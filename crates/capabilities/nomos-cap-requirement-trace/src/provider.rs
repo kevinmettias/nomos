@@ -1,10 +1,16 @@
 //! Turning this repository's own committed requirement assessments into the one fact this
 //! capability answers.
 
+mod trace_fact;
+
+pub use trace_fact::TraceFact;
+
 use crate::assessment::REGISTRY;
 use crate::guarantee::{Declared_Guarantee, PROVIDER};
 use crate::payload::{Encode_Payload, RequirementTracePayload};
-use crate::predicates::{Divergences_With_No_Record, Partials_With_No_Gap, Unresolved_Gaps, Unresolved_Records, Unresolved_Sites};
+use crate::predicates::{
+    Divergences_With_No_Record, Partials_With_No_Gap, Unresolved_Gaps, Unresolved_Records, Unresolved_Sites,
+};
 use crate::registry::Entries;
 use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_contracts::{
@@ -24,15 +30,6 @@ pub struct FactContext
     pub variant: BuildVariantId,
     pub configuration: ConfigurationId,
     pub generation: GenerationId,
-}
-
-/// The one fact this capability's `IncrementalGranularity::WholeWorkspace` ceiling allows,
-/// together with the subject it was filed under.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct TraceFact
-{
-    pub subject: SubjectId,
-    pub fact: MaterializedFact,
 }
 
 /// Reads `root`'s own `tests/contract/requirements/` and materializes the one fact this
@@ -60,6 +57,27 @@ pub fn Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, 
     };
 
     return TraceFact { subject, fact };
+}
+
+/// The key this fact is filed under.
+///
+/// `semantic_inputs` is empty, deliberately, the same choice every `crates/repository/`-
+/// shaped provider's own `Compute_Fact_Key` already makes for the identical reason: this
+/// provider's real input is the committed corpus's own current text, which no caller has
+/// independently, so a caller building a lookup key has nothing to reconstruct it from.
+fn Compute_Fact_Key(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
+{
+    return FactKey {
+        contract: crate::contract::Capability(),
+        contract_version: crate::contract::CONTRACT_VERSION,
+        subject,
+        semantic_inputs: InputDigest::Of(&[]),
+        provider: ProviderId::New(PROVIDER),
+        provider_version: crate::contract::CONTRACT_VERSION,
+        guarantee: GuaranteeDigest::Of(&guarantee),
+        variant: context.variant,
+        configuration: context.configuration,
+    };
 }
 
 /// The requirement-trace judgment `root`'s own committed corpus produces against the real
@@ -91,33 +109,16 @@ pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Requi
     };
 
     let mut problems = Unresolved_Sites(root, &assessments, filesystem);
-    problems.extend(Unresolved_Gaps(root, &assessments, filesystem));
-    problems.extend(Unresolved_Records(root, &assessments, filesystem));
-    problems.extend(Divergences_With_No_Record(&assessments));
-    problems.extend(Partials_With_No_Gap(&assessments));
+    let gaps = Unresolved_Gaps(root, &assessments, filesystem);
+    problems.extend(gaps);
+    let records = Unresolved_Records(root, &assessments, filesystem);
+    problems.extend(records);
+    let divergences = Divergences_With_No_Record(&assessments);
+    problems.extend(divergences);
+    let partials = Partials_With_No_Gap(&assessments);
+    problems.extend(partials);
 
     return RequirementTracePayload { problems };
-}
-
-/// The key this fact is filed under.
-///
-/// `semantic_inputs` is empty, deliberately, the same choice every `crates/repository/`-
-/// shaped provider's own `Compute_Fact_Key` already makes for the identical reason: this
-/// provider's real input is the committed corpus's own current text, which no caller has
-/// independently, so a caller building a lookup key has nothing to reconstruct it from.
-fn Compute_Fact_Key(subject: SubjectId, guarantee: Guarantee, context: FactContext) -> FactKey
-{
-    return FactKey {
-        contract: crate::contract::Capability(),
-        contract_version: crate::contract::CONTRACT_VERSION,
-        subject,
-        semantic_inputs: InputDigest::Of(&[]),
-        provider: ProviderId::New(PROVIDER),
-        provider_version: crate::contract::CONTRACT_VERSION,
-        guarantee: GuaranteeDigest::Of(&guarantee),
-        variant: context.variant,
-        configuration: context.configuration,
-    };
 }
 
 #[cfg(test)]
@@ -279,17 +280,6 @@ mod tests
         );
     }
 
-    fn Repository_Root() -> std::path::PathBuf
-    {
-        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(Path::parent)
-            .and_then(Path::parent)
-            .map(std::path::PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
-    }
-
     /// `AGT-001.assessment`'s content immediately before `a8215910` replaced it --
     /// recovered with `git show a8215910~1:tests/contract/requirements/AGT-001.assessment`
     /// from inside a worktree that shares this repository's full history, not
@@ -328,6 +318,11 @@ mod tests
 
     impl FileSystem for RealTreeExceptRequirements
     {
+        fn Replace_Atomically(&self, _path: &Path, _contents: &str) -> Result<(), FileSystemError>
+        {
+            unimplemented!("this fixture never writes")
+        }
+
         fn Read_To_String(&self, path: &Path) -> Result<String, FileSystemError>
         {
             if path == self.file
@@ -336,11 +331,6 @@ mod tests
             }
 
             return StdFileSystem.Read_To_String(path);
-        }
-
-        fn Replace_Atomically(&self, _path: &Path, _contents: &str) -> Result<(), FileSystemError>
-        {
-            unimplemented!("this fixture never writes")
         }
 
         fn Exists(&self, path: &Path) -> bool
@@ -406,6 +396,19 @@ mod tests
         let weak_key = Compute_Fact_Key(subject, weaker, Context());
 
         assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
+    }
+
+    /// This crate sits three levels below the workspace root, so the root is three parents
+    /// up from the manifest directory cargo hands a compiled test.
+    fn Repository_Root() -> std::path::PathBuf
+    {
+        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(Path::parent)
+            .and_then(Path::parent)
+            .map(std::path::PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
     }
 
     const VARIANT_DIGEST_FILL: u8 = 2;

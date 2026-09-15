@@ -1,6 +1,6 @@
 //! D-129 supersedes ADR-DOC-001, and the placeholder that stands for it stays visible.
 
-use crate::queries::{Column, Counted, Seeded, Title};
+use crate::queries::{Column, Counted, NodeId, Seeded, Title};
 use nomos_spec_store::{EXTERNAL, NodeRow};
 
 /// D-129 supersedes ADR-DOC-001. The edge has to be in the store, not only in the prose,
@@ -41,7 +41,7 @@ fn Test_The_Superseded_Record_Should_Carry_An_Explicit_Supersession_Edge()
 fn Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder()
 {
     let store = Seeded();
-    let authority = Column(&store, "SELECT authority FROM nodes WHERE node_id = ?1", "ADR-DOC-001");
+    let authority = Column(&store, "SELECT authority FROM nodes WHERE node_id = ?1", NodeId("ADR-DOC-001"));
     let bodies = Counted(
         &store,
         "SELECT count(*) FROM source_documents WHERE path LIKE '%ADR-DOC-001%'",
@@ -67,7 +67,7 @@ fn Test_A_Real_Record_Should_Replace_A_Placeholder_But_Not_A_Real_One()
             representation: "document",
             title: "Markdown is the canonical authored documentation format",
         })
-        .expect("upgrades");
+        .expect("the seed left ADR-DOC-001 as an external placeholder, so this updates that row");
     store
         .Upsert_Node(NodeRow {
             node_id: "D-129",

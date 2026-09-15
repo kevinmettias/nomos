@@ -23,6 +23,25 @@ mod support;
 use nomos_spec_store::TableLine;
 use support::Run;
 
+/// The block ordinal the fixture's first two rows were authored under.
+///
+/// Deliberately not the other one: the fixture is written so that the order the blocks are
+/// first seen in differs from their numeric order, which is what lets the assertion below
+/// tell a first-seen walk from a sort.
+const SHARED_BLOCK: u32 = 2;
+
+/// The block ordinal the fixture's third row carries, seen second.
+const OTHER_BLOCK: u32 = 1;
+
+/// The row ordinal the fixture's second row carries within [`SHARED_BLOCK`].
+///
+/// A name because it is not an identity: the first row of each block is the first, and this
+/// second row exists so that two rows of one block sit side by side.
+const SECOND_ROW: u32 = 2;
+
+/// How many of the fixture's rows were authored under [`SHARED_BLOCK`].
+const ROWS_UNDER_SHARED_BLOCK: usize = 2;
+
 /// One line of a table, shaped the way a real document's rows are: an ordinal for its
 /// block, a kind, and the text as authored. `spec/verb/table.rs`'s own `Sample_Line` helper
 /// builds the identical shape for its inline tests; this is the same fixture, reachable
@@ -49,30 +68,46 @@ fn Sample_Line(block_ordinal: u32, row_ordinal: u32, text: &str) -> TableLine
 fn Test_Table_Lines_Should_Carry_Which_Block_They_Came_From()
 {
     let lines = vec![
-        Sample_Line(2, 1, "| a |"),
-        Sample_Line(2, 2, "| b |"),
-        Sample_Line(1, 1, "| c |"),
+        Sample_Line(SHARED_BLOCK, 1, "| a |"),
+        Sample_Line(SHARED_BLOCK, SECOND_ROW, "| b |"),
+        Sample_Line(OTHER_BLOCK, 1, "| c |"),
     ];
+    assert_eq!(
+        Blocks_In_First_Seen_Order(&lines),
+        vec![SHARED_BLOCK, OTHER_BLOCK],
+        "first-seen block order must survive intact"
+    );
+    assert_eq!(
+        Rows_From_Block(&lines, SHARED_BLOCK),
+        ROWS_UNDER_SHARED_BLOCK,
+        "both rows authored under the shared block must still say so"
+    );
 
-    let mut seen_in_order: Vec<u32> = Vec::new();
-    for line in &lines
+    let first = lines.first().expect("the fixture holds three rows, so it has a first");
+    let second = lines.get(1).expect("the fixture holds three rows, so it has a second");
+    assert_eq!(first.text, "| a |");
+    assert_ne!(first.content_hash, second.content_hash, "distinct rows must not share a content hash");
+}
+
+/// The distinct block ordinals `lines` carries, in the order they were first seen.
+fn Blocks_In_First_Seen_Order(lines: &[TableLine]) -> Vec<u32>
+{
+    let mut seen: Vec<u32> = Vec::new();
+    for line in lines
     {
-        if !seen_in_order.contains(&line.block_ordinal)
+        if !seen.contains(&line.block_ordinal)
         {
-            seen_in_order.push(line.block_ordinal);
+            seen.push(line.block_ordinal);
         }
     }
 
-    assert_eq!(seen_in_order, vec![2, 1], "first-seen block order must survive intact");
-    assert_eq!(
-        lines.iter().filter(|line| line.block_ordinal == 2).count(),
-        2,
-        "both rows authored under block 2 must still say so"
-    );
-    let first = lines.first().expect("asserted above: two rows were found");
-    let second = lines.get(1).expect("asserted above: two rows were found");
-    assert_eq!(first.text, "| a |");
-    assert_ne!(first.content_hash, second.content_hash, "distinct rows must not share a content hash");
+    return seen;
+}
+
+/// How many of `lines` were authored under `block`.
+fn Rows_From_Block(lines: &[TableLine], block: u32) -> usize
+{
+    return lines.iter().filter(|line| line.block_ordinal == block).count();
 }
 
 /// The real binary, driven through the one `nomos spec` verb that answers from the

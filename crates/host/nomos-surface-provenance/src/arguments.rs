@@ -108,14 +108,6 @@ mod tests
     use crate::stated_environment::Stated;
     use std::path::Path;
 
-    /// Where a test that does not care about `--root` stands. Named rather than repeated
-    /// so the two tests that *do* care read as deliberately different from the ones that
-    /// do not.
-    fn Anywhere() -> Stated
-    {
-        return Stated::At(Path::new("/anywhere"));
-    }
-
     #[test]
     fn Test_Parsed_From_String_Arguments_Should_Require_Since_And_Until()
     {
@@ -149,7 +141,7 @@ mod tests
         let environment = Stated::At(Path::new("/stated/working/directory"));
 
         let parsed = Parsed_From_String_Arguments(&Arguments_From_Text("--since a --until b"), &environment)
-            .expect("must parse");
+            .expect("the line above names every flag this call requires");
 
         assert_eq!(parsed.since, "a");
         assert_eq!(parsed.until, "b");
@@ -169,7 +161,7 @@ mod tests
         let environment = Stated::At(Path::new("/stated/working/directory"));
 
         let parsed = Parsed_From_String_Arguments(&Arguments_From_Text("--since a --until b --root /given"), &environment)
-            .expect("must parse");
+            .expect("the line above names every flag this call requires");
 
         assert_eq!(parsed.root, PathBuf::from("/given"));
     }
@@ -201,10 +193,18 @@ mod tests
             &Arguments_From_Text("--since a --until b --root /work --crate nomos-model --crate nomos-store"),
             &Anywhere(),
         )
-        .expect("must parse");
+        .expect("the line above names every flag this call requires");
 
         assert_eq!(parsed.root, PathBuf::from("/work"));
         assert_eq!(parsed.crates, vec!["nomos-model", "nomos-store"]);
+    }
+
+    /// Where a test that does not care about `--root` stands. Named rather than repeated
+    /// so the two tests that *do* care read as deliberately different from the ones that
+    /// do not.
+    fn Anywhere() -> Stated
+    {
+        return Stated::At(Path::new("/anywhere"));
     }
 
     fn Arguments_From_Text(text: &str) -> Vec<String>

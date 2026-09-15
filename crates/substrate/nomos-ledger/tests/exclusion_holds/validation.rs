@@ -3,14 +3,17 @@
 //! Every violation at once rather than the first one found: an author fixing a board wants
 //! the list, and a validator that stops at the first fault turns one edit into several.
 
-use crate::board::*;
+use crate::board::{
+    At, Document, Held_By, Item, ItemId, ItemState, LEASE_ENDS_AT, NOW, Patterned, SetResolution, Validate_Document,
+    VerificationPredicate, VerificationRecord,
+};
 
 #[test]
 fn Test_Validate_Should_Refuse_Two_Active_Claims_On_Overlapping_Territory()
 {
     let document = Document(vec![
-        Held_By(Item("T-1", &["src/a.rs", "src/b.rs"]), "agent-a", NOW + 3_600),
-        Held_By(Item("T-2", &["src/b.rs", "src/c.rs"]), "agent-b", NOW + 3_600),
+        Held_By(Item("T-1", &["src/a.rs", "src/b.rs"]), "agent-a", LEASE_ENDS_AT),
+        Held_By(Item("T-2", &["src/b.rs", "src/c.rs"]), "agent-b", LEASE_ENDS_AT),
     ]);
 
     let violations = Validate_Document(&document, At(NOW));
@@ -27,8 +30,8 @@ fn Test_Validate_Should_Refuse_Two_Active_Claims_On_Overlapping_Territory()
 fn Test_Validate_Should_Accept_Two_Active_Claims_On_Disjoint_Territory()
 {
     let document = Document(vec![
-        Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW + 3_600),
-        Held_By(Item("T-2", &["src/c.rs"]), "agent-b", NOW + 3_600),
+        Held_By(Item("T-1", &["src/a.rs"]), "agent-a", LEASE_ENDS_AT),
+        Held_By(Item("T-2", &["src/c.rs"]), "agent-b", LEASE_ENDS_AT),
     ]);
 
     assert_eq!(
@@ -45,7 +48,7 @@ fn Test_A_Lapsed_Claim_Should_Not_Conflict()
 {
     let document = Document(vec![
         Held_By(Item("T-1", &["src/b.rs"]), "agent-a", NOW - 1),
-        Held_By(Item("T-2", &["src/b.rs"]), "agent-b", NOW + 3_600),
+        Held_By(Item("T-2", &["src/b.rs"]), "agent-b", LEASE_ENDS_AT),
     ]);
 
     let violations = Validate_Document(&document, At(NOW));
@@ -65,8 +68,8 @@ fn Test_Incomparable_Territory_Should_Be_Reported_Not_Ignored()
     second.territory.resolution = SetResolution::Symbol;
 
     let document = Document(vec![
-        Held_By(Item("T-1", &["src/b.rs"]), "agent-a", NOW + 3_600),
-        Held_By(second, "agent-b", NOW + 3_600),
+        Held_By(Item("T-1", &["src/b.rs"]), "agent-a", LEASE_ENDS_AT),
+        Held_By(second, "agent-b", LEASE_ENDS_AT),
     ]);
 
     let violations = Validate_Document(&document, At(NOW));
@@ -182,6 +185,13 @@ fn Test_A_Blocked_Item_Should_Say_Why()
     );
 }
 
+/// The three faults the fixture below plants: a blocked item with no reason, a done item
+/// with no verification, and a dependency on an item the document does not contain.
+///
+/// A named count rather than an inline literal, so a fourth fault is a value added here
+/// rather than a change to the assertion that counts them.
+const FAULTS_PLANTED_IN_THE_DOCUMENT: usize = 3;
+
 /// Every violation must be reported, not just the first. An author who has to re-run to
 /// discover the next problem is an author who stops re-running.
 #[test]
@@ -197,7 +207,7 @@ fn Test_Validation_Should_Report_Every_Violation_At_Once()
     let violations = Validate_Document(&Document(vec![blocked, done, dangling]), At(NOW));
 
     assert!(
-        violations.len() >= 3,
+        violations.len() >= FAULTS_PLANTED_IN_THE_DOCUMENT,
         "expected every violation, got: {violations:?}"
     );
 }

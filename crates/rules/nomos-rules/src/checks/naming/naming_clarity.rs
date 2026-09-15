@@ -411,11 +411,6 @@ mod tests
         assert!(findings.is_empty(), "{findings:?}");
     }
 
-    fn Payload_From_Text(text: &str) -> SyntaxPayload
-    {
-        return nomos_cap_syntax::Parse_Payload(text.as_bytes()).expect("this fixture payload is well formed");
-    }
-
     /// `OD-CAPABILITY-014` put a variable-length body behind an `impl` block's own
     /// trait-or-inherent label, so this carry stopped being an equality test against
     /// [`nomos_cap_syntax::TRAIT`]. `impl<T: Display> Display for T` is the shape that
@@ -429,10 +424,15 @@ mod tests
              item\t1\tImplementation\tNotApplicable\tTable\t.\t+inherent\\ngenerics\\nT\n",
         );
 
-        let generic_trait_impl = payload.items.first().expect("two items");
-        let generic_inherent_impl = payload.items.get(1).expect("two items");
+        let generic_trait_impl = payload.items.first().expect("the payload fixture declares two items");
+        let generic_inherent_impl = payload.items.get(1).expect("the payload fixture declares two items");
 
         assert_eq!(Enclosing_Trait_Impl(generic_trait_impl, None), Some("T".to_owned()));
         assert_eq!(Enclosing_Trait_Impl(generic_inherent_impl, None), None);
+    }
+
+    fn Payload_From_Text(text: &str) -> SyntaxPayload
+    {
+        return nomos_cap_syntax::Parse_Payload(text.as_bytes()).expect("this fixture payload is well formed");
     }
 }

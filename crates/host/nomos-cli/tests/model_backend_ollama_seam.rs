@@ -32,6 +32,10 @@ mod support;
 
 use support::Run;
 
+/// What a missing `--goal` leaves the process with -- `agent/exit_code.rs::ExitCode::Usage`'s
+/// own value, the same code both this backend's sibling seam and `nomos agent`'s own suite pin.
+const USAGE_EXIT_CODE: i32 = 2;
+
 /// A `ProcessLauncher` that never spawns a process, the same shape
 /// `tests/agent_executor_claude_code_seam.rs` uses for the sibling backend.
 struct Scripted
@@ -108,5 +112,5 @@ fn Test_Agent_Execute_With_Ollama_Should_Refuse_Before_Ever_Reaching_The_Backend
 {
     let ran = Run(&["agent", "execute", "--model-backend", "ollama"]);
 
-    assert_eq!(ran.code, 2, "missing --goal is a usage refusal: {}", ran.stderr);
+    assert_eq!(ran.code, USAGE_EXIT_CODE, "missing --goal is a usage refusal: {}", ran.stderr);
 }

@@ -75,34 +75,34 @@ fn Github_Api_Review_Comment_Command(repository: &str, comment_id: u64) -> Comma
 
 fn Require_Succeeded(outcome: &ExitOutcome, stderr: &str) -> Result<(), FetchError>
 {
-    match outcome
+    return match outcome
     {
-        ExitOutcome::Exited { code: 0 } => return Ok(()),
+        ExitOutcome::Exited { code: 0 } => Ok(()),
         ExitOutcome::Exited { code } =>
         {
-            return Err(FetchError {
+            Err(FetchError {
                 reason: format!("gh api pulls/comments exited {code}: {stderr}"),
-            });
+            })
         }
         ExitOutcome::TimedOut =>
         {
-            return Err(FetchError {
+            Err(FetchError {
                 reason: format!("gh api pulls/comments was still running after {TIMEOUT:?} and was killed"),
-            });
+            })
         }
         ExitOutcome::Stalled { idle_elapsed } =>
         {
-            return Err(FetchError {
+            Err(FetchError {
                 reason: format!("gh api pulls/comments produced no output for {idle_elapsed:?} and was judged stalled"),
-            });
+            })
         }
         ExitOutcome::Terminated =>
         {
-            return Err(FetchError {
+            Err(FetchError {
                 reason: "gh api pulls/comments was terminated before it could finish".to_owned(),
-            });
+            })
         }
-    }
+    };
 }
 
 #[cfg(test)]
@@ -110,10 +110,13 @@ mod tests
 {
     use super::*;
 
+    /// The real, public review comment this crate's own recorded fixture was captured from.
+    const COMMENT_ID: u64 = 3_521_038_097;
+
     #[test]
     fn Test_The_Command_Should_Name_The_Repository_And_Comment_Id()
     {
-        let command = Github_Api_Review_Comment_Command("coderabbitai/rabbits-playground", 3_521_038_097);
+        let command = Github_Api_Review_Comment_Command("coderabbitai/rabbits-playground", COMMENT_ID);
 
         assert_eq!(
             command.argv,

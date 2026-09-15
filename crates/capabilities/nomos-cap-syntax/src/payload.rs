@@ -127,15 +127,17 @@
 //! its own tests, which is the check the duplication was missing rather than the duplication
 //! removed.
 
+mod impls;
 mod observation;
 mod parse;
 mod render;
 #[cfg(test)]
 mod tests;
 
+pub use impls::{Impl_Generics, ImplLabel, Impl_Serves_A_Trait, Impl_Shape};
 pub use observation::{
-    FUNCTION, Function_Arity, Function_Shape, IMPLEMENTATION, INHERENT, Impl_Generics, Impl_Serves_A_Trait,
-    Impl_Shape, NOT_APPLICABLE, Observation, PUBLIC, SLICE, Struct_Fields, Struct_Shape, TRAIT, VALUE,
+    FUNCTION, Function_Arity, Function_Shape, IMPLEMENTATION, INHERENT, NOT_APPLICABLE, Observation, PUBLIC, SLICE,
+    Struct_Fields, Struct_Shape, TRAIT, VALUE,
 };
 use observation::Observed_Field;
 pub use parse::Parse_Payload;

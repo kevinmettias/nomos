@@ -167,6 +167,21 @@ mod tests
         let second_suite = Suite_In(&mut store, Sibling::Kwb);
 
         let mut first_report = SuiteReport::default();
+        Take_Shared_For_First(&mut store, first_suite, &mut first_report);
+
+        let mut second_report = SuiteReport::default();
+        Take_Shared_For_Second(&mut store, second_suite, &mut second_report);
+
+        assert_eq!(first_report.records, vec!["shared-id".to_owned()]);
+        assert_eq!(second_report.contested, vec!["shared-id".to_owned()]);
+    }
+
+    fn Take_Shared_For_First(
+        mut store: &mut SpecificationStore,
+        first_suite: Suite,
+        mut first_report: &mut SuiteReport,
+    )
+    {
         Take_Node(
             &mut store,
             &Declared {
@@ -179,8 +194,14 @@ mod tests
             &mut first_report,
         )
         .expect("takes");
+    }
 
-        let mut second_report = SuiteReport::default();
+    fn Take_Shared_For_Second(
+        mut store: &mut SpecificationStore,
+        second_suite: Suite,
+        mut second_report: &mut SuiteReport,
+    )
+    {
         Take_Node(
             &mut store,
             &Declared {
@@ -193,8 +214,5 @@ mod tests
             &mut second_report,
         )
         .expect("takes");
-
-        assert_eq!(first_report.records, vec!["shared-id".to_owned()]);
-        assert_eq!(second_report.contested, vec!["shared-id".to_owned()]);
     }
 }

@@ -99,27 +99,16 @@ mod tests
     use super::*;
     use std::path::PathBuf;
 
-    fn Command_At(root: PathBuf, commit: bool) -> CorrectionCommand
-    {
-        return CorrectionCommand { root, commit };
-    }
-
     /// A real run over a fixture tree with a real blocking phantom claim reaches a real
     /// `Staged` outcome -- not `UnreadableRoot` or `NoSourceFound`, proving this crate, not
     /// `nomos-cli`, can produce one.
     #[test]
     fn Test_Handle_Correction_Run_Should_Stage_A_Real_Phantom_Claim()
     {
-        let root = std::env::temp_dir().join("nomos-api-correction-run-stage");
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("creates a fresh directory");
-        std::fs::write(
-            root.join("a.rs"),
-            "/// A list.\n/// Mirrored by `Test_Api_Ghost`.\npub const TABLES: &[&str] = &[];\n",
-        )
-        .expect("writes a fixture whose stale mirror is one real blocking finding");
+        let root = Tree_With_A_Phantom_Mirror("nomos-api-correction-run-stage");
 
-        let response = Handle_Correction_Run(&Command_At(root.clone(), false));
+        let command = Command_At(root.clone());
+        let response = Handle_Correction_Run(&command);
         let on_disk = std::fs::read_to_string(root.join("a.rs")).expect("still readable");
 
         let _ignored = std::fs::remove_dir_all(&root);
@@ -135,6 +124,22 @@ mod tests
         assert!(on_disk.contains("Mirrored by"), "a dry run must not touch the file");
     }
 
+    /// A fresh tree under `name` holding one source file whose doc comment names a mirror
+    /// that does not exist -- one real blocking `check-doc-references` finding.
+    fn Tree_With_A_Phantom_Mirror(name: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(name);
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("creates a fresh directory");
+        std::fs::write(
+            root.join("a.rs"),
+            "/// A list.\n/// Mirrored by `Test_Api_Ghost`.\npub const TABLES: &[&str] = &[];\n",
+        )
+        .expect("writes a fixture whose stale mirror is one real blocking finding");
+
+        return root;
+    }
+
     /// An empty tree cannot be judged, the same distinction
     /// `nomos_check_orchestration::CheckOutcome::NoSource` already keeps apart from a clean
     /// judged run.
@@ -145,7 +150,8 @@ mod tests
         let _ignored = std::fs::remove_dir_all(&root);
         std::fs::create_dir_all(&root).expect("creates an empty directory");
 
-        let response = Handle_Correction_Run(&Command_At(root.clone(), false));
+        let command = Command_At(root.clone());
+        let response = Handle_Correction_Run(&command);
 
         let _ignored = std::fs::remove_dir_all(&root);
         assert_eq!(response, CorrectionResponse::NoSourceFound);
@@ -159,9 +165,17 @@ mod tests
     {
         let response = CorrectionResponse::Clean;
 
-        let json = serde_json::to_string(&response).expect("a CorrectionResponse always serializes");
+        let json = serde_json::to_string(&response)
+            .expect("a derived Serialize over owned data has nothing to refuse");
         let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
 
         assert_eq!(parsed.get("outcome").expect("a serialized CorrectionResponse always has this field"), "clean", "{json}");
+    }
+
+    /// A `CorrectionCommand` over `root`, left a dry run -- nothing here commits, so a test
+    /// that reads the tree back afterwards reads it exactly as it was.
+    fn Command_At(root: PathBuf) -> CorrectionCommand
+    {
+        return CorrectionCommand { root, commit: false };
     }
 }

@@ -46,11 +46,11 @@
 //!
 //! The capability's identity, contract version, ceiling and summary ([`contract`]); its one
 //! provider's own name and offer ([`guarantee`]); the canonical `Assessment`/`Verdict`/
-//! `Site` vocabulary ([`assessment`]); the refusing `key: value` reader
-//! ([`registry`]); the five comparisons against the real tree ([`predicates`]); the
-//! payload shape and its canonical encoding ([`payload`]); and the one function that reads
-//! `root`'s own committed corpus and materializes this capability's one fact
-//! ([`provider`]).
+//! `Site` vocabulary ([`assessment`]); the refusing `key: value` reader ([`registry`]); the
+//! five comparisons -- the three that resolve a citation against the real tree and the two
+//! that judge an already-parsed set ([`predicates`]); the payload shape and its canonical
+//! encoding ([`payload`]); and the one function that reads `root`'s own committed corpus and
+//! materializes this capability's one fact ([`provider`]).
 //!
 //! What is not here: the rule that reads this capability (`nomos-rules::
 //! Check_Requirement_Trace_Staleness`) and the composition wiring that runs this provider
@@ -69,11 +69,13 @@ mod provider;
 mod registry;
 mod requirement_trace_fact_production;
 
-pub use assessment::{Assessment, Site, Verdict, REGISTRY};
+pub use assessment::{Assessment, REGISTRY, Site, Verdict};
 pub use contract::{Capability, Capability_Contract, Ceiling, Payload_Schema, CAPABILITY, CONTRACT_VERSION, SCHEMA};
 pub use guarantee::{Declared_Guarantee, Provider_Offer, PROVIDER};
 pub use payload::{Encode_Payload, Parse_Payload, Problem, ProblemKind, Refusal, RequirementTracePayload};
-pub use predicates::{Divergences_With_No_Record, Partials_With_No_Gap, Unresolved_Gaps, Unresolved_Records, Unresolved_Sites};
+pub use predicates::{
+    Divergences_With_No_Record, Partials_With_No_Gap, Unresolved_Gaps, Unresolved_Records, Unresolved_Sites,
+};
 pub use provider::{Discover_Workspace, FactContext, Materialize_Workspace, TraceFact};
-pub use registry::{Entries, Is_Requirement_Id, Parse};
+pub use registry::{Entries, EntrySource, Is_Requirement_Id, Parse};
 pub use requirement_trace_fact_production::RequirementTraceFactProduction;

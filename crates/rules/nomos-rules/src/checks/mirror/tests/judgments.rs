@@ -15,11 +15,11 @@ fn Test_A_Universe_Whose_Mirror_Exists_Should_Produce_No_Finding()
     let declaring = Source(
         "a.rs",
         "/// Mirrored by `Test_Every_Table_Should_Be_Declared`.\n\
-         pub const TABLES: &[&str] = &[];\n",
+         pub const TABLES: &[&str] = &[];\n".to_owned(),
     );
     let checking = Source(
         "a_test.rs",
-        "#[test]\nfn Test_Every_Table_Should_Be_Declared()\n{\n}\n",
+        "#[test]\nfn Test_Every_Table_Should_Be_Declared()\n{\n}\n".to_owned(),
     );
     let sources = vec![declaring.clone(), checking.clone()];
 
@@ -44,7 +44,7 @@ fn Test_A_Mirror_That_Resolves_To_Nothing_Should_Block()
 {
     let findings = Findings_Over(&[Source(
         "a.rs",
-        "/// Mirrored by `Test_Renamed_Away`.\npub const TABLES: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Renamed_Away`.\npub const TABLES: &[&str] = &[];\n".to_owned(),
     )]);
 
     let finding = Only(&findings);
@@ -66,10 +66,10 @@ fn Test_A_Mirror_That_Resolves_To_Nothing_Should_Block()
 #[test]
 fn Test_A_False_Claim_Should_Outrank_An_Admitted_Gap()
 {
-    let admitted = Findings_Over(&[Source("a.rs", "pub const TABLES: &[&str] = &[];\n")]);
+    let admitted = Findings_Over(&[Source("a.rs", "pub const TABLES: &[&str] = &[];\n".to_owned())]);
     let false_claim = Findings_Over(&[Source(
         "a.rs",
-        "/// Mirrored by `Test_Nowhere`.\npub const TABLES: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Nowhere`.\npub const TABLES: &[&str] = &[];\n".to_owned(),
     )]);
 
     assert_eq!(Only(&admitted).gate, GateCategory::Advisory);
@@ -90,7 +90,7 @@ fn Test_A_False_Claim_Should_Outrank_An_Admitted_Gap()
 #[test]
 fn Test_A_Finding_Should_Report_How_It_Was_Come_By()
 {
-    let findings = Findings_Over(&[Source("a.rs", "pub const T: &[&str] = &[];\n")]);
+    let findings = Findings_Over(&[Source("a.rs", "pub const T: &[&str] = &[];\n".to_owned())]);
     let finding = Only(&findings);
 
     assert_eq!(finding.evidence, EvidenceClass::Derived);
@@ -103,8 +103,8 @@ fn Test_A_Finding_Should_Report_How_It_Was_Come_By()
 #[test]
 fn Test_The_Same_Universe_In_Two_Places_Should_Keep_One_Identity()
 {
-    let here = Findings_Over(&[Source("a.rs", "pub const T: &[&str] = &[];\n")]);
-    let moved = Findings_Over(&[Source("b/c.rs", "pub const T: &[&str] = &[];\n")]);
+    let here = Findings_Over(&[Source("a.rs", "pub const T: &[&str] = &[];\n".to_owned())]);
+    let moved = Findings_Over(&[Source("b/c.rs", "pub const T: &[&str] = &[];\n".to_owned())]);
 
     assert_eq!(Only(&here).subject, Only(&moved).subject);
     assert_ne!(Only(&here).locations, Only(&moved).locations);
@@ -138,11 +138,11 @@ fn Test_A_Check_Named_Only_Inside_A_Fixture_Should_Not_Resolve()
 {
     let declaring = Source(
         "a.rs",
-        "/// Mirrored by `Test_Only_In_A_Fixture`.\npub const T: &[&str] = &[];",
+        "/// Mirrored by `Test_Only_In_A_Fixture`.\npub const T: &[&str] = &[];".to_owned(),
     );
     let fixture = Source(
         "b.rs",
-        "fn Fixture() { let source = \"fn Test_Only_In_A_Fixture() {}\"; }",
+        "fn Fixture() { let source = \"fn Test_Only_In_A_Fixture() {}\"; }".to_owned(),
     );
     let sources = vec![declaring.clone(), fixture.clone()];
 
@@ -165,7 +165,7 @@ fn Test_A_Check_Named_Only_Inside_A_Fixture_Should_Not_Resolve()
 #[test]
 fn Test_An_Unparseable_File_Should_Be_Reported_And_Not_Fail_The_Build()
 {
-    let findings = Findings_Over(&[Source("broken.rs", "pub const ??? = ;")]);
+    let findings = Findings_Over(&[Source("broken.rs", "pub const ??? = ;".to_owned())]);
 
     let unparseable = findings
         .iter()
@@ -186,9 +186,9 @@ fn Test_A_Test_Named_Only_In_Prose_Should_Not_Resolve()
 {
     let declaring = Source(
         "a.rs",
-        "/// Mirrored by `Test_Deleted`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Deleted`.\npub const T: &[&str] = &[];\n".to_owned(),
     );
-    let prose = Source("b.rs", "// see Test_Deleted for the comparison\n");
+    let prose = Source("b.rs", "// see Test_Deleted for the comparison\n".to_owned());
     let sources = vec![declaring.clone(), prose.clone()];
 
     let world = World_Over(&[(&declaring, &[]), (&prose, &[])]);
@@ -209,9 +209,9 @@ fn Test_A_Test_Named_Only_In_Prose_Should_Not_Resolve()
 #[test]
 fn Test_Two_Crates_Sharing_A_Bare_Universe_Name_Should_Not_Share_A_Subject()
 {
-    let (store, project) = Two_Crates_Sharing_A_Bare_Universe_Name();
+    let crates = Two_Crates_Sharing_A_Bare_Universe_Name();
 
-    let findings = Findings_Over(&[store, project]);
+    let findings = Findings_Over(&[crates.store, crates.project]);
     let [store_finding, project_finding] = Exactly_Two(&findings);
 
     assert_eq!(store_finding.subject_name, project_finding.subject_name, "{findings:?}");
@@ -222,27 +222,40 @@ fn Test_Two_Crates_Sharing_A_Bare_Universe_Name_Should_Not_Share_A_Subject()
     );
 }
 
+/// Two crates whose `table.rs` each declare an identically named, unqualified universe, kept
+/// as named roles rather than a pair, so no caller has to remember which position is which.
+struct TwoCrates
+{
+    /// The `nomos-spec-store` crate's `table.rs`.
+    store: SourceFile,
+    /// The `nomos-spec-project` crate's `table.rs`.
+    project: SourceFile,
+}
+
 /// Two crates whose `table.rs` each declare an identically named, unqualified universe.
 ///
 /// Real crate paths, not the synthetic single-segment paths the rest of this suite uses,
 /// because the qualifier `D-134`'s fix derives is taken from the `/src/` split and a path
 /// without one stays deliberately unqualified.
-fn Two_Crates_Sharing_A_Bare_Universe_Name() -> (SourceFile, SourceFile)
+fn Two_Crates_Sharing_A_Bare_Universe_Name() -> TwoCrates
 {
-    let store = Source(
-        "crates/spec/nomos-spec-store/src/table.rs",
-        "pub const TABLES: &[&str] = &[];\n",
-    );
-    let project = Source(
-        "crates/spec/nomos-spec-project/src/table.rs",
-        "pub const TABLES: &[&str] = &[];\n",
-    );
-
-    return (store, project);
+    return TwoCrates {
+        store: Source(
+            "crates/spec/nomos-spec-store/src/table.rs",
+            "pub const TABLES: &[&str] = &[];\n".to_owned(),
+        ),
+        project: Source(
+            "crates/spec/nomos-spec-project/src/table.rs",
+            "pub const TABLES: &[&str] = &[];\n".to_owned(),
+        ),
+    };
 }
 
+/// The pair [`Exactly_Two`] returns: two findings, no more and no fewer.
+const EXACTLY_TWO: usize = 2;
+
 /// `findings` as exactly two, or a panic naming what was found instead.
-fn Exactly_Two(findings: &[Finding]) -> [&Finding; 2]
+fn Exactly_Two(findings: &[Finding]) -> [&Finding; EXACTLY_TWO]
 {
     let [first, second] = findings
     else

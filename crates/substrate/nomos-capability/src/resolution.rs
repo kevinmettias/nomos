@@ -1,14 +1,17 @@
 //! The answer to "who serves this capability, at what guarantee?".
 
 // What a resolution is made of: the ranking that chooses between usable offers, the
-// standing an offer has under that ranking, and the named absence when none is usable.
+// standing an offer has under that ranking, and the named absence when none is usable
+// together with what closes it.
+mod remedy;
 mod selection;
 mod standing;
 mod unmet;
 
+pub use remedy::Remedy;
 pub use selection::Selection;
 pub use standing::Standing;
-pub use unmet::{Remedy, Unmet};
+pub use unmet::Unmet;
 
 use crate::ProviderOffer;
 use nomos_contracts::CapabilityId;

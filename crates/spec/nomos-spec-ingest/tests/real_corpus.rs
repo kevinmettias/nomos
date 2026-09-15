@@ -5,12 +5,39 @@
 //! that fails.
 
 use nomos_spec_ingest::{
-    Check_Against_Manifest, Ingest_Catalog, Ingest_Source_Document, Ingest_Statements,
-    Parse_Block_Lineage, Parse_Catalog, Parse_Statements,
+    BlockLineage, Check_Against_Manifest, GateReport, Ingest_Catalog, Ingest_Source_Document,
+    Ingest_Statements, Parse_Block_Lineage, Parse_Catalog, Parse_Statements, RecordedBlock,
 };
 use nomos_spec_store::{SpecificationStore, Table};
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
+
+/// Every block the v14 lineage records, and how many a full ingest must produce.
+const RECORDED_BLOCK_COUNT: u32 = 2535;
+
+/// The recorded blocks whose content and normalized hashes differ, so they exercise the normalizer.
+const DISCRIMINATING_BLOCK_COUNT: u32 = 31;
+
+/// The statements the normative statement file records.
+const STATEMENT_COUNT: u32 = 493;
+
+/// The entities `catalog.json` resolves, which every ingested statement must attach to.
+const CATALOG_ENTITY_COUNT: u32 = 2619;
+
+/// The domain volumes a full ingest writes, one `SourceDocuments` row each.
+const SOURCE_DOCUMENT_COUNT: u32 = 10;
+
+/// The recorded blocks the five volumes `cace351ac` left untouched hold between them.
+const UNTOUCHED_VOLUME_BLOCK_COUNT: usize = 929;
+
+/// How many ingest passes prove the second is a no-op.
+const RE_INGEST_PASSES: u32 = 2;
+
+/// How many disagreements a failing report prints, enough to locate the first divergence.
+const DISAGREEMENTS_SHOWN: usize = 10;
+
+/// How many sample entries a divergence report prints before its count.
+const SAMPLES_SHOWN: usize = 5;
 
 fn Corpus() -> Option<PathBuf>
 {
@@ -97,13 +124,7 @@ fn Test_I1_Should_Reproduce_Every_Recorded_Block()
         report.mismatches.is_empty(),
         "{}\nfirst disagreements:\n  {}",
         report.Summary(),
-        report
-            .mismatches
-            .iter()
-            .take(10)
-            .map(nomos_spec_ingest::Mismatch::Describe)
-            .collect::<Vec<String>>()
-            .join("\n  ")
+        First_Disagreements(&report)
     );
     assert!(report.Is_Passing(), "{}", report.Summary());
     assert!(
@@ -116,13 +137,29 @@ fn Test_I1_Should_Reproduce_Every_Recorded_Block()
     // from 2533. `cace351ac` split one service heading and its prose into two of each in
     // volume 02; `P102` refreshed `source-block-lineage.yaml` at its source before this
     // number moved, and the v14.36 archive still answers 2533 (`revisions.rs`).
-    assert_eq!(report.blocks_checked, 2535, "{}", report.Summary());
+    assert_eq!(report.blocks_checked, RECORDED_BLOCK_COUNT, "{}", report.Summary());
     // Re-measured 2026-09-14 from 30, alongside `blocks_checked` above and for the same
     // reason: one of the two blocks `cace351ac` added to volume 02 normalizes to different
     // bytes than it hashes, so it discriminates the normalizer where its predecessors did
     // not. The count rising is what keeps this assertion meaningful -- a refresh that left
     // it at 30 while adding blocks would be evidence the normalizer stopped being exercised.
-    assert_eq!(report.discriminating_blocks, 31, "{}", report.Summary());
+    assert_eq!(report.discriminating_blocks, DISCRIMINATING_BLOCK_COUNT, "{}", report.Summary());
+}
+
+/// The first few disagreements, one per line, for a failing run's message.
+///
+/// Bounded because a manifest off by one block disagrees on every block after it; the
+/// first handful is what locates the divergence, and `report.mismatches` still holds all
+/// of them.
+fn First_Disagreements(report: &GateReport) -> String
+{
+    return report
+        .mismatches
+        .iter()
+        .take(DISAGREEMENTS_SHOWN)
+        .map(nomos_spec_ingest::Mismatch::Describe)
+        .collect::<Vec<String>>()
+        .join("\n  ");
 }
 
 /// I2 over the real statement file. Every recorded hash must match its recorded text,
@@ -137,25 +174,25 @@ fn Test_I2_Should_Ingest_Every_Statement_Without_Divergence()
     };
     let source = Read(&root, "01_authoring/source_lineage/normative-source-statements.yaml");
     let file = Parse_Statements(&source).expect("the statement file parses");
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    let report = Ingest_Statements(&mut store, &file).expect("ingests");
+    let mut store = SpecificationStore::In_Memory().expect("an in-memory store needs no file to open");
+    let report = Ingest_Statements(&mut store, &file).expect("the statement file came from the parser above");
 
     assert!(
         report.divergences.is_empty(),
         "{} statement(s) disagree with their own recorded hash: {:?}",
         report.divergences.len(),
-        report.divergences.iter().take(5).collect::<Vec<_>>()
+        report.divergences.iter().take(SAMPLES_SHOWN).collect::<Vec<_>>()
     );
     assert!(
         report.non_canonical_text.is_empty(),
         "{} statement(s) are not fixed points: {:?}",
         report.non_canonical_text.len(),
-        report.non_canonical_text.iter().take(5).collect::<Vec<_>>()
+        report.non_canonical_text.iter().take(SAMPLES_SHOWN).collect::<Vec<_>>()
     );
-    assert_eq!(report.ingested, 493);
+    assert_eq!(report.ingested, STATEMENT_COUNT);
     assert_eq!(
         store.Count(Table::NormativeStatements).expect("counts"),
-        493
+        STATEMENT_COUNT
     );
 }
 
@@ -168,21 +205,21 @@ fn Test_The_Whole_Corpus_Should_Ingest_Into_One_Store()
     {
         return;
     };
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory().expect("an in-memory store needs no file to open");
     let blocks = Ingest_The_Volumes(&mut store, &root);
     let source = Read(&root, "01_authoring/source_lineage/normative-source-statements.yaml");
-    let statements = Parse_Statements(&source).expect("parses");
-    Ingest_Statements(&mut store, &statements).expect("ingests");
+    let statements = Parse_Statements(&source).expect("the statement file is the corpus artifact this test read");
+    Ingest_Statements(&mut store, &statements).expect("the statements came from the parser above");
     let catalog_json = Read(&root, "02_machine/catalog/catalog.json");
-    let catalog = Parse_Catalog(&catalog_json).expect("parses");
-    let report = Ingest_Catalog(&mut store, &catalog).expect("ingests");
+    let catalog = Parse_Catalog(&catalog_json).expect("the catalog is the corpus artifact this test read");
+    let report = Ingest_Catalog(&mut store, &catalog).expect("the catalog came from the parser above");
     // Every statement resolves to a node, so nothing was ingested orphaned.
     let orphans = Orphaned_Statements(&store);
 
-    assert_eq!(blocks, 2535);
-    assert_eq!(report.nodes, 2619, "the catalog entity count changed");
-    assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), 10);
-    assert_eq!(store.Count(Table::SourceBlocks).expect("counts"), 2535);
+    assert_eq!(blocks, RECORDED_BLOCK_COUNT);
+    assert_eq!(report.nodes, CATALOG_ENTITY_COUNT, "the catalog entity count changed");
+    assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), SOURCE_DOCUMENT_COUNT);
+    assert_eq!(store.Count(Table::SourceBlocks).expect("counts"), RECORDED_BLOCK_COUNT);
     assert_eq!(orphans, 0);
 }
 
@@ -195,7 +232,7 @@ fn Ingest_The_Volumes(store: &mut SpecificationStore, root: &Path) -> u32
     for (name, markdown) in &documents
     {
         let ingested =
-            Ingest_Source_Document(store, name, "v14.36", markdown).expect("ingests");
+            Ingest_Source_Document(store, name, "v14.36", markdown).expect("a domain volume of the v14 corpus");
 
         blocks = blocks.saturating_add(ingested);
     }
@@ -214,7 +251,7 @@ fn Orphaned_Statements(store: &SpecificationStore) -> u32
             [],
             |row| return row.get(0),
         )
-        .expect("queries");
+        .expect("the store applied this schema, so the query resolves over it");
 }
 
 /// Re-ingesting the whole corpus must change nothing.
@@ -226,19 +263,19 @@ fn Test_Re_Ingesting_The_Corpus_Should_Be_A_No_Op()
     {
         return;
     };
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory().expect("an in-memory store needs no file to open");
     let documents = Domain_Volumes(&root);
 
-    for _ in 0..2
+    for _ in 0..RE_INGEST_PASSES
     {
         for (name, markdown) in &documents
         {
-            Ingest_Source_Document(&mut store, name, "v14.36", markdown).expect("ingests");
+            Ingest_Source_Document(&mut store, name, "v14.36", markdown).expect("a domain volume of the v14 corpus");
         }
     }
 
-    assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), 10);
-    assert_eq!(store.Count(Table::SourceBlocks).expect("counts"), 2535);
+    assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), SOURCE_DOCUMENT_COUNT);
+    assert_eq!(store.Count(Table::SourceBlocks).expect("counts"), RECORDED_BLOCK_COUNT);
 }
 
 /// The five volumes `cace351ac` did not touch, and why that list is the one worth naming.
@@ -290,54 +327,87 @@ fn Emitted_Mechanical_Fields(markdown: &str) -> Vec<(u32, String, String, String
 #[test]
 fn Test_The_Emitter_Should_Reproduce_The_Recorded_Fields_For_Volumes_The_Edit_Did_Not_Touch()
 {
-    let Some(root) = Corpus()
+    let Some((lineage, documents)) = Loaded_Corpus()
     else
     {
         return;
     };
-    let manifest = Read(&root, "01_authoring/source_lineage/source-block-lineage.yaml");
-    let lineage = Parse_Block_Lineage(&manifest).expect("the manifest parses");
-    let documents = Domain_Volumes(&root);
 
     let mut compared = 0_usize;
     for name in VOLUMES_THE_EDIT_DID_NOT_TOUCH
     {
-        let markdown = documents
-            .get(*name)
-            .unwrap_or_else(|| panic!("{name} is not among the domain volumes"));
-        let recorded: Vec<&nomos_spec_ingest::RecordedBlock> =
-            lineage.blocks.iter().filter(|block| return block.source_document == *name).collect();
-        let emitted = Emitted_Mechanical_Fields(markdown);
-
-        assert_eq!(
-            emitted.len(),
-            recorded.len(),
-            "{name}: the lineage records {} blocks and segmentation produces {}, for a volume \
-             cace351ac never edited -- so the emitter disagrees with the segmenter rather than \
-             the corpus having moved",
-            recorded.len(),
-            emitted.len()
-        );
-
-        for (want, got) in recorded.iter().zip(&emitted)
-        {
-            assert_eq!(
-                (want.block_ordinal, want.block_kind.as_str(), want.content_hash.as_str(), want.normalized_hash.as_str()),
-                (got.0, got.1.as_str(), got.2.as_str(), got.3.as_str()),
-                "{name}#{}: a volume the edit never touched must emit exactly what it records",
-                want.block_ordinal
-            );
-            compared = compared.saturating_add(1);
-        }
+        let pairs = Reproduced_Field_Pairs_In_Volume(*name, &documents, &lineage);
+        compared = compared.saturating_add(pairs);
     }
-
     // Measured 2026-09-14 against the live corpus, not chosen: the five volumes above hold 929
     // recorded blocks between them, and every one of them reproduced. Pinned as an equality
     // rather than a floor so that a volume dropping out of `documents` -- renamed, unreadable,
     // or quietly excluded -- fails here instead of shrinking the proof and still passing.
     assert_eq!(
-        compared, 929,
+        compared, UNTOUCHED_VOLUME_BLOCK_COUNT,
         "the five untouched volumes hold 929 blocks between them; comparing {compared} means \
          the proof no longer covers what it was measured over"
+    );
+}
+
+/// The recorded lineage and every domain volume, or `None` when no corpus is configured.
+fn Loaded_Corpus() -> Option<(BlockLineage, BTreeMap<String, String>)>
+{
+    let Some(root) = Corpus()
+    else
+    {
+        return None;
+    };
+    let manifest = Read(&root, "01_authoring/source_lineage/source-block-lineage.yaml");
+    let lineage = Parse_Block_Lineage(&manifest).expect("the manifest parses");
+    let documents = Domain_Volumes(&root);
+    return Some((lineage, documents));
+}
+
+/// How many block pairs one untouched volume's emitted fields reproduced against its records.
+///
+/// The volume must be among the documents: a name that dropped out of the corpus would
+/// otherwise shrink the proof silently instead of failing, which is the outcome the caller's
+/// equality over `UNTOUCHED_VOLUME_BLOCK_COUNT` exists to prevent.
+fn Reproduced_Field_Pairs_In_Volume(
+    name: &str,
+    documents: &BTreeMap<String, String>,
+    lineage: &BlockLineage,
+) -> usize
+{
+    let markdown = documents
+        .get(name)
+        .unwrap_or_else(|| panic!("{name} is not among the domain volumes"));
+    let recorded: Vec<&RecordedBlock> =
+        lineage.blocks.iter().filter(|block| return block.source_document == name).collect();
+    let emitted = Emitted_Mechanical_Fields(markdown);
+    assert_eq!(
+        emitted.len(),
+        recorded.len(),
+        "{name}: the lineage records {} blocks and segmentation produces {}, for a volume \
+         cace351ac never edited -- so the emitter disagrees with the segmenter rather than \
+         the corpus having moved",
+        recorded.len(),
+        emitted.len()
+    );
+
+    let mut compared = 0_usize;
+    for (want, got) in recorded.iter().zip(&emitted)
+    {
+        Assert_Fields_Match(name, want, got);
+        compared = compared.saturating_add(1);
+    }
+    return compared;
+}
+
+/// Asserts one block's emitted mechanical fields equal what the lineage records for it.
+fn Assert_Fields_Match(name: &str, want: &RecordedBlock, got: &(u32, String, String, String))
+{
+    let (ordinal, kind, content_hash, normalized_hash) = got;
+    assert_eq!(
+        (want.block_ordinal, want.block_kind.as_str(), want.content_hash.as_str(), want.normalized_hash.as_str()),
+        (*ordinal, kind.as_str(), content_hash.as_str(), normalized_hash.as_str()),
+        "{name}#{}: a volume the edit never touched must emit exactly what it records",
+        want.block_ordinal
     );
 }

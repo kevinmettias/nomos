@@ -36,6 +36,28 @@ fn At(seconds: i64) -> Timestamp
     return Timestamp::From_Unix_Seconds(seconds);
 }
 
+/// The instant every claim in this module was acquired.
+///
+/// One instant rather than one per test, so a test that means to be about the lapse boundary
+/// cannot accidentally be about the acquisition as well.
+const CLAIM_ACQUIRED_AT: i64 = 1_000;
+
+/// The instant the claim under test lapses.
+///
+/// It is read twice: as the `lease_expires_at` of that claim, and as the `now` a test asserts
+/// the boundary itself at, where a lease expiring exactly now has not yet lapsed — otherwise a
+/// holder renewing at the moment of expiry races against being displaced.
+const LEASE_LAPSE_INSTANT: i64 = 2_000;
+
+/// The last instant at which that lease still excludes: one second short of its lapse.
+const LAST_ACTIVE_INSTANT: i64 = 1_999;
+
+/// The first instant at which that lease has lapsed: one second past it.
+const FIRST_LAPSED_INSTANT: i64 = 2_001;
+
+/// The expiry of the claim a takeover installs, well clear of the one it replaced.
+const TAKEOVER_EXPIRES_AT: i64 = 9_000;
+
 /// The seven typed blocker causes `WORK-LEDGER-005` names, in the order it names them,
 /// each paired with the [`Blocker`] variant that carries it.
 ///
@@ -64,6 +86,19 @@ const CORPUS_CAUSES: [(&str, Option<&str>); 7] = [
     ("other", Some("Other")),
 ];
 
+/// The row of [`CORPUS_CAUSES`] each declared cause occupies.
+///
+/// The values are positions in that table and the names are the causes they stand for, because
+/// that is the whole of what [`Corpus_Position`] answers. `stale probe artifact` — the seventh
+/// cause, and the one `OD-LEDGER-017` declines — has no variant and so no row named here, which
+/// is why the numbering skips it.
+const DEPENDENCY_ROW: usize = 0;
+const DECISION_ROW: usize = 1;
+const TERRITORY_MISMATCH_ROW: usize = 2;
+const EXTERNAL_RESOURCE_ROW: usize = 3;
+const NEEDS_SPLIT_ROW: usize = 4;
+const OTHER_ROW: usize = 6;
+
 /// Where a cause sits in [`CORPUS_CAUSES`].
 ///
 /// The match is exhaustive on purpose, and that is the whole mechanism for membership: a
@@ -74,12 +109,12 @@ const fn Corpus_Position(blocker: &Blocker) -> usize
 {
     return match blocker
     {
-        Blocker::Dependency { .. } => 0,
-        Blocker::Decision { .. } => 1,
-        Blocker::TerritoryMismatch { .. } => 2,
-        Blocker::ExternalResource { .. } => 3,
-        Blocker::NeedsSplit => 4,
-        Blocker::Other { .. } => 6,
+        Blocker::Dependency { .. } => DEPENDENCY_ROW,
+        Blocker::Decision { .. } => DECISION_ROW,
+        Blocker::TerritoryMismatch { .. } => TERRITORY_MISMATCH_ROW,
+        Blocker::ExternalResource { .. } => EXTERNAL_RESOURCE_ROW,
+        Blocker::NeedsSplit => NEEDS_SPLIT_ROW,
+        Blocker::Other { .. } => OTHER_ROW,
     };
 }
 
@@ -226,12 +261,12 @@ fn Test_A_Lapsed_Claim_Should_Stop_Excluding()
     let mut item = Item("T-1");
     item.claim = Some(Claim {
         holder: "agent-a".to_owned(),
-        acquired_at: At(1_000),
-        lease_expires_at: At(2_000),
+        acquired_at: At(CLAIM_ACQUIRED_AT),
+        lease_expires_at: At(LEASE_LAPSE_INSTANT),
     });
 
-    assert!(item.Has_Active_Claim(At(1_999)));
-    assert!(!item.Has_Active_Claim(At(2_001)));
+    assert!(item.Has_Active_Claim(At(LAST_ACTIVE_INSTANT)));
+    assert!(!item.Has_Active_Claim(At(FIRST_LAPSED_INSTANT)));
 }
 
 /// The boundary. A lease expiring exactly now has not yet lapsed — otherwise a
@@ -241,19 +276,19 @@ fn Test_A_Claim_Should_Not_Lapse_On_Its_Expiry_Second()
 {
     let claim = Claim {
         holder: "agent-a".to_owned(),
-        acquired_at: At(1_000),
-        lease_expires_at: At(2_000),
+        acquired_at: At(CLAIM_ACQUIRED_AT),
+        lease_expires_at: At(LEASE_LAPSE_INSTANT),
     };
 
-    assert!(!claim.Has_Lapsed(At(2_000)));
-    assert!(claim.Has_Lapsed(At(2_001)));
+    assert!(!claim.Has_Lapsed(At(LEASE_LAPSE_INSTANT)));
+    assert!(claim.Has_Lapsed(At(FIRST_LAPSED_INSTANT)));
 }
 
 fn Claimed_By(holder: &str, expires: i64) -> Claim
 {
     return Claim {
         holder: holder.to_owned(),
-        acquired_at: At(1_000),
+        acquired_at: At(CLAIM_ACQUIRED_AT),
         lease_expires_at: At(expires),
     };
 }
@@ -269,9 +304,9 @@ fn Test_Replacing_A_Lapsed_Claim_Should_Keep_The_Claim_It_Replaced()
 {
     let mut item = Item("T-1");
     item.state = ItemState::Claimed;
-    item.claim = Some(Claimed_By("dead-agent", 2_000));
+    item.claim = Some(Claimed_By("dead-agent", LEASE_LAPSE_INSTANT));
 
-    assert!(item.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(2_001)));
+    assert!(item.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", TAKEOVER_EXPIRES_AT), At(FIRST_LAPSED_INSTANT)));
 
     assert_eq!(
         item.claim.as_ref().map(|claim| return claim.holder.clone()),
@@ -298,9 +333,9 @@ fn Test_Replacing_Should_Refuse_A_Live_Claim_And_An_Absent_One()
 {
     let mut live = Item("T-1");
     live.state = ItemState::Claimed;
-    live.claim = Some(Claimed_By("agent-a", 2_000));
+    live.claim = Some(Claimed_By("agent-a", LEASE_LAPSE_INSTANT));
 
-    assert!(!live.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(1_999)));
+    assert!(!live.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", TAKEOVER_EXPIRES_AT), At(LAST_ACTIVE_INSTANT)));
     assert_eq!(
         live.claim.as_ref().map(|claim| return claim.holder.clone()),
         Some("agent-a".to_owned()),
@@ -311,7 +346,7 @@ fn Test_Replacing_Should_Refuse_A_Live_Claim_And_An_Absent_One()
     let mut hollow = Item("T-2");
     hollow.state = ItemState::Claimed;
 
-    assert!(!hollow.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(2_001)));
+    assert!(!hollow.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", TAKEOVER_EXPIRES_AT), At(FIRST_LAPSED_INSTANT)));
     assert!(
         hollow.claim.is_none(),
         "a claim was written over an item that recorded none"
@@ -338,6 +373,12 @@ fn Test_An_Item_Id_Should_Honor_Format_Width()
     assert_eq!(format!("{}", ItemId::New("P1-MODEL")), "P1-MODEL");
 }
 
+/// How many fields `LedgerItem` serializes.
+///
+/// The number `Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version` asserts, named
+/// here because that test's whole subject is the value moving.
+const LEDGER_ITEM_FIELD_COUNT: usize = 17;
+
 /// A field added here without the schema version moving produces a refusal that misstates
 /// why.
 ///
@@ -360,7 +401,7 @@ fn Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version()
 
     assert_eq!(
         fields.len(),
-        17,
+        LEDGER_ITEM_FIELD_COUNT,
         "a field was added to `LedgerItem`. Raise `SCHEMA_VERSION` in `store.rs` and this \
          count together, or a build that predates the field will be told the ledger is \
          malformed instead of being told it is old"
@@ -381,11 +422,15 @@ fn Test_Terminal_States_Should_Be_Recognized()
     assert!(!ItemState::Claimed.Is_Finished());
 }
 
+/// How many kinds `ItemKind` declares, which is the length of what
+/// [`Every_Declared_Item_Kind`] returns.
+const DECLARED_ITEM_KIND_COUNT: usize = 5;
+
 /// Every kind `ItemKind` declares.
 ///
 /// A named provider rather than an inline literal, so a sixth kind is a value added here
 /// rather than a change to the loop that reads them.
-fn Every_Declared_Item_Kind() -> [ItemKind; 5]
+fn Every_Declared_Item_Kind() -> [ItemKind; DECLARED_ITEM_KIND_COUNT]
 {
     return [
         ItemKind::Capability,
@@ -396,11 +441,15 @@ fn Every_Declared_Item_Kind() -> [ItemKind; 5]
     ];
 }
 
+/// How many origins `ItemOrigin` declares, which is the length of what
+/// [`Every_Declared_Item_Origin`] returns.
+const DECLARED_ITEM_ORIGIN_COUNT: usize = 2;
+
 /// Every origin `ItemOrigin` declares.
 ///
 /// A named provider rather than an inline literal, for the reason [`Every_Declared_Item_Kind`]
 /// is one.
-fn Every_Declared_Item_Origin() -> [ItemOrigin; 2]
+fn Every_Declared_Item_Origin() -> [ItemOrigin; DECLARED_ITEM_ORIGIN_COUNT]
 {
     return [ItemOrigin::Required, ItemOrigin::Proposed];
 }

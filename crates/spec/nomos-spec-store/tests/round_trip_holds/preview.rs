@@ -3,10 +3,18 @@
 use crate::seeded::{Previewed, SYNTHETIC, Swapped, With_Synthetic};
 use nomos_spec_store::{BlockChange, EditPreview, NormativeOutcome};
 
+/// Whether the mandatory question is expected to have been answered for the edit under test: the
+/// two states this assertion can be in, named at the call site instead of `true` or `false`.
+enum Answer
+{
+    Supplied,
+    Missing,
+}
+
 /// The three cases that are not the same answer for whether normative wording moved,
 /// paired with the reason each one settles it. A provider rather than a literal in the
 /// test body: a fourth case becomes a diff that touches no test logic.
-fn Wording_Cases() -> Vec<(String, bool, &'static str)>
+fn Wording_Cases() -> Vec<(String, Answer, &'static str)>
 {
     let reworded = SYNTHETIC.replace("First paragraph.", "First paragraph, differently.");
     let reflowed = SYNTHETIC.replace("Second paragraph.", "Second  paragraph.");
@@ -16,9 +24,9 @@ fn Wording_Cases() -> Vec<(String, bool, &'static str)>
     );
 
     return vec![
-        (reworded, true, "rewording a paragraph moves its wording"),
-        (reflowed, false, "whitespace is not wording under the normalizer"),
-        (appended, false, "adding a paragraph moves nothing that was there"),
+        (reworded, Answer::Supplied, "rewording a paragraph moves its wording"),
+        (reflowed, Answer::Missing, "whitespace is not wording under the normalizer"),
+        (appended, Answer::Missing, "adding a paragraph moves nothing that was there"),
     ];
 }
 
@@ -28,19 +36,24 @@ fn Test_The_Preview_Should_Say_Whether_Normative_Is_Wording_Moved()
 {
     let store = With_Synthetic();
 
-    for (markdown, moved, why) in Wording_Cases()
+    for (markdown, answer, why) in Wording_Cases()
     {
         let preview = Previewed(&store, &markdown);
 
         assert_ne!(markdown, SYNTHETIC, "the {why} case changed nothing");
-        Assert_Answers_The_Mandatory_Question(&preview, moved, why);
+        Assert_Answers_The_Mandatory_Question(&preview, answer, why);
     }
 }
 
 /// The preview says whether normative wording moved, and says it in those words.
-fn Assert_Answers_The_Mandatory_Question(preview: &EditPreview, moved: bool, why: &str)
+fn Assert_Answers_The_Mandatory_Question(preview: &EditPreview, answer: Answer, why: &str)
 {
-    assert_eq!(preview.Is_Wording_Moved(), moved, "{why}: {}", preview.Describe());
+    assert_eq!(
+        preview.Is_Wording_Moved(),
+        matches!(answer, Answer::Supplied),
+        "{why}: {}",
+        preview.Describe()
+    );
     assert!(
         preview.Describe().contains("normative wording"),
         "the preview does not answer the mandatory question: {}",
@@ -58,11 +71,11 @@ fn Test_A_Reflowed_Block_Should_Be_Told_From_A_Reworded_One()
     let of = |markdown: &str| {
         return store
             .Claim_For_Edit("D-900", None)
-            .expect("claims")
+            .expect("the fixture wrote D-900 through the door, so this claim has a record to name")
             .Stage(markdown, None)
-            .expect("stages")
+            .expect("the claim above is editable, so the reflowed or reworded body is staged")
             .Preview(&store)
-            .expect("previews")
+            .expect("the staged edit is over the open store, so the preview can describe it")
             .Blocks()
             .to_vec();
     };
@@ -139,11 +152,11 @@ fn Test_A_Record_With_No_Recorded_Statement_Should_Still_Get_An_Answer()
     let edited = SYNTHETIC.replace("First paragraph.", "Something else.");
     let preview = store
         .Claim_For_Edit("D-900", None)
-        .expect("claims")
+        .expect("the record under test is the synthetic one the fixture wrote into this store")
         .Stage(&edited, None)
-        .expect("stages")
+        .expect("the claim above is editable, so a one-sentence rewrite of the first line is staged")
         .Preview(&store)
-        .expect("previews");
+        .expect("the stage above built an edit over the open store, so there is one to preview");
 
     assert!(preview.Statements().is_empty(), "the fixture recorded a statement");
     assert!(preview.Is_Wording_Moved());

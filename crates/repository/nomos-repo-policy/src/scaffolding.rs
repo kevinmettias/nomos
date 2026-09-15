@@ -187,6 +187,59 @@ mod tests
     const CAPABILITY: &str = "nomos.cap.test.scaffolding";
     const PROVIDER: &str = "nomos.repo.test.scaffolding";
 
+    /// The subject fill byte both key-filing tests measure against. Arbitrary, and distinct
+    /// from the fills `Sample_Context` uses so that a subject and a context cannot be confused.
+    const SUBJECT_DIGEST_FILL: u8 = 9;
+
+    #[test]
+    fn Test_Offer_Should_Carry_The_Values_Given()
+    {
+        let capability = CapabilityId::New(CAPABILITY);
+        let version = ContractVersion::New(1, 0);
+
+        let offer = Offer(PROVIDER, capability, version, Sample_Guarantee());
+
+        assert_eq!(offer.provider, ProviderId::New(PROVIDER));
+        assert_eq!(offer.capability, CapabilityId::New(CAPABILITY));
+        assert_eq!(offer.version, ContractVersion::New(1, 0));
+        assert_eq!(offer.guarantee, Sample_Guarantee());
+    }
+
+    #[test]
+    fn Test_Compute_Fact_Key_Should_Depend_On_The_Guarantee()
+    {
+        let subject = SubjectId::From_Digest(Digest128::From_Bytes([SUBJECT_DIGEST_FILL; Digest128::BYTE_LENGTH]));
+        let weaker = Guarantee::New(FactVariant::Syntactic, Assurance::Unsound, Assurance::Unknown, IncrementalGranularity::WholeWorkspace);
+
+        let strong_key = Compute_Fact_Key(&Sample_Identity(), subject, Sample_Guarantee(), Sample_Context());
+        let weak_key = Compute_Fact_Key(&Sample_Identity(), subject, weaker, Sample_Context());
+
+        assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
+    }
+
+    #[test]
+    fn Test_Materialize_Fact_Should_Carry_The_Guarantee_And_Payload_Given()
+    {
+        let subject = SubjectId::From_Digest(Digest128::From_Bytes([SUBJECT_DIGEST_FILL; Digest128::BYTE_LENGTH]));
+        let context = Sample_Context();
+        let key = Compute_Fact_Key(&Sample_Identity(), subject, Sample_Guarantee(), context);
+
+        let PolicyFact { subject: filed_subject, fact } = Materialize_Fact(
+            subject,
+            Sample_Guarantee(),
+            FactFiling { context, key },
+            EncodedPayload { schema: SchemaId::New("nomos.test.scaffolding.v1"), bytes: b"payload".to_vec() },
+        );
+
+        assert_eq!(filed_subject, subject);
+        assert_eq!(fact.guarantee, Sample_Guarantee());
+        assert_eq!(fact.snapshot, context.snapshot);
+        assert_eq!(fact.evidence, EvidenceClass::Verified);
+        assert_eq!(fact.payload.schema, SchemaId::New("nomos.test.scaffolding.v1"));
+        assert_eq!(fact.payload.bytes, b"payload".to_vec());
+        assert_eq!(fact.Generation(), context.generation);
+    }
+
     fn Sample_Guarantee() -> Guarantee
     {
         return Guarantee::New(
@@ -205,51 +258,5 @@ mod tests
             provider: PROVIDER,
             provider_version: ContractVersion::New(1, 0),
         };
-    }
-
-    #[test]
-    fn Test_Offer_Should_Carry_The_Values_Given()
-    {
-        let offer = Offer(PROVIDER, CapabilityId::New(CAPABILITY), ContractVersion::New(1, 0), Sample_Guarantee());
-
-        assert_eq!(offer.provider, ProviderId::New(PROVIDER));
-        assert_eq!(offer.capability, CapabilityId::New(CAPABILITY));
-        assert_eq!(offer.version, ContractVersion::New(1, 0));
-        assert_eq!(offer.guarantee, Sample_Guarantee());
-    }
-
-    #[test]
-    fn Test_Compute_Fact_Key_Should_Depend_On_The_Guarantee()
-    {
-        let subject = SubjectId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH]));
-        let weaker = Guarantee::New(FactVariant::Syntactic, Assurance::Unsound, Assurance::Unknown, IncrementalGranularity::WholeWorkspace);
-
-        let strong_key = Compute_Fact_Key(&Sample_Identity(), subject, Sample_Guarantee(), Sample_Context());
-        let weak_key = Compute_Fact_Key(&Sample_Identity(), subject, weaker, Sample_Context());
-
-        assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
-    }
-
-    #[test]
-    fn Test_Materialize_Fact_Should_Carry_The_Guarantee_And_Payload_Given()
-    {
-        let subject = SubjectId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH]));
-        let context = Sample_Context();
-        let key = Compute_Fact_Key(&Sample_Identity(), subject, Sample_Guarantee(), context);
-
-        let PolicyFact { subject: filed_subject, fact } = Materialize_Fact(
-            subject,
-            Sample_Guarantee(),
-            FactFiling { context, key },
-            EncodedPayload { schema: SchemaId::New("nomos.test.scaffolding.v1"), bytes: b"payload".to_vec() },
-        );
-
-        assert_eq!(filed_subject, subject);
-        assert_eq!(fact.guarantee, Sample_Guarantee());
-        assert_eq!(fact.snapshot, context.snapshot);
-        assert_eq!(fact.evidence, EvidenceClass::Verified);
-        assert_eq!(fact.payload.schema, SchemaId::New("nomos.test.scaffolding.v1"));
-        assert_eq!(fact.payload.bytes, b"payload".to_vec());
-        assert_eq!(fact.Generation(), context.generation);
     }
 }

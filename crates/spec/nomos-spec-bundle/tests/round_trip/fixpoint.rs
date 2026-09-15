@@ -22,20 +22,38 @@ fn Test_Every_Table_Should_Be_Exercised()
     );
 }
 
+/// How many records the populated fixture carries, a little under the real count.
+///
+/// The bar exists so that a bundle which lost most of the store cannot pass. It is set well
+/// below the fixture's own count so that adding a record to the fixture does not turn this
+/// assertion into a different one.
+const FIXTURE_RECORDS: u32 = 20;
+
 /// P1.
 #[test]
 fn Test_A_Bundle_Should_Survive_A_Database_Round_Trip_Byte_For_Byte()
 {
     let source = Populated();
-    let first = Export(&source).expect("exports").Write().expect("writes");
+    let first = Export(&source)
+        .expect("Export ran over the store Populated() filled")
+        .Write()
+        .expect("Write serializes the records the bundle carries");
 
-    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    let report = Import_Bundle(&mut rebuilt, &Bundle::Parse(&first).expect("parses")).expect("imports");
+    let mut rebuilt = SpecificationStore::In_Memory().expect("In_Memory applies the schema MIGRATIONS");
+    let bundle = Bundle::Parse(&first).expect("Parse inverts Write of these very bytes");
+    let report = Import_Bundle(&mut rebuilt, &bundle).expect("the bundle is disjoint from the fresh store");
 
-    let second = Export(&rebuilt).expect("re-exports").Write().expect("writes");
+    let second = Export(&rebuilt)
+        .expect("Export ran over the store the import filled")
+        .Write()
+        .expect("Write serializes the records the bundle carries");
 
     assert_eq!(first, second, "the bundle is not a fixpoint of the round trip");
-    assert!(report.records > 20, "only {} record(s) round-tripped", report.records);
+    assert!(
+        report.records > FIXTURE_RECORDS,
+        "only {} record(s) round-tripped",
+        report.records
+    );
 }
 
 /// P1 does not catch ordering by `uid`, because exporting in surrogate order and then
@@ -53,14 +71,23 @@ fn Test_Two_Stores_Of_The_Same_Corpus_Should_Export_Identically()
         "both stores assigned the same surrogates, so this test proved nothing"
     );
 
-    let first = Export(&forward).expect("exports").Write().expect("writes");
-    let second = Export(&backward).expect("exports").Write().expect("writes");
+    let first = Bundle_Of(&forward);
+    let second = Bundle_Of(&backward);
 
     assert_eq!(first, second, "the bundle is ordered by something that is not identity");
     assert!(
         !first.contains("\"uid\""),
         "a join surrogate reached the portable authority"
     );
+}
+
+/// The bundle text a store exports to, which is the form both fixpoint assertions compare.
+fn Bundle_Of(store: &SpecificationStore) -> String
+{
+    return Export(store)
+        .expect("Export ran over the store the caller filled")
+        .Write()
+        .expect("Write serializes the records the bundle carries");
 }
 
 fn Surrogates(store: &SpecificationStore) -> Vec<i64>
@@ -73,7 +100,7 @@ fn Surrogates(store: &SpecificationStore) -> Vec<i64>
                 .query_map([], |row| row.get(0))
                 .and_then(std::iter::Iterator::collect);
         })
-        .expect("reads uids");
+        .expect("Populated() wrote one source_documents row per document");
 }
 
 /// Every row counted, both directions.
@@ -81,10 +108,10 @@ fn Surrogates(store: &SpecificationStore) -> Vec<i64>
 fn Test_Import_Should_Land_Every_Row_The_Bundle_Declared()
 {
     let source = Populated();
-    let bundle = Export(&source).expect("exports");
+    let bundle = Export(&source).expect("Export ran over the store Populated() filled");
 
-    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    Import_Bundle(&mut rebuilt, &bundle).expect("imports");
+    let mut rebuilt = SpecificationStore::In_Memory().expect("In_Memory applies the schema MIGRATIONS");
+    Import_Bundle(&mut rebuilt, &bundle).expect("the bundle is disjoint from the fresh store");
 
     for table in Table::All()
     {
@@ -97,6 +124,12 @@ fn Test_Import_Should_Land_Every_Row_The_Bundle_Declared()
     }
 }
 
+/// The third column of the constraint query above, which is `max_per_node` in the table.
+const MAX_PER_NODE_COLUMN: usize = 2;
+
+/// What the fixture declares `verifies` may hold per node.
+const VERIFIES_MAX_PER_NODE: i64 = 4;
+
 /// `OD-SPEC-012`'s constraint columns are not a column the row-count guard would catch —
 /// the row is there either way, and only its values say whether the constraint survived.
 /// `verifies` carries a non-trivial domain, range and cardinality in the populated fixture
@@ -105,10 +138,10 @@ fn Test_Import_Should_Land_Every_Row_The_Bundle_Declared()
 fn Test_A_Relation_Types_Constraint_Should_Survive_The_Round_Trip()
 {
     let source = Populated();
-    let bundle = Export(&source).expect("exports");
+    let bundle = Export(&source).expect("Export ran over the store Populated() filled");
 
-    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    Import_Bundle(&mut rebuilt, &bundle).expect("imports");
+    let mut rebuilt = SpecificationStore::In_Memory().expect("In_Memory applies the schema MIGRATIONS");
+    Import_Bundle(&mut rebuilt, &bundle).expect("the bundle is disjoint from the fresh store");
 
     let (domain, range, max_per_node): (String, String, i64) = rebuilt
         .Connection()
@@ -116,13 +149,16 @@ fn Test_A_Relation_Types_Constraint_Should_Survive_The_Round_Trip()
             "SELECT domain_kinds_json, range_kinds_json, max_per_node FROM relation_types
              WHERE name = 'verifies'",
             [],
-            |row| return Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
+            |row| return Ok((row.get(0)?, row.get(1)?, row.get(MAX_PER_NODE_COLUMN)?)),
         )
         .expect("reads the constraint back");
 
     assert_eq!(domain, "[\"concept\"]", "the domain did not survive the round trip");
     assert_eq!(range, "[\"requirement\"]", "the range did not survive the round trip");
-    assert_eq!(max_per_node, 4, "the cardinality did not survive the round trip");
+    assert_eq!(
+        max_per_node, VERIFIES_MAX_PER_NODE,
+        "the cardinality did not survive the round trip"
+    );
 }
 
 /// A blob that is not valid UTF-8 must come back byte-exact.
@@ -130,11 +166,15 @@ fn Test_A_Relation_Types_Constraint_Should_Survive_The_Round_Trip()
 fn Test_Binary_Blobs_Should_Survive_As_Bytes()
 {
     let source = Populated();
-    let text = Export(&source).expect("exports").Write().expect("writes");
+    let text = Export(&source)
+        .expect("Export ran over the store Populated() filled")
+        .Write()
+        .expect("Write serializes the records the bundle carries");
     assert!(text.contains("\"base64\""), "the binary blob took the utf8 arm");
 
-    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    Import_Bundle(&mut rebuilt, &Bundle::Parse(&text).expect("parses")).expect("imports");
+    let mut rebuilt = SpecificationStore::In_Memory().expect("In_Memory applies the schema MIGRATIONS");
+    let bundle = Bundle::Parse(&text).expect("Parse inverts Write of these very bytes");
+    Import_Bundle(&mut rebuilt, &bundle).expect("the bundle is disjoint from the fresh store");
 
     let restored: Vec<u8> = rebuilt
         .Connection()

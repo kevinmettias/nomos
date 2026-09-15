@@ -85,50 +85,77 @@ impl core::fmt::Display for CompilerError
 /// loader a silent, unearned "no".
 pub(crate) fn Load_Crate<Env: Environment>(root: &Path, environment: &Env) -> Result<(RootDatabase, Vec<(EditionedFileId, String)>), CompilerError>
 {
-    // The exact absolutization `ra_ap_load_cargo::load_workspace_at` performs on `root`
-    // internally before resolving it -- not `std::fs::canonicalize`, whose Windows
-    // implementation returns a `\\?\`-prefixed verbatim path that a plain `VfsPath`
-    // rendering never carries, which silently broke every prefix match below until this
-    // was verified against a real fixture crate rather than assumed to line up.
-    let absolute_root = environment
-        .Working_Directory()
-        .map_err(|error| CompilerError { reason: format!("the current directory could not be read: {error}") })?
-        .join(root);
-
-    let cargo_config = CargoConfig { sysroot: Some(RustLibSource::Discover), ..CargoConfig::default() };
-    let load_config = LoadCargoConfig {
-        load_out_dirs_from_check: false,
-        with_proc_macro_server: ProcMacroServerChoice::None,
-        prefill_caches: false,
-    };
-
-    let (db, vfs, _proc_macro) = load_workspace_at(root, &cargo_config, &load_config, &|_progress| {}).map_err(|error| CompilerError {
+    let absolute_root = Absolute_Root(root, environment)?;
+    let (db, vfs, _proc_macro) = load_workspace_at(root, &Cargo_Configuration(), &Loader_Configuration(), &|_progress| {}).map_err(|error| CompilerError {
         reason: format!("`{}` could not be loaded as a Cargo project: {error}", root.display()),
     })?;
-
     let sema: Semantics<'_, RootDatabase> = Semantics::new(&db);
 
     let mut files: Vec<(EditionedFileId, String)> = Vec::new();
     for (file_id, vfs_path) in vfs.iter()
     {
         let path_str = vfs_path.to_string();
-        let is_rust_source = std::path::Path::new(&path_str).extension().is_some_and(|extension| return extension.eq_ignore_ascii_case("rs"));
-        if !is_rust_source || !std::path::Path::new(&path_str).starts_with(&absolute_root)
+        if !Source_Under_Root(&path_str, &absolute_root)
         {
             continue;
         }
-
-        let Some(editioned) = sema.attach_first_edition(file_id)
-        else
+        if let Some(editioned) = sema.attach_first_edition(file_id)
         {
-            continue;
-        };
-        files.push((editioned, path_str));
+            files.push((editioned, path_str));
+        }
     }
 
-    files.sort_by(|left, right| return left.1.cmp(&right.1));
+    return Ok((db, Sorted_By_Path(files)));
+}
 
-    return Ok((db, files));
+/// The exact absolutization `ra_ap_load_cargo::load_workspace_at` performs on `root`
+/// internally before resolving it -- not `std::fs::canonicalize`, whose Windows
+/// implementation returns a `\\?\`-prefixed verbatim path that a plain `VfsPath`
+/// rendering never carries, which silently broke every prefix match this reader makes
+/// until this was verified against a real fixture crate rather than assumed to line up.
+fn Absolute_Root<Env: Environment>(root: &Path, environment: &Env) -> Result<std::path::PathBuf, CompilerError>
+{
+    return Ok(environment
+        .Working_Directory()
+        .map_err(|error| CompilerError { reason: format!("the current directory could not be read: {error}") })?
+        .join(root));
+}
+
+/// The project-model configuration a real `ra_ap_load_cargo::load_workspace_at` call
+/// takes: a sysroot discovered rather than assumed.
+fn Cargo_Configuration() -> CargoConfig
+{
+    return CargoConfig { sysroot: Some(RustLibSource::Discover), ..CargoConfig::default() };
+}
+
+/// The loader configuration that same call takes: no proc-macro server, and no prefill --
+/// the cheapest honest load this reader can ask for.
+fn Loader_Configuration() -> LoadCargoConfig
+{
+    return LoadCargoConfig {
+        load_out_dirs_from_check: false,
+        with_proc_macro_server: ProcMacroServerChoice::None,
+        prefill_caches: false,
+    };
+}
+
+/// Whether `path` names a file this reader answers about: real Rust source, under the
+/// absolutized `root`, and therefore neither sysroot source nor another crate's -- the
+/// filter that keeps [`Load_Crate`] answering for the one crate it was asked about rather
+/// than for the standard library it had to load to answer honestly.
+fn Source_Under_Root(path: &str, absolute_root: &Path) -> bool
+{
+    let is_rust_source = std::path::Path::new(path).extension().is_some_and(|extension| return extension.eq_ignore_ascii_case("rs"));
+    let is_under_root = std::path::Path::new(path).starts_with(absolute_root);
+    return is_rust_source && is_under_root;
+}
+
+/// `files` in the one order every reader above walks them in: sorted by path, so a run
+/// over the same tree reaches the same answer in the same sequence.
+fn Sorted_By_Path(mut files: Vec<(EditionedFileId, String)>) -> Vec<(EditionedFileId, String)>
+{
+    files.sort_by(|left, right| return left.1.cmp(&right.1));
+    return files;
 }
 
 /// Every `.clone()` call in the crate rooted at `root` whose call expression --
@@ -146,15 +173,29 @@ pub fn Discover_Crate<Env: Environment>(root: &Path, environment: &Env) -> Resul
     let (db, files) = Load_Crate(root, environment)?;
     let sema: Semantics<'_, RootDatabase> = Semantics::new(&db);
 
+    let mut locations = Locations_Of(&sema, &files);
+    locations.sort();
+
+    return Ok(locations
+        .into_iter()
+        .map(|(path, line, col)| return ClonedCopyType { location: format!("{path}:{}:{}", line.saturating_add(1), col.saturating_add(1)) })
+        .collect());
+}
+
+/// Every clone-on-copy site in `files`, still as a raw, zero-based `(path, line, col)`
+/// triple: the shape [`Discover_Crate`] both orders and renders, gathered in one pass so
+/// that function reads as the three steps it really is.
+fn Locations_Of(sema: &Semantics<'_, RootDatabase>, files: &[(EditionedFileId, String)]) -> Vec<(String, u32, u32)>
+{
     let mut locations: Vec<(String, u32, u32)> = Vec::new();
     for (editioned, path_str) in files
     {
-        let source_file = sema.parse(editioned);
+        let source_file = sema.parse(*editioned);
         let line_index = LineIndex::new(&source_file.syntax().text().to_string());
 
         for call in source_file.syntax().descendants().filter_map(ast::MethodCallExpr::cast)
         {
-            if Clone_On_Copy(&sema, &call)
+            if Clone_On_Copy(sema, &call)
             {
                 let start = call.syntax().text_range().start();
                 let position = line_index.line_col(start);
@@ -163,12 +204,7 @@ pub fn Discover_Crate<Env: Environment>(root: &Path, environment: &Env) -> Resul
         }
     }
 
-    locations.sort();
-
-    return Ok(locations
-        .into_iter()
-        .map(|(path, line, col)| return ClonedCopyType { location: format!("{path}:{}:{}", line.saturating_add(1), col.saturating_add(1)) })
-        .collect());
+    return locations;
 }
 
 /// Whether `call` is a `.clone()` call whose own resolved return type -- `Self`, per
@@ -204,12 +240,6 @@ mod tests
 {
     use super::*;
 
-    fn Fixture_Root() -> std::path::PathBuf
-    {
-        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest.join("fixtures").join("clone_on_copy_sample");
-    }
-
     /// The one real, end-to-end assertion this reader owes: given a crate with one
     /// `.clone()` call on a `Copy` type and one on a `Clone`-but-not-`Copy` type, a real
     /// `ra_ap_hir` analysis finds exactly the first -- not zero (the sysroot-not-loaded
@@ -223,6 +253,12 @@ mod tests
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
         assert!(found.location.ends_with("lib.rs:23:12"), "{}", found.location);
+    }
+
+    fn Fixture_Root() -> std::path::PathBuf
+    {
+        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest.join("fixtures").join("clone_on_copy_sample");
     }
 
     #[test]

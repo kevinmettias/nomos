@@ -3,8 +3,15 @@
 //! Written against the interleaving harness rather than against timing, so a failure here is
 //! the defect and not the machine.
 
-use crate::board::*;
-use crate::interleaving::*;
+use crate::board::{
+    Abandon, AddRefusal, At, Claimant, ExclusionLedger, Held_By, Item, ItemId, ItemTerritory, LEASE, LEASE_ENDS_AT,
+    Mutex, NOW, REASON, Take, Validate_Document,
+};
+use crate::interleaving::{Holder_Of, InterleavedLedger, Two_Writers};
+
+/// A lease with seconds left on it, so the renewal below is visibly the thing that moved the
+/// expiry rather than a value the fixture already carried.
+const LEASE_ABOUT_TO_RUN_OUT: i64 = NOW + 10;
 
 /// The defect `P10-LOCK-BYPASS` is open for, at the verb that starts every piece of work.
 ///
@@ -28,10 +35,10 @@ fn Test_Two_Concurrent_Claims_Should_Both_Survive()
         Item("T-2", &["src/b.rs"]),
     ],
         |ledger| {
-            Take(ledger, "T-1", "agent-a");
+            Take(ledger, "T-1", Claimant("agent-a"));
         },
         |ledger| {
-            Take(ledger, "T-2", "agent-b");
+            Take(ledger, "T-2", Claimant("agent-b"));
         },
     );
 
@@ -60,14 +67,14 @@ fn Test_A_Release_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
     let after = Two_Writers(
         "concurrent-release",
         vec![
-        Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW + 3_600),
+        Held_By(Item("T-1", &["src/a.rs"]), "agent-a", LEASE_ENDS_AT),
         Item("T-2", &["src/b.rs"]),
     ],
         |ledger| {
-            Abandon(ledger, "T-1", "agent-a", REASON);
+            Abandon(ledger, "T-1", Claimant("agent-a"), REASON);
         },
         |ledger| {
-            Take(ledger, "T-2", "agent-b");
+            Take(ledger, "T-2", Claimant("agent-b"));
         },
     );
 
@@ -98,16 +105,16 @@ fn Test_A_Renewal_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
     let after = Two_Writers(
         "concurrent-renew",
         vec![
-        Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW + 10),
+        Held_By(Item("T-1", &["src/a.rs"]), "agent-a", LEASE_ABOUT_TO_RUN_OUT),
         Item("T-2", &["src/b.rs"]),
     ],
         |ledger| {
             ledger
-                .Renew(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+                .Renew(&ItemId::New("T-1"), "agent-a", LEASE)
                 .expect("a holder may renew its own claim");
         },
         |ledger| {
-            Take(ledger, "T-2", "agent-b");
+            Take(ledger, "T-2", Claimant("agent-b"));
         },
     );
 
@@ -124,7 +131,7 @@ fn Test_A_Renewal_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
             .find(|item| return item.id == ItemId::New("T-1"))
             .and_then(|item| return item.claim.as_ref())
             .map(|claim| return claim.lease_expires_at),
-        Some(At(NOW + 3_600)),
+        Some(At(LEASE_ENDS_AT)),
         "the renewal the first writer was told had been recorded is not in the ledger"
     );
 }
@@ -153,7 +160,7 @@ fn Test_An_Add_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
                 .expect("T-1 is not on the board yet");
         },
         |ledger| {
-            Take(ledger, "T-2", "agent-b");
+            Take(ledger, "T-2", Claimant("agent-b"));
         },
     );
 
@@ -195,10 +202,10 @@ fn Test_Two_Concurrent_Adds_Of_One_Identifier_Should_Not_Both_Be_Accepted()
         "concurrent-duplicate-add",
         Vec::new(),
         |ledger| {
-            Adds_T_1(ledger, "src/a.rs", "agent-a").expect("the board is empty, so T-1 is free");
+            Adds_T_1(ledger, "src/a.rs", Claimant("agent-a")).expect("the board is empty, so T-1 is free");
         },
         |ledger| {
-            let outcome = Adds_T_1(ledger, "src/b.rs", "agent-b");
+            let outcome = Adds_T_1(ledger, "src/b.rs", Claimant("agent-b"));
             *recorded.lock().expect("the harness never panics under this lock") = Some(outcome);
         },
     );
@@ -230,10 +237,10 @@ fn Test_Two_Concurrent_Adds_Of_One_Identifier_Should_Not_Both_Be_Accepted()
 fn Adds_T_1(
     ledger: &mut InterleavedLedger<'_>,
     file: &str,
-    holder: &str,
+    holder: Claimant<'_>,
 ) -> Result<(), AddRefusal>
 {
     let item = Item("T-1", &[file]);
 
-    return ledger.Add(&item, holder, &ItemTerritory::Empty(), &ItemTerritory::Empty());
+    return ledger.Add(&item, holder.0, &ItemTerritory::Empty(), &ItemTerritory::Empty());
 }

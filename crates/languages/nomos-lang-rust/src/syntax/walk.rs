@@ -188,7 +188,7 @@ impl<'ast> Visit<'ast> for Walk
         // any such claim wrong.
         let name = Type_Head(&node.self_ty);
 
-        let shape = Impl_Shape(node.trait_.is_some(), &node.generics);
+        let shape = Impl_Shape(node);
 
         self.Record(
             Declared {

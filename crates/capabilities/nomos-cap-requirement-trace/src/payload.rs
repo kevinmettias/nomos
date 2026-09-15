@@ -7,10 +7,18 @@
 //! port of its own) needs to tell a resolved citation from a stale one. So a [`Problem`] is
 //! close in shape to `nomos_cap_lint::LintDiagnostic`: a fact whose own judgment is already
 //! made, relayed by the rule that reads it rather than reached a second time.
+//!
+//! What an encoder and a decoder of this payload need is the kind of problem, the payload
+//! itself and the refusal they both speak; each of the three carries its own module, and the
+//! two lines hand the fields to the code that reads them.
 
+mod problem;
 mod refusal;
+mod requirement_trace_payload;
 
+pub use problem::Problem;
 pub use refusal::Refusal;
+pub use requirement_trace_payload::RequirementTracePayload;
 
 /// One of the five ways `crate::predicates` already reports a stale or incomplete
 /// assessment — kept as five variants, not collapsed to one "stale" tag, because a rule
@@ -68,37 +76,12 @@ impl ProblemKind
     }
 }
 
-/// One already-judged disagreement between a committed assessment and the workspace (or the
-/// assessment's own completeness) it was checked against.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Problem
-{
-    /// Which of the five checks this is.
-    pub kind: ProblemKind,
-    /// The requirement the stale assessment names -- the file stem, so a rule can point a
-    /// `Finding` at `tests/contract/requirements/{requirement}.assessment`.
-    pub requirement: String,
-    /// The full, human-readable explanation -- composed here, by the provider that has the
-    /// filesystem access to tell a missing file from a renamed symbol, not by the rule.
-    pub message: String,
-}
-
-/// A repository's whole requirement-trace judgment: every stale or incomplete assessment
-/// [`crate::predicates`] found, in a fixed, deterministic order (every unresolved site, then
-/// every unresolved gap, then every unresolved record, then every divergence with no record,
-/// then every partial with no gap -- each group itself ordered by requirement, since
-/// [`crate::registry::Entries`] sorts the assessments it reads before any predicate runs).
-///
-/// Empty for a repository with no `tests/contract/requirements/` directory at all, or one
-/// whose committed assessments all resolve -- the two cases `crate::provider`'s own module
-/// doc says are the same fact to a caller that only reads this payload: nothing to report.
-#[derive(Clone, Debug, PartialEq, Eq, Default)]
-pub struct RequirementTracePayload
-{
-    pub problems: Vec<Problem>,
-}
-
+/// The word every line of this encoding opens with.
 const PROBLEM_TAG: &str = "problem";
+/// The fields a `problem` line carries: the tag itself, the kind, the requirement and the
+/// message. The message is read whole, so a message that happens to contain a tab is not
+/// truncated at it.
+const PROBLEM_FIELDS: usize = 4;
 
 /// Encodes a payload as tab-separated lines, the same shape every other capability payload
 /// in this workspace uses: diffable by a person, written in one place with no derive between
@@ -144,11 +127,10 @@ pub fn Parse_Payload(bytes: &[u8]) -> Result<RequirementTracePayload, Refusal>
 }
 
 /// One line, decoded -- `PROBLEM_TAG`, a kind tag, a requirement and a message, in that
-/// order. `splitn` on the fourth field so a message that happened to contain a tab is
-/// carried whole rather than truncated at it.
+/// order, each field checked by the helper that knows what a good one looks like.
 fn Problem_Of_Line(line: &str) -> Result<Problem, Refusal>
 {
-    let mut fields = line.splitn(4, '\t');
+    let mut fields = line.splitn(PROBLEM_FIELDS, '\t');
     let (Some(tag), Some(kind), Some(requirement), Some(message)) = (fields.next(), fields.next(), fields.next(), fields.next())
     else
     {
@@ -157,30 +139,59 @@ fn Problem_Of_Line(line: &str) -> Result<Problem, Refusal>
         });
     };
 
-    if tag != PROBLEM_TAG
+    let line = Line(line);
+    Assert_Problem_Tag(line, tag)?;
+
+    return Ok(Problem {
+        kind: Read_Kind(line, kind)?,
+        requirement: Read_Requirement(line, requirement)?,
+        message: message.to_owned(),
+    });
+}
+
+/// One line's own text, given its own type so a field of a line cannot be handed to a reader
+/// in the line's place -- the same reason `crate::payload::Problem`'s fields are named.
+#[derive(Clone, Copy)]
+struct Line<'a>(&'a str);
+
+/// Whether a line opens with the one tag this payload names.
+fn Assert_Problem_Tag(line: Line<'_>, tag: &str) -> Result<(), Refusal>
+{
+    if tag == PROBLEM_TAG
     {
-        return Err(Refusal {
-            reason: format!("line {line:?} does not open with `{PROBLEM_TAG}`"),
-        });
+        return Ok(());
     }
-    let Some(kind) = ProblemKind::Of_Tag(kind)
+
+    return Err(Refusal {
+        reason: format!("line {:?} does not open with `{PROBLEM_TAG}`", line.0),
+    });
+}
+
+/// The kind a line's kind field names.
+fn Read_Kind(line: Line<'_>, kind: &str) -> Result<ProblemKind, Refusal>
+{
+    let Some(read) = ProblemKind::Of_Tag(kind)
     else
     {
         return Err(Refusal {
-            reason: format!("line {line:?} names an unrecognized problem kind `{kind}`"),
+            reason: format!("line {:?} names an unrecognized problem kind `{kind}`", line.0),
         });
     };
-    if requirement.is_empty()
+
+    return Ok(read);
+}
+
+/// A line's requirement field, refused when it is empty: a problem is about some
+/// requirement, and one naming none is not.
+fn Read_Requirement(line: Line<'_>, requirement: &str) -> Result<String, Refusal>
+{
+    if !requirement.is_empty()
     {
-        return Err(Refusal {
-            reason: format!("line {line:?} has an empty requirement"),
-        });
+        return Ok(requirement.to_owned());
     }
 
-    return Ok(Problem {
-        kind,
-        requirement: requirement.to_owned(),
-        message: message.to_owned(),
+    return Err(Refusal {
+        reason: format!("line {:?} has an empty requirement", line.0),
     });
 }
 
@@ -291,6 +302,7 @@ mod tests
         }
     }
 
+    /// A payload holding one problem of the first kind, for the tests above.
     fn Sample() -> RequirementTracePayload
     {
         return RequirementTracePayload {

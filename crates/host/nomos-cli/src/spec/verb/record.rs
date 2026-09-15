@@ -155,7 +155,24 @@ mod tests
     #[test]
     fn Test_Ambiguous_Revision_Should_List_Every_Held_Revision()
     {
-        let documents = vec![
+        let documents = Two_Held_Revisions();
+        let mut notes = Vec::new();
+
+        let code = Ambiguous_Revision("D-1", &documents, &mut notes);
+
+        assert_eq!(code, ExitCode::NotFound);
+        let text = String::from_utf8_lossy(&notes);
+        assert!(text.contains("authored"));
+        assert!(text.contains("final"));
+        assert!(text.contains("--revision"));
+    }
+
+    /// Two documents filed under one id, one per revision the store holds -- the ambiguity
+    /// [`Ambiguous_Revision`] exists to report, and the only fixture here that carries more
+    /// than one revision of the same id.
+    fn Two_Held_Revisions() -> Vec<DocumentSource>
+    {
+        return vec![
             DocumentSource {
                 uid: 1,
                 path: "a.md".to_owned(),
@@ -171,15 +188,6 @@ mod tests
                 text: String::new(),
             },
         ];
-        let mut notes = Vec::new();
-
-        let code = Ambiguous_Revision("D-1", &documents, &mut notes);
-
-        assert_eq!(code, ExitCode::NotFound);
-        let text = String::from_utf8_lossy(&notes);
-        assert!(text.contains("authored"));
-        assert!(text.contains("final"));
-        assert!(text.contains("--revision"));
     }
 
     #[test]

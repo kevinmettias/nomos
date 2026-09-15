@@ -11,7 +11,8 @@ fn Test_Command_From_String_Arguments_Should_Parse_Its_Fields_And_Default_State_
          --field title=t --field goal=g",
     );
 
-    let Command::Submit(request) = Command_From_String_Arguments(&arguments).expect("parses");
+    let Command::Submit(request) = Command_From_String_Arguments(&arguments)
+        .expect("the arguments above are a complete submit line");
 
     assert_eq!(request.kind, SubmissionKind::FeatureRequest);
     assert_eq!(request.id, "FR-100");
@@ -74,10 +75,11 @@ fn Test_A_Gap_Should_Parse_Its_Blocked_Fields_And_Severity()
          --gap which-substrate|behaviour,goal|blocking",
     );
 
-    let Command::Submit(request) = Command_From_String_Arguments(&arguments).expect("parses");
+    let Command::Submit(request) = Command_From_String_Arguments(&arguments)
+        .expect("the arguments above are a complete submit line");
 
     assert_eq!(request.gaps.len(), 1);
-    let gap = request.gaps.first().expect("one gap");
+    let gap = request.gaps.first().expect("the command line above carries one --gap");
     assert_eq!(gap.question, "which-substrate");
     assert_eq!(gap.blocks, vec!["behaviour".to_owned(), "goal".to_owned()]);
     assert_eq!(gap.severity, Severity::Blocking);
@@ -91,7 +93,8 @@ fn Test_A_Parsed_Submission_Should_Carry_This_Transport_Name()
         "submit --kind feature-request --id FR-104 --by kevin --field title=t",
     );
 
-    let Command::Submit(request) = Command_From_String_Arguments(&arguments).expect("parses");
+    let Command::Submit(request) = Command_From_String_Arguments(&arguments)
+        .expect("the arguments above are a complete submit line");
 
     assert_eq!(request.submitted_through, "cli");
 }
@@ -101,14 +104,26 @@ fn Arguments_From_Text(text: &str) -> Vec<String>
     return text.split_whitespace().map(str::to_owned).collect();
 }
 
+/// A help text, and the `--flag` whose alternatives are wanted out of it.
+///
+/// One type rather than two adjacent `&str` positions: the text and the flag are both
+/// strings, so a caller could transpose them and the search would look for a usage line
+/// inside a flag name, find none, and return the empty list -- which reads as "the text lists
+/// no alternatives" rather than as the mistake it is.
+struct FlagAlternatives<'a>
+{
+    usage: &'a str,
+    flag: &'a str,
+}
+
 /// The alternatives a `--flag a|b|c` segment of the help text lists.
 ///
 /// The brackets and angle brackets a usage line wraps its alternatives in come off, so a caller
 /// compares words rather than punctuation -- this group spells one of its two as
 /// `<a|b|c>` and the other as `[--state a|b]`, and neither shape is about the vocabulary.
-fn Alternatives_After(usage: &str, flag: &str) -> Vec<String>
+fn Alternatives_After(question: FlagAlternatives<'_>) -> Vec<String>
 {
-    let Some((_, rest)) = usage.split_once(&format!("{flag} "))
+    let Some((_, rest)) = question.usage.split_once(&format!("{} ", question.flag))
     else
     {
         return Vec::new();
@@ -130,6 +145,24 @@ fn Sorted_Words(words: impl Iterator<Item = String>) -> Vec<String>
     sorted.dedup();
 
     return sorted;
+}
+
+/// The alternatives the help text lists for `flag`, refused when it lists none.
+///
+/// A text that spells no alternative for the flag would have the comparison below pass
+/// against an empty set, and an empty set comparing equal to an empty set is what agreement
+/// looks like -- so the emptiness is a failure here rather than a silent pass there.
+fn Listed_Alternatives(flag: &str) -> Vec<String>
+{
+    let listed = Alternatives_After(FlagAlternatives { usage: &super::parsing::Usage_Text(), flag });
+
+    assert!(
+        !listed.is_empty(),
+        "no {flag} alternative was parsed out of the usage text, so this compared nothing: {}",
+        super::parsing::Usage_Text()
+    );
+
+    return listed;
 }
 
 /// Every kind a submission can declare.
@@ -176,11 +209,22 @@ fn Spelled_State(state: SubmissionState) -> &'static str
     };
 }
 
+/// A `--kind` spelling taken from the usage text, not from [`Spelled_Kind`]'s match.
+///
+/// Its own type so that [`Submit_Line`] cannot be handed the two spellings the wrong way
+/// round: both are strings, a transposed line still parses, and the failure would surface as
+/// an assertion about a different field than the one the swap happened in.
+struct KindSpelling<'a>(&'a str);
+
+/// A `--state` spelling, [`KindSpelling`]'s reasoning over the other position.
+struct StateSpelling<'a>(&'a str);
+
 /// A `submit` line carrying one `--kind` and one `--state`, so a spelling can be parsed back.
-fn Submit_Line(kind: &str, state: &str) -> Vec<String>
+fn Submit_Line(kind: KindSpelling<'_>, state: StateSpelling<'_>) -> Vec<String>
 {
     return Arguments_From_Text(&format!(
-        "submit --kind {kind} --id FR-1 --by kevin --state {state} --field title=t --field goal=g"
+        "submit --kind {} --id FR-1 --by kevin --state {} --field title=t --field goal=g",
+        kind.0, state.0
     ));
 }
 
@@ -192,7 +236,8 @@ fn Submit_Line(kind: &str, state: &str) -> Vec<String>
 /// told.
 fn Submitted(arguments: &[String]) -> nomos_spec_orchestration::SubmitRequest
 {
-    let Command::Submit(request) = Command_From_String_Arguments(arguments).expect("parses");
+    let Command::Submit(request) = Command_From_String_Arguments(arguments)
+        .expect("Submit_Line builds a complete submit line for every caller");
 
     return request;
 }
@@ -207,13 +252,8 @@ fn Submitted(arguments: &[String]) -> nomos_spec_orchestration::SubmitRequest
 #[test]
 fn Test_The_Listed_Submission_Kinds_Should_Be_Every_Kind_A_Submission_Can_Declare()
 {
-    let listed = Alternatives_After(&super::parsing::Usage_Text(), "--kind");
+    let listed = Listed_Alternatives("--kind");
 
-    assert!(
-        !listed.is_empty(),
-        "no --kind alternative was parsed out of the usage text, so this compared nothing: {}",
-        super::parsing::Usage_Text()
-    );
     assert_eq!(
         Sorted_Words(listed.iter().cloned()),
         Sorted_Words(Every_Submission_Kind().iter().map(|kind| return Spelled_Kind(*kind).to_owned())),
@@ -222,7 +262,8 @@ fn Test_The_Listed_Submission_Kinds_Should_Be_Every_Kind_A_Submission_Can_Declar
 
     for spelling in &listed
     {
-        let submitted = Submitted(&Submit_Line(spelling, "draft"));
+        let line = Submit_Line(KindSpelling(spelling), StateSpelling("draft"));
+        let submitted = Submitted(&line);
         let named = Every_Submission_Kind()
             .iter()
             .find(|kind| return Spelled_Kind(**kind) == spelling.as_str())
@@ -238,13 +279,8 @@ fn Test_The_Listed_Submission_Kinds_Should_Be_Every_Kind_A_Submission_Can_Declar
 #[test]
 fn Test_The_Listed_Submission_States_Should_Be_Every_State_A_Submission_Can_Be_In()
 {
-    let listed = Alternatives_After(&super::parsing::Usage_Text(), "--state");
+    let listed = Listed_Alternatives("--state");
 
-    assert!(
-        !listed.is_empty(),
-        "no --state alternative was parsed out of the usage text, so this compared nothing: {}",
-        super::parsing::Usage_Text()
-    );
     assert_eq!(
         Sorted_Words(listed.iter().cloned()),
         Sorted_Words(Every_Submission_State().iter().map(|state| return Spelled_State(*state).to_owned())),
@@ -253,7 +289,8 @@ fn Test_The_Listed_Submission_States_Should_Be_Every_State_A_Submission_Can_Be_I
 
     for spelling in &listed
     {
-        let submitted = Submitted(&Submit_Line("feature-request", spelling));
+        let line = Submit_Line(KindSpelling("feature-request"), StateSpelling(spelling));
+        let submitted = Submitted(&line);
         let named = Every_Submission_State()
             .iter()
             .find(|state| return Spelled_State(**state) == spelling.as_str())
@@ -317,12 +354,7 @@ fn Sorted(codes: impl Iterator<Item = i32>) -> Vec<i32>
 #[test]
 fn Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With()
 {
-    let usage = super::parsing::Usage_Text();
-
-    assert!(
-        usage.starts_with("usage: nomos request"),
-        "this compared some other group's help text: {usage}"
-    );
+    let usage = Usage_Text_Of_This_Group();
 
     let (_, spelled) = usage
         .split_once("exit codes:")
@@ -341,4 +373,22 @@ fn Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With()
          enum declares {:?}",
         Every_Exit_Code().iter().map(|code| return Labelled(*code)).collect::<Vec<_>>()
     );
+}
+
+/// This group's own help text, refused when it turns out to be some other group's.
+///
+/// Eight groups print a usage text and this file guards one of them. A `Usage_Text()` that
+/// returned another group's prose would have every comparison below pass against the wrong
+/// authority -- a failure that reads exactly like success -- so the identity of the text is
+/// asserted before anything is read out of it.
+fn Usage_Text_Of_This_Group() -> String
+{
+    let usage = super::parsing::Usage_Text();
+
+    assert!(
+        usage.starts_with("usage: nomos request"),
+        "this compared some other group's help text: {usage}"
+    );
+
+    return usage;
 }

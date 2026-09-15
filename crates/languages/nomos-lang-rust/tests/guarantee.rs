@@ -233,11 +233,16 @@ fn Test_The_Unexpanded_Count_Should_Expose_How_Much_Was_Out_Of_Reach()
 
     assert_eq!(reachable.unexpanded, 0);
     assert!(
-        mostly_hidden.unexpanded >= 3,
+        mostly_hidden.unexpanded >= FIXTURE_VISIBLE_UNEXPANDED_REGIONS,
         "one derive and two invocations, at least: {}",
         mostly_hidden.unexpanded
     );
 }
+
+/// The regions of the fixture above the walk can see: the derive on `One`, and the two
+/// macro invocations inside `two`'s body. A floor rather than an equality, which is what
+/// the axis being `Unknown` means.
+const FIXTURE_VISIBLE_UNEXPANDED_REGIONS: u32 = 3;
 
 /// The count is honest about being a lower bound. `#[tokio::main]` generates code and is
 /// syntactically identical to `#[allow(dead_code)]`, which does not — telling them apart
@@ -282,12 +287,7 @@ fn Test_The_Granularity_Should_Be_File_Because_A_Reading_Carries_Nothing_Across(
 
     let subject = "pub mod held { pub fn only() {} }\n";
     let first = Read_Source(subject);
-
-    for index in 0..100_u32
-    {
-        let _ = Read_Source(&format!("pub fn noise_{index}() {{ vec![{index}]; }}\n"));
-    }
-    let _ = Read_Source("fn broken( {");
+    Assert_The_Noise_Reads_And_The_Broken_File_Refuses();
 
     assert_eq!(
         Read_Source(subject),
@@ -296,6 +296,33 @@ fn Test_The_Granularity_Should_Be_File_Because_A_Reading_Carries_Nothing_Across(
          this file says"
     );
 }
+
+/// Reads the other files the test above reads, and asserts every one of them is what it is
+/// meant to be: the run of valid noise, and then the single source that is not valid Rust.
+///
+/// Both halves are read and looked at rather than dropped. A reading that refused one of the
+/// noise files is the very failure the test above exists for, and so is one that accepted
+/// the broken file — dropping either would report the defect as a pass.
+fn Assert_The_Noise_Reads_And_The_Broken_File_Refuses()
+{
+    for index in 0..OTHER_FILES_READ_BEFORE_THE_REPEAT
+    {
+        assert!(
+            matches!(Read_Source(&format!("pub fn noise_{index}() {{ vec![{index}]; }}\n")), Reading::Parsed(_)),
+            "file {index} of the run is valid Rust and has to be read as such"
+        );
+    }
+
+    assert!(
+        matches!(Read_Source("fn broken( {"), Reading::Unparseable(_)),
+        "a source with an unclosed delimiter is not a reading, and the axis depends on it"
+    );
+}
+
+/// How many files are read between the two readings of the file under test. Enough that a
+/// provider carrying any state at all would have to carry it across all of these; small
+/// enough that the test stays a test rather than becoming a benchmark.
+const OTHER_FILES_READ_BEFORE_THE_REPEAT: u32 = 100;
 
 /// Granularity is `File` and not `Symbol`. `syn` parses a whole file or refuses it, so
 /// there is no reading of half a file to offer — and claiming `Symbol` would let the
@@ -397,7 +424,7 @@ fn Test_A_Refusal_Should_Name_Where_It_Refused()
     };
 
     assert!(
-        failure.line >= 3,
+        failure.line >= BROKEN_FUNCTION_LINE,
         "the failure is on the third line, not the first: {failure}"
     );
     assert!(!failure.message.is_empty());
@@ -406,6 +433,11 @@ fn Test_A_Refusal_Should_Name_Where_It_Refused()
         "the rendered form must carry the reason"
     );
 }
+
+/// The line the broken function sits on in the fixture above -- the third, after a whole
+/// function and a blank line. Spelled out, because the assertion is that the refusal names
+/// this line rather than whichever line the parser happened to stop at.
+const BROKEN_FUNCTION_LINE: usize = 3;
 
 /// Every item form Rust has reaches a distinct [`ItemKind`]. A form that fell through to
 /// another kind would be reported under a name that is not its own, and nothing would

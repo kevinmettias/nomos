@@ -113,19 +113,8 @@ mod tests
 {
     use super::*;
 
-    fn Sample() -> FindingPayload
-    {
-        return FindingPayload {
-            external_system: "coderabbit".to_owned(),
-            external_id: ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", 3_521_038_097),
-            locator: "https://github.com/coderabbitai/rabbits-playground/pull/13#discussion_r3521038097".to_owned(),
-            category: "🔒 Security & Privacy".to_owned(),
-            severity: "🟡 Minor".to_owned(),
-            path: "modules/security/main.tf".to_owned(),
-            line: "43".to_owned(),
-            message: "Consider defining an explicit KMS key policy (least privilege).".to_owned(),
-        };
-    }
+    /// The real, public review comment this crate's own recorded fixture was captured from.
+    const COMMENT_ID: u64 = 3_521_038_097;
 
     #[test]
     fn Test_A_Payload_Should_Round_Trip_Through_Its_Own_Encoding()
@@ -179,5 +168,21 @@ mod tests
     {
         let bytes = b"coderabbit\tid1\n";
         assert!(Parse_Payload(bytes).is_err());
+    }
+
+    /// The one payload every test above writes and reads back: the fields of this crate's
+    /// own recorded fixture.
+    fn Sample() -> FindingPayload
+    {
+        return FindingPayload {
+            external_system: "coderabbit".to_owned(),
+            external_id: ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", COMMENT_ID),
+            locator: "https://github.com/coderabbitai/rabbits-playground/pull/13#discussion_r3521038097".to_owned(),
+            category: "🔒 Security & Privacy".to_owned(),
+            severity: "🟡 Minor".to_owned(),
+            path: "modules/security/main.tf".to_owned(),
+            line: "43".to_owned(),
+            message: "Consider defining an explicit KMS key policy (least privilege).".to_owned(),
+        };
     }
 }

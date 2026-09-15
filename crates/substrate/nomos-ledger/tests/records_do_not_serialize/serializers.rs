@@ -1,11 +1,15 @@
 //! What still serializes them, named rather than assumed.
 
 use crate::board::{
-    Constructed_Writers, Is_Open, Only_Records, Paths_Collide, RECORD_DIRECTORY, Record_Writers,
-    Unclaimed_Copy, Writer_Ids, Covers,
+    Constructed_Writers, Covers, CONTESTING_WRITERS, DeclaredPath, Is_Open, Only_Records,
+    PathText, Paths_Collide, RECORD_DIRECTORY, Record_Writers, ReservedPath, Unclaimed_Copy,
+    Writer_Ids,
 };
 use nomos_ledger::{ItemId, LedgerDocument, LedgerItem, Normalize_Path, Territory};
 use std::collections::BTreeSet;
+
+mod census;
+use census::{Exclusions, Exclusions_Among};
 
 /// The paths every record writer is forced to share, and what forces them.
 ///
@@ -47,6 +51,19 @@ use std::collections::BTreeSet;
 /// between `OD-LEDGER-011` and `OD-LEDGER-028`.
 const KNOWN_SERIALIZERS: &[(&str, &str)] = &[];
 
+/// How many open record writers reserving one path makes it a serializer.
+///
+/// Below this the path is ordinary contention between two items that happen to want the
+/// same ground, which resolves when one of them finishes. At this many it is a rule, and the
+/// next record writer will reserve it too.
+const WRITERS_MAKING_A_SERIALIZER: usize = 2;
+
+/// How many writers the search can be stated over.
+///
+/// "Reserved by *all* of them" is a claim about a population, and one item is not one: with a
+/// single writer every path it happens to reserve reads as universal.
+const WRITERS_MAKING_A_POPULATION: usize = 2;
+
 /// The paths the register declares, without what forces each of them.
 fn Declared() -> Vec<&'static str>
 {
@@ -60,59 +77,6 @@ fn Widened(item: &LedgerItem, path: &str) -> Territory
     paths.push(path.to_owned());
 
     return Territory::Of_Files(paths);
-}
-
-/// The non-record paths two items share, narrower spelling first.
-fn Shared_Paths(left: &LedgerItem, right: &LedgerItem) -> Vec<String>
-{
-    let mut shared = Vec::new();
-
-    for mine in &left.territory.paths
-    {
-        for broader in Broader_Of(mine, right)
-        {
-            if !shared.contains(&broader)
-            {
-                shared.push(broader);
-            }
-        }
-    }
-
-    shared.sort();
-    return shared;
-}
-
-/// The broader spelling of every non-record path in `right` that `mine` collides with.
-fn Broader_Of(mine: &str, right: &LedgerItem) -> Vec<String>
-{
-    if Normalize_Path(mine).starts_with(RECORD_DIRECTORY)
-    {
-        return Vec::new();
-    }
-
-    return right
-        .territory
-        .paths
-        .iter()
-        .filter(|theirs| return !Normalize_Path(theirs).starts_with(RECORD_DIRECTORY))
-        .filter(|theirs| return Paths_Collide(mine, theirs))
-        .map(|theirs| return Broader(mine, theirs))
-        .collect();
-}
-
-/// The broader of two colliding paths, which is the one that serializes.
-///
-/// An item reserving a whole crate is what a file inside it collides with, and naming the
-/// file would report the symptom. The shorter normalized spelling is the container — the
-/// same tie-break [`Covers`] takes the direction of a containment from.
-fn Broader(mine: &str, theirs: &str) -> String
-{
-    if Normalize_Path(mine).len() <= Normalize_Path(theirs).len()
-    {
-        return Normalize_Path(mine);
-    }
-
-    return Normalize_Path(theirs);
 }
 
 /// Two open items that each reserve a record and are otherwise territorially independent.
@@ -191,7 +155,7 @@ fn Test_Every_Declared_Serializer_Should_Still_Serialize()
 
     let stale: Vec<&str> = Declared()
         .into_iter()
-        .filter(|declared| return Reserving(&writers, declared) < 2)
+        .filter(|declared| return Reserving(&writers, declared) < WRITERS_MAKING_A_SERIALIZER)
         .collect();
 
     assert!(
@@ -208,7 +172,13 @@ fn Reserving(writers: &[&LedgerItem], declared: &str) -> usize
 {
     return writers
         .iter()
-        .filter(|item| return item.territory.paths.iter().any(|path| return Covers(path, declared)))
+        .filter(|item| {
+            return item
+                .territory
+                .paths
+                .iter()
+                .any(|path| return Covers(ReservedPath(path.as_str()), DeclaredPath(declared)));
+        })
         .count();
 }
 
@@ -226,7 +196,7 @@ fn Reserving(writers: &[&LedgerItem], declared: &str) -> usize
 #[test]
 fn Test_An_Undeclared_Serializer_Should_Be_Found()
 {
-    let mut document = Constructed_Writers(2);
+    let mut document = Constructed_Writers(CONTESTING_WRITERS);
     let writers = Writer_Ids(&document);
     let invented = "crates/invented/shared-by-everyone";
     for item in &mut document.items
@@ -287,7 +257,7 @@ fn Undeclared_Serializers(document: &LedgerDocument) -> BTreeSet<String>
 /// [`Undeclared_Serializers`]'s own doc comment.
 fn First_Writer_If_Comparable<'a>(writers: &[&'a LedgerItem]) -> Option<&'a LedgerItem>
 {
-    if writers.len() < 2
+    if writers.len() < WRITERS_MAKING_A_POPULATION
     {
         return None;
     }
@@ -302,7 +272,9 @@ fn Serializes(candidate: &str, writers: &[&LedgerItem], declared: &[&str]) -> bo
     {
         return false;
     }
-    if declared.iter().any(|known| return Paths_Collide(known, candidate))
+    if declared
+        .iter()
+        .any(|known| return Paths_Collide(PathText(known), PathText(candidate)))
     {
         return false;
     }
@@ -312,7 +284,7 @@ fn Serializes(candidate: &str, writers: &[&LedgerItem], declared: &[&str]) -> bo
             .territory
             .paths
             .iter()
-            .any(|path| return Paths_Collide(candidate, path));
+            .any(|path| return Paths_Collide(PathText(candidate), PathText(path)));
     });
 }
 
@@ -332,32 +304,49 @@ fn Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel()
     let document = Unclaimed_Copy();
     let writers = Record_Writers(&document);
     let counted = Exclusions_Among(&writers);
-    let parallel = A_Concurrent_Pair(&document)
-        .map_or_else(|| return "none".to_owned(), |(first, second)| {
-            return format!("{first} + {second}");
-        });
 
+    Report_The_Board(&writers, &counted, &document);
+    Assert_The_Counts_Agree(&counted);
+}
+
+/// Prints the figure, in both directions, so a reader sees what the board looked like.
+fn Report_The_Board(writers: &[&LedgerItem], counted: &Exclusions, document: &LedgerDocument)
+{
     eprintln!(
         "record writers: {} items, {} pair(s), {} blocked, {} of those only by a declared \
-         serializer. Concurrent pair available: {parallel}.\n\
+         serializer. Concurrent pair available: {}.\n\
          The {} are OD-LEDGER-007's debt; the other {} are ordinary contention.",
         writers.len(),
         counted.pairs,
         counted.blocked,
         counted.structural,
+        Parallel_Pair_Named(document),
         counted.structural,
         counted.blocked.saturating_sub(counted.structural)
     );
+}
 
-    // The figure printed above is deliberately not asserted against a threshold --
-    // `OD-LEDGER-032` is the record of what demanding one cost (red on 26 of the last 30
-    // commits, for a reason no commit contained), and reasserting it here would be the same
-    // defect in miniature. What *is* asserted is the arithmetic relationship `Count_Exclusion`
-    // promises regardless of which items happen to be on the board: a pair the register alone
-    // excludes is still an excluded pair, and an excluded pair is still one of the pairs
-    // counted. Either inequality breaking would mean the counting itself regressed, which the
-    // report above would not by itself reveal -- it would simply print a different number and
-    // look no less legitimate for it.
+/// The concurrent pair the board currently offers, named for the report, or `none`.
+fn Parallel_Pair_Named(document: &LedgerDocument) -> String
+{
+    return A_Concurrent_Pair(document)
+        .map_or_else(|| return "none".to_owned(), |(first, second)| {
+            return format!("{first} + {second}");
+        });
+}
+
+/// The arithmetic relationship `Count_Exclusion` promises whatever happens to be on the board.
+///
+/// The figure `Report_The_Board` prints is deliberately not asserted against a threshold --
+/// `OD-LEDGER-032` is the record of what demanding one cost (red on 26 of the last 30
+/// commits, for a reason no commit contained), and reasserting it here would be the same
+/// defect in miniature. What *is* asserted is the counting's own consistency: a pair the
+/// register alone excludes is still an excluded pair, and an excluded pair is still one of
+/// the pairs counted. Either inequality breaking would mean the counting itself regressed,
+/// which the report would not by itself reveal -- it would simply print a different number
+/// and look no less legitimate for it.
+fn Assert_The_Counts_Agree(counted: &Exclusions)
+{
     assert!(
         counted.blocked <= counted.pairs,
         "a blocked pair must be one of the pairs counted: {} blocked of {} pairs",
@@ -371,54 +360,6 @@ fn Test_A_Run_Should_Report_Whether_The_Board_Is_Parallel()
         counted.structural,
         counted.blocked
     );
-}
-
-/// How many pairs of record writers there are, how many exclude each other, and how many of
-/// those are excluded only by a path the register declares.
-#[derive(Default)]
-struct Exclusions
-{
-    pairs: usize,
-    blocked: usize,
-    structural: usize,
-}
-
-fn Exclusions_Among(writers: &[&LedgerItem]) -> Exclusions
-{
-    let declared = Declared();
-    let mut counted = Exclusions::default();
-
-    for (index, left) in writers.iter().enumerate()
-    {
-        for right in writers.iter().skip(index.saturating_add(1))
-        {
-            counted.pairs = counted.pairs.saturating_add(1);
-            Count_Exclusion(&mut counted, (left, right), &declared);
-        }
-    }
-
-    return counted;
-}
-
-/// Whether one pair excludes the other, and whether the register is the only reason.
-///
-/// Anything else is two items wanting the same crate, which is territory doing its job and
-/// resolves when one of them finishes.
-fn Count_Exclusion(counted: &mut Exclusions, pair: (&LedgerItem, &LedgerItem), declared: &[&str])
-{
-    let (left, right) = pair;
-    if left.territory.Intersect(&right.territory).Permits_Concurrency()
-    {
-        return;
-    }
-
-    counted.blocked = counted.blocked.saturating_add(1);
-    if Shared_Paths(left, right)
-        .iter()
-        .all(|path| return declared.iter().any(|known| return Paths_Collide(known, path)))
-    {
-        counted.structural = counted.structural.saturating_add(1);
-    }
 }
 
 /// The control for the acceptance test above, and the reason it cannot pass vacuously.

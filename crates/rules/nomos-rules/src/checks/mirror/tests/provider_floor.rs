@@ -45,7 +45,7 @@ fn Blind_Payload(names: &[&str]) -> Vec<u8>
 #[test]
 fn Test_A_Composition_With_No_Provider_Should_Report_A_Missing_Capability()
 {
-    let source = Source("a.rs", "pub const T: &[&str] = &[];\n");
+    let source = Source("a.rs", "pub const T: &[&str] = &[];\n".to_owned());
 
     let world = World::Offering(&[]);
     let mut reader = world.Reader();
@@ -73,7 +73,7 @@ fn Test_The_Scanners_Guarantee_Should_Not_Satisfy_This_Rules_Floor()
 
     let source = Source(
         "a.rs",
-        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n".to_owned(),
     );
     let world = World::Offering(&[(SCANNER, Scanner_Guarantee())]);
     let findings = Judged_In(&world, &[source]);
@@ -132,7 +132,7 @@ fn Test_A_Universe_Read_Through_A_Blind_Provider_Should_Not_Be_An_Admitted_Gap()
 {
     let source = Source(
         "a.rs",
-        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n".to_owned(),
     );
 
     let world = World::Offering(&[(PARSER, Parser_Guarantee())]).Materializing(
@@ -173,7 +173,7 @@ fn Assert_Nothing_Was_Observed(findings: &[Finding])
 #[test]
 fn Test_A_Payload_Under_Another_Schema_Should_Not_Be_Decoded()
 {
-    let source = Source("a.rs", "pub const T: &[&str] = &[];\n");
+    let source = Source("a.rs", "pub const T: &[&str] = &[];\n".to_owned());
 
     let world = World::Offering(&[(PARSER, Parser_Guarantee())]).Materializing(
         &source,

@@ -4,7 +4,27 @@
 //! be the same answer, because the first is a board nobody has started and the second is a
 //! board whose contents were lost.
 
-use crate::board::*;
+use crate::board::{
+    Abandonment, At, AT_NOW, Blocker, Claim, Document, GateOutcome, Held_By, Item, ItemId, ItemState, ItemTerritory,
+    LEASE_ENDS_AT, Ledger_At, LedgerDocument, LedgerError, LedgerItem, NOW, SCHEMA_VERSION, Temporary_Directory,
+    VerificationPredicate, VerificationRecord,
+};
+
+/// A schema version from a build later than this one, which the reader has to tell apart from
+/// a damaged file rather than reporting both the same way.
+const NEWER_SCHEMA_VERSION: u32 = 9_999;
+
+/// How many object nodes a fully populated document has, which is the universe the probe
+/// below derives rather than a list somebody maintains.
+///
+/// The count is what makes the walk below say something: an item with an empty list
+/// serializes as `[]`, contributes no node, and leaves whatever type lives inside it
+/// unprobed. If this number falls, the fixture stopped populating something.
+const OBJECT_NODES_IN_A_POPULATED_DOCUMENT: usize = 11;
+
+/// When the displaced claim's lease ran out: a minute after it was taken, so the fixture's
+/// two claims do not share one expiry and a reader can tell which is which.
+const DISPLACED_LEASE_ENDS_AT: i64 = NOW + 60;
 
 /// A missing ledger is a repository that has not started tracking work. A *corrupt*
 /// ledger is somebody's roadmap that got damaged, and treating it as empty would let
@@ -15,7 +35,8 @@ fn Test_A_Corrupt_Ledger_Should_Be_An_Error_Not_An_Empty_One()
     let directory = Temporary_Directory("corrupt");
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
-    std::fs::write(directory.As_Path().join("ledger.json"), "{ this is not json").expect("write");
+    std::fs::write(directory.As_Path().join("ledger.json"), "{ this is not json")
+        .expect("the corrupt fixture has to reach the disk");
 
     let error = ledger.Load().expect_err("a corrupt ledger must not read as empty");
 
@@ -65,12 +86,12 @@ fn Test_The_Ledger_Should_Round_Trip_Losslessly()
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
     let original = Document(vec![
-        Held_By(Item("T-1", &["src/a.rs", "src/b.rs"]), "agent-a", NOW + 3_600),
+        Held_By(Item("T-1", &["src/a.rs", "src/b.rs"]), "agent-a", LEASE_ENDS_AT),
         Item("T-2", &["src/c.rs"]),
     ]);
 
-    ledger.Save(&original).expect("valid");
-    let reloaded = ledger.Load().expect("readable");
+    ledger.Save(&original).expect("the fixture document is one the board accepts");
+    let reloaded = ledger.Load().expect("the document this test just saved reads back");
 
     assert_eq!(reloaded, original);
 }
@@ -118,7 +139,8 @@ fn Test_A_Ledger_Carrying_An_Undeclared_Key_Should_Not_Load()
         SCHEMA_VERSION,
         ",\"a_field_this_build_does_not_know\":{\"holder\":\"agent-a\"}",
     );
-    std::fs::write(directory.As_Path().join("ledger.json"), raw).expect("write");
+    std::fs::write(directory.As_Path().join("ledger.json"), raw)
+        .expect("the hand-written ledger has to reach the disk");
 
     let error = ledger
         .Load()
@@ -158,7 +180,7 @@ fn Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key()
     }
 
     assert!(
-        pointers.len() >= 11,
+        pointers.len() >= OBJECT_NODES_IN_A_POPULATED_DOCUMENT,
         "only {} object(s) were probed, so the fixture below has stopped being fully \
          populated — the guard did not shrink, the universe did",
         pointers.len()
@@ -188,7 +210,7 @@ fn Probed(whole: &serde_json::Value, pointer: &str) -> Result<LedgerDocument, se
 fn Fully_Populated() -> LedgerItem
 {
     let held = Item("T-1", &["src/a.rs"]);
-    let mut item = Held_By(held, "agent-a", NOW + 3_600);
+    let mut item = Held_By(held, "agent-a", LEASE_ENDS_AT);
     item.state = ItemState::Blocked;
     item.blocked = Some(Blocker::Dependency {
         items: vec![ItemId::New("T-0")],
@@ -216,7 +238,7 @@ fn Fully_Populated() -> LedgerItem
     item.displaced = vec![Claim {
         holder: "dead-agent".to_owned(),
         acquired_at: At(NOW),
-        lease_expires_at: At(NOW + 60),
+        lease_expires_at: At(DISPLACED_LEASE_ENDS_AT),
     }];
 
     return item;
@@ -262,8 +284,11 @@ fn Test_A_Ledger_Newer_Than_This_Build_Should_Say_So_Rather_Than_Malformed()
     // was here to make fail started succeeding. Named for what it is instead, which is the
     // same lesson `Raw_Ledger`'s own fixture learned: a probe key must not be one the schema
     // can catch up with.
-    let raw = Raw_Ledger(9_999, ",\"a_field_this_build_does_not_know\":[]");
-    let error = Load_Failure("newer-than-build", &raw);
+    let raw = Raw_Ledger(NEWER_SCHEMA_VERSION, ",\"a_field_this_build_does_not_know\":[]");
+    let error = Load_Failure(HandWritten {
+        name: "newer-than-build",
+        text: &raw,
+    });
 
     let LedgerError::Unrecognized {
         understood, found, ..
@@ -273,7 +298,7 @@ fn Test_A_Ledger_Newer_Than_This_Build_Should_Say_So_Rather_Than_Malformed()
         panic!("a file newer than this build must not be reported as damaged: {error}");
     };
     assert_eq!(*understood, SCHEMA_VERSION);
-    assert_eq!(*found, 9_999);
+    assert_eq!(*found, NEWER_SCHEMA_VERSION);
     Names_The_Versions_And_The_Remedy(&format!("{error}"));
 }
 
@@ -289,14 +314,28 @@ fn Names_The_Versions_And_The_Remedy(said: &str)
     );
 }
 
+/// A ledger file that no `Save` would produce: the name of the tree to put it in, and the
+/// bytes to put there.
+///
+/// Two strings as named fields rather than as two adjacent parameters, because a call site
+/// reading `Load_Failure(name, raw)` says nothing about which string is which.
+struct HandWritten<'a>
+{
+    /// What the scratch tree is called.
+    name: &'a str,
+    /// The document text, exactly as it lands on disk.
+    text: &'a str,
+}
+
 /// What `Load` says about a document written by hand.
 ///
 /// These files are the ones `Save` refuses to produce, so writing the bytes directly is the
 /// only way to reach the arm under test — and the tree goes away with the value returned.
-fn Load_Failure(name: &str, raw: &str) -> LedgerError
+fn Load_Failure(document: HandWritten<'_>) -> LedgerError
 {
-    let directory = Temporary_Directory(name);
-    std::fs::write(directory.As_Path().join("ledger.json"), raw).expect("write");
+    let directory = Temporary_Directory(document.name);
+    std::fs::write(directory.As_Path().join("ledger.json"), document.text)
+        .expect("the hand-written ledger has to reach the disk");
 
     return Ledger_At(directory.As_Path(), &AT_NOW)
         .Load()
@@ -315,7 +354,8 @@ fn Test_A_Ledger_That_Is_Merely_Broken_Should_Still_Be_Malformed()
     let directory = Temporary_Directory("merely-broken");
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
-    std::fs::write(directory.As_Path().join("ledger.json"), "{ this is not json").expect("write");
+    std::fs::write(directory.As_Path().join("ledger.json"), "{ this is not json")
+        .expect("the broken fixture has to reach the disk");
 
     let error = ledger.Load().expect_err("a broken document must not load");
 
@@ -343,12 +383,13 @@ fn Test_Saving_Should_Stamp_The_Version_This_Build_Understands()
 
     ledger
         .Save(&LedgerDocument {
-            schema_version: 9_999,
+            schema_version: NEWER_SCHEMA_VERSION,
             items: vec![Item("T-1", &["src/a.rs"])],
         })
-        .expect("valid");
+        .expect("saving stamps this build's version rather than refusing the file");
 
-    let written = std::fs::read_to_string(directory.As_Path().join("ledger.json")).expect("readable");
+    let written = std::fs::read_to_string(directory.As_Path().join("ledger.json"))
+        .expect("the ledger the save wrote is on disk");
 
     assert!(
         written.contains(&format!("\"schema_version\": {SCHEMA_VERSION}")),
@@ -378,7 +419,7 @@ fn Test_A_Document_Written_Before_A_Field_Existed_Should_Still_Load()
          \"verification\":null,\"verified\":null}\
          ]\n}\n",
     )
-    .expect("write");
+    .expect("the older fixture has to reach the disk");
 
     let document = Ledger_At(directory.As_Path(), &AT_NOW)
         .Load()

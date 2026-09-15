@@ -1,6 +1,6 @@
 //! An edge across the seam arrives as a reported placeholder, and the sibling suite claims it.
 
-use crate::queries::{Column, Counted, Seeded, Title};
+use crate::queries::{Column, Counted, NodeId, Seeded, Title};
 use nomos_spec_store::{EXTERNAL, NodeRow, SeedReport, Seed_Governing_Records, SpecificationStore, SuiteAuthority};
 
 /// The sibling records `ARC-ECOSYSTEM-001` cites, named here rather than counted.
@@ -22,8 +22,10 @@ const CITED_SIBLING_RECORDS: &[&str] = &["D-085", "D-086", "D-090", "D-096", "D-
 #[test]
 fn Test_A_Relation_To_A_Sibling_Record_Should_Arrive_As_A_Reported_Placeholder()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    let report = Seed_Governing_Records(&mut store).expect("seeds");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("In_Memory() opens no file, so this test needs no corpus to be present");
+    let report = Seed_Governing_Records(&mut store)
+        .expect("the governing records are embedded in this crate, so nothing external is read");
 
     for record in CITED_SIBLING_RECORDS
     {
@@ -40,7 +42,7 @@ fn Assert_Arrived_As_A_Placeholder(store: &SpecificationStore, report: &SeedRepo
          into a sibling suite is indistinguishable from an edge into nothing"
     );
 
-    let authority = Column(store, "SELECT authority FROM nodes WHERE node_id = ?1", record);
+    let authority = Column(store, "SELECT authority FROM nodes WHERE node_id = ?1", NodeId(record));
 
     assert_eq!(authority, EXTERNAL, "{record}");
     assert_eq!(
@@ -114,7 +116,9 @@ fn Claimed_By_The_Sibling_Suite() -> SpecificationStore
         })
         .expect("claims the placeholder");
 
-    store.Assign_Suite(node, suite).expect("assigns");
+    store
+        .Assign_Suite(node, suite)
+        .expect("Put_Suite and Upsert_Node just returned both uids on this connection");
 
     return store;
 }

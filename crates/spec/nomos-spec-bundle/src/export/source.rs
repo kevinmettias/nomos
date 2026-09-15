@@ -298,27 +298,32 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Source_Table_Rows(store.Connection(), &mut records).expect("collects");
+        Source_Table_Rows(store.Connection(), &mut records)
+            .expect("Source_Table_Rows ran over the store Fixture filled");
 
-        assert_eq!(
-            records,
-            vec![Record::SourceTableRow(SourceTableRow {
-                block: crate::OrdinalRef {
-                    document: DocumentRef {
-                        path: "doc.md".to_owned(),
-                        revision: "v1".to_owned(),
-                    },
-                    ordinal: 1,
+        assert_eq!(records, The_Row_It_Holds());
+    }
+
+    /// The one table row the fixture seeds, with its cells already encoded into the JSON
+    /// column `Source_Table_Rows` has to decode.
+    fn The_Row_It_Holds() -> Vec<Record>
+    {
+        return vec![Record::SourceTableRow(SourceTableRow {
+            block: crate::OrdinalRef {
+                document: DocumentRef {
+                    path: "doc.md".to_owned(),
+                    revision: "v1".to_owned(),
                 },
                 ordinal: 1,
-                table_ordinal: 1,
-                kind: "content".to_owned(),
-                cells: vec!["a".to_owned(), "b".to_owned()],
-                text: "a | b".to_owned(),
-                content_hash: "sha256:rc".to_owned(),
-                normalized_hash: "sha256:rn".to_owned(),
-            })]
-        );
+            },
+            ordinal: 1,
+            table_ordinal: 1,
+            kind: "content".to_owned(),
+            cells: vec!["a".to_owned(), "b".to_owned()],
+            text: "a | b".to_owned(),
+            content_hash: "sha256:rc".to_owned(),
+            normalized_hash: "sha256:rn".to_owned(),
+        })];
     }
 
     /// One blob, the document read from it, one heading, one block and one table row

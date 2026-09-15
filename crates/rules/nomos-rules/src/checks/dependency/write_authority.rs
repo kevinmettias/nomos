@@ -20,9 +20,30 @@
 //! fixtures, no registry, no store, no reader.
 
 use crate::SourceFile;
+use nomos_analysis::FactReader;
 use nomos_cap_architecture::ArchitecturePayload;
 use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
+
+/// Judges whether every workspace member `sources` names that depends on a package its
+/// repository declares an authority is one of the doors named for it -- the authority half of
+/// architecture conformance `OD-RULES-023` decided.
+///
+/// Spelled here rather than in [`super`] because this is the authority half of the judgment and
+/// [`Violations_In`] beside it is the whole of what it reaches.
+#[must_use]
+pub fn Check_Write_Authority(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+{
+    let architecture = match super::reading::Architecture_Of(sources, facts, super::WRITE_AUTHORITY)
+    {
+        Ok(architecture) => architecture,
+        Err(unread) => return unread,
+    };
+
+    return super::Judged(sources, facts, super::WRITE_AUTHORITY, &|payload, source| {
+        return Violations_In(&architecture, payload, source);
+    });
+}
 
 /// Every edge in `payload` that reaches a declared authority from a package the declaration
 /// does not name as one of its doors, as findings.
@@ -52,11 +73,19 @@ fn Violation_For_Edge(architecture: &ArchitecturePayload, source: &SourceFile, p
         return None;
     }
 
-    return Some(Violation_Finding(source, package, &edge.target, doors));
+    return Some(Violation_Finding(source, DeclaringPackage(package), &edge.target, doors));
 }
 
-fn Violation_Finding(source: &SourceFile, package: &str, authority: &str, doors: &[String]) -> Finding
+/// The crate an offending edge is declared in, as a value rather than a bare `&str`: the
+/// authority it depends on is named beside it, and two bare `&str`s in adjacent positions are
+/// transposable at a call site with nothing to catch it.
+#[derive(Clone, Copy)]
+struct DeclaringPackage<'a>(&'a str);
+
+fn Violation_Finding(source: &SourceFile, declaring: DeclaringPackage<'_>, authority: &str, doors: &[String]) -> Finding
 {
+    let package = declaring.0;
+
     return Finding {
         rule: RuleId::New(super::WRITE_AUTHORITY),
         subject: source.subject,

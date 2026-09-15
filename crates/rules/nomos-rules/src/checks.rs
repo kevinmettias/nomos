@@ -322,42 +322,7 @@ mod tests
         let IdleReader { registry, store } = Idle_Reader();
         let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
 
-        let findings = Relay_Findings(
-            &sources,
-            &mut facts,
-            |source, _facts| {
-                if source.path == "a.rs"
-                {
-                    return Err(Finding {
-                        rule: nomos_contracts::RuleId::New("example"),
-                        subject: source.subject,
-                        subject_name: source.path.clone(),
-                        applicability: nomos_contracts::Applicability::DependencyUnavailable,
-                        evidence: nomos_contracts::EvidenceClass::Derived,
-                        gate: nomos_contracts::GateCategory::Advisory,
-                        summary: "no fact for a.rs".to_owned(),
-                        locations: vec![source.path.clone()],
-                    });
-                }
-                return Ok(2u32);
-            },
-            |source, payload| {
-                return (0..*payload)
-                    .map(|index| {
-                        return Finding {
-                            rule: nomos_contracts::RuleId::New("example"),
-                            subject: source.subject,
-                            subject_name: format!("{}#{index}", source.path),
-                            applicability: nomos_contracts::Applicability::Supported,
-                            evidence: nomos_contracts::EvidenceClass::Derived,
-                            gate: nomos_contracts::GateCategory::Advisory,
-                            summary: "relayed".to_owned(),
-                            locations: vec![source.path.clone()],
-                        };
-                    })
-                    .collect();
-            },
-        );
+        let findings = Relay_Findings(&sources, &mut facts, Payload_Of_Two_Or_None, Relay_Each_Of_Two);
 
         assert_eq!(findings.len(), 3, "one pushed error plus two relayed findings: {findings:?}");
         assert!(findings.iter().any(|finding| return finding.summary == "no fact for a.rs"));
@@ -378,5 +343,64 @@ mod tests
     fn Idle_Reader() -> IdleReader
     {
         return IdleReader { registry: Registry::New(), store: MemoryFactStore::New() };
+    }
+
+    /// The payload thunk `Relay_Findings` is handed above: a source named `a.rs` has no fact
+    /// and yields the error, and every other source yields a payload of two.
+    fn Payload_Of_Two_Or_None(source: &SourceFile, _facts: &mut dyn FactReader) -> Result<u32, Finding>
+    {
+        if source.path == "a.rs"
+        {
+            return Err(No_Fact_Finding(source));
+        }
+
+        return Ok(2u32);
+    }
+
+    /// A dependency-unavailable finding naming `source`'s own path — what a rule reports when
+    /// the fact it needs was never materialized.
+    fn No_Fact_Finding(source: &SourceFile) -> Finding
+    {
+        return Finding {
+            rule: nomos_contracts::RuleId::New("example"),
+            subject: source.subject,
+            subject_name: source.path.clone(),
+            applicability: nomos_contracts::Applicability::DependencyUnavailable,
+            evidence: nomos_contracts::EvidenceClass::Derived,
+            gate: nomos_contracts::GateCategory::Advisory,
+            summary: "no fact for a.rs".to_owned(),
+            locations: vec![source.path.clone()],
+        };
+    }
+
+    /// The relay thunk beside it: one relaying finding per unit of `payload`, each named for
+    /// its own index so two of them from one source are distinguishable.
+    fn Relay_Each_Of_Two(source: &SourceFile, payload: &u32) -> Vec<Finding>
+    {
+        let mut findings = Vec::new();
+
+        for index in 0..*payload
+        {
+            let finding = Relayed_Finding(source, index);
+            findings.push(finding);
+        }
+
+        return findings;
+    }
+
+    /// The `index`-th finding a relay yields for `source` — a supported, derived finding named
+    /// `source#index`.
+    fn Relayed_Finding(source: &SourceFile, index: u32) -> Finding
+    {
+        return Finding {
+            rule: nomos_contracts::RuleId::New("example"),
+            subject: source.subject,
+            subject_name: format!("{}#{index}", source.path),
+            applicability: nomos_contracts::Applicability::Supported,
+            evidence: nomos_contracts::EvidenceClass::Derived,
+            gate: nomos_contracts::GateCategory::Advisory,
+            summary: "relayed".to_owned(),
+            locations: vec![source.path.clone()],
+        };
     }
 }

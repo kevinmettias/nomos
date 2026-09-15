@@ -71,18 +71,7 @@ mod run_coverage
     #[test]
     fn Test_Run_Should_Refuse_A_Submission_Missing_Its_Required_Fields()
     {
-        let submit = SubmitRequest {
-            kind: SubmissionKind::FeatureRequest,
-            id: "FR-RUN-COVERAGE-TEST".to_owned(),
-            by: "test".to_owned(),
-            state: SubmissionState::Draft,
-            contract_version: 1,
-            fields: Vec::new(),
-            gaps: Vec::new(),
-            submitted_through: "cli".to_owned(),
-            into: None,
-        };
-        let command = Command::Submit(submit);
+        let command = Command::Submit(Submission_Missing_Its_Fields());
         let request = CorpusRequest {
             variable: "NOMOS_REQUEST_RUN_COVERAGE_TEST_CORPUS_UNSET".to_owned(),
             root: None,
@@ -94,6 +83,24 @@ mod run_coverage
         let code = Run(&command, &request, &mut output, &mut notes);
 
         assert_eq!(code, ExitCode::Refused, "{}", String::from_utf8_lossy(&notes));
+    }
+
+    /// A submission carrying no `fields` at all -- which is what makes the rule set refuse it
+    /// before anything is stored, so the refusal above is reachable with no corpus and no
+    /// fixture file.
+    fn Submission_Missing_Its_Fields() -> SubmitRequest
+    {
+        return SubmitRequest {
+            kind: SubmissionKind::FeatureRequest,
+            id: "FR-RUN-COVERAGE-TEST".to_owned(),
+            by: "test".to_owned(),
+            state: SubmissionState::Draft,
+            contract_version: 1,
+            fields: Vec::new(),
+            gaps: Vec::new(),
+            submitted_through: "cli".to_owned(),
+            into: None,
+        };
     }
 }
 

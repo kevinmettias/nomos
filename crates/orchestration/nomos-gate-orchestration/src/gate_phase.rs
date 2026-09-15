@@ -3,6 +3,16 @@
 //! before this one explicitly left unbuilt. `crate::RuleCalibration`'s own doc names them by
 //! name as absent from its shape; this module is where they land instead.
 
+mod phase_approval;
+mod phase_disposition;
+mod phase_outcome;
+mod phase_threshold;
+
+pub use phase_approval::PhaseApproval;
+pub use phase_disposition::PhaseDisposition;
+pub use phase_outcome::PhaseOutcome;
+pub use phase_threshold::PhaseThreshold;
+
 use nomos_contracts::{Finding, RuleId};
 
 /// One ordered stage of a real `nomos gate run`, judging only the findings whose rule this
@@ -24,92 +34,6 @@ pub struct GatePhase
     pub rules: Vec<RuleId>,
     /// How many blocking findings this phase tolerates before it fails.
     pub threshold: PhaseThreshold,
-}
-
-/// A phase's own numeric threshold -- `WF-001`'s "thresholds" clause, narrower than a whole
-/// run's: a phase judges only the blocking findings its own [`GatePhase::rules`] admits.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum PhaseThreshold
-{
-    /// Any blocking finding fails this phase -- [`crate::Disposition_Of_Findings`]'s own
-    /// rule, narrowed to one phase's own findings rather than a whole run's.
-    AnyBlockingFinding,
-    /// This phase tolerates up to `max` blocking findings before it fails; `max` itself is
-    /// still tolerated.
-    MaxBlockingFindings
-    {
-        max: usize,
-    },
-}
-
-impl PhaseThreshold
-{
-    /// Whether `count` blocking findings exceed this threshold.
-    #[must_use]
-    const fn Exceeded_By(&self, count: usize) -> bool
-    {
-        return match *self
-        {
-            Self::AnyBlockingFinding => count > 0,
-            Self::MaxBlockingFindings { max } => count > max,
-        };
-    }
-}
-
-/// One approval of a phase that would otherwise fail -- `WF-001`'s "approvals" clause.
-///
-/// Matched by `phase` name alone, the same coarse, whole-phase addressing
-/// [`crate::RuleCalibration`] uses for a whole rule: an approval is a team's own record that
-/// a human or agent accepted this phase's findings despite its threshold, not a per-finding
-/// override the way [`crate::Suppression`] and [`crate::BaselineDebt`] both are.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct PhaseApproval
-{
-    /// The [`GatePhase::name`] this approval covers.
-    pub phase: String,
-    /// Why this phase was approved despite exceeding its threshold -- required, the same
-    /// "never a silent override" discipline [`crate::Suppression::rationale`] and
-    /// [`crate::BaselineDebt::rationale`] both already hold.
-    pub rationale: String,
-}
-
-/// One phase's own outcome, after [`Evaluated_Phases`] judged it.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct PhaseOutcome
-{
-    /// The [`GatePhase::name`] this outcome answers for.
-    pub name: String,
-    /// Whether this phase was judged at all -- `false` for every phase after the first one
-    /// that failed unapproved. This crate already computed every finding in one pass
-    /// (`crate::gate_environment::Judged_Sources`), so nothing here re-runs a rule; what
-    /// changes is whether a phase's own verdict is judged and reported at all, or left
-    /// unjudged because an earlier phase in the declared order already stopped the run.
-    pub ran: bool,
-    /// This phase's own blocking findings -- carried even when [`Self::approved`] is `true`,
-    /// the same "never silently drop a finding" discipline `crate::GateFindings`'s own doc
-    /// already states for calibration, suppression and baseline.
-    pub blocking_findings: Vec<Finding>,
-    /// Whether a [`PhaseApproval`] matching this phase's name let it pass despite exceeding
-    /// its threshold. `false` when nothing needed approving.
-    pub approved: bool,
-    /// This phase's own verdict.
-    pub disposition: PhaseDisposition,
-}
-
-/// One phase's own verdict, apart from the run's overall [`crate::GateRunOutcome`] -- a third
-/// state, [`Self::Skipped`], that `GateRunOutcome` deliberately does not carry, because a run
-/// either judged something or could not judge anything at all, while a phase can additionally
-/// simply never have been reached.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum PhaseDisposition
-{
-    /// This phase's blocking findings did not exceed its threshold, or did and a
-    /// [`PhaseApproval`] covered them.
-    Passed,
-    /// This phase's blocking findings exceeded its threshold and nothing approved them.
-    Failed,
-    /// An earlier phase already failed unapproved, so this phase was never judged.
-    Skipped,
 }
 
 /// Judges `phases` in declared order over `findings`, stopping at the first phase that fails
@@ -144,6 +68,13 @@ pub fn Evaluated_Phases(phases: &[GatePhase], findings: &[Finding], approvals: &
     return outcomes;
 }
 
+/// `phase`'s own outcome when an earlier phase already failed unapproved -- never judged, so
+/// carries no findings and needs no approval.
+fn Skipped(phase: &GatePhase) -> PhaseOutcome
+{
+    return PhaseOutcome { name: phase.name.clone(), ran: false, blocking_findings: Vec::new(), approved: false, disposition: PhaseDisposition::Skipped };
+}
+
 /// One phase's own outcome, judged in isolation -- [`Evaluated_Phases`]'s own per-phase step,
 /// split out so that function reads as the sequencing decision alone.
 fn Judged_Phase(phase: &GatePhase, findings: &[Finding], approvals: &[PhaseApproval]) -> PhaseOutcome
@@ -159,13 +90,6 @@ fn Judged_Phase(phase: &GatePhase, findings: &[Finding], approvals: &[PhaseAppro
         approved,
         disposition: if exceeded && !approved { PhaseDisposition::Failed } else { PhaseDisposition::Passed },
     };
-}
-
-/// `phase`'s own outcome when an earlier phase already failed unapproved -- never judged, so
-/// carries no findings and needs no approval.
-fn Skipped(phase: &GatePhase) -> PhaseOutcome
-{
-    return PhaseOutcome { name: phase.name.clone(), ran: false, blocking_findings: Vec::new(), approved: false, disposition: PhaseDisposition::Skipped };
 }
 
 /// `disposition`, downgraded from [`crate::GateRunOutcome::Failed`] to
@@ -202,6 +126,25 @@ mod tests
     use crate::GateRunOutcome;
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
+    /// The `max` blocking findings the one threshold in these fixtures tolerates -- chosen so
+    /// a fixture can sit exactly at it and the next can exceed it by one finding.
+    const TOLERATED_BLOCKING_FINDINGS: usize = 2;
+
+    /// The seed naming the second distinct subject a fixture builds under one rule:
+    /// `Finding_For` repeats the byte across the digest, so two seeds are two subjects.
+    const SECOND_SUBJECT_SEED: u8 = 2;
+
+    /// The seed naming the third distinct subject, for the fixture that exceeds
+    /// [`TOLERATED_BLOCKING_FINDINGS`] by one finding.
+    const THIRD_SUBJECT_SEED: u8 = 3;
+
+    /// A phase's own name, a type of its own so that `Phase`'s two string positions cannot be
+    /// transposed at a call site.
+    struct PhaseName<'a>(&'a str);
+
+    /// A rule's identifier, a type of its own for the same reason as [`PhaseName`].
+    struct RuleName<'a>(&'a str);
+
     fn Finding_For(rule: &str, subject_seed: u8) -> Finding
     {
         return Finding {
@@ -216,15 +159,10 @@ mod tests
         };
     }
 
-    fn Phase(name: &str, rule: &str, threshold: PhaseThreshold) -> GatePhase
-    {
-        return GatePhase { name: name.to_owned(), rules: vec![RuleId::New(rule)], threshold };
-    }
-
     #[test]
     fn Test_A_Phase_With_No_Blocking_Findings_Should_Pass()
     {
-        let phases = vec![Phase("first", "naming-convention", PhaseThreshold::AnyBlockingFinding)];
+        let phases = vec![Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
 
         let outcomes = Evaluated_Phases(&phases, &[], &[]);
 
@@ -241,8 +179,8 @@ mod tests
     fn Test_A_Later_Phase_Should_Not_Run_When_An_Earlier_One_Fails()
     {
         let phases = vec![
-            Phase("first", "naming-convention", PhaseThreshold::AnyBlockingFinding),
-            Phase("second", "dependency-direction", PhaseThreshold::AnyBlockingFinding),
+            Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding),
+            Phase(PhaseName("second"), RuleName("dependency-direction"), PhaseThreshold::AnyBlockingFinding),
         ];
         let findings = vec![Finding_For("naming-convention", 1)];
 
@@ -261,8 +199,8 @@ mod tests
     #[test]
     fn Test_A_Max_Threshold_Should_Tolerate_Findings_Up_To_And_Including_Its_Own_Max()
     {
-        let phase = Phase("first", "naming-convention", PhaseThreshold::MaxBlockingFindings { max: 2 });
-        let two_findings = vec![Finding_For("naming-convention", 1), Finding_For("naming-convention", 2)];
+        let phase = Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::MaxBlockingFindings { max: TOLERATED_BLOCKING_FINDINGS });
+        let two_findings = vec![Finding_For("naming-convention", 1), Finding_For("naming-convention", SECOND_SUBJECT_SEED)];
 
         let outcomes = Evaluated_Phases(&[phase.clone()], &two_findings, &[]);
         let [tolerated] = outcomes.as_slice()
@@ -272,7 +210,7 @@ mod tests
         };
         assert!(matches!(tolerated.disposition, PhaseDisposition::Passed), "two findings must not exceed a max of two");
 
-        let three_findings = vec![Finding_For("naming-convention", 1), Finding_For("naming-convention", 2), Finding_For("naming-convention", 3)];
+        let three_findings = vec![Finding_For("naming-convention", 1), Finding_For("naming-convention", SECOND_SUBJECT_SEED), Finding_For("naming-convention", THIRD_SUBJECT_SEED)];
         let outcomes = Evaluated_Phases(&[phase], &three_findings, &[]);
         let [exceeded] = outcomes.as_slice()
         else
@@ -282,10 +220,15 @@ mod tests
         assert!(matches!(exceeded.disposition, PhaseDisposition::Failed), "three findings must exceed a max of two");
     }
 
+    fn Phase(name: PhaseName<'_>, rule: RuleName<'_>, threshold: PhaseThreshold) -> GatePhase
+    {
+        return GatePhase { name: name.0.to_owned(), rules: vec![RuleId::New(rule.0)], threshold };
+    }
+
     #[test]
     fn Test_An_Approval_Should_Pass_A_Phase_That_Would_Otherwise_Fail()
     {
-        let phases = vec![Phase("first", "naming-convention", PhaseThreshold::AnyBlockingFinding)];
+        let phases = vec![Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
         let findings = vec![Finding_For("naming-convention", 1)];
         let approvals = vec![PhaseApproval { phase: "first".to_owned(), rationale: "reviewed and accepted".to_owned() }];
 
@@ -304,7 +247,7 @@ mod tests
     #[test]
     fn Test_An_Approval_Naming_A_Different_Phase_Should_Not_Match()
     {
-        let phases = vec![Phase("first", "naming-convention", PhaseThreshold::AnyBlockingFinding)];
+        let phases = vec![Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
         let findings = vec![Finding_For("naming-convention", 1)];
         let approvals = vec![PhaseApproval { phase: "second".to_owned(), rationale: "wrong phase".to_owned() }];
 
@@ -322,7 +265,7 @@ mod tests
     #[test]
     fn Test_Phased_Disposition_Should_Leave_A_Passed_Run_Untouched()
     {
-        let phases = vec![Phase("first", "naming-convention", PhaseThreshold::AnyBlockingFinding)];
+        let phases = vec![Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
 
         let disposition = Phased_Disposition(GateRunOutcome::Passed, &phases, &[], &[]);
 
@@ -342,7 +285,7 @@ mod tests
     #[test]
     fn Test_Phased_Disposition_Should_Pass_A_Failed_Run_When_Every_Finding_Is_Approved()
     {
-        let phases = vec![Phase("first", "naming-convention", PhaseThreshold::AnyBlockingFinding)];
+        let phases = vec![Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
         let findings = vec![Finding_For("naming-convention", 1)];
         let approvals = vec![PhaseApproval { phase: "first".to_owned(), rationale: "reviewed".to_owned() }];
         let outcomes = Evaluated_Phases(&phases, &findings, &approvals);
@@ -355,7 +298,7 @@ mod tests
     #[test]
     fn Test_Phased_Disposition_Should_Stay_Failed_When_A_Blocking_Finding_Belongs_To_No_Phase()
     {
-        let phases = vec![Phase("first", "naming-convention", PhaseThreshold::AnyBlockingFinding)];
+        let phases = vec![Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
         let findings = vec![Finding_For("dependency-direction", 1)];
         let outcomes = Evaluated_Phases(&phases, &findings, &[]);
 

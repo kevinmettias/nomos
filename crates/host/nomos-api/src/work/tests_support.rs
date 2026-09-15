@@ -5,6 +5,10 @@
 use nomos_ledger::ItemId;
 use nomos_work_orchestration::{ClaimRequest, EndingRequest};
 
+/// The ledger schema version every fixture board here is written at, and the version a test
+/// reading one of them back asserts against.
+const LEDGER_SCHEMA_VERSION: u32 = 6;
+
 /// A `ClaimRequest` for `item`, held by `holder`, with the one-hour lease every `Claim`/
 /// `Renew`/`TakeOver` test in this module reaches for -- the fixture literal
 /// `check-interfile-duplication` flagged as structurally repeated across `claim.rs`,
@@ -202,7 +206,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        assert_eq!(*parsed.get("schema_version").expect("a written ledger always carries schema_version"), 6);
+        assert_eq!(*parsed.get("schema_version").expect("a written ledger always carries schema_version"), LEDGER_SCHEMA_VERSION);
         assert!(parsed.get("items").expect("a written ledger always carries items").as_array().expect("items is an array").is_empty());
     }
 

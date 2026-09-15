@@ -12,6 +12,11 @@ use nomos_contracts::{
 };
 use std::path::Path;
 
+#[path = "fact_context/clone_on_copy_fact.rs"]
+mod clone_on_copy_fact;
+
+pub use clone_on_copy_fact::CloneOnCopyFact;
+
 /// Where in the workspace's history a fact is being produced -- the same four-field
 /// shape `nomos_lang_rust_deny::FactContext` carries, for the identical reason: these
 /// four always travel together.
@@ -22,16 +27,6 @@ pub struct FactContext
     pub variant: BuildVariantId,
     pub configuration: ConfigurationId,
     pub generation: GenerationId,
-}
-
-/// One materialized fact, addressed to the crate it was produced for -- the same
-/// `{subject, fact}` pairing `nomos_lang_rust_deny::PolicyFact` returns, for the
-/// identical reason: a caller writing this into a fact store needs the subject the key
-/// was built against, and a `FactKey` does not carry it back out.
-pub struct CloneOnCopyFact
-{
-    pub subject: SubjectId,
-    pub fact: MaterializedFact,
 }
 
 /// Analyzes the crate rooted at `root` through `ra_ap_hir` and produces the one fact
@@ -109,6 +104,12 @@ mod tests
         assert_eq!(decoded.findings.len(), 1, "{decoded:?}");
     }
 
+    fn Fixture_Root() -> std::path::PathBuf
+    {
+        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest.join("fixtures").join("clone_on_copy_sample");
+    }
+
     #[test]
     fn Test_A_Fact_Key_Should_Depend_On_The_Guarantee()
     {
@@ -124,12 +125,6 @@ mod tests
         let weak_key = Compute_Fact_Key(subject, weaker, Context());
 
         assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
-    }
-
-    fn Fixture_Root() -> std::path::PathBuf
-    {
-        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest.join("fixtures").join("clone_on_copy_sample");
     }
 
     /// Fill bytes distinct enough that `Context()`'s three digests differ from one

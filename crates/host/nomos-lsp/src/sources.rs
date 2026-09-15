@@ -35,7 +35,7 @@ mod tests
         let root = std::env::temp_dir().join("nomos-lsp-sources-walked-sources-present");
         let _ignored = std::fs::remove_dir_all(&root);
         std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-        std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
+        std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("the temporary root above was just created");
 
         let sources = Walked_Sources(&root).expect("a directory returns Some");
 

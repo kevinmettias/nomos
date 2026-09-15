@@ -6,14 +6,19 @@
 //! a real [`AgentExecutionOutcome`] or [`AgentExecutionError`].
 
 use std::path::PathBuf;
+use std::time::Duration;
 
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_agent_contracts::{Isolated_Working_Directory, TaskEnvelope};
 use nomos_agent_executor_claude_code::{AgentExecutionError, Execute_Task};
 use nomos_contracts::{CapabilityId, KnowledgeReferenceId, RuleId, SchemaId};
-use nomos_ledger::Territory;
+use nomos_ledger::{LedgerItem, Territory};
 use nomos_model_package::EffortLevel;
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+
+/// The claim lease the ledger seam test below asks for: comfortably longer than the test
+/// takes, so a claim that lapsed mid-test could not be mistaken for the seam failing.
+const CLAIM_LEASE: Duration = Duration::from_secs(60);
 
 /// A launcher whose one answer was written down by the test that built it, exercising
 /// `nomos_platform::ProcessLauncher` -- the trait boundary `Execute_Task` is generic
@@ -168,27 +173,46 @@ fn Test_Execute_Task_Should_Refuse_A_Capability_It_Has_No_Way_To_Grant()
 #[test]
 fn Test_The_Ledger_Territory_A_Task_Envelope_Carries_Is_The_Same_Territory_A_Real_Ledger_Claims()
 {
-    use nomos_ledger::{ExclusionLedger, FileLedger, ItemId, ItemKind, ItemOrigin, ItemState, LedgerDocument, LedgerItem, SCHEMA_VERSION};
+    use nomos_ledger::{ExclusionLedger, FileLedger, ItemId, LedgerDocument, SCHEMA_VERSION};
     use nomos_platform_std::{FileLock, StdFileSystem};
-    use std::time::Duration;
 
     let task = Real_Task("close the nomos_ledger seam");
     let directory = Isolated_Working_Directory("nomos-agent-executor-claude-code-ledger-seam-test").expect("a real scratch directory");
-
     let mut ledger = FileLedger::At(
         directory.join("ledger.json"),
         StdFileSystem,
         nomos_platform_std::SystemClock,
         FileLock::At(directory.join("ledger.lock")),
     );
-    let item = LedgerItem {
+
+    ledger
+        .Save(&LedgerDocument { schema_version: SCHEMA_VERSION, items: vec![Ready_Item(task.scope.clone())] })
+        .expect("a fresh ledger accepts one ready item");
+    let reservation = ledger
+        .Claim(&ItemId::New("integration-seam-test-item"), "integration-seam-test", CLAIM_LEASE)
+        .expect("claiming the item this test just wrote must succeed");
+
+    assert_eq!(reservation.item, ItemId::New("integration-seam-test-item"));
+    std::fs::remove_dir_all(&directory).expect("the scratch directory this test just created is there to be removed");
+}
+
+/// The one item the ledger seam test above claims: ready to be claimed, and carrying
+/// `territory` as its own.
+///
+/// Every field is written out rather than defaulted, because a real ledger item carries all
+/// of them and a fixture that omitted one would prove less about the seam than it claims.
+fn Ready_Item(territory: Territory) -> LedgerItem
+{
+    use nomos_ledger::{ItemId, ItemKind, ItemOrigin, ItemState};
+
+    return LedgerItem {
         id: ItemId::New("integration-seam-test-item"),
         title: "prove the shared Territory type".to_owned(),
         why: "the seam between this crate and nomos_ledger must be real, not coincidental naming".to_owned(),
         done_when: "the claimed territory equals the task envelope's own scope".to_owned(),
         kind: ItemKind::Correction,
         origin: ItemOrigin::Proposed,
-        territory: task.scope.clone(),
+        territory,
         state: ItemState::Ready,
         depends_on: Vec::new(),
         blocked: None,
@@ -200,14 +224,4 @@ fn Test_The_Ledger_Territory_A_Task_Envelope_Carries_Is_The_Same_Territory_A_Rea
         widened: Vec::new(),
         declined: None,
     };
-    ledger
-        .Save(&LedgerDocument { schema_version: SCHEMA_VERSION, items: vec![item] })
-        .expect("a fresh ledger accepts one ready item");
-
-    let reservation = ledger
-        .Claim(&ItemId::New("integration-seam-test-item"), "integration-seam-test", Duration::from_secs(60))
-        .expect("claiming the item this test just wrote must succeed");
-
-    assert_eq!(reservation.item, ItemId::New("integration-seam-test-item"));
-    let _ = std::fs::remove_dir_all(&directory);
 }

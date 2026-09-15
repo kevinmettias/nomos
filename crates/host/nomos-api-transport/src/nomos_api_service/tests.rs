@@ -21,9 +21,9 @@ use serde_json::Value;
 /// Reached through the strategy surface rather than through a wire line: the
 /// line is the engine's now, and a test that built one here would be exercising
 /// the engine's parser to reach this crate's dispatch.
-fn Answered(method: &str, parameters: &str) -> RemoteCallOutcome
+fn Answered(method: ServedMethod, parameters: &str) -> RemoteCallOutcome
 {
-    return NomosApiService.Answer(method, parameters);
+    return NomosApiService.Answer(method.Name(), parameters);
 }
 
 /// The document an answered outcome carries.
@@ -92,7 +92,7 @@ fn Test_No_Repo_Tooling_Operation_Should_Be_In_The_Registry()
 #[test]
 fn Test_Arguments_Of_The_Wrong_Shape_Should_Be_Invalid_Parameters()
 {
-    let outcome = Answered(ServedMethod::GateRun.Name(), r#"{"root":[]}"#);
+    let outcome = Answered(ServedMethod::GateRun, r#"{"root":[]}"#);
 
     assert_eq!(Refusal_Code(&outcome), RemoteCallRefusal::INVALID_PARAMETERS);
 }
@@ -102,7 +102,7 @@ fn Test_Arguments_Of_The_Wrong_Shape_Should_Be_Invalid_Parameters()
 #[test]
 fn Test_An_Explain_Naming_No_Finding_Should_Be_Invalid_Parameters()
 {
-    let outcome = Answered(ServedMethod::GateExplain.Name(), "{}");
+    let outcome = Answered(ServedMethod::GateExplain, "{}");
 
     assert_eq!(Refusal_Code(&outcome), RemoteCallRefusal::INVALID_PARAMETERS);
 }
@@ -113,7 +113,7 @@ fn Test_An_Explain_Naming_No_Finding_Should_Be_Invalid_Parameters()
 #[test]
 fn Test_A_Plan_With_No_Arguments_Should_Reach_A_Real_Registry()
 {
-    let outcome = Answered(ServedMethod::GatePlan.Name(), "{}");
+    let outcome = Answered(ServedMethod::GatePlan, "{}");
 
     let result = Document(&outcome);
     assert_eq!(At(&result, "/outcome"), "planned", "{result}");
@@ -129,10 +129,11 @@ fn Test_A_Correction_Run_Over_A_Clean_Tree_Should_Reach_A_Real_Clean_Answer()
     let root = std::env::temp_dir().join("nomos-api-transport-correction-run-clean");
     let _ignored = std::fs::remove_dir_all(&root);
     std::fs::create_dir_all(&root).expect("creates a fresh directory");
-    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("writable");
+    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n")
+        .expect("create_dir_all above made this directory on an empty path");
 
     let parameters = serde_json::json!({ "root": root.display().to_string() }).to_string();
-    let outcome = Answered(ServedMethod::Correction.Name(), &parameters);
+    let outcome = Answered(ServedMethod::Correction, &parameters);
 
     let _ignored = std::fs::remove_dir_all(&root);
     let result = Document(&outcome);

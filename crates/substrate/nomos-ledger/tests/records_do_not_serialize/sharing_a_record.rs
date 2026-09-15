@@ -1,6 +1,6 @@
 //! The negative control: sharing a record still excludes.
 
-use crate::board::{Contested, RECORD_DIRECTORY, Two_Record_Writers};
+use crate::board::{Contest, Contested, RECORD_DIRECTORY, Two_Record_Writers, TwoWriters};
 use nomos_ledger::{ClaimRefusal, Territory};
 
 /// The control that keeps the repair from being a blanket exemption.
@@ -15,7 +15,11 @@ use nomos_ledger::{ClaimRefusal, Territory};
 #[test]
 fn Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused()
 {
-    let (mut document, first, second) = Two_Record_Writers();
+    let TwoWriters {
+        mut document,
+        first,
+        second,
+    } = Two_Record_Writers();
     let contested = format!("{RECORD_DIRECTORY}/OD-CONTESTED-001");
     for item in &mut document.items
     {
@@ -24,7 +28,10 @@ fn Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused()
             item.territory = Territory::Of_Files([contested.clone()]);
         }
     }
-    let (_scratch, refusal) = Contested("contested-record", &document, &first, &second);
+    let Contest {
+        scratch: _scratch,
+        refusal,
+    } = Contested("contested-record", &document, &first, &second);
 
     assert!(
         matches!(refusal, ClaimRefusal::HeldBy { .. }),

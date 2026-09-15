@@ -26,6 +26,22 @@ const NOMOS: &str = env!("CARGO_BIN_EXE_nomos");
 /// Far enough ahead that a lease written here is live whenever the suite runs.
 const FOREVER: i64 = 4_102_444_800;
 
+/// The exit code for a claim refused because somebody else holds the ground.
+///
+/// `README.md`'s table calls this one *retryable*: the answer is to pick up another item
+/// rather than to fetch a person.
+const EXIT_RETRYABLE: i32 = 3;
+
+/// The exit code for a refusal no amount of waiting resolves, and a person has to decide.
+const EXIT_CONFLICT: i32 = 4;
+
+/// The item-list body of a scratch board's ledger, as the JSON text a fixture splices in.
+///
+/// A distinct type rather than a bare `&str`: [`Board::New`] takes a directory name and
+/// this document, both text and both adjacent, so a caller who wrote them the other way
+/// round would name a directory after a ledger and write a ledger named for a case.
+struct ItemList<'a>(&'a str);
+
 /// A ledger of this test's own, under the target directory rather than the repository.
 /// What one `nomos work` run exited with, and what it said.
 ///
@@ -44,16 +60,13 @@ struct Board
 
 impl Board
 {
-    fn New(name: &str, items: &str) -> Self
+    fn New(name: &str, items: ItemList<'_>) -> Self
     {
         let root = PathBuf::from(env!("CARGO_TARGET_TMPDIR")).join(format!("add-{name}"));
         let _ignored = std::fs::remove_dir_all(&root);
         std::fs::create_dir_all(&root).expect("a scratch directory");
-        std::fs::write(
-            root.join("ledger.json"),
-            format!("{{\n  \"schema_version\": 1,\n  \"items\": [{items}]\n}}\n"),
-        )
-        .expect("a scratch ledger");
+        let ledger = format!("{{\n  \"schema_version\": 1,\n  \"items\": [{}]\n}}\n", items.0);
+        std::fs::write(root.join("ledger.json"), ledger).expect("a scratch ledger");
         return Self { root };
     }
 
@@ -107,15 +120,33 @@ impl Drop for Board
 }
 
 /// One item, authored inline so each test's board is readable in the test.
-fn Item(id: &str, paths: &str, state: &str, tail: &str) -> String
+///
+/// A struct with named fields rather than four adjacent `&str` parameters. `Item(id,
+/// paths, state, tail)` put four texts side by side with nothing but position keeping them
+/// apart, and a caller who swapped `state` for `tail` would have compiled and written a
+/// ledger whose item declared its state as a claim object.
+struct Item<'a>
 {
-    return format!(
-        "{{\"id\":\"{id}\",\"title\":\"item {id}\",\"why\":\"because\",\
-         \"done_when\":\"the tests pass\",\
-         \"kind\":\"Correction\",\"origin\":\"Proposed\",\
-         \"widened\": [], \"territory\":{{\"resolution\":\"File\",\"paths\":[{paths}],\"patterns\":[]}},\
-         \"state\":\"{state}\",\"depends_on\":[],\"blocked\":null,{tail}}}"
-    );
+    id: &'a str,
+    paths: &'a str,
+    state: &'a str,
+    tail: &'a str,
+}
+
+impl Item<'_>
+{
+    /// This item as the JSON object a ledger's item list holds.
+    fn Json(&self) -> String
+    {
+        let Item { id, paths, state, tail } = self;
+        return format!(
+            "{{\"id\":\"{id}\",\"title\":\"item {id}\",\"why\":\"because\",\
+             \"done_when\":\"the tests pass\",\
+             \"kind\":\"Correction\",\"origin\":\"Proposed\",\
+             \"widened\": [], \"territory\":{{\"resolution\":\"File\",\"paths\":[{paths}],\"patterns\":[]}},\
+             \"state\":\"{state}\",\"depends_on\":[],\"blocked\":null,{tail}}}"
+        );
+    }
 }
 
 /// A live claim, held far enough ahead that it is live whenever the suite runs.
@@ -167,9 +198,21 @@ fn Add(board: &Board, id: &str, rest: &[&str]) -> Ran
 fn Held_Ground(name: &str) -> Board
 {
     let claim = Held_By("agent-a");
-    let item = Item("T-1", "\"src/shared.rs\"", "Claimed", &claim);
+    let item = Item { id: "T-1", paths: "\"src/shared.rs\"", state: "Claimed", tail: &claim }.Json();
 
-    return Board::New(name, &item);
+    return Board::New(name, ItemList(&item));
+}
+
+/// A board whose only item is `T-1`, ready on `src/a.rs` and unclaimed.
+///
+/// The four tests below differ in what they then ask `add` to do, never in the board they
+/// ask it of, so that board is named once: a body that differs from its neighbour is then a
+/// difference somebody made deliberately rather than the fixture drifting out of step.
+fn Board_Of_One_Ready_Item(name: &str) -> Board
+{
+    let item = Item { id: "T-1", paths: "\"src/a.rs\"", state: "Ready", tail: NO_CLAIM }.Json();
+
+    return Board::New(name, ItemList(&item));
 }
 
 // ---------------------------------------------------------------------------
@@ -215,7 +258,7 @@ fn Test_The_Item_Added_On_Held_Ground_Should_Still_Be_Refused_A_Claim()
     let Ran { code, said: message } = board.Work(&["claim", "--item", "T-2", "--holder", "agent-b"]);
 
     assert_eq!(
-        code, 3,
+        code, EXIT_RETRYABLE,
         "agent-b must be refused, and told to try another item rather than fetch a \
          human:\n{message}"
     );
@@ -265,13 +308,12 @@ fn Test_An_Item_Added_On_Free_Ground_Should_Claim()
 #[test]
 fn Test_A_Duplicate_Identifier_Should_Be_Refused()
 {
-    let item = Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM);
-    let board = Board::New("duplicate-id", &item);
+    let board = Board_Of_One_Ready_Item("duplicate-id");
     let before = board.On_Disk();
 
     let Ran { code, said: message } = Add(&board, "T-1", &["--territory", "src/b.rs"]);
 
-    assert_eq!(code, 4, "a taken identifier is a conflict, not a retryable one:\n{message}");
+    assert_eq!(code, EXIT_CONFLICT, "a taken identifier is a conflict, not a retryable one:\n{message}");
     assert!(message.contains("T-1"), "the refusal must name the identifier:\n{message}");
     assert_eq!(before, board.On_Disk(), "a refused add rewrote the ledger");
 }
@@ -287,8 +329,7 @@ fn Test_A_Duplicate_Identifier_Should_Be_Refused()
 #[test]
 fn Test_An_Item_That_Would_Invalidate_The_Document_Should_Not_Land()
 {
-    let item = Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM);
-    let board = Board::New("invalid-dependency", &item);
+    let board = Board_Of_One_Ready_Item("invalid-dependency");
     let before = board.On_Disk();
 
     let Ran { code, said: message } = Add(
@@ -319,8 +360,7 @@ fn Test_An_Item_That_Would_Invalidate_The_Document_Should_Not_Land()
 #[test]
 fn Test_An_Item_Reserving_One_Subject_Twice_Should_Not_Land()
 {
-    let item = Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM);
-    let board = Board::New("ambiguous-territory", &item);
+    let board = Board_Of_One_Ready_Item("ambiguous-territory");
     let before = board.On_Disk();
 
     let Ran { code, said: message } = Add(
@@ -345,8 +385,7 @@ fn Test_An_Item_Reserving_One_Subject_Twice_Should_Not_Land()
 #[test]
 fn Test_A_Well_Formed_Item_Should_Land()
 {
-    let item = Item("T-1", "\"src/a.rs\"", "Ready", NO_CLAIM);
-    let board = Board::New("well-formed", &item);
+    let board = Board_Of_One_Ready_Item("well-formed");
 
     let Ran { code, said: message } = Add(
         &board,

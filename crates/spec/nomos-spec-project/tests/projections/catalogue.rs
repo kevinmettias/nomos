@@ -8,6 +8,11 @@ use crate::store::{For_Building, Populated, Shipped};
 use nomos_spec_project::{Build, Content, Format};
 use std::collections::BTreeSet;
 
+/// How many profiles the shipped catalogue declares: fifteen whole-store profiles and four
+/// subject-addressed ones. Written here rather than derived from `SHIPPED`, because a count
+/// read off the thing under test would agree with any change to it.
+const SHIPPED_PROFILE_COUNT: usize = 19;
+
 #[test]
 fn Test_Every_Shipped_Profile_Should_Parse_And_Be_Distinct()
 {
@@ -15,7 +20,7 @@ fn Test_Every_Shipped_Profile_Should_Parse_And_Be_Distinct()
 
     assert_eq!(
         catalogue.Profiles().len(),
-        19,
+        SHIPPED_PROFILE_COUNT,
         "fifteen whole-store profiles and four subject-addressed ones"
     );
     let identifiers: BTreeSet<&str> = catalogue
@@ -23,7 +28,7 @@ fn Test_Every_Shipped_Profile_Should_Parse_And_Be_Distinct()
         .iter()
         .map(|profile| return profile.id.as_str())
         .collect();
-    assert_eq!(identifiers.len(), 19, "two profiles share an identifier");
+    assert_eq!(identifiers.len(), SHIPPED_PROFILE_COUNT, "two profiles share an identifier");
 }
 
 /// `SHIPPED`'s reality: what files actually sit in `profiles/`. A profile added there and

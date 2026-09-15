@@ -93,6 +93,13 @@ mod tests
 
     /// An arbitrary bound for commands whose timing is not under test.
     const A_BOUND: Duration = Duration::from_secs(30);
+    /// A short idle bound, distinct from [`A_BOUND`] so that a translation which dropped the
+    /// idle bound would be visible as a difference rather than as an equal pair.
+    const A_SHORT_BOUND: Duration = Duration::from_secs(5);
+    /// How long an idle clock is said to have run, and a failing exit code to have carried.
+    /// Neither is judged here; both are carried through the translation unchanged.
+    const AN_IDLE_ELAPSED: Duration = Duration::from_secs(7);
+    const A_FAILING_EXIT_CODE: i32 = 3;
     /// What the wrapped launcher says back.
     const SAID: &str = "said something";
 
@@ -143,12 +150,12 @@ mod tests
     {
         let inner = Recording::Reporting(ExitOutcome::Exited { code: 0 });
         let command = ProcessCommand::New(vec!["git".to_owned(), "status".to_owned()], A_BOUND)
-            .With_Idle_Timeout(Duration::from_secs(5));
+            .With_Idle_Timeout(A_SHORT_BOUND);
 
-        let output = XvpeLauncher::Wrapping(&inner).Run(&command).expect(COMMAND_MUST_SURVIVE);
+        let output = XvpeLauncher::Wrapping(&inner).Run(&command).expect("the wrapped launcher answers, and this double answers every command");
 
         let seen = inner.seen.borrow();
-        let seen = seen.first().expect(COMMAND_MUST_SURVIVE);
+        let seen = seen.first().expect("the double recorded exactly one command before answering");
         assert_eq!(seen.argv, command.argv, "{COMMAND_MUST_SURVIVE}");
         assert_eq!(seen.timeout, command.timeout, "{COMMAND_MUST_SURVIVE}");
         // The idle bound is the one a translation is most likely to drop, since
@@ -160,9 +167,12 @@ mod tests
     #[test]
     fn Test_Every_Outcome_Should_Map_To_Its_Own_Counterpart()
     {
-        let idle_elapsed = Duration::from_secs(7);
+        let idle_elapsed = AN_IDLE_ELAPSED;
         for (theirs, ours) in [
-            (ExitOutcome::Exited { code: 3 }, XvpeExitOutcome::Exited { code: 3 }),
+            (
+                ExitOutcome::Exited { code: A_FAILING_EXIT_CODE },
+                XvpeExitOutcome::Exited { code: A_FAILING_EXIT_CODE },
+            ),
             (ExitOutcome::TimedOut, XvpeExitOutcome::TimedOut),
             (ExitOutcome::Stalled { idle_elapsed }, XvpeExitOutcome::Stalled { idle_elapsed }),
             (ExitOutcome::Terminated, XvpeExitOutcome::Terminated),

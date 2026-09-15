@@ -111,32 +111,6 @@ mod tests
     use nomos_gate_orchestration::RuleSelector;
     use nomos_rules::NAMING_CONVENTION;
 
-    /// One field of a serialized value, by path.
-    ///
-    /// `serde_json::Value`'s own `Index` panics on a missing key, which is the failure
-    /// `clippy::indexing_slicing` is denied in this workspace to prevent, so these tests read
-    /// through `get` and report a missing key as `Null` rather than as a panic inside an
-    /// assertion.
-    fn At(value: &serde_json::Value, path: &[&str]) -> serde_json::Value
-    {
-        const NOTHING: serde_json::Value = serde_json::Value::Null;
-
-        let mut current = value;
-        for step in path
-        {
-            current = current.get(step).unwrap_or(&NOTHING);
-        }
-
-        return current.clone();
-    }
-
-    /// [`GateCommand`] over `root`, every selector at its select-everything default -- the
-    /// shape every test here builds before narrowing one field of its own.
-    fn Command_At(root: PathBuf) -> GateCommand
-    {
-        return GateCommand { root, ..Default::default() };
-    }
-
     /// A real run over this crate's own tree reaches a real judgment -- not
     /// [`Disposition::Indeterminate`], the state a walk that never became a judged check
     /// outcome carries -- proving this crate, not `nomos-cli`, can produce one.
@@ -170,7 +144,7 @@ mod tests
         assert!(response.findings.blocking_findings.is_empty());
         // Which indeterminate, not merely that it is one. Before this crate carried the
         // check outcome, this assertion could not be written here at all.
-        let rendered = serde_json::to_value(&response).expect("always serializes");
+        let rendered = serde_json::to_value(&response).expect("a derived Serialize over owned data has nothing to refuse");
         assert_eq!(At(&rendered, &["check_outcome", "outcome"]), "no_source", "{rendered}");
     }
 
@@ -181,7 +155,7 @@ mod tests
     {
         let response = Handle_Gate_Run(&Command_At(PathBuf::from(".")));
 
-        let rendered = serde_json::to_value(&response).expect("always serializes");
+        let rendered = serde_json::to_value(&response).expect("a derived Serialize over owned data has nothing to refuse");
         assert_eq!(At(&rendered, &["check_outcome", "outcome"]), "judged", "{rendered}");
         assert!(At(&rendered, &["check_outcome", "files"]).as_u64().unwrap_or(0) > 0, "{rendered}");
     }
@@ -204,12 +178,12 @@ mod tests
     #[test]
     fn Test_A_Malformed_Policy_Should_Reach_A_Headless_Caller_With_The_Key_It_Refused()
     {
-        let root = Probe_Tree("malformed", r#"{ "basline": [] }"#);
+        let root = Probe_Tree(TreeName("malformed"), r#"{ "basline": [] }"#);
 
         let response = Handle_Gate_Run(&Command_At(root.clone()));
 
         let _ignored = std::fs::remove_dir_all(&root);
-        let rendered = serde_json::to_value(&response).expect("always serializes");
+        let rendered = serde_json::to_value(&response).expect("a derived Serialize over owned data has nothing to refuse");
         assert_eq!(At(&rendered, &["disposition"]), "indeterminate", "{rendered}");
         // Judged, and still without a verdict -- the combination that was indistinguishable
         // from an unwalkable tree until both fields were carried.
@@ -219,13 +193,32 @@ mod tests
         assert!(detail.contains("basline"), "{detail}");
     }
 
+    /// One field of a serialized value, by path.
+    ///
+    /// `serde_json::Value`'s own `Index` panics on a missing key, which is the failure
+    /// `clippy::indexing_slicing` is denied in this workspace to prevent, so these tests read
+    /// through `get` and report a missing key as `Null` rather than as a panic inside an
+    /// assertion.
+    fn At(value: &serde_json::Value, path: &[&str]) -> serde_json::Value
+    {
+        const NOTHING: serde_json::Value = serde_json::Value::Null;
+
+        let mut current = value;
+        for step in path
+        {
+            current = current.get(step).unwrap_or(&NOTHING);
+        }
+
+        return current.clone();
+    }
+
     /// A declared entry that matches nothing reaches a headless caller, which is `OD-GATE-024`
     /// arriving on the surface this product is run on.
     #[test]
     fn Test_A_Declared_Entry_That_Matched_Nothing_Should_Reach_A_Headless_Caller()
     {
-        let policy = r#"{ "baseline": [ { "rule": "a-rule-no-registry-holds", "path": "src/lib.rs", "rationale": "tracked" } ] }"#;
-        let root = Probe_Tree("unmatched", policy);
+        let policy = "{ \"baseline\": [ { \"rule\": \"a-rule-no-registry-holds\", \"path\": \"src/lib.rs\", \"rationale\": \"tracked\" } ] }";
+        let root = Probe_Tree(TreeName("unmatched"), policy);
 
         let response = Handle_Gate_Run(&Command_At(root.clone()));
 
@@ -235,21 +228,6 @@ mod tests
             "{:?}",
             response.unmatched_policy
         );
-    }
-
-    /// A one-crate tree with real source and a declared `nomos-gate.json`, so a run over it
-    /// reaches `Judged` and resolves a policy -- the two things an empty directory cannot do.
-    fn Probe_Tree(name: &str, policy: &str) -> PathBuf
-    {
-        let root = std::env::temp_dir().join(format!("nomos-api-gate-run-{name}-{}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(root.join("src")).expect("creates a probe tree");
-        let manifest = "[package]\nname = \"probe\"\nversion = \"0.1.0\"\nedition = \"2021\"\n";
-        std::fs::write(root.join("Cargo.toml"), manifest).expect("writable");
-        std::fs::write(root.join("src").join("lib.rs"), "pub fn thing() -> i32 { return 1; }\n").expect("writable");
-        std::fs::write(root.join("nomos-gate.json"), policy).expect("writable");
-
-        return root;
     }
 
     /// The whole point of this crate: the response a real run produces is valid JSON, and
@@ -302,5 +280,30 @@ mod tests
             naming_only.findings.blocking_findings.is_empty(),
             "the deselected rule's finding must not exist at all: {naming_only:?}"
         );
+    }
+
+    /// [`GateCommand`] over `root`, every selector at its select-everything default -- the
+    /// shape every test here builds before narrowing one field of its own.
+    fn Command_At(root: PathBuf) -> GateCommand
+    {
+        return GateCommand { root, ..Default::default() };
+    }
+
+    /// The directory name a probe tree is created under.
+    struct TreeName<'a>(&'a str);
+
+    /// A one-crate tree with real source and a declared `nomos-gate.json`, so a run over it
+    /// reaches `Judged` and resolves a policy -- the two things an empty directory cannot do.
+    fn Probe_Tree(name: TreeName, policy: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-api-gate-run-{}-{}", name.0, std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(root.join("src")).expect("creates a probe tree");
+        let manifest = "[package]\nname = \"probe\"\nversion = \"0.1.0\"\nedition = \"2021\"\n";
+        std::fs::write(root.join("Cargo.toml"), manifest).expect("the probe root above was just created");
+        std::fs::write(root.join("src").join("lib.rs"), "pub fn thing() -> i32 { return 1; }\n").expect("the probe src directory above was just created");
+        std::fs::write(root.join("nomos-gate.json"), policy).expect("the probe root above was just created");
+
+        return root;
     }
 }

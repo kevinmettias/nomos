@@ -135,29 +135,12 @@ mod tests
         Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId,
     };
 
-    fn Subject_Of(fill: u8) -> SubjectId
-    {
-        return SubjectId::From_Digest(Digest128::From_Bytes([fill; Digest128::BYTE_LENGTH]));
-    }
+    /// The subject every test but one derives its finding from.
+    const BASE_SUBJECT_SEED: u8 = 3;
 
-    /// One finding every test below varies a single field of.
-    ///
-    /// A base plus struct update, rather than a constructor taking each field, so that each test
-    /// states the *one* difference it is about and no reader has to diff two argument lists to
-    /// find it.
-    fn A_Finding() -> Finding
-    {
-        return Finding {
-            rule: RuleId::New("file-name-matches-declared-type"),
-            subject: Subject_Of(3),
-            subject_name: "src/lib.rs:12".to_owned(),
-            applicability: Applicability::Supported,
-            evidence: EvidenceClass::Derived,
-            gate: GateCategory::Blocking,
-            summary: "the file names no type it declares".to_owned(),
-            locations: vec!["src/lib.rs:12".to_owned()],
-        };
-    }
+    /// A subject distinct from [`BASE_SUBJECT_SEED`], so that "the subject is load-bearing" has a
+    /// second value to compare against.
+    const OTHER_SUBJECT_SEED: u8 = 9;
 
     #[test]
     fn Test_The_Same_Finding_Should_Yield_The_Same_Identity()
@@ -211,7 +194,7 @@ mod tests
         let identity = FindingOccurrenceId::Of(&A_Finding());
 
         let other_rule = Finding { rule: RuleId::New("one-public-type-per-file"), ..A_Finding() };
-        let other_subject = Finding { subject: Subject_Of(9), ..A_Finding() };
+        let other_subject = Finding { subject: Subject_Of(OTHER_SUBJECT_SEED), ..A_Finding() };
         let other_summary = Finding { summary: "something else entirely".to_owned(), ..A_Finding() };
         let other_locations = Finding { locations: vec!["src/other.rs:1".to_owned()], ..A_Finding() };
 
@@ -290,5 +273,29 @@ mod tests
             FindingOccurrenceId::Of(&A_Finding()).Digest().to_string(),
             "f4b03938e2ff3a4f9cfbabd3c49d6fe1"
         );
+    }
+
+    fn Subject_Of(fill: u8) -> SubjectId
+    {
+        return SubjectId::From_Digest(Digest128::From_Bytes([fill; Digest128::BYTE_LENGTH]));
+    }
+
+    /// One finding every test above varies a single field of.
+    ///
+    /// A base plus struct update, rather than a constructor taking each field, so that each test
+    /// states the *one* difference it is about and no reader has to diff two argument lists to
+    /// find it.
+    fn A_Finding() -> Finding
+    {
+        return Finding {
+            rule: RuleId::New("file-name-matches-declared-type"),
+            subject: Subject_Of(BASE_SUBJECT_SEED),
+            subject_name: "src/lib.rs:12".to_owned(),
+            applicability: Applicability::Supported,
+            evidence: EvidenceClass::Derived,
+            gate: GateCategory::Blocking,
+            summary: "the file names no type it declares".to_owned(),
+            locations: vec!["src/lib.rs:12".to_owned()],
+        };
     }
 }

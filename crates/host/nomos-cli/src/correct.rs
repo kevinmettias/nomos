@@ -116,13 +116,6 @@ fn Read_Entry(root: &Path, path: PathBuf, pending: &mut Vec<PathBuf>, sources: &
     }
 }
 
-/// Rust or Go -- `Check_Completeness_Mirrors` needs every `.rs` and `.go` file under the
-/// root, since a check name claimed in one language's file can be declared in the other's.
-fn Is_Recognized_Extension(extension: &std::ffi::OsStr) -> bool
-{
-    return extension == "rs" || extension == "go";
-}
-
 fn Read_Source(root: &Path, path: &Path, text: String) -> SourceFile
 {
     use nomos_model::Subject_Of_Path;
@@ -139,62 +132,6 @@ fn Relative(root: &Path, path: &Path) -> String
     return path.strip_prefix(root).unwrap_or(path).display().to_string().replace('\\', "/");
 }
 
-/// Renders `outcome` into the exact text and [`ExitCode`] this command has always
-/// reported, one variant of [`CorrectionOutcome`] at a time.
-fn Rendered(outcome: &CorrectionOutcome, root: &Path, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
-{
-    return match outcome
-    {
-        CorrectionOutcome::UnreadableRoot =>
-        {
-            let _ = writeln!(stderr, "`{}` is not a directory", root.display());
-            ExitCode::Unreadable
-        }
-        CorrectionOutcome::NoSourceFound =>
-        {
-            let _ = writeln!(stderr, "no `.rs` or `.go` source found under `{}`", root.display());
-            ExitCode::Vacuous
-        }
-        CorrectionOutcome::UnreadableWorkspaceState =>
-        {
-            let _ = writeln!(stderr, "the tree could not be read as a workspace state");
-            ExitCode::Vacuous
-        }
-        CorrectionOutcome::ContradictoryRegistry(error) =>
-        {
-            let _ = writeln!(stderr, "this build's own capability registry is self-contradictory: {error}");
-            ExitCode::Vacuous
-        }
-        CorrectionOutcome::NoFactsMaterialized(files) =>
-        {
-            let _ = writeln!(stderr, "{files} file(s) were read but no syntax fact was materialized for any of them");
-            ExitCode::Vacuous
-        }
-        CorrectionOutcome::Clean =>
-        {
-            let _ = writeln!(stdout, "clean: no blocking correction claim under `{}`", root.display());
-            ExitCode::Ok
-        }
-        CorrectionOutcome::Refused(reason) =>
-        {
-            let _ = writeln!(stderr, "{reason}");
-            ExitCode::Refused
-        }
-        CorrectionOutcome::Staged { path, summary, preview } =>
-        {
-            let _ = writeln!(stdout, "{}", String::from_utf8_lossy(preview));
-            let _ = writeln!(stdout, "dry run: `{path}`: {summary}. Pass --commit to apply it.");
-            ExitCode::Ok
-        }
-        CorrectionOutcome::Committed { path, summary, preview, base, after_snapshot } =>
-        {
-            let _ = writeln!(stdout, "{}", String::from_utf8_lossy(preview));
-            let _ = writeln!(stdout, "committed: `{path}`: {summary} ({base} -> {after_snapshot})");
-            ExitCode::Ok
-        }
-    };
-}
-
 /// The build variant this binary was compiled as. A near-duplicate of `check::composition::
 /// Host_Variant`, not a shared dependency on it: that function is `pub(super)` to `check`,
 /// the same reasoning `sources.rs`'s own doc gives for not sharing that module's walk.
@@ -206,4 +143,50 @@ fn Correction_Variant() -> BuildVariant
         env!("NOMOS_TOOLCHAIN"),
         env!("NOMOS_FEATURES").split(',').filter(|feature| return !feature.is_empty()),
     );
+}
+
+/// Renders `outcome` into the exact text and [`ExitCode`] this command has always
+/// reported, one variant of [`CorrectionOutcome`] at a time.
+///
+/// Each arm is one case: the outcome on the left, the sentence it renders and the code it
+/// answers with on the right. The bytes are unchanged from the written-out form this
+/// replaced -- [`Announced`] ends its text with the same newline `writeln!` did.
+fn Rendered(outcome: &CorrectionOutcome, root: &Path, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+{
+    return match outcome
+    {
+        CorrectionOutcome::UnreadableRoot =>
+            Announced(stderr, ExitCode::Unreadable, format!("`{}` is not a directory", root.display())),
+        CorrectionOutcome::NoSourceFound =>
+            Announced(stderr, ExitCode::Vacuous, format!("no `.rs` or `.go` source found under `{}`", root.display())),
+        CorrectionOutcome::UnreadableWorkspaceState =>
+            Announced(stderr, ExitCode::Vacuous, "the tree could not be read as a workspace state".to_owned()),
+        CorrectionOutcome::ContradictoryRegistry(error) =>
+            Announced(stderr, ExitCode::Vacuous, format!("this build's own capability registry is self-contradictory: {error}")),
+        CorrectionOutcome::NoFactsMaterialized(files) =>
+            Announced(stderr, ExitCode::Vacuous, format!("{files} file(s) were read but no syntax fact was materialized for any of them")),
+        CorrectionOutcome::Refused(reason) =>
+            Announced(stderr, ExitCode::Refused, reason.clone()),
+        CorrectionOutcome::Clean =>
+            Announced(stdout, ExitCode::Ok, format!("clean: no blocking correction claim under `{}`", root.display())),
+        CorrectionOutcome::Staged { path, summary, preview } =>
+            Announced(stdout, ExitCode::Ok, format!("{}\ndry run: `{path}`: {summary}. Pass --commit to apply it.", String::from_utf8_lossy(preview))),
+        CorrectionOutcome::Committed { path, summary, preview, base, after_snapshot } =>
+            Announced(stdout, ExitCode::Ok, format!("{}\ncommitted: `{path}`: {summary} ({base} -> {after_snapshot})", String::from_utf8_lossy(preview))),
+    };
+}
+
+/// Writes `text` to `stream` as one line and answers with `code` -- the two steps every arm
+/// of [`Rendered`] ends in, so that each of those arms states one case rather than three.
+fn Announced(stream: &mut impl Write, code: ExitCode, text: String) -> ExitCode
+{
+    let _ = writeln!(stream, "{text}");
+    return code;
+}
+
+/// Rust or Go -- `Check_Completeness_Mirrors` needs every `.rs` and `.go` file under the
+/// root, since a check name claimed in one language's file can be declared in the other's.
+fn Is_Recognized_Extension(extension: &std::ffi::OsStr) -> bool
+{
+    return extension == "rs" || extension == "go";
 }

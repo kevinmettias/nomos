@@ -17,6 +17,10 @@ mod support;
 
 use support::Run;
 
+/// What a run that judged nothing leaves the process with -- `gate/exit_code.rs::
+/// ExitCode::Vacuous`'s own value, the code `check`'s own `Vacuous` already gave that number.
+const VACUOUS_EXIT_CODE: i32 = 6;
+
 /// `gate/parsing.rs` turns a repeated `--include <path>` into exactly
 /// `ScopeSelector::include`, and `Run_Gate` scopes the walk before ever calling
 /// `nomos_check_orchestration::Run` -- a scope admitting nothing reports the same
@@ -38,7 +42,7 @@ fn Test_A_Scope_Selector_Naming_Nothing_Should_Report_Vacuous_Through_A_Real_Run
     let ran = Run(&["gate", "run", "--root", ".", "--include", included]);
 
     assert_eq!(
-        ran.code, 6,
+        ran.code, VACUOUS_EXIT_CODE,
         "a real `gate run` scoped to the one path this ScopeSelector names must report the \
          same Vacuous outcome Run_Gate gives an empty walk: {}",
         ran.stdout

@@ -17,7 +17,8 @@ struct RootedStore
 
 fn Rooted() -> RootedStore
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("an in-memory store opens over no file, so this construction has no failure path");
     let root = store
         .Put_Suite(ROOT_SUITE, "The Nomos specification", SuiteAuthority::Root)
         .expect("records the root suite");
@@ -31,7 +32,7 @@ fn Test_A_Game_Plan_Should_Enter_As_Commentary()
     let RootedStore { mut store, root } = Rooted();
 
     let node = Ingest_Game_Plan(&mut store, root, "nomos full game plan.txt", PLAN)
-        .expect("ingests");
+        .expect("the game plan is markdown the ingester parses, so it reports");
 
     assert_eq!(node, "PLAN-NOMOS-FULL-GAME-PLAN-TXT");
     let authority: String = store
@@ -41,7 +42,7 @@ fn Test_A_Game_Plan_Should_Enter_As_Commentary()
             rusqlite::params![node],
             |row| row.get(0),
         )
-        .expect("queries");
+        .expect("the store answers a query over the nodes it holds");
     assert_eq!(authority, COMMENTARY);
 }
 
@@ -51,7 +52,8 @@ fn Test_A_Game_Plan_Should_Enter_As_Commentary()
 fn Test_Every_Game_Plan_Block_Should_Be_Disposed_To_The_Commentary_Node()
 {
     let RootedStore { mut store, root } = Rooted();
-    Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN).expect("ingests");
+    Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN)
+        .expect("the game plan is markdown the ingester parses, so it reports");
 
     let undisposed: u32 = store
         .Connection()
@@ -61,7 +63,7 @@ fn Test_Every_Game_Plan_Block_Should_Be_Disposed_To_The_Commentary_Node()
             [],
             |row| row.get(0),
         )
-        .expect("queries");
+        .expect("the store answers a count over the blocks it owns");
 
     assert_eq!(undisposed, 0);
     assert!(store.Count(nomos_spec_store::Table::SourceBlocks).expect("counts") > 0);
@@ -72,10 +74,11 @@ fn Test_Every_Game_Plan_Block_Should_Be_Disposed_To_The_Commentary_Node()
 fn Test_A_Statement_Sourced_Only_From_A_Game_Plan_Should_Be_Reported()
 {
     let RootedStore { mut store, root } = Rooted();
-    Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN).expect("ingests");
+    Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN)
+        .expect("the game plan is markdown the ingester parses, so it reports");
     Statement(&mut store, "AGT-001");
     Trace_To_Plan(&store, "AGT-001");
-    Prepare_Commentary_View(&store).expect("prepares");
+    Prepare_Commentary_View(&store).expect("the commentary view is prepared over a loaded store");
 
     assert_eq!(
         Statements_Sourced_Only_From_Commentary(&store).expect("queries"),
@@ -89,9 +92,10 @@ fn Test_A_Statement_Sourced_Only_From_A_Game_Plan_Should_Be_Reported()
 fn Test_A_Statement_With_A_Real_Source_Too_Should_Not_Be_Reported()
 {
     let RootedStore { mut store, root } = Rooted();
-    Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN).expect("ingests");
+    Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN)
+        .expect("the game plan is markdown the ingester parses, so it reports");
     crate::phases::Ingest_Source_Document(&mut store, "v.md", "v14.36", "# T\n\nReal.\n")
-        .expect("ingests");
+        .expect("the document is markdown the ingester parses, so it reports");
     Statement(&mut store, "AGT-001");
     Trace_To_Plan(&store, "AGT-001");
     store
@@ -106,7 +110,7 @@ fn Test_A_Statement_With_A_Real_Source_Too_Should_Not_Be_Reported()
         )
         .expect("links the real source");
 
-    Prepare_Commentary_View(&store).expect("prepares");
+    Prepare_Commentary_View(&store).expect("the commentary view is prepared over a loaded store");
     assert!(
         Statements_Sourced_Only_From_Commentary(&store)
             .expect("queries")
@@ -119,9 +123,10 @@ fn Test_A_Statement_With_A_Real_Source_Too_Should_Not_Be_Reported()
 fn Test_A_Statement_With_No_Lineage_Should_Not_Be_Reported_Here()
 {
     let RootedStore { mut store, root } = Rooted();
-    Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN).expect("ingests");
+    Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN)
+        .expect("the game plan is markdown the ingester parses, so it reports");
     Statement(&mut store, "AGT-002");
-    Prepare_Commentary_View(&store).expect("prepares");
+    Prepare_Commentary_View(&store).expect("the commentary view is prepared over a loaded store");
 
     assert!(
         Statements_Sourced_Only_From_Commentary(&store)
@@ -140,7 +145,7 @@ fn Statement(store: &mut SpecificationStore, id: &str)
             representation: "record",
             title: id,
         })
-        .expect("mints");
+        .expect("the node table mints a row for every identifier the suite names");
     store
         .Connection()
         .execute(
@@ -149,7 +154,7 @@ fn Statement(store: &mut SpecificationStore, id: &str)
              VALUES (?1, ?2, 'Requirement', 'Nomos shall.', 'sha256:aa')",
             rusqlite::params![node, id],
         )
-        .expect("inserts");
+        .expect("the statement table accepts a row the suite constructed");
 }
 
 fn Trace_To_Plan(store: &SpecificationStore, id: &str)
@@ -187,6 +192,9 @@ fn Test_A_Qualified_Identifier_Should_Name_Its_Suite()
     );
 }
 
+/// Where `Sibling::All()` places `Sibling::Ecosystem`, after `Xvpe` and `Kwb`.
+const ECOSYSTEM_POSITION: usize = 2;
+
 /// `Sibling::All()`'s own mirror, named in the doc comment above it.
 ///
 /// The match has no wildcard arm. A variant added to `Sibling` without a matching arm
@@ -201,7 +209,7 @@ fn Test_Every_Sibling_Should_Be_Matched_Exhaustively()
         {
             Sibling::Xvpe => 0,
             Sibling::Kwb => 1,
-            Sibling::Ecosystem => 2,
+            Sibling::Ecosystem => ECOSYSTEM_POSITION,
         };
     }
 

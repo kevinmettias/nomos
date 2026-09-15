@@ -16,7 +16,8 @@ use nomos_spec_validate::{DECLARED_RULES, Registered, Validate_Rules};
 
 fn Store() -> SpecificationStore
 {
-    return SpecificationStore::In_Memory().expect("opens");
+    return SpecificationStore::In_Memory()
+        .expect("an in-memory store opens no file, so only the shipped schema can fail here");
 }
 
 /// The happy path across the boundary: the hash a run reports must be the hash

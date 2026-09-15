@@ -272,35 +272,51 @@ mod tests
     #[test]
     fn Test_Select_Projection_Should_Gather_Every_Declared_Section_In_Order()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = Store_With_One_Suite();
+        let profile = One_Section_Profile();
+
+        let projection = Select_Projection(&store, &profile)
+            .expect("the profile's one section selects from the store's one suite");
+
+        assert_eq!(projection.sections.len(), 1);
+        assert_eq!(The_One_Section(&projection).items.len(), 1);
+        assert_eq!(projection.inputs.len(), 1);
+    }
+
+    /// An in-memory store holding the one suite the profile above names.
+    fn Store_With_One_Suite() -> SpecificationStore
+    {
+        let store =
+            SpecificationStore::In_Memory().expect("an in-memory store applies the schema MIGRATIONS");
         store
             .Connection()
             .execute_batch(
                 "INSERT INTO suites (suite_id, title, authority_root) \
                  VALUES ('nomos', 'The Nomos specification', 1);",
             )
-            .expect("seeds a suite");
+            .expect("the suite the profile's own section selects is inserted");
 
-        let profile = Profile::Parse(
+        return store;
+    }
+
+    /// The one-section profile whose section is the corpus's suites.
+    fn One_Section_Profile() -> Profile
+    {
+        return Profile::Parse(
             r#"{
                 "id": "one", "title": "One", "format": "markdown", "output": "one.md",
                 "sections": [{ "title": "Suites", "content": "suites" }]
             }"#,
         )
-        .expect("parses");
+        .expect("the profile text is the JSON literal this test wrote");
+    }
 
-        let projection = Select_Projection(&store, &profile).expect("selects");
-
-        assert_eq!(projection.sections.len(), 1);
-        assert_eq!(
-            projection
-                .sections
-                .first()
-                .expect("asserted above to contain exactly one section")
-                .items
-                .len(),
-            1
-        );
-        assert_eq!(projection.inputs.len(), 1);
+    /// The section that profile declares, which the caller has already asserted is the only one.
+    fn The_One_Section(projection: &Projection) -> &Section
+    {
+        return projection
+            .sections
+            .first()
+            .expect("the profile declares exactly one section, as this test asserts before it asks");
     }
 }

@@ -62,40 +62,6 @@ pub fn Discover_Workspace<Launcher: ProcessLauncher, Env: Environment>(root: &Pa
     return Require_Nonempty(discovered);
 }
 
-/// `root` made absolute against the real process working directory -- not
-/// `std::fs::canonicalize`, whose Windows implementation returns a `\\?\`-prefixed
-/// verbatim path that a `cargo clippy`-reported `package_id` never carries, which would
-/// silently break every prefix match in [`First_Party_Relative_Root`] below (the exact
-/// footgun `nomos_lang_rust_compiler::reading::Load_Crate`'s own doc already names, for
-/// the identical reason: a *prefix* comparison, unlike a plain equality check, cannot
-/// tolerate one side being canonicalized and the other not). A relative root -- `nomos
-/// check`'s own CLI default is `.` -- must resolve to the same real directory `cargo
-/// clippy` itself ran in, or every first-party package it reports would fail to
-/// relativize against it and be excluded as if it were external.
-fn Absolutized<Env: Environment>(root: &Path, environment: &Env) -> Result<PathBuf, ClippyError>
-{
-    let current_dir = environment.Working_Directory().map_err(|error| ClippyError {
-        reason: format!("the current directory could not be read: {error}"),
-    })?;
-
-    return Ok(current_dir.join(root));
-}
-
-/// The program name `cargo` is invoked by, from the environment rather than from this
-/// process's own ambient state.
-///
-/// `CARGO` is what a cargo-invoked build sets to the exact toolchain binary running, and a
-/// provider handed an injected launcher must not then reach around it for the program that
-/// launcher will run -- a fake launcher receives the command already built, so no test could
-/// state which cargo it names. `P87`/`OD-HOST-001`: the port comes from the composition root.
-fn Cargo_Program<Env: Environment>(environment: &Env) -> String
-{
-    return environment
-        .Variable("CARGO")
-        .and_then(|value| return value.into_string().ok())
-        .unwrap_or_else(|| return "cargo".to_owned());
-}
-
 fn Run_Cargo_Clippy<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<String, ClippyError>
 {
     let command = Cargo_Clippy_Command(root, environment);
@@ -131,6 +97,21 @@ fn Cargo_Clippy_Command<Env: Environment>(root: &Path, environment: &Env) -> Com
     return command;
 }
 
+/// The program name `cargo` is invoked by, from the environment rather than from this
+/// process's own ambient state.
+///
+/// `CARGO` is what a cargo-invoked build sets to the exact toolchain binary running, and a
+/// provider handed an injected launcher must not then reach around it for the program that
+/// launcher will run -- a fake launcher receives the command already built, so no test could
+/// state which cargo it names. `P87`/`OD-HOST-001`: the port comes from the composition root.
+fn Cargo_Program<Env: Environment>(environment: &Env) -> String
+{
+    return environment
+        .Variable("CARGO")
+        .and_then(|value| return value.into_string().ok())
+        .unwrap_or_else(|| return "cargo".to_owned());
+}
+
 /// Refuses every outcome a launched process can report other than a clean, zero exit —
 /// the same shape `nomos_lang_rust_cargo`'s own `Require_Clean_Exit` uses for the identical
 /// reason: a real compile error, not merely a lint warning, is the only thing that makes
@@ -154,6 +135,25 @@ fn Require_Clean_Exit(outcome: &ExitOutcome, stderr: &str) -> Result<(), ClippyE
             reason: "cargo clippy was terminated before it could finish".to_owned(),
         }),
     };
+}
+
+/// `root` made absolute against the real process working directory -- not
+/// `std::fs::canonicalize`, whose Windows implementation returns a `\\?\`-prefixed
+/// verbatim path that a `cargo clippy`-reported `package_id` never carries, which would
+/// silently break every prefix match in [`First_Party_Relative_Root`] below (the exact
+/// footgun `nomos_lang_rust_compiler::reading::Load_Crate`'s own doc already names, for
+/// the identical reason: a *prefix* comparison, unlike a plain equality check, cannot
+/// tolerate one side being canonicalized and the other not). A relative root -- `nomos
+/// check`'s own CLI default is `.` -- must resolve to the same real directory `cargo
+/// clippy` itself ran in, or every first-party package it reports would fail to
+/// relativize against it and be excluded as if it were external.
+fn Absolutized<Env: Environment>(root: &Path, environment: &Env) -> Result<PathBuf, ClippyError>
+{
+    let current_dir = environment.Working_Directory().map_err(|error| ClippyError {
+        reason: format!("the current directory could not be read: {error}"),
+    })?;
+
+    return Ok(current_dir.join(root));
 }
 
 /// `stdout`'s own JSON-lines stream, folded into one entry per first-party workspace
@@ -336,9 +336,7 @@ fn Require_Nonempty(discovered: Vec<DiscoveredDiagnostics>) -> Result<Vec<Discov
     if discovered.is_empty()
     {
         return Err(ClippyError {
-            reason: "cargo clippy reported no first-party workspace member; refusing to \
-                     report a clean result over an empty workspace"
-                .to_owned(),
+            reason: "cargo clippy reported no first-party workspace member; refusing to report a clean result over an empty workspace".to_owned(),
         });
     }
 
@@ -483,11 +481,8 @@ mod local_tests
         .to_string();
         let launcher = FakeLauncher { stdout };
 
-        let error = Discover_Workspace(&root, &launcher, &StdEnvironment).expect_err(
-            "a package cargo clippy reports outside the judged root must be excluded, leaving \
-             nothing for a real, honest Require_Nonempty refusal to report instead of a clean \
-             but empty result",
-        );
+        let error = Discover_Workspace(&root, &launcher, &StdEnvironment)
+            .expect_err("a package cargo clippy reports outside the judged root must be excluded, leaving nothing for a real, honest Require_Nonempty refusal to report instead of a clean but empty result");
 
         assert!(error.reason.contains("no first-party workspace member"), "{}", error.reason);
     }

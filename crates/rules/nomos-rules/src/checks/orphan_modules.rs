@@ -80,7 +80,10 @@
 use super::code_prefix::Code_Prefix;
 use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
+use path_syntax::{Declared_Module_Name, Declared_Path_Attribute};
 use std::collections::{BTreeMap, BTreeSet};
+
+mod path_syntax;
 
 /// The code-standards module-reachability rule id.
 pub const NO_ORPHAN_MODULES: &str = "no-orphan-modules";
@@ -101,13 +104,14 @@ const DIRECTORY_MODULE_FILE: &str = "mod.rs";
 /// The files Cargo compiles as a crate root without any declaration reaching them.
 const CRATE_ROOT_FILES: [&str; 2] = ["lib.rs", "main.rs"];
 
-/// The prefix that lets a keyword be spelled as an identifier. It is spelling, not name:
-/// `mod r#match;` is backed by `match.rs`.
-const RAW_IDENTIFIER_PREFIX: &str = "r#";
-
-/// The declaration keyword this rule resolves, and the attribute that redirects it.
-const MODULE_KEYWORD: &str = "mod";
-const PATH_ATTRIBUTE_NAME: &str = "path";
+/// A repo-relative directory path, forward-slashed, as this rule addresses one: the
+/// directory a declaration resolves against, and the directory a file's own children land in.
+///
+/// Named rather than a bare `&str` because every reader below takes it beside a second
+/// `&str` -- a relative path, a module name, a file's path -- and two bare `&str`s in
+/// adjacent positions are transposable at a call site with nothing to catch it.
+#[derive(Clone, Copy)]
+struct Directory<'a>(&'a str);
 
 /// Reports every Rust source under a crate's source tree that the crate's module tree does
 /// not reach.
@@ -220,17 +224,24 @@ impl<'a> SourceTree<'a>
             }
         }
 
+        roots.extend(self.Binary_Roots_Under(source_directory));
+        return roots;
+    }
+
+    /// The `bin/` roots under `source_directory`: every `.rs` file sitting directly in its
+    /// `bin/` directory, each of which Cargo compiles as its own root. A nested
+    /// `bin/<name>/main.rs` is also one, and reading it is the widening the module doc
+    /// deliberately does not make.
+    fn Binary_Roots_Under(&self, source_directory: &str) -> Vec<Module>
+    {
         let binary_directory = format!("{source_directory}/{BINARY_DIRECTORY_NAME}");
 
-        for path in self.by_path.keys()
-        {
-            if Is_Direct_Child_Of(path, &binary_directory)
-            {
-                roots.push(Module { file: (*path).to_owned(), directory: binary_directory.clone() });
-            }
-        }
-
-        return roots;
+        return self
+            .by_path
+            .keys()
+            .filter(|path| return Is_Direct_Child_Of(path, Directory(&binary_directory)))
+            .map(|path| return Module { file: (*path).to_owned(), directory: binary_directory.clone() })
+            .collect();
     }
 
     /// The modules `parent` declares, each paired with the directory *its* children resolve
@@ -244,7 +255,15 @@ impl<'a> SourceTree<'a>
             return Vec::new();
         };
 
-        let declaring_directory = Parent_Directory_Of(&parent.file);
+        return self.Declared_Children_Of(source, parent);
+    }
+
+    /// The modules one file declares, each resolved against the directory that file's own
+    /// declarations reach: a path attribute against the directory the file sits in, a
+    /// `mod name;` against the directory the file owns.
+    fn Declared_Children_Of(&self, source: &SourceFile, parent: &Module) -> Vec<Module>
+    {
+        let declaring_directory = Directory(Parent_Directory_Of(&parent.file));
         let mut children = Vec::new();
 
         for line in source.text.lines()
@@ -258,7 +277,7 @@ impl<'a> SourceTree<'a>
             }
 
             if let Some(name) = Declared_Module_Name(&code)
-                && let Some(child) = self.Resolve_Declaration(&parent.directory, name)
+                && let Some(child) = self.Resolve_Declaration(Directory(&parent.directory), name)
             {
                 children.push(child);
             }
@@ -269,9 +288,9 @@ impl<'a> SourceTree<'a>
 
     /// Resolves a path attribute against the directory the declaring file sits in. The file
     /// it names owns the directory it lands in, so its own children are its siblings.
-    fn Resolve_Path_Attribute(&self, declaring_directory: &str, relative: &str) -> Option<Module>
+    fn Resolve_Path_Attribute(&self, directory: Directory<'_>, relative: &str) -> Option<Module>
     {
-        let file = Joined_Path(declaring_directory, relative)?;
+        let file = Joined_Path(directory, relative)?;
 
         if !self.by_path.contains_key(file.as_str())
         {
@@ -285,9 +304,9 @@ impl<'a> SourceTree<'a>
     /// Resolves `mod name;` against `directory`, trying both layouts Rust allows: the
     /// sibling file `name.rs` first, then the directory module `name/mod.rs`. Either way the
     /// module it finds owns `directory/name`.
-    fn Resolve_Declaration(&self, directory: &str, name: &str) -> Option<Module>
+    fn Resolve_Declaration(&self, directory: Directory<'_>, name: &str) -> Option<Module>
     {
-        let owned = format!("{directory}/{name}");
+        let owned = format!("{}/{name}", directory.0);
         let sibling = format!("{owned}{RUST_SOURCE_SUFFIX}");
 
         if self.by_path.contains_key(sibling.as_str())
@@ -348,9 +367,9 @@ fn Source_Directory_Of(path: &str) -> Option<&str>
 
 /// Whether `path` names a `.rs` file sitting directly in `directory`, with no further
 /// directory between the two.
-fn Is_Direct_Child_Of(path: &str, directory: &str) -> bool
+fn Is_Direct_Child_Of(path: &str, directory: Directory<'_>) -> bool
 {
-    let Some(remainder) = path.strip_prefix(directory).and_then(|rest| return rest.strip_prefix('/'))
+    let Some(remainder) = path.strip_prefix(directory.0).and_then(|rest| return rest.strip_prefix('/'))
     else
     {
         return false;
@@ -363,426 +382,56 @@ fn Is_Direct_Child_Of(path: &str, directory: &str) -> bool
 fn Parent_Directory_Of(path: &str) -> &str
 {
     return match path.rfind('/')
-    {
+           {
         Some(separator) => path.get(..separator).unwrap_or(""),
         None => "",
-    };
+           };
 }
 
 /// `relative` resolved against `directory`, with `.` dropped and `..` applied, or `None`
 /// when it climbs above the root it started from.
-fn Joined_Path(directory: &str, relative: &str) -> Option<String>
+fn Joined_Path(directory: Directory<'_>, relative: &str) -> Option<String>
 {
-    let mut segments: Vec<String> = Vec::new();
+    let mut segments = Directory_Segments(directory);
 
-    if !directory.is_empty()
+    for segment in Recognized_Segments(relative)
     {
-        segments.extend(directory.split('/').map(str::to_owned));
-    }
-
-    let normalized = relative.replace('\\', "/");
-    let named_segments = normalized.split('/').filter(|segment| return !segment.is_empty() && *segment != ".");
-
-    for segment in named_segments
-    {
-        match segment
+        match segment.as_str()
         {
             ".." =>
             {
                 segments.pop()?;
             },
-            named => segments.push(named.to_owned()),
+            _ => segments.push(segment),
         }
     }
 
     return Some(segments.join("/"));
 }
 
-/// The code before any line comment, so a commented-out declaration does not read as a live
-/// one — which would hide the very orphan this rule looks for. This crate's established
-/// per-file convention, which `P45-CODE-PREFIX-KNOWS-STRINGS` will replace with one shared
-/// helper.
-/// The module name a line declares with `mod name;`, or `None` for any other line.
-///
-/// The terminating semicolon is required, which is what excludes an inline module: one
-/// written with a body is backed by no file and so declares nothing on disk.
-fn Declared_Module_Name(code: &str) -> Option<&str>
+/// `directory`'s own segments, empty for the root the walk started at.
+fn Directory_Segments(directory: Directory<'_>) -> Vec<String>
 {
-    let after_visibility = Without_Visibility(code.trim_start()).trim_start();
-    let after_keyword = Without_Module_Keyword(after_visibility)?;
-    let after_prefix = after_keyword.strip_prefix(RAW_IDENTIFIER_PREFIX).unwrap_or(after_keyword);
-    let (name, remainder) = Leading_Identifier(after_prefix)?;
-
-    if !remainder.trim_start().starts_with(';')
+    if directory.0.is_empty()
     {
-        return None;
+        return Vec::new();
     }
 
-    return Some(name);
+    return directory.0.split('/').map(str::to_owned).collect();
 }
 
-/// `code` with a leading `pub` or `pub(…)` removed, unchanged when it carries neither.
-fn Without_Visibility(code: &str) -> &str
+/// `relative`'s segments, with a backslash read as a separator and every segment that names
+/// no directory of its own -- the empty one, and `.` -- dropped.
+fn Recognized_Segments(relative: &str) -> Vec<String>
 {
-    let Some(after_visibility) = code.strip_prefix("pub")
-    else
-    {
-        return code;
-    };
+    let normalized = relative.replace('\\', "/");
 
-    if let Some(after_open) = after_visibility.trim_start().strip_prefix('(')
-        && let Some(close) = after_open.find(')')
-    {
-        return after_open.get(close.saturating_add(1)..).unwrap_or("");
-    }
-
-    if !after_visibility.starts_with(char::is_whitespace)
-    {
-        return code;
-    }
-
-    return after_visibility;
-}
-
-/// `code` past a leading declaration keyword and the whitespace after it, or `None` when it
-/// does not start with the keyword — an identifier merely beginning with those letters must
-/// not read as one.
-fn Without_Module_Keyword(code: &str) -> Option<&str>
-{
-    let after_keyword = code.strip_prefix(MODULE_KEYWORD)?;
-
-    if !after_keyword.starts_with(char::is_whitespace)
-    {
-        return None;
-    }
-
-    return Some(after_keyword.trim_start());
-}
-
-/// The identifier `code` starts with, paired with everything after it.
-fn Leading_Identifier(code: &str) -> Option<(&str, &str)>
-{
-    let first = code.chars().next()?;
-
-    if !first.is_ascii_alphabetic() && first != '_'
-    {
-        return None;
-    }
-
-    let end = code
-        .find(|character: char| return !character.is_ascii_alphanumeric() && character != '_')
-        .unwrap_or(code.len());
-
-    return Some((code.get(..end)?, code.get(end..)?));
-}
-
-/// The file a path attribute on this line names, or `None` when the line carries no complete
-/// attribute.
-fn Declared_Path_Attribute(code: &str) -> Option<&str>
-{
-    let opened = code.find("#[").and_then(|start| return code.get(start.saturating_add(2)..))?;
-    let after_name = opened.trim_start().strip_prefix(PATH_ATTRIBUTE_NAME)?;
-    let after_equals = after_name.trim_start().strip_prefix('=')?;
-    let quoted = after_equals.trim_start().strip_prefix('"')?;
-    let end = quoted.find('"')?;
-    let after_quote = quoted.get(end.saturating_add(1)..)?;
-
-    if !after_quote.trim_start().starts_with(']')
-    {
-        return None;
-    }
-
-    return quoted.get(..end);
+    return normalized
+        .split('/')
+        .filter(|segment| return !segment.is_empty() && *segment != ".")
+        .map(str::to_owned)
+        .collect();
 }
 
 #[cfg(test)]
-mod tests
-{
-    use super::*;
-    use nomos_contracts::SubjectId;
-    use nomos_model::Content_Digest;
-
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Report_A_File_No_Declaration_Names()
-    {
-        let sources = vec![Source("demo/src/lib.rs", Text(&[])), Source("demo/src/stray.rs", Text(&[]))];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
-        assert_eq!(found.rule, RuleId::New(NO_ORPHAN_MODULES));
-        assert_eq!(found.gate, GateCategory::Blocking);
-        assert_eq!(found.subject_name, "demo/src/stray.rs");
-    }
-
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Accept_A_Declared_Sibling_File()
-    {
-        let sources = vec![
-            Source("demo/src/lib.rs", Text(&["pub mod reached;"])),
-            Source("demo/src/reached.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Accept_A_Directory_Module_File()
-    {
-        let sources = vec![
-            Source("demo/src/lib.rs", Text(&["mod legacy;"])),
-            Source("demo/src/legacy/mod.rs", Text(&["mod inner;"])),
-            Source("demo/src/legacy/inner.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Accept_Every_Visibility_Spelling()
-    {
-        let sources = vec![
-            Source(
-                "demo/src/lib.rs",
-                Text(&["mod plain;", "pub mod exported;", "pub(crate) mod crate_wide;", "pub (super) mod parental;"]),
-            ),
-            Source("demo/src/plain.rs", Text(&[])),
-            Source("demo/src/exported.rs", Text(&[])),
-            Source("demo/src/crate_wide.rs", Text(&[])),
-            Source("demo/src/parental.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// The raw-identifier prefix is spelling, not name: the file backing it drops the prefix.
-    /// Missing this reported a live, compiling file as an orphan in the tool this ports.
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Resolve_A_Raw_Identifier_To_The_Unprefixed_File()
-    {
-        let sources = vec![
-            Source("demo/src/lib.rs", Text(&["mod r#match;"])),
-            Source("demo/src/match.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// A module written with a body is backed by no file, so a same-named file beside it is
-    /// still an orphan.
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Not_Let_An_Inline_Module_Reach_A_File()
-    {
-        let sources = vec![
-            Source("demo/src/lib.rs", Text(&["mod inline", "{", "}"])),
-            Source("demo/src/inline.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "demo/src/inline.rs");
-    }
-
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Not_Let_A_Commented_Declaration_Reach_A_File()
-    {
-        let sources = vec![
-            Source("demo/src/lib.rs", Text(&["// mod disabled;"])),
-            Source("demo/src/disabled.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "demo/src/disabled.rs");
-    }
-
-    /// An identifier that merely opens with the same three letters is not the keyword.
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Not_Read_A_Longer_Word_As_The_Keyword()
-    {
-        let sources = vec![
-            Source("demo/src/lib.rs", Text(&["modes;"])),
-            Source("demo/src/modes.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "demo/src/modes.rs");
-    }
-
-    /// The shape that reported all thirty-nine files of one live crate as orphans: the
-    /// attribute resolves against the directory the DECLARING file sits in, and the file it
-    /// names then owns the directory it LANDS in, so that file's own children are its
-    /// siblings rather than entries in a subdirectory named after it.
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Give_A_Path_Attribute_Target_The_Directory_It_Lands_In()
-    {
-        let sources = vec![
-            Source(
-                "demo/src/lib.rs",
-                Text(&["#[path = \"action_model/action_behavior/facade.rs\"]", "pub mod action_behavior;"]),
-            ),
-            Source("demo/src/action_model/action_behavior/facade.rs", Text(&["mod sibling;"])),
-            Source("demo/src/action_model/action_behavior/sibling.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Still_Report_A_Stray_Beside_A_Path_Attribute_Target()
-    {
-        let sources = vec![
-            Source("demo/src/lib.rs", Text(&["#[path = \"nested/facade.rs\"]", "mod facade;"])),
-            Source("demo/src/nested/facade.rs", Text(&[])),
-            Source("demo/src/nested/stray.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "demo/src/nested/stray.rs");
-    }
-
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Read_A_Binary_Target_As_Its_Own_Root()
-    {
-        let sources = vec![
-            Source("demo/src/lib.rs", Text(&[])),
-            Source("demo/src/bin/tool.rs", Text(&["mod helper;"])),
-            Source("demo/src/bin/helper.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Read_A_Main_File_As_A_Root()
-    {
-        let sources = vec![
-            Source("demo/src/main.rs", Text(&["mod engine;"])),
-            Source("demo/src/engine.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// A test target, a build script and a Go file all sit outside every crate's source
-    /// tree, so none of them has a module tree to be judged against.
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Ignore_Anything_Outside_A_Source_Tree()
-    {
-        let sources = vec![
-            Source("demo/src/lib.rs", Text(&[])),
-            Source("demo/tests/integration.rs", Text(&[])),
-            Source("demo/build.rs", Text(&[])),
-            Source("demo/src/tool.go", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// One crate's roots must not reach another's files, and each crate is judged from its
-    /// own source tree.
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Judge_Each_Crate_Against_Its_Own_Roots()
-    {
-        let sources = vec![
-            Source("first/src/lib.rs", Text(&["mod shared;"])),
-            Source("first/src/shared.rs", Text(&[])),
-            Source("second/src/lib.rs", Text(&[])),
-            Source("second/src/shared.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "second/src/shared.rs");
-    }
-
-    /// A source tree with no root at all reaches nothing, which is the same verdict the tool
-    /// this ports gives a crate whose manifest declares a target it does not carry.
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Report_Every_File_Of_A_Rootless_Source_Tree()
-    {
-        let sources = vec![Source("demo/src/one.rs", Text(&[])), Source("demo/src/two.rs", Text(&[]))];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert_eq!(findings.len(), 2, "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Report_In_Path_Order()
-    {
-        let sources = vec![
-            Source("demo/src/lib.rs", Text(&[])),
-            Source("demo/src/zulu.rs", Text(&[])),
-            Source("demo/src/alpha.rs", Text(&[])),
-        ];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        let reported: Vec<&str> = findings.iter().map(|finding| return finding.subject_name.as_str()).collect();
-        assert_eq!(reported, vec!["demo/src/alpha.rs", "demo/src/zulu.rs"]);
-    }
-
-    /// A declaration nothing backs is a compile error rustc reports far better than this
-    /// would, so it contributes no finding of its own.
-    #[test]
-    fn Test_Check_No_Orphan_Modules_Should_Ignore_A_Declaration_Backed_By_No_File()
-    {
-        let sources = vec![Source("demo/src/lib.rs", Text(&["mod absent;"]))];
-
-        let findings = Check_No_Orphan_Modules(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Joined_Path_Should_Refuse_A_Climb_Above_Its_Own_Root()
-    {
-        assert_eq!(Joined_Path("demo", "../../escaped.rs"), None);
-        assert_eq!(Joined_Path("demo/src", "../shared/held.rs"), Some("demo/shared/held.rs".to_owned()));
-    }
-
-    #[test]
-    fn Test_Source_Directory_Of_Should_Name_Nothing_For_A_Bare_Source_Directory()
-    {
-        assert_eq!(Source_Directory_Of("demo/src"), None);
-        assert_eq!(Source_Directory_Of("demo/src/lib.rs"), Some("demo/src"));
-        assert_eq!(Source_Directory_Of("demo/tests/main.rs"), None);
-    }
-
-    fn Text(lines: &[&str]) -> String
-    {
-        return lines.join("\n");
-    }
-
-    fn Source(path: &str, text: String) -> SourceFile
-    {
-        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
-        source.language = crate::Recognized_Language_In_Tests(path);
-        return source;
-    }
-}
+mod tests;

@@ -1,5 +1,11 @@
 //! The workflow was read at all.
 
+/// The fewest named steps the real gate workflow can hold and still describe the job it does.
+///
+/// This is the floor, not the count: the workflow gains steps without this file having to be
+/// edited, and loses one only when someone deliberately deletes a phase from CI.
+const MINIMUM_NAMED_WORKFLOW_STEPS: usize = 5;
+
 /// The vacuity guard for this suite.
 ///
 /// Every assertion beside it reads the workflow as text, and an empty string contains no
@@ -21,7 +27,7 @@ fn Test_The_Workflow_Should_Not_Appear_Empty()
         .count();
 
     assert!(
-        steps >= 5,
+        steps >= MINIMUM_NAMED_WORKFLOW_STEPS,
         "{steps} named step(s) in the gate workflow. Every assertion in this file is a \
          statement about a file that has been truncated or replaced"
     );

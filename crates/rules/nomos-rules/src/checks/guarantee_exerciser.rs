@@ -96,20 +96,40 @@ const NOTHING: &str = "nothing";
 #[must_use]
 pub fn Check_Guarantee_Declares_Its_Exerciser(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    let mut judged: Vec<(String, SyntaxPayload)> = Vec::new();
+    let mut judged: Vec<JudgedFile> = Vec::new();
     let mut findings: Vec<Finding> = Vec::new();
 
     for source in sources
     {
         match super::naming::reading::Payload_Of(source, facts)
         {
-            Ok(payload) => judged.push((source.path.clone(), payload)),
+            Ok(payload) => judged.push(JudgedFile { path: source.path.clone(), payload }),
             Err(finding) => findings.push(Unread_As_This_Rule(finding)),
         }
     }
 
     findings.extend(Findings_In(&judged));
     return findings;
+}
+
+fn Unread_As_This_Rule(mut finding: Finding) -> Finding
+{
+    finding.rule = RuleId::New(GUARANTEE_DECLARES_ITS_EXERCISER);
+    finding.summary = finding
+        .summary
+        .replace("this file's naming could not be judged", "this file's guarantee declarations could not be judged");
+    return finding;
+}
+
+/// One file's decoded payload beside the path it was read from.
+///
+/// A named pair rather than a `(String, SyntaxPayload)`: resolution is cross-file, so every
+/// judgment below carries both halves of it, and a pair leaves the reader telling the path from
+/// the payload by position alone.
+struct JudgedFile
+{
+    path: String,
+    payload: SyntaxPayload,
 }
 
 /// Every declaration's finding over an already-decoded set, which is the half a fixture can
@@ -120,20 +140,21 @@ pub fn Check_Guarantee_Declares_Its_Exerciser(sources: &[SourceFile], facts: &mu
 ///
 /// Takes the whole set rather than one payload at a time, because resolution is cross-file
 /// and a per-file judgment could only ever resolve a name declared in the file it sits in.
-fn Findings_In(judged: &[(String, SyntaxPayload)]) -> Vec<Finding>
+fn Findings_In(judged: &[JudgedFile]) -> Vec<Finding>
 {
     let mut tests: BTreeSet<String> = BTreeSet::new();
-    for (_path, payload) in judged
+    for judged_file in judged
     {
-        tests.extend(Check_Names_In(payload));
+        tests.extend(Check_Names_In(&judged_file.payload));
     }
 
     let mut findings: Vec<Finding> = Vec::new();
-    for (path, payload) in judged
+    for judged_file in judged
     {
-        for item in &payload.items
+        for item in &judged_file.payload.items
         {
-            findings.extend(Item_Findings(path, item, &tests));
+            let item_findings = Item_Findings(&judged_file.path, item, &tests);
+            findings.extend(item_findings);
         }
     }
 
@@ -267,15 +288,6 @@ fn Subject_Of(path: &str, item: &PayloadItem) -> SubjectId
     return SubjectId::From_Digest(Content_Digest(qualified.as_bytes()));
 }
 
-fn Unread_As_This_Rule(mut finding: Finding) -> Finding
-{
-    finding.rule = RuleId::New(GUARANTEE_DECLARES_ITS_EXERCISER);
-    finding.summary = finding
-        .summary
-        .replace("this file's naming could not be judged", "this file's guarantee declarations could not be judged");
-    return finding;
-}
-
 #[cfg(test)]
 mod tests
 {
@@ -288,7 +300,7 @@ mod tests
             "src/guarantee.rs",
             "unexpanded\t0\n\
              item\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by `Test_It_Holds`.\t+fn/0\n\
-             item\t1\tFunction\tPrivate\tTest_It_Holds\t.\t+fn/0\n",
+             item\t1\tFunction\tPrivate\tTest_It_Holds\t.\t+fn/0\n".to_owned(),
         )]);
 
         assert!(findings.is_empty(), "{findings:?}");
@@ -300,7 +312,7 @@ mod tests
     {
         let findings = Findings_In(&[Payload(
             "src/guarantee.rs",
-            "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by `Test_Nowhere`.\t+fn/0\n",
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by `Test_Nowhere`.\t+fn/0\n".to_owned(),
         )]);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
@@ -315,7 +327,7 @@ mod tests
     {
         let findings = Findings_In(&[Payload(
             "src/guarantee.rs",
-            "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+What this provider promises.\t+fn/0\n",
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+What this provider promises.\t+fn/0\n".to_owned(),
         )]);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
@@ -329,7 +341,7 @@ mod tests
     {
         let findings = Findings_In(&[Payload(
             "src/guarantee.rs",
-            "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by nothing: it reports a declared file verbatim.\t+fn/0\n",
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by nothing: it reports a declared file verbatim.\t+fn/0\n".to_owned(),
         )]);
 
         assert!(findings.is_empty(), "a stated absence is information, not silence: {findings:?}");
@@ -342,7 +354,7 @@ mod tests
     {
         let findings = Findings_In(&[Payload(
             "src/guarantee.rs",
-            "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by the tests below.\t+fn/0\n",
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by the tests below.\t+fn/0\n".to_owned(),
         )]);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
@@ -358,9 +370,9 @@ mod tests
         let findings = Findings_In(&[
             Payload(
                 "src/guarantee.rs",
-                "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by `Test_Elsewhere`.\t+fn/0\n",
+                "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by `Test_Elsewhere`.\t+fn/0\n".to_owned(),
             ),
-            Payload("tests/guarantee.rs", "unexpanded\t0\nitem\t0\tFunction\tPrivate\tTest_Elsewhere\t.\t+fn/0\n"),
+            Payload("tests/guarantee.rs", "unexpanded\t0\nitem\t0\tFunction\tPrivate\tTest_Elsewhere\t.\t+fn/0\n".to_owned()),
         ]);
 
         assert!(findings.is_empty(), "{findings:?}");
@@ -373,7 +385,7 @@ mod tests
     {
         let findings = Findings_In(&[Payload(
             "src/guarantee.rs",
-            "unexpanded\t0\nitem\t0\tFunction\tPublic\tProvider_Offer\t+What this provider offers.\t+fn/0\n",
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\tProvider_Offer\t+What this provider offers.\t+fn/0\n".to_owned(),
         )]);
 
         assert!(findings.is_empty(), "{findings:?}");
@@ -386,7 +398,7 @@ mod tests
     {
         let findings = Findings_In(&[Payload(
             "src/guarantee.rs",
-            "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t-\t+fn/0\n",
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t-\t+fn/0\n".to_owned(),
         )]);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
@@ -395,9 +407,9 @@ mod tests
         assert!(finding.summary.contains("could not be judged"), "{findings:?}");
     }
 
-    fn Payload(path: &str, text: &str) -> (String, SyntaxPayload)
+    fn Payload(path: &str, text: String) -> JudgedFile
     {
         let payload = nomos_cap_syntax::Parse_Payload(text.as_bytes()).expect("this fixture payload is well formed");
-        return (path.to_owned(), payload);
+        return JudgedFile { path: path.to_owned(), payload };
     }
 }

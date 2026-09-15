@@ -84,6 +84,11 @@ impl ProcessLauncher for FakeLauncher
 /// (`P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT`), so a fixture whose `workspace_root`
 /// does not correspond to a real, canonicalizable directory matching `root` would be
 /// refused as an escape rather than read as the well-formed document it is meant to be.
+///
+/// It names two workspace members, `alpha` and `beta` -- the count every test that reads
+/// this fixture's own output back asserts against.
+const FABRICATED_MEMBERS: usize = 2;
+
 fn Fake_Metadata_Document(root: &Path) -> String
 {
     let workspace_root = root.to_string_lossy().into_owned();
@@ -163,12 +168,17 @@ fn Fake_Workspace_Root() -> PathBuf
     return PathBuf::from("/workspace");
 }
 
+/// Fill bytes distinct enough that the three digests below differ from one another; each
+/// value carries no meaning beyond "not equal to the others".
+const VARIANT_DIGEST_FILL: u8 = 2;
+const CONFIGURATION_DIGEST_FILL: u8 = 3;
+
 fn Context() -> FactContext
 {
     return FactContext {
         snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
-        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
-        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
+        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_DIGEST_FILL; Digest128::BYTE_LENGTH])),
         generation: GenerationId::INITIAL,
     };
 }
@@ -186,7 +196,7 @@ fn Test_Discover_Workspace_Should_Read_Packages_And_Edges_From_A_Fake_Launchers_
 
     let discovered = Discover_Workspace(workspace_root.Path(), &launcher, &StdEnvironment).expect("a well-formed fake metadata document");
 
-    assert_eq!(discovered.len(), 2);
+    assert_eq!(discovered.len(), FABRICATED_MEMBERS);
     let alpha = discovered
         .iter()
         .find(|package| package.payload.package == "alpha")

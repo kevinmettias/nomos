@@ -3,6 +3,9 @@
 use super::*;
 use super::labels::{Label_Of, Order_Of};
 
+/// Three fingerprinted revisions make two adjacent pairs.
+const PAIRS_IN_THREE_REVISIONS: usize = 2;
+
 fn Revision(label: &str, documents: &[(&str, &str)]) -> RevisionFingerprint
 {
     return RevisionFingerprint {
@@ -25,7 +28,7 @@ fn Test_A_Path_That_Comes_Back_Should_Be_Reappeared_Not_Appeared()
         Revision("v14.3", &[("a.md", "sha256:01")]),
     ]);
 
-    assert_eq!(walk.len(), 2);
+    assert_eq!(walk.len(), PAIRS_IN_THREE_REVISIONS);
     assert_eq!(walk.first().map(|pair| pair.disappeared.clone()), Some(vec!["a.md".to_owned()]));
     assert_eq!(walk.get(1).map(|pair| pair.reappeared.clone()), Some(vec!["a.md".to_owned()]));
     assert_eq!(walk.get(1).map(|pair| pair.appeared.clone()), Some(Vec::new()));

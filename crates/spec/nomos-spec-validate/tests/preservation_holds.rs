@@ -7,19 +7,24 @@ use nomos_spec_validate::{DECLARED_RULES, Registered, RuleOutcome, Validate_Rule
 
 const DOCUMENT: &str = "---\nid: X\n---\n# Title\n\nOne.\n\n## Section\n\nTwo.\n";
 
+/// The blocks [`DOCUMENT`] segments into: the title, the paragraph under it, the second heading
+/// and the paragraph under that. [`Dispose_All`] disposes of exactly these, and `checked` on the
+/// block rule reports the same four back.
+const DOCUMENT_BLOCKS: u32 = 4;
+
 fn Ingested() -> SpecificationStore
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    Ingest_Source_Document(&mut store, "a.md", "v14.36", DOCUMENT).expect("ingests");
+    let mut store = SpecificationStore::In_Memory().expect("in-memory opens no file, so only the schema can fail");
+    Ingest_Source_Document(&mut store, "a.md", "v14.36", DOCUMENT).expect("the store is empty and in memory");
     return store;
 }
 
 fn Dispose_All(store: &mut SpecificationStore)
 {
-    let dispositions: Vec<(u32, String)> = (1..=4)
+    let dispositions: Vec<(u32, String)> = (1..=DOCUMENT_BLOCKS)
         .map(|ordinal| (ordinal, "preserved-verbatim".to_owned()))
         .collect();
-    Ingest_Block_Dispositions(store, "a.md", "v14.36", &dispositions).expect("disposes");
+    Ingest_Block_Dispositions(store, "a.md", "v14.36", &dispositions).expect("the document this names was ingested above");
 }
 
 /// The mirror [`DECLARED_RULES`] names at its declaration site.
@@ -34,7 +39,9 @@ fn Dispose_All(store: &mut SpecificationStore)
 #[test]
 fn Test_The_Registry_Should_Match_The_Manifest()
 {
-    let run = Validate_Rules(&SpecificationStore::In_Memory().expect("opens"), &Registered());
+    let store = SpecificationStore::In_Memory()
+        .expect("in-memory opens no file, so only the schema can fail");
+    let run = Validate_Rules(&store, &Registered());
 
     // Two empty lists reconcile perfectly. Without these the assertions below would pass
     // having compared nothing, which is the defect this test is now the declared mirror
@@ -103,7 +110,7 @@ fn Test_Disposed_Blocks_Should_Satisfy_Preserve_002()
         .expect("the rule ran");
 
     assert!(
-        matches!(block_rule.outcome, RuleOutcome::Satisfied { checked: 4 }),
+        matches!(block_rule.outcome, RuleOutcome::Satisfied { checked: DOCUMENT_BLOCKS }),
         "{:?}",
         block_rule.outcome
     );
@@ -225,7 +232,9 @@ fn Test_A_Traced_Statement_Should_Satisfy_Preserve_006()
 #[test]
 fn Test_An_Empty_Store_Should_Report_Vacuous_Rules()
 {
-    let run = Validate_Rules(&SpecificationStore::In_Memory().expect("opens"), &Registered());
+    let store = SpecificationStore::In_Memory()
+        .expect("in-memory opens no file, so only the schema can fail");
+    let run = Validate_Rules(&store, &Registered());
 
     assert!(run.Is_Passed(), "an empty store has nothing to violate");
     assert_eq!(
@@ -258,8 +267,8 @@ fn Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules()
 #[test]
 fn Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    nomos_spec_store::Seed_Governing_Records(&mut store).expect("seeds");
+    let mut store = SpecificationStore::In_Memory().expect("in-memory opens no file, so only the schema can fail");
+    nomos_spec_store::Seed_Governing_Records(&mut store).expect("the records are compiled in and inserted as written");
 
     let run = Validate_Rules(&store, &Registered());
 
@@ -290,8 +299,8 @@ const REPEATED_DECLARED: &str = "---\nid: X\n---\n# Title\n\n## A\n\nThis sectio
 #[test]
 fn Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    Ingest_Source_Document(&mut store, "a.md", "v14.36", REPEATED_UNDECLARED).expect("ingests");
+    let mut store = SpecificationStore::In_Memory().expect("in-memory opens no file, so only the schema can fail");
+    Ingest_Source_Document(&mut store, "a.md", "v14.36", REPEATED_UNDECLARED).expect("the store is empty and in memory");
 
     let run = Validate_Rules(&store, &Registered());
 
@@ -315,8 +324,8 @@ fn Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004()
 #[test]
 fn Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    Ingest_Source_Document(&mut store, "a.md", "v14.36", REPEATED_DECLARED).expect("ingests");
+    let mut store = SpecificationStore::In_Memory().expect("in-memory opens no file, so only the schema can fail");
+    Ingest_Source_Document(&mut store, "a.md", "v14.36", REPEATED_DECLARED).expect("the store is empty and in memory");
 
     let run = Validate_Rules(&store, &Registered());
 
@@ -342,6 +351,16 @@ const BELOW_FLOOR: &str = "Recommended language: Rust one";
 /// Three sections carrying the shortest body a real corpus repeated on purpose.
 const AT_STRUCTURAL_MINIMUM: &str = "This volume owns the domain material shown.";
 
+// The two measured populations the floor separates, one below it and one above. Each is a body
+// length and the number of sections carrying it: thirty characters is the longest body that
+// collided by accident anywhere in the sibling suites, carried by more sections than the
+// threshold needs so that length is what dismisses it; forty-three is the shortest the domain
+// volumes repeat on purpose, carried by exactly the threshold so that length is what admits it.
+const ACCIDENTAL_BODY_CEILING: usize = 30;
+const ACCIDENTAL_SECTIONS: usize = 5;
+const DELIBERATE_BODY_FLOOR: usize = 43;
+const DELIBERATE_SECTIONS: usize = 3;
+
 /// `body` repeated across `sections` sections of one document.
 fn Repeating(body: &str, sections: usize) -> String
 {
@@ -358,8 +377,8 @@ fn Repeating(body: &str, sections: usize) -> String
 /// The outcome `NSV-PRESERVE-004` reached over one document.
 fn Template_Outcome(document: &str) -> RuleOutcome
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    Ingest_Source_Document(&mut store, "a.md", "v14.36", document).expect("ingests");
+    let mut store = SpecificationStore::In_Memory().expect("in-memory opens no file, so only the schema can fail");
+    Ingest_Source_Document(&mut store, "a.md", "v14.36", document).expect("the store is empty and in memory");
 
     return Validate_Rules(&store, &Registered())
         .results
@@ -371,43 +390,46 @@ fn Template_Outcome(document: &str) -> RuleOutcome
 
 /// Repetition is necessary and not sufficient, which is the whole of `OD-SPEC-004` version 3.
 ///
-/// Thirty characters is the longest body that collided by accident anywhere in the sibling
-/// suites, and it is carried here by five sections rather than the three the threshold needs
-/// — so nothing about this document is marginal on repetition. It is dismissed on length or
-/// the floor is not doing its job.
+/// [`ACCIDENTAL_BODY_CEILING`] characters is the longest body that collided by accident
+/// anywhere in the sibling suites, and it is carried here by [`ACCIDENTAL_SECTIONS`] sections
+/// rather than the three the threshold needs — so nothing about this document is marginal on
+/// repetition. It is dismissed on length or the floor is not doing its job.
 #[test]
 fn Test_A_Body_Below_The_Floor_Should_Not_Violate_Preserve_004_However_Often_It_Repeats()
 {
     assert_eq!(
         BELOW_FLOOR.chars().count(),
-        30,
+        ACCIDENTAL_BODY_CEILING,
         "this fixture is the measured ceiling of the accidental population and has drifted"
     );
 
-    let outcome = Template_Outcome(&Repeating(BELOW_FLOOR, 5));
+    let repeated = Repeating(BELOW_FLOOR, ACCIDENTAL_SECTIONS);
+    let outcome = Template_Outcome(&repeated);
 
     assert!(
         matches!(outcome, RuleOutcome::Satisfied { .. }),
-        "a 30-character body repeated five times is a lexical collision, not a form letter: {outcome:?}"
+        "a {ACCIDENTAL_BODY_CEILING}-character body repeated {ACCIDENTAL_SECTIONS} times is a \
+         lexical collision, not a form letter: {outcome:?}"
     );
 }
 
 /// The other side of the same band, and the reason the floor is not higher.
 ///
-/// Forty-three characters is the shortest body the domain volumes repeat on purpose. A floor
-/// that dismissed it would be giving the right answer for the wrong reason: that text is
-/// contentful, and what admits it is a corpus declaring the roles it is projected into, which
-/// is a separate mechanism. Until that exists this must still report.
+/// [`DELIBERATE_BODY_FLOOR`] characters is the shortest body the domain volumes repeat on
+/// purpose. A floor that dismissed it would be giving the right answer for the wrong reason:
+/// that text is contentful, and what admits it is a corpus declaring the roles it is projected
+/// into, which is a separate mechanism. Until that exists this must still report.
 #[test]
 fn Test_A_Body_At_The_Shortest_Deliberate_Length_Should_Still_Violate_Preserve_004()
 {
     assert_eq!(
         AT_STRUCTURAL_MINIMUM.chars().count(),
-        43,
+        DELIBERATE_BODY_FLOOR,
         "this fixture is the measured floor of the deliberate population and has drifted"
     );
 
-    let outcome = Template_Outcome(&Repeating(AT_STRUCTURAL_MINIMUM, 3));
+    let repeated = Repeating(AT_STRUCTURAL_MINIMUM, DELIBERATE_SECTIONS);
+    let outcome = Template_Outcome(&repeated);
 
     assert!(
         matches!(outcome, RuleOutcome::Violated { .. }),
@@ -431,6 +453,10 @@ fn Test_The_Floor_Should_Admit_A_Body_Of_Exactly_Its_Own_Length()
     assert!(Is_Template_Eligible(&at), "a body of exactly the floor is eligible");
 }
 
+/// How many times the test below repeats `"ab "`: twenty-four letters and twelve spaces, which
+/// normalize to thirty-five characters and pad to eighty-four.
+const NORMALIZING_REPEATS: usize = 12;
+
 /// Length is counted over the normalized text, not the text as written.
 ///
 /// `normalized_hash` is what groups a template, so two bodies that differ only in whitespace
@@ -440,11 +466,11 @@ fn Test_The_Floor_Should_Admit_A_Body_Of_Exactly_Its_Own_Length()
 #[test]
 fn Test_Eligibility_Should_Be_Counted_Over_The_Normalized_Text()
 {
-    // Twelve of these normalize to 35 characters, one under the floor, and the padded
+    // This many of them normalize to 35 characters, one under the floor, and the padded
     // form is 84 before normalizing. A fixture comfortably over the floor in both forms
     // would agree under either implementation and assert nothing -- which is what the
     // first version of this test did.
-    let compact: String = "ab ".repeat(12);
+    let compact: String = "ab ".repeat(NORMALIZING_REPEATS);
     let padded = compact.replace(' ', "     ");
 
     assert!(

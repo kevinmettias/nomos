@@ -1,13 +1,10 @@
 //! Reading a revision into sections, and counting what repeats across them.
 
-// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
-// module; check-test-coverage keys a test's companion unit off the exact file it is
-// textually written in, so these tests cannot move to a sibling file without losing
-// their attribution to every function this file declares.
-// responsibility: allow same reason -- the coupling that keeps this file whole is
-// check-test-coverage's stem-based companion attribution, not a design choice.
+use super::{SourceBlock, BTreeSet, BTreeMap, Get_Filler_Pattern, Segment, BlockKind, Table_Rows, RowKind, TableRow, Models_In};
 
-use super::{SourceBlock, BTreeSet, BTreeMap, Get_Filler_Pattern, Is_Template_Eligible, SHARED_BY, Segment, BlockKind, Table_Rows, RowKind, TableRow, Models_In};
+mod blocks;
+
+use blocks::{Body_Of, Keyable_Blocks, Template_Key, Title_Of};
 
 /// Where a section sits: which document, under what heading.
 #[derive(Clone, Copy)]
@@ -140,29 +137,17 @@ impl Later
 
     fn Shape(&self, text: SectionText<'_>, title: SectionTitle<'_>) -> Body
     {
-        let text = text.0;
-        let title = title.0;
-        let declared = Get_Filler_Pattern(text);
-        let key = Template_Key(SectionText(text), SectionTitle(title));
-        let shared = self
-            .templates
-            .get(&key)
-            .map_or(0, |repetition| return repetition.sections);
+        let declared = Get_Filler_Pattern(text.0);
+        let key = Template_Key(text, title);
+        let shared = self.Sections_Sharing(&key);
 
-        // `declared` is deliberately not gated by the floor. The blocklist names known
-        // filler outright, and the floor is about repetition being insufficient evidence,
-        // which is a different question. In practice nothing turns on it -- every
-        // `FILLER_PATTERNS` entry is longer than the floor -- but gating it would make the
-        // blocklist unreachable for a short pattern somebody adds later.
-        if declared.is_some() || (shared >= SHARED_BY && Is_Template_Eligible(&key))
-        {
-            return Body::Template {
-                shared_with: shared,
-                declared,
-            };
-        }
+        return Body_Of(declared, shared, &key);
+    }
 
-        return Body::Narrative;
+    /// How many sections already carry this key.
+    fn Sections_Sharing(&self, key: &str) -> u32
+    {
+        return self.templates.get(key).map_or(0, |repetition| return repetition.sections);
     }
 }
 
@@ -294,55 +279,29 @@ pub(super) fn Note_Row(later: &mut Later, path: &str, row: &TableRow)
     }
 }
 
-pub(super) fn Keyable_Blocks(body: &[SourceBlock]) -> Vec<&SourceBlock>
+/// A prose block carrying the given text, for the tests in this file and in [`blocks`].
+///
+/// It sits at module scope rather than inside either test module because both need it, and
+/// a private item here is visible to both.
+#[cfg(test)]
+fn Test_Block(text: &str) -> SourceBlock
 {
-    return body
-        .iter()
-        .filter(|block| return !block.text.trim().is_empty())
-        .filter(|block| return !Is_Navigation(&block.text))
-        .collect();
-}
-
-pub(super) fn Is_Navigation(text: &str) -> bool
-{
-    let mut lines = text.lines().filter(|line| return !line.trim().is_empty()).peekable();
-    if lines.peek().is_none()
-    {
-        return false;
-    }
-
-    return lines.all(|line| {
-        let item = line.trim().trim_start_matches(['-', '*', '+']).trim();
-        return line.trim().starts_with(['-', '*', '+'])
-            && item.starts_with('[')
-            && item.ends_with(')');
-    });
-}
-
-pub(super) fn Template_Key(text: SectionText<'_>, title: SectionTitle<'_>) -> String
-{
-    let text = text.0;
-    let title = title.0;
-    let flattened = text.split_whitespace().collect::<Vec<&str>>().join(" ");
-    let elided = title.split_whitespace().collect::<Vec<&str>>().join(" ");
-
-    if elided.is_empty()
-    {
-        return flattened;
-    }
-
-    return flattened.replace(&elided, "{}");
-}
-
-pub(super) fn Title_Of(block: &SourceBlock) -> String
-{
-    return block.text.trim_start_matches('#').trim().to_owned();
+    return SourceBlock {
+        ordinal: 1,
+        kind: BlockKind::Prose,
+        heading_path: Vec::new(),
+        text: text.to_owned(),
+    };
 }
 
 #[cfg(test)]
 mod tests
 {
     use super::*;
+
+    /// How many documents each repetition fixture below writes, and so how many positions
+    /// the heading they share must be indexed under.
+    const SHARED_DOCUMENTS: usize = 3;
 
     #[test]
     fn Test_Read_Should_Index_Headings_As_Positions_And_Judge_Repeated_Bodies()
@@ -381,7 +340,7 @@ mod tests
         let later = Later::Read(&documents);
 
         let positions = later.authored.get("Shared").expect("the heading is indexed");
-        assert_eq!(positions.len(), 3, "all three sections are indexed under one heading");
+        assert_eq!(positions.len(), SHARED_DOCUMENTS, "all three sections are indexed under one heading");
         assert!(
             positions.iter().all(|position| return matches!(
                 position,
@@ -480,16 +439,6 @@ mod tests
         assert!(later.authored.contains_key("Widget"));
     }
 
-    fn Test_Block(text: &str) -> SourceBlock
-    {
-        return SourceBlock {
-            ordinal: 1,
-            kind: BlockKind::Prose,
-            heading_path: Vec::new(),
-            text: text.to_owned(),
-        };
-    }
-
     #[test]
     fn Test_Note_Row_Should_Record_The_Rows_Subject_As_An_Authored_Position()
     {
@@ -511,44 +460,6 @@ mod tests
             Position::Row { document } if document == "a.md"
         ));
         assert_eq!(later.named_in_row.get("Widget"), Some(&"a.md".to_owned()));
-    }
-
-    #[test]
-    fn Test_Keyable_Blocks_Should_Drop_Empty_And_Navigation_Only_Blocks()
-    {
-        let body = vec![
-            Test_Block("Real content.\n"),
-            Test_Block("   \n"),
-            Test_Block("- [One](one.md)\n- [Two](two.md)\n"),
-        ];
-
-        let kept = Keyable_Blocks(&body);
-
-        assert_eq!(kept.len(), 1);
-        assert_eq!(kept.first().expect("the assertion above confirms exactly one kept block").text, "Real content.\n");
-    }
-
-    #[test]
-    fn Test_Is_Navigation_Should_Recognise_A_Markdown_Link_List_And_Nothing_Else()
-    {
-        assert!(Is_Navigation("- [One](one.md)\n- [Two](two.md)\n"));
-        assert!(!Is_Navigation("Ordinary prose.\n"));
-        assert!(!Is_Navigation("   \n"), "blank text names nothing, so it is not navigation either");
-    }
-
-    #[test]
-    fn Test_Template_Key_Should_Elide_The_Sections_Own_Title_From_Its_Text()
-    {
-        let key = Template_Key(SectionText("Read Widget within the owning domain contract."), SectionTitle("Widget"));
-
-        assert_eq!(key, "Read {} within the owning domain contract.");
-        assert_eq!(Template_Key(SectionText("No title inside."), SectionTitle("")), "No title inside.");
-    }
-
-    #[test]
-    fn Test_Title_Of_Should_Strip_The_Hash_Marks_From_A_Heading_Line()
-    {
-        assert_eq!(Title_Of(&Test_Block("## Widget\n")), "Widget");
     }
 
     fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>

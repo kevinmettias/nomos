@@ -17,6 +17,9 @@ use std::path::Path;
 /// The extension one entry carries.
 const EXTENSION: &str = "assessment";
 
+/// The number of digits a requirement identifier's trailing segment carries.
+const NUMBER_DIGITS: usize = 3;
+
 /// Every assessment in a directory, sorted by requirement.
 ///
 /// Takes the directory rather than finding it, so a caller (a test, or
@@ -36,7 +39,8 @@ pub fn Entries<Fs: FileSystem>(directory: &Path, filesystem: &Fs) -> Result<Vec<
 
     for path in listing
     {
-        found.extend(Read_Entry(&path, filesystem)?);
+        let entry = Read_Entry(&path, filesystem)?;
+        found.extend(entry);
     }
 
     found.sort_by(|left, right| return left.requirement.cmp(&right.requirement));
@@ -61,9 +65,24 @@ fn Read_Entry<Fs: FileSystem>(path: &Path, filesystem: &Fs) -> Result<Option<Ass
         .Read_To_String(path)
         .map_err(|error| return format!("{} cannot be read: {error}", path.display()))?;
 
-    return Parse(stem, &text)
+    return Parse(EntrySource { stem, text: &text })
         .map(Some)
         .map_err(|refusal| return format!("{}: {refusal}", path.display()));
+}
+
+/// One entry before it has been read: the requirement its file is named for, and the text
+/// that file holds.
+///
+/// Named rather than passed as two adjacent `&str`. A call site that read `Parse(text, stem)`
+/// would compile, and the transposition would be caught only because [`Is_Requirement_Id`]
+/// refuses a file body -- a run-time refusal where a named field lets the compiler make one.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct EntrySource<'a>
+{
+    /// The requirement identifier the entry's own file is named for.
+    pub stem: &'a str,
+    /// The entry's own text, exactly as its file holds it.
+    pub text: &'a str,
 }
 
 /// One entry, or the reason it is not one.
@@ -74,17 +93,12 @@ fn Read_Entry<Fs: FileSystem>(path: &Path, filesystem: &Fs) -> Result<Option<Ass
 ///
 /// # Errors
 ///
-/// A `String` describing the first way `text` fails to be a well-formed entry for
-/// `stem`.
-pub fn Parse(stem: &str, text: &str) -> Result<Assessment, String>
+/// A `String` describing the first way the source's own text fails to be a well-formed entry
+/// for its stem.
+pub fn Parse(source: EntrySource<'_>) -> Result<Assessment, String>
 {
-    if !Is_Requirement_Id(stem)
-    {
-        return Err(format!(
-            "{stem} is not a requirement identifier; a file here is named for the \
-             requirement it assesses"
-        ));
-    }
+    let EntrySource { stem, text } = source;
+    Assert_Requirement_Id(stem)?;
 
     let read = Read_Lines(text)?;
     let verdict = read.verdict.ok_or_else(|| {
@@ -100,6 +114,24 @@ pub fn Parse(stem: &str, text: &str) -> Result<Assessment, String>
         sites: read.sites,
         gaps: read.gaps,
     });
+}
+
+/// Whether a stem names a requirement, refusing one that does not.
+///
+/// A stem is the entry's identity, so a mistyped one would silently create a requirement the
+/// corpus does not have and count it toward the floor -- [`Is_Requirement_Id`] holds the
+/// shape itself, and this is the one place an entry is held to it.
+fn Assert_Requirement_Id(stem: &str) -> Result<(), String>
+{
+    if Is_Requirement_Id(stem)
+    {
+        return Ok(());
+    }
+
+    return Err(format!(
+        "{stem} is not a requirement identifier; a file here is named for the \
+         requirement it assesses"
+    ));
 }
 
 /// What the lines of an entry said, before anything is required of them.
@@ -162,6 +194,32 @@ fn Second_Verdict(held: Option<&Verdict>, value: &str) -> Result<Verdict, String
     return Read_Verdict(value);
 }
 
+/// One of the four writable verdicts.
+fn Read_Verdict(value: &str) -> Result<Verdict, String>
+{
+    for verdict in [Verdict::Met, Verdict::Diverges, Verdict::NotBinding, Verdict::Partial]
+    {
+        if value == verdict.Label()
+        {
+            return Ok(verdict);
+        }
+    }
+
+    if value == "Unassessed"
+    {
+        return Err(
+            "Unassessed is held by the absence of an entry, so writing one would record \
+             that somebody looked and did not look"
+                .to_owned(),
+        );
+    }
+
+    return Err(format!(
+        "`{value}` is not a verdict; OD-TRACE-001 names Met, Diverges and NotBinding, \
+         OD-TRACE-003 adds Partial, and Unassessed is held by absence"
+    ));
+}
+
 /// The record a line names, refusing an empty one and a second one.
 fn Second_Record(held: Option<&str>, value: &str) -> Result<String, String>
 {
@@ -178,6 +236,55 @@ fn Second_Record(held: Option<&str>, value: &str) -> Result<String, String>
     }
 
     return Ok(value.to_owned());
+}
+
+/// A `path#symbol` site.
+fn Read_Site(value: &str) -> Result<Site, String>
+{
+    let Some((path, symbol)) = value.split_once('#')
+    else
+    {
+        return Err(format!(
+            "`{value}` is not a site; a site is `path#symbol`, and a path on its own \
+             survives every rename that matters"
+        ));
+    };
+    let path = path.trim();
+    let symbol = symbol.trim();
+    if path.is_empty() || symbol.is_empty()
+    {
+        return Err(format!("`{value}` has an empty path or symbol"));
+    }
+    if !Is_Repo_Relative(path)
+    {
+        return Err(format!(
+            "`{path}` is not repo-relative; a site outside this workspace is not a site \
+             this guard can see vanish"
+        ));
+    }
+
+    return Ok(Site {
+        path: path.to_owned(),
+        symbol: symbol.to_owned(),
+    });
+}
+
+/// Whether a site's own path is written relative to the workspace root.
+///
+/// A path that is not — absolute, or climbing out through `..` — names something outside
+/// this workspace, which is not a site this guard can see vanish.
+fn Is_Repo_Relative(path: &str) -> bool
+{
+    if path.starts_with('/')
+    {
+        return false;
+    }
+    if path.starts_with('\\')
+    {
+        return false;
+    }
+
+    return !path.contains("..");
 }
 
 /// What an entry owes once its lines have been read.
@@ -217,63 +324,6 @@ fn Assert_Complete(
     return Ok(());
 }
 
-/// One of the four writable verdicts.
-fn Read_Verdict(value: &str) -> Result<Verdict, String>
-{
-    for verdict in [Verdict::Met, Verdict::Diverges, Verdict::NotBinding, Verdict::Partial]
-    {
-        if value == verdict.Label()
-        {
-            return Ok(verdict);
-        }
-    }
-
-    if value == "Unassessed"
-    {
-        return Err(
-            "Unassessed is held by the absence of an entry, so writing one would record \
-             that somebody looked and did not look"
-                .to_owned(),
-        );
-    }
-
-    return Err(format!(
-        "`{value}` is not a verdict; OD-TRACE-001 names Met, Diverges and NotBinding, \
-         OD-TRACE-003 adds Partial, and Unassessed is held by absence"
-    ));
-}
-
-/// A `path#symbol` site.
-fn Read_Site(value: &str) -> Result<Site, String>
-{
-    let Some((path, symbol)) = value.split_once('#')
-    else
-    {
-        return Err(format!(
-            "`{value}` is not a site; a site is `path#symbol`, and a path on its own \
-             survives every rename that matters"
-        ));
-    };
-    let path = path.trim();
-    let symbol = symbol.trim();
-    if path.is_empty() || symbol.is_empty()
-    {
-        return Err(format!("`{value}` has an empty path or symbol"));
-    }
-    if path.starts_with('/') || path.starts_with('\\') || path.contains("..")
-    {
-        return Err(format!(
-            "`{path}` is not repo-relative; a site outside this workspace is not a site \
-             this guard can see vanish"
-        ));
-    }
-
-    return Ok(Site {
-        path: path.to_owned(),
-        symbol: symbol.to_owned(),
-    });
-}
-
 /// Whether a string is a corpus requirement identifier: a family, then three digits.
 ///
 /// The shape every family in the corpus uses — `CHK-003`, `EVID-001`, `WORK-LEDGER-005`.
@@ -294,7 +344,7 @@ pub fn Is_Requirement_Id(stem: &str) -> bool
     {
         return false;
     };
-    if number.len() != 3 || !number.bytes().all(|byte| return byte.is_ascii_digit())
+    if !Is_Number_Segment(number)
     {
         return false;
     }
@@ -315,4 +365,15 @@ pub fn Is_Requirement_Id(stem: &str) -> bool
                     .bytes()
                     .all(|byte| return byte.is_ascii_uppercase() || byte.is_ascii_digit());
         });
+}
+
+/// Whether a requirement identifier's trailing segment is a number of the declared width.
+fn Is_Number_Segment(number: &str) -> bool
+{
+    if number.len() != NUMBER_DIGITS
+    {
+        return false;
+    }
+
+    return number.bytes().all(|byte| return byte.is_ascii_digit());
 }

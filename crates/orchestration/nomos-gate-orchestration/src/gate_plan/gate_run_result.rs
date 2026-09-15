@@ -1,12 +1,11 @@
 //! What a real `nomos gate run` produced, including the check facts behind it.
 
 use nomos_check_orchestration::CheckOutcome;
-use nomos_contracts::{Digest128, RunId};
-use nomos_platform::Timestamp;
+use nomos_contracts::RunId;
 use std::path::PathBuf;
 
 use crate::GateRunOutcome;
-use super::GateFindings;
+use super::{GateFindings, GateRunProvenance, NoVerdict};
 
 /// What a real `nomos gate run` produced.
 ///
@@ -68,109 +67,4 @@ pub struct GateRunResult
     /// nobody knows what judged it, which must not read as "the same thing that judged the
     /// other side".
     pub provenance: Option<GateRunProvenance>,
-}
-
-/// The identity of what judged a run, as `OD-GATE-031` decided it.
-///
-/// # Why a run needs one
-///
-/// `crate::Compare_Gate_Runs` reports which findings moved between two runs, and a caller
-/// reads that as a fact about the repository, because that is what a gate is for. It is only
-/// that when every judgment input other than the source was compatible between the two sides.
-/// Before this type, every one of those inputs reached [`crate::Run_Gate`] and was discarded
-/// by it, so a finished run could not say what judged it even though the function that
-/// produced it held all five.
-///
-/// # Why these five and not more
-///
-/// `OD-GATE-031` sized this to what can actually differ between two sides *today*, rather
-/// than to the eventual shape. A provider binary's version, the host operating system and the
-/// identity of the nomos build are constant across a same-process comparison, which is the
-/// only kind `OD-GATE-022-A` has compare perform, so a field for any of them would be one no
-/// test could make differ. They arrive with the run history that record defers.
-///
-/// Which rules could actually look is also absent, and derivable rather than missing: a rule
-/// whose provider could not run reports `Applicability::MissingCapability` or
-/// `ProviderUnavailable`, `nomos_check_orchestration::Claim_Of` already reads exactly those,
-/// and a comparison holds both sides' findings. A field would be a second encoding of what
-/// the findings carry.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct GateRunProvenance
-{
-    /// Every file this run judged, by path and content.
-    ///
-    /// The thing a difference is *allowed* to be attributed to. A comparison needs it in
-    /// order to establish that the repository changed, rather than reaching that conclusion
-    /// because nothing else explained the difference.
-    pub source: Digest128,
-    /// The policy this run judged under, after the declared `nomos-gate.json` was resolved
-    /// over the command.
-    ///
-    /// The input most likely to differ between two sides and least likely to be noticed:
-    /// `Run_Gate` reads the policy from `command.root`, and a comparison judges two roots, so
-    /// comparing two checkouts compares two policies without anybody having asked for that.
-    pub policy: Digest128,
-    /// Which rules were allowed to count and which paths were in scope.
-    ///
-    /// A side that was told to look at less has fewer findings for that reason, and must not
-    /// read as a side that looked at everything and found less.
-    pub selection: Digest128,
-    /// What did the judging: the build variant, and the rule set this build carries with each
-    /// rule's contract record and version.
-    ///
-    /// Two different instruments measuring one tree is exactly the case the domain table in
-    /// `nomos-contracts` declines to claim reproducibility for -- the analysis kernel is
-    /// declared `CrossPlatform`, which is strictly weaker than `CrossBinary`.
-    pub instrument: Digest128,
-    /// The moment this run was judged against.
-    ///
-    /// The domain table declares the analysis kernel `StateTemporal`, which makes time a
-    /// judgment input rather than a label, and it genuinely is one: a temporary waiver stops
-    /// applying against this moment, so two runs over an identical tree under an identical
-    /// policy can still disagree because one of them happened later.
-    ///
-    /// The moment itself rather than a digest of it, because unlike the other four this is
-    /// not an identity to be matched -- a reader comparing two runs wants to know which was
-    /// later, and a digest would destroy exactly that.
-    pub at: Timestamp,
-}
-
-/// Why a run that judged its tree still reached no verdict.
-///
-/// [`GateRunOutcome::Indeterminate`] is the disposition; this is the cause. Both producers
-/// computed one and threw it away until this type existed, so `nomos-cli` could report that
-/// a run had reached no verdict and could not say which of them had happened -- the result
-/// did not know, and the serde message naming the offending key had already been dropped.
-///
-/// The two policy variants are kept apart for the reason `Applicability` keeps
-/// `MissingCapability` and `ProviderUnavailable` apart rather than folding them into one
-/// "could not look": the remedies differ. A file that cannot be read is a path or a
-/// permission; a file that cannot be parsed is its content.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum NoVerdict
-{
-    /// A `nomos-gate.json` is present under the run's root and could not be read at all, so
-    /// there were no declared rules to reduce this run's findings by. Carries the path and
-    /// the failure as the file system reported them.
-    UnreadablePolicy(String),
-    /// A `nomos-gate.json` is present and is not a policy this reader accepts, so there were
-    /// again no declared rules to reduce by. Carries the reader's own message, which names
-    /// the refused key for a mis-spelling and the position for a syntax error -- the detail
-    /// a person actually needs, and the one this crate used to compute and discard.
-    ///
-    /// A present-but-broken file is deliberately not treated as an absent one, for the
-    /// reason `Resolve_Gate_Policy`'s own doc gives: a repository that meant to suppress a
-    /// finding and mis-spelled the file would otherwise get a build that passes for a reason
-    /// nobody chose.
-    MalformedPolicy(String),
-    /// The declared coverage floor is `CoveragePolicy::RequireCompleteness` and this run's
-    /// selected findings are an incomplete claim, so a run that would otherwise have passed
-    /// is not reported as one.
-    ///
-    /// `OD-GATE-016`'s own decision, and the only member of this enum that is not a defect
-    /// in anything: nothing is wrong with the tree or the configuration, and the repository
-    /// asked for exactly this. A reader that cannot tell it from a broken policy file will
-    /// go looking for a fault that is not there, which is why it is a variant of its own
-    /// rather than a shared "no verdict".
-    IncompleteCoverage,
 }

@@ -8,9 +8,32 @@
 //! reader.
 
 use crate::SourceFile;
+use nomos_analysis::FactReader;
 use nomos_cap_architecture::ArchitecturePayload;
 use nomos_cap_dependency::DependencyPayload;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
+
+/// Judges whether every workspace member `sources` names is placed by the architecture its own
+/// repository declares — the coverage half of architecture conformance.
+///
+/// Reads the identical two facts [`super::Check_Dependency_Direction`] does, through the same
+/// readers, and files an unread subject under its own identifier rather than direction's.
+///
+/// Spelled here rather than in [`super`] because this is the coverage half of the judgment and
+/// [`Violations_In`] beside it is the whole of what it reaches.
+#[must_use]
+pub fn Check_Every_Member_Declares_A_Band(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+{
+    let architecture = match super::reading::Architecture_Of(sources, facts, super::DEPENDENCY_COMPLETENESS)
+    {
+        Ok(architecture) => architecture,
+        Err(unread) => return unread,
+    };
+
+    return super::Judged(sources, facts, super::DEPENDENCY_COMPLETENESS, &|payload, source| {
+        return Violations_In(&architecture, payload, source);
+    });
+}
 
 /// A finding when `payload`'s own package is not placed by `architecture` — empty otherwise.
 ///

@@ -29,6 +29,19 @@ mod support;
 
 use support::{Run, Tree};
 
+/// What a missing `--goal` leaves the process with.
+///
+/// `agent/exit_code.rs::ExitCode::Usage`'s own value: the command line was wrong, which every
+/// `--goal`-less invocation below is the shape of.
+const USAGE_EXIT_CODE: i32 = 2;
+
+/// What `judge-role` over a crate `README.md`'s band table does not list leaves the process
+/// with.
+///
+/// `agent/exit_code.rs::ExitCode::NotFound`'s own value: the answer is empty because a row
+/// that was expected was not there.
+const NOT_FOUND_EXIT_CODE: i32 = 6;
+
 /// The exact bare-envelope shape `agent/dispatch.rs::Execute_Task` builds for `nomos agent
 /// execute --goal <text>`: only `goal` and `effort` carry real content, everything else is
 /// the empty value this crate's own fields already support.
@@ -103,7 +116,7 @@ fn Test_Agent_Execute_Should_Refuse_Before_Building_A_Task_Envelope_When_Goal_Is
 {
     let ran = Run(&["agent", "execute"]);
 
-    assert_eq!(ran.code, 2, "missing --goal is a usage refusal: {}", ran.stderr);
+    assert_eq!(ran.code, USAGE_EXIT_CODE, "missing --goal is a usage refusal: {}", ran.stderr);
     assert!(ran.stderr.contains("--goal"), "{}", ran.stderr);
 }
 
@@ -118,6 +131,6 @@ fn Test_Agent_Judge_Role_Should_Refuse_Before_Building_A_Task_Envelope_When_The_
 
     let ran = Run(&["agent", "judge-role", "--crate", "nomos-does-not-exist", "--root", &tree.Root()]);
 
-    assert_eq!(ran.code, 6, "no README row is `NotFound`: {}", ran.stderr);
+    assert_eq!(ran.code, NOT_FOUND_EXIT_CODE, "no README row is `NotFound`: {}", ran.stderr);
     assert!(ran.stderr.contains("names no row"), "{}", ran.stderr);
 }

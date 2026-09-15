@@ -23,7 +23,7 @@ fn Test_The_Table_Universe_As_Originally_Written_Should_Be_Found_Unmirrored()
          \x20   pub const fn All() -> &'static [Self]\n\
          \x20   {\n\
          \x20   }\n\
-         }\n",
+         }\n".to_owned(),
     )]);
 
     let finding = Only(&findings);
@@ -44,7 +44,7 @@ fn Test_The_Governing_Universe_As_Originally_Written_Should_Be_Found_Unmirrored(
         "/// The records this store seeds itself with.\n\
          pub const GOVERNING_RECORD_IDS: &[&str] = &[\n\
          \x20   \"ARC-SPECDB-001\",\n\
-         ];\n",
+         ];\n".to_owned(),
     )]);
 
     assert_eq!(Only(&findings).subject_name, "GOVERNING_RECORD_IDS");
@@ -58,13 +58,13 @@ fn Test_All_Three_Historical_Instances_Should_Fail_This_Rule()
     let findings = Findings_Over(&[
         Source(
             "crates/spec/nomos-spec-store/src/store.rs",
-            "impl Table\n{\n    pub const fn All() -> &'static [Self]\n    {\n    }\n}\n",
+            "impl Table\n{\n    pub const fn All() -> &'static [Self]\n    {\n    }\n}\n".to_owned(),
         ),
         Source(
             "crates/spec/nomos-spec-store/src/governing.rs",
-            "pub const GOVERNING_RECORD_IDS: &[&str] = &[];\n",
+            "pub const GOVERNING_RECORD_IDS: &[&str] = &[];\n".to_owned(),
         ),
-        Source("tests/contract/src/gates.rs", "pub const CORPUS_VARIABLES: &[&str] = &[];\n"),
+        Source("tests/contract/src/gates.rs", "pub const CORPUS_VARIABLES: &[&str] = &[];\n".to_owned()),
     ]);
 
     let judged: Vec<&str> = findings

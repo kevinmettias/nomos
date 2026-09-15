@@ -12,8 +12,11 @@ pub const nomos_cap_syntax::SCHEMA: &str
 pub const nomos_cap_syntax::SLICE: &str
 pub const nomos_cap_syntax::TRAIT: &str
 pub const nomos_cap_syntax::VALUE: &str
+pub enum nomos_cap_syntax::ImplLabel
 pub enum nomos_cap_syntax::Observation
 pub enum nomos_cap_syntax::PayloadRefusalKind
+pub enum variant nomos_cap_syntax::ImplLabel::Inherent
+pub enum variant nomos_cap_syntax::ImplLabel::Trait
 pub enum variant nomos_cap_syntax::Observation::Absent
 pub enum variant nomos_cap_syntax::Observation::NotObserved
 pub enum variant nomos_cap_syntax::Observation::Present(String)
@@ -29,9 +32,10 @@ pub fn nomos_cap_syntax::Capability_Contract() -> CapabilityContract
 pub fn nomos_cap_syntax::Escape(value: &str) -> String
 pub fn nomos_cap_syntax::Function_Arity(shape: &Observation) -> Option<u32>
 pub fn nomos_cap_syntax::Function_Shape(arity: usize) -> String
+pub fn nomos_cap_syntax::ImplLabel::Label(self) -> &'static str
 pub fn nomos_cap_syntax::Impl_Generics(shape: &Observation) -> Option<Vec<String>>
 pub fn nomos_cap_syntax::Impl_Serves_A_Trait(shape: &Observation) -> Option<bool>
-pub fn nomos_cap_syntax::Impl_Shape(serves_a_trait: bool, generics: &[String]) -> String
+pub fn nomos_cap_syntax::Impl_Shape(label: ImplLabel, generics: &[String]) -> String
 pub fn nomos_cap_syntax::Language::As_Str(&self) -> &str
 pub fn nomos_cap_syntax::Language::New(value: impl Into<String>) -> Self
 pub fn nomos_cap_syntax::Language::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result

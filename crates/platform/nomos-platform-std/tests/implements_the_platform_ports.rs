@@ -8,7 +8,30 @@
 
 use nomos_platform::{Clock, Command, CrossProcessLock, FileSystem, FileSystemError, LockError, ProcessLauncher};
 use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
+use std::path::Path;
 use std::time::Duration;
+
+/// How long the launcher waits for a child that exits immediately. Long enough that a real
+/// process on a loaded machine is never killed for being slow, short enough that a launcher
+/// which never reaps its child fails this test rather than hanging the suite.
+const LAUNCH_TIMEOUT: Duration = Duration::from_secs(10);
+
+/// A lock older than this is treated as abandoned by a holder that died. A day, so that the
+/// refusal this file asserts comes from the live holder rather than from staleness.
+const STALE_AFTER: Duration = Duration::from_secs(86_400);
+
+/// Remove a leftover `path` from an earlier run of this test.
+///
+/// Absent is the expected case and the only one this tolerates: a path that exists and cannot
+/// be removed would make the test that follows it assert against a stale file, so it fails
+/// here with the cause rather than there with a confusing mismatch.
+fn Clear_Leftover(path: &Path)
+{
+    if let Err(cause) = std::fs::remove_file(path)
+    {
+        assert_eq!(cause.kind(), std::io::ErrorKind::NotFound, "{path:?} could not be cleared: {cause}");
+    }
+}
 
 /// `StdProcessLauncher` against the real `ProcessLauncher` contract: a real child process,
 /// judged through `nomos_platform::ExitOutcome`'s own `Is_Successful`/`Has_A_Verdict`.
@@ -23,7 +46,7 @@ fn Test_Std_Process_Launcher_Should_Report_A_Real_Exit_Through_The_Real_Trait()
     {
         vec!["sh".to_owned(), "-c".to_owned(), "exit 0".to_owned()]
     };
-    let command = Command::New(argv, Duration::from_secs(10));
+    let command = Command::New(argv, LAUNCH_TIMEOUT);
 
     let output = StdProcessLauncher.Run(&command).expect("a real, short-lived child process starts and exits");
 
@@ -39,7 +62,7 @@ fn Test_Std_File_System_Should_Round_Trip_A_Real_File_Through_The_Real_Trait()
 {
     let filesystem = StdFileSystem;
     let path = std::env::temp_dir().join(format!("nomos-platform-std-seam-test-{}.txt", std::process::id()));
-    let _ = std::fs::remove_file(&path);
+    Clear_Leftover(&path);
 
     filesystem.Replace_Atomically(&path, "seam-test-contents").expect("a fresh file can be written atomically");
     assert!(filesystem.Exists(&path));
@@ -51,7 +74,7 @@ fn Test_Std_File_System_Should_Round_Trip_A_Real_File_Through_The_Real_Trait()
         "a path nothing wrote must classify as nomos_platform's own NotFound, not a generic failure"
     );
 
-    let _ = std::fs::remove_file(&path);
+    Clear_Leftover(&path);
 }
 
 /// `SystemClock` against the real `Clock` contract: two real, back-to-back readings,
@@ -77,11 +100,11 @@ fn Test_System_Clock_Should_Produce_Real_Timestamps_The_Real_Trait_Can_Order()
 fn Test_File_Lock_Should_Exclude_A_Second_Holder_Through_The_Real_Trait()
 {
     let path = std::env::temp_dir().join(format!("nomos-platform-std-seam-test-{}.lock", std::process::id()));
-    let _ = std::fs::remove_file(&path);
+    Clear_Leftover(&path);
     let lock = FileLock::At(&path);
 
-    let held = lock.Acquire("seam-test-holder-a", Duration::ZERO, Duration::from_secs(86_400)).expect("an uncontended lock is acquired cleanly");
-    let refused = lock.Acquire("seam-test-holder-b", Duration::ZERO, Duration::from_secs(86_400));
+    let held = lock.Acquire("seam-test-holder-a", Duration::ZERO, STALE_AFTER).expect("an uncontended lock is acquired cleanly");
+    let refused = lock.Acquire("seam-test-holder-b", Duration::ZERO, STALE_AFTER);
 
     assert!(
         matches!(refused, Err(LockError::Held { .. })),

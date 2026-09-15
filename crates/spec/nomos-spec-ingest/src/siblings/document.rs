@@ -162,15 +162,7 @@ pub(super) mod tests
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
         let suite = Suite_In(&mut store, Sibling::Xvpe);
-        let node = store
-            .Upsert_Node(NodeRow {
-                node_id: "xvpe-spec-seed:a.md",
-                kind: "document",
-                authority: "canonical",
-                representation: "document",
-                title: "A",
-            })
-            .expect("mints");
+        let node = Document_Node(&mut store);
 
         let text = "# A\n\nFirst.\n\nSecond.\n";
         let sourced = Sourced { entry: "suite/a.md", text };
@@ -190,19 +182,26 @@ pub(super) mod tests
         assert_eq!(undisposed, 0);
     }
 
+    fn Document_Node(store: &mut SpecificationStore) -> i64
+    {
+        let node = store
+            .Upsert_Node(NodeRow {
+                node_id: "xvpe-spec-seed:a.md",
+                kind: "document",
+                authority: "canonical",
+                representation: "document",
+                title: "A",
+            })
+            .expect("mints");
+
+        return node;
+    }
+
     #[test]
     fn Test_Dispose_Block_Should_Record_Lineage_From_The_Block_To_The_Node()
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
-        let node = store
-            .Upsert_Node(NodeRow {
-                node_id: "n",
-                kind: "document",
-                authority: "canonical",
-                representation: "document",
-                title: "n",
-            })
-            .expect("mints");
+        let node = Disposed_Node(&mut store);
         let text = "# A\n\nBody.\n";
         let document = store.Put_Source_Document("a.md", "v14.36", text).expect("puts the document");
         let blocks = Segment(text);
@@ -222,6 +221,21 @@ pub(super) mod tests
             )
             .expect("queries");
         assert_eq!(disposed, u32::try_from(blocks.len()).unwrap_or(u32::MAX));
+    }
+
+    fn Disposed_Node(store: &mut SpecificationStore) -> i64
+    {
+        let node = store
+            .Upsert_Node(NodeRow {
+                node_id: "n",
+                kind: "document",
+                authority: "canonical",
+                representation: "document",
+                title: "n",
+            })
+            .expect("mints");
+
+        return node;
     }
 
     #[test]

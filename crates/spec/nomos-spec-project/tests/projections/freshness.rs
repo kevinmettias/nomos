@@ -6,25 +6,41 @@
 //! report where neither names anything in particular.
 
 use crate::store::{Populated, Profile_Named};
-use nomos_spec_project::{Build, Check, Freshness, Profile, Stamp, SIDECAR_SUFFIX};
+use nomos_spec_project::{Build, Check, Freshness, Output, Profile, Stamp, SIDECAR_SUFFIX};
 use nomos_spec_store::SpecificationStore;
 
 #[test]
 fn Test_The_Sidecar_Should_Round_Trip()
 {
     let store = Populated();
-    let output = Build(&store, &Profile_Named("domain-specification")).expect("builds");
+    let output = Build(&store, &Profile_Named("domain-specification"))
+        .expect("the fixture renders the shipped domain-specification profile");
 
-    let parsed = Stamp::Parse(&output.Sidecar().expect("stamps")).expect("parses");
+    let parsed = Stamp::Parse(
+        &output.Sidecar().expect("every built output carries a rendered stamp"),
+    )
+    .expect("the sidecar text came from Stamp::Render in the line above");
 
     assert_eq!(parsed, output.stamp);
     assert_eq!(output.sidecar_path, format!("{}{SIDECAR_SUFFIX}", output.path));
 }
 
+/// The stamp text that sits beside a body, wrapped so a caller cannot transpose it with the body.
+///
+/// `Checked` hands both to `Check` in a fixed order, and as two bare `&str` the compiler would
+/// accept either arrangement.
+struct SidecarText<'a>(&'a str);
+
 /// The freshness of a body and the stamp beside it, against the store they came from.
-fn Checked(store: &SpecificationStore, profile: &Profile, body: &str, sidecar: &str) -> Freshness
+fn Checked(
+    store: &SpecificationStore,
+    profile: &Profile,
+    body: &str,
+    sidecar: SidecarText<'_>,
+) -> Freshness
 {
-    return Check(store, profile, Some(body), Some(sidecar)).expect("checks");
+    return Check(store, profile, Some(body), Some(sidecar.0))
+        .expect("the store, the profile and the body all came from one build");
 }
 
 #[test]
@@ -32,9 +48,14 @@ fn Test_An_Unchanged_Store_Should_Be_Fresh()
 {
     let store = Populated();
     let profile = Profile_Named("mcp-resource");
-    let built = Build(&store, &profile).expect("builds");
+    let built = Build(&store, &profile).expect("the fixture renders this shipped profile");
 
-    let freshness = Checked(&store, &profile, &built.body, &built.Sidecar().expect("stamps"));
+    let freshness = Checked(
+        &store,
+        &profile,
+        &built.body,
+        SidecarText(&built.Sidecar().expect("every built output carries a rendered stamp")),
+    );
 
     assert!(freshness.Is_Fresh(), "{}", freshness.Report(&built.path));
 }
@@ -44,13 +65,11 @@ fn Test_A_Changed_Store_Should_Be_Stale()
 {
     let store = Populated();
     let profile = Profile_Named("mcp-resource");
-    let built = Build(&store, &profile).expect("builds");
+    let built = Build(&store, &profile).expect("the fixture renders this shipped profile");
+    let stamp = built.Sidecar().expect("every built output carries a rendered stamp");
 
-    store
-        .Connection()
-        .execute("UPDATE nodes SET title = 'Renamed' WHERE node_id = 'AGT-EXEC-001'", [])
-        .expect("changes the store");
-    let freshness = Checked(&store, &profile, &built.body, &built.Sidecar().expect("stamps"));
+    Rename_The_Fixtures_Node(&store);
+    let freshness = Checked(&store, &profile, &built.body, SidecarText(&stamp));
 
     assert!(freshness.stale.is_some(), "a changed store reads as current");
     assert!(freshness.Report(&built.path).contains("stale"));
@@ -65,16 +84,30 @@ fn Test_A_Changed_Store_Should_Be_Stale()
     );
 }
 
+/// Moves the store out from under a stamp by retitling the node every profile renders.
+fn Rename_The_Fixtures_Node(store: &SpecificationStore)
+{
+    store
+        .Connection()
+        .execute("UPDATE nodes SET title = 'Renamed' WHERE node_id = 'AGT-EXEC-001'", [])
+        .expect("changes the store");
+}
+
 #[test]
 fn Test_A_Changed_Profile_Should_Be_Stale()
 {
     let store = Populated();
     let profile = Profile_Named("mcp-resource");
-    let built = Build(&store, &profile).expect("builds");
+    let built = Build(&store, &profile).expect("the fixture renders this shipped profile");
     let mut retitled = profile.clone();
     retitled.title = "Renamed resource".to_owned();
 
-    let freshness = Checked(&store, &retitled, &built.body, &built.Sidecar().expect("stamps"));
+    let freshness = Checked(
+        &store,
+        &retitled,
+        &built.body,
+        SidecarText(&built.Sidecar().expect("every built output carries a rendered stamp")),
+    );
 
     assert!(freshness.stale.is_some(), "a rewritten profile reads as current");
 }
@@ -84,10 +117,15 @@ fn Test_An_Edited_Output_Should_Be_Reported_As_Edited()
 {
     let store = Populated();
     let profile = Profile_Named("mcp-resource");
-    let built = Build(&store, &profile).expect("builds");
+    let built = Build(&store, &profile).expect("the fixture renders this shipped profile");
     let tampered = format!("{}\nhand written\n", built.body);
 
-    let freshness = Checked(&store, &profile, &tampered, &built.Sidecar().expect("stamps"));
+    let freshness = Checked(
+        &store,
+        &profile,
+        &tampered,
+        SidecarText(&built.Sidecar().expect("every built output carries a rendered stamp")),
+    );
 
     assert!(freshness.edited.is_some(), "a hand-edited output reads as generated");
     assert!(freshness.stale.is_none(), "the store did not change");
@@ -111,15 +149,12 @@ fn Test_An_Edited_Output_Should_Be_Reported_As_Edited()
 #[test]
 fn Test_A_Stamp_Rewritten_To_Agree_With_An_Edited_Body_Should_Still_Be_Refused()
 {
-    use nomos_spec_model::ContentHash;
-
     let store = Populated();
     let profile = Profile_Named("mcp-resource");
-    let built = Build(&store, &profile).expect("builds");
+    let built = Build(&store, &profile).expect("the fixture renders this shipped profile");
     let tampered = format!("{}\nhand written\n", built.body);
-    let mut agreeing = built.stamp.clone();
-    agreeing.content_digest = ContentHash::Of(&tampered).As_String_Slice().to_owned();
-    let freshness = Checked(&store, &profile, &tampered, &agreeing.Render().expect("stamps"));
+    let agreeing = Stamp_Agreeing_With(&built, &tampered);
+    let freshness = Checked(&store, &profile, &tampered, SidecarText(&agreeing));
 
     assert!(
         !freshness.Is_Fresh(),
@@ -131,6 +166,20 @@ fn Test_A_Stamp_Rewritten_To_Agree_With_An_Edited_Body_Should_Still_Be_Refused()
         "the refusal did not come from the comparison against what the store renders"
     );
     Assert_Divergence_Is_The_Only_Verdict(&freshness, &built.path);
+}
+
+/// `built`'s own stamp, re-rendered with a digest that agrees with `tampered`.
+///
+/// The edit is then invisible to the digest comparison, which is the only way to reach the
+/// verdict this test exists for.
+fn Stamp_Agreeing_With(built: &Output, tampered: &str) -> String
+{
+    use nomos_spec_model::ContentHash;
+
+    let mut agreeing = built.stamp.clone();
+    agreeing.content_digest = ContentHash::Of(tampered).As_String_Slice().to_owned();
+
+    return agreeing.Render().expect("every stamp renders its own fields back as text");
 }
 
 /// Neither of the old two verdicts may claim the rewritten-stamp case. The stamp is internally
@@ -152,7 +201,8 @@ fn Test_An_Output_That_Was_Never_Built_Should_Be_Absent()
 {
     let store = Populated();
 
-    let freshness = Check(&store, &Profile_Named("mcp-resource"), None, None).expect("checks");
+    let freshness = Check(&store, &Profile_Named("mcp-resource"), None, None)
+        .expect("Check accepts an absent body and sidecar and reports the file absent");
 
     assert!(freshness.absent);
     assert!(!freshness.Is_Fresh());

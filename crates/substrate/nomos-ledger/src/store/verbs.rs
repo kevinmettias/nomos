@@ -274,17 +274,7 @@ mod tests
     {
         let directory = Temporary_Directory("decline-item");
         let clock = FixedClock(1_000);
-        let mut ledger = Ledger_At(&directory, &clock);
-        let mut claimed = Workable_Item("D-1");
-        claimed.state = ItemState::Claimed;
-        claimed.claim = Some(Claim {
-            holder: "agent-a".to_owned(),
-            acquired_at: Timestamp::From_Unix_Seconds(1_000),
-            lease_expires_at: Timestamp::From_Unix_Seconds(9_000),
-        });
-        ledger
-            .Save(&LedgerDocument { schema_version: crate::SCHEMA_VERSION, items: vec![claimed] })
-            .expect("a claimed item is a valid document");
+        let mut ledger = Ledger_Holding_A_Live_Claim(&directory, &clock);
 
         let refusal = Decline_Item(
             &mut ledger,
@@ -295,6 +285,29 @@ mod tests
         .expect_err("a live claim held by somebody else must refuse the decline");
 
         assert!(matches!(refusal, ClaimRefusal::StillHeld { .. }), "got {refusal:?}");
+    }
+
+    /// A ledger holding one item claimed by `agent-a` and still live at the clock's instant.
+    ///
+    /// The claim expires well past that instant, so whoever asks for the item is asking while
+    /// somebody else is holding it — which is the state every refusal of a live holder turns on.
+    fn Ledger_Holding_A_Live_Claim<'clock>(
+        directory: &std::path::Path,
+        clock: &'clock FixedClock,
+    ) -> FileLedger<StdFileSystem, &'clock FixedClock, FileLock>
+    {
+        let ledger = Ledger_At(directory, clock);
+        let mut claimed = Workable_Item("D-1");
+        claimed.state = ItemState::Claimed;
+        claimed.claim = Some(Claim {
+            holder: "agent-a".to_owned(),
+            acquired_at: Timestamp::From_Unix_Seconds(1_000),
+            lease_expires_at: Timestamp::From_Unix_Seconds(9_000),
+        });
+        ledger
+            .Save(&LedgerDocument { schema_version: crate::SCHEMA_VERSION, items: vec![claimed] })
+            .expect("a claimed item is a valid document");
+        return ledger;
     }
 
     #[test]

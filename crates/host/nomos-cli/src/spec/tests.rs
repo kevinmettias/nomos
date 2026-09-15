@@ -141,13 +141,36 @@ fn Test_Spec_Command_From_String_Arguments_Should_Refuse_An_Unknown_Command()
 
 /// Every code `work` already spends on a claim outcome, so a second test can point at it
 /// without repeating the pair inline.
-fn Works_Claim_Codes() -> [i32; 2]
+///
+/// A `Vec` rather than a borrowed slice: the values are computed rather than named constants,
+/// so a slice would be a borrow of a temporary that dies at the return.
+fn Works_Claim_Codes() -> Vec<i32>
 {
-    return [
+    return vec![
         crate::work::ExitCode::ClaimUnavailable.Value(),
         crate::work::ExitCode::Conflict.Value(),
     ];
 }
+
+/// The number each of this group's own exit codes is pinned to.
+///
+/// The numbers belong to the binary rather than to this group's choice: `1` is the usage
+/// failure every group shares, `3` and `4` are `work`'s claim refusals and must not acquire a
+/// second meaning, and the rest are this group's own. They are a table rather than six
+/// assertions so that a renumbering is one list to read against the usage text rather than
+/// six lines to diff, and so each number is written down once.
+///
+/// `Ok` and `Usage` are deliberately absent: they are pinned against `work`'s own values in
+/// the test below rather than against a number, which is the stronger claim.
+const PINNED_NUMBERS: [(ExitCode, i32); 6] =
+    [
+        (ExitCode::NotFound, 1),
+        (ExitCode::StoreError, 5),
+        (ExitCode::Absent, 6),
+        (ExitCode::Unwritable, 7),
+        (ExitCode::Stale, 8),
+        (ExitCode::Refused, 9),
+    ];
 
 /// The codes are a contract, and they are the binary's rather than the group's. `3`
 /// and `4` belong to `work`'s claim refusals and must not acquire a second meaning.
@@ -156,13 +179,22 @@ fn Test_Value_Should_Be_Stable_And_Not_Collide_With_Works_Claim_Codes()
 {
     assert_eq!(ExitCode::Ok.Value(), crate::work::ExitCode::Ok.Value());
     assert_eq!(ExitCode::Usage.Value(), crate::work::ExitCode::Usage.Value());
-    assert_eq!(ExitCode::NotFound.Value(), 1);
-    assert_eq!(ExitCode::StoreError.Value(), 5);
-    assert_eq!(ExitCode::Absent.Value(), 6);
-    assert_eq!(ExitCode::Unwritable.Value(), 7);
-    assert_eq!(ExitCode::Stale.Value(), 8);
-    assert_eq!(ExitCode::Refused.Value(), 9);
 
+    for (code, pinned) in PINNED_NUMBERS
+    {
+        assert_eq!(code.Value(), pinned, "{} was renumbered", Labelled(code));
+    }
+
+    Assert_No_Claim_Code_Is_Reused();
+}
+
+/// Refuses any of this group's codes that `work` already spends on a claim outcome.
+///
+/// Both groups leave the same process, so they share one exit vocabulary: a second meaning
+/// for `3` or `4` would make a caller branching on the number mean two different things
+/// depending on which verb produced it, and nothing else in either group would notice.
+fn Assert_No_Claim_Code_Is_Reused()
+{
     for taken in Works_Claim_Codes()
     {
         assert!(
@@ -245,12 +277,7 @@ fn Sorted(codes: impl Iterator<Item = i32>) -> Vec<i32>
 #[test]
 fn Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With()
 {
-    let usage = super::parsing::Usage_Text();
-
-    assert!(
-        usage.starts_with("usage: nomos spec"),
-        "this compared some other group's help text: {usage}"
-    );
+    let usage = Usage_Text_Of_This_Group();
 
     let (_, spelled) = usage
         .split_once("exit codes:")
@@ -265,10 +292,27 @@ fn Test_The_Documented_Exit_Codes_Should_Be_The_Ones_This_Group_Can_Exit_With()
     assert_eq!(
         documented,
         implemented,
-        "the usage text and ExitCode disagree about what this command can exit with; the \
-         enum declares {:?}",
+        "the usage text and ExitCode disagree about what this command can exit with; the enum declares {:?}",
         Every_Exit_Code().iter().map(|code| return Labelled(*code)).collect::<Vec<_>>()
     );
+}
+
+/// This group's own help text, refused when it turns out to be some other group's.
+///
+/// Eight groups print a usage text and this file guards one of them. A `Usage_Text()` that
+/// returned another group's prose would have every comparison below pass against the wrong
+/// authority -- a failure that reads exactly like success -- so the identity of the text is
+/// asserted before anything is read out of it.
+fn Usage_Text_Of_This_Group() -> String
+{
+    let usage = super::parsing::Usage_Text();
+
+    assert!(
+        usage.starts_with("usage: nomos spec"),
+        "this compared some other group's help text: {usage}"
+    );
+
+    return usage;
 }
 
 /// The verb each command name in the usage text sits on, first token of its own line.
@@ -364,19 +408,28 @@ fn Test_Usage_Text_Should_Name_Every_Command()
     let mut built = Vec::new();
     for verb in &named
     {
-        let line = Minimal_Line(verb)
-            .unwrap_or_else(|| panic!("the usage text names `{verb}` and no minimal line is written for it here"));
-        let command = Spec_Command_From_String_Arguments(&Arguments(line))
-            .unwrap_or_else(|error| panic!("the usage text names `{verb}` and the parser refuses it: {error}"));
-
-        assert_eq!(Named(&command), verb, "`{verb}` builds a different command");
-        built.push(Named(&command));
+        built.push(Built_From_Usage_Text(verb));
     }
 
     built.sort_unstable();
     built.dedup();
 
     assert_eq!(built.len(), named.len(), "two command names built the same command: {named:?}");
+}
+
+/// The name of the command the usage text's own minimal line for `verb` builds.
+///
+/// Both ways a name in the text can be wrong are refusals here rather than a false pass: a
+/// verb with no line written for it in this file, and a line the parser will not accept.
+fn Built_From_Usage_Text(verb: &str) -> &'static str
+{
+    let line = Minimal_Line(verb)
+        .unwrap_or_else(|| panic!("the usage text names `{verb}` and no minimal line is written for it here"));
+    let command = Spec_Command_From_String_Arguments(&Arguments(line))
+        .unwrap_or_else(|error| panic!("the usage text names `{verb}` and the parser refuses it: {error}"));
+
+    assert_eq!(Named(&command), verb, "`{verb}` builds a different command");
+    return Named(&command);
 }
 
 /// `--rename` is optional and `--from` is not, so a rename cannot be a second parse of

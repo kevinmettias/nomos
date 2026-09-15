@@ -139,9 +139,12 @@ mod published_records_tests
     fn Test_Published_Records_Should_List_Every_File_Directly_Under_The_Record_Directory()
     {
         let root = Fresh_Root("nomos-cli-work-published-records");
-        std::fs::create_dir_all(root.join(RECORD_DIRECTORY)).unwrap();
-        std::fs::write(root.join(RECORD_DIRECTORY).join("OD-EXAMPLE-001.md"), "# example").unwrap();
-        std::fs::write(root.join(RECORD_DIRECTORY).join("OD-EXAMPLE-002.md"), "# example").unwrap();
+        std::fs::create_dir_all(root.join(RECORD_DIRECTORY))
+            .expect("the test root is a scratch path outside the repository, so the directory can be made here");
+        std::fs::write(root.join(RECORD_DIRECTORY).join("OD-EXAMPLE-001.md"), "# example")
+            .expect("the record directory was created on the line above, so this record file is writable");
+        std::fs::write(root.join(RECORD_DIRECTORY).join("OD-EXAMPLE-002.md"), "# example")
+            .expect("the record directory was created on the line above, so this record file is writable");
 
         let territory = Published_Records(&root.join("work"), &FILE_SYSTEM);
 

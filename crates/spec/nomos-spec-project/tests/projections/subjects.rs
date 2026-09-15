@@ -10,6 +10,22 @@ use crate::store::{Populated, Profile_Named};
 use nomos_spec_project::{Build, Format, Profile};
 use nomos_spec_store::SpecificationStore;
 
+/// How many subject-addressed profiles the shipped catalogue declares.
+///
+/// The count is the shape of the claim rather than an incidental number: one selection rendered
+/// in four formats is what these profiles exist to demonstrate, so the array of them is sized by
+/// it and the digest set it feeds is checked against a single entry.
+const SUBJECT_PROFILE_COUNT: usize = 4;
+
+/// How many whole-store profiles this file checks are untouched by subject resolution.
+const WHOLE_STORE_PROFILE_COUNT: usize = 3;
+
+/// How many subject values this file asks the path guard to refuse.
+///
+/// One per escape shape the guard names -- a parent step, a Windows separator, a drive letter and
+/// a nested traversal -- so a guard that stopped refusing one of them would go unchecked.
+const ESCAPING_SUBJECT_COUNT: usize = 4;
+
 /// A store holding two nodes whose identifiers share a prefix.
 fn With_Overlapping_Identifiers() -> SpecificationStore
 {
@@ -38,7 +54,7 @@ fn Nodes_Profile(filter: &str) -> Profile
          \"output\": \"probe.md\", \"sections\": [{{ \"title\": \"Nodes\", \
          \"content\": \"nodes\", \"filter\": {filter} }}] }}"
     ))
-    .expect("parses");
+    .expect("the filter is a literal this test wrote");
 }
 
 /// The reason `node_id` exists rather than reusing `identifier_prefix`.
@@ -51,9 +67,10 @@ fn Test_An_Identity_Should_Select_One_Node_Where_A_Prefix_Selects_Two()
 {
     let store = With_Overlapping_Identifiers();
 
-    let exact = Build(&store, &Nodes_Profile("{ \"node_id\": \"SUBJ-1\" }")).expect("builds");
+    let exact = Build(&store, &Nodes_Profile("{ \"node_id\": \"SUBJ-1\" }"))
+        .expect("the fixture holds SUBJ-1 and an identity filter selects it");
     let prefixed = Build(&store, &Nodes_Profile("{ \"identifier_prefix\": \"SUBJ-1\" }"))
-        .expect("builds");
+        .expect("the fixture holds SUBJ-12 and a prefix filter reaches it");
 
     assert!(exact.body.contains("SUBJ-1"), "{}", exact.body);
     assert!(
@@ -71,10 +88,16 @@ fn Test_One_Profile_Should_Serve_Every_Subject()
     let store = Populated();
     let declared = Profile_Named("subject-dossier");
 
-    let first = Build(&store, &declared.For(Some("AGT-EXEC-001")).expect("resolves"))
-        .expect("builds the first subject");
-    let second =
-        Build(&store, &declared.For(Some("D-129")).expect("resolves")).expect("builds the second");
+    let first = Build(
+        &store,
+        &declared.For(Some("AGT-EXEC-001")).expect("the profile is a per-subject template"),
+    )
+    .expect("subject-dossier renders a dossier for this subject");
+    let second = Build(
+        &store,
+        &declared.For(Some("D-129")).expect("the profile is a per-subject template"),
+    )
+    .expect("subject-dossier renders a dossier for this subject");
 
     assert_eq!(first.path, "subjects/AGT-EXEC-001/dossier.md");
     assert_eq!(second.path, "subjects/D-129/dossier.md");
@@ -100,9 +123,9 @@ fn Test_A_Subject_Should_See_The_Relations_At_Either_End()
         &store,
         &Profile_Named("subject-dossier")
             .For(Some("AGT-EXEC-001"))
-            .expect("resolves"),
+            .expect("the profile is a per-subject template"),
     )
-    .expect("builds");
+    .expect("subject-dossier renders a dossier for this subject");
 
     assert!(
         built.body.contains("CDM-WORKSPACECONTEXT"),
@@ -112,7 +135,7 @@ fn Test_A_Subject_Should_See_The_Relations_At_Either_End()
 }
 
 /// The four subject-addressed profiles, and the path each writes for the fixture's subject.
-fn Subject_Profiles() -> [(&'static str, Format, &'static str); 4]
+fn Subject_Profiles() -> [(&'static str, Format, &'static str); SUBJECT_PROFILE_COUNT]
 {
     return [
         ("subject-dossier", Format::Markdown, "subjects/AGT-EXEC-001/dossier.md"),
@@ -149,8 +172,11 @@ fn Test_Every_Subject_Profile_Should_Render_The_Same_Subject_In_Its_Own_Format()
 fn Subject_Digest(store: &SpecificationStore, id: &str, format: Format, path: &str) -> String
 {
     let declared = Profile_Named(id);
-    let built =
-        Build(store, &declared.For(Some("AGT-EXEC-001")).expect("resolves")).expect("builds");
+    let built = Build(
+        store,
+        &declared.For(Some("AGT-EXEC-001")).expect("the profile is a per-subject template"),
+    )
+    .expect("the fixture holds the subject every one of these profiles names");
 
     assert_eq!(declared.format, format, "{id}");
     assert_eq!(built.path, path, "{id}");
@@ -210,7 +236,7 @@ fn Test_A_Subject_That_Matches_Nothing_Should_Not_Render_An_Empty_File()
         &store,
         &Profile_Named("subject-dossier")
             .For(Some("NO-SUCH-SUBJECT"))
-            .expect("resolves"),
+            .expect("resolution substitutes text and consults no store"),
     )
     .expect_err("must refuse");
 
@@ -220,7 +246,7 @@ fn Test_A_Subject_That_Matches_Nothing_Should_Not_Render_An_Empty_File()
 }
 
 /// Every whole-store profile this claim checks is untouched by subject resolution.
-fn Whole_Store_Profile_Ids() -> [&'static str; 3]
+fn Whole_Store_Profile_Ids() -> [&'static str; WHOLE_STORE_PROFILE_COUNT]
 {
     return ["diagram-set", "traceability-matrix", "domain-specification"];
 }
@@ -237,10 +263,17 @@ fn Test_A_Whole_Store_Profile_Should_Render_Exactly_What_It_Did_Before()
 
         assert!(!declared.Is_Per_Subject(), "{id} unexpectedly names a subject");
         assert_eq!(
-            Build(&store, &declared).expect("builds").body,
-            Build(&store, &declared.For(None).expect("resolves"))
-                .expect("builds")
+            Build(&store, &declared)
+                .expect("the fixture holds nodes and this profile is whole-store")
                 .body,
+            Build(
+                &store,
+                &declared
+                    .For(None)
+                    .expect("a whole-store profile is accepted against no subject")
+            )
+            .expect("the fixture holds nodes and this profile is whole-store")
+            .body,
             "{id} renders differently when resolved against no subject"
         );
     }
@@ -254,7 +287,7 @@ fn Test_A_Whole_Store_Profile_Should_Render_Exactly_What_It_Did_Before()
 /// letter and a backslash, and this is the assertion that keeps it refusing them once the
 /// path stopped being fully authored.
 /// Every subject value this claim tries to write outside the build root.
-fn Escaping_Subjects() -> [&'static str; 4]
+fn Escaping_Subjects() -> [&'static str; ESCAPING_SUBJECT_COUNT]
 {
     return ["../../escaped", "..\\windows", "C:/absolute", "a/../../b"];
 }
@@ -266,7 +299,7 @@ fn Test_A_Subject_Should_Not_Be_Able_To_Escape_The_Build_Root()
 
     for escape in Escaping_Subjects()
     {
-        let resolved = declared.For(Some(escape)).expect("resolves");
+        let resolved = declared.For(Some(escape)).expect("resolution substitutes text and reads no store");
 
         assert!(
             resolved.Validate().is_err(),
@@ -275,8 +308,9 @@ fn Test_A_Subject_Should_Not_Be_Able_To_Escape_The_Build_Root()
         );
     }
 
-    assert!(
-        declared.For(Some("D-129")).expect("resolves").Validate().is_ok(),
-        "an ordinary identifier was refused"
-    );
+    let ordinary = declared
+        .For(Some("D-129"))
+        .expect("the guard refuses escapes rather than ordinary identifiers");
+
+    assert!(ordinary.Validate().is_ok(), "an ordinary identifier was refused");
 }

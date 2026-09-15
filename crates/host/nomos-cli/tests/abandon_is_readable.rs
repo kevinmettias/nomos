@@ -22,6 +22,13 @@ use board::{Board, Ran};
 /// the defect would come back as.
 const REASON: &str = "the corpus this needs is on no runner here; stopped before inventing one";
 
+/// The agent a claim belongs to.
+///
+/// A distinct type rather than a bare `&str`: [`Claim_Then_Abandon`] takes a holder and a
+/// reason, both text and both adjacent, so a caller who wrote the prose where the name goes
+/// would compile and abandon under somebody else's name.
+struct Holder<'a>(&'a str);
+
 /// A scratch board holding one claimable item.
 ///
 /// The item text is what this suite is about and stays here; the directory it is written
@@ -46,13 +53,14 @@ fn A_Board(name: &str) -> Board
 ///
 /// A free function rather than a method, because the board is shared scaffolding and this
 /// cycle is what only this suite is about.
-fn Claim_Then_Abandon(board: &Board, holder: &str, reason: &str)
+fn Claim_Then_Abandon(board: &Board, holder: Holder<'_>, reason: &str)
 {
-    let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", holder]);
+    let text = holder.0;
+    let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", text]);
     assert_eq!(code, 0, "the claim must be granted: {said}");
 
     let Ran { said, code } = board.Work(&[
-        "abandon", "--item", "T-1", "--holder", holder, "--reason", reason,
+        "abandon", "--item", "T-1", "--holder", text, "--reason", reason,
     ]);
     assert_eq!(code, 0, "a holder may give up its own claim: {said}");
 }
@@ -62,7 +70,7 @@ fn Claim_Then_Abandon(board: &Board, holder: &str, reason: &str)
 fn Test_An_Abandoned_Item_Should_Report_Who_Stopped_And_Why()
 {
     let board = A_Board("reports-reason");
-    Claim_Then_Abandon(&board, "agent-a", REASON);
+    Claim_Then_Abandon(&board, Holder("agent-a"), REASON);
 
     let Ran { said: shown, code } = board.Work(&["show", "--item", "T-1"]);
 
@@ -86,7 +94,7 @@ fn Test_An_Abandoned_Item_Should_Report_Who_Stopped_And_Why()
 fn Test_An_Abandoned_Item_Should_Be_Claimable_By_Somebody_Else()
 {
     let board = A_Board("still-claimable");
-    Claim_Then_Abandon(&board, "agent-a", REASON);
+    Claim_Then_Abandon(&board, Holder("agent-a"), REASON);
 
     let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
     assert_eq!(code, 0, "an abandoned item must be takeable: {said}");
@@ -103,8 +111,8 @@ fn Test_An_Abandoned_Item_Should_Be_Claimable_By_Somebody_Else()
 fn Test_Every_Abandonment_Should_Be_Reported_And_Not_Only_The_Last()
 {
     let board = A_Board("reports-both");
-    Claim_Then_Abandon(&board, "agent-a", "went to look at something else");
-    Claim_Then_Abandon(&board, "agent-b", REASON);
+    Claim_Then_Abandon(&board, Holder("agent-a"), "went to look at something else");
+    Claim_Then_Abandon(&board, Holder("agent-b"), REASON);
 
     let Ran { said: shown, .. } = board.Work(&["show", "--item", "T-1"]);
 

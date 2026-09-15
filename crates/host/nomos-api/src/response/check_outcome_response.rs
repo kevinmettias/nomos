@@ -96,6 +96,13 @@ mod tests
     use super::*;
     use nomos_check_orchestration::Examined;
 
+    /// How many files a `NoFacts` outcome in these tests read before nothing was materialized.
+    const READ_FILES: usize = 3;
+    /// How many files a judged outcome in these tests read.
+    const JUDGED_FILES: usize = 4;
+    /// How many facts a judged outcome in these tests materialized.
+    const JUDGED_FACTS: usize = 9;
+
     /// One field of a serialized value, by path.
     ///
     /// `serde_json::Value`'s own `Index` panics on a missing key, which is the failure
@@ -115,18 +122,13 @@ mod tests
         return current.clone();
     }
 
-    fn Rendered(outcome: &CheckOutcome) -> serde_json::Value
-    {
-        return serde_json::to_value(CheckOutcomeResponse::From(outcome)).expect("always serializes");
-    }
-
     #[test]
     fn Test_Every_Non_Judged_Outcome_Should_Serialize_Under_A_Name_Of_Its_Own()
     {
         assert_eq!(At(&Rendered(&CheckOutcome::Unreadable), &["outcome"]), "unreadable");
         assert_eq!(At(&Rendered(&CheckOutcome::NoSource), &["outcome"]), "no_source");
-        assert_eq!(At(&Rendered(&CheckOutcome::NoFacts { files: 3 }), &["outcome"]), "no_facts");
-        assert_eq!(At(&Rendered(&CheckOutcome::NoFacts { files: 3 }), &["files"]).as_u64(), Some(3));
+        assert_eq!(At(&Rendered(&CheckOutcome::NoFacts { files: READ_FILES }), &["outcome"]), "no_facts");
+        assert_eq!(At(&Rendered(&CheckOutcome::NoFacts { files: READ_FILES }), &["files"]).as_u64(), Some(READ_FILES as u64));
     }
 
     /// The distinction this type exists for: two outcomes that both produce an
@@ -140,14 +142,21 @@ mod tests
     #[test]
     fn Test_A_Judged_Outcome_Should_Carry_Its_Counts_And_Its_Claim_And_Not_Its_Findings()
     {
-        let outcome = CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: 4, facts: 9 }, claim: Claim::Incomplete };
+        let outcome = CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: JUDGED_FILES, facts: JUDGED_FACTS }, claim: Claim::Incomplete };
 
         let rendered = Rendered(&outcome);
 
         assert_eq!(At(&rendered, &["outcome"]), "judged");
-        assert_eq!(At(&rendered, &["files"]).as_u64(), Some(4));
-        assert_eq!(At(&rendered, &["facts"]).as_u64(), Some(9));
+        assert_eq!(At(&rendered, &["files"]).as_u64(), Some(JUDGED_FILES as u64));
+        assert_eq!(At(&rendered, &["facts"]).as_u64(), Some(JUDGED_FACTS as u64));
         assert_eq!(At(&rendered, &["complete"]).as_bool(), Some(false));
         assert!(rendered.get("findings").is_none(), "the response's own findings field carries them, grouped: {rendered}");
+    }
+
+    /// An outcome as a caller receives it.
+    fn Rendered(outcome: &CheckOutcome) -> serde_json::Value
+    {
+        return serde_json::to_value(CheckOutcomeResponse::From(outcome))
+            .expect("a derived Serialize over owned data has nothing to refuse");
     }
 }

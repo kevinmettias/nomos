@@ -1,9 +1,10 @@
 //! The second acceptance criterion: the snapshot is an artefact, not a directory.
 
 use crate::board::{
-    Claimed, Contested, Covers, Record_Writers, Saved, Unclaimed_Copy,
+    Claimed, Contest, Contested, Covers, DeclaredPath, Record_Writers, ReservedPath, Saved,
+    SavedBoard, Unclaimed_Copy,
 };
-use nomos_ledger::{ItemId, LedgerDocument, LedgerItem, Normalize_Path, Territory};
+use nomos_ledger::{Holder, ItemId, LedgerDocument, LedgerItem, Normalize_Path, Territory};
 use std::collections::BTreeSet;
 
 /// The directory holding the whole harness, and the coarse reservation this item removed.
@@ -25,7 +26,8 @@ fn Reserved_Snapshots(item: &LedgerItem) -> BTreeSet<String>
         .iter()
         .map(|path| return Normalize_Path(path))
         .filter(|path| {
-            return Covers(SNAPSHOT_DIRECTORY, path) && path.as_str() != SNAPSHOT_DIRECTORY;
+            return Covers(ReservedPath(SNAPSHOT_DIRECTORY), DeclaredPath(path.as_str()))
+                && path.as_str() != SNAPSHOT_DIRECTORY;
         })
         .collect();
 }
@@ -126,14 +128,17 @@ fn Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once()
     {
         return Report_No_Pair();
     };
-    let (_scratch, mut ledger) = Saved("snapshot-grain", &document);
+    let SavedBoard {
+        scratch: _scratch,
+        mut ledger,
+    } = Saved("snapshot-grain", &document);
 
     for (writer, agent) in Claimants_Widening_Each_Crate(&first, &second)
     {
         let blame = format!(
             "{first} and {second} widen different crates' APIs and {writer} was still refused"
         );
-        Claimed(&mut ledger, writer, agent, &blame);
+        Claimed(&mut ledger, writer, Holder::from(agent), &blame);
     }
     ledger
         .Validate_Current()
@@ -162,7 +167,10 @@ fn Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair()
             item.territory = On_The_Snapshot_Directory(item);
         }
     }
-    let (_scratch, refusal) = Contested("snapshot-directory-restored", &document, &first, &second);
+    let Contest {
+        scratch: _scratch,
+        refusal,
+    } = Contested("snapshot-directory-restored", &document, &first, &second);
 
     assert!(
         refusal.Describe().contains("agent-a"),

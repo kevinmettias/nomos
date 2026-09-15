@@ -11,6 +11,14 @@
 
 use crate::authored::{Audit_Line, Board, FINISHED, Held_By, Item, NO_CLAIM, Standing};
 
+/// How many items [`Mixed_Board`] refuses a claim on: the territory case and the dependency
+/// case, and nothing else.
+///
+/// The count is the disagreement itself -- it goes up if a terminal item comes back into the
+/// report, and down if a refusal drops out of it -- rather than a line count that happens to
+/// have been observed once.
+const BLOCKED_ITEMS_ON_THE_MIXED_BOARD: u32 = 2;
+
 /// The board both halves of the defect are visible on.
 ///
 /// * `T-1` holds `src/shared.rs`, so `T-2` is refused for territory.
@@ -130,22 +138,30 @@ fn Test_Audit_Should_Agree_With_The_Listing_Item_For_Item()
     let mut checked = 0_u32;
     for line in audit.lines()
     {
-        let named = Assert_The_Listing_Agrees(&board, line, &audit);
+        let statement = AuditStatement(line);
+        let named = Assert_The_Listing_Agrees(&board, statement, &audit);
         checked = checked.saturating_add(named);
     }
 
     assert_eq!(
-        checked, 2,
+        checked, BLOCKED_ITEMS_ON_THE_MIXED_BOARD,
         "the board has exactly two blocked items; a different count means the audit is \
          answering for something else:\n{audit}"
     );
 }
 
+/// One line of the `audit` report, told apart from the report it was read out of.
+///
+/// [`Assert_The_Listing_Agrees`] takes both and both are text, so a caller who wrote them the
+/// other way round would look an item up inside a report and read a label off a line --
+/// compiling, and answering about nothing.
+struct AuditStatement<'a>(&'a str);
+
 /// One audit line against what the listing calls the same item. Answers 1 where a line named
 /// an item at all, which is what the count above measures.
-fn Assert_The_Listing_Agrees(board: &Board, line: &str, audit: &str) -> u32
+fn Assert_The_Listing_Agrees(board: &Board, line: AuditStatement<'_>, audit: &str) -> u32
 {
-    let mut fields = line.split_whitespace();
+    let mut fields = line.0.split_whitespace();
     let (Some(item), Some(label)) = (fields.next(), fields.next())
     else
     {

@@ -222,6 +222,19 @@ fn Pairs(declared: &serde_json::Value, key: &str) -> Result<Vec<(String, String)
         });
     };
 
+    let mut pairs = Flatten(entries, key)?;
+    pairs.sort();
+
+    return Ok(pairs);
+}
+
+/// Every name declared under every key of one block, as `(from, to)` pairs -- the flattening
+/// [`Pairs`] does once its two refusals have been discharged.
+fn Flatten(
+    entries: &serde_json::Map<String, serde_json::Value>,
+    key: &str,
+) -> Result<Vec<(String, String)>, ArchitectureError>
+{
     let mut pairs = Vec::new();
     for (from, targets) in entries
     {
@@ -230,7 +243,6 @@ fn Pairs(declared: &serde_json::Value, key: &str) -> Result<Vec<(String, String)
             pairs.push((from.clone(), to));
         }
     }
-    pairs.sort();
 
     return Ok(pairs);
 }

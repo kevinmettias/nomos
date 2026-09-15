@@ -4,7 +4,20 @@
 //! who held the item before. An item nobody holds has nothing to take over, and that
 //! refusal is a different one from the item that is merely unusable.
 
-use crate::board::*;
+use crate::board::{
+    At, AT_LATER_SECONDS, AT_NOW, After_The_Lapse, Board, Board_At, ClaimRefusal, Claimant, Document, Finished,
+    Held_By, Item, ItemState, LEASE_SECONDS, Ledger_At, Ledger_When, NOW, Named, Only_Item, Path, PathBuf, Refused,
+    SCHEMA_VERSION, Standing, Standing_Of, Take, Take_Over_In, Temporary_Directory, Validate_Document,
+};
+
+/// A moment a minute after the claim was taken, and so well inside its lease: the holder is
+/// still working, and a takeover here would be taking an item away from somebody who has not
+/// stopped.
+const STILL_WITHIN_THE_LEASE: i64 = NOW + 60;
+
+/// A moment later than the lease the first takeover installed — the first lapsed at
+/// [`AT_LATER_SECONDS`], so the second has to be a whole lease beyond that moment again.
+const AFTER_THE_SECOND_LEASE: i64 = AT_LATER_SECONDS + LEASE_SECONDS + LEASE_SECONDS;
 
 /// A live claim is not a lapse, and `takeover` is not a way to steal work in progress.
 ///
@@ -15,12 +28,12 @@ use crate::board::*;
 #[test]
 fn Test_An_Item_With_A_Live_Claim_Should_Not_Be_Taken_Over()
 {
-    let (directory, mut ledger) = Board_At("takeover-refuses-live", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", "agent-a");
+    let Board { directory, mut ledger } = Board_At("takeover-refuses-live", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", Claimant("agent-a"));
 
-    let mut during = Ledger_When(directory.As_Path(), NOW + 60);
+    let mut during = Ledger_When(directory.As_Path(), STILL_WITHIN_THE_LEASE);
 
-    let refusal = Take_Over_In(&mut during, "T-1", "agent-b")
+    let refusal = Take_Over_In(&mut during, "T-1", Claimant("agent-b"))
         .expect_err("a live claim must not be displaced by a takeover");
     assert!(matches!(refusal, ClaimRefusal::HeldBy { .. }), "{}", refusal.Describe());
     assert!(
@@ -49,7 +62,9 @@ fn Test_An_Item_With_A_Live_Claim_Should_Not_Be_Taken_Over()
 ///
 /// A named provider rather than an inline literal, so a third wrong-verb case is a value
 /// added here rather than a change to the loop that reads them.
-fn Items_A_Takeover_Must_Refuse() -> [(&'static str, &'static str); 2]
+const WRONG_VERB_CASES: usize = 2;
+
+fn Items_A_Takeover_Must_Refuse() -> [(&'static str, &'static str); WRONG_VERB_CASES]
 {
     return [("T-1", "an item nobody holds"), ("T-2", "a finished item")];
 }
@@ -57,13 +72,13 @@ fn Items_A_Takeover_Must_Refuse() -> [(&'static str, &'static str); 2]
 #[test]
 fn Test_Taking_Over_An_Item_Nobody_Holds_Should_Be_Refused()
 {
-    let (_directory, mut ledger) = Board_At("takeover-wrong-verb", vec![
+    let Board { directory: _directory, mut ledger } = Board_At("takeover-wrong-verb", vec![
         Item("T-1", &["src/a.rs"]),
         Finished("T-2", &["src/b.rs"]),
     ]);
     for (item, what) in Items_A_Takeover_Must_Refuse()
     {
-        let refusal = Take_Over_In(&mut ledger, item, "agent-b")
+        let refusal = Take_Over_In(&mut ledger, item, Claimant("agent-b"))
             .expect_err("a takeover answers a lapse and nothing else");
 
         assert!(
@@ -99,17 +114,17 @@ fn Test_Taking_Over_An_Item_Nobody_Holds_Should_Be_Refused()
 fn Test_A_Takeover_Should_Refuse_Territory_Somebody_Has_Since_Claimed()
 {
     // Two items over the same file. Concurrently claimable only while one of them is not.
-    let (directory, mut ledger) = Board_At("takeover-refuses-taken-ground", vec![
+    let Board { directory, mut ledger } = Board_At("takeover-refuses-taken-ground", vec![
         Item("T-1", &["src/a.rs"]),
         Item("T-2", &["src/a.rs"]),
     ]);
-    Take(&mut ledger, "T-1", "dead-agent");
+    Take(&mut ledger, "T-1", Claimant("dead-agent"));
     // The second claim succeeds precisely because T-1's lapsed claim no longer excludes. That
     // is the state the takeover then has to notice.
     let mut after = After_The_Lapse(directory.As_Path());
-    Take(&mut after, "T-2", "agent-b");
+    Take(&mut after, "T-2", Claimant("agent-b"));
 
-    let refusal = Take_Over_In(&mut after, "T-1", "agent-c")
+    let refusal = Take_Over_In(&mut after, "T-1", Claimant("agent-c"))
         .expect_err("the ground T-1 reserves is held by a live claim on T-2");
     assert!(matches!(refusal, ClaimRefusal::HeldBy { .. }), "{}", refusal.Describe());
     assert!(
@@ -136,15 +151,17 @@ fn Test_A_Takeover_Should_Refuse_Territory_Somebody_Has_Since_Claimed()
 #[test]
 fn Test_An_Item_Taken_Over_Twice_Should_Name_Both_Predecessors()
 {
-    let (directory, mut ledger) = Board_At("takeover-twice", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", "dead-agent");
+    let Board { directory, mut ledger } = Board_At("takeover-twice", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", Claimant("dead-agent"));
 
-    let mut takes = Ledger_When(directory.As_Path(), NOW + 7_200);
-    Take_Over_In(&mut takes, "T-1", "agent-b").expect("the first holder's lease ran out");
+    let mut takes = Ledger_When(directory.As_Path(), AT_LATER_SECONDS);
+    Take_Over_In(&mut takes, "T-1", Claimant("agent-b")).expect("the first holder's lease ran out");
 
-    // Past `agent-b`'s lease too: NOW + 7_200 + 3_600.
-    let mut again = Ledger_When(directory.As_Path(), NOW + 14_400);
-    Take_Over_In(&mut again, "T-1", "agent-c").expect("the second holder's lease ran out as well");
+    // Past `agent-b`'s lease too: the takeover above installed it at `AT_LATER_SECONDS`, and a
+    // lease runs a whole `LEASE` from the moment it is taken.
+    let mut again = Ledger_When(directory.As_Path(), AFTER_THE_SECOND_LEASE);
+    Take_Over_In(&mut again, "T-1", Claimant("agent-c"))
+        .expect("the second holder's lease ran out as well");
 
     assert_eq!(
         Standing_Of(&Only_Item(&again)),
@@ -170,13 +187,13 @@ fn Test_An_Item_Claimed_With_No_Claim_Recorded_Should_Not_Be_Taken_Over()
     let directory = Temporary_Directory("takeover-refuses-a-hole");
     let mut ledger = Ledger_At(directory.As_Path(), &AT_NOW);
     let path = Write_A_Claimed_Item_With_No_Claim(directory.As_Path());
-    let before = std::fs::read(&path).expect("readable");
+    let before = std::fs::read(&path).expect("the hand-written ledger is on disk to compare against");
 
-    let refusal = Take_Over_In(&mut ledger, "T-1", "agent-b")
+    let refusal = Take_Over_In(&mut ledger, "T-1", Claimant("agent-b"))
         .expect_err("an item whose predecessor record is already missing is not taken over");
     assert!(matches!(refusal, ClaimRefusal::NotClaimable { .. }), "{}", refusal.Describe());
     assert_eq!(
-        std::fs::read(&path).expect("readable"),
+        std::fs::read(&path).expect("the file the refused takeover may have rewritten"),
         before,
         "a refused takeover rewrote the file"
     );
@@ -201,7 +218,7 @@ fn Write_A_Claimed_Item_With_No_Claim(directory: &Path) -> PathBuf
              ]\n}}\n"
         ),
     )
-    .expect("write");
+    .expect("the hand-written ledger has to reach the disk");
 
     return path;
 }
@@ -216,11 +233,11 @@ fn Write_A_Claimed_Item_With_No_Claim(directory: &Path) -> PathBuf
 #[test]
 fn Test_An_Item_With_A_Displaced_Claim_Should_Round_Trip_Losslessly()
 {
-    let (directory, mut ledger) = Board_At("takeover-round-trip", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", "dead-agent");
+    let Board { directory, mut ledger } = Board_At("takeover-round-trip", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", Claimant("dead-agent"));
 
     let mut after = After_The_Lapse(directory.As_Path());
-    Take_Over_In(&mut after, "T-1", "agent-b").expect("a lapsed item is takeable");
+    Take_Over_In(&mut after, "T-1", Claimant("agent-b")).expect("a lapsed item is takeable");
 
     let first = after.Load().expect("a document carrying `displaced` must read");
     assert_eq!(first.schema_version, SCHEMA_VERSION);
@@ -232,8 +249,8 @@ fn Test_An_Item_With_A_Displaced_Claim_Should_Round_Trip_Losslessly()
         "the displaced claim did not survive the write"
     );
 
-    after.Save(&first).expect("valid");
-    let second = after.Load().expect("readable");
+    after.Save(&first).expect("the document with a displaced claim is one the board accepts");
+    let second = after.Load().expect("the document the second save wrote reads back");
 
     assert_eq!(second, first, "a displaced claim changed meaning on rewrite");
 }
@@ -289,12 +306,13 @@ fn Test_An_Unusable_Ledger_Should_Not_Be_Reported_As_A_Missing_Item()
 {
     // A genuinely missing item over a ledger that is fine, and then the same call over a file
     // that is not a ledger at all.
-    let (directory, mut sound) = Board_At("unusable-ledger", vec![Item("T-1", &["src/a.rs"])]);
-    let missing = Refused(&mut sound, "T-NOPE", "agent-a");
+    let Board { directory, mut ledger } = Board_At("unusable-ledger", vec![Item("T-1", &["src/a.rs"])]);
+    let missing = Refused(&mut ledger, "T-NOPE", Claimant("agent-a"));
 
-    std::fs::write(directory.As_Path().join("ledger.json"), "{ not json").expect("writes the corruption");
+    std::fs::write(directory.As_Path().join("ledger.json"), "{ not json")
+        .expect("the corruption has to reach the disk");
     let mut broken = Ledger_At(directory.As_Path(), &AT_NOW);
-    let unusable = Refused(&mut broken, "T-1", "agent-a");
+    let unusable = Refused(&mut broken, "T-1", Claimant("agent-a"));
     Told_Apart(&missing, &unusable);
 }
 

@@ -7,6 +7,14 @@
 use crate::store::{Populated, Profile_Named, Rendered};
 use nomos_spec_project::{Build, Catalogue, Profile, Select_Projection};
 
+/// The `relates-to` edges `OD-SPEC-015` declares, which is therefore the smallest neighbourhood
+/// the symmetric traversal must reach from it.
+///
+/// An authored count rather than a value derived from the code under test: the claim is that a
+/// traversal honouring `relates-to` reaches those declared neighbours, and a number read back out
+/// of the traversal would restate its answer instead of checking it.
+const RELATES_TO_EDGES_DECLARED_BY_OD_SPEC_015: usize = 3;
+
 #[test]
 fn Test_A_Soft_Deleted_Node_Should_Not_Be_Projected()
 {
@@ -30,7 +38,7 @@ fn Test_A_Section_That_Selects_Nothing_Should_Be_Refused()
              "sections": [{ "title": "Ghosts", "content": "nodes",
                             "filter": { "kind": "ghost" } }] }"#,
     )
-    .expect("parses");
+    .expect("the profile text is a literal this test wrote");
 
     let refusal = Build(&store, &profile).expect_err("must refuse");
 
@@ -47,9 +55,10 @@ fn Test_A_Section_That_Declares_It_May_Be_Empty_Should_Render()
                             "filter": { "kind": "ghost" } },
                           { "title": "Nodes", "content": "nodes" }] }"#,
     )
-    .expect("parses");
+    .expect("the profile text is a literal this test wrote");
 
-    let output = Build(&store, &profile).expect("builds");
+    let output = Build(&store, &profile)
+        .expect("the second section selects nodes and the first declares emptiness");
 
     assert!(output.body.contains("## Ghosts"), "{}", output.body);
 }
@@ -64,7 +73,7 @@ fn Test_A_Filter_A_Content_Kind_Does_Not_Honour_Should_Be_Refused()
              "sections": [{ "title": "Suites", "content": "suites",
                             "filter": { "relation_type": "verifies" } }] }"#,
     )
-    .expect("parses");
+    .expect("the profile text is a literal this test wrote");
 
     let refusal = Build(&store, &profile).expect_err("must refuse");
 
@@ -78,12 +87,12 @@ fn Test_Two_Profiles_Writing_One_Output_Should_Be_Refused()
         r#"{ "id": "one", "title": "One", "format": "markdown", "output": "shared.md",
              "sections": [{ "title": "Nodes", "content": "nodes" }] }"#,
     )
-    .expect("parses");
+    .expect("the profile text is a literal this test wrote");
     let two = Profile::Parse(
         r#"{ "id": "two", "title": "Two", "format": "markdown", "output": "shared.md",
              "sections": [{ "title": "Nodes", "content": "nodes" }] }"#,
     )
-    .expect("parses");
+    .expect("the profile text is a literal this test wrote");
 
     let Err(refusal) = Catalogue::Of(vec![one, two])
     else
@@ -102,7 +111,8 @@ fn Test_Two_Profiles_Writing_One_Output_Should_Be_Refused()
 fn Test_A_Selection_Should_Order_By_Identity_Rather_Than_By_Arrival()
 {
     let store = Populated();
-    let projection = Select_Projection(&store, &Profile_Named("mcp-resource")).expect("selects");
+    let projection = Select_Projection(&store, &Profile_Named("mcp-resource"))
+        .expect("the shipped catalogue declares this profile and it selects nodes");
 
     for section in &projection.sections
     {
@@ -141,6 +151,15 @@ fn Test_A_Status_Filter_Should_Select_The_Open_Records_And_Exclude_The_Accepted_
     let open = Node_Identities(&store, Some("open"));
     let accepted = Node_Identities(&store, Some("accepted"));
 
+    Assert_Status_Selections_Are_Disjoint(&open, &accepted);
+}
+
+/// The four things the two status selections must satisfy, given the fixture's declarations.
+///
+/// Split out of the test above because the test's own body is then the two selections it
+/// compares, and because a second status pair would assert exactly these four things again.
+fn Assert_Status_Selections_Are_Disjoint(open: &[String], accepted: &[String])
+{
     assert!(!open.is_empty(), "the seeded store answered no open record at all");
     assert!(
         open.contains(&"OD-SPEC-001".to_owned()),
@@ -201,7 +220,7 @@ fn Test_A_Status_Filter_On_A_Kind_That_Cannot_Answer_It_Should_Be_Refused_By_Nam
              "sections": [{ "title": "Statements", "content": "statements",
                             "filter": { "status": "open" } }] }"#,
     )
-    .expect("parses");
+    .expect("the profile text is a literal this test wrote");
 
     let refusal = Build(&store, &profile).expect_err("must refuse");
 
@@ -210,17 +229,29 @@ fn Test_A_Status_Filter_On_A_Kind_That_Cannot_Answer_It_Should_Be_Refused_By_Nam
     assert!(reported.contains("statements"), "the refusal did not name the content: {reported}");
 }
 
+/// A one-section probe profile, wrapped around a section this test wrote.
+///
+/// Every probe in this file asks one question of one section, so the profile around the section
+/// is identical each time and only the section text differs.
+fn Probe_Section(section: &str) -> Profile
+{
+    return Profile::Parse(&format!(
+        r#"{{ "id": "probe", "title": "Probe", "format": "markdown", "output": "probe.md",
+              "sections": [{section}] }}"#
+    ))
+    .expect("the probe profile is assembled from this test's own strings");
+}
+
 /// Every node identity a `nodes` section selects, optionally narrowed to one declared status.
 fn Node_Identities(store: &nomos_spec_store::SpecificationStore, status: Option<&str>) -> Vec<String>
 {
     let filter = status.map_or_else(String::new, |status| return format!(r#", "filter": {{ "status": "{status}" }}"#));
-    let profile = Profile::Parse(&format!(
-        r#"{{ "id": "probe", "title": "Probe", "format": "markdown", "output": "probe.md",
-              "sections": [{{ "title": "Nodes", "content": "nodes", "may_be_empty": true{filter} }}] }}"#
-    ))
-    .expect("parses");
+    let profile = Probe_Section(&format!(
+        r#"{{ "title": "Nodes", "content": "nodes", "may_be_empty": true{filter} }}"#
+    ));
 
-    let projection = Select_Projection(store, &profile).expect("selects");
+    let projection = Select_Projection(store, &profile)
+        .expect("the probe profile parses and the fixture holds nodes");
 
     return projection
         .sections
@@ -236,8 +267,10 @@ fn Node_Identities(store: &nomos_spec_store::SpecificationStore, status: Option<
 /// file, and reaching into it would mean editing a file this item does not hold.
 fn Seeded() -> nomos_spec_store::SpecificationStore
 {
-    let mut store = nomos_spec_store::SpecificationStore::In_Memory().expect("opens");
-    nomos_spec_store::Seed_Governing_Records(&mut store).expect("seeds");
+    let mut store = nomos_spec_store::SpecificationStore::In_Memory()
+        .expect("In_Memory applies the schema MIGRATIONS before it returns");
+    nomos_spec_store::Seed_Governing_Records(&mut store)
+        .expect("the governing records are generated into this build");
 
     return store;
 }
@@ -279,7 +312,7 @@ fn Test_A_Subject_Whose_Edges_Are_All_Relates_To_Should_Still_Reach_Them()
     let reached = Neighbourhood_Of(&store, "OD-SPEC-015");
 
     assert!(
-        reached.len() >= 3,
+        reached.len() >= RELATES_TO_EDGES_DECLARED_BY_OD_SPEC_015,
         "OD-SPEC-015 declares three relates-to edges and nothing else, and reached {reached:?}"
     );
 }
@@ -336,15 +369,13 @@ fn Neighbourhood_Of(store: &nomos_spec_store::SpecificationStore, subject: &str)
 /// Every `(identity, declared status)` a subject's neighbourhood section selects.
 fn Neighbourhood_Statuses(store: &nomos_spec_store::SpecificationStore, subject: &str) -> Vec<(String, String)>
 {
-    let profile = Profile::Parse(&format!(
-        r#"{{ "id": "probe", "title": "Probe", "format": "markdown", "output": "probe.md",
-              "sections": [{{ "title": "Neighbourhood", "content": "neighbourhood",
-                              "may_be_empty": true,
-                              "filter": {{ "node_id": "{subject}" }} }}] }}"#
-    ))
-    .expect("parses");
+    let profile = Probe_Section(&format!(
+        r#"{{ "title": "Neighbourhood", "content": "neighbourhood", "may_be_empty": true,
+              "filter": {{ "node_id": "{subject}" }} }}"#
+    ));
 
-    let projection = Select_Projection(store, &profile).expect("selects");
+    let projection = Select_Projection(store, &profile)
+        .expect("the probe profile parses and the store holds this subject");
 
     return projection
         .sections
@@ -432,13 +463,10 @@ fn Test_A_Family_View_Should_Select_Identically_Twice()
 /// Every `((from, to), edge count)` the families section selects.
 fn Family_Pairs(store: &nomos_spec_store::SpecificationStore) -> Vec<((String, String), String)>
 {
-    let profile = Profile::Parse(
-        r#"{ "id": "probe", "title": "Probe", "format": "markdown", "output": "probe.md",
-             "sections": [{ "title": "Families", "content": "families" }] }"#,
-    )
-    .expect("parses");
+    let profile = Probe_Section(r#"{ "title": "Families", "content": "families" }"#);
 
-    let projection = Select_Projection(store, &profile).expect("selects");
+    let projection = Select_Projection(store, &profile)
+        .expect("the probe profile parses and the store declares relations");
 
     return projection
         .sections

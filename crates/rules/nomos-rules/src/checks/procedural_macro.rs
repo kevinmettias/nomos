@@ -37,6 +37,9 @@ const PROCEDURAL_MACRO_ATTRIBUTE: &str = "proc_macro";
 /// How far above the attribute an explanation may sit and still be its explanation.
 const JUSTIFICATION_WINDOW_LINES: usize = 3;
 
+/// The two bytes that open an attribute.
+const ATTRIBUTE_OPENING_LENGTH: usize = 2;
+
 /// Reports a bare `#[proc_macro]` with no adjacent comment saying why the pattern needs
 /// true Rust-syntax parsing.
 #[must_use]
@@ -62,7 +65,8 @@ fn Procedural_Macro_Findings_In(source: &SourceFile) -> Vec<Finding>
     {
         if Declares_A_Function_Like_Procedural_Macro(&Code_Prefix(line)) && !Has_Adjacent_Explanation(&lines, index)
         {
-            findings.push(Procedural_Macro_Finding(source, index.saturating_add(1)));
+            let finding = Procedural_Macro_Finding(source, index.saturating_add(1));
+            findings.push(finding);
         }
     }
 
@@ -78,14 +82,14 @@ fn Declares_A_Function_Like_Procedural_Macro(code: &str) -> bool
     while let Some(offset) = code.get(searched_from..).and_then(|rest| return rest.find("#["))
     {
         let start = searched_from.saturating_add(offset);
-        let inside = code.get(start.saturating_add(2)..).unwrap_or("");
+        let inside = code.get(start.saturating_add(ATTRIBUTE_OPENING_LENGTH)..).unwrap_or("");
 
         if Closes_Immediately_After_The_Name(inside)
         {
             return true;
         }
 
-        searched_from = start.saturating_add(2);
+        searched_from = start.saturating_add(ATTRIBUTE_OPENING_LENGTH);
     }
 
     return false;
@@ -159,7 +163,7 @@ mod tests
     #[test]
     fn Test_Check_Prefer_Macro_Rules_Over_Procedural_Macros_Should_Report_A_Bare_Attribute()
     {
-        let sources = vec![Source("demo/src/a.rs", &Attribute(""))];
+        let sources = vec![Source("demo/src/a.rs", Attribute(""))];
 
         let findings = Check_Prefer_Macro_Rules_Over_Procedural_Macros(&sources);
 
@@ -175,8 +179,8 @@ mod tests
     fn Test_Check_Prefer_Macro_Rules_Over_Procedural_Macros_Should_Accept_The_Derive_And_Attribute_Forms()
     {
         let sources = vec![
-            Source("demo/src/a.rs", &Attribute("_derive(Thing)")),
-            Source("demo/src/b.rs", &Attribute("_attribute")),
+            Source("demo/src/a.rs", Attribute("_derive(Thing)")),
+            Source("demo/src/b.rs", Attribute("_attribute")),
         ];
 
         let findings = Check_Prefer_Macro_Rules_Over_Procedural_Macros(&sources);
@@ -191,7 +195,7 @@ mod tests
             "// The pattern reads the caller's own token stream and rewrites it, which no\n// declarative macro can express.\n{}",
             Attribute("")
         );
-        let sources = vec![Source("demo/src/a.rs", &text)];
+        let sources = vec![Source("demo/src/a.rs", text.to_owned())];
 
         let findings = Check_Prefer_Macro_Rules_Over_Procedural_Macros(&sources);
 
@@ -202,7 +206,7 @@ mod tests
     fn Test_Check_Prefer_Macro_Rules_Over_Procedural_Macros_Should_Not_Accept_A_Wordless_Comment()
     {
         let text = format!("// ----\n{}", Attribute(""));
-        let sources = vec![Source("demo/src/a.rs", &text)];
+        let sources = vec![Source("demo/src/a.rs", text.to_owned())];
 
         let findings = Check_Prefer_Macro_Rules_Over_Procedural_Macros(&sources);
 
@@ -213,7 +217,7 @@ mod tests
     fn Test_Check_Prefer_Macro_Rules_Over_Procedural_Macros_Should_Ignore_A_Commented_Attribute()
     {
         let text = format!("// {}", Attribute(""));
-        let sources = vec![Source("demo/src/a.rs", &text)];
+        let sources = vec![Source("demo/src/a.rs", text.to_owned())];
 
         let findings = Check_Prefer_Macro_Rules_Over_Procedural_Macros(&sources);
 
@@ -223,7 +227,7 @@ mod tests
     #[test]
     fn Test_Check_Prefer_Macro_Rules_Over_Procedural_Macros_Should_Ignore_A_Language_It_Does_Not_Judge()
     {
-        let sources = vec![Source("demo/src/a.go", &Attribute(""))];
+        let sources = vec![Source("demo/src/a.go", Attribute(""))];
 
         let findings = Check_Prefer_Macro_Rules_Over_Procedural_Macros(&sources);
 
@@ -238,7 +242,7 @@ mod tests
         return format!("#[{PROCEDURAL_MACRO_ATTRIBUTE}{suffix}]");
     }
 
-    fn Source(path: &str, text: &str) -> SourceFile
+    fn Source(path: &str, text: String) -> SourceFile
     {
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
         source.language = crate::Recognized_Language_In_Tests(path);

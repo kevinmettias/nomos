@@ -14,8 +14,19 @@ use crate::register::{Register, VOLUMES};
 use crate::headings::{
     Appendix, End_To_End, Headings_Matching, Lettered, Prefixed, Section_Six, Under_Path,
 };
-use crate::volumes::{Code_Blocks, Fence_Lines, Named_Models, Table_Under, Tables, Volume_Census};
+use crate::volumes::{
+    Code_Blocks, Fence_Lines, Named_Models, TableHeading, Table_Under, Tables, Volume_Census,
+};
 use std::path::{Path, PathBuf};
+
+/// The heading depth a document's own top-level sections sit at: `## D. …`.
+const LETTERED_DEPTH: usize = 3;
+
+/// The heading depth a numbered subsection sits at: `### D.7. …`.
+const SUBSECTION_DEPTH: usize = 4;
+
+/// How many numeric parts `"D.7 …"` numbers to, against `"D. …"`.
+const NESTED_PARTS: usize = 2;
 
 fn Corpus() -> Option<PathBuf>
 {
@@ -31,31 +42,83 @@ fn Archives() -> Option<PathBuf>
     return Some(root);
 }
 
+/// Both roots the register is measured against, or none of them.
+struct Corpora
+{
+    corpus: PathBuf,
+    archives: PathBuf,
+}
+
+/// The two corpora this suite reads, when the environment names both.
+///
+/// One set without the other is refused rather than half-measured: every entry the missing
+/// corpus explains would report as a divergence from a figure nobody could check.
+fn Corpora_From_Environment() -> Option<Corpora>
+{
+    let (corpus, archives) = (Corpus(), Archives());
+
+    assert!(
+        corpus.is_some() == archives.is_some(),
+        "one of NOMOS_V14_CORPUS and NOMOS_SPEC_ARCHIVES is set without the other, so \
+         half the register would go unmeasured"
+    );
+
+    return corpus.zip(archives).map(|(corpus, archives)| return Corpora {
+        corpus,
+        archives,
+    });
+}
+
 /// The half that needs the corpus. Every entry is re-measured; an entry with no extractor
 /// fails rather than passing unmeasured.
 #[test]
 fn Test_Every_Registered_Count_Should_Reproduce_From_The_Corpus()
 {
-    let (Some(corpus), Some(archives)) = (Corpus(), Archives())
+    let Some(Corpora { corpus, archives }) = Corpora_From_Environment()
     else
     {
-        assert!(
-            Corpus().is_none() && Archives().is_none(),
-            "one of NOMOS_V14_CORPUS and NOMOS_SPEC_ARCHIVES is set without the other, so \
-             half the register would go unmeasured"
-        );
         return;
     };
+    let measured = Re_Measure(&corpus, &archives);
+
+    assert!(
+        measured.diverged.is_empty(),
+        "{} of {} register entries no longer reproduce from the corpus:\n  {}",
+        measured.diverged.len(),
+        measured.checked,
+        measured.diverged.join("\n  ")
+    );
+
+    assert_eq!(
+        measured.checked,
+        u32::try_from(Register().len()).unwrap_or(u32::MAX),
+        "an entry was skipped"
+    );
+}
+
+/// What re-measuring the whole register found: how many entries were reached, and the
+/// entries whose register figure the corpus no longer reproduces.
+struct ReMeasurement
+{
+    checked: u32,
+    diverged: Vec<String>,
+}
+
+/// Every register entry re-measured.
+///
+/// Divergences are collected rather than asserted one at a time, deliberately. Asserting
+/// inside the loop stops at the first divergence, so a register that has fallen behind the
+/// corpus by five entries takes five runs to enumerate, and each run reports one number
+/// without saying whether it is the only one. `P103` needed the whole set before re-measuring
+/// anything, because which entries moved is a measurement rather than a prediction.
+fn Re_Measure(corpus: &Path, archives: &Path) -> ReMeasurement
+{
     let mut checked = 0_u32;
-    // Collected rather than asserted one at a time, deliberately. Asserting inside the loop
-    // stops at the first divergence, so a register that has fallen behind the corpus by five
-    // entries takes five runs to enumerate, and each run reports one number without saying
-    // whether it is the only one. `P103` needed the whole set before re-measuring anything,
-    // because which entries moved is a measurement rather than a prediction.
     let mut diverged: Vec<String> = Vec::new();
+
     for entry in Register()
     {
-        let measured = Measure(&entry.id, &corpus, &archives);
+        let measured = Measure(&entry.id, corpus, archives);
 
         if measured != entry.measured
         {
@@ -67,18 +130,10 @@ fn Test_Every_Registered_Count_Should_Reproduce_From_The_Corpus()
         checked = checked.saturating_add(1);
     }
 
-    assert!(
-        diverged.is_empty(),
-        "{} of {checked} register entries no longer reproduce from the corpus:\n  {}",
-        diverged.len(),
-        diverged.join("\n  ")
-    );
-
-    assert_eq!(
+    return ReMeasurement {
         checked,
-        u32::try_from(Register().len()).unwrap_or(u32::MAX),
-        "an entry was skipped"
-    );
+        diverged,
+    };
 }
 
 /// The extractor for one entry. An unknown identifier panics: a register entry nothing
@@ -128,25 +183,25 @@ fn Volume_Figure(id: &str, corpus: &Path) -> Option<u32>
     {
         "domain_model.pipe_lines" =>
         {
-            Some(Table_Under(corpus, "02-core", "5. Canonical domain model").lines)
+            Some(Table_Under(corpus, "02-core", TableHeading("5. Canonical domain model")).lines)
         }
         "domain_model.rows" =>
         {
-            Some(Table_Under(corpus, "02-core", "5. Canonical domain model").content)
+            Some(Table_Under(corpus, "02-core", TableHeading("5. Canonical domain model")).content)
         }
         "domain_model.named_models" => Some(Named_Models(corpus)),
         "roadmap.milestones" =>
         {
-            Some(Headings_Matching(corpus, "08-roadmap", 3, &["Foundation ", "Release "]))
+            Some(Headings_Matching(corpus, "08-roadmap", LETTERED_DEPTH, &["Foundation ", "Release "]))
         }
-        "roadmap.releases" => Some(Headings_Matching(corpus, "08-roadmap", 3, &["Release "])),
+        "roadmap.releases" => Some(Headings_Matching(corpus, "08-roadmap", LETTERED_DEPTH, &["Release "])),
         "scenario.end_to_end" => Some(End_To_End(corpus)),
         "service.section_6_headings" => Some(Section_Six(corpus).all),
         "service.leaf_headings" => Some(Section_Six(corpus).leaves),
         "service.service_headings" => Some(Section_Six(corpus).services),
         "service.subsystem_table_rows" =>
         {
-            Some(Table_Under(corpus, "02-core", "6. Systems and subsystem responsibilities").content)
+            Some(Table_Under(corpus, "02-core", TableHeading("6. Systems and subsystem responsibilities")).content)
         }
         _ => None,
     };
@@ -161,30 +216,30 @@ fn Appendix_Figure(id: &str, corpus: &Path) -> Option<u32>
     };
     let profiles = Appendix {
         letter: 'D',
-        parts: 2,
+        parts: NESTED_PARTS,
     };
 
     return match id
     {
         "scenario.appendix_g_sections" =>
         {
-            Some(Lettered(corpus, "09-reference", 3, Appendix { letter: 'G', parts: 1 }))
+            Some(Lettered(corpus, "09-reference", LETTERED_DEPTH, Appendix { letter: 'G', parts: 1 }))
         }
-        "appendix_d.sections" => Some(Lettered(corpus, "09-reference", 3, sections)),
-        "appendix_d.report_profiles" => Some(Lettered(corpus, "09-reference", 4, profiles)),
+        "appendix_d.sections" => Some(Lettered(corpus, "09-reference", LETTERED_DEPTH, sections)),
+        "appendix_d.report_profiles" => Some(Lettered(corpus, "09-reference", SUBSECTION_DEPTH, profiles)),
         "appendix_d.members" =>
         {
-            let under = Lettered(corpus, "09-reference", 3, sections);
-            let reports = Lettered(corpus, "09-reference", 4, profiles);
+            let under = Lettered(corpus, "09-reference", LETTERED_DEPTH, sections);
+            let reports = Lettered(corpus, "09-reference", SUBSECTION_DEPTH, profiles);
 
             Some(under.saturating_add(reports))
         }
         "appendix_h.sections" =>
         {
-            Some(Lettered(corpus, "06-agents", 3, Appendix { letter: 'H', parts: 1 }))
+            Some(Lettered(corpus, "06-agents", LETTERED_DEPTH, Appendix { letter: 'H', parts: 1 }))
         }
-        "headless_inventory.sections" => Some(Prefixed(corpus, "07-clients", 4, "E.1.")),
-        "ide_profiles.sections" => Some(Prefixed(corpus, "07-clients", 4, "F.1.")),
+        "headless_inventory.sections" => Some(Prefixed(corpus, "07-clients", SUBSECTION_DEPTH, "E.1.")),
+        "ide_profiles.sections" => Some(Prefixed(corpus, "07-clients", SUBSECTION_DEPTH, "F.1.")),
         _ => None,
     };
 }
@@ -198,16 +253,16 @@ fn Glossary_Figure(id: &str, corpus: &Path) -> Option<u32>
     {
         "glossary.table_terms" =>
         {
-            Some(Table_Under(corpus, "09-reference", "Glossary").content)
+            Some(Table_Under(corpus, "09-reference", TableHeading("Glossary")).content)
         }
         "glossary.extended_terms" =>
         {
-            Some(Under_Path(corpus, "09-reference", 4, extended))
+            Some(Under_Path(corpus, "09-reference", SUBSECTION_DEPTH, extended))
         }
         "glossary.definitions" =>
         {
-            let tabled = Table_Under(corpus, "09-reference", "Glossary").content;
-            let prose = Under_Path(corpus, "09-reference", 4, extended);
+            let tabled = Table_Under(corpus, "09-reference", TableHeading("Glossary")).content;
+            let prose = Under_Path(corpus, "09-reference", SUBSECTION_DEPTH, extended);
 
             Some(tabled.saturating_add(prose))
         }

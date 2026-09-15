@@ -7,6 +7,11 @@
 use crate::store::{For_Building, Populated, Profile_Named, Rendered};
 use nomos_spec_project::Build;
 
+/// The two pipes that close off the left and right edges of a markdown table row. The interior
+/// separators the row carries are the `" | "` occurrences counted below, so adding these two
+/// gives the row's total pipe count to set against the number of cells it splits into.
+const ROW_EDGE_PIPES: usize = 2;
+
 #[test]
 fn Test_A_Markdown_Table_Cell_Should_Not_Break_The_Table()
 {
@@ -17,7 +22,7 @@ fn Test_A_Markdown_Table_Cell_Should_Not_Break_The_Table()
     for line in rendered.lines().filter(|line| return line.starts_with("| "))
     {
         assert_eq!(
-            line.matches(" | ").count() + 2,
+            line.matches(" | ").count() + ROW_EDGE_PIPES,
             line.split(" | ").count() + 1,
             "a cell split the row: {line}"
         );
@@ -49,9 +54,11 @@ fn Test_A_Context_Pack_Should_Carry_Its_Inputs_Digest()
     // none. `For_Building` supplies the fixture's own subject for exactly the profiles that
     // need one, which is the same thing every other caller in this suite does.
     let profile = For_Building(&Profile_Named("implementation-context-pack"));
-    let output = Build(&store, &profile).expect("builds");
+    let output = Build(&store, &profile)
+        .expect("For_Building supplied the subject this profile's output path needs");
 
-    let parsed: serde_json::Value = serde_json::from_str(&output.body).expect("is json");
+    let parsed: serde_json::Value =
+        serde_json::from_str(&output.body).expect("the context pack renders JSON, so its body parses as JSON");
 
     assert_eq!(
         parsed.get("inputs_digest").and_then(serde_json::Value::as_str),
@@ -63,9 +70,11 @@ fn Test_A_Context_Pack_Should_Carry_Its_Inputs_Digest()
 fn Test_A_Yaml_Projection_Should_Parse_As_Yaml()
 {
     let store = Populated();
-    let output = Build(&store, &Profile_Named("contract-yaml")).expect("builds");
+    let output = Build(&store, &Profile_Named("contract-yaml"))
+        .expect("contract-yaml is a whole-store profile over the populated fixture");
 
-    let parsed: serde_yaml_ng::Value = serde_yaml_ng::from_str(&output.body).expect("is yaml");
+    let parsed: serde_yaml_ng::Value = serde_yaml_ng::from_str(&output.body)
+        .expect("the contract-yaml profile renders YAML, so its body parses as YAML");
 
     assert_eq!(
         parsed.get("nomos_generated").and_then(serde_yaml_ng::Value::as_bool),
@@ -81,7 +90,7 @@ fn Test_An_Html_Projection_Should_Escape_What_It_Renders()
     let mut store = Populated();
     let document = store
         .Put_Source_Document("volumes/04-escapes.md", "v14.36", "# Escapes\n\n<script>x</script>\n")
-        .expect("stores");
+        .expect("the in-memory store accepted the source document this test wrote");
     store
         .Put_Source_Blocks(document, &Segment("# Escapes\n\n<script>x</script>\n"))
         .expect("stores blocks");
@@ -92,8 +101,12 @@ fn Test_An_Html_Projection_Should_Escape_What_It_Renders()
     assert!(!rendered.contains("<script>"), "the renderer emitted raw markup");
 }
 
+/// How many profiles this claim checks against the seeded governing records, which is the
+/// length the array below is declared at.
+const GOVERNING_RECORD_PROFILE_COUNT: usize = 2;
+
 /// Every profile this claim checks against the seeded governing records.
-fn Governing_Record_Profile_Ids() -> [&'static str; 2]
+fn Governing_Record_Profile_Ids() -> [&'static str; GOVERNING_RECORD_PROFILE_COUNT]
 {
     return ["domain-specification", "html-site"];
 }
@@ -103,14 +116,20 @@ fn Test_The_Governing_Records_Should_Project_As_A_Document_Suite()
 {
     use nomos_spec_store::SpecificationStore;
 
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    nomos_spec_store::Seed_Governing_Records(&mut store).expect("seeds");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("an in-memory store is constructed for this test");
+    nomos_spec_store::Seed_Governing_Records(&mut store)
+        .expect("the seed wrote the governing records into the store this test opened");
 
     for id in Governing_Record_Profile_Ids()
     {
         Assert_Profile_Projects_The_Governing_Records(&store, id);
     }
 }
+
+/// The floor a profile's input count has to clear before consuming the governing records is
+/// evidence it read them rather than a handful of records that happen to be seeded.
+const GOVERNING_RECORD_INPUT_FLOOR: usize = 100;
 
 /// One profile, built twice and checked: it rebuilds to itself, it carries the governing
 /// records' own text, and it consumed enough of them for the count to be more than a
@@ -122,7 +141,8 @@ fn Assert_Profile_Projects_The_Governing_Records(store: &nomos_spec_store::Speci
     // the message because the caller builds two of them and `second` below is a plain
     // `expect`: this is the only arm that can say which profile refused its first build.
     let first = Build(store, &profile).unwrap_or_else(|error| panic!("{id}: {error}"));
-    let second = Build(store, &profile).expect("rebuilds");
+    let second = Build(store, &profile)
+        .expect("the same profile over the same store rebuilds to the same body");
 
     assert_eq!(first.body, second.body, "{id} does not rebuild to itself");
     assert!(
@@ -130,7 +150,7 @@ fn Assert_Profile_Projects_The_Governing_Records(store: &nomos_spec_store::Speci
         "{id} projected none of the records that govern it"
     );
     assert!(
-        first.stamp.inputs.len() > 100,
+        first.stamp.inputs.len() > GOVERNING_RECORD_INPUT_FLOOR,
         "{id} consumed {} inputs from the governing records",
         first.stamp.inputs.len()
     );
@@ -148,23 +168,17 @@ fn Assert_Profile_Projects_The_Governing_Records(store: &nomos_spec_store::Speci
 #[test]
 fn Test_A_Packed_Neighbour_Should_Carry_Its_Declared_Status()
 {
-    let mut store = nomos_spec_store::SpecificationStore::In_Memory().expect("opens");
-    nomos_spec_store::Seed_Governing_Records(&mut store).expect("seeds");
+    let mut store = nomos_spec_store::SpecificationStore::In_Memory()
+        .expect("an in-memory store is constructed for this test");
+    nomos_spec_store::Seed_Governing_Records(&mut store)
+        .expect("the seed wrote the governing records into the store this test opened");
     let profile = Profile_Named("implementation-context-pack")
         .For(Some("OD-PROJECT-005"))
         .expect("this profile is per-subject");
 
-    let output = Build(&store, &profile).expect("builds");
-    let parsed: serde_json::Value = serde_json::from_str(&output.body).expect("is json");
-
-    let neighbourhood = parsed
-        .get("sections")
-        .and_then(serde_json::Value::as_array)
-        .and_then(|sections| return sections.iter().find(|section| return section.get("title").and_then(serde_json::Value::as_str) == Some("Neighbourhood")))
-        .and_then(|section| return section.get("items"))
-        .and_then(serde_json::Value::as_array)
-        .cloned()
-        .unwrap_or_default();
+    let output = Build(&store, &profile)
+        .expect("the pack renders over the seeded store for the subject it names");
+    let neighbourhood = Neighbourhood_Items(&output.body);
 
     assert!(!neighbourhood.is_empty(), "the pack cited no neighbour: {}", output.body);
     assert!(
@@ -174,6 +188,25 @@ fn Test_A_Packed_Neighbour_Should_Carry_Its_Declared_Status()
         "no cited neighbour carried a declared status: {}",
         output.body
     );
+}
+
+/// The items of the pack's `Neighbourhood` section, read out of its rendered JSON body.
+///
+/// Empty when the pack carries no such section at all, which is why the caller asserts the
+/// items are non-empty rather than treating an empty read as an answer.
+fn Neighbourhood_Items(body: &str) -> Vec<serde_json::Value>
+{
+    let parsed: serde_json::Value =
+        serde_json::from_str(body).expect("the context pack renders JSON, so its body parses as JSON");
+
+    return parsed
+        .get("sections")
+        .and_then(serde_json::Value::as_array)
+        .and_then(|sections| return sections.iter().find(|section| return section.get("title").and_then(serde_json::Value::as_str) == Some("Neighbourhood")))
+        .and_then(|section| return section.get("items"))
+        .and_then(serde_json::Value::as_array)
+        .cloned()
+        .unwrap_or_default();
 }
 
 /// An identifier naming another item of the same projection is a link to it.

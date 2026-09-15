@@ -28,91 +28,15 @@
 //! capability slice and a materialization are orchestration concepts, and a descriptor table
 //! naming one would be a lower band describing an upper band's shape.
 
-use crate::SourceFile;
-use nomos_analysis::FactReader;
-use nomos_contracts::{CapabilityId, Finding, RuleId};
+use nomos_contracts::RuleId;
 
-/// A rule's own judgment, in the one shape every rule can be called through.
-///
-/// A plain `fn` pointer rather than a trait object or a closure, because [`DESCRIPTORS`] is
-/// a `const` and a `fn` pointer is the only callable a `const` can hold. That is what makes
-/// the table below the whole declaration of a rule rather than half of one, and it is what
-/// lets `nomos_check_orchestration` derive its run from this list instead of writing a
-/// second copy of it by hand -- `OD-RULES-027`.
-///
-/// Both parameters are taken by every rule and read by most. A rule that judges only source
-/// text is widened here with a closure that ignores the reader, and the two rules whose
-/// whole subject arrives through the reader are widened with one that ignores the sources;
-/// neither wrapper decides anything, which is why they are spelled inline in the table
-/// rather than given names of their own.
-///
-/// The sources a rule is handed are not always the walked ones. Six rules read a capability
-/// family's own materialized slice instead, and which six is `nomos_check_orchestration`'s
-/// to say, not this table's: a capability slice is an orchestration concept, and a
-/// descriptor naming one would be a lower band describing an upper band's shape.
-/// `OD-RULES-027` decided that split and why the mapping that remains there is a
-/// declaration rather than the demand planner `OD-RULES-009` declines.
-pub type RuleJudgment = fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>;
+pub use required_fact::RequiredFact;
+pub use rule_judgment::RuleJudgment;
+pub use subject_kind::SubjectKind;
 
-/// What a rule reads to reach a judgment.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum SubjectKind
-{
-    /// The text of each walked source, judged without consulting the fact store.
-    SourceText,
-    /// Facts filed under each walked source's own subject.
-    SourceFacts,
-    /// One whole-workspace fact, with no per-source subject of its own.
-    Workspace,
-}
-
-/// A capability family a rule reads facts from.
-///
-/// A closed set naming the families this workspace has, rather than a string: each variant
-/// resolves through the capability crate that owns the contract, so the identifier is
-/// spelled once, where it is declared, and not again here.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum RequiredFact
-{
-    SyntaxItems,
-    DependencyEdges,
-    LintDiagnostics,
-    DependencyPolicy,
-    Reachability,
-    NamingPolicy,
-    LimitsPolicy,
-    ScriptingPolicy,
-    GoalsPolicy,
-    WordsPolicy,
-    ReviewFindings,
-    RequirementTrace,
-    ArchitectureDeclaration,
-}
-
-impl RequiredFact
-{
-    /// The canonical identifier of the capability this family names.
-    #[must_use]
-    pub fn Capability(self) -> CapabilityId
-    {
-        return match self
-        {
-            Self::SyntaxItems => nomos_cap_syntax::Capability(),
-            Self::DependencyEdges => nomos_cap_dependency::Capability(),
-            Self::LintDiagnostics => nomos_cap_lint::Capability(),
-            Self::DependencyPolicy => nomos_cap_dependency_policy::Capability(),
-            Self::Reachability => nomos_cap_controlflow::Capability(),
-            Self::NamingPolicy => nomos_cap_naming_policy::Capability(),
-            Self::LimitsPolicy => nomos_cap_limits_policy::Capability(),
-            Self::ScriptingPolicy => nomos_cap_scripting_policy::Capability(),
-            Self::GoalsPolicy => nomos_cap_goals_policy::Capability(),
-            Self::WordsPolicy => nomos_cap_words_policy::Capability(),
-            Self::ReviewFindings => nomos_connector_coderabbit::Capability(),
-            Self::RequirementTrace => nomos_cap_requirement_trace::Capability(),
-            Self::ArchitectureDeclaration => nomos_cap_architecture::Capability(),
-        };
-    }
-}
+mod required_fact;
+mod rule_judgment;
+mod subject_kind;
 
 /// One rule: what it reads, what a run must have materialized before it can be judged, the
 /// authority it answers to, and the judgment itself.

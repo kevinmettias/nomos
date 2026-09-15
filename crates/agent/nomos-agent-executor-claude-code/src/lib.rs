@@ -135,6 +135,69 @@ pub fn Execute_In<Launcher: ProcessLauncher>(
     return Dispatch(task, launcher, capability, root);
 }
 
+/// The envelope, as the engine's own task.
+pub(crate) fn Task_For(task: &TaskEnvelope) -> AgentTask
+{
+    let asked = AgentTask::Of(Goal_For(task)).Answering(String::from(JSON_SCHEMA));
+    return match Effort_For(task.effort)
+    {
+        Some(effort) => asked.With_Effort(effort),
+        None => asked,
+    };
+}
+
+/// The goal, with the rules the envelope declares named inside it.
+///
+/// Advisory and stated as such: telling a model what binds it is not enforcement,
+/// and `OD-EXECUTOR-007` decided the validation half stays undecided until there
+/// is a real `WorkResult` to check rules against. The goal's own text is the only
+/// channel left for it — the separate system-prompt flag this originally used went
+/// with the 2026-09-12 dispatch migration.
+fn Goal_For(task: &TaskEnvelope) -> String
+{
+    if task.applicable_rules.is_empty()
+    {
+        return task.goal.clone();
+    }
+
+    let named =
+        task.applicable_rules.iter().map(|rule| rule.As_Str()).collect::<Vec<_>>().join(", ");
+    return format!("{} (bound by these rules: {named})", task.goal);
+}
+
+/// The boundary this dispatch runs inside.
+///
+/// The tightest the engine offers, plus a spend ceiling: an empty directory that
+/// goes away afterward, and no capability granted at all. This crate has never
+/// dispatched under anything wider, and stating it here rather than leaning on a
+/// default is what keeps that visible.
+pub(crate) fn Capability() -> AgentCapability
+{
+    return AgentCapability::Isolated(DEFAULT_TIMEOUT).Spending_At_Most(MAXIMUM_SPEND);
+}
+
+/// This workspace's effort, as the engine's.
+///
+/// [`EffortLevel::BackendDefault`] maps to `None`, which omits the request
+/// entirely rather than naming a value meaning "the default".
+///
+/// [`EffortLevel::Minimal`] has no distinct counterpart below `Low` and is mapped
+/// there — this crate's own approximation, not a claim of an exact match. The
+/// engine's own `ExtraHigh` has no counterpart here, because this workspace's
+/// enumeration closes at six values; it is not folded into `High` or `Maximum` to
+/// pretend otherwise.
+pub(crate) fn Effort_For(effort: EffortLevel) -> Option<EngineEffort>
+{
+    return match effort
+    {
+        EffortLevel::BackendDefault => None,
+        EffortLevel::Minimal | EffortLevel::Low => Some(EngineEffort::Low),
+        EffortLevel::Medium => Some(EngineEffort::Medium),
+        EffortLevel::High => Some(EngineEffort::High),
+        EffortLevel::Maximum => Some(EngineEffort::Maximum),
+    };
+}
+
 /// The one call into the engine, over a boundary already decided on, between the
 /// two envelope constraints this crate enforces itself.
 fn Dispatch<Launcher: ProcessLauncher>(
@@ -235,69 +298,6 @@ fn Refuse_Changed_Paths(
         }
     }
     return Ok(());
-}
-
-/// The envelope, as the engine's own task.
-pub(crate) fn Task_For(task: &TaskEnvelope) -> AgentTask
-{
-    let asked = AgentTask::Of(Goal_For(task)).Answering(String::from(JSON_SCHEMA));
-    return match Effort_For(task.effort)
-    {
-        Some(effort) => asked.With_Effort(effort),
-        None => asked,
-    };
-}
-
-/// The goal, with the rules the envelope declares named inside it.
-///
-/// Advisory and stated as such: telling a model what binds it is not enforcement,
-/// and `OD-EXECUTOR-007` decided the validation half stays undecided until there
-/// is a real `WorkResult` to check rules against. The goal's own text is the only
-/// channel left for it — the separate system-prompt flag this originally used went
-/// with the 2026-09-12 dispatch migration.
-fn Goal_For(task: &TaskEnvelope) -> String
-{
-    if task.applicable_rules.is_empty()
-    {
-        return task.goal.clone();
-    }
-
-    let named =
-        task.applicable_rules.iter().map(|rule| rule.As_Str()).collect::<Vec<_>>().join(", ");
-    return format!("{} (bound by these rules: {named})", task.goal);
-}
-
-/// The boundary this dispatch runs inside.
-///
-/// The tightest the engine offers, plus a spend ceiling: an empty directory that
-/// goes away afterward, and no capability granted at all. This crate has never
-/// dispatched under anything wider, and stating it here rather than leaning on a
-/// default is what keeps that visible.
-pub(crate) fn Capability() -> AgentCapability
-{
-    return AgentCapability::Isolated(DEFAULT_TIMEOUT).Spending_At_Most(MAXIMUM_SPEND);
-}
-
-/// This workspace's effort, as the engine's.
-///
-/// [`EffortLevel::BackendDefault`] maps to `None`, which omits the request
-/// entirely rather than naming a value meaning "the default".
-///
-/// [`EffortLevel::Minimal`] has no distinct counterpart below `Low` and is mapped
-/// there — this crate's own approximation, not a claim of an exact match. The
-/// engine's own `ExtraHigh` has no counterpart here, because this workspace's
-/// enumeration closes at six values; it is not folded into `High` or `Maximum` to
-/// pretend otherwise.
-pub(crate) fn Effort_For(effort: EffortLevel) -> Option<EngineEffort>
-{
-    return match effort
-    {
-        EffortLevel::BackendDefault => None,
-        EffortLevel::Minimal | EffortLevel::Low => Some(EngineEffort::Low),
-        EffortLevel::Medium => Some(EngineEffort::Medium),
-        EffortLevel::High => Some(EngineEffort::High),
-        EffortLevel::Maximum => Some(EngineEffort::Maximum),
-    };
 }
 
 #[cfg(test)]

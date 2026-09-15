@@ -4,8 +4,26 @@
 //! one. What stays here is what is specific to `list` and `audit`: the item text this
 //! suite authors, and the two readings it takes.
 
+use crate::board::CaseName;
+
 /// Far enough ahead that a lease written here is live whenever the suite runs.
 const FOREVER: i64 = 4_102_444_800;
+
+/// The JSON list of territory paths one item declares, told apart from the id it is filed
+/// under and the standing beside it.
+///
+/// [`Item`] and [`Item_Declined`] take three texts in a row, so a caller who wrote two of them
+/// the other way round would author an item whose id is a path array and whose paths are an
+/// id -- compiling, and refused later by a ledger parser that could only say "invalid".
+pub(crate) struct TerritoryPaths<'a>(&'a str);
+
+impl<'a> From<&'a str> for TerritoryPaths<'a>
+{
+    fn from(paths: &'a str) -> Self
+    {
+        return Self(paths);
+    }
+}
 
 pub(crate) struct Board
 {
@@ -14,8 +32,15 @@ pub(crate) struct Board
 
 impl Board
 {
-    pub(crate) fn New(name: &str, items: &str) -> Self
+    /// A board holding `items`, named for the case it is about.
+    ///
+    /// The name carries its own type because the ledger text beside it does not: both are
+    /// `&str` at every call site, and a caller who swapped them would name a directory after a
+    /// ledger.
+    pub(crate) fn New<'a>(name: impl Into<CaseName<'a>>, items: &str) -> Self
     {
+        let name = name.into();
+
         return Self {
             scratch: crate::board::Board::New(
                 "list",
@@ -84,8 +109,13 @@ pub(crate) struct Standing<'a>
 }
 
 /// One item, authored inline so each test's board is readable in the test.
-pub(crate) fn Item(id: &str, paths: &str, standing: Standing<'_>) -> String
+pub(crate) fn Item<'a>(
+    id: &str,
+    paths: impl Into<TerritoryPaths<'a>>,
+    standing: Standing<'_>,
+) -> String
 {
+    let paths = paths.into().0;
     let Standing { state, depends_on, tail } = standing;
 
     return format!(
@@ -101,8 +131,14 @@ pub(crate) const NO_CLAIM: &str = "\"claim\":null,\"verification\":null,\"verifi
 
 /// A `Declined` item, whose state is a struct variant carrying a reason rather than the bare
 /// word [`Item`] inserts for every other state — `Standing::state` cannot express it.
-pub(crate) fn Item_Declined(id: &str, paths: &str, reason: &str) -> String
+pub(crate) fn Item_Declined<'a>(
+    id: &str,
+    paths: impl Into<TerritoryPaths<'a>>,
+    reason: &str,
+) -> String
 {
+    let paths = paths.into().0;
+
     return format!(
         "{{\"id\":\"{id}\",\"title\":\"item {id}\",\"why\":\"because\",\
          \"done_when\":\"the tests pass\",\

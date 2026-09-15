@@ -1,12 +1,14 @@
 //! Describing the form of a declaration in the words the payload uses.
 
-/// Whether an `impl` block serves a trait or is inherent, and which type parameters it
-/// declares of its own.
+/// The shape an `impl` block has: whether it serves a trait or is inherent, and which type
+/// parameters it declares of its own.
 ///
 /// The first is the only thing that tells two `impl` blocks for one type apart. A member of
 /// `impl Display for Table` carries the same qualified name as a member of `impl Table` and
 /// does not belong to `Table` the same way, which is a distinction a consumer cannot
-/// recover from any other field.
+/// recover from any other field. Read off the block here rather than handed in as a bare
+/// `true`/`false`: at a call site a position is not a name, and the name this one gets is
+/// [`nomos_cap_syntax::ImplLabel`].
 ///
 /// The second is `OD-CAPABILITY-014`'s extension, and it answers a question no other field
 /// can either: an `impl` block's own recorded name is [`Type_Head`] of its self type, so
@@ -18,14 +20,23 @@
 /// const generics. That is the whole of what the record put in scope, and it is not a
 /// simplification here: neither of those can ever collide with an `impl` block's own
 /// recorded name, which is the one need the extension was measured for.
-pub(super) fn Impl_Shape(serves_a_trait: bool, generics: &syn::Generics) -> String
+pub(super) fn Impl_Shape(block: &syn::ItemImpl) -> String
 {
-    let parameters: Vec<String> = generics
+    let parameters: Vec<String> = block
+        .generics
         .type_params()
         .map(|parameter| return parameter.ident.to_string())
         .collect();
+    let label = if block.trait_.is_some()
+    {
+        nomos_cap_syntax::ImplLabel::Trait
+    }
+    else
+    {
+        nomos_cap_syntax::ImplLabel::Inherent
+    };
 
-    return nomos_cap_syntax::Impl_Shape(serves_a_trait, &parameters);
+    return nomos_cap_syntax::Impl_Shape(label, &parameters);
 }
 
 /// The single name a leaf of a use tree binds into this file.
@@ -146,10 +157,14 @@ mod tests
     #[test]
     fn Test_Impl_Shape_Should_Distinguish_A_Trait_Impl_From_An_Inherent_One()
     {
-        let none = syn::Generics::default();
+        // Parsed rather than hand-built, so what is asserted is what a real source file
+        // produces and not what this test believes `syn` produces.
+        let serves_a_trait: syn::ItemImpl =
+            syn::parse_str("impl Display for Table {}").expect("a valid trait impl parses");
+        let inherent: syn::ItemImpl = syn::parse_str("impl Table {}").expect("a valid inherent impl parses");
 
-        assert_eq!(Impl_Shape(true, &none), nomos_cap_syntax::TRAIT);
-        assert_eq!(Impl_Shape(false, &none), nomos_cap_syntax::INHERENT);
+        assert_eq!(Impl_Shape(&serves_a_trait), nomos_cap_syntax::TRAIT);
+        assert_eq!(Impl_Shape(&inherent), nomos_cap_syntax::INHERENT);
     }
 
     /// The blanket-impl shape `OD-CAPABILITY-014` was measured on, parsed rather than
@@ -164,7 +179,7 @@ mod tests
         let block: syn::ItemImpl =
             syn::parse_str("impl<'a, T: AsRef<[u8]>, const N: usize> ToHex for T {}").expect("a valid impl parses");
 
-        let shape = Impl_Shape(block.trait_.is_some(), &block.generics);
+        let shape = Impl_Shape(&block);
         let observed = nomos_cap_syntax::Observation::Present(shape);
 
         assert_eq!(nomos_cap_syntax::Impl_Serves_A_Trait(&observed), Some(true));

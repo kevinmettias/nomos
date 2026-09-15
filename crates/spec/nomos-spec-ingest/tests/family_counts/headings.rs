@@ -14,6 +14,16 @@ use std::path::Path;
 /// Section 6's own heading, spelled as volume 02 titles it.
 const SECTION_SIX: &str = "6. Systems and subsystem responsibilities";
 
+/// The depth an appendix's own sections sit at: `## G. …`.
+const APPENDIX_DEPTH: usize = 3;
+
+/// The depth section 6's own heading sits at. The walk below stops at the next heading at
+/// this level or above, because that is where section 6 ends.
+const SECTION_SIX_DEPTH: usize = 2;
+
+/// The depth of a leaf: the deepest level a numbered section reaches.
+const LEAF_DEPTH: usize = 4;
+
 pub(crate) struct Heading
 {
     pub(crate) depth: usize,
@@ -140,7 +150,7 @@ pub(crate) fn End_To_End(corpus: &Path) -> u32
     let markdown = Volume(corpus, "09-reference");
     let matched = Headings(&markdown)
         .iter()
-        .filter(|heading| return heading.depth == 3)
+        .filter(|heading| return heading.depth == APPENDIX_DEPTH)
         .filter(|heading| {
             return Is_Lettered(&heading.title, 'G', 1)
                 && heading.title.contains("End-to-end scenario:");
@@ -174,14 +184,14 @@ fn Counted_Under_Section_Six(headings: &[Heading]) -> SectionCounts
         {
             inside = true;
         }
-        else if inside && heading.depth <= 2
+        else if inside && heading.depth <= SECTION_SIX_DEPTH
         {
             break;
         }
         if inside
         {
             all = all.saturating_add(1);
-            leaves = leaves.saturating_add(u32::from(heading.depth == 4));
+            leaves = leaves.saturating_add(u32::from(heading.depth == LEAF_DEPTH));
             services = services.saturating_add(u32::from(Names_A_Service(heading)));
         }
     }
@@ -196,7 +206,7 @@ fn Counted_Under_Section_Six(headings: &[Heading]) -> SectionCounts
 /// Whether a leaf heading names a service, which is the count the register quotes.
 fn Names_A_Service(heading: &Heading) -> bool
 {
-    if heading.depth != 4
+    if heading.depth != LEAF_DEPTH
     {
         return false;
     }

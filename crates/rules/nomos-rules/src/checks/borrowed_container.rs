@@ -82,7 +82,8 @@ fn Borrowed_Container_Findings_In(source: &SourceFile) -> Vec<Finding>
 
         if let Some(found) = BORROWED_CONTAINERS.iter().find(|container| return Borrows(&code, container))
         {
-            findings.push(Borrowed_Container_Finding(source, index.saturating_add(1), found));
+            let finding = Borrowed_Container_Finding(source, index.saturating_add(1), found);
+            findings.push(finding);
         }
     }
 
@@ -173,15 +174,15 @@ mod tests
     fn Test_Check_Parameters_Borrow_Unless_Ownership_Is_Taken_Should_Report_Each_Owning_Container()
     {
         let sources = vec![
-            Source("demo/src/a.rs", &Signature("String")),
-            Source("demo/src/b.rs", &Signature("Vec<u8>")),
-            Source("demo/src/c.rs", &Signature("PathBuf")),
-            Source("demo/src/d.rs", &Signature("Box<u8>")),
+            Source("demo/src/a.rs", Signature("String")),
+            Source("demo/src/b.rs", Signature("Vec<u8>")),
+            Source("demo/src/c.rs", Signature("PathBuf")),
+            Source("demo/src/d.rs", Signature("Box<u8>")),
         ];
 
         let findings = Check_Parameters_Borrow_Unless_Ownership_Is_Taken(&sources);
 
-        assert_eq!(findings.len(), 4, "{findings:?}");
+        assert_eq!(findings.len(), BORROWED_CONTAINERS.len(), "{findings:?}");
         let found = findings.first().expect("asserted len 4 above");
         assert_eq!(found.rule, RuleId::New(PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN));
         assert_eq!(found.gate, GateCategory::Blocking);
@@ -191,10 +192,10 @@ mod tests
     fn Test_Check_Parameters_Borrow_Unless_Ownership_Is_Taken_Should_Accept_The_Unsized_View()
     {
         let sources = vec![
-            Source("demo/src/a.rs", &Signature("str")),
-            Source("demo/src/b.rs", &Signature("[u8]")),
-            Source("demo/src/c.rs", &Signature("Path")),
-            Source("demo/src/d.rs", &Signature("u8")),
+            Source("demo/src/a.rs", Signature("str")),
+            Source("demo/src/b.rs", Signature("[u8]")),
+            Source("demo/src/c.rs", Signature("Path")),
+            Source("demo/src/d.rs", Signature("u8")),
         ];
 
         let findings = Check_Parameters_Borrow_Unless_Ownership_Is_Taken(&sources);
@@ -207,7 +208,7 @@ mod tests
     #[test]
     fn Test_Check_Parameters_Borrow_Unless_Ownership_Is_Taken_Should_Accept_An_Owned_Parameter()
     {
-        let sources = vec![Source("demo/src/a.rs", "fn Judged(name: String, items: Vec<u8>, root: PathBuf) -> usize")];
+        let sources = vec![Source("demo/src/a.rs", "fn Judged(name: String, items: Vec<u8>, root: PathBuf) -> usize".to_owned())];
 
         let findings = Check_Parameters_Borrow_Unless_Ownership_Is_Taken(&sources);
 
@@ -219,10 +220,10 @@ mod tests
     fn Test_Check_Parameters_Borrow_Unless_Ownership_Is_Taken_Should_Not_Match_A_Longer_Type_Name()
     {
         let sources = vec![
-            Source("demo/src/a.rs", &Signature("Stringly")),
-            Source("demo/src/b.rs", &Signature("Vector")),
-            Source("demo/src/c.rs", &Signature("PathBuffer")),
-            Source("demo/src/d.rs", &Signature("Boxed")),
+            Source("demo/src/a.rs", Signature("Stringly")),
+            Source("demo/src/b.rs", Signature("Vector")),
+            Source("demo/src/c.rs", Signature("PathBuffer")),
+            Source("demo/src/d.rs", Signature("Boxed")),
         ];
 
         let findings = Check_Parameters_Borrow_Unless_Ownership_Is_Taken(&sources);
@@ -235,7 +236,7 @@ mod tests
     #[test]
     fn Test_Check_Parameters_Borrow_Unless_Ownership_Is_Taken_Should_Ignore_A_Borrow_That_Is_Not_A_Type()
     {
-        let sources = vec![Source("demo/src/a.rs", "    let held = &owner.name;")];
+        let sources = vec![Source("demo/src/a.rs", "    let held = &owner.name;".to_owned())];
 
         let findings = Check_Parameters_Borrow_Unless_Ownership_Is_Taken(&sources);
 
@@ -246,7 +247,7 @@ mod tests
     fn Test_Check_Parameters_Borrow_Unless_Ownership_Is_Taken_Should_Find_A_Container_Past_An_Earlier_Colon()
     {
         let signature = format!("fn Judged(count: usize, name: &{}) -> usize", "String");
-        let sources = vec![Source("demo/src/a.rs", &signature)];
+        let sources = vec![Source("demo/src/a.rs", signature)];
 
         let findings = Check_Parameters_Borrow_Unless_Ownership_Is_Taken(&sources);
 
@@ -257,7 +258,7 @@ mod tests
     fn Test_Check_Parameters_Borrow_Unless_Ownership_Is_Taken_Should_Report_One_Row_Per_Line()
     {
         let signature = format!("fn Judged(name: &{}, items: &{}) -> usize", "String", "Vec<u8>");
-        let sources = vec![Source("demo/src/a.rs", &signature)];
+        let sources = vec![Source("demo/src/a.rs", signature)];
 
         let findings = Check_Parameters_Borrow_Unless_Ownership_Is_Taken(&sources);
 
@@ -268,7 +269,7 @@ mod tests
     fn Test_Check_Parameters_Borrow_Unless_Ownership_Is_Taken_Should_Ignore_A_Commented_Signature()
     {
         let commented = format!("// {}", Signature("String"));
-        let sources = vec![Source("demo/src/a.rs", &commented)];
+        let sources = vec![Source("demo/src/a.rs", commented)];
 
         let findings = Check_Parameters_Borrow_Unless_Ownership_Is_Taken(&sources);
 
@@ -278,7 +279,7 @@ mod tests
     #[test]
     fn Test_Check_Parameters_Borrow_Unless_Ownership_Is_Taken_Should_Ignore_A_Language_It_Does_Not_Judge()
     {
-        let sources = vec![Source("demo/src/a.go", &Signature("String"))];
+        let sources = vec![Source("demo/src/a.go", Signature("String"))];
 
         let findings = Check_Parameters_Borrow_Unless_Ownership_Is_Taken(&sources);
 
@@ -289,7 +290,7 @@ mod tests
     fn Test_Check_Parameters_Borrow_Unless_Ownership_Is_Taken_Should_Name_The_Line_It_Found()
     {
         let text = format!("{}\n{{\n}}\n\n{}", Signature("str"), Signature("String"));
-        let sources = vec![Source("demo/src/a.rs", &text)];
+        let sources = vec![Source("demo/src/a.rs", text.to_owned())];
 
         let findings = Check_Parameters_Borrow_Unless_Ownership_Is_Taken(&sources);
 
@@ -307,7 +308,7 @@ mod tests
         return format!("fn Judged(name: &{parameter_type}) -> usize");
     }
 
-    fn Source(path: &str, text: &str) -> SourceFile
+    fn Source(path: &str, text: String) -> SourceFile
     {
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
         source.language = crate::Recognized_Language_In_Tests(path);

@@ -78,40 +78,6 @@ use nomos_workspace::BuildVariant;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
-/// The nearest enclosing directory that declares an architecture, or the working directory
-/// when none does.
-///
-/// Every other gate verb takes a `--root` because it walks one. `OD-GATE-026` made `admits`
-/// the one that does not, on the ground that a crate pair needs no tree -- which was true
-/// while the architecture was a table compiled into `nomos-rules` and is not any more. Rather
-/// than give the verb a flag it had no reason to want, this composition root answers the
-/// question a developer is actually asking: the architecture of the repository I am standing
-/// in. Searching upward for the file that declares it is what `cargo` does for `Cargo.toml`
-/// and `git` does for `.git`, and it makes `nomos gate admits` work from a subdirectory, which
-/// reading the working directory alone would not.
-///
-/// This is the composition root choosing where a value comes from, which `OD-HOST-001`
-/// reserves to it, rather than a library reaching for ambient state.
-fn Declaring_Root() -> PathBuf
-{
-    let working = PathBuf::from(".");
-    let Ok(absolute) = std::fs::canonicalize(&working)
-    else
-    {
-        return working;
-    };
-
-    for ancestor in absolute.ancestors()
-    {
-        if FILE_SYSTEM.Exists(&ancestor.join(nomos_gate_orchestration::ARCHITECTURE_DECLARATION_FILE))
-        {
-            return ancestor.to_path_buf();
-        }
-    }
-
-    return working;
-}
-
 /// Runs the requested verb and renders what it says.
 pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
@@ -144,25 +110,11 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
             );
             Render_Explain(&result, stdout, stderr)
         }
-        Invocation::Admits { depending, depended } =>
-        {
-            // The one arm that walks nothing. `OD-GATE-026` decided the subject is a crate
-            // pair, so there is no environment to compose and no source to gather -- which is
-            // the whole reason the answer is available before the edge is. It does read one
-            // file now, because the architecture it answers from is the repository's own
-            // declaration rather than a table compiled into a rules crate. Reading it is
-            // `nomos-gate-orchestration`'s own, through the same `FileSystem` port it already
-            // resolves `nomos-gate.json` over: a declaration it cannot read is an empty one,
-            // and the answer is then `NotJudged` rather than a guess -- the same answer any
-            // crate a declaration does not place already gets.
-            let answer = nomos_gate_orchestration::Admits_Under(
-                &Declaring_Root(),
-                &FILE_SYSTEM,
-                nomos_gate_orchestration::DependingCrate(depending),
-                nomos_gate_orchestration::DependedCrate(depended),
-            );
-            Render_Admits(answer, (depending, depended), stdout)
-        }
+        Invocation::Admits { depending, depended } => Admits_Verb(
+            nomos_gate_orchestration::DependingCrate(depending),
+            nomos_gate_orchestration::DependedCrate(depended),
+            stdout,
+        ),
     };
 }
 
@@ -187,6 +139,70 @@ fn Compare_Verb(
 ) -> ExitCode
 {
     return Render_Compare(&Judged(baseline), &Judged(candidate), stdout, stderr);
+}
+
+/// Answers the one verb that walks nothing, and renders the verdict.
+///
+/// `OD-GATE-026` decided the subject is a crate pair, so there is no environment to compose
+/// and no source to gather -- which is the whole reason the answer is available before the
+/// edge is. It does read one file now, because the architecture it answers from is the
+/// repository's own declaration rather than a table compiled into a rules crate. Reading it
+/// is `nomos-gate-orchestration`'s own, through the same `FileSystem` port it already
+/// resolves `nomos-gate.json` over: a declaration it cannot read is an empty one, and the
+/// answer is then `NotJudged` rather than a guess -- the same answer any crate a declaration
+/// does not place already gets.
+///
+/// The two ends arrive as the orchestration crate's own named types rather than bare strings,
+/// because the edge is directed: passing them positionally would let a caller ask the question
+/// backwards, which `DependedCrate`'s own doc says must not be possible.
+fn Admits_Verb(
+    depending: nomos_gate_orchestration::DependingCrate<'_>,
+    depended: nomos_gate_orchestration::DependedCrate<'_>,
+    stdout: &mut impl Write,
+) -> ExitCode
+{
+    let pair = (depending.0, depended.0);
+    let answer = nomos_gate_orchestration::Admits_Under(
+        &Declaring_Root(),
+        &FILE_SYSTEM,
+        depending,
+        depended,
+    );
+    return Render_Admits(answer, pair, stdout);
+}
+
+/// The nearest enclosing directory that declares an architecture, or the working directory
+/// when none does.
+///
+/// Every other gate verb takes a `--root` because it walks one. `OD-GATE-026` made `admits`
+/// the one that does not, on the ground that a crate pair needs no tree -- which was true
+/// while the architecture was a table compiled into `nomos-rules` and is not any more. Rather
+/// than give the verb a flag it had no reason to want, this composition root answers the
+/// question a developer is actually asking: the architecture of the repository I am standing
+/// in. Searching upward for the file that declares it is what `cargo` does for `Cargo.toml`
+/// and `git` does for `.git`, and it makes `nomos gate admits` work from a subdirectory, which
+/// reading the working directory alone would not.
+///
+/// This is the composition root choosing where a value comes from, which `OD-HOST-001`
+/// reserves to it, rather than a library reaching for ambient state.
+fn Declaring_Root() -> PathBuf
+{
+    let working = PathBuf::from(".");
+    let Ok(absolute) = std::fs::canonicalize(&working)
+    else
+    {
+        return working;
+    };
+
+    for ancestor in absolute.ancestors()
+    {
+        if FILE_SYSTEM.Exists(&ancestor.join(nomos_gate_orchestration::ARCHITECTURE_DECLARATION_FILE))
+        {
+            return ancestor.to_path_buf();
+        }
+    }
+
+    return working;
 }
 
 /// One walk-and-judge of `command.root`, under a freshly minted `RunId`.

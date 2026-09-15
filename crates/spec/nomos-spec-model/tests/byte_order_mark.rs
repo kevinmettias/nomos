@@ -20,6 +20,18 @@ use std::path::{Path, PathBuf};
 
 const BYTE_ORDER_MARK: char = '\u{feff}';
 
+/// The same mark as the three bytes it is written with, which is what the fixture is checked
+/// for: a `char` this file chose cannot tell whether the committed document still carries one.
+const BYTE_ORDER_MARK_BYTES: [u8; 3] = [0xEF, 0xBB, 0xBF];
+
+/// The authored tree's measured size. A tree smaller than this is not the corpus the gate was
+/// written against, and segmenting it would answer a question nobody asked.
+const AUTHORED_DOCUMENT_FLOOR: usize = 2000;
+
+/// How many of those documents carry a mark. The gate exists for the marked ones; below this
+/// the tree has stopped containing the case it covers.
+const MARKED_DOCUMENT_FLOOR: u32 = 1600;
+
 /// A real v14 decision record, byte for byte, mark included.
 ///
 /// Committed because the corpus is not in this repository. `include_str!` would strip
@@ -36,8 +48,8 @@ fn Fixture() -> String
         .unwrap_or_else(|error| panic!("the gate needs {}: {error}", path.display()));
 
     assert_eq!(
-        bytes.get(..3),
-        Some([0xEF, 0xBB, 0xBF].as_slice()),
+        bytes.get(..BYTE_ORDER_MARK_BYTES.len()),
+        Some(BYTE_ORDER_MARK_BYTES.as_slice()),
         "the fixture no longer carries a byte order mark and pins nothing"
     );
 
@@ -114,12 +126,12 @@ fn Test_Every_Authored_Document_Should_Segment_Past_Its_Front_Matter()
     }
 
     assert!(
-        documents.len() >= 2000,
+        documents.len() >= AUTHORED_DOCUMENT_FLOOR,
         "expected the authored tree, found {} documents",
         documents.len()
     );
     assert!(
-        marked >= 1600,
+        marked >= MARKED_DOCUMENT_FLOOR,
         "only {marked} marked documents: this no longer measures the case it exists for"
     );
 }

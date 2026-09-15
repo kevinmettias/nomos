@@ -1,21 +1,24 @@
 //! Composing an already-walked tree into a real `nomos gate run`, apart from choosing a
 //! platform, walking a tree or rendering the answer.
 
-use nomos_check_orchestration::{CheckOutcome, Claim, Claim_Of};
-use nomos_contracts::{Digest128, Finding, RuleId, RunId, SubjectId};
-use nomos_model::Digest_Of_Parts;
-use std::collections::BTreeMap;
+mod provenance;
+mod reduction;
+
+#[cfg(test)]
+mod reason_recording_tests;
+#[cfg(test)]
+mod tests;
+
+use nomos_check_orchestration::CheckOutcome;
+use nomos_contracts::{RuleId, RunId};
 use nomos_platform::{Environment, FileSystem, ProcessLauncher, Timestamp};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::Path;
 
 use crate::policy::{GatePolicyFile, Resolve_Gate_Policy};
-use crate::{
-    AdoptionPolicy, BaselineAllowance, BaselinePolicy, BaselinePopulation, CoveragePolicy, Disposition_Of_Findings, Evaluated_Phases,
-    GateCommand, GateFindings, GateRunOutcome, GateRunProvenance, GateRunResult, NoVerdict, Phased_Disposition, RuleSelector, ScopeSelector,
-    SuppressionDisposition, SuppressionPolicy, SuppressionReason,
-};
+use crate::{Evaluated_Phases, GateCommand, GateRunOutcome, GateRunProvenance, GateRunResult, Phased_Disposition};
+use reduction::{DispositionPolicies, Reduction, Reduced_Findings, Scoped_Findings};
 
 /// Judges `walked` exactly as `nomos check` would.
 ///
@@ -106,9 +109,9 @@ pub(crate) struct JudgeContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, En
 /// Judges `walked` exactly as `nomos check` would, and reduces the result to a
 /// [`GateRunResult`].
 ///
-/// `command.scope` narrows `walked` before [`Judged_Sources`] runs; a walk that becomes empty after
-/// scoping is `CheckOutcome::NoSource`, the same state an empty walk already was, because
-/// both mean "nothing was judged" to a caller.
+/// Each step is one named function, because each answers a question the others do not: which
+/// policy the command is judged under, what judged it, what was judged, which findings still
+/// block, and what disposition those leave. Read in that order this is the whole verb.
 ///
 /// `run` identifies this execution and is not computed here -- `OD-WORKFLOW-001`'s amendment
 /// decided a `RunId` identifies one execution, not one configuration, so this function must
@@ -125,61 +128,19 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
 {
     let GateEnvironment { variant, launcher, filesystem, environment, now } = environment;
     let declared = Resolve_Gate_Policy(&command.root, filesystem);
-    let effective = match &declared
-    {
-        Ok(Some(from_file)) => from_file.Resolved_Over(command),
-        // No file, or one that could not be read: the command's own policies stand alone,
-        // which for every caller that states none is today's behavior exactly.
-        Ok(None) | Err(_) => GatePolicyFile::default().Resolved_Over(command),
-    };
-
-    // Taken here rather than at the return, because this is the last point at which every
-    // input is still in hand: `walked` is moved into the judging below and `variant` into the
-    // context it judges under. `OD-GATE-031` is why a run carries this at all -- every one of
-    // these five reached this function and was discarded by it, so a finished run could not
-    // say what judged it.
+    let effective = Effective_Policy(declared.as_ref().ok().and_then(Option::as_ref), command);
     let provenance = GateRunProvenance {
-        source: Source_Digest(walked.as_deref()),
-        policy: Policy_Digest(&effective),
-        selection: Selection_Digest(command),
-        instrument: Instrument_Digest(&variant),
+        source: provenance::Source_Digest(walked.as_deref()),
+        policy: provenance::Policy_Digest(&effective),
+        selection: provenance::Selection_Digest(command),
+        instrument: provenance::Instrument_Digest(&variant),
         at: now,
     };
-
-    // `OD-GATE-025`: the scope never reaches the judging. Every walked file is judged, and
-    // the scope narrows the findings afterwards -- a rule answering a cross-file question
-    // must see the whole world or it answers a different question and labels it the same.
-    //
-    // A scope admitting no walked source at all is still `NoSource`, which is what it was
-    // before the scope moved. The judging happened and is simply discarded: what a caller is
-    // told is that nothing it asked about was there, and a mistyped `--include` must not read
-    // as a repository with nothing to say.
-    let admits_a_source = walked.as_ref().is_none_or(|sources| {
-        return sources.iter().any(|source| return command.scope.Is_In_Scope(&source.path));
-    });
-    let judged = Judged_Sources(walked, JudgeContext { launcher, filesystem, environment, variant, root: &command.root, selected: &command.rules.include });
-    let outcome = if admits_a_source { Scoped_Findings(judged, &command.scope) } else { CheckOutcome::NoSource };
-
-    let reduced = Reduced_Findings(
-        &outcome,
-        &command.rules,
-        DispositionPolicies { adoption: &effective.adoption, suppressions: &effective.suppressions, baseline: &effective.baseline, now },
-        effective.coverage,
-    );
-
-    let phase_outcomes = Evaluated_Phases(&command.phases, &reduced.findings.blocking_findings, &command.approvals);
-    let disposition = Phased_Disposition(reduced.disposition, &command.phases, &phase_outcomes, &reduced.findings.blocking_findings);
-
-    // A policy file that exists and could not be turned into a policy refuses the run rather
-    // than letting it report a disposition reached under policy nobody authored. The judgment
-    // above still happens and `check_outcome` still carries it in full, so a caller sees
-    // exactly what the check found; what it does not get is a verdict, because the rules for
-    // turning findings into one were unreadable. Reported after judging rather than instead of
-    // it so the answer stays as informative as it honestly can be.
-    //
-    // The cause travels with the refusal. It used to be read as `declared.is_err()` and
-    // dropped, which left every consumer able to say that there was no verdict and unable to
-    // say why -- including for the reader's own message naming the key it refused.
+    let context = JudgeContext { launcher, filesystem, environment, variant, root: &command.root, selected: &command.rules.include };
+    let outcome = Scoped_Judgment(walked, command, context);
+    let policies = DispositionPolicies_Of(&effective, now);
+    let reduced = Reduced_Findings(&outcome, &command.rules, policies, effective.coverage);
+    let disposition = Phased_Outcome(command, &reduced);
     let unusable_policy = declared.as_ref().err().map(|error| return error.As_No_Verdict());
 
     return GateRunResult {
@@ -188,1012 +149,75 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
         check_outcome: outcome,
         findings: reduced.findings,
         unmatched_policy: reduced.unmatched_policy,
-        disposition: if unusable_policy.is_some() { GateRunOutcome::Indeterminate } else { disposition },
         // The policy failure wins when both could apply. It cannot: an unreadable file falls
         // back to a default policy whose coverage is Unset, so Reduced_With_Coverage never
         // downgrades under one. Written as a preference anyway rather than as an assumption,
         // because the fallback is in a different function than this line.
+        disposition: if unusable_policy.is_some() { GateRunOutcome::Indeterminate } else { disposition },
         no_verdict: unusable_policy.or(reduced.no_verdict),
         provenance: Some(provenance),
     };
 }
 
-/// The digest of an ordered sequence of owned parts.
+/// The policy `command` is judged under.
 ///
-/// [`Digest_Of_Parts`] borrows, and every component below builds material that does not
-/// outlive its own call -- a version number as bytes, a timestamp, a subject's own digest.
-/// Owning the parts and borrowing once here is what lets each component read as a list of
-/// what it covers rather than as lifetime plumbing.
-fn Digest_Of_Owned(parts: &[Vec<u8>]) -> Digest128
+/// A file that resolved to a policy is resolved over the command's own; no file at all, or one
+/// that could not be read, leaves the command's policies standing alone -- which for every
+/// caller that states none is today's behavior exactly. The two failures are one case here and
+/// only here: [`Run_Gate`] reads the cause off the `Err` arm itself, which is what reaches a
+/// caller as [`crate::NoVerdict::MalformedPolicy`].
+fn Effective_Policy(from_file: Option<&GatePolicyFile>, command: &GateCommand) -> GatePolicyFile
 {
-    let borrowed: Vec<&[u8]> = parts.iter().map(|part| return part.as_slice()).collect();
-
-    return Digest_Of_Parts(&borrowed);
-}
-
-/// Every file this run judged, by path and content.
-///
-/// Sorted by path before hashing, so the walker's own ordering cannot decide the identity.
-/// Two runs over identical content must agree here or a comparison reads a difference in
-/// directory iteration as a difference in the repository, which is the exact failure
-/// `OD-GATE-031` exists to stop -- and it would be the worst possible instance of it,
-/// because nothing about the tree would have changed at all.
-///
-/// An unwalked root is a distinct identity rather than an empty one. `CheckOutcome` already
-/// keeps `Unreadable` and `NoSource` apart, and folding them together here would let a tree
-/// that could not be read match one that held nothing.
-fn Source_Digest(walked: Option<&[SourceFile]>) -> Digest128
-{
-    let Some(sources) = walked
-    else
+    return match from_file
     {
-        return Digest_Of_Owned(&[b"unwalked".to_vec()]);
-    };
-
-    let mut ordered: Vec<(&str, &str)> = sources.iter().map(|source| return (source.path.as_str(), source.text.as_str())).collect();
-    ordered.sort_unstable();
-
-    let mut parts: Vec<Vec<u8>> = vec![b"walked".to_vec()];
-    for (path, text) in ordered
-    {
-        parts.push(path.as_bytes().to_vec());
-        parts.push(text.as_bytes().to_vec());
-    }
-
-    return Digest_Of_Owned(&parts);
-}
-
-/// The policy this run judged under, in authoring order.
-///
-/// Authoring order rather than sorted, unlike [`Selection_Digest`], and the difference is
-/// not a style choice: `SuppressionPolicy::Suppressing` and `BaselinePolicy::Tolerating`
-/// both take the *first* entry that applies, so reordering two entries that match the same
-/// finding changes which one wins. An identity that ignored order would call two genuinely
-/// different policies the same.
-fn Policy_Digest(policy: &GatePolicyFile) -> Digest128
-{
-    let mut parts: Vec<Vec<u8>> = Vec::new();
-
-    for suppression in &policy.suppressions.suppressions
-    {
-        parts.push(b"suppression".to_vec());
-        parts.push(suppression.rule.As_Str().as_bytes().to_vec());
-        parts.push(suppression.subject.Digest().Bytes().to_vec());
-        parts.push(Disposition_Tag(suppression.disposition).as_bytes().to_vec());
-        parts.push(suppression.rationale.as_bytes().to_vec());
-        parts.push(suppression.owner.as_bytes().to_vec());
-        parts.push(Expiry_Bytes(suppression.expiry));
-    }
-
-    for debt in &policy.baseline.debt
-    {
-        parts.push(b"baseline".to_vec());
-        parts.push(debt.rule.As_Str().as_bytes().to_vec());
-        parts.push(debt.subject.Digest().Bytes().to_vec());
-        parts.push(debt.rationale.as_bytes().to_vec());
-    }
-
-    for calibration in &policy.adoption.calibrated
-    {
-        parts.push(b"calibration".to_vec());
-        parts.push(calibration.rule.As_Str().as_bytes().to_vec());
-        parts.push(calibration.rationale.as_bytes().to_vec());
-    }
-
-    parts.push(Coverage_Tag(policy.coverage).as_bytes().to_vec());
-
-    return Digest_Of_Owned(&parts);
-}
-
-/// A waiver's expiry as bytes, with absence distinct from any moment.
-///
-/// An empty part rather than a sentinel number: [`Digest_Of_Parts`] length-prefixes, so an
-/// empty part and an eight-byte one cannot collide, and no real timestamp has to be reserved
-/// to mean "none".
-fn Expiry_Bytes(expiry: Option<Timestamp>) -> Vec<u8>
-{
-    return match expiry
-    {
-        Some(moment) => moment.Unix_Seconds().to_le_bytes().to_vec(),
-        None => Vec::new(),
+        Some(file) => file.Resolved_Over(command),
+        None => GatePolicyFile::default().Resolved_Over(command),
     };
 }
 
-/// A suppression disposition as a stable tag.
+/// `walked` judged, then narrowed to what `command.scope` admits.
 ///
-/// Written out rather than derived from `Debug`, so that renaming a variant cannot silently
-/// change every recorded policy identity, and exhaustive so that adding one fails to compile
-/// here rather than hashing to whatever the last arm happened to be.
-const fn Disposition_Tag(disposition: SuppressionDisposition) -> &'static str
-{
-    return match disposition
-    {
-        SuppressionDisposition::InlineSuppression => "inline-suppression",
-        SuppressionDisposition::RepositoryPolicyException => "repository-policy-exception",
-        SuppressionDisposition::TemporaryWaiver => "temporary-waiver",
-        SuppressionDisposition::AcceptedBaselineDebt => "accepted-baseline-debt",
-        SuppressionDisposition::FalsePositiveDisposition => "false-positive",
-        SuppressionDisposition::FormalRiskAcceptance => "formal-risk-acceptance",
-    };
-}
-
-/// A coverage floor as a stable tag, exhaustive for the same reason [`Disposition_Tag`] is.
-const fn Coverage_Tag(coverage: CoveragePolicy) -> &'static str
-{
-    return match coverage
-    {
-        CoveragePolicy::Unset => "unset",
-        CoveragePolicy::RequireCompleteness => "require-completeness",
-    };
-}
-
-/// Which rules were allowed to count and which paths were in scope, sorted.
+/// `OD-GATE-025`: the scope never reaches the judging. Every walked file is judged, and the
+/// scope narrows the findings afterwards -- a rule answering a cross-file question must see
+/// the whole world or it answers a different question and labels it the same.
 ///
-/// Sorted rather than in authoring order, unlike [`Policy_Digest`], because
-/// `RuleSelector::Is_Included` and `ScopeSelector::Is_In_Scope` both answer with `any`, so
-/// two selections listing the same things in different orders select identically. Hashing
-/// the order would report a difference where a caller made none, and a stated difference
-/// nobody caused is how a reader learns to stop reading them.
-fn Selection_Digest(command: &GateCommand) -> Digest128
+/// A scope admitting no walked source at all is still `NoSource`, which is what it was before
+/// the scope moved. The judging happened and is simply discarded: what a caller is told is that
+/// nothing it asked about was there, and a mistyped `--include` must not read as a repository
+/// with nothing to say.
+fn Scoped_Judgment<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+    walked: Option<Vec<SourceFile>>,
+    command: &GateCommand,
+    context: JudgeContext<'_, Launcher, Fs, Env>,
+) -> CheckOutcome
 {
-    let mut rules: Vec<&str> = command.rules.include.iter().map(|rule| return rule.As_Str()).collect();
-    let mut included: Vec<&str> = command.scope.include.iter().map(String::as_str).collect();
-    let mut excluded: Vec<&str> = command.scope.exclude.iter().map(String::as_str).collect();
-    rules.sort_unstable();
-    included.sort_unstable();
-    excluded.sort_unstable();
+    let admits_a_source = walked
+        .as_ref()
+        .is_none_or(|sources| return sources.iter().any(|source| return command.scope.Is_In_Scope(&source.path)));
+    let judged = Judged_Sources(walked, context);
 
-    let mut parts: Vec<Vec<u8>> = vec![b"rules".to_vec()];
-    parts.extend(rules.iter().map(|rule| return rule.as_bytes().to_vec()));
-    parts.push(b"include".to_vec());
-    parts.extend(included.iter().map(|prefix| return prefix.as_bytes().to_vec()));
-    parts.push(b"exclude".to_vec());
-    parts.extend(excluded.iter().map(|prefix| return prefix.as_bytes().to_vec()));
+    if !admits_a_source
+    {
+        return CheckOutcome::NoSource;
+    }
 
-    return Digest_Of_Owned(&parts);
+    return Scoped_Findings(judged, &command.scope);
 }
 
-/// What did the judging: this build's variant, and the rule set it carries.
+/// The three per-finding overrides `policy` resolved to, read against `now`.
+fn DispositionPolicies_Of(policy: &GatePolicyFile, now: Timestamp) -> DispositionPolicies<'_>
+{
+    return DispositionPolicies { adoption: &policy.adoption, suppressions: &policy.suppressions, baseline: &policy.baseline, now };
+}
+
+/// `reduced`'s disposition once `command.phases` has been evaluated over it.
 ///
-/// The rule set comes from `nomos_rules::DESCRIPTORS` rather than from
-/// [`crate::Registered`], which copies the same three fields into its offers. Reading the
-/// table directly costs no registry composition and, more to the point, introduces no second
-/// failure path into [`Run_Gate`]: `Registered` returns a `Result`, and a run that could not
-/// name its own instrument would need a whole answer for that, for a case a static table
-/// cannot produce.
-fn Instrument_Digest(variant: &BuildVariant) -> Digest128
+/// A phase approval is the one thing that can turn a blocking finding into a passing run, so
+/// it is read here rather than by [`Reduced_Findings`]: that function decides what blocks, and
+/// this one decides what a repository has agreed to live with.
+fn Phased_Outcome(command: &GateCommand, reduced: &Reduction) -> GateRunOutcome
 {
-    let mut parts: Vec<Vec<u8>> = vec![
-        b"variant".to_vec(),
-        variant.target.as_bytes().to_vec(),
-        variant.profile.as_bytes().to_vec(),
-        variant.toolchain.as_bytes().to_vec(),
-    ];
-    // `features` is a `BTreeSet`, so this is already in a stable order.
-    parts.extend(variant.features.iter().map(|feature| return feature.as_bytes().to_vec()));
+    let phase_outcomes = Evaluated_Phases(&command.phases, &reduced.findings.blocking_findings, &command.approvals);
 
-    parts.push(b"rules".to_vec());
-    for descriptor in nomos_rules::DESCRIPTORS
-    {
-        parts.push(descriptor.Rule().As_Str().as_bytes().to_vec());
-        parts.push(descriptor.contract_record.as_bytes().to_vec());
-        parts.push(descriptor.contract_record_version.to_le_bytes().to_vec());
-    }
-
-    return Digest_Of_Owned(&parts);
-}
-
-
-/// `outcome`'s findings narrowed to what `scope` admits, the judging behind them untouched.
-///
-/// `OD-GATE-025` decided this is where a scope belongs. Narrowing the *source* set instead
-/// handed a rule answering a cross-file question a truncated world, which is how
-/// `--include <one file>` came to report `no-orphan-modules` against a file its own `lib.rs`
-/// declares: the file was collected and its declaring root was not.
-///
-/// A finding is admitted when any of its locations is, and a finding carrying no location at
-/// all is admitted unchanged -- a path filter has nothing to say about a finding that names
-/// no path, which is every `dependency-policy` advisory about the workspace as a whole.
-fn Scoped_Findings(outcome: CheckOutcome, scope: &ScopeSelector) -> CheckOutcome
-{
-    let CheckOutcome::Judged { findings, examined, claim } = outcome
-    else
-    {
-        return outcome;
-    };
-
-    let admitted = findings
-        .into_iter()
-        .filter(|finding| return Is_Admitted(finding, scope))
-        .collect();
-
-    return CheckOutcome::Judged { findings: admitted, examined, claim };
-}
-
-/// Whether `scope` admits `finding`, by the places it names.
-fn Is_Admitted(finding: &Finding, scope: &ScopeSelector) -> bool
-{
-    if finding.locations.is_empty()
-    {
-        return true;
-    }
-
-    return finding.locations.iter().any(|location| return scope.Is_In_Scope(location));
-}
-
-/// [`Reduced_Findings`]'s own result -- named so its caller assigns [`GateFindings`] and the
-/// disposition by field rather than by position.
-struct Reduction
-{
-    findings: GateFindings,
-    disposition: GateRunOutcome,
-    unmatched_policy: Vec<String>,
-    /// Why this reduction reached no verdict, when it judged findings and reached none.
-    /// Only [`Reduced_With_Coverage`] can produce one here; the policy file is read before
-    /// any of this runs and [`Run_Gate`] carries that cause itself.
-    no_verdict: Option<NoVerdict>,
-}
-
-/// The blocking findings, the findings an `AdoptionPolicy` calibration kept from blocking,
-/// the findings a `Suppression` kept from blocking, the findings a `BaselineDebt` kept from
-/// blocking, and the disposition they imply, read off a [`CheckOutcome`] this function does
-/// not own and must not consume -- `check_outcome` still has to end up in [`GateRunResult`]
-/// afterward. `rules` narrows which findings count before any list is computed; a finding
-/// whose rule is not selected can be neither blocking, calibrated, suppressed nor baselined,
-/// but it still exists in `check_outcome` untouched. `policies.adoption` splits what remains
-/// first -- a coarser, rule-wide override rather than a per-finding one -- then
-/// `policies.suppressions` splits what calibration did not match, then `policies.baseline`
-/// splits what neither matched: a finding matched by more than one reports as calibrated,
-/// not counted twice. `coverage` is consulted last, over `rules`' own selection rather than
-/// any of the four lists it splits into -- calibration, suppression and baseline each answer
-/// "does this blocking finding still block," a question about one finding at a time, while
-/// `coverage` answers "did this run reach a judgment about everything it selected," a
-/// question about the run as a whole.
-/// Every declared entry that no finding in `selected` matched, described for a reader.
-///
-/// `OD-GATE-024`'s one clause that survived its own retraction: an entry matching nothing is
-/// reported rather than silently ignored. Against the findings a run actually *selected*,
-/// not every finding it judged, because an entry for a rule the caller deselected did not
-/// fail to match -- it was never asked.
-fn Unmatched_Entries(selected: &[Finding], policies: DispositionPolicies<'_>) -> Vec<String>
-{
-    let mut unmatched = Vec::new();
-
-    for suppression in &policies.suppressions.suppressions
-    {
-        if !selected.iter().any(|finding| return suppression.Is_Applicable_To(finding))
-        {
-            unmatched.push(format!("suppression for `{}` matched nothing", suppression.rule));
-        }
-    }
-    for debt in &policies.baseline.debt
-    {
-        if !selected.iter().any(|finding| return debt.Is_Applicable_To(finding))
-        {
-            unmatched.push(format!("baseline entry for `{}` matched nothing", debt.rule));
-        }
-    }
-    for calibration in &policies.adoption.calibrated
-    {
-        if !selected.iter().any(|finding| return calibration.Is_Applicable_To(finding))
-        {
-            unmatched.push(format!("calibration for `{}` matched nothing", calibration.rule));
-        }
-    }
-
-    return unmatched;
-}
-
-fn Reduced_Findings(
-    outcome: &CheckOutcome,
-    rules: &RuleSelector,
-    policies: DispositionPolicies<'_>,
-    coverage: CoveragePolicy,
-) -> Reduction
-{
-    let CheckOutcome::Judged { findings, .. } = outcome
-    else
-    {
-        return Unjudged();
-    };
-
-    let selected: Vec<Finding> = findings.iter().filter(|finding| return rules.Is_Included(&finding.rule)).cloned().collect();
-    let findings = Partitioned_Findings(&selected, policies);
-
-    // Both buckets, because both are findings nothing licensed. `OD-GATE-030`: a population
-    // above the quantity its entry accepted is a baseline expansion the baseline must not
-    // hide, and a run that reported it and still passed would be hiding it in the only way
-    // that matters to a build. Composed here rather than by widening `Disposition_Of_Findings`,
-    // which answers about a list of findings and is right as it is.
-    let unlicensed: Vec<Finding> = findings.blocking_findings.iter().chain(findings.baseline_exceeded_findings.iter()).cloned().collect();
-    let disposition = Reduced_With_Coverage(Disposition_Of_Findings(&unlicensed), coverage, &selected);
-
-    let unmatched_policy = Unmatched_Entries(&selected, policies);
-
-    // Disposition_Of_Findings answers Passed or Failed and never Indeterminate, so an
-    // Indeterminate here is Reduced_With_Coverage's own downgrade and nothing else. Read off
-    // the result rather than recomputing the claim, so the two can never disagree about why.
-    let no_verdict = (disposition == GateRunOutcome::Indeterminate).then_some(NoVerdict::IncompleteCoverage);
-
-    return Reduction { findings, disposition, unmatched_policy, no_verdict };
-}
-
-/// [`Reduced_Findings`]'s own result when `outcome` was never judged -- nothing was found, so
-/// nothing can block, calibrate, suppress or baseline, and [`GateRunOutcome::Indeterminate`]
-/// is the only disposition an unjudged run can support.
-fn Unjudged() -> Reduction
-{
-    return Reduction {
-        findings: GateFindings {
-            blocking_findings: Vec::new(),
-            calibrated_findings: Vec::new(),
-            suppressed_findings: Vec::new(),
-            baselined_findings: Vec::new(),
-            baseline_exceeded_findings: Vec::new(),
-            baseline_populations: Vec::new(),
-            suppression_reasons: std::collections::BTreeMap::new(),
-        },
-        disposition: GateRunOutcome::Indeterminate,
-        // Nothing was judged, so no entry failed to match -- none was asked.
-        unmatched_policy: Vec::new(),
-        // Nothing was judged, so check_outcome is already the reason and this does not
-        // restate it. See GateRunResult::no_verdict's own doc.
-        no_verdict: None,
-    };
-}
-
-/// `selected`, split into the calibrated, suppressed, baselined and still-blocking findings
-/// `policies` implies -- [`Reduced_Findings`]'s own middle section, named so that function
-/// reads as one decision per line.
-fn Partitioned_Findings(selected: &[Finding], policies: DispositionPolicies<'_>) -> GateFindings
-{
-    let blockable: Vec<Finding> = selected.iter().filter(|finding| return finding.Can_Fail_A_Build()).cloned().collect();
-    let (calibrated_findings, uncalibrated): (Vec<Finding>, Vec<Finding>) =
-        blockable.into_iter().partition(|finding| return policies.adoption.Calibrating(finding).is_some());
-    let (suppressed_findings, remaining): (Vec<Finding>, Vec<Finding>) =
-        uncalibrated.into_iter().partition(|finding| return policies.suppressions.Suppressing(finding, policies.now).is_some());
-    let (matched, blocking_findings): (Vec<Finding>, Vec<Finding>) =
-        remaining.into_iter().partition(|finding| return policies.baseline.Tolerating(finding).is_some());
-    let Tolerated { baselined_findings, baseline_exceeded_findings, baseline_populations } = Tolerated_Within_Allowance(matched, policies.baseline);
-    let suppression_reasons = Recorded_Reasons(selected, policies);
-
-    return GateFindings {
-        blocking_findings,
-        calibrated_findings,
-        suppressed_findings,
-        baselined_findings,
-        baseline_exceeded_findings,
-        baseline_populations,
-        suppression_reasons,
-    };
-}
-
-/// What [`Tolerated_Within_Allowance`] split one run's baseline-matched findings into.
-struct Tolerated
-{
-    baselined_findings: Vec<Finding>,
-    baseline_exceeded_findings: Vec<Finding>,
-    baseline_populations: Vec<BaselinePopulation>,
-}
-
-/// Splits the findings a baseline entry matched by whether their scope stayed inside the
-/// quantity that entry accepted.
-///
-/// `OD-GATE-030` decides the shape, and two of its clauses are the reason this is a grouping
-/// rather than the per-finding filter it replaced.
-///
-/// **The unit is the scope, not the finding.** An entry accepts a quantity for a
-/// `rule`/`subject` scope, so whether it is exceeded is a fact about every occurrence in that
-/// scope at once. A filter that asked each finding separately could only ever answer "an entry
-/// matches you", which is what tolerated five occurrences against an entry that accepted one.
-///
-/// **An exceeded scope moves whole.** Where five are observed and one was accepted, four of
-/// them provably post-date adoption and *which* four is unknown. Leaving one in
-/// `baselined_findings` would pick a historical occurrence out of five candidates on no
-/// evidence, and would let the next reformatting commit pick a different one. So the group
-/// goes to `baseline_exceeded_findings` entire, and the arithmetic that explains it travels
-/// beside it.
-///
-/// Grouped through a `BTreeMap` on the same `rule`/`subject` key `suppression_reasons` already
-/// uses, so the populations come out in one order on every run over one tree rather than in
-/// whatever order the walk happened to produce.
-fn Tolerated_Within_Allowance(matched: Vec<Finding>, baseline: &BaselinePolicy) -> Tolerated
-{
-    let mut scopes: BTreeMap<(RuleId, SubjectId), Vec<Finding>> = BTreeMap::new();
-    for finding in matched
-    {
-        scopes.entry((finding.rule.clone(), finding.subject)).or_default().push(finding);
-    }
-
-    let mut tolerated = Tolerated { baselined_findings: Vec::new(), baseline_exceeded_findings: Vec::new(), baseline_populations: Vec::new() };
-    for ((rule, subject), occurrences) in scopes
-    {
-        // Every finding here matched some entry, or the partition above would not have kept
-        // it, and each group shares one rule and subject so one lookup answers for all of
-        // them. The fallback is unreachable and is written as the permissive reading anyway:
-        // an entry nobody could find must not invent a bound nobody declared.
-        let entry = occurrences.first().and_then(|finding| return baseline.Tolerating(finding));
-        let allowed = entry.map_or(BaselineAllowance::Unbounded, |entry| return entry.allowance);
-        // Cloned rather than borrowed for the reason the whole field exists: this outlives the
-        // policy the run resolved, because a caller reads a finished run long after the file
-        // it came from may have changed.
-        let declared_path = entry.and_then(|entry| return entry.declared_path.clone());
-        let population = BaselinePopulation { rule, subject, declared_path, allowed, observed: Occurrence_Count(occurrences.len()) };
-
-        if population.Is_Exceeded()
-        {
-            tolerated.baseline_exceeded_findings.extend(occurrences);
-        }
-        else
-        {
-            tolerated.baselined_findings.extend(occurrences);
-        }
-        tolerated.baseline_populations.push(population);
-    }
-
-    return tolerated;
-}
-
-/// A group's size as the count a [`BaselinePopulation`] reports.
-///
-/// A checked conversion rather than `as`, which would wrap a population past `u32::MAX` to a
-/// small number and report a scope holding four billion occurrences as comfortably inside an
-/// allowance of ten. Unreachable on any real tree and one line to make unreachable in
-/// principle, which is cheaper than the argument for why it cannot happen.
-fn Occurrence_Count(occurrences: usize) -> u32
-{
-    return u32::try_from(occurrences).unwrap_or(u32::MAX);
-}
-
-/// Why a disposition applied to each finding one names, recorded at the moment it was decided.
-///
-/// Both halves, deliberately. An active disposition explains why a finding is in
-/// `suppressed_findings`. A lapsed one explains why a finding is *not*: under `P103` an expired
-/// waiver does not suppress, so the finding falls through to baseline or blocking, and without
-/// this a reader comparing two runs would see it arrive in `blocking_findings` with nothing
-/// saying a tolerance came due rather than a new violation appearing. That distinction is the
-/// whole reason expiry was made visible in the run model, and it would be lost again in
-/// comparison if only suppressing dispositions were recorded.
-fn Recorded_Reasons(selected: &[Finding], policies: DispositionPolicies<'_>) -> BTreeMap<(RuleId, SubjectId), SuppressionReason>
-{
-    let mut reasons = BTreeMap::new();
-
-    for finding in selected
-    {
-        let key = (finding.rule.clone(), finding.subject);
-
-        if let Some(suppression) = policies.suppressions.Suppressing(finding, policies.now)
-        {
-            reasons.insert(key, SuppressionReason { disposition: suppression.disposition, status: suppression.Status_At(policies.now) });
-            continue;
-        }
-
-        if let Some(lapsed) = policies.suppressions.Lapsed(finding, policies.now).first()
-        {
-            reasons.insert(key, SuppressionReason { disposition: lapsed.disposition, status: lapsed.Status_At(policies.now) });
-        }
-    }
-
-    return reasons;
-}
-
-/// The three per-finding overrides [`Reduced_Findings`] checks, grouped into one value so
-/// [`Reduced_Findings`] stays within this crate's own parameter-count limit -- `adoption`
-/// checked first (a coarser, rule-wide override), then `suppressions`, then `baseline`.
-#[derive(Clone, Copy)]
-struct DispositionPolicies<'a>
-{
-    adoption: &'a AdoptionPolicy,
-    suppressions: &'a SuppressionPolicy,
-    baseline: &'a BaselinePolicy,
-    now: Timestamp,
-}
-
-/// `outcome`, downgraded from [`GateRunOutcome::Passed`] to [`GateRunOutcome::Indeterminate`]
-/// when `coverage` requires completeness and `Claim_Of(selected)` is [`Claim::Incomplete`] --
-/// `OD-GATE-016`'s own decision. Leaves every other `outcome` untouched: unset, this is the
-/// identity function, and [`CoveragePolicy::RequireCompleteness`]'s own doc says why a
-/// `Failed` outcome is left alone rather than downgraded the same way.
-fn Reduced_With_Coverage(outcome: GateRunOutcome, coverage: CoveragePolicy, selected: &[Finding]) -> GateRunOutcome
-{
-    return match (coverage, outcome)
-    {
-        (CoveragePolicy::RequireCompleteness, GateRunOutcome::Passed) if Claim_Of(selected) == Claim::Incomplete => GateRunOutcome::Indeterminate,
-        (_, outcome) => outcome,
-    };
-}
-
-#[cfg(test)]
-mod tests
-{
-    use super::{JudgeContext, Judged_Sources, Run_Gate};
-    use crate::{CoveragePolicy, GateCommand, GatePhase, GateRunOutcome, GateRunProvenance, NoVerdict, PhaseApproval, PhaseThreshold, RuleSelector};
-    use nomos_check_orchestration::{CheckOutcome, Claim};
-    use nomos_contracts::{Digest128, RuleId, RunId};
-    use nomos_model::Subject_Of_Path;
-    use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
-    use nomos_rules::SourceFile;
-    use nomos_workspace::BuildVariant;
-    use std::path::PathBuf;
-
-    fn Source(path: &str, text: &str) -> SourceFile
-    {
-        return SourceFile::New(path, Subject_Of_Path(path), text);
-    }
-
-    /// One source guaranteed to produce a real `completeness-mirror` blocking finding --
-    /// the same fixture [`Test_Run_Gate_Should_Fail_On_A_Blocking_Finding`] already uses,
-    /// named so the phase tests below do not repeat its literal text.
-    fn Blocking_Sources() -> Vec<SourceFile>
-    {
-        return vec![Source(
-            "a.rs",
-            "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
-        )];
-    }
-
-
-    /// A scratch root carrying `policy` as its own `nomos-gate.json`.
-    ///
-    /// A third private copy of a helper `gate_policy_file.rs` and `tests.rs` each keep one of
-    /// already. Reaching across for either would make it public for a caller that wants three
-    /// lines, which costs this crate's surface more than the repetition costs a reader.
-    fn Root_With_Policy(name: &str, policy: &str) -> PathBuf
-    {
-        let root = std::env::temp_dir().join(format!("nomos-gate-environment-{name}-{}", std::process::id()));
-        std::fs::create_dir_all(&root).expect("creatable");
-        std::fs::write(root.join("nomos-gate.json"), policy).expect("writable");
-
-        return root;
-    }
-
-    /// A policy file whose key is mis-spelled leaves the run without a verdict, and the run
-    /// says so *and* says which key was refused.
-    ///
-    /// The likeliest operator error there is, in the one file a repository adopting this tool
-    /// writes by hand, and `DeclaredPolicy` refuses it under `deny_unknown_fields` on purpose.
-    /// The reader's message naming the offending key was computed and discarded until
-    /// `no_verdict` existed, so this asserts the key itself reaches a caller rather than only
-    /// that something went wrong.
-    #[test]
-    fn Test_Run_Gate_Should_Name_The_Key_A_Malformed_Policy_Was_Refused_For()
-    {
-        let root = Root_With_Policy("malformed", r#"{ "basline": [] }"#);
-        let command = GateCommand { root: root.clone(), ..Default::default() };
-        let run = RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
-
-        let result = Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, run);
-
-        assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
-        let Some(NoVerdict::MalformedPolicy(detail)) = result.no_verdict
-        else
-        {
-            panic!("expected a malformed policy, got {:?}", result.no_verdict);
-        };
-        assert!(detail.contains("basline"), "{detail}");
-        // The judging still happened and is still reported in full. Refusing the verdict is
-        // not refusing the answer, which is what Run_Gate's own comment promises.
-        assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
-    }
-
-    /// A run that reaches a real verdict records no reason for one, so a caller reading
-    /// `no_verdict` on an ordinary run is told nothing rather than something empty.
-    #[test]
-    fn Test_Run_Gate_Should_Record_No_Reason_When_It_Reached_A_Verdict()
-    {
-        let root = Repository_Root();
-        let command = GateCommand { root: root.clone(), ..Default::default() };
-        let run = RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
-
-        let result = Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, run);
-
-        assert_eq!(result.disposition, GateRunOutcome::Failed);
-        assert_eq!(result.no_verdict, None);
-    }
-
-    /// The coverage floor downgrading an otherwise-passing run names itself, and is therefore
-    /// tellable apart from a broken policy file -- the distinction that matters most in this
-    /// enum, because this one is not a fault and the other two are.
-    ///
-    /// Driven through `Reduced_Findings` rather than `Run_Gate`: this is the exact mechanism
-    /// `OD-GATE-016` decided, and reaching it through a real walk would make the test depend
-    /// on which capabilities happen to be materializable on the machine running it.
-    #[test]
-    fn Test_Reduced_Findings_Should_Name_The_Coverage_Floor_That_Downgraded_A_Pass()
-    {
-        let outcome = CheckOutcome::Judged {
-            findings: vec![Unjudgeable_Finding()],
-            examined: nomos_check_orchestration::Examined { files: 1, facts: 1 },
-            claim: Claim::Incomplete,
-        };
-        let (adoption, suppressions, baseline) = (Default::default(), Default::default(), Default::default());
-        let policies = super::DispositionPolicies { adoption: &adoption, suppressions: &suppressions, baseline: &baseline, now: nomos_platform::Timestamp::From_Unix_Seconds(0) };
-
-        let reduced = super::Reduced_Findings(&outcome, &Default::default(), policies, CoveragePolicy::RequireCompleteness);
-
-        assert_eq!(reduced.disposition, GateRunOutcome::Indeterminate);
-        assert_eq!(reduced.no_verdict, Some(NoVerdict::IncompleteCoverage));
-        assert!(reduced.findings.blocking_findings.is_empty(), "nothing here can fail a build; the floor is the whole reason");
-    }
-
-    /// The same findings without a declared floor reach a verdict and name no reason, which is
-    /// what makes the assertion above about the floor rather than about the findings.
-    #[test]
-    fn Test_Reduced_Findings_Should_Pass_The_Same_Findings_With_No_Declared_Floor()
-    {
-        let outcome = CheckOutcome::Judged {
-            findings: vec![Unjudgeable_Finding()],
-            examined: nomos_check_orchestration::Examined { files: 1, facts: 1 },
-            claim: Claim::Incomplete,
-        };
-        let (adoption, suppressions, baseline) = (Default::default(), Default::default(), Default::default());
-        let policies = super::DispositionPolicies { adoption: &adoption, suppressions: &suppressions, baseline: &baseline, now: nomos_platform::Timestamp::From_Unix_Seconds(0) };
-
-        let reduced = super::Reduced_Findings(&outcome, &Default::default(), policies, CoveragePolicy::Unset);
-
-        assert_eq!(reduced.disposition, GateRunOutcome::Passed);
-        assert_eq!(reduced.no_verdict, None);
-    }
-
-    /// One finding a rule could not judge, which is what makes a claim `Incomplete`.
-    fn Unjudgeable_Finding() -> nomos_contracts::Finding
-    {
-        return nomos_contracts::Finding {
-            rule: RuleId::New("dependency-policy"),
-            subject: Subject_Of_Path("a.rs"),
-            subject_name: "a.rs".to_owned(),
-            applicability: nomos_contracts::Applicability::MissingCapability,
-            evidence: nomos_contracts::EvidenceClass::Derived,
-            gate: nomos_contracts::GateCategory::Advisory,
-            summary: "no provider offered the capability this rule requires".to_owned(),
-            locations: vec!["a.rs".to_owned()],
-        };
-    }
-
-
-    /// What `Run_Gate` recorded about a run over `root` judging `sources` under `rules`.
-    ///
-    /// Every provenance test below differs from its partner in exactly one argument, which is
-    /// what makes each of them a statement about that one input rather than about a run.
-    ///
-    /// They judge scratch roots rather than this repository's own, for two reasons. The
-    /// policy digest reads the `nomos-gate.json` under the root, and this tree's is shared
-    /// with live sessions, so a peer editing it mid-run would move a digest under a test
-    /// that is not about policy at all. And materializing this workspace's capabilities
-    /// costs a minute per call, for findings none of these assertions read.
-    fn Provenance_Over(root: &std::path::Path, sources: Vec<SourceFile>, rules: &RuleSelector) -> GateRunProvenance
-    {
-        let command = GateCommand { root: root.to_path_buf(), rules: rules.clone(), ..Default::default() };
-        let run = RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
-
-        let result = Run_Gate(
-            Some(sources),
-            super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) },
-            &command,
-            run,
-        );
-
-        return result.provenance.expect("Run_Gate always records what judged a run");
-    }
-
-    /// One tree, two policies: the source agrees and the policy does not.
-    ///
-    /// The likeliest instance of the whole defect. `Run_Gate` reads the policy from
-    /// `command.root` and a comparison judges two roots, so comparing two checkouts compares
-    /// two policies without anyone having asked for it, and every finding that moved bucket
-    /// for that reason reads as movement in the code.
-    #[test]
-    fn Test_Two_Policies_Over_One_Source_Should_Differ_In_The_Policy_Alone()
-    {
-        let lenient = Root_With_Policy("provenance-lenient", r#"{ "coverage": "unset" }"#);
-        let strict = Root_With_Policy("provenance-strict", r#"{ "coverage": "require-completeness" }"#);
-
-        let one = Provenance_Over(&lenient, Blocking_Sources(), &RuleSelector::default());
-        let other = Provenance_Over(&strict, Blocking_Sources(), &RuleSelector::default());
-
-        assert_eq!(one.source, other.source, "the same files were judged on both sides");
-        assert_ne!(one.policy, other.policy, "and they were judged under different policies");
-        assert_eq!(one.selection, other.selection);
-        assert_eq!(one.instrument, other.instrument);
-    }
-
-    /// One tree, two selections: a side told to look at less must be distinguishable from a
-    /// side that looked at everything and found less.
-    #[test]
-    fn Test_Two_Selections_Over_One_Source_Should_Differ_In_The_Selection_Alone()
-    {
-        let root = Root_With_Policy("provenance-selection", "{}");
-        let everything = RuleSelector::default();
-        let narrowed = RuleSelector { include: vec![RuleId::New("naming-convention")] };
-
-        let whole = Provenance_Over(&root, Blocking_Sources(), &everything);
-        let part = Provenance_Over(&root, Blocking_Sources(), &narrowed);
-
-        assert_eq!(whole.source, part.source);
-        assert_eq!(whole.policy, part.policy);
-        assert_ne!(whole.selection, part.selection);
-        assert_eq!(whole.instrument, part.instrument);
-    }
-
-    /// The licensed case: the source moved and nothing else did, so a difference in findings
-    /// is a difference in the repository and a comparison may say so.
-    #[test]
-    fn Test_A_Changed_Source_Should_Change_The_Source_And_Nothing_Else()
-    {
-        let root = Root_With_Policy("provenance-source", "{}");
-
-        let before = Provenance_Over(&root, Blocking_Sources(), &RuleSelector::default());
-        let after = Provenance_Over(&root, vec![Source("a.rs", "pub fn Different() {}\n")], &RuleSelector::default());
-
-        assert_ne!(before.source, after.source);
-        assert_eq!(before.policy, after.policy);
-        assert_eq!(before.selection, after.selection);
-        assert_eq!(before.instrument, after.instrument);
-    }
-
-    /// The same inputs record the same identity, which is what makes any of the assertions
-    /// above mean anything: a digest that varied on its own would make every one of them pass
-    /// for the wrong reason.
-    #[test]
-    fn Test_The_Same_Inputs_Should_Record_The_Same_Provenance()
-    {
-        let root = Root_With_Policy("provenance-repeat", "{}");
-
-        let once = Provenance_Over(&root, Blocking_Sources(), &RuleSelector::default());
-        let again = Provenance_Over(&root, Blocking_Sources(), &RuleSelector::default());
-
-        assert_eq!(once, again);
-    }
-
-    /// The walker's ordering must not decide the source identity.
-    ///
-    /// Without the sort in `Source_Digest`, two runs over identical content would disagree
-    /// whenever directory iteration did -- and a comparison would report the repository as
-    /// changed when nothing about it had, which is the worst available instance of the
-    /// failure `OD-GATE-031` exists to stop.
-    #[test]
-    fn Test_The_Same_Files_In_A_Different_Order_Should_Record_One_Source()
-    {
-        let root = Root_With_Policy("provenance-order", "{}");
-        let first = Source("a.rs", "pub fn One() {}\n");
-        let second = Source("b.rs", "pub fn Two() {}\n");
-
-        let forwards = Provenance_Over(&root, vec![first.clone(), second.clone()], &RuleSelector::default());
-        let backwards = Provenance_Over(&root, vec![second, first], &RuleSelector::default());
-
-        assert_eq!(forwards.source, backwards.source);
-    }
-
-    /// A reordered selection selects identically, so it must not read as a different one.
-    ///
-    /// `RuleSelector::Is_Included` answers with `any`. A stated difference nobody caused is
-    /// how a reader learns to stop reading them, which costs more than it saves.
-    #[test]
-    fn Test_A_Reordered_Selection_Should_Not_Read_As_A_Different_One()
-    {
-        let root = Root_With_Policy("provenance-reorder", "{}");
-        let one_way = RuleSelector { include: vec![RuleId::New("naming-convention"), RuleId::New("nesting-depth")] };
-        let other_way = RuleSelector { include: vec![RuleId::New("nesting-depth"), RuleId::New("naming-convention")] };
-
-        let first = Provenance_Over(&root, Blocking_Sources(), &one_way);
-        let second = Provenance_Over(&root, Blocking_Sources(), &other_way);
-
-        assert_eq!(first.selection, second.selection);
-    }
-
-    #[test]
-    fn Test_Judged_Sources_Should_Report_Unreadable_For_An_Unwalked_Root()
-    {
-        let root = Repository_Root();
-        let outcome = Judged_Sources(None, JudgeContext { launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, variant: Test_Variant(), root: &root, selected: &[] });
-
-        assert!(matches!(outcome, CheckOutcome::Unreadable));
-    }
-
-    #[test]
-    fn Test_Judged_Sources_Should_Report_No_Source_For_An_Empty_Walk()
-    {
-        let root = Repository_Root();
-        let outcome = Judged_Sources(Some(Vec::new()), JudgeContext { launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, variant: Test_Variant(), root: &root, selected: &[] });
-
-        assert!(matches!(outcome, CheckOutcome::NoSource));
-    }
-
-    #[test]
-    fn Test_Run_Gate_Should_Fail_On_A_Blocking_Finding()
-    {
-        let root = Repository_Root();
-        let command = GateCommand { root: root.clone(), ..Default::default() };
-        let run = RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
-
-        let result =
-            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, run);
-
-        assert!(!result.findings.blocking_findings.is_empty());
-    }
-
-    #[test]
-    fn Test_Run_Gate_Should_Pass_When_A_Phase_Approval_Covers_Every_Blocking_Finding()
-    {
-        let root = Repository_Root();
-        let unphased = GateCommand { root: root.clone(), ..Default::default() };
-        let baseline = Run_Gate(
-            Some(Blocking_Sources()),
-            super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) },
-            &unphased,
-            RunId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])),
-        );
-        // Every rule the fixture's own blocking findings actually name, read off a real run
-        // rather than hard-coded -- this fixture is shared with `Test_Run_Gate_Should_Fail_
-        // On_A_Blocking_Finding` and may trip more than one rule (`completeness-mirror` and
-        // `single-letter-names` both plausibly apply to `pub const T`), and a phase that
-        // named only one of them would leave the other unphased, which is a different test.
-        let rules: Vec<RuleId> = baseline.findings.blocking_findings.iter().map(|finding| return finding.rule.clone()).collect();
-        assert!(!rules.is_empty(), "the fixture must produce at least one blocking finding for this test to mean anything");
-
-        let phase = GatePhase { name: "completeness".to_owned(), rules, threshold: PhaseThreshold::AnyBlockingFinding };
-        let approval = PhaseApproval { phase: "completeness".to_owned(), rationale: "reviewed and accepted".to_owned() };
-        let command = GateCommand { root: root.clone(), phases: vec![phase], approvals: vec![approval], ..Default::default() };
-        let run = RunId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH]));
-
-        let result =
-            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, run);
-
-        assert!(!result.findings.blocking_findings.is_empty(), "the finding must still be real and reported, not hidden");
-        assert!(matches!(result.disposition, GateRunOutcome::Passed), "an approved phase covering every blocking finding must pass the run");
-    }
-
-    #[test]
-    fn Test_Run_Gate_Should_Stay_Failed_When_A_Blocking_Finding_Belongs_To_No_Declared_Phase()
-    {
-        let root = Repository_Root();
-        let phase = GatePhase { name: "unrelated".to_owned(), rules: vec![RuleId::New("naming-convention")], threshold: PhaseThreshold::AnyBlockingFinding };
-        let command = GateCommand { root: root.clone(), phases: vec![phase], ..Default::default() };
-        let run = RunId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH]));
-
-        let result =
-            Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, run);
-
-        assert!(matches!(result.disposition, GateRunOutcome::Failed), "a phase policy must not let a finding outside its own scope silently stop blocking");
-    }
-
-    fn Test_Variant() -> BuildVariant
-    {
-        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
-    }
-
-    /// This repository's own real root -- [`Judged_Sources`]'s dependency step, through
-    /// `nomos_check_orchestration::Run`, runs `cargo metadata` against it regardless of what
-    /// sources a test hands in.
-    fn Repository_Root() -> PathBuf
-    {
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest.parent().and_then(std::path::Path::parent).and_then(std::path::Path::parent).map(PathBuf::from).expect("this crate sits three levels below the workspace root");
-    }
-}
-
-#[cfg(test)]
-mod reason_recording_tests
-{
-    use super::{DispositionPolicies, Partitioned_Findings};
-    use crate::{AdoptionPolicy, BaselinePolicy, Suppression, SuppressionDisposition, SuppressionPolicy, SuppressionStatus};
-    use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
-    use nomos_platform::Timestamp;
-
-    const EXPIRY: i64 = 1_000;
-
-    fn Finding_Here() -> Finding
-    {
-        return Finding {
-            rule: RuleId::New("naming-convention"),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
-            subject_name: "src/lib.rs".to_string(),
-            applicability: Applicability::Supported,
-            evidence: EvidenceClass::Derived,
-            gate: GateCategory::Blocking,
-            summary: "a name".to_string(),
-            locations: Vec::new(),
-        };
-    }
-
-    fn Waiver() -> Suppression
-    {
-        let finding = Finding_Here();
-
-        return Suppression {
-            rule: finding.rule,
-            subject: finding.subject,
-            disposition: SuppressionDisposition::TemporaryWaiver,
-            rationale: "bounded".to_string(),
-            owner: "someone".to_string(),
-            expiry: Some(Timestamp::From_Unix_Seconds(EXPIRY)),
-        };
-    }
-
-    fn Partitioned_At(seconds: i64) -> crate::GateFindings
-    {
-        let adoption = AdoptionPolicy::default();
-        let baseline = BaselinePolicy::default();
-        let suppressions = SuppressionPolicy { suppressions: vec![Waiver()] };
-
-        return Partitioned_Findings(
-            &[Finding_Here()],
-            DispositionPolicies {
-                adoption: &adoption,
-                suppressions: &suppressions,
-                baseline: &baseline,
-                now: Timestamp::From_Unix_Seconds(seconds),
-            },
-        );
-    }
-
-    /// A live waiver suppresses, and its reason is recorded as active.
-    ///
-    /// The forward direction: a suppressed finding always has a reason, so a reader is never
-    /// told a finding did not block without being told why.
-    #[test]
-    fn Test_A_Suppressed_Finding_Should_Carry_An_Active_Reason()
-    {
-        let findings = Partitioned_At(EXPIRY - 1);
-        let finding = findings.suppressed_findings.first().expect("a live waiver suppresses");
-        let reason = findings
-            .suppression_reasons
-            .get(&(finding.rule.clone(), finding.subject))
-            .expect("a suppressed finding must say why");
-
-        assert_eq!(reason.disposition, SuppressionDisposition::TemporaryWaiver);
-        assert_eq!(reason.status, SuppressionStatus::Active);
-    }
-
-    /// A lapsed waiver does not suppress, and its reason is still recorded as expired.
-    ///
-    /// The direction the narrower invariant would have forbidden. Recording only suppressing
-    /// dispositions would leave this finding in `blocking_findings` with nothing saying a
-    /// tolerance came due rather than a violation appearing -- which is exactly the
-    /// distinction expiry was made visible for, lost again at the moment a reader looks for
-    /// it. So the recorded set is not the suppressed set, deliberately, and this is the case
-    /// that shows why.
-    #[test]
-    fn Test_A_Lapsed_Waiver_Should_Be_Recorded_Though_It_Did_Not_Suppress()
-    {
-        let findings = Partitioned_At(EXPIRY);
-        let finding = findings.blocking_findings.first().expect("a lapsed waiver does not suppress");
-
-        assert!(findings.suppressed_findings.is_empty(), "an expired waiver must not suppress");
-
-        let reason = findings
-            .suppression_reasons
-            .get(&(finding.rule.clone(), finding.subject))
-            .expect("a finding blocking because a waiver lapsed must say so");
-
-        assert_eq!(reason.status, SuppressionStatus::Expired);
-    }
-
-    /// A finding no disposition names carries no reason.
-    ///
-    /// The converse control. Without it a recorder that attached a reason to everything would
-    /// satisfy both cases above and make the field meaningless.
-    #[test]
-    fn Test_A_Finding_No_Disposition_Names_Should_Carry_No_Reason()
-    {
-        let adoption = AdoptionPolicy::default();
-        let baseline = BaselinePolicy::default();
-        let suppressions = SuppressionPolicy::default();
-
-        let findings = Partitioned_Findings(
-            &[Finding_Here()],
-            DispositionPolicies {
-                adoption: &adoption,
-                suppressions: &suppressions,
-                baseline: &baseline,
-                now: Timestamp::From_Unix_Seconds(0),
-            },
-        );
-
-        assert!(
-            findings.suppression_reasons.is_empty(),
-            "a finding nothing suppressed carried a reason: {:?}",
-            findings.suppression_reasons
-        );
-    }
+    return Phased_Disposition(reduced.disposition, &command.phases, &phase_outcomes, &reduced.findings.blocking_findings);
 }

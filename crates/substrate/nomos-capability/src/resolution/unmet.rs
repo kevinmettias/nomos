@@ -1,8 +1,10 @@
 //! Why a requirement could not be met.
 
+use super::remedy::Remedy;
 use nomos_contracts::Applicability;
 use nomos_contracts::ProviderId;
 use nomos_contracts::ContractVersion;
+
 /// Why a requirement could not be met.
 ///
 /// Separate from [`Applicability`] on purpose. `Applicability` is the vocabulary a run
@@ -88,35 +90,21 @@ impl Unmet
     }
 }
 
-/// What closes the gap a matching [`Unmet`] variant names -- the only half of the pair a
-/// caller can act on, structured so it survives being rendered more than one way rather than
-/// fixed as one sentence.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Remedy
-{
-    /// Author a capability contract naming this capability, then declare it against a
-    /// [`crate::Registry`].
-    DeclareTheContract,
-    /// The contract is declared; register a provider offer against it.
-    RegisterAProvider,
-    /// Offered at a version this caller cannot read; either side moving to a version the
-    /// other can read closes the gap.
-    AgreeOnAVersion
-    {
-        offered: ContractVersion,
-    },
-    /// The closest offer does not reach the required guarantee; strengthen it, or register
-    /// a new offer that does.
-    StrengthenTheClosestOffer
-    {
-        closest: ProviderId,
-    },
-}
-
 #[cfg(test)]
 mod tests
 {
     use super::*;
+
+    /// A contract major this caller cannot read, which is what makes
+    /// [`Unmet::VersionMismatch`] reachable at all.
+    const UNREADABLE_CONTRACT_MAJOR: u16 = 2;
+
+    /// A version no reader of this build admits, alongside the minor a mismatch is
+    /// reported at.
+    fn Unreadable_Version() -> ContractVersion
+    {
+        return ContractVersion::New(UNREADABLE_CONTRACT_MAJOR, 0);
+    }
 
     #[test]
     fn Test_Applicability_Should_Report_Every_Variant_As_A_Missing_Capability()
@@ -124,7 +112,7 @@ mod tests
         assert_eq!(Unmet::Undeclared.Applicability(), Applicability::MissingCapability);
         assert_eq!(Unmet::NoProvider.Applicability(), Applicability::MissingCapability);
         assert_eq!(
-            Unmet::VersionMismatch { offered: ContractVersion::New(2, 0) }.Applicability(),
+            Unmet::VersionMismatch { offered: Unreadable_Version() }.Applicability(),
             Applicability::MissingCapability
         );
         assert_eq!(
@@ -139,7 +127,7 @@ mod tests
         assert!(Unmet::Undeclared.Describe().contains("no capability contract"));
         assert!(Unmet::NoProvider.Describe().contains("no provider"));
         assert!(
-            Unmet::VersionMismatch { offered: ContractVersion::New(2, 0) }
+            Unmet::VersionMismatch { offered: Unreadable_Version() }
                 .Describe()
                 .contains("cannot read")
         );
@@ -156,8 +144,8 @@ mod tests
         assert_eq!(Unmet::Undeclared.Remedy(), Remedy::DeclareTheContract);
         assert_eq!(Unmet::NoProvider.Remedy(), Remedy::RegisterAProvider);
         assert_eq!(
-            Unmet::VersionMismatch { offered: ContractVersion::New(2, 0) }.Remedy(),
-            Remedy::AgreeOnAVersion { offered: ContractVersion::New(2, 0) }
+            Unmet::VersionMismatch { offered: Unreadable_Version() }.Remedy(),
+            Remedy::AgreeOnAVersion { offered: Unreadable_Version() }
         );
         assert_eq!(
             Unmet::BelowRequirement { closest: ProviderId::New("nomos.test.closest") }.Remedy(),

@@ -211,6 +211,13 @@ mod tests
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Lint_Diagnostics(&[source], &mut reader);
 
+        Assert_One_Relayed_Diagnostic(&findings);
+    }
+
+    /// Every field a relayed lint finding must carry: the reporting member, the fact's own
+    /// applicability, evidence and gate, the diagnostic's message, and the file it names.
+    fn Assert_One_Relayed_Diagnostic(findings: &[Finding])
+    {
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
         assert_eq!(found.subject_name, "nomos-cap-syntax");
@@ -259,35 +266,37 @@ mod tests
     {
         let source = Source_File("nomos-rules");
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Diagnostics_Fact(
-            &mut store,
-            &source,
-            &offer,
-            &DiagnosticsPayload {
-                package: "nomos-rules".to_owned(),
-                diagnostics: vec![
-                    LintDiagnostic {
-                        level: LintLevel::Warning,
-                        lint: Some("clippy::needless_return".to_owned()),
-                        message: "unneeded `return` statement".to_owned(),
-                        file: "crates/rules/nomos-rules/src/lib.rs".to_owned(),
-                        line: 1,
-                    },
-                    LintDiagnostic {
-                        level: LintLevel::Error,
-                        lint: None,
-                        message: "mismatched types".to_owned(),
-                        file: "crates/rules/nomos-rules/src/lint.rs".to_owned(),
-                        line: 2,
-                    },
-                ],
-            },
-        );
+        Materialize_Diagnostics_Fact(&mut store, &source, &offer, &Two_Member_Diagnostics());
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Lint_Diagnostics(&[source], &mut reader);
 
         assert_eq!(findings.len(), 2, "{findings:?}");
+    }
+
+    /// One warning with a lint name and one error without one, on two different files of the
+    /// same member — the fact that must become two findings rather than one.
+    fn Two_Member_Diagnostics() -> DiagnosticsPayload
+    {
+        return DiagnosticsPayload {
+            package: "nomos-rules".to_owned(),
+            diagnostics: vec![
+                LintDiagnostic {
+                    level: LintLevel::Warning,
+                    lint: Some("clippy::needless_return".to_owned()),
+                    message: "unneeded `return` statement".to_owned(),
+                    file: "crates/rules/nomos-rules/src/lib.rs".to_owned(),
+                    line: 1,
+                },
+                LintDiagnostic {
+                    level: LintLevel::Error,
+                    lint: None,
+                    message: "mismatched types".to_owned(),
+                    file: "crates/rules/nomos-rules/src/lint.rs".to_owned(),
+                    line: 2,
+                },
+            ],
+        };
     }
 
     fn Source_File(package: &str) -> SourceFile

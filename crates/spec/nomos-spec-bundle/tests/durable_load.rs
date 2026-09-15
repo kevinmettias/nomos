@@ -26,7 +26,7 @@ const FOREIGN_REVISION: &str = "v14.36";
 /// The store this build actually assembles: governing records first, unconditionally.
 fn Seeded() -> SpecificationStore
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory().expect("In_Memory applies the schema MIGRATIONS");
     Seed_Governing_Records(&mut store).expect("seeds the governing records");
 
     return store;
@@ -37,7 +37,7 @@ fn Foreign_Bundle() -> Bundle
 {
     use nomos_spec_model::Segment;
 
-    let mut source = SpecificationStore::In_Memory().expect("opens");
+    let mut source = SpecificationStore::In_Memory().expect("In_Memory applies the schema MIGRATIONS");
     let document = source
         .Put_Source_Document(FOREIGN_PATH, FOREIGN_REVISION, FOREIGN)
         .expect("stores the document");
@@ -45,7 +45,7 @@ fn Foreign_Bundle() -> Bundle
         .Put_Source_Blocks(document, &Segment(FOREIGN))
         .expect("stores the blocks");
 
-    return Export(&source).expect("exports");
+    return Export(&source).expect("Export ran over a store the fixture filled");
 }
 
 /// The property the whole item exists for.
@@ -75,10 +75,7 @@ fn Test_The_Seeded_Rows_Should_Be_Left_Untouched_By_The_Load()
 {
     let mut store = Seeded();
     let bundle = Foreign_Bundle();
-    let before: BTreeMap<&str, u32> = Table::All()
-        .iter()
-        .map(|table| return (table.Name(), store.Count(*table).expect("counts")))
-        .collect();
+    let before = Counts_By_Table(&store);
 
     Import_Bundle(&mut store, &bundle).expect("a disjoint bundle must load");
 
@@ -93,6 +90,19 @@ fn Test_The_Seeded_Rows_Should_Be_Left_Untouched_By_The_Load()
             table.Name()
         );
     }
+}
+
+/// How many rows each table holds, taken per table rather than as one total, because a total
+/// cannot tell a row that was placed from a row that was already there.
+fn Counts_By_Table(store: &SpecificationStore) -> BTreeMap<&'static str, u32>
+{
+    return Table::All()
+        .iter()
+        .map(|table| {
+            let rows = store.Count(*table).expect("Table::All() names every table the schema holds");
+            return (table.Name(), rows);
+        })
+        .collect();
 }
 
 /// What one table held before the load, plus exactly the rows the bundle declares for it.
@@ -159,7 +169,7 @@ fn Test_A_Bundle_Referencing_A_Row_Only_The_Store_Holds_Should_Not_Bind_To_It()
             to_node_id: "ARC-SPECDB-002".to_owned(),
         })],
     )
-    .expect("builds");
+    .expect("each field the fixture passes survives canonical JSON");
 
     let refusal = Import_Bundle(&mut store, &stitched).expect_err("a dangling reference must be refused");
 

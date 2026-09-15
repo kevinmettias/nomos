@@ -123,15 +123,23 @@ fn Assessment_File(requirement: &str) -> String
 /// at the granularity `nomos_cap_requirement_trace::payload`'s own module doc already
 /// orders `RequirementTracePayload::problems` in, so this never needs to re-sort what the
 /// provider already produced in order.
+/// The sort rank each problem kind takes, kept out of the subject text so two kinds never
+/// interleave.
+const UNRESOLVED_SITE_RANK: u8 = 0;
+const UNRESOLVED_GAP_RANK: u8 = 1;
+const UNRESOLVED_RECORD_RANK: u8 = 2;
+const DIVERGENCE_WITH_NO_RECORD_RANK: u8 = 3;
+const PARTIAL_WITH_NO_GAP_RANK: u8 = 4;
+
 const fn Rank(kind: ProblemKind) -> u8
 {
     return match kind
     {
-        ProblemKind::UnresolvedSite => 0,
-        ProblemKind::UnresolvedGap => 1,
-        ProblemKind::UnresolvedRecord => 2,
-        ProblemKind::DivergenceWithNoRecord => 3,
-        ProblemKind::PartialWithNoGap => 4,
+        ProblemKind::UnresolvedSite => UNRESOLVED_SITE_RANK,
+        ProblemKind::UnresolvedGap => UNRESOLVED_GAP_RANK,
+        ProblemKind::UnresolvedRecord => UNRESOLVED_RECORD_RANK,
+        ProblemKind::DivergenceWithNoRecord => DIVERGENCE_WITH_NO_RECORD_RANK,
+        ProblemKind::PartialWithNoGap => PARTIAL_WITH_NO_GAP_RANK,
     };
 }
 
@@ -170,27 +178,18 @@ mod tests
     #[test]
     fn Test_Check_Requirement_Trace_Staleness_Should_Report_One_Finding_Per_Problem()
     {
-        let TestOffering { mut store, registry, offer } = Offering();
-        let payload = RequirementTracePayload {
-            problems: vec![
-                Problem {
-                    kind: ProblemKind::UnresolvedSite,
-                    requirement: "CHK-003".to_owned(),
-                    message: "CHK-003: site crates/x.rs is not a file in this workspace".to_owned(),
-                },
-                Problem {
-                    kind: ProblemKind::UnresolvedRecord,
-                    requirement: "CAP-002".to_owned(),
-                    message: "CAP-002: OD-NOTHING-999 has no registration under crates/spec/nomos-spec-store/records/".to_owned(),
-                },
-            ],
-        };
-        Materialize(&mut store, &offer, &payload);
+        let problems = vec![
+            Unresolved_Site(Requirement("CHK-003"), Message("CHK-003: site crates/x.rs is not a file in this workspace")),
+            Problem {
+                kind: ProblemKind::UnresolvedRecord,
+                requirement: "CAP-002".to_owned(),
+                message: "CAP-002: OD-NOTHING-999 has no registration under crates/spec/nomos-spec-store/records/".to_owned(),
+            },
+        ];
 
-        let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Requirement_Trace_Staleness(&mut reader);
+        let findings = Findings_For_Problems(&problems);
 
-        assert_eq!(findings.len(), 2, "{findings:?}");
+        assert_eq!(findings.len(), problems.len(), "{findings:?}");
         let first = findings.first().expect("asserted len 2 above");
         assert_eq!(first.rule, RuleId::New(REQUIREMENT_TRACE_STALENESS));
         assert_eq!(first.applicability, Applicability::Supported);
@@ -206,27 +205,50 @@ mod tests
     #[test]
     fn Test_Check_Requirement_Trace_Staleness_Should_Not_Collapse_Two_Problems_From_One_Requirement()
     {
-        let TestOffering { mut store, registry, offer } = Offering();
-        let payload = RequirementTracePayload {
-            problems: vec![
-                Problem {
-                    kind: ProblemKind::UnresolvedSite,
-                    requirement: "CHK-003".to_owned(),
-                    message: "CHK-003: site a.rs is not a file in this workspace".to_owned(),
-                },
-                Problem {
-                    kind: ProblemKind::UnresolvedSite,
-                    requirement: "CHK-003".to_owned(),
-                    message: "CHK-003: site b.rs is not a file in this workspace".to_owned(),
-                },
-            ],
+        let problems = vec![
+            Unresolved_Site(Requirement("CHK-003"), Message("CHK-003: site a.rs is not a file in this workspace")),
+            Unresolved_Site(Requirement("CHK-003"), Message("CHK-003: site b.rs is not a file in this workspace")),
+        ];
+
+        let findings = Findings_For_Problems(&problems);
+
+        assert_eq!(
+            findings.len(),
+            problems.len(),
+            "two stale citations from one assessment are two reportable facts: {findings:?}"
+        );
+    }
+
+    /// `requirement` and `message` are both `&str`; without a distinct type per position a
+    /// call site like `Unresolved_Site("CHK-003", "CHK-003: ...")` reads as two
+    /// interchangeable strings and a swap compiles silently.
+    #[derive(Clone, Copy)]
+    struct Requirement<'a>(&'a str);
+
+    #[derive(Clone, Copy)]
+    struct Message<'a>(&'a str);
+
+    /// A stale-citation problem naming `requirement` and the site `message` describes — the
+    /// shape every test here that reports a site writes by hand otherwise.
+    fn Unresolved_Site(requirement: Requirement<'_>, message: Message<'_>) -> Problem
+    {
+        return Problem {
+            kind: ProblemKind::UnresolvedSite,
+            requirement: requirement.0.to_owned(),
+            message: message.0.to_owned(),
         };
-        Materialize(&mut store, &offer, &payload);
+    }
+
+    /// What the rule reports over `problems` materialized as the trace fact — the setup and
+    /// the single call both per-problem tests share, so each states only its own payload and
+    /// what it expects back.
+    fn Findings_For_Problems(problems: &[Problem]) -> Vec<Finding>
+    {
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize(&mut store, &offer, &RequirementTracePayload { problems: problems.to_vec() });
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
-        let findings = Check_Requirement_Trace_Staleness(&mut reader);
-
-        assert_eq!(findings.len(), 2, "two stale citations from one assessment are two reportable facts: {findings:?}");
+        return Check_Requirement_Trace_Staleness(&mut reader);
     }
 
     const PROVIDER: &str = "nomos.test.requirement.trace.resolves";

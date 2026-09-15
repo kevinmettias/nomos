@@ -319,8 +319,32 @@ mod tests
     #[test]
     fn Test_Insert_Each_Should_Skip_Records_Of_Another_Kind()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let bundle = Bundle::New(
+        let mut store = SpecificationStore::In_Memory().expect("an in-memory store applies the schema MIGRATIONS");
+        let bundle = Suite_And_Blob();
+
+        store
+            .In_Transaction(|transaction| {
+                Insert_Each(
+                    transaction,
+                    &bundle,
+                    "INSERT INTO suites (suite_id, title, authority_root) VALUES (?1, ?2, ?3)",
+                    Insert_One_Suite,
+                )
+            })
+            .expect("the insert ran over the bundle this test built");
+
+        let count: i64 = store
+            .Connection()
+            .query_row("SELECT COUNT(*) FROM suites", [], |row| row.get(0))
+            .expect("the suites table is readable from the store the insert ran against");
+        assert_eq!(count, 1);
+    }
+
+    /// A bundle carrying a suite and a blob, so an insert framed for the suites table is
+    /// handed one record it takes and one it must leave alone.
+    fn Suite_And_Blob() -> Bundle
+    {
+        return Bundle::New(
             1,
             vec![
                 Record::Suite(crate::Suite {
@@ -336,36 +360,24 @@ mod tests
                 }),
             ],
         )
-        .expect("builds");
+        .expect("the bundle carries exactly the two records this test names");
+    }
 
-        store
-            .In_Transaction(|transaction| {
-                Insert_Each(
-                    transaction,
-                    &bundle,
-                    "INSERT INTO suites (suite_id, title, authority_root) VALUES (?1, ?2, ?3)",
-                    |insert, record| {
-                        let Record::Suite(suite) = record
-                        else
-                        {
-                            return Ok(());
-                        };
-                        insert.execute(rusqlite::params![
-                            suite.suite_id,
-                            suite.title,
-                            i64::from(suite.authority_root)
-                        ])?;
+    /// The per-record body the suites insert runs: it takes a suite and returns without
+    /// inserting for anything of another kind, which is the skip this test is about.
+    fn Insert_One_Suite(insert: &mut rusqlite::Statement<'_>, record: &Record) -> Result<(), BundleError>
+    {
+        let Record::Suite(suite) = record
+        else
+        {
+            return Ok(());
+        };
+        insert.execute(rusqlite::params![
+            suite.suite_id,
+            suite.title,
+            i64::from(suite.authority_root)
+        ])?;
 
-                        return Ok(());
-                    },
-                )
-            })
-            .expect("inserts");
-
-        let count: i64 = store
-            .Connection()
-            .query_row("SELECT COUNT(*) FROM suites", [], |row| row.get(0))
-            .expect("reads back");
-        assert_eq!(count, 1);
+        return Ok(());
     }
 }

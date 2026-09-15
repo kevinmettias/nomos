@@ -11,7 +11,7 @@ use nomos_spec_store::{SpecificationStore, Table};
 #[test]
 fn Test_Importing_Into_A_Store_That_Already_Holds_The_Content_Should_Be_Refused()
 {
-    let bundle = Export(&Populated()).expect("exports");
+    let bundle = Export(&Populated()).expect("Export ran over the store Populated() filled");
     let mut occupied = Populated();
 
     let refusal = Import_Bundle(&mut occupied, &bundle).expect_err("a colliding store must be refused");
@@ -25,7 +25,7 @@ fn Test_Importing_Into_A_Store_That_Already_Holds_The_Content_Should_Be_Refused(
 #[test]
 fn Test_An_Unresolvable_Reference_Should_Be_Refused()
 {
-    let complete = Export(&Populated()).expect("exports");
+    let complete = Export(&Populated()).expect("Export ran over the store Populated() filled");
     let salvaged = Without_The_Workspace_Concept(&complete);
 
     assert!(
@@ -35,8 +35,9 @@ fn Test_An_Unresolvable_Reference_Should_Be_Refused()
 
     // The exporter's own version, not a literal: this test is about a dangling reference,
     // and pinning the number here makes every migration fail it for the wrong reason.
-    let broken = Bundle::New(complete.Header().schema_version, salvaged).expect("builds");
-    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
+    let broken = Bundle::New(complete.Header().schema_version, salvaged)
+        .expect("each record the fixture passes survives canonical JSON");
+    let mut rebuilt = SpecificationStore::In_Memory().expect("In_Memory applies the schema MIGRATIONS");
     let refusal = Import_Bundle(&mut rebuilt, &broken).expect_err("a dangling reference must be refused");
 
     assert!(matches!(refusal, BundleError::Unresolved { .. }), "{refusal}");
@@ -77,13 +78,19 @@ fn Test_A_Row_The_Export_Query_Drops_Should_Fail_The_Export()
             refusal,
             BundleError::Incomplete {
                 ref table,
-                in_store: 3,
-                exported: 2
+                in_store: DOCUMENTS_AFTER_THE_ORPHAN,
+                exported: DOCUMENTS_THE_JOIN_RETURNS
             } if table == "source_documents"
         ),
         "{refusal}"
     );
 }
+
+/// How many documents the fixture's store holds once the orphan is inserted beside them.
+const DOCUMENTS_AFTER_THE_ORPHAN: u32 = 3;
+
+/// How many of them the export's join reaches, which is one fewer than the store holds.
+const DOCUMENTS_THE_JOIN_RETURNS: u32 = 2;
 
 /// A document row the export's join will drop, written with the foreign key relaxed because
 /// the point is a row the store holds and the query does not return.

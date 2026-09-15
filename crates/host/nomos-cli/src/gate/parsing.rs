@@ -69,24 +69,7 @@ pub fn Gate_Invocation_From_String_Arguments(arguments: &[String]) -> Result<Inv
 
     let root = Named_Value_From_String_Arguments(rest, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from);
 
-    if verb == "explain"
-    {
-        return Explain_Invocation(rest, root);
-    }
-
-    if verb == "compare"
-    {
-        return Compare_Invocation(rest, root);
-    }
-
-    if verb == "admits"
-    {
-        return Admits_Invocation(rest);
-    }
-
-    let command = Plan_Or_Run_Command(root, rest);
-
-    return Ok(if verb == "run" { Invocation::Run(command) } else { Invocation::Plan(command) });
+    return Verb_Invocation(verb, rest, root);
 }
 
 /// Refuses anything but the three verbs this group implements today.
@@ -115,6 +98,34 @@ fn No_Unknown_Argument(rest: &[String]) -> Result<(), String>
     return Ok(());
 }
 
+/// Turns a recognized verb's own flags into the invocation that verb names.
+///
+/// The three verbs carrying a shape of their own -- `explain`'s query, `compare`'s second
+/// tree, `admits`' two crates -- are the ones whose arguments a shared `GateCommand` cannot
+/// express, so they are dispatched rather than folded in. `plan` and `run` share one command
+/// and differ only in which variant wraps it, which is the last line here.
+fn Verb_Invocation(verb: &str, rest: &[String], root: PathBuf) -> Result<Invocation, String>
+{
+    if verb == "explain"
+    {
+        return Explain_Invocation(rest, root);
+    }
+
+    if verb == "compare"
+    {
+        return Compare_Invocation(rest, root);
+    }
+
+    if verb == "admits"
+    {
+        return Admits_Invocation(rest);
+    }
+
+    let command = Plan_Or_Run_Command(root, rest);
+
+    return Ok(if verb == "run" { Invocation::Run(command) } else { Invocation::Plan(command) });
+}
+
 /// `explain`'s own required `--rule`/`--location`, read as single values rather than
 /// `plan`/`run`'s repeatable `--rule`: naming one finding needs exactly one rule, not a
 /// selector, so this does not populate `GateCommand::rules` at all -- `Explain_Gate`
@@ -129,21 +140,6 @@ fn Explain_Invocation(rest: &[String], root: PathBuf) -> Result<Invocation, Stri
     let query = FindingQuery { rule: RuleId::New(rule), location };
 
     return Ok(Invocation::Explain { command, query });
-}
-
-/// `admits`' own required `--from` and `--to`, naming the two crates.
-///
-/// It takes no root and is handed none. Every other verb walks a tree; this one asks about
-/// two names against the declared architecture, which is what makes it cheap enough to ask
-/// before the edge exists — `OD-GATE-026` measured the two answers at 40 milliseconds against
-/// thirteen seconds. Accepting a `--root` here would advertise a narrowing that changes
-/// nothing about the answer.
-fn Admits_Invocation(rest: &[String]) -> Result<Invocation, String>
-{
-    let depending = Required_Value(Named_Value_From_String_Arguments(rest, "--from").as_ref(), Name("--from"), Usage(USAGE))?;
-    let depended = Required_Value(Named_Value_From_String_Arguments(rest, "--to").as_ref(), Name("--to"), Usage(USAGE))?;
-
-    return Ok(Invocation::Admits { depending, depended });
 }
 
 /// `compare`'s own required `--against`, naming the tree judged against `--root`.
@@ -164,6 +160,21 @@ fn Compare_Invocation(rest: &[String], root: PathBuf) -> Result<Invocation, Stri
         baseline: Plan_Or_Run_Command(root, rest),
         candidate: Plan_Or_Run_Command(PathBuf::from(against), rest),
     });
+}
+
+/// `admits`' own required `--from` and `--to`, naming the two crates.
+///
+/// It takes no root and is handed none. Every other verb walks a tree; this one asks about
+/// two names against the declared architecture, which is what makes it cheap enough to ask
+/// before the edge exists — `OD-GATE-026` measured the two answers at 40 milliseconds against
+/// thirteen seconds. Accepting a `--root` here would advertise a narrowing that changes
+/// nothing about the answer.
+fn Admits_Invocation(rest: &[String]) -> Result<Invocation, String>
+{
+    let depending = Required_Value(Named_Value_From_String_Arguments(rest, "--from").as_ref(), Name("--from"), Usage(USAGE))?;
+    let depended = Required_Value(Named_Value_From_String_Arguments(rest, "--to").as_ref(), Name("--to"), Usage(USAGE))?;
+
+    return Ok(Invocation::Admits { depending, depended });
 }
 
 /// Builds `plan`/`run`'s shared command from `rest`'s flags, now that the verb and its

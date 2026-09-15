@@ -19,6 +19,16 @@ use nomos_contracts::SnapshotId;
 use nomos_contracts::SubjectId;
 use std::collections::VecDeque;
 
+/// Seed bytes for the identifiers a key names. Each is distinct so that two components
+/// never collide on the same digest and hide a disagreement between them.
+const SNAPSHOT_SEED: u8 = 2;
+const VARIANT_SEED: u8 = 3;
+const CONFIGURATION_SEED: u8 = 4;
+
+/// The dependent fact's subject, deliberately not `upstream`'s: the only thing that
+/// reaches this fact is the dependency edge below, which is the walk these tests drive.
+const DERIVED_SUBJECT_SEED: u8 = 7;
+
 fn Seeded(seed: u8) -> Digest128
 {
     return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
@@ -44,8 +54,8 @@ fn Key_For(subject_seed: u8) -> FactKey
         provider: ProviderId::New("nomos.provider.test"),
         provider_version: ContractVersion::New(1, 0),
         guarantee: GuaranteeDigest::Of(&File_Guarantee()),
-        variant: BuildVariantId::From_Digest(Seeded(3)),
-        configuration: ConfigurationId::From_Digest(Seeded(4)),
+        variant: BuildVariantId::From_Digest(Seeded(VARIANT_SEED)),
+        configuration: ConfigurationId::From_Digest(Seeded(CONFIGURATION_SEED)),
     };
 }
 
@@ -53,7 +63,7 @@ fn Fact_For(key: &FactKey, generation: GenerationId) -> MaterializedFact
 {
     return MaterializedFact {
         identity: key.clone().At(generation),
-        snapshot: SnapshotId::From_Digest(Seeded(2)),
+        snapshot: SnapshotId::From_Digest(Seeded(SNAPSHOT_SEED)),
         evidence: EvidenceClass::Derived,
         guarantee: File_Guarantee(),
         payload: FactPayload::New(SchemaId::New("nomos.syntax.v1"), b"tree".to_vec()),
@@ -99,21 +109,47 @@ impl DependencyPropagation for QueueOrderPropagation
     }
 }
 
-fn Two_Fact_Store(propagation: Box<dyn DependencyPropagation>) -> (MemoryFactStore, FactKey, FactKey)
+/// The store a test drives, and the two keys it holds: `upstream`, which the report's
+/// cause names directly, and `derived`, which only the dependency edge reaches.
+struct Two_Fact_Store
+{
+    store: MemoryFactStore,
+    upstream: FactKey,
+    derived: FactKey,
+}
+
+fn Two_Fact_Store(propagation: Box<dyn DependencyPropagation>) -> Two_Fact_Store
 {
     let upstream = Key_For(1);
     // A different subject than `upstream`, so `derived` is reached only by following
     // the dependency edge below — the walk this test exists to exercise — rather than
     // also matching `GenerationCause::SubjectChanged` directly.
-    let derived = Key_For(7);
+    let derived = Key_For(DERIVED_SUBJECT_SEED);
 
-    let mut store = MemoryFactStore::With_Propagation(propagation);
-    let upstream_fact = Fact_For(&upstream, GenerationId::INITIAL);
-    store.Materialize(upstream_fact, &[]).expect("materializes");
     let derived_fact = Fact_For(&derived, GenerationId::INITIAL);
+    let store = Store_With_Edge(propagation, &upstream, derived_fact);
+
+    return Two_Fact_Store {
+        store,
+        upstream,
+        derived,
+    };
+}
+
+/// A store built over `propagation` holding `upstream` alone, and `derived` reading it — the
+/// one edge that reaches `derived`.
+fn Store_With_Edge(
+    propagation: Box<dyn DependencyPropagation>,
+    upstream: &FactKey,
+    derived: MaterializedFact,
+) -> MemoryFactStore
+{
+    let mut store = MemoryFactStore::With_Propagation(propagation);
+    let upstream_fact = Fact_For(upstream, GenerationId::INITIAL);
+    store.Materialize(upstream_fact, &[]).expect("materializes");
     store
         .Materialize(
-            derived_fact,
+            derived,
             &[Dependency {
                 key: upstream.clone(),
                 outcome: ReadOutcome::Materialized,
@@ -121,7 +157,7 @@ fn Two_Fact_Store(propagation: Box<dyn DependencyPropagation>) -> (MemoryFactSto
         )
         .expect("materializes");
 
-    return (store, upstream, derived);
+    return store;
 }
 
 #[test]
@@ -129,16 +165,16 @@ fn Test_An_Alternate_Propagation_Implementation_Should_Produce_The_Same_Report()
 {
     use crate::propagation::LocalGraphPropagation;
 
-    let (mut default_store, upstream, _) = Two_Fact_Store(Box::new(LocalGraphPropagation));
-    let (mut alternate_store, _, _) = Two_Fact_Store(Box::new(QueueOrderPropagation));
+    let mut default_fixture = Two_Fact_Store(Box::new(LocalGraphPropagation));
+    let mut alternate_fixture = Two_Fact_Store(Box::new(QueueOrderPropagation));
     let next = GenerationId::INITIAL.Next();
     let cause = GenerationCause::SubjectChanged {
-        subject: upstream.subject,
+        subject: default_fixture.upstream.subject,
         granularity: IncrementalGranularity::File,
     };
 
-    let default_report = default_store.Invalidate(&cause, next);
-    let alternate_report = alternate_store.Invalidate(&cause, next);
+    let default_report = default_fixture.store.Invalidate(&cause, next);
+    let alternate_report = alternate_fixture.store.Invalidate(&cause, next);
 
     assert_eq!(
         default_report, alternate_report,

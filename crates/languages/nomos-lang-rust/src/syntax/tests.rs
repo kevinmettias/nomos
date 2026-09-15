@@ -57,8 +57,13 @@ fn Test_Ordinals_Should_Be_Dense_And_Zero_Based()
 
     let ordinals: Vec<u32> = facts.items.iter().map(|item| return item.ordinal).collect();
 
-    assert_eq!(ordinals, vec![0, 1, 2]);
+    assert_eq!(ordinals, DENSE_ORDINALS_OF_THREE_DECLARATIONS);
 }
+
+/// The ordinals the fixture above's three declarations must carry, spelled out rather than
+/// derived: dense says no gap between them, and zero-based says where the first one starts,
+/// and a vector counted off the fixture itself would assert neither.
+const DENSE_ORDINALS_OF_THREE_DECLARATIONS: [u32; 3] = [0, 1, 2];
 
 /// `OD-CAPABILITY-010`'s extension: a named-field struct's own field names and head types,
 /// read back through `nomos_cap_syntax::Struct_Fields` the same way a real consumer would,
@@ -67,7 +72,7 @@ fn Test_Ordinals_Should_Be_Dense_And_Zero_Based()
 fn Test_A_Named_Field_Structs_Fields_Should_Be_Recorded()
 {
     let facts = Parsed("pub struct Counter { pub n: u32, label: String }\n");
-    let item = facts.items.first().expect("one struct");
+    let item = facts.items.first().expect("the fixture is one struct declaration, so its first item is that struct");
 
     let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
     let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a named-field struct records its fields");
@@ -86,12 +91,17 @@ fn Test_A_Tuple_Or_Unit_Struct_Should_Record_No_Fields()
 {
     let facts = Parsed("struct Pair(u32, u32);\nstruct Marker;\n");
 
-    assert_eq!(facts.items.len(), 2, "{facts:?}");
+    assert_eq!(facts.items.len(), FIXTURE_STRUCT_COUNT, "{facts:?}");
     for item in &facts.items
     {
         assert_eq!(item.shape, None, "{item:?}");
     }
 }
+
+/// The fixture above declares exactly this many structs. The loop below passes vacuously
+/// over an empty `items`, so without this the test would be green for a parser that recorded
+/// one struct and for one that recorded none.
+const FIXTURE_STRUCT_COUNT: usize = 2;
 
 /// A field's type is its head, not its full generic spelling — `Type_Head`'s own existing
 /// boundary, reused rather than widened.
@@ -99,7 +109,7 @@ fn Test_A_Tuple_Or_Unit_Struct_Should_Record_No_Fields()
 fn Test_A_Generic_Fields_Type_Should_Record_Its_Head_Only()
 {
     let facts = Parsed("pub struct Wrapper { pub inner: Vec<String> }\n");
-    let item = facts.items.first().expect("one struct");
+    let item = facts.items.first().expect("the fixture is one struct declaration, so its first item is that struct");
 
     let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
     let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a named-field struct records its fields");
@@ -250,7 +260,7 @@ fn Assert_Stray_Mark_Is_Refused()
     match Read_Source(stray)
     {
         Reading::Unparseable(failure) => assert_eq!(
-            failure.line, 3,
+            failure.line, STRAY_MARK_LINE,
             "the refusal names the line the mark is on: {failure}"
         ),
         // The half of the byte-order-mark rule that has to be red: a stray mark reported as
@@ -263,6 +273,11 @@ fn Assert_Stray_Mark_Is_Refused()
         ),
     }
 }
+
+/// The line the stray mark occupies in `Assert_Stray_Mark_Is_Refused`'s fixture -- counted
+/// out, so that a refusal naming the file's first line, or the item after the mark, is a
+/// wrong line rather than a shifted one this assertion would follow.
+const STRAY_MARK_LINE: usize = 3;
 
 /// The measured reason completeness is `Unknown`, and the negative control for the
 /// claim that this provider is honest about it. If the walk stopped at item level,
@@ -279,8 +294,13 @@ fn Test_New_Should_Produce_A_Walk_That_Counts_Unexpanded_Regions_Wherever_They_A
     );
 
     assert_eq!(
-        facts.unexpanded, 4,
+        facts.unexpanded, FIXTURE_UNEXPANDED_COUNT,
         "one derive, two invocations inside a body, one at item position: {:?}",
         facts.items
     );
 }
+
+/// The fixture above's four unexpanded regions: the derive, the two macro invocations
+/// inside `body`, and the one at item position. Named so that a walk which stopped counting
+/// at item level reports a number this test can name rather than an off-by-three.
+const FIXTURE_UNEXPANDED_COUNT: u32 = 4;

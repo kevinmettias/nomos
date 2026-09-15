@@ -8,6 +8,13 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity}
 
 const CAPABILITY: &str = "nomos.cap.test.knowledge";
 
+/// How many ways [`Unmet`] can name an absence: one arm of [`Every_Unmet_Reason`] each.
+const UNMET_REASONS: usize = 4;
+
+/// A contract version this caller cannot read, which is what makes the version-mismatch
+/// arm of [`Every_Unmet_Reason`] reachable.
+const UNREADABLE_CONTRACT_MAJOR: u16 = 2;
+
 fn Capability() -> CapabilityId
 {
     return CapabilityId::New(CAPABILITY);
@@ -123,13 +130,13 @@ fn Test_An_Undeclared_Capability_And_An_Unoffered_One_Should_Be_Different_Absenc
 /// rather than that this mapping should change — so this test is the measurement that
 /// answer rests on, and it fails if the mapping moves underneath it.
 /// Every way [`Unmet`] can name an absence, once each.
-fn Every_Unmet_Reason() -> [Unmet; 4]
+fn Every_Unmet_Reason() -> [Unmet; UNMET_REASONS]
 {
     return [
         Unmet::Undeclared,
         Unmet::NoProvider,
         Unmet::VersionMismatch {
-            offered: ContractVersion::New(2, 0),
+            offered: ContractVersion::New(UNREADABLE_CONTRACT_MAJOR, 0),
         },
         Unmet::BelowRequirement {
             closest: ProviderId::New("nomos.test.knowledge"),
@@ -163,10 +170,19 @@ fn Test_Every_Absence_Should_Report_As_A_Missing_Capability_Today()
 /// than" not "only". A requirement the registry cannot honour is refused, because the
 /// caller said "only" — `Resolve` and `Resolve_Requiring` must disagree here or the
 /// second strength does not exist.
+/// A registry that has declared `Contract()` and can answer it via `Offer()`, alongside the
+/// provider these tests ask for and never offer, and the provider that actually answers.
+struct Registry_With_One_Offer
+{
+    registry: Registry,
+    absent: ProviderId,
+    answering: ProviderId,
+}
+
 /// A registry that has declared `Contract()` and can answer it via `Offer()` — but not
 /// via the `absent` provider these tests ask for and never offer. Returns the registry,
 /// `absent`, and who actually answers, since every assertion below needs at least one.
-fn Registry_With_One_Offer() -> (Registry, ProviderId, ProviderId)
+fn Registry_With_One_Offer() -> Registry_With_One_Offer
 {
     let mut registry = Registry::New();
     registry.Declare(Contract()).expect("declared once");
@@ -175,7 +191,11 @@ fn Registry_With_One_Offer() -> (Registry, ProviderId, ProviderId)
     let absent = ProviderId::New("nomos.test.absent");
     let answering = Offer().provider;
 
-    return (registry, absent, answering);
+    return Registry_With_One_Offer {
+        registry,
+        absent,
+        answering,
+    };
 }
 
 fn Assert_Preference_Falls_Back(via_preference: &Resolution)
@@ -224,11 +244,11 @@ fn Assert_Requirement_Refuses(via_requirement: RequiredResolution, required: Pro
 #[test]
 fn Test_A_Required_Naming_Should_Refuse_What_A_Preferred_Naming_Falls_Back_To()
 {
-    let (registry, absent, answering) = Registry_With_One_Offer();
+    let fixture = Registry_With_One_Offer();
 
-    let via_preference = registry.Resolve(&Need().Preferring(absent.clone()));
-    let via_requirement = registry.Resolve_Requiring(&Need(), &absent);
+    let via_preference = fixture.registry.Resolve(&Need().Preferring(fixture.absent.clone()));
+    let via_requirement = fixture.registry.Resolve_Requiring(&Need(), &fixture.absent);
 
     Assert_Preference_Falls_Back(&via_preference);
-    Assert_Requirement_Refuses(via_requirement, absent, answering);
+    Assert_Requirement_Refuses(via_requirement, fixture.absent, fixture.answering);
 }

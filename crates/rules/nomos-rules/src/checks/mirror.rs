@@ -223,14 +223,47 @@ mod address
 
     const PARSER: &str = "nomos.test.mirror.address.parses";
 
+    /// The fact this module materializes: an unexpanded syntax row naming a constant whose own
+    /// doc comment mirrors a name the source no longer declares.
+    const MIRROR_RESOLVING_TO_NOTHING: &str =
+        "unexpanded\t0\nitem\t0\tConstant\tPublic\tTABLES\t+ Mirrored by `Test_Renamed_Away`.\t+slice\n";
+
     #[test]
     fn Test_Check_Completeness_Mirrors_Should_Block_On_A_Mirror_That_Resolves_To_Nothing()
     {
-        let source = SourceFile::New(
+        let findings = Findings_Over_A_Mirror_That_Resolves_To_Nothing();
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        let finding = findings.first().expect("asserted len 1 above");
+        assert_eq!(finding.subject_name, "TABLES");
+        assert_eq!(finding.gate, GateCategory::Blocking);
+    }
+
+    /// What the rule reports over the one source this module addresses.
+    fn Findings_Over_A_Mirror_That_Resolves_To_Nothing() -> Vec<Finding>
+    {
+        let source = Source_Whose_Mirror_Resolved_To_Nothing();
+        let TestOffering { store, registry, .. } = Offering_With_Fact(&source);
+
+        let mut reader = nomos_analysis::Reader::On(&store, &registry, Test_Context());
+        return Check_Completeness_Mirrors(&[source], &mut reader);
+    }
+
+    /// The `a.rs` source this module addresses: a constant whose doc comment names a symbol the
+    /// source itself no longer declares.
+    fn Source_Whose_Mirror_Resolved_To_Nothing() -> SourceFile
+    {
+        return SourceFile::New(
             "a.rs",
             SubjectId::From_Digest(Content_Digest(b"a.rs")),
             "/// Mirrored by `Test_Renamed_Away`.\npub const TABLES: &[&str] = &[];\n",
         );
+    }
+
+    /// A declared-and-offered syntax capability with [`MIRROR_RESOLVING_TO_NOTHING`]
+    /// materialized against `source` — the reader the addressing test is built over.
+    fn Offering_With_Fact(source: &SourceFile) -> TestOffering
+    {
         let TestOffering { mut store, registry, offer } = test_support::Offering(
             nomos_cap_syntax::Capability_Contract(),
             nomos_cap_syntax::Capability(),
@@ -244,17 +277,9 @@ mod address
             &offer,
             nomos_analysis::InputDigest::Of(&[source.text.as_bytes()]),
             nomos_cap_syntax::Payload_Schema(),
-            "unexpanded\t0\nitem\t0\tConstant\tPublic\tTABLES\t+ Mirrored by `Test_Renamed_Away`.\t+slice\n"
-                .as_bytes()
-                .to_vec(),
+            MIRROR_RESOLVING_TO_NOTHING.as_bytes().to_vec(),
         );
-        let mut reader = nomos_analysis::Reader::On(&store, &registry, Test_Context());
 
-        let findings = Check_Completeness_Mirrors(&[source], &mut reader);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        let finding = findings.first().expect("asserted len 1 above");
-        assert_eq!(finding.subject_name, "TABLES");
-        assert_eq!(finding.gate, GateCategory::Blocking);
+        return TestOffering { store, registry, offer };
     }
 }

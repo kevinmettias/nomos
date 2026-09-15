@@ -49,18 +49,30 @@ impl KnowledgeContextItem
 #[cfg(test)]
 mod tests
 {
-    use alloc::vec;
     use alloc::borrow::ToOwned;
+    use alloc::vec;
     use super::*;
 
     #[test]
     fn Test_Is_Unresolved_Should_Be_True_When_Role_Or_Authority_Scope_Is_Missing()
     {
-        let missing_role = KnowledgeContextItem {
+        let missing_role = Item(None, Some("repository"));
+        let missing_authority = Item(Some(KnowledgeSourceRole::CodeOrTestEvidence), None);
+        let resolved = Item(Some(KnowledgeSourceRole::CodeOrTestEvidence), Some("repository"));
+
+        assert!(missing_role.Is_Unresolved(), "a missing role is unresolved");
+        assert!(missing_authority.Is_Unresolved(), "a missing authority scope is unresolved");
+        assert!(!resolved.Is_Unresolved(), "both present is what resolved means");
+    }
+
+    /// One knowledge item, carrying everything but the two fields this test varies.
+    fn Item(role: Option<KnowledgeSourceRole>, authority_scope: Option<&str>) -> KnowledgeContextItem
+    {
+        return KnowledgeContextItem {
             source: None,
             source_version: None,
-            role: None,
-            authority_scope: Some("repository".to_owned()),
+            role,
+            authority_scope: authority_scope.map(ToOwned::to_owned),
             applicable_snapshot: None,
             applicable_build_variant: None,
             freshness: None,
@@ -68,20 +80,5 @@ mod tests
             permitted_use: None,
             contradiction_links: vec![],
         };
-        assert!(missing_role.Is_Unresolved());
-
-        let missing_authority = KnowledgeContextItem {
-            role: Some(KnowledgeSourceRole::CodeOrTestEvidence),
-            authority_scope: None,
-            ..missing_role.clone()
-        };
-        assert!(missing_authority.Is_Unresolved());
-
-        let resolved = KnowledgeContextItem {
-            role: Some(KnowledgeSourceRole::CodeOrTestEvidence),
-            authority_scope: Some("repository".to_owned()),
-            ..missing_role
-        };
-        assert!(!resolved.Is_Unresolved());
     }
 }

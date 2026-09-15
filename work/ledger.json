@@ -73542,7 +73542,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -73556,7 +73556,28 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "_A_Declared_Module ... ok\ntest tests::Test_Explain_Should_Report_A_Suppression_That_Applies ... ok\ntest tests::Test_A_Declared_Entry_That_Matched_Should_Not_Be_Reported_As_Unmatched ... ok\n\ntest result: ok. 157 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 77.54s\n\n\nrunning 4 tests\ntest Test_Run_Gate_Should_Report_An_Unreadable_Check_Outcome_As_Indeterminate ... ok\ntest Test_Run_Gate_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified ... ok\ntest Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestration_Seam ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.73s\n\n\nrunning 4 tests\ntest Test_Disposition_Of_Findings_Should_Fail_On_A_Blocking_Finding ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\ntest Test_Disposition_Of_Findings_Should_Fail_With_One_Blocking_Finding_Among_Many ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.20s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-441acf4888ebc08b.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-51ff4d6c2ef7792a.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-274283f7a8f3c89b.exe)\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1789499922,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d65e59b2788a297faae418197bbab39d72f2163b"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -76009,7 +76030,13 @@
         "timeout_seconds": 1800
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-p103",
+          "reason": "Stopped rather than improvised: the first half of this item's done_when cannot be satisfied inside the territory it reserves, and I am not widening into eight packages on my own judgement.\n\nThe report is the test Test_A_Run_Should_Report_What_It_Did_Not_Check in tests/contract/tests/corpus_gates/report.rs. It compiles only into the nomos-contract-tests test binary, so a package-scoped run of any other package never builds it and can never print its line -- and every verification predicate on this board is package-scoped.\n\nThere is no smaller place to stand. No crate in this workspace depends on nomos-contract-tests, so the report cannot ride into another test binary through a linked library. The fifteen declared gated files share no choke point: each reads its corpus variable in its own local helper -- Corpus_Or_Skip in nomos-lang-rust, nomos-workspace and tests/integration, Corpus in nomos-spec-ingest, Corpus_Root in nomos-spec-model and nomos-spec-store -- so making a scoped run speak means editing eight packages, and this item reserves none of them.\n\nA helper that prints on its own skip path does not reach the reader either. libtest captures a passing test's output, which is exactly why a skipped test prints ok in the first place; the captured line is discarded with the pass. The two mechanisms that do reach a scoped run's terminal are a build script emitting cargo::warning, which must live in each gated package, and a static initializer in a library linked into each test binary, which needs a dev-dependency added to each. Both are eight-package changes and both are a mechanism decision this item does not make.\n\nSo the item needs its mechanism decided and then its territory widened, and in that order. Suggested split, in the shape P110-A and P110-B already took here: a decision item naming the reporting mechanism and the exact packages it lands in, then this item re-scoped to that surface with the table's two independent derivations still agreeing.\n\nThe SECOND half was verified independently and deliberately left unlanded, because this item's own done_when forbids repairing one and leaving the other. Line 22's v14.36 is false: the corpus at the configured root carries v14.19 fifty times across its text files plus once inside a compiled .pyc, which reconciles this item's own figure of 51, and v14.36 appears nowhere in the tree at all. That half is small, real and in territory whenever somebody takes this up.",
+          "abandoned_at": 1789498449
+        }
+      ],
       "displaced": [],
       "declined": null,
       "widened": []
@@ -77691,14 +77718,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p110a",
-        "acquired_at": 1789495714,
-        "lease_expires_at": 1789510114
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -77708,7 +77731,27 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "15 tests\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\finish-p109d\\crates\\spec\\nomos-spec-store)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.51s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1789497082,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -77882,7 +77925,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -77897,7 +77940,29 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "--lib",
+          "policy::gate_policy_file"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 13 tests\ntest policy::gate_policy_file::tests::Test_A_Policy_A_Caller_Built_Should_Win_Over_The_File ... ok\ntest policy::gate_policy_file::tests::Test_A_Root_With_No_Policy_File_Should_Resolve_To_Nothing_Rather_Than_Refusing ... ok\ntest policy::gate_policy_file::tests::Test_A_Misspelled_Key_Should_Refuse_Rather_Than_Be_Ignored ... ok\ntest policy::gate_policy_file::tests::Test_A_File_That_Is_Not_The_Declared_Shape_Should_Refuse_Rather_Than_Read_As_Empty ... ok\ntest policy::gate_policy_file::tests::Test_A_Declared_File_Should_Resolve_All_Four_Policies ... ok\ntest policy::gate_policy_file::tests::Test_A_Declared_Path_Should_Resolve_To_The_Subject_A_Walk_Would_File_It_Under ... ok\ntest policy::gate_policy_file::tests::Test_A_Non_Waiver_With_An_Expiry_Should_Be_Refused ... ok\ntest policy::gate_policy_file::tests::Test_A_Temporary_Waiver_With_An_Expiry_Should_Resolve_To_That_Instant ... ok\ntest policy::gate_policy_file::tests::Test_An_Entry_Accepting_Zero_Occurrences_Should_Be_Refused ... ok\ntest policy::gate_policy_file::tests::Test_A_Temporary_Waiver_Without_An_Expiry_Should_Be_Refused ... ok\ntest policy::gate_policy_file::tests::Test_A_Declared_Entry_Should_Carry_The_Occurrence_Count_It_Accepted ... ok\ntest policy::gate_policy_file::tests::Test_An_Entry_Naming_No_Count_Should_Be_Unbounded_Rather_Than_Assumed ... ok\ntest policy::gate_policy_file::tests::Test_Every_Refusal_Sentence_Should_Render_As_Single_Spaced_Prose ... ok\n\ntest result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 144 filtered out; finished in 0.03s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\finish-p109d\\crates\\orchestration\\nomos-gate-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.74s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-441acf4888ebc08b.exe)\n",
+        "verified_at": 1789498083,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -77968,6 +78033,1180 @@
           "--no-fail-fast"
         ],
         "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P110-B-A-FINDING-CARRIES-THE-ADDRESS-ITS-RULE-DECLARES",
+      "title": "a finding carries the address its rule declares",
+      "why": "OD-GATE-032 decided a declared tolerance addresses its finding through a tagged selector with exactly one addressing mode, and that a rule which subjects its findings to something inside the file must declare an address a person can write rather than assemble a composite privately. Nothing implements that, and this is the prerequisite half: the policy side cannot resolve a name to an identity until the finding carries one. Sixteen production sites build the composite privately as SubjectId::From_Digest(Content_Digest(qualified.as_bytes())), where qualified is assembled at the site with no shared constructor and no normalization -- thirteen under checks/naming across eleven files, and three outside it in checks/function_shape.rs, checks/guarantee_exerciser.rs and checks/mirror/verdict.rs. subject_name holds the bare member name rather than the composite, so nothing Finding carries today can address one of these findings, and matching a bare display name would broaden across every symbol that shares it rather than addressing one. Measured this session: Finding is not non_exhaustive, implements no Default, and carries no field that could hold an address, so adding one edits every construction site in the workspace -- 132 in production across 80 files, 49 of them in nomos-rules alone. OD-ANALYSIS-011 permits exactly three subject derivations and this family is a fourth it does not name; tests/contract/tests/boundaries/findings.rs enforces the three, and its fixture is two fact-free rules so it cannot produce the fourth and passes over the family it exists to guard.",
+      "done_when": "Finding carries the address its rule declares, as display and authoring material that never participates in subject identity or in matching, and the sixteen sites that assemble a qualified-name composite publish that address instead of keeping it private. Every subject value in the workspace is byte-identical to what it was before this item: the change is that the string a person would have to write is now on the finding rather than private to the rule that built it. OD-ANALYSIS-011 is amended to name the fourth derivation, and tests/contract/tests/boundaries/findings.rs permits it with its fixture extended to actually produce a finding of that shape, because a guard whose fixture cannot exercise the shape it exists for has already been written once in this repository and checks nothing. The naming family is the family that must be addressable, since it is what a repository adopting on existing code reaches for first.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts",
+          "crates/rules/nomos-rules",
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-correction-orchestration",
+          "crates/kernel/nomos-model",
+          "crates/languages/nomos-lang-rust-compiler",
+          "crates/host/nomos-cli",
+          "crates/host/nomos-lsp",
+          "crates/host/nomos-surface-provenance",
+          "crates/agent/nomos-agent-contracts",
+          "tests/contract/tests/boundaries",
+          "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P109-F-A-POLICY-DIGEST-IGNORES-THE-ALLOWANCE-THAT-DECIDES-THE-JUDGMENT",
+      "title": "a policy digest ignores the allowance that decides the judgment",
+      "why": "Policy_Digest builds the digest a run records of the policy it judged under, and gate_compare.rs compares two runs by it: if before.policy equals after.policy the two sides were judged under the same policy and a difference is attributed to the repository. For each baseline entry the digest hashes the rule, the subject and the rationale, and it does not hash the entry allowance. Two policies differing only in accepted_occurrence_count therefore digest alike, and a comparison reads them as one policy -- so a repository that raised or lowered a tolerance between two runs gets a report saying the source changed, which is the failure class OD-GATE-031 exists to prevent. The evidence that this is an omission rather than a decision is the shape of what the digest does include: rationale is pure display material that no judgment consults, and it is hashed, while the allowance decides whether a finding is tolerated or exceeds the baseline and is not. The absence of declared_path from the same digest is correct and is not this defect -- it is display material too, and hashing it would make two spellings of one entry digest differently. The allowance is not display material; P109-C added it so a tolerance could say how much it accepted, and it is exactly what two such policies can differ by.",
+      "done_when": "Two effective policies differing only in a baseline entry allowance digest differently, and a test asserts it on the digest rather than on the policy, because the omission is invisible in either policy and only appears in the comparison. Nothing about which findings a run tolerates changes, and the digest stays order-sensitive in authoring order as it is today: this is a change to what the identity is computed over and not to what a run does. A comparison over two runs whose only difference is the allowance reports the policy difference rather than attributing it to the repository.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "--lib",
+          "gate_environment"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-GATE-ORCH",
+      "title": "Eight-phase zero across the gate-orch territory",
+      "why": "The eight named code-standards gate phases report 133 findings across 7 files in the gate-orch territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/admissibility.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_phase.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_run_result.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/suppression_disposition/suppression.rs",
+          "crates/orchestration/nomos-gate-orchestration/tests/check_orchestration_seam.rs",
+          "crates/orchestration/nomos-gate-orchestration/tests/gate_run_outcome.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings/baseline_population.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests/registry.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests/disposition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests/run.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests/baseline.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests/explain.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests/coverage.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests/declared_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests/narrowing.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-a5",
+        "acquired_at": 1789497612,
+        "lease_expires_at": 1789526412
+      },
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "gate-orch"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings.rs"
+          ],
+          "widened_at": 1789499430
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings/baseline_population.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file/tests.rs"
+          ],
+          "widened_at": 1789500842
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/orchestration/nomos-gate-orchestration/src/tests/registry.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/tests/disposition.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/tests/run.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/tests/baseline.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/tests/explain.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/tests/coverage.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/tests/declared_policy.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/tests/narrowing.rs"
+          ],
+          "widened_at": 1789503746
+        }
+      ]
+    },
+    {
+      "id": "P111-EIGHT-PHASE-CAPABILITIES-CONNECTORS",
+      "title": "Eight-phase zero across the capabilities-connectors territory",
+      "why": "The eight named code-standards gate phases report 102 findings across 24 files in the capabilities-connectors territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-architecture/src/payload.rs",
+          "crates/capabilities/nomos-cap-controlflow/tests/contract.rs",
+          "crates/capabilities/nomos-cap-dependency-policy/tests/contract.rs",
+          "crates/capabilities/nomos-cap-dependency/tests/contract.rs",
+          "crates/capabilities/nomos-cap-goals-policy/tests/contract.rs",
+          "crates/capabilities/nomos-cap-limits-policy/tests/contract.rs",
+          "crates/capabilities/nomos-cap-lint/tests/contract.rs",
+          "crates/capabilities/nomos-cap-naming-policy/tests/contract.rs",
+          "crates/capabilities/nomos-cap-requirement-trace/src/assessment.rs",
+          "crates/capabilities/nomos-cap-requirement-trace/src/payload.rs",
+          "crates/capabilities/nomos-cap-requirement-trace/src/predicates.rs",
+          "crates/capabilities/nomos-cap-requirement-trace/src/provider.rs",
+          "crates/capabilities/nomos-cap-requirement-trace/src/registry.rs",
+          "crates/capabilities/nomos-cap-requirement-trace/tests/contract.rs",
+          "crates/capabilities/nomos-cap-scripting-policy/tests/contract.rs",
+          "crates/capabilities/nomos-cap-syntax/src/payload/observation.rs",
+          "crates/capabilities/nomos-cap-syntax/src/payload/tests.rs",
+          "crates/capabilities/nomos-cap-syntax/tests/contract.rs",
+          "crates/capabilities/nomos-cap-words-policy/tests/contract.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/fetching.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/payload.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/provider.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/review_finding_id.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/translation.rs",
+          "crates/capabilities/nomos-cap-syntax/src/lib.rs",
+          "crates/capabilities/nomos-cap-syntax/src/payload/impls.rs",
+          "crates/languages/nomos-lang-rust/src/syntax/shape.rs",
+          "crates/languages/nomos-lang-rust/src/syntax/walk.rs",
+          "tests/contract/surface/nomos-cap-syntax.txt",
+          "tests/contract/surface/nomos-cap-requirement-trace.txt",
+          "crates/capabilities/nomos-cap-requirement-trace/src/lib.rs",
+          "tests/contract/tests/requirement_trace/registry.rs",
+          "tests/contract/tests/requirement_trace/reader.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-a5",
+        "acquired_at": 1789497619,
+        "lease_expires_at": 1789526419
+      },
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "capabilities-connectors"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/capabilities/nomos-cap-syntax/src/lib.rs",
+            "crates/capabilities/nomos-cap-syntax/src/payload/impls.rs",
+            "crates/languages/nomos-lang-rust/src/syntax/shape.rs",
+            "crates/languages/nomos-lang-rust/src/syntax/walk.rs",
+            "tests/contract/surface/nomos-cap-syntax.txt",
+            "tests/contract/surface/nomos-cap-requirement-trace.txt"
+          ],
+          "widened_at": 1789500939
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/capabilities/nomos-cap-requirement-trace/src/lib.rs"
+          ],
+          "widened_at": 1789501028
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "tests/contract/tests/requirement_trace/registry.rs",
+            "tests/contract/tests/requirement_trace/reader.rs"
+          ],
+          "widened_at": 1789502415
+        }
+      ]
+    },
+    {
+      "id": "P111-EIGHT-PHASE-HOST-CLI",
+      "title": "Eight-phase zero across the host-cli territory",
+      "why": "The eight named code-standards gate phases report 260 findings across 47 files in the host-cli territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/agent/dispatch.rs",
+          "crates/host/nomos-cli/src/agent/tests.rs",
+          "crates/host/nomos-cli/src/check/sources.rs",
+          "crates/host/nomos-cli/src/check/tests.rs",
+          "crates/host/nomos-cli/src/correct.rs",
+          "crates/host/nomos-cli/src/correct/tests.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate/parsing.rs",
+          "crates/host/nomos-cli/src/gate/sources.rs",
+          "crates/host/nomos-cli/src/gate/tests.rs",
+          "crates/host/nomos-cli/src/request.rs",
+          "crates/host/nomos-cli/src/request/report.rs",
+          "crates/host/nomos-cli/src/request/tests.rs",
+          "crates/host/nomos-cli/src/spec/tests.rs",
+          "crates/host/nomos-cli/src/spec/verb/record.rs",
+          "crates/host/nomos-cli/src/vacuity.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/work/listing.rs",
+          "crates/host/nomos-cli/src/work/parse.rs",
+          "crates/host/nomos-cli/src/work/report.rs",
+          "crates/host/nomos-cli/src/work/tests.rs",
+          "crates/host/nomos-cli/src/workflow.rs",
+          "crates/host/nomos-cli/tests/abandon_is_readable.rs",
+          "crates/host/nomos-cli/tests/add_guarantees_what_it_says.rs",
+          "crates/host/nomos-cli/tests/agent_contracts_seam.rs",
+          "crates/host/nomos-cli/tests/agent_executor_claude_code_seam.rs",
+          "crates/host/nomos-cli/tests/authoring_surface.rs",
+          "crates/host/nomos-cli/tests/check_command.rs",
+          "crates/host/nomos-cli/tests/contracts_seam.rs",
+          "crates/host/nomos-cli/tests/freshness.rs",
+          "crates/host/nomos-cli/tests/gate_orchestration_seam.rs",
+          "crates/host/nomos-cli/tests/gate_step/vacuity.rs",
+          "crates/host/nomos-cli/tests/lang_go_seam.rs",
+          "crates/host/nomos-cli/tests/list_tells_the_truth/audit.rs",
+          "crates/host/nomos-cli/tests/list_tells_the_truth/authored.rs",
+          "crates/host/nomos-cli/tests/model_backend_ollama_seam.rs",
+          "crates/host/nomos-cli/tests/model_seam.rs",
+          "crates/host/nomos-cli/tests/platform_seam.rs",
+          "crates/host/nomos-cli/tests/read_surface.rs",
+          "crates/host/nomos-cli/tests/request_submit.rs",
+          "crates/host/nomos-cli/tests/scratch_ledger/board.rs",
+          "crates/host/nomos-cli/tests/spec_model_seam.rs",
+          "crates/host/nomos-cli/tests/spec_store_seam.rs",
+          "crates/host/nomos-cli/tests/stale_writer_is_refused.rs",
+          "crates/host/nomos-cli/tests/support/mod.rs",
+          "crates/host/nomos-cli/tests/takeover_is_recorded.rs",
+          "crates/host/nomos-cli/tests/work_orchestration_seam.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-cli/src/workflow/parsing.rs",
+          "crates/host/nomos-cli/src/workflow/sources.rs",
+          "crates/host/nomos-cli/src/workflow/tests.rs",
+          "crates/host/nomos-cli/src/work/tests/parsing.rs",
+          "crates/host/nomos-cli/src/work/tests/listing.rs",
+          "crates/host/nomos-cli/src/work/tests/vocabulary.rs",
+          "crates/host/nomos-cli/src/work/tests/separator.rs",
+          "crates/host/nomos-cli/src/gate/report/admits.rs",
+          "crates/host/nomos-cli/src/gate/report/baselines.rs",
+          "crates/host/nomos-cli/src/gate/report/explain.rs",
+          "crates/host/nomos-cli/src/gate/report/run.rs",
+          "crates/host/nomos-cli/src/gate/report/tests.rs",
+          "crates/host/nomos-cli/src/gate/report/tests/baselines.rs",
+          "crates/host/nomos-cli/src/gate/report/tests/compare.rs",
+          "crates/host/nomos-cli/src/gate/report/tests/explain.rs",
+          "crates/host/nomos-cli/src/gate/report/tests/plan.rs",
+          "crates/host/nomos-cli/src/gate/report/tests/verdicts.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-a5",
+        "acquired_at": 1789497620,
+        "lease_expires_at": 1789526420
+      },
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "host-cli"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/host/nomos-cli/src/gate/report.rs"
+          ],
+          "widened_at": 1789499566
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/host/nomos-cli/src/workflow/parsing.rs",
+            "crates/host/nomos-cli/src/workflow/sources.rs",
+            "crates/host/nomos-cli/src/workflow/tests.rs"
+          ],
+          "widened_at": 1789500195
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/host/nomos-cli/src/work/tests/parsing.rs",
+            "crates/host/nomos-cli/src/work/tests/listing.rs",
+            "crates/host/nomos-cli/src/work/tests/vocabulary.rs"
+          ],
+          "widened_at": 1789503086
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/host/nomos-cli/src/work/tests/separator.rs",
+            "crates/host/nomos-cli/src/gate/report/admits.rs",
+            "crates/host/nomos-cli/src/gate/report/baselines.rs",
+            "crates/host/nomos-cli/src/gate/report/explain.rs",
+            "crates/host/nomos-cli/src/gate/report/run.rs",
+            "crates/host/nomos-cli/src/gate/report/tests.rs",
+            "crates/host/nomos-cli/src/gate/report/tests/baselines.rs",
+            "crates/host/nomos-cli/src/gate/report/tests/compare.rs",
+            "crates/host/nomos-cli/src/gate/report/tests/explain.rs",
+            "crates/host/nomos-cli/src/gate/report/tests/plan.rs",
+            "crates/host/nomos-cli/src/gate/report/tests/verdicts.rs"
+          ],
+          "widened_at": 1789504063
+        }
+      ]
+    },
+    {
+      "id": "P111-EIGHT-PHASE-HOST-SURFACES",
+      "title": "Eight-phase zero across the host-surfaces territory",
+      "why": "The eight named code-standards gate phases report 153 findings across 35 files in the host-surfaces territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api-transport/src/nomos_api_service.rs",
+          "crates/host/nomos-api-transport/src/nomos_api_service/tests.rs",
+          "crates/host/nomos-api/src/agent.rs",
+          "crates/host/nomos-api/src/check.rs",
+          "crates/host/nomos-api/src/correction.rs",
+          "crates/host/nomos-api/src/response/baseline_allowance_response.rs",
+          "crates/host/nomos-api/src/response/baseline_population_response.rs",
+          "crates/host/nomos-api/src/response/check_outcome_response.rs",
+          "crates/host/nomos-api/src/response/comparability_response.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "crates/host/nomos-api/src/response/gate_explain_response.rs",
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "crates/host/nomos-api/src/response/no_verdict_response.rs",
+          "crates/host/nomos-api/src/sources.rs",
+          "crates/host/nomos-api/src/spec/rendered_projection_response.rs",
+          "crates/host/nomos-api/src/spec/submission_response.rs",
+          "crates/host/nomos-api/src/work/tests_support.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "crates/host/nomos-api/tests/integration_seams.rs",
+          "crates/host/nomos-lsp/src/file_diagnostic.rs",
+          "crates/host/nomos-lsp/src/location.rs",
+          "crates/host/nomos-lsp/src/nomos_diagnostic_provider.rs",
+          "crates/host/nomos-lsp/src/nomos_diagnostic_provider/tests.rs",
+          "crates/host/nomos-lsp/src/severity.rs",
+          "crates/host/nomos-lsp/src/sources.rs",
+          "crates/host/nomos-lsp/src/walk_outward.rs",
+          "crates/host/nomos-lsp/src/walk_outward/architectural_component.rs",
+          "crates/host/nomos-lsp/tests/fixture_tree.rs",
+          "crates/host/nomos-mcp/src/nomos_tool_catalog/tests.rs",
+          "crates/host/nomos-mcp/src/served_tool.rs",
+          "crates/host/nomos-mcp/tests/stdio.rs",
+          "crates/host/nomos-surface-provenance/src/arguments.rs",
+          "crates/host/nomos-surface-provenance/src/evaluate.rs",
+          "crates/host/nomos-surface-provenance/src/main.rs",
+          "crates/host/nomos-surface-provenance/tests/platform_integration.rs",
+          "crates/host/nomos-api/src/response/baseline_debt_response.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "host-surfaces"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "host-surfaces"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: host-surfaces -- 5 crate(s), zero findings in the eight phases\r\n",
+        "verified_at": 1789499888,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "13369bd53355597b0e8cc6db12821daff8e2d96b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/host/nomos-api/src/response/baseline_debt_response.rs"
+          ],
+          "widened_at": 1789499674
+        }
+      ]
+    },
+    {
+      "id": "P111-EIGHT-PHASE-KERNEL-PLATFORM",
+      "title": "Eight-phase zero across the kernel-platform territory",
+      "why": "The eight named code-standards gate phases report 158 findings across 21 files in the kernel-platform territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/composer/nomos-composer-std/src/lib.rs",
+          "crates/contracts/nomos-contracts/src/knowledge_source_role/knowledge_context_item.rs",
+          "crates/corrections/nomos-corrections/tests/integration_seams.rs",
+          "crates/kernel/nomos-model/src/identity/finding_occurrence_id.rs",
+          "crates/kernel/nomos-model/src/identity/occurrence_collision.rs",
+          "crates/kernel/nomos-model/tests/nomos_contracts_seam.rs",
+          "crates/kernel/nomos-store/tests/one_door.rs",
+          "crates/platform/nomos-platform-std/src/launcher/tests.rs",
+          "crates/platform/nomos-platform-std/src/std_file_system.rs",
+          "crates/platform/nomos-platform-std/tests/implements_the_platform_ports.rs",
+          "crates/platform/nomos-platform-xvpe/src/xvpe_launcher.rs",
+          "crates/repository/nomos-repo-policy/src/architecture/reading.rs",
+          "crates/repository/nomos-repo-policy/src/architecture/reading/tests.rs",
+          "crates/repository/nomos-repo-policy/src/scaffolding.rs",
+          "crates/spec/nomos-spec-model/src/submission/tests.rs",
+          "crates/spec/nomos-spec-model/src/table.rs",
+          "crates/spec/nomos-spec-model/tests/byte_order_mark.rs",
+          "crates/spec/nomos-spec-model/tests/normalizer_gate.rs",
+          "crates/spec/nomos-spec-validate/src/validation_run.rs",
+          "crates/spec/nomos-spec-validate/tests/model_seam.rs",
+          "crates/spec/nomos-spec-validate/tests/preservation_holds.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "kernel-platform"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "kernel-platform"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: kernel-platform -- 10 crate(s), zero findings in the eight phases\r\n",
+        "verified_at": 1789499606,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "13369bd53355597b0e8cc6db12821daff8e2d96b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-LANGUAGES-AGENTS",
+      "title": "Eight-phase zero across the languages-agents territory",
+      "why": "The eight named code-standards gate phases report 129 findings across 36 files in the languages-agents territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/tests.rs",
+          "crates/agent/nomos-agent-executor-claude-code/tests/integration_seams.rs",
+          "crates/agent/nomos-model-backend-ollama/src/lib.rs",
+          "crates/agent/nomos-model-backend-ollama/src/tests.rs",
+          "crates/agent/nomos-model-backend-ollama/tests/integration_seams.rs",
+          "crates/languages/nomos-lang-go-modules/src/discovery/tests.rs",
+          "crates/languages/nomos-lang-go-modules/tests/integration_seams.rs",
+          "crates/languages/nomos-lang-go/src/syntax/tests.rs",
+          "crates/languages/nomos-lang-go/tests/integration_seams.rs",
+          "crates/languages/nomos-lang-rust-cargo/src/metadata_error.rs",
+          "crates/languages/nomos-lang-rust-cargo/tests/integration_seams.rs",
+          "crates/languages/nomos-lang-rust-cargo/tests/invalidation.rs",
+          "crates/languages/nomos-lang-rust-clippy/src/clippy_error.rs",
+          "crates/languages/nomos-lang-rust-clippy/src/tests.rs",
+          "crates/languages/nomos-lang-rust-clippy/tests/capability_seam.rs",
+          "crates/languages/nomos-lang-rust-clippy/tests/materialize_workspace_seam.rs",
+          "crates/languages/nomos-lang-rust-clippy/tests/platform_std_seam.rs",
+          "crates/languages/nomos-lang-rust-compiler/fixtures/clone_on_copy_sample/src/lib.rs",
+          "crates/languages/nomos-lang-rust-compiler/fixtures/nested_lock_sample/src/lib.rs",
+          "crates/languages/nomos-lang-rust-compiler/src/check.rs",
+          "crates/languages/nomos-lang-rust-compiler/src/fact_context.rs",
+          "crates/languages/nomos-lang-rust-compiler/src/nested_lock_check.rs",
+          "crates/languages/nomos-lang-rust-compiler/src/nested_lock_fact_context.rs",
+          "crates/languages/nomos-lang-rust-compiler/src/nested_lock_reading.rs",
+          "crates/languages/nomos-lang-rust-compiler/src/payload.rs",
+          "crates/languages/nomos-lang-rust-compiler/src/reading.rs",
+          "crates/languages/nomos-lang-rust-deny/src/deny_error.rs",
+          "crates/languages/nomos-lang-rust-deny/tests/integration_seams.rs",
+          "crates/languages/nomos-lang-rust-scan/tests/integration_seams.rs",
+          "crates/languages/nomos-lang-rust/src/rollup/tests.rs",
+          "crates/languages/nomos-lang-rust/src/syntax/shape.rs",
+          "crates/languages/nomos-lang-rust/src/syntax/tests.rs",
+          "crates/languages/nomos-lang-rust/tests/corpus/claims.rs",
+          "crates/languages/nomos-lang-rust/tests/guarantee.rs",
+          "crates/languages/nomos-lang-rust/tests/rollup.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "languages-agents"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "languages-agents"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: languages-agents -- 12 crate(s), zero findings in the eight phases\r\n",
+        "verified_at": 1789499668,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "13369bd53355597b0e8cc6db12821daff8e2d96b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-ORCHESTRATION",
+      "title": "Eight-phase zero across the orchestration territory",
+      "why": "The eight named code-standards gate phases report 182 findings across 26 files in the orchestration territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-agent-orchestration/src/run.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/validated_correction.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/declared_rules.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/dependency_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/package_conformance.rs",
+          "crates/orchestration/nomos-check-orchestration/src/rule_resolution.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/tests/incremental_equivalence.rs",
+          "crates/orchestration/nomos-check-orchestration/tests/run_seam.rs",
+          "crates/orchestration/nomos-check-orchestration/tests/unchanged_run_economy.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/phantom_mirror.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/run.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/trailing_whitespace.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/corpus/tests.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-spec-orchestration/tests/spec_run_seam.rs",
+          "crates/orchestration/nomos-work-orchestration/src/run.rs",
+          "crates/orchestration/nomos-work-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-work-orchestration/tests/integration_seams.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/body/correction_body.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-workspace-discovery/src/lib.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/body.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/body/commit_intent.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "orchestration"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: orchestration -- 7 crate(s), zero findings in the eight phases\r\n",
+        "verified_at": 1789500520,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "960fdb8f105af19a2a59186fac8107fb3b484ded"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/orchestration/nomos-workflow-orchestration/src/body.rs",
+            "crates/orchestration/nomos-workflow-orchestration/src/body/commit_intent.rs"
+          ],
+          "widened_at": 1789500194
+        }
+      ]
+    },
+    {
+      "id": "P111-EIGHT-PHASE-RULES",
+      "title": "Eight-phase zero across the rules territory",
+      "why": "The eight named code-standards gate phases report 165 findings across 37 files in the rules territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/checks/borrowed_container.rs",
+          "crates/rules/nomos-rules/src/checks/closure_bounds.rs",
+          "crates/rules/nomos-rules/src/checks/code_prefix.rs",
+          "crates/rules/nomos-rules/src/checks/constant_scope.rs",
+          "crates/rules/nomos-rules/src/checks/crosslang.rs",
+          "crates/rules/nomos-rules/src/checks/dependency.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/violations.rs",
+          "crates/rules/nomos-rules/src/checks/dependency/write_authority.rs",
+          "crates/rules/nomos-rules/src/checks/facade.rs",
+          "crates/rules/nomos-rules/src/checks/formatting.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape.rs",
+          "crates/rules/nomos-rules/src/checks/go_text.rs",
+          "crates/rules/nomos-rules/src/checks/guarantee_exerciser.rs",
+          "crates/rules/nomos-rules/src/checks/lifetime_discipline.rs",
+          "crates/rules/nomos-rules/src/checks/lint.rs",
+          "crates/rules/nomos-rules/src/checks/mirror.rs",
+          "crates/rules/nomos-rules/src/checks/mirror/tests.rs",
+          "crates/rules/nomos-rules/src/checks/mirror/tests/judgments.rs",
+          "crates/rules/nomos-rules/src/checks/mirror/tests/reads_a_fact.rs",
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs",
+          "crates/rules/nomos-rules/src/checks/naming/file_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/naming_clarity.rs",
+          "crates/rules/nomos-rules/src/checks/naming/single_letter_names.rs",
+          "crates/rules/nomos-rules/src/checks/nesting_depth.rs",
+          "crates/rules/nomos-rules/src/checks/orphan_modules.rs",
+          "crates/rules/nomos-rules/src/checks/policy.rs",
+          "crates/rules/nomos-rules/src/checks/procedural_macro.rs",
+          "crates/rules/nomos-rules/src/checks/requirement_trace.rs",
+          "crates/rules/nomos-rules/src/checks/review.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks/scalar_range.rs",
+          "crates/rules/nomos-rules/src/checks/structure.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/rules/nomos-rules/src/universe_kind.rs",
+          "crates/rules/nomos-rules/tests/integration_seams.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-a5",
+        "acquired_at": 1789497623,
+        "lease_expires_at": 1789526423
+      },
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "rules"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-SPEC-CORE",
+      "title": "Eight-phase zero across the spec-core territory",
+      "why": "The eight named code-standards gate phases report 173 findings across 26 files in the spec-core territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-bundle/src/columns/tests.rs",
+          "crates/spec/nomos-spec-bundle/src/export.rs",
+          "crates/spec/nomos-spec-bundle/src/export/graph.rs",
+          "crates/spec/nomos-spec-bundle/src/export/source.rs",
+          "crates/spec/nomos-spec-bundle/src/import.rs",
+          "crates/spec/nomos-spec-bundle/src/import/graph.rs",
+          "crates/spec/nomos-spec-bundle/src/import/source.rs",
+          "crates/spec/nomos-spec-bundle/src/import/submission.rs",
+          "crates/spec/nomos-spec-bundle/tests/durable_load.rs",
+          "crates/spec/nomos-spec-bundle/tests/round_trip/fixpoint.rs",
+          "crates/spec/nomos-spec-bundle/tests/round_trip/governing_records.rs",
+          "crates/spec/nomos-spec-bundle/tests/round_trip/populated.rs",
+          "crates/spec/nomos-spec-bundle/tests/round_trip/refusals.rs",
+          "crates/spec/nomos-spec-bundle/tests/round_trip/table_rows.rs",
+          "crates/spec/nomos-spec-project/src/projection/content.rs",
+          "crates/spec/nomos-spec-project/src/render.rs",
+          "crates/spec/nomos-spec-project/src/select.rs",
+          "crates/spec/nomos-spec-project/src/select/sections.rs",
+          "crates/spec/nomos-spec-project/tests/projections/catalogue.rs",
+          "crates/spec/nomos-spec-project/tests/projections/determinism.rs",
+          "crates/spec/nomos-spec-project/tests/projections/freshness.rs",
+          "crates/spec/nomos-spec-project/tests/projections/rebuildability.rs",
+          "crates/spec/nomos-spec-project/tests/projections/renderers.rs",
+          "crates/spec/nomos-spec-project/tests/projections/selection.rs",
+          "crates/spec/nomos-spec-project/tests/projections/store.rs",
+          "crates/spec/nomos-spec-project/tests/projections/subjects.rs",
+          "crates/spec/nomos-spec-project/src/render/mermaid.rs",
+          "crates/spec/nomos-spec-project/src/select/sections/lineage.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-a5",
+        "acquired_at": 1789497624,
+        "lease_expires_at": 1789526424
+      },
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "spec-core"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/spec/nomos-spec-project/src/render/mermaid.rs",
+            "crates/spec/nomos-spec-project/src/select/sections/lineage.rs"
+          ],
+          "widened_at": 1789502312
+        }
+      ]
+    },
+    {
+      "id": "P111-EIGHT-PHASE-SPEC-INGEST",
+      "title": "Eight-phase zero across the spec-ingest territory",
+      "why": "The eight named code-standards gate phases report 254 findings across 24 files in the spec-ingest territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/src/archaeology/sections.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/tests.rs",
+          "crates/spec/nomos-spec-ingest/src/content/statement/report.rs",
+          "crates/spec/nomos-spec-ingest/src/phases/source_document.rs",
+          "crates/spec/nomos-spec-ingest/src/phases/tests.rs",
+          "crates/spec/nomos-spec-ingest/src/restore/extract.rs",
+          "crates/spec/nomos-spec-ingest/src/restore/record.rs",
+          "crates/spec/nomos-spec-ingest/src/restore/tests.rs",
+          "crates/spec/nomos-spec-ingest/src/revisions/tests.rs",
+          "crates/spec/nomos-spec-ingest/src/siblings/document.rs",
+          "crates/spec/nomos-spec-ingest/src/siblings/machine.rs",
+          "crates/spec/nomos-spec-ingest/src/siblings/prose.rs",
+          "crates/spec/nomos-spec-ingest/src/siblings/tests.rs",
+          "crates/spec/nomos-spec-ingest/tests/archive_reads.rs",
+          "crates/spec/nomos-spec-ingest/tests/family_counts/headings.rs",
+          "crates/spec/nomos-spec-ingest/tests/family_counts/measurement.rs",
+          "crates/spec/nomos-spec-ingest/tests/family_counts/volumes.rs",
+          "crates/spec/nomos-spec-ingest/tests/gate_holds.rs",
+          "crates/spec/nomos-spec-ingest/tests/overlay.rs",
+          "crates/spec/nomos-spec-ingest/tests/real_corpus.rs",
+          "crates/spec/nomos-spec-ingest/tests/regression_report/archives.rs",
+          "crates/spec/nomos-spec-ingest/tests/restoration.rs",
+          "crates/spec/nomos-spec-ingest/tests/revisions.rs",
+          "crates/spec/nomos-spec-ingest/tests/siblings.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-a5",
+        "acquired_at": 1789497625,
+        "lease_expires_at": 1789526425
+      },
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "spec-ingest"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-SPEC-STORE",
+      "title": "Eight-phase zero across the spec-store territory",
+      "why": "The eight named code-standards gate phases report 178 findings across 22 files in the spec-store territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/src/read.rs",
+          "crates/spec/nomos-spec-store/src/registration/tests.rs",
+          "crates/spec/nomos-spec-store/src/store/specification_store.rs",
+          "crates/spec/nomos-spec-store/src/submission/tests.rs",
+          "crates/spec/nomos-spec-store/tests/governing_records_are_present/queries.rs",
+          "crates/spec/nomos-spec-store/tests/governing_records_are_present/registration.rs",
+          "crates/spec/nomos-spec-store/tests/governing_records_are_present/seeding.rs",
+          "crates/spec/nomos-spec-store/tests/governing_records_are_present/siblings.rs",
+          "crates/spec/nomos-spec-store/tests/governing_records_are_present/supersession.rs",
+          "crates/spec/nomos-spec-store/tests/round_trip_holds/editing.rs",
+          "crates/spec/nomos-spec-store/tests/round_trip_holds/preview.rs",
+          "crates/spec/nomos-spec-store/tests/round_trip_holds/projection.rs",
+          "crates/spec/nomos-spec-store/tests/round_trip_holds/refusals.rs",
+          "crates/spec/nomos-spec-store/tests/round_trip_holds/seeded.rs",
+          "crates/spec/nomos-spec-store/tests/store_holds.rs",
+          "crates/spec/nomos-spec-store/tests/table_rows/census.rs",
+          "crates/spec/nomos-spec-store/tests/table_rows/corpus.rs",
+          "crates/spec/nomos-spec-store/tests/table_rows/hashing.rs",
+          "crates/spec/nomos-spec-store/tests/table_rows/lineage.rs",
+          "crates/spec/nomos-spec-store/tests/table_rows/migration.rs",
+          "crates/spec/nomos-spec-store/tests/table_rows/refusals.rs",
+          "crates/spec/nomos-spec-store/tests/table_rows/stored.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: spec-store -- 1 crate(s), zero findings in the eight phases\r\n",
+        "verified_at": 1789499617,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "13369bd53355597b0e8cc6db12821daff8e2d96b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-SUBSTRATE",
+      "title": "Eight-phase zero across the substrate territory",
+      "why": "The eight named code-standards gate phases report 147 findings across 19 files in the substrate territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/fact/memory_store/tests.rs",
+          "crates/substrate/nomos-analysis/src/store/rematerialization_group.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/invalidation.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/key.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/key_identity.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/reader.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/store.rs",
+          "crates/substrate/nomos-analysis/tests/invalidation_order.rs",
+          "crates/substrate/nomos-analysis/tests/recomputation_equivalence.rs",
+          "crates/substrate/nomos-capability/src/registry/tests.rs",
+          "crates/substrate/nomos-capability/src/resolution/unmet.rs",
+          "crates/substrate/nomos-capability/tests/resolution_never_says_no.rs",
+          "crates/substrate/nomos-scope-verification/src/territory/tests.rs",
+          "crates/substrate/nomos-workspace/src/workspace/tests.rs",
+          "crates/substrate/nomos-workspace/tests/nomos_model_seam.rs",
+          "crates/substrate/nomos-workspace/tests/portable/arrival.rs",
+          "crates/substrate/nomos-workspace/tests/portable/over_the_corpus.rs",
+          "crates/substrate/nomos-workspace/tests/portable/permutation.rs",
+          "crates/substrate/nomos-workspace/tests/portable/walk.rs",
+          "crates/substrate/nomos-capability/src/resolution.rs",
+          "crates/substrate/nomos-capability/src/resolution/remedy.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "substrate"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "substrate"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: substrate -- 4 crate(s), zero findings in the eight phases\r\n",
+        "verified_at": 1789499624,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "13369bd53355597b0e8cc6db12821daff8e2d96b"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/substrate/nomos-capability/src/resolution.rs",
+            "crates/substrate/nomos-capability/src/resolution/remedy.rs"
+          ],
+          "widened_at": 1789497966
+        }
+      ]
+    },
+    {
+      "id": "P111-EIGHT-PHASE-SUBSTRATE-LEDGER",
+      "title": "Eight-phase zero across the substrate-ledger territory",
+      "why": "The eight named code-standards gate phases report 226 findings across 30 files in the substrate-ledger territory. The campaign's scope requires zero findings in those eight phases with no new suppressions and no new in-code allow markers, so every one is a real fix rather than a waiver.",
+      "done_when": "Every file in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/claim/refusal/tests.rs",
+          "crates/substrate/nomos-ledger/src/file_ledger.rs",
+          "crates/substrate/nomos-ledger/src/finish.rs",
+          "crates/substrate/nomos-ledger/src/finish/tests.rs",
+          "crates/substrate/nomos-ledger/src/item/ledger_item.rs",
+          "crates/substrate/nomos-ledger/src/item/tests.rs",
+          "crates/substrate/nomos-ledger/src/store/refusal.rs",
+          "crates/substrate/nomos-ledger/src/store/validation.rs",
+          "crates/substrate/nomos-ledger/src/store/verbs.rs",
+          "crates/substrate/nomos-ledger/tests/declining_ends_an_item.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/board.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/claiming.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/concurrency.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/dependencies.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/finishing.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/interleaving.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/lapse.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/persistence.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/records.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/takeover.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/validation.rs",
+          "crates/substrate/nomos-ledger/tests/gate_covers_finish/launcher.rs",
+          "crates/substrate/nomos-ledger/tests/gate_covers_finish/ordering.rs",
+          "crates/substrate/nomos-ledger/tests/gate_covers_finish/red_gate.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/board.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/identifier_and_file.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/record_directory.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs",
+          "crates/substrate/nomos-ledger/tests/scope_verification_integration.rs",
+          "crates/substrate/nomos-ledger/tests/widening_is_recorded.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-a5",
+        "acquired_at": 1789497627,
+        "lease_expires_at": 1789526427
+      },
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "substrate-ledger"
+        ],
+        "timeout_seconds": 1800
       },
       "verified": null,
       "abandoned": [],

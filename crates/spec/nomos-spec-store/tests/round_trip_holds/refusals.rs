@@ -11,7 +11,7 @@ fn Test_A_Staged_Text_Naming_A_Different_Record_Should_Be_Refused()
     let edited = SYNTHETIC.replace("id: D-900", "id: D-901");
     let refusal = store
         .Claim_For_Edit("D-900", None)
-        .expect("claims")
+        .expect("the fixture wrote D-900 through the door, so the claim names a record that is there")
         .Stage(&edited, None)
         .expect_err("must refuse");
 
@@ -42,7 +42,7 @@ fn Test_An_Edit_This_Surface_Would_Not_Write_Should_Be_Refused()
     {
         let refusal = store
             .Claim_For_Edit("D-900", None)
-            .expect("claims")
+            .expect("the fixture wrote D-900 before the loop, so each body below has a record to edit")
             .Stage(&markdown, None)
             .expect_err(&format!("{why} must be refused"));
 
@@ -90,11 +90,11 @@ fn Test_A_Relation_Type_Nothing_Declares_Should_Be_Refused()
     let edited = SYNTHETIC.replace("type: relates-to", "type: invented-by-an-author");
     let preview = store
         .Claim_For_Edit("D-900", None)
-        .expect("claims")
+        .expect("D-900 is the authored record the fixture wrote, so the claim finds it")
         .Stage(&edited, None)
-        .expect("stages")
+        .expect("the claim above is editable, so a body naming an invented relation type is staged")
         .Preview(&store)
-        .expect("previews");
+        .expect("the stage above built an edit over the open store, so there is one to preview");
 
     assert!(store.Commit_Edit(&preview).is_err());
     assert_eq!(
@@ -112,22 +112,22 @@ fn Test_A_Refused_Commit_Should_Leave_Every_Table_As_It_Was()
     let mut store = With_Synthetic();
     let before: Vec<u32> = Table::All()
         .iter()
-        .map(|table| return store.Count(*table).expect("counts"))
+        .map(|table| return store.Count(*table).expect("the schema creates every table Table::All names"))
         .collect();
 
     let edited = SYNTHETIC.replace("type: relates-to", "type: invented-by-an-author");
     let preview = store
         .Claim_For_Edit("D-900", None)
-        .expect("claims")
+        .expect("the store has held the authored D-900 since the fixture wrote it, unchanged")
         .Stage(&edited, None)
-        .expect("stages")
+        .expect("the claim above is editable, so a body naming an invented relation type is staged")
         .Preview(&store)
-        .expect("previews");
+        .expect("the stage above built an edit over the open store, so there is one to preview");
     assert!(store.Commit_Edit(&preview).is_err());
 
     let after: Vec<u32> = Table::All()
         .iter()
-        .map(|table| return store.Count(*table).expect("counts"))
+        .map(|table| return store.Count(*table).expect("the store is still open and its schema unchanged"))
         .collect();
     assert_eq!(before, after);
 }

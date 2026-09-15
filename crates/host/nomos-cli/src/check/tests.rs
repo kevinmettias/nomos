@@ -10,6 +10,15 @@
 use super::*;
 use super::parsing::USAGE;
 
+/// The position each [`ExitCode`] holds in [`ExitCode::All`], one name per code, so the
+/// exhaustive mirror below claims a named position rather than leaving four numerals to be
+/// read against the universe by eye.
+const OK_ORDINAL: usize = 0;
+const VIOLATIONS_ORDINAL: usize = 1;
+const USAGE_ORDINAL: usize = 2;
+const UNREADABLE_ORDINAL: usize = 3;
+const VACUOUS_ORDINAL: usize = 4;
+
 /// A code's name, as an exhaustive match, so that adding one stops the build here.
 fn Labelled(code: ExitCode) -> &'static str
 {
@@ -39,11 +48,11 @@ fn Test_Every_ExitCode_Should_Be_Matched_Exhaustively()
     {
         return match code
         {
-            ExitCode::Ok => 0,
-            ExitCode::Violations => 1,
-            ExitCode::Usage => 2,
-            ExitCode::Unreadable => 3,
-            ExitCode::Vacuous => 4,
+            ExitCode::Ok => OK_ORDINAL,
+            ExitCode::Violations => VIOLATIONS_ORDINAL,
+            ExitCode::Usage => USAGE_ORDINAL,
+            ExitCode::Unreadable => UNREADABLE_ORDINAL,
+            ExitCode::Vacuous => VACUOUS_ORDINAL,
         };
     }
 
@@ -84,15 +93,22 @@ fn Test_Only_Ok_Should_Carry_The_Passing_Exit_Code()
 
 /// The numeric codes `check`'s own usage text documents (see [`USAGE`]'s "exit codes"
 /// line): 0 nothing blocking, 1 findings that can fail a build, 2 usage, 5 unreadable
-/// tree, 6 nothing was judged.
+/// tree, 6 nothing was judged. Named one per code, so the assertions below state what each
+/// code must return rather than restating four numerals beside it.
+const DOCUMENTED_OK: i32 = 0;
+const DOCUMENTED_VIOLATIONS: i32 = 1;
+const DOCUMENTED_USAGE: i32 = 2;
+const DOCUMENTED_UNREADABLE: i32 = 5;
+const DOCUMENTED_VACUOUS: i32 = 6;
+
 #[test]
 fn Test_Value_Should_Return_The_Documented_Exit_Code_Number()
 {
-    assert_eq!(ExitCode::Ok.Value(), 0);
-    assert_eq!(ExitCode::Violations.Value(), 1);
-    assert_eq!(ExitCode::Usage.Value(), 2);
-    assert_eq!(ExitCode::Unreadable.Value(), 5);
-    assert_eq!(ExitCode::Vacuous.Value(), 6);
+    assert_eq!(ExitCode::Ok.Value(), DOCUMENTED_OK);
+    assert_eq!(ExitCode::Violations.Value(), DOCUMENTED_VIOLATIONS);
+    assert_eq!(ExitCode::Usage.Value(), DOCUMENTED_USAGE);
+    assert_eq!(ExitCode::Unreadable.Value(), DOCUMENTED_UNREADABLE);
+    assert_eq!(ExitCode::Vacuous.Value(), DOCUMENTED_VACUOUS);
 }
 
 /// The codes this file documents are the codes this group can exit with.
@@ -145,11 +161,7 @@ fn Test_The_Usage_Text_Should_Route_To_The_Rule_Set_Rather_Than_Name_Any_Of_It()
         "the usage text names no rule and must say where the rules are: {USAGE}"
     );
 
-    let named: Vec<&str> = nomos_rules::DESCRIPTORS
-        .iter()
-        .map(|descriptor| return descriptor.id)
-        .filter(|identifier| return USAGE.contains(identifier))
-        .collect();
+    let named = Rules_Named_By_Usage();
 
     assert!(
         !nomos_rules::DESCRIPTORS.is_empty(),
@@ -163,6 +175,18 @@ fn Test_The_Usage_Text_Should_Route_To_The_Rule_Set_Rather_Than_Name_Any_Of_It()
         named.len(),
         nomos_rules::DESCRIPTORS.len()
     );
+}
+
+/// Every composed rule's own identifier that [`USAGE`] names -- the enumeration the test
+/// above compares against its authority, which is the whole condition `OD-AGENT-004`'s
+/// amendment puts on a help text that lists anything.
+fn Rules_Named_By_Usage() -> Vec<&'static str>
+{
+    return nomos_rules::DESCRIPTORS
+        .iter()
+        .map(|descriptor| return descriptor.id)
+        .filter(|identifier| return USAGE.contains(identifier))
+        .collect();
 }
 
 #[test]
@@ -226,10 +250,8 @@ fn Sorted(codes: impl Iterator<Item = i32>) -> Vec<i32>
 #[test]
 fn Test_A_Run_That_Materialized_No_Facts_Should_Not_Report_Clean()
 {
-    let root = std::env::temp_dir().join("nomos-check-no-facts");
-    let _ignored = std::fs::remove_dir_all(&root);
-    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-    std::fs::write(root.join("broken.rs"), "pub const ??? = ;").expect("writable");
+    let root = Fresh_Tree("nomos-check-no-facts");
+    std::fs::write(root.join("broken.rs"), "pub const ??? = ;").expect("the temporary root was created just above, so a new fixture file lands inside it");
 
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
@@ -251,14 +273,12 @@ fn Test_A_Run_That_Materialized_No_Facts_Should_Not_Report_Clean()
 #[test]
 fn Test_A_Run_That_Materialized_Facts_Should_Judge_Rather_Than_Refuse()
 {
-    let root = std::env::temp_dir().join("nomos-check-with-facts");
-    let _ignored = std::fs::remove_dir_all(&root);
-    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+    let root = Fresh_Tree("nomos-check-with-facts");
     std::fs::write(
         root.join("a.rs"),
         "/// Mirrored by `Test_Renamed_Away`.\npub const TABLE: &[&str] = &[];\n",
     )
-    .expect("writable");
+    .expect("the temporary root was created just above, so a new fixture file lands inside it");
 
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
@@ -323,50 +343,92 @@ fn Test_A_Phantom_Should_Block_Though_The_Tree_Holds_A_File_The_Parser_Refuses()
 #[test]
 fn Test_A_Provider_Refusal_Must_Not_Render_The_Same_As_A_Clean_Run()
 {
-    let (code, rendered) = Broken_Provider_Run();
-    let (clean_code, clean_rendered) = Clean_Run();
+    let broken = Broken_Provider_Run();
+    let clean = Clean_Run();
 
     // Neither run fails the build: nothing declares a mirror, so there is nothing to be a
-    // phantom about, and the refusal is advisory. That is exactly why the exit code alone
-    // cannot be the thing that tells these two runs apart.
-    assert_eq!(code, ExitCode::Ok, "{rendered}");
-    assert_eq!(clean_code, ExitCode::Ok, "{clean_rendered}");
-    assert_eq!(code, clean_code, "the exit code is not where this distinction lives");
+    // phantom about, and the refusal is advisory. The exit code alone cannot tell them apart.
+    assert_eq!(broken.code, ExitCode::Ok, "{}", broken.rendered);
+    assert_eq!(clean.code, ExitCode::Ok, "{}", clean.rendered);
+    assert_eq!(broken.code, clean.code, "the exit code is not where this distinction lives");
 
     assert_ne!(
-        rendered, clean_rendered,
+        broken.rendered, clean.rendered,
         "a run carrying a real provider refusal rendered identically to a clean run"
     );
-    assert!(rendered.contains("claim: incomplete"), "{rendered}");
-    assert!(clean_rendered.contains("claim: complete"), "{clean_rendered}");
+    assert!(broken.rendered.contains("claim: incomplete"), "{}", broken.rendered);
+    assert!(clean.rendered.contains("claim: complete"), "{}", clean.rendered);
     assert!(
-        !clean_rendered.contains("DependencyUnavailable") && !clean_rendered.contains("Unparseable"),
-        "{clean_rendered}"
+        !clean.rendered.contains("DependencyUnavailable") && !clean.rendered.contains("Unparseable"),
+        "{}",
+        clean.rendered
     );
+}
+
+/// One run of `check` over a fixture tree: the code the process would leave with, and the
+/// stdout it rendered. Named fields rather than a pair, so an assertion below says which
+/// half of the result it is reading.
+struct RunOutcome
+{
+    code: ExitCode,
+    rendered: String,
+}
+
+/// A fresh, empty temporary root named `case`, with whatever an earlier run left behind
+/// removed first, so every run starts from the same tree.
+fn Fresh_Tree(case: &str) -> PathBuf
+{
+    let root = std::env::temp_dir().join(case);
+    let _ignored = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+    return root;
+}
+
+/// Runs `check` over `root` and answers with what the run produced. The tree is left exactly
+/// as the run left it -- the caller owns it and decides when it goes.
+fn Run_Over(root: &Path) -> RunOutcome
+{
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let code = Run(&CheckCommand { root: root.to_path_buf() }, &mut stdout, &mut stderr);
+
+    return RunOutcome { code, rendered: String::from_utf8_lossy(&stdout).into_owned() };
+}
+
+/// Runs `check` over `root`, removes the tree, and answers with what the run produced.
+fn Run_Then_Clean_Up(root: PathBuf) -> RunOutcome
+{
+    let outcome = Run_Over(&root);
+    let _ignored = std::fs::remove_dir_all(&root);
+
+    return outcome;
 }
 
 /// A tree with one clean file and one the parser genuinely refuses to read -- the run and
-/// its rendered stdout, with the temporary root cleaned up before returning.
-fn Broken_Provider_Run() -> (ExitCode, String)
+/// its rendered stdout.
+fn Broken_Provider_Run() -> RunOutcome
 {
-    let root = std::env::temp_dir().join("nomos-check-coverage-debt-beside-clean");
-    let _ignored = std::fs::remove_dir_all(&root);
-    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-    std::fs::write(root.join("a.rs"), "pub fn ok()\n{\n}\n").expect("writable");
-    std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("writable");
-
-    let mut stdout = Vec::new();
-    let mut stderr = Vec::new();
-    let code = Run(&CheckCommand { root: root.clone() }, &mut stdout, &mut stderr);
-    let rendered = String::from_utf8_lossy(&stdout).into_owned();
-
-    let _ignored = std::fs::remove_dir_all(&root);
-
-    return (code, rendered);
+    return Run_Then_Clean_Up(A_Broken_Tree());
 }
 
-/// A tree with nothing for the parser to refuse -- the run and its rendered stdout, with
-/// the temporary root cleaned up before returning.
+/// A tree with nothing for the parser to refuse -- the run and its rendered stdout.
+fn Clean_Run() -> RunOutcome
+{
+    return Run_Then_Clean_Up(A_Clean_Tree());
+}
+
+/// One file that parses, beside one the real parser refuses.
+fn A_Broken_Tree() -> PathBuf
+{
+    let root = Fresh_Tree("nomos-check-coverage-debt-beside-clean");
+    std::fs::write(root.join("a.rs"), "pub fn ok()\n{\n}\n").expect("the temporary root was created just above, so a new fixture file lands inside it");
+    std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("the temporary root was created just above, so a new fixture file lands inside it");
+
+    return root;
+}
+
+/// The tree nothing in this file finds a finding in: one source file that parses and no
+/// universe claiming anything.
 ///
 /// A real, if minimal, Cargo.toml is required: without one, `cargo metadata` cannot find a
 /// workspace here at all, and the dependency-edges provider reports `ProviderUnavailable`
@@ -380,47 +442,36 @@ fn Broken_Provider_Run() -> (ExitCode, String)
 /// The `Cargo.toml`'s own `license` field is declared to match the `deny.toml`'s own
 /// `licenses.allow` list, so the fixture is genuinely clean under `dependency-policy` too,
 /// not merely unlicensed in a way this reader happens not to flag.
-fn Clean_Run() -> (ExitCode, String)
+fn A_Clean_Tree() -> PathBuf
 {
-    let root = std::env::temp_dir().join("nomos-check-clean-only");
-    let _ignored = std::fs::remove_dir_all(&root);
-    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-    std::fs::write(root.join("a.rs"), "pub fn ok()\n{\n}\n").expect("writable");
+    let root = Fresh_Tree("nomos-check-clean-only");
+    std::fs::write(root.join("a.rs"), "pub fn ok()\n{\n}\n").expect("the temporary root was created just above, so a new fixture file lands inside it");
     std::fs::write(
         root.join("Cargo.toml"),
         "[package]\nname = \"nomos-check-clean-only-fixture\"\nversion = \"0.0.0\"\nedition = \"2021\"\nlicense = \"MIT\"\n",
     )
-    .expect("writable");
+    .expect("the temporary root was created just above, so a new fixture file lands inside it");
     std::fs::write(
         root.join("deny.toml"),
         "[graph]\nall-features = false\n\n[advisories]\nversion = 2\n\n[licenses]\nversion = 2\nallow = [\"MIT\"]\n\n[bans]\nmultiple-versions = \"warn\"\n\n[sources]\n",
     )
-    .expect("writable");
+    .expect("the temporary root was created just above, so a new fixture file lands inside it");
     std::fs::create_dir_all(root.join("src")).expect("the src directory is creatable");
-    std::fs::write(root.join("src").join("lib.rs"), "").expect("writable");
+    std::fs::write(root.join("src").join("lib.rs"), "").expect("the temporary root was created just above, so a new fixture file lands inside it");
 
-    let mut stdout = Vec::new();
-    let mut stderr = Vec::new();
-    let code = Run(&CheckCommand { root: root.clone() }, &mut stdout, &mut stderr);
-    let rendered = String::from_utf8_lossy(&stdout).into_owned();
-
-    let _ignored = std::fs::remove_dir_all(&root);
-
-    return (code, rendered);
+    return root;
 }
 
 /// One file claiming a mirror nothing declares, beside one the parser genuinely refuses.
 fn A_Tree_With_A_Phantom_Beside_A_Refusal() -> PathBuf
 {
-    let root = std::env::temp_dir().join("nomos-check-phantom-beside-broken");
-    let _ignored = std::fs::remove_dir_all(&root);
-    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+    let root = Fresh_Tree("nomos-check-phantom-beside-broken");
     std::fs::write(
         root.join("a.rs"),
         "/// Mirrored by `Test_Renamed_Away`.\npub const TABLE: &[&str] = &[];\n",
     )
-    .expect("writable");
-    std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("writable");
+    .expect("the temporary root was created just above, so a new fixture file lands inside it");
+    std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("the temporary root was created just above, so a new fixture file lands inside it");
 
     return root;
 }

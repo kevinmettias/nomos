@@ -60,6 +60,14 @@
 //! blind to string content, rather than changing what `Code_Prefix` itself returns to every
 //! caller. Nothing before this line changes what `Code_Prefix` does or who calls it.
 
+/// The two bytes a backslash escape occupies: the backslash itself and the byte it escapes.
+const ESCAPED_BYTE_LENGTH: usize = 2;
+
+/// Where a char literal's closing quote sits, counted from its opening quote: two bytes on
+/// for the single character, three on for the backslash of an escaped one.
+const SINGLE_CHAR_LITERAL_CLOSING_OFFSET: usize = 2;
+const ESCAPED_CHAR_LITERAL_CLOSING_OFFSET: usize = 3;
+
 /// `line`, with any trailing `//` line comment removed — but a `//` only ends the line when
 /// it appears outside a string, a raw string, or a char literal, unlike the plain
 /// `line.split("//").next()` this replaces everywhere it was copied. See this file's own
@@ -76,39 +84,10 @@ pub(crate) fn Code_Prefix(line: &str) -> String
     let bytes = line.as_bytes();
     let mut output: Vec<u8> = Vec::with_capacity(bytes.len());
     let mut index = 0;
-
-    while let Some(&byte) = bytes.get(index)
+    while let Some(step) = Code_Step_At(bytes, index)
     {
-        if let Some(hashes) = Raw_String_Opens_At(bytes, index)
-        {
-            let body_start = Raw_String_Body_Start(bytes, index, hashes);
-            let end = Skip_Raw_String_Body(bytes, body_start, hashes);
-            output.extend_from_slice(bytes.get(index..end).unwrap_or_default());
-            index = end;
-            continue;
-        }
-
-        match byte
-        {
-            b'/' if bytes.get(index.saturating_add(1)) == Some(&b'/') => break,
-            b'"' =>
-            {
-                let end = Skip_String_Body(bytes, index.saturating_add(1));
-                output.extend_from_slice(bytes.get(index..end).unwrap_or_default());
-                index = end;
-            }
-            b'\'' if Opens_Char_Literal(bytes, index) =>
-            {
-                let end = Skip_Char_Literal_Body(bytes, index.saturating_add(1));
-                output.extend_from_slice(bytes.get(index..end).unwrap_or_default());
-                index = end;
-            }
-            other =>
-            {
-                output.push(other);
-                index = index.saturating_add(1);
-            }
-        }
+        output.extend_from_slice(bytes.get(step.start..step.end).unwrap_or_default());
+        index = step.end;
     }
 
     // Every byte pushed above is copied verbatim from `line`'s own valid UTF-8, so this can
@@ -136,42 +115,37 @@ pub(crate) fn Code_With_String_Bodies_Masked(line: &str) -> String
     let bytes = line.as_bytes();
     let mut output: Vec<u8> = Vec::with_capacity(bytes.len());
     let mut index = 0;
-
-    while let Some(&byte) = bytes.get(index)
+    while let Some(step) = Code_Step_At(bytes, index)
     {
-        if let Some(hashes) = Raw_String_Opens_At(bytes, index)
-        {
-            let body_start = Raw_String_Body_Start(bytes, index, hashes);
-            let end = Skip_Raw_String_Body(bytes, body_start, hashes);
-            Mask_Range(&mut output, bytes, index, end);
-            index = end;
-            continue;
-        }
-
-        match byte
-        {
-            b'/' if bytes.get(index.saturating_add(1)) == Some(&b'/') => break,
-            b'"' =>
-            {
-                let end = Skip_String_Body(bytes, index.saturating_add(1));
-                Mask_Range(&mut output, bytes, index, end);
-                index = end;
-            }
-            b'\'' if Opens_Char_Literal(bytes, index) =>
-            {
-                let end = Skip_Char_Literal_Body(bytes, index.saturating_add(1));
-                Mask_Range(&mut output, bytes, index, end);
-                index = end;
-            }
-            other =>
-            {
-                output.push(other);
-                index = index.saturating_add(1);
-            }
-        }
+        Mask_Step(&mut output, bytes, step);
+        index = step.end;
     }
 
     return String::from_utf8(output).unwrap_or_default();
+}
+
+/// One step of either scan above: the byte range to consume, and whether that range is a
+/// literal's own body. Carried as a value because it is the only thing that tells
+/// [`Code_With_String_Bodies_Masked`] a one-byte literal from a plain byte.
+#[derive(Clone, Copy)]
+struct CodeStep
+{
+    start: usize,
+    end: usize,
+    is_literal: bool,
+}
+
+/// Writes one step's contribution to [`Code_With_String_Bodies_Masked`]'s output: one space
+/// per byte of a literal's own body, or the plain byte itself.
+fn Mask_Step(output: &mut Vec<u8>, bytes: &[u8], step: CodeStep)
+{
+    if step.is_literal
+    {
+        Mask_Range(output, bytes, step.start, step.end);
+        return;
+    }
+
+    output.push(bytes.get(step.start).copied().unwrap_or_default());
 }
 
 /// Pushes one space for every byte of `bytes[start..end]`, the masked stand-in for a
@@ -179,7 +153,61 @@ pub(crate) fn Code_With_String_Bodies_Masked(line: &str) -> String
 fn Mask_Range(output: &mut Vec<u8>, bytes: &[u8], start: usize, end: usize)
 {
     let length = bytes.get(start..end).unwrap_or_default().len();
-    output.extend(std::iter::repeat_n(b' ', length));
+    let spaces = std::iter::repeat_n(b' ', length);
+    output.extend(spaces);
+}
+
+/// The step either scan takes at `index`, or `None` once a `//` comment ends the line or the
+/// line itself runs out: a whole raw string, string or char literal, else the single byte
+/// that is not one.
+fn Code_Step_At(bytes: &[u8], index: usize) -> Option<CodeStep>
+{
+    let Some(&byte) = bytes.get(index)
+    else
+    {
+        return None;
+    };
+    if byte == b'/' && bytes.get(index.saturating_add(1)) == Some(&b'/')
+    {
+        return None;
+    }
+    if let Some((start, end)) = Raw_String_Range_At(bytes, index)
+    {
+        return Some(CodeStep { start, end, is_literal: true });
+    }
+    if Opens_Literal_Body(bytes, index)
+    {
+        let end = Literal_Body_End(bytes, index);
+        return Some(CodeStep { start: index, end, is_literal: true });
+    }
+
+    return Some(CodeStep { start: index, end: index.saturating_add(1), is_literal: false });
+}
+
+/// Whether the byte at `index` opens a literal body: every `"` does, and a `'` only when
+/// [`Opens_Char_Literal`] confirms a real char literal rather than a lifetime.
+fn Opens_Literal_Body(bytes: &[u8], index: usize) -> bool
+{
+    if bytes.get(index) == Some(&b'"')
+    {
+        return true;
+    }
+
+    return bytes.get(index) == Some(&b'\'') && Opens_Char_Literal(bytes, index);
+}
+
+/// One past the closing delimiter of the literal opening at `index`, dispatching on which
+/// delimiter that is — the `"` or `'` its caller has already confirmed opens a real body.
+fn Literal_Body_End(bytes: &[u8], index: usize) -> usize
+{
+    return if bytes.get(index) == Some(&b'\'')
+    {
+        Skip_Char_Literal_Body(bytes, index.saturating_add(1))
+    }
+    else
+    {
+        Skip_String_Body(bytes, index.saturating_add(1))
+    };
 }
 
 /// Advances past a double-quoted string's own body, honoring a backslash escape so an
@@ -192,7 +220,7 @@ fn Skip_String_Body(bytes: &[u8], mut index: usize) -> usize
     {
         match byte
         {
-            b'\\' => index = index.saturating_add(2),
+            b'\\' => index = index.saturating_add(ESCAPED_BYTE_LENGTH),
             b'"' => return index.saturating_add(1),
             _ => index = index.saturating_add(1),
         }
@@ -211,10 +239,10 @@ fn Opens_Char_Literal(bytes: &[u8], index: usize) -> bool
 {
     if bytes.get(index.saturating_add(1)) == Some(&b'\\')
     {
-        return bytes.get(index.saturating_add(3)) == Some(&b'\'');
+        return bytes.get(index.saturating_add(ESCAPED_CHAR_LITERAL_CLOSING_OFFSET)) == Some(&b'\'');
     }
 
-    return bytes.get(index.saturating_add(1)).is_some() && bytes.get(index.saturating_add(2)) == Some(&b'\'');
+    return bytes.get(index.saturating_add(1)).is_some() && bytes.get(index.saturating_add(SINGLE_CHAR_LITERAL_CLOSING_OFFSET)) == Some(&b'\'');
 }
 
 /// Advances past a char literal's own body (already confirmed real by
@@ -274,6 +302,18 @@ fn Raw_String_Body_Start(bytes: &[u8], index: usize, hashes: usize) -> usize
     return cursor;
 }
 
+/// The half-open byte range of the raw-string literal opening at `index` — the whole literal,
+/// opening delimiter included — or `None` when no raw string opens there. Shared by both
+/// scans below, which differ only in whether they copy that range through or mask it.
+fn Raw_String_Range_At(bytes: &[u8], index: usize) -> Option<(usize, usize)>
+{
+    let hashes = Raw_String_Opens_At(bytes, index)?;
+    let body_start = Raw_String_Body_Start(bytes, index, hashes);
+    let end = Skip_Raw_String_Body(bytes, body_start, hashes);
+
+    return Some((index, end));
+}
+
 /// Advances past a raw string's own body — no escape sequence to honor, since a raw string
 /// has none — to one past the first `"` immediately followed by `hashes` `#` characters, or
 /// to `bytes.len()` if the line ends first, the honest answer for the fixture this rule was
@@ -305,222 +345,4 @@ fn Raw_String_Closes_Here(bytes: &[u8], index: usize, hashes: usize) -> bool
 }
 
 #[cfg(test)]
-mod tests
-{
-    use super::*;
-
-    /// The exact regression `P66-UNSAFE-JUSTIFICATION-STRING-BLINDNESS` measured:
-    /// `nomos-lang-rust-scan/src/item_kind.rs` declares
-    /// `("unsafe impl", Self::Implementation)`, a table entry whose own quoted text is not
-    /// a real `unsafe impl` — a bare substring search over `Code_Prefix`'s own output
-    /// (which preserves a string's real text) reads it as one anyway.
-    #[test]
-    fn Test_Code_With_String_Bodies_Masked_Should_Not_Read_A_Table_Entrys_Own_String_As_Real_Code()
-    {
-        let line = "(\"unsafe impl\", Self::Implementation),";
-
-        let masked = Code_With_String_Bodies_Masked(line);
-
-        assert!(!masked.contains("unsafe impl"), "{masked:?}");
-    }
-
-    /// The masked scan still finds a real, unquoted `unsafe {` — it must not blind a real
-    /// caller to real code, only to a string's own quoted text.
-    #[test]
-    fn Test_Code_With_String_Bodies_Masked_Should_Still_Find_Real_Unquoted_Code()
-    {
-        let line = "let s = \"unsafe impl\"; unsafe { core::ptr::read(p) }";
-
-        let masked = Code_With_String_Bodies_Masked(line);
-
-        assert!(masked.contains("unsafe { core::ptr::read(p) }"), "{masked:?}");
-        assert!(!masked.contains("unsafe impl"), "the string's own text must be masked: {masked:?}");
-    }
-
-    /// A trailing `//` comment is still recognized once the preceding string is masked,
-    /// not read through by accident.
-    #[test]
-    fn Test_Code_With_String_Bodies_Masked_Should_Still_Strip_A_Trailing_Comment()
-    {
-        let line = "let s = \"https://example.com\"; // a comment";
-
-        let masked = Code_With_String_Bodies_Masked(line);
-
-        assert!(!masked.contains("a comment"), "{masked:?}");
-    }
-
-    /// A raw string's own unsafe-shaped text is masked the same way a plain string's is.
-    #[test]
-    fn Test_Code_With_String_Bodies_Masked_Should_Mask_A_Raw_Strings_Own_Text()
-    {
-        let line = "let s = r#\"unsafe impl Foo for Bar {}\"#;";
-
-        let masked = Code_With_String_Bodies_Masked(line);
-
-        assert!(!masked.contains("unsafe impl"), "{masked:?}");
-    }
-
-    #[test]
-    fn Test_Code_Prefix_Should_Strip_A_Trailing_Comment()
-    {
-        assert_eq!(Code_Prefix("let x = 1; // a comment"), "let x = 1; ");
-    }
-
-    #[test]
-    fn Test_Code_Prefix_Should_Return_The_Whole_Line_With_No_Comment()
-    {
-        assert_eq!(Code_Prefix("let x = 1;"), "let x = 1;");
-    }
-
-    /// The first real defect this rule exists to fix: a string literal holding a URL must
-    /// not truncate the real code that follows it on the same line.
-    ///
-    /// Deliberately not spelled `unsafe { ... }` past the string, unlike an earlier version
-    /// of this test: `unsafe-justification`'s own `Has_Unsafe_Construct` is a bare substring
-    /// search over this same `Code_Prefix` output, and since this function preserves a
-    /// string's own body rather than blanking it, a fixture whose STRING happened to contain
-    /// that phrase already tripped it once — this file's own module doc names why blanking
-    /// is not the fix. `Real_Code(p)` proves the identical truncation property without
-    /// handing another rule's text scanner a phrase it does not know is quoted.
-    #[test]
-    fn Test_Code_Prefix_Should_Not_Truncate_At_A_Url_Inside_A_String()
-    {
-        let line = "let doc = \"https://example.com\"; Real_Code(p)";
-
-        let prefix = Code_Prefix(line);
-
-        assert!(
-            prefix.contains("Real_Code(p)"),
-            "the string's own // must not hide the real code after it: {prefix:?}"
-        );
-    }
-
-    /// A literal's own body is preserved, not blanked — this crate's own module doc names
-    /// why: `A_Rust_Path_Stays_Within_Its_Own_Subtree` and others need a specific string's
-    /// real value, not a placeholder. Says "block" rather than `unsafe`, for the reason the
-    /// test above now states explicitly: this string's own text must not spell a phrase
-    /// another rule's own text scanner reads as real code.
-    #[test]
-    fn Test_Code_Prefix_Should_Preserve_A_Strings_Own_Text()
-    {
-        let line = "let example = \"call the block { ... } to do it\";";
-
-        assert_eq!(Code_Prefix(line), line);
-    }
-
-    #[test]
-    fn Test_Code_Prefix_Should_Strip_A_Real_Comment_After_A_Url_Bearing_String()
-    {
-        let line = "let doc = \"https://example.com\"; // real comment";
-
-        let prefix = Code_Prefix(line);
-
-        assert!(prefix.starts_with("let doc = "), "{prefix:?}");
-        assert!(!prefix.contains("real comment"), "{prefix:?}");
-    }
-
-    #[test]
-    fn Test_Code_Prefix_Should_Honor_An_Escaped_Quote_Inside_A_String()
-    {
-        let line = "let s = \"a \\\" // not a comment\"; Real_Code()";
-
-        let prefix = Code_Prefix(line);
-
-        assert!(prefix.contains("Real_Code()"), "the escaped quote must not end the string early: {prefix:?}");
-    }
-
-    #[test]
-    fn Test_Code_Prefix_Should_Not_Read_A_Quoted_Char_Literal_As_Opening_A_String()
-    {
-        let line = "let c = '\"'; // real comment";
-
-        let prefix = Code_Prefix(line);
-
-        assert!(prefix.starts_with("let c = "), "{prefix:?}");
-        assert!(!prefix.contains("real comment"), "{prefix:?}");
-    }
-
-    #[test]
-    fn Test_Code_Prefix_Should_Not_Read_An_Escaped_Quote_Char_Literal_As_Opening_A_String()
-    {
-        let line = "let c = '\\''; // real comment";
-
-        let prefix = Code_Prefix(line);
-
-        assert!(prefix.starts_with("let c = "), "{prefix:?}");
-        assert!(!prefix.contains("real comment"), "{prefix:?}");
-    }
-
-    /// A lifetime has no closing `'`; it must not be misread as an unterminated char
-    /// literal that swallows the rest of the line, including a real trailing comment.
-    #[test]
-    fn Test_Code_Prefix_Should_Not_Read_A_Lifetime_As_A_Char_Literal()
-    {
-        let line = "fn F<'a>(x: &'a str) -> &'a str // real comment";
-
-        let prefix = Code_Prefix(line);
-
-        assert!(prefix.contains("fn F<'a>(x: &'a str) -> &'a str"), "{prefix:?}");
-        assert!(!prefix.contains("real comment"), "{prefix:?}");
-    }
-
-    #[test]
-    fn Test_Code_Prefix_Should_Not_Truncate_At_A_Double_Slash_Inside_A_Raw_String()
-    {
-        let line = "let s = r\"https://example.com\"; Real_Code(p)";
-
-        let prefix = Code_Prefix(line);
-
-        assert!(prefix.contains("Real_Code(p)"), "{prefix:?}");
-    }
-
-    #[test]
-    fn Test_Code_Prefix_Should_Not_Truncate_At_A_Double_Slash_Inside_A_Hashed_Raw_String()
-    {
-        let line = "let s = r#\"a \" b // still a string\"#; Real_Code()";
-
-        let prefix = Code_Prefix(line);
-
-        assert!(prefix.contains("Real_Code()"), "{prefix:?}");
-    }
-
-    /// A raw string with an unbalanced quote inside it — one hash count, one real
-    /// delimiter — must still close only at its own real delimiter, not at the stray `"`.
-    /// Its own body reads `begin { let x = "`, not `unsafe { let x = "` as an earlier version
-    /// of this test spelled it: the shape under test is a brace and a stray quote inside a
-    /// raw string, and spelling it with the one word `unsafe-justification`'s own text
-    /// scanner reads as real code — a bare substring search over this same `Code_Prefix`
-    /// output — made this fixture's own quoted text trip a different rule's finding.
-    #[test]
-    fn Test_Code_Prefix_Should_Handle_A_Raw_String_With_An_Unbalanced_Quote()
-    {
-        let line = "let s = r#\"begin { let x = \" } \"#; // real comment";
-
-        let prefix = Code_Prefix(line);
-
-        assert!(prefix.starts_with("let s = r#\"begin { let x = \" } \"#; "), "{prefix:?}");
-        assert!(!prefix.contains("real comment"), "{prefix:?}");
-    }
-
-    #[test]
-    fn Test_Code_Prefix_Should_Strip_A_Comment_After_A_Byte_String()
-    {
-        let line = "let b = b\"raw // bytes\"; // real comment";
-
-        let prefix = Code_Prefix(line);
-
-        assert!(prefix.starts_with("let b = "), "{prefix:?}");
-        assert!(!prefix.contains("real comment"), "{prefix:?}");
-    }
-
-    #[test]
-    fn Test_Code_Prefix_Should_Strip_A_Comment_After_A_Raw_Byte_String()
-    {
-        let line = "let b = br\"raw // bytes\"; // real comment";
-
-        let prefix = Code_Prefix(line);
-
-        assert!(prefix.starts_with("let b = "), "{prefix:?}");
-        assert!(!prefix.contains("real comment"), "{prefix:?}");
-    }
-}
+mod tests;

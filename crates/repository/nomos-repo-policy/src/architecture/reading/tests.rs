@@ -9,6 +9,10 @@ use nomos_platform::{DeterminismStrength, FileSystemError, ReproducibilityScope,
 use nomos_platform_std::StdFileSystem;
 use std::path::PathBuf;
 
+/// A value that is not a string. Named because what the fixture is about is the *kind* of
+/// value a declaration holds, not the particular number.
+const NOT_A_NAME: u8 = 3;
+
 /// A [`FileSystem`] that hands back fixed text instead of reading a real path, the boundary
 /// this module's own doc names as the one place a caller substitutes a real filesystem.
 struct FakeFileSystem
@@ -168,7 +172,7 @@ fn Non_Object_Lookups() -> Vec<(&'static str, serde_json::Value)>
 #[test]
 fn Test_Discover_Workspace_Should_Refuse_A_Member_Whose_Component_Is_Not_A_Name()
 {
-    let filesystem = Declaring(serde_json::json!({ "components": ["Domain"], "members": { "billing": 3 } }));
+    let filesystem = Declaring(serde_json::json!({ "components": ["Domain"], "members": { "billing": NOT_A_NAME } }));
 
     let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a non-string component must be refused");
 

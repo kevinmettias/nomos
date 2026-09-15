@@ -351,33 +351,17 @@ mod tests
     #[test]
     fn Test_Condensation_Of_Should_Group_Two_Facts_That_Depend_On_Each_Other()
     {
-        let mut store = MemoryFactStore::New();
         let a = Key_For(1);
         let b = Key_For(2);
-        store
-            .Materialize(
-                Fact_For(&a, GenerationId::From_Raw(1)),
-                &[Dependency { key: b.clone(), outcome: ReadOutcome::Materialized }],
-            )
-            .expect("a depends on b");
-        store
-            .Materialize(
-                Fact_For(&b, GenerationId::From_Raw(1)),
-                &[Dependency { key: a.clone(), outcome: ReadOutcome::Materialized }],
-            )
-            .expect("b depends on a");
-
+        let store = Mutually_Dependent(&a, &b);
         let report = Report_Naming(&[a.clone(), b.clone()]);
+
         let groups = Condensation_Of(&report, &store);
 
         assert_eq!(groups.len(), 1, "a mutual dependency is one group, not two: {groups:?}");
         let group = groups.first().expect("the assertion above found exactly one group");
         assert!(group.Is_Cycle());
-        let mut members = group.members.clone();
-        members.sort();
-        let mut expected = vec![a, b];
-        expected.sort();
-        assert_eq!(members, expected);
+        assert_eq!(Sorted_Members(&group.members), Sorted_Pair(&a, &b));
     }
 
     fn Key_For(subject_seed: u8) -> FactKey
@@ -393,6 +377,29 @@ mod tests
             variant: BuildVariantId::From_Digest(Seeded(3)),
             configuration: ConfigurationId::From_Digest(Seeded(4)),
         };
+    }
+
+    /// A store in which `first` reads `second` and `second` reads `first`, so condensing the
+    /// pair yields one strongly connected group rather than two singleton ones.
+    fn Mutually_Dependent(first: &FactKey, second: &FactKey) -> MemoryFactStore
+    {
+        let mut store = MemoryFactStore::New();
+        let reading_second = Fact_For(first, GenerationId::From_Raw(1));
+        store
+            .Materialize(
+                reading_second,
+                &[Dependency { key: second.clone(), outcome: ReadOutcome::Materialized }],
+            )
+            .expect("the first reads the second");
+        let reading_first = Fact_For(second, GenerationId::From_Raw(1));
+        store
+            .Materialize(
+                reading_first,
+                &[Dependency { key: first.clone(), outcome: ReadOutcome::Materialized }],
+            )
+            .expect("the second reads the first");
+
+        return store;
     }
 
     fn Fact_For(key: &FactKey, generation: GenerationId) -> MaterializedFact
@@ -416,6 +423,18 @@ mod tests
             broadened: Vec::new(),
             retained: 0,
         };
+    }
+
+    fn Sorted_Pair(first: &FactKey, second: &FactKey) -> Vec<FactKey>
+    {
+        return Sorted_Members(&[first.clone(), second.clone()]);
+    }
+
+    fn Sorted_Members(members: &[FactKey]) -> Vec<FactKey>
+    {
+        let mut sorted = members.to_vec();
+        sorted.sort();
+        return sorted;
     }
 
     fn Seeded(seed: u8) -> Digest128

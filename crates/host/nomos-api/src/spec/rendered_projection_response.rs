@@ -42,7 +42,21 @@ mod tests
     #[test]
     fn Test_From_Should_Copy_Every_Field_Of_The_Domain_Render_Answer()
     {
-        let stamp = Stamp {
+        let stamp = Built_Stamp();
+        let answer = Render_Answer_For(stamp.clone());
+
+        let response = RenderedProjectionResponse::From(answer.clone());
+
+        assert_eq!(response.id, answer.id);
+        assert_eq!(response.body, answer.body);
+        assert_eq!(response.sidecar, answer.sidecar);
+        assert_eq!(response.stamp.profile, stamp.profile);
+    }
+
+    /// The stamp a real `subject-dossier` build reports, with no sections and no inputs.
+    fn Built_Stamp() -> Stamp
+    {
+        return Stamp {
             profile: "subject-dossier".to_owned(),
             profile_digest: "digest".to_owned(),
             format: Format::Markdown,
@@ -52,18 +66,16 @@ mod tests
             sections: Vec::new(),
             inputs: Vec::new(),
         };
-        let answer = RenderAnswer {
+    }
+
+    /// The domain answer over `stamp` that [`RenderedProjectionResponse::From`] maps.
+    fn Render_Answer_For(stamp: Stamp) -> RenderAnswer
+    {
+        return RenderAnswer {
             id: "subject-dossier".to_owned(),
             body: PathBuf::from("into/subject-dossier.md"),
             sidecar: PathBuf::from("into/subject-dossier.stamp.json"),
-            stamp: stamp.clone(),
+            stamp,
         };
-
-        let response = RenderedProjectionResponse::From(answer.clone());
-
-        assert_eq!(response.id, answer.id);
-        assert_eq!(response.body, answer.body);
-        assert_eq!(response.sidecar, answer.sidecar);
-        assert_eq!(response.stamp.profile, stamp.profile);
     }
 }

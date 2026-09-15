@@ -19,7 +19,7 @@ fn Test_A_Row_Should_Hash_Its_Own_Line()
     };
     let rows = Table_Rows(&block);
 
-    let first = rows.first().expect("a row");
+    let first = rows.first().expect("the block's text is two pipe lines, so it yields rows");
     assert_eq!(first.Content_Hash(), nomos_spec_model::ContentHash::Of("| a | b |"));
     assert_ne!(
         first.Content_Hash(),

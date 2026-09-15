@@ -8,6 +8,19 @@
 use nomos_spec_ingest::{Check_Against_Manifest, Ingest_Statements, Parse_Block_Lineage, Parse_Statements};
 use std::collections::BTreeMap;
 
+/// How many mismatches the failure message names before it stops listing them.
+const MISMATCHES_LISTED: usize = 5;
+
+/// The blocks the vendored lineage slice covers, as v14's own manifest counted them.
+const SLICE_BLOCKS: u32 = 46;
+
+/// The statements the vendored statement slice holds.
+const SLICE_STATEMENTS: u32 = 16;
+
+/// A floor rather than a measurement: the slice carries non-ascii statements, and this many
+/// pins the encoding rather than merely showing one of them.
+const NON_ASCII_FLOOR: usize = 5;
+
 fn Fixture(name: &str) -> String
 {
     use std::path::Path;
@@ -28,7 +41,7 @@ fn Documents() -> BTreeMap<String, String>
 #[test]
 fn Test_The_Gate_Should_Pass_Against_Real_Recorded_Blocks()
 {
-    let lineage = Parse_Block_Lineage(&Fixture("block-lineage-slice.yaml")).expect("parses");
+    let lineage = Parse_Block_Lineage(&Fixture("block-lineage-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
 
     let report = Check_Against_Manifest(&lineage, &Documents());
 
@@ -39,13 +52,13 @@ fn Test_The_Gate_Should_Pass_Against_Real_Recorded_Blocks()
         report
             .mismatches
             .iter()
-            .take(5)
+            .take(MISMATCHES_LISTED)
             .map(nomos_spec_ingest::Mismatch::Describe)
             .collect::<Vec<String>>()
             .join("\n  ")
     );
     assert!(report.Is_Passing());
-    assert_eq!(report.blocks_checked, 46, "{}", report.Summary());
+    assert_eq!(report.blocks_checked, SLICE_BLOCKS, "{}", report.Summary());
     assert_eq!(report.documents_checked, 1);
 }
 
@@ -55,7 +68,7 @@ fn Test_The_Gate_Should_Pass_Against_Real_Recorded_Blocks()
 #[test]
 fn Test_This_Slice_Should_Not_Claim_To_Exercise_The_Normalizer()
 {
-    let lineage = Parse_Block_Lineage(&Fixture("block-lineage-slice.yaml")).expect("parses");
+    let lineage = Parse_Block_Lineage(&Fixture("block-lineage-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
 
     let report = Check_Against_Manifest(&lineage, &Documents());
 
@@ -71,7 +84,7 @@ fn Test_This_Slice_Should_Not_Claim_To_Exercise_The_Normalizer()
 #[test]
 fn Test_An_Altered_Source_Should_Fail_The_Gate()
 {
-    let lineage = Parse_Block_Lineage(&Fixture("block-lineage-slice.yaml")).expect("parses");
+    let lineage = Parse_Block_Lineage(&Fixture("block-lineage-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
     let source = Fixture("00-suite-index.md");
     let altered = source.replacen("Focused", "Focussed", 1);
     assert_ne!(altered, source, "the control must actually alter the document");
@@ -101,7 +114,7 @@ fn Test_An_Altered_Source_Should_Fail_The_Gate()
 #[test]
 fn Test_Front_Matter_Should_Be_Outside_The_Gate()
 {
-    let lineage = Parse_Block_Lineage(&Fixture("block-lineage-slice.yaml")).expect("parses");
+    let lineage = Parse_Block_Lineage(&Fixture("block-lineage-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
     let source = Fixture("00-suite-index.md");
     let altered = source.replacen("status: accepted", "status: withdrawn", 1);
     assert_ne!(altered, source, "the fixture must contain the front-matter key");
@@ -122,20 +135,22 @@ fn Test_Real_Statements_Should_Ingest_Without_Divergence()
 {
     use nomos_spec_store::SpecificationStore;
 
-    let file = Parse_Statements(&Fixture("statements-slice.yaml")).expect("parses");
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let file = Parse_Statements(&Fixture("statements-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("an in-memory store opens over no file, so this construction has no failure path");
 
-    let report = Ingest_Statements(&mut store, &file).expect("ingests");
+    let report = Ingest_Statements(&mut store, &file)
+        .expect("the vendored statements are well formed, so ingestion reports rather than refuses");
 
     assert!(report.Is_Passing(), "{report:?}");
-    assert_eq!(report.ingested, 16);
+    assert_eq!(report.ingested, SLICE_STATEMENTS);
 }
 
 /// Non-ASCII statements pin the encoding. Under latin-1 or NFD these hash differently.
 #[test]
 fn Test_The_Statement_Slice_Should_Contain_Non_Ascii()
 {
-    let file = Parse_Statements(&Fixture("statements-slice.yaml")).expect("parses");
+    let file = Parse_Statements(&Fixture("statements-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
 
     let non_ascii = file
         .statements
@@ -143,5 +158,5 @@ fn Test_The_Statement_Slice_Should_Contain_Non_Ascii()
         .filter(|statement| !statement.canonical_text.is_ascii())
         .count();
 
-    assert!(non_ascii >= 5, "only {non_ascii} non-ascii statements in the slice");
+    assert!(non_ascii >= NON_ASCII_FLOOR, "only {non_ascii} non-ascii statements in the slice");
 }

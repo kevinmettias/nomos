@@ -237,7 +237,8 @@ mod tests
             "--id".to_owned(),
             "OD-GATE-003-VACUITY-GUARD-TEST-NONEXISTENT".to_owned(),
         ];
-        let command = crate::spec::Spec_Command_From_String_Arguments(&arguments).expect("parses");
+        let command = crate::spec::Spec_Command_From_String_Arguments(&arguments)
+            .expect("the arguments above are `record` with an id, which this group parses");
         let request = nomos_spec_orchestration::corpus::CorpusRequest {
             variable: "NOMOS_VACUITY_GUARD_TEST_CORPUS_UNSET".to_owned(),
             root: None,
@@ -328,7 +329,8 @@ mod tests
         std::fs::create_dir_all(&empty).expect("creates an empty directory");
 
         let arguments = vec!["run".to_owned(), "--check".to_owned(), "--root".to_owned(), empty.display().to_string()];
-        let command = crate::workflow::Command_From_String_Arguments(&arguments).expect("parses");
+        let command = crate::workflow::Command_From_String_Arguments(&arguments)
+            .expect("the arguments above are `run --check` with a root, which this group parses");
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
         let code = crate::workflow::Run(&command, &mut stdout, &mut stderr);

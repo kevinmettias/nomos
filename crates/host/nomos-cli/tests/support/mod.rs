@@ -48,6 +48,31 @@ pub fn Run(arguments: &[&str]) -> Ran
     };
 }
 
+/// One file's path inside a scratch tree, told apart from the text written into it.
+///
+/// [`Tree::With`] takes both and both are text, so a caller who wrote them the other way
+/// round would create a directory named after one file's contents and write a path into a
+/// file -- compiling, and asserting about nothing. Callers still spell the value as a plain
+/// `&str`, or as the `&String` a `format!` produces, so the conversions live here rather
+/// than at each of the seam tests sharing this file.
+pub struct FileName<'a>(&'a str);
+
+impl<'a> From<&'a str> for FileName<'a>
+{
+    fn from(name: &'a str) -> Self
+    {
+        return Self(name);
+    }
+}
+
+impl<'a> From<&'a String> for FileName<'a>
+{
+    fn from(name: &'a String) -> Self
+    {
+        return Self(name.as_str());
+    }
+}
+
 /// A scratch tree under the system temp directory, removed when it is dropped.
 pub struct Tree
 {
@@ -69,8 +94,9 @@ impl Tree
     }
 
     /// Writes one file into the tree, creating parent directories as needed.
-    pub fn With(self, name: &str, text: &str) -> Self
+    pub fn With<'a>(self, name: impl Into<FileName<'a>>, text: &str) -> Self
     {
+        let name = name.into().0;
         let path = self.root.join(name);
         if let Some(parent) = path.parent()
         {

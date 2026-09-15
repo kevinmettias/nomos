@@ -96,6 +96,25 @@ pub fn Execute_In<Launcher: ProcessLauncher>(
     return Dispatch(task, launcher, capability);
 }
 
+/// The envelope, as the engine's own task.
+///
+/// The goal and nothing else: no schema, because a free-text answer would not
+/// conform to one, and no effort, because none maps here honestly.
+pub(crate) fn Task_For(task: &TaskEnvelope) -> AgentTask
+{
+    return AgentTask::Of(task.goal.clone());
+}
+
+/// The boundary this dispatch runs inside.
+///
+/// An empty directory that goes away afterward, and nothing granted. No spend
+/// ceiling: local inference has no metered charge a runaway invocation could
+/// inflate, so a ceiling here would be a number that means nothing.
+pub(crate) fn Capability() -> AgentCapability
+{
+    return AgentCapability::Isolated(DEFAULT_TIMEOUT);
+}
+
 /// The one call into the engine, over a boundary already decided on, after the one
 /// envelope constraint this backend can answer.
 fn Dispatch<Launcher: ProcessLauncher>(
@@ -131,25 +150,6 @@ fn Refuse_Ungrantable_Tools(task: &TaskEnvelope) -> Result<(), AgentExecutionErr
     let named =
         task.available_tools.iter().map(|tool| tool.As_Str()).collect::<Vec<_>>().join(", ");
     return Err(AgentExecutionError::UnsupportedTools(named));
-}
-
-/// The envelope, as the engine's own task.
-///
-/// The goal and nothing else: no schema, because a free-text answer would not
-/// conform to one, and no effort, because none maps here honestly.
-pub(crate) fn Task_For(task: &TaskEnvelope) -> AgentTask
-{
-    return AgentTask::Of(task.goal.clone());
-}
-
-/// The boundary this dispatch runs inside.
-///
-/// An empty directory that goes away afterward, and nothing granted. No spend
-/// ceiling: local inference has no metered charge a runaway invocation could
-/// inflate, so a ceiling here would be a number that means nothing.
-pub(crate) fn Capability() -> AgentCapability
-{
-    return AgentCapability::Isolated(DEFAULT_TIMEOUT);
 }
 
 #[cfg(test)]

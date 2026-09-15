@@ -81,6 +81,9 @@ fn Test_Two_Different_Subjects_Should_Be_Two_Independent_Entries_In_Nomos_Analys
     assert!(store.Current(&two_key.At(GenerationId::INITIAL), GenerationId::INITIAL).is_some());
 }
 
+/// The fixture source read below declares two items, `one` and `two`.
+const TWO_DECLARED_ITEMS: usize = 2;
+
 /// `nomos_cap_syntax`: this crate's own payload bytes decode under the shared schema
 /// reader — the property that makes this provider's encoding an interface rather than a
 /// private format. A thin equivalent of `fact_context.rs`'s
@@ -96,7 +99,7 @@ fn Test_This_Crates_Payload_Should_Decode_Under_Nomos_Cap_Syntaxs_Own_Reader()
         .expect("this crate writes the schema nomos_cap_syntax's own reader expects");
 
     assert_eq!(payload.unexpanded, 0);
-    assert_eq!(payload.items.len(), 2);
+    assert_eq!(payload.items.len(), TWO_DECLARED_ITEMS);
     assert!(payload.items.first().expect("two items").Is_Public());
 }
 

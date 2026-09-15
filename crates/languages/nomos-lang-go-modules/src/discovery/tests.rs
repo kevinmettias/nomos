@@ -29,7 +29,10 @@ impl TemporaryWorkspace
         return Self { root };
     }
 
-    fn Write(&self, relative: &str, content: &str)
+    /// `relative` is a `&Path` rather than a `&str` so the two positions have distinct
+    /// types: a caller that swapped the fixture's path for its content would be writing
+    /// a file named after the module source, and only the type system would say so.
+    fn Write(&self, relative: &Path, content: &str)
     {
         let path = self.root.join(relative);
         if let Some(parent) = path.parent()
@@ -42,9 +45,15 @@ impl TemporaryWorkspace
 
 impl Drop for TemporaryWorkspace
 {
+    /// Drop cannot propagate a failure, so a failed removal is reported rather than
+    /// silently discarded; each root is uniquely named, so the worst case is one leaked
+    /// directory, not a sibling test's fixture disappearing out from under it.
     fn drop(&mut self)
     {
-        let _ = std::fs::remove_dir_all(&self.root);
+        if let Err(error) = std::fs::remove_dir_all(&self.root)
+        {
+            eprintln!("failed to remove temporary workspace {}: {error}", self.root.display());
+        }
     }
 }
 
@@ -62,7 +71,7 @@ fn Test_Discover_Workspace_Should_Treat_A_Single_Module_With_No_Go_Work_As_Its_O
 {
     let workspace = TemporaryWorkspace::New();
     workspace.Write(
-        "go.mod",
+        Path::new("go.mod"),
         "module example.com/solo\n\ngo 1.21\n\nrequire github.com/external/thing v1.0.0\n",
     );
 
@@ -77,20 +86,32 @@ fn Test_Discover_Workspace_Should_Treat_A_Single_Module_With_No_Go_Work_As_Its_O
     );
 }
 
+/// A two-member workspace whose `a` requires both `b` and an external module, and whose
+/// `b` requires nothing — the graph the edge test below reads.
+fn Two_Member_Workspace_With_An_External_Requirement() -> TemporaryWorkspace
+{
+    let workspace = TemporaryWorkspace::New();
+    workspace.Write(Path::new("go.work"), "go 1.21\n\nuse (\n\t./a\n\t./b\n)\n");
+    workspace.Write(
+        Path::new("a/go.mod"),
+        "module example.com/a\n\ngo 1.21\n\nrequire (\n\texample.com/b v0.0.0\n\tgithub.com/external/thing v1.0.0\n)\n",
+    );
+    workspace.Write(Path::new("b/go.mod"), "module example.com/b\n\ngo 1.21\n");
+
+    return workspace;
+}
+
+/// This fixture declares two members, `a` and `b`, so a discovery over it finds two.
+const TWO_WORKSPACE_MEMBERS: usize = 2;
+
 #[test]
 fn Test_A_Workspace_Member_Requiring_Another_Should_Carry_The_Edge()
 {
-    let workspace = TemporaryWorkspace::New();
-    workspace.Write("go.work", "go 1.21\n\nuse (\n\t./a\n\t./b\n)\n");
-    workspace.Write(
-        "a/go.mod",
-        "module example.com/a\n\ngo 1.21\n\nrequire (\n\texample.com/b v0.0.0\n\tgithub.com/external/thing v1.0.0\n)\n",
-    );
-    workspace.Write("b/go.mod", "module example.com/b\n\ngo 1.21\n");
+    let workspace = Two_Member_Workspace_With_An_External_Requirement();
 
     let discovered = Discover_Workspace(&workspace.root).expect("a real two-module workspace");
 
-    assert_eq!(discovered.len(), 2);
+    assert_eq!(discovered.len(), TWO_WORKSPACE_MEMBERS);
     let a = Payload_Of(&discovered, "example.com/a");
     assert_eq!(
         a.edges,
@@ -110,12 +131,12 @@ fn Test_A_Workspace_Member_Requiring_Another_Should_Carry_The_Edge()
 fn Test_An_Indirect_Requirement_Of_A_Member_Should_Still_Be_An_Edge()
 {
     let workspace = TemporaryWorkspace::New();
-    workspace.Write("go.work", "use ./a\nuse ./b\n");
+    workspace.Write(Path::new("go.work"), "use ./a\nuse ./b\n");
     workspace.Write(
-        "a/go.mod",
+        Path::new("a/go.mod"),
         "module example.com/a\n\nrequire example.com/b v0.0.0 // indirect\n",
     );
-    workspace.Write("b/go.mod", "module example.com/b\n");
+    workspace.Write(Path::new("b/go.mod"), "module example.com/b\n");
 
     let discovered = Discover_Workspace(&workspace.root).expect("a real two-module workspace");
 
@@ -127,8 +148,8 @@ fn Test_An_Indirect_Requirement_Of_A_Member_Should_Still_Be_An_Edge()
 fn Test_Manifest_Relative_Root_Should_Be_Repository_Relative_And_Forward_Sloshed()
 {
     let workspace = TemporaryWorkspace::New();
-    workspace.Write("go.work", "use (\n\t./nested/a\n)\n");
-    workspace.Write("nested/a/go.mod", "module example.com/a\n");
+    workspace.Write(Path::new("go.work"), "use (\n\t./nested/a\n)\n");
+    workspace.Write(Path::new("nested/a/go.mod"), "module example.com/a\n");
 
     let discovered = Discover_Workspace(&workspace.root).expect("a real workspace");
 
@@ -143,13 +164,13 @@ fn Test_Manifest_Relative_Root_Should_Be_Repository_Relative_And_Forward_Sloshed
 fn Test_Edges_Should_Be_In_Canonical_Order()
 {
     let workspace = TemporaryWorkspace::New();
-    workspace.Write("go.work", "use (\n\t./a\n\t./b\n\t./c\n)\n");
+    workspace.Write(Path::new("go.work"), "use (\n\t./a\n\t./b\n\t./c\n)\n");
     workspace.Write(
-        "a/go.mod",
+        Path::new("a/go.mod"),
         "module example.com/a\n\nrequire (\n\texample.com/c v0.0.0\n\texample.com/b v0.0.0\n)\n",
     );
-    workspace.Write("b/go.mod", "module example.com/b\n");
-    workspace.Write("c/go.mod", "module example.com/c\n");
+    workspace.Write(Path::new("b/go.mod"), "module example.com/b\n");
+    workspace.Write(Path::new("c/go.mod"), "module example.com/c\n");
 
     let discovered = Discover_Workspace(&workspace.root).expect("a real workspace");
 
@@ -183,7 +204,7 @@ fn Test_A_Go_Mod_With_No_Module_Line_Should_Be_Refused()
     for (content, expected_fragment) in Go_Mod_With_No_Module_Line_Cases()
     {
         let workspace = TemporaryWorkspace::New();
-        workspace.Write("go.mod", content);
+        workspace.Write(Path::new("go.mod"), content);
 
         let error = Discover_Workspace(&workspace.root).expect_err("a go.mod with no module line");
         assert!(error.reason.contains(expected_fragment), "{}", error.reason);
@@ -203,7 +224,7 @@ fn Test_A_Go_Work_With_No_Use_Directive_Should_Be_Refused()
     for (content, expected_fragment) in Go_Work_With_No_Use_Directive_Cases()
     {
         let workspace = TemporaryWorkspace::New();
-        workspace.Write("go.work", content);
+        workspace.Write(Path::new("go.work"), content);
 
         let error = Discover_Workspace(&workspace.root).expect_err("a go.work naming no member");
         assert!(error.reason.contains(expected_fragment), "{}", error.reason);

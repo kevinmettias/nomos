@@ -7,7 +7,14 @@
 
 use crate::store::{For_Building, Order, Populated, Populated_In_Order, Shipped};
 use nomos_spec_bundle::{Bundle, Export, Import_Bundle};
-use nomos_spec_project::{Build, GENERATED_FILE_NOTICE};
+use nomos_spec_project::{Build, Profile, GENERATED_FILE_NOTICE};
+use nomos_spec_store::SpecificationStore;
+
+/// How much of `GENERATED_FILE_NOTICE` a body must carry for the notice to count as explained.
+///
+/// A prefix rather than the whole sentence: what is checked is that the marker arrives with the
+/// words that explain it, and a body is free to wrap the notice across lines.
+const GENERATED_NOTICE_PREFIX_CHARS: usize = 40;
 
 /// P3, first half.
 #[test]
@@ -18,11 +25,16 @@ fn Test_A_Rebuild_Should_Be_Byte_Identical()
     for profile in Shipped().Profiles()
     {
         let buildable = For_Building(profile);
-        let first = Build(&store, &buildable).expect("builds");
-        let second = Build(&store, &buildable).expect("rebuilds");
+        let first = Build(&store, &buildable)
+            .expect("the fixture renders every shipped profile it declares");
+        let second = Build(&store, &buildable)
+            .expect("the same fixture and profile produced the first body");
 
         assert_eq!(first.body, second.body, "{} does not rebuild to itself", profile.id);
-        assert_eq!(first.Sidecar().expect("stamps"), second.Sidecar().expect("stamps"));
+        assert_eq!(
+            first.Sidecar().expect("every built output carries a rendered stamp"),
+            second.Sidecar().expect("every built output carries a rendered stamp")
+        );
     }
 }
 
@@ -30,12 +42,8 @@ fn Test_A_Rebuild_Should_Be_Byte_Identical()
 #[test]
 fn Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original()
 {
-    use nomos_spec_store::SpecificationStore;
-
     let source = Populated();
-    let bundle = Export(&source).expect("exports").Write().expect("writes");
-    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    Import_Bundle(&mut rebuilt, &Bundle::Parse(&bundle).expect("parses")).expect("imports");
+    let rebuilt = Reimported(&source);
 
     for profile in Shipped().Profiles()
     {
@@ -52,6 +60,27 @@ fn Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original()
     }
 }
 
+/// The fixture's store, exported and imported back into a fresh in-memory one.
+///
+/// This is the store a second machine holds, which is the whole point of the comparison: the
+/// import has no uid from the original's insertion order to inherit.
+fn Reimported(source: &SpecificationStore) -> SpecificationStore
+{
+    let bundle = Export(source)
+        .expect("the fixture store is exportable as a bundle")
+        .Write()
+        .expect("the export writes into a buffer it owns");
+    let mut rebuilt = SpecificationStore::In_Memory()
+        .expect("In_Memory applies the schema MIGRATIONS before it returns");
+    Import_Bundle(
+        &mut rebuilt,
+        &Bundle::Parse(&bundle).expect("the bytes came out of Export in the line above"),
+    )
+    .expect("the bundle carries every table the fixture wrote");
+
+    return rebuilt;
+}
+
 /// Insertion order decides `uid`, and nothing in a projection may be ordered by one.
 #[test]
 fn Test_Insertion_Order_Should_Not_Reach_The_Output()
@@ -62,8 +91,10 @@ fn Test_Insertion_Order_Should_Not_Reach_The_Output()
     for profile in Shipped().Profiles()
     {
         let buildable = For_Building(profile);
-        let first = Build(&forwards, &buildable).expect("builds");
-        let second = Build(&backwards, &buildable).expect("builds");
+        let first = Build(&forwards, &buildable)
+            .expect("the fixture renders every shipped profile it declares");
+        let second = Build(&backwards, &buildable)
+            .expect("the same fixture renders the profile in either insertion order");
 
         assert_eq!(
             first.body, second.body,
@@ -80,7 +111,8 @@ fn Test_Every_Body_Should_Be_Lf_Utf8_Without_A_Bom()
 
     for profile in Shipped().Profiles()
     {
-        let output = Build(&store, &For_Building(profile)).expect("builds");
+        let output = Build(&store, &For_Building(profile))
+            .expect("the fixture renders every shipped profile it declares");
 
         assert!(!output.body.contains('\r'), "{} carries a carriage return", profile.id);
         assert!(
@@ -89,7 +121,10 @@ fn Test_Every_Body_Should_Be_Lf_Utf8_Without_A_Bom()
             profile.id
         );
         assert!(
-            !output.Sidecar().expect("stamps").contains('\r'),
+            !output
+                .Sidecar()
+                .expect("every built output carries a rendered stamp")
+                .contains('\r'),
             "{}: the sidecar carries a carriage return",
             profile.id
         );
@@ -103,16 +138,22 @@ fn Test_Every_Body_Should_Declare_Itself_Generated()
 
     for profile in Shipped().Profiles()
     {
-        let output = Build(&store, &For_Building(profile)).expect("builds");
+        let output = Build(&store, &For_Building(profile))
+            .expect("the fixture renders every shipped profile it declares");
 
-        Assert_Declares_Itself_Generated(&output.body, &profile.id);
+        Assert_Declares_Itself_Generated(&output.body, profile);
     }
 }
 
 /// A body has to say it is generated, say it must not be edited, and carry the sentence that
 /// explains the marker rather than the marker on its own.
-fn Assert_Declares_Itself_Generated(body: &str, id: &str)
+///
+/// The profile arrives whole rather than as its `id`, so the two arguments are of different
+/// types and a caller cannot pass the body where the profile goes.
+fn Assert_Declares_Itself_Generated(body: &str, profile: &Profile)
 {
+    let id = &profile.id;
+
     assert!(
         body.contains("nomos_generated") || body.contains("nomos-generated"),
         "{id} does not say it is generated"
@@ -122,8 +163,11 @@ fn Assert_Declares_Itself_Generated(body: &str, id: &str)
         "{id} does not say it must not be edited"
     );
     assert!(
-        body.contains(GENERATED_FILE_NOTICE.get(..40).unwrap_or(GENERATED_FILE_NOTICE))
-            || body.contains("Generated by nomos"),
+        body.contains(
+            GENERATED_FILE_NOTICE
+                .get(..GENERATED_NOTICE_PREFIX_CHARS)
+                .unwrap_or(GENERATED_FILE_NOTICE)
+        ) || body.contains("Generated by nomos"),
         "{id} carries the marker without the sentence that explains it"
     );
 }
@@ -149,7 +193,8 @@ fn Test_No_Body_Should_Carry_This_Machine()
 
     for profile in Shipped().Profiles()
     {
-        let output = Build(&store, &For_Building(profile)).expect("builds");
+        let output = Build(&store, &For_Building(profile))
+            .expect("the fixture renders every shipped profile it declares");
 
         for environmental in Environmental_Strings()
         {

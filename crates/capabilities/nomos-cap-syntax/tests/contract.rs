@@ -17,16 +17,18 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 #[test]
 fn Test_The_Ceiling_Should_Admit_A_Weaker_Offer()
 {
+    let guarantee = Guarantee::New(
+        FactVariant::Approximate,
+        Assurance::Unsound,
+        Assurance::Unknown,
+        IncrementalGranularity::File,
+    );
+
     contract_testing::Assert_Ceiling_Admits(
         Capability_Contract(),
         Capability(),
         CONTRACT_VERSION,
-        Guarantee::New(
-            FactVariant::Approximate,
-            Assurance::Unsound,
-            Assurance::Unknown,
-            IncrementalGranularity::File,
-        ),
+        guarantee,
     );
 }
 
@@ -36,14 +38,16 @@ fn Test_The_Ceiling_Should_Admit_A_Weaker_Offer()
 #[test]
 fn Test_The_Ceiling_Should_Refuse_A_Claim_Of_Name_Resolution()
 {
+    let guarantee = Guarantee::New(
+        FactVariant::SemanticallyResolved,
+        Assurance::Sound,
+        Assurance::Sound,
+        IncrementalGranularity::Region,
+    );
+
     contract_testing::Assert_Ceiling_Refuses(
         Capability_Contract(),
-        Guarantee::New(
-            FactVariant::SemanticallyResolved,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::Region,
-        ),
+        guarantee,
         "a provider claiming resolution for a capability about what a file says on its \
          face would satisfy every rule that needs resolution",
     );

@@ -27,6 +27,25 @@ const LAPSED_AT: i64 = 1_003_600;
 /// Far enough ahead that `T-3`'s claim is live whenever this suite runs. Unix seconds in 2096.
 const STILL_LIVE: i64 = 4_000_000_000;
 
+/// How many items [`A_Board`] writes.
+///
+/// The count is the fixture's, and it is also the assertion: a field written per item has to
+/// appear this many times, so a writer that emitted it only where it had something to say
+/// would fall short of it.
+const ITEMS_ON_THE_BOARD: usize = 3;
+
+/// The exit code for work somebody holds that the caller may wait out.
+///
+/// `README.md`'s table calls this one retryable: the lease running out is what resolves it, so
+/// the caller's next step is to try again later or pick another item.
+const EXIT_RETRYABLE: i32 = 3;
+
+/// The exit code for a state a person has to resolve.
+///
+/// Distinct from [`EXIT_RETRYABLE`] because no amount of waiting changes an item that is not
+/// lapsed: an agent that retried this would retry forever.
+const EXIT_CONFLICT: i32 = 4;
+
 /// A scratch board with one lapsed item, one free item and one somebody is still holding.
 ///
 /// Written as JSON rather than built with `work add` and `work claim`, because the claim
@@ -111,7 +130,7 @@ fn Assert_The_Displaced_Claim_Survived(written: &str)
     );
     assert_eq!(
         written.matches("\"displaced\"").count(),
-        3,
+        ITEMS_ON_THE_BOARD,
         "`displaced` must be emitted for every item, not only the one that has any:\n{written}"
     );
 }
@@ -189,7 +208,7 @@ fn Test_Claiming_A_Lapsed_Item_Should_Refuse_And_Name_The_Takeover()
     let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
 
     assert_eq!(
-        code, 4,
+        code, EXIT_CONFLICT,
         "a lapsed item is a conflict a person decides, not a queue to retry: {said}"
     );
     assert!(said.contains("dead-agent"), "{said}");
@@ -217,19 +236,19 @@ fn Test_Takeover_Should_Exit_Three_When_The_Lease_Is_Live_And_Four_When_It_Is_No
 
     let Ran { said: live, code } = board.Work(&["takeover", "--item", "T-3", "--holder", "agent-b"]);
     assert_eq!(
-        code, 3,
+        code, EXIT_RETRYABLE,
         "taking over a live claim is a queue, not a conflict: {live}"
     );
     assert!(live.contains("agent-a"), "{live}");
 
     let Ran { said: free, code } = board.Work(&["takeover", "--item", "T-2", "--holder", "agent-b"]);
     assert_eq!(
-        code, 4,
+        code, EXIT_CONFLICT,
         "taking over an item nobody holds is the wrong verb, and waiting will not fix it: {free}"
     );
 
     let Ran { said: missing, code } = board.Work(&["takeover", "--item", "T-9", "--holder", "agent-b"]);
-    assert_eq!(code, 4, "{missing}");
+    assert_eq!(code, EXIT_CONFLICT, "{missing}");
 
     assert!(
         !board.Written().contains("agent-b"),

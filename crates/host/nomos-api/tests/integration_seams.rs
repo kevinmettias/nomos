@@ -15,6 +15,14 @@
 use std::path::PathBuf;
 use std::time::Duration;
 
+/// The one trigger content a real `COMPLETENESS_MIRROR` finding fires on: a doc comment
+/// mirroring a `Test_*` no shipped item holds.
+const MIRRORED_TRIGGER: &str = "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n";
+
+/// The one-hour lease the claim test below asks for, in the seconds
+/// [`nomos_platform::Timestamp::Plus`] is handed.
+const ONE_HOUR_IN_SECONDS: u64 = 3600;
+
 // ---------------------------------------------------------------------------------------------
 // Gate: nomos_gate_orchestration, nomos_contracts, nomos_rules, nomos_model.
 // ---------------------------------------------------------------------------------------------
@@ -28,11 +36,8 @@ use std::time::Duration;
 #[test]
 fn Test_Handle_Gate_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers()
 {
-    let directory = Scratch_Source_Tree("gate-explain-not-found", "a.rs", "pub fn Ok() {}\n");
-    let query = nomos_gate_orchestration::FindingQuery {
-        rule: nomos_contracts::RuleId::New(nomos_rules::COMPLETENESS_MIRROR),
-        location: "nowhere.rs".to_owned(),
-    };
+    let directory = Scratch_Source_Tree("gate-explain-not-found", &[("a.rs", "pub fn Ok() {}\n")]);
+    let query = A_Mirror_Query("nowhere.rs");
 
     let response = nomos_api::Handle_Gate_Explain(&directory, &query);
 
@@ -50,20 +55,30 @@ fn Test_Handle_Gate_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers(
 #[test]
 fn Test_Handle_Gate_Explain_Should_Find_A_Real_Blocking_Finding_Over_A_Real_Walked_Directory()
 {
-    let directory = Scratch_Source_Tree(
-        "gate-explain-found",
-        "a.rs",
-        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
-    );
-    let query = nomos_gate_orchestration::FindingQuery {
-        rule: nomos_contracts::RuleId::New(nomos_rules::COMPLETENESS_MIRROR),
-        location: "a.rs".to_owned(),
-    };
+    let directory = Scratch_Source_Tree("gate-explain-found", &[("a.rs", MIRRORED_TRIGGER)]);
+    let query = A_Mirror_Query("a.rs");
 
     let response = nomos_api::Handle_Gate_Explain(&directory, &query);
 
     let _ignored = std::fs::remove_dir_all(&directory);
+    Assert_A_Real_Blocking_Finding(response);
+}
 
+/// A query addressed to the shipped `COMPLETENESS_MIRROR` rule at `location`, through a real
+/// `nomos_gate_orchestration::FindingQuery` and a real `nomos_contracts::RuleId`.
+fn A_Mirror_Query(location: &str) -> nomos_gate_orchestration::FindingQuery
+{
+    return nomos_gate_orchestration::FindingQuery {
+        rule: nomos_contracts::RuleId::New(nomos_rules::COMPLETENESS_MIRROR),
+        location: location.to_owned(),
+    };
+}
+
+/// `response` asserted to be the real blocking `Finding` [`MIRRORED_TRIGGER`] produces, with
+/// `nomos_model::Subject_Of_Path`'s own determinism asserted alongside it: two reads of one
+/// path must agree, and a sibling file this crate would walk beside it must not collide.
+fn Assert_A_Real_Blocking_Finding(response: nomos_api::GateExplainResponse)
+{
     let nomos_api::GateExplainResponse::Found { finding, would_block, contract_record, .. } = response
     else
     {
@@ -90,14 +105,17 @@ fn Test_Handle_Gate_Explain_Should_Find_A_Real_Blocking_Finding_Over_A_Real_Walk
 }
 
 /// A real, freshly walkable scratch tree of this file's own -- never the real repository tree,
-/// which live sessions write to concurrently.
-fn Scratch_Source_Tree(label: &str, file_name: &str, content: &str) -> PathBuf
+/// which live sessions write to concurrently -- holding one file per `(name, content)` pair.
+fn Scratch_Source_Tree(label: &str, files: &[(&str, &str)]) -> PathBuf
 {
     let name = format!("nomos-api-tests-integration-seams-{label}-{}", std::process::id());
     let directory = std::env::temp_dir().join(name);
     let _ignored = std::fs::remove_dir_all(&directory);
     std::fs::create_dir_all(&directory).expect("creates a fresh scratch directory");
-    std::fs::write(directory.join(file_name), content).expect("writes a real source file");
+    for (file_name, content) in files
+    {
+        std::fs::write(directory.join(file_name), content).expect("writes a real source file");
+    }
 
     return directory;
 }
@@ -122,20 +140,32 @@ fn Test_Handle_Work_Claim_Should_Grant_A_Reservation_Whose_Expiry_Is_A_Real_Syst
 
     let id = "SCRATCH-API-TESTS-INTEGRATION-SEAMS-CLAIM";
     let directory = Scratch_Board_With_A_Claimable_Item(id);
-    let lease = Duration::from_secs(3600);
-    let request = nomos_work_orchestration::ClaimRequest {
-        item: nomos_ledger::ItemId::New(id),
-        holder: "test-holder".to_owned(),
-        lease,
-    };
+    let lease = Duration::from_secs(ONE_HOUR_IN_SECONDS);
+    let request = nomos_work_orchestration::ClaimRequest { item: nomos_ledger::ItemId::New(id), holder: "test-holder".to_owned(), lease };
 
     let before = nomos_composer_std::CLOCK.Now();
     let response = nomos_api::Handle_Work_Claim(&directory, &request);
     let after = nomos_composer_std::CLOCK.Now();
 
     let _ignored = std::fs::remove_dir_all(&directory);
+    Assert_Lease_Granted(response, id, Lease_Window { lease, before, after });
+}
 
-    let nomos_api::ReservationOutcomeResponse::Reserved { reservation } = response
+/// One claim's clock window: the lease the caller asked for and the two real
+/// `nomos_composer_std::CLOCK` readings that bracketed the call. Bundled so the granted
+/// expiry is checked against a window rather than an exact, flaky-by-construction instant.
+struct Lease_Window
+{
+    lease: Duration,
+    before: nomos_platform::Timestamp,
+    after: nomos_platform::Timestamp,
+}
+
+/// `granted` asserted to be the reservation `id`'s own claim grants, expiring one
+/// `window.lease` after the real clock reading `window` reports.
+fn Assert_Lease_Granted(granted: nomos_api::ReservationOutcomeResponse, id: &str, window: Lease_Window)
+{
+    let nomos_api::ReservationOutcomeResponse::Reserved { reservation } = granted
     else
     {
         // This fixture builds a real, unclaimed Ready item with real territory and no
@@ -145,12 +175,18 @@ fn Test_Handle_Work_Claim_Should_Grant_A_Reservation_Whose_Expiry_Is_A_Real_Syst
     };
     assert_eq!(reservation.item, nomos_ledger::ItemId::New(id));
     assert_eq!(reservation.holder, "test-holder");
-    let earliest_acceptable = before.Plus(lease);
-    let latest_acceptable = after.Plus(lease);
+
+    let earliest_acceptable = window.before.Plus(window.lease);
+    let latest_acceptable = window.after.Plus(window.lease);
     assert!(
         reservation.expires_at >= earliest_acceptable && reservation.expires_at <= latest_acceptable,
-        "a lease of {lease:?} granted between {before:?} and {after:?} must expire between \
-         {earliest_acceptable:?} and {latest_acceptable:?}, not {:?}",
+        "a lease of {:?} granted between {:?} and {:?} must expire between \
+         {:?} and {:?}, not {:?}",
+        window.lease,
+        window.before,
+        window.after,
+        earliest_acceptable,
+        latest_acceptable,
         reservation.expires_at
     );
 }

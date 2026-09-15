@@ -104,26 +104,6 @@ pub(super) fn Print_History(found: &LedgerItem, current_revision: Option<&str>, 
     Print_Verification(found, current_revision, output);
 }
 
-/// Every enlargement of the territory, and what each one added.
-///
-/// The added paths and not the territory as it stands, which the item already carries. What is
-/// not otherwise recoverable is which of those paths were not predicted when the item was
-/// authored, and that is the whole of what `OD-LEDGER-039` keeps these rows for.
-fn Print_Widenings(found: &LedgerItem, output: &mut impl std::io::Write)
-{
-    for widening in &found.widened
-    {
-        let _ = writeln!(
-            output,
-            "widened by {} at unix {}, adding {}: {}",
-            widening.holder,
-            widening.widened_at.Unix_Seconds(),
-            widening.added.len(),
-            widening.added.join(" ")
-        );
-    }
-}
-
 /// Every holder a takeover displaced, and the window they held.
 fn Print_Displacements(found: &LedgerItem, output: &mut impl std::io::Write)
 {
@@ -150,6 +130,26 @@ fn Print_Abandonments(found: &LedgerItem, output: &mut impl std::io::Write)
             abandonment.holder,
             abandonment.abandoned_at.Unix_Seconds(),
             abandonment.reason
+        );
+    }
+}
+
+/// Every enlargement of the territory, and what each one added.
+///
+/// The added paths and not the territory as it stands, which the item already carries. What is
+/// not otherwise recoverable is which of those paths were not predicted when the item was
+/// authored, and that is the whole of what `OD-LEDGER-039` keeps these rows for.
+fn Print_Widenings(found: &LedgerItem, output: &mut impl std::io::Write)
+{
+    for widening in &found.widened
+    {
+        let _ = writeln!(
+            output,
+            "widened by {} at unix {}, adding {}: {}",
+            widening.holder,
+            widening.widened_at.Unix_Seconds(),
+            widening.added.len(),
+            widening.added.join(" ")
         );
     }
 }
@@ -393,6 +393,22 @@ mod tests
     #[test]
     fn Test_Print_History_Should_Print_Every_Displacement_Abandonment_And_Verification()
     {
+        let item = An_Item_With_A_Full_History();
+        let mut output = Vec::new();
+
+        Print_History(&item, Some("abc123"), &mut output);
+
+        let printed = String::from_utf8(output).unwrap();
+        assert!(printed.contains("taken over from agent-a"), "{printed}");
+        assert!(printed.contains("abandoned by agent-b"), "{printed}");
+        assert!(printed.contains("verified by `cargo test`"), "{printed}");
+        assert!(printed.contains("still describes this tree"), "{printed}");
+    }
+
+    /// One item carrying each of the three history rows [`Print_History`] prints, and a
+    /// verification stamped against the revision the test reads back.
+    fn An_Item_With_A_Full_History() -> LedgerItem
+    {
         let mut item = Item("T-1");
         item.displaced.push(nomos_ledger::Claim {
             holder: "agent-a".to_owned(),
@@ -412,15 +428,8 @@ mod tests
             gate: None,
             revision: Some("abc123".to_owned()),
         });
-        let mut output = Vec::new();
 
-        Print_History(&item, Some("abc123"), &mut output);
-
-        let printed = String::from_utf8(output).unwrap();
-        assert!(printed.contains("taken over from agent-a"), "{printed}");
-        assert!(printed.contains("abandoned by agent-b"), "{printed}");
-        assert!(printed.contains("verified by `cargo test`"), "{printed}");
-        assert!(printed.contains("still describes this tree"), "{printed}");
+        return item;
     }
 
     /// A minimal, ready item: enough to exercise the listing surface without a claim, a

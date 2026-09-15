@@ -19,11 +19,41 @@ fn At(value: &Value, pointer: &str) -> Value
     return value.pointer(pointer).cloned().unwrap_or(Value::Null);
 }
 
+/// The id the second request carries, and the id its answer must echo back untouched -- the
+/// one number in this conversation the engine takes from the request rather than choosing.
+const CLIENT_REQUEST_ID: u64 = 2;
+
 /// A real `initialize` and a real `tools/call`, written to a real child process's stdin and
 /// read back from its stdout -- the same conversation an MCP client has with this server
 /// when it launches it as a subprocess, which is the only way this binary is ever run.
 #[test]
 fn Test_A_Real_Subprocess_Should_Answer_A_Real_Conversation_Over_Its_Own_Stdio()
+{
+    let mut conversation = Spawned_Server();
+
+    let initialized = Asked(&mut conversation, r#"{"jsonrpc":"2.0","id":1,"method":"initialize"}"#);
+    assert_eq!(At(&initialized, "/result/serverInfo/name"), "nomos-mcp", "{initialized}");
+
+    let call = r#"{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"nomos.gate.plan","arguments":{}}}"#;
+    let called = Asked(&mut conversation, call);
+    assert_eq!(At(&called, "/id"), CLIENT_REQUEST_ID, "{called}");
+    assert_eq!(At(&called, "/result/isError"), false, "{called}");
+
+    drop(conversation.stdin);
+    let status = conversation.child.wait().expect("the child exits once its stdin closes");
+    assert!(status.success(), "{status:?}");
+}
+
+/// A spawned server this test owns both pipes of, and the line reader over its stdout.
+struct Conversation
+{
+    child: std::process::Child,
+    stdin: std::process::ChildStdin,
+    answers: std::io::Lines<BufReader<std::process::ChildStdout>>,
+}
+
+/// The compiled server, spawned with both pipes requested -- nothing is written to it yet.
+fn Spawned_Server() -> Conversation
 {
     let mut child = Command::new(env!("CARGO_BIN_EXE_nomos-mcp"))
         .stdin(Stdio::piped())
@@ -31,23 +61,18 @@ fn Test_A_Real_Subprocess_Should_Answer_A_Real_Conversation_Over_Its_Own_Stdio()
         .spawn()
         .expect("the built nomos-mcp binary is spawnable");
 
-    let mut stdin = child.stdin.take().expect("stdin was requested as piped");
+    let stdin = child.stdin.take().expect("stdin was requested as piped");
     let stdout = child.stdout.take().expect("stdout was requested as piped");
-    let mut lines = BufReader::new(stdout).lines();
 
-    writeln!(stdin, r#"{{"jsonrpc":"2.0","id":1,"method":"initialize"}}"#).expect("the child's stdin accepts a line");
-    let initialized: Value = Next_Answer(&mut lines);
-    assert_eq!(At(&initialized, "/result/serverInfo/name"), "nomos-mcp", "{initialized}");
+    return Conversation { child, stdin, answers: BufReader::new(stdout).lines() };
+}
 
-    writeln!(stdin, r#"{{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{{"name":"nomos.gate.plan","arguments":{{}}}}}}"#)
-        .expect("the child's stdin accepts a second line");
-    let called: Value = Next_Answer(&mut lines);
-    assert_eq!(At(&called, "/id"), 2, "{called}");
-    assert_eq!(At(&called, "/result/isError"), false, "{called}");
+/// One request written to `conversation`'s stdin, and the answer it wrote back.
+fn Asked(conversation: &mut Conversation, request: &str) -> Value
+{
+    writeln!(conversation.stdin, "{request}").expect("the child's stdin accepts a line");
 
-    drop(stdin);
-    let status = child.wait().expect("the child exits once its stdin closes");
-    assert!(status.success(), "{status:?}");
+    return Next_Answer(&mut conversation.answers);
 }
 
 /// The next line the child wrote, parsed as JSON.

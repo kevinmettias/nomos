@@ -57,20 +57,6 @@ mod tests
     use super::*;
     use nomos_cap_architecture::Membership;
 
-    /// A declaration in a vocabulary this workspace does not use -- the point being that this
-    /// module resolves whatever the repository under check declares, not what nomos knows.
-    fn Declaration() -> ArchitecturePayload
-    {
-        return ArchitecturePayload {
-            components: vec!["Domain".to_owned(), "Api".to_owned()],
-            membership: vec![
-                Membership { package: "billing".to_owned(), component: "Domain".to_owned() },
-                Membership { package: "http".to_owned(), component: "Api".to_owned() },
-            ],
-            ..ArchitecturePayload::default()
-        };
-    }
-
     #[test]
     fn Test_Of_Should_Resolve_A_Crate_Path_To_Its_Declared_Component()
     {
@@ -114,5 +100,19 @@ mod tests
     fn Test_Of_Should_Be_None_When_The_Repository_Declared_Nothing()
     {
         assert!(ArchitecturalComponent::Of(&ArchitecturePayload::default(), "crates/domain/billing/src/lib.rs").is_none());
+    }
+
+    /// A declaration in a vocabulary this workspace does not use -- the point being that this
+    /// module resolves whatever the repository under check declares, not what nomos knows.
+    fn Declaration() -> ArchitecturePayload
+    {
+        return ArchitecturePayload {
+            components: vec!["Domain".to_owned(), "Api".to_owned()],
+            membership: vec![
+                Membership { package: "billing".to_owned(), component: "Domain".to_owned() },
+                Membership { package: "http".to_owned(), component: "Api".to_owned() },
+            ],
+            ..ArchitecturePayload::default()
+        };
     }
 }

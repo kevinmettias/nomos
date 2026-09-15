@@ -36,6 +36,20 @@ struct StatementRecord
     canonical_hash: String,
 }
 
+/// The discriminating set's recorded size: the only blocks in the whole v14 corpus where
+/// normalization changes the hash. A different count means the fixture is not that set.
+const DISCRIMINATING_BLOCKS: usize = 30;
+
+/// How many statements the plan's gate asked for.
+const SAMPLED_STATEMENT_FLOOR: usize = 20;
+
+/// How many of those statements must be non-ASCII for the sample to pin the encoding.
+const NON_ASCII_STATEMENT_FLOOR: usize = 10;
+
+/// The domain volumes the authored tree divides into, which is the whole of
+/// `01_authoring/domain_volumes`.
+const VOLUME_FLOOR: u32 = 10;
+
 fn Corpus(name: &str) -> PathBuf
 {
     return Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/corpus").join(name);
@@ -117,7 +131,7 @@ fn Test_The_Normalizer_Should_Reproduce_The_Discriminating_Hashes()
 
     assert_eq!(
         blocks.len(),
-        30,
+        DISCRIMINATING_BLOCKS,
         "the discriminating set is fixed; a change here means the corpus changed"
     );
 
@@ -159,7 +173,7 @@ fn Test_Sampled_Statements_Should_Reproduce_Their_Canonical_Hash()
     let statements: Vec<StatementRecord> = Load("statements.json");
 
     assert!(
-        statements.len() >= 20,
+        statements.len() >= SAMPLED_STATEMENT_FLOOR,
         "the gate requires at least twenty sampled statements, found {}",
         statements.len()
     );
@@ -187,7 +201,7 @@ fn Test_The_Sample_Should_Contain_Non_Ascii_Statements()
         .count();
 
     assert!(
-        non_ascii >= 10,
+        non_ascii >= NON_ASCII_STATEMENT_FLOOR,
         "only {non_ascii} non-ascii statements: the sample no longer pins the encoding"
     );
 }
@@ -238,7 +252,7 @@ fn Test_The_Whole_Corpus_Should_Reproduce_When_Available()
         documents = documents.saturating_add(Assert_It_Segments(&entry.path()));
     }
 
-    assert!(documents >= 10, "expected the ten domain volumes, found {documents}");
+    assert!(documents >= VOLUME_FLOOR, "expected the ten domain volumes, found {documents}");
 }
 
 /// Opt-in by path, and loud rather than silent: a configured corpus that cannot be read fails,

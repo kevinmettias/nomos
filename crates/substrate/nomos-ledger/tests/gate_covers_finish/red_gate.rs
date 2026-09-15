@@ -1,12 +1,14 @@
 //! The instance. A passing predicate and a red gate must not finish an item.
 
-use crate::launcher::{Bench, Bench_At, Finish_In, Scripted, Standing, State_Of, WORKFLOW};
+use crate::launcher::{
+    Bench, Bench_At, Finish_In, Scripted, Standing, State_Of, GATE_FAILED_EXIT, WORKFLOW,
+};
 use nomos_ledger::{FinishRefusal, ItemState, VerificationRecord};
 
 #[test]
 fn Test_A_Passing_Predicate_Should_Not_Finish_An_Item_While_The_Gate_Is_Red()
 {
-    let scripted = Scripted::New(101, 0);
+    let scripted = Scripted::New(GATE_FAILED_EXIT, 0);
     let Bench {
         directory,
         mut ledger,

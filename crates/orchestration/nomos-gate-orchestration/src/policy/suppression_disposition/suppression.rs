@@ -76,6 +76,11 @@ mod tests
     use super::{Suppression, SuppressionDisposition};
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
+    /// The subject byte the *other* finding in [`Test_Is_Applicable_To_Should_Not_Match_A_Different_Subject`]
+    /// seeds from, named so the two findings that test tells apart differ by something a reader
+    /// can read rather than by two bare digits.
+    const OTHER_SUBJECT_SEED: u8 = 2;
+
     #[test]
     fn Test_Is_Applicable_To_Should_Match_Same_Rule_And_Subject()
     {
@@ -89,7 +94,8 @@ mod tests
     fn Test_Is_Applicable_To_Should_Not_Match_A_Different_Subject()
     {
         let finding = Finding_For("naming-convention", 1);
-        let suppression = Suppression_Of(&Finding_For("naming-convention", 2));
+        let other = Finding_For("naming-convention", OTHER_SUBJECT_SEED);
+        let suppression = Suppression_Of(&other);
 
         assert!(!suppression.Is_Applicable_To(&finding));
     }
@@ -130,18 +136,6 @@ mod expiry_tests
     use nomos_platform::Timestamp;
 
     const EXPIRY_SECONDS: i64 = 1_000;
-
-    fn Waiver_Expiring_At(seconds: i64) -> Suppression
-    {
-        return Suppression {
-            rule: RuleId::New("naming-convention"),
-            subject: SubjectId::From_Digest(Content_Digest(b"src/lib.rs")),
-            disposition: SuppressionDisposition::TemporaryWaiver,
-            rationale: "bounded while the rename lands".to_string(),
-            owner: "someone".to_string(),
-            expiry: Some(Timestamp::From_Unix_Seconds(seconds)),
-        };
-    }
 
     /// Before the instant, the waiver applies.
     #[test]
@@ -198,5 +192,19 @@ mod expiry_tests
                 "a disposition naming no end date stopped applying at {seconds}"
             );
         }
+    }
+
+    /// The waiver every test above shares, so its construction is written once: a temporary
+    /// waiver ending at `seconds`, which each test then judges at a moment of its own.
+    fn Waiver_Expiring_At(seconds: i64) -> Suppression
+    {
+        return Suppression {
+            rule: RuleId::New("naming-convention"),
+            subject: SubjectId::From_Digest(Content_Digest(b"src/lib.rs")),
+            disposition: SuppressionDisposition::TemporaryWaiver,
+            rationale: "bounded while the rename lands".to_string(),
+            owner: "someone".to_string(),
+            expiry: Some(Timestamp::From_Unix_Seconds(seconds)),
+        };
     }
 }

@@ -26,6 +26,22 @@ use std::process::{Command, Output};
 
 const V14: &str = concat!("NOMOS_", "V14_CORPUS");
 
+/// How much of a text a failure message prints.
+///
+/// Enough for a reader to tell a projection that opens wrongly from one that is not there,
+/// and short enough that the message stays one line.
+const DIAGNOSTIC_CHARS: usize = 60;
+
+/// The exit code for an answer that is empty because something the store expected was not
+/// there.
+///
+/// A corpus that is absent and an identifier nothing holds are the two cases this whole
+/// file is about, and this is the code the first of them carries.
+const EXIT_ABSENT: i32 = 6;
+
+/// The exit code for a command line the binary refuses.
+const EXIT_USAGE: i32 = 2;
+
 /// The binary, with a corpus environment this test decides rather than inherits.
 ///
 /// Without the removal these assertions would pass or fail according to whether the
@@ -165,7 +181,7 @@ fn Test_Nothing_But_The_Record_Should_Reach_Standard_Output()
     let output = Nomos(&["spec", "record", "--id", "D-132"]);
 
     let text = Out_Text(&output);
-    assert!(text.starts_with("---\nid: D-132\n"), "{:?}", text.get(..60));
+    assert!(text.starts_with("---\nid: D-132\n"), "{:?}", text.get(..DIAGNOSTIC_CHARS));
     assert!(
         !text.contains("absent:"),
         "the absence note reached stdout, so a redirect would write it into the record"
@@ -218,7 +234,7 @@ fn Test_An_Absent_Corpus_Should_Be_Named_Rather_Than_Answered_Empty()
 {
     let output = Nomos(&["spec", "table", "--document", "05_domain_model.md"]);
 
-    assert_eq!(Code(&output), 6, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_ABSENT, "{}", Err_Text(&output));
     assert!(
         Out_Text(&output).is_empty(),
         "an absent corpus produced content: {}",
@@ -247,7 +263,7 @@ fn Test_An_Unreadable_Corpus_Should_Name_The_Path_It_Was_Given()
         &missing.display().to_string(),
     ]);
 
-    assert_eq!(Code(&output), 6, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_ABSENT, "{}", Err_Text(&output));
     assert!(
         Out_Text(&output).contains("no-corpus-here"),
         "{}",
@@ -280,20 +296,35 @@ fn Test_A_Profile_Should_Render_To_A_File()
     let output = Render("domain-specification", &into);
     assert_eq!(Code(&output), 0, "{}", Err_Text(&output));
 
-    let (rendered, stamp) = Rendered_Domain_Specification(&into);
+    let Projection { body, stamp } = Rendered_Domain_Specification(&into);
 
-    assert!(rendered.starts_with("---\nnomos_generated: true\n"), "{:?}", rendered.get(..60));
     assert!(
-        rendered.contains("OD-GATE-001-a-skipped-test-reports-ok.md"),
+        body.starts_with("---\nnomos_generated: true\n"),
+        "{:?}",
+        body.get(..DIAGNOSTIC_CHARS)
+    );
+    assert!(
+        body.contains("OD-GATE-001-a-skipped-test-reports-ok.md"),
         "the projection does not carry what the store holds"
     );
     assert!(stamp.contains("\"profile\": \"domain-specification\""), "{stamp:.200}");
     assert!(stamp.contains("\"content_digest\""), "{stamp:.200}");
 }
 
+/// A rendered profile and the freshness stamp written beside it.
+///
+/// Named rather than a `(String, String)`: both members are text, so a caller who read them
+/// in the wrong order would assert about a stamp as though it were a projection and be told
+/// only that the assertion failed.
+struct Projection
+{
+    body: String,
+    stamp: String,
+}
+
 /// The rendered `domain-specification` body and its freshness-stamp sidecar, read out of
 /// `into`.
-fn Rendered_Domain_Specification(into: &Path) -> (String, String)
+fn Rendered_Domain_Specification(into: &Path) -> Projection
 {
     let body = into.join("spec/domain-specification.md");
     let sidecar = into.join("spec/domain-specification.md.nomos-projection.json");
@@ -309,7 +340,7 @@ fn Rendered_Domain_Specification(into: &Path) -> (String, String)
         // different repair from a render that wrote nothing at all.
         .unwrap_or_else(|error| panic!("{} was not written: {error}", sidecar.display()));
 
-    return (rendered, stamp);
+    return Projection { body: rendered, stamp };
 }
 
 /// A profile whose sections need the corpus fails as an absence, not as the profile's own
@@ -322,7 +353,7 @@ fn Test_A_Profile_That_Needs_The_Corpus_Should_Fail_As_An_Absence()
 
     let output = Render("architecture-document", &into);
 
-    assert_eq!(Code(&output), 6, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_ABSENT, "{}", Err_Text(&output));
     let notes = Err_Text(&output);
     assert!(notes.contains("this store is not whole"), "{notes}");
     assert!(!notes.contains("may_be_empty"), "the profile's advice is the wrong advice here");
@@ -375,7 +406,7 @@ fn Test_A_Node_With_No_Document_Should_Say_So_Rather_Than_Report_It_Missing()
 {
     let output = Nomos(&["spec", "record", "--id", "ADR-DOC-001"]);
 
-    assert_eq!(Code(&output), 6, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_ABSENT, "{}", Err_Text(&output));
     let notes = Err_Text(&output);
     assert!(
         notes.contains("no source document is recorded against it"),
@@ -390,7 +421,7 @@ fn Test_A_Missing_Required_Flag_Should_Be_A_Usage_Error()
 {
     let output = Nomos(&["spec", "record"]);
 
-    assert_eq!(Code(&output), 2, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_USAGE, "{}", Err_Text(&output));
     let notes = Err_Text(&output);
     assert!(notes.contains("--id is required"), "{notes}");
     assert!(notes.contains("usage: nomos spec"), "{notes}");
@@ -401,7 +432,7 @@ fn Test_A_Non_Numeric_Ordinal_Should_Be_A_Usage_Error()
 {
     let output = Nomos(&["spec", "table", "--document", "x.md", "--table", "second"]);
 
-    assert_eq!(Code(&output), 2, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_USAGE, "{}", Err_Text(&output));
     assert!(Err_Text(&output).contains("second"), "{}", Err_Text(&output));
 }
 
@@ -410,7 +441,7 @@ fn Test_An_Unknown_Spec_Command_Should_Be_A_Usage_Error()
 {
     let output = Nomos(&["spec", "frobnicate"]);
 
-    assert_eq!(Code(&output), 2, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_USAGE, "{}", Err_Text(&output));
     assert!(Err_Text(&output).contains("frobnicate"), "{}", Err_Text(&output));
 }
 
@@ -421,7 +452,7 @@ fn Test_The_Binary_Should_Name_Both_Groups()
 {
     let output = Nomos(&[]);
 
-    assert_eq!(Code(&output), 2);
+    assert_eq!(Code(&output), EXIT_USAGE);
     let notes = Err_Text(&output);
     assert!(notes.contains("work"), "{notes}");
     assert!(notes.contains("spec"), "{notes}");
@@ -434,6 +465,6 @@ fn Test_The_Work_Group_Should_Still_Parse_Its_Arguments()
 {
     let output = Nomos(&["work", "claim", "--holder", "somebody"]);
 
-    assert_eq!(Code(&output), 2, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_USAGE, "{}", Err_Text(&output));
     assert!(Err_Text(&output).contains("--item is required"), "{}", Err_Text(&output));
 }

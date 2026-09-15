@@ -417,7 +417,9 @@ mod tests
     {
         let mut store = SpecificationStore::In_Memory().expect("opens");
         let markdown = "# Volume\n\nprose, and not a table.\n";
-        let uid = store.Put_Source_Document("volume.md", "v14.36", markdown).expect("writes");
+        let uid = store
+            .Put_Source_Document("volume.md", "v14.36", markdown)
+            .expect("In_Memory() opened this store empty, so the path is free and the insert conflicts with nothing");
         store
             .Put_Source_Blocks(uid, &nomos_spec_model::Segment(markdown))
             .expect("writes blocks");

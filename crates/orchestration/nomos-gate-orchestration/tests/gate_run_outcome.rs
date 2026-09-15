@@ -12,13 +12,18 @@
 use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 use nomos_gate_orchestration::{Disposition_Of_Findings, GateRunOutcome};
 
+/// The byte every finding below seeds its subject digest with. The value carries no meaning of
+/// its own -- any seed but zero distinguishes one subject from another -- so it is named here
+/// rather than spelled at the one place that reads it.
+const SUBJECT_SEED: u8 = 7;
+
 /// One finding, built so `gate` and `applicability` are the only knobs a caller of
 /// `Disposition_Of_Findings` cares about -- everything else here is filler a reader can ignore.
 fn Finding_With(gate: GateCategory, applicability: Applicability) -> Finding
 {
     return Finding {
         rule: RuleId::New("naming-convention"),
-        subject: SubjectId::From_Digest(Digest128::From_Bytes([7; Digest128::BYTE_LENGTH])),
+        subject: SubjectId::From_Digest(Digest128::From_Bytes([SUBJECT_SEED; Digest128::BYTE_LENGTH])),
         subject_name: "Example".to_owned(),
         applicability,
         evidence: EvidenceClass::Derived,

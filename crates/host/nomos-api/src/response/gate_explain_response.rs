@@ -166,14 +166,15 @@ mod tests
     #[test]
     fn Test_From_Should_Map_A_Real_Blocking_Finding_Into_A_Found_Explanation()
     {
-        let directory =
-            Scratch_Source_Tree("found", "a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
-        let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
+        let response = Explained_Trigger("found");
 
-        let response = Handle_Gate_Explain(&directory, &query);
+        Assert_A_Real_Blocking_Finding(response);
+    }
 
-        let _ignored = std::fs::remove_dir_all(&directory);
-
+    /// `response` asserted to be the `Found` a real blocking finding reaches when nothing
+    /// calibrates, suppresses or baselines it, citing `D-134`'s current version.
+    fn Assert_A_Real_Blocking_Finding(response: GateExplainResponse)
+    {
         let GateExplainResponse::Found {
             would_block,
             calibrated_by,
@@ -191,6 +192,7 @@ mod tests
             // from silently.
             panic!("this fixture must produce the finding the query names");
         };
+
         assert!(would_block);
         assert!(calibrated_by.is_none());
         assert!(suppressed_by.is_none());
@@ -205,15 +207,24 @@ mod tests
     #[test]
     fn Test_Unique_Scratch_Directory_Should_Let_A_Real_Explanation_Round_Trip_As_Json()
     {
+        let response = Explained_Trigger("json");
+
+        Assert_Round_Trips_As_Json(&response, "found");
+    }
+
+    /// The explanation `label`'s own fresh tree produces for the one trigger `Test_Nowhere`'s
+    /// stale mirror is, walked from a real directory rather than handed to `Explain_Gate` as a
+    /// synthetic `SourceFile` list. The tree is removed again before this returns.
+    fn Explained_Trigger(label: &str) -> GateExplainResponse
+    {
         let directory =
-            Scratch_Source_Tree("json", "a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+            Scratch_Source_Tree(label, "a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
         let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
 
         let response = Handle_Gate_Explain(&directory, &query);
 
         let _ignored = std::fs::remove_dir_all(&directory);
-
-        Assert_Round_Trips_As_Json(&response, "found");
+        return response;
     }
 
     /// A real, freshly walkable scratch tree of this test's own -- never the real repository

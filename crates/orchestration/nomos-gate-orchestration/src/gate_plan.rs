@@ -8,12 +8,16 @@
 mod gate_findings;
 mod gate_outcome;
 mod gate_run_outcome;
+mod gate_run_provenance;
 mod gate_run_result;
+mod no_verdict;
 
 pub use gate_findings::{BaselinePopulation, GateFindings};
 pub use gate_outcome::GateOutcome;
 pub use gate_run_outcome::{Disposition_Of_Findings, GateRunOutcome};
-pub use gate_run_result::{GateRunProvenance, GateRunResult, NoVerdict};
+pub use gate_run_provenance::GateRunProvenance;
+pub use gate_run_result::GateRunResult;
+pub use no_verdict::NoVerdict;
 
 use nomos_rules::RuleOffer;
 

@@ -41,6 +41,22 @@
 
 use std::path::PathBuf;
 
+// The concrete types this set selects, one per file. Each is separately replaceable — a
+// second composer swaps the file a name resolves to without touching any other member — and
+// each is re-exported here so that the path a caller names is the same one it named before
+// they were split apart.
+mod clock_type;
+mod environment_type;
+mod file_system_type;
+mod launcher_type;
+mod lock_type;
+
+pub use clock_type::ClockType;
+pub use environment_type::EnvironmentType;
+pub use file_system_type::FileSystemType;
+pub use launcher_type::LauncherType;
+pub use lock_type::LockType;
+
 // The port vocabulary, re-exported so a caller that takes this crate needs no separate
 // dependency on `nomos-platform` to name the traits its own signatures are generic over.
 // The authority is still `nomos-platform`; this is a re-export and not a second
@@ -67,27 +83,6 @@ pub const LAUNCHER: LauncherType = nomos_platform_std::StdProcessLauncher;
 
 /// The environment this platform reads variables and the working directory from.
 pub const ENVIRONMENT: EnvironmentType = nomos_platform_std::StdEnvironment;
-
-/// The concrete filesystem type, for a caller that must name one in a signature.
-///
-/// An alias rather than a re-export, and the difference is the point. A caller writing
-/// `nomos_composer_std::FileSystemType` names *this platform's* filesystem, which is what a
-/// composer exists to let it say; a caller writing `StdFileSystem` names one implementation,
-/// which is what every host did before this crate and what leaves it unable to be handed a
-/// different one.
-pub type FileSystemType = nomos_platform_std::StdFileSystem;
-
-/// The concrete clock type. See [`FileSystemType`].
-pub type ClockType = nomos_platform_std::SystemClock;
-
-/// The concrete launcher type. See [`FileSystemType`].
-pub type LauncherType = nomos_platform_std::StdProcessLauncher;
-
-/// The concrete environment type. See [`FileSystemType`].
-pub type EnvironmentType = nomos_platform_std::StdEnvironment;
-
-/// The concrete cross-process lock type. See [`FileSystemType`].
-pub type LockType = nomos_platform_std::FileLock;
 
 /// A cross-process lock over `path`.
 ///

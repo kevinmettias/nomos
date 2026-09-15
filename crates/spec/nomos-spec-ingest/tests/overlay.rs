@@ -19,6 +19,30 @@ use std::path::PathBuf;
 
 const V15: &str = "nomos-spec-v15.0.zip";
 
+/// The v14 identifiers the corpus carries: the denominator every reconciliation figure is a
+/// part of, and the number of outcomes the report holds.
+const V14_IDENTIFIERS: usize = 689;
+
+/// The requirements and the stories v14 declares. One number each, because the claim is that
+/// neither family lost a member or had one reworded on the way into v15.
+const REQUIREMENTS: usize = 363;
+const STORIES: usize = 169;
+
+/// The acceptance family v15 dropped whole: declared in v14, absent from v15, and named
+/// rather than counted.
+const ACCEPTANCE: usize = 157;
+
+/// How many of the reworded outcomes a diagnostic message prints before it stops.
+const REWORDED_SAMPLE: usize = 5;
+
+/// v15's non-record documents: every document the overlay walks, filler included.
+const V15_NON_RECORD_DOCUMENTS: u32 = 206;
+
+/// The records v15 adds, and the nodes the store receives for them — one apiece, so the two
+/// are counted in different units even where they agree.
+const V15_RECORDS: usize = 66;
+const V15_RECORD_NODES: u32 = 66;
+
 fn Corpus() -> Option<PathBuf>
 {
     let root = PathBuf::from(std::env::var_os("NOMOS_V14_CORPUS")?);
@@ -130,29 +154,29 @@ fn Test_Every_Identifier_Should_Reconcile_By_Name()
     let report: ReconciliationReport = Reconcile_Artifacts(&v14, &v15);
     let absent = report.Absent_In(Family::Acceptance);
 
-    assert_eq!(v14.len(), 689, "the v14 artifact count changed");
-    assert_eq!(report.Declared_In(Family::Requirement), 363);
-    assert_eq!(report.Declared_In(Family::Story), 169);
-    assert_eq!(report.Declared_In(Family::Acceptance), 157);
+    assert_eq!(v14.len(), V14_IDENTIFIERS, "the v14 artifact count changed");
+    assert_eq!(report.Declared_In(Family::Requirement), REQUIREMENTS);
+    assert_eq!(report.Declared_In(Family::Story), STORIES);
+    assert_eq!(report.Declared_In(Family::Acceptance), ACCEPTANCE);
     // Requirements and stories came through whole, and their wording did not drift.
-    assert_eq!(report.Preserved_In(Family::Requirement), 363, "{}", report.Summary());
-    assert_eq!(report.Preserved_In(Family::Story), 169, "{}", report.Summary());
+    assert_eq!(report.Preserved_In(Family::Requirement), REQUIREMENTS, "{}", report.Summary());
+    assert_eq!(report.Preserved_In(Family::Story), STORIES, "{}", report.Summary());
     assert!(
         report.Reworded().is_empty(),
         "wording drifted: {:?}",
-        report.Reworded().iter().take(5).collect::<Vec<_>>()
+        report.Reworded().iter().take(REWORDED_SAMPLE).collect::<Vec<_>>()
     );
     // The whole acceptance family is gone. Reported as absent, not as reworded, and named
     // rather than counted.
     assert_eq!(report.Preserved_In(Family::Acceptance), 0, "{}", report.Summary());
-    assert_eq!(absent.len(), 157, "{}", report.Summary());
+    assert_eq!(absent.len(), ACCEPTANCE, "{}", report.Summary());
     assert!(
         absent.contains(&"US-AGT-001-AC"),
         "the report does not name the identifiers it lost"
     );
     assert_eq!(
         report.Absent().len(),
-        157,
+        ACCEPTANCE,
         "something outside the acceptance family also disappeared: {}",
         report.Summary()
     );
@@ -174,7 +198,7 @@ fn Test_The_Report_Should_Name_What_It_Lost()
     assert!(spelled.contains("-AC"), "the summary gives a count with no identifier: {spelled}");
     assert_eq!(
         report.outcomes.len(),
-        689,
+        V14_IDENTIFIERS,
         "the report holds fewer outcomes than there are identifiers, so some were summarised away"
     );
 }
@@ -188,7 +212,8 @@ fn Test_Every_Filler_Block_Should_Carry_A_Lineage_Row()
     {
         return;
     };
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("an in-memory store opens over no file, so this construction has no failure path");
     let headings = V14_Headings(&corpus);
     let mut report = OverlayReport::default();
     for entry in archive.Listing().Ending_With(".md")
@@ -201,7 +226,7 @@ fn Test_Every_Filler_Block_Should_Carry_A_Lineage_Row()
     let rows = Filler_Lineage_Rows(&store);
     let displaced = report.filler.iter().filter(|block| block.displaced.is_some()).count();
 
-    assert_eq!(report.documents, 206, "the v15 non-record document count changed");
+    assert_eq!(report.documents, V15_NON_RECORD_DOCUMENTS, "the v15 non-record document count changed");
     assert!(!report.filler.is_empty(), "no filler was found, so this test examined nothing");
     assert_eq!(
         rows,
@@ -264,7 +289,7 @@ fn Filler_Lineage_Rows(store: &SpecificationStore) -> u32
             [],
             |row| return row.get(0),
         )
-        .expect("queries");
+        .expect("the store answers a count over the filler rows it owns");
 }
 
 /// The v15-only records, as authored nodes.
@@ -276,7 +301,8 @@ fn Test_The_V15_Records_Should_Be_Ingested_As_Authored_Nodes()
     {
         return;
     };
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("an in-memory store opens over no file, so this construction has no failure path");
     let ingested = Ingest_Every_V15_Record(&mut store, &mut archive);
 
     // The plan says 64. The archive holds 66 — 54 under records/ and 12 under
@@ -313,13 +339,13 @@ fn Ingest_Every_V15_Record(store: &mut SpecificationStore, archive: &mut Archive
 /// store received one node per record.
 fn Assert_The_Record_Set_Is_Complete(ingested: &[String], store: &SpecificationStore)
 {
-    assert_eq!(ingested.len(), 66, "the v15 record count changed");
+    assert_eq!(ingested.len(), V15_RECORDS, "the v15 record count changed");
     assert_eq!(
         ingested.iter().collect::<std::collections::BTreeSet<_>>().len(),
-        66,
+        V15_RECORDS,
         "two records share an identifier"
     );
-    assert_eq!(store.Count(Table::Nodes).expect("counts"), 66);
+    assert_eq!(store.Count(Table::Nodes).expect("counts"), V15_RECORD_NODES);
 }
 
 /// The records this system's own governance depends on are among the ones ingested.
@@ -382,7 +408,7 @@ fn Test_Absent_And_Reworded_Should_Not_Collapse()
         "---\nid: X-001\nstatement: X-001 A thing shall hold.\n---\n\n# X-001 - A thing\n",
         Family::Requirement,
     )
-    .expect("reads");
+    .expect("the artifact is well-formed front matter the parser reads");
 
     let absent = Reconcile_Artifacts(std::slice::from_ref(&artifact), &BTreeMap::new());
     assert_eq!(absent.Absent().len(), 1);

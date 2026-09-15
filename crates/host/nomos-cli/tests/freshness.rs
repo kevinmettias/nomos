@@ -40,6 +40,29 @@ const REQUIRED: &str = "diagram-set";
 /// Where that profile puts its body, relative to a build root.
 const REQUIRED_BODY: &str = "diagrams/relations.mmd";
 
+/// The exit code for a governed output that is no longer what its stamp says it is.
+///
+/// Apart from the absence code on purpose: absence is "nobody could find out" and this is
+/// "somebody found out, and the answer is that the file drifted".
+const EXIT_STALE: i32 = 8;
+
+/// The exit code for a command line the binary refuses.
+const EXIT_USAGE: i32 = 2;
+
+/// A catalogue identifier for a projection profile.
+///
+/// A distinct type rather than a bare `&str`: [`Rendered_As`] takes a build-root name and a
+/// profile name, both text and both adjacent, so a caller who transposed them would render
+/// one profile into a directory named for another and be told nothing.
+struct Profile<'a>(&'a str);
+
+/// The text a sidecar's declared digest is rewritten to.
+///
+/// A distinct type rather than a bare `&str`: [`Restamp`] takes a field name and its
+/// replacement, both adjacent, and a caller who transposed them would rewrite the sidecar's
+/// field names instead of its digests — which is the one thing the rewrite exists to do.
+struct Replacement<'a>(&'a str);
+
 /// How many profiles the catalogue ships.
 ///
 /// Read from the catalogue rather than typed here. It was a literal `14` until four
@@ -91,18 +114,18 @@ fn Scratch(name: &str) -> PathBuf
 /// A build root holding exactly one rendered profile and its sidecar.
 fn Rendered(name: &str) -> PathBuf
 {
-    return Rendered_As(name, EMBEDDED);
+    return Rendered_As(name, Profile(EMBEDDED));
 }
 
 /// The same, for a named profile.
-fn Rendered_As(name: &str, profile: &str) -> PathBuf
+fn Rendered_As(name: &str, profile: Profile<'_>) -> PathBuf
 {
     let into = Scratch(name);
     let output = Nomos(&[
         "spec",
         "render",
         "--profile",
-        profile,
+        profile.0,
         "--into",
         &into.display().to_string(),
     ]);
@@ -146,11 +169,11 @@ fn Test_A_Hand_Edited_Output_Should_Be_Caught()
     let into = Rendered("freshness-edited");
     let body = into.join(EMBEDDED_BODY);
     let text = std::fs::read_to_string(&body).expect("reads the rendered body");
-    std::fs::write(&body, format!("{text}\nsomebody typed this here\n")).expect("edits it");
+    std::fs::write(&body, format!("{text}\nsomebody typed this here\n")).expect("the fixture created this build root, so the body it just read is writable");
 
     let output = Freshness(&into, &[]);
 
-    assert_eq!(Code(&output), 8, "an edited output was not caught: {}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_STALE, "an edited output was not caught: {}", Out_Text(&output));
     let said = Out_Text(&output);
     assert!(said.contains("edited"), "{said}");
     assert!(!said.contains("stale:"), "the store did not change: {said}");
@@ -167,13 +190,13 @@ fn Test_Deleting_The_Sidecar_Should_Not_Make_An_Edit_Invisible()
     let into = Rendered("freshness-unstamped");
     let body = into.join(EMBEDDED_BODY);
     let text = std::fs::read_to_string(&body).expect("reads the rendered body");
-    std::fs::write(&body, format!("{text}\nsomebody typed this here\n")).expect("edits it");
+    std::fs::write(&body, format!("{text}\nsomebody typed this here\n")).expect("the fixture created this build root, so the body it just read is writable");
     std::fs::remove_file(into.join(format!("{EMBEDDED_BODY}.nomos-projection.json")))
         .expect("removes the sidecar");
 
     let output = Freshness(&into, &[]);
 
-    assert_eq!(Code(&output), 8, "an unstamped output passed: {}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_STALE, "an unstamped output passed: {}", Out_Text(&output));
     assert!(Out_Text(&output).contains("nothing can say whether"), "{}", Out_Text(&output));
 }
 
@@ -186,7 +209,7 @@ fn Test_A_Sidecar_Whose_Output_Is_Gone_Should_Be_Reported()
 
     let output = Freshness(&into, &[]);
 
-    assert_eq!(Code(&output), 8, "{}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_STALE, "{}", Out_Text(&output));
     assert!(Out_Text(&output).contains("deleted or never written"), "{}", Out_Text(&output));
 }
 
@@ -252,7 +275,7 @@ fn Test_One_Profile_Should_Be_Checkable_Without_The_Other_Thirteen()
 ///
 /// What every staleness test below needs: a stamp that disagrees with the thing it
 /// describes, so the comparison has to read the sidecar rather than trust it.
-fn Restamp(sidecar: &Path, field: &str, replacement: &str)
+fn Restamp(sidecar: &Path, field: &str, replacement: Replacement<'_>)
 {
     let stamp = std::fs::read_to_string(sidecar).expect("reads the sidecar");
     let digest = stamp
@@ -266,7 +289,7 @@ fn Restamp(sidecar: &Path, field: &str, replacement: &str)
         // two situations apart, so the field name is named and the run stops here.
         .unwrap_or_else(|| panic!("the sidecar declares no {field}"));
 
-    let rewritten = stamp.replace(digest, replacement);
+    let rewritten = stamp.replace(digest, replacement.0);
     std::fs::write(sidecar, rewritten).expect("rewrites the stamp");
 }
 
@@ -281,11 +304,11 @@ fn Test_A_Rewritten_Stamp_Should_Not_Excuse_The_File_It_Describes()
 {
     let into = Rendered("freshness-restamped");
     let sidecar = into.join(format!("{EMBEDDED_BODY}.nomos-projection.json"));
-    Restamp(&sidecar, "\"content_digest\": \"", "blake3:0000000000000000");
+    Restamp(&sidecar, "\"content_digest\": \"", Replacement("blake3:0000000000000000"));
 
     let output = Freshness(&into, &[]);
 
-    assert_eq!(Code(&output), 8, "{}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_STALE, "{}", Out_Text(&output));
     assert!(Out_Text(&output).contains("edited"), "{}", Out_Text(&output));
 }
 
@@ -311,7 +334,7 @@ fn Test_A_Required_Output_That_Was_Never_Built_Should_Fail()
 
     let output = Freshness(&into, &["--require", REQUIRED]);
 
-    assert_eq!(Code(&output), 8, "a promised output was absent and nobody minded: {}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_STALE, "a promised output was absent and nobody minded: {}", Out_Text(&output));
     let said = Out_Text(&output);
     assert!(said.contains(REQUIRED_BODY), "the missing output is not named: {said}");
     assert!(said.contains("required and not current"), "{said}");
@@ -338,25 +361,25 @@ fn Test_An_Unrequired_Output_That_Was_Never_Built_Should_Still_Pass()
 #[test]
 fn Test_A_Required_Output_Missing_Its_Sidecar_Should_Fail()
 {
-    let into = Rendered_As("required-unstamped", REQUIRED);
+    let into = Rendered_As("required-unstamped", Profile(REQUIRED));
     std::fs::remove_file(into.join(format!("{REQUIRED_BODY}.nomos-projection.json")))
         .expect("removes the sidecar");
 
     let output = Freshness(&into, &["--require", REQUIRED]);
 
-    assert_eq!(Code(&output), 8, "{}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_STALE, "{}", Out_Text(&output));
     assert!(Out_Text(&output).contains("required and not current"), "{}", Out_Text(&output));
 }
 
 #[test]
 fn Test_A_Required_Sidecar_Missing_Its_Output_Should_Fail()
 {
-    let into = Rendered_As("required-bodiless", REQUIRED);
+    let into = Rendered_As("required-bodiless", Profile(REQUIRED));
     std::fs::remove_file(into.join(REQUIRED_BODY)).expect("removes the body");
 
     let output = Freshness(&into, &["--require", REQUIRED]);
 
-    assert_eq!(Code(&output), 8, "{}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_STALE, "{}", Out_Text(&output));
     assert!(Out_Text(&output).contains("required and not current"), "{}", Out_Text(&output));
 }
 
@@ -368,14 +391,14 @@ fn Test_A_Required_Sidecar_Missing_Its_Output_Should_Fail()
 #[test]
 fn Test_A_Required_Output_That_Was_Edited_Should_Not_Count_As_Kept()
 {
-    let into = Rendered_As("required-edited", REQUIRED);
+    let into = Rendered_As("required-edited", Profile(REQUIRED));
     let body = into.join(REQUIRED_BODY);
     let text = std::fs::read_to_string(&body).expect("reads the rendered body");
-    std::fs::write(&body, format!("{text}\n%% somebody typed this here\n")).expect("edits it");
+    std::fs::write(&body, format!("{text}\n%% somebody typed this here\n")).expect("the fixture created this build root, so the body it just read is writable");
 
     let output = Freshness(&into, &["--require", REQUIRED]);
 
-    assert_eq!(Code(&output), 8, "{}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_STALE, "{}", Out_Text(&output));
     let said = Out_Text(&output);
     assert!(said.contains("edited"), "{said}");
     assert!(said.contains("required and not current"), "{said}");
@@ -391,13 +414,13 @@ fn Test_A_Required_Output_That_Was_Edited_Should_Not_Count_As_Kept()
 #[test]
 fn Test_A_Required_Output_Built_Over_Other_Inputs_Should_Not_Count_As_Kept()
 {
-    let into = Rendered_As("required-stale-inputs", REQUIRED);
+    let into = Rendered_As("required-stale-inputs", Profile(REQUIRED));
     let sidecar = into.join(format!("{REQUIRED_BODY}.nomos-projection.json"));
-    Restamp(&sidecar, "\"inputs_digest\": \"", "sha256:0000000000000000");
+    Restamp(&sidecar, "\"inputs_digest\": \"", Replacement("sha256:0000000000000000"));
 
     let output = Freshness(&into, &["--require", REQUIRED]);
 
-    assert_eq!(Code(&output), 8, "{}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_STALE, "{}", Out_Text(&output));
     let said = Out_Text(&output);
     assert!(said.contains("stale:"), "{said}");
     assert!(said.contains("required and not current"), "{said}");
@@ -410,7 +433,7 @@ fn Test_A_Required_Output_Built_Over_Other_Inputs_Should_Not_Count_As_Kept()
 #[test]
 fn Test_A_Kept_Requirement_Should_Name_Itself()
 {
-    let into = Rendered_As("required-kept", REQUIRED);
+    let into = Rendered_As("required-kept", Profile(REQUIRED));
 
     let output = Freshness(&into, &["--require", REQUIRED]);
 
@@ -427,7 +450,7 @@ fn Test_A_Kept_Requirement_Should_Name_Itself()
 #[test]
 fn Test_An_Unknown_Requirement_Should_Be_Refused_Rather_Than_Reported_Missing()
 {
-    let into = Rendered_As("required-unknown", REQUIRED);
+    let into = Rendered_As("required-unknown", Profile(REQUIRED));
 
     let output = Freshness(&into, &["--require", "no-such-profile"]);
 
@@ -442,10 +465,10 @@ fn Test_An_Unknown_Requirement_Should_Be_Refused_Rather_Than_Reported_Missing()
 #[test]
 fn Test_A_Requirement_Outside_The_Examined_Profile_Should_Be_Refused()
 {
-    let into = Rendered_As("required-unexamined", REQUIRED);
+    let into = Rendered_As("required-unexamined", Profile(REQUIRED));
 
     let output = Freshness(&into, &["--profile", EMBEDDED, "--require", REQUIRED]);
 
-    assert_eq!(Code(&output), 2, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_USAGE, "{}", Err_Text(&output));
     assert!(Err_Text(&output).contains("never looked for it"), "{}", Err_Text(&output));
 }

@@ -80,7 +80,9 @@ fn Test_An_Invalidated_Fact_Should_Stay_Readable_As_History()
         next,
     );
 
-    let (fact, supersession) = store.Historical(&key).expect("history");
+    let (fact, supersession) = store
+        .Historical(&key)
+        .expect("the invalidation above superseded the fact Stored materialized");
 
     assert_eq!(fact.Generation(), GenerationId::INITIAL);
     assert_eq!(supersession.invalidated_at, next);

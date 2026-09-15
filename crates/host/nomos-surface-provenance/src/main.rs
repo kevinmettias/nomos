@@ -226,17 +226,6 @@ mod tests
     use fake_launcher::{Scripted, Stderr, Stdout};
     use stated_environment::Stated;
 
-    /// Every test below passes `--root` explicitly (through [`Arguments_With_Extra`]), so
-    /// none of them exercises the working-directory default — `arguments.rs`'s own tests
-    /// do that directly. This fixture exists so the port is supplied, not so it decides
-    /// anything here, and it stands somewhere deliberately unusable as a root to keep that
-    /// honest: any test that started depending on the default would fail rather than pass
-    /// against a directory that happens to exist.
-    fn Nowhere_In_Particular() -> Stated
-    {
-        return Stated::At(std::path::Path::new("/not/a/real/root"));
-    }
-
     /// A usage error is rendered and exits `2` before any query is attempted — proven
     /// with no launcher scripted at all, since none should be asked to run anything.
     #[test]
@@ -306,6 +295,17 @@ mod tests
         assert!(String::from_utf8_lossy(&stderr).contains("no-such-crate"));
 
         let _ = std::fs::remove_dir_all(&root);
+    }
+
+    /// Every test above passes `--root` explicitly (through [`Arguments_With_Extra`]), so
+    /// none of them exercises the working-directory default — `arguments.rs`'s own tests
+    /// do that directly. This fixture exists so the port is supplied, not so it decides
+    /// anything here, and it stands somewhere deliberately unusable as a root to keep that
+    /// honest: any test that started depending on the default would fail rather than pass
+    /// against a directory that happens to exist.
+    fn Nowhere_In_Particular() -> Stated
+    {
+        return Stated::At(std::path::Path::new("/not/a/real/root"));
     }
 
     /// A scratch repository root carrying exactly one snapshot file (`nomos-model`) --

@@ -1,5 +1,11 @@
 //! Why a claim, a takeover or a decline is refused, decided before anything is written.
 
+// The questions about a lapsed lease, somebody else's live claim and an unfinished
+// dependency, which every refusal below is built out of and none of which is a refusal
+// this file's callers reach for by name.
+#[path = "refusal/ground.rs"]
+mod ground;
+
 use nomos_platform::Timestamp;
 
 use crate::ClaimRefusal;
@@ -42,7 +48,7 @@ pub fn Claim_Refusal(
     // item is in and reporting it as merely "not claimable" is what left the operator with
     // no next step: true of a `Done` item as well, and the two have opposite remedies.
     // `OD-LEDGER-012`.
-    if let Some(refusal) = Lapse_Refusal(target, now)
+    if let Some(refusal) = ground::Lapse_Refusal(target, now)
     {
         return Some(refusal);
     }
@@ -54,7 +60,7 @@ pub fn Claim_Refusal(
         });
     }
 
-    return Contested_By(document, target, now);
+    return ground::Contested_By(document, target, now);
 }
 
 /// Every item [`Claim_Refusal`] would grant right now, in the order a session should offer
@@ -94,10 +100,10 @@ pub fn Eligible_Items(document: &LedgerDocument, now: Timestamp) -> Vec<&LedgerI
 /// applies — the same discipline [`Claim_Refusal`] follows, and the lapse check is first for
 /// the same reason it is first there.
 ///
-/// [`Contested_By`] is deliberately not consulted. Territory contention decides who may *work*
-/// an item; it has nothing to say about whether the item is work at all, and a decline refused
-/// because some unrelated peer holds an overlapping file would be a refusal nobody could act
-/// on.
+/// [`ground::Contested_By`] is deliberately not consulted. Territory contention decides who
+/// may *work* an item; it has nothing to say about whether the item is work at all, and a
+/// decline refused because some unrelated peer holds an overlapping file would be a refusal
+/// nobody could act on.
 pub(super) fn Decline_Refusal(
     document: &LedgerDocument,
     item: &ItemId,
@@ -112,95 +118,12 @@ pub(super) fn Decline_Refusal(
     // The lapse check is first, because `Claimed` is the state a lapsed item is in and the
     // remedies differ: a live holder is asked to release, and a dead one is taken over.
     // `OD-LEDGER-012`.
-    if let Some(refusal) = Lapse_Refusal(target, now)
+    if let Some(refusal) = ground::Lapse_Refusal(target, now)
     {
         return Some(refusal);
     }
 
     return Held_Or_Unready(target);
-}
-
-/// Why `holder` may not widen `item` by `adding` as of `now`, if they may not.
-///
-/// # Why the enlarged territory and not the added paths
-///
-/// The contention question is about the territory the item *would have*, so the check is run
-/// over exactly that: the target is cloned, [`LedgerItem::Widen`] is applied to the clone, and
-/// the result is handed to [`Held_Ground`]. Asking instead whether each added path collides
-/// would be a second notion of what a widening produces, free to disagree with the one that
-/// applies it -- and the answer that matters is the one the write will make true.
-///
-/// [`Held_Ground`] and not [`Contested_By`]. The dependency half of that pair asks whether an
-/// item may *start*, which a claimed item has already answered; re-asking it here would refuse
-/// a widening because a dependency was declined after the work began, which is a real problem
-/// and not this verb's to report.
-///
-/// # Why liveness and not the holder's name
-///
-/// The lapse check is first, as it is in [`Claim_Refusal`] and [`Decline_Refusal`], and here it
-/// is more than message ordering. A lapsed claim stops excluding -- which is what
-/// [`Contested_By`] already records for takeovers -- so another item may since have been
-/// claimed over exactly the files this one reserves. A holder whose lease has gone, enlarging a
-/// reservation that currently excludes nobody, is that hazard reached through a new verb, and
-/// their name still matching is precisely what makes it look permissible. They are told to take
-/// the item over first.
-pub(super) fn Widen_Refusal(
-    document: &LedgerDocument,
-    requested: &Enlargement<'_>,
-    now: Timestamp,
-) -> Option<ClaimRefusal>
-{
-    let Enlargement { item, holder, adding } = *requested;
-
-    let Some(target) = document.items.iter().find(|candidate| return &candidate.id == item)
-    else
-    {
-        return Some(ClaimRefusal::NoSuchItem { item: item.clone() });
-    };
-
-    if let Some(refusal) = Lapse_Refusal(target, now)
-    {
-        return Some(refusal);
-    }
-
-    // `Claimed` and a live claim are two facts and both are required. The state alone would
-    // admit an item whose claim record is missing, which `Validate` calls a corruption rather
-    // than a thing to widen; the claim alone would admit one that has been finished or
-    // declined out from under a holder who never released it.
-    let Some(claim) = target.claim.as_ref().filter(|_| return target.state == ItemState::Claimed)
-    else
-    {
-        return Some(ClaimRefusal::NotClaimable {
-            item: item.clone(),
-            state: target.state.Describe(),
-        });
-    };
-
-    if claim.holder != holder
-    {
-        return Some(ClaimRefusal::StillHeld {
-            item: item.clone(),
-            holder: claim.holder.clone(),
-            until: claim.lease_expires_at,
-        });
-    }
-
-    let mut enlarged = target.clone();
-    drop(enlarged.Widen(adding, holder, now));
-
-    return Held_Ground(document, &enlarged, now);
-}
-
-/// The widening being asked for -- grouped so this stays under the workspace's own
-/// parameter-count ceiling, the same reason [`Claimant`] is grouped in `validation.rs`.
-pub(super) struct Enlargement<'a>
-{
-    /// Which item is to be enlarged.
-    pub(super) item: &'a ItemId,
-    /// Who is asking, which must be the live holder.
-    pub(super) holder: &'a str,
-    /// The paths to add. Never a replacement territory.
-    pub(super) adding: &'a [String],
 }
 
 /// What a live claim or a state other than `Ready` does to a decline.
@@ -229,12 +152,127 @@ fn Held_Or_Unready(target: &LedgerItem) -> Option<ClaimRefusal>
     return None;
 }
 
+/// Why `holder` may not widen `item` by `adding` as of `now`, if they may not.
+///
+/// # Why the enlarged territory and not the added paths
+///
+/// The contention question is about the territory the item *would have*, so the check is run
+/// over exactly that: the target is cloned, [`LedgerItem::Widen`] is applied to the clone, and
+/// the result is handed to [`ground::Held_Ground`]. Asking instead whether each added path
+/// collides would be a second notion of what a widening produces, free to disagree with the
+/// one that applies it -- and the answer that matters is the one the write will make true.
+///
+/// [`ground::Held_Ground`] and not [`ground::Contested_By`]. The dependency half of that pair
+/// asks whether an item may *start*, which a claimed item has already answered; re-asking it
+/// here would refuse a widening because a dependency was declined after the work began, which
+/// is a real problem and not this verb's to report.
+///
+/// # Why liveness and not the holder's name
+///
+/// The lapse check is first, as it is in [`Claim_Refusal`] and [`Decline_Refusal`], and here it
+/// is more than message ordering. A lapsed claim stops excluding -- which is what
+/// [`ground::Contested_By`] already records for takeovers -- so another item may since have
+/// been claimed over exactly the files this one reserves. A holder whose lease has gone,
+/// enlarging a reservation that currently excludes nobody, is that hazard reached through a
+/// new verb, and their name still matching is precisely what makes it look permissible. They
+/// are told to take the item over first.
+pub(super) fn Widen_Refusal(
+    document: &LedgerDocument,
+    requested: &Enlargement<'_>,
+    now: Timestamp,
+) -> Option<ClaimRefusal>
+{
+    let item = requested.item;
+    let holder = requested.holder;
+
+    let Some(target) = document.items.iter().find(|candidate| return &candidate.id == item)
+    else
+    {
+        return Some(ClaimRefusal::NoSuchItem { item: item.clone() });
+    };
+
+    if let Some(refusal) = ground::Lapse_Refusal(target, now)
+    {
+        return Some(refusal);
+    }
+
+    if let Some(refusal) = Held_Or_Unclaimed(target, holder)
+    {
+        return Some(refusal);
+    }
+
+    return Refused_By_The_Enlargement(document, target, requested, now);
+}
+
+/// The widening being asked for -- grouped so this stays under the workspace's own
+/// parameter-count ceiling, the same reason [`Claimant`] is grouped in `validation.rs`.
+pub(super) struct Enlargement<'a>
+{
+    /// Which item is to be enlarged.
+    pub(super) item: &'a ItemId,
+    /// Who is asking, which must be the live holder.
+    pub(super) holder: &'a str,
+    /// The paths to add. Never a replacement territory.
+    pub(super) adding: &'a [String],
+}
+
+/// What a claim held by somebody else, or no live claim at all, does to a widening.
+///
+/// `Claimed` and a live claim are two facts and both are required. The state alone would admit
+/// an item whose claim record is missing, which `Validate` calls a corruption rather than a
+/// thing to widen; the claim alone would admit one that has been finished or declined out from
+/// under a holder who never released it. They are two arms because their remedies differ: a
+/// wrong holder is somebody to wait for, and a state that is not `Claimed` is not this verb's
+/// to fix at all.
+fn Held_Or_Unclaimed(target: &LedgerItem, holder: &str) -> Option<ClaimRefusal>
+{
+    let Some(claim) = target.claim.as_ref().filter(|_| return target.state == ItemState::Claimed)
+    else
+    {
+        return Some(ClaimRefusal::NotClaimable {
+            item: target.id.clone(),
+            state: target.state.Describe(),
+        });
+    };
+
+    if claim.holder != holder
+    {
+        return Some(ClaimRefusal::StillHeld {
+            item: target.id.clone(),
+            holder: claim.holder.clone(),
+            until: claim.lease_expires_at,
+        });
+    }
+
+    return None;
+}
+
+/// The item as the widening would leave it, judged against the ground everybody else holds.
+///
+/// [`LedgerItem::Widen`] and not two statements at the call site, for the reason the verb
+/// itself calls it: a call site that grew the territory itself would be free to grow it and
+/// not record what it grew by. What `Widen` reports is discarded deliberately -- it answers
+/// what changed, and the question here is what the item would *hold*.
+fn Refused_By_The_Enlargement(
+    document: &LedgerDocument,
+    target: &LedgerItem,
+    requested: &Enlargement<'_>,
+    now: Timestamp,
+) -> Option<ClaimRefusal>
+{
+    let mut enlarged = target.clone();
+    let added = enlarged.Widen(requested.adding, requested.holder, now);
+    drop(added);
+
+    return ground::Held_Ground(document, &enlarged, now);
+}
+
 /// What refuses a takeover of `item` as of `now`, if anything.
 ///
 /// The mirror of [`Claim_Refusal`], differing in exactly one clause: a claim needs the item to
 /// be free and this needs it to be lapsed. Everything after that question is the same code,
-/// which is the point — [`Contested_By`] is called and not copied, so a takeover cannot come to
-/// disagree with a claim about whether two territories are independent.
+/// which is the point — [`ground::Contested_By`] is called and not copied, so a takeover
+/// cannot come to disagree with a claim about whether two territories are independent.
 pub(super) fn Takeover_Refusal(
     document: &LedgerDocument,
     item: &ItemId,
@@ -252,12 +290,12 @@ pub(super) fn Takeover_Refusal(
 
     // A takeover answers a lapse and nothing else. An item with a live claim is a queue, and
     // everything else is the caller reaching for the wrong verb.
-    if Lapse_Refusal(target, now).is_none()
+    if ground::Lapse_Refusal(target, now).is_none()
     {
         return Some(Wrong_Verb(target, now));
     }
 
-    return Contested_By(document, target, now);
+    return ground::Contested_By(document, target, now);
 }
 
 /// What to say to a caller that used `takeover` on an item that has not lapsed.
@@ -284,135 +322,6 @@ fn Wrong_Verb(target: &LedgerItem, now: Timestamp) -> ClaimRefusal
     };
 }
 
-/// The refusal a lapsed item earns, if it is one.
-///
-/// One implementation, two callers, for the reason [`Claim_Refusal`] itself is a function:
-/// this predicate now decides both what `claim` refuses with *and* whether
-/// [`FileLedger::Take_Over`] will succeed, and a second copy of it would eventually let a
-/// listing say `lapsed` about an item the takeover then declined.
-///
-/// `now` comes from the caller for the same reason every other judgment here takes it: a
-/// second clock read would decide half of one answer against a different instant.
-fn Lapse_Refusal(target: &LedgerItem, now: Timestamp) -> Option<ClaimRefusal>
-{
-    if target.state != ItemState::Claimed
-    {
-        return None;
-    }
-
-    let claim = target.claim.as_ref()?;
-    if !claim.Has_Lapsed(now)
-    {
-        return None;
-    }
-
-    return Some(ClaimRefusal::Lapsed {
-        item: target.id.clone(),
-        holder: claim.holder.clone(),
-        since: claim.lease_expires_at,
-    });
-}
-
-/// Everything that refuses an item for a reason outside the item's own state: an unfinished
-/// dependency, or territory somebody else is actively holding.
-///
-/// Lifted out of [`Claim_Refusal`] unchanged so that [`FileLedger::Take_Over`] re-establishes
-/// independence by the same code rather than by a second copy of it. A takeover that skipped
-/// this would grant overlapping ground, and the case is not hypothetical: a lapsed claim stops
-/// excluding, so another item may since have been claimed over exactly the files this one
-/// reserves.
-///
-/// Private. Both entry points are public and the rule is not a third one.
-fn Contested_By(
-    document: &LedgerDocument,
-    target: &LedgerItem,
-    now: Timestamp,
-) -> Option<ClaimRefusal>
-{
-    if let Some(refusal) = Unmet_Dependency(document, target)
-    {
-        return Some(refusal);
-    }
-
-    return Held_Ground(document, target, now);
-}
-
-/// The first dependency of `target` that is not done, as a refusal.
-///
-/// A dependency that is `Declined` is reported through its own arm rather than
-/// [`ClaimRefusal::DependencyUnmet`] — `OD-LEDGER-020` is why: it will never become `Done`, so
-/// the two must not share a refusal whose retryability tells the caller to wait.
-fn Unmet_Dependency(document: &LedgerDocument, target: &LedgerItem) -> Option<ClaimRefusal>
-{
-    for dependency in &target.depends_on
-    {
-        let Some(found) = document.items.iter().find(|candidate| return &candidate.id == dependency)
-        else
-        {
-            return Some(ClaimRefusal::DependencyUnmet {
-                item: target.id.clone(),
-                dependency: dependency.clone(),
-                state: "not in the ledger".to_owned(),
-            });
-        };
-
-        if let ItemState::Declined { .. } = &found.state
-        {
-            return Some(ClaimRefusal::DependencyDeclined {
-                item: target.id.clone(),
-                dependency: dependency.clone(),
-                state: found.state.Describe(),
-            });
-        }
-
-        if found.state != ItemState::Done
-        {
-            return Some(ClaimRefusal::DependencyUnmet {
-                item: target.id.clone(),
-                dependency: dependency.clone(),
-                state: found.state.Describe(),
-            });
-        }
-    }
-
-    return None;
-}
-
-/// The first active claim whose territory `target` cannot be shown independent of.
-fn Held_Ground(
-    document: &LedgerDocument,
-    target: &LedgerItem,
-    now: Timestamp,
-) -> Option<ClaimRefusal>
-{
-    for other in &document.items
-    {
-        if other.id == target.id || !other.Has_Active_Claim(now)
-        {
-            continue;
-        }
-
-        let refusal = Refused_By(target, other);
-        if refusal.is_some()
-        {
-            return refusal;
-        }
-    }
-
-    return None;
-}
-
-/// What `other`'s live claim does to `target`, if anything.
-fn Refused_By(target: &LedgerItem, other: &LedgerItem) -> Option<ClaimRefusal>
-{
-    use crate::exclusion::Refusal_From;
-
-    let claim = other.claim.as_ref()?;
-    let overlap = target.territory.Intersect(&other.territory);
-
-    return Refusal_From(&overlap, &other.id, &claim.holder, claim.lease_expires_at);
-}
-
 /// A store failure, reported as itself rather than as a missing item.
 ///
 /// Every load and save in the three operations below used to discard its error and return
@@ -436,7 +345,19 @@ impl From<&LedgerError> for ClaimRefusal
 }
 
 #[cfg(test)]
-mod tests
+#[path = "refusal/tests.rs"]
+mod tests;
+
+/// Narrow, file-local proofs for each of this file's own visible functions, addressed by
+/// name.
+///
+/// [`tests`] above is `refusal/tests.rs`, a separate physical file whose behavioural suite
+/// this does not repeat or replace. `check-test-coverage`'s Rust front end keys a test's
+/// companion unit off the literal file it is textually written in, so a test living in that
+/// separate file can never address a function declared here, however it is named — this
+/// module gives each function here the one-file address the check reads.
+#[cfg(test)]
+mod self_tests
 {
     use super::*;
     use crate::Claim;
@@ -444,108 +365,46 @@ mod tests
     use crate::ItemOrigin;
     use crate::Territory;
 
-    /// When the fixture below acquired its claim.
+    /// When the held board's claim was acquired.
     const CLAIM_ACQUIRED_AT_SECONDS: i64 = 1_000;
 
-    /// When the fixture below's claim expires.
+    /// When the held board's claim expires.
     const CLAIM_EXPIRES_AT_SECONDS: i64 = 9_000;
 
-    /// The fixture `Test_Eligible_Items_Should_Exclude_What_Claim_Refusal_Would_Refuse`
-    /// asserts over: a `Ready` item held back by a live overlapping claim, the item
-    /// contesting its territory, and an item nothing touches.
-    ///
-    /// A named struct rather than a three-`LedgerItem` tuple: the tuple repeats one type
-    /// three times, so a caller destructuring it by position could swap two members and the
-    /// compiler would not notice.
-    struct Fixture
-    {
-        held: LedgerItem,
-        contested: LedgerItem,
-        free: LedgerItem,
-    }
-
-    /// The property [`Eligible_Items`] exists to give a name to: a `Ready` item held back by
-    /// a live overlapping claim is not eligible, and one nothing contests is, in the same
-    /// order [`Claim_Refusal`] would decide each of them individually.
-    #[test]
-    fn Test_Eligible_Items_Should_Exclude_What_Claim_Refusal_Would_Refuse()
-    {
-        let Fixture { held, contested, free } = Held_Contested_And_Free();
-        let document = Document_Of(vec![held, contested, free]);
-
-        let eligible: Vec<&str> = Eligible_Items(&document, Timestamp_At_Seconds(2_000))
-            .into_iter()
-            .map(|item| return item.id.As_Text())
-            .collect();
-
-        assert_eq!(
-            eligible,
-            vec!["P3-FREE"],
-            "P1-HELD is claimed and not Ready, and P2-CONTESTED shares P1-HELD's live \
-             territory -- Claim_Refusal would refuse both, and Eligible_Items must agree \
-             with it rather than compute a second opinion"
-        );
-    }
-
-    fn Held_Contested_And_Free() -> Fixture
-    {
-        let mut held = Item_Named("P1-HELD");
-        held.territory = Territory::Of_Files(["a/shared.rs"]);
-        held.state = ItemState::Claimed;
-        held.claim = Some(Claim {
-            holder: "agent-a".to_owned(),
-            acquired_at: Timestamp_At_Seconds(CLAIM_ACQUIRED_AT_SECONDS),
-            lease_expires_at: Timestamp_At_Seconds(CLAIM_EXPIRES_AT_SECONDS),
-        });
-
-        let mut contested = Item_Named("P2-CONTESTED");
-        contested.territory = Territory::Of_Files(["a/shared.rs"]);
-
-        let mut free = Item_Named("P3-FREE");
-        free.territory = Territory::Of_Files(["b/other.rs"]);
-
-        return Fixture { held, contested, free };
-    }
-
-    /// The tie-break `OD-LEDGER-023` wrote down: id order, not the order items happen to
-    /// sit in the document.
-    #[test]
-    fn Test_Eligible_Items_Should_Order_By_Id_Rather_Than_Document_Order()
-    {
-        let document = Document_Of(vec![Item_Named("P9-LATER"), Item_Named("P1-EARLIER"), Item_Named("P5-MIDDLE")]);
-
-        let eligible: Vec<&str> = Eligible_Items(&document, Timestamp_At_Seconds(2_000))
-            .into_iter()
-            .map(|item| return item.id.As_Text())
-            .collect();
-
-        assert_eq!(eligible, vec!["P1-EARLIER", "P5-MIDDLE", "P9-LATER"]);
-    }
-
-    #[test]
-    fn Test_Eligible_Items_Should_Be_Empty_Over_An_Empty_Board()
-    {
-        let document = Document_Of(Vec::new());
-
-        assert!(Eligible_Items(&document, Timestamp_At_Seconds(2_000)).is_empty());
-    }
+    /// The instant every test here asks its question at, which is after
+    /// `CLAIM_ACQUIRED_AT_SECONDS` and before `CLAIM_EXPIRES_AT_SECONDS`.
+    const ASKED_AT_SECONDS: i64 = 2_000;
 
     #[test]
     fn Test_Claim_Refusal_Should_Report_No_Such_Item_When_Absent()
     {
-        let document = Document_Of(Vec::new());
+        let empty = LedgerDocument {
+            schema_version: crate::SCHEMA_VERSION,
+            items: Vec::new(),
+        };
 
-        let refusal = Claim_Refusal(&document, &ItemId::New("GHOST"), Timestamp_At_Seconds(2_000));
+        let refusal = Claim_Refusal(&empty, &ItemId::New("GHOST"), Timestamp_At_Seconds(ASKED_AT_SECONDS));
 
         assert_eq!(refusal, Some(ClaimRefusal::NoSuchItem { item: ItemId::New("GHOST") }));
     }
 
     #[test]
+    fn Test_Eligible_Items_Should_Exclude_An_Item_A_Live_Claim_Holds()
+    {
+        let document = Held_Board();
+
+        assert!(
+            Eligible_Items(&document, Timestamp_At_Seconds(ASKED_AT_SECONDS)).is_empty(),
+            "P1-HELD is claimed, so Claim_Refusal refuses it and the listing must agree"
+        );
+    }
+
+    #[test]
     fn Test_Decline_Refusal_Should_Refuse_An_Item_Someone_Else_Is_Holding()
     {
-        let document = Document_With_A_Held_Claim();
+        let document = Held_Board();
 
-        let refusal = Decline_Refusal(&document, &ItemId::New("P1-HELD"), Timestamp_At_Seconds(2_000));
+        let refusal = Decline_Refusal(&document, &ItemId::New("P1-HELD"), Timestamp_At_Seconds(ASKED_AT_SECONDS));
 
         assert!(
             matches!(refusal, Some(ClaimRefusal::StillHeld { .. })),
@@ -556,11 +415,11 @@ mod tests
     #[test]
     fn Test_Takeover_Refusal_Should_Refuse_A_Verb_Used_On_A_Live_Claim()
     {
-        let document = Document_With_A_Held_Claim();
+        let document = Held_Board();
 
-        // The claim above expires at CLAIM_EXPIRES_AT_SECONDS; asking before that means it
-        // has not lapsed, so a takeover is the wrong verb rather than a valid recovery.
-        let refusal = Takeover_Refusal(&document, &ItemId::New("P1-HELD"), Timestamp_At_Seconds(2_000));
+        // The claim below expires at 9_000; asking at 2_000 means it has not lapsed, so a
+        // takeover is the wrong verb rather than a valid recovery.
+        let refusal = Takeover_Refusal(&document, &ItemId::New("P1-HELD"), Timestamp_At_Seconds(ASKED_AT_SECONDS));
 
         assert!(
             matches!(refusal, Some(ClaimRefusal::HeldBy { .. })),
@@ -568,23 +427,27 @@ mod tests
         );
     }
 
-    /// A board holding exactly one item, `P1-HELD`, live-claimed by `agent-a` for the
-    /// duration `[CLAIM_ACQUIRED_AT_SECONDS, CLAIM_EXPIRES_AT_SECONDS)`.
+    /// A board holding exactly one item, `P1-HELD`, live-claimed by `agent-a` over
+    /// `a/shared.rs`.
     ///
-    /// Both refusal tests above ask a different verb about the same claimed item, so they
+    /// Three of the tests above ask a different verb about the same claimed item, so they
     /// share this one arrangement rather than each rebuilding it -- a change to what "held"
-    /// means here now changes for both at once instead of silently drifting between two
-    /// independently hand-written copies.
-    fn Document_With_A_Held_Claim() -> LedgerDocument
+    /// means here then changes for all three at once instead of drifting between copies.
+    fn Held_Board() -> LedgerDocument
     {
         let mut held = Item_Named("P1-HELD");
+        held.territory = Territory::Of_Files(["a/shared.rs"]);
         held.state = ItemState::Claimed;
         held.claim = Some(Claim {
             holder: "agent-a".to_owned(),
             acquired_at: Timestamp_At_Seconds(CLAIM_ACQUIRED_AT_SECONDS),
             lease_expires_at: Timestamp_At_Seconds(CLAIM_EXPIRES_AT_SECONDS),
         });
-        return Document_Of(vec![held]);
+
+        return LedgerDocument {
+            schema_version: crate::SCHEMA_VERSION,
+            items: vec![held],
+        };
     }
 
     fn Item_Named(id: &str) -> LedgerItem
@@ -613,13 +476,5 @@ mod tests
     fn Timestamp_At_Seconds(seconds: i64) -> Timestamp
     {
         return Timestamp::From_Unix_Seconds(seconds);
-    }
-
-    fn Document_Of(items: Vec<LedgerItem>) -> LedgerDocument
-    {
-        return LedgerDocument {
-            schema_version: crate::SCHEMA_VERSION,
-            items,
-        };
     }
 }

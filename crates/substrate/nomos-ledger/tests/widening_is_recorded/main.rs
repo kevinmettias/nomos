@@ -9,154 +9,28 @@
 //! Every test here has a negative control, for the reason `exclusion_holds.rs` gives: a guard
 //! nobody has watched fail is a test that would pass just as happily if the thing it checks
 //! were deleted. The two that matter most are the contention pair and the lapse pair, because
-//! each has a sibling in which the *same* widening is granted — so neither can be satisfied by
+//! each has a sibling in which the *same* widening is granted -- so neither can be satisfied by
 //! an implementation that simply refuses everything.
+//!
+//! What an item, a clock and a board are lives in `fixtures`; the lock the atomicity test
+//! watches lives in `watching_lock`.
 
-use nomos_ledger::{
-    ClaimRefusal, ExclusionLedger, FileLedger, Holder, ItemId, ItemKind, ItemOrigin, ItemState,
-    LedgerDocument, LedgerItem, SCHEMA_VERSION, Territory,
+mod fixtures;
+mod watching_lock;
+
+use crate::fixtures::{
+    Board, Board_After_The_Lease_Lapsed, Board_At, BoardOnDisk, ClaimRefusal, Holder, Item,
+    ItemId, LedgerDocument, Ledger_At, Named, Only_Item, Path, Paths, SCHEMA_VERSION, Take,
+    Temporary_Directory, Timestamp, AT_NOW, NOW,
 };
-use nomos_platform::{
-    Clock, CrossProcessLock, DeterminismStrength, LockAcquisition, LockError, ReproducibilityScope,
-    Strategy, Timestamp, TraceEquivalence,
-};
-use nomos_platform_std::{FileLock, FileLockGuard, StdFileSystem};
-use std::path::{Path, PathBuf};
-use std::sync::{Arc, Mutex};
-use std::time::Duration;
+use crate::watching_lock::{Assert_One_Lock_Acquisition, WatchedBoard, Watched_Board_At};
 
-const NOW: i64 = 1_000_000;
-const LEASE: Duration = Duration::from_secs(3_600);
-
-/// Held still, so that "when it was widened" is arithmetic rather than a sleep.
-struct FixedClock(i64);
-
-impl Strategy for FixedClock
-{
-    const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
-    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
-    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
-}
-
-impl Clock for &FixedClock
-{
-    fn Now(&self) -> Timestamp
-    {
-        return Timestamp::From_Unix_Seconds(self.0);
-    }
-}
-
-static AT_NOW: FixedClock = FixedClock(NOW);
-
-/// Two hours on, by which time the one-hour lease every test here takes has lapsed.
-static AT_LATER: FixedClock = FixedClock(NOW + 7_200);
-
-fn Item(id: &str, files: &[&str]) -> LedgerItem
-{
-    return LedgerItem {
-        id: ItemId::New(id),
-        title: format!("work item {id}"),
-        why: "it needs doing".to_owned(),
-        done_when: "the tests pass".to_owned(),
-        kind: ItemKind::Correction,
-        origin: ItemOrigin::Proposed,
-        territory: Territory::Of_Files(files.iter().copied()),
-        state: ItemState::Ready,
-        depends_on: Vec::new(),
-        blocked: None,
-        claim: None,
-        verification: None,
-        verified: None,
-        abandoned: Vec::new(),
-        displaced: Vec::new(),
-        widened: Vec::new(),
-        declined: None,
-    };
-}
-
-fn Temporary_Directory(name: &str) -> PathBuf
-{
-    let mut path = std::env::temp_dir();
-    path.push(format!("nomos-widen-{name}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&path);
-    std::fs::create_dir_all(&path).expect("test needs a temp directory");
-    return path;
-}
-
-fn Ledger_At<'clock>(
-    directory: &Path,
-    clock: &'clock FixedClock,
-) -> FileLedger<StdFileSystem, &'clock FixedClock, FileLock>
-{
-    return FileLedger::At(
-        directory.join("ledger.json"),
-        StdFileSystem,
-        clock,
-        FileLock::At(directory.join("ledger.lock")),
-    );
-}
-
-/// A ledger on a fresh temporary directory, already holding the board it starts from.
-fn Board_At(
-    name: &str,
-    items: Vec<LedgerItem>,
-) -> (PathBuf, FileLedger<StdFileSystem, &'static FixedClock, FileLock>)
-{
-    let directory = Temporary_Directory(name);
-    let ledger = Ledger_At(&directory, &AT_NOW);
-    ledger
-        .Save(&LedgerDocument { schema_version: SCHEMA_VERSION, items })
-        .expect("a fresh ledger is valid");
-
-    return (directory, ledger);
-}
-
-fn Take<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &str)
-{
-    ledger
-        .Claim(&ItemId::New(item), holder, LEASE)
-        .unwrap_or_else(|refusal| panic!("the fixture claim was refused: {}", refusal.Describe()));
-}
-
-fn Paths(paths: &[&str]) -> Vec<String>
-{
-    return paths.iter().map(|path| return (*path).to_owned()).collect();
-}
-
-/// The one item on a board, read back off disk.
-fn Only_Item<Files, TimeSource, Lock>(ledger: &FileLedger<Files, TimeSource, Lock>) -> LedgerItem
-where
-    Files: nomos_platform::FileSystem,
-    TimeSource: Clock,
-    Lock: CrossProcessLock,
-{
-    return ledger
-        .Load()
-        .expect("the board is readable")
-        .items
-        .into_iter()
-        .next()
-        .expect("the board has an item");
-}
-
-/// One item off a board, by id, read back off disk.
-fn Named<Files, TimeSource, Lock>(
-    ledger: &FileLedger<Files, TimeSource, Lock>,
-    id: &str,
-) -> LedgerItem
-where
-    Files: nomos_platform::FileSystem,
-    TimeSource: Clock,
-    Lock: CrossProcessLock,
-{
-    return ledger
-        .Load()
-        .expect("the board is readable")
-        .items
-        .into_iter()
-        .find(|item| return item.id == ItemId::New(id))
-        .expect("the item is on the board");
-}
+/// The two widenings the multiplicity fixture performs, and so the two rows its board must
+/// carry afterwards.
+///
+/// One name, because the fixture's count and the assertion's expectation are the same number:
+/// an edit that changed one without the other would leave the second measuring nothing.
+const WIDENINGS: usize = 2;
 
 
 // ---------------------------------------------------------------------------------------
@@ -172,16 +46,20 @@ where
 #[test]
 fn Test_A_Holder_Should_Widen_Their_Own_Territory_And_The_Widening_Should_Be_Kept()
 {
-    let (_directory, mut ledger) = Board_At("kept", vec![Item("T-1", &["a.rs"])]);
-    Take(&mut ledger, "T-1", "agent-a");
+    let BoardOnDisk { directory: _directory, mut ledger } = Board_At("kept", vec![Item("T-1", &["a.rs"])]);
+    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
         .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs", "c.rs"]))
         .expect("the holder may widen their own item");
-
     assert_eq!(added, Paths(&["b.rs", "c.rs"]), "the verb reports what it added");
+    Assert_The_Widening_Was_Kept(&ledger, &["b.rs", "c.rs"]);
+}
 
-    let item = Only_Item(&ledger);
+/// The growth and the row that records it, in that order and with no path lost between them.
+fn Assert_The_Widening_Was_Kept(ledger: &Board, added: &[&str])
+{
+    let item = Only_Item(ledger);
     assert_eq!(
         item.territory.paths,
         Paths(&["a.rs", "b.rs", "c.rs"]),
@@ -190,7 +68,7 @@ fn Test_A_Holder_Should_Widen_Their_Own_Territory_And_The_Widening_Should_Be_Kep
     assert_eq!(item.widened.len(), 1, "one widening happened, so one is recorded");
     let recorded = item.widened.first().expect("the length was just asserted");
     assert_eq!(recorded.holder, "agent-a", "who found the reservation short");
-    assert_eq!(recorded.added, Paths(&["b.rs", "c.rs"]), "and exactly what they added");
+    assert_eq!(recorded.added, Paths(added), "and exactly what they added");
     assert_eq!(
         recorded.widened_at,
         Timestamp::From_Unix_Seconds(NOW),
@@ -207,8 +85,9 @@ fn Test_A_Holder_Should_Widen_Their_Own_Territory_And_The_Widening_Should_Be_Kep
 #[test]
 fn Test_Two_Widenings_Should_Be_Two_Rows_Rather_Than_One_Coalesced_One()
 {
-    let (_directory, mut ledger) = Board_At("multiplicity", vec![Item("T-1", &["a.rs"])]);
-    Take(&mut ledger, "T-1", "agent-a");
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("multiplicity", vec![Item("T-1", &["a.rs"])]);
+    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     ledger
         .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
@@ -216,9 +95,14 @@ fn Test_Two_Widenings_Should_Be_Two_Rows_Rather_Than_One_Coalesced_One()
     ledger
         .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["c.rs", "d.rs"]))
         .expect("the second widening is granted");
+    Assert_The_Widenings_Are_Two_Rows(&ledger);
+}
 
-    let item = Only_Item(&ledger);
-    assert_eq!(item.widened.len(), 2, "two widenings, two rows");
+/// Two rows, oldest first, over a territory carrying every path either of them added.
+fn Assert_The_Widenings_Are_Two_Rows(ledger: &Board)
+{
+    let item = Only_Item(ledger);
+    assert_eq!(item.widened.len(), WIDENINGS, "two widenings, two rows");
     let [first, second] = item.widened.as_slice()
     else
     {
@@ -242,8 +126,9 @@ fn Test_Two_Widenings_Should_Be_Two_Rows_Rather_Than_One_Coalesced_One()
 #[test]
 fn Test_A_Path_Already_Reserved_Should_Add_Nothing_And_Record_Nothing()
 {
-    let (_directory, mut ledger) = Board_At("already", vec![Item("T-1", &["a.rs", "dir/b.rs"])]);
-    Take(&mut ledger, "T-1", "agent-a");
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("already", vec![Item("T-1", &["a.rs", "dir/b.rs"])]);
+    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
         .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["a.rs", "./dir/b.rs"]))
@@ -264,8 +149,8 @@ fn Test_A_Path_Already_Reserved_Should_Add_Nothing_And_Record_Nothing()
 #[test]
 fn Test_A_Path_Named_Twice_In_One_Widening_Should_Be_Added_Once()
 {
-    let (_directory, mut ledger) = Board_At("twice", vec![Item("T-1", &["a.rs"])]);
-    Take(&mut ledger, "T-1", "agent-a");
+    let BoardOnDisk { directory: _directory, mut ledger } = Board_At("twice", vec![Item("T-1", &["a.rs"])]);
+    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
         .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs", "b.rs"]))
@@ -284,8 +169,9 @@ fn Test_A_Path_Named_Twice_In_One_Widening_Should_Be_Added_Once()
 #[test]
 fn Test_Widening_Should_Never_Remove_A_Path()
 {
-    let (_directory, mut ledger) = Board_At("superset", vec![Item("T-1", &["a.rs", "b.rs"])]);
-    Take(&mut ledger, "T-1", "agent-a");
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("superset", vec![Item("T-1", &["a.rs", "b.rs"])]);
+    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let before = Only_Item(&ledger).territory.paths;
     ledger
@@ -311,12 +197,12 @@ fn Test_Widening_Should_Never_Remove_A_Path()
 #[test]
 fn Test_A_Widening_Onto_Ground_A_Peer_Holds_Should_Be_Refused()
 {
-    let (_directory, mut ledger) = Board_At(
+    let BoardOnDisk { directory: _directory, mut ledger } = Board_At(
         "contested",
         vec![Item("T-1", &["a.rs"]), Item("T-2", &["b.rs"])],
     );
-    Take(&mut ledger, "T-1", "agent-a");
-    Take(&mut ledger, "T-2", "agent-b");
+    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+    Take(&mut ledger, "T-2", &Holder::from("agent-b"));
 
     let refusal = ledger
         .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
@@ -341,11 +227,11 @@ fn Test_A_Widening_Onto_Ground_A_Peer_Holds_Should_Be_Refused()
 #[test]
 fn Test_The_Same_Widening_Should_Be_Granted_When_No_Peer_Holds_The_Ground()
 {
-    let (_directory, mut ledger) = Board_At(
+    let BoardOnDisk { directory: _directory, mut ledger } = Board_At(
         "uncontested",
         vec![Item("T-1", &["a.rs"]), Item("T-2", &["b.rs"])],
     );
-    Take(&mut ledger, "T-1", "agent-a");
+    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
         .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
@@ -358,8 +244,8 @@ fn Test_The_Same_Widening_Should_Be_Granted_When_No_Peer_Holds_The_Ground()
 #[test]
 fn Test_A_Widening_By_Somebody_Who_Is_Not_The_Holder_Should_Be_Refused()
 {
-    let (_directory, mut ledger) = Board_At("notholder", vec![Item("T-1", &["a.rs"])]);
-    Take(&mut ledger, "T-1", "agent-a");
+    let BoardOnDisk { directory: _directory, mut ledger } = Board_At("notholder", vec![Item("T-1", &["a.rs"])]);
+    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let refusal = ledger
         .Widen(&ItemId::New("T-1"), Holder::from("agent-b"), &Paths(&["b.rs"]))
@@ -381,7 +267,7 @@ fn Test_A_Widening_By_Somebody_Who_Is_Not_The_Holder_Should_Be_Refused()
 #[test]
 fn Test_A_Widening_Of_An_Item_Nobody_Holds_Should_Be_Refused()
 {
-    let (_directory, mut ledger) = Board_At("unclaimed", vec![Item("T-1", &["a.rs"])]);
+    let BoardOnDisk { directory: _directory, mut ledger } = Board_At("unclaimed", vec![Item("T-1", &["a.rs"])]);
 
     let refusal = ledger
         .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
@@ -405,23 +291,18 @@ fn Test_A_Widening_Of_An_Item_Nobody_Holds_Should_Be_Refused()
 #[test]
 fn Test_A_Widening_By_A_Holder_Whose_Lease_Has_Run_Out_Should_Be_Refused()
 {
-    let directory = Temporary_Directory("lapsed");
-    {
-        let mut ledger = Ledger_At(&directory, &AT_NOW);
-        ledger
-            .Save(&LedgerDocument {
-                schema_version: SCHEMA_VERSION,
-                items: vec![Item("T-1", &["a.rs"])],
-            })
-            .expect("a fresh ledger is valid");
-        Take(&mut ledger, "T-1", "agent-a");
-    }
+    let BoardOnDisk { directory: _directory, mut ledger } = Board_After_The_Lease_Lapsed("lapsed");
 
-    let mut later = Ledger_At(&directory, &AT_LATER);
-    let refusal = later
+    let refusal = ledger
         .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
         .expect_err("agent-a's lease ran out an hour ago");
+    Assert_A_Lapse_Refuses(&refusal);
+    Assert_No_Widening_Was_Written(&ledger);
+}
 
+/// A refusal that says a dead lease is not authorization, and names the verb that revives one.
+fn Assert_A_Lapse_Refuses(refusal: &ClaimRefusal)
+{
     assert!(
         matches!(refusal, ClaimRefusal::Lapsed { .. }),
         "a dead lease is not authorization, however well the name matches: {}",
@@ -432,8 +313,12 @@ fn Test_A_Widening_By_A_Holder_Whose_Lease_Has_Run_Out_Should_Be_Refused()
         "and the remedy must be named: {}",
         refusal.Describe()
     );
+}
 
-    let item = Only_Item(&later);
+/// A refused widening wrote nothing at all: no added path and no row.
+fn Assert_No_Widening_Was_Written(ledger: &Board)
+{
+    let item = Only_Item(ledger);
     assert_eq!(item.territory.paths, Paths(&["a.rs"]), "a refused widening writes no path");
     assert!(item.widened.is_empty(), "and records no widening");
 }
@@ -443,8 +328,8 @@ fn Test_A_Widening_By_A_Holder_Whose_Lease_Has_Run_Out_Should_Be_Refused()
 #[test]
 fn Test_The_Same_Holder_Should_Widen_While_The_Lease_Is_Still_Live()
 {
-    let (_directory, mut ledger) = Board_At("live", vec![Item("T-1", &["a.rs"])]);
-    Take(&mut ledger, "T-1", "agent-a");
+    let BoardOnDisk { directory: _directory, mut ledger } = Board_At("live", vec![Item("T-1", &["a.rs"])]);
+    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
         .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
@@ -458,142 +343,17 @@ fn Test_The_Same_Holder_Should_Widen_While_The_Lease_Is_Still_Live()
 // Where the decision is made
 // ---------------------------------------------------------------------------------------
 
-/// What a lock acquisition saw, and what the file held when it was released.
-#[derive(Default)]
-struct LockLog
-{
-    acquisitions: u32,
-    at_release: Vec<String>,
-}
-
-/// A real lock that records when it was taken and what the document held as it was released.
-///
-/// The falsifier for atomicity, which sharing the exclusion check does not buy. Two widenings
-/// running at once can each read a board on which their own added paths are free and jointly
-/// write the overlap the check exists to prevent, and the only thing that stops it is deciding
-/// and writing without releasing the lock in between. `OD-LEDGER-015` is what the three verbs
-/// before this one cost by deciding outside it.
-///
-/// A counting fake alone would only catch an implementation that took no lock. Reading the
-/// document *inside* `Drop`, while the inner guard is still held, is what catches the worse
-/// shape: a decision made under the lock and a write performed after releasing it. The field
-/// order matters and is the mechanism — `Drop::drop` runs before the struct's fields are
-/// dropped, so the real lock is still held at the moment the snapshot is taken.
-struct WatchingLock
-{
-    inner: FileLock,
-    document: PathBuf,
-    log: Arc<Mutex<LockLog>>,
-}
-
-impl Strategy for WatchingLock
-{
-    const STRENGTH: DeterminismStrength = DeterminismStrength::None;
-    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
-    const TRACE: TraceEquivalence = TraceEquivalence::NotApplicable;
-}
-
-struct WatchingGuard
-{
-    document: PathBuf,
-    log: Arc<Mutex<LockLog>>,
-    /// The real lock, released when this guard finishes dropping.
-    ///
-    /// Last, and that is the mechanism rather than a style choice: `Drop::drop` runs before a
-    /// struct's fields are dropped, so the lock is still held while the snapshot below is
-    /// taken. Read by the snapshot through its own existence rather than by name, which is
-    /// what the drop below says out loud so that nothing prunes it as unused.
-    held: FileLockGuard,
-}
-
-impl Drop for WatchingGuard
-{
-    fn drop(&mut self)
-    {
-        // The whole point of the snapshot: what the document held while the lock was still
-        // ours. Naming `held` here is deliberate -- it is the thing making that true, and a
-        // field nothing mentions is a field somebody deletes.
-        let held: &FileLockGuard = &self.held;
-        let _still_locked = std::ptr::from_ref(held);
-
-        let text = std::fs::read_to_string(&self.document).unwrap_or_default();
-        self.log.lock().expect("the log is not poisoned").at_release.push(text);
-    }
-}
-
-impl CrossProcessLock for WatchingLock
-{
-    type Guard = WatchingGuard;
-
-    fn Acquire(
-        &self,
-        holder: &str,
-        wait_limit: Duration,
-        stale_after: Duration,
-    ) -> Result<LockAcquisition<Self::Guard>, LockError>
-    {
-        let acquired = self.inner.Acquire(holder, wait_limit, stale_after)?;
-        let mut log = self.log.lock().expect("the log is not poisoned");
-        log.acquisitions = log.acquisitions.saturating_add(1);
-        drop(log);
-
-        return Ok(LockAcquisition {
-            guard: WatchingGuard {
-                document: self.document.clone(),
-                log: Arc::clone(&self.log),
-                held: acquired.guard,
-            },
-            broke_stale: acquired.broke_stale,
-        });
-    }
-}
-
+/// One widening, one acquisition, and the widening already on disk when it ends.
 #[test]
 fn Test_A_Widening_Should_Decide_And_Write_Inside_One_Lock_Acquisition()
 {
-    let directory = Temporary_Directory("atomic");
-    let document = directory.join("ledger.json");
-    let log = Arc::new(Mutex::new(LockLog::default()));
-
-    let mut ledger = FileLedger::At(
-        document.clone(),
-        StdFileSystem,
-        &AT_NOW,
-        WatchingLock {
-            inner: FileLock::At(directory.join("ledger.lock")),
-            document: document.clone(),
-            log: Arc::clone(&log),
-        },
-    );
-    ledger
-        .Save(&LedgerDocument { schema_version: SCHEMA_VERSION, items: vec![Item("T-1", &["a.rs"])] })
-        .expect("a fresh ledger is valid");
-    Take(&mut ledger, "T-1", "agent-a");
-
-    log.lock().expect("the log is not poisoned").at_release.clear();
+    let WatchedBoard { directory: _directory, mut ledger, log } = Watched_Board_At("atomic");
     let taken_before = log.lock().expect("the log is not poisoned").acquisitions;
 
     ledger
         .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
         .expect("the holder may widen their own item");
-
-    let log = log.lock().expect("the log is not poisoned");
-    assert_eq!(
-        log.acquisitions - taken_before,
-        1,
-        "one widening takes the lock exactly once: twice would mean the decision and the write \
-         each took their own, with the board free to move between them"
-    );
-    let [at_release] = log.at_release.as_slice()
-    else
-    {
-        panic!("one widening releases the lock exactly once, and this released {} times", log.at_release.len());
-    };
-    assert!(
-        at_release.contains("b.rs"),
-        "the widening must already be on disk when the lock is released, or it was written \
-         after the lock was given up and another writer could have been between the two"
-    );
+    Assert_One_Lock_Acquisition(&log, taken_before);
 }
 
 
@@ -616,23 +376,25 @@ fn Test_An_Item_Written_Without_The_Widened_Field_Should_Be_Refused()
 {
     let directory = Temporary_Directory("unmigrated");
     let ledger = Ledger_At(&directory, &AT_NOW);
-
     ledger
         .Save(&LedgerDocument { schema_version: SCHEMA_VERSION, items: vec![Item("T-1", &["a.rs"])] })
         .expect("a fresh ledger is valid");
 
     let path = directory.join("ledger.json");
-    let written = std::fs::read_to_string(&path).expect("the board was written");
-    assert!(
-        written.contains("\"widened\""),
-        "the field must be serialized on every item, whatever it holds -- counting the key \
-         across the file is how a stale writer is detected, and a key whose presence depends \
-         on its content cannot be counted"
-    );
+    Rewrite_The_Board_Without_The_Widened_Field(&path);
+    Assert_A_Missing_Field_Is_Refused(&ledger);
+}
 
-    // Removed as JSON rather than as text, so the fixture is a document missing one key
-    // rather than one that does not parse at all -- which would pass this test for the wrong
-    // reason, and would pass it just as happily if the field carried a default.
+/// Removes the `widened` key from the board's one item, as JSON rather than as text.
+///
+/// Text removal would make the fixture a document that does not parse at all, which would pass
+/// the caller for the wrong reason -- and would pass it just as happily if the field carried a
+/// default.
+fn Rewrite_The_Board_Without_The_Widened_Field(path: &Path)
+{
+    let written = std::fs::read_to_string(path).expect("the board was written");
+    Assert_The_Field_Is_Always_Serialized(&written);
+
     let mut document: serde_json::Value =
         serde_json::from_str(&written).expect("the board this build wrote is JSON");
     let removed = document
@@ -645,8 +407,23 @@ fn Test_An_Item_Written_Without_The_Widened_Field_Should_Be_Refused()
     let unmigrated = serde_json::to_string_pretty(&document).expect("the fixture serializes");
     serde_json::from_str::<serde_json::Value>(&unmigrated)
         .expect("the fixture must still be well-formed JSON, or this tests the parser");
-    std::fs::write(&path, &unmigrated).expect("the fixture is written");
+    std::fs::write(path, &unmigrated).expect("the fixture is written");
+}
 
+/// The key is on every item, whatever it holds, which is what makes a stale writer detectable.
+fn Assert_The_Field_Is_Always_Serialized(written: &str)
+{
+    assert!(
+        written.contains("\"widened\""),
+        "the field must be serialized on every item, whatever it holds -- counting the key \
+         across the file is how a stale writer is detected, and a key whose presence depends \
+         on its content cannot be counted"
+    );
+}
+
+/// The refusal names the field an operator has to migrate to.
+fn Assert_A_Missing_Field_Is_Refused(ledger: &Board)
+{
     let error = ledger.Load().expect_err("a row missing the field is not a row with an empty one");
     let said = format!("{error:?}");
     assert!(

@@ -26,6 +26,18 @@ use std::process::{Command, Output};
 
 const V14: &str = concat!("NOMOS_", "V14_CORPUS");
 
+/// The exit code for a submission this surface refused.
+///
+/// The command line was right: the submitter asked for exactly what they meant and the
+/// *content* was refused, which is why it is apart from [`EXIT_USAGE`].
+const EXIT_REFUSED: i32 = 9;
+
+/// The exit code for a command line the binary refuses.
+const EXIT_USAGE: i32 = 2;
+
+/// How many argv entries one flag and its value take between them.
+const FLAG_AND_ITS_VALUE: usize = 2;
+
 fn Nomos(arguments: &[&str]) -> Output
 {
     return Command::new(env!("CARGO_BIN_EXE_nomos"))
@@ -106,11 +118,11 @@ fn Test_An_Incomplete_Submission_Should_Be_Refused_With_Exit_Nine()
 {
     let mut arguments = Complete_Request_Fields("FR-CLI-002");
     // Drop the last two `--field` flags (`invariants` and its value), leaving the rest intact.
-    arguments.truncate(arguments.len() - 2);
+    arguments.truncate(arguments.len() - FLAG_AND_ITS_VALUE);
 
     let output = Nomos(&arguments);
 
-    assert_eq!(Code(&output), 9, "{}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_REFUSED, "{}", Out_Text(&output));
     let said = Err_Text(&output);
     assert!(said.contains("invariants"), "{said}");
     assert!(said.contains("nothing was stored"), "{said}");
@@ -139,7 +151,7 @@ fn Test_A_Refusal_Should_Name_Every_Failing_Field_Rather_Than_The_First()
         "title=only a title",
     ]);
 
-    assert_eq!(Code(&output), 9, "{}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_REFUSED, "{}", Out_Text(&output));
     let said = Err_Text(&output);
     for field in Fields_Left_Unset_By_Title_Only()
     {
@@ -152,7 +164,7 @@ fn Test_A_Missing_Required_Argument_Should_Be_A_Usage_Error()
 {
     let output = Nomos(&["request", "submit", "--id", "FR-CLI-004", "--by", "kevin"]);
 
-    assert_eq!(Code(&output), 2, "{}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_USAGE, "{}", Out_Text(&output));
     assert!(Err_Text(&output).contains("--kind"), "{}", Err_Text(&output));
 }
 
@@ -161,7 +173,7 @@ fn Test_An_Unrecognised_Command_Should_Be_A_Usage_Error()
 {
     let output = Nomos(&["request", "nonsense"]);
 
-    assert_eq!(Code(&output), 2, "{}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_USAGE, "{}", Out_Text(&output));
 }
 
 /// `OD-SPEC-013` made a submission a row in `nodes`; this is that row surviving the one
@@ -181,7 +193,7 @@ fn Test_Into_Should_Render_The_Accepted_Submission_With_A_Freshness_Stamp()
     assert!(said.contains("subject-dossier ->"), "{said}");
     assert!(said.contains("sidecar (.nomos-projection.json) ->"), "{said}");
 
-    let (body, sidecar) = Written_Dossier(&into, "FR-CLI-005");
+    let Dossier { body, sidecar } = Written_Dossier(&into, "FR-CLI-005");
 
     assert!(body.contains("FR-CLI-005"), "{body}");
     assert!(body.contains("feature-request"), "{body}");
@@ -205,8 +217,19 @@ fn Submitted_With_Into(id: &str, into: &Path) -> Output
     return Nomos(&arguments);
 }
 
+/// A written subject dossier and the freshness stamp written beside it.
+///
+/// Named rather than a `(String, String)`: both members are text, so a caller who read them
+/// in the wrong order would assert about a stamp as though it were a dossier and be told
+/// only that the assertion failed.
+struct Dossier
+{
+    body: String,
+    sidecar: String,
+}
+
 /// The written dossier body and its freshness-stamp sidecar for `id`, read out of `into`.
-fn Written_Dossier(into: &Path, id: &str) -> (String, String)
+fn Written_Dossier(into: &Path, id: &str) -> Dossier
 {
     let body_path = into.join(format!("subjects/{id}/dossier.md"));
     let sidecar_path = into.join(format!("subjects/{id}/dossier.md.nomos-projection.json"));
@@ -215,7 +238,7 @@ fn Written_Dossier(into: &Path, id: &str) -> (String, String)
     let sidecar = std::fs::read_to_string(&sidecar_path)
         .unwrap_or_else(|error| panic!("reads {}: {error}", sidecar_path.display()));
 
-    return (body, sidecar);
+    return Dossier { body, sidecar };
 }
 
 /// A refused submission has nothing to project, so `--into` is never reached.
@@ -227,7 +250,7 @@ fn Test_Into_Should_Write_Nothing_When_The_Submission_Is_Refused()
 
     let output = Refused_Submission(&destination);
 
-    assert_eq!(Code(&output), 9, "{}", Out_Text(&output));
+    assert_eq!(Code(&output), EXIT_REFUSED, "{}", Out_Text(&output));
     assert!(
         std::fs::read_dir(&into).expect("the directory itself exists").next().is_none(),
         "a refused submission wrote something into {}",

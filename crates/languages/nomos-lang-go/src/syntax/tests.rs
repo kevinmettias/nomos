@@ -50,7 +50,7 @@ fn Test_A_Structs_Fields_Should_Be_Recorded()
     for (source, expected) in One_Field_Per_Line_Cases()
     {
         let facts = Parsed(source);
-        let item = facts.items.first().expect("one struct");
+        let item = facts.items.first().expect("each case source declares exactly one struct");
 
         let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
         let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a struct with named fields records them");
@@ -78,7 +78,7 @@ fn Test_Named_Field_Children_Should_Record_Each_Name_In_A_Multi_Name_Field_Decla
     for (source, expected) in Shared_Type_Field_Cases()
     {
         let facts = Parsed(source);
-        let item = facts.items.first().expect("one struct");
+        let item = facts.items.first().expect("each case source declares exactly one struct");
 
         let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
         let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a struct with named fields records them");
@@ -94,7 +94,7 @@ fn Test_Named_Field_Children_Should_Record_Each_Name_In_A_Multi_Name_Field_Decla
 fn Test_A_Fields_Type_Should_Be_Recorded_Verbatim()
 {
     let facts = Parsed("package main\n\ntype Wide struct {\n\tPtr *Foo\n\tItems []string\n\tM map[string]int\n}\n");
-    let item = facts.items.first().expect("one struct");
+    let item = facts.items.first().expect("the fixture source declares exactly one struct");
 
     let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
     let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a struct with named fields records them");
@@ -116,7 +116,7 @@ fn Test_A_Fields_Type_Should_Be_Recorded_Verbatim()
 fn Test_An_Embedded_Field_Should_Not_Be_Recorded()
 {
     let facts = Parsed("package main\n\ntype Wrapper struct {\n\tEmbedded\n\tName string\n}\n");
-    let item = facts.items.first().expect("one struct");
+    let item = facts.items.first().expect("the fixture source declares exactly one struct");
 
     let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
     let fields = nomos_cap_syntax::Struct_Fields(&shape).expect("a struct with at least one named field records it");
@@ -130,10 +130,13 @@ fn Test_An_Embedded_Field_Should_Not_Be_Recorded()
 fn Test_A_Struct_With_No_Named_Fields_Should_Record_Absence()
 {
     let facts = Parsed("package main\n\ntype Marker struct{}\n");
-    let item = facts.items.first().expect("one struct");
+    let item = facts.items.first().expect("the fixture source declares exactly one struct");
 
     assert_eq!(item.shape, None);
 }
+
+/// The fixture below declares three functions, so the last of its ordinals is this one.
+const LAST_OF_THREE_ORDINALS: u32 = 2;
 
 #[test]
 fn Test_Ordinals_Should_Be_Dense_And_Zero_Based()
@@ -142,7 +145,7 @@ fn Test_Ordinals_Should_Be_Dense_And_Zero_Based()
 
     let ordinals: Vec<u32> = facts.items.iter().map(|item| return item.ordinal).collect();
 
-    assert_eq!(ordinals, vec![0, 1, 2]);
+    assert_eq!(ordinals, vec![0, 1, LAST_OF_THREE_ORDINALS]);
 }
 
 #[test]
@@ -181,7 +184,7 @@ fn Test_An_Interfaces_Method_Set_Should_Be_Recorded_Under_Its_Name()
     let names: Vec<String> = facts.items.iter().map(Item::Qualified_Name).collect();
     assert_eq!(names, vec!["Writer".to_owned(), "Writer::Write".to_owned()]);
 
-    let method = facts.items.get(1).expect("two items");
+    let method = facts.items.get(1).expect("the fixture declares an interface and one method on it");
     assert_eq!(method.visibility, Visibility::Public);
     assert_eq!(method.shape.as_deref(), Some("fn/1"));
 }
@@ -282,7 +285,7 @@ fn Test_Documentation_Should_Be_Found_At_Either_Attachment_Point()
          \tB = 2\n\
          )\n",
     );
-    let b = grouped.items.get(1).expect("two items");
+    let b = grouped.items.get(1).expect("the grouped const declares both A and B");
     assert_eq!(b.documentation.as_deref(), Some("B is two."));
 
     let single = Parsed(
@@ -290,7 +293,7 @@ fn Test_Documentation_Should_Be_Found_At_Either_Attachment_Point()
          // Tables lists every table.\n\
          var Tables []string\n",
     );
-    let tables = single.items.first().expect("one item");
+    let tables = single.items.first().expect("the single var declaration is the only item");
     assert_eq!(tables.documentation.as_deref(), Some("Tables lists every table."));
 }
 

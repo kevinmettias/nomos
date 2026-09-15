@@ -83,27 +83,18 @@ mod tests
     use super::*;
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
 
-    /// A declaration placing the one crate these fixtures name, so a location under `crates/`
-    /// resolves to something. The component is this repository's own word because the finding
-    /// is this repository's own file; nothing in this module supplied it.
-    fn Declaring() -> ArchitecturePayload
-    {
-        return ArchitecturePayload {
-            components: vec!["Specification".to_owned()],
-            membership: vec![nomos_cap_architecture::Membership {
-                package: "nomos-spec-store".to_owned(),
-                component: "Specification".to_owned(),
-            }],
-            ..ArchitecturePayload::default()
-        };
-    }
+    /// The bytes the two fixture subject digests below are filled with. Nothing asserts on
+    /// either -- they exist so each fixture carries a real `SubjectId` rather than one that was
+    /// never derived -- and they differ only so the two fixtures do not share a subject.
+    const FIRST_FIXTURE_DIGEST_BYTE: u8 = 1;
+    const SECOND_FIXTURE_DIGEST_BYTE: u8 = 2;
 
     #[test]
     fn Test_Of_Should_Carry_Every_Real_Answer_For_A_Correctable_Rules_Zone_Finding()
     {
         let finding = Finding {
             rule: RuleId::New(nomos_rules::COMPLETENESS_MIRROR),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([FIRST_FIXTURE_DIGEST_BYTE; Digest128::BYTE_LENGTH])),
             subject_name: "Table::All".to_owned(),
             applicability: Applicability::Supported,
             evidence: EvidenceClass::Derived,
@@ -127,7 +118,7 @@ mod tests
     {
         let finding = Finding {
             rule: RuleId::New(nomos_rules::DEPENDENCY_DIRECTION),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([SECOND_FIXTURE_DIGEST_BYTE; Digest128::BYTE_LENGTH])),
             subject_name: "nomos-rules".to_owned(),
             applicability: Applicability::Supported,
             evidence: EvidenceClass::Derived,
@@ -141,5 +132,20 @@ mod tests
         assert!(walked.governing_rule.is_some(), "dependency-direction is a real descriptor");
         assert!(walked.architectural_component.is_none(), "a bare package name is not a crates/ path");
         assert!(walked.available_correction.is_none(), "dependency-direction has no known correction family");
+    }
+
+    /// A declaration placing the one crate these fixtures name, so a location under `crates/`
+    /// resolves to something. The component is this repository's own word because the finding
+    /// is this repository's own file; nothing in this module supplied it.
+    fn Declaring() -> ArchitecturePayload
+    {
+        return ArchitecturePayload {
+            components: vec!["Specification".to_owned()],
+            membership: vec![nomos_cap_architecture::Membership {
+                package: "nomos-spec-store".to_owned(),
+                component: "Specification".to_owned(),
+            }],
+            ..ArchitecturePayload::default()
+        };
     }
 }

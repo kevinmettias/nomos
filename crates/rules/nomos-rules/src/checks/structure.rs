@@ -149,19 +149,6 @@ fn Finding_For_Source(source: &SourceFile, rule: Rule<'_>, because: Because<'_>)
     };
 }
 
-/// This crate's own floor for `nomos.cap.limits.policy` — stated at the capability's own
-/// ceiling since there is only one real provider today and no weaker answer this crate
-/// could honestly still act on. Mirrors `checks::naming::Naming_Policy_Requirement`
-/// exactly, for the sibling capability.
-fn Limits_Policy_Requirement() -> nomos_capability::Requirement
-{
-    return nomos_capability::Requirement::New(
-        nomos_cap_limits_policy::Capability(),
-        nomos_cap_limits_policy::CONTRACT_VERSION,
-        nomos_cap_limits_policy::Ceiling(),
-    );
-}
-
 /// Resolves the numeric threshold `key` must take: a repository's own declared
 /// `nomos.cap.limits.policy`, most-specific key first (`language`'s own override, then the
 /// repository-wide default), falling back to `default` when neither is declared.
@@ -209,6 +196,19 @@ fn Materialized_Limits_Payload(facts: &mut dyn FactReader) -> Option<nomos_cap_l
     };
 
     return nomos_cap_limits_policy::Parse_Payload(&fact.payload.bytes).ok();
+}
+
+/// This crate's own floor for `nomos.cap.limits.policy` — stated at the capability's own
+/// ceiling since there is only one real provider today and no weaker answer this crate
+/// could honestly still act on. Mirrors `checks::naming::Naming_Policy_Requirement`
+/// exactly, for the sibling capability.
+fn Limits_Policy_Requirement() -> nomos_capability::Requirement
+{
+    return nomos_capability::Requirement::New(
+        nomos_cap_limits_policy::Capability(),
+        nomos_cap_limits_policy::CONTRACT_VERSION,
+        nomos_cap_limits_policy::Ceiling(),
+    );
 }
 
 /// The one row in `payload` declared for exactly `scope` and `key` — the shape both the

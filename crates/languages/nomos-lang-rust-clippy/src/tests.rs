@@ -204,21 +204,8 @@ const DUPLICATE_MESSAGE_LINE: u32 = 5;
 fn Test_Duplicate_Diagnostics_From_Two_Target_Compiles_Should_Collapse_To_One()
 {
     let root = Path::new("F:/repos/nomos");
-    let one_message = |package_id: &str| {
-        return serde_json::json!({
-            "reason": "compiler-message",
-            "package_id": package_id,
-            "message": {
-                "level": "warning",
-                "message": "unneeded return statement",
-                "code": { "code": "clippy::needless_return" },
-                "spans": [{ "file_name": "src/lib.rs", "line_start": DUPLICATE_MESSAGE_LINE, "is_primary": true }]
-            }
-        })
-        .to_string();
-    };
     let id = "path+file:///F:/repos/nomos/crates/rules/nomos-rules#0.1.0";
-    let stdout = format!("{}\n{}\n", one_message(id), one_message(id));
+    let stdout = format!("{}\n{}\n", Duplicate_Message_Line(id), Duplicate_Message_Line(id));
 
     let discovered = Grouped_By_Package(&stdout, root);
 
@@ -228,4 +215,22 @@ fn Test_Duplicate_Diagnostics_From_Two_Target_Compiles_Should_Collapse_To_One()
         1,
         "the same diagnostic reported by two target compiles must collapse to one"
     );
+}
+
+/// One `compiler-message` line naming `package_id`'s own warning at
+/// [`DUPLICATE_MESSAGE_LINE`] -- `--all-targets` emits this shape once per compilation that
+/// reaches the same source line, which is the duplicate the test above collapses.
+fn Duplicate_Message_Line(package_id: &str) -> String
+{
+    return serde_json::json!({
+        "reason": "compiler-message",
+        "package_id": package_id,
+        "message": {
+            "level": "warning",
+            "message": "unneeded return statement",
+            "code": { "code": "clippy::needless_return" },
+            "spans": [{ "file_name": "src/lib.rs", "line_start": DUPLICATE_MESSAGE_LINE, "is_primary": true }]
+        }
+    })
+    .to_string();
 }

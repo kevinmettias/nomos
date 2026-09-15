@@ -15,12 +15,17 @@ fn Subject(path: &str) -> nomos_contracts::SubjectId
     return nomos_contracts::SubjectId::From_Digest(Content_Digest(path.as_bytes()));
 }
 
+/// Fill bytes distinct enough that the three digests below differ from one another; each
+/// value carries no meaning beyond "not equal to the others".
+const VARIANT_DIGEST_FILL: u8 = 2;
+const CONFIGURATION_DIGEST_FILL: u8 = 3;
+
 fn Context() -> FactContext
 {
     return FactContext {
         snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
-        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
-        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
+        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_DIGEST_FILL; Digest128::BYTE_LENGTH])),
         generation: GenerationId::INITIAL,
     };
 }

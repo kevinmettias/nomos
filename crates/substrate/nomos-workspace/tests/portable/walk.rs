@@ -8,6 +8,11 @@ use std::path::{Path, PathBuf};
 
 const NOT_SOURCE: &[&str] = &["target", ".git"];
 
+/// The fewest members a real corpus has. Below it the walk found a directory and almost
+/// nothing in it, and every assertion that iterates the set would pass having read almost
+/// nothing.
+pub(crate) const CORPUS_MEMBER_FLOOR: usize = 5_000;
+
 /// Every Rust file under a root, as workspace-relative paths and contents.
 ///
 /// Sorted, so a failure names the same file on two machines and the permutation test has a
@@ -70,10 +75,16 @@ fn Visit(path: &Path, pending: &mut Vec<PathBuf>, paths: &mut Vec<PathBuf>)
     {
         pending.push(path.to_path_buf());
     }
-    else if !is_directory && path.extension().is_some_and(|extension| return extension == "rs")
+    else if !is_directory && Is_Rust_Source(path)
     {
         paths.push(path.to_path_buf());
     }
+}
+
+/// Whether a path names a Rust source file, by its extension.
+fn Is_Rust_Source(path: &Path) -> bool
+{
+    return path.extension().is_some_and(|extension| return extension == "rs");
 }
 
 /// A path under the root, as the workspace-relative string a snapshot is allowed to record.
@@ -90,7 +101,7 @@ fn Relative_To(root: &Path, path: &Path) -> String
 pub(crate) fn Assert_This_Is_That_Corpus(members: &[(String, String)], root: &Path)
 {
     assert!(
-        members.len() >= 5_000,
+        members.len() >= CORPUS_MEMBER_FLOOR,
         "found {} Rust files under {}, which is not this corpus. Every assertion below \
          iterates over this set, so a truncated walk makes all of them pass having read \
          almost nothing",

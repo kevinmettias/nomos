@@ -238,38 +238,61 @@ impl LedgerItem
     pub fn Widen<'a>(&mut self, paths: &[String], holder: impl Into<Holder<'a>>, at: Timestamp) -> Vec<String>
     {
         let holder = holder.into();
-        let mut added: Vec<String> = Vec::new();
-
-        for path in paths
-        {
-            let normalized = Normalize_Path(path);
-            let held = self
-                .territory
-                .paths
-                .iter()
-                .chain(added.iter())
-                .any(|existing| return Normalize_Path(existing) == normalized);
-
-            if !held
-            {
-                added.push(path.clone());
-            }
-        }
+        let added = Paths_Not_Yet_Held(&self.territory, paths);
 
         if added.is_empty()
         {
             return added;
         }
 
-        self.territory.paths.extend(added.iter().cloned());
-        self.widened.push(Widening {
-            holder: holder.As_Text().to_owned(),
-            added: added.clone(),
-            widened_at: at,
-        });
-
-        return added;
+        return Reserve_And_Record(self, added, holder, at);
     }
+}
+
+/// Those of `paths` that `territory` does not already reserve, in the order they were asked
+/// for and with a path named twice in one call added once.
+///
+/// Compared after [`Normalize_Path`], so two spellings of one file are one path here exactly
+/// as they are to [`Territory::Intersect`]. The paths this call has already accepted are
+/// chained into the ones the territory holds, which is what collapses the repeat.
+fn Paths_Not_Yet_Held(territory: &Territory, paths: &[String]) -> Vec<String>
+{
+    let mut added: Vec<String> = Vec::new();
+
+    for path in paths
+    {
+        let normalized = Normalize_Path(path);
+        let held = territory
+            .paths
+            .iter()
+            .chain(added.iter())
+            .any(|existing| return Normalize_Path(existing) == normalized);
+
+        if !held
+        {
+            added.push(path.clone());
+        }
+    }
+
+    return added;
+}
+
+/// Reserves the paths a widening added and records the [`Widening`] that added them, returning
+/// the paths so a caller can report what happened.
+///
+/// One call and not two statements, for the reason [`LedgerItem::Widen`] is one operation: a
+/// caller that grew the territory itself would be free to grow it and not record what it grew
+/// by, and the record is the half `OD-LEDGER-039` exists to keep.
+fn Reserve_And_Record(item: &mut LedgerItem, added: Vec<String>, holder: Holder<'_>, at: Timestamp) -> Vec<String>
+{
+    item.territory.paths.extend(added.iter().cloned());
+    item.widened.push(Widening {
+        holder: holder.As_Text().to_owned(),
+        added: added.clone(),
+        widened_at: at,
+    });
+
+    return added;
 }
 
 #[cfg(test)]

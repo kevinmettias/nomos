@@ -45,12 +45,16 @@ fn Test_A_Declaration_The_Schema_Dropped_Should_Be_Refused()
     );
 }
 
+/// The length of the two-byte record this fixture declares, which no column in the schema
+/// holds — the point of the case is the field's NAME, not its value.
+const FIXTURE_BYTE_LENGTH: i64 = 2;
+
 #[test]
 fn Test_A_Declared_Field_The_Record_Lacks_Should_Be_Refused()
 {
     let record = Record::Blob(crate::row::blob::Blob {
         sha256: "sha256:aa".to_owned(),
-        byte_length: 2,
+        byte_length: FIXTURE_BYTE_LENGTH,
         encoding: crate::row::blob::encoding::Encoding::Utf8,
         content: "hi".to_owned(),
     });

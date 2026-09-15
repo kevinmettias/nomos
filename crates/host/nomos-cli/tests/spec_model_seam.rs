@@ -29,6 +29,11 @@ use std::process::Command;
 /// should depend on whether a real corpus happens to be configured on the machine running it.
 const V14_CORPUS_VARIABLE: &str = "NOMOS_V14_CORPUS";
 
+/// What a submission the rule set refuses leaves the process with -- `request/exit_code.rs::
+/// ExitCode::Refused`'s own value, deliberately the number `spec` already gave "an edit was
+/// refused" rather than a fresh one.
+const REFUSED_SUBMISSION_EXIT_CODE: i32 = 9;
+
 /// Runs the real binary with the v14 corpus variable stripped from its environment.
 fn Run_Without_Corpus(arguments: &[&str]) -> support::Ran
 {
@@ -54,8 +59,25 @@ fn Test_A_Complete_Submission_Should_Report_Its_Kind_And_State_As_Nomos_Spec_Mod
 {
     let kind = SubmissionKind::FeatureRequest;
     let state = SubmissionState::Draft;
+    let outcome = A_Complete_Submission_Outcome();
 
-    let outcome = Run_Without_Corpus(&[
+    assert_eq!(outcome.code, 0, "{}", outcome.stderr);
+    assert!(
+        outcome.stdout.contains(&format!("as {} ({})", kind.Label(), state.Label())),
+        "{}",
+        outcome.stdout
+    );
+}
+
+/// A complete `request submit`, driven through the real binary, and what it said.
+///
+/// Carries every field [`SubmissionKind::FeatureRequest`] itself says this kind requires, with
+/// `--kind` spelled from that type's own `Label()` rather than from a literal that could
+/// silently drift away from it.
+fn A_Complete_Submission_Outcome() -> support::Ran
+{
+    let kind = SubmissionKind::FeatureRequest;
+    return Run_Without_Corpus(&[
         "request",
         "submit",
         "--kind",
@@ -75,13 +97,6 @@ fn Test_A_Complete_Submission_Should_Report_Its_Kind_And_State_As_Nomos_Spec_Mod
         "--field",
         "invariants=none",
     ]);
-
-    assert_eq!(outcome.code, 0, "{}", outcome.stderr);
-    assert!(
-        outcome.stdout.contains(&format!("as {} ({})", kind.Label(), state.Label())),
-        "{}",
-        outcome.stdout
-    );
 }
 
 /// A submission missing every required field but `title` must be refused, naming every field
@@ -105,7 +120,7 @@ fn Test_A_Submission_Missing_Its_Required_Fields_Should_Name_Every_One_Of_Nomos_
         "title=only a title",
     ]);
 
-    assert_eq!(outcome.code, 9, "{}", outcome.stdout);
+    assert_eq!(outcome.code, REFUSED_SUBMISSION_EXIT_CODE, "{}", outcome.stdout);
     for field in kind.Required_Fields()
     {
         assert!(outcome.stderr.contains(field), "refusal did not name {field}: {}", outcome.stderr);

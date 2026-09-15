@@ -325,10 +325,27 @@ mod tests
     #[test]
     fn Test_Summary_Should_Combine_Rule_Error_And_Reconciliation_Counts_Into_One_Line()
     {
-        // `dyn Rule`: this fixture needs one heterogeneous list of fake rules, each returning
-        // a different canned outcome; a generic parameter cannot hold more than one concrete
-        // type in one `Vec`, and this is a handful of test fixtures, not a hot path.
-        let rules: Vec<Box<dyn Rule>> = vec![
+        let run = Validate_Rules(&Store(), &One_Of_Each_Outcome());
+
+        assert_eq!(
+            run.Summary(),
+            format!(
+                "3 rule(s) ran over 5 subject(s): 1 violation(s), 1 error(s), {} unregistered, 1 undeclared",
+                DECLARED_RULES.len() - 2
+            )
+        );
+    }
+
+    /// One rule satisfied over five subjects, one violated once, and one errored: a run in
+    /// which each of the four counts `Summary` renders is non-zero and distinct, so a rendering
+    /// that dropped or merged one of them could not match the line the test above expects.
+    ///
+    /// `dyn Rule`: this fixture needs one heterogeneous list of fake rules, each returning
+    /// a different canned outcome; a generic parameter cannot hold more than one concrete
+    /// type in one `Vec`, and this is a handful of test fixtures, not a hot path.
+    fn One_Of_Each_Outcome() -> Vec<Box<dyn Rule>>
+    {
+        return vec![
             Box::new(Fake(
                 *DECLARED_RULES.first().expect("DECLARED_RULES lists at least two rules"),
                 RuleOutcome::Satisfied { checked: 5 },
@@ -342,16 +359,6 @@ mod tests
             )),
             Box::new(Fake("NSV-INVENTED-001", RuleOutcome::Errored("boom".to_owned()))),
         ];
-
-        let run = Validate_Rules(&Store(), &rules);
-
-        assert_eq!(
-            run.Summary(),
-            format!(
-                "3 rule(s) ran over 5 subject(s): 1 violation(s), 1 error(s), {} unregistered, 1 undeclared",
-                DECLARED_RULES.len() - 2
-            )
-        );
     }
 
     #[test]

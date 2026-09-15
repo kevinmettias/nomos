@@ -38,10 +38,10 @@ fn Test_A_Phantom_In_A_Read_Subject_Should_Block_Though_Another_Subject_Was_Unre
 {
     let declaring = Source(
         "a.rs",
-        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n".to_owned(),
     );
     // The same shape as the real fixture: text no parser accepts, and no fact.
-    let broken = Source("broken.rs", "pub const ??? = ;\n");
+    let broken = Source("broken.rs", "pub const ??? = ;\n".to_owned());
     let judged = Judged_Beside(&declaring, &broken);
     let claim = Named("T", &judged).expect("the universe is judged");
 
@@ -87,7 +87,7 @@ fn Assert_The_Shortfall_Travels_With_The_Judgment(claim: &Finding, judged: &[Fin
 fn Test_A_Claim_In_An_Unread_Subject_Should_Not_Be_A_Phantom()
 {
     let declaring = Declaring_Its_Own_Mirror();
-    let other = Source("b.rs", "#[test]\nfn Test_Something_Else()\n{\n}\n");
+    let other = Source("b.rs", "#[test]\nfn Test_Something_Else()\n{\n}\n".to_owned());
     let sources = vec![declaring.clone(), other.clone()];
     // Every fact but the declaring file's own, so the index is real and short of it.
     let world = World_Over(&[(&other, &["Test_Something_Else"])]);
@@ -119,7 +119,7 @@ fn Declaring_Its_Own_Mirror() -> SourceFile
          \x20   fn Test_Right_Here()\n\
          \x20   {\n\
          \x20   }\n\
-         }\n",
+         }\n".to_owned(),
     );
 }
 
@@ -154,11 +154,11 @@ fn Test_A_Name_Spelled_In_A_Comment_Should_Still_Withhold_The_Block()
 {
     let declaring = Source(
         "a.rs",
-        "/// Mirrored by `Test_Only_Mentioned`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Only_Mentioned`.\npub const T: &[&str] = &[];\n".to_owned(),
     );
     let broken = Source(
         "broken.rs",
-        "// Test_Only_Mentioned used to live here.\npub const ??? = ;\n",
+        "// Test_Only_Mentioned used to live here.\npub const ??? = ;\n".to_owned(),
     );
     let judged = Judged_Beside(&declaring, &broken);
     let claim = Named("T", &judged).expect("the universe is judged");
@@ -185,9 +185,9 @@ fn Test_Two_Claims_Under_One_Shortfall_Should_Be_Judged_Separately()
         "/// Mirrored by `Test_In_The_Broken_File`.\n\
          pub const WITHHELD: &[&str] = &[];\n\
          /// Mirrored by `Test_Nowhere_At_All`.\n\
-         pub const PHANTOM: &[&str] = &[];\n",
+         pub const PHANTOM: &[&str] = &[];\n".to_owned(),
     );
-    let broken = Source("broken.rs", "fn Test_In_The_Broken_File( ??? = ;\n");
+    let broken = Source("broken.rs", "fn Test_In_The_Broken_File( ??? = ;\n".to_owned());
     let sources = vec![declaring.clone(), broken.clone()];
     let world = World_Over(&[(&declaring, &[])]);
     let findings = Judged_In(&world, &sources);
@@ -215,7 +215,7 @@ fn Test_With_No_Provider_Admitted_No_Claim_Should_Be_A_Phantom()
 {
     let source = Source(
         "a.rs",
-        "/// Mirrored by `Test_Nowhere_In_This_Tree`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Nowhere_In_This_Tree`.\npub const T: &[&str] = &[];\n".to_owned(),
     );
     let world = World::Offering(&[]);
     let findings = Judged_In(&world, &[source]);
@@ -244,9 +244,9 @@ fn Test_A_Phantom_Should_Still_Block_When_Every_Subject_Was_Read()
 {
     let declaring = Source(
         "a.rs",
-        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Renamed_Away`.\npub const T: &[&str] = &[];\n".to_owned(),
     );
-    let other = Source("b.rs", "#[test]\nfn Test_Something_Else()\n{\n}\n");
+    let other = Source("b.rs", "#[test]\nfn Test_Something_Else()\n{\n}\n".to_owned());
     let sources = vec![declaring.clone(), other.clone()];
 
     let world = World_Over(&[(&declaring, &[]), (&other, &["Test_Something_Else"])]);
@@ -269,8 +269,8 @@ fn Test_A_Phantom_Should_Still_Block_When_Every_Subject_Was_Read()
 #[test]
 fn Test_An_Admitted_Gap_Should_Not_Inherit_The_Indexs_Doubt()
 {
-    let declaring = Source("a.rs", "pub const T: &[&str] = &[];\n");
-    let unread = Source("b.rs", "#[test]\nfn Test_Whatever()\n{\n}\n");
+    let declaring = Source("a.rs", "pub const T: &[&str] = &[];\n".to_owned());
+    let unread = Source("b.rs", "#[test]\nfn Test_Whatever()\n{\n}\n".to_owned());
     let judged = Judged_Beside(&declaring, &unread);
     let gap = Named("T", &judged).expect("the universe is judged");
 

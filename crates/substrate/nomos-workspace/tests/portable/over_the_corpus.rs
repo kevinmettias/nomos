@@ -8,12 +8,18 @@
 //! `tests/contract/tests/corpus_gates.rs` would drop without any assertion being removed.
 
 use crate::arrival::{Configuration, Fresh, Ingest, Variant, Workspace};
-use crate::walk::{Assert_This_Is_That_Corpus, Corpus};
+use crate::walk::{Assert_This_Is_That_Corpus, Corpus, CORPUS_MEMBER_FLOOR};
 use nomos_store::{Authority, DocumentKind, DocumentStore};
 use nomos_workspace::{Applied, WorkspaceSnapshot};
+use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 
 const SCALE_CORPUS: &str = "F:/repos/xvpe";
+
+/// How many files one change set carries. A checkout arrives as one event covering a whole
+/// subtree rather than one event per file, and a stride is what turns a flat member list
+/// into those events.
+const CORPUS_BATCH: usize = 512;
 
 fn Scale_Corpus_Or_Skip() -> Option<(PathBuf, Vec<(String, String)>)>
 {
@@ -23,7 +29,7 @@ fn Scale_Corpus_Or_Skip() -> Option<(PathBuf, Vec<(String, String)>)>
         .map_or_else(|| return PathBuf::from(SCALE_CORPUS), PathBuf::from);
     if !root.is_dir()
     {
-        Report_The_Absence(configured.is_some(), &root);
+        Report_The_Absence(configured.as_deref(), &root);
 
         return None;
     }
@@ -37,10 +43,14 @@ fn Scale_Corpus_Or_Skip() -> Option<(PathBuf, Vec<(String, String)>)>
 /// A corpus the environment named and this machine cannot read is a failure. An unconfigured
 /// one that is simply not here is a skip, said out loud so a green run is not read as a
 /// checked one.
-fn Report_The_Absence(configured: bool, root: &Path)
+///
+/// The two states are the caller's `Option`, not a `bool` beside the path: `Some` is a root
+/// the environment named, `None` is nothing promised. A `bool` here would have been the same
+/// fact spelled a second time, one position away from being read as its opposite.
+fn Report_The_Absence(configured: Option<&OsStr>, root: &Path)
 {
     assert!(
-        !configured,
+        configured.is_none(),
         "NOMOS_RUST_CORPUS is set to {}, which is not a directory. A configured corpus \
          that cannot be read is a failure, not a skip",
         root.display()
@@ -67,7 +77,7 @@ fn Test_A_Snapshot_Of_The_Real_Corpus_Should_Name_Nothing_Outside_Itself()
         return;
     };
     let mut workspace = Fresh();
-    Ingest(&mut workspace, &members, 512);
+    Ingest(&mut workspace, &members, CORPUS_BATCH);
     let encoded = workspace.Snapshot().Encode();
 
     eprintln!(
@@ -126,7 +136,7 @@ fn Test_A_Snapshot_Should_Be_Interpretable_Without_The_Tree()
     };
 
     let mut workspace = Fresh();
-    Ingest(&mut workspace, &members, 512);
+    Ingest(&mut workspace, &members, CORPUS_BATCH);
     let encoded = workspace.Snapshot().Encode();
     let elsewhere = WorkspaceSnapshot::Decode(&encoded).expect("bytes are all it needs");
 
@@ -164,7 +174,7 @@ fn Assert_Every_Member_Survived(elsewhere: &WorkspaceSnapshot, workspace: &Works
     // The positive control. If `Members` returned nothing, every assertion above would
     // hold over two empty snapshots.
     assert!(
-        here.len() >= 5_000,
+        here.len() >= CORPUS_MEMBER_FLOOR,
         "{} members is not this corpus",
         here.len()
     );
@@ -182,7 +192,7 @@ fn Test_A_Recorded_Snapshot_Should_Be_Readable_From_The_Store_Alone()
     };
 
     let mut workspace = Fresh();
-    Ingest(&mut workspace, &members, 512);
+    Ingest(&mut workspace, &members, CORPUS_BATCH);
     let mut store = DocumentStore::For(Workspace::Authority());
     workspace.Record(&mut store).expect("the store admits an observed measurement");
 
@@ -281,7 +291,7 @@ fn Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries()
     // The vacuity guard. If the corpus had one member — or none — every permutation would
     // be the same permutation and this would have asserted nothing.
     assert!(
-        members >= 5_000,
+        members >= CORPUS_MEMBER_FLOOR,
         "{members} members cannot meaningfully be permuted a hundred ways"
     );
 }
@@ -291,10 +301,10 @@ fn Test_A_Hundred_Ingestion_Orders_Should_Yield_Byte_Identical_Queries()
 /// with it.
 fn Permuted_A_Hundred_Ways(members: &[(String, String)]) -> crate::permutation::Taken
 {
-    use crate::permutation::{Snapshot_Of_One_Order, Taken};
+    use crate::permutation::{Snapshot_Of_One_Order, Taken, PERMUTATION_COUNT};
 
     let mut baseline: Option<Taken> = None;
-    for permutation in 0..100_u32
+    for permutation in 0..PERMUTATION_COUNT
     {
         let taken = Snapshot_Of_One_Order(members, permutation);
 
@@ -351,7 +361,7 @@ struct ReIngestion
 fn Ingested_Twice(members: &[(String, String)]) -> ReIngestion
 {
     let mut workspace = Fresh();
-    Ingest(&mut workspace, members, 512);
+    Ingest(&mut workspace, members, CORPUS_BATCH);
 
     let after_first = workspace.Generation();
     let identity = workspace.Id();
@@ -370,7 +380,7 @@ fn Ingested_Twice(members: &[(String, String)]) -> ReIngestion
 fn Re_Ingest(workspace: &mut Workspace, members: &[(String, String)]) -> usize
 {
     let mut redundant = 0_usize;
-    for batch in members.chunks(512)
+    for batch in members.chunks(CORPUS_BATCH)
     {
         let effects = Apply_Again(workspace, batch);
 
@@ -389,7 +399,9 @@ fn Re_Ingest(workspace: &mut Workspace, members: &[(String, String)]) -> usize
 fn Apply_Again(workspace: &mut Workspace, batch: &[(String, String)]) -> usize
 {
     let set = crate::arrival::Change_Set(batch);
-    let applied = workspace.Apply(&set).expect("applies");
+    let applied = workspace
+        .Apply(&set)
+        .expect("the batch is a slice of the corpus already ingested, so every path is relative");
 
     assert!(
         matches!(applied, Applied::Unchanged { .. }),

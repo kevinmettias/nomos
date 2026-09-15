@@ -40,3 +40,4 @@
 # recreated, which is the shape this refinement exists to remove. A build resolved through
 # any of it is development-resolved rather than reproducible.
 /.cargo/
+.claude/settings.local.json

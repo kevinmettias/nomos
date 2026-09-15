@@ -4,29 +4,35 @@
 //! That only holds if a row's `uid` survives re-ingestion, so the renumbering test belongs
 //! beside the lineage it would silently break.
 
-use crate::stored::{AUTHORED, Segment, SpecificationStore, Stored, TABLE, Two};
+use crate::stored::{AUTHORED, Blame, Segment, SpecificationStore, Stored, TABLE, Two};
 use nomos_spec_store::{NodeRow, Table};
 
 /// One column of one row, from a query that binds nothing.
-fn One<T: rusqlite::types::FromSql>(store: &SpecificationStore, sql: &str, blame: &str) -> T
+fn One<T: rusqlite::types::FromSql>(
+    store: &SpecificationStore,
+    sql: &str,
+    blame: Blame<'_>,
+) -> T
 {
-    return store
-        .Connection()
-        .query_row(sql, [], |row| return row.get(0))
-        .expect(blame);
+    let found = store.Connection().query_row(sql, [], |row| return row.get(0));
+
+    return found.unwrap_or_else(|cause| panic!("{}: {cause}", blame.0));
 }
 
 /// Re-ingest must not renumber rows: `uid` is what a lineage row would point at.
 #[test]
 fn Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store =
+        SpecificationStore::In_Memory().expect("In_Memory applies the schema in process");
     let document = store
         .Put_Source_Document("doc.md", AUTHORED, TABLE)
-        .expect("stores");
+        .expect("the fixture path is fresh in this store, so the insert conflicts with nothing");
     let blocks = Segment(TABLE);
 
-    store.Put_Source_Blocks(document, &blocks).expect("writes");
+    store
+        .Put_Source_Blocks(document, &blocks)
+        .expect("Put_Source_Blocks inserts every block of the fixture table");
     let before = Row_Uids(&store);
     store.Put_Source_Blocks(document, &blocks).expect("writes again");
 
@@ -44,7 +50,7 @@ fn Row_Uids(store: &SpecificationStore) -> Vec<i64>
                 .query_map([], |row| row.get(0))
                 .and_then(std::iter::Iterator::collect);
         })
-        .expect("reads uids");
+        .expect("the projection names one column the schema declares");
 }
 
 /// The property the restoration exists to establish: one canonical source, two
@@ -59,7 +65,7 @@ fn Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row()
          JOIN source_table_rows r ON r.uid = l.source_table_row_uid
          JOIN nodes n ON n.uid = l.target_node_uid
          WHERE n.node_id = 'CON-METRICTRADEOFF-001'",
-        "the concept traces to no row",
+        Blame("the concept traces to no row"),
     );
 
     assert!(
@@ -75,19 +81,24 @@ fn Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row()
 /// The fixture table, with a concept minted from one of its rows and pointed back at it.
 fn With_A_Concept_Minted_From_A_Row() -> SpecificationStore
 {
-    let mut store = Stored(TABLE).expect("stores");
-    let document: i64 = One(&store, "SELECT uid FROM source_documents LIMIT 1", "one document");
+    let mut store =
+        Stored(TABLE).expect("the fixture body is a well-formed table the store takes");
+    let document: i64 = One(
+        &store,
+        "SELECT uid FROM source_documents LIMIT 1",
+        Blame("the fixture wrote exactly one source document"),
+    );
     let (block_ordinal, row_ordinal): (u32, u32) = Two(
         &store,
         "SELECT b.ordinal, r.ordinal FROM source_blocks b
          JOIN source_table_rows r ON r.source_block_uid = b.uid
          WHERE r.cells_json LIKE '%MetricTradeoffProjection%'",
-        "finds the row",
+        Blame("the fixture's row is the only one naming MetricTradeoffProjection"),
     );
     let row_uid = store
         .Table_Row_Uid(document, block_ordinal, row_ordinal)
-        .expect("queries")
-        .expect("the row is addressable");
+        .expect("the fixture's row is addressable at its own block and row ordinals")
+        .expect("the row the fixture stored is the one that lookup resolves");
     let node = store
         .Upsert_Node(NodeRow {
             node_id: "CON-METRICTRADEOFF-001",
@@ -109,16 +120,17 @@ fn With_A_Concept_Minted_From_A_Row() -> SpecificationStore
 #[test]
 fn Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row()
 {
-    let mut store = Stored(TABLE).expect("stores");
+    let mut store =
+        Stored(TABLE).expect("the fixture body stores, which is what gives this test rows");
     let row_uid: i64 = One(
         &store,
         "SELECT uid FROM source_table_rows WHERE kind = 'content' LIMIT 1",
-        "finds a row",
+        Blame("the fixture table's first content row"),
     );
 
     store
         .Put_Row_Lineage(row_uid, "preserved-verbatim", None)
-        .expect("records");
+        .expect("Put_Row_Lineage accepts the row uid the line above resolved");
     store
         .Put_Row_Lineage(row_uid, "preserved-verbatim", None)
         .expect("records again");

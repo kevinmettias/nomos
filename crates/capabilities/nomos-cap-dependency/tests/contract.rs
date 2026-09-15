@@ -16,16 +16,18 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 #[test]
 fn Test_The_Ceiling_Should_Admit_A_Weaker_Offer()
 {
+    let guarantee = Guarantee::New(
+        FactVariant::Syntactic,
+        Assurance::Unsound,
+        Assurance::Unknown,
+        IncrementalGranularity::WholeWorkspace,
+    );
+
     contract_testing::Assert_Ceiling_Admits(
         Capability_Contract(),
         Capability(),
         CONTRACT_VERSION,
-        Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Unsound,
-            Assurance::Unknown,
-            IncrementalGranularity::WholeWorkspace,
-        ),
+        guarantee,
     );
 }
 
@@ -35,14 +37,16 @@ fn Test_The_Ceiling_Should_Admit_A_Weaker_Offer()
 #[test]
 fn Test_The_Ceiling_Should_Refuse_A_Claim_Above_Semantically_Resolved()
 {
+    let guarantee = Guarantee::New(
+        FactVariant::RuntimeObserved,
+        Assurance::Sound,
+        Assurance::Sound,
+        IncrementalGranularity::Project,
+    );
+
     contract_testing::Assert_Ceiling_Refuses(
         Capability_Contract(),
-        Guarantee::New(
-            FactVariant::RuntimeObserved,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::Project,
-        ),
+        guarantee,
         "a provider claiming runtime observation for a capability about declared \
          dependency edges would satisfy every rule that needs it",
     );

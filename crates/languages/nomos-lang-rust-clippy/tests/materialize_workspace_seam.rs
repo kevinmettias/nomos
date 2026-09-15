@@ -17,10 +17,29 @@ use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceE
 use nomos_analysis::GuaranteeDigest;
 use nomos_cap_lint::{Parse_Payload, Payload_Schema};
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
-use nomos_lang_rust_clippy::{Declared_Guarantee, FactContext, Materialize_Workspace};
+use nomos_lang_rust_clippy::{Declared_Guarantee, DiagnosticsFact, FactContext, Materialize_Workspace};
 use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
 use std::path::{Path, PathBuf};
 use nomos_platform_std::StdEnvironment;
+
+/// The source line the fabricated diagnostic attributes its own warning to -- any plausible
+/// line inside the fixture's own `src/lib.rs` would do, named so the fixture's JSON carries
+/// no bare literal.
+const FABRICATED_DIAGNOSTIC_LINE: u32 = 5;
+
+/// Fill bytes distinct enough that a context's three digests differ from one another; each
+/// value carries no meaning beyond "not equal to the others" -- the same convention
+/// `src/fact_context.rs`'s own inline tests already use.
+const VARIANT_DIGEST_FILL: u8 = 2;
+const CONFIGURATION_DIGEST_FILL: u8 = 3;
+
+/// The build-variant fill the different-variant context below uses -- distinct from
+/// [`VARIANT_DIGEST_FILL`] so the two contexts' own keys must file apart.
+const DIFFERENT_VARIANT_DIGEST_FILL: u8 = 9;
+
+/// The exit code `cargo clippy` reports for a real compile error -- `rustc`'s own
+/// `EXIT_FAILURE`, the value a real failing run carries rather than a clean zero exit.
+const COMPILE_FAILURE_EXIT_CODE: i32 = 101;
 
 /// `Discover_Workspace` absolutizes `root` against the real process working directory
 /// before relativizing any `package_id` against it (`Absolutized`, added for
@@ -102,7 +121,7 @@ fn Single_Member_Clippy_Output() -> String
             "level": "warning",
             "message": "unneeded return statement",
             "code": { "code": "clippy::needless_return" },
-            "spans": [{ "file_name": "src/lib.rs", "line_start": 5, "is_primary": true }]
+            "spans": [{ "file_name": "src/lib.rs", "line_start": FABRICATED_DIAGNOSTIC_LINE, "is_primary": true }]
         }
     })
     .to_string();
@@ -110,15 +129,12 @@ fn Single_Member_Clippy_Output() -> String
     return format!("{artifact}\n{message}\n");
 }
 
-/// Fill bytes distinct enough that a context's three digests differ from one another; each
-/// value carries no meaning beyond "not equal to the others" — the same convention
-/// `src/fact_context.rs`'s own inline tests already use.
 fn Context(generation: GenerationId) -> FactContext
 {
     return FactContext {
         snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
-        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
-        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
+        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_DIGEST_FILL; Digest128::BYTE_LENGTH])),
         generation,
     };
 }
@@ -167,31 +183,54 @@ fn Test_The_Facts_Key_Should_Depend_On_The_Build_Variant_But_Not_On_The_Generati
 {
     let launcher = FakeLauncher::Reporting(Single_Member_Clippy_Output());
     let base = Context(GenerationId::INITIAL);
-    let later_generation = FactContext { generation: GenerationId::INITIAL.Next(), ..base };
-    let different_variant =
-        FactContext { variant: BuildVariantId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])), ..base };
 
     let at_base = Materialize_Workspace(&Root(), base, &launcher, &StdEnvironment).expect("base context");
-    let at_later_generation = Materialize_Workspace(&Root(), later_generation, &launcher, &StdEnvironment).expect("later generation");
-    let at_different_variant = Materialize_Workspace(&Root(), different_variant, &launcher, &StdEnvironment).expect("different variant");
-
-    let key_at_base = at_base.first().expect("one member").fact.Key().Digest();
-    let key_at_later_generation = at_later_generation.first().expect("one member").fact.Key().Digest();
-    let key_at_different_variant = at_different_variant.first().expect("one member").fact.Key().Digest();
+    let at_later_generation = Materialize_Workspace(&Root(), Later_Generation(base), &launcher, &StdEnvironment).expect("later generation");
+    let at_different_variant = Materialize_Workspace(&Root(), Different_Variant(base), &launcher, &StdEnvironment).expect("different variant");
 
     assert_eq!(
-        key_at_base, key_at_later_generation,
+        Key_Of(&at_base),
+        Key_Of(&at_later_generation),
         "a later generation re-asks the same question and must file under the same key"
     );
     assert_ne!(
-        key_at_base, key_at_different_variant,
+        Key_Of(&at_base),
+        Key_Of(&at_different_variant),
         "two offers of the same subject under a different build variant must file apart"
     );
     assert_ne!(
-        at_base.first().expect("one member").fact.Generation(),
-        at_later_generation.first().expect("one member").fact.Generation(),
+        Single_Member(&at_base).fact.Generation(),
+        Single_Member(&at_later_generation).fact.Generation(),
         "the generation itself must still differ even though the key does not"
     );
+}
+
+/// `base`'s own context one generation later -- the same question, re-asked.
+fn Later_Generation(base: FactContext) -> FactContext
+{
+    return FactContext { generation: GenerationId::INITIAL.Next(), ..base };
+}
+
+/// `base`'s own context under a different build variant -- the same subject and generation,
+/// asked under a variant whose digest differs from [`VARIANT_DIGEST_FILL`]'s.
+fn Different_Variant(base: FactContext) -> FactContext
+{
+    let variant = BuildVariantId::From_Digest(Digest128::From_Bytes([DIFFERENT_VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH]));
+
+    return FactContext { variant, ..base };
+}
+
+/// The single fact a one-member stream materializes into -- the invariant the fixture's own
+/// [`Single_Member_Clippy_Output`] makes true, and the reason this `first()` is not a bet.
+fn Single_Member(facts: &[DiagnosticsFact]) -> &DiagnosticsFact
+{
+    return facts.first().expect("Single_Member_Clippy_Output names exactly one workspace member, so materializing it yields exactly one fact");
+}
+
+/// [`Single_Member`]'s own fact key, as the digest the store files it under.
+fn Key_Of(facts: &[DiagnosticsFact]) -> nomos_contracts::Digest128
+{
+    return Single_Member(facts).fact.Key().Digest();
 }
 
 /// The error that crosses the boundary: a real compile failure — `cargo clippy` exiting
@@ -202,7 +241,7 @@ fn Test_A_Non_Zero_Exit_Should_Refuse_Rather_Than_Report_A_Clean_Result()
 {
     let launcher = FakeLauncher {
         stdout: String::new(),
-        outcome: ExitOutcome::Exited { code: 101 },
+        outcome: ExitOutcome::Exited { code: COMPILE_FAILURE_EXIT_CODE },
         stderr: "error[E0308]: mismatched types".to_owned(),
     };
 

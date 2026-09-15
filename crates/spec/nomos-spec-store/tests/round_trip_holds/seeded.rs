@@ -5,8 +5,10 @@ use nomos_spec_store::{
     AUTHORED,
     DocumentSource,
     EditPreview,
+    FromNodeId,
     Seed_Governing_Records,
     SpecificationStore,
+    ToNodeId,
 };
 
 /// The one document behind a record.
@@ -14,7 +16,7 @@ pub(crate) fn Only_Document(store: &SpecificationStore, id: &str) -> DocumentSou
 {
     return store
         .Documents_Behind(id, None)
-        .expect("queries")
+        .expect("the seed stores a source document with every record it writes, so this id has a row")
         .first()
         .cloned()
         // A seeded record with no document behind it stored identity and not bytes, so every
@@ -25,8 +27,19 @@ pub(crate) fn Only_Document(store: &SpecificationStore, id: &str) -> DocumentSou
 }
 
 /// How many edges join two nodes, in the direction named.
-pub(crate) fn Edge_Count(store: &SpecificationStore, from: &str, to: &str) -> u32
+///
+/// The two positions are the crate's own node-identifier types rather than bare `&str`, so that
+/// a caller cannot hand the target where the source belongs and reverse the edge it is asking
+/// about. They accept a `&str` here because a sibling module of this test still calls with two
+/// of them.
+pub(crate) fn Edge_Count<'a>(
+    store: &SpecificationStore,
+    from: impl Into<FromNodeId<'a>>,
+    to: impl Into<ToNodeId<'a>>,
+) -> u32
 {
+    let from: FromNodeId<'a> = from.into();
+    let to: ToNodeId<'a> = to.into();
     return store
         .Connection()
         .query_row(
@@ -34,10 +47,10 @@ pub(crate) fn Edge_Count(store: &SpecificationStore, from: &str, to: &str) -> u3
              JOIN nodes f ON f.uid = r.from_node_uid
              JOIN nodes t ON t.uid = r.to_node_uid
              WHERE f.node_id = ?1 AND t.node_id = ?2",
-            rusqlite::params![from, to],
+            rusqlite::params![from.0, to.0],
             |row| return row.get(0),
         )
-        .expect("queries");
+        .expect("relations and nodes are both in the schema the store opened with, so the count runs");
 }
 
 /// What committing this edit to the synthetic record would change.
@@ -45,11 +58,11 @@ pub(crate) fn Previewed(store: &SpecificationStore, markdown: &str) -> EditPrevi
 {
     return store
         .Claim_For_Edit("D-900", None)
-        .expect("claims")
+        .expect("D-900 was written through the door by With_Synthetic, so the claim names it")
         .Stage(markdown, None)
-        .expect("stages")
+        .expect("the claim above came back editable, so replacing its body is allowed")
         .Preview(store)
-        .expect("previews");
+        .expect("previewing a staged edit writes nothing, so the open store can answer for it");
 }
 
 /// The synthetic record with its two sections in the other order and nothing else changed.
@@ -74,8 +87,10 @@ pub(crate) const SYNTHETIC_PATH: &str = "docs/records/D-900-a-synthetic-record.m
 
 pub(crate) fn Seeded() -> SpecificationStore
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    Seed_Governing_Records(&mut store).expect("seeds");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("In_Memory() applies this crate's schema in process, so opening a fresh store cannot fail");
+    Seed_Governing_Records(&mut store)
+        .expect("the governing records are compiled into the crate, so seeding them cannot fail");
     return store;
 }
 
@@ -93,14 +108,14 @@ pub(crate) fn Commit(store: &mut SpecificationStore, markdown: &str, rename: Opt
 {
     let preview = store
         .Claim_For_Edit("D-900", None)
-        .expect("claims")
+        .expect("Commit is only called with D-900, which With_Synthetic wrote before this")
         .Stage(markdown, rename)
-        .expect("stages")
+        .expect("the claim above is editable, so the replacement body this caller passed is staged")
         .Preview(store)
-        .expect("previews");
+        .expect("the stage above built an edit over the open store, so there is one to describe");
     let described = preview.Describe();
 
-    store.Commit_Edit(&preview).expect("commits");
+    store.Commit_Edit(&preview).expect("every caller of Commit stages a canonical edit, so the transaction writes");
 
     return described;
 }
@@ -119,5 +134,5 @@ pub(crate) fn Block_Uids(store: &SpecificationStore, path: &str) -> Vec<i64>
                 .query_map(rusqlite::params![path], |row| row.get(0))
                 .and_then(std::iter::Iterator::collect);
         })
-        .expect("reads uids");
+        .expect("source_blocks holds one row per block of every seeded document, so this path has uids");
 }

@@ -10,12 +10,21 @@ use nomos_contracts::{ConfigurationId, Digest128};
 use nomos_model::Content_Digest;
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
 
+/// The byte this fixture's configuration digest repeats across its length. Which byte it is
+/// carries no meaning; that it is fixed is what makes two runs comparable.
+const FIXTURE_CONFIGURATION_BYTE: u8 = 0x42;
+
+// The variant is built into a local rather than inlined into `Workspace::Empty`, so that the
+// value handed to the constructor has a name.
 fn Fresh_Workspace() -> Workspace
 {
-    return Workspace::Empty(
-        BuildVariant::New("x86_64-pc-windows-msvc", "dev", "1.85", ["analysis"]),
-        ConfigurationId::From_Digest(Digest128::From_Bytes([0x42; Digest128::BYTE_LENGTH])),
-    );
+    let variant = BuildVariant::New("x86_64-pc-windows-msvc", "dev", "1.85", ["analysis"]);
+    let configuration = ConfigurationId::From_Digest(Digest128::From_Bytes([
+        FIXTURE_CONFIGURATION_BYTE;
+        Digest128::BYTE_LENGTH
+    ]));
+
+    return Workspace::Empty(variant, configuration);
 }
 
 /// The happy path: content written through the one door reads back at exactly
@@ -42,7 +51,9 @@ fn Test_Different_Content_Should_Not_Share_Nomos_Models_Digest()
 {
     let mut workspace = Fresh_Workspace();
     let changes = WorkspaceChangeSet::From(ChangeSource::IdeEdit).Present("src/a.rs", "fn a() {}");
-    workspace.Apply(&changes).expect("applies");
+    workspace
+        .Apply(&changes)
+        .expect("src/a.rs is workspace-relative, which is the only thing the door refuses");
 
     assert_ne!(
         workspace.Content_Of("src/a.rs"),

@@ -4,6 +4,28 @@ use crate::key::{Base, Configuration, Snapshot, Stored, Subject, Varied};
 use nomos_analysis::{Component, FactKey, FactStore, MaterializedFact, MemoryFactStore};
 use nomos_contracts::{GenerationId, SnapshotId};
 
+/// The position each `Component` variant occupies in `Component::All()`'s own order. They
+/// are named rather than written so an arm that drifts is a name to compare, and so the
+/// ordinal carries the meaning it has: this variant's place in the enumerated universe.
+const CONTRACT_ORDINAL: usize = 0;
+const CONTRACT_VERSION_ORDINAL: usize = 1;
+const SUBJECT_ORDINAL: usize = 2;
+const SEMANTIC_INPUTS_ORDINAL: usize = 3;
+const PROVIDER_ORDINAL: usize = 4;
+const PROVIDER_VERSION_ORDINAL: usize = 5;
+const GUARANTEE_ORDINAL: usize = 6;
+const VARIANT_ORDINAL: usize = 7;
+const CONFIGURATION_ORDINAL: usize = 8;
+
+/// The seed the two differing components are set to, matching [`Varied`]'s own substitution
+/// so a two-component key can be compared against the one-component keys.
+const VARIED_SEED: u8 = 9;
+
+/// The two trees the same fact is read from: the one it was measured at, and the one that
+/// asks the question again.
+const MEASURED_TREE_SEED: u8 = 2;
+const ASKING_TREE_SEED: u8 = 9;
+
 /// The same fact, read from a named tree.
 fn Fact_From(key: &FactKey, snapshot: SnapshotId) -> MaterializedFact
 {
@@ -25,15 +47,15 @@ fn Test_Every_Component_Should_Be_Matched_Exhaustively()
     {
         return match component
         {
-            Component::Contract => 0,
-            Component::ContractVersion => 1,
-            Component::Subject => 2,
-            Component::SemanticInputs => 3,
-            Component::Provider => 4,
-            Component::ProviderVersion => 5,
-            Component::Guarantee => 6,
-            Component::Variant => 7,
-            Component::Configuration => 8,
+            Component::Contract => CONTRACT_ORDINAL,
+            Component::ContractVersion => CONTRACT_VERSION_ORDINAL,
+            Component::Subject => SUBJECT_ORDINAL,
+            Component::SemanticInputs => SEMANTIC_INPUTS_ORDINAL,
+            Component::Provider => PROVIDER_ORDINAL,
+            Component::ProviderVersion => PROVIDER_VERSION_ORDINAL,
+            Component::Guarantee => GUARANTEE_ORDINAL,
+            Component::Variant => VARIANT_ORDINAL,
+            Component::Configuration => CONFIGURATION_ORDINAL,
         };
     }
 
@@ -100,8 +122,8 @@ fn Test_A_Change_In_Any_One_Component_Should_Miss_The_Cache()
 fn Test_Two_Components_Should_Not_Cancel_Each_Other_Out()
 {
     let mut both = Base();
-    both.subject = Subject(9);
-    both.configuration = Configuration(9);
+    both.subject = Subject(VARIED_SEED);
+    both.configuration = Configuration(VARIED_SEED);
 
     assert_ne!(both.Digest(), Base().Digest());
     assert_ne!(both.Digest(), Varied(Component::Subject).Digest());
@@ -120,8 +142,8 @@ fn Test_Two_Workspace_States_Should_Not_Produce_Two_Facts()
 {
     let key = Base();
     let mut store = MemoryFactStore::New();
-    let measured = Fact_From(&key, Snapshot(2));
-    let asked_again = Fact_From(&key, Snapshot(9));
+    let measured = Fact_From(&key, Snapshot(MEASURED_TREE_SEED));
+    let asked_again = Fact_From(&key, Snapshot(ASKING_TREE_SEED));
 
     assert_eq!(
         measured.Key().Digest(),
@@ -136,7 +158,7 @@ fn Test_Two_Workspace_States_Should_Not_Produce_Two_Facts()
 
     assert_eq!(
         served.snapshot,
-        Snapshot(2),
+        Snapshot(MEASURED_TREE_SEED),
         "and what it serves still names the tree it was read from. A reused fact is not a \
          repeated observation, so its provenance must not be restamped"
     );

@@ -2,19 +2,24 @@
 
 use super::*;
 
+/// A statement's recorded canonical hash, kept distinct from its text so a call site cannot
+/// hand the two over in the wrong order.
+struct RecordedHash<'a>(&'a str);
+
 fn Store() -> SpecificationStore
 {
-    return SpecificationStore::In_Memory().expect("opens");
+    return SpecificationStore::In_Memory()
+        .expect("an in-memory store opens against no file, so this construction has no failure");
 }
 
-fn Statements(text: &str, hash: &str) -> StatementFile
+fn Statements(text: &str, hash: RecordedHash<'_>) -> StatementFile
 {
     return StatementFile {
         statements: vec![RecordedStatement {
             id: "AGT-001".to_owned(),
             kind: "Requirement".to_owned(),
             canonical_text: text.to_owned(),
-            canonical_hash: hash.to_owned(),
+            canonical_hash: hash.0.to_owned(),
             source_document: "a.md".to_owned(),
         }],
     };
@@ -24,9 +29,10 @@ fn Statements(text: &str, hash: &str) -> StatementFile
 fn Test_A_Matching_Statement_Should_Ingest_Cleanly()
 {
     let text = "Nomos shall do the thing.";
-    let file = Statements(text, ContentHash::Of(text).As_String_Slice());
+    let file = Statements(text, RecordedHash(ContentHash::Of(text).As_String_Slice()));
 
-    let report = Ingest_Statements(&mut Store(), &file).expect("ingests");
+    let report = Ingest_Statements(&mut Store(), &file)
+        .expect("the fixture's statement is well formed, so ingestion reports rather than refuses");
 
     assert!(report.Is_Passing());
     assert_eq!(report.ingested, 1);
@@ -37,9 +43,10 @@ fn Test_A_Matching_Statement_Should_Ingest_Cleanly()
 #[test]
 fn Test_A_Divergent_Hash_Should_Be_Reported_By_Id()
 {
-    let file = Statements("Nomos shall do the thing.", "sha256:0000");
+    let file = Statements("Nomos shall do the thing.", RecordedHash("sha256:0000"));
 
-    let report = Ingest_Statements(&mut Store(), &file).expect("ingests");
+    let report = Ingest_Statements(&mut Store(), &file)
+        .expect("a hash that disagrees with its text is reported in the report, never refused");
 
     assert!(!report.Is_Passing());
     assert_eq!(
@@ -54,9 +61,10 @@ fn Test_A_Divergent_Hash_Should_Be_Reported_By_Id()
 fn Test_Non_Canonical_Text_Should_Be_Reported()
 {
     let text = "Nomos  shall\ndo the thing.";
-    let file = Statements(text, ContentHash::Of(text).As_String_Slice());
+    let file = Statements(text, RecordedHash(ContentHash::Of(text).As_String_Slice()));
 
-    let report = Ingest_Statements(&mut Store(), &file).expect("ingests");
+    let report = Ingest_Statements(&mut Store(), &file)
+        .expect("non-canonical text is reported in the report, so ingestion itself still succeeds");
 
     assert!(!report.Is_Passing(), "the hash matches but the text is not canonical");
     assert!(report.divergences.is_empty());
@@ -67,7 +75,7 @@ fn Test_Non_Canonical_Text_Should_Be_Reported()
 fn Test_An_Empty_Statement_File_Should_Not_Pass()
 {
     let report = Ingest_Statements(&mut Store(), &StatementFile { statements: Vec::new() })
-        .expect("ingests");
+        .expect("an empty statement file is a report of nothing ingested, not a refusal");
 
     assert!(!report.Is_Passing(), "ingesting nothing is not a clean ingest");
 }
@@ -78,12 +86,16 @@ fn Test_Ingest_Should_Be_Idempotent()
     let mut store = Store();
     let markdown = "# Title\n\nOne.\n";
 
-    let first = Ingest_Source_Document(&mut store, "a.md", "v14.36", markdown).expect("first");
-    let second = Ingest_Source_Document(&mut store, "a.md", "v14.36", markdown).expect("second");
+    let first = Ingest_Source_Document(&mut store, "a.md", "v14.36", markdown)
+        .expect("a markdown document with one heading ingests as its own source document");
+    let second = Ingest_Source_Document(&mut store, "a.md", "v14.36", markdown)
+        .expect("re-ingesting the same document takes the same path, so it reports once more");
 
     assert_eq!(first, second);
     assert_eq!(
-        store.Count(nomos_spec_store::Table::SourceBlocks).expect("counts"),
+        store
+            .Count(nomos_spec_store::Table::SourceBlocks)
+            .expect("the store answers a count over the tables it owns"),
         first
     );
 }
@@ -96,11 +108,15 @@ fn Test_A_Statements_Node_Kind_Should_Match_The_Catalogs_Vocabulary()
 {
     let mut store = Store();
     let text = "Nomos shall do the thing.";
-    let file = Statements(text, ContentHash::Of(text).As_String_Slice());
+    let file = Statements(text, RecordedHash(ContentHash::Of(text).As_String_Slice()));
 
-    Ingest_Statements(&mut store, &file).expect("ingests");
+    Ingest_Statements(&mut store, &file)
+        .expect("the fixture's statement is well formed, so ingestion reports rather than refuses");
 
-    let summary = store.Node_Summary("AGT-001").expect("reads").expect("node exists");
+    let summary = store
+        .Node_Summary("AGT-001")
+        .expect("the store answers a summary lookup over the nodes it owns")
+        .expect("the ingest above committed a node named AGT-001");
     assert_eq!(summary.kind, "requirement");
 
     let stored_kind: String = store
@@ -127,9 +143,15 @@ fn Test_Catalog_Entities_Should_Become_Nodes_With_Aliases()
         aliases: vec!["AGT-010".to_owned()],
     }];
 
-    let report = Ingest_Catalog(&mut store, &entities).expect("ingests");
+    let report = Ingest_Catalog(&mut store, &entities)
+        .expect("the fixture's catalog entity is well formed, so ingestion reports rather than refuses");
 
     assert_eq!(report.nodes, 1);
     assert_eq!(report.aliases, 1);
-    assert_eq!(store.Count(nomos_spec_store::Table::Nodes).expect("counts"), 1);
+    assert_eq!(
+        store
+            .Count(nomos_spec_store::Table::Nodes)
+            .expect("the store answers a count over the tables it owns"),
+        1
+    );
 }

@@ -134,6 +134,21 @@ mod tests
         let kwb = Suite_In(&mut store, Sibling::Kwb);
 
         let mut first_report = SuiteReport::default();
+        Record_Shared_For_Xvpe(&mut store, xvpe, &mut first_report);
+
+        let mut second_report = SuiteReport::default();
+        Record_Shared_For_Kwb(&mut store, kwb, &mut second_report);
+
+        assert!(first_report.contested.is_empty());
+        assert_eq!(second_report.contested, vec!["shared-id".to_owned()]);
+    }
+
+    fn Record_Shared_For_Xvpe(
+        mut store: &mut SpecificationStore,
+        xvpe: Suite,
+        mut first_report: &mut SuiteReport,
+    )
+    {
         Record_Machine(
             &mut store,
             Declared {
@@ -146,8 +161,14 @@ mod tests
             &mut first_report,
         )
         .expect("records");
+    }
 
-        let mut second_report = SuiteReport::default();
+    fn Record_Shared_For_Kwb(
+        mut store: &mut SpecificationStore,
+        kwb: Suite,
+        mut second_report: &mut SuiteReport,
+    )
+    {
         Record_Machine(
             &mut store,
             Declared {
@@ -160,9 +181,6 @@ mod tests
             &mut second_report,
         )
         .expect("records");
-
-        assert!(first_report.contested.is_empty());
-        assert_eq!(second_report.contested, vec!["shared-id".to_owned()]);
     }
 
     #[test]

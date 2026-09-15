@@ -18,12 +18,17 @@ use nomos_lang_rust_cargo::{FactContext, Materialize_Workspace, PackageFact};
 use nomos_platform_std::{StdEnvironment, StdProcessLauncher};
 use std::path::{Path, PathBuf};
 
+/// Fill bytes distinct enough that the three digests below differ from one another; each
+/// value carries no meaning beyond "not equal to the others".
+const VARIANT_DIGEST_FILL: u8 = 2;
+const CONFIGURATION_DIGEST_FILL: u8 = 3;
+
 fn Context(generation: GenerationId) -> FactContext
 {
     return FactContext {
-        snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
+        snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
+        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_DIGEST_FILL; Digest128::BYTE_LENGTH])),
         generation,
     };
 }
@@ -84,28 +89,48 @@ impl Drop for Fixture
     }
 }
 
+/// Alpha's first fact as the store took it: the key it is addressed by, the generation it
+/// was written at, and the subject the edit will later invalidate -- the three things every
+/// assertion below reads the store back by, named rather than returned as a bare tuple.
+struct Initial
+{
+    key: FactKey,
+    generation: GenerationId,
+    subject: SubjectId,
+}
+
+/// The refreshed fact and the key it is addressed by, for the same reason as [`Initial`].
+struct Refreshed
+{
+    key: FactKey,
+    fact: PackageFact,
+}
+
 #[test]
 fn Test_An_Edited_Manifests_Old_Fact_Should_Not_Survive_The_Generation_It_Was_Invalidated_At()
 {
     let fixture = Fixture::New("survive");
     let mut store = MemoryFactStore::New();
 
-    let (old_key, old_generation, alpha_subject) = Materialize_And_Store_Initial(&fixture, &mut store);
+    let Initial { key: old_key, generation: old_generation, subject: alpha_subject } = Materialize_And_Store_Initial(&fixture, &mut store);
     Assert_Initial_Fact_Readable(&store, &old_key, old_generation);
 
     let next = GenerationId::INITIAL.Next();
     let report = Drop_Edge_And_Invalidate(&fixture, &mut store, alpha_subject, next);
-    Assert_Invalidation_Report(&report, &old_key, &store, old_generation, next);
+    Assert_Invalidation_Report(&report, &old_key);
+    Assert_Pre_Edit_Fact_Is_Not_Current(&store, &old_key, old_generation, next);
 
     let historical_fact = Assert_Historical_Fact(&store, &old_key, next);
 
-    let (new_key, alpha_after) = Materialize_And_Store_Refresh(&fixture, &mut store, next);
-    Assert_Refreshed_Fact_Current(&store, &new_key, next, &alpha_after, &historical_fact);
+    let Refreshed { key: new_key, fact: alpha_after } = Materialize_And_Store_Refresh(&fixture, &mut store, next);
+    let current = Refreshed_Current(&store, &new_key, next);
+    Assert_Refreshed_Payload(&current, &alpha_after);
+    Assert_Stale_Payload_Differs(&current, &historical_fact);
 }
 
 /// Materializes alpha's fact at the initial generation, stores it, and returns its key,
 /// generation, and subject — everything the rest of this test invalidates and re-reads by.
-fn Materialize_And_Store_Initial(fixture: &Fixture, store: &mut MemoryFactStore) -> (FactKey, GenerationId, SubjectId)
+fn Materialize_And_Store_Initial(fixture: &Fixture, store: &mut MemoryFactStore) -> Initial
 {
     let initial = Materialize_Workspace(fixture.Path(), Context(GenerationId::INITIAL), &StdProcessLauncher, &StdEnvironment)
         .expect("a real cargo workspace with an edge");
@@ -117,13 +142,13 @@ fn Materialize_And_Store_Initial(fixture: &Fixture, store: &mut MemoryFactStore)
         !alpha_before.fact.payload.bytes.is_empty(),
         "a real dependency payload was written"
     );
-    let old_key = alpha_before.fact.Key().clone();
-    let old_generation = alpha_before.fact.Generation();
+    let key = alpha_before.fact.Key().clone();
+    let generation = alpha_before.fact.Generation();
     store
         .Materialize(alpha_before.fact.clone(), &[])
         .expect("the first generation's fact is never backdated");
 
-    return (old_key, old_generation, alpha_before.subject);
+    return Initial { key, generation, subject: alpha_before.subject };
 }
 
 fn Assert_Initial_Fact_Readable(store: &MemoryFactStore, old_key: &FactKey, old_generation: GenerationId)
@@ -154,19 +179,20 @@ fn Drop_Edge_And_Invalidate(
     );
 }
 
-fn Assert_Invalidation_Report(
-    report: &InvalidationReport,
-    old_key: &FactKey,
-    store: &MemoryFactStore,
-    old_generation: GenerationId,
-    next: GenerationId,
-)
+/// What the invalidation reached, from the store's own report.
+fn Assert_Invalidation_Report(report: &InvalidationReport, old_key: &FactKey)
 {
     assert_eq!(
         report.direct,
         vec![old_key.clone()],
         "the edited package's own fact is what the cause names: {report:#?}"
     );
+}
+
+/// And what it left behind: the pre-edit fact is gone as the *current* fact, though not as
+/// history -- [`Assert_Historical_Fact`] is the other half of that same claim.
+fn Assert_Pre_Edit_Fact_Is_Not_Current(store: &MemoryFactStore, old_key: &FactKey, old_generation: GenerationId, next: GenerationId)
+{
     assert!(
         store.Current(&old_key.clone().At(old_generation), next).is_none(),
         "the pre-edit fact must not survive as current at the generation it was invalidated at"
@@ -189,7 +215,7 @@ fn Assert_Historical_Fact(store: &MemoryFactStore, old_key: &FactKey, next: Gene
 
 /// Re-runs `cargo metadata` at the post-edit generation, stores the refreshed fact, and
 /// returns its key alongside the fact itself.
-fn Materialize_And_Store_Refresh(fixture: &Fixture, store: &mut MemoryFactStore, next: GenerationId) -> (FactKey, PackageFact)
+fn Materialize_And_Store_Refresh(fixture: &Fixture, store: &mut MemoryFactStore, next: GenerationId) -> Refreshed
 {
     let refreshed = Materialize_Workspace(fixture.Path(), Context(next), &StdProcessLauncher, &StdEnvironment)
         .expect("a real cargo workspace with the edge removed");
@@ -197,32 +223,38 @@ fn Materialize_And_Store_Refresh(fixture: &Fixture, store: &mut MemoryFactStore,
         .into_iter()
         .find(|package| package.path == "alpha")
         .expect("alpha is still a workspace member");
-    let new_key = alpha_after.fact.Key().clone();
+    let key = alpha_after.fact.Key().clone();
     store
         .Materialize(alpha_after.fact.clone(), &[])
         .expect("the later generation's fact is not backdated against the invalidated one");
 
-    return (new_key, alpha_after);
+    return Refreshed { key, fact: alpha_after };
 }
 
-fn Assert_Refreshed_Fact_Current(
-    store: &MemoryFactStore,
-    new_key: &FactKey,
-    next: GenerationId,
-    alpha_after: &PackageFact,
-    historical_fact: &MaterializedFact,
-)
+/// The fact the store itself calls current at `next`, addressed by `key` -- read back out
+/// of the store rather than taken from the value the caller just wrote.
+fn Refreshed_Current(store: &MemoryFactStore, key: &FactKey, next: GenerationId) -> MaterializedFact
 {
-    let current = store
-        .Current(&new_key.clone().At(next), next)
+    return store
+        .Current(&key.clone().At(next), next)
         .expect("the re-materialized fact is current at the generation it was written");
+}
+
+/// The current fact at the new generation is the edited one.
+fn Assert_Refreshed_Payload(current: &MaterializedFact, alpha_after: &PackageFact)
+{
     assert_eq!(
         current.payload.bytes, alpha_after.fact.payload.bytes,
         "the current fact at the new generation is the edited one, not the stale edge"
     );
+}
+
+/// And it differs from what the pre-edit generation held -- without this the other half
+/// proves nothing about which fact survived.
+fn Assert_Stale_Payload_Differs(current: &MaterializedFact, historical_fact: &MaterializedFact)
+{
     assert_ne!(
         current.payload.bytes, historical_fact.payload.bytes,
-        "the edited manifest must actually have produced a different payload, or this test \
-         proves nothing about which fact survived"
+        "the edited manifest must actually have produced a different payload, or this test proves nothing about which fact survived"
     );
 }

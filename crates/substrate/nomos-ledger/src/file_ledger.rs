@@ -1,13 +1,5 @@
 //! The durable ledger: a JSON file, a lock beside it, and the rules it must satisfy.
 
-// file-size: allow: this file is the FileLedger struct, its two impl blocks -- one
-// type's own surface, whose doc comments carry the "why" for
-// OD-LEDGER-008/009/012/015/019/021 inline -- and that type's own per-method test
-// suite. check-test-coverage keys a test's companion unit off the literal file it is
-// textually written in, so these tests cannot move to a sibling file without losing
-// their one-file address; splitting either impl block would also put one type's
-// methods behind two module paths for no cohesion gained.
-
 // The ledger file as a document, beside the reader that parses one.
 #[path = "store/ledger_document.rs"]
 mod ledger_document;
@@ -49,8 +41,14 @@ mod constants;
 #[path = "store/board_files.rs"]
 mod board_files;
 
-use claiming::{Install_Claim, With_Own_Claim};
-use file::{Decide_Under_Lock, Load_Document, Save_Document};
+// The bodies of the three verbs `ExclusionLedger` declares, beside the file's other
+// bodies. They answer one question between them -- whether a holder may have an item,
+// and for how long -- which is why they are together and not scattered.
+#[path = "store/exclusion_verbs.rs"]
+mod exclusion_verbs;
+
+use exclusion_verbs::{Claim_Item, Release_Item, Renew_Item};
+use file::{Load_Document, Save_Document, With_Lock_Run};
 use verbs::{Add_Item, Decline_Item, Take_Over, Validate_Current, Widen_Territory};
 
 pub use refusal::{Claim_Refusal, Eligible_Items};
@@ -63,11 +61,10 @@ use std::time::Duration;
 
 use nomos_platform::{Clock, CrossProcessLock, FileSystem, StaleTakeover, Timestamp};
 
-use crate::Claim;
 use crate::ClaimRefusal;
 use crate::DeclineReason;
 use crate::Holder;
-use crate::exclusion::{Check_Lease, ExclusionLedger};
+use crate::exclusion::ExclusionLedger;
 use crate::LedgerItem;
 use crate::ItemId;
 use crate::LedgerError;
@@ -241,27 +238,7 @@ FileLedger<Files, TimeSource, Lock>
         modify: impl FnOnce(&mut LedgerDocument) -> Result<Outcome, LedgerError>,
     ) -> Result<(Outcome, Option<StaleTakeover>), LedgerError>
     {
-        let acquisition = self
-            .lock
-            .Acquire(holder, LOCK_WAIT_LIMIT, LOCK_STALE_AFTER)
-            .map_err(|error| LedgerError::Locked {
-                cause: error.to_string(),
-            })?;
-
-        let read = self.Load()?;
-        let mut document = read.clone();
-        let outcome = modify(&mut document)?;
-
-        if document != read
-        {
-            self.Save(&document)?;
-        }
-
-        // The takeover travels out with the result rather than being logged here. A
-        // caller that surfaces it can tell the user their predecessor abandoned an
-        // update; a caller that drops it has made a choice, and this signature is what
-        // makes that choice visible in review.
-        return Ok((outcome, acquisition.broke_stale));
+        return With_Lock_Run(self, holder, modify);
     }
 
     /// Enlarges a held item's territory, keeping what the enlargement added.
@@ -476,33 +453,7 @@ for FileLedger<Files, TimeSource, Lock>
         lease: Duration,
     ) -> Result<Reservation, ClaimRefusal>
     {
-        Check_Lease(lease)?;
-
-        // The refusal is decided and the grant is written under one acquisition. Deciding
-        // outside it is not a narrower window, it is the same defect: what the check reads
-        // and what the write is based on are the same snapshot, and another session can
-        // replace the file between them.
-        return Decide_Under_Lock(self, holder, |document, now| {
-            let expires_at = now.Plus(lease);
-
-            if let Some(refusal) = Claim_Refusal(document, item, now)
-            {
-                return Err(refusal);
-            }
-
-            let granted = Claim {
-                holder: holder.to_owned(),
-                acquired_at: now,
-                lease_expires_at: expires_at,
-            };
-            Install_Claim(document, item, &granted);
-
-            return Ok(Reservation {
-                item: item.clone(),
-                holder: holder.to_owned(),
-                expires_at,
-            });
-        });
+        return Claim_Item(self, item, holder, lease);
     }
 
     fn Renew(
@@ -512,27 +463,7 @@ for FileLedger<Files, TimeSource, Lock>
         lease: Duration,
     ) -> Result<Reservation, ClaimRefusal>
     {
-        Check_Lease(lease)?;
-
-        // A lost renewal does not look like a lost write. It looks like a lease that ran
-        // out early, which reads as an agent that died — so this verb being outside the
-        // lock sent whoever noticed to investigate the wrong thing.
-        return Decide_Under_Lock(self, holder, |document, now| {
-            let expires_at = now.Plus(lease);
-
-            With_Own_Claim(document, item, holder, |candidate| {
-                if let Some(claim) = &mut candidate.claim
-                {
-                    claim.lease_expires_at = expires_at;
-                }
-            })?;
-
-            return Ok(Reservation {
-                item: item.clone(),
-                holder: holder.to_owned(),
-                expires_at,
-            });
-        });
+        return Renew_Item(self, item, holder, lease);
     }
 
     fn Release(
@@ -542,297 +473,11 @@ for FileLedger<Files, TimeSource, Lock>
         outcome: ReleaseOutcome,
     ) -> Result<(), ClaimRefusal>
     {
-        // This is the write [`crate::Finish`] performs once its predicate has passed, and
-        // the reason the lock is taken here rather than around finishing: the predicate is
-        // minutes of somebody else's test suite and holds nothing, while the recording of
-        // its verdict is this, and is milliseconds. A verdict recorded outside the lock is
-        // an agent told its work was written down over a board that has since forgotten it.
-        return Decide_Under_Lock(self, holder, |document, now| {
-            // Both arms, written once, in `ReleaseOutcome::Record_On`. Spelling them out at
-            // the call site is what let this store keep the finished arm's evidence and drop
-            // the abandoned arm's.
-            return With_Own_Claim(document, item, holder, |candidate| {
-                outcome.Record_On(candidate, holder, now);
-            });
-        });
+        return Release_Item(self, item, holder, outcome);
     }
 
 }
 
 #[cfg(test)]
-mod tests
-{
-    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
-    use super::*;
-    use crate::{ItemKind, ItemOrigin, ItemState};
-    use nomos_platform_std::{FileLock, StdFileSystem};
-
-    /// A clock that never moves, so a test's fixture and its assertions read the same
-    /// instant the ledger did.
-    struct FixedClock(i64);
-
-    /// Fixed instants, so both the values and their timing reproduce.
-    impl Strategy for FixedClock
-    {
-        const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
-        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
-        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
-    }
-
-    impl Clock for &FixedClock
-    {
-        fn Now(&self) -> Timestamp
-        {
-            return Timestamp::From_Unix_Seconds(self.0);
-        }
-    }
-
-    #[test]
-    fn Test_At_Should_Remember_The_Ledger_File_Location()
-    {
-        let directory = Temporary_Directory("at");
-        let clock = FixedClock(1_000);
-        let target = directory.join("ledger.json");
-
-        let ledger = Ledger_At(&directory, &clock);
-
-        assert_eq!(ledger.Path(), target.as_path());
-    }
-
-    #[test]
-    fn Test_Path_Should_Return_The_File_This_Ledger_Reads_And_Writes()
-    {
-        let directory = Temporary_Directory("path");
-        let clock = FixedClock(1_000);
-        let ledger = Ledger_At(&directory, &clock);
-
-        assert_eq!(ledger.Path(), directory.join("ledger.json").as_path());
-    }
-
-    #[test]
-    fn Test_Read_File_Should_Surface_The_Underlying_Cause_As_Text()
-    {
-        let directory = Temporary_Directory("read-file");
-        let clock = FixedClock(1_000);
-        let ledger = Ledger_At(&directory, &clock);
-        let missing = directory.join("missing.txt");
-
-        let error = ledger.Read_File(&missing).expect_err("a missing file cannot be read");
-
-        assert!(error.contains("does not exist"), "the cause must be legible, got: {error}");
-    }
-
-    #[test]
-    fn Test_Now_Should_Reflect_The_Ledgers_Own_Clock()
-    {
-        let directory = Temporary_Directory("now");
-        let clock = FixedClock(4_242);
-        let ledger = Ledger_At(&directory, &clock);
-
-        assert_eq!(ledger.Now(), Timestamp::From_Unix_Seconds(4_242));
-    }
-
-    #[test]
-    fn Test_Load_Should_Answer_An_Empty_Document_When_Nothing_Was_Written()
-    {
-        let directory = Temporary_Directory("load-missing");
-        let clock = FixedClock(1_000);
-        let ledger = Ledger_At(&directory, &clock);
-
-        let document = ledger.Load().expect("a missing ledger is an empty one, not an error");
-
-        assert_eq!(document.schema_version, SCHEMA_VERSION);
-        assert!(document.items.is_empty());
-    }
-
-    #[test]
-    fn Test_Save_Should_Write_A_Document_That_Reads_Back_Unchanged()
-    {
-        let directory = Temporary_Directory("save");
-        let clock = FixedClock(1_000);
-        let ledger = Ledger_At(&directory, &clock);
-        let document = LedgerDocument {
-            schema_version: SCHEMA_VERSION,
-            items: vec![Workable_Item("SAVE-1")],
-        };
-
-        ledger.Save(&document).expect("a valid document must be writable");
-        let reloaded = ledger.Load().expect("what was just written must be readable");
-
-        assert_eq!(reloaded, document);
-    }
-
-    #[test]
-    fn Test_With_Lock_Should_Run_The_Modification_And_Persist_A_Real_Change()
-    {
-        let directory = Temporary_Directory("with-lock");
-        let clock = FixedClock(1_000);
-        let ledger = Ledger_At(&directory, &clock);
-        let item = Workable_Item("LOCK-1");
-
-        let (outcome, takeover) = ledger
-            .With_Lock("agent-a", |document| {
-                document.items.push(item.clone());
-                return Ok(item.id.clone());
-            })
-            .expect("a plain modification must succeed");
-
-        assert_eq!(outcome, item.id);
-        assert!(takeover.is_none(), "a fresh lock is never a stale takeover");
-        let reloaded = ledger.Load().expect("the modification must have been written");
-        assert_eq!(reloaded.items.len(), 1);
-    }
-
-    #[test]
-    fn Test_Take_Over_Should_Replace_A_Lapsed_Claim_With_A_Fresh_One()
-    {
-        let directory = Temporary_Directory("take-over");
-        let clock = FixedClock(10_000);
-        let mut ledger = Ledger_At(&directory, &clock);
-        let mut item = Workable_Item("TAKE-1");
-        item.state = ItemState::Claimed;
-        item.claim = Some(Claim {
-            holder: "dead-agent".to_owned(),
-            acquired_at: Timestamp::From_Unix_Seconds(1_000),
-            lease_expires_at: Timestamp::From_Unix_Seconds(2_000),
-        });
-        ledger
-            .Save(&LedgerDocument { schema_version: SCHEMA_VERSION, items: vec![item] })
-            .expect("a claimed item is still a valid document");
-
-        let reservation = ledger
-            .Take_Over(&ItemId::New("TAKE-1"), "agent-b", Duration::from_secs(3_600))
-            .expect("a lapsed claim must be takeable");
-
-        assert_eq!(reservation.holder, "agent-b");
-        let reloaded = ledger.Load().expect("the takeover must have been written");
-        let taken = reloaded.items.first().expect("the item survives its takeover");
-        assert_eq!(
-            taken.claim.as_ref().map(|claim| return claim.holder.as_str()),
-            Some("agent-b")
-        );
-        assert_eq!(taken.displaced.len(), 1, "the displaced claim must be kept, not dropped");
-    }
-
-    #[test]
-    fn Test_Decline_Should_End_A_Ready_Item_With_No_Claim_At_All()
-    {
-        let directory = Temporary_Directory("decline");
-        let clock = FixedClock(1_000);
-        let mut ledger = Ledger_At(&directory, &clock);
-        ledger
-            .Save(&LedgerDocument {
-                schema_version: SCHEMA_VERSION,
-                items: vec![Workable_Item("DECLINE-1")],
-            })
-            .expect("a ready item is a valid document");
-
-        ledger
-            .Decline(&ItemId::New("DECLINE-1"), "agent-a", "superseded")
-            .expect("a ready, unclaimed item may be declined");
-
-        let reloaded = ledger.Load().expect("the decline must have been written");
-        let declined = reloaded.items.first().expect("the item survives its decline");
-        assert_eq!(
-            declined.state,
-            ItemState::Declined { reason: "superseded".to_owned() }
-        );
-    }
-
-    #[test]
-    fn Test_Add_Should_Put_A_New_Item_On_The_Board()
-    {
-        let directory = Temporary_Directory("add");
-        let clock = FixedClock(1_000);
-        let mut ledger = Ledger_At(&directory, &clock);
-        let item = Workable_Item("ADD-1");
-
-        ledger
-            .Add(&item, "agent-a", &Territory::Empty(), &Territory::Empty())
-            .expect("a fresh identifier over an empty board must be accepted");
-
-        let reloaded = ledger.Load().expect("the add must have been written");
-        assert_eq!(reloaded.items.len(), 1);
-        assert_eq!(reloaded.items.first().expect("the assertion above found exactly one item").id, item.id);
-    }
-
-    #[test]
-    fn Test_Validate_Current_Should_Report_A_Duplicate_Identifier_Written_To_Disk()
-    {
-        let directory = Temporary_Directory("validate-current");
-        let clock = FixedClock(1_000);
-        let ledger = Ledger_At(&directory, &clock);
-        // Written directly rather than through `Save`, which would itself refuse this
-        // document -- this test is about `Validate_Current` surfacing what is already on
-        // disk, not about `Save`'s own guard.
-        let duplicated = LedgerDocument {
-            schema_version: SCHEMA_VERSION,
-            items: vec![Workable_Item("DUP-1"), Workable_Item("DUP-1")],
-        };
-        let raw = serde_json::to_string(&duplicated).expect("the fixture document serializes");
-        std::fs::write(ledger.Path(), raw).expect("test can write the raw fixture directly");
-
-        let error = ledger
-            .Validate_Current()
-            .expect_err("a repeated identifier violates an invariant");
-
-        assert!(
-            matches!(
-                &error,
-                LedgerError::Invalid { violations } if violations.iter().any(|line| line.contains("more than once"))
-            ),
-            "expected a duplicate-identifier violation, got {error:?}"
-        );
-    }
-
-    /// A scratch directory this test owns outright, named for the test so two tests
-    /// running at once never share one file.
-    fn Temporary_Directory(name: &str) -> PathBuf
-    {
-        let mut path = std::env::temp_dir();
-        path.push(format!("nomos-file-ledger-{name}-{}", std::process::id()));
-        // error-info: allow this is a best-effort clean slate before creating the directory fresh below
-        let _ = std::fs::remove_dir_all(&path);
-        std::fs::create_dir_all(&path).expect("test needs a temp directory");
-        return path;
-    }
-
-    /// A real ledger over a real file, exactly as every caller of this type gets one.
-    fn Ledger_At<'clock>(
-        directory: &Path,
-        clock: &'clock FixedClock,
-    ) -> FileLedger<StdFileSystem, &'clock FixedClock, FileLock>
-    {
-        return FileLedger::At(
-            directory.join("ledger.json"),
-            StdFileSystem,
-            clock,
-            FileLock::At(directory.join("ledger.lock")),
-        );
-    }
-
-    /// A `Ready` item with a non-empty territory of its own, so it can sit on a board
-    /// without itself violating [`Validate_Document`]'s "reserves nothing" rule.
-    fn Workable_Item(id: &str) -> LedgerItem
-    {
-        return LedgerItem {
-            id: ItemId::New(id),
-            title: "an item".to_owned(),
-            why: "because".to_owned(),
-            done_when: "when it is done".to_owned(),
-            kind: ItemKind::Correction,
-            origin: ItemOrigin::Proposed,
-            territory: Territory::Of_Files([format!("src/{id}.rs")]),
-            state: ItemState::Ready,
-            depends_on: Vec::new(),
-            blocked: None,
-            claim: None,
-            verification: None,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            widened: Vec::new(),
-            declined: None,
-        };
-    }
-}
+#[path = "store/tests/file_ledger.rs"]
+mod tests;

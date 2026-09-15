@@ -4,6 +4,9 @@ use crate::populated::{Populated, Rebuilt_From, Records_In};
 use nomos_spec_bundle::{Export, Record};
 use nomos_spec_store::{SpecificationStore, Table};
 
+/// The fixture's table: a separator, a header and one content row.
+const FIXTURE_TABLE_ROWS: u32 = 3;
+
 /// The fixture carries a table, and the bundle carries its rows.
 ///
 /// `Test_Every_Table_Should_Be_Exercised` already refuses an empty `source_table_rows`, so
@@ -14,14 +17,14 @@ use nomos_spec_store::{SpecificationStore, Table};
 fn Test_The_Bundle_Should_Carry_Typed_Table_Rows()
 {
     let store = Populated();
-    let rows = store.Count(Table::SourceTableRows).expect("counts");
+    let rows = store.Count(Table::SourceTableRows).expect("Table::SourceTableRows names a schema table");
 
     assert!(
-        rows >= 3,
+        rows >= FIXTURE_TABLE_ROWS,
         "the fixture no longer holds a table, so the row round trip is not being tested"
     );
 
-    let bundle = Export(&store).expect("exports");
+    let bundle = Export(&store).expect("Export ran over the store Populated() filled");
     let exported = Records_In(&bundle, Table::SourceTableRows);
     let rebuilt = Rebuilt_From(&bundle);
 
@@ -61,7 +64,7 @@ fn Assert_The_Row_Kinds_Survived(rebuilt: &SpecificationStore)
 fn Test_A_Lineage_To_A_Table_Row_Should_Survive_The_Round_Trip()
 {
     let source = Populated();
-    let bundle = Export(&source).expect("exports");
+    let bundle = Export(&source).expect("Export ran over the store Populated() filled");
     let carried = bundle
         .Records()
         .iter()

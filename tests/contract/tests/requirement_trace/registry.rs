@@ -34,9 +34,9 @@ pub(crate) fn Entries(directory: &Path) -> Result<Vec<Assessment>, String>
 }
 
 /// One entry, or the reason it is not one.
-pub(crate) fn Parse(stem: &str, text: &str) -> Result<Assessment, String>
+pub(crate) fn Parse(source: nomos_cap_requirement_trace::EntrySource<'_>) -> Result<Assessment, String>
 {
-    return nomos_cap_requirement_trace::Parse(stem, text);
+    return nomos_cap_requirement_trace::Parse(source);
 }
 
 /// Whether a string is a corpus requirement identifier: a family, then three digits.

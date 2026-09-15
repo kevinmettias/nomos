@@ -9,15 +9,25 @@ const SAMPLE: &str = "unexpanded\t2\n\
                       item\t1\tConstant\tPublic\tTABLES\t+Mirrored by `Test_X`.\t+slice\n\
                       item\t2\tFunction\tNotApplicable\tJudged::Two\t-\t-\n";
 
+/// The `unexpanded` lower bound `SAMPLE`'s own header declares.
+const SAMPLE_UNEXPANDED: u32 = 2;
+
+/// How many `item` records `SAMPLE` declares.
+const SAMPLE_ITEMS: usize = 3;
+
+/// The index of `SAMPLE`'s last item -- the one whose documentation and shape are the two `-`
+/// marks `Test_Not_Observed_And_Absent_Should_Be_Different_Bytes` tells apart.
+const SAMPLE_LAST_ITEM: usize = SAMPLE_ITEMS - 1;
+
 #[test]
 fn Test_A_Well_Formed_Payload_Should_Decode_To_Its_Records()
 {
-    let payload = Parse_Payload(SAMPLE.as_bytes()).expect("this is the grammar");
+    let payload = Parse_Payload(SAMPLE.as_bytes()).expect("SAMPLE is this module's own grammar, written well");
 
-    assert_eq!(payload.unexpanded, 2);
-    assert_eq!(payload.items.len(), 3);
+    assert_eq!(payload.unexpanded, SAMPLE_UNEXPANDED);
+    assert_eq!(payload.items.len(), SAMPLE_ITEMS);
 
-    let list = payload.items.get(1).expect("three items");
+    let list = payload.items.get(1).expect("SAMPLE declares three items, so index 1 is one of them");
     assert_eq!(list.kind, "Constant");
     assert_eq!(list.Own_Name(), "TABLES");
     assert!(list.Is_Public());
@@ -31,13 +41,13 @@ fn Test_Not_Observed_And_Absent_Should_Be_Different_Bytes()
 {
     assert_ne!(Observation::NotObserved.Encode(), Observation::Absent.Encode());
 
-    let payload = Parse_Payload(SAMPLE.as_bytes()).expect("the grammar");
+    let payload = Parse_Payload(SAMPLE.as_bytes()).expect("SAMPLE is this module's own grammar, written well");
 
-    let looked = payload.items.first().expect("three items");
+    let looked = payload.items.first().expect("SAMPLE declares three items, so it has a first");
     assert_eq!(looked.documentation, Observation::Absent);
     assert!(looked.documentation.Was_Observed(), "this provider read doc comments");
 
-    let blind = payload.items.get(2).expect("three items");
+    let blind = payload.items.get(SAMPLE_LAST_ITEM).expect("SAMPLE_LAST_ITEM indexes one of the three SAMPLE declares");
     assert_eq!(blind.documentation, Observation::NotObserved);
     assert!(!blind.documentation.Was_Observed());
 
@@ -45,6 +55,11 @@ fn Test_Not_Observed_And_Absent_Should_Be_Different_Bytes()
     // must not confuse them has a second question to ask.
     assert_eq!(looked.documentation.Value(), blind.documentation.Value());
 }
+
+/// The four items the fixture in the test below declares: a top-level item, then a trait impl,
+/// the member that follows it, an inherent impl, and that impl's member -- the last of them
+/// sitting at this index.
+const ENCLOSING_ITEMS: usize = 4;
 
 /// A member belongs to the record it follows, and two impls of one type are told apart
 /// by nothing else.
@@ -58,25 +73,28 @@ fn Test_A_Member_Should_Be_Enclosed_By_The_Record_It_Follows()
           item\t2\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
           item\t3\tFunction\tPublic\tTable::All\t.\t+fn/0\n",
     )
-    .expect("well formed");
+    .expect("the fixture is a header and four item records");
 
-    let under_trait = payload.Enclosing(1).expect("the first All is enclosed");
+    let under_trait = payload.Enclosing(1).expect("the fixture's item 1 follows its trait impl");
     assert_eq!(under_trait.shape.Value(), Some(TRAIT));
 
-    let under_inherent = payload.Enclosing(3).expect("the second All is enclosed");
+    let under_inherent = payload
+        .Enclosing(ENCLOSING_ITEMS - 1)
+        .expect("the fixture's last item follows its inherent impl");
     assert_eq!(under_inherent.shape.Value(), Some(INHERENT));
 
     assert!(payload.Enclosing(0).is_none(), "a top-level item encloses nothing");
 }
 
+/// The arity the two assertions below read back -- neither `0` nor `1`, the counts a shape
+/// nobody wrote could be mistaken for.
+const ARITY: usize = 2;
+
 #[test]
 fn Test_A_Function_Shape_Should_Carry_Its_Arity()
 {
     assert_eq!(Function_Shape(0), "fn/0");
-    assert_eq!(
-        Function_Arity(&Observation::Present(Function_Shape(2))),
-        Some(2)
-    );
+    assert_eq!(Function_Arity(&Observation::Present(Function_Shape(ARITY))), Some(ARITY as u32));
     assert_eq!(Function_Arity(&Observation::NotObserved), None);
     assert_eq!(Function_Arity(&Observation::Present(SLICE.to_owned())), None);
 }
@@ -112,14 +130,25 @@ fn Test_Struct_Fields_Should_Be_None_For_A_Shape_That_Is_Not_One()
 #[test]
 fn Test_A_Struct_Shape_Should_Survive_A_Real_Item_Record_Round_Trip()
 {
-    use crate::PayloadItem;
-    use crate::SyntaxPayload;
-
     let fields = vec![
         ("weird\tname".to_owned(), "Vec".to_owned()),
         ("plain".to_owned(), "Option\n<Boxed>".to_owned()),
     ];
-    let payload = SyntaxPayload {
+    let decoded = Round_Tripped_Struct_Payload(&fields);
+    let item = decoded.items.first().expect("the payload below declares exactly one item");
+
+    assert_eq!(Struct_Fields(&item.shape), Some(fields));
+}
+
+/// One `Struct` item declaring `fields`, written and read back through this module's own writer
+/// and its own reader.
+fn Round_Tripped_Struct_Payload(fields: &[(String, String)]) -> SyntaxPayload
+{
+    use crate::PayloadItem;
+    use crate::SyntaxPayload;
+
+    let shape = Struct_Shape(fields).expect("two fields is not empty");
+    let written = SyntaxPayload {
         unexpanded: 0,
         items: vec![PayloadItem {
             ordinal: 0,
@@ -127,30 +156,31 @@ fn Test_A_Struct_Shape_Should_Survive_A_Real_Item_Record_Round_Trip()
             visibility: PUBLIC.to_owned(),
             qualified_name: "Weird".to_owned(),
             documentation: Observation::Absent,
-            shape: Observation::Present(Struct_Shape(&fields).expect("two fields is not empty")),
+            shape: Observation::Present(shape),
         }],
     };
+    let rendered = Render_Payload(&written);
 
-    let rendered = Render_Payload(&payload);
-    let decoded = Parse_Payload(&rendered).expect("this module's own encoding");
-
-    assert_eq!(
-        Struct_Fields(&decoded.items.first().expect("one item").shape),
-        Some(fields)
-    );
+    return Parse_Payload(&rendered).expect("this module's own encoding, read back by its own reader");
 }
+
+/// `Test_Documentation_Should_Survive_The_Field_It_Travels_In`'s prose: two newlines, a tab and
+/// a backslash in it, none of which is a record break of its own.
+const PROSE: &str = "Mirrored by `Test_X`.\n\nA second\tparagraph with a \\ in it.";
+
+/// How many newlines `PROSE` itself carries.
+const PROSE_NEWLINES: usize = 2;
 
 /// Documentation is prose and arrives with newlines and tabs in it. One field, one
 /// record, and the text a consumer matches against is the text the author wrote.
 #[test]
 fn Test_Documentation_Should_Survive_The_Field_It_Travels_In()
 {
-    let prose = "Mirrored by `Test_X`.\n\nA second\tparagraph with a \\ in it.";
-    let payload = Build_Single_Item_Payload_With_Documentation(prose);
+    let payload = Build_Single_Item_Payload_With_Documentation(PROSE);
 
     let rendered = Render_Payload(&payload);
     Assert_Prose_Newlines_Did_Not_Become_Records(&rendered);
-    Assert_Documentation_Round_Trips_To_The_Same_Prose(&rendered, prose);
+    Assert_Documentation_Round_Trips_To_The_Same_Prose(&rendered, PROSE);
 }
 
 /// Builds a one-item payload whose `documentation` field is exactly `prose`.
@@ -172,13 +202,13 @@ fn Build_Single_Item_Payload_With_Documentation(prose: &str) -> SyntaxPayload
     };
 }
 
-/// Counts the rendered bytes' newlines: the prose's own two newlines, and no others —
+/// Counts the rendered bytes' newlines: the prose's own `PROSE_NEWLINES` and no others —
 /// confirming its embedded newlines were escaped rather than read back as record breaks.
 fn Assert_Prose_Newlines_Did_Not_Become_Records(rendered: &[u8])
 {
     assert_eq!(
         rendered.iter().filter(|byte| return **byte == b'\n').count(),
-        2,
+        PROSE_NEWLINES,
         "the newlines in the prose must not become records"
     );
 }
@@ -188,7 +218,9 @@ fn Assert_Prose_Newlines_Did_Not_Become_Records(rendered: &[u8])
 fn Assert_Documentation_Round_Trips_To_The_Same_Prose(rendered: &[u8], prose: &str)
 {
     let read = Parse_Payload(rendered).expect("what this module wrote");
-    assert_eq!(read.items.first().expect("one item").documentation.Value(), Some(prose));
+    let item = read.items.first().expect("the payload was built with exactly one item");
+
+    assert_eq!(item.documentation.Value(), Some(prose));
 }
 
 /// A file that declares nothing is a real answer, and the shortest well-formed payload.
@@ -212,10 +244,18 @@ fn Test_A_Payload_This_Build_Cannot_Read_Should_Not_Decode_To_No_Items()
     Assert_An_Unreadable_Field_Is_Refused();
 }
 
+/// The two bytes no UTF-8 decoder accepts: `0xFF` is never valid anywhere in a sequence, and
+/// no sequence begins with a `0xFE`.
+const NOT_UTF8: &[u8] = &[0xFF, 0xFE];
+
+/// The line every refusal fixture below writes its refused record on: each writes one header
+/// on line 1, and the record it is about is the next one.
+const REFUSED_LINE: usize = 2;
+
 /// Bytes that are not a payload at all, and a payload that never says what it is.
 fn Assert_The_Whole_Payload_Is_Refused()
 {
-    assert_eq!(Parse_Payload(&[0xFF, 0xFE]), Err(PayloadRefusal::Whole(PayloadRefusalKind::NotUtf8)));
+    assert_eq!(Parse_Payload(NOT_UTF8), Err(PayloadRefusal::Whole(PayloadRefusalKind::NotUtf8)));
     assert_eq!(Parse_Payload(b""), Err(PayloadRefusal::Whole(PayloadRefusalKind::NoHeader)));
     assert_eq!(
         Parse_Payload(b"item\t0\tFunction\tPublic\tOne\t.\t.\n"),
@@ -223,9 +263,17 @@ fn Assert_The_Whole_Payload_Is_Refused()
     );
     assert_eq!(
         Parse_Payload(b"unexpanded\t0\nunexpanded\t1\n"),
-        Err(PayloadRefusal::At(2, PayloadRefusalKind::RepeatedHeader))
+        Err(PayloadRefusal::At(REFUSED_LINE, PayloadRefusalKind::RepeatedHeader))
     );
 }
+
+/// The fields an `item` record carries in this schema: the tag, the ordinal, the kind, the
+/// visibility, the qualified name, the documentation and the shape.
+const ITEM_FIELDS: usize = 7;
+
+/// The five fields the previous schema's `item` record carried -- which is what a five-field
+/// `item` line is refused for, rather than read as an item nobody wrote.
+const PREVIOUS_SCHEMA_ITEM_FIELDS: usize = 5;
 
 /// A record shaped like something this build does not read: an unknown tag, and the previous
 /// schema's item — five fields where seven are written, which is this schema's likeliest
@@ -241,7 +289,7 @@ fn Assert_An_Unreadable_Record_Is_Refused()
             unknown,
             PayloadRefusal {
                 kind: PayloadRefusalKind::UnknownRecord { ref tag },
-                line: Some(2),
+                line: Some(REFUSED_LINE),
             } if tag == "region"
         ),
         "{unknown:?}"
@@ -251,11 +299,11 @@ fn Assert_An_Unreadable_Record_Is_Refused()
             previous,
             PayloadRefusal {
                 kind: PayloadRefusalKind::WrongFieldCount {
-                    found: 5,
-                    expected: 7,
+                    found: PREVIOUS_SCHEMA_ITEM_FIELDS,
+                    expected: ITEM_FIELDS,
                     ..
                 },
-                line: Some(2),
+                line: Some(REFUSED_LINE),
             }
         ),
         "{previous:?}"
@@ -291,7 +339,7 @@ fn Assert_An_Unreadable_Field_Is_Refused()
                     field: "documentation",
                     ..
                 },
-                line: Some(2),
+                line: Some(REFUSED_LINE),
             }
         ),
         "{unmarked:?}"
@@ -314,7 +362,7 @@ fn Test_A_Refusal_Should_Say_What_It_Refused()
 #[test]
 fn Test_A_Decoded_Payload_Should_Render_Back_To_The_Bytes_It_Came_From()
 {
-    let payload = Parse_Payload(SAMPLE.as_bytes()).expect("the grammar");
+    let payload = Parse_Payload(SAMPLE.as_bytes()).expect("SAMPLE is this module's own grammar, written well");
     let rendered = Render_Payload(&payload);
 
     assert_eq!(String::from_utf8(rendered.clone()).as_deref(), Ok(SAMPLE));
@@ -329,10 +377,11 @@ fn Test_A_Decoded_Payload_Should_Render_Back_To_The_Bytes_It_Came_From()
 #[test]
 fn Test_An_Impl_Shape_Should_Carry_Its_Own_Generic_Parameters()
 {
-    assert_eq!(Impl_Shape(true, &[]), TRAIT);
-    assert_eq!(Impl_Shape(false, &[]), INHERENT);
+    assert_eq!(Impl_Shape(ImplLabel::Trait, &[]), TRAIT);
+    assert_eq!(Impl_Shape(ImplLabel::Inherent, &[]), INHERENT);
 
-    let blanket = Observation::Present(Impl_Shape(true, &["T".to_owned()]));
+    let declared = Impl_Shape(ImplLabel::Trait, &["T".to_owned()]);
+    let blanket = Observation::Present(declared);
 
     assert_eq!(Impl_Serves_A_Trait(&blanket), Some(true));
     assert_eq!(Impl_Generics(&blanket), Some(vec!["T".to_owned()]));
@@ -368,7 +417,8 @@ fn Test_An_Impl_Shapes_Generic_List_Should_Survive_A_Delimiter_In_A_Name()
 {
     let awkward = "One\nTwo".to_owned();
 
-    let shape = Observation::Present(Impl_Shape(false, &[awkward.clone(), "Three".to_owned()]));
+    let declared = Impl_Shape(ImplLabel::Inherent, &[awkward.clone(), "Three".to_owned()]);
+    let shape = Observation::Present(declared);
 
     assert_eq!(Impl_Generics(&shape), Some(vec![awkward, "Three".to_owned()]));
 }
@@ -383,9 +433,9 @@ fn Test_A_Generic_Impls_Shape_Should_Survive_The_Wire()
         b"unexpanded\t0\n\
           item\t0\tImplementation\tNotApplicable\tT\t.\t+trait\\ngenerics\\nT\n",
     )
-    .expect("well formed");
+    .expect("the fixture is a header and one item record");
 
-    let block = payload.items.first().expect("one item");
+    let block = payload.items.first().expect("the payload declares exactly one item");
 
     assert_eq!(Impl_Serves_A_Trait(&block.shape), Some(true));
     assert_eq!(Impl_Generics(&block.shape), Some(vec!["T".to_owned()]));

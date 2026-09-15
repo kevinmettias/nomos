@@ -31,7 +31,7 @@ use crate::payload::nested_lock_finding::NestedLockFinding;
 use crate::reading::{CompilerError, Load_Crate};
 use nomos_platform::Environment;
 use line_index::LineIndex;
-use ra_ap_hir::{Adt, ModuleDef, ScopeDef, Semantics, Struct};
+use ra_ap_hir::{Adt, EditionedFileId, ModuleDef, ScopeDef, Semantics, Struct};
 use ra_ap_ide_db::RootDatabase;
 use ra_ap_ide_db::famous_defs::FamousDefs;
 use ra_ap_syntax::ast::{self, AstNode};
@@ -56,29 +56,11 @@ pub fn Discover_Nested_Locks<Env: Environment>(root: &Path, environment: &Env) -
     else
     {
         return Err(CompilerError {
-            reason: "could not resolve `std::sync::Mutex`/`std::sync::RwLock` -- no loaded crate's own \
-                     dependency graph reached a real standard library"
-                .to_owned(),
+            reason: "could not resolve `std::sync::Mutex`/`std::sync::RwLock` -- no loaded crate's own dependency graph reached a real standard library".to_owned(),
         });
     };
 
-    let mut locations: Vec<(String, u32, u32)> = Vec::new();
-    for (editioned, path_str) in &files
-    {
-        let source_file = sema.parse(*editioned);
-        let line_index = LineIndex::new(&source_file.syntax().text().to_string());
-
-        for type_node in source_file.syntax().descendants().filter_map(ast::Type::cast)
-        {
-            if Nested_Lock(&sema, &type_node, mutex, rwlock)
-            {
-                let start = type_node.syntax().text_range().start();
-                let position = line_index.line_col(start);
-                locations.push((path_str.clone(), position.line, position.col));
-            }
-        }
-    }
-
+    let mut locations = Locations_Of(&sema, &files, mutex, rwlock);
     locations.sort();
 
     return Ok(locations
@@ -132,6 +114,31 @@ fn Find_Struct(sema: &Semantics<'_, RootDatabase>, module: ra_ap_hir::Module, na
     });
 }
 
+/// Every nested-lock site in `files`, still as a raw, zero-based `(path, line, col)`
+/// triple: the shape [`Discover_Nested_Locks`] both orders and renders, gathered in one
+/// pass so that function reads as the three steps it really is.
+fn Locations_Of(sema: &Semantics<'_, RootDatabase>, files: &[(EditionedFileId, String)], mutex: Struct, rwlock: Struct) -> Vec<(String, u32, u32)>
+{
+    let mut locations: Vec<(String, u32, u32)> = Vec::new();
+    for (editioned, path_str) in files
+    {
+        let source_file = sema.parse(*editioned);
+        let line_index = LineIndex::new(&source_file.syntax().text().to_string());
+
+        for type_node in source_file.syntax().descendants().filter_map(ast::Type::cast)
+        {
+            if Nested_Lock(sema, &type_node, mutex, rwlock)
+            {
+                let start = type_node.syntax().text_range().start();
+                let position = line_index.line_col(start);
+                locations.push((path_str.clone(), position.line, position.col));
+            }
+        }
+    }
+
+    return locations;
+}
+
 /// Whether `type_node`'s own resolved type is a `Mutex`/`RwLock` whose type argument
 /// itself resolved to a `Mutex`/`RwLock`.
 fn Nested_Lock(sema: &Semantics<'_, RootDatabase>, type_node: &ast::Type, mutex: Struct, rwlock: Struct) -> bool
@@ -161,12 +168,6 @@ mod tests
 {
     use super::*;
 
-    fn Fixture_Root() -> std::path::PathBuf
-    {
-        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest.join("fixtures").join("nested_lock_sample");
-    }
-
     /// The one real, end-to-end assertion this reader owes: given a crate with one
     /// `Mutex` nested behind a type alias and one plain, unnested `Mutex`, a real
     /// `ra_ap_hir` analysis finds exactly the first -- not zero (the sysroot-not-loaded
@@ -179,7 +180,13 @@ mod tests
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
-        assert!(found.location.ends_with("lib.rs:18:19"), "{}", found.location);
+        assert!(found.location.ends_with("registry.rs:13:19"), "{}", found.location);
+    }
+
+    fn Fixture_Root() -> std::path::PathBuf
+    {
+        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest.join("fixtures").join("nested_lock_sample");
     }
 
     #[test]

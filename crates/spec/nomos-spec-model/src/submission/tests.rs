@@ -10,11 +10,22 @@ fn First(failures: &[Failure]) -> &Failure
     return failures.first().expect("at least one failure");
 }
 
-fn Value(field: &str, value: &str, origin: Origin) -> FieldValue
+/// One field's name and the text it carries, grouped so a call site writes both by name.
+///
+/// As two bare `&str` parameters the pair is transposable and nothing would object:
+/// `Value("something", "title", origin)` compiles and means the opposite of what it reads
+/// as. Naming each position is what makes that a compile error instead.
+struct Declared<'a>
+{
+    field: &'a str,
+    value: &'a str,
+}
+
+fn Value(declared: Declared<'_>, origin: Origin) -> FieldValue
 {
     return FieldValue {
-        field: field.to_owned(),
-        value: value.to_owned(),
+        field: declared.field.to_owned(),
+        value: declared.value.to_owned(),
         origin,
     };
 }
@@ -36,11 +47,11 @@ fn Request(state: SubmissionState, values: Vec<FieldValue>) -> Submission
 fn Complete_Request_Values() -> Vec<FieldValue>
 {
     return vec![
-        Value("title", "Ledger items can be declined", Origin::Submitted),
-        Value("goal", "close superseded work", Origin::Submitted),
-        Value("behaviour", "a verb writes Declined", Origin::Submitted),
-        Value("acceptance", "the item stops being claimable", Origin::Submitted),
-        Value("invariants", "none", Origin::Submitted),
+        Value(Declared { field: "title", value: "Ledger items can be declined" }, Origin::Submitted),
+        Value(Declared { field: "goal", value: "close superseded work" }, Origin::Submitted),
+        Value(Declared { field: "behaviour", value: "a verb writes Declined" }, Origin::Submitted),
+        Value(Declared { field: "acceptance", value: "the item stops being claimable" }, Origin::Submitted),
+        Value(Declared { field: "invariants", value: "none" }, Origin::Submitted),
     ];
 }
 
@@ -66,11 +77,8 @@ fn Test_Required_Fields_Should_Include_Title_And_The_Kinds_Own_Fields()
 #[test]
 fn Test_A_Refusal_Should_Name_Every_Missing_Field_Rather_Than_The_First()
 {
-    let submission = Request(SubmissionState::Draft, vec![Value(
-        "title",
-        "something",
-        Origin::Submitted,
-    )]);
+    let declared = Value(Declared { field: "title", value: "something" }, Origin::Submitted);
+    let submission = Request(SubmissionState::Draft, vec![declared]);
 
     let failures = Validate_Submission(&submission);
     let fields: Vec<&str> = failures
@@ -85,8 +93,8 @@ fn Test_A_Refusal_Should_Name_Every_Missing_Field_Rather_Than_The_First()
 fn Test_A_Draft_Should_Be_Refused_For_Incompleteness_Exactly_As_An_Accepted_One_Is()
 {
     let missing = vec![
-        Value("title", "something", Origin::Submitted),
-        Value("goal", "a goal", Origin::Submitted),
+        Value(Declared { field: "title", value: "something" }, Origin::Submitted),
+        Value(Declared { field: "goal", value: "a goal" }, Origin::Submitted),
     ];
 
     let as_draft = Request(SubmissionState::Draft, missing.clone());
@@ -118,7 +126,7 @@ fn Test_A_Stated_Absence_Should_Satisfy_A_Required_Field()
 fn Test_An_Inferred_Value_Should_Be_Readable_And_Never_Sufficient()
 {
     let mut values = Complete_Request_Values();
-    let inferred = Value("goal", "guessed from the title", Origin::Inferred);
+    let inferred = Value(Declared { field: "goal", value: "guessed from the title" }, Origin::Inferred);
     values.push(inferred);
 
     let as_draft = Request(SubmissionState::Draft, values.clone());
@@ -136,7 +144,7 @@ fn Test_An_Inferred_Value_Should_Be_Readable_And_Never_Sufficient()
 fn Test_Current_Should_Read_The_Latest_Value_Not_An_Earlier_One()
 {
     let mut values = Complete_Request_Values();
-    let clarified = Value("goal", "what it became", Origin::Clarified);
+    let clarified = Value(Declared { field: "goal", value: "what it became" }, Origin::Clarified);
     values.push(clarified);
 
     let submission = Request(SubmissionState::Accepted, values);
@@ -208,7 +216,15 @@ fn Test_A_Non_Blocking_Gap_Should_Survive_Acceptance()
     );
 }
 
-fn Design(alternatives: &str, selected: &str) -> Submission
+/// A design's two free-text answers, grouped for the same reason [`Declared`] is: two adjacent
+/// `&str` positions are a pair a caller can transpose with nothing to catch it.
+struct DesignAnswers<'a>
+{
+    alternatives: &'a str,
+    selected: &'a str,
+}
+
+fn Design(answers: DesignAnswers<'_>) -> Submission
 {
     return Submission {
         id: "DS-001".to_owned(),
@@ -218,12 +234,12 @@ fn Design(alternatives: &str, selected: &str) -> Submission
         submitted_by: "kevin".to_owned(),
         submitted_through: "cli".to_owned(),
         values: vec![
-            Value("title", "a title", Origin::Submitted),
-            Value("answers", "FR-001", Origin::Submitted),
-            Value("alternatives", alternatives, Origin::Submitted),
-            Value("selected", selected, Origin::Submitted),
-            Value("architecture_delta", "none", Origin::Submitted),
-            Value("acceptance", "the tests pass", Origin::Submitted),
+            Value(Declared { field: "title", value: "a title" }, Origin::Submitted),
+            Value(Declared { field: "answers", value: "FR-001" }, Origin::Submitted),
+            Value(Declared { field: "alternatives", value: answers.alternatives }, Origin::Submitted),
+            Value(Declared { field: "selected", value: answers.selected }, Origin::Submitted),
+            Value(Declared { field: "architecture_delta", value: "none" }, Origin::Submitted),
+            Value(Declared { field: "acceptance", value: "the tests pass" }, Origin::Submitted),
         ],
         gaps: Vec::new(),
     };
@@ -237,7 +253,10 @@ struct DesignRefusalCase
     rule: &'static str,
 }
 
-fn Designs_That_Should_Be_Refused() -> [DesignRefusalCase; 2]
+/// How many malformed designs the fixture below carries, one per rule it exercises.
+const REFUSAL_CASES: usize = 2;
+
+fn Designs_That_Should_Be_Refused() -> [DesignRefusalCase; REFUSAL_CASES]
 {
     return [
         DesignRefusalCase {
@@ -258,7 +277,8 @@ fn Test_A_Malformed_Design_Should_Be_Refused_By_Its_Own_Rule()
 {
     for case in Designs_That_Should_Be_Refused()
     {
-        let design = Design(case.alternatives, case.selected);
+        let answers = DesignAnswers { alternatives: case.alternatives, selected: case.selected };
+        let design = Design(answers);
         let failures = Validate_Submission(&design);
 
         assert_eq!(failures.len(), 1, "{}", case.rule);
@@ -269,7 +289,8 @@ fn Test_A_Malformed_Design_Should_Be_Refused_By_Its_Own_Rule()
 #[test]
 fn Test_Do_Nothing_Should_Be_An_Admissible_Alternative()
 {
-    let design = Design("a new verb\ndo nothing", "a new verb");
+    let answers = DesignAnswers { alternatives: "a new verb\ndo nothing", selected: "a new verb" };
+    let design = Design(answers);
 
     assert_eq!(Validate_Submission(&design), Vec::new());
 }
@@ -277,14 +298,14 @@ fn Test_Do_Nothing_Should_Be_An_Admissible_Alternative()
 fn Result_Submission(deviations: &str, evidence: Option<&str>) -> Submission
 {
     let mut values = vec![
-        Value("title", "a title", Origin::Submitted),
-        Value("implements", "DS-001", Origin::Submitted),
-        Value("deviations", deviations, Origin::Submitted),
-        Value("owed", "none", Origin::Submitted),
+        Value(Declared { field: "title", value: "a title" }, Origin::Submitted),
+        Value(Declared { field: "implements", value: "DS-001" }, Origin::Submitted),
+        Value(Declared { field: "deviations", value: deviations }, Origin::Submitted),
+        Value(Declared { field: "owed", value: "none" }, Origin::Submitted),
     ];
     if let Some(evidence) = evidence
     {
-        let value = Value("evidence", evidence, Origin::Submitted);
+        let value = Value(Declared { field: "evidence", value: evidence }, Origin::Submitted);
         values.push(value);
     }
 
@@ -332,22 +353,34 @@ fn Test_Evidence_Should_Be_Required_For_An_Accepted_Result_And_Not_For_A_Draft()
     assert_eq!(Validate_Submission(&submission), Vec::new());
 }
 
-fn All_Submission_Kinds() -> [SubmissionKind; 3]
+/// How many variants [`SubmissionKind`] has, which is what its label round trip covers.
+const SUBMISSION_KINDS: usize = 3;
+
+fn All_Submission_Kinds() -> [SubmissionKind; SUBMISSION_KINDS]
 {
     return [SubmissionKind::FeatureRequest, SubmissionKind::DesignSpec, SubmissionKind::FeatureResult];
 }
 
-fn All_Submission_Origins() -> [Origin; 4]
+/// How many variants [`Origin`] has.
+const SUBMISSION_ORIGINS: usize = 4;
+
+fn All_Submission_Origins() -> [Origin; SUBMISSION_ORIGINS]
 {
     return [Origin::Submitted, Origin::Clarified, Origin::Inferred, Origin::Decided];
 }
 
-fn All_Submission_Severities() -> [Severity; 2]
+/// How many variants [`Severity`] has.
+const SUBMISSION_SEVERITIES: usize = 2;
+
+fn All_Submission_Severities() -> [Severity; SUBMISSION_SEVERITIES]
 {
     return [Severity::Blocking, Severity::NonBlocking];
 }
 
-fn All_Submission_States() -> [SubmissionState; 2]
+/// How many variants [`SubmissionState`] has.
+const SUBMISSION_STATES: usize = 2;
+
+fn All_Submission_States() -> [SubmissionState; SUBMISSION_STATES]
 {
     return [SubmissionState::Draft, SubmissionState::Accepted];
 }

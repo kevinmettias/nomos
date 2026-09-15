@@ -1,6 +1,9 @@
 //! The acceptance criterion: a record excludes nobody but its own writer.
 
-use crate::board::{Claimed, Project_Onto_Records, Saved, Unclaimed_Copy, Writer_Ids};
+use crate::board::{
+    Claimed, Project_Onto_Records, Saved, SavedBoard, Unclaimed_Copy, Writer_Ids,
+};
+use nomos_ledger::Holder;
 
 /// What `P10-RECORD-LOCK` actually bought, stated so that it can hold.
 ///
@@ -37,13 +40,17 @@ fn Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer()
     // Every one of them, not a pair. A pair could be independent by accident; all of them
     // being claimable at once is the property, and it is the one that survives an item being
     // added to the board tomorrow.
-    let (_scratch, mut ledger) = Saved("records-only", &document);
+    let SavedBoard {
+        scratch: _scratch,
+        mut ledger,
+    } = Saved("records-only", &document);
     for (ordinal, writer) in writers.iter().enumerate()
     {
+        let agent = format!("agent-{ordinal}");
         let blame = format!(
             "{writer} was refused on its record alone, so two records still exclude each other"
         );
-        Claimed(&mut ledger, writer, &format!("agent-{ordinal}"), &blame);
+        Claimed(&mut ledger, writer, Holder::from(&agent), &blame);
     }
     ledger
         .Validate_Current()

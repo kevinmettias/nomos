@@ -53,28 +53,12 @@ fn Sample_Violation_Cases() -> Vec<(&'static str, &'static str, &'static str)>
     return vec![("duplicate", "warning", "multiple versions of a crate are present")];
 }
 
-/// `cases`, folded into the newline-delimited JSON-diagnostic stream `cargo deny` writes to
-/// stderr -- the exact shape `reading::Violation_Of` reads, reproduced here because that
-/// reader is private to the crate's own module.
-///
-/// The stream ends with the `{"type":"summary"}` line a finished run always writes, naming
-/// every check the provider asks for, because `P81` made that line the difference between a
-/// run whose silence is a clean result and one whose silence is a failure nobody could
-/// read. A fixture standing for a completed run has to be shaped like one; without it these
-/// seams would be asserting about the refusal path while claiming to test the parse.
-fn Diagnostics_Stderr(cases: &[(&str, &str, &str)]) -> String
+/// `cases`, one `cargo deny` diagnostic JSON object per line -- the exact shape
+/// `reading::Violation_Of` reads, reproduced here because that reader is private to the
+/// crate's own module.
+fn Diagnostics_Of(cases: &[(&str, &str, &str)]) -> String
 {
-    let summary = serde_json::json!({
-        "type": "summary",
-        "fields": {
-            "bans": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 },
-            "licenses": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 },
-            "sources": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 }
-        }
-    })
-    .to_string();
-
-    let diagnostics = cases
+    return cases
         .iter()
         .map(|(code, severity, message)| {
             return serde_json::json!({
@@ -91,16 +75,45 @@ fn Diagnostics_Stderr(cases: &[(&str, &str, &str)]) -> String
         })
         .collect::<Vec<_>>()
         .join("\n");
-
-    return format!("{diagnostics}\n{summary}");
 }
+
+/// The `{"type":"summary"}` line a finished `cargo deny check bans licenses sources` run
+/// always writes, naming every check this provider asks for.
+///
+/// `P81` made that line the difference between a run whose silence is a clean result and
+/// one whose silence is a failure nobody could read. A fixture standing for a completed run
+/// has to be shaped like one; without it these seams would be asserting about the refusal
+/// path while claiming to test the parse.
+fn Completed_Summary() -> String
+{
+    return serde_json::json!({
+        "type": "summary",
+        "fields": {
+            "bans": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 },
+            "licenses": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 },
+            "sources": { "errors": 0, "helps": 0, "notes": 0, "warnings": 0 }
+        }
+    })
+    .to_string();
+}
+
+/// The whole stderr stream a finished run writes: the diagnostics, then the summary.
+fn Diagnostics_Stderr(cases: &[(&str, &str, &str)]) -> String
+{
+    return format!("{}\n{}", Diagnostics_Of(cases), Completed_Summary());
+}
+
+/// Fill bytes distinct enough that the three digests below differ from one another; each
+/// value carries no meaning beyond "not equal to the others".
+const VARIANT_DIGEST_FILL: u8 = 2;
+const CONFIGURATION_DIGEST_FILL: u8 = 3;
 
 fn Context() -> FactContext
 {
     return FactContext {
         snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
-        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
-        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
+        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_DIGEST_FILL; Digest128::BYTE_LENGTH])),
         generation: GenerationId::INITIAL,
     };
 }

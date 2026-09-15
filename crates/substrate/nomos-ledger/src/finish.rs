@@ -303,23 +303,11 @@ mod local_tests
                 items: vec![Claimed_Item(item_id.clone())],
             })
             .expect("a claimed item is a valid document");
-        let launcher = AlwaysZero;
 
-        let record = Finish_Item(
-            &mut ledger,
-            &&launcher,
-            &Finishing { item: &item_id, holder: HOLDER },
-            Some(&directory),
-        )
-        .expect("a zero-exit predicate behind a green gate must finish");
+        let record = Finished_Record(&mut ledger, &directory, &item_id);
 
-        assert_eq!(record.exit_code, 0);
-        assert!(record.gate.is_some(), "the gate's own outcome must ride along with the predicate's");
-
-        let reloaded = ledger.Load().expect("the release must have been written");
-        let closed = reloaded.items.first().expect("the item survives finishing");
-        assert_eq!(closed.state, ItemState::Done);
-        assert_eq!(closed.claim, None, "a finished item is no longer held");
+        Assert_Verification_Recorded(&record);
+        Assert_Claim_Closed(&ledger);
     }
 
     fn Temporary_Directory(name: &str) -> PathBuf
@@ -350,5 +338,43 @@ mod local_tests
             clock,
             FileLock::At(directory.join("ledger.lock")),
         );
+    }
+
+    /// Runs `item`'s predicate through [`Finish_Item`] against a launcher that always exits
+    /// zero, and answers with the record a green gate left behind. Panics with the refusal
+    /// when the finish is refused, which is the failure the caller is testing for.
+    fn Finished_Record(
+        ledger: &mut FileLedger<StdFileSystem, &FixedClock, FileLock>,
+        directory: &Path,
+        item: &ItemId,
+    ) -> VerificationRecord
+    {
+        return Finish_Item(
+            ledger,
+            &&AlwaysZero,
+            &Finishing { item, holder: HOLDER },
+            Some(directory),
+        )
+        .expect("a zero-exit predicate behind a green gate must finish");
+    }
+
+    /// The record a passing predicate left behind, checked for the predicate's own verdict
+    /// and the gate's together.
+    fn Assert_Verification_Recorded(record: &VerificationRecord)
+    {
+        assert_eq!(record.exit_code, 0);
+        assert!(
+            record.gate.is_some(),
+            "the gate's own outcome must ride along with the predicate's"
+        );
+    }
+
+    /// The item the finish was applied to, checked as closed: `Done`, and no longer held.
+    fn Assert_Claim_Closed(ledger: &FileLedger<StdFileSystem, &FixedClock, FileLock>)
+    {
+        let reloaded = ledger.Load().expect("the release must have been written");
+        let closed = reloaded.items.first().expect("the item survives finishing");
+        assert_eq!(closed.state, ItemState::Done);
+        assert_eq!(closed.claim, None, "a finished item is no longer held");
     }
 }

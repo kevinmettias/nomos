@@ -5,14 +5,14 @@
 //! `pub use store::FileLedger` against one module, so a `pub fn` written on the type
 //! anywhere else is public and unrecorded.
 
-use nomos_platform::{Clock, CrossProcessLock, FileSystem};
+use nomos_platform::{Clock, CrossProcessLock, FileSystem, StaleTakeover};
 
 use nomos_platform::Timestamp;
 
 use crate::LedgerDocument;
 use crate::LedgerError;
 
-use super::{FileLedger, SCHEMA_VERSION};
+use super::{FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, SCHEMA_VERSION};
 
 /// The body of [`FileLedger::Save`], which keeps the documentation and the signature.
 pub(super) fn Save_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
@@ -126,14 +126,58 @@ pub(super) fn Load_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossPro
         .map_err(|error| return Explain_Parse_Failure(&ledger.path, &text, &error));
 }
 
+/// The body of [`FileLedger::With_Lock`], which keeps the documentation and the signature.
+///
+/// The write is conditional on the document having changed, and the takeover travels out with
+/// the result rather than being logged here: a caller that surfaces it can tell the user their
+/// predecessor abandoned an update, and a caller that drops it has made a choice this signature
+/// makes visible in review. Both are argued at length on `With_Lock` itself.
+pub(super) fn With_Lock_Run<
+    Files: FileSystem,
+    TimeSource: Clock,
+    Lock: CrossProcessLock,
+    Outcome,
+>(
+    ledger: &FileLedger<Files, TimeSource, Lock>,
+    holder: &str,
+    modify: impl FnOnce(&mut LedgerDocument) -> Result<Outcome, LedgerError>,
+) -> Result<(Outcome, Option<StaleTakeover>), LedgerError>
+{
+    let acquisition = ledger
+        .lock
+        .Acquire(holder, LOCK_WAIT_LIMIT, LOCK_STALE_AFTER)
+        .map_err(|error| LedgerError::Locked {
+            cause: error.to_string(),
+        })?;
+
+    let read = ledger.Load()?;
+    let mut document = read.clone();
+    let outcome = modify(&mut document)?;
+
+    if document != read
+    {
+        ledger.Save(&document)?;
+    }
+
+    // The takeover travels out with the result rather than being logged here. A
+    // caller that surfaces it can tell the user their predecessor abandoned an
+    // update; a caller that drops it has made a choice, and this signature is what
+    // makes that choice visible in review.
+    return Ok((outcome, acquisition.broke_stale));
+}
+
 #[cfg(test)]
 mod tests
 {
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
+
     use super::*;
     use crate::{AddRefusal, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, Territory};
     use nomos_platform_std::{FileLock, StdFileSystem};
     use std::path::{Path, PathBuf};
+
+    /// The instant the tests here are read at, named so that a fixture change is one edit.
+    const NOW_SECONDS: i64 = 1_000;
 
     struct FixedClock(i64);
 
@@ -207,6 +251,25 @@ mod tests
 
         assert_eq!(document.items.len(), 1);
         assert_eq!(document.items.first().expect("the assertion above found exactly one item").id, ItemId::New("L-1"));
+    }
+
+    #[test]
+    fn Test_With_Lock_Run_Should_Modify_And_Persist_In_One_Acquisition()
+    {
+        let directory = Temporary_Directory("with-lock-run");
+        let clock = FixedClock(NOW_SECONDS);
+        let ledger = Ledger_At(&directory, &clock);
+
+        let (outcome, takeover) = With_Lock_Run(&ledger, "agent-a", |document| {
+            document.items.push(Workable_Item("W-1"));
+            return Ok("W-1".to_owned());
+        })
+        .expect("a plain modification must succeed");
+
+        assert_eq!(outcome, "W-1");
+        assert!(takeover.is_none(), "a fresh lock is never a stale takeover");
+        let reloaded = Load_Document(&ledger).expect("the modification must have been written");
+        assert_eq!(reloaded.items.len(), 1);
     }
 
     fn Temporary_Directory(name: &str) -> PathBuf

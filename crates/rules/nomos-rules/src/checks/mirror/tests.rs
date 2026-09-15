@@ -11,8 +11,7 @@ use nomos_analysis::{
 };
 use nomos_capability::{ProviderOffer, Registry};
 use nomos_contracts::{
-    Assurance, BuildVariantId, ConfigurationId, Digest128, FactVariant, GenerationId, Guarantee,
-    IncrementalGranularity, ProviderId, SchemaId, SnapshotId,
+    Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId, SchemaId,
 };
 
 mod historical;
@@ -51,7 +50,7 @@ fn Offer(provider: &str, guarantee: Guarantee) -> ProviderOffer
 }
 
 /// A source file, with the subject a composition root would file its facts under.
-fn Source(path: &str, text: &str) -> SourceFile
+fn Source(path: &str, text: String) -> SourceFile
 {
     return SourceFile::New(
         path,
@@ -129,12 +128,7 @@ impl World
 
     fn Context() -> Context
     {
-        return Context {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
+        return crate::checks::test_support::Test_Context();
     }
 
     /// The key a named offer's answer about one source would be filed under.

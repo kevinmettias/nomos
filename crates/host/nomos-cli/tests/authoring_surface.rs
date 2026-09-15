@@ -26,6 +26,26 @@ const V14: &str = concat!("NOMOS_", "V14_CORPUS");
 const RECORD: &str = "D-131";
 const RECORD_PATH: &str = "docs/records/D-131-a-byte-order-mark-belongs-to-the-front-matter-fence.md";
 
+/// The exit code for an edit this surface refused.
+///
+/// The command line was right: the author asked for exactly what they meant and the
+/// *content* was refused, which is why it is apart from [`EXIT_USAGE`].
+const EXIT_REFUSED: i32 = 9;
+
+/// The exit code for a command line the binary refuses.
+const EXIT_USAGE: i32 = 2;
+
+/// The exit code for an answer that is empty because something the store expected was not
+/// there — a record this corpus does not hold, rather than a mistake anybody made.
+const EXIT_ABSENT: i32 = 6;
+
+/// The name a fixture's scratch directory is built from.
+///
+/// A distinct type rather than a bare `&str`: [`Staged`] takes a directory name and the
+/// text to stage into it, both strings and both adjacent, so a caller who transposed them
+/// would write a record's bytes into a directory named after them.
+struct FixtureName<'a>(&'a str);
+
 fn Nomos(arguments: &[&str]) -> Output
 {
     return Command::new(env!("CARGO_BIN_EXE_nomos"))
@@ -75,9 +95,9 @@ fn On_Disk() -> String
 }
 
 /// Writes a text to stage, whatever it is.
-fn Staged(name: &str, text: &str) -> PathBuf
+fn Staged(name: FixtureName<'_>, text: &str) -> PathBuf
 {
-    let path = Scratch(name).join("staged.md");
+    let path = Scratch(name.0).join("staged.md");
     std::fs::write(&path, text).expect("writes the staged record");
 
     return path;
@@ -95,7 +115,7 @@ fn Edited(name: &str, edit: impl Fn(&str) -> String) -> Fixture
     assert_ne!(text, On_Disk(), "the {name} fixture changed nothing");
 
     return Fixture {
-        staged: Staged(name, &text),
+        staged: Staged(FixtureName(name), &text),
         text,
     };
 }
@@ -237,7 +257,7 @@ fn Assert_It_Printed_Its_Preview(output: &Output)
 #[test]
 fn Test_Commit_Should_Move_A_Renamed_Record_And_Vacate_Its_Old_Path()
 {
-    let staged = Staged("commit-renames", &On_Disk());
+    let staged = Staged(FixtureName("commit-renames"), &On_Disk());
     let into = Scratch("commit-renames-tree");
     let moved = "docs/records/D-131-the-mark-belongs-to-the-fence.md";
 
@@ -268,7 +288,7 @@ fn Test_An_Edit_This_Surface_Would_Not_Write_Should_Exit_Refused()
 
     let output = Commit(&staged, &into);
 
-    assert_eq!(Code(&output), 9, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_REFUSED, "{}", Err_Text(&output));
     assert!(
         Err_Text(&output).contains("would change bytes the edit did not ask to change"),
         "{}",
@@ -294,7 +314,7 @@ fn Test_Restating_The_Identifier_Should_Be_Refused()
         &staged.display().to_string(),
     ]);
 
-    assert_eq!(Code(&output), 9, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_REFUSED, "{}", Err_Text(&output));
     assert!(Err_Text(&output).contains("Identity lives in the store"), "{}", Err_Text(&output));
 }
 
@@ -304,7 +324,7 @@ fn Test_A_Staged_File_That_Is_Not_There_Should_Be_A_Usage_Error()
 {
     let output = Nomos(&["spec", "preview", "--id", RECORD, "--from", "no-such-file.md"]);
 
-    assert_eq!(Code(&output), 2, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_USAGE, "{}", Err_Text(&output));
     assert!(Err_Text(&output).contains("no-such-file.md"), "{}", Err_Text(&output));
 }
 
@@ -313,7 +333,7 @@ fn Test_Preview_Should_Require_A_Staged_File()
 {
     let output = Nomos(&["spec", "preview", "--id", RECORD]);
 
-    assert_eq!(Code(&output), 2, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_USAGE, "{}", Err_Text(&output));
     assert!(Err_Text(&output).contains("--from"), "{}", Err_Text(&output));
 }
 
@@ -325,7 +345,7 @@ fn Test_An_Unknown_Record_Should_Report_The_Absence_It_Might_Be()
 {
     let output = Nomos(&["spec", "markdown", "--id", "AGT-001"]);
 
-    assert_eq!(Code(&output), 6, "{}", Err_Text(&output));
+    assert_eq!(Code(&output), EXIT_ABSENT, "{}", Err_Text(&output));
     assert!(Err_Text(&output).contains("AGT-001"), "{}", Err_Text(&output));
     assert!(Err_Text(&output).contains("absent"), "{}", Err_Text(&output));
 }
@@ -346,7 +366,7 @@ fn Authoring_Runs<'a>(from: &'a str, root: &'a str) -> Vec<Vec<&'a str>>
 #[test]
 fn Test_Every_Authoring_Run_Should_Say_What_Persists()
 {
-    let staged = Staged("says-what-persists", &On_Disk());
+    let staged = Staged(FixtureName("says-what-persists"), &On_Disk());
     let into = Scratch("says-what-persists-tree");
     let from = staged.display().to_string();
     let root = into.display().to_string();

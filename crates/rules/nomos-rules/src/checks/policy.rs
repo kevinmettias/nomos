@@ -195,18 +195,13 @@ mod tests
     fn Test_Materialize_Should_Let_A_Real_Fact_With_A_Violation_Be_Read_And_Relayed()
     {
         let source = Source();
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Policy_Fact(
-            &mut store,
-            &source,
-            &offer,
-            &PolicyPayload {
-                violations: vec![PolicyViolation {
-                    severity: PolicySeverity::Warning,
-                    code: "duplicate".to_owned(),
-                    message: "found 2 duplicate entries for crate 'syn'".to_owned(), target: None }],
-            },
-        );
+        let payload = PolicyPayload {
+            violations: vec![PolicyViolation {
+                severity: PolicySeverity::Warning,
+                code: "duplicate".to_owned(),
+                message: "found 2 duplicate entries for crate 'syn'".to_owned(), target: None }],
+        };
+        let TestOffering { store, registry, .. } = Offering_With_Policy_Fact(&source, &payload);
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Dependency_Policy(&[source], &mut reader);
@@ -224,8 +219,8 @@ mod tests
     fn Test_Check_Dependency_Policy_Should_Produce_No_Finding_For_Clean_Facts()
     {
         let source = Source();
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Policy_Fact(&mut store, &source, &offer, &PolicyPayload { violations: Vec::new() });
+        let empty = PolicyPayload { violations: Vec::new() };
+        let TestOffering { store, registry, .. } = Offering_With_Policy_Fact(&source, &empty);
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Dependency_Policy(&[source], &mut reader);
@@ -263,23 +258,29 @@ mod tests
     fn Test_Multiple_Violations_Should_Each_Become_A_Finding()
     {
         let source = Source();
-        let TestOffering { mut store, registry, offer } = Offering();
-        Materialize_Policy_Fact(
-            &mut store,
-            &source,
-            &offer,
-            &PolicyPayload {
-                violations: vec![
-                    PolicyViolation { severity: PolicySeverity::Warning, code: "duplicate".to_owned(), message: "m1".to_owned(), target: None },
-                    PolicyViolation { severity: PolicySeverity::Error, code: "banned".to_owned(), message: "m2".to_owned(), target: None },
-                ],
-            },
-        );
+        let payload = PolicyPayload {
+            violations: vec![
+                PolicyViolation { severity: PolicySeverity::Warning, code: "duplicate".to_owned(), message: "m1".to_owned(), target: None },
+                PolicyViolation { severity: PolicySeverity::Error, code: "banned".to_owned(), message: "m2".to_owned(), target: None },
+            ],
+        };
+        let TestOffering { store, registry, .. } = Offering_With_Policy_Fact(&source, &payload);
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Dependency_Policy(&[source], &mut reader);
 
         assert_eq!(findings.len(), 2, "{findings:?}");
+    }
+
+    /// A declared-and-offered dependency-policy capability with `payload` materialized against
+    /// `source` — the setup every test here that reads a real fact shares, so each states only
+    /// its own payload and what it expects back.
+    fn Offering_With_Policy_Fact(source: &SourceFile, payload: &PolicyPayload) -> TestOffering
+    {
+        let TestOffering { mut store, registry, offer } = Offering();
+        Materialize_Policy_Fact(&mut store, source, &offer, payload);
+
+        return TestOffering { store, registry, offer };
     }
 
     fn Source() -> SourceFile

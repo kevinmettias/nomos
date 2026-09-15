@@ -1,11 +1,17 @@
 //! Turning one live `gh api` review-comment call into the one fact this capability
 //! answers.
 
+mod connector_error;
+mod review_finding_fact;
+
+pub use connector_error::ConnectorError;
+pub use review_finding_fact::ReviewFindingFact;
+
 use crate::contract::{Capability, Payload_Schema, CONTRACT_VERSION};
-use crate::fetching::{Fetch_Review_Comment, FetchError};
+use crate::fetching::Fetch_Review_Comment;
 use crate::guarantee::{Declared_Guarantee, PROVIDER};
 use crate::payload::{finding_payload::FindingPayload, Encode_Payload};
-use crate::translation::{Translate_Review_Comment, TranslationError};
+use crate::translation::Translate_Review_Comment;
 use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_contracts::{
     BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, Guarantee, ProviderId, SnapshotId,
@@ -22,58 +28,6 @@ pub struct FactContext
     pub variant: BuildVariantId,
     pub configuration: ConfigurationId,
     pub generation: GenerationId,
-}
-
-/// The one fact this capability's `IncrementalGranularity::None` ceiling allows for one
-/// review comment, together with the subject it was filed under.
-///
-/// `subject` is always `nomos_model::Subject_Of_Path("")` today -- a connector's own fact
-/// about the finding itself has no Nomos subject until a bears-on relation names a
-/// narrower one, per `ARC-CONNECTOR-001`'s "What This Record Does Not Do". Nothing in the
-/// review comment's own fields -- not even `path`, which names a file in the *reviewed*
-/// repository, not necessarily a path this workspace's own analysis can address -- is
-/// treated as that relation; `path` travels as payload data describing the finding.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct ReviewFindingFact
-{
-    pub subject: SubjectId,
-    pub fact: MaterializedFact,
-}
-
-/// This connector could not produce a fact.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum ConnectorError
-{
-    Fetch(FetchError),
-    Translation(TranslationError),
-}
-
-impl core::fmt::Display for ConnectorError
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return match self
-        {
-            Self::Fetch(error) => write!(formatter, "{error}"),
-            Self::Translation(error) => write!(formatter, "{error}"),
-        };
-    }
-}
-
-impl From<FetchError> for ConnectorError
-{
-    fn from(error: FetchError) -> Self
-    {
-        return Self::Fetch(error);
-    }
-}
-
-impl From<TranslationError> for ConnectorError
-{
-    fn from(error: TranslationError) -> Self
-    {
-        return Self::Translation(error);
-    }
 }
 
 /// Fetches one review comment live and materializes the one fact this capability answers
@@ -152,24 +106,20 @@ mod tests
     use super::*;
     use nomos_contracts::Digest128;
 
-    fn Context() -> FactContext
-    {
-        return FactContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
-            generation: GenerationId::INITIAL,
-        };
-    }
+    /// The width of one `Digest128`, in bytes.
+    const DIGEST_BYTES: usize = 16;
 
-    fn Sample_Payload() -> FindingPayload
-    {
-        return Translate_Review_Comment(
-            "coderabbitai/rabbits-playground",
-            crate::fixture::Sample_Review_Comment_Response(),
-        )
-        .expect("this crate's own recorded fixture");
-    }
+    /// The distinct byte the fixture fills each of its three digests with -- distinct so
+    /// that a transposition between the three positions would be visible in a key.
+    const SNAPSHOT_FILL: u8 = 1;
+    const VARIANT_FILL: u8 = 2;
+    const CONFIGURATION_FILL: u8 = 3;
+
+    /// The real, public review comment this crate's own recorded fixture was captured from.
+    const COMMENT_ID: u64 = 3_521_038_097;
+
+    /// A different review comment, from the same repository.
+    const OTHER_COMMENT_ID: u64 = 3_521_038_104;
 
     /// One real, recorded-fixture translation, checked for every property this crate
     /// promises at once -- the fixture-replay half of `OD-CONNECTOR-002`'s two-test shape.
@@ -194,14 +144,25 @@ mod tests
         assert_eq!(decoded.severity, "🟡 Minor");
     }
 
+    /// This crate's own recorded fixture, translated -- the payload every test above and
+    /// below builds its expectations on.
+    fn Sample_Payload() -> FindingPayload
+    {
+        return Translate_Review_Comment(
+            "coderabbitai/rabbits-playground",
+            crate::fixture::Sample_Review_Comment_Response(),
+        )
+        .expect("this crate's own recorded fixture");
+    }
+
     #[test]
     fn Test_A_Fact_Key_Should_Depend_On_The_External_Identity()
     {
         let subject = nomos_model::Subject_Of_Path("");
         let guarantee = Declared_Guarantee();
 
-        let one = crate::identity::ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", 3_521_038_097);
-        let other = crate::identity::ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", 3_521_038_104);
+        let one = crate::identity::ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", COMMENT_ID);
+        let other = crate::identity::ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", OTHER_COMMENT_ID);
 
         let first_key = Keyed(subject, &one, guarantee, Context());
         let second_key = Keyed(subject, &other, guarantee, Context());
@@ -223,7 +184,7 @@ mod tests
     {
         let ReviewFindingFact { subject, fact } = Materialize_Review_Comment(
             "coderabbitai/rabbits-playground",
-            3_521_038_097,
+            COMMENT_ID,
             Context(),
             &nomos_platform_std::StdProcessLauncher,
         )
@@ -241,5 +202,17 @@ mod tests
         assert_eq!(decoded.path, "modules/security/main.tf");
         assert!(!decoded.severity.is_empty());
         assert!(!decoded.category.is_empty());
+    }
+
+    /// The context every fact these tests build is produced in: three distinct digests and
+    /// the initial generation.
+    fn Context() -> FactContext
+    {
+        return FactContext {
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([SNAPSHOT_FILL; DIGEST_BYTES])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_FILL; DIGEST_BYTES])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_FILL; DIGEST_BYTES])),
+            generation: GenerationId::INITIAL,
+        };
     }
 }

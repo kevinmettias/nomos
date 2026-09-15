@@ -5,7 +5,10 @@
 //! wait. Collapsing them would tell an author to wait for an item that will never release
 //! what it is holding.
 
-use crate::board::*;
+use crate::board::{
+    AddRefusal, At, AT_NOW, Board, Board_At, Declination, Document, FileLedger, FileLock, FixedClock, Item, ItemId,
+    ItemState, ItemTerritory, Ledger_At, LedgerItem, NOW, StdFileSystem, Temporary_Directory, VerificationRecord,
+};
 
 /// An item the board cannot hold is the caller's to correct, not a broken store.
 ///
@@ -20,7 +23,7 @@ use crate::board::*;
 #[test]
 fn Test_An_Item_That_Would_Not_Validate_Should_Refuse_As_The_Authors_Mistake()
 {
-    let (_directory, mut ledger) = Board_At("add-would-not-validate", Vec::new());
+    let Board { directory: _directory, mut ledger } = Board_At("add-would-not-validate", Vec::new());
 
     let item = Item("T-1", &[]);
     let refused =
@@ -52,9 +55,12 @@ const PUBLISHED_RECORD_FILE: &str = "docs/records/OD-LEDGER-006-a-reason-does-no
 const RESERVED_RECORD: &str = "docs/records/OD-LEDGER-020";
 
 /// An item reserving `docs/records/<ID>` alongside whatever else it touches.
-fn Reserving_Record(id: &str, identifier: &str) -> LedgerItem
+///
+/// The identifier is typed rather than a second string, so a call site cannot hand the two
+/// positions to each other and get an item that reads correctly while reserving something else.
+fn Reserving_Record(id: &ItemId, identifier: &str) -> LedgerItem
 {
-    return Item(id, &["crates/a/src/lib.rs", identifier]);
+    return Item(id.As_Text(), &["crates/a/src/lib.rs", identifier]);
 }
 
 /// A published record, spelled as the file it actually is rather than as its identifier.
@@ -77,9 +83,9 @@ fn Published(files: &[&str]) -> ItemTerritory
 #[test]
 fn Test_A_Record_Identifier_Already_Published_Should_Be_Refused_By_Its_File()
 {
-    let (_directory, mut ledger) = Board_At("add-record-published", Vec::new());
+    let Board { directory: _directory, mut ledger } = Board_At("add-record-published", Vec::new());
 
-    let item = Reserving_Record("T-1", "docs/records/OD-LEDGER-006");
+    let item = Reserving_Record(&ItemId::New("T-1"), "docs/records/OD-LEDGER-006");
     let refused = ledger.Add(
         &item,
         "agent-a",
@@ -107,9 +113,9 @@ fn Test_A_Record_Identifier_Already_Published_Should_Be_Refused_By_Its_File()
 #[test]
 fn Test_An_Unspent_Record_Identifier_Should_Still_Be_Accepted()
 {
-    let (_directory, mut ledger) = Board_At("add-record-unspent", Vec::new());
+    let Board { directory: _directory, mut ledger } = Board_At("add-record-unspent", Vec::new());
 
-    let item = Reserving_Record("T-1", "docs/records/OD-LEDGER-007");
+    let item = Reserving_Record(&ItemId::New("T-1"), "docs/records/OD-LEDGER-007");
     let added = ledger.Add(
         &item,
         "agent-a",
@@ -149,7 +155,9 @@ fn Amending(files: &[&str]) -> ItemTerritory
 ///
 /// A named provider rather than an inline literal, so a third accepted spelling is a value
 /// added here rather than a change to the loop that reads them.
-fn Spellings_Of_The_Published_Record() -> [(&'static str, &'static str); 2]
+const SPELLINGS_OF_ONE_RECORD: usize = 2;
+
+fn Spellings_Of_The_Published_Record() -> [(&'static str, &'static str); SPELLINGS_OF_ONE_RECORD]
 {
     return [
         ("the bare identifier", "docs/records/OD-LEDGER-006"),
@@ -162,8 +170,8 @@ fn Test_A_Published_Record_Declared_As_An_Amendment_Should_Be_Accepted()
 {
     for (described, spelled) in Spellings_Of_The_Published_Record()
     {
-        let (_directory, mut ledger) = Board_At("add-record-amended", Vec::new());
-        let item = Reserving_Record("T-1", spelled);
+        let Board { directory: _directory, mut ledger } = Board_At("add-record-amended", Vec::new());
+        let item = Reserving_Record(&ItemId::New("T-1"), spelled);
 
         assert_eq!(
             ledger.Add(
@@ -189,12 +197,11 @@ fn Test_A_Published_Record_Declared_As_An_Amendment_Should_Be_Accepted()
 #[test]
 fn Test_An_Amendment_Should_Not_Exempt_A_Record_Another_Open_Item_Reserves()
 {
-    let (_directory, mut ledger) = Board_At("add-record-amend-contended", vec![Reserving_Record(
-        "T-1",
-        "docs/records/OD-LEDGER-006",
-    )]);
+    let Board { directory: _directory, mut ledger } = Board_At("add-record-amend-contended", vec![
+        Reserving_Record(&ItemId::New("T-1"), "docs/records/OD-LEDGER-006"),
+    ]);
 
-    let item = Reserving_Record("T-2", "docs/records/OD-LEDGER-006");
+    let item = Reserving_Record(&ItemId::New("T-2"), "docs/records/OD-LEDGER-006");
     let refused = ledger.Add(
         &item,
         "agent-b",
@@ -220,9 +227,9 @@ fn Test_An_Amendment_Should_Not_Exempt_A_Record_Another_Open_Item_Reserves()
 #[test]
 fn Test_A_Declared_Amendment_Of_An_Unpublished_Record_Should_Be_Refused()
 {
-    let (_directory, mut ledger) = Board_At("add-record-amend-absent", Vec::new());
+    let Board { directory: _directory, mut ledger } = Board_At("add-record-amend-absent", Vec::new());
 
-    let item = Reserving_Record("T-1", "docs/records/OD-LEDGER-099");
+    let item = Reserving_Record(&ItemId::New("T-1"), "docs/records/OD-LEDGER-099");
     let refused = ledger.Add(
         &item,
         "agent-a",
@@ -256,18 +263,41 @@ fn Test_A_Declared_Amendment_Of_An_Unpublished_Record_Should_Be_Refused()
 #[test]
 fn Test_A_Declared_Amendment_Spelling_The_Wrong_Filename_Should_Be_Refused_With_The_Right_One()
 {
-    let (_directory, mut ledger) = Board_At("add-record-amend-misspelled", Vec::new());
-    let published = "docs/records/OD-LEDGER-006-a-reason-does-not-survive.md";
+    let Board { directory: _directory, mut ledger } = Board_At("add-record-amend-misspelled", Vec::new());
 
-    let item = Reserving_Record("T-1", "docs/records/OD-LEDGER-006");
-    let refused = ledger.Add(
-        &item,
-        "agent-a",
-        &Published(&[published]),
-        &Amending(&["docs/records/OD-LEDGER-006-a-slug-nobody-published.md"]),
+    let refused = Amend_With_A_Slug_Nobody_Published(&mut ledger, PUBLISHED_RECORD_FILE);
+
+    Hands_Back_The_Spelling_It_Refused(refused, PUBLISHED_RECORD_FILE);
+    assert!(
+        ledger.Load().expect("readable").items.is_empty(),
+        "the refusal was reported and the item landed anyway"
     );
+}
 
-    let Err(AddRefusal::AmendmentMisspelled { identifier, declared, file }) = refused
+/// The declaration itself: `--amends` naming the right record by a filename nobody published.
+fn Amend_With_A_Slug_Nobody_Published(
+    ledger: &mut FileLedger<StdFileSystem, &'static FixedClock, FileLock>,
+    published: &str,
+) -> AddRefusal
+{
+    let item = Reserving_Record(&ItemId::New("T-1"), "docs/records/OD-LEDGER-006");
+
+    return ledger
+        .Add(
+            &item,
+            "agent-a",
+            &Published(&[published]),
+            &Amending(&["docs/records/OD-LEDGER-006-a-slug-nobody-published.md"]),
+        )
+        .expect_err("the misspelled amendment must not be accepted as an allocation");
+}
+
+/// Both halves of what the refusal owes: that it refuses, and that its text hands the author
+/// back the spelling, since a refusal that only said "wrong" would leave them doing the lookup
+/// that produced the mistake.
+fn Hands_Back_The_Spelling_It_Refused(refused: AddRefusal, published: &str)
+{
+    let AddRefusal::AmendmentMisspelled { identifier, declared, file } = refused
     else
     {
         panic!("a misspelled amendment must be refused as such: {refused:?}");
@@ -281,10 +311,6 @@ fn Test_A_Declared_Amendment_Spelling_The_Wrong_Filename_Should_Be_Refused_With_
         described.contains(published),
         "the refusal must hand back the spelling, not only withhold it: {described}"
     );
-    assert!(
-        ledger.Load().expect("readable").items.is_empty(),
-        "the refusal was reported and the item landed anyway"
-    );
 }
 
 /// The bare identifier spelling stays accepted, because it never claimed a filename.
@@ -297,9 +323,9 @@ fn Test_A_Declared_Amendment_Spelling_The_Wrong_Filename_Should_Be_Refused_With_
 #[test]
 fn Test_A_Declared_Amendment_Spelled_As_A_Bare_Identifier_Should_Still_Be_Accepted()
 {
-    let (_directory, mut ledger) = Board_At("add-record-amend-bare", Vec::new());
+    let Board { directory: _directory, mut ledger } = Board_At("add-record-amend-bare", Vec::new());
 
-    let item = Reserving_Record("T-1", "docs/records/OD-LEDGER-006");
+    let item = Reserving_Record(&ItemId::New("T-1"), "docs/records/OD-LEDGER-006");
     let added = ledger.Add(
         &item,
         "agent-a",
@@ -319,15 +345,14 @@ fn Test_A_Declared_Amendment_Spelled_As_A_Bare_Identifier_Should_Still_Be_Accept
 #[test]
 fn Test_A_Record_Identifier_Another_Open_Item_Reserves_Should_Be_Refused_By_Its_Item()
 {
-    let (_directory, mut ledger) = Board_At("add-record-reserved", vec![Reserving_Record(
-        "T-1",
-        "docs/records/OD-LEDGER-020",
-    )]);
+    let Board { directory: _directory, mut ledger } = Board_At("add-record-reserved", vec![
+        Reserving_Record(&ItemId::New("T-1"), "docs/records/OD-LEDGER-020"),
+    ]);
 
     // The second author writes the identifier's file spelling rather than its bare form.
     // `OD-LEDGER-016` makes those one subject, so this must still be refused — an author
     // who reserved the file they were about to write has taken the identifier.
-    let item = Reserving_Record("T-2", "docs/records/OD-LEDGER-020-the-same-number.md");
+    let item = Reserving_Record(&ItemId::New("T-2"), "docs/records/OD-LEDGER-020-the-same-number.md");
     let refused =
         ledger.Add(&item, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty());
 
@@ -348,13 +373,12 @@ fn Test_A_Record_Identifier_Another_Open_Item_Reserves_Should_Be_Refused_By_Its_
 #[test]
 fn Test_A_Published_Identifier_And_A_Reserved_One_Should_Be_Different_Refusals()
 {
-    let (_directory, mut ledger) = Board_At("add-record-distinct", vec![Reserving_Record(
-        "T-1",
-        "docs/records/OD-LEDGER-020",
-    )]);
+    let Board { directory: _directory, mut ledger } = Board_At("add-record-distinct", vec![
+        Reserving_Record(&ItemId::New("T-1"), "docs/records/OD-LEDGER-020"),
+    ]);
 
-    let holding = Reserving_Record("T-2", "docs/records/OD-LEDGER-020");
-    let publishing = Reserving_Record("T-3", "docs/records/OD-LEDGER-006");
+    let holding = Reserving_Record(&ItemId::New("T-2"), "docs/records/OD-LEDGER-020");
+    let publishing = Reserving_Record(&ItemId::New("T-3"), "docs/records/OD-LEDGER-006");
     let reserved =
         ledger.Add(&holding, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty());
     let published = ledger.Add(
@@ -382,7 +406,9 @@ fn Test_A_Published_Identifier_And_A_Reserved_One_Should_Be_Different_Refusals()
 ///
 /// A named provider rather than an inline literal, so a third closed state — should one ever
 /// exist — is a value added here rather than a change to the loop that reads them.
-fn Closed_States() -> [ItemState; 2]
+const CLOSED_STATES_UNDER_TEST: usize = 2;
+
+fn Closed_States() -> [ItemState; CLOSED_STATES_UNDER_TEST]
 {
     return [
         ItemState::Done,
@@ -404,9 +430,9 @@ fn Test_A_Closed_Items_Record_Reservation_Should_Not_Reserve_Anything()
         let described = format!("{state:?}");
         ledger
             .Save(&Document(vec![Closed_Reserving(RESERVED_RECORD, state)]))
-            .expect("valid");
+            .expect("the closed item the fixture built is a valid document");
 
-        let item = Reserving_Record("T-2", RESERVED_RECORD);
+        let item = Reserving_Record(&ItemId::New("T-2"), RESERVED_RECORD);
         assert_eq!(
             ledger.Add(&item, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty()),
             Ok(()),
@@ -422,7 +448,7 @@ fn Test_A_Closed_Items_Record_Reservation_Should_Not_Reserve_Anything()
 /// completed here — but the completing is scaffolding, not what the test is about.
 fn Closed_Reserving(record: &str, state: ItemState) -> LedgerItem
 {
-    let mut closed = Reserving_Record("T-1", record);
+    let mut closed = Reserving_Record(&ItemId::New("T-1"), record);
     if matches!(state, ItemState::Declined { .. })
     {
         closed.declined = Some(Declination {
@@ -455,7 +481,8 @@ fn Closed_Reserving(record: &str, state: ItemState) -> LedgerItem
 #[test]
 fn Test_Ordinary_Shared_Territory_Should_Still_Be_Accepted()
 {
-    let (_directory, mut ledger) = Board_At("add-shared-territory", vec![Item("T-1", &["crates/a/src/lib.rs"])]);
+    let Board { directory: _directory, mut ledger } =
+        Board_At("add-shared-territory", vec![Item("T-1", &["crates/a/src/lib.rs"])]);
 
     let item = Item("T-2", &["crates/a/src/lib.rs"]);
     let added =

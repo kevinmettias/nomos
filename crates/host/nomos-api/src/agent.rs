@@ -41,6 +41,10 @@ use nomos_rules::RoleSurfacePair;
 use serde::Serialize;
 use std::path::Path;
 
+mod judge_role_response;
+
+pub use judge_role_response::AgentJudgeRoleResponse;
+
 /// Dispatches `goal` to `config.backend` exactly as `nomos agent execute --goal <goal>
 /// --effort <effort>` would, and hands back a JSON-serializable [`AgentDispatchResponse`].
 #[must_use]
@@ -206,30 +210,6 @@ impl AgentDispatchResponse
     }
 }
 
-/// What [`Handle_Agent_Judge_Role`] answers -- `NoDeclaredRoleOrSurface` and `NoFinding`
-/// are the two composition-root-level answers this handler gives before
-/// `Run_Agent_Judgment` is ever called, the identical two refusals
-/// `nomos-cli`'s own `judge_role.rs` reports as `ExitCode::NotFound`, kept apart here
-/// because a wire caller reading JSON needs to know which one it got even though this
-/// binary's own exit code does not distinguish them.
-#[derive(Clone, Debug, PartialEq, Serialize)]
-#[serde(rename_all = "snake_case", tag = "outcome")]
-pub enum AgentJudgeRoleResponse
-{
-    /// `crate_name` names no row in `root`'s `README.md` band table, or `root` has no
-    /// committed surface snapshot for it.
-    NoDeclaredRoleOrSurface,
-    /// `Check_Declared_Role_Matches_Surface` produced no finding for its own subject --
-    /// unreached by that rule's own current implementation (it maps one subject to
-    /// exactly one finding), kept as a real, checked case rather than an `unwrap`, the
-    /// same defensive shape `nomos-cli`'s own `Judged_Finding` already holds.
-    NoFinding,
-    Dispatched
-    {
-        dispatch: AgentDispatchResponse
-    },
-}
-
 #[cfg(test)]
 mod tests
 {
@@ -257,6 +237,20 @@ mod tests
         assert!(pair.declared_role.contains("AgentExecutor"), "{}", pair.declared_role);
         assert_eq!(pair.crate_root, "crates/agent/nomos-agent-executor-claude-code");
         assert!(!pair.actual_surface.is_empty());
+    }
+
+    /// This repository's own root, three levels above `crates/host/nomos-api` -- the same
+    /// derivation `nomos-cli`'s own `agent/tests.rs` uses to run against a real tree rather
+    /// than a fixture nobody could have produced.
+    fn Repository_Root() -> std::path::PathBuf
+    {
+        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest
+            .parent()
+            .and_then(Path::parent)
+            .and_then(Path::parent)
+            .map(std::path::PathBuf::from)
+            .expect("this crate sits three levels below the workspace root");
     }
 
     #[test]
@@ -288,7 +282,8 @@ mod tests
     {
         let response = AgentDispatchResponse::Unavailable { reason: "fixture".to_owned() };
 
-        let json = serde_json::to_string(&response).expect("an AgentDispatchResponse always serializes");
+        let json = serde_json::to_string(&response)
+            .expect("a derived Serialize over owned data has nothing to refuse");
         let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
 
         assert_eq!(parsed.get("backend").expect("a serialized AgentDispatchResponse always has this field"), "unavailable", "{json}");
@@ -299,23 +294,10 @@ mod tests
     {
         let response = AgentJudgeRoleResponse::NoFinding;
 
-        let json = serde_json::to_string(&response).expect("an AgentJudgeRoleResponse always serializes");
+        let json = serde_json::to_string(&response)
+            .expect("a derived Serialize over owned data has nothing to refuse");
         let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
 
         assert_eq!(parsed.get("outcome").expect("a serialized AgentJudgeRoleResponse always has this field"), "no_finding", "{json}");
-    }
-
-    /// This repository's own root, three levels above `crates/host/nomos-api` -- the same
-    /// derivation `nomos-cli`'s own `agent/tests.rs` uses to run against a real tree rather
-    /// than a fixture nobody could have produced.
-    fn Repository_Root() -> std::path::PathBuf
-    {
-        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(Path::parent)
-            .and_then(Path::parent)
-            .map(std::path::PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
     }
 }

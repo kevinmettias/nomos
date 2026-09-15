@@ -246,22 +246,27 @@ mod tests
         };
 
         let result = Finding_For(&launcher, &query, "nomos-model");
+        let error = Refusal_Of(result);
 
         // Names the failure rather than just its presence: a malformed input, an
         // out-of-range index, or a typo in the fixture would all still be `is_err()`, but
         // only `git diff` itself refusing a revision produces `git`'s own "exited 128"
         // and "bad revision" text.
-        let error = match result
-        {
-            Err(error) => error,
-            // The launcher above is scripted to answer "git diff" with exit 128 and a bad-
-            // revision message, so Finding_For can only succeed here if it swallowed that
-            // failure -- reaching Ok means that propagation itself regressed, not a
-            // condition this test should assert around.
-            Ok(_) => panic!("a bad revision must fail the diff query, not report a finding"),
-        };
         assert!(error.contains("exited 128"), "{error}");
         assert!(error.contains("bad revision"), "{error}");
+    }
+
+    /// The error `result` carries, or a panic naming why nothing else is reachable here: the
+    /// launcher above is scripted to answer `git diff` with exit 128 and a bad-revision
+    /// message, so reaching `Ok` would mean that propagation regressed rather than a condition
+    /// this test should assert around.
+    fn Refusal_Of(result: Result<CrateFinding, String>) -> String
+    {
+        return match result
+        {
+            Err(error) => error,
+            Ok(_) => panic!("a bad revision must fail the diff query, not report a finding"),
+        };
     }
 
     /// Runs the whole join a real invocation performs -- `Records_Touched` then

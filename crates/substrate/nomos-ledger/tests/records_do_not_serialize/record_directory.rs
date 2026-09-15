@@ -1,6 +1,8 @@
 //! The rule: no open item reserves the directory every record lives in.
 
-use crate::board::{Constructed_Writers, Is_Open, RECORD_DIRECTORY, Real_Ledger};
+use crate::board::{
+    Constructed_Writers, CONTESTING_WRITERS, Is_Open, RECORD_DIRECTORY, Real_Ledger,
+};
 
 /// The straggler guard, and the reason this file reads the real ledger.
 ///
@@ -37,7 +39,7 @@ fn Test_An_Item_Reserving_The_Whole_Record_Directory_Should_Be_Found()
 {
     use nomos_ledger::Territory;
 
-    let mut document = Constructed_Writers(2);
+    let mut document = Constructed_Writers(CONTESTING_WRITERS);
     let straggler = document
         .items
         .first_mut()

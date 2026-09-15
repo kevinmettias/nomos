@@ -1,555 +1,31 @@
 //! One reader per kind of section a profile can ask for.
+//!
+//! The readers are grouped by what they read: the stored corpus at every grain it was
+//! segmented into, the record graph, what a node declares, lineage, and omissions. Nothing
+//! below this module knows which file a reader lives in -- `select` and `query` name them
+//! through this facade, and the tests below it call them the same way.
 
-// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
-// module; check-test-coverage keys a test's companion unit off the exact file it is
-// textually written in, so these tests cannot move to a sibling file without losing
-// their attribution to every function this file declares.
-// responsibility: allow same reason -- the coupling that keeps this file whole is
-// check-test-coverage's stem-based companion attribution, not a design choice.
+mod citation;
+mod corpus;
+mod graph;
+mod lineage;
+mod normative;
+mod omissions;
 
-use super::{
-    Columns, Connection, Filter, FirstColumn, Item, Name, ProjectError, Query, Narrow_To_Nodes, Row,
-    SecondColumn, Value,
-};
-use std::collections::BTreeMap;
-
-pub(super) fn Gather_Suites(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
-{
-    let mut query = Query::On(
-        "SELECT suite_id, title, authority_root FROM suites WHERE 1 = 1",
-    );
-    query.Prefix("suite_id", filter.identifier_prefix.as_ref());
-
-    return query.Ordered_By("suite_id").Run(connection, |row| {
-        let mut columns = Columns::Of(row);
-        let suite = columns.Text()?;
-        let title = columns.Text()?;
-        let root: i64 = columns.Next()?;
-
-        return Ok(Item::Of(&suite)
-            .With(Name("title"), Value(&title))
-            .With(Name("authority"), Value(if root == 1 { "root" } else { "sibling" })));
-    });
-}
-
-pub(super) fn Gather_Documents(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
-{
-    let mut query = Query::On(
-        "SELECT d.path, d.revision, b.sha256,
-                (SELECT count(*) FROM source_blocks WHERE document_uid = d.uid),
-                (SELECT count(*) FROM source_headings WHERE document_uid = d.uid)
-         FROM source_documents d JOIN blobs b ON b.uid = d.blob_uid
-         WHERE 1 = 1",
-    );
-    query.Equal("d.path", filter.document.as_ref());
-    query.Equal("d.revision", filter.revision.as_ref());
-
-    return query.Ordered_By("d.revision, d.path").Run(connection, |row| {
-        let mut columns = Columns::Of(row);
-        let path = columns.Text()?;
-        let revision = columns.Text()?;
-        let hash = columns.Text()?;
-        let blocks: i64 = columns.Next()?;
-        let headings: i64 = columns.Next()?;
-
-        return Ok(Item::Of(&format!("{path}@{revision}"))
-            .With(Name("path"), Value(&path))
-            .With(Name("revision"), Value(&revision))
-            .With(Name("blocks"), Value(&blocks.to_string()))
-            .With(Name("headings"), Value(&headings.to_string()))
-            .With(Name("hash"), Value(&hash)));
-    });
-}
-
-pub(super) fn Gather_Headings(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
-{
-    let mut query = Query::On(
-        "SELECT d.path, d.revision, h.ordinal, h.depth, h.title
-         FROM source_headings h JOIN source_documents d ON d.uid = h.document_uid
-         WHERE 1 = 1",
-    );
-    query.Equal("d.path", filter.document.as_ref());
-    query.Equal("d.revision", filter.revision.as_ref());
-
-    return query
-        .Ordered_By("d.revision, d.path, h.ordinal")
-        .Run(connection, |row| {
-            let mut columns = Columns::Of(row);
-            let path = columns.Text()?;
-            let revision = columns.Text()?;
-            let ordinal: i64 = columns.Next()?;
-            let depth: i64 = columns.Next()?;
-            let title = columns.Text()?;
-
-            return Ok(Item::Of(&format!("{path}#{ordinal}"))
-                .With(Name("revision"), Value(&revision))
-                .With(Name("depth"), Value(&depth.to_string()))
-                .With(Name("title"), Value(&title)));
-        });
-}
-
-pub(super) fn Gather_Blocks(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
-{
-    let mut query = Query::On(
-        "SELECT d.path, d.revision, b.ordinal, b.kind, b.heading_path, b.text, b.content_hash
-         FROM source_blocks b JOIN source_documents d ON d.uid = b.document_uid
-         WHERE 1 = 1",
-    );
-    query.Equal("d.path", filter.document.as_ref());
-    query.Equal("d.revision", filter.revision.as_ref());
-    query.Equal("b.kind", filter.kind.as_ref());
-
-    return query
-        .Ordered_By("d.revision, d.path, b.ordinal")
-        .Run(connection, |row| {
-            let mut columns = Columns::Of(row);
-            let path = columns.Text()?;
-            let revision = columns.Text()?;
-            let ordinal: i64 = columns.Next()?;
-            let kind = columns.Text()?;
-            let heading = columns.Text()?;
-            let text = columns.Text()?;
-            let hash = columns.Text()?;
-
-            return Ok(Item::Of(&format!("{path}#{ordinal}"))
-                .With(Name("revision"), Value(&revision))
-                .With(Name("kind"), Value(&kind))
-                .With(Name("heading"), Value(&heading))
-                .With(Name("hash"), Value(&hash))
-                .Carrying(&text));
-        });
-}
-
-pub(super) fn Gather_Rows(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
-{
-    let mut query = Query::On(
-        "SELECT d.path, d.revision, b.ordinal, r.ordinal, r.table_ordinal, r.kind,
-                r.cells_json, r.text, r.content_hash
-         FROM source_table_rows r
-         JOIN source_blocks b ON b.uid = r.source_block_uid
-         JOIN source_documents d ON d.uid = b.document_uid
-         WHERE 1 = 1",
-    );
-    query.Equal("d.path", filter.document.as_ref());
-    query.Equal("d.revision", filter.revision.as_ref());
-    query.Equal("r.kind", filter.row_kind.as_ref());
-
-    return query
-        .Ordered_By("d.revision, d.path, b.ordinal, r.ordinal")
-        .Run(connection, |row| {
-            let mut columns = Columns::Of(row);
-            let path = columns.Text()?;
-            let revision = columns.Text()?;
-            let block: i64 = columns.Next()?;
-            let ordinal: i64 = columns.Next()?;
-            let table: i64 = columns.Next()?;
-            let kind = columns.Text()?;
-            let cells_json = columns.Text()?;
-            let cells: Vec<String> = serde_json::from_str(&cells_json).unwrap_or_default();
-            let text = columns.Text()?;
-            let hash = columns.Text()?;
-
-            return Ok(Item::Of(&format!("{path}#{block}:{ordinal}"))
-                .With(Name("revision"), Value(&revision))
-                .With(Name("kind"), Value(&kind))
-                .With(Name("table"), Value(&table.to_string()))
-                .With(Name("cells"), Value(&cells.join(" | ")))
-                .With(Name("hash"), Value(&hash))
-                .Carrying(&text));
-        });
-}
-
-pub(super) fn Gather_Nodes(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
-{
-    let mut query = Query::On(
-        "SELECT n.node_id, n.kind, n.authority, n.representation, n.title, s.suite_id
-         FROM nodes n LEFT JOIN suites s ON s.uid = n.suite_uid
-         WHERE n.deleted_at IS NULL",
-    );
-    Narrow_To_Nodes(&mut query, filter);
-
-    return query.Ordered_By("n.node_id").Run(connection, |row| {
-        let mut columns = Columns::Of(row);
-        let node = columns.Text()?;
-        let kind = columns.Text()?;
-        let authority = columns.Text()?;
-        let representation = columns.Text()?;
-        let title = columns.Text()?;
-        let suite = columns.Text()?;
-
-        return Ok(Item::Of(&node)
-            .With(Name("kind"), Value(&kind))
-            .With(Name("authority"), Value(&authority))
-            .With(Name("representation"), Value(&representation))
-            .With(Name("title"), Value(&title))
-            .With(Name("suite"), Value(&suite)));
-    });
-}
-
-/// Every node one relation away from the node `filter.node_id` names, with what it declared.
-///
-/// # Why one hop, and why it is not a parameter
-///
-/// `OD-PROJECT-005` measured the record graph: from any record, one hop reaches a median of 7
-/// of 232 records, two reaches a median of 43 and ranges from 7 to 161 by starting point, and
-/// three reaches 62 per cent of the corpus. A hop bound stops bounding after the first, because
-/// `relates-to` is symmetric and carries 93 per cent of the edges. A caller wanting a
-/// neighbour's neighbourhood asks about the neighbour.
-///
-/// # Why every relation type is followed
-///
-/// The same record measured the alternative. Restricted to `affects`, `affected_by` and
-/// `supersedes`, the median reach is the starting record itself at any hop count, and 177 of
-/// 232 records carry no directional edge at all. A traversal that skipped `relates-to` would
-/// reach nothing for three quarters of the corpus.
-///
-/// # Why status is reported and not filtered
-///
-/// A neighbour's declared lifecycle status rides along so a pack says which of the decisions
-/// around its subject are still open — ten of this repository's are. Filtering by it was
-/// refused: keeping only `accepted` would hide exactly the unsettled questions an implementer
-/// needs flagged, and keeping only `open` would hide the settled ground. A neighbour that
-/// declared no status at all — a referenced placeholder carries no front-matter row — is
-/// reported with an empty one rather than dropped, for the reason `OD-RULES-003` gives
-/// generally: an absence is said rather than inferred.
-pub(super) fn Gather_Neighbourhood(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
-{
-    // `DISTINCT` because `relations` holds each authored edge and its inverse, so a neighbour
-    // is reached twice; `s.node_id <> n.node_id` because a subject is not its own neighbour.
-    let mut query = Query::On(
-        "SELECT DISTINCT n.node_id, n.kind, n.title, COALESCE(front.status, '')
-         FROM nodes n
-         JOIN relations r ON r.from_node_uid = n.uid OR r.to_node_uid = n.uid
-         JOIN nodes s ON (s.uid = r.from_node_uid OR s.uid = r.to_node_uid) AND s.node_id <> n.node_id
-         LEFT JOIN record_front_matter front ON front.node_uid = n.uid
-         WHERE n.deleted_at IS NULL",
-    );
-    query.Equal("s.node_id", filter.node_id.as_ref());
-
-    // By identity, never by the order the walk reached them: two selections of one store must
-    // be identical, which is what the freshness sidecar's determinism rests on.
-    return query.Ordered_By("n.node_id").Run(connection, |row| {
-        let mut columns = Columns::Of(row);
-        let node = columns.Text()?;
-        let kind = columns.Text()?;
-        let title = columns.Text()?;
-        let status = columns.Text()?;
-
-        return Ok(Item::Of(&node)
-            .With(Name("kind"), Value(&kind))
-            .With(Name("title"), Value(&title))
-            .With(Name("status"), Value(&status)));
-    });
-}
-
-/// Every edge between two record families, counted, rather than every edge between two records.
-///
-/// # What a family is
-///
-/// The identifier without its ordinal: `OD-RULES-027` and `OD-RULES-029` are both `OD-RULES`,
-/// `D-134` is `D`. A node whose identifier carries no trailing ordinal is a family of one
-/// rather than a node outside every family, and that is what keeps an edge to it from becoming
-/// a dangling end -- the grouping is total, so every edge has a family at both ends.
-///
-/// # Why this is not `identifier_prefix`
-///
-/// `OD-PROJECT-006` measured the difference. Narrowing by prefix draws one family's internal
-/// edges and every edge leaving it as a dangling end; it answers "what is inside OD-RULES",
-/// which is a slice of the one resolution that already exists. This answers "how do OD-RULES
-/// and OD-GATE stand to each other", which is a second resolution, and no filter can express
-/// it because the answer is about nodes the filter would have excluded.
-///
-/// # Why the aggregation is in Rust rather than in the query
-///
-/// A family is the identifier minus a trailing ordinal, and expressing that in SQLite's string
-/// functions would put the definition of a family in a place no test can reach directly. The
-/// query does what a query is good at -- joining the edges -- and [`Family_Of`] holds what a
-/// family is, in one function with its own tests.
-pub(super) fn Gather_Families(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
-{
-    let _ = filter;
-    // Ordered here as well as grouped below: the aggregation is deterministic on its own, and
-    // ordering the input too means a failure reads the same way twice.
-    let edges = Query::On(
-        "SELECT f.node_id, t.node_id
-         FROM relations r
-         JOIN nodes f ON f.uid = r.from_node_uid
-         JOIN nodes t ON t.uid = r.to_node_uid
-         WHERE f.deleted_at IS NULL AND t.deleted_at IS NULL",
-    )
-    .Ordered_By("f.node_id, t.node_id")
-    .Run(connection, |row| {
-        let mut columns = Columns::Of(row);
-        let from = columns.Text()?;
-        let to = columns.Text()?;
-
-        // An edge carried as an item, because that is what `Run` hands back. It is folded into
-        // the real answer below and never reaches a projection.
-        return Ok(Item::Of(&from).With(Name("to"), Value(&to)));
-    })?;
-
-    return Ok(Between_Families(&edges));
-}
-
-/// `edges` rolled into one item per ordered pair of distinct families, carrying how many
-/// edges run between them.
-///
-/// A family's internal edges are dropped rather than counted as a self-edge: the question this
-/// answers is how families stand to one another, and a family's relationship with itself is
-/// the resolution the full diagram already shows.
-///
-/// `BTreeMap` rather than a hash map because the output order is the answer's order, and two
-/// selections of one store must be identical.
-fn Between_Families(edges: &[Item]) -> Vec<Item>
-{
-    let mut counted: BTreeMap<(String, String), usize> = BTreeMap::new();
-    for edge in edges
-    {
-        let from = Family_Of(&edge.identity);
-        let to = Family_Of(edge.Field("to").unwrap_or_default());
-        if from == to
-        {
-            continue;
-        }
-        let tally = counted.entry((from, to)).or_insert(0);
-        *tally = tally.saturating_add(1);
-    }
-
-    return counted
-        .into_iter()
-        .map(|((from, to), edges)| {
-            return Item::Of(&format!("{from} -> {to}"))
-                .With(Name("from"), Value(from.as_str()))
-                .With(Name("to"), Value(to.as_str()))
-                .With(Name("edges"), Value(&edges.to_string()));
-        })
-        .collect();
-}
-
-/// The family an identifier belongs to: itself without a trailing ordinal.
-///
-/// A node carrying no ordinal is its own family rather than no family at all. That is what
-/// makes the grouping total, and a total grouping is what stops an edge to such a node from
-/// being drawn as a dangling end.
-fn Family_Of(identity: &str) -> String
-{
-    let Some((family, ordinal)) = identity.rsplit_once('-')
-    else
-    {
-        return identity.to_owned();
-    };
-
-    if ordinal.is_empty() || !ordinal.bytes().all(|byte| return byte.is_ascii_digit())
-    {
-        return identity.to_owned();
-    }
-
-    return family.to_owned();
-}
-
-pub(super) fn Gather_Statements(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
-{
-    let mut query = Query::On(
-        "SELECT s.statement_id, s.kind, n.node_id, s.canonical_text, s.canonical_hash,
-                s.supersedes_hash
-         FROM normative_statements s JOIN nodes n ON n.uid = s.node_uid
-         WHERE 1 = 1",
-    );
-    query.Equal("s.kind", filter.kind.as_ref());
-    query.Prefix("s.statement_id", filter.identifier_prefix.as_ref());
-    query.Equal("n.node_id", filter.node_id.as_ref());
-
-    return query.Ordered_By("s.statement_id").Run(connection, |row| {
-        let mut columns = Columns::Of(row);
-        let statement = columns.Text()?;
-        let kind = columns.Text()?;
-        let node = columns.Text()?;
-        let text = columns.Text()?;
-        let hash = columns.Text()?;
-        let supersedes = columns.Text()?;
-
-        return Ok(Item::Of(&statement)
-            .With(Name("kind"), Value(&kind))
-            .With(Name("node"), Value(&node))
-            .With(Name("supersedes"), Value(&supersedes))
-            .With(Name("hash"), Value(&hash))
-            .Carrying(&text));
-    });
-}
-
-pub(super) fn Gather_Relations(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
-{
-    let mut query = Query::On(
-        "SELECT f.node_id, r.relation_type, t.node_id, y.tier, s.suite_id
-         FROM relations r
-         JOIN nodes f ON f.uid = r.from_node_uid
-         JOIN nodes t ON t.uid = r.to_node_uid
-         JOIN relation_types y ON y.name = r.relation_type
-         LEFT JOIN suites s ON s.uid = f.suite_uid
-         WHERE 1 = 1",
-    );
-    query.Equal("r.relation_type", filter.relation_type.as_ref());
-    query.Equal("s.suite_id", filter.suite.as_ref());
-    query.Prefix("f.node_id", filter.identifier_prefix.as_ref());
-    query.Either(FirstColumn("f.node_id"), SecondColumn("t.node_id"), filter.node_id.as_ref());
-
-    return query
-        .Ordered_By("f.node_id, r.relation_type, t.node_id")
-        .Run(connection, |row| {
-            let mut columns = Columns::Of(row);
-            let from = columns.Text()?;
-            let relation = columns.Text()?;
-            let to = columns.Text()?;
-            let tier = columns.Text()?;
-
-            return Ok(Item::Of(&format!("{from} {relation} {to}"))
-                .With(Name("from"), Value(&from))
-                .With(Name("relation"), Value(&relation))
-                .With(Name("to"), Value(&to))
-                .With(Name("tier"), Value(&tier)));
-        });
-}
-
-/// Every lineage row with all three of its source kinds joined.
-///
-/// One query rather than a union of three, because a row carries exactly one source and a
-/// `coalesce` over the three is what lets a single ordering cover all of them. `-1` is what
-/// each unmatched join leaves behind, and is read back as "this row is not addressed at
-/// that grain".
-const LINEAGE_ROWS: &str = "SELECT l.disposition,
-            coalesce(d.path, hd.path, rd.path, ''),
-            coalesce(b.ordinal, rb.ordinal, -1), coalesce(r.ordinal, -1), coalesce(h.title, ''),
-            coalesce(n.node_id, ''), coalesce(st.statement_id, '')
-     FROM lineage l
-     LEFT JOIN source_blocks b ON b.uid = l.source_block_uid
-     LEFT JOIN source_documents d ON d.uid = b.document_uid
-     LEFT JOIN source_headings h ON h.uid = l.source_heading_uid
-     LEFT JOIN source_documents hd ON hd.uid = h.document_uid
-     LEFT JOIN source_table_rows r ON r.uid = l.source_table_row_uid
-     LEFT JOIN source_blocks rb ON rb.uid = r.source_block_uid
-     LEFT JOIN source_documents rd ON rd.uid = rb.document_uid
-     LEFT JOIN nodes n ON n.uid = l.target_node_uid
-     LEFT JOIN normative_statements st ON st.uid = l.target_statement
-     WHERE 1 = 1";
-
-/// Document, then position, then disposition, then target.
-///
-/// Every column is named rather than ordering by the document alone, because two rows on
-/// one block would otherwise come back in whatever order the join produced them and a
-/// projection has to render the same way twice.
-const LINEAGE_ORDER: &str = "coalesce(d.path, hd.path, rd.path, ''), coalesce(b.ordinal, -1), \
-     coalesce(r.ordinal, -1), l.disposition, coalesce(n.node_id, ''), \
-     coalesce(st.statement_id, '')";
-
-pub(super) fn Gather_Lineage(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
-{
-    let mut query = Query::On(LINEAGE_ROWS);
-    query.Equal("l.disposition", filter.disposition.as_ref());
-    query.Equal("coalesce(d.path, hd.path, rd.path, '')", filter.document.as_ref());
-
-    return query
-        .Ordered_By(LINEAGE_ORDER)
-        .Run(connection, |row| {
-            let mut columns = Columns::Of(row);
-            let disposition = columns.Text()?;
-            let source = Cited_Source(&mut columns)?;
-            // `node` is read before `statement` because the query names them in that order
-            // and `Columns` reads positionally; both are read unconditionally regardless of
-            // which one `target` below turns out to need.
-            let node = columns.Text()?;
-            let statement = columns.Text()?;
-            // A statement is the more specific of the two and wins where both are present:
-            // saying which node a block preserved is true but answers a coarser question
-            // than the one the lineage was recorded to answer.
-            let target = match statement.is_empty()
-            {
-                true => node,
-                false => statement,
-                         };
-
-            return Ok(Item::Of(&format!("{source} -> {disposition}"))
-                .With(Name("source"), Value(&source))
-                .With(Name("disposition"), Value(&disposition))
-                .With(Name("target"), Value(&target)));
-        });
-}
-
-/// Where a lineage row points, at the finest grain the row carries.
-///
-/// A row addresses a table row, a block, or a heading, and `-1` is the sentinel each join
-/// leaves behind when it matched nothing. Citing the block for a row-level disposition
-/// would make thirty rows of one table cite the same place.
-pub(super) fn Cited_Source(columns: &mut Columns<'_, '_>) -> rusqlite::Result<String>
-{
-    let path = columns.Text()?;
-    let block: i64 = columns.Next()?;
-    let ordinal: i64 = columns.Next()?;
-    let heading = columns.Text()?;
-
-    return Ok(match (block, ordinal)
-    {
-        (-1, -1) => format!("{path}#{heading}"),
-        (block, -1) => format!("{path}#{block}"),
-        (block, ordinal) => format!("{path}#{block}:{ordinal}"),
-    });
-}
-
-/// Every omission with both of its source kinds joined.
-///
-/// `-1` is what the unmatched join leaves behind, and is read back as "this omission is not
-/// addressed at that grain".
-const OMISSION_ROWS: &str = "SELECT coalesce(d.path, hd.path, ''), coalesce(b.ordinal, -1),
-            coalesce(h.title, ''), o.reason, o.justification, o.decision_record
-     FROM omissions o
-     LEFT JOIN source_blocks b ON b.uid = o.source_block_uid
-     LEFT JOIN source_documents d ON d.uid = b.document_uid
-     LEFT JOIN source_headings h ON h.uid = o.source_heading_uid
-     LEFT JOIN source_documents hd ON hd.uid = h.document_uid
-     WHERE 1 = 1";
-
-/// Decision record, then document, then position, then reason — every column named, so two
-/// omissions on one block cannot come back in whatever order the join produced them.
-const OMISSION_ORDER: &str =
-    "o.decision_record, coalesce(d.path, hd.path, ''), coalesce(b.ordinal, -1), o.reason";
-
-pub(super) fn Gather_Omissions(connection: &Connection, filter: &Filter) -> Result<Vec<Item>, ProjectError>
-{
-    let mut query = Query::On(OMISSION_ROWS);
-    query.Equal("coalesce(d.path, hd.path, '')", filter.document.as_ref());
-
-    return query.Ordered_By(OMISSION_ORDER).Run(connection, An_Omission);
-}
-
-/// One omission, cited at the finest grain its row carries.
-fn An_Omission(row: &Row<'_>) -> rusqlite::Result<Item>
-{
-    let mut columns = Columns::Of(row);
-    let path = columns.Text()?;
-    let block: i64 = columns.Next()?;
-    let heading = columns.Text()?;
-    let reason = columns.Text()?;
-    let justification = columns.Text()?;
-    let decision = columns.Text()?;
-    let source = if block == -1
-    {
-        format!("{path}#{heading}")
-    }
-    else
-    {
-        format!("{path}#{block}")
-    };
-
-    return Ok(Item::Of(&format!("{source} -> {decision}"))
-        .With(Name("source"), Value(&source))
-        .With(Name("reason"), Value(&reason))
-        .With(Name("justification"), Value(&justification))
-        .With(Name("decision"), Value(&decision)));
-}
+pub(super) use corpus::{Gather_Blocks, Gather_Documents, Gather_Headings, Gather_Rows, Gather_Suites};
+pub(super) use graph::{Gather_Families, Gather_Neighbourhood, Gather_Nodes};
+pub(super) use lineage::Gather_Lineage;
+pub(super) use normative::{Gather_Relations, Gather_Statements};
+pub(super) use omissions::Gather_Omissions;
 
 #[cfg(test)]
 mod tests
 {
+    use super::citation::Cited_Source;
+    use super::super::Columns;
     use super::*;
+    use crate::Filter;
+    use crate::Item;
     use nomos_spec_store::SpecificationStore;
 
     #[test]
@@ -717,16 +193,10 @@ mod tests
         );
 
         let items = Gather_Relations(store.Connection(), &Filter::default()).expect("gathers");
+        let relation = The_One_Item(&items);
 
-        assert_eq!(items.len(), 1);
-        assert_eq!(
-            items.first().expect("asserted above to contain exactly one item").Field("from"),
-            Some("CDM-ONE")
-        );
-        assert_eq!(
-            items.first().expect("asserted above to contain exactly one item").Field("to"),
-            Some("AGT-EXEC-001")
-        );
+        assert_eq!(relation.Field("from"), Some("CDM-ONE"));
+        assert_eq!(relation.Field("to"), Some("AGT-EXEC-001"));
     }
 
     #[test]
@@ -741,16 +211,10 @@ mod tests
         );
 
         let items = Gather_Lineage(store.Connection(), &Filter::default()).expect("gathers");
+        let lineage = The_One_Item(&items);
 
-        assert_eq!(items.len(), 1);
-        assert_eq!(
-            items.first().expect("asserted above to contain exactly one item").Field("disposition"),
-            Some("preserved-verbatim")
-        );
-        assert_eq!(
-            items.first().expect("asserted above to contain exactly one item").Field("target"),
-            Some("CDM-ONE")
-        );
+        assert_eq!(lineage.Field("disposition"), Some("preserved-verbatim"));
+        assert_eq!(lineage.Field("target"), Some("CDM-ONE"));
     }
 
     #[test]
@@ -783,16 +247,10 @@ mod tests
         );
 
         let items = Gather_Omissions(store.Connection(), &Filter::default()).expect("gathers");
+        let omission = The_One_Item(&items);
 
-        assert_eq!(items.len(), 1);
-        assert_eq!(
-            items.first().expect("asserted above to contain exactly one item").Field("reason"),
-            Some("superseded")
-        );
-        assert_eq!(
-            items.first().expect("asserted above to contain exactly one item").Field("decision"),
-            Some("D-129")
-        );
+        assert_eq!(omission.Field("reason"), Some("superseded"));
+        assert_eq!(omission.Field("decision"), Some("D-129"));
     }
 
     /// An in-memory store seeded by `sql` alone — the setup every `Gather_*` test that needs no
@@ -802,6 +260,19 @@ mod tests
         let store = SpecificationStore::In_Memory().expect("opens");
         store.Connection().execute_batch(sql).expect("seeds");
         return store;
+    }
+
+    /// The one item a `Gather_*` returned, asserting on the way that it is the only one.
+    ///
+    /// The count and the unwrap that depends on it are one step. A test that checks the length
+    /// and then takes the first item is stating the same fact twice, and the message `expect`
+    /// raises belongs on the assertion that established the fact rather than on the read that
+    /// followed it.
+    fn The_One_Item(items: &[Item]) -> &Item
+    {
+        assert_eq!(items.len(), 1);
+
+        return items.first().expect("asserted above to contain exactly one item");
     }
 
     /// An in-memory store holding one document and its one segmented block, seeded further by

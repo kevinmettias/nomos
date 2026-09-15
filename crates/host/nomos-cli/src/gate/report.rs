@@ -1,164 +1,35 @@
 //! Turning what [`nomos_gate_orchestration::Run`] or [`nomos_gate_orchestration::Run_Gate`]
 //! answered into text and an [`ExitCode`].
-
-// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
-// module; check-test-coverage keys a test's companion unit off the exact file it is
-// textually written in, so these tests cannot move to a sibling file without losing
-// their attribution to every function this file declares.
-// responsibility: allow same reason -- the coupling that keeps this file whole is
-// check-test-coverage's stem-based companion attribution, not a design choice.
+//!
+//! The `compare` verb's rendering is here, beside the submodule declarations; what each other
+//! verb renders lives in the submodule named for it, so a reader looking for `explain`'s
+//! wording does not read `run`'s to find it.
 
 use super::ExitCode;
-use nomos_capability::RegistryError;
 use nomos_check_orchestration::CheckOutcome;
-use nomos_contracts::{Finding, RunId};
+use nomos_contracts::RunId;
 use nomos_gate_orchestration::{
-    Admissibility, BaselineAllowance, BaselineDebt, BaselinePopulation, Comparability, Explanation, GateExplainResult, GateOutcome,
-    GateRunOutcome, GateRunResult, JudgmentDifference, NoVerdict, RuleCalibration, Suppression,
+    CollidingOccurrences, Comparability, DispositionChange, GateCompareResult, GateRunResult, JudgmentDifference,
 };
 use std::io::Write;
-use std::path::Path;
 
-/// Renders what `nomos_gate_orchestration::Run` answered for `plan`.
-pub(super) fn Render_Plan(outcome: &GateOutcome, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
-{
-    return match outcome
-    {
-        GateOutcome::Planned(plan) =>
-        {
-            let _ = writeln!(stdout, "rules: {}", plan.rules.len());
-            for offer in &plan.rules
-            {
-                let _ = writeln!(
-                    stdout,
-                    "  {} ({} v{})",
-                    offer.rule, offer.contract_record, offer.contract_record_version
-                );
-            }
+mod admits;
+mod baselines;
+mod explain;
+mod run;
 
-            ExitCode::Ok
-        }
-        GateOutcome::Contradictory(error) =>
-        {
-            let _ = writeln!(stderr, "this gate's rule registry is self-contradictory: {error:?}");
+#[cfg(test)]
+mod tests;
 
-            ExitCode::Contradictory
-        }
-    };
-}
+pub(super) use admits::Render_Admits;
+pub(super) use explain::Render_Explain;
+pub(super) use run::{Render_Plan, Render_Run};
 
-/// Renders what [`super::run::Run_Gate`] answered for `run`.
-///
-/// Matches on [`GateRunResult::check_outcome`] directly, the same shape
-/// `check::report::Render` already uses, rather than switching on `disposition`: the exit
-/// code for every non-`Judged` variant is a property of *why* nothing was judged, which
-/// only `check_outcome` carries.
-pub(super) fn Render_Run(result: &GateRunResult, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
-{
-    return match &result.check_outcome
-    {
-        CheckOutcome::Unreadable => Render_Check_Unreadable(&result.root, stderr),
-        CheckOutcome::Contradictory(error) => Render_Run_Contradictory(error, stderr),
-        CheckOutcome::NoSource => Render_Run_No_Source(&result.root, stderr),
-        CheckOutcome::NoFacts { files } => Render_Run_No_Facts(&result.root, *files, stderr),
-        CheckOutcome::Judged { findings, .. } => Report_Judged(findings, result, stdout, stderr),
-    };
-}
+use run::{Render_Check_Unreadable, Render_Run_Contradictory, Render_Run_No_Facts, Render_Run_No_Source};
 
-/// The check layer beneath this gate run has its own composition contradictory.
-fn Render_Run_Contradictory(error: &RegistryError, stderr: &mut impl Write) -> ExitCode
-{
-    let _ = writeln!(
-        stderr,
-        "the check layer beneath this gate run has its own composition \
-         contradictory, so no fact it produced would have been offered by anybody: \
-         {error}"
-    );
-
-    return ExitCode::Contradictory;
-}
-
-/// The walk found no source under `root`, so `run` judged nothing.
-fn Render_Run_No_Source(root: &Path, stderr: &mut impl Write) -> ExitCode
-{
-    let _ = writeln!(
-        stderr,
-        "no Rust source found under `{}`, so nothing was judged.\n\
-         A clean result here would mean only that the walk found nothing.",
-        root.display()
-    );
-
-    return ExitCode::Vacuous;
-}
-
-/// Source was found under `root` but no syntax fact was materialized for any of it.
-fn Render_Run_No_Facts(root: &Path, files: usize, stderr: &mut impl Write) -> ExitCode
-{
-    let _ = writeln!(
-        stderr,
-        "{files} file(s) were read under `{}` and no syntax fact was materialized \
-         for any of them, so no mirror claim could be resolved.\n\
-         A clean result here would mean only that the analysis never ran.",
-        root.display()
-    );
-
-    return ExitCode::Vacuous;
-}
-
-/// Renders a judged run's findings and reduces its disposition to an [`ExitCode`] -- the
-/// one arm of [`Render_Run`] that does real work, the same way `check::report::Render`
-/// delegates its own `Judged` arm to a dedicated function rather than folding it into the
-/// outer match.
-fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
-{
-    let _ = writeln!(stdout, "run: {}", result.run);
-
-    for finding in findings
-    {
-        let _ = writeln!(stdout, "{}", finding.Describe());
-    }
-
-    let _ = writeln!(
-        stdout,
-        "\n{} finding(s), {} of which can fail a build, {} calibrated, {} suppressed, {} baselined",
-        findings.len(),
-        // Both, because both failed the build. Counted together and explained apart: the
-        // report below says which of them is a tolerance that ran out of room.
-        result.findings.blocking_findings.len().saturating_add(result.findings.baseline_exceeded_findings.len()),
-        result.findings.calibrated_findings.len(),
-        result.findings.suppressed_findings.len(),
-        result.findings.baselined_findings.len()
-    );
-
-    Report_Exceeded_Baselines(&result.findings.baseline_populations, stdout);
-    Report_Unmatched_Policy(result, stdout);
-
-    return Exit_Code_For(result, stderr);
-}
-
-/// Names every declared policy entry that matched no finding in this run.
-///
-/// `OD-GATE-024`: an entry that matches nothing is reported rather than silently ignored,
-/// because an author who wrote one cannot otherwise tell a mis-spelling from a finding that
-/// has since been fixed. It does not change the exit code — a policy legitimately outlives
-/// the finding it was written for, and a repository whose debt was paid must not fail its
-/// own gate for having paid it.
-///
-/// Silent when every entry matched, and when none was declared: a header over an empty list
-/// on every clean run is the noise that teaches a reader to skip the line that matters.
-fn Report_Unmatched_Policy(result: &GateRunResult, stdout: &mut impl Write)
-{
-    if result.unmatched_policy.is_empty()
-    {
-        return;
-    }
-
-    let _ = writeln!(stdout, "\ndeclared policy that matched nothing:");
-    for entry in &result.unmatched_policy
-    {
-        let _ = writeln!(stdout, "  {entry}");
-    }
-}
+/// A collision names two findings -- the one that was indexed and the one it collided with --
+/// so the number of findings a refusal accounts for is twice the number of collisions.
+const FINDINGS_PER_COLLISION: usize = 2;
 
 /// Renders what [`nomos_gate_orchestration::Compare_Gate_Runs`] answered for `compare`.
 ///
@@ -194,74 +65,10 @@ pub(super) fn Render_Compare(
     let compared = match nomos_gate_orchestration::Compare_Gate_Runs(baseline, candidate)
     {
         Ok(compared) => compared,
-        Err(refused) =>
-        {
-            // Not `Violations`: nothing about the tree was judged badly, and nothing about the
-            // difference was judged at all. This is the analysis refusing to answer, which is
-            // the distinction `Unjudged` above already draws for a side that could not be read.
-            let _ = writeln!(
-                stderr,
-                "cannot compare: run {} produced {} finding(s) that share an occurrence identity \
-                 with another finding in the same run, so indexing them would silently drop one.\n\
-                 This is a defect in the identity material rather than something to work around: \
-                 two findings agreeing on rule, subject, summary and locations are one occurrence \
-                 to every consumer. The colliding findings are:",
-                refused.run,
-                refused.collisions.len().saturating_mul(2)
-            );
-
-            for collision in &refused.collisions
-            {
-                let _ = writeln!(stderr, "  {}", collision.first.Describe());
-                let _ = writeln!(stderr, "  {}", collision.second.Describe());
-            }
-
-            return ExitCode::Contradictory;
-        }
+        Err(refused) => return Refuse_Colliding_Runs(&refused, stderr),
     };
 
-    let _ = writeln!(
-        stdout,
-        "baseline: {} ({})\ncandidate: {} ({})",
-        compared.baseline,
-        baseline.root.display(),
-        compared.candidate,
-        candidate.root.display()
-    );
-
-    Report_Comparability(&compared.comparability, stdout);
-
-    for finding in &compared.added
-    {
-        let _ = writeln!(stdout, "+ {}", finding.Describe());
-    }
-    for finding in &compared.removed
-    {
-        let _ = writeln!(stdout, "- {}", finding.Describe());
-    }
-    for change in &compared.changed
-    {
-        // `locations` is appended because occurrence scope made the rule-and-subject pair
-        // non-unique: one subject can now contribute several changes, and without the geometry
-        // they would print as identical lines. Omitted when a finding carries none, rather than
-        // printing an empty bracket that says nothing.
-        let where_it_is =
-            if change.locations.is_empty() { String::new() } else { format!(" [{}]", change.locations.join(", ")) };
-
-        let _ = writeln!(
-            stdout,
-            "~ {} {}{}: {:?} -> {:?}",
-            change.rule, change.subject_name, where_it_is, change.before, change.after
-        );
-    }
-
-    let _ = writeln!(
-        stdout,
-        "\n{} added, {} removed, {} changed disposition",
-        compared.added.len(),
-        compared.removed.len(),
-        compared.changed.len()
-    );
+    Report_Compared_Runs(baseline, candidate, &compared, stdout);
 
     return ExitCode::Ok;
 }
@@ -290,6 +97,56 @@ fn Unjudged(result: &GateRunResult, flag: &str, stderr: &mut impl Write) -> Opti
         // Guarded by the matches! above, which returns before reaching here.
         CheckOutcome::Judged { .. } => ExitCode::Ok,
     });
+}
+
+/// Reports a `compare` the analysis refused: two findings in one run share an occurrence
+/// identity, so indexing them would silently drop one.
+///
+/// Not `Violations`: nothing about the tree was judged badly, and nothing about the difference
+/// was judged at all. This is the analysis refusing to answer, which is the distinction
+/// [`Unjudged`] above already draws for a side that could not be read.
+fn Refuse_Colliding_Runs(refused: &CollidingOccurrences, stderr: &mut impl Write) -> ExitCode
+{
+    let _ = writeln!(
+        stderr,
+        "cannot compare: run {} produced {} finding(s) that share an occurrence identity \
+         with another finding in the same run, so indexing them would silently drop one.\n\
+         This is a defect in the identity material rather than something to work around: \
+         two findings agreeing on rule, subject, summary and locations are one occurrence \
+         to every consumer. The colliding findings are:",
+        refused.run,
+        refused.collisions.len().saturating_mul(FINDINGS_PER_COLLISION)
+    );
+
+    for collision in &refused.collisions
+    {
+        let _ = writeln!(stderr, "  {}", collision.first.Describe());
+        let _ = writeln!(stderr, "  {}", collision.second.Describe());
+    }
+
+    return ExitCode::Contradictory;
+}
+
+/// The two runs' identities, then what a reader may conclude from the difference below, then
+/// the difference itself.
+fn Report_Compared_Runs(
+    baseline: &GateRunResult,
+    candidate: &GateRunResult,
+    compared: &GateCompareResult,
+    stdout: &mut impl Write,
+)
+{
+    let _ = writeln!(
+        stdout,
+        "baseline: {} ({})\ncandidate: {} ({})",
+        compared.baseline,
+        baseline.root.display(),
+        compared.candidate,
+        candidate.root.display()
+    );
+
+    Report_Comparability(&compared.comparability, stdout);
+    Report_Moved_Findings(compared, stdout);
 }
 
 /// Says what a reader may conclude from the difference below, before they read it.
@@ -353,6 +210,50 @@ fn Report_Incomparable(runs: &[RunId], stdout: &mut impl Write)
     );
 }
 
+/// Every finding the two runs do not agree on, one line each -- added, then removed, then
+/// changed in disposition -- and the count of each.
+fn Report_Moved_Findings(compared: &GateCompareResult, stdout: &mut impl Write)
+{
+    for finding in &compared.added
+    {
+        let _ = writeln!(stdout, "+ {}", finding.Describe());
+    }
+    for finding in &compared.removed
+    {
+        let _ = writeln!(stdout, "- {}", finding.Describe());
+    }
+    for change in &compared.changed
+    {
+        Report_One_Change(change, stdout);
+    }
+
+    let _ = writeln!(
+        stdout,
+        "\n{} added, {} removed, {} changed disposition",
+        compared.added.len(),
+        compared.removed.len(),
+        compared.changed.len()
+    );
+}
+
+/// One changed finding, as a line: the rule, its subject, where the change sits when the
+/// finding carries geometry, and the disposition it moved between.
+fn Report_One_Change(change: &DispositionChange, stdout: &mut impl Write)
+{
+    // `locations` is appended because occurrence scope made the rule-and-subject pair
+    // non-unique: one subject can now contribute several changes, and without the geometry
+    // they would print as identical lines. Omitted when a finding carries none, rather than
+    // printing an empty bracket that says nothing.
+    let where_it_is =
+        if change.locations.is_empty() { String::new() } else { format!(" [{}]", change.locations.join(", ")) };
+
+    let _ = writeln!(
+        stdout,
+        "~ {} {}{}: {:?} -> {:?}",
+        change.rule, change.subject_name, where_it_is, change.before, change.after
+    );
+}
+
 /// One judgment difference, as a reader would need it said.
 ///
 /// Written out rather than derived from `Debug`, for the reason every other rendering in this
@@ -365,878 +266,4 @@ const fn Difference_Sentence(difference: JudgmentDifference) -> &'static str
         JudgmentDifference::Selection => "they were allowed to look at different things",
         JudgmentDifference::Instrument => "they were judged by different builds, or by different rule sets",
     };
-}
-
-/// Says which baselined scopes hold more debt than they accepted, and refuses to say more.
-///
-/// Only the exceeded ones. A line for every baselined scope would put the ordinary case --
-/// adopted debt sitting where it was adopted -- in front of a reader on every clean run, and a
-/// report whose every line is routine is one whose exceptional line gets skipped.
-///
-/// The closing sentence is the part that is easy to drop and must not be. `OD-GATE-030` refuses
-/// attribution inside an exceeded population: a run knows the scope is over its allowance by a
-/// number and does not know which of the occurrences present are the adopted ones. Saying only
-/// "4 more than accepted" invites a reader to decide for themselves which four, which is
-/// exactly the claim nothing here can support.
-fn Report_Exceeded_Baselines(populations: &[BaselinePopulation], stdout: &mut impl Write)
-{
-    let exceeded: Vec<&BaselinePopulation> = populations.iter().filter(|population| return population.Is_Exceeded()).collect();
-    if exceeded.is_empty()
-    {
-        return;
-    }
-
-    let _ = writeln!(stdout, "\nbaseline debt has grown past what was adopted:");
-    for population in exceeded
-    {
-        let _ = writeln!(
-            stdout,
-            "  {} at {}: {} occurrence(s) now, {} accepted at adoption, {} more than accepted",
-            population.rule.As_Str(),
-            Scope_Name(population),
-            population.observed,
-            Accepted_Count(population.allowed),
-            population.Excess()
-        );
-    }
-
-    let _ = writeln!(
-        stdout,
-        "Which of the occurrences present are the ones that were adopted is not known, so none \
-         of them is reported as new. What is known is the quantity: a scope holding more than \
-         it accepted holds at least that many occurrences that cannot be the adopted ones."
-    );
-}
-
-/// The scope as its author wrote it, which is the whole reason this is not `population.subject`.
-///
-/// A declared entry names a path and the run matches the digest that path folds to, so the
-/// digest is the right identity and the wrong thing to print: the fold is one way, and a reader
-/// told `a scope at e3f85dfb…` cannot find the entry they wrote. Several spellings of one path
-/// fold together -- `./a.rs`, `a.rs`, `A.rs` -- so the author's own spelling is not recoverable
-/// from the subject by anyone, this function included, which is why the entry carries it.
-///
-/// The digest appears only when there is no authored spelling to prefer, which means a policy
-/// built in code rather than declared in a file. Saying the digest there is honest and saying
-/// one of several possible paths would not be. It is printed bare rather than dressed as a path
-/// so that a reader can tell the two cases apart.
-fn Scope_Name(population: &BaselinePopulation) -> String
-{
-    return match &population.declared_path
-    {
-        Some(path) => path.clone(),
-        None => population.subject.to_string(),
-    };
-}
-
-/// The accepted quantity, for a scope that has one.
-///
-/// An unbounded scope never reaches this, because it can never be exceeded. The word is here
-/// rather than a zero anyway, so that a caller who later prints every population does not
-/// report "0 accepted" for an entry that accepted everything.
-fn Accepted_Count(allowance: BaselineAllowance) -> String
-{
-    return match allowance
-    {
-        BaselineAllowance::Unbounded => "no stated limit".to_owned(),
-        BaselineAllowance::AtMost(count) => count.to_string(),
-    };
-}
-
-/// Reduces a real run's disposition to the [`ExitCode`] it reports.
-///
-/// Every arm is reachable from the `Judged` arm this is called under, `Indeterminate`
-/// included: `Run_Gate` assigns that disposition *after* a full judgment in two deliberate
-/// cases, which [`Render_Run_No_Verdict`] names. This function asserted the opposite and
-/// aborted the process on both until the cases were measured.
-///
-/// Takes the whole result rather than the disposition alone, because the cause and the
-/// disposition are one answer: reading `Indeterminate` without the `NoVerdict` beside it is
-/// exactly the half-answer this repository had before the result carried one.
-fn Exit_Code_For(result: &GateRunResult, stderr: &mut impl Write) -> ExitCode
-{
-    return match result.disposition
-    {
-        GateRunOutcome::Failed => ExitCode::Violations,
-        GateRunOutcome::Passed => ExitCode::Ok,
-        GateRunOutcome::Indeterminate => Render_Run_No_Verdict(result.no_verdict.as_ref(), stderr),
-    };
-}
-
-/// The tree was judged, the findings reported above are all of them, and no verdict was
-/// reached. Says which of the three mechanisms produced that.
-///
-/// Each wants a different reaction, which is the whole reason `GateRunResult` carries the
-/// cause rather than only the disposition. Two are a broken `nomos-gate.json` and send a
-/// reader to that file with the reader's own message about it -- for a mis-spelled key,
-/// the key. The third is `OD-GATE-016`'s coverage floor doing exactly what the repository
-/// asked it to, where there is no fault to find and a reader sent looking for one would
-/// waste the trip.
-///
-/// `None` is not reachable from a real `Run_Gate` today, which fills the cause on every
-/// path that produces this disposition after judging. It is still answered rather than
-/// asserted away: an unreachable claim about this exact arm is what aborted the process
-/// before, and the honest rendering of a missing reason is to say the reason is missing.
-fn Render_Run_No_Verdict(cause: Option<&NoVerdict>, stderr: &mut impl Write) -> ExitCode
-{
-    let _ = match cause
-    {
-        Some(NoVerdict::UnreadablePolicy(detail)) => writeln!(
-            stderr,
-            "\nthis run judged the tree and reached no verdict: the `nomos-gate.json` under its \
-             root could not be read, so there were no declared rules to reduce the findings \
-             above by.\n  {detail}"
-        ),
-        Some(NoVerdict::MalformedPolicy(detail)) => writeln!(
-            stderr,
-            "\nthis run judged the tree and reached no verdict: the `nomos-gate.json` under its \
-             root is not a policy this reader accepts, so there were no declared rules to \
-             reduce the findings above by.\n  {detail}"
-        ),
-        Some(NoVerdict::IncompleteCoverage) => writeln!(
-            stderr,
-            "\nthis run judged the tree, found nothing that can fail a build, and is still not \
-             a pass: its declared coverage floor is `require-completeness` and some rules \
-             could not look.\n\
-             Nothing is wrong with the tree or with the policy. A clean result here would \
-             mean only that the rules which did run found nothing."
-        ),
-        None => writeln!(
-            stderr,
-            "\nthis run judged the tree and reached no verdict, and did not record why."
-        ),
-    };
-
-    return ExitCode::Contradictory;
-}
-
-/// Renders what [`nomos_gate_orchestration::Explain_Gate`] answered for `explain`.
-///
-/// The same `check_outcome`-first match [`Render_Run`] uses, for the same reason: the exit
-/// code for every non-`Judged` variant is a property of *why* nothing was judged, not of
-/// the query.
-pub(super) fn Render_Explain(result: &GateExplainResult, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
-{
-    return match &result.check_outcome
-    {
-        CheckOutcome::Unreadable => Render_Check_Unreadable(&result.root, stderr),
-        CheckOutcome::Contradictory(error) => Render_Explain_Contradictory(error, stderr),
-        CheckOutcome::NoSource => Render_Explain_No_Source(&result.root, stderr),
-        CheckOutcome::NoFacts { files } => Render_Explain_No_Facts(&result.root, *files, stderr),
-        CheckOutcome::Judged { .. } => Report_Explanation(&result.explanation, stdout),
-    };
-}
-
-/// What the architecture says about an edge that does not exist yet.
-///
-/// `Permitted` and `NotJudged` are both `Ok`; only `Refused` is `Violations`. That pairing is
-/// deliberate and it is the one place this verb could mislead: a caller scripting `admits`
-/// into a pre-commit hook reads the exit code, and giving `NotJudged` a failing code would
-/// stop a build over a crate this workspace has no opinion about, while giving `Refused` a
-/// clean one would let the edge through. So the code carries the judgment and the text
-/// carries the difference between "yes" and "no answer" — which the line always says, in
-/// words, whichever code it exits with.
-pub(super) fn Render_Admits(answer: Admissibility, pair: (&str, &str), stdout: &mut impl Write) -> ExitCode
-{
-    let (depending, depended) = pair;
-
-    return match answer
-    {
-        Admissibility::Permitted =>
-        {
-            let _ = writeln!(stdout, "permitted: {depending} may name {depended}.");
-            ExitCode::Ok
-        }
-        Admissibility::Refused =>
-        {
-            let _ = writeln!(
-                stdout,
-                "refused: {depending} may not name {depended} under this repository's declared \
-                 architecture."
-            );
-            ExitCode::Violations
-        }
-        Admissibility::NotJudged =>
-        {
-            let _ = writeln!(
-                stdout,
-                "not judged: {depending} or {depended} has no declared zone, so there is nothing \
-                 to judge this edge against. This is not permission."
-            );
-            ExitCode::Ok
-        }
-    };
-}
-
-/// The check layer beneath this gate explain has its own composition contradictory.
-fn Render_Explain_Contradictory(error: &RegistryError, stderr: &mut impl Write) -> ExitCode
-{
-    let _ = writeln!(
-        stderr,
-        "the check layer beneath this gate explain has its own composition \
-         contradictory, so no fact it produced would have been offered by anybody: \
-         {error}"
-    );
-
-    return ExitCode::Contradictory;
-}
-
-/// The walk found no source under `root`, so `explain`'s query cannot be answered.
-fn Render_Explain_No_Source(root: &Path, stderr: &mut impl Write) -> ExitCode
-{
-    let _ = writeln!(
-        stderr,
-        "no Rust source found under `{}`, so nothing was judged and the query \
-         cannot be answered.",
-        root.display()
-    );
-
-    return ExitCode::Vacuous;
-}
-
-/// Source was found under `root` but no syntax fact was materialized for any of it, so
-/// `explain`'s query cannot be answered.
-fn Render_Explain_No_Facts(root: &Path, files: usize, stderr: &mut impl Write) -> ExitCode
-{
-    let _ = writeln!(
-        stderr,
-        "{files} file(s) were read under `{}` and no syntax fact was materialized \
-         for any of them, so the query cannot be answered.",
-        root.display()
-    );
-
-    return ExitCode::Vacuous;
-}
-
-/// Renders `explain`'s answer and reduces it to an [`ExitCode`] -- `Violations` when the
-/// named finding would block a real run, `Ok` otherwise (not found, or found but not
-/// blocking), the same "the exit code mirrors what `run` would decide for this one
-/// finding" reasoning `nomos_gate_orchestration::explain`'s own doc gives.
-fn Report_Explanation(explanation: &Explanation, stdout: &mut impl Write) -> ExitCode
-{
-    return match explanation
-    {
-        Explanation::NotFound =>
-        {
-            let _ = writeln!(stdout, "not found");
-
-            ExitCode::Ok
-        }
-        Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by, contract } =>
-        {
-            let tolerance = Toleration {
-                calibrated_by: calibrated_by.as_ref(),
-                suppressed_by: suppressed_by.as_ref(),
-                baselined_by: baselined_by.as_ref(),
-            };
-            let found = FoundExplanation { finding, would_block: *would_block, contract: contract.as_ref() };
-
-            Report_Found(found, tolerance, stdout)
-        }
-    };
-}
-
-/// The calibration, suppression or baseline note [`Report_Found`] renders alongside a found
-/// explanation's block status -- never more than one at once, since `Explain_Gate` checks
-/// them in that order and stops at the first match, but grouped as a triple rather than
-/// three parameters: what a found explanation was tolerated by is one fact, not three.
-#[derive(Clone, Copy)]
-#[allow(clippy::struct_field_names)] // each field answers "tolerated by ___"; the shared
-                                      // suffix is the point, not an accident to rename away
-struct Toleration<'a>
-{
-    calibrated_by: Option<&'a RuleCalibration>,
-    suppressed_by: Option<&'a Suppression>,
-    baselined_by: Option<&'a BaselineDebt>,
-}
-
-/// A found explanation's finding, block status and contract -- grouped separately from
-/// [`Toleration`] because these three come directly off [`Explanation::Found`], while
-/// `Toleration` is the one of at most three ways that finding was tolerated.
-#[derive(Clone, Copy)]
-struct FoundExplanation<'a>
-{
-    finding: &'a Finding,
-    would_block: bool,
-    contract: Option<&'a (String, u32)>,
-}
-
-/// Renders one found explanation's finding, block status, and calibration, suppression or
-/// baseline note (if any applies), and reduces it to the [`ExitCode`] a real run would
-/// decide for this one finding.
-fn Report_Found(found: FoundExplanation<'_>, tolerance: Toleration<'_>, stdout: &mut impl Write) -> ExitCode
-{
-    let _ = writeln!(stdout, "{}", found.finding.Describe());
-    let _ = writeln!(stdout, "would block: {}", found.would_block);
-    if let Some((record, version)) = found.contract
-    {
-        let _ = writeln!(stdout, "contract: {record} v{version}");
-    }
-    if let Some(calibration) = tolerance.calibrated_by
-    {
-        let _ = writeln!(stdout, "calibrated by: {}", calibration.rationale);
-    }
-    if let Some(suppression) = tolerance.suppressed_by
-    {
-        let _ = writeln!(
-            stdout,
-            "suppressed by: {:?} — {} (owner: {})",
-            suppression.disposition, suppression.rationale, suppression.owner
-        );
-    }
-    if let Some(debt) = tolerance.baselined_by
-    {
-        let _ = writeln!(stdout, "baselined by: {}", debt.rationale);
-    }
-
-    return if found.would_block { ExitCode::Violations } else { ExitCode::Ok };
-}
-
-/// The root does not exist, is not a directory, or its walk could not be ingested -- the
-/// same message whether the caller was `run` or `explain`, since neither verb's own
-/// question ever got asked.
-fn Render_Check_Unreadable(root: &Path, stderr: &mut impl Write) -> ExitCode
-{
-    let _ = writeln!(
-        stderr,
-        "cannot judge `{}`: not a directory, or its walk could not be ingested as a \
-         workspace state",
-        root.display()
-    );
-
-    return ExitCode::Contradictory;
-}
-
-#[cfg(test)]
-mod tests
-{
-    //! [`super::Render_Plan`], [`super::Render_Run`] and [`super::Render_Explain`], exercised.
-    //!
-    //! Split from `report.rs` itself once that file passed the ~500-line review trigger --
-    //! `report.rs` is the rendering logic, this is its own coverage, the same split this
-    //! workspace already keeps between `spec.rs` and `spec/tests.rs`.
-
-    use super::*;
-    use nomos_check_orchestration::{Claim, Examined};
-    use nomos_contracts::{Applicability, Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
-    use nomos_gate_orchestration::{Fresh_Run_Id, GateFindings, GateRunProvenance};
-    use nomos_platform::Timestamp;
-    use std::path::PathBuf;
-
-    /// A check outcome that never reached `Judged` must render as `Vacuous`, the same claim
-    /// `Render_Check_Unreadable`'s siblings already make for `run`'s own non-judged arms --
-    /// `Render_Run` picks the same arm for `explain`'s `NoSource`.
-    #[test]
-    fn Test_Render_Run_Should_Report_Vacuous_When_The_Check_Outcome_Never_Reached_Judged()
-    {
-        let result = GateRunResult {
-            provenance: None,
-            no_verdict: None,
-            unmatched_policy: Vec::new(),
-            run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
-            root: PathBuf::from("does/not/matter"),
-            check_outcome: CheckOutcome::NoSource,
-            findings: Empty_Findings(),
-            disposition: GateRunOutcome::Indeterminate,
-        };
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Run(&result, &mut stdout, &mut stderr);
-
-        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
-        assert_eq!(code, ExitCode::Vacuous, "{rendered_stderr}");
-        assert!(rendered_stderr.contains("nothing was judged"), "{rendered_stderr}");
-        assert!(String::from_utf8_lossy(&stdout).is_empty());
-    }
-
-    /// A run whose baselined scope holds `observed` occurrences against an allowance of
-    /// `allowed`, rendered.
-    ///
-    /// The declared path is spelled the way an author would plausibly write it rather than the
-    /// way `Subject_Of_Path` normalizes it, so that the output a test reads is the one the
-    /// failing behavior actually produced: a digest where the author wrote a path.
-    fn Rendered_Population(allowed: BaselineAllowance, observed: u32) -> String
-    {
-        return Rendered_Population_Declared(Some("./src/lib.rs"), allowed, observed);
-    }
-
-    /// The same, for an entry no file declared -- a policy a caller built in code.
-    fn Rendered_Population_Declared(declared_path: Option<&str>, allowed: BaselineAllowance, observed: u32) -> String
-    {
-        let population = BaselinePopulation {
-            rule: RuleId::New("no-single-line-function-bodies"),
-            subject: nomos_model::Subject_Of_Path("src/lib.rs"),
-            declared_path: declared_path.map(str::to_owned),
-            allowed,
-            observed,
-        };
-        let mut result = Judged_With(1, None);
-        result.findings.baseline_populations = vec![population];
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let _ = Render_Run(&result, &mut stdout, &mut stderr);
-
-        return String::from_utf8_lossy(&stdout).into_owned();
-    }
-
-    /// The numbers a reader acts on, and the sentence that stops them acting on more.
-    ///
-    /// `OD-GATE-030` refuses attribution inside an exceeded population. A report that gave the
-    /// excess and stopped would leave a reader to pick which occurrences are new, which is the
-    /// claim the run cannot support, so the disclaimer is asserted as part of the output rather
-    /// than left to a reviewer to notice going missing.
-    #[test]
-    fn Test_An_Exceeded_Scope_Should_Report_Its_Arithmetic_And_Refuse_To_Name_Which_Are_New()
-    {
-        let rendered = Rendered_Population(BaselineAllowance::AtMost(1), 5);
-
-        assert!(rendered.contains("baseline debt has grown past what was adopted"), "{rendered}");
-        assert!(rendered.contains("5 occurrence(s) now"), "{rendered}");
-        assert!(rendered.contains("1 accepted at adoption"), "{rendered}");
-        assert!(rendered.contains("4 more than accepted"), "{rendered}");
-        assert!(rendered.contains("is not known"), "the report must refuse to name which are new: {rendered}");
-    }
-
-    /// The scope is named the way its author wrote it, not by the identity it folds to.
-    ///
-    /// The defect this closes, as a reader met it: `no-single-line-function-bodies at
-    /// e3f85dfb5b619eeb400b77bf17e6437c` for an entry whose author typed `./src/lib.rs`. Both
-    /// halves are asserted, because either alone is satisfied by the wrong thing -- a report
-    /// that printed the path *and* the digest would pass a containment check on the path, and
-    /// one that printed neither would pass a check on the digest.
-    #[test]
-    fn Test_An_Exceeded_Scope_Should_Be_Named_As_Its_Author_Wrote_It_Rather_Than_By_Its_Digest()
-    {
-        let rendered = Rendered_Population(BaselineAllowance::AtMost(1), 5);
-        let digest = nomos_model::Subject_Of_Path("src/lib.rs").to_string();
-
-        assert!(rendered.contains("./src/lib.rs"), "the author's own spelling is what they can act on: {rendered}");
-        assert!(!rendered.contains(&digest), "a digest is the identity and not something the author can search their own configuration for: {rendered}");
-    }
-
-    /// An entry no file declared has no authored spelling, so the digest is printed and is not
-    /// dressed up as a path.
-    ///
-    /// The converse control. Without it, a report that always printed the subject would satisfy
-    /// the test above only by accident of the fixture, and a reader of a programmatically built
-    /// policy would be shown a path that no file contains.
-    #[test]
-    fn Test_An_Exceeded_Scope_No_File_Declared_Should_Be_Named_By_Its_Digest_Alone()
-    {
-        let rendered = Rendered_Population_Declared(None, BaselineAllowance::AtMost(1), 5);
-        let digest = nomos_model::Subject_Of_Path("src/lib.rs").to_string();
-
-        assert!(rendered.contains(&digest), "{rendered}");
-        assert!(!rendered.contains("src/lib.rs"), "no path may be invented for an entry that named none: {rendered}");
-    }
-
-    /// A scope inside its allowance says nothing at all.
-    ///
-    /// A line on every clean run is how the exceptional line stops being read.
-    #[test]
-    fn Test_A_Scope_Within_Its_Allowance_Should_Report_Nothing()
-    {
-        let rendered = Rendered_Population(BaselineAllowance::AtMost(5), 2);
-
-        assert!(!rendered.contains("baseline debt has grown"), "{rendered}");
-    }
-
-    /// An unbounded scope is never exceeded, however much it holds.
-    #[test]
-    fn Test_An_Unbounded_Scope_Should_Report_Nothing_However_Much_It_Holds()
-    {
-        let rendered = Rendered_Population(BaselineAllowance::Unbounded, 900);
-
-        assert!(!rendered.contains("baseline debt has grown"), "{rendered}");
-    }
-
-    /// A judged run that found nothing, carrying `provenance` -- the only thing the
-    /// comparability rendering reads, so every test below differs in that alone.
-    fn Judged_With(fill: u8, provenance: Option<GateRunProvenance>) -> GateRunResult
-    {
-        return GateRunResult {
-            provenance,
-            no_verdict: None,
-            unmatched_policy: Vec::new(),
-            run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(i64::from(fill))),
-            root: PathBuf::from("."),
-            check_outcome: CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: 1, facts: 1 }, claim: Claim::Complete },
-            findings: Empty_Findings(),
-            disposition: GateRunOutcome::Passed,
-        };
-    }
-
-    /// A provenance whose policy is `policy` and whose every other component is shared, so
-    /// that two of them differ in the policy and in nothing else.
-    fn Provenance_With(policy: u8) -> GateRunProvenance
-    {
-        let shared = Digest128::From_Bytes([1; Digest128::BYTE_LENGTH]);
-
-        return GateRunProvenance {
-            source: shared,
-            policy: Digest128::From_Bytes([policy; Digest128::BYTE_LENGTH]),
-            selection: shared,
-            instrument: shared,
-            at: Timestamp::From_Unix_Seconds(0),
-        };
-    }
-
-    /// Two runs judged alike say nothing about it.
-    ///
-    /// A caveat printed on every comparison is how a reader learns to skip the line that
-    /// matters, which would cost more than the caveat saves.
-    #[test]
-    fn Test_Render_Compare_Should_Say_Nothing_When_The_Two_Runs_Were_Judged_Alike()
-    {
-        let baseline = Judged_With(1, Some(Provenance_With(7)));
-        let candidate = Judged_With(2, Some(Provenance_With(7)));
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Compare(&baseline, &candidate, &mut stdout, &mut stderr);
-
-        let rendered = String::from_utf8_lossy(&stdout).into_owned();
-        assert_eq!(code, ExitCode::Ok, "{rendered}");
-        assert!(!rendered.contains("not judged alike"), "{rendered}");
-        assert!(!rendered.contains("does not record what judged it"), "{rendered}");
-    }
-
-    /// A policy difference is stated, and stated *before* the diff.
-    ///
-    /// Order is the assertion, not decoration: a reader who takes the diff at face value has
-    /// already been misled by the time they reach a footnote, so a correct sentence in the
-    /// wrong place does not satisfy `OD-GATE-031`.
-    #[test]
-    fn Test_Render_Compare_Should_State_A_Policy_Difference_Before_The_Difference()
-    {
-        let baseline = Judged_With(1, Some(Provenance_With(7)));
-        let candidate = Judged_With(2, Some(Provenance_With(8)));
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Compare(&baseline, &candidate, &mut stdout, &mut stderr);
-
-        let rendered = String::from_utf8_lossy(&stdout).into_owned();
-        assert_eq!(code, ExitCode::Ok, "a comparability is not a verdict: {rendered}");
-        assert!(rendered.contains("different declared policies"), "{rendered}");
-        let stated = rendered.find("not judged alike").unwrap_or(usize::MAX);
-        let counted = rendered.find(" added, ").unwrap_or(0);
-        assert!(stated < counted, "the caveat has to arrive first: {rendered}");
-    }
-
-    /// A run that does not say what judged it is named, and the diff is still printed.
-    ///
-    /// `P106` settled the same trade one verb over: refusing the verdict is not refusing the
-    /// answer, and throwing away what the caller asked for in order to say something about it
-    /// is the worse of the two.
-    #[test]
-    fn Test_Render_Compare_Should_Name_A_Run_That_Cannot_Say_What_Judged_It()
-    {
-        let baseline = Judged_With(1, Some(Provenance_With(7)));
-        let candidate = Judged_With(2, None);
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Compare(&baseline, &candidate, &mut stdout, &mut stderr);
-
-        let rendered = String::from_utf8_lossy(&stdout).into_owned();
-        assert_eq!(code, ExitCode::Ok, "{rendered}");
-        assert!(rendered.contains("does not record what judged it"), "{rendered}");
-        assert!(rendered.contains("0 added, 0 removed"), "the difference is still reported: {rendered}");
-    }
-
-    /// A judged run whose disposition is `Indeterminate` says there is no verdict, says which
-    /// mechanism produced that, and exits `Contradictory` -- instead of aborting the process.
-    ///
-    /// The arm these cover was `unreachable!` until it was measured, on the claim that
-    /// `Run_Gate` only assigns `Indeterminate` to a run which never reached `Judged`. It
-    /// assigns it to a judged run in three cases, and a real `nomos gate run` aborted with
-    /// 101 on every one.
-    ///
-    /// One test per cause rather than one over all of them, because the whole point of
-    /// carrying a cause is that the three read differently to a person: two send a reader to
-    /// the policy file, and the third tells them not to go looking for a fault at all.
-    #[test]
-    fn Test_Render_Run_Should_Name_A_Malformed_Policy_As_The_Reason_There_Is_No_Verdict()
-    {
-        let finding = Example_Finding(GateCategory::Advisory);
-        let result = Judged_Without_A_Verdict(&finding, Some(NoVerdict::MalformedPolicy("unknown field `basline`".to_owned())));
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Run(&result, &mut stdout, &mut stderr);
-
-        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
-        assert_eq!(code, ExitCode::Contradictory, "{rendered_stderr}");
-        assert!(rendered_stderr.contains("not a policy this reader accepts"), "{rendered_stderr}");
-        assert!(rendered_stderr.contains("basline"), "{rendered_stderr}");
-        // The abort came *after* the findings were written, so what it destroyed was the
-        // verdict line and the exit code. A fix that reported the state by dropping the
-        // report would be the worse answer.
-        assert!(String::from_utf8_lossy(&stdout).contains(&finding.Describe()));
-    }
-
-    #[test]
-    fn Test_Render_Run_Should_Name_An_Unreadable_Policy_Separately_From_A_Malformed_One()
-    {
-        let finding = Example_Finding(GateCategory::Advisory);
-        let result = Judged_Without_A_Verdict(&finding, Some(NoVerdict::UnreadablePolicy("nomos-gate.json: PermissionDenied".to_owned())));
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Run(&result, &mut stdout, &mut stderr);
-
-        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
-        assert_eq!(code, ExitCode::Contradictory, "{rendered_stderr}");
-        assert!(rendered_stderr.contains("could not be read"), "{rendered_stderr}");
-        assert!(rendered_stderr.contains("PermissionDenied"), "{rendered_stderr}");
-    }
-
-    /// The coverage floor is the one cause where nothing is wrong, so its rendering says so
-    /// rather than sending a reader to look for a fault that is not there.
-    #[test]
-    fn Test_Render_Run_Should_Say_Nothing_Is_Wrong_When_The_Coverage_Floor_Withheld_The_Pass()
-    {
-        let finding = Example_Finding(GateCategory::Advisory);
-        let result = Judged_Without_A_Verdict(&finding, Some(NoVerdict::IncompleteCoverage));
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Run(&result, &mut stdout, &mut stderr);
-
-        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
-        assert_eq!(code, ExitCode::Contradictory, "{rendered_stderr}");
-        assert!(rendered_stderr.contains("require-completeness"), "{rendered_stderr}");
-        assert!(rendered_stderr.contains("Nothing is wrong"), "{rendered_stderr}");
-    }
-
-    /// A cause `Run_Gate` does not currently leave unset is still answered rather than
-    /// asserted away: an unreachable claim about this exact arm is what aborted the process
-    /// before it carried one, and the honest rendering of a missing reason says it is missing.
-    #[test]
-    fn Test_Render_Run_Should_Say_The_Reason_Is_Missing_Rather_Than_Assume_One()
-    {
-        let finding = Example_Finding(GateCategory::Advisory);
-        let result = Judged_Without_A_Verdict(&finding, None);
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Run(&result, &mut stdout, &mut stderr);
-
-        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
-        assert_eq!(code, ExitCode::Contradictory, "{rendered_stderr}");
-        assert!(rendered_stderr.contains("did not record why"), "{rendered_stderr}");
-    }
-
-    /// A run that judged `finding` and came out with no verdict, for `cause`.
-    fn Judged_Without_A_Verdict(finding: &Finding, cause: Option<NoVerdict>) -> GateRunResult
-    {
-        return GateRunResult {
-            // These tests are about rendering, and say nothing about what judged the run.
-            provenance: None,
-            no_verdict: cause,
-            unmatched_policy: Vec::new(),
-            run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
-            root: PathBuf::from("."),
-            check_outcome: CheckOutcome::Judged {
-                findings: vec![finding.clone()],
-                examined: Examined { files: 1, facts: 1 },
-                claim: Claim::Incomplete,
-            },
-            findings: Empty_Findings(),
-            disposition: GateRunOutcome::Indeterminate,
-        };
-    }
-
-    /// A judged run with nothing blocking reports `Ok` and names its own `RunId` -- the
-    /// "real work" arm `Report_Judged` does, end to end at this function's own boundary.
-    #[test]
-    fn Test_Render_Run_Should_Report_The_RunId_And_Ok_When_Nothing_Blocks()
-    {
-        let run = Fresh_Run_Id(Timestamp::From_Unix_Seconds(0));
-        let result = GateRunResult {
-            provenance: None,
-            no_verdict: None,
-            unmatched_policy: Vec::new(),
-            run,
-            root: PathBuf::from("."),
-            check_outcome: CheckOutcome::Judged {
-                findings: Vec::new(),
-                examined: Examined { files: 1, facts: 1 },
-                claim: Claim::Complete,
-            },
-            findings: Empty_Findings(),
-            disposition: GateRunOutcome::Passed,
-        };
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Run(&result, &mut stdout, &mut stderr);
-
-        let rendered = String::from_utf8_lossy(&stdout).into_owned();
-        assert_eq!(code, ExitCode::Ok, "{rendered}");
-        assert!(rendered.contains(&format!("run: {run}")), "{rendered}");
-        assert!(rendered.contains("0 finding(s), 0 of which can fail a build"), "{rendered}");
-        assert!(String::from_utf8_lossy(&stderr).is_empty());
-    }
-
-    /// A judged run with one blocking finding reports `Violations` and names the finding --
-    /// `Exit_Code_For`'s `Failed` arm, only reachable through `Report_Judged`.
-    #[test]
-    fn Test_Render_Run_Should_Report_Violations_When_A_Finding_Blocks()
-    {
-        let finding = Example_Finding(GateCategory::Blocking);
-        let result = GateRunResult {
-            provenance: None,
-            no_verdict: None,
-            unmatched_policy: Vec::new(),
-            run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
-            root: PathBuf::from("."),
-            check_outcome: CheckOutcome::Judged {
-                findings: vec![finding.clone()],
-                examined: Examined { files: 1, facts: 1 },
-                claim: Claim::Complete,
-            },
-            findings: GateFindings { blocking_findings: vec![finding.clone()], ..Empty_Findings() },
-            disposition: GateRunOutcome::Failed,
-        };
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Run(&result, &mut stdout, &mut stderr);
-
-        let rendered = String::from_utf8_lossy(&stdout).into_owned();
-        assert_eq!(code, ExitCode::Violations, "{rendered}");
-        assert!(rendered.contains(&finding.Describe()), "{rendered}");
-        assert!(rendered.contains("1 finding(s), 1 of which can fail a build"), "{rendered}");
-    }
-
-    /// `explain` shares `run`'s own non-judged rendering, so a check outcome that never
-    /// reached `Judged` must report `Vacuous` here too, regardless of what `explanation`
-    /// carries.
-    #[test]
-    fn Test_Render_Explain_Should_Report_Vacuous_When_The_Check_Outcome_Never_Reached_Judged()
-    {
-        let result = GateExplainResult {
-            root: PathBuf::from("does/not/matter"),
-            check_outcome: CheckOutcome::NoSource,
-            explanation: Explanation::NotFound,
-        };
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Explain(&result, &mut stdout, &mut stderr);
-
-        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
-        assert_eq!(code, ExitCode::Vacuous, "{rendered_stderr}");
-        assert!(rendered_stderr.contains("the query cannot be answered"), "{rendered_stderr}");
-    }
-
-    /// A judged tree in which no finding names the query's location answers `not found` and
-    /// exits clean.
-    #[test]
-    fn Test_Render_Explain_Should_Report_Not_Found_When_Judged_And_No_Finding_Matches()
-    {
-        let result = GateExplainResult {
-            root: PathBuf::from("."),
-            check_outcome: CheckOutcome::Judged {
-                findings: Vec::new(),
-                examined: Examined { files: 1, facts: 1 },
-                claim: Claim::Complete,
-            },
-            explanation: Explanation::NotFound,
-        };
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Explain(&result, &mut stdout, &mut stderr);
-
-        let rendered = String::from_utf8_lossy(&stdout).into_owned();
-        assert_eq!(code, ExitCode::Ok, "{rendered}");
-        assert!(rendered.contains("not found"), "{rendered}");
-        assert!(String::from_utf8_lossy(&stderr).is_empty());
-    }
-
-    /// A found finding that would block a real run reports `Violations` and names both the
-    /// finding and its block status -- `Report_Found`'s own "real work" arm.
-    #[test]
-    fn Test_Render_Explain_Should_Report_Would_Block_For_A_Found_Blocking_Finding()
-    {
-        let finding = Example_Finding(GateCategory::Blocking);
-        let result = GateExplainResult {
-            root: PathBuf::from("."),
-            check_outcome: CheckOutcome::Judged {
-                findings: vec![finding.clone()],
-                examined: Examined { files: 1, facts: 1 },
-                claim: Claim::Complete,
-            },
-            explanation: Explanation::Found {
-                finding: Box::new(finding.clone()),
-                would_block: true,
-                calibrated_by: None,
-                suppressed_by: None,
-                baselined_by: None,
-                contract: None,
-            },
-        };
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Explain(&result, &mut stdout, &mut stderr);
-
-        let rendered = String::from_utf8_lossy(&stdout).into_owned();
-        assert_eq!(code, ExitCode::Violations, "{rendered}");
-        assert!(rendered.contains("would block: true"), "{rendered}");
-        assert!(rendered.contains(&finding.Describe()), "{rendered}");
-    }
-
-    /// A real, composed registry -- `nomos_gate_orchestration::Run` never touches a
-    /// filesystem or a subprocess for `plan`, so this drives `Render_Plan` against a
-    /// genuine `GateOutcome` rather than a hand-built one.
-    #[test]
-    fn Test_Render_Plan_Should_Report_Ok_And_List_Every_Registered_Rule()
-    {
-        let outcome = nomos_gate_orchestration::Run(&nomos_gate_orchestration::GateCommand::default());
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Plan(&outcome, &mut stdout, &mut stderr);
-
-        let rendered = String::from_utf8_lossy(&stdout).into_owned();
-        assert_eq!(code, ExitCode::Ok, "{rendered}{}", String::from_utf8_lossy(&stderr));
-        assert!(rendered.starts_with("rules: "), "{rendered}");
-    }
-
-    /// One real finding, distinguishable from another only by the gate category a caller
-    /// passes in -- everything else about it is incidental to what these tests check.
-    fn Example_Finding(gate: GateCategory) -> Finding
-    {
-        return Finding {
-            rule: RuleId::New("unread-reaches-finding"),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])),
-            subject_name: "Example::Subject".to_owned(),
-            applicability: Applicability::Supported,
-            evidence: EvidenceClass::Derived,
-            gate,
-            summary: "reaches an unread item".to_owned(),
-            locations: vec!["a.rs".to_owned()],
-        };
-    }
-
-    /// No finding blocked, calibrated, suppressed or baselined -- the starting point every
-    /// test above that does not care about one of these buckets builds on.
-    fn Empty_Findings() -> GateFindings
-    {
-        return GateFindings {
-            blocking_findings: Vec::new(),
-            calibrated_findings: Vec::new(),
-            suppressed_findings: Vec::new(),
-            baselined_findings: Vec::new(),
-            baseline_exceeded_findings: Vec::new(),
-            baseline_populations: Vec::new(),
-            suppression_reasons: Default::default(),
-        };
-    }
 }

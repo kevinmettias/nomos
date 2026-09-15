@@ -8,9 +8,33 @@
 //! hole it is cited for, and leave the table in `tests/contract/tests/corpus_gates.rs`
 //! agreeing with itself.
 
-use crate::stored::{Census, RowCensus, RowScope, SpecificationStore, Two};
+use crate::stored::{Blame, Census, RowCensus, RowScope, SpecificationStore, Two};
 use nomos_spec_model::{Segment, Table_Rows};
 use std::path::{Path, PathBuf};
+
+/// The pipe lines the ten domain volumes carry, re-measured 2026-09-14 against the live corpus.
+const DOMAIN_VOLUME_LINES: u32 = 286;
+
+/// Every authored line of those volumes: the pipe lines that are not delimiters.
+const DOMAIN_VOLUME_NON_SEPARATOR_LINES: u32 = 262;
+
+/// The data rows of those volumes.
+const DOMAIN_VOLUME_CONTENT_LINES: u32 = 238;
+
+/// The tables those volumes carry, each contributing one header line and one delimiter.
+const DOMAIN_VOLUME_TABLES: u32 = 24;
+
+/// The domain volumes the corpus holds.
+const DOMAIN_VOLUMES: u32 = 10;
+
+/// The six of them that carry a table at all.
+const VOLUMES_WITH_TABLES: u32 = 6;
+
+/// The canonical domain model's pipe lines.
+const CANONICAL_MODEL_LINES: u32 = 30;
+
+/// Its data rows, which is not the number of models they name.
+const CANONICAL_MODEL_CONTENT_LINES: u32 = 28;
 
 /// The corpus root, if this machine has one.
 ///
@@ -40,23 +64,51 @@ fn Test_The_Domain_Volumes_Should_Answer_282_258_And_234()
     {
         return;
     };
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store =
+        SpecificationStore::In_Memory().expect("In_Memory applies the schema in process");
+    let measured = Store_Volumes(&mut store, &root.join("01_authoring/domain_volumes"));
+    let census = Census(&store, RowScope::Everything);
+
+    assert_eq!(
+        measured.volumes, DOMAIN_VOLUMES,
+        "the ten domain volumes are the corpus this is measured over"
+    );
+    assert_eq!(measured.with_tables, VOLUMES_WITH_TABLES, "six of the ten carry tables");
+    Assert_The_Census_Reconciles(&census);
+}
+
+/// What one walk over a volume directory counted.
+///
+/// Both figures are counts, so a tuple would leave the caller remembering which came first and
+/// compiling either way if it did not.
+struct VolumesStored
+{
+    volumes: u32,
+    with_tables: u32,
+}
+
+/// Every volume under `directory`, stored, and how many of them carry a table at all.
+///
+/// Both figures belong to the same walk, and the walk is here rather than in the test so that
+/// the test reads as the claim it makes: this many volumes, that many of them with tables,
+/// and the counts reconcile.
+fn Store_Volumes(store: &mut SpecificationStore, directory: &Path) -> VolumesStored
+{
     let mut volumes = 0_u32;
     let mut with_tables = 0_u32;
 
-    for path in Volumes(&root.join("01_authoring/domain_volumes"))
+    for path in Volumes(directory)
     {
-        let carries = Store_Volume(&mut store, &path);
+        let carries = Store_Volume(store, &path);
 
         volumes = volumes.saturating_add(1);
         with_tables = with_tables.saturating_add(u32::from(carries));
     }
 
-    let census = Census(&store, RowScope::Everything);
-
-    assert_eq!(volumes, 10, "the ten domain volumes are the corpus this is measured over");
-    assert_eq!(with_tables, 6, "six of the ten carry tables");
-    Assert_The_Census_Reconciles(&census);
+    return VolumesStored {
+        volumes,
+        with_tables,
+    };
 }
 
 /// One volume, stored, and whether it carries a table at all.
@@ -99,11 +151,17 @@ fn Store_Volume(store: &mut SpecificationStore, path: &Path) -> bool
 /// re-measurement rather than a constant edited to make a test pass.
 fn Assert_The_Census_Reconciles(census: &RowCensus)
 {
-    assert_eq!(census.lines, 286, "pipe lines over the ten domain volumes");
-    assert_eq!(census.non_separator, 262, "authored lines, header rows included");
-    assert_eq!(census.content, 238, "data rows");
-    assert_eq!(census.header, 24, "one header per table");
-    assert_eq!(census.separator, 24, "one delimiter per table, so this is the table count");
+    assert_eq!(census.lines, DOMAIN_VOLUME_LINES, "pipe lines over the ten domain volumes");
+    assert_eq!(
+        census.non_separator, DOMAIN_VOLUME_NON_SEPARATOR_LINES,
+        "authored lines, header rows included"
+    );
+    assert_eq!(census.content, DOMAIN_VOLUME_CONTENT_LINES, "data rows");
+    assert_eq!(census.header, DOMAIN_VOLUME_TABLES, "one header per table");
+    assert_eq!(
+        census.separator, DOMAIN_VOLUME_TABLES,
+        "one delimiter per table, so this is the table count"
+    );
     assert_eq!(
         census
             .header
@@ -140,13 +198,14 @@ fn Test_The_Canonical_Domain_Model_Should_Answer_30_And_28()
     let path = root.join(
         "01_authoring/domain_volumes/02-core-architecture-identity-and-configuration.md",
     );
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store =
+        SpecificationStore::In_Memory().expect("In_Memory is this measurement's own store");
     Store_Volume(&mut store, &path);
     let (block_uid, table_ordinal): (i64, u32) = Two(
         &store,
         "SELECT source_block_uid, table_ordinal FROM source_table_rows
          WHERE kind = 'content' AND cells_json LIKE '%WorkspaceContext%'",
-        "the canonical domain model is no longer in this volume",
+        Blame("the canonical domain model is no longer in this volume"),
     );
     let census = Census(
         &store,
@@ -156,8 +215,11 @@ fn Test_The_Canonical_Domain_Model_Should_Answer_30_And_28()
         },
     );
 
-    assert_eq!(census.lines, 30, "pipe lines");
-    assert_eq!(census.content, 28, "data rows, which is not the model count");
+    assert_eq!(census.lines, CANONICAL_MODEL_LINES, "pipe lines");
+    assert_eq!(
+        census.content, CANONICAL_MODEL_CONTENT_LINES,
+        "data rows, which is not the model count"
+    );
     assert_eq!(census.header, 1);
     assert_eq!(census.separator, 1);
 }

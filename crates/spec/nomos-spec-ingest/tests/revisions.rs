@@ -20,6 +20,41 @@ const V15: &str = "v15.0";
 
 const V14_LAST: &str = "v14.36";
 
+/// The archive set: the twelve surviving v14 releases plus v15.0.
+const REVISION_ARCHIVES: usize = 13;
+
+/// Adjacent pairs over that set, which is one fewer than the set itself.
+const ADJACENT_PAIRS: usize = 12;
+
+/// Markdown documents v15.0 does not carry, over the whole-tree scope.
+const DISAPPEARED_INTO_V15: usize = 2290;
+
+/// Markdown documents v15.0 introduced, over the same scope.
+const APPEARED_IN_V15: usize = 272;
+
+/// The domain volumes v14.36 keeps and v15.0 drops, counted over the walk.
+const DROPPED_DOMAIN_VOLUMES: usize = 10;
+
+/// How many changed paths the panic message below names before it stops listing them.
+const CHANGED_SAMPLE: usize = 5;
+
+/// v14.36 over its domain-volume scope, as `Census_Kinds` measured it.
+const V14_DOCUMENTS: u32 = 10;
+const V14_DOCUMENTS_WITH_TABLES: u32 = 6;
+const V14_PIPE_LINES: u32 = 282;
+const V14_NON_SEPARATOR_ROWS: u32 = 258;
+const V14_CONTENT_ROWS: u32 = 234;
+const V14_FENCE_LINES: u32 = 6;
+const V14_CODE_BLOCKS: u32 = 3;
+
+/// v15.0 over the only scope it has: the one table it retains, in the principles document.
+const V15_PIPE_LINES: u32 = 12;
+const V15_NON_SEPARATOR_ROWS: u32 = 11;
+const V15_CONTENT_ROWS: u32 = 10;
+
+/// A floor rather than a measurement: enough revisions that dropping one is a real loss.
+const REVISIONS_NEEDED_TO_DROP: usize = 3;
+
 fn Archives() -> Option<PathBuf>
 {
     let root = PathBuf::from(std::env::var_os("NOMOS_SPEC_ARCHIVES")?);
@@ -77,7 +112,7 @@ fn Test_The_Revision_Set_Should_Be_Ordered_And_Name_Its_Gaps()
     let revisions = Revisions_In(&root).expect("reads the directory");
     let labels: Vec<String> = revisions.iter().map(|(label, _)| return label.clone()).collect();
 
-    assert_eq!(labels.len(), 13, "the revision archives are 12 v14 releases and v15.0");
+    assert_eq!(labels.len(), REVISION_ARCHIVES, "the revision archives are 12 v14 releases and v15.0");
     assert_eq!(labels.first().map(String::as_str), Some("v14.24"));
     assert_eq!(labels.last().map(String::as_str), Some(V15));
 
@@ -100,7 +135,7 @@ fn Test_Every_Adjacent_Pair_Should_Yield_The_Four_Sets()
     let walk = Walk_Revisions(&fingerprints);
 
     assert_eq!(walk.len(), fingerprints.len().saturating_sub(1), "one pair per adjacency");
-    assert_eq!(walk.len(), 12);
+    assert_eq!(walk.len(), ADJACENT_PAIRS);
 
     for pair in &walk
     {
@@ -166,8 +201,8 @@ fn Test_The_Last_Pair_Should_Carry_Its_Measured_Sizes()
         panic!("no pairs");
     };
 
-    assert_eq!(pair.disappeared.len(), 2290, "markdown documents v15.0 does not carry");
-    assert_eq!(pair.appeared.len(), 272, "markdown documents v15.0 introduced");
+    assert_eq!(pair.disappeared.len(), DISAPPEARED_INTO_V15, "markdown documents v15.0 does not carry");
+    assert_eq!(pair.appeared.len(), APPEARED_IN_V15, "markdown documents v15.0 introduced");
 }
 
 /// The pair the plan calls the headline.
@@ -197,14 +232,14 @@ fn Test_The_Last_Pair_Should_Show_The_Whole_Narrative_Tree_Disappearing()
     assert_eq!(pair.to, V15);
     assert_eq!(
         volumes.len(),
-        10,
+        DROPPED_DOMAIN_VOLUMES,
         "the ten domain volumes are what v15.0 dropped\n{}",
         pair.Summary()
     );
     assert!(
         pair.changed.is_empty(),
         "v15.0 kept no path at its old location, so nothing can have changed in place: {:?}",
-        pair.changed.iter().take(5).collect::<Vec<_>>()
+        pair.changed.iter().take(CHANGED_SAMPLE).collect::<Vec<_>>()
     );
     assert!(!pair.appeared.is_empty(), "v15.0 added the records and nothing shows it");
 }
@@ -221,16 +256,16 @@ fn Test_The_Headline_Counts_Should_Name_Their_Unit_And_Their_Scope()
     let mut archive = Opened(&root, V14_LAST);
     let v14 = Census_Kinds(&mut archive, Scope::DomainVolumes).expect("counts v14.36");
 
-    assert_eq!(v14.documents, 10, "domain volumes");
-    assert_eq!(v14.documents_with_tables, 6, "of the ten, the ones carrying a table");
-    assert_eq!(v14.pipe_lines, 282, "pipe lines");
-    assert_eq!(v14.non_separator_rows, 258, "authored rows, header included");
-    assert_eq!(v14.content_rows, 234, "data rows");
+    assert_eq!(v14.documents, V14_DOCUMENTS, "domain volumes");
+    assert_eq!(v14.documents_with_tables, V14_DOCUMENTS_WITH_TABLES, "of the ten, the ones carrying a table");
+    assert_eq!(v14.pipe_lines, V14_PIPE_LINES, "pipe lines");
+    assert_eq!(v14.non_separator_rows, V14_NON_SEPARATOR_ROWS, "authored rows, header included");
+    assert_eq!(v14.content_rows, V14_CONTENT_ROWS, "data rows");
     // The plan says 6 code blocks. Six is the fence count; three is the blocks. Recorded
     // rather than corrected — OD-SPEC-002 settled it and this reproduces it from the
     // archive rather than from the working tree.
-    assert_eq!(v14.fence_lines, 6, "fence lines, which is the plan's figure");
-    assert_eq!(v14.code_blocks, 3, "fenced blocks, which is what the plan named");
+    assert_eq!(v14.fence_lines, V14_FENCE_LINES, "fence lines, which is the plan's figure");
+    assert_eq!(v14.code_blocks, V14_CODE_BLOCKS, "fenced blocks, which is what the plan named");
 }
 
 /// v15.0 has no domain volumes, and the census refuses to call that zero.
@@ -274,9 +309,9 @@ fn Test_V15_Should_Retain_Almost_No_Table_And_No_Code_At_All()
     // "retains 11 table rows" is the non-separator count and is right; it predates the
     // header kind, so the number it names is header-plus-data rather than data.
     assert_eq!(v15.documents_with_tables, 1, "documents carrying a table");
-    assert_eq!(v15.pipe_lines, 12, "pipe lines anywhere in v15.0");
-    assert_eq!(v15.non_separator_rows, 11, "authored rows, which is OD-SPEC-002's figure");
-    assert_eq!(v15.content_rows, 10, "data rows");
+    assert_eq!(v15.pipe_lines, V15_PIPE_LINES, "pipe lines anywhere in v15.0");
+    assert_eq!(v15.non_separator_rows, V15_NON_SEPARATOR_ROWS, "authored rows, which is OD-SPEC-002's figure");
+    assert_eq!(v15.content_rows, V15_CONTENT_ROWS, "data rows");
     assert!(
         v14.pipe_lines > v15.pipe_lines,
         "v15.0 did not lose table content tree-wide, so the headline is wrong"
@@ -376,7 +411,7 @@ fn Test_Dropping_A_Revision_Should_Change_The_Walk()
         return;
     };
     let full = Fingerprints(&root);
-    assert!(full.len() > 3, "too few revisions to drop one");
+    assert!(full.len() > REVISIONS_NEEDED_TO_DROP, "too few revisions to drop one");
 
     let thinned: Vec<RevisionFingerprint> = full
         .iter()

@@ -41,6 +41,23 @@ pub(crate) struct Ran
     pub(crate) code: i32,
 }
 
+/// The case a scratch board is named for, told apart from the suite it belongs to and the
+/// ledger it is written with.
+///
+/// [`Board::New`] takes all three and all three are text, so a caller who wrote them the other
+/// way round would name a directory after a ledger and write a ledger named for a suite, with
+/// nothing to catch it. A caller still spells the value as a plain `&str`, which is why the
+/// conversion lives here rather than at each of the suites sharing this file.
+pub(crate) struct CaseName<'a>(&'a str);
+
+impl<'a> From<&'a str> for CaseName<'a>
+{
+    fn from(name: &'a str) -> Self
+    {
+        return Self(name);
+    }
+}
+
 /// A scratch board on disk, removed when the test that made it ends.
 pub(crate) struct Board
 {
@@ -54,8 +71,9 @@ impl Board
     /// The process id is part of the directory name because these are separate test
     /// binaries and cargo runs them at the same time; `prefix` separates the suites and
     /// `name` separates the cases within one.
-    pub(crate) fn New(prefix: &str, name: &str, ledger: &str) -> Self
+    pub(crate) fn New<'a>(prefix: &str, name: impl Into<CaseName<'a>>, ledger: &str) -> Self
     {
+        let name = name.into().0;
         let root =
             std::env::temp_dir().join(format!("nomos-{prefix}-{name}-{}", std::process::id()));
         let _ignored = std::fs::remove_dir_all(&root);
@@ -103,7 +121,8 @@ impl Board
     /// said.
     pub(crate) fn Written(&self) -> String
     {
-        return std::fs::read_to_string(self.Ledger()).expect("readable");
+        return std::fs::read_to_string(self.Ledger())
+            .expect("Board::New writes ledger.json at construction, so this board's file is on disk before any run reads it back");
     }
 
     fn Ledger(&self) -> PathBuf

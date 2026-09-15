@@ -1,6 +1,9 @@
 //! An item that cannot start until another finishes.
 
-use crate::board::*;
+use crate::board::{
+    AT_NOW, Board, ClaimRefusal, Claimant, Declined, Document, Finished, Item, ItemId, Ledger_At, Refused, Take,
+    Temporary_Directory,
+};
 
 /// A dependency edge that only `validate` reads is a comment. Claiming has to refuse an
 /// item whose prerequisite is unfinished, or the ordering is advice.
@@ -17,7 +20,7 @@ fn Test_Claiming_An_Item_With_An_Unfinished_Dependency_Should_Be_Refused()
         .Save(&Document(vec![Item("T-1", &["src/a.rs"]), dependent]))
         .expect("a fresh ledger is valid");
 
-    let refusal = Refused(&mut ledger, "T-2", "agent-a");
+    let refusal = Refused(&mut ledger, "T-2", Claimant("agent-a"));
 
     assert!(matches!(refusal, ClaimRefusal::DependencyUnmet { .. }), "{}", refusal.Describe());
     assert!(refusal.Is_Retryable(), "finishing T-1 is what resolves this");
@@ -27,7 +30,7 @@ fn Test_Claiming_An_Item_With_An_Unfinished_Dependency_Should_Be_Refused()
 /// A fresh board with `T-1` declined and `T-2` depending on it — the fixture
 /// `Test_Claiming_An_Item_With_A_Declined_Dependency_Should_Be_Refused_Non_Retryably`
 /// exercises.
-fn Declined_Dependency_Board() -> (Scratch, FileLedger<StdFileSystem, &'static FixedClock, FileLock>)
+fn Declined_Dependency_Board() -> Board
 {
     let directory = Temporary_Directory("claim-dependency-declined");
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
@@ -42,7 +45,7 @@ fn Declined_Dependency_Board() -> (Scratch, FileLedger<StdFileSystem, &'static F
         ]))
         .expect("a fresh ledger is valid");
 
-    return (directory, ledger);
+    return Board { directory, ledger };
 }
 
 /// A declined dependency is a dead end, not a queue — `OD-LEDGER-020`. Reporting it as
@@ -51,9 +54,9 @@ fn Declined_Dependency_Board() -> (Scratch, FileLedger<StdFileSystem, &'static F
 #[test]
 fn Test_Claiming_An_Item_With_A_Declined_Dependency_Should_Be_Refused_Non_Retryably()
 {
-    let (_directory, mut ledger) = Declined_Dependency_Board();
+    let Board { directory: _directory, mut ledger } = Declined_Dependency_Board();
 
-    let refusal = Refused(&mut ledger, "T-2", "agent-a");
+    let refusal = Refused(&mut ledger, "T-2", Claimant("agent-a"));
 
     assert!(
         matches!(refusal, ClaimRefusal::DependencyDeclined { .. }),
@@ -89,7 +92,7 @@ fn Test_A_Finished_Dependency_Should_Not_Block_A_Claim()
         .Save(&Document(vec![finished, dependent]))
         .expect("a fresh ledger is valid");
 
-    Take(&mut ledger, "T-2", "agent-a");
+    Take(&mut ledger, "T-2", Claimant("agent-a"));
 }
 
 // ---------------------------------------------------------------------------

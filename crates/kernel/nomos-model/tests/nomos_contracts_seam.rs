@@ -11,6 +11,14 @@
 use nomos_contracts::{Applicability, SubjectId};
 use nomos_model::{Content_Digest, Coverage, CoverageGap};
 
+/// How many subjects the fixtures say a run judged. Both fixtures that carry a bare count of
+/// what was examined use it, so that the two tests are not two different quantities.
+const SUBJECTS_JUDGED: u64 = 3;
+
+/// Deliberately out of scope in the fixture whose gaps include a rule that does not bind and
+/// one policy switched off.
+const SUBJECTS_OUT_OF_SCOPE: u64 = 2;
+
 fn Subject_Named(name: &str) -> SubjectId
 {
     return SubjectId::From_Digest(Content_Digest(name.as_bytes()));
@@ -30,8 +38,8 @@ fn Gap_For(subject: &str, reason: Applicability) -> CoverageGap
 fn Test_Debt_Should_Exclude_Deliberate_Absences_Through_The_Public_Api()
 {
     let coverage = Coverage {
-        evaluated: 3,
-        excluded: 2,
+        evaluated: SUBJECTS_JUDGED,
+        excluded: SUBJECTS_OUT_OF_SCOPE,
         gaps: vec![
             Gap_For("a.rs", Applicability::NotApplicable),
             Gap_For("b.rs", Applicability::ConfigurationDisabled),
@@ -53,7 +61,7 @@ fn Test_Debt_Should_Exclude_Deliberate_Absences_Through_The_Public_Api()
 fn Test_Agent_Required_Should_Be_A_Gap_That_Is_Not_Debt_Through_The_Public_Api()
 {
     let coverage = Coverage {
-        evaluated: 3,
+        evaluated: SUBJECTS_JUDGED,
         excluded: 1,
         gaps: vec![Gap_For("a.rs", Applicability::AgentRequired)],
     };

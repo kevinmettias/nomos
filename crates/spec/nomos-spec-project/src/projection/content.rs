@@ -72,6 +72,24 @@ mod tests
 {
     use super::*;
 
+    /// Where `Content::All()` puts each variant.
+    ///
+    /// Named rather than written into the mirror below as bare numbers: a variant's place is
+    /// a fact about the universe rather than a value in the arm, and `10` beside `2` reads as
+    /// a quantity where `ORDINAL_NEIGHBOURHOOD` beside `ORDINAL_HEADINGS` reads as an order.
+    const ORDINAL_SUITES: usize = 0;
+    const ORDINAL_DOCUMENTS: usize = 1;
+    const ORDINAL_HEADINGS: usize = 2;
+    const ORDINAL_BLOCKS: usize = 3;
+    const ORDINAL_ROWS: usize = 4;
+    const ORDINAL_NODES: usize = 5;
+    const ORDINAL_STATEMENTS: usize = 6;
+    const ORDINAL_RELATIONS: usize = 7;
+    const ORDINAL_LINEAGE: usize = 8;
+    const ORDINAL_OMISSIONS: usize = 9;
+    const ORDINAL_NEIGHBOURHOOD: usize = 10;
+    const ORDINAL_FAMILIES: usize = 11;
+
     /// `Content::All()`'s own mirror, named in the doc comment above it.
     ///
     /// The match has no wildcard arm. A variant added to `Content` without a matching arm
@@ -84,18 +102,18 @@ mod tests
         {
             return match content
             {
-                Content::Suites => 0,
-                Content::Documents => 1,
-                Content::Headings => 2,
-                Content::Blocks => 3,
-                Content::Rows => 4,
-                Content::Nodes => 5,
-                Content::Statements => 6,
-                Content::Relations => 7,
-                Content::Lineage => 8,
-                Content::Omissions => 9,
-                Content::Neighbourhood => 10,
-                Content::Families => 11,
+                Content::Suites => ORDINAL_SUITES,
+                Content::Documents => ORDINAL_DOCUMENTS,
+                Content::Headings => ORDINAL_HEADINGS,
+                Content::Blocks => ORDINAL_BLOCKS,
+                Content::Rows => ORDINAL_ROWS,
+                Content::Nodes => ORDINAL_NODES,
+                Content::Statements => ORDINAL_STATEMENTS,
+                Content::Relations => ORDINAL_RELATIONS,
+                Content::Lineage => ORDINAL_LINEAGE,
+                Content::Omissions => ORDINAL_OMISSIONS,
+                Content::Neighbourhood => ORDINAL_NEIGHBOURHOOD,
+                Content::Families => ORDINAL_FAMILIES,
             };
         }
 

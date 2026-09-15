@@ -28,7 +28,7 @@ fn Root(name: &str) -> std::path::PathBuf
 fn Test_Judging_Twice_Should_Reuse_The_Same_Workspace_And_Advance_Its_Generation_On_A_Real_Edit()
 {
     let root = Root("nomos-lsp-provider-reuse-edited-root");
-    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("writable");
+    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("the fresh root above was just created");
 
     let mut provider = NomosDiagnosticProvider::New();
 
@@ -36,7 +36,7 @@ fn Test_Judging_Twice_Should_Reuse_The_Same_Workspace_And_Advance_Its_Generation
     let generation_after_first =
         provider.workspace.as_ref().expect("a walked tree must leave a workspace behind").Generation();
 
-    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\npub fn Also_Ok() {}\n").expect("writable");
+    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\npub fn Also_Ok() {}\n").expect("the fresh root above was just created");
     let _ignored = provider.Diagnose(&root);
     let generation_after_second =
         provider.workspace.as_ref().expect("a walked tree must leave a workspace behind").Generation();
@@ -53,7 +53,7 @@ fn Test_Judging_Twice_Should_Reuse_The_Same_Workspace_And_Advance_Its_Generation
 fn Test_Judging_An_Untouched_Tree_Twice_Should_Not_Advance_The_Generation_A_Second_Time()
 {
     let root = Root("nomos-lsp-provider-reuse-untouched-root");
-    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("writable");
+    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("the fresh root above was just created");
 
     let mut provider = NomosDiagnosticProvider::New();
 
@@ -106,46 +106,85 @@ fn Test_A_Root_That_Cannot_Be_Walked_Should_Report_Nothing()
 fn Test_A_Second_Judgement_Should_Re_Derive_A_Fact_Only_For_The_Source_That_Moved()
 {
     let root = Root("nomos-lsp-provider-selective-invalidation");
-    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("writable");
-    std::fs::write(root.join("b.rs"), "pub fn Fine() {}\n").expect("writable");
-
     let mut provider = NomosDiagnosticProvider::New();
 
-    let cold_judgement = provider.Diagnose(&root);
-    let cold = provider.store.Materializations();
-
-    let _ignored = provider.Diagnose(&root);
-    let unchanged = provider.store.Materializations().saturating_sub(cold);
-
-    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\npub fn Added() {}\n").expect("writable");
-    let _ignored = provider.Diagnose(&root);
-    let edited = provider.store.Materializations().saturating_sub(cold).saturating_sub(unchanged);
+    let counted = Counted_By_Judging_Three_Times(&root, &mut provider);
 
     let _ignored = std::fs::remove_dir_all(&root);
+    Assert_Only_The_Moved_Source_Was_Charged(counted);
+}
+
+/// The syntax facts one cold judgement of the two-source fixture is expected to pay for: one
+/// per source. Named rather than written as `2` at the assertion, because the number is the
+/// fixture's own shape rather than a value that means only itself.
+const SOURCES_IN_THE_FIXTURE: u32 = 2;
+
+/// The syntax facts one edit to one of those sources is expected to re-derive.
+const SOURCES_EDITED_BY_THE_FIXTURE: u32 = 1;
+
+/// What judging one fixture three times cost, in
+/// [`nomos_analysis::MemoryFactStore::Materializations`] writes: the cold judgement's own total,
+/// the extra an unchanged re-judgement cost on top of it, and the extra a third cost on top of
+/// both after one source was edited.
+struct Materialization_Counts
+{
+    cold: u32,
+    unchanged: u32,
+    edited: u32,
+}
+
+/// Writes the two-source fixture under `root`, judges it three times through `provider` -- cold,
+/// unchanged, and once more after `a.rs` gained an item -- and returns the three counts the
+/// assertions above compare.
+///
+/// The cold judgement's own emptiness is asserted here rather than handed back: a count read off
+/// a tree nothing ever judged is a number about nothing, and this is the only place that can say
+/// so while the judgement itself is still in hand.
+fn Counted_By_Judging_Three_Times(root: &std::path::Path, provider: &mut NomosDiagnosticProvider) -> Materialization_Counts
+{
+    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("the fresh root above was just created");
+    std::fs::write(root.join("b.rs"), "pub fn Fine() {}\n").expect("the fresh root above was just created");
+
+    let first = provider.Diagnose(root);
+    assert!(!first.is_empty(), "the cold judgement found nothing, so every count below is about a tree that was never really judged");
+    let cold = provider.store.Materializations();
+
+    let _ignored = provider.Diagnose(root);
+    let unchanged = provider.store.Materializations().saturating_sub(cold);
+
+    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\npub fn Added() {}\n").expect("the fresh root above was just created");
+    let _ignored = provider.Diagnose(root);
+    let edited = provider.store.Materializations().saturating_sub(cold).saturating_sub(unchanged);
+
+    return Materialization_Counts { cold, unchanged, edited };
+}
+
+/// The three claims the counts make, in the order the fixture establishes them: an unchanged
+/// re-judgement is cheaper than the cold one, the cold one paid for one syntax fact per source
+/// beyond that per-call cost, and the edit re-derived exactly one of them.
+fn Assert_Only_The_Moved_Source_Was_Charged(counted: Materialization_Counts)
+{
+    let per_source = counted.cold.saturating_sub(counted.unchanged);
+    let after_edit = counted.edited.saturating_sub(counted.unchanged);
 
     assert!(
-        !cold_judgement.is_empty(),
-        "the cold judgement found nothing, so every count below is about a tree that was \
-         never really judged"
-    );
-    assert!(
-        unchanged < cold,
-        "an unchanged second judgement cost {unchanged} against a cold {cold}: reuse that \
-         charges the same as a cold run is a cache nothing is reading"
+        counted.unchanged < counted.cold,
+        "an unchanged second judgement cost {} against a cold {}: reuse that charges the same \
+         as a cold run is a cache nothing is reading",
+        counted.unchanged,
+        counted.cold
     );
     assert_eq!(
-        cold.saturating_sub(unchanged),
-        2,
-        "the cold judgement should have paid for both sources' syntax on top of the \
-         per-call cost of {unchanged}, and paid for {} instead",
-        cold.saturating_sub(unchanged)
+        per_source,
+        SOURCES_IN_THE_FIXTURE,
+        "the cold judgement should have paid for one syntax fact per source on top of the per-call cost of {}, and paid for {per_source} instead",
+        counted.unchanged
     );
     assert_eq!(
-        edited.saturating_sub(unchanged),
-        1,
-        "editing one of two sources should re-derive one syntax fact and reuse the other's, \
-         and re-derived {} on top of the per-call cost of {unchanged}",
-        edited.saturating_sub(unchanged)
+        after_edit,
+        SOURCES_EDITED_BY_THE_FIXTURE,
+        "editing one of two sources should re-derive one syntax fact and reuse the other's, and re-derived {after_edit} on top of the per-call cost of {}",
+        counted.unchanged
     );
 }
 
@@ -161,33 +200,53 @@ fn Test_A_Second_Judgement_Should_Re_Derive_A_Fact_Only_For_The_Source_That_Move
 fn Test_A_Reusing_Provider_Should_Answer_What_A_Fresh_One_Answers_Over_The_Same_Tree()
 {
     let root = Root("nomos-lsp-provider-clean-recompute-equivalence");
-    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("writable");
-    std::fs::write(root.join("b.rs"), "pub fn Fine() {}\n").expect("writable");
 
-    let mut reusing = NomosDiagnosticProvider::New();
-
-    let cold = reusing.Diagnose(&root);
-    let unchanged = reusing.Diagnose(&root);
-
-    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\npub fn Also_Ok() {}\n").expect("writable");
-    let after_edit = reusing.Diagnose(&root);
-
-    let recomputed = NomosDiagnosticProvider::New().Diagnose(&root);
+    let answers = Answers_Over(&root);
 
     let _ignored = std::fs::remove_dir_all(&root);
 
-    assert_eq!(unchanged, cold, "an unchanged tree judged twice must answer the same thing twice");
+    assert_eq!(answers.unchanged, answers.cold, "an unchanged tree judged twice must answer the same thing twice");
     assert_ne!(
-        after_edit, cold,
+        answers.after_edit, answers.cold,
         "the edit must change what the provider answers, or this fixture proves nothing \
          about invalidation -- reusing everything and recomputing everything both pass an \
          unchanged comparison"
     );
     assert_eq!(
-        after_edit, recomputed,
+        answers.after_edit, answers.recomputed,
         "a provider that carried its workspace, store and reassessment cache across the \
          edit answered differently from one that had never judged this tree at all"
     );
+}
+
+/// The four judgements this fixture compares, all over the same two-source tree: a reusing
+/// provider's cold one, its second over an unchanged tree, its third after `a.rs` gained an
+/// item, and one from a provider that had never judged this tree at all.
+struct Provider_Answers
+{
+    cold: Vec<SourceDiagnostic>,
+    unchanged: Vec<SourceDiagnostic>,
+    after_edit: Vec<SourceDiagnostic>,
+    recomputed: Vec<SourceDiagnostic>,
+}
+
+/// Writes the two-source fixture under `root`, then reaches all four of the judgements
+/// [`Provider_Answers`] names -- three through one provider that keeps its state, and one
+/// through a provider created for that single call.
+fn Answers_Over(root: &std::path::Path) -> Provider_Answers
+{
+    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("the fresh root above was just created");
+    std::fs::write(root.join("b.rs"), "pub fn Fine() {}\n").expect("the fresh root above was just created");
+
+    let mut reusing = NomosDiagnosticProvider::New();
+    let cold = reusing.Diagnose(root);
+    let unchanged = reusing.Diagnose(root);
+
+    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\npub fn Also_Ok() {}\n").expect("the fresh root above was just created");
+    let after_edit = reusing.Diagnose(root);
+    let recomputed = NomosDiagnosticProvider::New().Diagnose(root);
+
+    return Provider_Answers { cold, unchanged, after_edit, recomputed };
 }
 
 /// A cold judgement is what the unreassessed path produces, argument for argument.
@@ -201,8 +260,8 @@ fn Test_A_Reusing_Provider_Should_Answer_What_A_Fresh_One_Answers_Over_The_Same_
 fn Test_A_Cold_Judgement_Should_Equal_What_The_Unreassessed_Run_Path_Produces()
 {
     let root = Root("nomos-lsp-provider-cold-run-equivalence");
-    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("writable");
-    std::fs::write(root.join("b.rs"), "pub fn Fine() {}\n").expect("writable");
+    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("the fresh root above was just created");
+    std::fs::write(root.join("b.rs"), "pub fn Fine() {}\n").expect("the fresh root above was just created");
 
     let judged = NomosDiagnosticProvider::New().Diagnose(&root);
     let expected = Judged_By_Run(&root);
@@ -228,11 +287,28 @@ fn Test_A_Cold_Judgement_Should_Equal_What_The_Unreassessed_Run_Path_Produces()
 fn Judged_By_Run(root: &std::path::Path) -> Vec<SourceDiagnostic>
 {
     let sources = Walked_Sources(root).expect("a directory that was just written walks");
+
+    let nomos_check_orchestration::CheckOutcome::Judged { findings, .. } = Run_Over(root, &sources)
+    else
+    {
+        panic!("a walked tree with two readable sources must reach a judgement");
+    };
+
+    let architecture = nomos_repo_policy::architecture::Discover_Workspace(root, &FILE_SYSTEM).unwrap_or_default();
+
+    return findings.iter().flat_map(|finding| return Diagnostics_For(&architecture, finding)).collect();
+}
+
+/// The outcome [`nomos_check_orchestration::Run`] reaches over `sources` under `root`, with a
+/// workspace and a fact store that live only for this call -- the unreassessed path, whose whole
+/// difference from [`NomosDiagnosticProvider`] is that it keeps neither between calls.
+fn Run_Over(root: &std::path::Path, sources: &[SourceFile]) -> nomos_check_orchestration::CheckOutcome
+{
     let mut workspace = None;
     let mut store = MemoryFactStore::New();
 
-    let outcome = nomos_check_orchestration::Run(
-        &sources,
+    return nomos_check_orchestration::Run(
+        sources,
         nomos_check_orchestration::RunContext {
             variant: Host_Variant(),
             root,
@@ -244,14 +320,4 @@ fn Judged_By_Run(root: &std::path::Path) -> Vec<SourceDiagnostic>
         },
         &[],
     );
-
-    let nomos_check_orchestration::CheckOutcome::Judged { findings, .. } = outcome
-    else
-    {
-        panic!("a walked tree with two readable sources must reach a judgement");
-    };
-
-    let architecture = nomos_repo_policy::architecture::Discover_Workspace(root, &FILE_SYSTEM).unwrap_or_default();
-
-    return findings.iter().flat_map(|finding| return Diagnostics_For(&architecture, finding)).collect();
 }

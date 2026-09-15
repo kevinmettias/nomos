@@ -25,9 +25,9 @@ fn Test_A_Mirror_Should_Resolve_Only_Through_A_Fact()
 {
     let declaring = Source(
         "a.rs",
-        "/// Mirrored by `Test_Present`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_Present`.\npub const T: &[&str] = &[];\n".to_owned(),
     );
-    let checking = Source("b.rs", "#[test]\nfn Test_Present()\n{\n}\n");
+    let checking = Source("b.rs", "#[test]\nfn Test_Present()\n{\n}\n".to_owned());
     let sources = vec![declaring.clone(), checking.clone()];
     let with_fact = World_Over(&[(&declaring, &[]), (&checking, &["Test_Present"])]);
     // The same two files, and the store is told about only one of them.
@@ -78,8 +78,8 @@ fn Assert_Withholding_The_Fact_Leaves_Both_Unresolved(unresolved: &[Finding])
 fn Test_An_Empty_Store_Should_Not_Report_A_Clean_Tree()
 {
     let sources = vec![
-        Source("a.rs", "/// Mirrored by `Test_Somewhere`.\npub const T: &[&str] = &[];\n"),
-        Source("b.rs", "#[test]\nfn Test_Somewhere()\n{\n}\n"),
+        Source("a.rs", "/// Mirrored by `Test_Somewhere`.\npub const T: &[&str] = &[];\n".to_owned()),
+        Source("b.rs", "#[test]\nfn Test_Somewhere()\n{\n}\n".to_owned()),
     ];
     let world = World::Offering(&[(PARSER, Parser_Guarantee())]);
     let findings = Judged_In(&world, &sources);
@@ -88,7 +88,7 @@ fn Test_An_Empty_Store_Should_Not_Report_A_Clean_Tree()
         !findings.is_empty(),
         "a run that read no fact at all must not render as a clean tree"
     );
-    assert_eq!(Unavailable(&findings), 2, "one finding per unread subject: {findings:?}");
+    assert_eq!(Unavailable(&findings), sources.len(), "one finding per unread subject: {findings:?}");
     assert!(
         findings
             .iter()
@@ -117,9 +117,9 @@ fn Test_An_Incomplete_Index_Should_Not_Manufacture_A_Phantom()
 {
     let declaring = Source(
         "a.rs",
-        "/// Mirrored by `Test_In_The_Unread_File`.\npub const T: &[&str] = &[];\n",
+        "/// Mirrored by `Test_In_The_Unread_File`.\npub const T: &[&str] = &[];\n".to_owned(),
     );
-    let unread = Source("b.rs", "#[test]\nfn Test_In_The_Unread_File()\n{\n}\n");
+    let unread = Source("b.rs", "#[test]\nfn Test_In_The_Unread_File()\n{\n}\n".to_owned());
     let judged = Judged_Beside(&declaring, &unread);
     let claim = Named("T", &judged).expect("the universe is still judged");
 

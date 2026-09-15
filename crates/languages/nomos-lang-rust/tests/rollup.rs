@@ -24,6 +24,20 @@ use nomos_lang_rust::{FactContext, Materialization};
 const ALPHA: &str = "pub fn Alpha() {}\nfn hidden() {}\n";
 const BETA: &str = "pub struct Beta;\npub mod inner { pub fn Deep() {} }\n";
 
+/// The module every pair of leaves below is rolled into holds exactly this many members.
+/// Named once because several assertions are counting things that follow from there being
+/// two of them, and a count repeated in four places is a count that can drift in one.
+const FIXTURE_MEMBER_COUNT: usize = 2;
+
+/// What the store holds once those leaves and the rollup over them are written: one fact
+/// per member, plus the one the rollup itself is.
+const LIVE_FACT_COUNT: u32 = 3;
+
+/// The entries the two members declare with `pub` on them -- `Alpha` in [`ALPHA`], and
+/// `Beta`, `inner` and `inner::Deep` in [`BETA`]. `hidden` is deliberately not one of them,
+/// which is what makes this count worth asserting rather than counting the entries instead.
+const FIXTURE_PUBLIC_ENTRY_COUNT: usize = 4;
+
 fn Subject(path: &str) -> SubjectId
 {
     use nomos_model::Content_Digest;
@@ -31,12 +45,18 @@ fn Subject(path: &str) -> SubjectId
     return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
 }
 
+/// Fill bytes distinct enough that the three identities [`Context`] mints differ from one
+/// another; each value carries no meaning beyond "not equal to the others".
+const SNAPSHOT_DIGEST_FILL: u8 = 1;
+const VARIANT_DIGEST_FILL: u8 = 2;
+const CONFIGURATION_DIGEST_FILL: u8 = 3;
+
 fn Context(generation: GenerationId) -> FactContext
 {
     return FactContext {
-        snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
+        snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([SNAPSHOT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_DIGEST_FILL; Digest128::BYTE_LENGTH])),
         generation,
     };
 }
@@ -79,14 +99,19 @@ fn Need() -> Requirement
 }
 
 /// Writes one file's syntax fact and hands back the key it was filed under.
+///
+/// The file is named by its subject rather than by its path, so that the two arguments a
+/// caller could transpose -- this one and the source body beside it -- are not the same
+/// type. The failure message prints the source rather than the name, because a fixture that
+/// does not parse is debugged by reading it, not by being told which constant it was.
 fn Materialize_Leaf(
     store: &mut MemoryFactStore,
-    path: &str,
+    subject: SubjectId,
     source: &str,
     context: FactContext,
 ) -> nomos_analysis::FactKey
 {
-    let Materialization::Materialized(fact) = nomos_lang_rust::Materialize_Syntax_Fact(Subject(path), source, context)
+    let Materialization::Materialized(fact) = nomos_lang_rust::Materialize_Syntax_Fact(subject, source, context)
     else
     {
         // The leaf is the thing this file rolls up, and the function's whole job is to hand
@@ -94,7 +119,7 @@ fn Materialize_Leaf(
         // materialized, and a let-else cannot return in any case. A missing leaf would leave
         // the rollup covering fewer inputs than the test believes and still agreeing with
         // itself, which is the one way these assertions could go green over nothing.
-        panic!("`{path}` parses");
+        panic!("this fixture is meant to parse: {source:?}");
     };
 
     let key = fact.Key().clone();
@@ -120,8 +145,8 @@ fn Roll_Up_Two_Files() -> RolledModule
     let registry = Registry_With_Both();
     let need = Need();
     let context = Context(GenerationId::INITIAL);
-    let alpha = Materialize_Leaf(&mut store, "alpha.rs", ALPHA, context);
-    let beta = Materialize_Leaf(&mut store, "beta.rs", BETA, context);
+    let alpha = Materialize_Leaf(&mut store, Subject("alpha.rs"), ALPHA, context);
+    let beta = Materialize_Leaf(&mut store, Subject("beta.rs"), BETA, context);
     let module = Module {
         // A subject of its own. Sharing one with a member would put the rollup in the
         // direct set of any change to that member, which is the property under test
@@ -207,7 +232,7 @@ fn Test_A_Change_To_Nothing_In_The_Module_Should_Reach_Neither()
         "a file no member is and no rollup reads invalidated something: {report:#?}"
     );
     assert_eq!(
-        report.retained, 3,
+        report.retained, LIVE_FACT_COUNT,
         "two leaves and one rollup are still live"
     );
 }
@@ -224,7 +249,7 @@ fn Test_The_Store_Should_Return_The_Edges_The_Reader_Recorded()
         held, rolled.rolled.dependencies,
         "what was declared at materialization is what the store holds"
     );
-    assert_eq!(held.len(), 2, "one edge per member read: {held:#?}");
+    assert_eq!(held.len(), FIXTURE_MEMBER_COUNT, "one edge per member read: {held:#?}");
 
     let read: Vec<&nomos_analysis::FactKey> = held
         .iter()
@@ -256,7 +281,7 @@ fn Test_A_Member_With_No_Fact_Should_Still_Be_An_Edge()
         need: &need,
         context,
     };
-    Materialize_Leaf(&mut store, "alpha.rs", ALPHA, context);
+    Materialize_Leaf(&mut store, Subject("alpha.rs"), ALPHA, context);
     let rolled =
         rollup::Materialize_Index(&mut store, &against, &module).expect("materializes");
     let missed = rolled
@@ -269,7 +294,7 @@ fn Test_A_Member_With_No_Fact_Should_Still_Be_An_Edge()
     assert_eq!(rolled.index.Answered(), 1);
     assert_eq!(
         rolled.dependencies.len(),
-        2,
+        FIXTURE_MEMBER_COUNT,
         "the member that answered and the member that did not are both edges: {:#?}",
         rolled.dependencies
     );
@@ -315,12 +340,12 @@ fn Test_Every_Entry_Should_Name_The_Member_That_Declared_It()
         .filter(|entry| return entry.visibility == PUBLIC)
         .count();
 
-    assert_eq!(index.Answered(), 2);
+    assert_eq!(index.Answered(), FIXTURE_MEMBER_COUNT);
     assert_eq!(index.Unreachable(), 0);
     assert_eq!(index.Approximated(), 0);
     assert_eq!(alpha_entries, vec!["Alpha", "hidden"]);
     assert_eq!(beta_entries, vec!["Beta", "inner", "inner::Deep"]);
-    assert_eq!(public, 4, "{:#?}", index.items);
+    assert_eq!(public, FIXTURE_PUBLIC_ENTRY_COUNT, "{:#?}", index.items);
 }
 
 /// Every name one member declared, in the order the index holds them.

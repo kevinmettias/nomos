@@ -47,13 +47,17 @@ mod tests
 {
     use super::*;
 
+    /// The line number the fixture location string below carries, so the assertion that reads
+    /// it back names the line it expects rather than a bare number.
+    const REPORTED_LINE: u32 = 42;
+
     #[test]
     fn Test_Parse_Should_Split_A_Path_And_Line()
     {
         let location = Location::Parse("crates/rules/nomos-rules/src/lib.rs:42");
 
         assert_eq!(location.path, "crates/rules/nomos-rules/src/lib.rs");
-        assert_eq!(location.line, Some(42));
+        assert_eq!(location.line, Some(REPORTED_LINE));
     }
 
     #[test]

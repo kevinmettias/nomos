@@ -6,6 +6,30 @@
 
 use crate::arrival::{Fresh, Ingest, Workspace};
 
+/// How many arrival orders this suite produces, and therefore how many seeds it tries. The
+/// hundred permutations are a hundred distinct orders, so the count is one quantity.
+pub(crate) const PERMUTATION_COUNT: u32 = 100;
+
+/// How many synthetic members the permutation check runs over. A member count far below the
+/// real corpus's, because the claim is about the walk and not about any particular tree.
+const SYNTHETIC_MEMBER_COUNT: u32 = 500;
+
+/// The fewest distinct orders a hundred seeds must produce before the test above asserts
+/// anything. Half of them, which is far below what the walk produces and far above the one a
+/// broken walk would.
+const DISTINCT_ORDER_FLOOR: usize = 50;
+
+/// How far the starting offset moves for each successive seed. A prime, so successive seeds
+/// begin far apart in the member list rather than on adjacent entries.
+const OFFSET_GROWTH: usize = 97;
+
+/// How much the stride grows for each successive permutation index.
+const STRIDE_GROWTH: usize = 7;
+
+/// One past the largest stride the per-permutation growth produces, so that change-set
+/// boundaries fall between different files whatever the corpus length.
+const STRIDE_CEILING: usize = 511;
+
 /// What one arrival order produced, and the stride it arrived under.
 pub(crate) struct Taken
 {
@@ -26,8 +50,8 @@ pub(crate) fn Snapshot_Of_One_Order(members: &[(String, String)], permutation: u
     let stride = 1_usize.saturating_add(
         usize::try_from(permutation)
             .unwrap_or(0)
-            .saturating_mul(7)
-            .checked_rem(511)
+            .saturating_mul(STRIDE_GROWTH)
+            .checked_rem(STRIDE_CEILING)
             .unwrap_or(0),
     );
     let mut workspace: Workspace = Fresh();
@@ -83,7 +107,7 @@ pub(crate) fn Permuted(members: &[(String, String)], seed: u32) -> Vec<(String, 
 {
     let Some(offset) = usize::try_from(seed)
         .unwrap_or(0)
-        .saturating_mul(97)
+        .saturating_mul(OFFSET_GROWTH)
         .checked_rem(members.len())
     else
     {
@@ -123,12 +147,12 @@ fn Walk_From(members: &[(String, String)], offset: usize) -> Vec<(String, String
 #[test]
 fn Test_The_Permutation_Should_Reorder_Without_Losing_Anything()
 {
-    let members: Vec<(String, String)> = (0..500_u32)
+    let members: Vec<(String, String)> = (0..SYNTHETIC_MEMBER_COUNT)
         .map(|index| return (format!("src/f{index}.rs"), format!("fn f{index}() {{}}")))
         .collect();
 
     let mut orders = std::collections::BTreeSet::new();
-    for seed in 0..100_u32
+    for seed in 0..PERMUTATION_COUNT
     {
         let permuted = Permuted(&members, seed);
         let order = Path_Order(&permuted);
@@ -138,7 +162,7 @@ fn Test_The_Permutation_Should_Reorder_Without_Losing_Anything()
     }
 
     assert!(
-        orders.len() > 50,
+        orders.len() > DISTINCT_ORDER_FLOOR,
         "a hundred seeds produced only {} distinct orders; the test above would be \
          asserting the same order against itself",
         orders.len()

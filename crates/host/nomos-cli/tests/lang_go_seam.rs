@@ -20,6 +20,10 @@ mod support;
 
 use support::{Run, Tree};
 
+/// What a tree the walk recognizes no source in leaves the process with -- `check/exit_code.rs::
+/// ExitCode::Vacuous`'s own value, the same code an empty walk produces.
+const VACUOUS_EXIT_CODE: i32 = 6;
+
 /// The literal `check/sources.rs` and `gate/sources.rs` hardcode, restated here as an
 /// assertion against the real constant rather than left as two independently-spelled
 /// strings that happen to agree today.
@@ -65,6 +69,6 @@ fn Test_Check_Should_Not_Walk_A_File_Named_With_An_Unrecognized_Extension_Close_
 
     let ran = Run(&["check", "--root", &tree.Root()]);
 
-    assert_eq!(ran.code, 6, "an extension the walk does not recognize must not be examined: {}", ran.stdout);
+    assert_eq!(ran.code, VACUOUS_EXIT_CODE, "an extension the walk does not recognize must not be examined: {}", ran.stdout);
     assert!(!ran.stdout.contains("file(s) examined"), "{}", ran.stdout);
 }

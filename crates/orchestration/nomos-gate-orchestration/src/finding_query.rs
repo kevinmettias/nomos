@@ -61,24 +61,7 @@ pub fn Explain_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
 ) -> GateExplainResult
 {
     let GateEnvironment { variant, launcher, filesystem, environment, now } = environment;
-
-    // Resolved here rather than taken from `command` alone, because the three policies this
-    // answer is about are the ones a real run would apply, and a run applies the declared file
-    // merged under the caller's own. Read before `filesystem` is handed to the judging below,
-    // which is the same ordering `Run_Gate` keeps for the same reason.
-    //
-    // An unreadable file falls back to the caller's policies standing alone, exactly as
-    // `Run_Gate` does. That direction is the safe one here: a policy nobody could read
-    // tolerates nothing, so the answer over-reports blocking rather than claiming a tolerance
-    // it could not verify. `Run_Gate` additionally withholds its verdict in that case; this
-    // function has no verdict to withhold, and reporting one finding as blocking is not a
-    // claim about the run.
-    let effective = match Resolve_Gate_Policy(&command.root, filesystem)
-    {
-        Ok(Some(from_file)) => from_file.Resolved_Over(command),
-        Ok(None) | Err(_) => GatePolicyFile::default().Resolved_Over(command),
-    };
-
+    let effective = Effective_Policies(command, filesystem);
     let check_outcome = Judged_Sources(walked, JudgeContext { launcher, filesystem, environment, variant, root: &command.root, selected: &[] });
     let explanation = Explained_Query(
         &check_outcome,
@@ -87,6 +70,28 @@ pub fn Explain_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
     );
 
     return GateExplainResult { root: command.root.clone(), check_outcome, explanation };
+}
+
+/// The policy [`Explain_Gate`] answers with: the `nomos-gate.json` under `command.root`, merged
+/// under the caller's own.
+///
+/// Resolved here rather than taken from `command` alone, because the three policies this answer
+/// is about are the ones a real run would apply, and a run applies the declared file merged under
+/// the caller's own. Read before `filesystem` is handed to the judging, which is the same
+/// ordering `Run_Gate` keeps for the same reason.
+///
+/// An unreadable file falls back to the caller's policies standing alone, exactly as `Run_Gate`
+/// does. That direction is the safe one here: a policy nobody could read tolerates nothing, so
+/// the answer over-reports blocking rather than claiming a tolerance it could not verify.
+/// `Run_Gate` additionally withholds its verdict in that case; this function has no verdict to
+/// withhold, and reporting one finding as blocking is not a claim about the run.
+fn Effective_Policies<Fs: FileSystem>(command: &GateCommand, filesystem: &Fs) -> GatePolicyFile
+{
+    return match Resolve_Gate_Policy(&command.root, filesystem)
+    {
+        Ok(Some(from_file)) => from_file.Resolved_Over(command),
+        Ok(None) | Err(_) => GatePolicyFile::default().Resolved_Over(command),
+    };
 }
 
 /// The three per-finding overrides [`Explained_Query`] and [`Disposed_Finding`] check,
@@ -170,6 +175,13 @@ mod tests
     use nomos_workspace::BuildVariant;
     use std::path::PathBuf;
 
+    /// The distinguishing part of a scratch root's directory name.
+    ///
+    /// A type of its own rather than the `&str` it wraps, because it sits in the position next to
+    /// the policy text it has nothing in common with: two adjacent `&str` parameters are a pair a
+    /// caller can hand over in the wrong order and the compiler will accept both.
+    struct ScratchName(&'static str);
+
     fn Source(path: &str, text: &str) -> SourceFile
     {
         return SourceFile::New(path, Subject_Of_Path(path), text);
@@ -200,6 +212,12 @@ mod tests
         assert!(would_block);
     }
 
+    fn Repository_Root() -> PathBuf
+    {
+        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest.parent().and_then(std::path::Path::parent).and_then(std::path::Path::parent).map(PathBuf::from).expect("this crate sits three levels below the workspace root");
+    }
+
     /// The declared policy decides this answer, because it decides the run's.
     ///
     /// Before this, `Explain_Gate` read the three policies off `command` and nothing else, and
@@ -214,15 +232,10 @@ mod tests
     #[test]
     fn Test_Explain_Gate_Should_Read_The_Baseline_The_Tree_Declares()
     {
-        let root = Scratch_Root_Declaring(
-            "declares-a-baseline",
+        let explanation = Explained_Under_Declared_Policy(
+            ScratchName("declares-a-baseline"),
             &format!(r#"{{ "baseline": [ {{ "rule": "{NO_SINGLE_LINE_FUNCTION_BODIES}", "path": "a.rs", "rationale": "pre-existing at adoption" }} ] }}"#),
         );
-        let command = GateCommand { root: root.clone(), ..Default::default() };
-
-        let explanation = Explained_Collapsed_Body(&command);
-
-        let _ignored = std::fs::remove_dir_all(&root);
         let Explanation::Found { would_block, baselined_by, .. } = explanation
         else
         {
@@ -251,12 +264,7 @@ mod tests
     #[test]
     fn Test_Explain_Gate_Should_Claim_No_Tolerance_It_Could_Not_Read()
     {
-        let root = Scratch_Root_Declaring("declares-an-unreadable-baseline", "{ not json");
-        let command = GateCommand { root: root.clone(), ..Default::default() };
-
-        let explanation = Explained_Collapsed_Body(&command);
-
-        let _ignored = std::fs::remove_dir_all(&root);
+        let explanation = Explained_Under_Declared_Policy(ScratchName("declares-an-unreadable-baseline"), "{ not json");
         let Explanation::Found { would_block, baselined_by, .. } = explanation
         else
         {
@@ -266,13 +274,29 @@ mod tests
         assert!(would_block);
     }
 
-    /// A directory holding one `nomos-gate.json` and nothing else.
-    fn Scratch_Root_Declaring(name: &str, policy: &str) -> PathBuf
+    /// What `Explain_Gate` answers about the collapsed body under a scratch root declaring
+    /// `policy`, with that root removed before this returns.
+    ///
+    /// The two tests above differ only in the policy text and in what they then assert about the
+    /// answer, so the three steps that get from one to the other -- write the file, explain under
+    /// it, clean the directory up -- are written once.
+    fn Explained_Under_Declared_Policy(name: ScratchName, policy: &str) -> Explanation
     {
-        let root = std::env::temp_dir().join(format!("nomos-explain-{name}-{}", std::process::id()));
+        let root = Scratch_Root_Declaring(name, policy);
+        let command = GateCommand { root: root.clone(), ..Default::default() };
+        let explanation = Explained_Collapsed_Body(&command);
+        let _ignored = std::fs::remove_dir_all(&root);
+
+        return explanation;
+    }
+
+    /// A directory holding one `nomos-gate.json` and nothing else.
+    fn Scratch_Root_Declaring(name: ScratchName, policy: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-explain-{}-{}", name.0, std::process::id()));
         let _ignored = std::fs::remove_dir_all(&root);
         std::fs::create_dir_all(&root).expect("creates a scratch root");
-        std::fs::write(root.join("nomos-gate.json"), policy).expect("writable");
+        std::fs::write(root.join("nomos-gate.json"), policy).expect("the directory holding this file was created by the line above, so the write cannot fail for want of a parent");
 
         return root;
     }
@@ -295,12 +319,6 @@ mod tests
         let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, command, &query);
 
         return result.explanation;
-    }
-
-    fn Repository_Root() -> PathBuf
-    {
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest.parent().and_then(std::path::Path::parent).and_then(std::path::Path::parent).map(PathBuf::from).expect("this crate sits three levels below the workspace root");
     }
 
     fn Test_Variant() -> BuildVariant

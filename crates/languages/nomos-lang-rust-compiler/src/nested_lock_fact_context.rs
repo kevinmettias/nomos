@@ -95,6 +95,12 @@ mod tests
         assert_eq!(decoded.findings.len(), 1, "{decoded:?}");
     }
 
+    fn Fixture_Root() -> std::path::PathBuf
+    {
+        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        return manifest.join("fixtures").join("nested_lock_sample");
+    }
+
     #[test]
     fn Test_A_Fact_Key_Should_Depend_On_The_Guarantee()
     {
@@ -110,12 +116,6 @@ mod tests
         let weak_key = Compute_Fact_Key(subject, weaker, Context());
 
         assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
-    }
-
-    fn Fixture_Root() -> std::path::PathBuf
-    {
-        let manifest = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest.join("fixtures").join("nested_lock_sample");
     }
 
     /// Fill bytes distinct enough that `Context()`'s three digests differ from one

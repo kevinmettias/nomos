@@ -4,6 +4,10 @@ use crate::seeded::{
     Block_Uids, Commit, Only_Document, SYNTHETIC, SYNTHETIC_PATH, With_Synthetic,
 };
 
+/// The blocks the shortening edit drops along with the section it deletes: the `## Rationale`
+/// heading and the paragraph beneath it.
+const DROPPED_BLOCKS: usize = 2;
+
 /// The round trip, closed: an edit goes in as markdown and comes back out of the store as the
 /// same bytes.
 #[test]
@@ -15,7 +19,9 @@ fn Test_An_Edit_Should_Be_Readable_Back_Out_As_What_Was_Committed()
 
     Commit(&mut store, &edited, None);
 
-    let projection = store.Record_Markdown("D-900", None).expect("projects");
+    let projection = store
+        .Record_Markdown("D-900", None)
+        .expect("Commit just wrote D-900's bytes into the rows, so they render markdown back");
     assert_eq!(projection.markdown, edited);
     assert!(projection.Is_Matching_Source(), "the stored bytes and the rows disagree");
 }
@@ -26,9 +32,13 @@ fn Test_An_Edit_Should_Be_Readable_Back_Out_As_What_Was_Committed()
 fn Test_Identity_Should_Survive_An_Edit()
 {
     let mut store = With_Synthetic();
-    let node_before = store.Node_Uid("D-900").expect("queries");
+    let node_before = store
+        .Node_Uid("D-900")
+        .expect("the fixture wrote D-900 through the authoring door, so its node row is there");
     let blocks_before = Block_Uids(&store, SYNTHETIC_PATH);
-    let relations_before = store.Node_Summary("D-900").expect("queries");
+    let relations_before = store
+        .Node_Summary("D-900")
+        .expect("the same node row the line above resolved is what this summary is keyed by");
 
     let revised = SYNTHETIC.replace("Second paragraph.", "Second paragraph, revised.");
 
@@ -49,7 +59,9 @@ fn Test_Identity_Should_Survive_An_Edit()
 fn Test_A_Rename_Should_Be_An_Ordinary_Edit()
 {
     let mut store = With_Synthetic();
-    let node_before = store.Node_Uid("D-900").expect("queries");
+    let node_before = store
+        .Node_Uid("D-900")
+        .expect("the record is looked up by the id the seed wrote, before the rename moves it");
     let blocks_before = Block_Uids(&store, SYNTHETIC_PATH);
     let moved = "docs/records/D-900-renamed.md";
 
@@ -75,11 +87,11 @@ fn Test_A_Rename_Onto_A_Path_Another_Record_Holds_Should_Be_Refused()
 
     let preview = store
         .Claim_For_Edit("D-900", None)
-        .expect("claims")
+        .expect("the seed wrote D-900 through the door and this test has not claimed it yet")
         .Stage(SYNTHETIC, Some(taken))
-        .expect("stages")
+        .expect("the claim above is editable, so a body naming another record can be staged")
         .Preview(&store)
-        .expect("previews");
+        .expect("the stage above built an edit over the open store, so there is one to preview");
     let refusal = store.Commit_Edit(&preview).expect_err("must refuse");
 
     assert!(matches!(refusal, EditError::PathTaken { .. }), "{refusal}");
@@ -103,7 +115,7 @@ fn Test_A_Shortening_Edit_Should_Prune_The_Blocks_It_Dropped()
     Commit(&mut store, &shortened, None);
 
     let after = Block_Uids(&store, SYNTHETIC_PATH);
-    assert_eq!(after.len(), before.len().saturating_sub(2));
+    assert_eq!(after.len(), before.len().saturating_sub(DROPPED_BLOCKS));
     assert_eq!(after, before.get(..after.len()).unwrap_or_default());
     assert_eq!(
         store.Record_Markdown("D-900", None).expect("projects").markdown,
@@ -117,14 +129,16 @@ fn Test_A_Shortening_Edit_Should_Prune_The_Blocks_It_Dropped()
 fn Test_Committing_What_Was_Read_Out_Should_Change_Nothing()
 {
     let store = With_Synthetic();
-    let claimed = store.Claim_For_Edit("D-900", None).expect("claims");
+    let claimed = store
+        .Claim_For_Edit("D-900", None)
+        .expect("the synthetic record is in the store and nothing has claimed it in this test");
     let markdown = claimed.Markdown().to_owned();
 
     let preview = claimed
         .Stage(&markdown, None)
-        .expect("stages")
+        .expect("the claim above is editable, so staging the bytes read back out is allowed")
         .Preview(&store)
-        .expect("previews");
+        .expect("the stage above built an edit over the open store, so there is one to preview");
 
     assert_eq!(markdown, SYNTHETIC);
     assert!(preview.Has_No_Changes(), "{}", preview.Describe());

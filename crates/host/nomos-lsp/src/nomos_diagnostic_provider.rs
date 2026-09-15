@@ -6,6 +6,7 @@ use crate::file_diagnostic::Diagnostics_For;
 use crate::sources::Walked_Sources;
 use nomos_analysis::MemoryFactStore;
 use nomos_composer_std::{ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
+use nomos_rules::SourceFile;
 use nomos_workspace::Workspace;
 use std::path::Path;
 use xvpe_diagnostics::{DiagnosticProviderStrategy, SourceDiagnostic};
@@ -92,32 +93,11 @@ impl DiagnosticProviderStrategy for NomosDiagnosticProvider
     /// is something a rule produces about a subject, and there is no subject here.
     fn Diagnose(&mut self, root: &Path) -> Vec<SourceDiagnostic>
     {
-        let Some(sources) = Walked_Sources(root)
-        else
-        {
-            return Vec::new();
-        };
+        let Some(sources) = Walked_Sources(root) else { return Vec::new(); };
 
-        let outcome = nomos_check_orchestration::Run_Reassessing(
-            &sources,
-            nomos_check_orchestration::RunContext {
-                variant: Host_Variant(),
-                root,
-                launcher: &LAUNCHER,
-                filesystem: &FILE_SYSTEM,
-                environment: &ENVIRONMENT,
-                workspace: &mut self.workspace,
-                store: &mut self.store,
-            },
-            &[],
-            &mut self.reassessment,
-        );
+        let outcome = Run_Judgment(self, root, &sources);
 
-        let nomos_check_orchestration::CheckOutcome::Judged { findings, .. } = outcome
-        else
-        {
-            return Vec::new();
-        };
+        let nomos_check_orchestration::CheckOutcome::Judged { findings, .. } = outcome else { return Vec::new(); };
 
         // Read once for the whole batch rather than per finding: it is one file, and the
         // architectural component every diagnostic carries is resolved against it. A
@@ -128,6 +108,28 @@ impl DiagnosticProviderStrategy for NomosDiagnosticProvider
 
         return findings.iter().flat_map(|finding| return Diagnostics_For(&architecture, finding)).collect();
     }
+}
+
+/// The outcome `nomos_check_orchestration::Run_Reassessing` reaches over `sources` under
+/// `root`, through the workspace, fact store and reassessment cache `provider` keeps between
+/// calls -- the three things whose reuse is the whole reason this crate has a provider of its
+/// own rather than calling the orchestration fresh each time.
+fn Run_Judgment(provider: &mut NomosDiagnosticProvider, root: &Path, sources: &[SourceFile]) -> nomos_check_orchestration::CheckOutcome
+{
+    return nomos_check_orchestration::Run_Reassessing(
+        sources,
+        nomos_check_orchestration::RunContext {
+            variant: Host_Variant(),
+            root,
+            launcher: &LAUNCHER,
+            filesystem: &FILE_SYSTEM,
+            environment: &ENVIRONMENT,
+            workspace: &mut provider.workspace,
+            store: &mut provider.store,
+        },
+        &[],
+        &mut provider.reassessment,
+    );
 }
 
 #[cfg(test)]

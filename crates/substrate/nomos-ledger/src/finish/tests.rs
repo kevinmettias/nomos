@@ -4,18 +4,51 @@ use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceE
 use super::*;
 use nomos_platform::ProcessOutput;
 
+/// A limit wider than the text it is asked to keep, so the short-output case is kept whole
+/// rather than truncated.
+const LIMIT_ABOVE_THE_TEXT: usize = 100;
+
+/// How much filler the long-output text carries ahead of the suffix its tail is expected to
+/// be.
+const FILLER_CHARACTERS: usize = 50;
+
+/// The length of the suffix the long-output text ends with, and so the tail limit that
+/// leaves exactly it.
+const SUFFIX_LENGTH: usize = 11;
+
+/// How many two-byte characters the multi-byte text is built from.
+const MULTI_BYTE_CHARACTERS: usize = 100;
+
+/// An odd byte limit against a text of even byte length, so the cut falls inside a character
+/// and the boundary walk has something to do.
+const MID_CHARACTER_LIMIT: usize = 51;
+
+/// The exit code a predicate or gate step reports when it failed.
+const FAILING_EXIT_CODE: i32 = 101;
+
+/// The shortest a refusal's `Describe()` may be and still tell an operator anything.
+const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 15;
+
+/// The wall timeout the runner in these tests is built with.
+const WALL_BOUND_SECONDS: u64 = 600;
+
+/// The idle bound `Command_From_Argv` is expected to derive from that wall timeout, by
+/// halving it. Strictly shorter, or a silent predicate could only ever be caught at the
+/// wall bound.
+const IDLE_BOUND_SECONDS: u64 = 300;
+
 #[test]
 fn Test_Short_Output_Should_Be_Kept_Whole()
 {
-    assert_eq!(Tail_Of("all good", 100), "all good");
+    assert_eq!(Tail_Of("all good", LIMIT_ABOVE_THE_TEXT), "all good");
 }
 
 #[test]
 fn Test_Long_Output_Should_Keep_The_End()
 {
-    let long = "a".repeat(50) + "the failure";
+    let long = "a".repeat(FILLER_CHARACTERS) + "the failure";
 
-    let tail = Tail_Of(&long, 11);
+    let tail = Tail_Of(&long, SUFFIX_LENGTH);
 
     assert_eq!(tail, "the failure");
 }
@@ -25,11 +58,11 @@ fn Test_Long_Output_Should_Keep_The_End()
 #[test]
 fn Test_Truncation_Should_Survive_Multi_Byte_Characters()
 {
-    let text = "é".repeat(100);
+    let text = "é".repeat(MULTI_BYTE_CHARACTERS);
 
-    let tail = Tail_Of(&text, 51);
+    let tail = Tail_Of(&text, MID_CHARACTER_LIMIT);
 
-    assert!(tail.len() <= 51);
+    assert!(tail.len() <= MID_CHARACTER_LIMIT);
     assert!(tail.chars().all(|character| character == 'é'));
 }
 
@@ -68,7 +101,7 @@ fn Refusals_That_Judged_The_Work(item: &ItemId) -> Vec<FinishRefusal>
         FinishRefusal::GateFailed {
             item: item.clone(),
             argv: vec!["cargo".to_owned(), "clippy".to_owned()],
-            exit_code: 101,
+            exit_code: FAILING_EXIT_CODE,
             output_tail: String::new(),
         },
     ];
@@ -111,7 +144,7 @@ fn Test_Every_Refusal_Should_Describe_Itself_Usefully()
     for refusal in Every_Refusal(item)
     {
         assert!(
-            refusal.Describe().len() > 15,
+            refusal.Describe().len() > MINIMUM_USEFUL_DESCRIPTION_LENGTH,
             "{} is too terse to act on",
             refusal.Describe()
         );
@@ -139,7 +172,7 @@ fn Every_Refusal(item: ItemId) -> Vec<FinishRefusal>
         },
         FinishRefusal::PredicateFailed {
             item: item.clone(),
-            exit_code: 101,
+            exit_code: FAILING_EXIT_CODE,
             output_tail: "assertion failed".to_owned(),
         },
         FinishRefusal::GateUndetermined {
@@ -152,7 +185,7 @@ fn Every_Refusal(item: ItemId) -> Vec<FinishRefusal>
         FinishRefusal::GateFailed {
             item,
             argv: vec!["cargo".to_owned(), "clippy".to_owned()],
-            exit_code: 101,
+            exit_code: FAILING_EXIT_CODE,
             output_tail: "indexing may panic".to_owned(),
         },
         FinishRefusal::NotRecorded {
@@ -169,13 +202,13 @@ fn Test_Commanded_Should_Give_The_Predicate_An_Idle_Bound_Shorter_Than_The_Wall_
 {
     let runner = Runner {
         working_directory: None,
-        timeout: std::time::Duration::from_secs(600),
+        timeout: std::time::Duration::from_secs(WALL_BOUND_SECONDS),
     };
 
     let command = Command_From_Argv(vec!["a-predicate".to_owned()], runner);
 
     assert!(command.idle_timeout < command.timeout, "an idle bound equal to the wall bound can never fire first");
-    assert_eq!(command.idle_timeout, std::time::Duration::from_secs(300));
+    assert_eq!(command.idle_timeout, std::time::Duration::from_secs(IDLE_BOUND_SECONDS));
 }
 
 /// A launcher standing in for the real one: it never sees a live process, and instead
@@ -241,7 +274,7 @@ fn Test_A_Silent_Predicate_Should_Surface_As_Stalled_Not_Timed_Out()
     let item = ItemId::New("T-1");
     let runner = Runner {
         working_directory: None,
-        timeout: std::time::Duration::from_secs(600),
+        timeout: std::time::Duration::from_secs(WALL_BOUND_SECONDS),
     };
     let command = Command_From_Argv(vec!["a-predicate".to_owned()], runner);
     let launcher = Simulated { keeps_producing: false };
@@ -270,7 +303,7 @@ fn Test_A_Predicate_That_Keeps_Producing_Should_Still_Report_Timed_Out()
     let item = ItemId::New("T-1");
     let runner = Runner {
         working_directory: None,
-        timeout: std::time::Duration::from_secs(600),
+        timeout: std::time::Duration::from_secs(WALL_BOUND_SECONDS),
     };
     let command = Command_From_Argv(vec!["a-predicate".to_owned()], runner);
     let launcher = Simulated { keeps_producing: true };
@@ -322,7 +355,7 @@ fn Test_A_Predicate_That_Exits_Promptly_Should_Still_Reach_A_Verdict()
     let item = ItemId::New("T-1");
     let runner = Runner {
         working_directory: None,
-        timeout: std::time::Duration::from_secs(600),
+        timeout: std::time::Duration::from_secs(WALL_BOUND_SECONDS),
     };
     let command = Command_From_Argv(vec!["a-predicate".to_owned()], runner);
 

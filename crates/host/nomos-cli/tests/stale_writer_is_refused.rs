@@ -24,12 +24,27 @@ use nomos_ledger::SCHEMA_VERSION;
 /// stop being the case it was written for by the schema catching up with it.
 const UNDECLARED: &str = ",\"a_field_this_build_does_not_know\":{\"holder\":\"agent-a\"}";
 
-/// A scratch board holding one claimable item, with `extra` spliced into that item.
+/// The exit code for a ledger this build cannot use at all.
+///
+/// `README.md`'s table gives this its own code because it is the one that means *stop and
+/// fetch a person*, as against the claim codes that mean *try another item*.
+const EXIT_STORE_ERROR: i32 = 5;
+
+/// The JSON a fixture splices onto its item's last field.
+///
+/// A distinct type rather than a bare `&str`: [`A_Board`] takes a directory name and this
+/// text, both strings and both adjacent, so a caller who transposed them would name a
+/// directory after a key and splice a case name into the document.
+struct Splice<'a>(&'a str);
+
+/// A scratch board holding one claimable item, with the [`Splice`]'s text spliced into it.
 ///
 /// The item text is what this suite is about and stays here; the directory it is written
 /// into is `scratch_ledger/board.rs`, shared with the suites beside this one.
-fn A_Board(name: &str, extra: &str) -> Board
+fn A_Board(name: &str, splice: Splice<'_>) -> Board
 {
+    let extra = splice.0;
+
     return Board::New(
         "stale",
         name,
@@ -55,13 +70,13 @@ fn A_Board(name: &str, extra: &str) -> Board
 #[test]
 fn Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It()
 {
-    let board = A_Board("refuses-to-rewrite", UNDECLARED);
+    let board = A_Board("refuses-to-rewrite", Splice(UNDECLARED));
     let before = board.Bytes();
 
     let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
 
     assert_eq!(
-        code, 5,
+        code, EXIT_STORE_ERROR,
         "a build that cannot read the board must report the store unusable: {said}"
     );
     assert_eq!(
@@ -80,11 +95,11 @@ fn Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It()
 #[test]
 fn Test_Listing_A_Ledger_This_Build_Cannot_Account_For_Should_Refuse()
 {
-    let board = A_Board("refuses-to-list", UNDECLARED);
+    let board = A_Board("refuses-to-list", Splice(UNDECLARED));
 
     let Ran { said, code } = board.Work(&["list"]);
 
-    assert_eq!(code, 5, "{said}");
+    assert_eq!(code, EXIT_STORE_ERROR, "{said}");
     assert!(
         said.contains("a_field_this_build_does_not_know"),
         "the refusal must name what could not be accounted for:\n{said}"
@@ -99,7 +114,7 @@ fn Test_Listing_A_Ledger_This_Build_Cannot_Account_For_Should_Refuse()
 #[test]
 fn Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It()
 {
-    let board = A_Board("still-writes", "");
+    let board = A_Board("still-writes", Splice(""));
     let before = board.Bytes();
 
     let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
@@ -120,7 +135,7 @@ fn Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It()
 #[test]
 fn Test_Validate_Should_Report_The_Files_Schema_And_The_Builds()
 {
-    let board = A_Board("validate-reports-both", "");
+    let board = A_Board("validate-reports-both", Splice(""));
 
     let Ran { said, code } = board.Work(&["validate"]);
 

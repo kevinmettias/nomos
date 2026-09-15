@@ -12,6 +12,16 @@ const CORE: &str = "# Core\n\n## 5. Canonical domain model\n\n\
 
 const DECLARED: &str = "This section groups related specification material for the domain.";
 
+/// How many domain models the `Earlier()` fixture declares: `WorkspaceContext` and the two
+/// the combined row names. A revision that dropped the volumes loses all of them.
+const MODELS_IN_CORE: u32 = 3;
+
+/// How many declared filler bodies the census finds over the fixtures below, one per section.
+const DECLARED_FILLERS: usize = 3;
+
+/// How many sections carry one template body, as a `Repetition` counts them.
+const SECTIONS_PER_TEMPLATE: u32 = 3;
+
 fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
 {
     return pairs
@@ -28,10 +38,14 @@ fn Earlier() -> Revision
     };
 }
 
-fn Earlier_With(path: &str, text: &str) -> Revision
+/// A markdown document's text, kept distinct from the path it is filed under so a call site
+/// cannot hand the two over in the wrong order.
+struct Markdown<'a>(&'a str);
+
+fn Earlier_With(path: &str, text: Markdown<'_>) -> Revision
 {
     let mut revision = Earlier();
-    revision.documents.insert(path.to_owned(), text.to_owned());
+    revision.documents.insert(path.to_owned(), text.0.to_owned());
 
     return revision;
 }
@@ -58,7 +72,8 @@ fn Fate_Of(report: &RegressionReport, name: &str) -> Fate
 
 fn Reported(later: &[(&str, &str)]) -> RegressionReport
 {
-    return Regression_Between_Revisions(&Earlier(), &Later_Than(later)).expect("reports");
+    return Regression_Between_Revisions(&Earlier(), &Later_Than(later))
+        .expect("both revisions carry the volumes a regression report reads, so it reports");
 }
 
 #[test]
@@ -75,7 +90,7 @@ fn Test_A_Heading_Over_A_Repeated_Paragraph_Should_Be_Hollowed()
         Fate::Hollowed {
             document: "a.md".to_owned(),
             evidence: Hollow::Template {
-                shared_with: 3,
+                shared_with: SHARED_BY,
                 declared: None,
             },
         }
@@ -148,7 +163,7 @@ fn Test_A_Name_Occurring_Nowhere_Should_Be_Gone()
     let report = Reported(&[("a.md", "# Elsewhere\n\nNothing of the kind.\n")]);
 
     assert_eq!(Fate_Of(&report, "WorkspaceContext"), Fate::Gone);
-    assert_eq!(report.Tally(Restored::CanonicalDomainModel).gone, 3);
+    assert_eq!(report.Tally(Restored::CanonicalDomainModel).gone, MODELS_IN_CORE);
 }
 
 #[test]
@@ -172,10 +187,11 @@ fn Test_A_Model_Sharing_A_Row_Should_Be_Found_In_That_Row()
 #[test]
 fn Test_A_Moved_Document_Should_Be_Relocated_Rather_Than_Both_Sets()
 {
-    let earlier = Earlier_With("old/record.md", "# Record\n\nA decision.\n");
+    let earlier = Earlier_With("old/record.md", Markdown("# Record\n\nA decision.\n"));
     let later = Later_Than(&[("new/record.md", "# Record\n\nA decision.\n")]);
 
-    let report = Regression_Between_Revisions(&earlier, &later).expect("reports");
+    let report = Regression_Between_Revisions(&earlier, &later)
+        .expect("both revisions carry the volumes a regression report reads, so it reports");
 
     assert_eq!(report.documents.relocated.len(), 1);
     assert_eq!(
@@ -193,13 +209,14 @@ fn Test_A_Moved_Document_Should_Be_Relocated_Rather_Than_Both_Sets()
 #[test]
 fn Test_A_Relocation_With_Two_Origins_Should_Name_Both()
 {
-    let mut earlier = Earlier_With("old/one.md", "# Record\n\nA decision.\n");
+    let mut earlier = Earlier_With("old/one.md", Markdown("# Record\n\nA decision.\n"));
     earlier
         .documents
         .insert("old/two.md".to_owned(), "# Record\n\nA decision.\n".to_owned());
     let later = Later_Than(&[("new/record.md", "# Record\n\nA decision.\n")]);
 
-    let report = Regression_Between_Revisions(&earlier, &later).expect("reports");
+    let report = Regression_Between_Revisions(&earlier, &later)
+        .expect("both revisions carry the volumes a regression report reads, so it reports");
 
     assert_eq!(
         report.documents.relocated.first().map(|moved| return moved.from.clone()),
@@ -210,10 +227,11 @@ fn Test_A_Relocation_With_Two_Origins_Should_Name_Both()
 #[test]
 fn Test_An_Edited_Move_Should_Not_Be_A_Relocation()
 {
-    let earlier = Earlier_With("old/record.md", "# Record\n\nA decision.\n");
+    let earlier = Earlier_With("old/record.md", Markdown("# Record\n\nA decision.\n"));
     let later = Later_Than(&[("new/record.md", "# Record\n\nA different decision.\n")]);
 
-    let report = Regression_Between_Revisions(&earlier, &later).expect("reports");
+    let report = Regression_Between_Revisions(&earlier, &later)
+        .expect("both revisions carry the volumes a regression report reads, so it reports");
 
     assert!(report.documents.relocated.is_empty());
     assert_eq!(report.documents.appeared, vec!["new/record.md".to_owned()]);
@@ -266,9 +284,9 @@ fn Test_Declared_Filler_Should_Be_Named_As_Declared()
         "{:?}",
         Fate_Of(&report, "Counterfactual Analysis Service")
     );
-    assert_eq!(report.filler.declared.len(), 3);
+    assert_eq!(report.filler.declared.len(), DECLARED_FILLERS);
     assert!(report.filler.Widest_Undeclared().is_none());
-    assert_eq!(report.filler.stubs.len(), 3);
+    assert_eq!(report.filler.stubs.len(), DECLARED_FILLERS);
 }
 
 #[test]
@@ -302,7 +320,7 @@ fn Test_A_Template_Naming_Its_Own_Section_Should_Read_As_One_Template()
     );
     assert_eq!(
         report.filler.Widest_Undeclared().map(|template| return template.sections),
-        Some(3)
+        Some(SECTIONS_PER_TEMPLATE)
     );
 }
 

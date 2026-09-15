@@ -82,23 +82,16 @@ mod tests
     use super::*;
     use nomos_gate_orchestration::BaselineAllowance;
 
-    fn Population(allowed: BaselineAllowance, observed: u32) -> serde_json::Value
-    {
-        return Rendered(Some("./src/lib.rs"), allowed, observed);
-    }
-
-    fn Rendered(declared_path: Option<&str>, allowed: BaselineAllowance, observed: u32) -> serde_json::Value
-    {
-        let population = BaselinePopulation {
-            rule: RuleId::New("no-single-line-function-bodies"),
-            subject: nomos_model::Subject_Of_Path("src/lib.rs"),
-            declared_path: declared_path.map(str::to_owned),
-            allowed,
-            observed,
-        };
-
-        return serde_json::to_value(BaselinePopulationResponse::From(population)).expect("always serializes");
-    }
+    /// An occurrence count past the single occurrence these tests adopt.
+    const OBSERVED_OCCURRENCES: u32 = 5;
+    /// The part of [`OBSERVED_OCCURRENCES`] a one-occurrence allowance cannot cover.
+    const EXCESS_OVER_ONE_ADOPTED: u32 = 4;
+    /// An allowance an occurrence count inside it fits under.
+    const ADOPTED_ALLOWANCE: u32 = 5;
+    /// An occurrence count inside [`ADOPTED_ALLOWANCE`].
+    const OBSERVED_WITHIN_ALLOWANCE: u32 = 2;
+    /// An occurrence count no unbounded scope can exceed.
+    const OBSERVED_UNBOUNDED: u32 = 900;
 
     /// The scope reaches a headless caller as its author wrote it, so that caller's message can
     /// name the entry the person reading it has to repair.
@@ -109,7 +102,8 @@ mod tests
     #[test]
     fn Test_A_Declared_Scope_Should_Cross_The_Wire_As_Its_Author_Wrote_It()
     {
-        let rendered = Rendered(Some("./src/lib.rs"), BaselineAllowance::AtMost(1), 5);
+        let rendered =
+            Rendered(Some("./src/lib.rs"), BaselineAllowance::AtMost(1), OBSERVED_OCCURRENCES);
 
         assert_eq!(rendered.get("declared_path").and_then(serde_json::Value::as_str), Some("./src/lib.rs"), "{rendered}");
     }
@@ -122,7 +116,7 @@ mod tests
     #[test]
     fn Test_A_Scope_No_File_Declared_Should_Cross_The_Wire_With_No_Path_At_All()
     {
-        let rendered = Rendered(None, BaselineAllowance::AtMost(1), 5);
+        let rendered = Rendered(None, BaselineAllowance::AtMost(1), OBSERVED_OCCURRENCES);
 
         assert_eq!(rendered.get("declared_path"), Some(&serde_json::Value::Null), "{rendered}");
     }
@@ -132,18 +126,19 @@ mod tests
     #[test]
     fn Test_An_Exceeded_Scope_Should_Carry_What_It_Accepted_What_It_Found_And_The_Difference()
     {
-        let rendered = Population(BaselineAllowance::AtMost(1), 5);
+        let rendered = Population(BaselineAllowance::AtMost(1), OBSERVED_OCCURRENCES);
 
         assert_eq!(rendered.pointer("/allowed/accepted_occurrence_count").and_then(serde_json::Value::as_u64), Some(1), "{rendered}");
-        assert_eq!(rendered.get("observed").and_then(serde_json::Value::as_u64), Some(5), "{rendered}");
-        assert_eq!(rendered.get("excess").and_then(serde_json::Value::as_u64), Some(4), "{rendered}");
+        assert_eq!(rendered.get("observed").and_then(serde_json::Value::as_u64), Some(u64::from(OBSERVED_OCCURRENCES)), "{rendered}");
+        assert_eq!(rendered.get("excess").and_then(serde_json::Value::as_u64), Some(u64::from(EXCESS_OVER_ONE_ADOPTED)), "{rendered}");
     }
 
     /// A scope inside its allowance reports no excess rather than a wrapped one.
     #[test]
     fn Test_A_Scope_Within_Its_Allowance_Should_Report_No_Excess()
     {
-        let rendered = Population(BaselineAllowance::AtMost(5), 2);
+        let rendered =
+            Population(BaselineAllowance::AtMost(ADOPTED_ALLOWANCE), OBSERVED_WITHIN_ALLOWANCE);
 
         assert_eq!(rendered.get("excess").and_then(serde_json::Value::as_u64), Some(0), "{rendered}");
     }
@@ -153,10 +148,35 @@ mod tests
     #[test]
     fn Test_An_Unbounded_Scope_Should_Report_No_Excess_And_Name_Itself()
     {
-        let rendered = Population(BaselineAllowance::Unbounded, 900);
+        let rendered = Population(BaselineAllowance::Unbounded, OBSERVED_UNBOUNDED);
 
         assert_eq!(rendered.pointer("/allowed/allowance").and_then(serde_json::Value::as_str), Some("unbounded"), "{rendered}");
-        assert_eq!(rendered.get("observed").and_then(serde_json::Value::as_u64), Some(900), "{rendered}");
+        assert_eq!(rendered.get("observed").and_then(serde_json::Value::as_u64), Some(u64::from(OBSERVED_UNBOUNDED)), "{rendered}");
         assert_eq!(rendered.get("excess").and_then(serde_json::Value::as_u64), Some(0), "{rendered}");
+    }
+
+    /// A population of `observed` occurrences under `allowed`, as a caller receives it.
+    fn Population(allowed: BaselineAllowance, observed: u32) -> serde_json::Value
+    {
+        return Rendered(Some("./src/lib.rs"), allowed, observed);
+    }
+
+    /// A population carrying `declared_path` under `allowed`, as a caller receives it.
+    fn Rendered(
+        declared_path: Option<&str>,
+        allowed: BaselineAllowance,
+        observed: u32,
+    ) -> serde_json::Value
+    {
+        let population = BaselinePopulation {
+            rule: RuleId::New("no-single-line-function-bodies"),
+            subject: nomos_model::Subject_Of_Path("src/lib.rs"),
+            declared_path: declared_path.map(str::to_owned),
+            allowed,
+            observed,
+        };
+
+        return serde_json::to_value(BaselinePopulationResponse::From(population))
+            .expect("a derived Serialize over owned data has nothing to refuse");
     }
 }

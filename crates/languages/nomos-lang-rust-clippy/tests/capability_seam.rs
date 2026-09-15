@@ -18,6 +18,15 @@ use nomos_lang_rust_clippy::{Declared_Guarantee, Provider_Offer};
 #[test]
 fn Test_This_Crates_Offer_Should_Be_Accepted_By_Nomos_Cap_Lints_Own_Registry()
 {
+    let mut registry = Registry_Declaring_The_Contract();
+
+    assert_eq!(registry.Offer(Provider_Offer()), Ok(()));
+}
+
+/// A registry with `nomos_cap_lint`'s own contract already declared -- the state each offer
+/// below is made into, named once so every test's body says only what that test is about.
+fn Registry_Declaring_The_Contract() -> nomos_capability::Registry
+{
     use nomos_capability::Registry;
 
     let mut registry = Registry::New();
@@ -25,38 +34,23 @@ fn Test_This_Crates_Offer_Should_Be_Accepted_By_Nomos_Cap_Lints_Own_Registry()
         .Declare(nomos_cap_lint::Capability_Contract())
         .expect("the contract is the first declaration in a fresh registry");
 
-    assert_eq!(registry.Offer(Provider_Offer()), Ok(()));
+    return registry;
 }
 
 /// The error that crosses the boundary: an offer claiming more than `nomos_cap_lint`'s own
 /// ceiling permits is refused by the registry, not silently accepted.
 ///
-/// `FactVariant::RuntimeObserved` is the exact over-ceiling claim `nomos_cap_lint`'s own
-/// `Test_The_Ceiling_Should_Refuse_A_Claim_Of_Runtime_Observation` already proves the
-/// contract itself refuses; this proves the registry enforces that refusal for a real offer
-/// rather than the contract merely being able to detect it in isolation.
+/// This proves the registry enforces that refusal for a real offer, rather than the contract
+/// merely being able to detect it in isolation.
 #[test]
 fn Test_An_Offer_Claiming_More_Than_The_Ceiling_Should_Be_Refused()
 {
-    use nomos_capability::{ProviderOffer, Registry};
-    use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
+    let mut registry = Registry_Declaring_The_Contract();
 
-    let mut registry = Registry::New();
-    registry
-        .Declare(nomos_cap_lint::Capability_Contract())
-        .expect("the contract is the first declaration in a fresh registry");
+    let error = registry
+        .Offer(Over_Ceiling_Offer())
+        .expect_err("a claim above the ceiling must be refused, not accepted");
 
-    let over_ceiling = ProviderOffer {
-        guarantee: Guarantee::New(
-            FactVariant::RuntimeObserved,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::Project,
-        ),
-        ..Provider_Offer()
-    };
-
-    let error = registry.Offer(over_ceiling).expect_err("a claim above the ceiling must be refused, not accepted");
     assert_eq!(
         error.kind,
         nomos_capability::RegistryErrorKind::Offer {
@@ -65,6 +59,25 @@ fn Test_An_Offer_Claiming_More_Than_The_Ceiling_Should_Be_Refused()
         },
         "the refusal must name this offer's own provider and say why: {error:?}"
     );
+}
+
+/// `FactVariant::RuntimeObserved` is the exact over-ceiling claim `nomos_cap_lint`'s own
+/// `Test_The_Ceiling_Should_Refuse_A_Claim_Of_Runtime_Observation` proves the contract itself
+/// refuses: this crate's own offer with its guarantee raised to runtime observation.
+fn Over_Ceiling_Offer() -> nomos_capability::ProviderOffer
+{
+    use nomos_capability::ProviderOffer;
+    use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
+
+    return ProviderOffer {
+        guarantee: Guarantee::New(
+            FactVariant::RuntimeObserved,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::Project,
+        ),
+        ..Provider_Offer()
+    };
 }
 
 /// The lifecycle constraint the ceiling imposes on every offer: this crate's own declared

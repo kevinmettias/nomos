@@ -4,10 +4,18 @@ use super::*;
 use super::spelling::{Normalize_Path, Subject_Of};
 use nomos_model::Intersection;
 
+/// How many spellings of one file this file asserts reduce to one subject: one arm of
+/// [`Equivalent_Spellings_Of_One_File`] each.
+const EQUIVALENT_SPELLINGS: usize = 5;
+
+/// How many paths under `docs/records` carry no record filename for `Normalize_Path` to
+/// fold: one arm of [`Paths_With_No_Record_Identifier`] each.
+const PATHS_WITHOUT_A_RECORD_IDENTIFIER: usize = 4;
+
 /// The property the normalization exists for. Two spellings of one file must be one
 /// subject, or the ledger hands out overlapping territory believing it is disjoint.
 /// Every spelling this test asserts must reduce to the same subject as the canonical path.
-fn Equivalent_Spellings_Of_One_File() -> [&'static str; 5]
+fn Equivalent_Spellings_Of_One_File() -> [&'static str; EQUIVALENT_SPELLINGS]
 {
     return [
         "./crates/kernel/nomos-model/src/digest.rs",
@@ -165,7 +173,8 @@ fn Test_The_Serialized_Form_Should_Show_Paths()
 {
     let territory = Territory::Of_Files(["crates/kernel/nomos-model/src/digest.rs"]);
 
-    let rendered = serde_json::to_string(&territory).unwrap();
+    let rendered = serde_json::to_string(&territory)
+        .expect("a territory serializes as strings and plain enums, so this has no failure mode");
 
     assert!(
         rendered.contains("crates/kernel/nomos-model/src/digest.rs"),
@@ -306,7 +315,7 @@ fn Test_A_Leading_Digit_Group_Should_Not_Be_An_Ordinal()
 /// and a registration file elsewhere keeps its extension — that directory is named by
 /// identifier too, and `records/OD-LEDGER-016.record` is a real path that resolves.
 /// Paths that carry no record filename for `Normalize_Path` to fold.
-fn Paths_With_No_Record_Identifier() -> [&'static str; 4]
+fn Paths_With_No_Record_Identifier() -> [&'static str; PATHS_WITHOUT_A_RECORD_IDENTIFIER]
 {
     return [
         "docs/records/readme.md",

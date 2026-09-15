@@ -54,29 +54,38 @@ fn Markdown_Files(directory: &Path) -> Vec<PathBuf>
     return paths;
 }
 
+/// One volume read off disk and put into the store, so a census can be taken over all of
+/// them afterwards.
+fn Put_Volume(store: &mut SpecificationStore, path: &Path)
+{
+    let markdown = std::fs::read_to_string(path)
+        // Skipping an unreadable volume would drop its rows from the census, and a short
+        // census reads as the corpus holding fewer table rows rather than as a file this
+        // run could not open.
+        .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
+    let name = path.file_name().and_then(std::ffi::OsStr::to_str).unwrap_or("?");
+    let document = store
+        .Put_Source_Document(name, "v14.36", &markdown)
+        .expect("stores the document");
+
+    store
+        .Put_Source_Blocks(document, &Segment(&markdown))
+        // The census is the store's own count of what it was given, so a volume whose blocks
+        // the store refused must not go on to be counted as holding none. The document name
+        // is in the message because the census itself has no place for it.
+        .unwrap_or_else(|error| panic!("{name}: {error}"));
+}
+
 /// The row census over every domain volume, taken through the store so the numbers come
 /// from the same segmenter and the same typing the ingest uses.
 pub(crate) fn Volume_Census(volumes: &Path) -> nomos_spec_store::RowCensus
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("an in-memory store opens over no file, so this construction has no failure path");
 
     for path in Markdown_Files(volumes)
     {
-        let markdown = std::fs::read_to_string(&path)
-            // Skipping an unreadable volume would drop its rows from the census, and a short
-            // census reads as the corpus holding fewer table rows rather than as a file this
-            // run could not open.
-            .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
-        let name = path.file_name().and_then(std::ffi::OsStr::to_str).unwrap_or("?");
-        let document = store
-            .Put_Source_Document(name, "v14.36", &markdown)
-            .expect("stores the document");
-        store
-            .Put_Source_Blocks(document, &Segment(&markdown))
-            // The census is the store's own count of what it was given, so a volume whose
-            // blocks the store refused must not go on to be counted as holding none. The
-            // document name is in the message because the census itself has no place for it.
-            .unwrap_or_else(|error| panic!("{name}: {error}"));
+        Put_Volume(&mut store, &path);
     }
 
     return store.Row_Census(RowScope::Everything).expect("takes a census");
@@ -150,18 +159,34 @@ pub(crate) fn Code_Blocks(volumes: &Path) -> u32
     return blocks;
 }
 
+/// A heading addressed by its own text, as the document titles it.
+///
+/// Distinct from the volume stem rather than a second `&str`, because both are text and a
+/// call site handing them over in the wrong order would compile.
+pub(crate) struct TableHeading<'a>(pub(crate) &'a str);
+
+/// Whether a block carries at least one table row.
+///
+/// Named rather than written into the condition below, because `Table_Rows` is a pipeline:
+/// the reader would have to run it to answer the yes-or-no question being asked.
+fn Carries_Rows(block: &SourceBlock) -> bool
+{
+    return !nomos_spec_model::Table_Rows(block).is_empty();
+}
+
 /// The pipe lines and the data rows of the one table sitting directly under a heading.
 ///
 /// Refuses a heading carrying more than one table rather than summing them: "the table
 /// under §5" would then mean something the register's sentence does not say.
-pub(crate) fn Table_Under(corpus: &Path, stem: &str, heading: &str) -> TableCounts
+pub(crate) fn Table_Under(corpus: &Path, stem: &str, heading: TableHeading<'_>) -> TableCounts
 {
+    let TableHeading(heading) = heading;
     let markdown = Volume(corpus, stem);
     let mut found: Vec<SourceBlock> = Vec::new();
     for block in Segment(&markdown)
     {
         let directly_under = block.heading_path.last().map(String::as_str) == Some(heading);
-        if directly_under && !nomos_spec_model::Table_Rows(&block).is_empty()
+        if directly_under && Carries_Rows(&block)
         {
             found.push(block);
         }

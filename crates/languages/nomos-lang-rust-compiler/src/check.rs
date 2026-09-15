@@ -230,7 +230,7 @@ mod tests
 
     fn Materialize(store: &mut MemoryFactStore, registry: &Registry, subject: SubjectId, payload: &CloneOnCopyPayload)
     {
-        let offer = registry.Offers(&Capability()).first().expect("Offered_Registry always offers exactly one provider").clone();
+        let offer = registry.Offers(&Capability()).first().expect("Offered_Registry is the only writer of this registry, and it declares and offers one provider").clone();
         let context = Test_Context();
         let key = FactKey {
             contract: offer.capability.clone(),
@@ -258,12 +258,17 @@ mod tests
             .expect("nothing here is backdated");
     }
 
+    /// Fill bytes distinct enough that `Test_Context()`'s three digests differ from one
+    /// another; each value carries no meaning beyond "not equal to the others".
+    const VARIANT_DIGEST_FILL: u8 = 2;
+    const CONFIGURATION_DIGEST_FILL: u8 = 3;
+
     fn Test_Context() -> Context
     {
         return Context {
             snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_DIGEST_FILL; Digest128::BYTE_LENGTH])),
             generation: GenerationId::INITIAL,
         };
     }

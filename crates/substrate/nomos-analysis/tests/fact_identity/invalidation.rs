@@ -8,6 +8,28 @@ use nomos_analysis::{
 use nomos_contracts::{CapabilityId, GenerationId, IncrementalGranularity, SubjectId};
 use std::collections::BTreeSet;
 
+/// The seed of a subject that is deliberately not the one under test, so a fact about it
+/// can only be reached by the behaviour under examination.
+const OTHER_SUBJECT_SEED: u8 = 9;
+
+/// The seed of the subject that reads the invalidated one, directly or through a middle
+/// fact of the chain.
+const CONSUMER_SUBJECT_SEED: u8 = 7;
+
+/// The seed of the subject at the far end of the chain, which reads the consumer rather
+/// than the invalidated fact.
+const OUTERMOST_SUBJECT_SEED: u8 = 8;
+
+/// The snapshots a replacement moves between: the one the store was materialized at, and
+/// the one that replaces it.
+const FROM_SNAPSHOT_SEED: u8 = 2;
+const TO_SNAPSHOT_SEED: u8 = 9;
+
+/// How many edges the `[read, middle, outer]` chain holds, and the position of `outer` in
+/// it: `middle` reads `read`, and `outer` reads `middle`.
+const CHAIN_EDGE_COUNT: usize = 2;
+const OUTERMOST_POSITION: usize = 2;
+
 /// A fact for `key` that reached for `upstream` and got the given outcome.
 fn Materialize_Reading(
     store: &mut MemoryFactStore,
@@ -47,8 +69,8 @@ fn Snapshot_Replaced(
 {
     return store.Invalidate(
         &GenerationCause::SnapshotReplaced {
-            from: Snapshot(2),
-            to: Snapshot(9),
+            from: Snapshot(FROM_SNAPSHOT_SEED),
+            to: Snapshot(TO_SNAPSHOT_SEED),
             differing,
         },
         next,
@@ -66,7 +88,7 @@ fn Test_Replacing_A_Snapshot_Should_Invalidate_Exactly_The_Members_That_Differ()
 {
     let changed = Base();
     let mut untouched = Base();
-    untouched.subject = Subject(9);
+    untouched.subject = Subject(OTHER_SUBJECT_SEED);
     let mut store = Stored(&changed);
     let fact = Fact(&untouched, GenerationId::INITIAL);
     store.Materialize(fact, &[]).expect("materializes");
@@ -131,7 +153,7 @@ fn Test_An_Unrelated_Fact_Should_Be_Retained()
 {
     let key = Base();
     let mut elsewhere = Base();
-    elsewhere.subject = Subject(9);
+    elsewhere.subject = Subject(OTHER_SUBJECT_SEED);
     let mut store = Stored(&key);
     let fact = Fact(&elsewhere, GenerationId::INITIAL);
     store.Materialize(fact, &[]).expect("materializes");
@@ -153,7 +175,7 @@ fn Test_Invalidation_Should_Follow_Dependency_Edges()
     let read = Base();
     let mut derived = Base();
     derived.contract = CapabilityId::New(SEMANTIC);
-    derived.subject = Subject(7);
+    derived.subject = Subject(CONSUMER_SUBJECT_SEED);
     let mut store = Stored(&read);
     Materialize_Reading(&mut store, &derived, &read, ReadOutcome::Materialized);
     let next = GenerationId::INITIAL.Next();
@@ -171,22 +193,15 @@ fn Test_Invalidation_Should_Follow_Dependency_Edges()
 
 /// Which position in a `[read, middle, outer]` triple each key depends on, forming a chain:
 /// `middle` reads `read`, and `outer` reads `middle`.
-fn Chain_Edges() -> [(usize, usize); 2]
+fn Chain_Edges() -> [(usize, usize); CHAIN_EDGE_COUNT]
 {
-    return [(1, 0), (2, 1)];
+    return [(1, 0), (OUTERMOST_POSITION, 1)];
 }
 
-#[test]
-fn Test_Invalidation_Should_Follow_Edges_Transitively()
+/// A store holding `read`, its consumer, and the fact that consumes the consumer.
+fn Chained_Store(chain: &[&FactKey]) -> MemoryFactStore
 {
-    let read = Base();
-    let mut middle = Base();
-    middle.subject = Subject(7);
-    let mut outer = Base();
-    outer.subject = Subject(8);
-    let chain = [&read, &middle, &outer];
-
-    let mut store = Stored(&read);
+    let mut store = Stored(*chain.first().expect("every caller hands a chain holding the read key first"));
     for (downstream, upstream) in Chain_Edges()
     {
         Materialize_Reading(
@@ -196,6 +211,21 @@ fn Test_Invalidation_Should_Follow_Edges_Transitively()
             ReadOutcome::Materialized,
         );
     }
+
+    return store;
+}
+
+#[test]
+fn Test_Invalidation_Should_Follow_Edges_Transitively()
+{
+    let read = Base();
+    let mut middle = Base();
+    middle.subject = Subject(CONSUMER_SUBJECT_SEED);
+    let mut outer = Base();
+    outer.subject = Subject(OUTERMOST_SUBJECT_SEED);
+    let chain = [&read, &middle, &outer];
+
+    let mut store = Chained_Store(&chain);
     let next = GenerationId::INITIAL.Next();
 
     let report = Subject_Changed(&mut store, read.subject, next);
@@ -210,7 +240,7 @@ fn Test_An_Edge_Recorded_By_A_Missed_Read_Should_Still_Carry_Invalidation()
 {
     let absent = Base();
     let mut consumer = Base();
-    consumer.subject = Subject(7);
+    consumer.subject = Subject(CONSUMER_SUBJECT_SEED);
 
     let mut store = MemoryFactStore::New();
     let appearing = Fact(&absent, GenerationId::INITIAL);

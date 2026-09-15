@@ -219,13 +219,13 @@ mod tests
     fn Test_Read_Directory_Should_List_Every_Immediate_Child()
     {
         let directory = Temporary_Path("read-directory");
-        std::fs::create_dir_all(&directory).unwrap();
+        std::fs::create_dir_all(&directory).expect("Temporary_Path cleared this path before the test started");
         let filesystem = StdFileSystem;
-        filesystem.Replace_Atomically(&directory.join("a.txt"), "a").unwrap();
-        filesystem.Replace_Atomically(&directory.join("b.txt"), "b").unwrap();
-        std::fs::create_dir_all(directory.join("nested")).unwrap();
+        filesystem.Replace_Atomically(&directory.join("a.txt"), "a").expect("the parent directory was just created here");
+        filesystem.Replace_Atomically(&directory.join("b.txt"), "b").expect("the parent directory was just created here");
+        std::fs::create_dir_all(directory.join("nested")).expect("the parent directory exists and nested does not yet");
 
-        let mut entries = filesystem.Read_Directory(&directory).unwrap();
+        let mut entries = filesystem.Read_Directory(&directory).expect("every entry was created in this directory above");
         entries.sort();
 
         assert_eq!(

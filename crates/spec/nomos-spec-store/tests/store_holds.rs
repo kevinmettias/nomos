@@ -7,16 +7,37 @@ fn Temporary_Database(name: &str) -> std::path::PathBuf
 {
     let mut path = std::env::temp_dir();
     path.push(format!("nomos-spec-{name}-{}.db", std::process::id()));
-    let _ = std::fs::remove_file(&path);
+    // A file left behind by an interrupted run is the only failure this removal may report.
+    if let Err(cause) = std::fs::remove_file(&path)
+    {
+        assert_eq!(cause.kind(), std::io::ErrorKind::NotFound, "a leftover database: {cause}");
+    }
     return path;
 }
 
 const DOCUMENT: &str = "---\nid: X\n---\n# Title\n\nOne.\n\n## Section\n\nTwo.\n";
 
+/// How many tables the schema must report at least, below which the completeness guard below
+/// would be comparing two empty lists rather than checking anything.
+const SCHEMA_TABLE_FLOOR: usize = 5;
+
+/// The three tables one `Three_Rows` transaction writes: blobs, nodes and node history.
+const WRITTEN_TABLE_COUNT: usize = 3;
+
+/// The two distinct byte strings the blob-identity test stores: one repeated, one different.
+const DISTINCT_BLOB_COUNT: u32 = 2;
+
+/// How many times the re-ingest test asks for the same document.
+const RE_INGEST_ATTEMPTS: u32 = 3;
+
+/// The two revisions of one path that must stay distinct documents.
+const REVISIONS_OF_ONE_PATH: u32 = 2;
+
 #[test]
 fn Test_A_Fresh_Store_Should_Be_At_The_Latest_Version()
 {
-    let store = SpecificationStore::In_Memory().expect("opens");
+    let store = SpecificationStore::In_Memory()
+        .expect("In_Memory() applies this crate's schema in process, so it cannot fail to open");
 
     assert_eq!(store.Version(), Latest_Version());
     assert!(Latest_Version() > 0, "a store with no migrations is not a store");
@@ -25,7 +46,8 @@ fn Test_A_Fresh_Store_Should_Be_At_The_Latest_Version()
 #[test]
 fn Test_Every_Declared_Table_Should_Exist()
 {
-    let store = SpecificationStore::In_Memory().expect("opens");
+    let store = SpecificationStore::In_Memory()
+        .expect("In_Memory() applies this crate's schema in process, so every table is declared");
 
     for table in Table::All()
     {
@@ -50,7 +72,8 @@ fn Test_Every_Declared_Table_Should_Exist()
 #[test]
 fn Test_Every_Table_In_The_Schema_Should_Be_Declared()
 {
-    let store = SpecificationStore::In_Memory().expect("opens");
+    let store = SpecificationStore::In_Memory()
+        .expect("In_Memory() applies this crate's schema in process, so its tables can be asked");
     let present = Tables_In_The_Schema(&store);
     let declared: Vec<&str> = Table::All().iter().map(|table| return table.Name()).collect();
     let undeclared: Vec<&String> = present
@@ -58,7 +81,10 @@ fn Test_Every_Table_In_The_Schema_Should_Be_Declared()
         .filter(|name| return !declared.contains(&name.as_str()))
         .collect();
 
-    assert!(present.len() > 5, "the schema reported almost nothing, so this checked nothing");
+    assert!(
+        present.len() > SCHEMA_TABLE_FLOOR,
+        "the schema reported almost nothing, so this checked nothing"
+    );
     assert!(
         undeclared.is_empty(),
         "in the schema and absent from Table::All(), so every guard built on it is blind \
@@ -91,16 +117,22 @@ fn Test_Reopening_Should_Not_Re_Run_Migrations()
 {
     let path = Temporary_Database("reopen");
 
-    let mut first = SpecificationStore::Open(&path).expect("opens");
-    let uid = first.Put_Source_Document("a.md", "v14.36", DOCUMENT).expect("writes");
+    let mut first = SpecificationStore::Open(&path)
+        .expect("Open creates the file and applies the schema at that path");
+    let uid = first
+        .Put_Source_Document("a.md", "v14.36", DOCUMENT)
+        .expect("the path is fresh in this store, so the insert conflicts with nothing");
     assert!(uid > 0);
     drop(first);
 
-    let second = SpecificationStore::Open(&path).expect("reopens");
+    let second =
+        SpecificationStore::Open(&path).expect("the file the first handle wrote is still there");
     assert_eq!(second.Version(), Latest_Version());
     assert_eq!(second.Count(Table::SourceDocuments).expect("counts"), 1);
+    drop(second);
 
-    let _ = std::fs::remove_file(&path);
+    std::fs::remove_file(&path)
+        .expect("the handle is dropped, so the database this test made is removable");
 }
 
 /// A store written by a newer build must be refused, not read. Reading tables whose
@@ -110,11 +142,12 @@ fn Test_A_Future_Schema_Version_Should_Be_Refused()
 {
     let path = Temporary_Database("future");
     {
-        let store = SpecificationStore::Open(&path).expect("opens");
+        let store = SpecificationStore::Open(&path)
+            .expect("Open creates the file whose pragma this test writes");
         store
             .Connection()
             .pragma_update(None, "user_version", Latest_Version().saturating_add(1))
-            .expect("bumps");
+            .expect("the connection belongs to this test, so the pragma is writable");
     }
 
     let result = SpecificationStore::Open(&path);
@@ -124,7 +157,8 @@ fn Test_A_Future_Schema_Version_Should_Be_Refused()
         "a newer schema must be refused"
     );
 
-    let _ = std::fs::remove_file(&path);
+    std::fs::remove_file(&path)
+        .expect("the store was dropped with that block, so the file is removable");
 }
 
 /// One transaction writing a blob, a node and a history row, in that order.
@@ -159,12 +193,16 @@ fn Three_Rows(store: &mut SpecificationStore, reason: &str) -> Result<(), StoreE
 /// Together because the claim is about all three at once: a rollback that reached the last
 /// statement and not the two before it is the defect, and three separate assertions report
 /// it as one table being wrong rather than as the rollback being partial.
-fn Written(store: &SpecificationStore) -> [u32; 3]
+fn Written(store: &SpecificationStore) -> [u32; WRITTEN_TABLE_COUNT]
 {
     return [
-        store.Count(Table::Blobs).expect("counts"),
-        store.Count(Table::Nodes).expect("counts"),
-        store.Count(Table::NodeHistory).expect("counts"),
+        store.Count(Table::Blobs).expect("Count runs a SELECT over a table the schema declares"),
+        store
+            .Count(Table::Nodes)
+            .expect("the nodes table is one the schema declares, so counting it is a query"),
+        store
+            .Count(Table::NodeHistory)
+            .expect("the history table is one the schema declares too"),
     ];
 }
 
@@ -173,7 +211,8 @@ fn Written(store: &SpecificationStore) -> [u32; 3]
 #[test]
 fn Test_A_Failed_Transaction_Should_Roll_Back_Every_Table()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("In_Memory() gives the rollback test a store it can write into");
 
     // The history row carries a blank reason. The schema refuses it, which fails the
     // whole transaction at its last statement rather than its first.
@@ -188,7 +227,8 @@ fn Test_A_Failed_Transaction_Should_Roll_Back_Every_Table()
 #[test]
 fn Test_A_Successful_Transaction_Should_Commit_Every_Table()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("In_Memory() gives the commit test a store it can write into");
 
     let outcome = Three_Rows(&mut store, "ingested from v14.36");
 
@@ -200,34 +240,42 @@ fn Test_A_Successful_Transaction_Should_Commit_Every_Table()
 #[test]
 fn Test_Identical_Blobs_Should_Be_Stored_Once()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("In_Memory() gives the blob-identity test a store it can write into");
 
-    let first = store.Put_Blob(b"the same bytes").expect("writes");
-    let second = store.Put_Blob(b"the same bytes").expect("writes");
-    let other = store.Put_Blob(b"different bytes").expect("writes");
+    let first = store.Put_Blob(b"the same bytes").expect("Put_Blob takes the first copy of them");
+    let second =
+        store.Put_Blob(b"the same bytes").expect("Put_Blob takes a repeated copy of the bytes");
+    let other =
+        store.Put_Blob(b"different bytes").expect("Put_Blob takes the first copy of other bytes");
 
     assert_eq!(first, second);
     assert_ne!(first, other);
-    assert_eq!(store.Count(Table::Blobs).expect("counts"), 2);
+    assert_eq!(store.Count(Table::Blobs).expect("counts"), DISTINCT_BLOB_COUNT);
 }
 
 /// Re-ingesting a document must be a no-op, or ingest is not restartable.
 #[test]
 fn Test_Re_Ingesting_A_Document_Should_Be_Idempotent()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("In_Memory() gives the re-ingest test a store it can write into");
     let blocks = Segment(DOCUMENT);
 
-    for _ in 0..3
+    for _ in 0..RE_INGEST_ATTEMPTS
     {
-        let uid = store.Put_Source_Document("a.md", "v14.36", DOCUMENT).expect("writes");
-        store.Put_Source_Blocks(uid, &blocks).expect("writes blocks");
+        let uid = store
+            .Put_Source_Document("a.md", "v14.36", DOCUMENT)
+            .expect("Put_Source_Document takes a repeat of a path it already holds");
+        store
+            .Put_Source_Blocks(uid, &blocks)
+            .expect("Put_Source_Blocks takes a repeat of the same blocks");
     }
 
     assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), 1);
     assert_eq!(
-        store.Count(Table::SourceBlocks).expect("counts"),
-        u32::try_from(blocks.len()).expect("small")
+        store.Count(Table::SourceBlocks).expect("the ingest wrote the blocks of one document"),
+        u32::try_from(blocks.len()).expect("the fixture's block count fits the column's width")
     );
 }
 
@@ -236,15 +284,21 @@ fn Test_Re_Ingesting_A_Document_Should_Be_Idempotent()
 #[test]
 fn Test_Two_Revisions_Of_One_Path_Should_Be_Distinct()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("In_Memory() gives the revision test a store it can write into");
 
-    let old = store.Put_Source_Document("a.md", "v14.36", DOCUMENT).expect("writes");
+    let old = store
+        .Put_Source_Document("a.md", "v14.36", DOCUMENT)
+        .expect("the path is fresh in this store, so the insert conflicts with nothing");
     let new = store
         .Put_Source_Document("a.md", "v15.0", "# Title\n\nReplaced.\n")
-        .expect("writes");
+        .expect("a second revision of that path is a second document, not a conflict");
 
     assert_ne!(old, new);
-    assert_eq!(store.Count(Table::SourceDocuments).expect("counts"), 2);
+    assert_eq!(
+        store.Count(Table::SourceDocuments).expect("counts"),
+        REVISIONS_OF_ONE_PATH
+    );
 }
 
 /// Block hashes must survive the round trip through `SQLite` unchanged. If they do not,
@@ -252,26 +306,39 @@ fn Test_Two_Revisions_Of_One_Path_Should_Be_Distinct()
 #[test]
 fn Test_Block_Hashes_Should_Survive_Storage()
 {
-    use rusqlite::params;
-
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("In_Memory() gives the block-hash test a store it can write into");
     let blocks = Segment(DOCUMENT);
-    let uid = store.Put_Source_Document("a.md", "v14.36", DOCUMENT).expect("writes");
-    store.Put_Source_Blocks(uid, &blocks).expect("writes blocks");
+    let uid = store
+        .Put_Source_Document("a.md", "v14.36", DOCUMENT)
+        .expect("Put_Source_Document accepts a path this store has not seen");
+    store
+        .Put_Source_Blocks(uid, &blocks)
+        .expect("Put_Source_Blocks inserts every block it is handed");
+
+    let stored = Stored_Hashes(&store, uid);
 
     for block in &blocks
     {
-        let stored: String = store
-            .Connection()
-            .query_row(
-                "SELECT content_hash FROM source_blocks WHERE document_uid = ?1 AND ordinal = ?2",
-                params![uid, block.ordinal],
-                |row| row.get(0),
-            )
-            .expect("reads back");
-
-        assert_eq!(stored, block.Content_Hash().As_String_Slice());
+        let hash = stored.get(&block.ordinal).expect("every block written has a row");
+        assert_eq!(hash, block.Content_Hash().As_String_Slice());
     }
+}
+
+/// Every `content_hash` the store holds for `uid`, keyed by the block's own ordinal — read
+/// once, so the loop above compares hashes rather than issuing one query per block.
+fn Stored_Hashes(store: &SpecificationStore, uid: i64) -> std::collections::HashMap<u32, String>
+{
+    let mut statement = store
+        .Connection()
+        .prepare("SELECT ordinal, content_hash FROM source_blocks WHERE document_uid = ?1")
+        .expect("the projection names two columns this connection holds");
+
+    return statement
+        .query_map([uid], |row| return Ok((row.get(0)?, row.get(1)?)))
+        .expect("the query above compiles against the schema the store applies")
+        .map(|row| return row.expect("query_map yields one row per source_blocks row"))
+        .collect();
 }
 
 /// Foreign keys must be enforced. `SQLite` disables them by default, so a schema full of
@@ -279,7 +346,8 @@ fn Test_Block_Hashes_Should_Survive_Storage()
 #[test]
 fn Test_A_Dangling_Reference_Should_Be_Refused()
 {
-    let store = SpecificationStore::In_Memory().expect("opens");
+    let store = SpecificationStore::In_Memory()
+        .expect("In_Memory() gives the foreign-key test a store it can write into");
 
     let result = store.Connection().execute(
         "INSERT INTO source_documents (path, revision, blob_uid) VALUES ('a.md', 'v1', 9999)",
@@ -294,7 +362,8 @@ fn Test_A_Dangling_Reference_Should_Be_Refused()
 #[test]
 fn Test_An_Unjustified_Omission_Should_Be_Refused()
 {
-    let store = SpecificationStore::In_Memory().expect("opens");
+    let store = SpecificationStore::In_Memory()
+        .expect("In_Memory() gives the omission test a store it can write into");
 
     let blank = store.Connection().execute(
         "INSERT INTO omissions (source_block_uid, reason, justification, decision_record)

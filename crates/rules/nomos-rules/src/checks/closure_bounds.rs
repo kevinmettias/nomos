@@ -66,19 +66,35 @@ pub fn Check_Closure_Bounds_Are_Minimal(sources: &[SourceFile]) -> Vec<Finding>
     return findings;
 }
 
-/// Reports a `Box`, `Arc`, or `Rc` of `dyn Fn*` with no adjacent explanation.
-#[must_use]
-pub fn Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(sources: &[SourceFile]) -> Vec<Finding>
+fn Minimal_Bound_Findings_In(source: &SourceFile) -> Vec<Finding>
 {
+    let lines: Vec<&str> = source.text.lines().collect();
     let mut findings = Vec::new();
 
-    for source in sources.iter().filter(|source| return source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source))
+    for (index, line) in lines.iter().enumerate()
     {
-        findings.extend(Boxed_Closure_Findings_In(source));
+        let finding = Minimal_Bound_Finding_For(source, line, &lines, index);
+        findings.extend(finding);
     }
 
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
+}
+
+/// The finding this line owes, if any: a widened bound or a public API's own bound, either
+/// one unexplained by an adjacent comment.
+fn Minimal_Bound_Finding_For(source: &SourceFile, line: &str, lines: &[&str], index: usize) -> Option<Finding>
+{
+    let code = Code_Prefix(line);
+    let line_number = index.saturating_add(1);
+    let shape = Closure_Bound_Shape(&code);
+    let explained = Has_Adjacent_Explanation(lines, index);
+
+    return match shape
+    {
+        Some(ClosureBoundShape::ExtraBound) if !explained => Some(Extra_Bound_Finding(source, line_number)),
+        Some(ClosureBoundShape::PublicApi) if !explained => Some(Public_Api_Finding(source, line_number)),
+        _ => None,
+    };
 }
 
 /// What one line's closure-trait call is doing, in the precedence code-standards' own
@@ -112,67 +128,18 @@ fn Closure_Bound_Shape(code: &str) -> Option<ClosureBoundShape>
     return None;
 }
 
-fn Minimal_Bound_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let lines: Vec<&str> = source.text.lines().collect();
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        let code = Code_Prefix(line);
-        let line_number = index.saturating_add(1);
-
-        match Closure_Bound_Shape(&code)
-        {
-            Some(ClosureBoundShape::ExtraBound) if !Has_Adjacent_Explanation(&lines, index) =>
-            {
-                findings.push(Extra_Bound_Finding(source, line_number));
-            }
-            Some(ClosureBoundShape::PublicApi) if !Has_Adjacent_Explanation(&lines, index) =>
-            {
-                findings.push(Public_Api_Finding(source, line_number));
-            }
-            _ => {}
-        }
-    }
-
-    return findings;
-}
-
-fn Boxed_Closure_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let lines: Vec<&str> = source.text.lines().collect();
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        let code = Code_Prefix(line);
-
-        if matches!(Closure_Bound_Shape(&code), Some(ClosureBoundShape::BoxedDyn)) && !Has_Adjacent_Explanation(&lines, index)
-        {
-            findings.push(Boxed_Closure_Finding(source, index.saturating_add(1)));
-        }
-    }
-
-    return findings;
-}
-
-/// The three spellings a closure-trait call takes. Checked as one gate before any of the
-/// three shapes above, matching the original's own `closure_bounds_fn_pattern` gate.
-const CLOSURE_TRAIT_CALLS: [&str; 3] = ["Fn(", "FnMut(", "FnOnce("];
-
 fn Names_A_Closure_Trait_Call(code: &str) -> bool
 {
-    return CLOSURE_TRAIT_CALLS.iter().any(|call| return Contains_With_Left_Boundary(code, call));
+    return CLOSURE_TRAIT_CALLS.iter().any(|call| return Contains_With_Left_Boundary(code, *call));
 }
 
 /// Whether `needle` occurs in `haystack` at a position not itself inside a longer
 /// identifier — `MyFn(` does not name a closure trait call, `impl Fn(` does.
-fn Contains_With_Left_Boundary(haystack: &str, needle: &str) -> bool
+fn Contains_With_Left_Boundary(haystack: &str, needle: CallSpelling<'_>) -> bool
 {
     let mut searched_from = 0usize;
 
-    while let Some(offset) = haystack.get(searched_from..).and_then(|rest| return rest.find(needle))
+    while let Some(offset) = haystack.get(searched_from..).and_then(|rest| return rest.find(needle.0))
     {
         let start = searched_from.saturating_add(offset);
 
@@ -187,15 +154,16 @@ fn Contains_With_Left_Boundary(haystack: &str, needle: &str) -> bool
     return false;
 }
 
-/// Whether the byte at `offset` is one an identifier can be made of.
-fn Continues_An_Identifier(text: &str, offset: usize) -> bool
-{
-    return text.as_bytes().get(offset).is_some_and(|byte| return byte.is_ascii_alphanumeric() || *byte == b'_');
-}
+/// The three spellings a closure-trait call takes. Checked as one gate before any of the
+/// three shapes above, matching the original's own `closure_bounds_fn_pattern` gate.
+const CLOSURE_TRAIT_CALLS: [CallSpelling<'static>; 3] =
+    [CallSpelling("Fn("), CallSpelling("FnMut("), CallSpelling("FnOnce(")];
 
-/// `Box`, `Arc`, or `Rc` directly wrapping `dyn Fn*(` — a heap allocation plus an indirect
-/// call, which is [`ClosureBoundShape::BoxedDyn`]'s whole subject.
-const BOXED_CLOSURE_WRAPPERS: [&str; 3] = ["Box", "Arc", "Rc"];
+/// One of the spellings above, as a value rather than a bare `&str`. Every reader here is
+/// handed it beside the line it is searched for in, and two bare `&str`s in adjacent
+/// positions are transposable at a call site with nothing to catch it.
+#[derive(Clone, Copy)]
+struct CallSpelling<'a>(&'a str);
 
 fn Boxes_A_Dyn_Closure(code: &str) -> bool
 {
@@ -237,12 +205,8 @@ fn Opens_On_A_Dyn_Closure(after: &str) -> bool
     };
     let after = after.trim_start();
 
-    return CLOSURE_TRAIT_CALLS.iter().any(|call| return after.starts_with(call));
+    return CLOSURE_TRAIT_CALLS.iter().any(|call| return after.starts_with(call.0));
 }
-
-/// `+ Send`, `+ Sync`, or `+ 'static` — a closure requesting more than the plain `Fn*` trait
-/// admits, [`ClosureBoundShape::ExtraBound`]'s subject.
-const EXTRA_BOUND_KEYWORDS: [&str; 3] = ["Send", "Sync", "'static"];
 
 fn Widens_With_An_Extra_Bound(code: &str) -> bool
 {
@@ -268,12 +232,114 @@ fn Widens_With_An_Extra_Bound(code: &str) -> bool
     return false;
 }
 
+/// `Box`, `Arc`, or `Rc` directly wrapping `dyn Fn*(` — a heap allocation plus an indirect
+/// call, which is [`ClosureBoundShape::BoxedDyn`]'s whole subject.
+const BOXED_CLOSURE_WRAPPERS: [&str; 3] = ["Box", "Arc", "Rc"];
+
 /// A `pub fn` whose own line also ascribes a type to something — the original's
 /// `\bwhere\b|:` gate, read as "this signature line already carries a colon", since a
 /// closure parameter named inline always does and a bare `where` never appears without one.
 fn Opens_A_Public_Function_Signature(code: &str) -> bool
 {
     return code.contains("pub fn ") && code.contains(':');
+}
+
+fn Extra_Bound_Finding(source: &SourceFile, line_number: usize) -> Finding
+{
+    let location = format!("{}:{line_number}", source.path);
+
+    return Finding {
+        rule: RuleId::New(CLOSURE_BOUNDS_ARE_MINIMAL),
+        subject: source.subject,
+        subject_name: location.clone(),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary: format!(
+            "{location} widens a closure bound with `Send`, `Sync`, or `'static` with no adjacent comment saying why; request only the capability the call site uses"
+        ),
+        locations: vec![location],
+    };
+}
+
+/// `+ Send`, `+ Sync`, or `+ 'static` — a closure requesting more than the plain `Fn*` trait
+/// admits, [`ClosureBoundShape::ExtraBound`]'s subject.
+const EXTRA_BOUND_KEYWORDS: [&str; 3] = ["Send", "Sync", "'static"];
+
+fn Public_Api_Finding(source: &SourceFile, line_number: usize) -> Finding
+{
+    let location = format!("{}:{line_number}", source.path);
+
+    return Finding {
+        rule: RuleId::New(CLOSURE_BOUNDS_ARE_MINIMAL),
+        subject: source.subject,
+        subject_name: location.clone(),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary: format!(
+            "{location} is a public function whose closure bound is an API contract; confirm the `Fn`/`FnMut`/`FnOnce` choice is minimal or explain it with an adjacent comment"
+        ),
+        locations: vec![location],
+    };
+}
+
+/// Reports a `Box`, `Arc`, or `Rc` of `dyn Fn*` with no adjacent explanation.
+#[must_use]
+pub fn Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(sources: &[SourceFile]) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources.iter().filter(|source| return source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source))
+    {
+        findings.extend(Boxed_Closure_Findings_In(source));
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+fn Boxed_Closure_Findings_In(source: &SourceFile) -> Vec<Finding>
+{
+    let lines: Vec<&str> = source.text.lines().collect();
+    let mut findings = Vec::new();
+
+    for (index, line) in lines.iter().enumerate()
+    {
+        let code = Code_Prefix(line);
+
+        if matches!(Closure_Bound_Shape(&code), Some(ClosureBoundShape::BoxedDyn)) && !Has_Adjacent_Explanation(&lines, index)
+        {
+            let finding = Boxed_Closure_Finding(source, index.saturating_add(1));
+            findings.push(finding);
+        }
+    }
+
+    return findings;
+}
+
+fn Boxed_Closure_Finding(source: &SourceFile, line_number: usize) -> Finding
+{
+    let location = format!("{}:{line_number}", source.path);
+
+    return Finding {
+        rule: RuleId::New(BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS),
+        subject: source.subject,
+        subject_name: location.clone(),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary: format!(
+            "{location} boxes or shares a `dyn Fn*` closure with no adjacent comment saying why; that is a heap allocation plus an indirect call, reserved for genuine type erasure"
+        ),
+        locations: vec![location],
+    };
+}
+
+/// Whether the byte at `offset` is one an identifier can be made of.
+fn Continues_An_Identifier(text: &str, offset: usize) -> bool
+{
+    return text.as_bytes().get(offset).is_some_and(|byte| return byte.is_ascii_alphanumeric() || *byte == b'_');
 }
 
 /// Whether any of the few lines above `index` carries a comment with something in it. A bare
@@ -305,60 +371,6 @@ fn Is_An_Explanatory_Comment(line: &str) -> bool
         .any(|character| return character.is_ascii_alphanumeric());
 }
 
-fn Extra_Bound_Finding(source: &SourceFile, line_number: usize) -> Finding
-{
-    let location = format!("{}:{line_number}", source.path);
-
-    return Finding {
-        rule: RuleId::New(CLOSURE_BOUNDS_ARE_MINIMAL),
-        subject: source.subject,
-        subject_name: location.clone(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!(
-            "{location} widens a closure bound with `Send`, `Sync`, or `'static` with no adjacent comment saying why; request only the capability the call site uses"
-        ),
-        locations: vec![location],
-    };
-}
-
-fn Public_Api_Finding(source: &SourceFile, line_number: usize) -> Finding
-{
-    let location = format!("{}:{line_number}", source.path);
-
-    return Finding {
-        rule: RuleId::New(CLOSURE_BOUNDS_ARE_MINIMAL),
-        subject: source.subject,
-        subject_name: location.clone(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!(
-            "{location} is a public function whose closure bound is an API contract; confirm the `Fn`/`FnMut`/`FnOnce` choice is minimal or explain it with an adjacent comment"
-        ),
-        locations: vec![location],
-    };
-}
-
-fn Boxed_Closure_Finding(source: &SourceFile, line_number: usize) -> Finding
-{
-    let location = format!("{}:{line_number}", source.path);
-
-    return Finding {
-        rule: RuleId::New(BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS),
-        subject: source.subject,
-        subject_name: location.clone(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!(
-            "{location} boxes or shares a `dyn Fn*` closure with no adjacent comment saying why; that is a heap allocation plus an indirect call, reserved for genuine type erasure"
-        ),
-        locations: vec![location],
-    };
-}
-
 /// This file's own path, checked with the same normalized-slash comparison
 /// [`super::Is_Test_Or_Example_Source`] and `rust_text.rs`'s own copy already use. Every
 /// pattern this module looks for is spelled out literally in its own constants and, worse,
@@ -376,184 +388,6 @@ fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 
 /// The code before any line comment. This crate's established per-file convention, which
 /// `P45-CODE-PREFIX-KNOWS-STRINGS` will replace with one shared helper.
+
 #[cfg(test)]
-mod tests
-{
-    use super::*;
-    use nomos_contracts::SubjectId;
-    use nomos_model::Content_Digest;
-
-    /// Translated from the original's `Test_Boxed_Dyn_Closure_Needs_A_Reason`.
-    #[test]
-    fn Test_Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths_Should_Report_A_Boxed_Dyn_Closure()
-    {
-        let sources = vec![Source("demo/src/a.rs", "struct Handler { callback: Box<dyn Fn(Event)> }")];
-
-        let findings = Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(&sources);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
-        assert_eq!(found.rule, RuleId::New(BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS));
-        assert_eq!(found.gate, GateCategory::Blocking);
-    }
-
-    #[test]
-    fn Test_Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths_Should_Accept_A_Generic_Bound()
-    {
-        let sources = vec![Source("demo/src/a.rs", "fn once<F: FnOnce()>(f: F) { f(); }")];
-
-        let findings = Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths_Should_Accept_An_Adjacent_Explanation()
-    {
-        let text = "    // Heterogeneous callbacks stored in one map; genuine type erasure.\n    callback: Box<dyn Fn(Event)>,";
-        let sources = vec![Source("demo/src/a.rs", text)];
-
-        let findings = Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths_Should_Also_Catch_Arc_And_Rc()
-    {
-        let sources = vec![
-            Source("demo/src/a.rs", "callback: Arc<dyn Fn(Event)>,"),
-            Source("demo/src/b.rs", "callback: Rc<dyn FnMut(Event)>,"),
-        ];
-
-        let findings = Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(&sources);
-
-        assert_eq!(findings.len(), 2, "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths_Should_Ignore_A_Language_It_Does_Not_Judge()
-    {
-        let sources = vec![Source("demo/src/a.go", "struct Handler { callback: Box<dyn Fn(Event)> }")];
-
-        let findings = Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// Translated from the original's `Test_Closure_Static_Bound_Needs_A_Reason`. One
-    /// finding even though the line widens with both `Send` and `'static`, matching the
-    /// original's one-finding-per-line shape.
-    #[test]
-    fn Test_Check_Closure_Bounds_Are_Minimal_Should_Report_A_Widened_Bound()
-    {
-        let sources = vec![Source("demo/src/a.rs", &Spawn_Bound_Fn())];
-
-        let findings = Check_Closure_Bounds_Are_Minimal(&sources);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
-        assert_eq!(found.rule, RuleId::New(CLOSURE_BOUNDS_ARE_MINIMAL));
-        assert_eq!(found.gate, GateCategory::Blocking);
-    }
-
-    /// Translated from the original's `Test_Reasoned_Closure_Bound_Is_Clean`, adjusted for
-    /// this port's divergence: any adjacent explanation counts, not one marker spelling.
-    #[test]
-    fn Test_Check_Closure_Bounds_Are_Minimal_Should_Accept_An_Adjacent_Explanation()
-    {
-        let text = format!("// Spawned onto a detached thread, so the standard library demands `Send` here.\n{}", Spawn_Bound_Fn());
-        let sources = vec![Source("demo/src/a.rs", &text)];
-
-        let findings = Check_Closure_Bounds_Are_Minimal(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Closure_Bounds_Are_Minimal_Should_Not_Accept_A_Wordless_Comment()
-    {
-        let text = format!("// ----\n{}", Spawn_Bound_Fn());
-        let sources = vec![Source("demo/src/a.rs", &text)];
-
-        let findings = Check_Closure_Bounds_Are_Minimal(&sources);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    /// Translated from the original's `Test_Local_Generic_Closure_Bound_Is_Clean`.
-    #[test]
-    fn Test_Check_Closure_Bounds_Are_Minimal_Should_Accept_A_Plain_Generic_Bound()
-    {
-        let sources = vec![Source("demo/src/a.rs", "fn once<F: FnOnce()>(f: F) { f(); }")];
-
-        let findings = Check_Closure_Bounds_Are_Minimal(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// The public-API shape: fires on a fixture built for it, which is what tells this
-    /// shape apart from a scanner that cannot fire at all — see the module doc's measured
-    /// zero over the real corpus.
-    #[test]
-    fn Test_Check_Closure_Bounds_Are_Minimal_Should_Report_An_Unexplained_Public_Bound()
-    {
-        let sources = vec![Source("demo/src/a.rs", "pub fn Present_Cleared(paint: impl FnOnce() -> bool) -> bool")];
-
-        let findings = Check_Closure_Bounds_Are_Minimal(&sources);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Closure_Bounds_Are_Minimal_Should_Not_Judge_A_Crate_Private_Signature()
-    {
-        let sources = vec![Source("demo/src/a.rs", "pub(crate) fn Present_Cleared(paint: impl FnOnce() -> bool) -> bool")];
-
-        let findings = Check_Closure_Bounds_Are_Minimal(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// A boxed `dyn` bound that also widens with `Send` reports only as the boxed shape,
-    /// matching the original switch's precedence: each line reports once.
-    #[test]
-    fn Test_Check_Closure_Bounds_Are_Minimal_Should_Defer_To_The_Boxed_Shape_On_The_Same_Line()
-    {
-        let sources = vec![Source("demo/src/a.rs", "callback: Box<dyn Fn(Event) + Send>,")];
-
-        assert!(Check_Closure_Bounds_Are_Minimal(&sources).is_empty());
-        assert_eq!(Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(&sources).len(), 1);
-    }
-
-    #[test]
-    fn Test_Check_Closure_Bounds_Are_Minimal_Should_Ignore_A_Language_It_Does_Not_Judge()
-    {
-        let sources = vec![Source("demo/src/a.go", &Spawn_Bound_Fn())];
-
-        let findings = Check_Closure_Bounds_Are_Minimal(&sources);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// The character `'static` opens with, held once so no fixture spells the whole word
-    /// literally. [`super::super::lifetime_discipline::Check_Static_Bounds_Are_Justified`]
-    /// reads this file's own raw text the same as any other Rust source — a string literal
-    /// is not a comment to it — so a fixture spelling `'static` out reports a finding
-    /// against this file's own test module. Measured: composing this rule and running a
-    /// real `nomos gate run` produced exactly two such findings before this became a built
-    /// string, on the two fixtures below with no adjacent explanation of their own.
-    const STATIC_QUOTE: char = '\'';
-
-    fn Spawn_Bound_Fn() -> String
-    {
-        return format!("fn spawn<F: FnOnce() + Send + {STATIC_QUOTE}static>(f: F) {{}}");
-    }
-
-    fn Source(path: &str, text: &str) -> SourceFile
-    {
-        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
-        source.language = crate::Recognized_Language_In_Tests(path);
-        return source;
-    }
-}
+mod tests;

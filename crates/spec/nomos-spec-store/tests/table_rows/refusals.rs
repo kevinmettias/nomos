@@ -45,7 +45,8 @@ fn Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused()
 #[test]
 fn Test_A_Refused_Table_Should_Not_Write_Half_A_Document()
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store =
+        SpecificationStore::In_Memory().expect("In_Memory applies the schema in process");
     let markdown = "| a | b |\n| 1 | 2 |\n";
     let document = store
         .Put_Source_Document("doc.md", AUTHORED, markdown)
@@ -64,7 +65,8 @@ fn Test_A_Refused_Table_Should_Not_Write_Half_A_Document()
 #[test]
 fn Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused()
 {
-    let store = SpecificationStore::In_Memory().expect("opens");
+    let store =
+        SpecificationStore::In_Memory().expect("In_Memory gives the refusal test its store");
 
     let targetless = store.Connection().execute(
         "INSERT INTO lineage (disposition) VALUES ('preserved-verbatim')",

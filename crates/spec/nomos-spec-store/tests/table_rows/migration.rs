@@ -4,6 +4,12 @@
 //! there and would be untested by the whole suite otherwise. The version-2 fixture is the
 //! only thing that reaches it, which is why the fixture and the assertion stay together.
 
+/// The version whose shape typed a table's column titles as content rows.
+const VERSION_BEFORE_HEADER_KINDS: u32 = 2;
+
+/// The migration that re-derives those titles back into header rows.
+const RE_DERIVE_HEADERS: u32 = 3;
+
 /// A store written before the header kind existed must not keep answering the old way.
 ///
 /// This drives migration 3 directly: build the version-2 shape, type the header as content
@@ -12,17 +18,18 @@
 #[test]
 fn Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers()
 {
-    let connection = rusqlite::Connection::open_in_memory().expect("opens");
+    let connection = rusqlite::Connection::open_in_memory()
+        .expect("an in-memory connection is this fixture's blank slate");
 
-    Apply_Migrations(&connection, 1..=2);
+    Apply_Migrations(&connection, 1..=VERSION_BEFORE_HEADER_KINDS);
     connection
         .execute_batch(A_VERSION_TWO_TABLE)
-        .expect("populates the version-2 shape");
+        .expect("the fixture above is written in the statements version 2 accepted");
 
     let before = Kinds(&connection);
 
     assert_eq!(before, vec!["content", "separator", "content"], "the fixture is not version 2");
-    Apply_Migrations(&connection, 3..=3);
+    Apply_Migrations(&connection, RE_DERIVE_HEADERS..=RE_DERIVE_HEADERS);
     assert_eq!(
         Kinds(&connection),
         vec!["header", "separator", "content"],
@@ -41,7 +48,9 @@ fn Apply_Migrations(connection: &rusqlite::Connection, versions: std::ops::Range
     {
         for statement in migration.statements
         {
-            connection.execute_batch(statement).expect("applies");
+            connection
+                .execute_batch(statement)
+                .expect("MIGRATIONS holds statements this crate's own schema accepts");
         }
     }
 }
@@ -81,5 +90,5 @@ fn Kinds(connection: &rusqlite::Connection) -> Vec<String>
                 .query_map([], |row| row.get(0))
                 .and_then(std::iter::Iterator::collect);
         })
-        .expect("reads kinds");
+        .expect("the projection names the one column source_table_rows holds");
 }

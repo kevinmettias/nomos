@@ -111,6 +111,26 @@ fn Item_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
     return findings;
 }
 
+/// Whether `item` is an `impl` block whose own recorded name is one of the generic
+/// parameters that same block declares.
+///
+/// Asked of the payload rather than guessed from the name. `OD-CAPABILITY-014` measured the
+/// alternative and rejected it: exempting every `Implementation` item whose name is a single
+/// upper-case letter would also hide `impl Trait for X` over a real struct somebody named
+/// `X`, which is the case this rule exists for. A `None` here is a `shape` no `impl` block
+/// wrote, and answers `false` rather than exempting on a field it could not read.
+fn Names_Its_Own_Generic_Parameter(item: &PayloadItem) -> bool
+{
+    if item.kind != IMPLEMENTATION
+    {
+        return false;
+    }
+
+    return Impl_Generics(&item.shape).is_some_and(|parameters| {
+        return parameters.iter().any(|parameter| return parameter == item.Own_Name());
+    });
+}
+
 fn Field_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
 {
     let Some(fields) = Struct_Fields(&item.shape)
@@ -133,26 +153,6 @@ fn Unread_As_This_Rule(mut finding: Finding) -> Finding
         .summary
         .replace("this file's naming could not be judged", "this file's single-letter names could not be judged");
     return finding;
-}
-
-/// Whether `item` is an `impl` block whose own recorded name is one of the generic
-/// parameters that same block declares.
-///
-/// Asked of the payload rather than guessed from the name. `OD-CAPABILITY-014` measured the
-/// alternative and rejected it: exempting every `Implementation` item whose name is a single
-/// upper-case letter would also hide `impl Trait for X` over a real struct somebody named
-/// `X`, which is the case this rule exists for. A `None` here is a `shape` no `impl` block
-/// wrote, and answers `false` rather than exempting on a field it could not read.
-fn Names_Its_Own_Generic_Parameter(item: &PayloadItem) -> bool
-{
-    if item.kind != IMPLEMENTATION
-    {
-        return false;
-    }
-
-    return Impl_Generics(&item.shape).is_some_and(|parameters| {
-        return parameters.iter().any(|parameter| return parameter == item.Own_Name());
-    });
 }
 
 /// `_` is exempt regardless of what declared it: `const _: () = assert!(...);` is Rust's own

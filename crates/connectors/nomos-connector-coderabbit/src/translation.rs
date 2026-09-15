@@ -75,32 +75,9 @@ impl core::fmt::Display for TranslationError
 /// is written against.
 pub fn Translate_Review_Comment(repository: &str, vendor_bytes: &[u8]) -> Result<FindingPayload, TranslationError>
 {
-    let value: serde_json::Value = serde_json::from_slice(vendor_bytes).map_err(|error| TranslationError {
-        reason: format!("not valid JSON: {error}"),
-    })?;
-
-    let id = value
-        .get("id")
-        .and_then(serde_json::Value::as_u64)
-        .ok_or_else(|| TranslationError {
-            reason: format!("no numeric \"id\" field: {value}"),
-        })?;
-    let login = value
-        .get("user")
-        .and_then(|user| user.get("login"))
-        .and_then(serde_json::Value::as_str)
-        .ok_or_else(|| TranslationError {
-            reason: format!("no string \"user.login\" field: {value}"),
-        })?;
-    if login != CODERABBIT_BOT_LOGIN
-    {
-        return Err(TranslationError {
-            reason: format!(
-                "comment {id} was posted by {login:?}, not {CODERABBIT_BOT_LOGIN:?}; this connector \
-                 only translates CodeRabbit's own comments"
-            ),
-        });
-    }
+    let value = Vendor_Value(vendor_bytes)?;
+    let id = Review_Comment_Id(&value)?;
+    Require_CodeRabbit_Posted_It(&value, id)?;
 
     let path = Field_Str(&value, "path")?;
     let html_url = Field_Str(&value, "html_url")?;
@@ -117,6 +94,52 @@ pub fn Translate_Review_Comment(repository: &str, vendor_bytes: &[u8]) -> Result
         path,
         line,
         message: body,
+    });
+}
+
+/// GitHub's own response for one review comment, decoded as JSON and otherwise unread.
+fn Vendor_Value(vendor_bytes: &[u8]) -> Result<serde_json::Value, TranslationError>
+{
+    return serde_json::from_slice(vendor_bytes).map_err(|error| TranslationError {
+        reason: format!("not valid JSON: {error}"),
+    });
+}
+
+/// GitHub's own permanent numeric id for the comment row itself.
+fn Review_Comment_Id(value: &serde_json::Value) -> Result<u64, TranslationError>
+{
+    return value
+        .get("id")
+        .and_then(serde_json::Value::as_u64)
+        .ok_or_else(|| TranslationError {
+            reason: format!("no numeric \"id\" field: {value}"),
+        });
+}
+
+/// Refuses a comment posted by anybody but `CodeRabbit`'s own bot account. This connector's
+/// entire reason for existing is `CodeRabbit`'s own review; translating an arbitrary human
+/// reviewer's comment through it would misreport whose judgment the resulting fact
+/// represents.
+fn Require_CodeRabbit_Posted_It(value: &serde_json::Value, id: u64) -> Result<(), TranslationError>
+{
+    let login = value
+        .get("user")
+        .and_then(|user| user.get("login"))
+        .and_then(serde_json::Value::as_str)
+        .ok_or_else(|| TranslationError {
+            reason: format!("no string \"user.login\" field: {value}"),
+        })?;
+
+    if login == CODERABBIT_BOT_LOGIN
+    {
+        return Ok(());
+    }
+
+    return Err(TranslationError {
+        reason: format!(
+            "comment {id} was posted by {login:?}, not {CODERABBIT_BOT_LOGIN:?}; this connector \
+             only translates CodeRabbit's own comments"
+        ),
     });
 }
 
@@ -156,25 +179,45 @@ fn Line_Field(value: &serde_json::Value) -> Result<String, TranslationError>
 /// this reader is written against.
 fn Marker_Line(body: &str) -> Result<(String, String), TranslationError>
 {
-    if !body.contains(RECOGNIZED_COMMENT_VERSION_MARKER)
+    Require_Recognized_Marker(body)?;
+
+    let first_line = First_Line(body)?;
+    let (category, severity) = Marker_Segments(first_line)?;
+
+    return Ok((Trim_Marker_Segment(category), Trim_Marker_Segment(severity)));
+}
+
+/// Refuses a body whose comment-body convention this reader was not written against: the
+/// version marker is what says which one it is, and a body carrying a different or absent
+/// one is refused rather than parsed against a guess.
+fn Require_Recognized_Marker(body: &str) -> Result<(), TranslationError>
+{
+    if body.contains(RECOGNIZED_COMMENT_VERSION_MARKER)
     {
-        return Err(TranslationError {
-            reason: format!(
-                "body does not carry a recognized {RECOGNIZED_COMMENT_VERSION_MARKER:?} marker; \
-                 this reader is written against that comment-body version and refuses to guess \
-                 at an unversioned or different one"
-            ),
-        });
+        return Ok(());
     }
 
-    let Some(first_line) = body.lines().next()
-    else
-    {
-        return Err(TranslationError {
-            reason: "body is empty; no marker line to read".to_owned(),
-        });
-    };
+    return Err(TranslationError {
+        reason: format!(
+            "body does not carry a recognized {RECOGNIZED_COMMENT_VERSION_MARKER:?} marker; \
+             this reader is written against that comment-body version and refuses to guess \
+             at an unversioned or different one"
+        ),
+    });
+}
 
+/// The body's own first line -- the one the marker convention writes category, severity and
+/// effort on.
+fn First_Line(body: &str) -> Result<&str, TranslationError>
+{
+    return body.lines().next().ok_or_else(|| TranslationError {
+        reason: "body is empty; no marker line to read".to_owned(),
+    });
+}
+
+/// A marker line's own ` | `-separated segments, at least the category and the severity.
+fn Marker_Segments(first_line: &str) -> Result<(&str, &str), TranslationError>
+{
     let segments: Vec<&str> = first_line.split(" | ").collect();
     let [category, severity, ..] = segments.as_slice()
     else
@@ -187,7 +230,7 @@ fn Marker_Line(body: &str) -> Result<(String, String), TranslationError>
         });
     };
 
-    return Ok((Trim_Marker_Segment(category), Trim_Marker_Segment(severity)));
+    return Ok((category, severity));
 }
 
 fn Trim_Marker_Segment(segment: &str) -> String

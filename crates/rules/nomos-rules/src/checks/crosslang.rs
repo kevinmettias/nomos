@@ -122,48 +122,17 @@ mod tests
 
     const PROVIDER: &str = "nomos.test.crosslang.resolves";
 
-    fn Struct_Item(ordinal: u32, qualified_name: &str, documentation: Observation, fields: &[(&str, &str)]) -> PayloadItem
-    {
-        let owned: Vec<(String, String)> = fields.iter().map(|(field_name, t)| return ((*field_name).to_owned(), (*t).to_owned())).collect();
-        let shape = nomos_cap_syntax::Struct_Shape(&owned).map_or(Observation::Absent, Observation::Present);
-
-        return PayloadItem {
-            ordinal,
-            kind: "Struct".to_owned(),
-            visibility: PUBLIC.to_owned(),
-            qualified_name: qualified_name.to_owned(),
-            documentation,
-            shape,
-        };
-    }
-
     #[test]
     fn Test_Check_Cross_Language_Correspondence_Should_Produce_No_Finding_For_Matching_Structs()
     {
         let rust_source = Source_File("counter.rs");
         let go_source = Source_File("counter.go");
         let TestOffering { mut store, registry, offer } = Offering();
+        let rust_item = Struct_Item(0, "Counter", Observation::Present("Corresponds to `Counter`.".to_owned()), &[("n", "u32")]);
+        let go_item = Struct_Item(0, "Counter", Observation::Absent, &[("n", "int")]);
 
-        Materialize_Syntax_Fact(
-            &mut store,
-            &rust_source,
-            &offer,
-            &SyntaxPayload {
-                unexpanded: 0,
-                items: vec![Struct_Item(
-                    0,
-                    "Counter",
-                    Observation::Present("Corresponds to `Counter`.".to_owned()),
-                    &[("n", "u32")],
-                )],
-            },
-        );
-        Materialize_Syntax_Fact(
-            &mut store,
-            &go_source,
-            &offer,
-            &SyntaxPayload { unexpanded: 0, items: vec![Struct_Item(0, "Counter", Observation::Absent, &[("n", "int")])] },
-        );
+        Materialize_One_Struct(&mut store, &rust_source, &offer, rust_item);
+        Materialize_One_Struct(&mut store, &go_source, &offer, go_item);
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Cross_Language_Correspondence(&[rust_source, go_source], &mut reader);
@@ -177,27 +146,11 @@ mod tests
         let rust_source = Source_File("wide.rs");
         let go_source = Source_File("wide.go");
         let TestOffering { mut store, registry, offer } = Offering();
+        let rust_item = Struct_Item(0, "Wide", Observation::Present("Corresponds to `Wide`.".to_owned()), &[("a", "u32"), ("b", "u32")]);
+        let go_item = Struct_Item(0, "Wide", Observation::Absent, &[("a", "int")]);
 
-        Materialize_Syntax_Fact(
-            &mut store,
-            &rust_source,
-            &offer,
-            &SyntaxPayload {
-                unexpanded: 0,
-                items: vec![Struct_Item(
-                    0,
-                    "Wide",
-                    Observation::Present("Corresponds to `Wide`.".to_owned()),
-                    &[("a", "u32"), ("b", "u32")],
-                )],
-            },
-        );
-        Materialize_Syntax_Fact(
-            &mut store,
-            &go_source,
-            &offer,
-            &SyntaxPayload { unexpanded: 0, items: vec![Struct_Item(0, "Wide", Observation::Absent, &[("a", "int")])] },
-        );
+        Materialize_One_Struct(&mut store, &rust_source, &offer, rust_item);
+        Materialize_One_Struct(&mut store, &go_source, &offer, go_item);
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Cross_Language_Correspondence(&[rust_source, go_source], &mut reader);
@@ -237,22 +190,11 @@ mod tests
         let rust_source = Source_File("wrapper.rs");
         let go_source = Source_File("marker.go");
         let TestOffering { mut store, registry, offer } = Offering();
+        let rust_item = Struct_Item(0, "Wrapper", Observation::Present("Corresponds to `Marker`.".to_owned()), &[("x", "u32")]);
+        let go_item = Struct_Item(0, "Marker", Observation::Absent, &[]);
 
-        Materialize_Syntax_Fact(
-            &mut store,
-            &rust_source,
-            &offer,
-            &SyntaxPayload {
-                unexpanded: 0,
-                items: vec![Struct_Item(0, "Wrapper", Observation::Present("Corresponds to `Marker`.".to_owned()), &[("x", "u32")])],
-            },
-        );
-        Materialize_Syntax_Fact(
-            &mut store,
-            &go_source,
-            &offer,
-            &SyntaxPayload { unexpanded: 0, items: vec![Struct_Item(0, "Marker", Observation::Absent, &[])] },
-        );
+        Materialize_One_Struct(&mut store, &rust_source, &offer, rust_item);
+        Materialize_One_Struct(&mut store, &go_source, &offer, go_item);
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Cross_Language_Correspondence(&[rust_source, go_source], &mut reader);
@@ -280,6 +222,28 @@ mod tests
         let findings = Check_Cross_Language_Correspondence(&[source], &mut reader);
 
         assert!(findings.is_empty());
+    }
+
+    fn Struct_Item(ordinal: u32, qualified_name: &str, documentation: Observation, fields: &[(&str, &str)]) -> PayloadItem
+    {
+        let owned: Vec<(String, String)> = fields.iter().map(|(field_name, t)| return ((*field_name).to_owned(), (*t).to_owned())).collect();
+        let shape = nomos_cap_syntax::Struct_Shape(&owned).map_or(Observation::Absent, Observation::Present);
+
+        return PayloadItem {
+            ordinal,
+            kind: "Struct".to_owned(),
+            visibility: PUBLIC.to_owned(),
+            qualified_name: qualified_name.to_owned(),
+            documentation,
+            shape,
+        };
+    }
+
+    /// Materializes a `nomos_cap_syntax` fact holding exactly `item` — the one-item fact every
+    /// correspondence test below needs on each of its two sides.
+    fn Materialize_One_Struct(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, item: PayloadItem)
+    {
+        Materialize_Syntax_Fact(store, source, offer, &SyntaxPayload { unexpanded: 0, items: vec![item] });
     }
 
     fn Source_File(path: &str) -> SourceFile

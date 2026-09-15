@@ -49,21 +49,19 @@ mod tests
 {
     use super::*;
 
-    fn Rendered(allowance: BaselineAllowance) -> serde_json::Value
-    {
-        return serde_json::to_value(BaselineAllowanceResponse::From(allowance)).expect("always serializes");
-    }
+    /// The occurrence count a bounded entry adopts in these tests.
+    const ADOPTED_OCCURRENCES: u32 = 3;
 
     /// Each state crosses under a name of its own, so a caller branches on a word.
     #[test]
     fn Test_Each_State_Should_Serialize_Under_A_Name_Of_Its_Own()
     {
         let unbounded = Rendered(BaselineAllowance::Unbounded);
-        let bounded = Rendered(BaselineAllowance::AtMost(3));
+        let bounded = Rendered(BaselineAllowance::AtMost(ADOPTED_OCCURRENCES));
 
         assert_eq!(unbounded.get("allowance").and_then(serde_json::Value::as_str), Some("unbounded"), "{unbounded}");
         assert_eq!(bounded.get("allowance").and_then(serde_json::Value::as_str), Some("at_most"), "{bounded}");
-        assert_eq!(bounded.get("accepted_occurrence_count").and_then(serde_json::Value::as_u64), Some(3), "{bounded}");
+        assert_eq!(bounded.get("accepted_occurrence_count").and_then(serde_json::Value::as_u64), Some(u64::from(ADOPTED_OCCURRENCES)), "{bounded}");
     }
 
     /// An unbounded entry carries no count at all, rather than a zero or a null.
@@ -77,5 +75,12 @@ mod tests
         let rendered = Rendered(BaselineAllowance::Unbounded);
 
         assert!(rendered.get("accepted_occurrence_count").is_none(), "{rendered}");
+    }
+
+    /// An allowance as a caller receives it.
+    fn Rendered(allowance: BaselineAllowance) -> serde_json::Value
+    {
+        return serde_json::to_value(BaselineAllowanceResponse::From(allowance))
+            .expect("a derived Serialize over owned data has nothing to refuse");
     }
 }

@@ -54,7 +54,9 @@ fn Assert_Projects_To_Its_Own_Bytes(store: &SpecificationStore, id: &str)
 fn Test_A_Projection_Should_Come_From_The_Rows_And_Not_The_Blob()
 {
     let mut store = Seeded();
-    let before = store.Record_Markdown("D-132", None).expect("projects");
+    let before = store
+        .Record_Markdown("D-132", None)
+        .expect("D-132 is one of the records the seed authored, so its rows render markdown back");
 
     let other = store.Put_Blob(b"not a record at all").expect("writes a blob");
     store
@@ -84,7 +86,9 @@ fn Test_The_Graph_Holds_An_Edge_The_Record_Never_Declared()
     let store = Seeded();
     let in_graph = Edge_Count(&store, "OD-LEDGER-001", "OD-LEDGER-009");
     let document = Only_Document(&store, "OD-LEDGER-001");
-    let declared = store.Declared_Relations(document.uid).expect("queries");
+    let declared = store
+        .Declared_Relations(document.uid)
+        .expect("the seed stored OD-LEDGER-001's declared relations, so its uid has rows to read");
 
     assert_eq!(in_graph, 1, "the inverse edge is not there, so this proves nothing");
     assert!(
@@ -126,10 +130,11 @@ fn Test_A_Document_With_No_Declared_Front_Matter_Should_Say_So()
 /// it can be read, hashed and preserved but not rendered back.
 fn An_Ingested_Document() -> SpecificationStore
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("In_Memory() applies this crate's schema in process, so there is no file to fail on");
     let uid = store
         .Put_Source_Document("volumes/one.md", "v14.36", "# Volume\n\nBody.\n")
-        .expect("writes");
+        .expect("the store was just opened empty, so this path and its document uid are both free");
     let node = store
         .Upsert_Node(NodeRow {
             node_id: "VOL-001",
@@ -149,7 +154,7 @@ fn An_Ingested_Document() -> SpecificationStore
              SELECT uid, 'preserved-verbatim', ?1 FROM source_blocks WHERE document_uid = ?2",
             rusqlite::params![node, uid],
         )
-        .expect("disposes");
+        .expect("Put_Source_Blocks just wrote this document's blocks, so the SELECT has rows to dispose");
 
     return store;
 }

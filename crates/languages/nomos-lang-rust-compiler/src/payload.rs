@@ -38,14 +38,6 @@ pub fn Encode_Payload(payload: &CloneOnCopyPayload) -> Vec<u8>
     return encoded.into_bytes();
 }
 
-/// A newline collapsed to a space, so a rendered location can never split its line in
-/// two -- the same normalization `nomos_cap_dependency_policy`'s own encoder applies to
-/// a violation's free-text message.
-fn Single_Line(text: &str) -> String
-{
-    return text.replace(['\n', '\r'], " ");
-}
-
 /// Reads a payload back out of its canonical encoding.
 ///
 /// # Errors
@@ -134,6 +126,14 @@ fn Nested_Lock_Finding_Line(line: &str) -> Result<NestedLockFinding, Refusal>
     return Ok(NestedLockFinding { location: location.to_owned() });
 }
 
+/// A newline collapsed to a space, so a rendered location can never split its line in
+/// two -- the same normalization `nomos_cap_dependency_policy`'s own encoder applies to
+/// a violation's free-text message.
+fn Single_Line(text: &str) -> String
+{
+    return text.replace(['\n', '\r'], " ");
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -172,16 +172,6 @@ mod tests
         assert!(error.reason.contains("is not a clone-on-copy finding"), "{}", error.reason);
     }
 
-    fn Sample() -> CloneOnCopyPayload
-    {
-        return CloneOnCopyPayload {
-            findings: vec![
-                ClonedCopyType { location: "src/lib.rs:7:16".to_owned() },
-                ClonedCopyType { location: "src/lib.rs:12:5".to_owned() },
-            ],
-        };
-    }
-
     #[test]
     fn Test_Parse_Nested_Lock_Payload_Should_Round_Trip_A_Payload_Through_Its_Own_Encoding()
     {
@@ -218,5 +208,15 @@ mod tests
     fn Nested_Lock_Sample() -> NestedLockPayload
     {
         return NestedLockPayload { findings: vec![NestedLockFinding { location: "src/lib.rs:15:5".to_owned() }] };
+    }
+
+    fn Sample() -> CloneOnCopyPayload
+    {
+        return CloneOnCopyPayload {
+            findings: vec![
+                ClonedCopyType { location: "src/lib.rs:7:16".to_owned() },
+                ClonedCopyType { location: "src/lib.rs:12:5".to_owned() },
+            ],
+        };
     }
 }

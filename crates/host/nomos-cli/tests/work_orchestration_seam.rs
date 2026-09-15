@@ -36,10 +36,27 @@ struct Board
     root: PathBuf,
 }
 
+/// The case a scratch board is named for, told apart from the ledger written into it.
+///
+/// [`Board::New`] takes both and both are text, so a caller who wrote them the other way round
+/// would build a directory name out of a whole ledger document -- compiling, and failing at
+/// the filesystem rather than at the call. A caller still spells the value as a plain `&str`,
+/// which is why the conversion lives here.
+struct CaseName<'a>(&'a str);
+
+impl<'a> From<&'a str> for CaseName<'a>
+{
+    fn from(name: &'a str) -> Self
+    {
+        return Self(name);
+    }
+}
+
 impl Board
 {
-    fn New(name: &str, ledger: &str) -> Self
+    fn New<'a>(name: impl Into<CaseName<'a>>, ledger: &str) -> Self
     {
+        let name = name.into().0;
         let root = std::env::temp_dir().join(format!("nomos-cli-work-orch-seam-{name}-{}", std::process::id()));
         let _ignored = std::fs::remove_dir_all(&root);
         std::fs::create_dir_all(&root).expect("a scratch directory");
@@ -115,9 +132,14 @@ struct ListCase
     should_list_it: bool,
 }
 
+/// The two `--state` filters [`List_Cases`] holds: the item's own state, which must list it,
+/// and one it is not in, which must not. Named because the length is spelled in that
+/// function's return type, where no `const` is in reach of the literal.
+const LIST_CASE_COUNT: usize = 2;
+
 /// Every `--state` filter [`Test_Listing_By_State_Should_Find_The_Item_Only_When_The_State_Matches`]
 /// checks: the item's own state, which must list it, and one it is not in, which must not.
-fn List_Cases() -> [ListCase; 2]
+fn List_Cases() -> [ListCase; LIST_CASE_COUNT]
 {
     return [
         ListCase { state: "ready", should_list_it: true },
@@ -156,13 +178,23 @@ struct ShowCase
     expected_text: &'static str,
 }
 
+/// The two `--item` ids [`Show_Cases`] holds: the one item the board carries, and one it does
+/// not. Named because the length is spelled in that function's return type, where no `const`
+/// is in reach of the literal.
+const SHOW_CASE_COUNT: usize = 2;
+
+/// What `nomos work show --item <an id no item answers to>` leaves the process with --
+/// `work/exit_code.rs::ExitCode::Conflict`'s own value, which `work.rs::Render_Show` returns
+/// beside the `no item named …` line this suite asserts on.
+const UNKNOWN_ITEM_EXIT_CODE: i32 = 4;
+
 /// Every `--item` id [`Test_Showing_An_Item_Should_Report_On_It_Or_Refuse_The_Ones_The_Board_Does_Not_Hold`]
 /// checks: the one item the board holds, and one it does not.
-fn Show_Cases() -> [ShowCase; 2]
+fn Show_Cases() -> [ShowCase; SHOW_CASE_COUNT]
 {
     return [
         ShowCase { item: "T-1", expected_code: 0, expected_text: "T-1" },
-        ShowCase { item: "NO-SUCH-ITEM", expected_code: 4, expected_text: "no item named NO-SUCH-ITEM" },
+        ShowCase { item: "NO-SUCH-ITEM", expected_code: UNKNOWN_ITEM_EXIT_CODE, expected_text: "no item named NO-SUCH-ITEM" },
     ];
 }
 

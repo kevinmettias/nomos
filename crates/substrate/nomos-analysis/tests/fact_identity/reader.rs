@@ -9,6 +9,13 @@ use nomos_analysis::{
 };
 use nomos_contracts::{CapabilityId, GenerationId, IncrementalGranularity};
 
+/// The reads this file's first test performs: a hit, a miss, and a requirement. Each one
+/// leaves exactly one edge on the reader's trail.
+const RECORDED_READS: usize = 3;
+
+/// The subject the derived fact is about, which differs from the fact it reads.
+const DERIVED_SUBJECT_SEED: u8 = 7;
+
 #[test]
 fn Test_Every_Read_Should_Record_An_Edge()
 {
@@ -19,14 +26,19 @@ fn Test_Every_Read_Should_Record_An_Edge()
 
     assert!(reader.Get(&key.clone().At(GenerationId::INITIAL)).is_ok());
     assert!(reader.Get(&Varied(Component::Subject).At(GenerationId::INITIAL)).is_err());
-    let _ = reader.Require(
-        &CapabilityId::New(SYNTAX),
-        &Subject(1),
-        InputDigest::Of(&[b"fn main() {}"]),
-        &Needing(Syntactic()),
+    assert!(
+        reader
+            .Require(
+                &CapabilityId::New(SYNTAX),
+                &Subject(1),
+                InputDigest::Of(&[b"fn main() {}"]),
+                &Needing(Syntactic()),
+            )
+            .is_ok(),
+        "the registry offers SYNTAX at this subject's guarantee, so the requirement resolves"
     );
 
-    assert_eq!(reader.Dependencies().len(), 3, "a read left no edge behind");
+    assert_eq!(reader.Dependencies().len(), RECORDED_READS, "a read left no edge behind");
 }
 
 #[test]
@@ -76,13 +88,16 @@ fn Test_The_Recorded_Edges_Should_Become_The_Stored_Dependencies()
 {
     let read = Base();
     let mut derived = Base();
-    derived.subject = Subject(7);
+    derived.subject = Subject(DERIVED_SUBJECT_SEED);
     let mut store = Stored(&read);
 
     let dependencies = {
         let registry = Offering(Syntactic());
         let mut reader = Reader::On(&store, &registry, Context_At(GenerationId::INITIAL));
-        let _ = reader.Get(&read.clone().At(GenerationId::INITIAL));
+        assert!(
+            reader.Get(&read.clone().At(GenerationId::INITIAL)).is_ok(),
+            "the store holds this fact at this context, so the read answers it"
+        );
         reader.Into_Dependencies()
     };
     let fact = crate::key::Fact(&derived, GenerationId::INITIAL);

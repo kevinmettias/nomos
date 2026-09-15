@@ -67,6 +67,18 @@ impl ProcessLauncher for Scripted
 /// against it and the executor never reads it.
 const NO_ROOT: &str = "";
 
+/// The response below reports one cent, and the engine measures money as an integer count of
+/// millionths of a dollar rather than as a float.
+const ONE_CENT_IN_MICRO_DOLLARS: u64 = 10_000;
+
+/// How long the scripted response below says the run took. Any value would do; it is named
+/// because the assertion that reads it back has nowhere else to get one.
+const SCRIPTED_DURATION_MS: u64 = 500;
+
+/// What a missing `--goal` leaves the process with -- `agent/exit_code.rs::ExitCode::Usage`'s
+/// own value, the same code `tests/agent_contracts_seam.rs` pins for this shape.
+const USAGE_EXIT_CODE: i32 = 2;
+
 /// The bare envelope `agent/dispatch.rs::Execute_Task` builds for `nomos agent execute
 /// --goal <text>` -- only `goal` and `effort` carry real content.
 fn Bare_Task(goal: &str) -> TaskEnvelope
@@ -104,8 +116,8 @@ fn Test_Execute_Task_Should_Return_Every_Field_The_Cli_Renders_For_A_Clean_Respo
     // measures money as an integer, and nothing between there and here turns it into a
     // float any more -- so the assertion that used to need a tolerance no longer does,
     // which is the observable proof the exactness survived the trip.
-    assert_eq!(outcome.cost, MicroDollars::From_Micros(10_000));
-    assert_eq!(outcome.duration_ms, 500);
+    assert_eq!(outcome.cost, MicroDollars::From_Micros(ONE_CENT_IN_MICRO_DOLLARS));
+    assert_eq!(outcome.duration_ms, SCRIPTED_DURATION_MS);
 }
 
 /// The error that crosses this boundary: a non-zero exit is refused as
@@ -131,5 +143,5 @@ fn Test_Agent_Execute_Should_Refuse_Before_Ever_Reaching_The_Claude_Code_Executo
 {
     let ran = Run(&["agent", "execute"]);
 
-    assert_eq!(ran.code, 2, "missing --goal is a usage refusal: {}", ran.stderr);
+    assert_eq!(ran.code, USAGE_EXIT_CODE, "missing --goal is a usage refusal: {}", ran.stderr);
 }

@@ -17,6 +17,19 @@ use std::path::{Path, PathBuf};
 const NOW: i64 = 1_000_000;
 const HOLDER: &str = "agent-a";
 
+/// The lease the claimed item on every constructed board carries.
+///
+/// Two hours, matching `DEFAULT_LEASE`. Every test here finishes the item long before it
+/// lapses, and none of them moves the clock, so the exact figure is only ever read.
+const LEASE_SECONDS: i64 = 3_600;
+
+/// The exit code a scripted gate step reports when the gate is red.
+///
+/// `cargo clippy` exits 101 when the build it drives fails, so a scripted step answering 101
+/// is the real shape of a red gate rather than an arbitrary non-zero. Nothing in these tests
+/// reads the number itself; what they read is that it is not zero.
+pub(crate) const GATE_FAILED_EXIT: i32 = 101;
+
 /// The workflow a derived gate step is read out of. Deliberately the real shape, so that
 /// a change to the repository's own gate breaks these tests rather than passing them.
 pub(crate) const WORKFLOW: &str = "name: gate\n\
@@ -106,7 +119,20 @@ fn Temporary_Directory(name: &str) -> PathBuf
 {
     let mut path = std::env::temp_dir();
     path.push(format!("nomos-gate-{name}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&path);
+
+    // A process id that repeats finds the previous run's tree still here. Nothing to clear
+    // is the ordinary case and is not worth a word; anything else means a stale tree is
+    // about to be read as this run's own.
+    match std::fs::remove_dir_all(&path)
+    {
+        Ok(()) => {}
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        Err(error) => eprintln!(
+            "a leftover scratch directory at {} could not be cleared: {error}",
+            path.display()
+        ),
+    }
+
     std::fs::create_dir_all(&path).expect("test needs a temp directory");
     return path;
 }
@@ -159,7 +185,7 @@ fn A_Claimed_Item() -> LedgerItem
         claim: Some(Claim {
             holder: HOLDER.to_owned(),
             acquired_at: Timestamp::From_Unix_Seconds(NOW),
-            lease_expires_at: Timestamp::From_Unix_Seconds(NOW + 3_600),
+            lease_expires_at: Timestamp::From_Unix_Seconds(NOW + LEASE_SECONDS),
         }),
         verification: Some(VerificationPredicate::From_String_Arguments(vec![
             "cargo".to_owned(),

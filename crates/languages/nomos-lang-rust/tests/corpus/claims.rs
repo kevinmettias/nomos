@@ -94,7 +94,7 @@ fn Test_The_Corpus_Should_Yield_Syntax_Facts()
         walked.unreadable.is_empty(),
         "{} of {total} files could not be read off disk: {:?}",
         walked.unreadable.len(),
-        walked.unreadable.iter().take(10).collect::<Vec<&PathBuf>>()
+        walked.unreadable.iter().take(UNREADABLE_PATHS_SHOWN).collect::<Vec<&PathBuf>>()
     );
     assert!(
         walked.items > 0,
@@ -105,13 +105,23 @@ fn Test_The_Corpus_Should_Yield_Syntax_Facts()
     // genuinely declare nothing. What must not happen is the reverse: a provider whose
     // usual answer is nothing.
     assert!(
-        walked.declaring_nothing.saturating_mul(2) < walked.read,
+        walked.declaring_nothing.saturating_mul(NOTHING_DECLARED_ONE_IN) < walked.read,
         "{} of the {} files read declared nothing. That is not a corpus of stubs, it is a \
          reader that stopped reading",
         walked.declaring_nothing,
         walked.read
     );
 }
+
+/// The most unreadable paths a failure names before it stops naming them: enough to see
+/// whether the cause is one file or a pattern, and few enough that the message stays
+/// readable in a terminal.
+const UNREADABLE_PATHS_SHOWN: usize = 10;
+
+/// At most one file in this many may declare nothing. A corpus has `mod` stubs and generated
+/// stubs that genuinely declare nothing, so the ratio is not zero -- but a reader that has
+/// stopped reading blows straight through it, which is the failure this bounds.
+const NOTHING_DECLARED_ONE_IN: usize = 2;
 
 /// Every recognized file reaches exactly one of the two outcomes, and every refusal is
 /// named, positioned and accounted for.
@@ -279,25 +289,42 @@ fn Test_Soundness_Should_Hold_Over_The_Whole_Corpus()
         return;
     };
 
-    let (checked, files) = Count_Checked_Names(&corpus);
+    let counted = Count_Checked_Names(&corpus);
 
-    eprintln!("soundness: {checked} names checked across {files} files");
+    eprintln!(
+        "soundness: {} names checked across {} files",
+        counted.checked, counted.files
+    );
     assert!(
-        checked > 10_000,
-        "only {checked} names were checked across {files} files; that is too few for this \
-         corpus to have been read"
+        counted.checked > NAMES_TO_PROVE_THE_CORPUS_WAS_READ,
+        "only {} names were checked across {} files; that is too few for this corpus to have \
+         been read",
+        counted.checked,
+        counted.files
     );
 }
 
 /// How many identifiers were checked for membership in the file they came from, and
 /// across how many files — the whole-corpus counterpart to the sample `tests/guarantee.rs`
 /// checks the same way.
-fn Count_Checked_Names(corpus: &Corpus) -> (u64, usize)
+///
+/// Named fields rather than a pair, because the two counts are a `u64` and a `usize` and a
+/// caller reading `counted.checked` cannot mistake it for the file count the way a tuple
+/// whose second element happens to be the smaller number invites.
+struct SoundnessCount
+{
+    checked: u64,
+    files: usize,
+}
+
+fn Count_Checked_Names(corpus: &Corpus) -> SoundnessCount
 {
     use crate::soundness::Names_Checked;
 
-    let mut checked = 0_u64;
-    let mut files = 0_usize;
+    let mut count = SoundnessCount {
+        checked: 0,
+        files: 0,
+    };
 
     for path in &corpus.files
     {
@@ -307,12 +334,17 @@ fn Count_Checked_Names(corpus: &Corpus) -> (u64, usize)
             continue;
         };
 
-        checked = checked.saturating_add(names);
-        files = files.saturating_add(1);
+        count.checked = count.checked.saturating_add(names);
+        count.files = count.files.saturating_add(1);
     }
 
-    return (checked, files);
+    return count;
 }
+
+/// The floor below which a whole-corpus soundness pass has measured too little to be
+/// evidence of anything: a corpus this size routinely yields more names than this, so
+/// falling under it means the walk read almost nothing rather than that the corpus shrank.
+const NAMES_TO_PROVE_THE_CORPUS_WAS_READ: u64 = 10_000;
 
 /// Reading is a function of the bytes, checked against the corpus rather than against a
 /// sample.
@@ -365,10 +397,15 @@ fn Test_Reading_The_Corpus_Twice_Should_Reach_The_Same_Facts()
         corpus.files.len()
     );
     assert!(
-        compared >= 50,
+        compared >= FILES_THE_STRIDE_MUST_REACH,
         "only {compared} files were compared; the stride sampled almost nothing"
     );
 }
+
+/// The floor the stride has to reach for this to be a sample of the corpus rather than of
+/// nothing. Stated over the files actually compared rather than over the corpus size the
+/// stride was computed from, so a corpus that shrank cannot make the sample look adequate.
+const FILES_THE_STRIDE_MUST_REACH: usize = 50;
 
 /// The corpus is what makes the completeness declaration a measurement rather than a
 /// worry. If real Rust had no macros in it, `Unknown` would be pedantry.

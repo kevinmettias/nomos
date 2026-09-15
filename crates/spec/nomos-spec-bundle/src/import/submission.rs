@@ -118,31 +118,19 @@ mod tests
     {
         use crate::row::submission::Submission;
 
-        let mut store = Fixture();
-        let bundle = Bundle::New(
-            1,
-            vec![Record::Submission(Submission {
+        let kind = Placed_Value(
+            Record::Submission(Submission {
                 node_id: "N2".to_owned(),
                 kind: "design-spec".to_owned(),
                 form_contract_version: 1,
                 state: "draft".to_owned(),
                 submitted_by: "you".to_owned(),
                 submitted_through: "test".to_owned(),
-            })],
-        )
-        .expect("builds");
-
-        store.In_Transaction(|transaction| Insert_Submissions(transaction, &bundle)).expect("inserts");
-
-        let kind: String = store
-            .Connection()
-            .query_row(
-                "SELECT s.kind FROM submissions s JOIN nodes n ON n.uid = s.node_uid
-                 WHERE n.node_id = 'N2'",
-                [],
-                |row| row.get(0),
-            )
-            .expect("reads back");
+            }),
+            Insert_Submissions,
+            "SELECT s.kind FROM submissions s JOIN nodes n ON n.uid = s.node_uid
+             WHERE n.node_id = 'N2'",
+        );
         assert_eq!(kind, "design-spec");
     }
 
@@ -151,10 +139,8 @@ mod tests
     {
         use crate::row::submission::value::Value as SubmissionValue;
 
-        let mut store = Fixture();
-        let bundle = Bundle::New(
-            1,
-            vec![Record::SubmissionValue(SubmissionValue {
+        let value = Placed_Value(
+            Record::SubmissionValue(SubmissionValue {
                 node_id: "N1".to_owned(),
                 field: "title".to_owned(),
                 ordinal: 1,
@@ -163,18 +149,10 @@ mod tests
                 value_hash: "sha256:vv".to_owned(),
                 supersedes_hash: None,
                 recorded_at: "2026-01-01T00:00:00Z".to_owned(),
-            })],
-        )
-        .expect("builds");
-
-        store.In_Transaction(|transaction| Insert_Submission_Values(transaction, &bundle)).expect("inserts");
-
-        let value: String = store
-            .Connection()
-            .query_row("SELECT value FROM submission_values WHERE submission_uid = 1", [], |row| {
-                row.get(0)
-            })
-            .expect("reads back");
+            }),
+            Insert_Submission_Values,
+            "SELECT value FROM submission_values WHERE submission_uid = 1",
+        );
         assert_eq!(value, "A title");
     }
 
@@ -183,29 +161,44 @@ mod tests
     {
         use crate::row::submission::gap::Gap as SubmissionGap;
 
-        let mut store = Fixture();
-        let bundle = Bundle::New(
-            1,
-            vec![Record::SubmissionGap(SubmissionGap {
+        let question = Placed_Value(
+            Record::SubmissionGap(SubmissionGap {
                 node_id: "N1".to_owned(),
                 ordinal: 1,
                 question: "What?".to_owned(),
                 blocks: "[]".to_owned(),
                 severity: "non-blocking".to_owned(),
                 closed_by: None,
-            })],
-        )
-        .expect("builds");
-
-        store.In_Transaction(|transaction| Insert_Submission_Gaps(transaction, &bundle)).expect("inserts");
-
-        let question: String = store
-            .Connection()
-            .query_row("SELECT question FROM submission_gaps WHERE submission_uid = 1", [], |row| {
-                row.get(0)
-            })
-            .expect("reads back");
+            }),
+            Insert_Submission_Gaps,
+            "SELECT question FROM submission_gaps WHERE submission_uid = 1",
+        );
         assert_eq!(question, "What?");
+    }
+
+    /// Places a bundle holding exactly one record with `insert`, then reads back the single
+    /// column `sql` names — the value the caller's own assertion is about.
+    ///
+    /// The record is the caller's, so a test states only which row it places and which
+    /// column proves it; the placing and the reading back are the same for every kind.
+    fn Placed_Value(
+        record: Record,
+        insert: fn(&Transaction<'_>, &Bundle) -> Result<(), BundleError>,
+        sql: &str,
+    ) -> String
+    {
+        let mut store = Fixture();
+        let bundle = Bundle::New(1, vec![record])
+            .expect("the bundle carries exactly the record the caller placed");
+
+        store
+            .In_Transaction(|transaction| insert(transaction, &bundle))
+            .expect("the insert places the row the caller reads back");
+
+        return store
+            .Connection()
+            .query_row(sql, [], |row| row.get(0))
+            .expect("the column the caller named is readable from the row it placed");
     }
 
     /// A node already filed as a submission, and a second node not yet filed.

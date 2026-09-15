@@ -85,11 +85,6 @@ mod tests
         return current.clone();
     }
 
-    fn Rendered(cause: &NoVerdict) -> serde_json::Value
-    {
-        return serde_json::to_value(NoVerdictResponse::From(cause)).expect("always serializes");
-    }
-
     #[test]
     fn Test_Every_Cause_Should_Serialize_Under_A_Name_Of_Its_Own()
     {
@@ -114,5 +109,11 @@ mod tests
         let rendered = Rendered(&NoVerdict::IncompleteCoverage);
 
         assert!(rendered.get("detail").is_none(), "{rendered}");
+    }
+
+    /// `cause` as the wire publishes it, so a test can read one field of it by path.
+    fn Rendered(cause: &NoVerdict) -> serde_json::Value
+    {
+        return serde_json::to_value(NoVerdictResponse::From(cause)).expect("a derived Serialize over owned data has nothing to refuse");
     }
 }

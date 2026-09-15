@@ -1,7 +1,9 @@
 //! Existing debt a repository has named and chosen to tolerate, rather than block.
 
+mod baseline_allowance;
 mod baseline_policy;
 
+pub use baseline_allowance::BaselineAllowance;
 pub use baseline_policy::BaselinePolicy;
 
 use nomos_contracts::{Finding, RuleId, SubjectId};
@@ -65,45 +67,6 @@ pub struct BaselineDebt
     pub declared_path: Option<String>,
 }
 
-/// How much debt one [`BaselineDebt`] accepted.
-///
-/// A state that names itself rather than an `Option<u32>` whose `None` a reader has to
-/// interpret. The interpretation is load-bearing and counter-intuitive -- absence means
-/// *unlimited*, not zero and not one -- so it is spelled, and every match over it has to say
-/// which case it is handling.
-///
-/// # Why absence is unbounded rather than one
-///
-/// `OD-GATE-030` decides this and states the alternative it rejected. Every entry authored
-/// before the quantity existed names none, and reading those as a single occurrence would
-/// start blocking builds over debt a repository did adopt, with the gate claiming a number
-/// nobody wrote. Reading them as unlimited keeps the meaning they were written under; what
-/// makes that honest rather than a silent hole is that the state is *named*, so a run can
-/// report the entry as unbounded instead of it being indistinguishable from a bounded one.
-///
-/// # What a count is not
-///
-/// It bounds capacity and establishes nothing about history. A scope that accepted five and
-/// observes five is equally consistent with the same five persisting and with all five having
-/// been fixed while five different violations appeared. `OD-GATE-030` says so at length, and
-/// this type is deliberately not named for continuity, persistence or reintroduction so that
-/// nobody reaches for it to answer one of those.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum BaselineAllowance
-{
-    /// The entry names no count, so it tolerates however many occurrences its scope holds.
-    ///
-    /// The state every entry authored before `OD-GATE-030` v2 is in, and the one a run reports
-    /// rather than passes over in silence.
-    Unbounded,
-    /// The entry accepted at most this many occurrences.
-    ///
-    /// Never zero: an entry accepting none tolerates nothing, which is what declining to write
-    /// the entry already does, so the declared reader refuses it rather than storing a value
-    /// whose only effect would be to block what it claims to permit.
-    AtMost(u32),
-}
-
 impl BaselineDebt
 {
     /// Whether this entry applies to `finding` -- the same `rule`/`subject` identity
@@ -130,6 +93,14 @@ mod tests
 
     const DISTINCT_SEED_BYTE: u8 = 2;
 
+    /// What each of the two spellings below accepted at adoption.
+    ///
+    /// Two names rather than two bare numbers because the pair carries the test: the two entries
+    /// differ in their allowance as well as in their spelling, so an implementation that matched
+    /// on either field would still have to agree with itself about the other.
+    const FIRST_SPELLING_ACCEPTS: u32 = 2;
+    const SECOND_SPELLING_ACCEPTS: u32 = 5;
+
     #[test]
     fn Test_Tolerating_Should_Report_Nothing_For_An_Empty_Policy()
     {
@@ -148,21 +119,6 @@ mod tests
         assert_eq!(policy.Tolerating(&finding), Some(&debt));
     }
 
-    /// One entry over `finding`'s own scope, as a declared file would have produced it.
-    ///
-    /// `allowance` is a parameter because the tests below differ in it, and `declared_path`
-    /// because the whole point of carrying it is that it can differ while the scope does not.
-    fn Debt_Over(finding: &Finding, declared_path: Option<&str>, allowance: BaselineAllowance) -> BaselineDebt
-    {
-        return BaselineDebt {
-            rule: finding.rule.clone(),
-            subject: finding.subject,
-            rationale: "test fixture".to_owned(),
-            allowance,
-            declared_path: declared_path.map(str::to_owned),
-        };
-    }
-
     /// Two entries naming one file by two spellings are one scope, so both tolerate the same
     /// finding.
     ///
@@ -179,8 +135,8 @@ mod tests
     fn Test_Two_Entries_Naming_One_File_By_Two_Spellings_Should_Tolerate_The_Same_Finding()
     {
         let finding = Finding_Subjected_To("src/lib.rs");
-        let spelled_one_way = Debt_Over(&finding, Some("./src/lib.rs"), BaselineAllowance::AtMost(2));
-        let spelled_another = Debt_Over(&finding, Some("Src\\Lib.rs"), BaselineAllowance::AtMost(5));
+        let spelled_one_way = Debt_Over(&finding, Some("./src/lib.rs"), BaselineAllowance::AtMost(FIRST_SPELLING_ACCEPTS));
+        let spelled_another = Debt_Over(&finding, Some("Src\\Lib.rs"), BaselineAllowance::AtMost(SECOND_SPELLING_ACCEPTS));
 
         assert_eq!(spelled_one_way.subject, spelled_another.subject, "one file, one subject");
         assert_ne!(spelled_one_way.declared_path, spelled_another.declared_path, "and two spellings, so this test is about the field it says it is");
@@ -229,6 +185,21 @@ mod tests
         let policy = BaselinePolicy { debt: vec![debt] };
 
         assert!(policy.Tolerating(&finding).is_none());
+    }
+
+    /// One entry over `finding`'s own scope, as a declared file would have produced it.
+    ///
+    /// `allowance` is a parameter because the tests above differ in it, and `declared_path`
+    /// because the whole point of carrying it is that it can differ while the scope does not.
+    fn Debt_Over(finding: &Finding, declared_path: Option<&str>, allowance: BaselineAllowance) -> BaselineDebt
+    {
+        return BaselineDebt {
+            rule: finding.rule.clone(),
+            subject: finding.subject,
+            rationale: "test fixture".to_owned(),
+            allowance,
+            declared_path: declared_path.map(str::to_owned),
+        };
     }
 
     fn Finding_For(rule: &str, subject_seed: u8) -> Finding

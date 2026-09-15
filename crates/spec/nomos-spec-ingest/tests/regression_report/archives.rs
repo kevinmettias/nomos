@@ -18,6 +18,30 @@ const NEW_RECORDS: &[&str] = &[
     "records/architecture/ARC-FEATOVERLAY-001-feature-overlays-and-topology.md",
 ];
 
+/// The families the register states a fate for, each one measured by the headline pair.
+const REGISTERED_FAMILIES: u32 = 9;
+
+/// Members whose heading survives into v15.0 and whose content does not.
+const HOLLOWED_MEMBERS: u32 = 92;
+
+/// The members the headline pair really lost, over every family.
+const GONE_MEMBERS: usize = 19;
+
+/// Record documents v15.0 carries unchanged from v14.36, at a new path.
+const MOVED_RECORDS: usize = 64;
+
+/// The widest undeclared template the filler census found: its sections, and the documents
+/// carrying it.
+const WIDEST_SECTIONS: u32 = 196;
+const WIDEST_DOCUMENTS: usize = 132;
+
+/// Documents the declared blocklist does match, which is the other half of the comparison.
+const DECLARED_FILLERS: usize = 99;
+
+/// A floor rather than a measurement: an ordinary pair keeps more members than this, so a
+/// walk that saw almost nothing fails here.
+const ORDINARY_PAIR_FLOOR: usize = 100;
+
 fn Archives() -> Option<PathBuf>
 {
     let root = PathBuf::from(std::env::var_os("NOMOS_SPEC_ARCHIVES")?);
@@ -84,7 +108,7 @@ fn Test_The_Headline_Should_Reproduce_From_The_Archives()
         Assert_The_Archives_Agree(&report, &entry, Family(label), fates);
         checked = checked.saturating_add(1);
     }
-    assert_eq!(checked, 9, "a family went unmeasured");
+    assert_eq!(checked, REGISTERED_FAMILIES, "a family went unmeasured");
 }
 
 #[test]
@@ -148,7 +172,7 @@ fn Test_The_Families_The_Plan_Calls_Gone_Should_Be_Hollowed_Rather_Than_Absent()
         Assert_Every_Member_Is_Hollowed(&report, family, &tally);
         hollowed = hollowed.saturating_add(tally.hollowed);
     }
-    assert_eq!(hollowed, 92, "members whose heading survives and whose content does not");
+    assert_eq!(hollowed, HOLLOWED_MEMBERS, "members whose heading survives and whose content does not");
 }
 
 /// The named members v15.0's headline pair actually lost, quoted rather than counted.
@@ -191,7 +215,7 @@ fn Test_The_Content_That_Really_Went_Should_Be_Named()
         panic!("the member does not resolve by the name the corpus gives it");
     };
 
-    assert_eq!(gone.len(), 19, "{gone:?}");
+    assert_eq!(gone.len(), GONE_MEMBERS, "{gone:?}");
     for name in Members_The_Headline_Lost()
     {
         assert!(gone.contains(&name), "{name} is not among the members v15.0 lost: {gone:?}");
@@ -225,7 +249,7 @@ fn Test_The_Records_The_Plan_Calls_New_Should_Be_Relocations()
         .map(String::as_str)
         .collect();
 
-    assert_eq!(moved.len(), 64, "record documents v15.0 carries unchanged from v14.36");
+    assert_eq!(moved.len(), MOVED_RECORDS, "record documents v15.0 carries unchanged from v14.36");
     assert_eq!(written, NEW_RECORDS, "the records v15.0 actually wrote");
     for relocation in &report.documents.relocated
     {
@@ -265,9 +289,9 @@ fn Test_The_Filler_The_Blocklist_Does_Not_See_Should_Be_Named()
         "{}",
         widest.text
     );
-    assert_eq!(widest.sections, 196);
-    assert_eq!(widest.documents.len(), 132, "the plan's 132, reproduced");
-    assert_eq!(report.filler.declared.len(), 99, "documents the blocklist does match");
+    assert_eq!(widest.sections, WIDEST_SECTIONS);
+    assert_eq!(widest.documents.len(), WIDEST_DOCUMENTS, "the plan's 132, reproduced");
+    assert_eq!(report.filler.declared.len(), DECLARED_FILLERS, "documents the blocklist does match");
     assert!(
         report.filler.templates.iter().any(|template| return template.declared.is_some()),
         "no declared pattern matched any template, so the comparison is between one \
@@ -303,7 +327,8 @@ fn Test_An_Ordinary_Pair_Should_Preserve_Every_Member()
     };
     let before = Read(&root, V14_PREVIOUS);
     let after = Read(&root, V14_LAST);
-    let report = Regression_Between_Revisions(&before, &after).expect("reports");
+    let report = Regression_Between_Revisions(&before, &after)
+        .expect("an ordinary pair carries both revisions' volumes, so it reports");
     for family in Restored::All()
     {
         let tally = report.Tally(*family);
@@ -317,7 +342,7 @@ fn Test_An_Ordinary_Pair_Should_Preserve_Every_Member()
     }
 
     assert!(
-        report.members.len() > 100,
+        report.members.len() > ORDINARY_PAIR_FLOOR,
         "the control measured {} members",
         report.members.len()
     );

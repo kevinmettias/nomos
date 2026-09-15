@@ -6,6 +6,8 @@
 
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 
+mod scratch;
+
 pub(crate) use nomos_ledger::{
     Finishing,
     Abandonment, AddRefusal, Blocker, Claim, ClaimRefusal, Declination, ExclusionLedger, FileLedger, Finish_Item,
@@ -16,6 +18,7 @@ pub(crate) use nomos_ledger::{
 pub(crate) use nomos_model::SetResolution;
 pub(crate) use nomos_platform::{Clock, FileSystem, FileSystemError, Timestamp};
 pub(crate) use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher};
+pub(crate) use scratch::{Scratch, Temporary_Directory};
 pub(crate) use std::path::{Path, PathBuf};
 pub(crate) use std::sync::atomic::{AtomicBool, Ordering};
 pub(crate) use std::sync::{Condvar, Mutex};
@@ -113,64 +116,6 @@ pub(crate) fn Document(items: Vec<LedgerItem>) -> LedgerDocument
     };
 }
 
-/// A temporary repository that removes itself when the test holding it ends.
-///
-/// Every test here used to close with its own `remove_dir_all`, which is a line that only
-/// runs when the test passes: a failed assertion unwinds straight past it. `Drop` runs on
-/// the unwind too, so the tree is cleared exactly when the value goes out of scope and the
-/// cleanup is no longer a step a test can forget or an assertion can skip.
-pub(crate) struct Scratch(pub(crate) PathBuf);
-
-impl Drop for Scratch
-{
-    fn drop(&mut self)
-    {
-        let _ = std::fs::remove_dir_all(&self.0);
-    }
-}
-
-impl Scratch
-{
-    pub(crate) fn As_Path(&self) -> &Path
-    {
-        return &self.0;
-    }
-}
-
-pub(crate) fn Temporary_Directory(name: &str) -> Scratch
-{
-    let mut path = std::env::temp_dir();
-    path.push(format!("nomos-ledger-{name}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&path);
-    std::fs::create_dir_all(&path).expect("test needs a temp directory");
-    Write_Gate(&path);
-
-    return Scratch(path);
-}
-
-/// Every tree these tests build is a repository with a gate, because finishing now reads
-/// one and refuses when it cannot.
-///
-/// The lint step is `cargo --version` rather than the real clippy invocation. These tests
-/// are about what a *predicate's* exit code does to an item; running a real workspace lint
-/// in each of them would make the suite take minutes and would couple it to whatever the
-/// workspace currently contains. What the derived step actually is, and that it comes from
-/// the workflow rather than from a constant, is covered in `gate_covers_finish.rs`.
-pub(crate) fn Write_Gate(directory: &Path)
-{
-    let workflows = directory.join(".github").join("workflows");
-    std::fs::create_dir_all(&workflows).expect("test needs a workflow directory");
-    std::fs::write(
-        workflows.join("gate.yml"),
-        "jobs:\n\
-         \x20 gate:\n\
-         \x20   steps:\n\
-         \x20     - name: Lint\n\
-         \x20       run: cargo --version\n",
-    )
-    .expect("test needs a workflow");
-}
-
 /// The clock every test that does not move time shares.
 ///
 /// A `'static` clock is what lets [`Board_At`] hand back a ledger: the ledger borrows its
@@ -178,17 +123,31 @@ pub(crate) fn Write_Gate(directory: &Path)
 /// to move builds its own later clock and a second ledger over the same directory.
 pub(crate) static AT_NOW: FixedClock = FixedClock(NOW);
 
-/// The one-hour lease every test here takes, said once.
-pub(crate) const LEASE: Duration = Duration::from_secs(3_600);
+/// The one-hour lease every test here takes, in the seconds [`At`] and [`LEASE_ENDS_AT`] count.
+pub(crate) const LEASE_SECONDS: i64 = 3_600;
+
+/// The same lease as the duration `Claim` and `Renew` take.
+pub(crate) const LEASE: Duration = Duration::from_secs(LEASE_SECONDS as u64);
+
+/// When a claim taken at [`NOW`] for the standard lease runs out.
+pub(crate) const LEASE_ENDS_AT: i64 = NOW + LEASE_SECONDS;
+
+/// A holder's name, as the ledger stores it.
+///
+/// Its own type rather than a bare `&str` because the two names a claim carries — the item
+/// and the holder — are both strings, and the compiler accepts either order at a call site
+/// written `Take(ledger, item, holder)`. Nothing at that call site says which name is which;
+/// this does.
+pub(crate) struct Claimant<'a>(pub(crate) &'a str);
 
 /// One agent claims one item for the standard lease, and it is expected to succeed.
 ///
 /// A refusal here is the fixture failing rather than the assertion under test, so it panics
 /// with the refusal's own words instead of returning it.
-pub(crate) fn Take<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &str)
+pub(crate) fn Take<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: Claimant<'_>)
 {
     ledger
-        .Claim(&ItemId::New(item), holder, LEASE)
+        .Claim(&ItemId::New(item), holder.0, LEASE)
         .unwrap_or_else(|refusal| panic!("the fixture claim was refused: {}", refusal.Describe()));
 }
 
@@ -238,12 +197,12 @@ pub(crate) fn Declined(id: &str, files: &[&str], reason: &str) -> LedgerItem
 ///
 /// The record is the fixture rather than the subject — what these tests assert is what the
 /// store does with it — so building it here keeps eleven lines of literal out of the test.
-pub(crate) fn Release_As_Finished<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &str)
+pub(crate) fn Release_As_Finished<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: Claimant<'_>)
 {
     ledger
         .Release(
             &ItemId::New(item),
-            holder,
+            holder.0,
             ReleaseOutcome::Finished(VerificationRecord {
                 argv: vec!["cargo".to_owned(), "test".to_owned()],
                 exit_code: 0,
@@ -267,12 +226,17 @@ pub(crate) fn Abandonments(item: &LedgerItem) -> Vec<(&str, &str)>
 }
 
 /// A holder gives up its own claim, with the words it gave for stopping.
-pub(crate) fn Abandon<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &str, reason: &str)
+pub(crate) fn Abandon<Ledger: ExclusionLedger>(
+    ledger: &mut Ledger,
+    item: &str,
+    holder: Claimant<'_>,
+    reason: &str,
+)
 {
     ledger
         .Release(
             &ItemId::New(item),
-            holder,
+            holder.0,
             ReleaseOutcome::Abandoned {
                 reason: reason.to_owned(),
             },
@@ -282,10 +246,14 @@ pub(crate) fn Abandon<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, 
 
 /// A claim that is expected to be refused, with the refusal handed back as the value the
 /// test is about.
-pub(crate) fn Refused<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &str) -> ClaimRefusal
+pub(crate) fn Refused<Ledger: ExclusionLedger>(
+    ledger: &mut Ledger,
+    item: &str,
+    holder: Claimant<'_>,
+) -> ClaimRefusal
 {
     return ledger
-        .Claim(&ItemId::New(item), holder, LEASE)
+        .Claim(&ItemId::New(item), holder.0, LEASE)
         .expect_err("this claim is contended and must be refused");
 }
 
@@ -294,7 +262,7 @@ pub(crate) fn Finish_In(
     ledger: &mut FileLedger<StdFileSystem, &FixedClock, FileLock>,
     directory: &Path,
     item: &str,
-    holder: &str,
+    holder: Claimant<'_>,
 ) -> Result<VerificationRecord, FinishRefusal>
 {
     return Finish_Item(
@@ -302,7 +270,7 @@ pub(crate) fn Finish_In(
         &StdProcessLauncher,
         &Finishing {
             item: &ItemId::New(item),
-            holder,
+            holder: holder.0,
         },
         Some(directory),
     );
@@ -391,8 +359,10 @@ pub(crate) fn Standing_Of(item: &LedgerItem) -> Standing<'_>
     };
 }
 
-/// Two hours after [`AT_NOW`], by which time the one-hour lease these tests take has lapsed.
-pub(crate) static AT_LATER: FixedClock = FixedClock(NOW + 7_200);
+/// Two hours after [`NOW`], by which time the one-hour lease these tests take has lapsed.
+pub(crate) const AT_LATER_SECONDS: i64 = NOW + 7_200;
+
+pub(crate) static AT_LATER: FixedClock = FixedClock(AT_LATER_SECONDS);
 
 /// The same board read again once its lease has lapsed.
 pub(crate) fn After_The_Lapse(
@@ -409,10 +379,10 @@ pub(crate) fn After_The_Lapse(
 pub(crate) fn Take_Over_In<Clock: nomos_platform::Clock>(
     ledger: &mut FileLedger<StdFileSystem, Clock, FileLock>,
     item: &str,
-    holder: &str,
+    holder: Claimant<'_>,
 ) -> Result<Reservation, ClaimRefusal>
 {
-    return ledger.Take_Over(&ItemId::New(item), holder, LEASE);
+    return ledger.Take_Over(&ItemId::New(item), holder.0, LEASE);
 }
 
 /// The same board read again by a ledger standing at a named moment.
@@ -425,17 +395,26 @@ pub(crate) fn Ledger_When(directory: &Path, seconds: i64) -> FileLedger<StdFileS
     return Ledger_At(directory, FixedClock(seconds));
 }
 
+/// A fresh board: the temporary tree it lives in, and the ledger over it.
+///
+/// Named fields rather than a pair, so a call site that destructures one says which half it
+/// keeps — the tree has to outlive the ledger, which reads and writes a file inside it.
+pub(crate) struct Board
+{
+    /// Clears the tree when it goes out of scope.
+    pub(crate) directory: Scratch,
+    /// The ledger over that tree's `ledger.json`.
+    pub(crate) ledger: FileLedger<StdFileSystem, &'static FixedClock, FileLock>,
+}
+
 /// A ledger on a fresh temporary directory, already holding the board it starts from.
-pub(crate) fn Board_At(
-    name: &str,
-    items: Vec<LedgerItem>,
-) -> (Scratch, FileLedger<StdFileSystem, &'static FixedClock, FileLock>)
+pub(crate) fn Board_At(name: &str, items: Vec<LedgerItem>) -> Board
 {
     let directory = Temporary_Directory(name);
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
     ledger.Save(&Document(items)).expect("a fresh ledger is valid");
 
-    return (directory, ledger);
+    return Board { directory, ledger };
 }
 
 /// A board written straight to disk, bypassing `Save`'s own validation gate.
@@ -449,17 +428,14 @@ pub(crate) fn Board_At(
 /// hand-editing". This is that hand edit, done for real: the file lands on disk in the shape
 /// a person's editor would have left it, with no store operation ever given the chance to
 /// reject it on the way in.
-pub(crate) fn Board_Written_By_Hand(
-    name: &str,
-    items: Vec<LedgerItem>,
-) -> (Scratch, FileLedger<StdFileSystem, &'static FixedClock, FileLock>)
+pub(crate) fn Board_Written_By_Hand(name: &str, items: Vec<LedgerItem>) -> Board
 {
     let directory = Temporary_Directory(name);
     let text = serde_json::to_string_pretty(&Document(items)).expect("a document serializes");
     std::fs::write(directory.As_Path().join("ledger.json"), text).expect("test needs to write the ledger");
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
-    return (directory, ledger);
+    return Board { directory, ledger };
 }
 
 pub(crate) fn Ledger_At<Clock: nomos_platform::Clock>(

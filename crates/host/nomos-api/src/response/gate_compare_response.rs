@@ -23,13 +23,12 @@
 
 use crate::{composition, sources};
 use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
-use nomos_contracts::{Finding, RuleId, RunId, SubjectId};
-use nomos_gate_orchestration::{
-    DispositionChange, FindingDisposition, GateCommand, GateCompareResult, GateRunResult, SuppressionDisposition, SuppressionStatus,
-};
+use nomos_contracts::{Finding, RunId};
+use nomos_gate_orchestration::{GateCommand, GateCompareResult, GateRunResult};
 use nomos_platform::Clock;
 use serde::Serialize;
 
+use super::bucket_change::BucketChange;
 use super::ComparabilityResponse;
 
 /// Judges `baseline.root` and `candidate.root` exactly as `nomos gate run` would, and hands
@@ -79,167 +78,6 @@ fn Judged(command: &GateCommand) -> GateRunResult
         command,
         run,
     );
-}
-
-/// A serializable twin of [`nomos_gate_orchestration::FindingDisposition`].
-///
-/// A twin rather than a re-export because the type it mirrors does not derive `Serialize`,
-/// for the reason `crate::response`'s own doc gives, and because `OD-GATE-022-A` refuses to
-/// give it one on a caller's behalf. Kept to the same four variants, in the same order, so a
-/// mismatch is a compile error in [`FindingBucket::From`] rather than a silent divergence --
-/// the discipline [`super::Disposition`] already uses.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum FindingBucket
-{
-    /// The finding failed the build.
-    Blocking,
-    /// An `AdoptionPolicy` calibration kept it from blocking.
-    Calibrated,
-    /// A `Suppression` kept it from blocking.
-    Suppressed,
-    /// A `BaselineDebt` entry kept it from blocking.
-    Baselined,
-    /// A `BaselineDebt` entry matched, and its scope held more occurrences than it accepted,
-    /// so nothing kept it from blocking.
-    ///
-    /// Kept apart from [`Self::Blocking`] so a caller can see a tolerance running out of room
-    /// as the distinct event it is -- a finding moving between the two is a real transition,
-    /// and collapsing them would report a repository's debt growing past what it adopted as
-    /// though a rule had simply started failing.
-    BaselineExceeded,
-}
-
-impl FindingBucket
-{
-    fn From(disposition: FindingDisposition) -> Self
-    {
-        return match disposition
-        {
-            FindingDisposition::Blocking => Self::Blocking,
-            FindingDisposition::Calibrated => Self::Calibrated,
-            FindingDisposition::Suppressed => Self::Suppressed,
-            FindingDisposition::Baselined => Self::Baselined,
-            FindingDisposition::BaselineExceeded => Self::BaselineExceeded,
-        };
-    }
-}
-
-/// A serializable twin of [`nomos_gate_orchestration::SuppressionDisposition`].
-///
-/// A twin for the reason [`FindingBucket`] is one. Six variants in the same order, so a
-/// reordering or a dropped arm is a compile error in [`SuppressedBecause::From`] rather than
-/// the wrong word on a wire.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum SuppressedBecause
-{
-    /// Suppressed at the finding's own site.
-    InlineSuppression,
-    /// Exempted by a repository-wide policy.
-    RepositoryPolicyException,
-    /// Accepted for a bounded period, and carrying an end date.
-    TemporaryWaiver,
-    /// Existing debt a baseline tolerates.
-    AcceptedBaselineDebt,
-    /// The finding does not hold.
-    FalsePositiveDisposition,
-    /// A deliberate, owned decision to accept the risk.
-    FormalRiskAcceptance,
-}
-
-impl SuppressedBecause
-{
-    fn From(disposition: SuppressionDisposition) -> Self
-    {
-        return match disposition
-        {
-            SuppressionDisposition::InlineSuppression => Self::InlineSuppression,
-            SuppressionDisposition::RepositoryPolicyException => Self::RepositoryPolicyException,
-            SuppressionDisposition::TemporaryWaiver => Self::TemporaryWaiver,
-            SuppressionDisposition::AcceptedBaselineDebt => Self::AcceptedBaselineDebt,
-            SuppressionDisposition::FalsePositiveDisposition => Self::FalsePositiveDisposition,
-            SuppressionDisposition::FormalRiskAcceptance => Self::FormalRiskAcceptance,
-        };
-    }
-}
-
-/// A serializable twin of [`nomos_gate_orchestration::SuppressionStatus`].
-///
-/// Two variants because two is the whole population: a third, for a disposition stale by rule
-/// version, subject identity, evidence or scope, is named in that type's own documentation and
-/// deliberately not invented before something can construct it.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum SuppressionStanding
-{
-    /// The disposition applied when the run was judged.
-    Active,
-    /// It named an end date and the run was at or past it.
-    Expired,
-}
-
-impl SuppressionStanding
-{
-    fn From(status: SuppressionStatus) -> Self
-    {
-        return match status
-        {
-            SuppressionStatus::Active => Self::Active,
-            SuppressionStatus::Expired => Self::Expired,
-        };
-    }
-}
-
-/// One finding present in both runs whose bucket moved.
-///
-/// Carries both ends rather than a single "changed" flag: a finding that moved from blocking
-/// to baselined and one that moved the other way are opposite facts about a build, and a
-/// caller that cannot tell them apart learns nothing from being told something moved.
-#[derive(Debug, Serialize)]
-pub struct BucketChange
-{
-    /// The rule that produced the finding on both sides.
-    pub rule: RuleId,
-    /// The subject it was produced about, the identity the two runs are matched by.
-    pub subject: SubjectId,
-    /// That subject's readable name.
-    pub subject_name: String,
-    /// Which bucket it fell into in the baseline run.
-    pub before: FindingBucket,
-    /// Which bucket it falls into in the candidate run.
-    pub after: FindingBucket,
-    /// Why it was in `before`'s bucket, when a disposition named it.
-    ///
-    /// Without this a headless caller sees a bucket that did not move and concludes nothing
-    /// changed, when a `false_positive_disposition` may have become a
-    /// `formal_risk_acceptance` -- the same treatment, an opposite engineering claim.
-    pub before_reason: Option<SuppressedBecause>,
-    /// Why it is in `after`'s bucket, when a disposition names it.
-    pub after_reason: Option<SuppressedBecause>,
-    /// Whether `before_reason` still applied when the baseline run was judged.
-    pub before_standing: Option<SuppressionStanding>,
-    /// Whether `after_reason` still applies. `expired` beside a `blocking` bucket is a
-    /// tolerance that came due rather than a violation that appeared.
-    pub after_standing: Option<SuppressionStanding>,
-}
-
-impl BucketChange
-{
-    fn From(change: DispositionChange) -> Self
-    {
-        return Self {
-            rule: change.rule,
-            subject: change.subject,
-            subject_name: change.subject_name,
-            before: FindingBucket::From(change.before),
-            after: FindingBucket::From(change.after),
-            before_reason: change.before_reason.map(|reason| return SuppressedBecause::From(reason.disposition)),
-            after_reason: change.after_reason.map(|reason| return SuppressedBecause::From(reason.disposition)),
-            before_standing: change.before_reason.map(|reason| return SuppressionStanding::From(reason.status)),
-            after_standing: change.after_reason.map(|reason| return SuppressionStanding::From(reason.status)),
-        };
-    }
 }
 
 /// What changed between two real gate runs, in a shape `serde_json` can hand across a wire.
@@ -335,7 +173,19 @@ impl GateCompareResponse
 mod tests
 {
     use super::*;
+    use crate::response::finding_bucket::FindingBucket;
+    use crate::response::suppressed_because::SuppressedBecause;
+    use crate::response::suppression_standing::SuppressionStanding;
+    use nomos_contracts::{RuleId, SubjectId};
+    use nomos_gate_orchestration::FindingDisposition;
     use std::path::PathBuf;
+
+    /// The digest length a `RunId` in these tests is built from.
+    const DIGEST_BYTES: usize = 16;
+    /// The digest bytes the baseline side of a refused comparison is given.
+    const BASELINE_BYTES: [u8; DIGEST_BYTES] = [1; DIGEST_BYTES];
+    /// The digest bytes the candidate side of a refused comparison is given.
+    const CANDIDATE_BYTES: [u8; DIGEST_BYTES] = [2; DIGEST_BYTES];
 
     /// One field of a serialized value, by path.
     ///
@@ -354,21 +204,6 @@ mod tests
         return current.clone();
     }
 
-    /// A one-crate tree with real source and a declared `nomos-gate.json`, so a run over it
-    /// reaches `Judged` and resolves a policy of its own.
-    fn Probe_Tree(name: &str, policy: &str) -> PathBuf
-    {
-        let root = std::env::temp_dir().join(format!("nomos-api-comparability-{name}-{}", std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(root.join("src")).expect("creates a probe tree");
-        let manifest = "[package]\nname = \"probe\"\nversion = \"0.1.0\"\nedition = \"2021\"\n";
-        std::fs::write(root.join("Cargo.toml"), manifest).expect("writable");
-        std::fs::write(root.join("src").join("lib.rs"), "pub fn thing() -> i32 { return 1; }\n").expect("writable");
-        std::fs::write(root.join("nomos-gate.json"), policy).expect("writable");
-
-        return root;
-    }
-
     /// The defect, end to end through the handler a transport calls: two trees under two
     /// declared policies come back saying so, rather than reporting the movement as the
     /// repository's.
@@ -379,14 +214,15 @@ mod tests
     #[test]
     fn Test_Two_Policies_Should_Reach_A_Headless_Caller_As_A_Stated_Difference()
     {
-        let lenient = Probe_Tree("lenient", r#"{ "coverage": "unset" }"#);
-        let strict = Probe_Tree("strict", r#"{ "coverage": "require-completeness" }"#);
+        let lenient = Probe_Tree(TreeName("lenient"), r#"{ "coverage": "unset" }"#);
+        let strict = Probe_Tree(TreeName("strict"), r#"{ "coverage": "require-completeness" }"#);
 
         let response = Handle_Gate_Compare(&Command_At(&lenient.to_string_lossy()), &Command_At(&strict.to_string_lossy()));
 
         let _ignored = std::fs::remove_dir_all(&lenient);
         let _ignored = std::fs::remove_dir_all(&strict);
-        let rendered = serde_json::to_value(&response).expect("always serializes");
+        let rendered = serde_json::to_value(&response)
+            .expect("a derived Serialize over owned data has nothing to refuse");
         assert_eq!(At(&rendered, &["comparability", "comparability"]), "compatible_with", "{rendered}");
         assert_eq!(At(&rendered, &["comparability", "differences"]).to_string(), "[\"policy\"]", "{rendered}");
     }
@@ -399,20 +235,15 @@ mod tests
     #[test]
     fn Test_One_Tree_Under_One_Policy_Should_Reach_A_Headless_Caller_As_Compatible()
     {
-        let root = Probe_Tree("compatible", "{}");
+        let root = Probe_Tree(TreeName("compatible"), "{}");
 
         let response = Handle_Gate_Compare(&Command_At(&root.to_string_lossy()), &Command_At(&root.to_string_lossy()));
 
         let _ignored = std::fs::remove_dir_all(&root);
-        let rendered = serde_json::to_value(&response).expect("always serializes");
+        let rendered = serde_json::to_value(&response)
+            .expect("a derived Serialize over owned data has nothing to refuse");
         assert_eq!(At(&rendered, &["comparability", "comparability"]), "compatible", "{rendered}");
         assert!(At(&rendered, &["comparability"]).get("differences").is_none(), "{rendered}");
-    }
-
-    /// [`GateCommand`] over `root`, every selector at its select-everything default.
-    fn Command_At(root: &str) -> GateCommand
-    {
-        return GateCommand { root: PathBuf::from(root), ..Default::default() };
     }
 
     /// Comparing a tree with itself under one policy reports nothing changed.
@@ -462,8 +293,8 @@ mod tests
     #[test]
     fn Test_A_Refused_Comparison_Should_Carry_No_Differences()
     {
-        let baseline = RunId::From_Digest(nomos_contracts::Digest128::From_Bytes([1; 16]));
-        let candidate = RunId::From_Digest(nomos_contracts::Digest128::From_Bytes([2; 16]));
+        let baseline = RunId::From_Digest(nomos_contracts::Digest128::From_Bytes(BASELINE_BYTES));
+        let candidate = RunId::From_Digest(nomos_contracts::Digest128::From_Bytes(CANDIDATE_BYTES));
 
         let response = GateCompareResponse::Refused(baseline, candidate, baseline);
 
@@ -530,5 +361,33 @@ mod tests
                 && rendered.contains("\"after_standing\":\"expired\""),
             "a bucket change must carry both ends in snake_case, and rendered as {rendered}"
         );
+    }
+
+    /// The directory name a probe tree is created under.
+    ///
+    /// A type of its own rather than a plain `&str`: [`Probe_Tree`]'s other argument is a
+    /// `&str` too, so a call site reading `Probe_Tree(name, policy)` would let a caller
+    /// transpose the two with the compiler raising nothing.
+    struct TreeName<'a>(&'a str);
+
+    /// A one-crate tree with real source and a declared `nomos-gate.json`, so a run over it
+    /// reaches `Judged` and resolves a policy of its own.
+    fn Probe_Tree(name: TreeName, policy: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-api-comparability-{}-{}", name.0, std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(root.join("src")).expect("creates a probe tree");
+        let manifest = "[package]\nname = \"probe\"\nversion = \"0.1.0\"\nedition = \"2021\"\n";
+        std::fs::write(root.join("Cargo.toml"), manifest).expect("the probe root above was just created");
+        std::fs::write(root.join("src").join("lib.rs"), "pub fn thing() -> i32 { return 1; }\n").expect("the probe src directory above was just created");
+        std::fs::write(root.join("nomos-gate.json"), policy).expect("the probe root above was just created");
+
+        return root;
+    }
+
+    /// [`GateCommand`] over `root`, every selector at its select-everything default.
+    fn Command_At(root: &str) -> GateCommand
+    {
+        return GateCommand { root: PathBuf::from(root), ..Default::default() };
     }
 }

@@ -77,15 +77,7 @@ mod tests
     fn Test_Store_Text_Should_Record_The_Statements_Canonical_Text_And_Hash()
     {
         let mut store = Store();
-        let node_uid = store
-            .Upsert_Node(nomos_spec_store::NodeRow {
-                node_id: "AGT-001",
-                kind: "requirement",
-                authority: "canonical",
-                representation: "record",
-                title: "a requirement",
-            })
-            .expect("upserts");
+        let node_uid = Node_Uid(&mut store);
         let statement = RecordedStatement {
             id: "AGT-001".to_owned(),
             kind: "Requirement".to_owned(),
@@ -94,7 +86,7 @@ mod tests
             source_document: "a.md".to_owned(),
         };
 
-        Store_Text(&mut store, &statement, "requirement", node_uid).expect("stores");
+        Store_The_Statement(&mut store, &statement, node_uid);
 
         let stored_text: String = store
             .Connection()
@@ -105,6 +97,26 @@ mod tests
             )
             .expect("reads the row Store_Text wrote");
         assert_eq!(stored_text, "Nomos shall do the thing.");
+    }
+
+    fn Node_Uid(store: &mut SpecificationStore) -> i64
+    {
+        let node_uid = store
+            .Upsert_Node(nomos_spec_store::NodeRow {
+                node_id: "AGT-001",
+                kind: "requirement",
+                authority: "canonical",
+                representation: "record",
+                title: "a requirement",
+            })
+            .expect("upserts");
+
+        return node_uid;
+    }
+
+    fn Store_The_Statement(mut store: &mut SpecificationStore, statement: &RecordedStatement, node_uid: i64)
+    {
+        Store_Text(&mut store, &statement, "requirement", node_uid).expect("stores");
     }
 
     fn Store() -> SpecificationStore

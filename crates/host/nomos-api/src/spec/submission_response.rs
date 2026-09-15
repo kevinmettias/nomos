@@ -47,16 +47,7 @@ mod tests
     #[test]
     fn Test_From_Should_Copy_Every_Field_And_Map_Every_Nested_Value()
     {
-        let submission = Submission {
-            id: "FR-API-001".to_owned(),
-            kind: SubmissionKind::FeatureRequest,
-            form_contract_version: 1,
-            state: SubmissionState::Draft,
-            submitted_by: "kevin".to_owned(),
-            submitted_through: "nomos-api-test".to_owned(),
-            values: vec![FieldValue { field: "title".to_owned(), value: "t".to_owned(), origin: Origin::Submitted }],
-            gaps: Vec::new(),
-        };
+        let submission = A_Submission();
 
         let response = SubmissionResponse::From(submission.clone());
 
@@ -72,5 +63,21 @@ mod tests
             "title"
         );
         assert!(response.gaps.is_empty());
+    }
+
+    /// A real submission holding one value and no gap, so a mapping that dropped either a
+    /// field or a nested value would show.
+    fn A_Submission() -> Submission
+    {
+        return Submission {
+            id: "FR-API-001".to_owned(),
+            kind: SubmissionKind::FeatureRequest,
+            form_contract_version: 1,
+            state: SubmissionState::Draft,
+            submitted_by: "kevin".to_owned(),
+            submitted_through: "nomos-api-test".to_owned(),
+            values: vec![FieldValue { field: "title".to_owned(), value: "t".to_owned(), origin: Origin::Submitted }],
+            gaps: Vec::new(),
+        };
     }
 }

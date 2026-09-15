@@ -4,7 +4,11 @@
 //! ordinary case, and a board that stops until somebody intervenes has turned a routine
 //! failure into an outage.
 
-use crate::board::*;
+use crate::board::{
+    At, AT_LATER_SECONDS, After_The_Lapse, Board, Board_At, ClaimRefusal, Claimant, ExclusionLedger, Holder, Item,
+    ItemId, ItemState, LEASE, LEASE_ENDS_AT, LedgerItem, NOW, Only_Item, Refused, Standing, Standing_Of, Take,
+    Take_Over_In, Timestamp, Validate_Document,
+};
 
 /// The defect, and the reason it needed an experiment rather than a reading.
 ///
@@ -20,17 +24,17 @@ use crate::board::*;
 #[test]
 fn Test_A_Lapsed_Lease_Should_Not_Stop_The_Rest_Of_The_Board()
 {
-    let (directory, mut ledger) = Board_At("lapse-bricks", vec![
+    let Board { directory, mut ledger } = Board_At("lapse-bricks", vec![
         Item("T-1", &["src/a.rs"]),
         Item("T-2", &["src/b.rs"]),
     ]);
-    Take(&mut ledger, "T-1", "dead-agent");
+    Take(&mut ledger, "T-1", Claimant("dead-agent"));
 
     let mut after = After_The_Lapse(directory.As_Path());
 
     // One: the document is not called invalid because time passed.
     assert_eq!(
-        Validate_Document(&after.Load().expect("the file is still readable"), At(NOW + 7_200)),
+        Validate_Document(&after.Load().expect("the file is still readable"), At(AT_LATER_SECONDS)),
         Vec::<String>::new(),
         "a lapsed lease made the whole document invalid, so nothing can be written to it"
     );
@@ -39,7 +43,7 @@ fn Test_A_Lapsed_Lease_Should_Not_Stop_The_Rest_Of_The_Board()
         .expect("validate must not call a board with a lapsed lease broken");
     // Two: an unrelated item is still claimable. `src/b.rs` shares nothing with `src/a.rs`,
     // so a refusal here is not exclusion — it is the board refusing to be written at all.
-    Take(&mut after, "T-2", "agent-b");
+    Take(&mut after, "T-2", Claimant("agent-b"));
 }
 
 /// Three: what the lapsed item itself does, which is a decision rather than a consequence.
@@ -71,12 +75,12 @@ fn Test_A_Lapsed_Lease_Should_Not_Stop_The_Rest_Of_The_Board()
 #[test]
 fn Test_A_Lapsed_Item_Should_Refuse_A_Plain_Claim_And_Name_The_Takeover()
 {
-    let (directory, mut ledger) = Board_At("lapse-takeover", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", "dead-agent");
+    let Board { directory, mut ledger } = Board_At("lapse-takeover", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", Claimant("dead-agent"));
 
     let mut after = After_The_Lapse(directory.As_Path());
 
-    let refusal = Refused(&mut after, "T-1", "agent-b");
+    let refusal = Refused(&mut after, "T-1", Claimant("agent-b"));
     Says_The_Item_Is_Lapsed_And_Names_The_Verb(&refusal);
 
     assert_eq!(
@@ -121,22 +125,22 @@ fn Says_The_Item_Is_Lapsed_And_Names_The_Verb(refusal: &ClaimRefusal)
 #[test]
 fn Test_The_Holder_Should_Still_Recover_Its_Own_Lapsed_Claim()
 {
-    let (directory, mut ledger) = Board_At("lapse-recover", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", "agent-a");
+    let Board { directory, mut ledger } = Board_At("lapse-recover", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", Claimant("agent-a"));
 
     let mut after = After_The_Lapse(directory.As_Path());
 
     after
-        .Renew(&ItemId::New("T-1"), "agent-a", Duration::from_secs(3_600))
+        .Renew(&ItemId::New("T-1"), "agent-a", LEASE)
         .unwrap_or_else(|refusal| {
             panic!("the holder must be able to renew: {}", refusal.Describe())
         });
 
-    let held = after.Load().expect("readable");
+    let held = after.Load().expect("the ledger the renewal wrote reads back");
     assert!(
         held.items
             .first()
-            .is_some_and(|item| return item.Has_Active_Claim(At(NOW + 7_200))),
+            .is_some_and(|item| return item.Has_Active_Claim(At(AT_LATER_SECONDS))),
         "renewing a lapsed claim must make it active again"
     );
 }
@@ -160,12 +164,12 @@ fn Test_The_Holder_Should_Still_Recover_Its_Own_Lapsed_Claim()
 #[test]
 fn Test_A_Lapsed_Item_Should_Be_Taken_Over_And_Still_Name_Its_Previous_Holder()
 {
-    let (directory, mut ledger) = Board_At("takeover-keeps-predecessor", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", "dead-agent");
+    let Board { directory, mut ledger } = Board_At("takeover-keeps-predecessor", vec![Item("T-1", &["src/a.rs"])]);
+    Take(&mut ledger, "T-1", Claimant("dead-agent"));
 
     let mut after = After_The_Lapse(directory.As_Path());
 
-    let reservation = Take_Over_In(&mut after, "T-1", "agent-b").unwrap_or_else(|refusal| {
+    let reservation = Take_Over_In(&mut after, "T-1", Claimant("agent-b")).unwrap_or_else(|refusal| {
         panic!(
             "an item whose holder died must return to the pool without a person editing the \
              file: {}",
@@ -175,7 +179,7 @@ fn Test_A_Lapsed_Item_Should_Be_Taken_Over_And_Still_Name_Its_Previous_Holder()
     assert_eq!(reservation.holder, "agent-b");
 
     let item = Only_Item(&after);
-    Installed_The_Taker(&item, At(NOW + 7_200));
+    Installed_The_Taker(&item, At(AT_LATER_SECONDS));
     Kept_The_Claim_It_Replaced(&item);
 }
 
@@ -221,7 +225,7 @@ fn Kept_The_Claim_It_Replaced(item: &LedgerItem)
     assert_eq!(displaced.acquired_at, At(NOW), "when they took it");
     assert_eq!(
         displaced.lease_expires_at,
-        At(NOW + 3_600),
+        At(LEASE_ENDS_AT),
         "when the lease ran out"
     );
 }

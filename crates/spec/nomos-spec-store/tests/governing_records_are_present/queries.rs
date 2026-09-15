@@ -2,28 +2,36 @@
 
 use nomos_spec_store::{Seed_Governing_Records, SpecificationStore};
 
+/// The node identifier a query is scoped to.
+///
+/// Named rather than left a second `&str`, because it sits beside the SQL at every `Column`
+/// call site and a transposed pair would query the wrong node while still building.
+pub(crate) struct NodeId<'a>(pub(crate) &'a str);
+
 /// One counted answer, for a query that binds nothing.
 pub(crate) fn Counted(store: &SpecificationStore, sql: &str) -> u32
 {
     return store
         .Connection()
         .query_row(sql, [], |row| return row.get(0))
-        .expect("queries");
+        .expect("In_Memory() applied the schema first, so the table the SQL counts exists");
 }
 
 /// One text answer, for a query naming one node as `?1`.
-pub(crate) fn Column(store: &SpecificationStore, sql: &str, node_id: &str) -> String
+pub(crate) fn Column(store: &SpecificationStore, sql: &str, node_id: NodeId<'_>) -> String
 {
     return store
         .Connection()
-        .query_row(sql, rusqlite::params![node_id], |row| return row.get(0))
-        .expect("queries");
+        .query_row(sql, rusqlite::params![node_id.0], |row| return row.get(0))
+        .expect("a caller passes a node_id the seed wrote, so this SELECT returns its row");
 }
 
 pub(crate) fn Seeded() -> SpecificationStore
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    Seed_Governing_Records(&mut store).expect("seeds");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("In_Memory() opens no file and applies this crate's schema in the same call");
+    Seed_Governing_Records(&mut store)
+        .expect("RECORDS is embedded in this crate, so the seed writes text it already holds");
     return store;
 }
 

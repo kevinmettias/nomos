@@ -286,6 +286,8 @@ fn To_Snake_Case(name: &str) -> String
 mod tests
 {
     use super::*;
+    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use nomos_model::Content_Digest;
 
     /// A fixture whose filename is part of what it fixes is not judged by either rule.
     ///
@@ -298,14 +300,25 @@ mod tests
     #[test]
     fn Test_Check_File_Name_Matches_Declared_Type_Should_Not_Judge_A_Test_Or_Example_Source()
     {
-        use crate::checks::test_support::{self, Test_Context, TestOffering};
+        let path = "tests/corpus/analysis/alpha/one.rs";
+        let source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), "pub struct Anchor;\n");
+        let TestOffering { store, registry, .. } = Offering_Over_A_Corpus_Fixture(&source);
+
+        let mut reader = nomos_analysis::Reader::On(&store, &registry, Test_Context());
+        let findings = Check_File_Name_Matches_Declared_Type(&[source], &mut reader);
+
+        assert!(findings.is_empty(), "a corpus fixture must not be judged on its stem: {findings:?}");
+    }
+
+    /// A declared-and-offered syntax capability with the `Anchor` item `source` declares
+    /// materialized against it — the reader the corpus-fixture test above is built over, so
+    /// that fixture really would be judged if the exemption were deleted.
+    fn Offering_Over_A_Corpus_Fixture(source: &SourceFile) -> TestOffering
+    {
         use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
-        use nomos_model::Content_Digest;
 
         const PARSER: &str = "nomos.test.file.names.parses";
-        let path = "tests/corpus/analysis/alpha/one.rs";
-        let source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), "pub struct Anchor;
-");
+        const ITEMS: &str = "unexpanded\t0\nitem\t0\tStruct\tPublic\tAnchor\t.\t.\n";
         let guarantee = Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
         let TestOffering { mut store, registry, offer } = test_support::Offering(
             nomos_cap_syntax::Capability_Contract(),
@@ -320,15 +333,9 @@ mod tests
             &offer,
             nomos_analysis::InputDigest::Of(&[source.text.as_bytes()]),
             nomos_cap_syntax::Payload_Schema(),
-            "unexpanded	0
-item	0	Struct	Public	Anchor	.	.
-".as_bytes().to_vec(),
+            ITEMS.as_bytes().to_vec(),
         );
-        let mut reader = nomos_analysis::Reader::On(&store, &registry, Test_Context());
-
-        let findings = Check_File_Name_Matches_Declared_Type(&[source], &mut reader);
-
-        assert!(findings.is_empty(), "a corpus fixture must not be judged on its stem: {findings:?}");
+        return TestOffering { store, registry, offer };
     }
 
     #[test]

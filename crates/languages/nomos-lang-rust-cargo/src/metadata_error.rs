@@ -83,54 +83,6 @@ pub fn Discover_Workspace<Launcher: ProcessLauncher, Env: Environment>(root: &Pa
     return Require_Nonempty(discovered);
 }
 
-/// Refuses if `document`'s own `"workspace_root"` does not resolve to `root` -- the exact
-/// escape `P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT` measured directly: `cargo
-/// metadata`, pointed at a directory with no `Cargo.toml` of its own that sits inside a
-/// larger cargo workspace, silently walks upward and answers about that enclosing
-/// workspace instead of refusing. `cargo metadata`'s own document always names exactly
-/// which workspace root it actually resolved to, so this check reads that field directly
-/// rather than inferring the escape indirectly from which packages came back.
-///
-/// Both sides are canonicalized before comparing: `workspace_root` is cargo's own already-
-/// resolved absolute path, and `root` is often a relative `.` in a real invocation (`nomos
-/// check`'s own CLI default), which `std::fs::canonicalize` resolves against the real
-/// process working directory the same way `cargo metadata` itself did. Canonicalizing both
-/// sides is safe even though `std::fs::canonicalize`'s own Windows implementation returns a
-/// `\\?\`-prefixed verbatim path (`nomos_lang_rust_compiler::reading::Load_Crate`'s own doc
-/// names this as a real footgun for a *prefix* comparison) -- this is a plain equality
-/// check, and the identical transformation applied to both sides cancels out.
-fn Require_Workspace_Root_Is(document: &serde_json::Value, root: &Path) -> Result<(), MetadataError>
-{
-    let workspace_root = document
-        .get("workspace_root")
-        .and_then(serde_json::Value::as_str)
-        .ok_or_else(|| MetadataError {
-            reason: "cargo metadata's document has no \"workspace_root\" string".to_owned(),
-        })?;
-
-    let resolved = std::fs::canonicalize(workspace_root).map_err(|error| MetadataError {
-        reason: format!("cargo metadata's own \"workspace_root\" ({workspace_root}) could not be read: {error}"),
-    })?;
-    let expected = std::fs::canonicalize(root).map_err(|error| MetadataError {
-        reason: format!("the root cargo metadata was asked about ({}) could not be read: {error}", root.display()),
-    })?;
-
-    if resolved != expected
-    {
-        return Err(MetadataError {
-            reason: format!(
-                "cargo metadata escaped the workspace it was asked about: asked over \"{}\", it \
-                 answered for \"{}\" instead -- refusing rather than silently reporting on the \
-                 wrong tree",
-                expected.display(),
-                resolved.display()
-            ),
-        });
-    }
-
-    return Ok(());
-}
-
 fn Run_Cargo_Metadata<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<serde_json::Value, MetadataError>
 {
     let command = Cargo_Metadata_Command(root, environment);
@@ -145,22 +97,6 @@ fn Run_Cargo_Metadata<Launcher: ProcessLauncher, Env: Environment>(root: &Path, 
 
 /// The `cargo metadata` invocation `tests/contract/src/workspace.rs` already established
 /// works over this workspace, run from `root`.
-/// The program name `cargo` is invoked by, from the environment rather than from this
-/// process's own ambient state.
-///
-/// `CARGO` is what a cargo-invoked build sets to the exact toolchain binary running, and a
-/// provider handed an injected launcher must not then reach around it for the program that
-/// launcher will run -- a fake launcher receives the command already built, so no test could
-/// state which cargo it names. `P87`/`OD-HOST-001`: the port comes from the composition root.
-fn Cargo_Program<Env: Environment>(environment: &Env) -> String
-{
-    return environment
-        .Variable("CARGO")
-        .and_then(|value| return value.into_string().ok())
-        .unwrap_or_else(|| return "cargo".to_owned());
-}
-
-/// The `cargo metadata` invocation, run from `root`.
 fn Cargo_Metadata_Command<Env: Environment>(root: &Path, environment: &Env) -> Command
 {
     let cargo = Cargo_Program(environment);
@@ -178,6 +114,21 @@ fn Cargo_Metadata_Command<Env: Environment>(root: &Path, environment: &Env) -> C
     command.working_directory = Some(root.to_path_buf());
 
     return command;
+}
+
+/// The program name `cargo` is invoked by, from the environment rather than from this
+/// process's own ambient state.
+///
+/// `CARGO` is what a cargo-invoked build sets to the exact toolchain binary running, and a
+/// provider handed an injected launcher must not then reach around it for the program that
+/// launcher will run -- a fake launcher receives the command already built, so no test could
+/// state which cargo it names. `P87`/`OD-HOST-001`: the port comes from the composition root.
+fn Cargo_Program<Env: Environment>(environment: &Env) -> String
+{
+    return environment
+        .Variable("CARGO")
+        .and_then(|value| return value.into_string().ok())
+        .unwrap_or_else(|| return "cargo".to_owned());
 }
 
 /// Refuses every outcome a launched process can report other than a clean, zero exit.
@@ -206,6 +157,59 @@ fn Parse_Metadata_Document(stdout: &str) -> Result<serde_json::Value, MetadataEr
 {
     return serde_json::from_str(stdout).map_err(|error| MetadataError {
         reason: format!("cargo metadata's stdout was not the JSON it promised: {error}"),
+    });
+}
+
+/// Refuses if `document`'s own `"workspace_root"` does not resolve to `root` -- the exact
+/// escape `P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT` measured directly: `cargo
+/// metadata`, pointed at a directory with no `Cargo.toml` of its own that sits inside a
+/// larger cargo workspace, silently walks upward and answers about that enclosing
+/// workspace instead of refusing. `cargo metadata`'s own document always names exactly
+/// which workspace root it actually resolved to, so this check reads that field directly
+/// rather than inferring the escape indirectly from which packages came back.
+///
+/// Both sides are canonicalized before comparing: `workspace_root` is cargo's own already-
+/// resolved absolute path, and `root` is often a relative `.` in a real invocation (`nomos
+/// check`'s own CLI default), which `std::fs::canonicalize` resolves against the real
+/// process working directory the same way `cargo metadata` itself did. Canonicalizing both
+/// sides is safe even though `std::fs::canonicalize`'s own Windows implementation returns a
+/// `\\?\`-prefixed verbatim path (`nomos_lang_rust_compiler::reading::Load_Crate`'s own doc
+/// names this as a real footgun for a *prefix* comparison) -- this is a plain equality
+/// check, and the identical transformation applied to both sides cancels out.
+fn Require_Workspace_Root_Is(document: &serde_json::Value, root: &Path) -> Result<(), MetadataError>
+{
+    let declared = Declared_Workspace_Root(document)?;
+    let resolved = Canonicalized(Path::new(declared), "cargo metadata's own \"workspace_root\"")?;
+    let expected = Canonicalized(root, "the root cargo metadata was asked about")?;
+
+    if resolved != expected
+    {
+        return Err(MetadataError {
+            reason: format!("cargo metadata escaped the workspace it was asked about: asked over \"{}\", it answered for \"{}\" instead -- refusing rather than silently reporting on the wrong tree", expected.display(), resolved.display()),
+        });
+    }
+
+    return Ok(());
+}
+
+/// The `"workspace_root"` string `cargo metadata`'s document promises alongside
+/// `workspace_members` and `packages`.
+fn Declared_Workspace_Root(document: &serde_json::Value) -> Result<&str, MetadataError>
+{
+    return document
+        .get("workspace_root")
+        .and_then(serde_json::Value::as_str)
+        .ok_or_else(|| MetadataError {
+            reason: "cargo metadata's document has no \"workspace_root\" string".to_owned(),
+        });
+}
+
+/// `path`, canonicalized -- or a refusal naming `what` and the path, so a comparison between
+/// two canonical paths says which of the two could not be read.
+fn Canonicalized(path: &Path, what: &str) -> Result<PathBuf, MetadataError>
+{
+    return std::fs::canonicalize(path).map_err(|error| MetadataError {
+        reason: format!("{what} ({}) could not be read: {error}", path.display()),
     });
 }
 
@@ -397,9 +401,7 @@ fn Require_Nonempty(discovered: Vec<DiscoveredPackage>) -> Result<Vec<Discovered
     if discovered.is_empty()
     {
         return Err(MetadataError {
-            reason: "cargo metadata reported no workspace members; refusing to report a \
-                     clean result over an empty graph"
-                .to_owned(),
+            reason: "cargo metadata reported no workspace members; refusing to report a clean result over an empty graph".to_owned(),
         });
     }
 
@@ -415,190 +417,9 @@ fn Is_Member(package: &serde_json::Value, members: &BTreeSet<String>) -> bool
 }
 
 #[cfg(test)]
-mod tests
-{
-    use super::*;
-    use nomos_platform_std::{StdEnvironment, StdProcessLauncher};
-
-    #[test]
-    fn Test_Discover_Workspace_Should_Find_This_Crates_Real_Dependency_On_Nomos_Contracts()
-    {
-        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher, &StdEnvironment).expect("a real cargo workspace");
-
-        let this_crate = discovered
-            .iter()
-            .find(|package| package.payload.package == "nomos-lang-rust-cargo")
-            .expect("this crate is itself a workspace member");
-
-        assert!(
-            this_crate
-                .payload
-                .edges
-                .iter()
-                .any(|edge| edge.target == "nomos-contracts" && edge.kind == DependencyKind::Normal),
-            "got {:?}",
-            this_crate.payload.edges
-        );
-    }
-
-    #[test]
-    fn Test_Nomos_Contracts_Should_Have_No_First_Party_Edges()
-    {
-        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher, &StdEnvironment).expect("a real cargo workspace");
-
-        let contracts = discovered
-            .iter()
-            .find(|package| package.payload.package == "nomos-contracts")
-            .expect("nomos-contracts is a workspace member");
-
-        assert!(
-            contracts.payload.edges.is_empty(),
-            "nomos-contracts must depend on nothing else in this workspace: {:?}",
-            contracts.payload.edges
-        );
-    }
-
-    #[test]
-    fn Test_Every_Discovered_Package_Should_Carry_A_Manifest_Relative_Root()
-    {
-        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher, &StdEnvironment).expect("a real cargo workspace");
-
-        let this_crate = discovered
-            .iter()
-            .find(|package| package.payload.package == "nomos-lang-rust-cargo")
-            .expect("this crate is itself a workspace member");
-
-        assert_eq!(
-            this_crate.manifest_relative_root,
-            "crates/languages/nomos-lang-rust-cargo"
-        );
-    }
-
-    #[test]
-    fn Test_Edges_Should_Be_In_Canonical_Order()
-    {
-        let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher, &StdEnvironment).expect("a real cargo workspace");
-
-        for package in &discovered
-        {
-            let mut sorted = package.payload.edges.clone();
-            sorted.sort_by(|left, right| (&left.target, left.kind.Label(), left.optional).cmp(&(&right.target, right.kind.Label(), right.optional)));
-            assert_eq!(package.payload.edges, sorted, "{}", package.payload.package);
-        }
-    }
-
-    /// Run over this workspace's own real root, the same standard `tests/contract`
-    /// already holds this exact invocation to: a boundary reader that cannot be checked
-    /// against a real graph is checked against nothing.
-    fn Repository_Root() -> PathBuf
-    {
-        let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-        return manifest
-            .parent()
-            .and_then(Path::parent)
-            .and_then(Path::parent)
-            .map(PathBuf::from)
-            .expect("this crate sits three levels below the workspace root");
-    }
-}
+#[path = "metadata/tests.rs"]
+mod tests;
 
 #[cfg(test)]
-mod stated_environment_decides_the_program
-{
-    use super::*;
-    use nomos_platform::{DeterminismStrength, EnvironmentError, ReproducibilityScope, Strategy, TraceEquivalence};
-    use std::cell::RefCell;
-    use std::ffi::OsString;
-
-    /// The program name a test states, rather than the one this process happens to be
-    /// standing in.
-    struct Stated
-    {
-        cargo: Option<&'static str>,
-    }
-
-    /// Answers from fixed data, so its outputs reproduce byte for byte.
-    impl Strategy for Stated
-    {
-        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
-        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
-        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
-    }
-
-    impl Environment for Stated
-    {
-        fn Variable(&self, name: &str) -> Option<OsString>
-        {
-            if name != "CARGO"
-            {
-                return None;
-            }
-
-            return self.cargo.map(OsString::from);
-        }
-
-        fn Working_Directory(&self) -> Result<PathBuf, EnvironmentError>
-        {
-            return Ok(PathBuf::from("."));
-        }
-    }
-
-    /// A launcher that records the command it was handed and never runs anything.
-    struct Recording
-    {
-        seen: RefCell<Vec<Command>>,
-    }
-
-    /// Answers from fixed data, so its outputs reproduce byte for byte.
-    impl Strategy for Recording
-    {
-        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
-        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
-        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
-    }
-
-    impl ProcessLauncher for Recording
-    {
-        fn Run(&self, command: &Command) -> Result<nomos_platform::ProcessOutput, String>
-        {
-            self.seen.borrow_mut().push(command.clone());
-
-            return Err("this launcher only records".to_owned());
-        }
-    }
-
-    /// The defect `P87` closed, stated as the property it restores: a test can now say which
-    /// `cargo` a dispatch would run.
-    ///
-    /// Before the port, this function read `CARGO` from `std::env` while building a command
-    /// for an *injected* launcher, so the fake launcher below received the program already
-    /// chosen and nothing could state it. Watched failing against the `std::env` read first —
-    /// under it the command names whatever this process was launched by, never `stated-cargo`.
-    #[test]
-    fn Test_A_Stated_Cargo_Should_Be_The_Program_The_Launcher_Is_Handed()
-    {
-        let launcher = Recording { seen: RefCell::new(Vec::new()) };
-        let environment = Stated { cargo: Some("stated-cargo") };
-
-        let _refused = Discover_Workspace(Path::new("."), &launcher, &environment);
-
-        let seen = launcher.seen.borrow();
-        let command = seen.first().expect("the launcher was handed a command before it refused");
-        assert_eq!(command.argv.first().map(String::as_str), Some("stated-cargo"));
-    }
-
-    /// And an environment naming no `CARGO` falls back to the plain program, rather than to
-    /// whatever this process inherited.
-    #[test]
-    fn Test_An_Unset_Cargo_Should_Fall_Back_To_The_Plain_Program_Name()
-    {
-        let launcher = Recording { seen: RefCell::new(Vec::new()) };
-        let environment = Stated { cargo: None };
-
-        let _refused = Discover_Workspace(Path::new("."), &launcher, &environment);
-
-        let seen = launcher.seen.borrow();
-        let command = seen.first().expect("the launcher was handed a command before it refused");
-        assert_eq!(command.argv.first().map(String::as_str), Some("cargo"));
-    }
-}
+#[path = "metadata/stated_environment_decides_the_program.rs"]
+mod stated_environment_decides_the_program;

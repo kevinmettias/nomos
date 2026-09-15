@@ -20,6 +20,17 @@ use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::PathBuf;
 
+/// How long `cargo --version` is given before the launcher gives up on it. A real process on a
+/// loaded machine can take a moment, and the point of the test is that the generic bound launches
+/// something at all, not how quickly.
+const LAUNCH_TIMEOUT_SECONDS: u64 = 30;
+
+/// The path a test source is filed under, named so that it cannot be written in the other's place.
+struct SourcePath<'a>(&'a str);
+
+/// The text a test source carries, named for the same reason as [`SourcePath`].
+struct SourceText<'a>(&'a str);
+
 fn Test_Variant() -> BuildVariant
 {
     return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
@@ -44,9 +55,9 @@ fn Repository_Root() -> PathBuf
         .expect("this crate sits three levels below the workspace root");
 }
 
-fn Source(path: &str, text: &str) -> SourceFile
+fn Source(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
 {
-    return SourceFile::New(path, Subject_Of_Path(path), text);
+    return SourceFile::New(path.0, Subject_Of_Path(path.0), text.0);
 }
 
 /// The happy path across the boundary: a clean source, judged through the real
@@ -55,7 +66,7 @@ fn Source(path: &str, text: &str) -> SourceFile
 #[test]
 fn Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestration_Seam()
 {
-    let sources = vec![Source("a.rs", "pub fn Ok()\n{\n}\n")];
+    let sources = vec![Source(SourcePath("a.rs"), SourceText("pub fn Ok()\n{\n}\n"))];
     let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
     let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, Test_Run_Id());
@@ -86,8 +97,8 @@ fn Test_Run_Gate_Should_Report_An_Unreadable_Check_Outcome_As_Indeterminate()
 fn Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified()
 {
     let sources = vec![Source(
-        "a.rs",
-        "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+        SourcePath("a.rs"),
+        SourceText("/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n"),
     )];
     let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
@@ -106,7 +117,7 @@ fn Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified()
 /// that merely happens to match its shape.
 fn Version_Through_Generic_Launcher<Launcher: ProcessLauncher>(launcher: &Launcher) -> nomos_platform::ProcessOutput
 {
-    let command = nomos_platform::Command::New(vec!["cargo".to_owned(), "--version".to_owned()], std::time::Duration::from_secs(30));
+    let command = nomos_platform::Command::New(vec!["cargo".to_owned(), "--version".to_owned()], std::time::Duration::from_secs(LAUNCH_TIMEOUT_SECONDS));
     return launcher.Run(&command).expect("cargo --version must be a real, launchable process");
 }
 

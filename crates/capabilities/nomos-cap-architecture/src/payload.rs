@@ -43,6 +43,9 @@ const PERMITS_FIELDS: usize = 2;
 const EXCEPTION_FIELDS: usize = 2;
 /// A `door` line's own fields, after its tag.
 const DOOR_FIELDS: usize = 2;
+/// The width of the fixed array [`Pair`] reads a two-field line into: every relation line this
+/// schema names -- `member`, `permits`, `exception` and `door` alike -- carries exactly this many.
+const PAIR_FIELDS: usize = 2;
 
 /// A repository's whole declared architecture — empty when it declares none.
 ///
@@ -146,25 +149,44 @@ pub fn Encode_Payload(payload: &ArchitecturePayload) -> Vec<u8>
 {
     let mut encoded = String::new();
 
-    for component in &payload.components
+    Push_Components(&mut encoded, &payload.components);
+    Push_Relation_Rows(&mut encoded, payload);
+    Push_Authorities(&mut encoded, &payload.authorities);
+
+    return encoded.into_bytes();
+}
+
+/// Every `component` line, in declared order.
+fn Push_Components(encoded: &mut String, components: &[String])
+{
+    for component in components
     {
-        encoded.push_str("component\t");
-        encoded.push_str(component);
-        encoded.push('\n');
+        Push_Row(encoded, &["component", component]);
     }
+}
+
+/// Every `member`, `permits` and `exception` line, in that order.
+fn Push_Relation_Rows(encoded: &mut String, payload: &ArchitecturePayload)
+{
     for placed in &payload.membership
     {
-        Push_Pair(&mut encoded, "member", &placed.package, &placed.component);
+        Push_Row(encoded, &["member", &placed.package, &placed.component]);
     }
     for permission in &payload.permissions
     {
-        Push_Pair(&mut encoded, "permits", &permission.from, &permission.to);
+        Push_Row(encoded, &["permits", &permission.from, &permission.to]);
     }
     for exception in &payload.exceptions
     {
-        Push_Pair(&mut encoded, "exception", &exception.from, &exception.to);
+        Push_Row(encoded, &["exception", &exception.from, &exception.to]);
     }
-    for authority in &payload.authorities
+}
+
+/// Every `authority` line, each immediately followed by the `door` lines under it, so a
+/// reader sees an authority and the ways into it together rather than joining two lists by eye.
+fn Push_Authorities(encoded: &mut String, authorities: &[Authority])
+{
+    for authority in authorities
     {
         encoded.push_str("authority\t");
         encoded.push_str(&authority.package);
@@ -172,22 +194,9 @@ pub fn Encode_Payload(payload: &ArchitecturePayload) -> Vec<u8>
 
         for door in &authority.doors
         {
-            Push_Pair(&mut encoded, "door", &authority.package, door);
+            Push_Row(encoded, &["door", &authority.package, door]);
         }
     }
-
-    return encoded.into_bytes();
-}
-
-/// One `tag\tleft\tright` line.
-fn Push_Pair(encoded: &mut String, tag: &str, left: &str, right: &str)
-{
-    encoded.push_str(tag);
-    encoded.push('\t');
-    encoded.push_str(left);
-    encoded.push('\t');
-    encoded.push_str(right);
-    encoded.push('\n');
 }
 
 /// Reads a declaration back out of its canonical encoding.
@@ -264,7 +273,7 @@ fn Read_Exception_Or_Authority(line: &str, payload: &mut ArchitecturePayload) ->
     {
         let [package, door] = Pair(line, rest, DOOR_FIELDS)?;
 
-        return Add_Door(payload, package, door);
+        return Add_Door(payload, package, Door(door));
     }
 
     return Err(Refusal {
@@ -272,8 +281,12 @@ fn Read_Exception_Or_Authority(line: &str, payload: &mut ArchitecturePayload) ->
     });
 }
 
+/// A `door` line's door package, given its own type so a door and the authority it names cannot
+/// be handed to [`Add_Door`] in the wrong order.
+struct Door<'a>(&'a str);
+
 /// `door` onto the authority it names, refused when no `authority` line declared one.
-fn Add_Door(payload: &mut ArchitecturePayload, package: &str, door: &str) -> Result<(), Refusal>
+fn Add_Door(payload: &mut ArchitecturePayload, package: &str, door: Door<'_>) -> Result<(), Refusal>
 {
     let Some(authority) = payload.authorities.iter_mut().find(|authority| return authority.package == package)
     else
@@ -283,13 +296,77 @@ fn Add_Door(payload: &mut ArchitecturePayload, package: &str, door: &str) -> Res
         });
     };
 
-    authority.doors.push(door.to_owned());
+    authority.doors.push(door.0.to_owned());
 
     return Ok(());
 }
 
+/// Every component a `member` or `permits` line names is one the declaration declared.
+///
+/// The check `OD-RULES-003` asks for by name: an incomplete declaration is refused rather than
+/// silently dropping the statements that reference what is missing.
+fn Assert_Components_Declared(payload: &ArchitecturePayload) -> Result<(), Refusal>
+{
+    for placed in &payload.membership
+    {
+        Assert_Declared(payload, &placed.component, ReferencingLine::Member)?;
+    }
+    for permission in &payload.permissions
+    {
+        Assert_Declared(payload, &permission.from, ReferencingLine::Permits)?;
+        Assert_Declared(payload, &permission.to, ReferencingLine::Permits)?;
+    }
+
+    return Ok(());
+}
+
+/// Which kind of line named a component, given its own type so one line's tag cannot be handed
+/// to a refusal produced for another.
+enum ReferencingLine
+{
+    /// A `member` line's own component.
+    Member,
+    /// A `permits` line's component, on either side of the permission.
+    Permits,
+}
+
+impl ReferencingLine
+{
+    /// The tag a refusal for this line names.
+    fn Tag(self) -> &'static str
+    {
+        return match self
+        {
+            Self::Member => "member",
+            Self::Permits => "permits",
+        };
+    }
+}
+
+/// One component name, checked against the declared set.
+fn Assert_Declared(payload: &ArchitecturePayload, component: &str, line: ReferencingLine) -> Result<(), Refusal>
+{
+    if payload.components.iter().any(|declared| return declared == component)
+    {
+        return Ok(());
+    }
+
+    let tag = line.Tag();
+
+    return Err(Refusal {
+        reason: format!("a {tag} line names component {component:?}, which no component line declares"),
+    });
+}
+
+/// One `tag\tleft\tright` line, from the fields it is made of.
+fn Push_Row(encoded: &mut String, fields: &[&str])
+{
+    encoded.push_str(&fields.join("\t"));
+    encoded.push('\n');
+}
+
 /// A two-field line's own fields, or a refusal naming the line that did not have two.
-fn Pair<'a>(line: &str, rest: &'a str, fields: usize) -> Result<[&'a str; 2], Refusal>
+fn Pair<'a>(line: &str, rest: &'a str, fields: usize) -> Result<[&'a str; PAIR_FIELDS], Refusal>
 {
     let split: Vec<&str> = rest.splitn(fields, '\t').collect();
     let [left, right] = split.as_slice()
@@ -301,38 +378,6 @@ fn Pair<'a>(line: &str, rest: &'a str, fields: usize) -> Result<[&'a str; 2], Re
     };
 
     return Ok([*left, *right]);
-}
-
-/// Every component a `member` or `permits` line names is one the declaration declared.
-///
-/// The check `OD-RULES-003` asks for by name: an incomplete declaration is refused rather than
-/// silently dropping the statements that reference what is missing.
-fn Assert_Components_Declared(payload: &ArchitecturePayload) -> Result<(), Refusal>
-{
-    for placed in &payload.membership
-    {
-        Assert_Declared(payload, &placed.component, "member")?;
-    }
-    for permission in &payload.permissions
-    {
-        Assert_Declared(payload, &permission.from, "permits")?;
-        Assert_Declared(payload, &permission.to, "permits")?;
-    }
-
-    return Ok(());
-}
-
-/// One component name, checked against the declared set.
-fn Assert_Declared(payload: &ArchitecturePayload, component: &str, tag: &str) -> Result<(), Refusal>
-{
-    if payload.components.iter().any(|declared| return declared == component)
-    {
-        return Ok(());
-    }
-
-    return Err(Refusal {
-        reason: format!("a {tag} line names component {component:?}, which no component line declares"),
-    });
 }
 
 #[cfg(test)]

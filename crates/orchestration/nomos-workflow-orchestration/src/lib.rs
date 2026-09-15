@@ -47,7 +47,7 @@ mod workflow_step_plan;
 #[cfg(test)]
 mod tests;
 
-pub use body::{Body, CheckBody, CorrectionBody, GateBody};
+pub use body::{Body, CheckBody, CommitIntent, CorrectionBody, GateBody};
 pub use run::{Platform, Run};
 pub use workflow_outcome::{DispatchError, StepOutcome, WorkflowOutcome};
 pub use workflow_step_plan::WorkflowStepPlan;

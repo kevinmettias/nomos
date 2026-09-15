@@ -1,7 +1,8 @@
 //! OD-LEDGER-016: the identifier and the file it names are one record.
 
 use crate::board::{
-    Contested, Paths_Collide, RECORD_DIRECTORY, Repository_Root, Two_Record_Writers,
+    Contest, Contested, PathText, Paths_Collide, RECORD_DIRECTORY, Repository_Root,
+    Two_Record_Writers, TwoWriters,
 };
 use nomos_ledger::{ClaimRefusal, Territory};
 use std::path::Path;
@@ -15,6 +16,13 @@ use std::path::Path;
 const AN_IDENTIFIER: &str = "docs/records/OD-LEDGER-006";
 const THE_FILE_IT_NAMES: &str =
     "docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md";
+
+/// The fewest records that make the sweep below a sweep rather than a look at one file.
+///
+/// A floor, not a count: the directory holds hundreds and a number written here would be
+/// wrong the next time a record is written. This is the point below which the comparison
+/// has stopped covering the directory it claims to.
+const FEWEST_RECORDS_ON_DISK: usize = 20;
 
 /// The property `OD-LEDGER-016` buys, claimed through the ledger rather than argued.
 ///
@@ -30,7 +38,11 @@ const THE_FILE_IT_NAMES: &str =
 #[test]
 fn Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holder()
 {
-    let (mut document, first, second) = Two_Record_Writers();
+    let TwoWriters {
+        mut document,
+        first,
+        second,
+    } = Two_Record_Writers();
     for item in &mut document.items
     {
         if item.id == first
@@ -42,7 +54,10 @@ fn Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holde
             item.territory = Territory::Of_Files([THE_FILE_IT_NAMES]);
         }
     }
-    let (_scratch, refusal) = Contested("record-stem", &document, &first, &second);
+    let Contest {
+        scratch: _scratch,
+        refusal,
+    } = Contested("record-stem", &document, &first, &second);
 
     assert!(
         matches!(refusal, ClaimRefusal::HeldBy { .. }),
@@ -115,14 +130,16 @@ fn Test_Every_Record_On_Disk_Should_Be_One_Subject_With_Its_Identifier()
 {
     let records = Records_On_Disk();
     assert!(
-        records.len() >= 20,
+        records.len() >= FEWEST_RECORDS_ON_DISK,
         "the record directory must hold the records this compares; got {}",
         records.len()
     );
     let divergent: Vec<String> = records
         .iter()
         .filter(|(identifier, path)| {
-            return !Paths_Collide(&format!("{RECORD_DIRECTORY}/{identifier}"), path);
+            let reserved = format!("{RECORD_DIRECTORY}/{identifier}");
+
+            return !Paths_Collide(PathText(&reserved), PathText(path.as_str()));
         })
         .map(|(identifier, path)| return format!("{identifier} != {path}"))
         .collect();

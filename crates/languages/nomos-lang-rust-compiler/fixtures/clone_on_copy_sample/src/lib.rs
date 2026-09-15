@@ -3,6 +3,12 @@
 //! and one whose receiver resolves to a type that is `Clone` but not `Copy` -- the exact
 //! distinction `Type::is_copy` exists to draw and `syn`'s parse tree has no way to make,
 //! since it never resolves a name to the item that declares it.
+//!
+//! The `Clone`-but-not-`Copy` half lives in `heavy.rs`, one public type per file.
+
+mod heavy;
+
+pub use heavy::{Heavy, duplicate_heavy};
 
 #[derive(Clone, Copy)]
 pub struct Point
@@ -11,20 +17,8 @@ pub struct Point
     pub vertical: i32,
 }
 
-#[derive(Clone)]
-pub struct Heavy
-{
-    pub data: Vec<u8>,
-}
-
 #[must_use]
 pub fn duplicate_point(point: &Point) -> Point
 {
     return point.clone();
-}
-
-#[must_use]
-pub fn duplicate_heavy(heavy: &Heavy) -> Heavy
-{
-    return heavy.clone();
 }

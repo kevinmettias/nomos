@@ -6,7 +6,7 @@
 //! drift apart and the comparison would still pass.
 
 use nomos_spec_project::{Build, Catalogue, Profile};
-use nomos_spec_store::SpecificationStore;
+use nomos_spec_store::{DocumentPath, SpecificationStore};
 
 const CORE: &str = "# Core architecture\n\nIdentity is not a path.\n\n\
                     ## Domain model\n\n| Model | Owns |\n| --- | --- |\n\
@@ -35,7 +35,8 @@ pub(crate) fn Populated() -> SpecificationStore
 
 pub(crate) fn Populated_In_Order(order: Order) -> SpecificationStore
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("In_Memory applies the schema MIGRATIONS before it returns");
     let mut documents = vec![
         ("volumes/02-core.md", CORE),
         ("volumes/03-conformance.md", CONFORMANCE),
@@ -47,7 +48,7 @@ pub(crate) fn Populated_In_Order(order: Order) -> SpecificationStore
 
     for (path, text) in documents
     {
-        Put_Document(&mut store, path, text);
+        Put_Document(&mut store, DocumentPath(path), text);
     }
     Populate_Graph(&store, order);
 
@@ -55,7 +56,10 @@ pub(crate) fn Populated_In_Order(order: Order) -> SpecificationStore
 }
 
 /// One document and the blocks it segments into, which the store holds separately.
-fn Put_Document(store: &mut SpecificationStore, path: &str, text: &str)
+///
+/// The path arrives as a `DocumentPath` rather than as a second `&str`, so a caller cannot hand
+/// the text where the path goes and have the store take it.
+fn Put_Document(store: &mut SpecificationStore, path: DocumentPath<'_>, text: &str)
 {
     use nomos_spec_model::Segment;
 

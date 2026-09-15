@@ -3,6 +3,31 @@
 use super::*;
 use crate::ChangeSource;
 
+/// The byte a fixture configuration digest repeats across its length. Which byte it is
+/// carries no meaning; that every fixture fills with the same one is what makes the two
+/// configurations in this file comparable.
+const FIXTURE_CONFIGURATION_BYTE: u8 = 0x11;
+
+/// How many files the checkout fixture writes in one set, and therefore how many effects
+/// that one generation is expected to carry.
+const CHECKOUT_FILES: usize = 3;
+
+/// How many changes this file applies before it edits one file back: the generation a
+/// workspace stands at once that many have landed.
+const CHANGES_BEFORE_THE_EDIT_BACK: u64 = 3;
+
+/// How many absolute spellings of a path the door must refuse: one arm of
+/// [`Absolute_Paths`] each.
+const ABSOLUTE_PATH_SPELLINGS: usize = 4;
+
+/// How many spellings of reaching outside the workspace the door must refuse: one arm of
+/// [`Escaping_Paths`] each.
+const ESCAPING_PATH_SPELLINGS: usize = 3;
+
+/// How wide the window is that compares every neighbouring pair of workspace identities.
+/// Two, because a pair is the smallest window in which a difference can show.
+const NEIGHBOURING_PAIR: usize = 2;
+
 fn Variant() -> BuildVariant
 {
     return BuildVariant::New("x86_64-unknown-linux-gnu", "dev", "1.85", ["analysis"]);
@@ -12,13 +37,20 @@ fn Fresh() -> Workspace
 {
     return Workspace::Empty(
         Variant(),
-        ConfigurationId::From_Digest(Digest128::From_Bytes([0x11; 16])),
+        ConfigurationId::From_Digest(Digest128::From_Bytes([
+            FIXTURE_CONFIGURATION_BYTE;
+            Digest128::BYTE_LENGTH
+        ])),
     );
 }
 
-fn Edit(path: &str, content: &str) -> WorkspaceChangeSet
+/// A workspace-relative path, typed apart from the content written at it so that a caller
+/// cannot transpose the two: a fixture that swapped them would compile.
+struct Member_Path(&'static str);
+
+fn Edit(path: Member_Path, content: &str) -> WorkspaceChangeSet
 {
-    return WorkspaceChangeSet::From(ChangeSource::IdeEdit).Present(path, content);
+    return WorkspaceChangeSet::From(ChangeSource::IdeEdit).Present(path.0, content);
 }
 
 fn Removal(path: &str) -> WorkspaceChangeSet
@@ -45,7 +77,7 @@ fn Test_One_Applied_Set_Should_Produce_One_Generation()
         GenerationId::From_Raw(1),
         "three files in one set is one event and one generation"
     );
-    assert_eq!(applied.Effects().len(), 3);
+    assert_eq!(applied.Effects().len(), CHECKOUT_FILES);
 }
 
 /// A save that changed nothing is not a change. Advancing here would invalidate every
@@ -54,12 +86,12 @@ fn Test_One_Applied_Set_Should_Produce_One_Generation()
 fn Test_A_Change_That_Says_What_Is_Already_True_Should_Not_Advance()
 {
     let mut workspace = Fresh();
-    let first = Edit("src/a.rs", "pub fn a() {}");
-    workspace.Apply(&first).expect("applies");
+    let first = Edit(Member_Path("src/a.rs"),"pub fn a() {}");
+    workspace.Apply(&first).expect("every path in this fixture is workspace-relative and distinct, which the door admits");
     let before = workspace.Generation();
     let identity = workspace.Id();
 
-    let redundant = Edit("src/a.rs", "pub fn a() {}");
+    let redundant = Edit(Member_Path("src/a.rs"),"pub fn a() {}");
     let applied = workspace
         .Apply(&redundant)
         .expect("a redundant save is not an error");
@@ -82,12 +114,12 @@ fn Test_A_Change_That_Says_What_Is_Already_True_Should_Not_Advance()
 fn Test_A_Change_That_Says_Something_New_Should_Advance()
 {
     let mut workspace = Fresh();
-    let first = Edit("src/a.rs", "pub fn a() {}");
-    workspace.Apply(&first).expect("applies");
+    let first = Edit(Member_Path("src/a.rs"),"pub fn a() {}");
+    workspace.Apply(&first).expect("every path in this fixture is workspace-relative and distinct, which the door admits");
     let before = workspace.Generation();
 
-    let changed = Edit("src/a.rs", "pub fn changed() {}");
-    let applied = workspace.Apply(&changed).expect("applies");
+    let changed = Edit(Member_Path("src/a.rs"),"pub fn changed() {}");
+    let applied = workspace.Apply(&changed).expect("every path in this fixture is workspace-relative and distinct, which the door admits");
 
     assert!(matches!(applied, Applied::Advanced { .. }), "{applied:?}");
     assert!(workspace.Generation() > before);
@@ -106,16 +138,16 @@ fn Test_A_Change_That_Says_Something_New_Should_Advance()
 fn Test_Editing_A_File_Back_Should_Return_To_The_Same_Snapshot()
 {
     let mut workspace = Fresh();
-    let first = Edit("src/a.rs", "original");
-    workspace.Apply(&first).expect("applies");
+    let first = Edit(Member_Path("src/a.rs"),"original");
+    workspace.Apply(&first).expect("every path in this fixture is workspace-relative and distinct, which the door admits");
     let original = workspace.Id();
 
-    let changed = Edit("src/a.rs", "changed");
-    workspace.Apply(&changed).expect("applies");
+    let changed = Edit(Member_Path("src/a.rs"),"changed");
+    workspace.Apply(&changed).expect("every path in this fixture is workspace-relative and distinct, which the door admits");
     assert_ne!(workspace.Id(), original);
 
-    let back = Edit("src/a.rs", "original");
-    workspace.Apply(&back).expect("applies");
+    let back = Edit(Member_Path("src/a.rs"),"original");
+    workspace.Apply(&back).expect("every path in this fixture is workspace-relative and distinct, which the door admits");
 
     assert_eq!(
         workspace.Id(),
@@ -124,7 +156,7 @@ fn Test_Editing_A_File_Back_Should_Return_To_The_Same_Snapshot()
     );
     assert_eq!(
         workspace.Generation(),
-        GenerationId::From_Raw(3),
+        GenerationId::From_Raw(CHANGES_BEFORE_THE_EDIT_BACK),
         "and the generation counts what happened, which is three changes"
     );
 }
@@ -133,11 +165,11 @@ fn Test_Editing_A_File_Back_Should_Return_To_The_Same_Snapshot()
 fn Test_A_Removal_Should_Take_The_Member_And_A_Second_Should_Not()
 {
     let mut workspace = Fresh();
-    let first = Edit("src/a.rs", "pub fn a() {}");
-    workspace.Apply(&first).expect("applies");
+    let first = Edit(Member_Path("src/a.rs"),"pub fn a() {}");
+    workspace.Apply(&first).expect("every path in this fixture is workspace-relative and distinct, which the door admits");
     let gone = Removal("src/a.rs");
 
-    let removed = workspace.Apply(&gone).expect("applies");
+    let removed = workspace.Apply(&gone).expect("every path in this fixture is workspace-relative and distinct, which the door admits");
 
     assert!(matches!(removed, Applied::Advanced { .. }));
     assert_eq!(workspace.Content_Of("src/a.rs"), None);
@@ -169,7 +201,7 @@ fn Test_An_Empty_Change_Set_Should_Be_Refused()
 /// The failure portability exists to prevent, caught at the door rather than in the
 /// bytes.
 /// Every spelling of "this is not workspace-relative" the door has to catch.
-fn Absolute_Paths() -> [&'static str; 4]
+fn Absolute_Paths() -> [&'static str; ABSOLUTE_PATH_SPELLINGS]
 {
     return ["F:/repos/xvpe/a.rs", "/usr/src/a.rs", "C:\\src\\a.rs", "\\\\?\\F:\\a.rs"];
 }
@@ -182,14 +214,14 @@ fn Test_An_Absolute_Path_Should_Be_Refused()
     for path in Absolute_Paths()
     {
         assert!(
-            workspace.Apply(&Edit(path, "content")).is_err(),
+            workspace.Apply(&Edit(Member_Path(path), "content")).is_err(),
             "`{path}` is not workspace-relative"
         );
     }
 }
 
 /// Every spelling of "this reaches outside the workspace" the door has to catch.
-fn Escaping_Paths() -> [&'static str; 3]
+fn Escaping_Paths() -> [&'static str; ESCAPING_PATH_SPELLINGS]
 {
     return ["../outside.rs", "src/../../outside.rs", ".."];
 }
@@ -201,7 +233,7 @@ fn Test_A_Path_Reaching_Outside_The_Workspace_Should_Be_Refused()
 
     for path in Escaping_Paths()
     {
-        assert!(workspace.Apply(&Edit(path, "content")).is_err(), "`{path}`");
+        assert!(workspace.Apply(&Edit(Member_Path(path), "content")).is_err(), "`{path}`");
     }
 }
 
@@ -230,8 +262,8 @@ fn Test_One_Path_Changed_Twice_Should_Be_Refused()
 fn Test_A_Refused_Set_Should_Change_Nothing()
 {
     let mut workspace = Fresh();
-    let first = Edit("src/a.rs", "original");
-    workspace.Apply(&first).expect("applies");
+    let first = Edit(Member_Path("src/a.rs"),"original");
+    workspace.Apply(&first).expect("every path in this fixture is workspace-relative and distinct, which the door admits");
     let before = (workspace.Generation(), workspace.Id());
 
     let checkout = WorkspaceChangeSet::From(ChangeSource::GitCheckout)
@@ -261,12 +293,12 @@ fn Test_The_Source_Should_Not_Reach_The_Workspace_Identity()
     {
         let mut workspace = Fresh();
         let change = WorkspaceChangeSet::From(*source).Present("src/a.rs", "pub fn a() {}");
-        workspace.Apply(&change).expect("applies");
+        workspace.Apply(&change).expect("every path in this fixture is workspace-relative and distinct, which the door admits");
         identities.push(workspace.Id());
     }
 
     assert!(
-        identities.windows(2).all(|pair| return pair.first() == pair.last()),
+        identities.windows(NEIGHBOURING_PAIR).all(|pair| return pair.first() == pair.last()),
         "five sources, one workspace: {identities:?}"
     );
 }

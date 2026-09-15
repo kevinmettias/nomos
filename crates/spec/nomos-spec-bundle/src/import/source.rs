@@ -264,10 +264,8 @@ mod tests
     #[test]
     fn Test_Insert_Source_Headings_Should_Place_A_Heading_By_Its_Document()
     {
-        let mut store = Fixture();
-        let bundle = Bundle::New(
-            1,
-            vec![Record::SourceHeading(crate::Heading {
+        let title = Placed_Value(
+            Record::SourceHeading(crate::Heading {
                 document: crate::DocumentRef {
                     path: "doc.md".to_owned(),
                     revision: "v1".to_owned(),
@@ -275,28 +273,18 @@ mod tests
                 ordinal: 2,
                 depth: 1,
                 title: "Section Two".to_owned(),
-            })],
-        )
-        .expect("builds");
-
-        store.In_Transaction(|transaction| Insert_Source_Headings(transaction, &bundle)).expect("inserts");
-
-        let title: String = store
-            .Connection()
-            .query_row("SELECT title FROM source_headings WHERE document_uid = 1 AND ordinal = 2", [], |row| {
-                row.get(0)
-            })
-            .expect("reads back");
+            }),
+            Insert_Source_Headings,
+            "SELECT title FROM source_headings WHERE document_uid = 1 AND ordinal = 2",
+        );
         assert_eq!(title, "Section Two");
     }
 
     #[test]
     fn Test_Insert_Source_Blocks_Should_Place_A_Block_By_Its_Document()
     {
-        let mut store = Fixture();
-        let bundle = Bundle::New(
-            1,
-            vec![Record::SourceBlock(crate::Block {
+        let text = Placed_Value(
+            Record::SourceBlock(crate::Block {
                 document: crate::DocumentRef {
                     path: "doc.md".to_owned(),
                     revision: "v1".to_owned(),
@@ -307,28 +295,18 @@ mod tests
                 text: "World.".to_owned(),
                 content_hash: "sha256:hc2".to_owned(),
                 normalized_hash: "sha256:nh2".to_owned(),
-            })],
-        )
-        .expect("builds");
-
-        store.In_Transaction(|transaction| Insert_Source_Blocks(transaction, &bundle)).expect("inserts");
-
-        let text: String = store
-            .Connection()
-            .query_row("SELECT text FROM source_blocks WHERE document_uid = 1 AND ordinal = 2", [], |row| {
-                row.get(0)
-            })
-            .expect("reads back");
+            }),
+            Insert_Source_Blocks,
+            "SELECT text FROM source_blocks WHERE document_uid = 1 AND ordinal = 2",
+        );
         assert_eq!(text, "World.");
     }
 
     #[test]
     fn Test_Insert_Source_Table_Rows_Should_Decode_The_Cells_Json_Column()
     {
-        let mut store = Fixture();
-        let bundle = Bundle::New(
-            1,
-            vec![Record::SourceTableRow(crate::TableRow {
+        let cells_json = Placed_Value(
+            Record::SourceTableRow(crate::TableRow {
                 block: crate::OrdinalRef {
                     document: crate::DocumentRef {
                         path: "doc.md".to_owned(),
@@ -343,19 +321,36 @@ mod tests
                 text: "a | b".to_owned(),
                 content_hash: "sha256:rc".to_owned(),
                 normalized_hash: "sha256:rn".to_owned(),
-            })],
-        )
-        .expect("builds");
-
-        store.In_Transaction(|transaction| Insert_Source_Table_Rows(transaction, &bundle)).expect("inserts");
-
-        let cells_json: String = store
-            .Connection()
-            .query_row("SELECT cells_json FROM source_table_rows WHERE source_block_uid = 1", [], |row| {
-                row.get(0)
-            })
-            .expect("reads back");
+            }),
+            Insert_Source_Table_Rows,
+            "SELECT cells_json FROM source_table_rows WHERE source_block_uid = 1",
+        );
         assert_eq!(cells_json, "[\"a\",\"b\"]");
+    }
+
+    /// Places a bundle holding exactly one record with `insert`, then reads back the single
+    /// column `sql` names — the value the caller's own assertion is about.
+    ///
+    /// The record is the caller's, so a test states only which row it places and which
+    /// column proves it; the placing and the reading back are the same for every kind.
+    fn Placed_Value(
+        record: Record,
+        insert: fn(&Transaction<'_>, &Bundle) -> Result<(), BundleError>,
+        sql: &str,
+    ) -> String
+    {
+        let mut store = Fixture();
+        let bundle = Bundle::New(1, vec![record])
+            .expect("the bundle carries exactly the record the caller placed");
+
+        store
+            .In_Transaction(|transaction| insert(transaction, &bundle))
+            .expect("the insert places the row the caller reads back");
+
+        return store
+            .Connection()
+            .query_row(sql, [], |row| row.get(0))
+            .expect("the column the caller named is readable from the row it placed");
     }
 
     /// One blob, the document read from it and one block inside it — one row of every

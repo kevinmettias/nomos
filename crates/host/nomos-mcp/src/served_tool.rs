@@ -99,127 +99,141 @@ impl ServedTool
     {
         return match self.0
         {
-            ServedMethod::GatePlan => json!({
-                "type": "object",
-                "properties": {},
-                "additionalProperties": false,
-            }),
-            ServedMethod::GateRun => json!({
-                "type": "object",
-                "properties": {
-                    "root": {
-                        "type": "string",
-                        "description": "The tree to judge. Absent, this server's own working directory.",
-                    },
-                    "include": {
-                        "type": "array",
-                        "items": { "type": "string" },
-                        "description": "Which files under root a run judges. Empty selects everything.",
-                    },
-                    "exclude": {
-                        "type": "array",
-                        "items": { "type": "string" },
-                        "description": "Which files under root a run does not judge, applied after include.",
-                    },
-                    "rules": {
-                        "type": "array",
-                        "items": { "type": "string" },
-                        "description": "Which rules' findings count toward the disposition. Empty selects every registered rule.",
-                    },
-                },
-                "additionalProperties": false,
-            }),
-            ServedMethod::GateCompare => json!({
-                "type": "object",
-                "properties": {
-                    "baseline": {
-                        "type": "object",
-                        "properties": {
-                            "root": {
-                                "type": "string",
-                                "description": "The tree this side judges. Absent, this server's own working directory.",
-                            },
-                            "include": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "description": "Which files under root this side judges. Empty selects everything.",
-                            },
-                            "exclude": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "description": "Which files under root this side does not judge, applied after include.",
-                            },
-                            "rules": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "description": "Which rules' findings count toward this side's disposition. Empty selects every registered rule.",
-                            },
-                        },
-                        "additionalProperties": false,
-                    },
-                    "candidate": {
-                        "type": "object",
-                        "properties": {
-                            "root": {
-                                "type": "string",
-                                "description": "The tree this side judges. Absent, this server's own working directory.",
-                            },
-                            "include": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "description": "Which files under root this side judges. Empty selects everything.",
-                            },
-                            "exclude": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "description": "Which files under root this side does not judge, applied after include.",
-                            },
-                            "rules": {
-                                "type": "array",
-                                "items": { "type": "string" },
-                                "description": "Which rules' findings count toward this side's disposition. Empty selects every registered rule.",
-                            },
-                        },
-                        "additionalProperties": false,
-                    },
-                },
-                "additionalProperties": false,
-            }),
-            ServedMethod::GateExplain => json!({
-                "type": "object",
-                "properties": {
-                    "root": {
-                        "type": "string",
-                        "description": "The tree to judge before answering. Absent, this server's own working directory.",
-                    },
-                    "rule": {
-                        "type": "string",
-                        "description": "The rule the finding to explain was produced by.",
-                    },
-                    "location": {
-                        "type": "string",
-                        "description": "One location that finding names, as a reader of a run's own output already sees it.",
-                    },
-                },
-                "required": ["rule", "location"],
-                "additionalProperties": false,
-            }),
-            ServedMethod::Correction => json!({
-                "type": "object",
-                "properties": {
-                    "root": {
-                        "type": "string",
-                        "description": "The tree to correct. Absent, this server's own working directory.",
-                    },
-                    "commit": {
-                        "type": "boolean",
-                        "description": "Whether to actually write the corrected file, or only stage and validate it. Absent, false.",
-                    },
-                },
-                "additionalProperties": false,
-            }),
+            ServedMethod::GatePlan => Plan_Schema(),
+            ServedMethod::GateRun => Run_Schema(),
+            ServedMethod::GateCompare => Compare_Schema(),
+            ServedMethod::GateExplain => Explain_Schema(),
+            ServedMethod::Correction => Correction_Schema(),
         };
     }
+}
+
+/// `nomos.gate.plan`'s arguments: none, and a schema saying so rather than leaving a client to
+/// guess whether an empty object is an omission or a mistake.
+fn Plan_Schema() -> Value
+{
+    return json!({
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+    });
+}
+
+/// `nomos.gate.run`'s arguments -- the four fields every judging verb takes.
+fn Run_Schema() -> Value
+{
+    return json!({
+        "type": "object",
+        "properties": {
+            "root": {
+                "type": "string",
+                "description": "The tree to judge. Absent, this server's own working directory.",
+            },
+            "include": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Which files under root a run judges. Empty selects everything.",
+            },
+            "exclude": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Which files under root a run does not judge, applied after include.",
+            },
+            "rules": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Which rules' findings count toward the disposition. Empty selects every registered rule.",
+            },
+        },
+        "additionalProperties": false,
+    });
+}
+
+/// `nomos.gate.compare`'s arguments: the same side twice, named `baseline` and `candidate`.
+fn Compare_Schema() -> Value
+{
+    return json!({
+        "type": "object",
+        "properties": {
+            "baseline": Side_Schema(),
+            "candidate": Side_Schema(),
+        },
+        "additionalProperties": false,
+    });
+}
+
+/// One side of `nomos.gate.compare` -- the whole of `Run_Schema`'s arguments, since both sides
+/// are judged by the same operation.
+fn Side_Schema() -> Value
+{
+    return json!({
+        "type": "object",
+        "properties": {
+            "root": {
+                "type": "string",
+                "description": "The tree this side judges. Absent, this server's own working directory.",
+            },
+            "include": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Which files under root this side judges. Empty selects everything.",
+            },
+            "exclude": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Which files under root this side does not judge, applied after include.",
+            },
+            "rules": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Which rules' findings count toward this side's disposition. Empty selects every registered rule.",
+            },
+        },
+        "additionalProperties": false,
+    });
+}
+
+/// `nomos.gate.explain`'s arguments: the two fields a finding is named by, both required.
+fn Explain_Schema() -> Value
+{
+    return json!({
+        "type": "object",
+        "properties": {
+            "root": {
+                "type": "string",
+                "description": "The tree to judge before answering. Absent, this server's own working directory.",
+            },
+            "rule": {
+                "type": "string",
+                "description": "The rule the finding to explain was produced by.",
+            },
+            "location": {
+                "type": "string",
+                "description": "One location that finding names, as a reader of a run's own output already sees it.",
+            },
+        },
+        "required": ["rule", "location"],
+        "additionalProperties": false,
+    });
+}
+
+/// `nomos.gate.correction`'s arguments: which tree, and whether the fix is only staged.
+fn Correction_Schema() -> Value
+{
+    return json!({
+        "type": "object",
+        "properties": {
+            "root": {
+                "type": "string",
+                "description": "The tree to correct. Absent, this server's own working directory.",
+            },
+            "commit": {
+                "type": "boolean",
+                "description": "Whether to actually write the corrected file, or only stage and validate it. Absent, false.",
+            },
+        },
+        "additionalProperties": false,
+    });
 }
 
 #[cfg(test)]

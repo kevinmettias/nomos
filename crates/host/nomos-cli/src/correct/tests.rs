@@ -24,6 +24,39 @@ const PHANTOM_FIXTURE: &str = "/// A list of things this crate owns.\n\
 /// Mirrored by `Test_Nonexistent_Check_That_Does_Not_Exist`.\n\
 pub const THINGS: &[&str] = &[\"a\"];\n";
 
+/// The name a fixture tree is filed under in the system temp directory.
+///
+/// A distinct type rather than a bare `&str`, so that the name and the contents a tree is
+/// built from cannot be handed over in the wrong order: both would otherwise be strings, and
+/// swapping them would produce a directory named after a file's whole text.
+struct CaseName<'a>(&'a str);
+
+/// A fresh temporary root holding one `a.rs` with `contents` -- the tree each test below
+/// judges. Named for what the file declares, since which claim it carries is the only thing
+/// that differs between them.
+fn Root_Holding_A_Claim(case: CaseName<'_>, contents: &str) -> PathBuf
+{
+    let root = Fresh_Root(case.0);
+    std::fs::write(root.join("a.rs"), contents).expect("the temporary root was created just above, so a new fixture file lands inside it");
+    return root;
+}
+
+/// Runs `command` and answers with the stdout it rendered.
+///
+/// Every run in this file expects the same exit code -- `Ok` -- because none of them meets a
+/// refusal; the assertion lives here so each test below reads as what it set up and what it
+/// then observed.
+fn Rendered_By(command: &CorrectCommand) -> String
+{
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let code = Run(command, &mut stdout, &mut stderr);
+    let rendered = String::from_utf8_lossy(&stdout).into_owned();
+
+    assert_eq!(code, ExitCode::Ok, "{rendered} / stderr: {}", String::from_utf8_lossy(&stderr));
+    return rendered;
+}
+
 #[test]
 fn Test_An_Unreadable_Root_Should_Refuse()
 {
@@ -54,8 +87,7 @@ fn Test_An_Empty_Tree_Should_Be_Vacuous()
 #[test]
 fn Test_A_Tree_With_No_Phantom_Should_Be_Clean()
 {
-    let root = Fresh_Root("nomos-cli-correct-clean-tree");
-    std::fs::write(root.join("a.rs"), "pub fn Something() -> u32 { return 1; }\n").expect("writable");
+    let root = Root_Holding_A_Claim(CaseName("nomos-cli-correct-clean-tree"), "pub fn Something() -> u32 { return 1; }\n");
     let command = CorrectCommand { root: root.clone(), commit: false };
     let mut stdout = Vec::new();
     let mut stderr = Vec::new();
@@ -71,19 +103,14 @@ fn Test_A_Tree_With_No_Phantom_Should_Be_Clean()
 #[test]
 fn Test_A_Dry_Run_Should_Report_The_Phantom_And_Change_Nothing_On_Disk()
 {
-    let root = Fresh_Root("nomos-cli-correct-dry-run");
+    let root = Root_Holding_A_Claim(CaseName("nomos-cli-correct-dry-run"), PHANTOM_FIXTURE);
     let path = root.join("a.rs");
-    std::fs::write(&path, PHANTOM_FIXTURE).expect("writable");
     let command = CorrectCommand { root: root.clone(), commit: false };
-    let mut stdout = Vec::new();
-    let mut stderr = Vec::new();
 
-    let code = Run(&command, &mut stdout, &mut stderr);
-    let reported = String::from_utf8_lossy(&stdout).into_owned();
+    let reported = Rendered_By(&command);
     let on_disk = std::fs::read_to_string(&path).expect("still readable");
 
     let _ignored = std::fs::remove_dir_all(&root);
-    assert_eq!(code, ExitCode::Ok, "{reported} / stderr: {}", String::from_utf8_lossy(&stderr));
     assert!(reported.contains("dry run"), "{reported}");
     assert_eq!(on_disk, PHANTOM_FIXTURE, "a dry run must not touch the file");
 }
@@ -95,17 +122,11 @@ fn Test_A_Dry_Run_Should_Report_The_Phantom_And_Change_Nothing_On_Disk()
 #[test]
 fn Test_Committing_Should_Strike_The_Claim_On_Disk_And_Leave_A_Clean_Rerun()
 {
-    let root = Fresh_Root("nomos-cli-correct-commit");
+    let root = Root_Holding_A_Claim(CaseName("nomos-cli-correct-commit"), PHANTOM_FIXTURE);
     let path = root.join("a.rs");
-    std::fs::write(&path, PHANTOM_FIXTURE).expect("writable");
     let command = CorrectCommand { root: root.clone(), commit: true };
-    let mut stdout = Vec::new();
-    let mut stderr = Vec::new();
 
-    let code = Run(&command, &mut stdout, &mut stderr);
-    let reported = String::from_utf8_lossy(&stdout).into_owned();
-
-    assert_eq!(code, ExitCode::Ok, "{reported} / stderr: {}", String::from_utf8_lossy(&stderr));
+    let reported = Rendered_By(&command);
     assert!(reported.contains("committed"), "{reported}");
 
     let corrected = std::fs::read_to_string(&path).expect("still readable");
@@ -118,13 +139,9 @@ fn Test_Committing_Should_Strike_The_Claim_On_Disk_And_Leave_A_Clean_Rerun()
     // Rerun over the corrected tree: the same universe now declares no mirror at all,
     // which is an admitted-gap advisory finding -- not a Phantom, so this command reports
     // the tree clean rather than finding a second candidate.
-    let mut second_stdout = Vec::new();
-    let mut second_stderr = Vec::new();
-    let second_code = Run(&command, &mut second_stdout, &mut second_stderr);
-    let second_reported = String::from_utf8_lossy(&second_stdout).into_owned();
-
+    let second_reported = Rendered_By(&command);
     let _ignored = std::fs::remove_dir_all(&root);
-    assert_eq!(second_code, ExitCode::Ok, "{second_reported}");
+
     assert!(second_reported.contains("clean"), "{second_reported}");
 }
 

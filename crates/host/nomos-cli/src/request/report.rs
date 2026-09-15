@@ -69,6 +69,11 @@ mod tests
     use nomos_spec_project::{Format, Stamp};
     use std::path::PathBuf;
 
+    /// The row identifier the projection test's accepted answer carries. Nothing asserts on
+    /// the number itself -- that test reads the paths the rendering names -- so it is a label
+    /// rather than a value, and naming it says so.
+    const PROJECTED_SUBMISSION_UID: i64 = 7;
+
     /// An accepted submission with no `--into` renders its id, kind, state and uid, and
     /// nothing about a projection that was never asked for.
     #[test]
@@ -91,7 +96,27 @@ mod tests
     #[test]
     fn Test_Report_Accepted_Should_Name_Where_The_Projection_Landed_When_One_Was_Written()
     {
-        let written = RenderAnswer {
+        let answer = SubmitAnswer {
+            submission: Example_Submission(),
+            uid: PROJECTED_SUBMISSION_UID,
+            written: Some(Written_Projection()),
+        };
+        let mut output = Vec::new();
+
+        let code = Report_Accepted(&answer, &mut output);
+
+        let rendered = String::from_utf8_lossy(&output).into_owned();
+        assert_eq!(code, ExitCode::Ok, "{rendered}");
+        assert!(rendered.contains("subject-dossier -> out/FR-1.md"), "{rendered}");
+        assert!(rendered.contains(&format!("sidecar ({SIDECAR_SUFFIX}) -> out/FR-1.sidecar.json")), "{rendered}");
+    }
+
+    /// The projection a `--into` produced: one body and one sidecar under `out/`, carrying a
+    /// well-formed stamp. Both digests are opaque to the rendering, which reads only the paths,
+    /// so a repeated character is enough to make them the right shape.
+    fn Written_Projection() -> RenderAnswer
+    {
+        return RenderAnswer {
             id: "subject-dossier".to_owned(),
             body: PathBuf::from("out/FR-1.md"),
             sidecar: PathBuf::from("out/FR-1.sidecar.json"),
@@ -106,15 +131,6 @@ mod tests
                 inputs: Vec::new(),
             },
         };
-        let answer = SubmitAnswer { submission: Example_Submission(), uid: 7, written: Some(written) };
-        let mut output = Vec::new();
-
-        let code = Report_Accepted(&answer, &mut output);
-
-        let rendered = String::from_utf8_lossy(&output).into_owned();
-        assert_eq!(code, ExitCode::Ok, "{rendered}");
-        assert!(rendered.contains("subject-dossier -> out/FR-1.md"), "{rendered}");
-        assert!(rendered.contains(&format!("sidecar ({SIDECAR_SUFFIX}) -> out/FR-1.sidecar.json")), "{rendered}");
     }
 
     /// The shipped catalogue no longer carrying the requested profile is a store-shaped

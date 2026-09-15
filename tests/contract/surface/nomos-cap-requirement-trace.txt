@@ -29,7 +29,7 @@ pub fn nomos_cap_requirement_trace::Encode_Payload(payload: &RequirementTracePay
 pub fn nomos_cap_requirement_trace::Entries<Fs: FileSystem>(directory: &Path, filesystem: &Fs) -> Result<Vec<Assessment>, String>
 pub fn nomos_cap_requirement_trace::Is_Requirement_Id(stem: &str) -> bool
 pub fn nomos_cap_requirement_trace::Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, filesystem: &Fs) -> TraceFact
-pub fn nomos_cap_requirement_trace::Parse(stem: &str, text: &str) -> Result<Assessment, String>
+pub fn nomos_cap_requirement_trace::Parse(source: EntrySource<'_>) -> Result<Assessment, String>
 pub fn nomos_cap_requirement_trace::Parse_Payload(bytes: &[u8]) -> Result<RequirementTracePayload, Refusal>
 pub fn nomos_cap_requirement_trace::Partials_With_No_Gap(assessments: &[Assessment]) -> Vec<Problem>
 pub fn nomos_cap_requirement_trace::Payload_Schema() -> SchemaId
@@ -45,6 +45,8 @@ pub struct field nomos_cap_requirement_trace::Assessment::record: Option<String>
 pub struct field nomos_cap_requirement_trace::Assessment::requirement: String
 pub struct field nomos_cap_requirement_trace::Assessment::sites: Vec<Site>
 pub struct field nomos_cap_requirement_trace::Assessment::verdict: Verdict
+pub struct field nomos_cap_requirement_trace::EntrySource::stem: &'a str
+pub struct field nomos_cap_requirement_trace::EntrySource::text: &'a str
 pub struct field nomos_cap_requirement_trace::FactContext::configuration: ConfigurationId
 pub struct field nomos_cap_requirement_trace::FactContext::generation: GenerationId
 pub struct field nomos_cap_requirement_trace::FactContext::snapshot: SnapshotId
@@ -59,6 +61,7 @@ pub struct field nomos_cap_requirement_trace::Site::symbol: String
 pub struct field nomos_cap_requirement_trace::TraceFact::fact: MaterializedFact
 pub struct field nomos_cap_requirement_trace::TraceFact::subject: SubjectId
 pub struct nomos_cap_requirement_trace::Assessment
+pub struct nomos_cap_requirement_trace::EntrySource<'a>
 pub struct nomos_cap_requirement_trace::FactContext
 pub struct nomos_cap_requirement_trace::Problem
 pub struct nomos_cap_requirement_trace::Refusal

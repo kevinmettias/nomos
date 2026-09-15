@@ -36,121 +36,6 @@ pub fn Validate_Document(document: &LedgerDocument, now: Timestamp) -> Vec<Strin
     return violations;
 }
 
-/// Sets of items that can only finish after one another, and so can never finish.
-///
-/// # Why `Check_Dependencies` does not already cover this
-///
-/// That check asks whether each named dependency is an item the ledger holds. Every member of
-/// a ring names a real item, so a ring is a valid document by that check -- and `Load` refuses
-/// only invalid documents, which means a cycle loads and nothing downstream looks again. What
-/// follows is silence rather than an error: every item in the ring lists as `waiting`, the
-/// label for a dependency that has not finished, and stays that way forever because no member
-/// can finish before another member that cannot finish either. The `next:` line computed over
-/// the whole board never names any of them, and `stranded` -- the one label that says a
-/// dependency will never finish -- is reserved by `OD-LEDGER-020` for a *declined* dependency
-/// and does not fire here.
-///
-/// # Why one violation per ring and not one per member
-///
-/// A caller has one thing to break. Reporting each member separately would read as several
-/// defects and would still not say which items have to be considered together to repair any
-/// of them.
-///
-/// # Why mutual reachability and not a walk that remembers what it has seen
-///
-/// A diamond -- two paths from one item down to another -- arrives at its bottom item twice,
-/// so a check written on "have I been here before" reports it as a ring. That shape is
-/// ordinary and common on a real board. What makes a ring a ring is that its members reach
-/// *each other*, and `Test_An_Acyclic_Diamond_Should_Not_Be_Reported` is the guard that keeps
-/// the two apart.
-///
-/// Put that way the self-dependency needs no case of its own: an item naming itself reaches
-/// itself, which is what every member of every longer ring also does.
-fn Dependency_Cycles(document: &LedgerDocument) -> Vec<String>
-{
-    let reaches = Reachability_Of(document);
-
-    let mut rings: Vec<String> = Vec::new();
-    let mut already_reported: BTreeSet<&ItemId> = BTreeSet::new();
-
-    for (item, downstream) in &reaches
-    {
-        if already_reported.contains(item) || !downstream.contains(item)
-        {
-            continue;
-        }
-
-        let ring: Vec<&ItemId> = downstream
-            .iter()
-            .copied()
-            .filter(|other| return reaches.get(other).is_some_and(|from_other| return from_other.contains(item)))
-            .collect();
-
-        for member in &ring
-        {
-            already_reported.insert(member);
-        }
-        rings.push(Ring_Violation(&ring));
-    }
-
-    rings.sort();
-
-    return rings;
-}
-
-/// Every item each item can reach through `depends_on`, directly or at any remove.
-///
-/// A dependency naming nothing the ledger holds is `Check_Dependencies`' violation and is
-/// skipped here rather than reported a second time in a second vocabulary.
-fn Reachability_Of(document: &LedgerDocument) -> BTreeMap<&ItemId, BTreeSet<&ItemId>>
-{
-    let mut edges: BTreeMap<&ItemId, Vec<&ItemId>> = BTreeMap::new();
-    for item in &document.items
-    {
-        edges.insert(&item.id, item.depends_on.iter().collect());
-    }
-
-    let mut reaches = BTreeMap::new();
-    for item in &document.items
-    {
-        let mut downstream: BTreeSet<&ItemId> = BTreeSet::new();
-        let mut pending: Vec<&ItemId> = edges.get(&item.id).cloned().unwrap_or_default();
-
-        while let Some(next) = pending.pop()
-        {
-            if !edges.contains_key(next) || !downstream.insert(next)
-            {
-                continue;
-            }
-            pending.extend(edges.get(next).cloned().unwrap_or_default());
-        }
-
-        reaches.insert(&item.id, downstream);
-    }
-
-    return reaches;
-}
-
-/// One ring, said so a reader knows which items have to be considered together.
-fn Ring_Violation(members: &[&ItemId]) -> String
-{
-    let Some(first) = members.first()
-    else
-    {
-        // Unreachable: a ring always holds the item that was found to reach itself.
-        return "an empty dependency cycle was reported, which is a defect in this check".to_owned();
-    };
-
-    if members.len() == 1
-    {
-        return format!("{first} depends on itself, which is a dependency cycle of one, so it can never finish");
-    }
-
-    let named: Vec<&str> = members.iter().map(|member| return member.As_Text()).collect();
-
-    return format!("{} form a dependency cycle, so none of them can ever finish", named.join(", "));
-}
-
 /// Identifiers that appear more than once, which makes every lookup ambiguous.
 fn Duplicate_Identifiers(document: &LedgerDocument) -> Vec<String>
 {
@@ -208,16 +93,14 @@ fn Check_State(item: &LedgerItem, violations: &mut Vec<String>)
     if item.state == ItemState::Claimed && item.claim.is_none()
     {
         violations.push(format!(
-            "{} is marked claimed and records no claim, so nothing can say who holds it or \
-             held it",
+            "{} is marked claimed and records no claim, so nothing can say who holds it or held it",
             item.id
         ));
     }
     if item.state == ItemState::Done && item.verified.is_none()
     {
         violations.push(format!(
-            "{} is done with no recorded verification; done_when is prose, and prose is not \
-             a predicate",
+            "{} is done with no recorded verification; done_when is prose, and prose is not a predicate",
             item.id
         ));
     }
@@ -248,9 +131,13 @@ fn Check_Territory(item: &LedgerItem, violations: &mut Vec<String>)
     for (first, second) in item.territory.Ambiguous_Paths()
     {
         violations.push(format!(
-            "{}'s territory lists `{first}` and `{second}`, which name the same subject; \
-             whoever wrote it probably believed they were reserving two things",
-            item.id
+            concat!(
+                "{}'s territory lists `{first}` and `{second}`, which name the same subject; ",
+                "whoever wrote it probably believed they were reserving two things",
+            ),
+            item.id,
+            first = first,
+            second = second
         ));
     }
 
@@ -259,6 +146,31 @@ fn Check_Territory(item: &LedgerItem, violations: &mut Vec<String>)
         violations.push(format!(
             "{} is workable but reserves nothing, so it excludes nobody",
             item.id
+        ));
+    }
+}
+
+/// A territory that still carries an unexpanded pattern.
+///
+/// `OD-LEDGER-013` withdrew `work add --territory-pattern`, the only authoring surface that
+/// ever put a value in [`crate::Territory::patterns`], and kept the field itself so a
+/// document that arrives with one anyway — hand-edited, or written by some future authoring
+/// surface — still fails closed: every comparison touching a pattern answers
+/// [`nomos_model::Intersection::Unknown`] rather than comparing as excluding nothing. That
+/// guard covers claiming, but a pattern sitting in a `Ready` or `Claimed` item was never
+/// refused by `Validate_Document` itself, which is the gap the record named and left open. This closes
+/// it: any non-empty `patterns` is reported, regardless of state, because the field is only
+/// ever non-empty by a hand edit that this check exists to catch.
+fn Check_Pattern(item: &LedgerItem, violations: &mut Vec<String>)
+{
+    if !item.territory.patterns.is_empty()
+    {
+        violations.push(format!(
+            concat!(
+                "{}'s territory carries unexpanded pattern(s) {:?}, which compare as unknown ",
+                "rather than as touching nothing and must not reach the board that way",
+            ),
+            item.id, item.territory.patterns
         ));
     }
 }
@@ -292,36 +204,154 @@ fn Check_Widenings(item: &LedgerItem, violations: &mut Vec<String>)
             if !held
             {
                 violations.push(format!(
-                    "{} records a widening by {} that added `{added}`, which its territory does \
-                     not reserve; the enlargement and the record it is kept in have come apart",
-                    item.id, widening.holder
+                    concat!(
+                        "{} records a widening by {} that added `{added}`, which its territory does ",
+                        "not reserve; the enlargement and the record it is kept in have come apart",
+                    ),
+                    item.id,
+                    widening.holder,
+                    added = added
                 ));
             }
         }
     }
 }
 
-/// A territory that still carries an unexpanded pattern.
+/// Sets of items that can only finish after one another, and so can never finish.
 ///
-/// `OD-LEDGER-013` withdrew `work add --territory-pattern`, the only authoring surface that
-/// ever put a value in [`crate::Territory::patterns`], and kept the field itself so a
-/// document that arrives with one anyway — hand-edited, or written by some future authoring
-/// surface — still fails closed: every comparison touching a pattern answers
-/// [`nomos_model::Intersection::Unknown`] rather than comparing as excluding nothing. That
-/// guard covers claiming, but a pattern sitting in a `Ready` or `Claimed` item was never
-/// refused by `Validate_Document` itself, which is the gap the record named and left open. This closes
-/// it: any non-empty `patterns` is reported, regardless of state, because the field is only
-/// ever non-empty by a hand edit that this check exists to catch.
-fn Check_Pattern(item: &LedgerItem, violations: &mut Vec<String>)
+/// # Why `Check_Dependencies` does not already cover this
+///
+/// That check asks whether each named dependency is an item the ledger holds. Every member of
+/// a ring names a real item, so a ring is a valid document by that check -- and `Load` refuses
+/// only invalid documents, which means a cycle loads and nothing downstream looks again. What
+/// follows is silence rather than an error: every item in the ring lists as `waiting`, the
+/// label for a dependency that has not finished, and stays that way forever because no member
+/// can finish before another member that cannot finish either. The `next:` line computed over
+/// the whole board never names any of them, and `stranded` -- the one label that says a
+/// dependency will never finish -- is reserved by `OD-LEDGER-020` for a *declined* dependency
+/// and does not fire here.
+///
+/// # Why one violation per ring and not one per member
+///
+/// A caller has one thing to break. Reporting each member separately would read as several
+/// defects and would still not say which items have to be considered together to repair any
+/// of them.
+///
+/// # Why mutual reachability and not a walk that remembers what it has seen
+///
+/// A diamond -- two paths from one item down to another -- arrives at its bottom item twice,
+/// so a check written on "have I been here before" reports it as a ring. That shape is
+/// ordinary and common on a real board. What makes a ring a ring is that its members reach
+/// *each other*, and `Test_An_Acyclic_Diamond_Should_Not_Be_Reported` is the guard that keeps
+/// the two apart.
+///
+/// Put that way the self-dependency needs no case of its own: an item naming itself reaches
+/// itself, which is what every member of every longer ring also does.
+fn Dependency_Cycles(document: &LedgerDocument) -> Vec<String>
 {
-    if !item.territory.patterns.is_empty()
+    let reaches = Reachability_Of(document);
+
+    let mut rings: Vec<String> = Vec::new();
+
+    Report_Rings(&reaches, &mut rings);
+
+    rings.sort();
+
+    return rings;
+}
+
+/// Every item each item can reach through `depends_on`, directly or at any remove.
+///
+/// A dependency naming nothing the ledger holds is `Check_Dependencies`' violation and is
+/// skipped here rather than reported a second time in a second vocabulary.
+fn Reachability_Of(document: &LedgerDocument) -> BTreeMap<&ItemId, BTreeSet<&ItemId>>
+{
+    let mut edges: BTreeMap<&ItemId, Vec<&ItemId>> = BTreeMap::new();
+    for item in &document.items
     {
-        violations.push(format!(
-            "{}'s territory carries unexpanded pattern(s) {:?}, which compare as unknown \
-             rather than as touching nothing and must not reach the board that way",
-            item.id, item.territory.patterns
-        ));
+        edges.insert(&item.id, item.depends_on.iter().collect());
     }
+
+    let mut reaches = BTreeMap::new();
+    for item in &document.items
+    {
+        let reachable = Reachable_From(&edges, &item.id);
+        reaches.insert(&item.id, reachable);
+    }
+
+    return reaches;
+}
+
+/// Every item `from` can reach through `edges`, directly or at any remove.
+///
+/// A dependency naming nothing the ledger holds stops the walk rather than being followed:
+/// `Check_Dependencies` reports that one, and a second report in a second vocabulary would
+/// read as a second defect.
+fn Reachable_From<'a>(edges: &BTreeMap<&'a ItemId, Vec<&'a ItemId>>, from: &'a ItemId) -> BTreeSet<&'a ItemId>
+{
+    let mut downstream: BTreeSet<&ItemId> = BTreeSet::new();
+    let mut pending: Vec<&ItemId> = edges.get(from).cloned().unwrap_or_default();
+
+    while let Some(next) = pending.pop()
+    {
+        if !edges.contains_key(next) || !downstream.insert(next)
+        {
+            continue;
+        }
+        pending.extend(edges.get(next).cloned().unwrap_or_default());
+    }
+
+    return downstream;
+}
+
+/// Appends one violation per ring among `reaches`.
+///
+/// A ring already named by an earlier one is skipped rather than counted twice: two rings
+/// sharing a member are one thing for a caller to break, and `already_reported` is what
+/// keeps the second from reading as a second defect.
+fn Report_Rings(reaches: &BTreeMap<&ItemId, BTreeSet<&ItemId>>, rings: &mut Vec<String>)
+{
+    let mut already_reported: BTreeSet<&ItemId> = BTreeSet::new();
+
+    for (item, downstream) in reaches
+    {
+        if already_reported.contains(item) || !downstream.contains(item)
+        {
+            continue;
+        }
+
+        let ring: Vec<&ItemId> = downstream
+            .iter()
+            .copied()
+            .filter(|other| return reaches.get(other).is_some_and(|from_other| return from_other.contains(item)))
+            .collect();
+
+        for member in &ring
+        {
+            already_reported.insert(member);
+        }
+        rings.push(Ring_Violation(&ring));
+    }
+}
+
+/// One ring, said so a reader knows which items have to be considered together.
+fn Ring_Violation(members: &[&ItemId]) -> String
+{
+    let Some(first) = members.first()
+    else
+    {
+        // Unreachable: a ring always holds the item that was found to reach itself.
+        return "an empty dependency cycle was reported, which is a defect in this check".to_owned();
+    };
+
+    if members.len() == 1
+    {
+        return format!("{first} depends on itself, which is a dependency cycle of one, so it can never finish");
+    }
+
+    let named: Vec<&str> = members.iter().map(|member| return member.As_Text()).collect();
+
+    return format!("{} form a dependency cycle, so none of them can ever finish", named.join(", "));
 }
 
 /// Every pair of concurrently-claimed items whose territories are not provably disjoint.
@@ -363,7 +393,9 @@ fn Not_Provably_Disjoint(item: &LedgerItem, other: &LedgerItem) -> Option<String
     let first = Claimant { item, holder: Holder_Of(item) };
     let second = Claimant { item: other, holder: Holder_Of(other) };
 
-    return match item.territory.Intersect(&other.territory)
+    let intersection = item.territory.Intersect(&other.territory);
+
+    return match intersection
     {
         Intersection::Disjoint => None,
         Intersection::Overlaps(shared) => Some(Overlap_Message(first, second, shared.len())),
@@ -411,201 +443,31 @@ fn Unknown_Message(first: Claimant<'_>, second: Claimant<'_>, reason: &nomos_mod
 }
 
 #[cfg(test)]
-mod tests
+#[path = "validation/tests.rs"]
+mod tests;
+
+/// Narrow, file-local proof for this file's own public function, addressed by name.
+///
+/// [`tests`] above is `validation/tests.rs`, a separate physical file whose behavioural
+/// suite this does not repeat or replace. `check-test-coverage`'s Rust front end keys a
+/// test's companion unit off the literal file it is textually written in, so a test living
+/// in that separate file can never address a function declared here, however it is named —
+/// this module gives [`Validate_Document`] the one-file address the check reads.
+#[cfg(test)]
+mod self_tests
 {
     use super::*;
-    use crate::{ItemKind, ItemOrigin, Territory};
 
     #[test]
-    fn Test_Validate_Document_Should_Collect_Every_Violation_Not_Just_The_First()
+    fn Test_Validate_Document_Should_Find_Nothing_Wrong_With_An_Empty_Board()
     {
-        let now = Timestamp::From_Unix_Seconds(1_000);
-        let duplicate_id = ItemId::New("DUP-1");
-        let first = Workable_Item(duplicate_id.clone());
-        let mut second = Workable_Item(duplicate_id);
-        second.territory = Territory::Of_Files(["src/other.rs"]);
-        let mut reserves_nothing = Workable_Item(ItemId::New("EMPTY-1"));
-        reserves_nothing.territory = Territory::Empty();
-
-        let document = LedgerDocument {
+        let empty = LedgerDocument {
             schema_version: crate::SCHEMA_VERSION,
-            items: vec![first, second, reserves_nothing],
+            items: Vec::new(),
         };
 
-        let violations = Validate_Document(&document, now);
+        let violations = Validate_Document(&empty, Timestamp::From_Unix_Seconds(0));
 
-        assert!(violations.iter().any(|line| line.contains("more than once")), "{violations:?}");
-        assert!(violations.iter().any(|line| line.contains("reserves nothing")), "{violations:?}");
-        assert_eq!(violations.len(), 2, "exactly these two violations for this fixture, no more, no fewer: {violations:?}");
-    }
-
-    /// Two items naming each other is a ring nothing in it can leave.
-    ///
-    /// Reported once for the ring, not once per member: a caller has one thing to break, and
-    /// two violations saying the same thing would read as two defects.
-    #[test]
-    fn Test_Two_Items_Depending_On_Each_Other_Should_Be_One_Violation()
-    {
-        let document = Document(vec![Depending("A-1", &["B-1"]), Depending("B-1", &["A-1"])]);
-
-        let cycles = Cycles_Among(&document);
-
-        assert_eq!(cycles.len(), 1, "{cycles:?}");
-        let ring = cycles.first().expect("asserted len 1 above");
-        assert!(ring.contains("A-1") && ring.contains("B-1"), "{ring}");
-    }
-
-    /// A ring longer than two, which a check comparing pairs would miss entirely.
-    #[test]
-    fn Test_A_Longer_Ring_Should_Be_One_Violation_Naming_Every_Member()
-    {
-        let document = Document(vec![
-            Depending("C-1", &["D-1"]),
-            Depending("D-1", &["E-1"]),
-            Depending("E-1", &["C-1"]),
-        ]);
-
-        let cycles = Cycles_Among(&document);
-
-        assert_eq!(cycles.len(), 1, "{cycles:?}");
-        let ring = cycles.first().expect("asserted len 1 above");
-        for member in ["C-1", "D-1", "E-1"]
-        {
-            assert!(ring.contains(member), "{member} missing from {ring}");
-        }
-    }
-
-    /// An item naming itself.
-    ///
-    /// Measured not to be covered by `Check_Dependencies`, which asks only whether the named
-    /// item is one the ledger holds -- and it is, it is this one. So it is a ring of one and
-    /// is reported as such, rather than left to a check that does not reach it.
-    #[test]
-    fn Test_An_Item_Depending_On_Itself_Should_Be_Reported_As_A_Ring_Of_One()
-    {
-        let document = Document(vec![Depending("F-1", &["F-1"])]);
-
-        let cycles = Cycles_Among(&document);
-
-        assert_eq!(cycles.len(), 1, "{cycles:?}");
-        let ring = cycles.first().expect("asserted len 1 above");
-        assert!(ring.contains("F-1") && ring.contains("depends on itself"), "{ring}");
-    }
-
-    /// The negative control: two paths from one item down to another is not a ring.
-    ///
-    /// A diamond arrives at `J-1` twice, so any check written on "have I been here before"
-    /// rather than on "do these reach each other" reports it. This is the shape that tells
-    /// those two apart, and a real board is full of it.
-    #[test]
-    fn Test_An_Acyclic_Diamond_Should_Not_Be_Reported()
-    {
-        let document = Document(vec![
-            Depending("G-1", &["H-1", "I-1"]),
-            Depending("H-1", &["J-1"]),
-            Depending("I-1", &["J-1"]),
-            Depending("J-1", &[]),
-        ]);
-
-        let cycles = Cycles_Among(&document);
-
-        assert!(cycles.is_empty(), "a diamond is not a cycle: {cycles:?}");
-    }
-
-    /// A widening row that names a path the territory does not reserve is a corruption.
-    ///
-    /// Unreachable through `Widen`, which grows the territory and records the growth in one
-    /// operation. Reachable by a hand edit and by any future writer that does the two as two
-    /// statements, which is exactly the shape `OD-LEDGER-039` keeps these rows to avoid.
-    ///
-    /// The falsifier for `Check_Widenings`. Without it the check is a guard nobody has watched
-    /// fail, which this repository counts as no guard at all.
-    #[test]
-    fn Test_A_Widening_Naming_A_Path_The_Territory_Lost_Should_Be_Reported()
-    {
-        let mut item = Workable_Item(ItemId::New("K-1"));
-        item.widened.push(crate::Widening {
-            holder: "agent-a".to_owned(),
-            added: vec!["src/b.rs".to_owned()],
-            widened_at: Timestamp::From_Unix_Seconds(1_000),
-        });
-
-        let violations = Validate_Document(&Document(vec![item]), Timestamp::From_Unix_Seconds(1_000));
-
-        assert!(
-            violations.iter().any(|line| return line.contains("src/b.rs") && line.contains("come apart")),
-            "a widening naming ground the territory does not hold must be reported: {violations:?}"
-        );
-    }
-
-    /// The control: the same widening, on a territory that does reserve what it added.
-    ///
-    /// Without this the check above is satisfied by a rule that reports every widening, which
-    /// would make a correctly widened board invalid -- and the board this lands on has one.
-    #[test]
-    fn Test_A_Widening_Whose_Paths_The_Territory_Reserves_Should_Be_Accepted()
-    {
-        let mut item = Workable_Item(ItemId::New("K-1"));
-        item.territory.paths.push("src/b.rs".to_owned());
-        item.widened.push(crate::Widening {
-            holder: "agent-a".to_owned(),
-            added: vec!["src/b.rs".to_owned()],
-            widened_at: Timestamp::From_Unix_Seconds(1_000),
-        });
-
-        let violations = Validate_Document(&Document(vec![item]), Timestamp::From_Unix_Seconds(1_000));
-
-        assert!(
-            violations.is_empty(),
-            "a widening whose paths the territory holds is the ordinary case: {violations:?}"
-        );
-    }
-
-    /// Every cycle violation `Validate_Document` reports over `document`, and nothing else.
-    fn Cycles_Among(document: &LedgerDocument) -> Vec<String>
-    {
-        let now = Timestamp::From_Unix_Seconds(1_000);
-
-        return Validate_Document(document, now)
-            .into_iter()
-            .filter(|line| return line.contains("cycle"))
-            .collect();
-    }
-
-    fn Document(items: Vec<LedgerItem>) -> LedgerDocument
-    {
-        return LedgerDocument { schema_version: crate::SCHEMA_VERSION, items };
-    }
-
-    /// A workable item that depends on the identifiers named.
-    fn Depending(id: &str, dependencies: &[&str]) -> LedgerItem
-    {
-        let mut item = Workable_Item(ItemId::New(id));
-        item.depends_on = dependencies.iter().map(|named| return ItemId::New(*named)).collect();
-
-        return item;
-    }
-
-    fn Workable_Item(id: ItemId) -> LedgerItem
-    {
-        return LedgerItem {
-            id,
-            title: "an item".to_owned(),
-            why: "because".to_owned(),
-            done_when: "when it is done".to_owned(),
-            kind: ItemKind::Correction,
-            origin: ItemOrigin::Proposed,
-            territory: Territory::Of_Files(["src/a.rs"]),
-            state: ItemState::Ready,
-            depends_on: Vec::new(),
-            blocked: None,
-            claim: None,
-            verification: None,
-            verified: None,
-            abandoned: Vec::new(),
-            displaced: Vec::new(),
-            widened: Vec::new(),
-            declined: None,
-        };
+        assert!(violations.is_empty(), "{violations:?}");
     }
 }

@@ -16,9 +16,17 @@ pub(crate) fn Variant() -> nomos_workspace::BuildVariant
     );
 }
 
+/// The byte every build this suite ingests as repeats across its configuration digest.
+/// Which byte it is carries no meaning; that all of them share it is what makes a
+/// permutation comparable with the baseline it is measured against.
+const FIXTURE_CONFIGURATION_BYTE: u8 = 0x2f;
+
 pub(crate) fn Configuration() -> ConfigurationId
 {
-    return ConfigurationId::From_Digest(Digest128::From_Bytes([0x2f; 16]));
+    return ConfigurationId::From_Digest(Digest128::From_Bytes([
+        FIXTURE_CONFIGURATION_BYTE;
+        Digest128::BYTE_LENGTH
+    ]));
 }
 
 pub(crate) fn Fresh() -> Workspace

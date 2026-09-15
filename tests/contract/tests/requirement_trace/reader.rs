@@ -4,6 +4,7 @@
 //! in this registry's clothes — so the reader has no lenient path at all.
 
 use crate::registry::{Entries, Is_Requirement_Id, Parse};
+use nomos_cap_requirement_trace::EntrySource;
 
 /// Every refusal, asserted as an `Err` rather than as a short `Ok`.
 #[test]
@@ -11,14 +12,14 @@ fn Test_The_Reader_Should_Refuse_Every_Malformed_Entry()
 {
     let sound = "verdict: Met\nsite: README.md#Nomos\n";
     assert!(
-        Parse("CHK-003", sound).is_ok(),
+        Parse(EntrySource { stem: "CHK-003", text: sound }).is_ok(),
         "the well-formed case must parse, or every refusal below proves only that the \
          reader refuses everything"
     );
 
     let partial_sound = "verdict: Partial\nsite: README.md#Nomos\ngap: README.md#Nomos\n";
     assert!(
-        Parse("CHK-003", partial_sound).is_ok(),
+        Parse(EntrySource { stem: "CHK-003", text: partial_sound }).is_ok(),
         "a Partial entry naming both a site and a gap must parse, or every Partial \
          refusal below proves only that the reader refuses every Partial"
     );
@@ -26,7 +27,7 @@ fn Test_The_Reader_Should_Refuse_Every_Malformed_Entry()
     for (stem, text, because) in MALFORMED
     {
         assert!(
-            Parse(stem, text).is_err(),
+            Parse(EntrySource { stem, text }).is_err(),
             "the reader accepted an entry with {because}"
         );
     }

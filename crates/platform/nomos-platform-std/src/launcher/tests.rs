@@ -6,6 +6,43 @@ use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant};
 
+// This file is itself reached through a `#[path]` attribute in `std_process_launcher.rs`, and a
+// module loaded that way does not own a directory: a bare `mod process_tree;` here would be
+// looked for beside `drain.rs`, not under `tests/`. The attribute says where the file is.
+#[path = "tests/process_tree.rs"]
+mod process_tree;
+
+/// A wall bound no test in this file waits out. Every fixture given it ends -- or is ended --
+/// for some other reason first, so a bound this long only ever shows that the bound which
+/// actually fired was not this one.
+const UNREACHED_WALL_BOUND: Duration = Duration::from_secs(30);
+
+/// The exit code a failing program reports, chosen neither zero nor a code a launcher might
+/// invent, so that an assertion on it distinguishes the real code from a default.
+const A_FAILING_EXIT_CODE: i32 = 3;
+
+/// A bound for a command the launcher refuses before it spawns anything. The bound is never
+/// reached; it is here because `Command::New` takes one.
+const REFUSAL_BOUND: Duration = Duration::from_secs(5);
+
+/// The bound the loud fixture is given. Generous, because the point of that fixture is that
+/// the launcher drains it rather than letting it block in `write`.
+const LOUD_BOUND: Duration = Duration::from_secs(10);
+
+/// How long a test tolerates before concluding the launcher waited for the program instead of
+/// ending it. The bound under test is one second, so a wait under this is the bound firing
+/// rather than the fixture finishing.
+const ENDED_WELL_WITHIN: Duration = Duration::from_secs(7);
+
+/// The idle bound given to a fixture whose wall bound is shorter, so that the wait is ended by
+/// a clock the test deliberately did not let expire.
+const IDLE_BOUND_LONGER_THAN_WALL: Duration = Duration::from_secs(5);
+
+/// How long a test tolerates the silent fixture's one-second idle bound taking to end it. The
+/// wall bound is [`UNREACHED_WALL_BOUND`], so a wait anywhere near this means the idle clock
+/// was never what ended the wait.
+const SILENT_END_BOUND: Duration = Duration::from_secs(10);
+
 /// A command that exits with the given code, on either platform family.
 fn Exit_With(code: i32) -> Command
 {
@@ -22,13 +59,13 @@ fn Exit_With(code: i32) -> Command
         vec!["sh".to_owned(), "-c".to_owned(), format!("exit {code}")]
     };
 
-    return Command::New(argv, Duration::from_secs(30));
+    return Command::New(argv, UNREACHED_WALL_BOUND);
 }
 
 #[test]
 fn Test_A_Successful_Program_Should_Report_A_Zero_Exit()
 {
-    let output = StdProcessLauncher.Run(&Exit_With(0)).unwrap();
+    let output = StdProcessLauncher.Run(&Exit_With(0)).expect("exit 0 is a program the host shell runs to completion");
 
     assert_eq!(output.outcome, ExitOutcome::Exited { code: 0 });
     assert!(output.outcome.Is_Successful());
@@ -38,9 +75,10 @@ fn Test_A_Successful_Program_Should_Report_A_Zero_Exit()
 #[test]
 fn Test_A_Failing_Program_Should_Report_Its_Exit_Code()
 {
-    let output = StdProcessLauncher.Run(&Exit_With(3)).unwrap();
+    let output = StdProcessLauncher.Run(&Exit_With(A_FAILING_EXIT_CODE))
+        .expect("exit 3 is a program the host shell runs to completion");
 
-    assert_eq!(output.outcome, ExitOutcome::Exited { code: 3 });
+    assert_eq!(output.outcome, ExitOutcome::Exited { code: A_FAILING_EXIT_CODE });
     assert!(!output.outcome.Is_Successful());
     assert!(
         output.outcome.Has_A_Verdict(),
@@ -56,7 +94,7 @@ fn Test_A_Missing_Program_Should_Be_An_Error_Not_A_Failed_Check()
 {
     let missing = Command::New(
         vec!["nomos-no-such-program-exists".to_owned()],
-        Duration::from_secs(5),
+        REFUSAL_BOUND,
     );
 
     let result = StdProcessLauncher.Run(&missing);
@@ -67,7 +105,7 @@ fn Test_A_Missing_Program_Should_Be_An_Error_Not_A_Failed_Check()
 #[test]
 fn Test_An_Empty_Command_Should_Be_Refused()
 {
-    let empty = Command::New(Vec::new(), Duration::from_secs(5));
+    let empty = Command::New(Vec::new(), REFUSAL_BOUND);
 
     let error = StdProcessLauncher.Run(&empty).expect_err("an empty argv names no program to run");
 
@@ -110,7 +148,7 @@ fn Loud(name: &str) -> LoudFixture
     let argv = Shout(&path.display().to_string());
 
     return LoudFixture {
-        command: Command::New(argv, Duration::from_secs(10)),
+        command: Command::New(argv, LOUD_BOUND),
         path,
         text,
     };
@@ -173,7 +211,7 @@ fn Test_A_Loud_Program_Should_Be_Judged_On_Its_Result_Not_Its_Volume()
 {
     let LoudFixture { command, path, .. } = Loud("result");
 
-    let output = StdProcessLauncher.Run(&command).unwrap();
+    let output = StdProcessLauncher.Run(&command).expect("the loud fixture is a shell command this host runs");
     Cleared(&path);
 
     assert_eq!(
@@ -200,7 +238,7 @@ fn Test_A_Loud_Programs_Output_Should_Arrive_Whole()
         text: expected,
     } = Loud("whole");
 
-    let output = StdProcessLauncher.Run(&command).unwrap();
+    let output = StdProcessLauncher.Run(&command).expect("the loud fixture is a shell command this host runs");
     Cleared(&path);
 
     assert_eq!(
@@ -249,7 +287,7 @@ fn Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out()
 {
     let slow = Command::New(A_Slow_Program(), Duration::from_secs(1));
     let started = Instant::now();
-    let output = StdProcessLauncher.Run(&slow).unwrap();
+    let output = StdProcessLauncher.Run(&slow).expect("ping is present on every host this suite runs on");
 
     assert!(
         matches!(output.outcome, ExitOutcome::TimedOut | ExitOutcome::Stalled { .. }),
@@ -258,7 +296,7 @@ fn Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out()
     );
     assert!(!output.outcome.Has_A_Verdict());
     assert!(
-        started.elapsed() < Duration::from_secs(7),
+        started.elapsed() < ENDED_WELL_WITHIN,
         "the timeout did not terminate the program, it waited for it"
     );
 }
@@ -297,10 +335,10 @@ fn A_Slow_Program() -> Vec<String>
 #[test]
 fn Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out()
 {
-    let silent = Command::New(A_Silent_Program(), Duration::from_secs(30))
+    let silent = Command::New(A_Silent_Program(), UNREACHED_WALL_BOUND)
         .With_Idle_Timeout(Duration::from_secs(1));
     let started = Instant::now();
-    let output = StdProcessLauncher.Run(&silent).unwrap();
+    let output = StdProcessLauncher.Run(&silent).expect("the silent fixture is a shell command this host runs");
 
     assert!(
         matches!(output.outcome, ExitOutcome::Stalled { .. }),
@@ -309,7 +347,7 @@ fn Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out()
     );
     assert!(!output.outcome.Has_A_Verdict());
     assert!(
-        started.elapsed() < Duration::from_secs(10),
+        started.elapsed() < SILENT_END_BOUND,
         "the idle bound did not terminate the program — it waited nearly the full 30-second \
          wall bound instead"
     );
@@ -332,9 +370,10 @@ fn Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out()
 fn Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled()
 {
     let progressing =
-        Command::New(A_Slow_Program(), Duration::from_secs(1)).With_Idle_Timeout(Duration::from_secs(5));
+        Command::New(A_Slow_Program(), Duration::from_secs(1))
+            .With_Idle_Timeout(IDLE_BOUND_LONGER_THAN_WALL);
     let started = Instant::now();
-    let output = StdProcessLauncher.Run(&progressing).unwrap();
+    let output = StdProcessLauncher.Run(&progressing).expect("ping is present on every host this suite runs on");
 
     assert!(
         !output.stdout.is_empty(),
@@ -348,7 +387,7 @@ fn Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled()
          as stalled"
     );
     assert!(
-        started.elapsed() < Duration::from_secs(7),
+        started.elapsed() < ENDED_WELL_WITHIN,
         "the wall bound did not terminate the program, it waited for it"
     );
 }
@@ -370,153 +409,4 @@ fn A_Silent_Program() -> Vec<String>
     }
 
     return vec!["sleep".to_owned(), "30".to_owned()];
-}
-
-/// A kill that reaches only the direct child is not the kill `cargo test` needs: the
-/// hanging process is usually the compiled test binary a step above `cargo` spawned, and
-/// Windows does not cascade a terminated process's own kill to what it started. `cmd`
-/// running `ping` as its own child reproduces that shape at two processes deep — this
-/// launcher's direct child is `cmd`, and `ping` is what `cmd` itself started and waited
-/// on, exactly as `cargo` starts and waits on its test binary.
-///
-/// `ping`'s output is redirected to a marker file rather than captured, so what is being
-/// asked is not "did the launcher see more output" but "did anything in the tree keep
-/// running after the launcher returned" — a question a kill that only reached `cmd` would
-/// answer wrong, because `ping` would still be there appending to the file on its own
-/// schedule.
-///
-/// Windows only. There is nothing platform-specific about the claim, but proving it
-/// without `taskkill` would need a mechanism this item's territory does not build; see
-/// `docs/records/OD-PLATFORM-001` for the scope this leaves open.
-#[test]
-fn Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child()
-{
-    if !cfg!(windows)
-    {
-        return;
-    }
-
-    let marker = Fresh_Marker_Path("tree");
-    let nested = Nested_Ping_Command(&marker);
-
-    let output = StdProcessLauncher.Run(&nested).unwrap();
-    Assert_Killed_Before_Completion(&output);
-
-    let (right_after_kill, settled) = Bytes_Written_Before_And_After_Settling(&marker);
-    Cleared(&marker);
-
-    Assert_Marker_Stopped_Growing(right_after_kill, settled);
-}
-
-/// A fresh path for a marker file, with anything left over from a previous run cleared
-/// first so a stale marker cannot be mistaken for one this run wrote.
-fn Fresh_Marker_Path(name: &str) -> PathBuf
-{
-    let mut marker = std::env::temp_dir();
-    marker.push(format!("nomos-launcher-{name}-{}.txt", std::process::id()));
-    let _ = std::fs::remove_file(&marker);
-
-    return marker;
-}
-
-/// A command whose direct child is `cmd`, and whose actual work is `ping` running two
-/// generations down — reproducing the shape `cargo test` and its compiled test binary
-/// take, at a short enough bound that the test does not have to wait it out.
-fn Nested_Ping_Command(marker: &Path) -> Command
-{
-    return Command::New(
-        vec![
-            "cmd".to_owned(),
-            "/C".to_owned(),
-            format!("ping -n 30 127.0.0.1 > {}", marker.display()),
-        ],
-        Duration::from_secs(2),
-    );
-}
-
-/// Verifies the wait ended because the launcher's bound expired, not because `ping`
-/// itself finished — the distinction that makes the marker file's later behavior mean
-/// anything.
-fn Assert_Killed_Before_Completion(output: &ProcessOutput)
-{
-    assert!(
-        !output.outcome.Has_A_Verdict(),
-        "the wait must have ended at a bound, not at the program's own completion"
-    );
-}
-
-/// How many bytes the marker holds right after the launcher returns, and again after
-/// giving anything still running a settling window to keep writing.
-fn Bytes_Written_Before_And_After_Settling(marker: &Path) -> (u64, u64)
-{
-    let right_after_kill = Bytes_Written(marker);
-    std::thread::sleep(Duration::from_millis(1_500)); // flakiness: allow: proves an absence, no event to wait on
-    let settled = Bytes_Written(marker);
-
-    return (right_after_kill, settled);
-}
-
-/// Verifies the marker stopped growing the moment the launcher returned — proof that
-/// `ping`, and not only the `cmd` above it, was actually killed.
-fn Assert_Marker_Stopped_Growing(right_after_kill: u64, settled: u64)
-{
-    assert_eq!(
-        right_after_kill, settled,
-        "the marker file kept growing after the launcher returned, so `ping` was still \
-         running under a `cmd` this launcher believed it had already killed"
-    );
-}
-
-/// How many bytes a file holds, or zero if it cannot be read — a marker file that a
-/// killed tree never got to create is itself evidence the tree is dead.
-fn Bytes_Written(path: &Path) -> u64
-{
-    return std::fs::metadata(path).map_or(0, |metadata| return metadata.len());
-}
-
-/// A grandchild holding the pipe open must not hold the launcher open.
-///
-/// Found while fixing the defect above rather than reported with it. The child exits
-/// and its own ends of the pipes close, but anything it handed to a background
-/// process stays open, so end of file never arrives. Reading until end of file —
-/// which is what the launcher did after the wait, and what a thread joined without a
-/// bound would do — waits for the grandchild instead of the child. Here the
-/// grandchild outlives the budget by an order of magnitude.
-#[test]
-fn Test_A_Grandchild_Holding_The_Pipe_Should_Not_Hold_The_Launcher()
-{
-    let orphaning = Command::New(A_Program_That_Orphans(), Duration::from_secs(20));
-    let started = Instant::now();
-    let output = StdProcessLauncher.Run(&orphaning).unwrap();
-    let waited = started.elapsed();
-
-    assert_eq!(
-        output.outcome,
-        ExitOutcome::Exited { code: 0 },
-        "the child exited promptly and its own verdict is what was asked for"
-    );
-    assert!(
-        waited < Duration::from_secs(20),
-        "waited {waited:?} for a process that was never the one being judged"
-    );
-}
-
-/// A shell that hands a pipe to a background process and then exits, so the grandchild
-/// outlives the budget by an order of magnitude.
-fn A_Program_That_Orphans() -> Vec<String>
-{
-    if cfg!(windows)
-    {
-        return vec![
-            "cmd".to_owned(),
-            "/C".to_owned(),
-            "start /B ping -n 30 127.0.0.1 & echo parent-done".to_owned(),
-        ];
-    }
-
-    return vec![
-        "sh".to_owned(),
-        "-c".to_owned(),
-        "sleep 29 & echo parent-done".to_owned(),
-    ];
 }

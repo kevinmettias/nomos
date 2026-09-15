@@ -21,6 +21,12 @@ use serde::Deserialize;
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
+/// The ten domain volumes this suite restores from.
+const DOMAIN_VOLUME_COUNT: usize = 10;
+
+/// How many rule violations the failure message names before it stops listing them.
+const VIOLATIONS_LISTED: usize = 5;
+
 const REGISTER: &str = include_str!("../../../../tests/corpus/families/counts.json");
 
 const REVISION: &str = "v14.36";
@@ -84,9 +90,8 @@ fn Read(root: &Path, relative: &str) -> String
 {
     let path = root.join(relative);
     return std::fs::read_to_string(&path)
-        // Every caller names a file the corpus is supposed to carry — a volume, a section lineage,
-        // a block manifest — so a failure here is the corpus not being the one this restores from.
-        // Which path was tried is the whole of the answer.
+        // Every caller names a file the corpus is supposed to carry, so a failure here is the
+        // corpus not being the one this restores from; which path was tried is the whole answer.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 }
 
@@ -94,9 +99,8 @@ fn Volumes(root: &Path) -> BTreeMap<String, String>
 {
     let directory = root.join("01_authoring/domain_volumes");
     let entries = std::fs::read_dir(&directory)
-        // The count at the end of this function would report a directory that will not read as the
-        // corpus holding the wrong number of volumes, and send the reader to the corpus rather
-        // than to the path.
+        // A directory that will not read would report as the corpus holding the wrong number of
+        // volumes, and send the reader to the corpus rather than to the path.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", directory.display()));
 
     let mut documents = BTreeMap::new();
@@ -112,7 +116,7 @@ fn Volumes(root: &Path) -> BTreeMap<String, String>
         documents.insert(name, text);
     }
 
-    assert_eq!(documents.len(), 10, "the ten domain volumes are the corpus this restores from");
+    assert_eq!(documents.len(), DOMAIN_VOLUME_COUNT, "the ten domain volumes are the corpus this restores from");
     return documents;
 }
 
@@ -143,12 +147,14 @@ fn Volume_Name(path: &Path) -> Option<String>
 /// Source truth, then the restoration on top of it.
 fn Restored_Store(root: &Path) -> RestoredStore
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("an in-memory store opens over no file, so this construction has no failure path");
     let documents = Volumes(root);
 
     for (name, markdown) in &documents
     {
-        Ingest_Source_Document(&mut store, name, REVISION, markdown).expect("ingests");
+        Ingest_Source_Document(&mut store, name, REVISION, markdown)
+            .expect("the corpus volumes are markdown the ingester parses, so it reports");
     }
 
     let report =
@@ -237,7 +243,11 @@ fn Test_Every_Restored_Member_Should_Resolve_By_Its_Identifier()
     let unresolved: Vec<&str> = report
         .members
         .iter()
-        .filter(|member| return Resolve_Model_Uid(&store, &member.id).expect("resolves").is_none())
+        .filter(|member| {
+            return Resolve_Model_Uid(&store, &member.id)
+                .expect("the restoration minted a node for every member it kept")
+                .is_none();
+        })
         .map(|member| return member.id.as_str())
         .collect();
 
@@ -318,7 +328,7 @@ fn Rows_Traced_To(store: &SpecificationStore, node_id: &str) -> Vec<String>
                 .query_map(rusqlite::params![node_id], |row| return row.get(0))
                 .and_then(std::iter::Iterator::collect);
         })
-        .expect("queries");
+        .expect("the lineage table answers a prepared query over its own rows");
 }
 
 /// Every family member traces to a source, and the two shapes stay distinct: a heading
@@ -355,7 +365,7 @@ fn Sources_Behind(store: &SpecificationStore, node_id: &str) -> u32
             rusqlite::params![node_id],
             |row| return row.get(0),
         )
-        .expect("queries");
+        .expect("the lineage table answers a count over the rows it owns");
 }
 
 /// The preservation half. A restoration that leaves the ledger broken has not restored
@@ -379,7 +389,7 @@ fn Test_The_Reconciled_Store_Should_Report_No_Preservation_Errors()
         run.Violations().is_empty(),
         "{}\nfirst: {:?}",
         run.Summary(),
-        run.Violations().iter().take(5).collect::<Vec<_>>()
+        run.Violations().iter().take(VIOLATIONS_LISTED).collect::<Vec<_>>()
     );
     assert!(run.Is_Passed(), "{}", run.Summary());
     Assert_The_Preservation_Rules_Examined_Something(&run);
@@ -400,7 +410,8 @@ fn Ingest_The_Lineage(store: &mut SpecificationStore, root: &Path)
 {
     let section_lineage = Read(root, "01_authoring/source_lineage/section-lineage.yaml");
     let sections = Parse_Section_Lineage(&section_lineage).expect("the section lineage parses");
-    let headings = Ingest_Section_Lineage(store, &sections, REVISION).expect("ingests");
+    let headings = Ingest_Section_Lineage(store, &sections, REVISION)
+        .expect("the section lineage is well formed, so ingestion reports rather than refuses");
     let block_lineage = Read(root, "01_authoring/source_lineage/source-block-lineage.yaml");
     let manifest = Parse_Block_Lineage(&block_lineage).expect("the block manifest parses");
 
@@ -464,16 +475,24 @@ fn Test_Restoring_The_Whole_Corpus_Twice_Should_Change_Nothing()
         mut store,
         report: first,
     } = Restored_Store(&root);
-    let nodes = store.Count(Table::Nodes).expect("counts");
-    let lineage = store.Count(Table::Lineage).expect("counts");
-    let aliases = store.Count(Table::NodeAliases).expect("counts");
+    let nodes = Count(&store, Table::Nodes);
+    let lineage = Count(&store, Table::Lineage);
+    let aliases = Count(&store, Table::NodeAliases);
 
     let again = Restore_Members(&mut store, REVISION, &Volumes(&root)).expect("restores again");
     assert!(again.contested_aliases.is_empty(), "{:?}", again.contested_aliases);
 
     assert!(nodes > 0 && lineage > 0 && aliases > 0, "the first run wrote nothing");
-    assert_eq!(store.Count(Table::Nodes).expect("counts"), nodes);
-    assert_eq!(store.Count(Table::Lineage).expect("counts"), lineage);
-    assert_eq!(store.Count(Table::NodeAliases).expect("counts"), aliases);
+    assert_eq!(Count(&store, Table::Nodes), nodes);
+    assert_eq!(Count(&store, Table::Lineage), lineage);
+    assert_eq!(Count(&store, Table::NodeAliases), aliases);
     assert_eq!(first.members.len(), Restored_Store(&root).report.members.len());
+}
+
+/// The store's own count of one table, so two runs compare as two counts rather than two reads.
+fn Count(store: &SpecificationStore, table: Table) -> u32
+{
+    return store
+        .Count(table)
+        .expect("the store answers a count over the tables it owns");
 }

@@ -35,15 +35,22 @@ pub(crate) fn Census(store: &SpecificationStore, scope: RowScope) -> RowCensus
     return store.Row_Census(scope).expect("takes a census");
 }
 
+/// Why a fixture query had to return a row, named so a caller cannot transpose it with the
+/// query text it sits beside.
+///
+/// The two are both prose describing one call, so as two bare `&str`s they compile in either
+/// order — and the failure would then quote the other one's explanation at whichever row was
+/// missing.
+pub(crate) struct Blame<'a>(pub(crate) &'a str);
+
 /// Two columns of one row, which is what it takes to address a table row.
 pub(crate) fn Two<A: rusqlite::types::FromSql, B: rusqlite::types::FromSql>(
     store: &SpecificationStore,
     sql: &str,
-    blame: &str,
+    blame: Blame<'_>,
 ) -> (A, B)
 {
-    return store
-        .Connection()
-        .query_row(sql, [], |row| return Ok((row.get(0)?, row.get(1)?)))
-        .expect(blame);
+    let found = store.Connection().query_row(sql, [], |row| return Ok((row.get(0)?, row.get(1)?)));
+
+    return found.unwrap_or_else(|cause| panic!("{}: {cause}", blame.0));
 }

@@ -91,11 +91,16 @@ mod tests
         assert_eq!(Severity_Of(&finding), DiagnosticSeverity::Hint);
     }
 
+    /// The one byte every fixture digest below is filled with, so a real `SubjectId` is
+    /// distinguishable from one that was never derived, without the value itself pretending
+    /// to mean anything.
+    const FIXTURE_DIGEST_BYTE: u8 = 7;
+
     fn Example_Finding(applicability: Applicability, gate: GateCategory) -> Finding
     {
         return Finding {
             rule: RuleId::New("test-rule"),
-            subject: SubjectId::From_Digest(nomos_contracts::Digest128::From_Bytes([7; nomos_contracts::Digest128::BYTE_LENGTH])),
+            subject: SubjectId::From_Digest(nomos_contracts::Digest128::From_Bytes([FIXTURE_DIGEST_BYTE; nomos_contracts::Digest128::BYTE_LENGTH])),
             subject_name: "Example".to_owned(),
             applicability,
             evidence: EvidenceClass::Derived,

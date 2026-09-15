@@ -9,7 +9,7 @@
 //! [`CorrectionPlan`]/[`StagedPlan`]/[`ValidatedPlan`]/[`CommittedPlan`] -- the same view a
 //! real consumer has.
 
-use nomos_contracts::{ConfigurationId, Digest128, EvidenceClass, MutationClass, ProviderId};
+use nomos_contracts::{ConfigurationId, Digest128, EvidenceClass, MutationClass, ProviderId, SnapshotId};
 use nomos_corrections::{
     ChangeSet, CommittedPlan, CorrectionCandidate, CorrectionClass, CorrectionError, CorrectionId, CorrectionPlan, Edit, StagedPlan,
     ValidatedPlan,
@@ -32,9 +32,36 @@ fn Real_Workspace(configuration_seed_byte: u8) -> Workspace
     let mut workspace = Workspace::Empty(variant, configuration);
 
     let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
-    workspace.Apply(&initial).expect("a fresh present is always accepted");
+    workspace.Apply(&initial).expect("Workspace::Apply admits a Present whose path holds no prior content");
 
     return workspace;
+}
+
+/// One mechanical candidate rewriting `a.rs` from `prior` to `"new"`, wrapped in the plan a
+/// caller would submit it as.
+fn Rewrite_Plan(prior: &str) -> CorrectionPlan
+{
+    let edit = Edit::New("a.rs", Some(prior.to_owned()), Some("new".to_owned()));
+    let candidate = CorrectionCandidate::New("rewrite a.rs", ChangeSet::Empty().With(edit), CorrectionClass::Mechanical, vec![]);
+
+    return CorrectionPlan::New(vec![candidate]).expect("one candidate is a valid plan");
+}
+
+/// Stage, validate and commit `plan` against `workspace`, asserting at each seam that the
+/// staged plan was built against `starting` and that the mutation class it declares is the one
+/// the stage carries.
+fn Advance(plan: &CorrectionPlan, workspace: &mut Workspace, starting: SnapshotId) -> CommittedPlan
+{
+    let staged = plan.Stage(workspace).expect("the candidate's declared prior content matches the real workspace");
+    assert_eq!(staged.Base(), starting, "a plan stages against the state it was previewed on");
+    assert_eq!(StagedPlan::Mutation_Class(), MutationClass::Validate);
+
+    let validated = staged.Validate(workspace).expect("the workspace has not moved since staging");
+    assert_eq!(ValidatedPlan::Mutation_Class(), MutationClass::Validate);
+
+    return validated
+        .Commit(workspace, Agent_Judged())
+        .expect("commits cleanly against the real workspace");
 }
 
 /// What a caller with nothing stronger than its own judgment supplies to
@@ -58,23 +85,11 @@ fn Test_The_Full_Lifecycle_Round_Trips_A_Real_Workspace_Through_The_Public_Api()
 {
     let mut workspace = Real_Workspace(CONFIGURATION_SEED_BYTE_ROUND_TRIP);
     let starting = workspace.Id();
-
-    let edit = Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()));
-    let candidate = CorrectionCandidate::New("rewrite a.rs", ChangeSet::Empty().With(edit), CorrectionClass::Mechanical, vec![]);
-    let plan = CorrectionPlan::New(vec![candidate]).expect("one candidate is a valid plan");
+    let plan = Rewrite_Plan("old");
 
     assert!(!plan.Preview().Rendered().is_empty(), "a real preview renders something for a real edit");
 
-    let staged = plan.Stage(&workspace).expect("the candidate's declared prior content matches the real workspace");
-    assert_eq!(staged.Base(), starting);
-    assert_eq!(StagedPlan::Mutation_Class(), MutationClass::Validate);
-
-    let validated = staged.Validate(&workspace).expect("the workspace has not moved since staging");
-    assert_eq!(ValidatedPlan::Mutation_Class(), MutationClass::Validate);
-
-    let committed = validated
-        .Commit(&mut workspace, Agent_Judged())
-        .expect("commits cleanly against the real workspace");
+    let committed = Advance(&plan, &mut workspace, starting);
     assert_ne!(committed.After(), starting, "a real commit must have actually advanced the workspace");
     assert_eq!(
         workspace.Content_Of("a.rs"),
@@ -100,10 +115,7 @@ fn Test_The_Full_Lifecycle_Round_Trips_A_Real_Workspace_Through_The_Public_Api()
 fn Test_Staging_Against_Stale_Content_Reports_The_Real_Digest_Of_What_Is_There()
 {
     let workspace = Real_Workspace(CONFIGURATION_SEED_BYTE_STALE);
-
-    let edit = Edit::New("a.rs", Some("not what is there".to_owned()), Some("new".to_owned()));
-    let candidate = CorrectionCandidate::New("rewrite a.rs", ChangeSet::Empty().With(edit), CorrectionClass::Mechanical, vec![]);
-    let plan = CorrectionPlan::New(vec![candidate]).expect("one candidate is a valid plan");
+    let plan = Rewrite_Plan("not what is there");
 
     let refusal = plan.Stage(&workspace).expect_err("the declared prior content does not match the real workspace");
 

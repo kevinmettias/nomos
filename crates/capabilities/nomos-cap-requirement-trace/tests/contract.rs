@@ -15,16 +15,18 @@ use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity,
 #[test]
 fn Test_The_Ceiling_Should_Admit_A_Weaker_Offer()
 {
+    let guarantee = Guarantee::New(
+        FactVariant::Syntactic,
+        Assurance::Unsound,
+        Assurance::Unknown,
+        IncrementalGranularity::WholeWorkspace,
+    );
+
     contract_testing::Assert_Ceiling_Admits(
         Capability_Contract(),
         Capability(),
         CONTRACT_VERSION,
-        Guarantee::New(
-            FactVariant::Syntactic,
-            Assurance::Unsound,
-            Assurance::Unknown,
-            IncrementalGranularity::WholeWorkspace,
-        ),
+        guarantee,
     );
 }
 
@@ -34,14 +36,16 @@ fn Test_The_Ceiling_Should_Admit_A_Weaker_Offer()
 #[test]
 fn Test_The_Ceiling_Should_Refuse_A_Claim_Of_Semantic_Resolution()
 {
+    let guarantee = Guarantee::New(
+        FactVariant::SemanticallyResolved,
+        Assurance::Sound,
+        Assurance::Sound,
+        IncrementalGranularity::WholeWorkspace,
+    );
+
     contract_testing::Assert_Ceiling_Refuses(
         Capability_Contract(),
-        Guarantee::New(
-            FactVariant::SemanticallyResolved,
-            Assurance::Sound,
-            Assurance::Sound,
-            IncrementalGranularity::WholeWorkspace,
-        ),
+        guarantee,
         "a provider claiming semantic resolution for a capability that only ever compares \
          literal text would satisfy every rule that needs it",
     );

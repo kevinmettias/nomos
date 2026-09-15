@@ -10,8 +10,10 @@
 //! this crate's own private access (`nomos_capability`, `nomos_contracts`, `nomos_model`).
 
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
-use nomos_lang_go_modules::{Declared_Guarantee, Discover_Workspace, FactContext, Materialize_Workspace, Provider_Offer};
-use std::path::PathBuf;
+use nomos_lang_go_modules::{
+    Declared_Guarantee, Discover_Workspace, FactContext, Materialize_Workspace, ModuleFact, Provider_Offer,
+};
+use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static COUNTER: AtomicU64 = AtomicU64::new(0);
@@ -39,7 +41,10 @@ impl IntegrationWorkspace
         return Self { root };
     }
 
-    fn Write(&self, relative: &str, content: &str)
+    /// `relative` is a `&Path` rather than a `&str` so the two positions have distinct
+    /// types: a caller that swapped the fixture's path for its content would be writing
+    /// a file named after the module source, and only the type system would say so.
+    fn Write(&self, relative: &Path, content: &str)
     {
         let path = self.root.join(relative);
         if let Some(parent) = path.parent()
@@ -52,18 +57,33 @@ impl IntegrationWorkspace
 
 impl Drop for IntegrationWorkspace
 {
+    /// Drop cannot propagate a failure, so a failed removal is reported rather than
+    /// silently discarded; each root is uniquely named, so the worst case is one leaked
+    /// directory, not a sibling test's fixture disappearing out from under it.
     fn drop(&mut self)
     {
-        let _ = std::fs::remove_dir_all(&self.root);
+        if let Err(error) = std::fs::remove_dir_all(&self.root)
+        {
+            eprintln!("failed to remove temporary workspace {}: {error}", self.root.display());
+        }
     }
 }
+
+/// Fill bytes distinct enough that the three digests below differ from one another; each
+/// value carries no meaning beyond "not equal to the others".
+const VARIANT_DIGEST_FILL: u8 = 2;
+const CONFIGURATION_DIGEST_FILL: u8 = 3;
+
+/// A generation past `GenerationId::INITIAL`, which is what makes a fact materialized at
+/// it newer than one materialized at `INITIAL`; the value itself means nothing further.
+const NEWER_GENERATION: u64 = 5;
 
 fn Context_At(generation: GenerationId) -> FactContext
 {
     return FactContext {
         snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
-        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
-        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
+        variant: BuildVariantId::From_Digest(Digest128::From_Bytes([VARIANT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
+        configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_DIGEST_FILL; Digest128::BYTE_LENGTH])),
         generation,
     };
 }
@@ -79,14 +99,28 @@ fn Context() -> FactContext
 fn Two_Module_Workspace() -> IntegrationWorkspace
 {
     let workspace = IntegrationWorkspace::New();
-    workspace.Write("go.work", "go 1.21\n\nuse (\n\t./a\n\t./b\n)\n");
+    workspace.Write(Path::new("go.work"), "go 1.21\n\nuse (\n\t./a\n\t./b\n)\n");
     workspace.Write(
-        "a/go.mod",
+        Path::new("a/go.mod"),
         "module example.com/a\n\ngo 1.21\n\nrequire example.com/b v0.0.0\n",
     );
-    workspace.Write("b/go.mod", "module example.com/b\n\ngo 1.21\n");
+    workspace.Write(Path::new("b/go.mod"), "module example.com/b\n\ngo 1.21\n");
 
     return workspace;
+}
+
+/// The single fact a workspace declaring one `go.mod` materializes, at `generation` — the
+/// fixture the solo-module tests below share.
+fn Solo_Modules_Fact_At(generation: GenerationId) -> ModuleFact
+{
+    let workspace = IntegrationWorkspace::New();
+    workspace.Write(Path::new("go.mod"), "module example.com/solo\n");
+
+    return Materialize_Workspace(&workspace.root, Context_At(generation))
+        .expect("a real workspace")
+        .into_iter()
+        .next()
+        .expect("the solo module produced one fact");
 }
 
 // -----------------------------------------------------------------------------------------
@@ -101,11 +135,7 @@ fn Test_A_Modules_Materialized_Fact_Should_Be_Accepted_And_Read_Back_By_Nomos_An
 {
     use nomos_analysis::{FactStore, MemoryFactStore};
 
-    let workspace = IntegrationWorkspace::New();
-    workspace.Write("go.mod", "module example.com/solo\n");
-
-    let facts = Materialize_Workspace(&workspace.root, Context()).expect("a real single-module workspace");
-    let module = facts.into_iter().next().expect("the solo module produced one fact");
+    let module = Solo_Modules_Fact_At(GenerationId::INITIAL);
     let key = module.fact.Key().clone();
     let mut store = MemoryFactStore::New();
 
@@ -127,24 +157,13 @@ fn Test_Materializing_An_Older_Generations_Fact_Over_A_Newer_One_Should_Be_Refus
 {
     use nomos_analysis::{FactError, MemoryFactStore};
 
-    let workspace = IntegrationWorkspace::New();
-    workspace.Write("go.mod", "module example.com/solo\n");
-
-    let newer = Materialize_Workspace(&workspace.root, Context_At(GenerationId::From_Raw(5)))
-        .expect("a real workspace")
-        .into_iter()
-        .next()
-        .expect("the solo module produced one fact");
-    let older = Materialize_Workspace(&workspace.root, Context())
-        .expect("a real workspace")
-        .into_iter()
-        .next()
-        .expect("the solo module produced one fact");
     let mut store = MemoryFactStore::New();
-    store.Materialize(newer.fact, &[]).expect("the newer generation is written first");
+    store
+        .Materialize(Solo_Modules_Fact_At(GenerationId::From_Raw(NEWER_GENERATION)).fact, &[])
+        .expect("the newer generation is written first");
 
     let error = store
-        .Materialize(older.fact, &[])
+        .Materialize(Solo_Modules_Fact_At(GenerationId::INITIAL).fact, &[])
         .expect_err("writing behind the current generation must be refused");
 
     assert!(matches!(error, FactError::Backdated { .. }), "{error:?}");
@@ -299,11 +318,7 @@ fn Test_The_Declared_Guarantee_Should_Satisfy_A_Requirement_That_Accepts_Unknown
 #[test]
 fn Test_A_Modules_Subject_Should_Match_Nomos_Models_Own_Subject_Of_Its_Path()
 {
-    let workspace = IntegrationWorkspace::New();
-    workspace.Write("go.mod", "module example.com/solo\n");
-
-    let facts = Materialize_Workspace(&workspace.root, Context()).expect("a real workspace");
-    let module = facts.into_iter().next().expect("the solo module produced one fact");
+    let module = Solo_Modules_Fact_At(GenerationId::INITIAL);
 
     assert_eq!(module.subject, nomos_model::Subject_Of_Path(&module.path));
 }

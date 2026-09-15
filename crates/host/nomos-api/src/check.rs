@@ -17,7 +17,15 @@ use crate::{composition, sources};
 use nomos_check_orchestration::{CheckCommand, CheckOutcome, Run, RunContext};
 use nomos_contracts::Finding;
 use nomos_composer_std::{ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
+use nomos_rules::SourceFile;
 use serde::Serialize;
+use std::path::Path;
+
+mod claim_response;
+mod examined_response;
+
+pub use claim_response::ClaimResponse;
+pub use examined_response::ExaminedResponse;
 
 /// Walks `command.root` and runs every registered rule over it -- `nomos-cli::check`'s own
 /// "empty selects everything" default -- and hands back a JSON-serializable [`CheckResponse`].
@@ -35,12 +43,22 @@ pub fn Handle_Check_Run(command: &CheckCommand) -> CheckResponse
         return CheckResponse::NoSource;
     }
 
+    let outcome = Judged(&sources, &command.root);
+
+    return CheckResponse::From(outcome);
+}
+
+/// Every registered rule run over `sources`, with the build variant this crate's own
+/// composition root names.
+fn Judged(sources: &[SourceFile], root: &Path) -> CheckOutcome
+{
     let mut store = nomos_analysis::MemoryFactStore::New();
-    let outcome = Run(
-        &sources,
+
+    return Run(
+        sources,
         RunContext {
             variant: composition::Host_Variant(),
-            root: &command.root,
+            root,
             launcher: &LAUNCHER,
             filesystem: &FILE_SYSTEM,
             environment: &ENVIRONMENT,
@@ -49,8 +67,6 @@ pub fn Handle_Check_Run(command: &CheckCommand) -> CheckResponse
         },
         &[],
     );
-
-    return CheckResponse::From(outcome);
 }
 
 /// A serializable twin of [`nomos_check_orchestration::CheckOutcome`].
@@ -103,55 +119,11 @@ impl CheckResponse
     }
 }
 
-/// A serializable twin of [`nomos_check_orchestration::Examined`].
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
-pub struct ExaminedResponse
-{
-    /// Files the walk read.
-    pub files: usize,
-    /// Files a syntax fact was materialized for.
-    pub facts: usize,
-}
-
-impl ExaminedResponse
-{
-    fn From(examined: nomos_check_orchestration::Examined) -> Self
-    {
-        return Self { files: examined.files, facts: examined.facts };
-    }
-}
-
-/// A serializable twin of [`nomos_check_orchestration::Claim`].
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum ClaimResponse
-{
-    Complete,
-    Incomplete,
-}
-
-impl ClaimResponse
-{
-    fn From(claim: nomos_check_orchestration::Claim) -> Self
-    {
-        return match claim
-        {
-            nomos_check_orchestration::Claim::Complete => Self::Complete,
-            nomos_check_orchestration::Claim::Incomplete => Self::Incomplete,
-        };
-    }
-}
-
 #[cfg(test)]
 mod tests
 {
     use super::*;
     use std::path::PathBuf;
-
-    fn Command_At(root: PathBuf) -> CheckCommand
-    {
-        return CheckCommand { root };
-    }
 
     /// A real run over a fixture tree with a real blocking phantom claim reaches a real
     /// `Judged` outcome carrying that finding -- not `Unreadable` or `NoSource` -- proving
@@ -216,9 +188,17 @@ mod tests
     {
         let response = CheckResponse::NoSource;
 
-        let json = serde_json::to_string(&response).expect("a CheckResponse always serializes");
+        let json = serde_json::to_string(&response)
+            .expect("a derived Serialize over owned data has nothing to refuse");
         let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
 
         assert_eq!(parsed.get("outcome").expect("a serialized CheckResponse always has this field"), "no_source", "{json}");
+    }
+
+    /// A bare `CheckCommand` over `root` -- this verb selects everything by default, so the
+    /// root is the whole of what a caller supplies.
+    fn Command_At(root: PathBuf) -> CheckCommand
+    {
+        return CheckCommand { root };
     }
 }

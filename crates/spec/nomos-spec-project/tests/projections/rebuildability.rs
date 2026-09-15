@@ -88,8 +88,10 @@ fn Probe(content: Content) -> Profile
 
 fn Seeded() -> SpecificationStore
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    nomos_spec_store::Seed_Governing_Records(&mut store).expect("seeds");
+    let mut store =
+        SpecificationStore::In_Memory().expect("an in-memory store is constructed for this test");
+    nomos_spec_store::Seed_Governing_Records(&mut store)
+        .expect("the seed wrote the governing records into the store this test opened");
 
     return store;
 }
@@ -216,6 +218,15 @@ fn Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content(
     let store = Seeded();
     let screened = Screen_The_Shipped_Profiles(&store);
 
+    Assert_The_Rendering_Profiles_Are_The_Pinned_Set(&screened);
+    Assert_The_Witnesses_Are_The_Pinned_Pair(&screened);
+    Assert_The_Skipped_Profiles_Are_The_Pinned_Set(&screened);
+}
+
+/// The profiles that render over a seeded store: the set the Required projections step may
+/// draw from, so a change here changes what the gate can ask for.
+fn Assert_The_Rendering_Profiles_Are_The_Pinned_Set(screened: &Outcomes)
+{
     assert_eq!(
         screened.renders,
         // `relation-families` renders here and is deliberately *not* required.
@@ -233,6 +244,13 @@ fn Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content(
         "the set of profiles that render without a corpus moved. This is the set the Required \
          projections step may draw from, so a change here changes what the gate can ask for."
     );
+}
+
+/// The profiles the screen passes and the build still refuses: the witnesses to
+/// `Reaches_Only_Seeded_Content` being necessary and not sufficient. An empty set would mean
+/// the screen had silently become the answer.
+fn Assert_The_Witnesses_Are_The_Pinned_Pair(screened: &Outcomes)
+{
     assert_eq!(
         screened.screened_but_refuses,
         Named(&["feature-design", "release-specification"]),
@@ -240,6 +258,12 @@ fn Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content(
          only seeded kinds and still refuses, because it filters nodes on a kind only a corpus \
          has. An empty set here would mean the screen had silently become the answer."
     );
+}
+
+/// The subject-scoped profiles this comparison says nothing about, which the gate exercises
+/// through `Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store` instead.
+fn Assert_The_Skipped_Profiles_Are_The_Pinned_Set(screened: &Outcomes)
+{
     assert_eq!(
         screened.skipped,
         // `implementation-context-pack` joined the subject-scoped four when `OD-PROJECT-005`
@@ -268,8 +292,11 @@ fn Test_Rendering_Over_A_Seeded_Store_Should_Imply_Reaching_Only_Seeded_Content(
 /// The pair is written here and in `.github/workflows/gate.yml`. That duplication is chosen:
 /// the workflow is what CI runs and this is what a local `cargo test` can check, and deriving
 /// one from the other would put a workflow parser in this band. `OD-PROJECT-002` records it.
+/// How many profiles the gate names as required, which is the length of the pair below.
+const REQUIRED_PROFILE_COUNT: usize = 2;
+
 /// Every profile the gate names as required, in `.github/workflows/gate.yml`.
-fn Required_Profile_Ids() -> [&'static str; 2]
+fn Required_Profile_Ids() -> [&'static str; REQUIRED_PROFILE_COUNT]
 {
     return ["diagram-set", "domain-specification"];
 }

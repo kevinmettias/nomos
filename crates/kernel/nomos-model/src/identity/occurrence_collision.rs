@@ -52,24 +52,38 @@ pub fn Occurrence_Collisions_In(findings: &[&Finding]) -> Vec<OccurrenceCollisio
 
     for finding in findings
     {
-        let finding: &Finding = finding;
-        let occurrence = FindingOccurrenceId::Of(finding);
-
-        if let Some(first) = seen.get(&occurrence)
-        {
-            collisions.push(OccurrenceCollision {
-                occurrence,
-                first: (*first).clone(),
-                second: finding.clone(),
-            });
-
-            continue;
-        }
-
-        seen.insert(occurrence, finding);
+        Absorb(&mut seen, &mut collisions, finding);
     }
 
     return collisions;
+}
+
+/// Fold one finding into a population being scanned for collisions.
+///
+/// A finding whose identity has already been seen is reported against the one that reached it
+/// first; any other is recorded so that a later finding can be reported against it. This is the
+/// loop body of [`Occurrence_Collisions_In`], named so that the policy it encodes — report, do not
+/// absorb — is readable without the iteration around it.
+fn Absorb<'a>(
+    seen: &mut BTreeMap<FindingOccurrenceId, &'a Finding>,
+    collisions: &mut Vec<OccurrenceCollision>,
+    finding: &'a Finding,
+)
+{
+    let occurrence = FindingOccurrenceId::Of(finding);
+
+    if let Some(first) = seen.get(&occurrence)
+    {
+        collisions.push(OccurrenceCollision {
+            occurrence,
+            first: (*first).clone(),
+            second: finding.clone(),
+        });
+
+        return;
+    }
+
+    seen.insert(occurrence, finding);
 }
 
 #[cfg(test)]
@@ -81,34 +95,12 @@ mod tests
         Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId,
     };
 
-    fn A_Finding() -> Finding
-    {
-        return Finding {
-            rule: RuleId::New("file-name-matches-declared-type"),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
-            subject_name: "src/lib.rs:12".to_owned(),
-            applicability: Applicability::Supported,
-            evidence: EvidenceClass::Derived,
-            gate: GateCategory::Blocking,
-            summary: "the file names no type it declares".to_owned(),
-            locations: vec!["src/lib.rs:12".to_owned()],
-        };
-    }
+    /// The subject seed every fixture finding is built from.
+    const BASE_SUBJECT_SEED: u8 = 3;
 
-    /// The same rule and subject, at a different place: distinct occurrences, no collision.
-    fn Another_Occurrence() -> Finding
-    {
-        return Finding { locations: vec!["src/lib.rs:40".to_owned()], ..A_Finding() };
-    }
-
-    /// A finding indistinguishable from `A_Finding` in every identity component.
-    ///
-    /// Differs in treatment alone, which is excluded from the identity by construction — so this
-    /// is the shape a real collision takes rather than a contrived duplicate.
-    fn An_Indistinguishable_Finding() -> Finding
-    {
-        return Finding { gate: GateCategory::Advisory, ..A_Finding() };
-    }
+    /// How many collisions three findings sharing one identity report: the second and the third
+    /// each collide with the first, so two pairs name the finding that got there first.
+    const COLLISIONS_AMONG_THREE_SHARING_ONE_IDENTITY: usize = 2;
 
     /// The population this repository actually has: many findings, no two alike.
     ///
@@ -179,7 +171,7 @@ mod tests
 
         let collisions = Occurrence_Collisions_In(&[&first, &second, &third]);
 
-        assert_eq!(collisions.len(), 2, "{collisions:?}");
+        assert_eq!(collisions.len(), COLLISIONS_AMONG_THREE_SHARING_ONE_IDENTITY, "{collisions:?}");
 
         for collision in &collisions
         {
@@ -192,5 +184,34 @@ mod tests
     fn Test_An_Empty_Population_Should_Report_No_Collision()
     {
         assert_eq!(Occurrence_Collisions_In(&[]), Vec::<OccurrenceCollision>::new());
+    }
+
+    fn A_Finding() -> Finding
+    {
+        return Finding {
+            rule: RuleId::New("file-name-matches-declared-type"),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([BASE_SUBJECT_SEED; Digest128::BYTE_LENGTH])),
+            subject_name: "src/lib.rs:12".to_owned(),
+            applicability: Applicability::Supported,
+            evidence: EvidenceClass::Derived,
+            gate: GateCategory::Blocking,
+            summary: "the file names no type it declares".to_owned(),
+            locations: vec!["src/lib.rs:12".to_owned()],
+        };
+    }
+
+    /// The same rule and subject, at a different place: distinct occurrences, no collision.
+    fn Another_Occurrence() -> Finding
+    {
+        return Finding { locations: vec!["src/lib.rs:40".to_owned()], ..A_Finding() };
+    }
+
+    /// A finding indistinguishable from `A_Finding` in every identity component.
+    ///
+    /// Differs in treatment alone, which is excluded from the identity by construction — so this
+    /// is the shape a real collision takes rather than a contrived duplicate.
+    fn An_Indistinguishable_Finding() -> Finding
+    {
+        return Finding { gate: GateCategory::Advisory, ..A_Finding() };
     }
 }

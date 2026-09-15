@@ -3,8 +3,8 @@
 
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_ledger::{
-    ClaimRefusal, ExclusionLedger, FileLedger, ItemId, ItemState, LedgerDocument, LedgerItem,
-    Normalize_Path, Territory,
+    ClaimRefusal, ExclusionLedger, FileLedger, Holder, ItemId, ItemState, LedgerDocument,
+    LedgerItem, Normalize_Path, Territory,
 };
 use nomos_platform::{Clock, Timestamp};
 use nomos_platform_std::{FileLock, StdFileSystem};
@@ -34,12 +34,26 @@ impl Clock for &FixedClock
 
 const NOW: i64 = 1_000_000;
 
+/// The lease every claim in this suite takes. Long enough that no test here can lapse one
+/// by accident; nothing in this file moves time.
+const LEASE: Duration = Duration::from_secs(3_600);
+
+/// How many directory levels this crate's manifest directory sits below the repository root.
+///
+/// `crates/substrate/nomos-ledger`, so three: the crate, then `substrate`, then `crates`.
+const LEVELS_BELOW_THE_REPOSITORY_ROOT: usize = 3;
+
+/// How many record writers a contest needs: one to hold, one to be refused by it.
+///
+/// Every constructed subject in this suite is built with exactly this many, and the
+/// controls that prove the searches have teeth are all contests between the two.
+pub(crate) const CONTESTING_WRITERS: usize = 2;
+
 /// The repository root, from this crate's manifest directory.
 pub(crate) fn Repository_Root() -> PathBuf
 {
     let mut root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    // crates/substrate/nomos-ledger -> the repository.
-    for _ in 0..3
+    for _ in 0..LEVELS_BELOW_THE_REPOSITORY_ROOT
     {
         root.pop();
     }
@@ -88,7 +102,15 @@ impl Drop for Scratch
 {
     fn drop(&mut self)
     {
-        let _ = std::fs::remove_dir_all(&self.0);
+        if let Err(error) = std::fs::remove_dir_all(&self.0)
+        {
+            // A `Drop` impl runs on the unwinding path too, so this must stay infallible:
+            // a panic here aborts the process and buries the assertion already failing.
+            eprintln!(
+                "could not clear the scratch directory {}: {error}",
+                self.0.display()
+            );
+        }
     }
 }
 
@@ -104,7 +126,20 @@ fn Temporary_Directory(name: &str) -> Scratch
 {
     let mut path = std::env::temp_dir();
     path.push(format!("nomos-record-lock-{name}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&path);
+
+    // A process id that repeats finds the previous run's tree still here. Nothing to clear
+    // is the ordinary case and is not worth a word; anything else means a stale tree is
+    // about to be read as this run's own.
+    match std::fs::remove_dir_all(&path)
+    {
+        Ok(()) => {}
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        Err(error) => eprintln!(
+            "a leftover scratch directory at {} could not be cleared: {error}",
+            path.display()
+        ),
+    }
+
     std::fs::create_dir_all(&path).expect("test needs a temp directory");
     return Scratch(path);
 }
@@ -113,7 +148,18 @@ fn Temporary_Directory(name: &str) -> Scratch
 pub(crate) type Board = FileLedger<StdFileSystem, &'static FixedClock, FileLock>;
 
 /// A doctored board on disk, and the ledger open over it.
-pub(crate) fn Saved(name: &str, document: &LedgerDocument) -> (Scratch, Board)
+///
+/// Named fields rather than a pair, because the two are not interchangeable: the scratch
+/// directory has to outlive the ledger that is open over it, and a caller that read them by
+/// position would have to remember which was which to keep that true.
+pub(crate) struct SavedBoard
+{
+    pub(crate) scratch: Scratch,
+    pub(crate) ledger: Board,
+}
+
+/// Writes a doctored board into a fresh scratch directory and opens a ledger over it.
+pub(crate) fn Saved(name: &str, document: &LedgerDocument) -> SavedBoard
 {
     let directory = Temporary_Directory(name);
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
@@ -133,14 +179,21 @@ pub(crate) fn Saved(name: &str, document: &LedgerDocument) -> (Scratch, Board)
 
     ledger.Save(&document).expect("the doctored board is still a valid ledger");
 
-    return (directory, ledger);
+    return SavedBoard {
+        scratch: directory,
+        ledger,
+    };
 }
 
 /// Claims an item, or fails naming what the refusal means for the property under test.
-pub(crate) fn Claimed(ledger: &mut Board, writer: &ItemId, agent: &str, blame: &str)
+///
+/// The agent is a [`Holder`] rather than a `&str` so the two cannot be swapped at a call
+/// site: one is who is claiming and the other is the prose a refusal is reported with, and
+/// a bare `&str` in both positions says only that both are text.
+pub(crate) fn Claimed(ledger: &mut Board, writer: &ItemId, agent: Holder<'_>, blame: &str)
 {
     ledger
-        .Claim(writer, agent, Duration::from_secs(3_600))
+        .Claim(writer, agent.As_Text(), LEASE)
         .unwrap_or_else(|refusal| panic!("{blame}: {}", refusal.Describe()));
 }
 
@@ -162,9 +215,16 @@ static AT_NOW: FixedClock = FixedClock(NOW);
 /// This is not the same choice as `OD-LEDGER-004`'s. That record reads the *real* board
 /// where the real board is the subject — what the items actually say — and this is not one
 /// of those places.
-pub(crate) fn Two_Record_Writers() -> (LedgerDocument, ItemId, ItemId)
+pub(crate) struct TwoWriters
 {
-    let document = Constructed_Writers(2);
+    pub(crate) document: LedgerDocument,
+    pub(crate) first: ItemId,
+    pub(crate) second: ItemId,
+}
+
+pub(crate) fn Two_Record_Writers() -> TwoWriters
+{
+    let document = Constructed_Writers(CONTESTING_WRITERS);
     let writers = Writer_Ids(&document);
 
     let (Some(first), Some(second)) = (writers.first().cloned(), writers.get(1).cloned())
@@ -173,8 +233,13 @@ pub(crate) fn Two_Record_Writers() -> (LedgerDocument, ItemId, ItemId)
         panic!("a board this function built with two writers must hold two")
     };
 
-    return (document, first, second);
+    return TwoWriters {
+        document,
+        first,
+        second,
+    };
 }
+
 /// A board carrying exactly `count` open record writers, constructed rather than borrowed.
 ///
 /// `OD-LEDGER-032` is why this exists. Every control in this file used to take its subject
@@ -217,28 +282,38 @@ pub(crate) fn Constructed_Writers(count: usize) -> LedgerDocument
     return document;
 }
 
-/// Puts a doctored board on disk and lets two agents contest it, first come first served.
+/// The refusal a contest produced, and the scratch directory it has to outlive.
 ///
-/// The refusal handed back is the second agent's, which is what every test using this is
-/// about; the directory comes back so that it outlives the assertion rather than being
-/// cleared while the ledger is still open over it.
+/// Named fields rather than a pair: the refusal is the second agent's, which is what every
+/// test using this is about, and the directory must not be cleared while the ledger that
+/// produced it is still open over it.
+pub(crate) struct Contest
+{
+    pub(crate) scratch: Scratch,
+    pub(crate) refusal: ClaimRefusal,
+}
+
+/// Puts a doctored board on disk and lets two agents contest it, first come first served.
 pub(crate) fn Contested(
     name: &str,
     document: &LedgerDocument,
     first: &ItemId,
     second: &ItemId,
-) -> (Scratch, ClaimRefusal)
+) -> Contest
 {
-    let (directory, mut ledger) = Saved(name, document);
+    let SavedBoard {
+        scratch,
+        mut ledger,
+    } = Saved(name, document);
 
     ledger
-        .Claim(first, "agent-a", Duration::from_secs(3_600))
+        .Claim(first, "agent-a", LEASE)
         .expect("the first claim is uncontended");
     let refusal = ledger
-        .Claim(second, "agent-b", Duration::from_secs(3_600))
+        .Claim(second, "agent-b", LEASE)
         .expect_err("the second of a contesting pair must be refused");
 
-    return (directory, refusal);
+    return Contest { scratch, refusal };
 }
 
 fn Ledger_At<'clock>(
@@ -321,15 +396,25 @@ pub(crate) fn Project_Onto_Records(document: &mut LedgerDocument, writers: &[Ite
     }
 }
 
+/// A path as this ledger's own rule reads one.
+///
+/// Both positions of [`Paths_Collide`] and [`Broader`] carry this type, and the same one on
+/// purpose: exclusion is symmetric, so there is no order at a call site for a reader to get
+/// wrong and no wrong answer for a swap to reach. A bare `&str` in both positions would say
+/// there was one.
+///
+/// [`Broader`]: super::serializers::census::Broader
+pub(crate) struct PathText<'a>(pub(crate) &'a str);
+
 /// Whether two paths exclude each other, decided by the ledger's own rule.
 ///
 /// Single-path territories rather than a containment check written here. `a/b` contains
 /// `a/b/c` and two spellings of one path are one path, and a second implementation of
 /// either would be a second answer waiting to disagree with `Territory::Intersect`.
-pub(crate) fn Paths_Collide(left: &str, right: &str) -> bool
+pub(crate) fn Paths_Collide(left: PathText<'_>, right: PathText<'_>) -> bool
 {
-    return !Territory::Of_Files([left])
-        .Intersect(&Territory::Of_Files([right]))
+    return !Territory::Of_Files([left.0])
+        .Intersect(&Territory::Of_Files([right.0]))
         .Permits_Concurrency();
 }
 
@@ -347,11 +432,24 @@ pub(crate) fn Paths_Collide(left: &str, right: &str) -> bool
 ///
 /// The direction is taken from the collision rather than decided again beside it. If two
 /// paths collide under this ledger's rule then one contains the other, and the shorter
-/// normalized spelling is the container — the same tie-break [`super::serializers::Shared_Paths`]
+/// normalized spelling is the container — the same tie-break
+/// [`super::serializers::census::Shared_Paths`]
 /// already uses to name the broader of two paths. A containment check written out here would
 /// be a second answer waiting to disagree with `Territory::Intersect`.
-pub(crate) fn Covers(reserved: &str, declared: &str) -> bool
+pub(crate) fn Covers(reserved: ReservedPath<'_>, declared: DeclaredPath<'_>) -> bool
 {
-    return Paths_Collide(reserved, declared)
-        && Normalize_Path(reserved).len() <= Normalize_Path(declared).len();
+    return Paths_Collide(PathText(reserved.0), PathText(declared.0))
+        && Normalize_Path(reserved.0).len() <= Normalize_Path(declared.0).len();
 }
+
+/// A path an item reserves, kept distinct from a path it merely declares so that the two
+/// positions of [`Covers`] cannot be swapped at a call site.
+///
+/// [`Covers`] asks about one direction only — a reservation covers a declaration, never the
+/// other way round — and the swap is silent: two `&str` positions accept either order and
+/// answer `false` for a question whose whole point is that it is not symmetric.
+pub(crate) struct ReservedPath<'a>(pub(crate) &'a str);
+
+/// A path an item declares it will touch, kept distinct from a reserved one for the same
+/// reason [`ReservedPath`] exists.
+pub(crate) struct DeclaredPath<'a>(pub(crate) &'a str);

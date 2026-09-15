@@ -32,15 +32,15 @@ pub(crate) fn Populated() -> SpecificationStore
 /// in it are the test for whether anything in the bundle is ordered by a surrogate.
 pub(crate) fn Populated_In_Reverse(reversed: bool) -> SpecificationStore
 {
-    let mut store = SpecificationStore::In_Memory().expect("opens");
+    let mut store = SpecificationStore::In_Memory().expect("In_Memory applies the schema MIGRATIONS");
     let documents = Documents_In_Order(reversed);
     if !reversed
     {
         Put_The_Binary_Blob(&mut store);
     }
-    for (path, text) in documents
+    for document in documents
     {
-        Put_Document(&mut store, path, text);
+        Put_Document(&mut store, document);
     }
     if reversed
     {
@@ -53,12 +53,28 @@ pub(crate) fn Populated_In_Reverse(reversed: bool) -> SpecificationStore
     return store;
 }
 
+/// One fixture document: the path it is stored under, and the text it holds.
+///
+/// The two are named here rather than passed as adjacent strings, so a call site cannot hand
+/// the text over as the path.
+struct Document<'a>
+{
+    path: &'a str,
+    text: &'a str,
+}
+
 /// The fixture's two documents, in the order this store is to be written in.
-fn Documents_In_Order(reversed: bool) -> Vec<(&'static str, &'static str)>
+fn Documents_In_Order(reversed: bool) -> Vec<Document<'static>>
 {
     let mut documents = vec![
-        ("volumes/03-conformance.md", SECOND),
-        ("volumes/02-core.md", FIRST),
+        Document {
+            path: "volumes/03-conformance.md",
+            text: SECOND,
+        },
+        Document {
+            path: "volumes/02-core.md",
+            text: FIRST,
+        },
     ];
     if reversed
     {
@@ -79,14 +95,14 @@ fn Put_The_Binary_Blob(store: &mut SpecificationStore)
 }
 
 /// One document and the blocks it segments into, which the store holds separately.
-fn Put_Document(store: &mut SpecificationStore, path: &str, text: &str)
+fn Put_Document(store: &mut SpecificationStore, document: Document<'_>)
 {
-    let document = store
-        .Put_Source_Document(path, "v14.36", text)
+    let uid = store
+        .Put_Source_Document(document.path, "v14.36", document.text)
         .expect("stores the document");
 
     store
-        .Put_Source_Blocks(document, &Segment(text))
+        .Put_Source_Blocks(uid, &Segment(document.text))
         .expect("stores the blocks");
 }
 
@@ -116,24 +132,34 @@ fn A_Round_Trip_Submission() -> Submission
         submitted_by: "the fixture".to_owned(),
         submitted_through: "test".to_owned(),
         values: vec![
-            Value("title", "A submission survives a round trip", Origin::Submitted),
-            Value("goal", "what was first asked", Origin::Submitted),
+            Value(Answer { field: "title", value: "A submission survives a round trip" }, Origin::Submitted),
+            Value(Answer { field: "goal", value: "what was first asked" }, Origin::Submitted),
             // Supersedes the line above for reading, and never replaces it in storage.
-            Value("goal", "what it became on being asked", Origin::Clarified),
-            Value("behaviour", "it exports and imports unchanged", Origin::Submitted),
-            Value("acceptance", "the bundle is byte-identical", Origin::Submitted),
-            Value("invariants", "none", Origin::Submitted),
+            Value(Answer { field: "goal", value: "what it became on being asked" }, Origin::Clarified),
+            Value(Answer { field: "behaviour", value: "it exports and imports unchanged" }, Origin::Submitted),
+            Value(Answer { field: "acceptance", value: "the bundle is byte-identical" }, Origin::Submitted),
+            Value(Answer { field: "invariants", value: "none" }, Origin::Submitted),
         ],
         gaps: vec![A_Gap()],
     };
 }
 
+/// What one field was answered with.
+///
+/// The field and the value are named here rather than passed as adjacent strings, so a call
+/// site cannot hand the value over as the field it answers.
+struct Answer<'a>
+{
+    field: &'a str,
+    value: &'a str,
+}
+
 /// One attributed field value.
-fn Value(field: &str, value: &str, origin: Origin) -> FieldValue
+fn Value(answer: Answer<'_>, origin: Origin) -> FieldValue
 {
     return FieldValue {
-        field: field.to_owned(),
-        value: value.to_owned(),
+        field: answer.field.to_owned(),
+        value: answer.value.to_owned(),
         origin,
     };
 }
@@ -152,8 +178,8 @@ fn A_Gap() -> DecisionGap
 /// A store rebuilt from a bundle held in memory.
 pub(crate) fn Rebuilt_From(bundle: &Bundle) -> SpecificationStore
 {
-    let mut rebuilt = SpecificationStore::In_Memory().expect("opens");
-    Import_Bundle(&mut rebuilt, bundle).expect("imports");
+    let mut rebuilt = SpecificationStore::In_Memory().expect("In_Memory applies the schema MIGRATIONS");
+    Import_Bundle(&mut rebuilt, bundle).expect("the fixture bundle is disjoint from the store");
 
     return rebuilt;
 }
@@ -161,7 +187,7 @@ pub(crate) fn Rebuilt_From(bundle: &Bundle) -> SpecificationStore
 /// A store rebuilt from written bundle bytes and nothing else.
 pub(crate) fn Reimported(written: &str) -> SpecificationStore
 {
-    let bundle = Bundle::Parse(written).expect("parses");
+    let bundle = Bundle::Parse(written).expect("Parse inverts Write of the fixture's own bytes");
 
     return Rebuilt_From(&bundle);
 }

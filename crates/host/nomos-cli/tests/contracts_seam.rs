@@ -24,22 +24,46 @@ use support::{Run, Tree};
 #[test]
 fn Test_A_Real_Phantoms_Rendered_Line_Should_Equal_Findings_Own_Describe()
 {
-    let tree = Tree::New("contracts-seam").With(
-        "universe.rs",
-        "/// Mirrored by `Test_Nothing_Named_This_For_Contracts_Seam`.\n\
-         pub const TABLES: &[&str] = &[];\n",
-    );
+    let tree = A_Tree_Claiming_An_Absent_Check();
 
     let ran = Run(&["check", "--root", &tree.Root()]);
 
     assert_eq!(ran.code, 1, "a false claim of coverage must fail the run: {}", ran.stdout);
     assert!(ran.stdout.contains("Blocking"), "{}", ran.stdout);
 
-    // The same rule, subject and summary the real completeness-mirror rule must have
-    // produced for this exact fixture -- `RuleId::New("completeness-mirror")`,
-    // `subject_name` read off the declared item's own name, `GateCategory::Blocking` because
-    // the claimed check resolves to nothing, and the summary
-    // `nomos_contracts::EnforcementBreach::Phantom`'s own `Describe()` spells verbatim.
+    let described = The_Phantom_Claim_Describes();
+
+    assert!(
+        ran.stdout.contains(&described),
+        "nomos_contracts::Finding::Describe() must reproduce a line the real binary actually \
+         printed -- expected {described:?} to appear in: {}",
+        ran.stdout
+    );
+}
+
+/// The fixture the run above walks: a universe whose own doc comment declares it is mirrored
+/// by a check that does not exist, which is the one shape whose finding the real
+/// completeness-mirror rule files as blocking.
+fn A_Tree_Claiming_An_Absent_Check() -> Tree
+{
+    return Tree::New("contracts-seam").With(
+        "universe.rs",
+        "/// Mirrored by `Test_Nothing_Named_This_For_Contracts_Seam`.\n\
+         pub const TABLES: &[&str] = &[];\n",
+    );
+}
+
+/// What `nomos_contracts::Finding::Describe()` says for the one `Finding` the real
+/// completeness-mirror rule must have produced for [`A_Tree_Claiming_An_Absent_Check`].
+///
+/// The `Finding` is built here from the crate's own constructors -- the same rule, subject
+/// and summary, with `RuleId::New("completeness-mirror")`, `subject_name` read off the
+/// declared item's own name, `GateCategory::Blocking` because the claimed check resolves to
+/// nothing, and the summary `nomos_contracts::EnforcementBreach::Phantom`'s own `Describe()`
+/// spells verbatim -- so the text compared below is produced by that method rather than
+/// copied out of the binary's output.
+fn The_Phantom_Claim_Describes() -> String
+{
     let finding = nomos_contracts::Finding {
         rule: nomos_contracts::RuleId::New("completeness-mirror"),
         subject: nomos_contracts::SubjectId::From_Digest(nomos_contracts::Digest128::From_Bytes(
@@ -55,11 +79,5 @@ fn Test_A_Real_Phantoms_Rendered_Line_Should_Equal_Findings_Own_Describe()
         locations: vec!["universe.rs".to_owned()],
     };
 
-    let described = finding.Describe();
-    assert!(
-        ran.stdout.contains(&described),
-        "nomos_contracts::Finding::Describe() must reproduce a line the real binary actually \
-         printed -- expected {described:?} to appear in: {}",
-        ran.stdout
-    );
+    return finding.Describe();
 }

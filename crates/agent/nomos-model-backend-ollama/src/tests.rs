@@ -122,7 +122,8 @@ fn Test_The_Outcome_Should_Carry_What_The_Model_Wrote()
 {
     let launcher = Scripted::New();
 
-    let outcome = Execute_Task(&Bare_Task(A_GOAL), &launcher).expect(RESPONSE_IS_THE_OUTPUT);
+    let outcome = Execute_Task(&Bare_Task(A_GOAL), &launcher)
+        .expect("the scripted launcher above answers every command with a fixed exit, so no dispatch here can fail");
 
     assert_eq!(outcome.response, A_RESPONSE, "{RESPONSE_IS_THE_OUTPUT}");
 }
@@ -134,11 +135,11 @@ fn Test_A_Caller_Chosen_Directory_Should_Be_The_One_Dispatched_Into()
     let directory = std::env::temp_dir();
 
     let outcome = Execute_In(&Bare_Task(A_GOAL), &launcher, &directory)
-        .expect(CHOSEN_DIRECTORY_IS_USED);
+        .expect("the scripted launcher above answers every command with a fixed exit, so no dispatch here can fail");
 
     assert_eq!(outcome.response, A_RESPONSE, "{CHOSEN_DIRECTORY_IS_USED}");
     let seen = launcher.seen.borrow();
-    let seen = seen.first().expect(CHOSEN_DIRECTORY_IS_USED);
+    let seen = seen.first().expect("the dispatch above ran the launcher once, and a launcher that was never run would leave this empty");
     assert_eq!(
         seen.working_directory.as_deref(),
         Some(directory.as_path()),

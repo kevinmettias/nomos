@@ -58,8 +58,13 @@ fn Test_Encode_Index_Should_Be_Line_Oriented_And_Local_To_Nothing()
 
     assert!(!rendered.contains('\r'), "line endings must not be local");
     assert!(rendered.starts_with("module\t"));
-    assert_eq!(rendered.lines().count(), 5);
+    assert_eq!(rendered.lines().count(), AN_INDEX_RECORD_COUNT);
 }
+
+/// How many records [`An_Index`] is worth: one for the module, one per member, and one per
+/// item. Spelled out rather than counted off the fixture, so that a record the encoder
+/// silently drops or a line it silently splits changes this number and fails the test.
+const AN_INDEX_RECORD_COUNT: usize = 5;
 
 /// A member that could not be read must not encode like a member that declares
 /// nothing.

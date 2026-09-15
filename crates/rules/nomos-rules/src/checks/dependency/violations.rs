@@ -6,9 +6,36 @@
 //! same split [`crate::naming::violations`] draws for the same reason.
 
 use crate::SourceFile;
+use nomos_analysis::FactReader;
 use nomos_cap_architecture::ArchitecturePayload;
 use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
+
+/// Judges every workspace member `sources` names against the architecture its own repository
+/// declares.
+///
+/// One dependency fact per source, the same shape [`crate::Check_Naming_Convention`] reads, plus
+/// one whole-workspace declaration read once for the run. A source here is a workspace member,
+/// not a file — its `subject` is the member's own subject — and its `text` is unread: this
+/// rule's whole judgment comes from the two facts, never from `source.text`.
+///
+/// Spelled here rather than in [`super`] because this is the direction half of the judgment and
+/// [`Violations_In`] beside it is the whole of what it reaches: the caller belongs with the
+/// thing it calls, and the three entry points sharing one file was a module boundary the
+/// declarations were hiding.
+#[must_use]
+pub fn Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+{
+    let architecture = match super::reading::Architecture_Of(sources, facts, super::DEPENDENCY_DIRECTION)
+    {
+        Ok(architecture) => architecture,
+        Err(unread) => return unread,
+    };
+
+    return super::Judged(sources, facts, super::DEPENDENCY_DIRECTION, &|payload, source| {
+        return Violations_In(&architecture, payload, source);
+    });
+}
 
 /// Every edge `payload` declares that reaches a component its own component may not, or a
 /// peer in its own component with no named exception, as findings.
@@ -183,7 +210,7 @@ mod tests
         let payload = DependencyPayload { package: "billing".to_owned(), edges: vec![Dependency_Edge("http")] };
 
         let findings = Violations_In(&Declaration(), &payload, &Source_File("billing"));
-        let found = findings.first().expect("one finding");
+        let found = findings.first().expect("the fixture declares one violation");
 
         assert!(found.summary.contains("billing (Domain)"), "{}", found.summary);
         assert!(found.summary.contains("http (Api)"), "{}", found.summary);

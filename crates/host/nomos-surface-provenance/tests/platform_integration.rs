@@ -54,7 +54,7 @@ impl Repository
 
     /// Writes `text` to `relative`, under the repository root, creating any parent
     /// directories it needs.
-    fn Write(&self, relative: &str, text: &str) -> &Self
+    fn Write(&self, relative: impl AsRef<Path>, text: &str) -> &Self
     {
         let path = self.root.join(relative);
         if let Some(parent) = path.parent()

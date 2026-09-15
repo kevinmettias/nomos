@@ -219,6 +219,26 @@ mod tests
         assert_eq!(found.locations, vec!["modules/security/main.tf".to_owned()]);
     }
 
+    fn Materialize_Review_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &FindingPayload)
+    {
+        let bytes = nomos_connector_coderabbit::Encode_Payload(payload);
+        test_support::Materialize(store, source.subject, offer, InputDigest::Of(&[]), nomos_connector_coderabbit::Payload_Schema(), bytes);
+    }
+
+    fn Sample_Payload() -> FindingPayload
+    {
+        return FindingPayload {
+            external_system: "coderabbit".to_owned(),
+            external_id: ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", REVIEW_COMMENT_ID),
+            locator: "https://github.com/coderabbitai/rabbits-playground/pull/13#discussion_r3521038097".to_owned(),
+            category: "🔒 Security & Privacy".to_owned(),
+            severity: "🟡 Minor".to_owned(),
+            path: "modules/security/main.tf".to_owned(),
+            line: "43".to_owned(),
+            message: "Consider defining an explicit KMS key policy.".to_owned(),
+        };
+    }
+
     /// Also [`Test_Context`]'s own shape: the fixed context every fact and every reader
     /// this suite builds resolves under.
     #[test]
@@ -233,6 +253,10 @@ mod tests
         assert_eq!(findings.len(), 1, "an unread subject must not render as a clean one: {findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").gate, GateCategory::Advisory);
     }
+
+    /// The review comment id the sample payload names -- the one the real provider's own
+    /// locator URL ends with.
+    const REVIEW_COMMENT_ID: u64 = 3_521_038_097;
 
     #[test]
     fn Test_An_Empty_Source_List_Should_Produce_No_Findings()
@@ -259,20 +283,6 @@ mod tests
         assert_eq!(findings.first().expect("asserted len 1 above").applicability, Applicability::Unparseable);
     }
 
-    fn Sample_Payload() -> FindingPayload
-    {
-        return FindingPayload {
-            external_system: "coderabbit".to_owned(),
-            external_id: ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", 3_521_038_097),
-            locator: "https://github.com/coderabbitai/rabbits-playground/pull/13#discussion_r3521038097".to_owned(),
-            category: "🔒 Security & Privacy".to_owned(),
-            severity: "🟡 Minor".to_owned(),
-            path: "modules/security/main.tf".to_owned(),
-            line: "43".to_owned(),
-            message: "Consider defining an explicit KMS key policy.".to_owned(),
-        };
-    }
-
     fn Source_File(name: &str) -> SourceFile
     {
         return SourceFile::New(name, SubjectId::From_Digest(Content_Digest(name.as_bytes())), String::new());
@@ -297,11 +307,5 @@ mod tests
             PROVIDER,
             Guarantee_At_Floor(),
         );
-    }
-
-    fn Materialize_Review_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &FindingPayload)
-    {
-        let bytes = nomos_connector_coderabbit::Encode_Payload(payload);
-        test_support::Materialize(store, source.subject, offer, InputDigest::Of(&[]), nomos_connector_coderabbit::Payload_Schema(), bytes);
     }
 }

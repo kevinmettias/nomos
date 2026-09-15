@@ -219,36 +219,53 @@ mod tests
     #[test]
     fn Test_Collect_Rows_Should_Append_Every_Row_The_Query_Returns()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = Store_Holding_One_Blob();
+        let mut records = Vec::new();
+
+        Collect_Rows(store.Connection(), &mut records, "SELECT sha256 FROM blobs", Read_One_Blob)
+            .expect("Collect_Rows ran over the query and the row reader this test passes it");
+
+        assert_eq!(records, The_One_Blob_It_Holds());
+    }
+
+    /// A fresh store holding one blob row, so a query over `blobs` has a row to return.
+    fn Store_Holding_One_Blob() -> SpecificationStore
+    {
+        let store =
+            SpecificationStore::In_Memory().expect("an in-memory store applies the schema MIGRATIONS");
         store
             .Connection()
             .execute(
                 "INSERT INTO blobs (sha256, byte_length, content) VALUES (?1, ?2, ?3)",
                 rusqlite::params!["sha256:aa", 2i64, b"hi".as_slice()],
             )
-            .expect("inserts");
+            .expect("the blob row this test queries for is inserted");
 
-        let mut records = Vec::new();
-        Collect_Rows(store.Connection(), &mut records, "SELECT sha256 FROM blobs", |row| {
-            let sha256: String = row.get(0)?;
-            return Ok(Record::Blob(crate::Blob {
-                sha256,
-                byte_length: 2,
-                encoding: crate::Encoding::Utf8,
-                content: "hi".to_owned(),
-            }));
-        })
-        .expect("collects");
+        return store;
+    }
 
-        assert_eq!(
-            records,
-            vec![Record::Blob(crate::Blob {
-                sha256: "sha256:aa".to_owned(),
-                byte_length: 2,
-                encoding: crate::Encoding::Utf8,
-                content: "hi".to_owned(),
-            })]
-        );
+    /// The row reader that query is given: the column it selects, with the fields no column
+    /// holds filled in by hand.
+    fn Read_One_Blob(row: &rusqlite::Row<'_>) -> rusqlite::Result<Record>
+    {
+        let sha256: String = row.get(0)?;
+        return Ok(Record::Blob(crate::Blob {
+            sha256,
+            byte_length: 2,
+            encoding: crate::Encoding::Utf8,
+            content: "hi".to_owned(),
+        }));
+    }
+
+    /// The single blob row the fixture holds, once decoded.
+    fn The_One_Blob_It_Holds() -> Vec<Record>
+    {
+        return vec![Record::Blob(crate::Blob {
+            sha256: "sha256:aa".to_owned(),
+            byte_length: 2,
+            encoding: crate::Encoding::Utf8,
+            content: "hi".to_owned(),
+        })];
     }
 
     #[test]

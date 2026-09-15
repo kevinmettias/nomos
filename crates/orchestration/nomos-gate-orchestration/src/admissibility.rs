@@ -32,6 +32,12 @@
 //! retrospective answer requires the edge to exist, so a developer asking "may I?" has to do
 //! the thing first. Reading one declaration does not reintroduce that.
 
+mod depended_crate;
+mod depending_crate;
+
+pub use depended_crate::DependedCrate;
+pub use depending_crate::DependingCrate;
+
 use nomos_cap_architecture::ArchitecturePayload;
 use nomos_platform::FileSystem;
 use std::path::Path;
@@ -42,12 +48,6 @@ use std::path::Path;
 /// Re-exported rather than re-spelled: `nomos_repo_policy::architecture` owns the name, and a
 /// host that typed the string itself would be a second place to change it.
 pub const ARCHITECTURE_DECLARATION_FILE: &str = nomos_repo_policy::architecture::ARCHITECTURE_JSON;
-
-/// The crate that would do the naming.
-pub struct DependingCrate<'a>(pub &'a str);
-
-/// The crate that would be named.
-pub struct DependedCrate<'a>(pub &'a str);
 
 /// What the architecture says about an edge that does not exist yet.
 ///
@@ -99,10 +99,7 @@ impl Admissibility
 #[must_use]
 pub fn Admits(architecture: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
 {
-    let DependingCrate(depending) = depending;
-    let DependedCrate(depended) = depended;
-
-    let (Some(from), Some(to)) = (architecture.Component_Of(depending), architecture.Component_Of(depended))
+    let (Some(from), Some(to)) = (architecture.Component_Of(depending.0), architecture.Component_Of(depended.0))
     else
     {
         return Admissibility::NotJudged;
@@ -126,9 +123,9 @@ pub fn Admits(architecture: &ArchitecturePayload, depending: DependingCrate<'_>,
 /// Directed, as the declaration is: that a composition root may name a provider does not mean
 /// the provider may name the composition root, and a list read in both directions would admit
 /// exactly the cycles a component forbidding its own members exists to prevent.
-fn Is_A_Declared_Peer(architecture: &ArchitecturePayload, depending: &str, depended: &str) -> Admissibility
+fn Is_A_Declared_Peer(architecture: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
 {
-    if architecture.Excepts(depending, depended)
+    if architecture.Excepts(depending.0, depended.0)
     {
         return Admissibility::Permitted;
     }
@@ -161,7 +158,84 @@ mod tests
     use super::*;
     use nomos_cap_architecture::{Exception, Membership, Permission};
 
-    /// A declaration in a vocabulary this workspace does not use. Every assertion below is
+    /// The entry the tests below read, so that naming the two ends of the edge is written once
+    /// rather than at every call site.
+    fn Admits_In(declaration: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
+    {
+        return Admits(declaration, depending, depended);
+    }
+
+    #[test]
+    fn Test_An_Edge_The_Architecture_Admits_Should_Be_Permitted()
+    {
+        assert_eq!(Admits_In(&Declaration(), DependingCrate("http"), DependedCrate("billing")), Admissibility::Permitted);
+    }
+
+    #[test]
+    fn Test_An_Edge_The_Architecture_Does_Not_Admit_Should_Be_Refused()
+    {
+        assert_eq!(Admits_In(&Declaration(), DependingCrate("billing"), DependedCrate("http")), Admissibility::Refused);
+    }
+
+    #[test]
+    fn Test_Two_Peers_In_One_Component_Should_Be_Refused_Without_A_Named_Exception()
+    {
+        assert_eq!(Admits_In(&Declaration(), DependingCrate("billing"), DependedCrate("invoicing")), Admissibility::Refused);
+    }
+
+    #[test]
+    fn Test_A_Named_Exception_Should_Be_Permitted()
+    {
+        assert_eq!(Admits_In(&Declaration(), DependingCrate("billing"), DependedCrate("billing-core")), Admissibility::Permitted);
+    }
+
+    /// An exception is a directed statement about one real dependency.
+    #[test]
+    fn Test_The_Reverse_Of_A_Named_Exception_Should_Be_Refused()
+    {
+        assert_eq!(Admits_In(&Declaration(), DependingCrate("billing-core"), DependedCrate("billing")), Admissibility::Refused);
+    }
+
+    /// A crate naming itself is not an edge, and the exception list names pairs of two
+    /// different crates, so it falls out as refused rather than admitted.
+    #[test]
+    fn Test_A_Crate_Naming_Itself_Should_Be_Refused()
+    {
+        assert_eq!(Admits_In(&Declaration(), DependingCrate("billing"), DependedCrate("billing")), Admissibility::Refused);
+    }
+
+    /// The third outcome, and the one that makes this safe to consult: a crate the declaration
+    /// does not place gets no judgment rather than a permissive default.
+    #[test]
+    fn Test_A_Crate_The_Declaration_Does_Not_Place_Should_Not_Be_Judged()
+    {
+        assert_eq!(Admits_In(&Declaration(), DependingCrate("unplaced"), DependedCrate("billing")), Admissibility::NotJudged);
+        assert_eq!(Admits_In(&Declaration(), DependingCrate("billing"), DependedCrate("unplaced")), Admissibility::NotJudged);
+    }
+
+    /// A repository that declared nothing is judged about nothing, which is the state every
+    /// repository but this one was in while the table was compiled into `nomos-rules`.
+    #[test]
+    fn Test_A_Repository_That_Declared_Nothing_Should_Not_Be_Judged()
+    {
+        assert_eq!(Admits_In(&ArchitecturePayload::default(), DependingCrate("http"), DependedCrate("billing")), Admissibility::NotJudged);
+    }
+
+    /// Replace the declaration and the same function enforces the new one -- the property the
+    /// whole migration is for, asked of the prospective answer rather than the retrospective.
+    #[test]
+    fn Test_The_Same_Function_Should_Enforce_A_Different_Declaration()
+    {
+        let reversed = ArchitecturePayload {
+            permissions: vec![Permission { from: "Domain".to_owned(), to: "Api".to_owned() }],
+            ..Declaration()
+        };
+
+        assert_eq!(Admits_In(&reversed, DependingCrate("http"), DependedCrate("billing")), Admissibility::Refused);
+        assert_eq!(Admits_In(&reversed, DependingCrate("billing"), DependedCrate("http")), Admissibility::Permitted);
+    }
+
+    /// A declaration in a vocabulary this workspace does not use. Every assertion above is
     /// about the mechanism, and none of them could be written this way while the components
     /// were an enum compiled into `nomos-rules`.
     fn Declaration() -> ArchitecturePayload
@@ -178,81 +252,6 @@ mod tests
             exceptions: vec![Exception { from: "billing".to_owned(), to: "billing-core".to_owned() }],
             authorities: Vec::new(),
         };
-    }
-
-    fn Admits_In(declaration: &ArchitecturePayload, depending: &str, depended: &str) -> Admissibility
-    {
-        return Admits(declaration, DependingCrate(depending), DependedCrate(depended));
-    }
-
-    #[test]
-    fn Test_An_Edge_The_Architecture_Admits_Should_Be_Permitted()
-    {
-        assert_eq!(Admits_In(&Declaration(), "http", "billing"), Admissibility::Permitted);
-    }
-
-    #[test]
-    fn Test_An_Edge_The_Architecture_Does_Not_Admit_Should_Be_Refused()
-    {
-        assert_eq!(Admits_In(&Declaration(), "billing", "http"), Admissibility::Refused);
-    }
-
-    #[test]
-    fn Test_Two_Peers_In_One_Component_Should_Be_Refused_Without_A_Named_Exception()
-    {
-        assert_eq!(Admits_In(&Declaration(), "billing", "invoicing"), Admissibility::Refused);
-    }
-
-    #[test]
-    fn Test_A_Named_Exception_Should_Be_Permitted()
-    {
-        assert_eq!(Admits_In(&Declaration(), "billing", "billing-core"), Admissibility::Permitted);
-    }
-
-    /// An exception is a directed statement about one real dependency.
-    #[test]
-    fn Test_The_Reverse_Of_A_Named_Exception_Should_Be_Refused()
-    {
-        assert_eq!(Admits_In(&Declaration(), "billing-core", "billing"), Admissibility::Refused);
-    }
-
-    /// A crate naming itself is not an edge, and the exception list names pairs of two
-    /// different crates, so it falls out as refused rather than admitted.
-    #[test]
-    fn Test_A_Crate_Naming_Itself_Should_Be_Refused()
-    {
-        assert_eq!(Admits_In(&Declaration(), "billing", "billing"), Admissibility::Refused);
-    }
-
-    /// The third outcome, and the one that makes this safe to consult: a crate the declaration
-    /// does not place gets no judgment rather than a permissive default.
-    #[test]
-    fn Test_A_Crate_The_Declaration_Does_Not_Place_Should_Not_Be_Judged()
-    {
-        assert_eq!(Admits_In(&Declaration(), "unplaced", "billing"), Admissibility::NotJudged);
-        assert_eq!(Admits_In(&Declaration(), "billing", "unplaced"), Admissibility::NotJudged);
-    }
-
-    /// A repository that declared nothing is judged about nothing, which is the state every
-    /// repository but this one was in while the table was compiled into `nomos-rules`.
-    #[test]
-    fn Test_A_Repository_That_Declared_Nothing_Should_Not_Be_Judged()
-    {
-        assert_eq!(Admits_In(&ArchitecturePayload::default(), "http", "billing"), Admissibility::NotJudged);
-    }
-
-    /// Replace the declaration and the same function enforces the new one -- the property the
-    /// whole migration is for, asked of the prospective answer rather than the retrospective.
-    #[test]
-    fn Test_The_Same_Function_Should_Enforce_A_Different_Declaration()
-    {
-        let reversed = ArchitecturePayload {
-            permissions: vec![Permission { from: "Domain".to_owned(), to: "Api".to_owned() }],
-            ..Declaration()
-        };
-
-        assert_eq!(Admits_In(&reversed, "http", "billing"), Admissibility::Refused);
-        assert_eq!(Admits_In(&reversed, "billing", "http"), Admissibility::Permitted);
     }
 
     #[test]

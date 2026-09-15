@@ -56,7 +56,7 @@ fn Test_A_Call_Should_Reach_The_Real_Registry()
 
     assert!(!answer.Is_A_Failure(), "{CALL_REACHES_THE_REGISTRY}");
     let document: serde_json::Value =
-        serde_json::from_str(answer.Text()).expect(CALL_REACHES_THE_REGISTRY);
+        serde_json::from_str(answer.Text()).expect("a produced answer is a JSON document");
     assert_eq!(At(&document, "/outcome"), "planned", "{CALL_REACHES_THE_REGISTRY}");
 }
 

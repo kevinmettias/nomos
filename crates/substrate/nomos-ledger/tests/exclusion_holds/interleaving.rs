@@ -7,8 +7,12 @@
 //!
 //! The harness is read by `concurrency.rs`, which is where the claims it supports are made.
 
+use crate::board::{
+    AT_NOW, AtomicBool, Condvar, Document, Duration, FileLedger, FileLock, FileSystem, FileSystemError, FixedClock,
+    ItemId, Ledger_At, LedgerDocument, LedgerItem, Mutex, Ordering, Path, PathBuf, Scratch, StdFileSystem,
+    Temporary_Directory, ThreadId,
+};
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
-use crate::board::*;
 
 /// How long the harness lets the second writer run before it releases the first one.
 ///
@@ -285,7 +289,9 @@ pub(crate) fn Contended(name: &str, items: Vec<LedgerItem>) -> Scratch
 /// whether a write was lost, since each writer was told its own succeeded.
 pub(crate) fn Written(directory: &Path) -> LedgerDocument
 {
-    return Ledger_At(directory, &AT_NOW).Load().expect("readable");
+    return Ledger_At(directory, &AT_NOW)
+        .Load()
+        .expect("both writers finished, so the file they wrote reads back");
 }
 
 pub(crate) fn Holder_Of(document: &LedgerDocument, id: &str) -> Option<String>

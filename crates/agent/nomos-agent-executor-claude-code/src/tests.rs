@@ -196,8 +196,9 @@ fn Test_A_Validated_Answer_Should_Build_The_Work_Result()
 {
     let launcher = Scripted::Saying(A_VALID_RESPONSE);
 
-    let outcome = Execute_Task(&Bare_Task(A_GOAL, EffortLevel::BackendDefault), &launcher, Path::new(NO_ROOT))
-        .expect(ANSWER_BECOMES_A_RESULT);
+    let envelope = Bare_Task(A_GOAL, EffortLevel::BackendDefault);
+    let outcome = Execute_Task(&envelope, &launcher, Path::new(NO_ROOT))
+        .expect("the scripted launcher above answers with the well-formed document this case is about, so its dispatch cannot fail");
 
     assert_eq!(
         outcome.result.assumptions,
@@ -222,7 +223,8 @@ fn Test_An_Answer_That_Never_Validated_Should_Be_Refused()
         r#"{"result":"done","is_error":false,"total_cost_usd":0.01,"duration_ms":5}"#,
     );
 
-    let failure = Execute_Task(&Bare_Task(A_GOAL, EffortLevel::BackendDefault), &launcher, Path::new(NO_ROOT));
+    let envelope = Bare_Task(A_GOAL, EffortLevel::BackendDefault);
+    let failure = Execute_Task(&envelope, &launcher, Path::new(NO_ROOT));
 
     assert!(matches!(failure, Err(AgentExecutionError::Unparseable(_))), "{MALFORMED_IS_REFUSED}");
 }
@@ -233,9 +235,9 @@ fn Test_A_Caller_Chosen_Directory_Should_Be_The_One_Dispatched_Into()
     let launcher = Scripted::Saying(A_VALID_RESPONSE);
     let directory = std::env::temp_dir();
 
-    let outcome =
-        Execute_In(&Bare_Task(A_GOAL, EffortLevel::BackendDefault), &launcher, &directory, Path::new(NO_ROOT))
-            .expect(CHOSEN_DIRECTORY_IS_USED);
+    let envelope = Bare_Task(A_GOAL, EffortLevel::BackendDefault);
+    let outcome = Execute_In(&envelope, &launcher, &directory, Path::new(NO_ROOT))
+        .expect("the scripted launcher above answers with the well-formed document this case is about, so its dispatch cannot fail");
 
     assert_eq!(
         outcome.result.assumptions,
@@ -243,7 +245,7 @@ fn Test_A_Caller_Chosen_Directory_Should_Be_The_One_Dispatched_Into()
         "{CHOSEN_DIRECTORY_IS_USED}"
     );
     let seen = launcher.seen.borrow();
-    let seen = seen.first().expect(CHOSEN_DIRECTORY_IS_USED);
+    let seen = seen.first().expect("the dispatch above ran the launcher once, and a launcher that never ran would record no command");
     assert_eq!(
         seen.working_directory.as_deref(),
         Some(directory.as_path()),
@@ -287,7 +289,8 @@ fn Test_A_Prohibited_Path_Left_Alone_Should_Not_Be_Reported_As_Changed()
     let mut task = Bare_Task(A_GOAL, EffortLevel::BackendDefault);
     task.prohibited_changes = Territory::Of_Files(["protected.txt"]);
 
-    let outcome = Execute_Task(&task, &launcher, &root).expect(UNTOUCHED_IS_NOT_A_CHANGE);
+    let outcome = Execute_Task(&task, &launcher, &root)
+        .expect("the meddling launcher above leaves the prohibited path alone and answers a valid document, so nothing here refuses");
 
     assert_eq!(
         outcome.result.assumptions,
@@ -349,7 +352,8 @@ fn Test_The_Declared_Rules_Should_Be_Named_In_The_Goal_The_Model_Is_Given()
 fn Test_An_Envelope_Declaring_No_Rules_Should_Reach_The_Model_Unchanged()
 {
     // The common case today, and it must not grow a trailing clause about nothing.
-    let task = Task_For(&Bare_Task(A_GOAL, EffortLevel::BackendDefault));
+    let envelope = Bare_Task(A_GOAL, EffortLevel::BackendDefault);
+    let task = Task_For(&envelope);
 
     assert_eq!(task.goal, A_GOAL, "{GOAL_MUST_SURVIVE}");
 }

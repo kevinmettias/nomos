@@ -1,12 +1,5 @@
 //! Reading a `nomos work` command line, and the usage text that says what one may be.
 
-// file-size: allow this file pairs its production code with its own inline #[cfg(test)]
-// module; check-test-coverage keys a test's companion unit off the exact file it is
-// textually written in, so these tests cannot move to a sibling file without losing
-// their attribution to every function this file declares.
-// responsibility: allow same reason -- the coupling that keeps this file whole is
-// check-test-coverage's stem-based companion attribution, not a design choice.
-
 use std::time::Duration;
 
 use nomos_ledger::{
@@ -17,6 +10,8 @@ use nomos_ledger::{
 use crate::arguments::{Named_Value_From_String_Arguments, Named_Values_From_String_Arguments};
 
 use super::{ClaimRequest, EndingRequest, WorkCommand};
+
+mod usage;
 
 /// Parses `nomos work` arguments.
 ///
@@ -146,32 +141,6 @@ fn Parse_Territory(named: &[String], amending: &Territory) -> Result<Territory, 
     }
 
     return Ok(Territory::Of_Files(paths));
-}
-
-/// Why `--territory-pattern` is withdrawn rather than supported.
-///
-/// Refused before `--territory` is even checked, because it is the more specific answer:
-/// somebody who passed only a pattern needs to be told the pattern is the problem, not that
-/// they reserved nothing. See `OD-LEDGER-013`.
-///
-/// A pattern is recorded unexpanded, and `Territory::Intersect` answers `Unknown` for every
-/// comparison involving one. That is the correct answer to a question the comparison cannot
-/// decide, and it is not correct as the *outcome of a flag*: the item becomes unclaimable by
-/// anyone including its own author, every other claim on the board is refused against it,
-/// and the refusal is non-retryable, which by the exit-code contract tells an agent to stop
-/// and fetch a person. So the flag is withdrawn rather than the refusal weakened.
-fn Refuse_A_Pattern(pattern: &str) -> String
-{
-    return format!(
-        "--territory-pattern is not supported: a pattern is never expanded, so every \
-         comparison against `{pattern}` answers that independence cannot be established — \
-         which makes the item unclaimable and refuses every other claim on the board.\n\
-         \n\
-         Reserve a directory instead. Territory is compared by containment, so \
-         `--territory crates/spec` already reserves everything beneath it, and it is \
-         decided from the text with no filesystem access.\n\n{}",
-        Usage_Text()
-    );
 }
 
 /// Applies `--timeout` to a parsed predicate, or refuses it when there is no predicate to
@@ -339,6 +308,12 @@ fn Parse_Abandon(named: &[String]) -> Result<WorkCommand, String>
 }
 
 /// The other half of the pair [`Parse_Abandon`] documents.
+/// `decline --item <id> --holder <name> --reason <text>`.
+fn Parse_Decline(named: &[String]) -> Result<WorkCommand, String>
+{
+    return Ok(WorkCommand::Decline(Ending_Request(named)?));
+}
+
 /// `widen --item <id> --holder <name> --territory <path> [--territory <path> …]`.
 ///
 /// `--territory` and not a flag of its own, because it is the same argument `add` takes and
@@ -352,7 +327,18 @@ fn Parse_Widen(named: &[String]) -> Result<WorkCommand, String>
 {
     let item = Item_Of(named)?;
     let holder = Holder_Of(named)?;
+    let adding = Paths_To_Reserve(named)?;
 
+    return Ok(WorkCommand::Widen {
+        item,
+        holder,
+        adding,
+    });
+}
+
+/// The paths a `widen` reserves, refusing the two ways `--territory` can be given wrongly.
+fn Paths_To_Reserve(named: &[String]) -> Result<Vec<String>, String>
+{
     if let Some(pattern) = Named_Values_From_String_Arguments(named, "--territory-pattern").first()
     {
         return Err(Refuse_A_Pattern(pattern));
@@ -369,16 +355,7 @@ fn Parse_Widen(named: &[String]) -> Result<WorkCommand, String>
         );
     }
 
-    return Ok(WorkCommand::Widen {
-        item,
-        holder,
-        adding,
-    });
-}
-
-fn Parse_Decline(named: &[String]) -> Result<WorkCommand, String>
-{
-    return Ok(WorkCommand::Decline(Ending_Request(named)?));
+    return Ok(adding);
 }
 
 /// Parses a lease such as `2h`, `30m` or `45s`.
@@ -410,73 +387,34 @@ pub(super) fn Parse_Duration(text: &str) -> Result<Duration, String>
 
 pub(super) fn Usage_Text() -> String
 {
-    return format!("usage: nomos work <command>\n\n{VERBS}\n{NOTES}");
+    return format!("usage: nomos work <command>\n\n{}\n{}", usage::VERBS, usage::NOTES);
 }
 
-/// Every verb and what it takes.
-const VERBS: &str = "\x20 list     [--state ready|waiting|held|lapsed|snagged|stranded|claimed|blocked|done|declined]\n\
-     \x20          `ready` means claimable now. An item nothing can claim is reported as \
-     `waiting` (a dependency is unfinished), `held` (somebody holds overlapping territory), \
-     `lapsed` (its holder's lease ran out, so `takeover` applies), `snagged` (independence \
-     cannot be established) or `stranded` (a dependency was declined and will never finish), \
-     from the same refusal `claim` would give.\n\
-     \x20 show     --item <id>\n\
-     \x20          one item in full: its claim, every claim given up on it with the reason \
-     given, and its verification. `list` is a column per item and cannot carry prose.\n\
-     \x20 add      --item <id> --title <text> --why <text> --done-when <text>\n\
-     \x20          --kind capability|decision|validation|correction|cleanup\n\
-     \x20          --origin required|proposed\n\
-     \x20          --territory <path> [--territory <path> …]\n\
-     \x20          [--amends <record> …]\n\
-     \x20          [--depends-on <id> …]\n\
-     \x20          [-- <program> <args…>] [--timeout 2h]\n\
-     \x20          `--kind` says what sort of work this is; `--origin` says whether a person \
-     required it or a session proposed it. Both are required and both are closed sets: an \
-     unrecognized value is refused rather than stored. `OD-LEDGER-024`.\n\
-     \x20          `--amends` reserves a record this repository has already published and \
-     says the item edits it. Reserving a published record any other way is refused, because \
-     an identifier is allocated once and the two acts are otherwise the same act. Either \
-     spelling works — the identifier or the file — and it reserves what it names, so the \
-     record does not also need `--territory`.\n\
-     \x20          `--timeout` bounds the predicate named after `--`, defaulting to 10 \
-     minutes like the predicate itself does; it is refused if given with no predicate to \
-     bound. `finish` halves it for the idle bound (`OD-PLATFORM-001`), so a predicate \
-     expected to run quiet for a while — a corpus-backed test, say — needs a longer one \
-     declared here rather than left at the default.\n\
-     \x20 claim    --item <id> --holder <name> [--lease 2h]\n\
-     \x20 renew    --item <id> --holder <name> [--lease 2h]\n\
-     \x20 takeover --item <id> --holder <name> [--lease 2h]\n\
-     \x20          takes over an item listed `lapsed` — one whose holder's lease ran out. \
-     `claim` never takes over a lapsed item; `takeover` does, and records the claim it \
-     displaced, which `show` then reports.\n\
-     \x20 finish   --item <id> --holder <name>\n\
-     \x20 abandon  --item <id> --holder <name> --reason <text>\n\
-     \x20 decline  --item <id> --holder <name> --reason <text>\n\
-     \x20          ends an item that turned out not to be work — superseded by another item, \
-     or refused by a record since it was written. `abandon` ends a *claim* and puts the item \
-     back on the board for somebody else; `decline` ends the *item*, and takes no claim, \
-     because an item nobody intends to do should not have to be claimed first. It refuses an \
-     item somebody is holding, and one already done or already declined.\n\
-     \x20 widen    --item <id> --holder <name> --territory <path> [--territory <path> ...]\n\
-     \x20          adds paths to the territory of an item you hold, when execution proved \
-     the reservation short of the change. It only ever adds: dropping a path drops the \
-     `done_when` clause it carried, so there is no spelling here for a replacement \
-     territory. The enlarged territory is checked against every live claim by the check \
-     a `claim` goes through, the enlargement is recorded on the item and `show` reports \
-     it, and a holder whose lease has run out is refused -- a lapsed claim stops \
-     excluding, so `takeover` comes first. `OD-LEDGER-039`.\n\
-     \x20 validate\n\
-     \x20 audit\n";
-
-/// What holds across every verb: the predicate, and the codes an agent branches on.
-const NOTES: &str = "\neverything after `--` is the verification predicate, run directly \
-     with no shell. `finish` runs the gate's own lint step first, derived from \
-     .github/workflows/gate.yml rather than written here, then the item's predicate, and \
-     records the item done only if both exit zero. An item whose predicate passes while the \
-     gate is red is not finished.\n\
-     \n\
-     exit codes: 0 ok, 1 validation error, 2 usage, 3 claim unavailable (retryable), \
-     4 conflict, 5 store error";
+/// Why `--territory-pattern` is withdrawn rather than supported.
+///
+/// Refused before `--territory` is even checked, because it is the more specific answer:
+/// somebody who passed only a pattern needs to be told the pattern is the problem, not that
+/// they reserved nothing. See `OD-LEDGER-013`.
+///
+/// A pattern is recorded unexpanded, and `Territory::Intersect` answers `Unknown` for every
+/// comparison involving one. That is the correct answer to a question the comparison cannot
+/// decide, and it is not correct as the *outcome of a flag*: the item becomes unclaimable by
+/// anyone including its own author, every other claim on the board is refused against it,
+/// and the refusal is non-retryable, which by the exit-code contract tells an agent to stop
+/// and fetch a person. So the flag is withdrawn rather than the refusal weakened.
+fn Refuse_A_Pattern(pattern: &str) -> String
+{
+    return format!(
+        "--territory-pattern is not supported: a pattern is never expanded, so every \
+         comparison against `{pattern}` answers that independence cannot be established — \
+         which makes the item unclaimable and refuses every other claim on the board.\n\
+         \n\
+         Reserve a directory instead. Territory is compared by containment, so \
+         `--territory crates/spec` already reserves everything beneath it, and it is \
+         decided from the text with no filesystem access.\n\n{}",
+        Usage_Text()
+    );
+}
 
 /// The item an argument list names.
 fn Item_Of(named: &[String]) -> Result<ItemId, String>
@@ -514,149 +452,4 @@ fn Required_Value(value: Option<&String>, name: &str) -> Result<String, String>
 }
 
 #[cfg(test)]
-mod tests
-{
-    //! [`super::Work_Command_From_String_Arguments`] and [`super::Parse_Duration`], exercised.
-    //!
-    //! Split from `parse.rs` itself once that file passed the ~500-line review trigger --
-    //! `parse.rs` is the parsing logic, this is its own coverage, the same split this
-    //! workspace already keeps between `spec.rs` and `spec/tests.rs`.
-
-    use super::*;
-
-    #[test]
-    fn Test_Work_Command_From_String_Arguments_Should_Refuse_An_Unknown_Verb()
-    {
-        let error = Work_Command_From_String_Arguments(&Arguments("frobnicate")).unwrap_err();
-
-        assert!(error.contains("frobnicate"));
-        assert!(error.contains("usage"));
-    }
-
-    fn Arguments(text: &str) -> Vec<String>
-    {
-        return text.split_whitespace().map(str::to_owned).collect();
-    }
-
-    #[test]
-    fn Test_Parse_Duration_Should_Convert_Hour_Minute_And_Second_Units()
-    {
-        assert_eq!(Parse_Duration("2h").unwrap(), Duration::from_secs(7_200));
-        assert_eq!(Parse_Duration("30m").unwrap(), Duration::from_secs(1_800));
-        assert_eq!(Parse_Duration("45s").unwrap(), Duration::from_secs(45));
-    }
-
-    /// The usage text is what an agent reads at exit 2, so a verb missing from it is a verb
-    /// that does not exist as far as the next session is concerned.
-    ///
-    /// This used to iterate `Every_Verb`, a hand-written list of eleven names, asserting that
-    /// the usage text named each and that the parser did not reject it as unknown. Both of
-    /// those are real, and they are two directions between the *text* and the *parser* —
-    /// neither is tied to [`WorkCommand`], which is the thing that actually changes when a
-    /// verb is added. A verb reaching the dispatch match above and not that list was named by
-    /// nobody, and the suite stayed green. `OD-AGENT-004` version 2 states the condition this
-    /// now meets: enumerate a compiled vocabulary only where a test compares the enumeration
-    /// against its authority.
-    ///
-    /// The two original claims are kept and a third is added. Verbs are read out of the usage
-    /// text rather than listed here, so the list *is* the text; each is driven through the real
-    /// parser; and the command each builds is named by [`Named`]'s wildcard-free match, so a
-    /// variant added to `WorkCommand` stops this file compiling.
-    #[test]
-    fn Test_Usage_Text_Should_Name_Every_Verb_It_Accepts()
-    {
-        let named = Named_Verbs();
-
-        assert!(
-            !named.is_empty(),
-            "no verb was parsed out of the usage text, so this compared nothing: {}",
-            Usage_Text()
-        );
-
-        let mut built = Vec::new();
-        for verb in &named
-        {
-            let line = Minimal_Line(verb)
-                .unwrap_or_else(|| panic!("the usage text names `{verb}` and no minimal line is written for it here"));
-            let command = Work_Command_From_String_Arguments(&Arguments(line))
-                .unwrap_or_else(|error| panic!("the usage text names `{verb}` and the parser refuses it: {error}"));
-
-            assert_eq!(Named(&command), verb, "`{verb}` builds a different command");
-            built.push(Named(&command));
-        }
-
-        built.sort_unstable();
-        built.dedup();
-
-        assert_eq!(built.len(), named.len(), "two verbs built the same command: {named:?}");
-    }
-
-    /// The verb each line of the usage text's verb block opens with.
-    ///
-    /// A verb line carries exactly two leading spaces; every continuation line under one is
-    /// indented further, and the notes below the block are not indented at all. So the shape of
-    /// the block is what selects the verbs, and no second list of what counts as a verb line is
-    /// needed.
-    fn Named_Verbs() -> Vec<String>
-    {
-        return Usage_Text()
-            .lines()
-            .filter(|line| return line.starts_with("  ") && !line.starts_with("   "))
-            .filter_map(|line| return line.split_whitespace().next())
-            .map(str::to_owned)
-            .collect();
-    }
-
-    /// The command a verb builds, as an exhaustive match, so that adding one stops the build
-    /// here.
-    ///
-    /// Matched on the variant rather than on the spelling, because the two are not one-to-one:
-    /// `takeover` is spelled without the capital [`WorkCommand::TakeOver`] carries, and `claim`,
-    /// `renew` and `takeover` share a parse arm while being three variants. A table keyed on
-    /// spellings would have to write that down twice.
-    fn Named(command: &WorkCommand) -> &'static str
-    {
-        return match *command
-        {
-            WorkCommand::List { .. } => "list",
-            WorkCommand::Show { .. } => "show",
-            WorkCommand::Add { .. } => "add",
-            WorkCommand::Finish { .. } => "finish",
-            WorkCommand::Claim(_) => "claim",
-            WorkCommand::Renew(_) => "renew",
-            WorkCommand::TakeOver(_) => "takeover",
-            WorkCommand::Abandon(_) => "abandon",
-            WorkCommand::Decline(_) => "decline",
-            WorkCommand::Widen { .. } => "widen",
-            WorkCommand::Validate => "validate",
-            WorkCommand::Audit => "audit",
-        };
-    }
-
-    /// The shortest argument list each verb accepts, so the parser can be asked what it builds.
-    ///
-    /// [`None`] for a verb with no line rather than a panic here, so the test reports *which*
-    /// verb the usage text grew without a fixture — the failure a new verb actually causes.
-    fn Minimal_Line(verb: &str) -> Option<&'static str>
-    {
-        return match verb
-        {
-            "list" => Some("list"),
-            "show" => Some("show --item T-1"),
-            "add" => Some(
-                "add --item T-1 --title t --why w --done-when d --kind correction \
-                 --origin proposed --territory src/a.rs",
-            ),
-            "claim" => Some("claim --item T-1 --holder h"),
-            "renew" => Some("renew --item T-1 --holder h"),
-            "takeover" => Some("takeover --item T-1 --holder h"),
-            "finish" => Some("finish --item T-1 --holder h"),
-            "abandon" => Some("abandon --item T-1 --holder h --reason r"),
-            "decline" => Some("decline --item T-1 --holder h --reason r"),
-            "widen" => Some("widen --item T-1 --holder h --territory a.rs"),
-            "validate" => Some("validate"),
-            "audit" => Some("audit"),
-            _ => None,
-        };
-    }
-}
+mod tests;

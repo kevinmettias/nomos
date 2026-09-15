@@ -67,10 +67,22 @@ mod tests
 {
     use super::*;
 
+    /// The repository the comment this crate's own recorded fixture was captured from was
+    /// posted against.
+    const REPOSITORY: &str = "coderabbitai/rabbits-playground";
+
+    /// GitHub's own permanent id for that comment.
+    const COMMENT_ID: u64 = 3_521_038_097;
+
+    /// A different comment, from the same repository -- one whose id differs from
+    /// [`COMMENT_ID`] in its last digit only, which is the case a reader comparing the two
+    /// could otherwise read as the same finding.
+    const OTHER_COMMENT_ID: u64 = 3_521_038_104;
+
     #[test]
     fn Test_A_Review_Comment_Identity_Should_Join_Repository_And_Comment_Id()
     {
-        let id = ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", 3_521_038_097);
+        let id = ReviewFindingId::Of_Review_Comment(REPOSITORY, COMMENT_ID);
         assert_eq!(id.As_Str(), "coderabbitai/rabbits-playground#review-comment:3521038097");
     }
 
@@ -78,12 +90,12 @@ mod tests
     fn Test_Two_Different_Comments_Should_Be_Different_Identities()
     {
         assert_ne!(
-            ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", 3_521_038_097),
-            ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", 3_521_038_104)
+            ReviewFindingId::Of_Review_Comment(REPOSITORY, COMMENT_ID),
+            ReviewFindingId::Of_Review_Comment(REPOSITORY, OTHER_COMMENT_ID)
         );
         assert_ne!(
-            ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", 3_521_038_097),
-            ReviewFindingId::Of_Review_Comment("coderabbitai/other-repo", 3_521_038_097)
+            ReviewFindingId::Of_Review_Comment(REPOSITORY, COMMENT_ID),
+            ReviewFindingId::Of_Review_Comment("coderabbitai/other-repo", COMMENT_ID)
         );
     }
 }

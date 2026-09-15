@@ -22,6 +22,33 @@ const ADDRESSING_FIXTURE: &str = "addressing";
 const MISSING_ENTRY_FIXTURE: &str = "missing-entry";
 const BINARY_FIXTURE: &str = "binary";
 
+/// The markdown entries the fixture writes: `suite/00-index.md` and `suite/nested/01-core.md`.
+const FIXTURE_MARKDOWN_ENTRIES: usize = 2;
+
+/// The bytes of the fixture's third entry. They are not text, which is the point: a reader
+/// that decoded them to something would pass a lossy replacement off as the file's content.
+const BINARY_BYTES: &[u8] = &[0xFF, 0xFE, 0x00];
+
+/// The real archive set: two series that do not overlap, and what belongs to neither.
+const ARCHIVES: usize = 32;
+const ARCHIVES_WITH_MARKDOWN: usize = 16;
+const REVISION_TREES: usize = 12;
+const DOCX_DELIVERIES: usize = 16;
+
+/// The archives outside both series: v15.0 and the three seed suites.
+const OTHER_ARCHIVES: usize = 4;
+
+/// How many markdown files a v14 revision tree carries at least. A floor rather than a count,
+/// so it separates a revision tree from a DOCX delivery without pinning a second figure here.
+const REVISION_TREE_MARKDOWN_FLOOR: usize = 2000;
+
+/// v15.0's file count, and the floor under the records it carries.
+const V15_FILES: usize = 273;
+const V15_RECORDS_FLOOR: usize = 60;
+
+/// How many entries the unpacking test reads before it compares the directory to itself.
+const UNPACK_SAMPLE: usize = 20;
+
 fn Archives() -> Option<PathBuf>
 {
     let root = PathBuf::from(std::env::var_os("NOMOS_SPEC_ARCHIVES")?);
@@ -46,13 +73,15 @@ fn Fixture(name: &str) -> PathBuf
     let mut writer = zip::ZipWriter::new(file);
     let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
 
-    writer.start_file("suite/00-index.md", options).expect("starts");
-    writer.write_all(b"---\nid: V0\n---\n\n# Index\n").expect("writes");
-    writer.start_file("suite/nested/01-core.md", options).expect("starts");
-    writer.write_all("# Core\n\nUnknown is not pass \u{2014} ni\u{f1}o.\n".as_bytes()).expect("writes");
-    writer.start_file("suite/binary.bin", options).expect("starts");
-    writer.write_all(&[0xFF, 0xFE, 0x00]).expect("writes");
-    writer.finish().expect("finishes");
+    writer.start_file("suite/00-index.md", options).expect("the writer holds no open entry");
+    writer.write_all(b"---\nid: V0\n---\n\n# Index\n").expect("the open entry takes the bytes");
+    writer.start_file("suite/nested/01-core.md", options).expect("the writer holds no open entry");
+    writer
+        .write_all("# Core\n\nUnknown is not pass \u{2014} ni\u{f1}o.\n".as_bytes())
+        .expect("the open entry takes the bytes");
+    writer.start_file("suite/binary.bin", options).expect("the writer holds no open entry");
+    writer.write_all(BINARY_BYTES).expect("the open entry takes the bytes");
+    writer.finish().expect("the fixture's entries are all written, so it closes");
 
     return path;
 }
@@ -60,7 +89,8 @@ fn Fixture(name: &str) -> PathBuf
 #[test]
 fn Test_An_Archive_Should_List_Its_Files_Sorted()
 {
-    let mut archive = Archive::Open(&Fixture(LISTING_FIXTURE)).expect("opens");
+    let mut archive = Archive::Open(&Fixture(LISTING_FIXTURE))
+        .expect("the fixture is a zip this reader wrote, so it opens");
 
     assert_eq!(
         archive.Listing().Paths(),
@@ -72,7 +102,7 @@ fn Test_An_Archive_Should_List_Its_Files_Sorted()
     );
     assert!(archive.Listing().Has_Path("suite/nested/01-core.md"));
     assert!(!archive.Listing().Has_Path("suite/absent.md"));
-    assert_eq!(archive.Listing().Ending_With(".md").len(), 2);
+    assert_eq!(archive.Listing().Ending_With(".md").len(), FIXTURE_MARKDOWN_ENTRIES);
     assert_eq!(
         archive.Read_Text("suite/00-index.md").expect("reads"),
         "---\nid: V0\n---\n\n# Index\n"
@@ -83,9 +113,10 @@ fn Test_An_Archive_Should_List_Its_Files_Sorted()
 #[test]
 fn Test_An_Entry_Should_Be_Addressable_By_Its_Path()
 {
-    let mut archive = Archive::Open(&Fixture(ADDRESSING_FIXTURE)).expect("opens");
+    let mut archive = Archive::Open(&Fixture(ADDRESSING_FIXTURE))
+        .expect("the fixture is a zip this reader wrote, so it opens");
 
-    let text = archive.Read_Text("suite/nested/01-core.md").expect("reads");
+    let text = archive.Read_Text("suite/nested/01-core.md").expect("the fixture wrote this entry");
 
     assert!(text.contains("Unknown is not pass"));
     assert!(text.contains('\u{f1}'), "the bytes did not survive as UTF-8");
@@ -94,7 +125,8 @@ fn Test_An_Entry_Should_Be_Addressable_By_Its_Path()
 #[test]
 fn Test_A_Missing_Entry_Should_Name_The_Archive_And_The_Entry()
 {
-    let mut archive = Archive::Open(&Fixture(MISSING_ENTRY_FIXTURE)).expect("opens");
+    let mut archive = Archive::Open(&Fixture(MISSING_ENTRY_FIXTURE))
+        .expect("the fixture is a zip this reader wrote, so it opens");
 
     let refusal = archive.Read("suite/absent.md").expect_err("must refuse");
 
@@ -108,9 +140,13 @@ fn Test_A_Missing_Entry_Should_Name_The_Archive_And_The_Entry()
 #[test]
 fn Test_A_Binary_Entry_Should_Refuse_To_Be_Read_As_Text()
 {
-    let mut archive = Archive::Open(&Fixture(BINARY_FIXTURE)).expect("opens");
+    let mut archive = Archive::Open(&Fixture(BINARY_FIXTURE))
+        .expect("the fixture is a zip this reader wrote, so it opens");
 
-    assert_eq!(archive.Read("suite/binary.bin").expect("reads"), vec![0xFF, 0xFE, 0x00]);
+    assert_eq!(
+        archive.Read("suite/binary.bin").expect("the fixture wrote this entry"),
+        BINARY_BYTES.to_vec()
+    );
 
     let refusal = archive.Read_Text("suite/binary.bin").expect_err("must refuse");
     assert!(matches!(refusal.kind, ArchiveErrorKind::NotText { .. }), "{refusal}");
@@ -121,7 +157,7 @@ fn Test_A_Binary_Entry_Should_Refuse_To_Be_Read_As_Text()
 fn Test_An_Archive_Holding_Nothing_Should_Be_Refused_Not_Reported_Empty()
 {
     let path = std::env::temp_dir().join("nomos-p3-archive-empty.zip");
-    let file = std::fs::File::create(&path).expect("creates");
+    let file = std::fs::File::create(&path).expect("the temp directory is writable, so it creates the file");
     zip::ZipWriter::new(file).finish().expect("finishes an empty archive");
 
     let Err(refusal) = Archive::Open(&path)
@@ -170,13 +206,13 @@ fn Test_Every_Real_Archive_Should_Open_And_Hold_Files()
         docx_deliveries,
     } = counted;
 
-    assert_eq!(archives.len(), 32, "the archive count changed");
-    assert_eq!(with_markdown, 16, "the number of archives carrying markdown changed");
-    assert_eq!(revision_trees, 12, "the v14 revision series changed length");
-    assert_eq!(docx_deliveries, 16, "the DOCX delivery series changed length");
+    assert_eq!(archives.len(), ARCHIVES, "the archive count changed");
+    assert_eq!(with_markdown, ARCHIVES_WITH_MARKDOWN, "the number of archives carrying markdown changed");
+    assert_eq!(revision_trees, REVISION_TREES, "the v14 revision series changed length");
+    assert_eq!(docx_deliveries, DOCX_DELIVERIES, "the DOCX delivery series changed length");
     assert_eq!(
-        revision_trees.saturating_add(docx_deliveries).saturating_add(4),
-        32,
+        revision_trees.saturating_add(docx_deliveries).saturating_add(OTHER_ARCHIVES),
+        ARCHIVES,
         "the two series plus v15.0 and the three seed suites no longer account for every archive"
     );
 }
@@ -185,9 +221,9 @@ fn Test_Every_Real_Archive_Should_Open_And_Hold_Files()
 #[derive(Default)]
 struct Series
 {
-    with_markdown: u32,
-    revision_trees: u32,
-    docx_deliveries: u32,
+    with_markdown: usize,
+    revision_trees: usize,
+    docx_deliveries: usize,
 }
 
 /// One archive: it opens, it lists something, and it is one of the two series or neither.
@@ -217,7 +253,7 @@ fn Count_One_Archive(path: &std::path::Path, counted: &mut Series)
     {
         counted.revision_trees = counted.revision_trees.saturating_add(1);
         assert!(
-            markdown > 2000,
+            markdown > REVISION_TREE_MARKDOWN_FLOOR,
             "{name} is a revision tree holding only {markdown} markdown file(s)"
         );
     }
@@ -253,8 +289,8 @@ fn Test_The_V15_Archive_Should_Yield_Its_Records()
         .count();
     let decision = "nomos-spec-v15.0/records/decisions/D-045-runtime-capture-boundary.md";
 
-    assert_eq!(archive.Listing().Paths().len(), 273, "the v15.0 file count changed");
-    assert!(records >= 60, "only {records} records under records/");
+    assert_eq!(archive.Listing().Paths().len(), V15_FILES, "the v15.0 file count changed");
+    assert!(records >= V15_RECORDS_FLOOR, "only {records} records under records/");
     assert!(archive.Listing().Has_Path(decision), "the v15 decision records are not where I4 expects");
     assert!(
         archive.Read_Text(decision).expect("reads").starts_with("---\nid: D-045"),
@@ -276,7 +312,7 @@ fn Test_Reading_Should_Not_Unpack()
     // An open that failed quietly would leave the two listings identical because nothing was ever
     // read, and the assertion below would report "reading did not unpack" having never read.
     let mut archive = Archive::Open(&path).unwrap_or_else(|error| panic!("{error}"));
-    for entry in archive.Listing().Ending_With(".md").iter().take(20)
+    for entry in archive.Listing().Ending_With(".md").iter().take(UNPACK_SAMPLE)
     {
         // The same vacuity one entry at a time: a read that errored cannot have put anything on
         // disk, so swallowing it buys the comparison below for free.
@@ -289,7 +325,7 @@ fn Test_Reading_Should_Not_Unpack()
 fn Listing(directory: &std::path::Path) -> Vec<String>
 {
     let mut names: Vec<String> = std::fs::read_dir(directory)
-        .expect("lists")
+        .expect("the caller established this directory exists")
         .flatten()
         .map(|entry| return entry.file_name().to_string_lossy().into_owned())
         .collect();

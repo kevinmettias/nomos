@@ -55,10 +55,12 @@
 
 mod agent_dispatch_outcome;
 mod backend;
+mod dispatch_config;
 mod run;
 mod validated_correction;
 
 pub use agent_dispatch_outcome::AgentDispatchOutcome;
 pub use backend::Backend;
-pub use run::{AgentEnvironment, DispatchConfig, Run_Agent_Execute, Run_Agent_Judgment};
+pub use dispatch_config::DispatchConfig;
+pub use run::{AgentEnvironment, Run_Agent_Execute, Run_Agent_Judgment};
 pub use validated_correction::{Run_Validated_Correction, ValidatedCorrectionOutcome};

@@ -1,18 +1,22 @@
 //! Ordering. The gate runs first and short-circuits.
 
-use crate::launcher::{Bench, Bench_At, Finish_In, Scripted, WORKFLOW};
+use crate::launcher::{Bench, Bench_At, Finish_In, Scripted, GATE_FAILED_EXIT, WORKFLOW};
+
+/// How many steps a finish runs when the gate is green: the gate first, the predicate second.
+const STEPS_WHEN_THE_GATE_IS_GREEN: usize = 2;
 
 #[test]
 fn Test_The_Gate_Should_Run_Before_The_Predicate_And_Short_Circuit()
 {
-    let scripted = Scripted::New(101, 0);
+    let scripted = Scripted::New(GATE_FAILED_EXIT, 0);
     let Bench {
         directory,
         mut ledger,
         launcher,
     } = Bench_At("ordering", Some(WORKFLOW), scripted);
 
-    let _ = Finish_In(&mut ledger, &directory, &launcher, "T-1");
+    Finish_In(&mut ledger, &directory, &launcher, "T-1")
+        .expect_err("a red gate must refuse the finish before the predicate runs");
 
     let calls = launcher.Calls();
     assert_eq!(
@@ -35,10 +39,15 @@ fn Test_A_Green_Gate_Should_Still_Run_The_Predicate_Second()
         launcher,
     } = Bench_At("ordering-green", Some(WORKFLOW), scripted);
 
-    let _ = Finish_In(&mut ledger, &directory, &launcher, "T-1");
+    Finish_In(&mut ledger, &directory, &launcher, "T-1")
+        .expect("a green gate and a passing predicate finish the item");
 
     let calls = launcher.Calls();
-    assert_eq!(calls.len(), 2, "both steps must run: {calls:?}");
+    assert_eq!(
+        calls.len(),
+        STEPS_WHEN_THE_GATE_IS_GREEN,
+        "both steps must run: {calls:?}"
+    );
     assert!(calls.first().is_some_and(|first| {
         return first.iter().any(|argument| return argument == "clippy");
     }));

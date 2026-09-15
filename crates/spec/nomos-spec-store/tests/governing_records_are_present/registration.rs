@@ -152,7 +152,7 @@ fn Assert_Every_Governing_Record_Resolves(store: &SpecificationStore)
 {
     let missing: Vec<&str> = GOVERNING_RECORD_IDS
         .iter()
-        .filter(|id| store.Node_Uid(id).expect("queries").is_none())
+        .filter(|id| store.Node_Uid(id).expect("the seed wrote each governing id as a node row").is_none())
         .copied()
         .collect();
 
@@ -437,7 +437,8 @@ fn Test_The_Build_Script_Should_Not_Enumerate_The_Record_Directory()
 #[test]
 fn Test_An_Unseeded_Store_Should_Hold_None_Of_Them()
 {
-    let store = SpecificationStore::In_Memory().expect("opens");
+    let store = SpecificationStore::In_Memory()
+        .expect("In_Memory() builds the store from the schema alone, with no file and no seed");
 
     for id in GOVERNING_RECORD_IDS
     {

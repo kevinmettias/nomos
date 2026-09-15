@@ -69,7 +69,14 @@ const MAX_NESTING_DEPTH: usize = 3;
 const NESTING_DEPTH_MAX_KEY: &str = "nesting-depth-max";
 
 /// The control-flow keywords that open a level.
-const CONSTRUCT_KEYWORDS: [&str; 5] = ["if", "while", "for", "loop", "match"];
+const CONSTRUCT_KEYWORDS: [ConstructKeyword<'static>; 5] =
+    [ConstructKeyword("if"), ConstructKeyword("while"), ConstructKeyword("for"), ConstructKeyword("loop"), ConstructKeyword("match")];
+
+/// One of the keywords above, as a value rather than a bare `&str`: [`Opens_Construct`] takes
+/// it beside the line it is looked for in, and two bare `&str`s in adjacent positions are
+/// transposable at a call site with nothing to catch it.
+#[derive(Clone, Copy)]
+struct ConstructKeyword<'a>(&'a str);
 
 /// The modifiers a function declaration may carry before its keyword.
 const FUNCTION_MODIFIERS: [&str; 5] = ["pub", "async", "unsafe", "const", "extern"];
@@ -83,7 +90,8 @@ pub fn Check_Nesting_Depth(sources: &[SourceFile], facts: &mut dyn FactReader) -
 
     for source in sources.iter().filter(|source| return source.Is_Written_In(RUST_LANGUAGE))
     {
-        findings.extend(Deep_Function_Findings_In(source, limit));
+        let found = Deep_Function_Findings_In(source, limit);
+        findings.extend(found);
     }
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
@@ -123,60 +131,165 @@ struct FunctionScan
     breach: Option<Breach>,
 }
 
+/// One pass over a source's lines, carrying what each line needs from the line before it: the
+/// literal left open, the brace depth reached, the function body being scanned, and the
+/// findings the walk has produced. The state the loop body would otherwise thread through five
+/// locals, named so the walk reads as a walk rather than a tally.
+struct NestingWalk<'a>
+{
+    /// The source whose lines are walked — the subject and path every finding carries.
+    source: &'a SourceFile,
+    /// The deepest nesting this walk accepts, resolved once for the whole run.
+    limit: usize,
+    /// The literal state the line before left open.
+    literal: RustLiteralState,
+    /// The brace depth the line before ended at.
+    depth: usize,
+    /// The function body being scanned, when the walk is inside one.
+    open: Option<FunctionScan>,
+    /// Every breach found so far, in line order.
+    findings: Vec<Finding>,
+}
+
 /// Reports the functions in one source whose nesting passes `limit`.
 fn Deep_Function_Findings_In(source: &SourceFile, limit: usize) -> Vec<Finding>
 {
-    let mut findings = Vec::new();
-    let mut literal = RustLiteralState::None;
-    let mut depth = 0usize;
-    let mut scan: Option<FunctionScan> = None;
+    let mut walk = NestingWalk::New(source, limit);
 
     for (index, line) in source.text.lines().enumerate()
     {
-        let code = String::from_utf8_lossy(&Advance_Literal_State(line, &mut literal)).into_owned();
+        walk.Step(index, line);
+    }
+    walk.Judge_Open_Function();
+
+    return walk.findings;
+}
+
+impl<'a> NestingWalk<'a>
+{
+    fn New(source: &'a SourceFile, limit: usize) -> NestingWalk<'a>
+    {
+        return NestingWalk {
+            source,
+            limit,
+            literal: RustLiteralState::None,
+            depth: 0usize,
+            open: None,
+            findings: Vec::new(),
+        };
+    }
+
+    /// One line of the walk: close the constructs its braces closed, judge a function it ended,
+    /// then either open a scan or read the line's own construct — in that order, because a line
+    /// that both ends one body and opens another is the shape a one-line function has.
+    fn Step(&mut self, index: usize, line: &str)
+    {
+        let literal_bytes = Advance_Literal_State(line, &mut self.literal);
+        let code = String::from_utf8_lossy(&literal_bytes).into_owned();
         let opened = code.matches('{').count();
         let closed = code.matches('}').count();
-        let after_closing = depth.saturating_sub(closed);
+        let after_closing = self.depth.saturating_sub(closed);
 
-        if let Some(open) = scan.as_mut()
+        self.Close_Constructs_Above(after_closing);
+        if self.Is_Past_The_Open_Function(after_closing)
+        {
+            self.Judge_Open_Function();
+        }
+        if self.open.is_none() && Opens_A_Function(&code)
+        {
+            self.open = Some(self.Opened_Scan(opened));
+        }
+        else if let Some(open) = self.open.as_mut()
+        {
+            Consider_Line(open, &code, LinePosition { number: index.saturating_add(1), depth: self.depth });
+        }
+        self.depth = self.depth.saturating_add(opened).saturating_sub(closed);
+    }
+
+    /// Drops every construct the closing braces on this line closed.
+    fn Close_Constructs_Above(&mut self, after_closing: usize)
+    {
+        if let Some(open) = self.open.as_mut()
         {
             open.open_constructs.retain(|construct| return *construct <= after_closing);
         }
-
-        let function_ended = scan.as_ref().is_some_and(|open| return after_closing < open.body_depth);
-
-        if function_ended
-            && let Some(finished) = scan.take()
-            && let Some(breach) = finished.breach
-        {
-            findings.push(Nesting_Finding(source, &breach));
-        }
-
-        if scan.is_none() && Opens_A_Function(&code)
-        {
-            scan = Some(FunctionScan {
-                limit,
-                body_depth: depth.saturating_add(opened),
-                open_constructs: Vec::new(),
-                awaiting_block: None,
-                breach: None,
-            });
-        }
-        else if let Some(open) = scan.as_mut()
-        {
-            Consider_Line(open, &code, LinePosition { number: index.saturating_add(1), depth });
-        }
-
-        depth = depth.saturating_add(opened).saturating_sub(closed);
     }
 
-    if let Some(finished) = scan
-        && let Some(breach) = finished.breach
+    /// Whether this line's closing braces ended the function body being scanned.
+    fn Is_Past_The_Open_Function(&self, after_closing: usize) -> bool
     {
-        findings.push(Nesting_Finding(source, &breach));
+        return self.open.as_ref().is_some_and(|open| return after_closing < open.body_depth);
     }
 
-    return findings;
+    /// Judges the function the walk is inside, if it is inside one at all, and reports its
+    /// breach when it has one. A body with no breach is discarded without a finding.
+    fn Judge_Open_Function(&mut self)
+    {
+        let Some(finished) = self.open.take()
+        else
+        {
+            return;
+        };
+        if let Some(breach) = finished.breach
+        {
+            let finding = Nesting_Finding(self.source, &breach);
+            self.findings.push(finding);
+        }
+    }
+
+    /// The scan a function declaration opens: a body whose own depth is this line's brace depth
+    /// plus the braces the line opened.
+    fn Opened_Scan(&self, opened: usize) -> FunctionScan
+    {
+        return FunctionScan {
+            limit: self.limit,
+            body_depth: self.depth.saturating_add(opened),
+            open_constructs: Vec::new(),
+            awaiting_block: None,
+            breach: None,
+        };
+    }
+}
+
+/// The one finding a too-deeply-nested function produces.
+fn Nesting_Finding(source: &SourceFile, breach: &Breach) -> Finding
+{
+    let location = format!("{}:{}", source.path, breach.line_number);
+    let depth = breach.depth;
+
+    return Finding {
+        rule: RuleId::New(NESTING_DEPTH),
+        subject: source.subject,
+        subject_name: location.clone(),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary: format!(
+            "{location} nests control flow {depth} levels deep; by this level a reader holds every enclosing condition in their head to know whether the line runs at all -- flatten it with a guard clause and an early return, or extract the inner levels into a named helper"
+        ),
+        locations: vec![location],
+    };
+}
+
+/// Whether this line declares a function, past any modifiers it carries.
+fn Opens_A_Function(code: &str) -> bool
+{
+    let mut rest = code.trim_start();
+
+    while let Some(modifier) = FUNCTION_MODIFIERS.iter().find_map(|modifier| return Word_Prefix(rest, modifier))
+    {
+        let mut after = modifier.trim_start();
+
+        if let Some(after_open) = after.strip_prefix('(')
+            && let Some(close) = after_open.find(')')
+        {
+            after = after_open.get(close.saturating_add(1)..).unwrap_or("");
+        }
+
+        rest = after.trim_start();
+    }
+
+    return Word_Prefix(rest, "fn").is_some();
 }
 
 /// Advances one line of a function body: notes a construct whose keyword opens here, and
@@ -189,18 +302,14 @@ fn Consider_Line(scan: &mut FunctionScan, code: &str, position: LinePosition)
         Record_Level(scan, level, position.number);
     }
 
-    if code.contains('{') && scan.awaiting_block.take().is_some()
+    if code.contains('{')
     {
-        scan.open_constructs.push(position.depth.saturating_add(1));
-    }
-}
+        let awaited = scan.awaiting_block.take().is_some();
 
-/// Notes `level` as reached, and remembers the first line to pass the scan's own limit.
-fn Record_Level(scan: &mut FunctionScan, level: usize, line_number: usize)
-{
-    if level > scan.limit && scan.breach.is_none()
-    {
-        scan.breach = Some(Breach { line_number, depth: level });
+        if awaited
+        {
+            scan.open_constructs.push(position.depth.saturating_add(1));
+        }
     }
 }
 
@@ -211,6 +320,39 @@ fn Record_Level(scan: &mut FunctionScan, level: usize, line_number: usize)
 /// construct at all, because it is the other half of the `if` already counted.
 fn Level_Opened_By(code: &str, open_constructs: usize) -> Option<usize>
 {
+    let (rest, continues_a_decision) = Past_Else(Construct_Start(code))?;
+    let keyword = CONSTRUCT_KEYWORDS.iter().find(|keyword| return Opens_Construct(rest, **keyword))?;
+
+    if continues_a_decision && keyword.0 == "if"
+    {
+        return Some(open_constructs.max(1));
+    }
+
+    return Some(open_constructs.saturating_add(1));
+}
+
+/// The `rest` a construct keyword is read from, and whether this line continues the decision
+/// above it (`else`/`else if`) rather than opening one. `None` when the line carries an `else`
+/// with something other than an `if` after it, which opens no construct of its own — the `else`
+/// belongs to the `if` already counted.
+fn Past_Else(rest: &str) -> Option<(&str, bool)>
+{
+    let Some(after_else) = Word_Prefix(rest, "else")
+    else
+    {
+        return Some((rest, false));
+    };
+
+    let following = after_else.trim_start();
+    Word_Prefix(following, "if")?;
+
+    return Some((following, true));
+}
+
+/// `code` past the closing braces and any loop label that lead it: where a construct's own
+/// keyword would appear.
+fn Construct_Start(code: &str) -> &str
+{
     let mut rest = code.trim_start();
 
     while let Some(after_brace) = rest.strip_prefix('}')
@@ -218,25 +360,7 @@ fn Level_Opened_By(code: &str, open_constructs: usize) -> Option<usize>
         rest = after_brace.trim_start();
     }
 
-    rest = Without_Loop_Label(rest);
-    let mut continues_a_decision = false;
-
-    if let Some(after_else) = Word_Prefix(rest, "else")
-    {
-        continues_a_decision = true;
-        rest = after_else.trim_start();
-
-        Word_Prefix(rest, "if")?;
-    }
-
-    let keyword = CONSTRUCT_KEYWORDS.iter().find(|keyword| return Opens_Construct(rest, keyword))?;
-
-    if continues_a_decision && *keyword == "if"
-    {
-        return Some(open_constructs.max(1));
-    }
-
-    return Some(open_constructs.saturating_add(1));
+    return Without_Loop_Label(rest);
 }
 
 /// `code` past a loop label, when it carries one. `'outer: for row in rows` is a loop, and a
@@ -268,15 +392,15 @@ fn Without_Loop_Label(code: &str) -> &str
 /// Whether `code` opens `keyword` as a construct rather than as part of a longer name — and,
 /// for `for`, not as the higher-ranked `for<'lifetime>` of a `where` clause, which is a
 /// binder and not a loop.
-fn Opens_Construct(code: &str, keyword: &str) -> bool
+fn Opens_Construct(code: &str, keyword: ConstructKeyword<'_>) -> bool
 {
-    let Some(after_keyword) = code.strip_prefix(keyword)
+    let Some(after_keyword) = code.strip_prefix(keyword.0)
     else
     {
         return false;
     };
 
-    if *keyword == *"for" && after_keyword.starts_with('<')
+    if keyword.0 == "for" && after_keyword.starts_with('<')
     {
         return false;
     }
@@ -284,32 +408,12 @@ fn Opens_Construct(code: &str, keyword: &str) -> bool
     return after_keyword.is_empty() || after_keyword.starts_with([' ', '\t', '{']);
 }
 
-/// Whether this line declares a function, past any modifiers it carries.
-fn Opens_A_Function(code: &str) -> bool
+/// Notes `level` as reached, and remembers the first line to pass the scan's own limit.
+fn Record_Level(scan: &mut FunctionScan, level: usize, line_number: usize)
 {
-    let mut rest = code.trim_start();
-
-    loop
+    if level > scan.limit && scan.breach.is_none()
     {
-        if Word_Prefix(rest, "fn").is_some()
-        {
-            return true;
-        }
-
-        let Some(modifier) = FUNCTION_MODIFIERS.iter().find_map(|modifier| return Word_Prefix(rest, modifier))
-        else
-        {
-            return false;
-        };
-        let mut after = modifier.trim_start();
-
-        if let Some(after_open) = after.strip_prefix('(')
-            && let Some(close) = after_open.find(')')
-        {
-            after = after_open.get(close.saturating_add(1)..).unwrap_or("");
-        }
-
-        rest = after.trim_start();
+        scan.breach = Some(Breach { line_number, depth: level });
     }
 }
 
@@ -327,263 +431,5 @@ fn Word_Prefix<'a>(code: &'a str, word: &str) -> Option<&'a str>
     return Some(after_word);
 }
 
-/// The one finding a too-deeply-nested function produces.
-fn Nesting_Finding(source: &SourceFile, breach: &Breach) -> Finding
-{
-    let location = format!("{}:{}", source.path, breach.line_number);
-    let depth = breach.depth;
-
-    return Finding {
-        rule: RuleId::New(NESTING_DEPTH),
-        subject: source.subject,
-        subject_name: location.clone(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!(
-            "{location} nests control flow {depth} levels deep; by this level a reader holds every enclosing condition in their head to know whether the line runs at all -- flatten it with a guard clause and an early return, or extract the inner levels into a named helper"
-        ),
-        locations: vec![location],
-    };
-}
-
 #[cfg(test)]
-mod tests
-{
-    use super::*;
-    use crate::checks::test_support;
-    use nomos_analysis::{MemoryFactStore, Reader};
-    use nomos_capability::Registry;
-    use nomos_contracts::SubjectId;
-    use nomos_model::Content_Digest;
-
-    #[test]
-    fn Test_Check_Nesting_Depth_Should_Report_A_Function_Past_The_Limit()
-    {
-        let findings = Judge(&[Source("demo/src/a.rs", &Nested(MAX_NESTING_DEPTH + 1))]);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
-        assert_eq!(found.rule, RuleId::New(NESTING_DEPTH));
-        assert_eq!(found.gate, GateCategory::Blocking);
-    }
-
-    /// A function *reaching* the limit is fine; only one past it is reported.
-    #[test]
-    fn Test_Check_Nesting_Depth_Should_Accept_A_Function_At_The_Limit()
-    {
-        let findings = Judge(&[Source("demo/src/a.rs", &Nested(MAX_NESTING_DEPTH))]);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// One finding per function, at the first construct to cross — not one per level.
-    #[test]
-    fn Test_Check_Nesting_Depth_Should_Report_A_Function_Once()
-    {
-        let findings = Judge(&[Source("demo/src/a.rs", &Nested(MAX_NESTING_DEPTH + 3))]);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    /// An else-if is the second question in one decision, not a decision inside one.
-    #[test]
-    fn Test_Check_Nesting_Depth_Should_Not_Deepen_For_An_Else_If()
-    {
-        let text = Function(&[
-            "    if a", "    {", "        if b", "        {", "            if c",
-            "            {", "                return 1;", "            }",
-            "            else if d", "            {", "                return 2;",
-            "            }", "        }", "    }",
-        ]);
-
-        let findings = Judge(&[Source("demo/src/a.rs", &text)]);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// The other half of the same rule: an else-if does not deepen, but its body still does.
-    #[test]
-    fn Test_Check_Nesting_Depth_Should_Deepen_Inside_An_Else_If_Body()
-    {
-        let text = Function(&[
-            "    if a", "    {", "        if b", "        {", "            return 1;",
-            "        }", "        else if c", "        {", "            if d",
-            "            {", "                if e", "                {",
-            "                    return 2;", "                }", "            }",
-            "        }", "    }",
-        ]);
-
-        let findings = Judge(&[Source("demo/src/a.rs", &text)]);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    /// A brace that opens no control flow adds no level, which is the whole reason this
-    /// counts constructs rather than braces.
-    #[test]
-    fn Test_Check_Nesting_Depth_Should_Not_Count_A_Brace_That_Opens_No_Control_Flow()
-    {
-        let text = Function(&[
-            "    if a", "    {", "        let held = Point { x: 1, y: 2 };",
-            "        let run = |value: u8| { return value; };", "        match held.x",
-            "        {", "            0 => { return 1; },", "            _ => { return 2; },",
-            "        }", "    }",
-        ]);
-
-        let findings = Judge(&[Source("demo/src/a.rs", &text)]);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// A labelled loop is a loop, and a scan that stopped at the quote would miss it.
-    #[test]
-    fn Test_Check_Nesting_Depth_Should_Count_A_Labelled_Loop()
-    {
-        let text = Function(&[
-            "    'outer: for row in rows", "    {", "        for column in columns",
-            "        {", "            while ready", "            {", "                loop",
-            "                {", "                    break 'outer;", "                }",
-            "            }", "        }", "    }",
-        ]);
-
-        let findings = Judge(&[Source("demo/src/a.rs", &text)]);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    /// A higher-ranked binder in a where clause is not a loop, and reading it as one is a
-    /// mistake a sibling prototype actually made against this workspace.
-    #[test]
-    fn Test_Check_Nesting_Depth_Should_Not_Read_A_Higher_Ranked_Binder_As_A_Loop()
-    {
-        let text = Function(&[
-            "    if a", "    {", "        if b", "        {", "            if c",
-            "            {", "                return 1;", "            }", "        }", "    }",
-        ]);
-        let bound = format!("where\n    for<'error> Error: From<&'error Cause>,\n{text}");
-
-        let findings = Judge(&[Source("demo/src/a.rs", &bound)]);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// A brace inside a string literal is not a block. This crate has paid twice for a
-    /// scanner that could not tell the difference.
-    #[test]
-    fn Test_Check_Nesting_Depth_Should_Not_Count_A_Brace_Inside_A_String()
-    {
-        let text = Function(&[
-            "    if a", "    {", "        let shape = \"if b { if c { if d { deep\";",
-            "        return shape.len();", "    }",
-        ]);
-
-        let findings = Judge(&[Source("demo/src/a.rs", &text)]);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Nesting_Depth_Should_Judge_Each_Function_Separately()
-    {
-        let text = format!("{}\n{}", Nested(MAX_NESTING_DEPTH), Nested(MAX_NESTING_DEPTH + 1));
-
-        let findings = Judge(&[Source("demo/src/a.rs", &text)]);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Nesting_Depth_Should_Ignore_A_Language_It_Does_Not_Judge()
-    {
-        let findings = Judge(&[Source("demo/src/a.go", &Nested(MAX_NESTING_DEPTH + 1))]);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    /// The limit is a repository's to declare, the same `OD-RULES-011` mechanism the
-    /// file-size triggers already resolve through — a declared ceiling of one reports a
-    /// function the compiled default accepts.
-    #[test]
-    fn Test_Check_Nesting_Depth_Should_Resolve_A_Declared_Limit()
-    {
-        let offering = test_support::Offering(
-            nomos_cap_limits_policy::Capability_Contract(),
-            nomos_cap_limits_policy::Capability(),
-            nomos_cap_limits_policy::CONTRACT_VERSION,
-            "nomos.test.limits.provides",
-            nomos_cap_limits_policy::Ceiling(),
-        );
-        let test_support::TestOffering { mut store, registry, offer } = offering;
-        let payload = nomos_cap_limits_policy::LimitsPolicyPayload {
-            rows: vec![nomos_cap_limits_policy::PolicyRow {
-                scope: nomos_cap_limits_policy::Scope::Repository,
-                key: NESTING_DEPTH_MAX_KEY.to_owned(),
-                value: 1,
-            }],
-        };
-        test_support::Materialize(
-            &mut store,
-            nomos_model::Subject_Of_Path(""),
-            &offer,
-            nomos_analysis::InputDigest::Of(&[]),
-            nomos_cap_limits_policy::Payload_Schema(),
-            nomos_cap_limits_policy::Encode_Payload(&payload),
-        );
-        let mut facts = Reader::On(&store, &registry, test_support::Test_Context());
-
-        let findings = Check_Nesting_Depth(&[Source("demo/src/a.rs", &Nested(2))], &mut facts);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    /// Every test above reads an empty store, so the compiled default is the limit.
-    fn Judge(sources: &[SourceFile]) -> Vec<Finding>
-    {
-        let store = MemoryFactStore::New();
-        let registry = Registry::New();
-        let mut facts = Reader::On(&store, &registry, test_support::Test_Context());
-
-        return Check_Nesting_Depth(sources, &mut facts);
-    }
-
-    /// A function whose control flow nests exactly `levels` deep, built rather than spelled
-    /// so the shape stays readable at any depth.
-    fn Nested(levels: usize) -> String
-    {
-        let mut body = Vec::new();
-
-        for level in 0..levels
-        {
-            let indent = "    ".repeat(level.saturating_add(1));
-            body.push(format!("{indent}if ready"));
-            body.push(format!("{indent}{{"));
-        }
-
-        body.push("    return 1;".to_owned());
-
-        for level in (0..levels).rev()
-        {
-            body.push(format!("{}}}", "    ".repeat(level.saturating_add(1))));
-        }
-
-        let borrowed: Vec<&str> = body.iter().map(|line| return line.as_str()).collect();
-        return Function(&borrowed);
-    }
-
-    fn Function(body: &[&str]) -> String
-    {
-        let mut lines = vec!["fn Judged(ready: bool) -> u8".to_owned(), "{".to_owned()];
-        lines.extend(body.iter().map(|line| return (*line).to_owned()));
-        lines.push("    return 0;".to_owned());
-        lines.push("}".to_owned());
-        return lines.join("\n");
-    }
-
-    fn Source(path: &str, text: &str) -> SourceFile
-    {
-        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
-        source.language = crate::Recognized_Language_In_Tests(path);
-        return source;
-    }
-}
+mod tests;
