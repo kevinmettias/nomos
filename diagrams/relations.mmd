@@ -983,6 +983,7 @@ graph LR
     od_ledger_008 -->|"relates-to"| od_ledger_024
     od_ledger_008 -->|"relates-to"| od_ledger_026["OD-LEDGER-026"]
     od_ledger_008 -->|"relates-to"| od_ledger_027
+    od_ledger_008 -->|"relates-to"| od_ledger_039["OD-LEDGER-039"]
     od_ledger_008 -->|"relates-to"| od_package_009["OD-PACKAGE-009"]
     od_ledger_009 -->|"affected_by"| od_ledger_012
     od_ledger_009 -->|"relates-to"| od_ledger_001
@@ -1011,6 +1012,7 @@ graph LR
     od_ledger_012 -->|"relates-to"| od_ledger_005
     od_ledger_012 -->|"relates-to"| od_ledger_008
     od_ledger_012 -->|"relates-to"| od_ledger_016
+    od_ledger_012 -->|"relates-to"| od_ledger_039
     od_ledger_013 -->|"relates-to"| od_ledger_001
     od_ledger_013 -->|"relates-to"| od_ledger_008
     od_ledger_013 -->|"relates-to"| od_ledger_009
@@ -1028,6 +1030,7 @@ graph LR
     od_ledger_015 -->|"relates-to"| od_ledger_003
     od_ledger_015 -->|"relates-to"| od_ledger_009
     od_ledger_015 -->|"relates-to"| od_ledger_021
+    od_ledger_015 -->|"relates-to"| od_ledger_039
     od_ledger_015 -->|"relates-to"| od_platform_001
     od_ledger_016 -->|"affects"| od_ledger_001
     od_ledger_016 -->|"relates-to"| od_ledger_004
@@ -1065,6 +1068,7 @@ graph LR
     od_ledger_019 -->|"relates-to"| od_ledger_024
     od_ledger_019 -->|"relates-to"| od_ledger_034
     od_ledger_019 -->|"relates-to"| od_ledger_038
+    od_ledger_019 -->|"relates-to"| od_ledger_039
     od_ledger_020 -->|"relates-to"| od_ledger_005
     od_ledger_020 -->|"relates-to"| od_ledger_014
     od_ledger_020 -->|"relates-to"| od_ledger_019
@@ -1091,6 +1095,7 @@ graph LR
     od_ledger_024 -->|"relates-to"| od_ledger_008
     od_ledger_024 -->|"relates-to"| od_ledger_019
     od_ledger_024 -->|"relates-to"| od_ledger_022
+    od_ledger_024 -->|"relates-to"| od_ledger_039
     od_ledger_025 -->|"affected_by"| od_ledger_026
     od_ledger_025 -->|"relates-to"| od_ledger_014
     od_ledger_025 -->|"relates-to"| od_ledger_016
@@ -1145,6 +1150,13 @@ graph LR
     od_ledger_038 -->|"relates-to"| od_ledger_019
     od_ledger_038 -->|"relates-to"| od_ledger_020
     od_ledger_038 -->|"relates-to"| od_ledger_023
+    od_ledger_038 -->|"relates-to"| od_ledger_039
+    od_ledger_039 -->|"relates-to"| od_ledger_008
+    od_ledger_039 -->|"relates-to"| od_ledger_012
+    od_ledger_039 -->|"relates-to"| od_ledger_015
+    od_ledger_039 -->|"relates-to"| od_ledger_019
+    od_ledger_039 -->|"relates-to"| od_ledger_024
+    od_ledger_039 -->|"relates-to"| od_ledger_038
     od_model_001 -->|"relates-to"| od_ledger_001
     od_model_001 -->|"relates-to"| od_model_002
     od_model_001 -->|"relates-to"| od_rules_001
@@ -1898,6 +1910,7 @@ graph LR
     od_ledger_036
     od_ledger_037
     od_ledger_038
+    od_ledger_039
     od_model_001
     od_model_002
     od_package_001

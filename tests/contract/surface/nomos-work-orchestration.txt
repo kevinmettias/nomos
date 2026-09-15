@@ -11,6 +11,7 @@ pub enum variant nomos_work_orchestration::WorkCommand::Renew(ClaimRequest)
 pub enum variant nomos_work_orchestration::WorkCommand::Show { item: ItemId, }
 pub enum variant nomos_work_orchestration::WorkCommand::TakeOver(ClaimRequest)
 pub enum variant nomos_work_orchestration::WorkCommand::Validate
+pub enum variant nomos_work_orchestration::WorkCommand::Widen { item: ItemId, holder: String, adding: Vec<String>, }
 pub enum variant nomos_work_orchestration::WorkOutcome::Abandon(Result<(), ClaimRefusal>)
 pub enum variant nomos_work_orchestration::WorkOutcome::Add(Result<(), AddRefusal>)
 pub enum variant nomos_work_orchestration::WorkOutcome::Audit(Result<BoardView, LedgerError>)
@@ -22,6 +23,7 @@ pub enum variant nomos_work_orchestration::WorkOutcome::Renew(Result<Reservation
 pub enum variant nomos_work_orchestration::WorkOutcome::Show(Result<ShowView, LedgerError>)
 pub enum variant nomos_work_orchestration::WorkOutcome::TakeOver(Result<Reservation, ClaimRefusal>)
 pub enum variant nomos_work_orchestration::WorkOutcome::Validate(Result<LedgerDocument, LedgerError>)
+pub enum variant nomos_work_orchestration::WorkOutcome::Widen(Result<Vec<String>, ClaimRefusal>)
 pub fn nomos_work_orchestration::Run<Filesystem, ClockSource, Lock, Launcher>( command: &WorkCommand, ledger: &mut FileLedger<Filesystem, ClockSource, Lock>, launcher: &Launcher, published: impl FnOnce() -> Territory, ) -> WorkOutcome where Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock, Launcher: ProcessLauncher,
 pub struct field nomos_work_orchestration::BoardView::document: LedgerDocument
 pub struct field nomos_work_orchestration::BoardView::now: Timestamp

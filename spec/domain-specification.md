@@ -167,6 +167,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md | authored | 22 | 7 | sha256:3595ed422199d4058d69fa987aa9a1b826a27df82f6e0daa776f250e98ff51a0 |
 | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md@authored | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md | authored | 18 | 6 | sha256:ab5cb902ffef3564343e99f10236808102e5e0f1d3c8374831bc8e8ab0d579ad |
 | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md@authored | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md | authored | 38 | 12 | sha256:5c7849568533836d07c6844c09979f45b1d256845c3b09136bb51a9a9d5137f5 |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md@authored | docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md | authored | 45 | 14 | sha256:844727432856f31929b4e334136e241c81c3c25ed23cbddcda8923af41ba995f |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -1557,6 +1558,20 @@ profile: domain-specification
 | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#30 | authored | 2 | What was considered and rejected |
 | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#35 | authored | 2 | Controls |
 | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#37 | authored | 2 | Status |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#1 | authored | 1 | A territory is widened by its live holder under the same exclusion, and the widening is recorded |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#7 | authored | 2 | What was measured |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#13 | authored | 2 | The decision |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#14 | authored | 3 | 1. A live holder may enlarge the territory of an item they hold |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#17 | authored | 3 | 2. Authorization is a live lease, not a matching name |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#20 | authored | 3 | 3. The exclusion is the claim's own, re-run against the board as it stands |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#23 | authored | 3 | 4. Deciding and writing are one mutation under one lock acquisition |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#26 | authored | 3 | 5. The enlargement is recorded, not merged in silently |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#30 | authored | 3 | 6. The compatibility of the new field has two directions and two mechanisms |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#35 | authored | 2 | What this record does not do |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#40 | authored | 2 | What was considered and rejected |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#42 | authored | 2 | Controls |
+| docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#44 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -44038,6 +44053,380 @@ convention this record's own decision 4 uses to close its instance.
 
 Open. Closed for decision 1 when `P85-LEDGER-038-FANOUT-WARNING-2` finishes; decisions 2
 through 4 are closed by this record and its own repointing commit.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#1
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded · hash: sha256:be3aab5171cbb491b6bd0e2413fd9cc34cf7d6404127eb4d812369d5cf50c624*
+
+# A territory is widened by its live holder under the same exclusion, and the widening is recorded
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#2
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#3
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / Question · hash: sha256:d5d64c905ac24b78fa46ec1fba7469f3bf5e5d07ed04883aaf43cb83d68a9539*
+
+An item's territory is authored before the change it reserves has been attempted. It is
+therefore a prediction, and a prediction is sometimes wrong by one file.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#4
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / Question · hash: sha256:da4fc5af80004ef4a7c4f6dd11f289683643db199b1fa39fc52344447c93c004*
+
+Until this record the ledger had no proportionate answer. Territory is immutable once claimed
+and there was no verb to enlarge it, so a holder who found their reservation short by one
+legitimate path had exactly one route: abandon the claim, decline the item, re-author it with
+the missing path, and re-author every dependent the decline stranded, because a declined
+dependency never becomes `Done` and `OD-LEDGER-020` correctly calls its dependents `stranded`
+forever.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#5
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / Question · hash: sha256:de065385ff6dc5d674ba5dd84e91b0a8c659f17bd814c7e72e77dfd6dfd6c103*
+
+The immutability is not the defect and must survive. A holder who could rewrite their own
+reservation could take a path a peer is actively holding, and the exclusion check the board
+exists for would never be asked. What is wrong is that the refusal was total rather than
+proportionate: the ledger answered a request to add one path by ending the item.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#6
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / Question · hash: sha256:ded03a8832d479c14890364c6671d315a299e0630eb6e68c7d59531db9b68adb*
+
+There is a second loss and it is the one that compounds. The board cannot say how often a
+predicted cone escapes its reservation. A decline stores a holder, a timestamp and free
+prose, so the number is not derivable and any stated one would be a figure nobody could
+check. A widening refused into a decline destroys the evidence at the moment it is produced.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#7
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What was measured · hash: sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491*
+
+## What was measured
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#8
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What was measured · hash: sha256:ab5fbbb1b7216bb1c00447df3b9f860d0720fd88a8698150c0668255fc47b090*
+
+**One item, three declines, in one session on 2026-09-14.** The subject was a shared
+eligibility threshold in the specification crates.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#9
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What was measured · hash: sha256:e283d7c7d801e9ea1ccff0e1cc8a05da7cc979fc69eeb20720b0a47447fe2736*
+
+The first escape was a crate root. The helper the item's own rule had to call sat in a private
+module, so no other crate could name it, and the file carrying the module declaration was not
+reserved. The second was two fixtures whose bodies the change made vacuous: leaving them would
+have left two tests passing for a reason that was no longer the one they claimed, and editing
+them was outside the reservation. Neither file was reachable by grepping what the predicate
+reads. Both appeared only when the change was run. The third attempt reserved what an actual
+build and test run named, and held.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#10
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What was measured · hash: sha256:a224d0acaa5287b28bf504c1c27dae882274f3c8539e222ce6bbca3cdab22a91*
+
+The cost was not the editing. It was five ledger transitions and a dependent re-authored
+twice, for work whose only defect was that one file it legitimately had to touch could not be
+predicted before the attempt.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#11
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What was measured · hash: sha256:428f231a310d65b152ed1b427e250ab9faa64857a6d7f3b105c4abcc8d05c2d5*
+
+**A second cause, and the author was not wrong at all.** The decline of `P11-AMEND-TERRITORY`
+records a reservation that was correct when authored and became false afterwards: `ef1c93f`,
+*Give every substrate type its own file*, moved the type whose wording that item's `done_when`
+required it to change. The same decline states the population rather than the instance — three
+refactor commits split 49 files into 99, and eight open items reserved a file that was split.
+No prediction discipline reaches that case, because there was no prediction error.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#12
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What was measured · hash: sha256:3fcc925ebbad39aa22d32ff122d3bc3168de69b4f94d4c594dc54e1c5997156a*
+
+**The count of items whose terms rather than whose territory were wrong is different, and
+deliberately not addressed here.** Thirteen declines on this board cite the item's own wording;
+about eight are genuinely work that was right and terms that were not. Every one of those was
+a `Ready`, unclaimed item, where re-authoring costs a board entry and nothing else. The
+expensive case is the claimed one, which is this record's.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#13
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision · hash: sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0*
+
+## The decision
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#14
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 1. A live holder may enlarge the territory of an item they hold · hash: sha256:732eb12e5838bdc2a91e8ebdc0e6a81f30ec82e522822298173d85448e246602*
+
+### 1. A live holder may enlarge the territory of an item they hold
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#15
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 1. A live holder may enlarge the territory of an item they hold · hash: sha256:3429d6dd6b52bb249a849eb829b2796ea92ca7a8d35e2a28b8c091c275044041*
+
+`nomos work widen --item <id> --holder <name> --territory <path> …`, a fifth verb that changes
+the board.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#16
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 1. A live holder may enlarge the territory of an item they hold · hash: sha256:5b80d638953783d0564ac2afb1cc75902a4191531766adede174246945845a48*
+
+It **only ever adds**. There is no argument that can express a replacement territory, and that
+is the point rather than an omission: dropping a path drops the `done_when` clause that path
+carried, so narrowing must not be one typo away from a holder who meant to add one file. A
+path the territory already reserves contributes nothing, is not recorded as added, and is
+reported as such — compared after `Normalize_Path`, so two spellings of one path are one path
+here exactly as they are to `Territory::Intersect`.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#17
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 2. Authorization is a live lease, not a matching name · hash: sha256:f8c37797e05d4af53a5b0c698bec49e76d00b1e14178754fdb0466d518edf87b*
+
+### 2. Authorization is a live lease, not a matching name
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#18
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 2. Authorization is a live lease, not a matching name · hash: sha256:d455ab57c1471037056f611c9e082fd05b26a227b812ef5884e06612d2a1e0c8*
+
+A widening is refused when the item has no claim, when the item has ended, when the caller is
+not the holder, and — the case that needs stating — when the holder's lease has run out.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#19
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 2. Authorization is a live lease, not a matching name · hash: sha256:492f666ee896cf22e378fbaa06140e6f9f60a6ab7a8b55fb084f25f06fc87e7e*
+
+A lapsed claim stops excluding. `store/refusal.rs` already records that for takeovers: another
+item may since have been claimed over exactly the files this one reserves. A lapsed holder
+enlarging a reservation that currently excludes nobody is that hazard reached through a new
+verb, and their name still matching is precisely what would make it look permissible. The
+remedy named is `takeover`, which is the verb that makes the claim live again.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#20
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 3. The exclusion is the claim's own, re-run against the board as it stands · hash: sha256:98c5bf5cd529611c237817f2c47bd2f61ff754b69a8a349544ffb0e680300f6d*
+
+### 3. The exclusion is the claim's own, re-run against the board as it stands
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#21
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 3. The exclusion is the claim's own, re-run against the board as it stands · hash: sha256:cec359555c8535045828161fb9e4624af86a8b87cc85919cc9360a13049625fc*
+
+The enlarged territory is checked by `Held_Ground` — the same function a claim is refused by,
+called and not copied, so a widening cannot come to a different answer about contention than a
+claim would. The check is run over the territory the item *would have*: the target is cloned,
+the widening is applied to the clone, and the result is handed to the check. Asking instead
+whether each added path collides would be a second notion of what a widening produces, free to
+disagree with the one that applies it.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#22
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 3. The exclusion is the claim's own, re-run against the board as it stands · hash: sha256:27c324e72f93e393ff9ff486770934e5402783d09ba49dd3eb2fb5fa7932a993*
+
+It is re-run at widen time and never inherited from the claim. Independence was established
+when the claim was granted and the board has moved since.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#23
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 4. Deciding and writing are one mutation under one lock acquisition · hash: sha256:f7bf81a1cc51d92944b32c755c803b1c7e8278bc714304d9535810f882ee144e*
+
+### 4. Deciding and writing are one mutation under one lock acquisition
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#24
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 4. Deciding and writing are one mutation under one lock acquisition · hash: sha256:39c3aeb0d15a515ef0f059a1a5d58ac9072721b53be1d358bf0e5362699e0c5e*
+
+Load, holder check, enlargement, exclusion, history append, validation and write happen inside
+a single acquisition of the cross-process lock, through the same guarded path the fourth
+board-changing verb uses. `OD-LEDGER-015` is the record of what the three verbs before it cost
+by deciding outside it.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#25
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 4. Deciding and writing are one mutation under one lock acquisition · hash: sha256:a75c204dd725bb5705d547a00781125d94084430a935f070ab7d5a948a4cd614*
+
+Sharing the exclusion function is necessary and is not the property. Two widenings running at
+once can each observe a board on which their own added paths are free and jointly produce the
+overlap that check exists to prevent, and nothing about sharing the function prevents it.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#26
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 5. The enlargement is recorded, not merged in silently · hash: sha256:79763b84f75b4f6300c31a271f05f1dae398793a53ee38aaac417555e60b77a6*
+
+### 5. The enlargement is recorded, not merged in silently
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#27
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 5. The enlargement is recorded, not merged in silently · hash: sha256:d588c3acd7edfab42866355059fc596edf41527d0ccb6d3cd38e57e9a641fb0e*
+
+`LedgerItem::widened` keeps, per widening, which paths were added, by which holder, at what
+moment. The added paths rather than the territory afterwards, which the item already carries:
+what cannot be recovered from the item is which paths this particular widening contributed.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#28
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 5. The enlargement is recorded, not merged in silently · hash: sha256:d674e3e20f01b6a233af9597aa76f0c4f814e31a864582fd837cc560fca10b6e*
+
+A list and not a single row, for the reason `abandoned` and `displaced` are lists. An item
+widened twice was widened twice, and coalescing two rows into one would leave the territory
+correct while destroying the difference between one bad prediction and a reservation that was
+never a serious attempt.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#29
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 5. The enlargement is recorded, not merged in silently · hash: sha256:7c5b9597346a00c2771b7e1ea173bece9acb9d819b454867b5c3e1f182cd2b63*
+
+This is the measurement. How often a predicted cone escapes, and by how much, is answerable
+from these rows and from nothing else on the board.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#30
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 6. The compatibility of the new field has two directions and two mechanisms · hash: sha256:7727cbd7b8232b2902c8e9d34a47d89e9e533a118b2a33f1ae98f76a9266f7da*
+
+### 6. The compatibility of the new field has two directions and two mechanisms
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#31
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 6. The compatibility of the new field has two directions and two mechanisms · hash: sha256:ce11b73bafad3e134678f5b35cf00276455cd5b4b2d2a850d549d1a7c3a211d9*
+
+Stated separately because attributing either to the other is how a guard comes to rest on
+something that does not hold it.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#32
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 6. The compatibility of the new field has two directions and two mechanisms · hash: sha256:b45ea9f8895e6870c700eb5a85540911c867a5e7f7d5cf5fe2eb94bfba2b8466*
+
+An **older build meeting a newer file** is stopped by `#[serde(deny_unknown_fields)]` on
+`LedgerItem`, which refuses the parse on a key it does not know. This is mechanical and applies
+to any field ever added.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#33
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 6. The compatibility of the new field has two directions and two mechanisms · hash: sha256:ffc463b5a6a3ae73ff2c1fc4f3c0c4bde80166f879349cb111aa05e4e7ae2d4b*
+
+A **newer build meeting an older file** is stopped by the *absence* of `#[serde(default)]` on
+the new field. That is what forces the board to be migrated rather than silently read, and it
+is why the field carries none: an item written before this verb existed may well have been
+widened by the only means there was, which was to decline it and re-author it with more paths.
+Reading such a row as never widened would be a claim about history the document cannot support.
+`kind` and `origin` carry none for the same reason.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#34
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / The decision / 6. The compatibility of the new field has two directions and two mechanisms · hash: sha256:e3cc1e1b915f5f88858efa42d63ae3b41008a7174ae01974ac9504c092e73bf2*
+
+`SCHEMA_VERSION` does neither. It is consulted *after* a parse has already failed and decides
+only whether the operator reads `Unrecognized` or `Malformed`. `OD-LEDGER-008` chose that
+deliberately: a field once arrived without the number moving, so a guard resting on the bump
+would have reported clean on the next instance of the defect it was built for. A forgotten bump
+costs a sentence and cannot cost a field.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#35
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#36
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What this record does not do · hash: sha256:447a89a4e024fe34a287cfdca7d5501581e1c9cbd6a325a6e407282c8f0f861b*
+
+**It does not infer, validate or propose a dependency cone.** An author still predicts the
+territory and still measures it. The recorded widenings are the only evidence that would ever
+justify changing that, and there are none yet. A mechanism that computed the cone would be a
+different decision resting on data this one is built to produce.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#37
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What this record does not do · hash: sha256:6cb28dec057835a8366e80505312927b468020a6b8f7504b48c4b703c3e289c1*
+
+**It is not a licence to reserve loosely.** A claim is the author's best pre-work reservation
+and a widening is an evidence-backed repair for the case where execution disproves that
+prediction. It is not the first move of an incremental discovery of territory, and neither this
+record nor the verb's own help text may read as an invitation to treat it as one. The
+distinction is what keeps the history worth having: a board on which widening is routine has
+lost the measurement rather than gained a convenience, because an escape rate says nothing
+unless the reservations it is measured against were genuine attempts to get the territory
+right.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#38
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What this record does not do · hash: sha256:91e6b20e3efb96384b9827bbf32f95dab6989c9e706352abb2acbc9b9ef7e80b*
+
+**It does not make an item's terms editable.** `why`, `done_when`, the predicate and the
+dependencies are unchanged by this verb, and the evidence for a general edit is weaker and
+cheaper — see *What was measured*. A general mutable-item surface is not what a repeated
+expensive failure justifies.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#39
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What this record does not do · hash: sha256:cc18ade89c7d04972f737953a12da98ddf53bec44fa9ebf784c79fed023147cd*
+
+**It does not report a reservation that decayed under a peer's refactor.** The second measured
+cause is real and its repair is detection, not another mutation: `work audit` says nothing
+today about a reserved path that is no longer in the tree. That is filed separately.
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#40
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What was considered and rejected · hash: sha256:8f7f0641d3cd5b809218d2d25798211bc5d57fcdce7846941623bef23aa8bd85*
+
+## What was considered and rejected
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#41
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / What was considered and rejected · hash: sha256:a13ffab4d377d04b01dbdd53aa83d788653b613184090f9b86c79927a38ac05a*
+
+| Alternative | What it produces |
+|---|---|
+| let the holder write a whole new territory | narrowing one typo away, and a dropped path drops the `done_when` clause it carried |
+| skip the exclusion check for the item's own holder | the one refusal the verb has to earn, removed |
+| check each added path instead of the enlarged territory | a second notion of what a widening produces, free to disagree with the one that applies it |
+| decide under the lock and write after releasing it | two concurrent widenings each see a safe board and jointly create the overlap |
+| authorize on the holder's name alone | a lapsed holder enlarges a reservation that currently excludes nobody, onto ground a peer may hold |
+| union the paths without recording the widening | the territory stays correct and the measurement is destroyed |
+| coalesce repeated widenings into one row | one bad prediction becomes indistinguishable from a reservation that was never serious |
+| give the field `#[serde(default)]` | every item predating the verb reads as never widened, which the document cannot support |
+| rest the stale-writer guard on the schema bump | a field once arrived without the bump; the guard reports clean on the next instance |
+| infer the replacement territory and widen automatically | a cone computed from data this record exists to start collecting |
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#42
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#43
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / Controls · hash: sha256:a5f58f1bac769ae6ed296ac217bac291ac9f57126c5f946ac2f197bf8df118bc*
+
+| Weakening | What it produces |
+|---|---|
+| refuse every widening | the item is safe and the verb is pointless; the two granting tests are the control |
+| grant every widening | territory stops excluding, which is the whole of what the board does |
+| record the territory after instead of the paths added | a second shape that can drift from `Territory`, and the escape no longer recoverable |
+| drop the lapse refusal | authorization survives the lease that granted it |
+| report the request instead of what was added | a caller is told a path landed that was already there |
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#44
+
+*revision: authored · kind: heading · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#45
+
+*revision: authored · kind: prose · heading: A territory is widened by its live holder under the same exclusion, and the widening is recorded / Status · hash: sha256:f22858b9b3f28b7c48333558845dbbe989c4b8615db324173f96323a7f18e6b0*
+
+Accepted. Decisions 1 through 6 are closed by the commit that publishes this record; the
+detection of a reservation that decayed under a peer's refactor is a separate filed item and
+not a clause of this one.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 

@@ -84,6 +84,7 @@ fn Test_A_Lapsed_Item_Should_Refuse_A_Plain_Claim_And_Name_The_Takeover()
         Standing {
             held_by: Some("dead-agent"),
             displaced: Vec::new(),
+            widened: Vec::new(),
         },
         "the lapsed claim was replaced, or a refused claim recorded a displacement — either \
          way `claim` has quietly become `takeover`"

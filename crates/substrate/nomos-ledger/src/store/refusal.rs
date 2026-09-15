@@ -120,6 +120,89 @@ pub(super) fn Decline_Refusal(
     return Held_Or_Unready(target);
 }
 
+/// Why `holder` may not widen `item` by `adding` as of `now`, if they may not.
+///
+/// # Why the enlarged territory and not the added paths
+///
+/// The contention question is about the territory the item *would have*, so the check is run
+/// over exactly that: the target is cloned, [`LedgerItem::Widen`] is applied to the clone, and
+/// the result is handed to [`Held_Ground`]. Asking instead whether each added path collides
+/// would be a second notion of what a widening produces, free to disagree with the one that
+/// applies it -- and the answer that matters is the one the write will make true.
+///
+/// [`Held_Ground`] and not [`Contested_By`]. The dependency half of that pair asks whether an
+/// item may *start*, which a claimed item has already answered; re-asking it here would refuse
+/// a widening because a dependency was declined after the work began, which is a real problem
+/// and not this verb's to report.
+///
+/// # Why liveness and not the holder's name
+///
+/// The lapse check is first, as it is in [`Claim_Refusal`] and [`Decline_Refusal`], and here it
+/// is more than message ordering. A lapsed claim stops excluding -- which is what
+/// [`Contested_By`] already records for takeovers -- so another item may since have been
+/// claimed over exactly the files this one reserves. A holder whose lease has gone, enlarging a
+/// reservation that currently excludes nobody, is that hazard reached through a new verb, and
+/// their name still matching is precisely what makes it look permissible. They are told to take
+/// the item over first.
+pub(super) fn Widen_Refusal(
+    document: &LedgerDocument,
+    requested: &Enlargement<'_>,
+    now: Timestamp,
+) -> Option<ClaimRefusal>
+{
+    let Enlargement { item, holder, adding } = *requested;
+
+    let Some(target) = document.items.iter().find(|candidate| return &candidate.id == item)
+    else
+    {
+        return Some(ClaimRefusal::NoSuchItem { item: item.clone() });
+    };
+
+    if let Some(refusal) = Lapse_Refusal(target, now)
+    {
+        return Some(refusal);
+    }
+
+    // `Claimed` and a live claim are two facts and both are required. The state alone would
+    // admit an item whose claim record is missing, which `Validate` calls a corruption rather
+    // than a thing to widen; the claim alone would admit one that has been finished or
+    // declined out from under a holder who never released it.
+    let Some(claim) = target.claim.as_ref().filter(|_| return target.state == ItemState::Claimed)
+    else
+    {
+        return Some(ClaimRefusal::NotClaimable {
+            item: item.clone(),
+            state: target.state.Describe(),
+        });
+    };
+
+    if claim.holder != holder
+    {
+        return Some(ClaimRefusal::StillHeld {
+            item: item.clone(),
+            holder: claim.holder.clone(),
+            until: claim.lease_expires_at,
+        });
+    }
+
+    let mut enlarged = target.clone();
+    drop(enlarged.Widen(adding, holder, now));
+
+    return Held_Ground(document, &enlarged, now);
+}
+
+/// The widening being asked for -- grouped so this stays under the workspace's own
+/// parameter-count ceiling, the same reason [`Claimant`] is grouped in `validation.rs`.
+pub(super) struct Enlargement<'a>
+{
+    /// Which item is to be enlarged.
+    pub(super) item: &'a ItemId,
+    /// Who is asking, which must be the live holder.
+    pub(super) holder: &'a str,
+    /// The paths to add. Never a replacement territory.
+    pub(super) adding: &'a [String],
+}
+
 /// What a live claim or a state other than `Ready` does to a decline.
 ///
 /// `Describe` rather than a bare state word, so a `Declined` item's refusal carries the
@@ -522,6 +605,7 @@ mod tests
             verified: None,
             abandoned: Vec::new(),
             displaced: Vec::new(),
+            widened: Vec::new(),
             declined: None,
         };
     }

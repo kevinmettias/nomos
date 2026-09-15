@@ -157,6 +157,7 @@ fn Test_The_Ledger_Territory_A_Task_Envelope_Carries_Is_The_Same_Territory_A_Rea
         verified: None,
         abandoned: Vec::new(),
         displaced: Vec::new(),
+        widened: Vec::new(),
         declined: None,
     };
     ledger

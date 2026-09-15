@@ -77589,14 +77589,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p103-widen",
-        "acquired_at": 1789440668,
-        "lease_expires_at": 1789451468
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -77615,7 +77611,36 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "4128e1.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-5d8bdd3ad46949ca.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9081f35afc78d185.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-00551ef005ff6ac5.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-55c03e2f58ca2c01.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-1c48d29768a13792.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-d14649c9426f51eb.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-d043c73da60b6806.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-a0cddea1b2e75030.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-91836b81fba1bcf2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-cc68a4bcc3ccdbbb.exe)\n     Running tests\\declining_ends_an_item.rs (target\\debug\\deps\\declining_ends_an_item-8675c3e9d2148d74.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-d5e2654517ac36c7.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-f560418249ff2ecf.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-2b70e3445dc69cf1.exe)\n     Running tests\\scope_verification_integration.rs (target\\debug\\deps\\scope_verification_integration-d8bddce2f78ab4b0.exe)\n     Running tests\\widening_is_recorded.rs (target\\debug\\deps\\widening_is_recorded-c68923ba4e5091c1.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_work_orchestration-da11de9b68acaa80.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-d8d63d67f5d426b3.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_work_orchestration\n",
+        "verified_at": 1789443305,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f86f91a91e8292269b862725cb093a5278569fd1"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,

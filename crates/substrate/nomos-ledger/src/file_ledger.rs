@@ -51,7 +51,7 @@ mod board_files;
 
 use claiming::{Install_Claim, With_Own_Claim};
 use file::{Decide_Under_Lock, Load_Document, Save_Document};
-use verbs::{Add_Item, Decline_Item, Take_Over, Validate_Current};
+use verbs::{Add_Item, Decline_Item, Take_Over, Validate_Current, Widen_Territory};
 
 pub use refusal::{Claim_Refusal, Eligible_Items};
 pub use validation::Validate_Document;
@@ -262,6 +262,51 @@ FileLedger<Files, TimeSource, Lock>
         // update; a caller that drops it has made a choice, and this signature is what
         // makes that choice visible in review.
         return Ok((outcome, acquisition.broke_stale));
+    }
+
+    /// Enlarges a held item's territory, keeping what the enlargement added.
+    ///
+    /// A reservation is authored before the change it reserves has been attempted, so it is a
+    /// prediction, and a prediction is sometimes wrong by one file. Without this the only
+    /// repair is to abandon, decline and re-author -- which ends the item, strands every
+    /// dependent, and destroys the evidence that the prediction was short at the moment it is
+    /// produced. `OD-LEDGER-039`.
+    ///
+    /// # Why this is not on [`ExclusionLedger`]
+    ///
+    /// For the reason [`Self::Take_Over`] is not: the run-scoped reservations a correction
+    /// scheduler holds and the session-scoped leases delegated agents hold both die with the
+    /// process that made them, so neither has an author who authored a territory and a later
+    /// execution to disagree with it. Putting this on the shared trait would oblige two
+    /// instances to implement a repair for a mistake they cannot make.
+    ///
+    /// # What it will not do
+    ///
+    /// It only adds. There is no argument here that could express a replacement territory:
+    /// dropping a path drops the `done_when` clause that path carried, and a verb taking a
+    /// whole new territory would put narrowing one typo away from a holder who meant to add
+    /// one file. A path already reserved contributes nothing and is not recorded as added.
+    ///
+    /// It is not a licence to reserve loosely and discover territory as you go. The
+    /// measurement is the reason the enlargement is kept, and an escape rate says nothing
+    /// unless the reservations it is measured against were genuine attempts to get the
+    /// territory right.
+    ///
+    /// # Errors
+    ///
+    /// [`ClaimRefusal::Lapsed`] if the lease has run out -- a lapsed claim stops excluding, so
+    /// enlarging one reaches ground a peer may legitimately hold since, and the remedy named is
+    /// `takeover`. [`ClaimRefusal::StillHeld`] if somebody else holds it,
+    /// [`ClaimRefusal::NotClaimable`] if nobody does or the item has ended, and whatever a
+    /// claim over the enlarged territory would be refused with otherwise.
+    pub fn Widen(
+        &mut self,
+        item: &ItemId,
+        holder: Holder<'_>,
+        adding: &[String],
+    ) -> Result<Vec<String>, ClaimRefusal>
+    {
+        return Widen_Territory(self, item, holder, adding);
     }
 
     /// Takes a lapsed item over, keeping the claim it displaces.
@@ -786,6 +831,7 @@ mod tests
             verified: None,
             abandoned: Vec::new(),
             displaced: Vec::new(),
+            widened: Vec::new(),
             declined: None,
         };
     }

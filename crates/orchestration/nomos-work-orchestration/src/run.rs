@@ -56,6 +56,7 @@ where
         WorkCommand::Renew(request) => Renew_Outcome(ledger, request),
         WorkCommand::TakeOver(request) => TakeOver_Outcome(ledger, request),
         WorkCommand::Abandon(request) => Abandon_Outcome(ledger, request),
+        WorkCommand::Widen { item, holder, adding } => Widen_Outcome(ledger, item, holder, adding),
         WorkCommand::Decline(request) => Decline_Outcome(ledger, request),
         WorkCommand::Validate => WorkOutcome::Validate(Validated_Board(ledger)),
         WorkCommand::Audit => WorkOutcome::Audit(Board_View(ledger)),
@@ -234,6 +235,17 @@ fn Decline_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProces
     let board = Board_After(ledger, declined.is_ok());
 
     return WorkOutcome::Decline { declined, board };
+}
+
+/// `widen`: enlarge a held territory, and say what the enlargement added.
+fn Widen_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
+    item: &ItemId,
+    holder: &str,
+    adding: &[String],
+) -> WorkOutcome
+{
+    return WorkOutcome::Widen(ledger.Widen(item, holder.into(), adding));
 }
 
 /// The board, once it is known to satisfy its own invariants.

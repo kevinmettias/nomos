@@ -170,6 +170,7 @@ fn A_Claimed_Item() -> LedgerItem
         verified: None,
         abandoned: Vec::new(),
         displaced: Vec::new(),
+        widened: Vec::new(),
         declined: None,
     };
 }

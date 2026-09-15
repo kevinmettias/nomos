@@ -68,6 +68,7 @@ fn Item(id: &str, files: &[&str]) -> LedgerItem
         verified: None,
         abandoned: Vec::new(),
         displaced: Vec::new(),
+        widened: Vec::new(),
         declined: None,
     };
 }

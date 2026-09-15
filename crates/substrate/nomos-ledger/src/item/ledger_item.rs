@@ -10,9 +10,11 @@ use crate::ItemId;
 use crate::ItemKind;
 use crate::ItemOrigin;
 use crate::ItemState;
+use crate::Normalize_Path;
 use crate::Territory;
 use crate::VerificationPredicate;
 use crate::VerificationRecord;
+use crate::Widening;
 use nomos_platform::Timestamp;
 use serde::{Deserialize, Serialize};
 
@@ -115,6 +117,21 @@ pub struct LedgerItem
     /// than backfilled with an agent identifier nothing recorded.
     #[serde(default)]
     pub declined: Option<Declination>,
+    /// Every enlargement of this item's territory, oldest first. `OD-LEDGER-039`.
+    ///
+    /// No `#[serde(default)]`, for the reason [`LedgerItem::kind`] carries none and not for
+    /// the reason its two list neighbours carry one. `abandoned` and `displaced` are read as
+    /// empty on an older row because an item written before takeovers were recorded genuinely
+    /// had none. That is not true here: an item written before this field existed may have
+    /// been widened by the only means there was, which was to decline it and re-author it with
+    /// more paths, and reading such a row as never widened would be a claim about history the
+    /// document cannot support. The board is migrated instead, in the commit that adds this.
+    ///
+    /// No `skip_serializing_if` either, and for the reason [`LedgerItem::displaced`] has none:
+    /// a field whose presence depends on its content cannot be counted, and counting the key
+    /// across the file is this repository's standing check that no stale writer has been
+    /// through it.
+    pub widened: Vec<Widening>,
 }
 
 impl LedgerItem
@@ -194,6 +211,65 @@ impl LedgerItem
             declined_at: at,
         });
     }
+
+    /// Enlarges this territory, keeping what the enlargement added.
+    ///
+    /// Returns the paths that were actually added — those `paths` names that this territory
+    /// did not already reserve, compared after [`Normalize_Path`] so that two spellings of one
+    /// file are one path here exactly as they are to [`Territory::Intersect`]. An empty return
+    /// means every path was already held, and nothing is recorded: a widening row claiming to
+    /// have added what was already there would overstate the one number these rows exist to
+    /// carry honestly.
+    ///
+    /// One operation, for the reason [`LedgerItem::Decline`] and
+    /// [`LedgerItem::Try_Replace_Lapsed_Claim`] are each one. Spelled out at a call site, an
+    /// implementation is free to grow the territory and not record what it grew by, and the
+    /// record is the half `OD-LEDGER-039` exists to keep. There is no ordering of the
+    /// statements below in which the paths land and the [`Widening`] does not.
+    ///
+    /// It **only ever adds**. There is no parameter here that could express a replacement
+    /// territory, which is the point rather than an omission: dropping a path drops the
+    /// `done_when` clause that path carried, so narrowing is not a thing a holder may do by
+    /// accident or otherwise.
+    ///
+    /// It performs no checks. Whether this holder may widen at all is `Widen_Refusal`'s
+    /// question, asked once under the lock, and asking it twice is how two answers come to
+    /// disagree.
+    pub fn Widen<'a>(&mut self, paths: &[String], holder: impl Into<Holder<'a>>, at: Timestamp) -> Vec<String>
+    {
+        let holder = holder.into();
+        let mut added: Vec<String> = Vec::new();
+
+        for path in paths
+        {
+            let normalized = Normalize_Path(path);
+            let held = self
+                .territory
+                .paths
+                .iter()
+                .chain(added.iter())
+                .any(|existing| return Normalize_Path(existing) == normalized);
+
+            if !held
+            {
+                added.push(path.clone());
+            }
+        }
+
+        if added.is_empty()
+        {
+            return added;
+        }
+
+        self.territory.paths.extend(added.iter().cloned());
+        self.widened.push(Widening {
+            holder: holder.As_Text().to_owned(),
+            added: added.clone(),
+            widened_at: at,
+        });
+
+        return added;
+    }
 }
 
 #[cfg(test)]
@@ -272,6 +348,7 @@ mod tests
             verified: None,
             abandoned: Vec::new(),
             displaced: Vec::new(),
+            widened: Vec::new(),
             declined: None,
         };
     }

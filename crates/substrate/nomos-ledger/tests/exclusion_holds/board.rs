@@ -83,6 +83,7 @@ pub(crate) fn Item(id: &str, files: &[&str]) -> LedgerItem
         verified: None,
         abandoned: Vec::new(),
         displaced: Vec::new(),
+        widened: Vec::new(),
         declined: None,
     };
 }
@@ -364,6 +365,13 @@ pub(crate) struct Standing<'a>
 {
     pub(crate) held_by: Option<&'a str>,
     pub(crate) displaced: Vec<&'a str>,
+    /// Who has widened this item's territory, oldest first.
+    ///
+    /// Here so that every assertion in this suite says a verb wrote no widening, rather than
+    /// only the tests that thought to ask. `OD-LEDGER-039` added a second thing a mutating
+    /// verb can write to an item, and a summary of the observable claim state that omitted it
+    /// would let a verb start recording one with every existing test still green.
+    pub(crate) widened: Vec<&'a str>,
 }
 
 pub(crate) fn Standing_Of(item: &LedgerItem) -> Standing<'_>
@@ -374,6 +382,11 @@ pub(crate) fn Standing_Of(item: &LedgerItem) -> Standing<'_>
             .displaced
             .iter()
             .map(|claim| return claim.holder.as_str())
+            .collect(),
+        widened: item
+            .widened
+            .iter()
+            .map(|widening| return widening.holder.as_str())
             .collect(),
     };
 }

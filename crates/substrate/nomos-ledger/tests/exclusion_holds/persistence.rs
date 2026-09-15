@@ -96,7 +96,7 @@ fn Raw_Ledger(schema_version: u32, extra: &str) -> String
          {{\"id\":\"T-1\",\"title\":\"item T-1\",\"why\":\"because\",\
          \"done_when\":\"the tests pass\",\
          \"kind\":\"Correction\",\"origin\":\"Proposed\",\
-         \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\"patterns\":[]}},\
+         \"widened\": [], \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\"patterns\":[]}},\
          \"state\":\"Ready\",\"depends_on\":[],\"blocked\":null,\"claim\":null,\
          \"verification\":null,\"verified\":null,\"abandoned\":[]{extra}}}\
          ]\n}}\n"
@@ -373,7 +373,7 @@ fn Test_A_Document_Written_Before_A_Field_Existed_Should_Still_Load()
          {\"id\":\"T-1\",\"title\":\"item T-1\",\"why\":\"because\",\
          \"done_when\":\"the tests pass\",\
          \"kind\":\"Correction\",\"origin\":\"Proposed\",\
-         \"territory\":{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\"patterns\":[]},\
+         \"widened\": [], \"territory\":{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\"patterns\":[]},\
          \"state\":\"Ready\",\"depends_on\":[],\"blocked\":null,\"claim\":null,\
          \"verification\":null,\"verified\":null}\
          ]\n}\n",

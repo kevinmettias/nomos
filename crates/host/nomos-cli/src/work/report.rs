@@ -307,6 +307,43 @@ pub(super) fn Report_Decline(
     };
 }
 
+/// Reports a widening, saying what it actually added rather than what was asked for.
+///
+/// The two differ whenever a path was already reserved, and printing the request back would
+/// report a widening that did not happen. Every added path is named rather than counted: a
+/// count is what a reader would have to go and check against the board anyway, and this line
+/// is the only place the escape is visible at the moment it is made.
+///
+/// Adding nothing is reported as its own sentence and not as a success with an empty list. It
+/// is not a refusal -- the territory is exactly what the caller asked for, which is the
+/// outcome they wanted -- but a caller told only `widened` would believe a path landed that
+/// was already there.
+pub(super) fn Report_Widen(
+    item: &nomos_ledger::ItemId,
+    result: Result<Vec<String>, ClaimRefusal>,
+    output: &mut impl std::io::Write,
+) -> ExitCode
+{
+    return match result
+    {
+        Ok(added) if added.is_empty() =>
+        {
+            let _ = writeln!(output, "{item} already reserved every path given; nothing added");
+            ExitCode::Ok
+        }
+        Ok(added) =>
+        {
+            let _ = writeln!(output, "{item} widened by {}: {}", added.len(), added.join(" "));
+            ExitCode::Ok
+        }
+        Err(refusal) =>
+        {
+            let _ = writeln!(output, "refused: {}", refusal.Describe());
+            Code_For(&refusal)
+        }
+    };
+}
+
 pub(super) fn Report_Release(result: Result<(), ClaimRefusal>, output: &mut impl std::io::Write)
 -> ExitCode
 {
@@ -888,6 +925,7 @@ mod tests
             verified: None,
             abandoned: Vec::new(),
             displaced: Vec::new(),
+            widened: Vec::new(),
             declined: None,
         };
     }

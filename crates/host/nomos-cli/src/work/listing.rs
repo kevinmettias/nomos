@@ -100,7 +100,28 @@ pub(super) fn Print_History(found: &LedgerItem, current_revision: Option<&str>, 
 {
     Print_Displacements(found, output);
     Print_Abandonments(found, output);
+    Print_Widenings(found, output);
     Print_Verification(found, current_revision, output);
+}
+
+/// Every enlargement of the territory, and what each one added.
+///
+/// The added paths and not the territory as it stands, which the item already carries. What is
+/// not otherwise recoverable is which of those paths were not predicted when the item was
+/// authored, and that is the whole of what `OD-LEDGER-039` keeps these rows for.
+fn Print_Widenings(found: &LedgerItem, output: &mut impl std::io::Write)
+{
+    for widening in &found.widened
+    {
+        let _ = writeln!(
+            output,
+            "widened by {} at unix {}, adding {}: {}",
+            widening.holder,
+            widening.widened_at.Unix_Seconds(),
+            widening.added.len(),
+            widening.added.join(" ")
+        );
+    }
 }
 
 /// Every holder a takeover displaced, and the window they held.
@@ -422,6 +443,7 @@ mod tests
             verified: None,
             abandoned: Vec::new(),
             displaced: Vec::new(),
+            widened: Vec::new(),
             declined: None,
         };
     }

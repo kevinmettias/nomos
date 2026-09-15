@@ -41,6 +41,7 @@ pub fn Work_Command_From_String_Arguments(arguments: &[String]) -> Result<WorkCo
         "claim" | "renew" | "takeover" => Parse_Reservation(verb, named),
         "abandon" => Parse_Abandon(named),
         "decline" => Parse_Decline(named),
+        "widen" => Parse_Widen(named),
         "validate" => Ok(WorkCommand::Validate),
         "audit" => Ok(WorkCommand::Audit),
         other => Err(format!("unknown command `{other}`.\n\n{}", Usage_Text())),
@@ -242,6 +243,7 @@ fn New_Item(
         verified: None,
         abandoned: Vec::new(),
         displaced: Vec::new(),
+        widened: Vec::new(),
         declined: None,
     });
 }
@@ -337,6 +339,43 @@ fn Parse_Abandon(named: &[String]) -> Result<WorkCommand, String>
 }
 
 /// The other half of the pair [`Parse_Abandon`] documents.
+/// `widen --item <id> --holder <name> --territory <path> [--territory <path> …]`.
+///
+/// `--territory` and not a flag of its own, because it is the same argument `add` takes and
+/// naming it twice would let an author learn one spelling and meet the other. At least one is
+/// required: a widening that adds nothing is not a thing to ask for, and accepting it would
+/// write a lock acquisition and a refusal path for a request that cannot change anything.
+///
+/// `--territory-pattern` is refused here exactly as `add` refuses it, through the same
+/// function, so the withdrawn flag does not come back through the new verb.
+fn Parse_Widen(named: &[String]) -> Result<WorkCommand, String>
+{
+    let item = Item_Of(named)?;
+    let holder = Holder_Of(named)?;
+
+    if let Some(pattern) = Named_Values_From_String_Arguments(named, "--territory-pattern").first()
+    {
+        return Err(Refuse_A_Pattern(pattern));
+    }
+
+    let adding = Named_Values_From_String_Arguments(named, "--territory");
+    if adding.is_empty()
+    {
+        return Err(
+            "--territory is required: a widening that adds no path changes nothing. \
+             `widen` only ever adds -- to reserve fewer paths, decline the item and re-author \
+             it, because dropping a path drops the `done_when` clause it carried."
+                .to_owned(),
+        );
+    }
+
+    return Ok(WorkCommand::Widen {
+        item,
+        holder,
+        adding,
+    });
+}
+
 fn Parse_Decline(named: &[String]) -> Result<WorkCommand, String>
 {
     return Ok(WorkCommand::Decline(Ending_Request(named)?));
@@ -418,6 +457,14 @@ const VERBS: &str = "\x20 list     [--state ready|waiting|held|lapsed|snagged|st
      back on the board for somebody else; `decline` ends the *item*, and takes no claim, \
      because an item nobody intends to do should not have to be claimed first. It refuses an \
      item somebody is holding, and one already done or already declined.\n\
+     \x20 widen    --item <id> --holder <name> --territory <path> [--territory <path> ...]\n\
+     \x20          adds paths to the territory of an item you hold, when execution proved \
+     the reservation short of the change. It only ever adds: dropping a path drops the \
+     `done_when` clause it carried, so there is no spelling here for a replacement \
+     territory. The enlarged territory is checked against every live claim by the check \
+     a `claim` goes through, the enlargement is recorded on the item and `show` reports \
+     it, and a holder whose lease has run out is refused -- a lapsed claim stops \
+     excluding, so `takeover` comes first. `OD-LEDGER-039`.\n\
      \x20 validate\n\
      \x20 audit\n";
 
@@ -580,6 +627,7 @@ mod tests
             WorkCommand::TakeOver(_) => "takeover",
             WorkCommand::Abandon(_) => "abandon",
             WorkCommand::Decline(_) => "decline",
+            WorkCommand::Widen { .. } => "widen",
             WorkCommand::Validate => "validate",
             WorkCommand::Audit => "audit",
         };
@@ -605,6 +653,7 @@ mod tests
             "finish" => Some("finish --item T-1 --holder h"),
             "abandon" => Some("abandon --item T-1 --holder h --reason r"),
             "decline" => Some("decline --item T-1 --holder h --reason r"),
+            "widen" => Some("widen --item T-1 --holder h --territory a.rs"),
             "validate" => Some("validate"),
             "audit" => Some("audit"),
             _ => None,

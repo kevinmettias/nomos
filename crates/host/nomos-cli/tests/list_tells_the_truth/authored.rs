@@ -92,7 +92,7 @@ pub(crate) fn Item(id: &str, paths: &str, standing: Standing<'_>) -> String
         "{{\"id\":\"{id}\",\"title\":\"item {id}\",\"why\":\"because\",\
          \"done_when\":\"the tests pass\",\
          \"kind\":\"Correction\",\"origin\":\"Proposed\",\
-         \"territory\":{{\"resolution\":\"File\",\"paths\":[{paths}],\"patterns\":[]}},\
+         \"widened\": [], \"territory\":{{\"resolution\":\"File\",\"paths\":[{paths}],\"patterns\":[]}},\
          \"state\":\"{state}\",\"depends_on\":[{depends_on}],\"blocked\":null,{tail}}}"
     );
 }
@@ -107,7 +107,7 @@ pub(crate) fn Item_Declined(id: &str, paths: &str, reason: &str) -> String
         "{{\"id\":\"{id}\",\"title\":\"item {id}\",\"why\":\"because\",\
          \"done_when\":\"the tests pass\",\
          \"kind\":\"Correction\",\"origin\":\"Proposed\",\
-         \"territory\":{{\"resolution\":\"File\",\"paths\":[{paths}],\"patterns\":[]}},\
+         \"widened\": [], \"territory\":{{\"resolution\":\"File\",\"paths\":[{paths}],\"patterns\":[]}},\
          \"state\":{{\"Declined\":{{\"reason\":\"{reason}\"}}}},\"depends_on\":[],\"blocked\":null,{NO_CLAIM}}}"
     );
 }

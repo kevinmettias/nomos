@@ -33,6 +33,7 @@ fn Test_An_Item_With_A_Live_Claim_Should_Not_Be_Taken_Over()
         Standing {
             held_by: Some("agent-a"),
             displaced: Vec::new(),
+            widened: Vec::new(),
         },
         "a takeover displaced a holder who was still working"
     );
@@ -121,6 +122,7 @@ fn Test_A_Takeover_Should_Refuse_Territory_Somebody_Has_Since_Claimed()
         Standing {
             held_by: Some("dead-agent"),
             displaced: Vec::new(),
+            widened: Vec::new(),
         },
         "a refused takeover wrote to the item anyway"
     );
@@ -149,6 +151,7 @@ fn Test_An_Item_Taken_Over_Twice_Should_Name_Both_Predecessors()
         Standing {
             held_by: Some("agent-c"),
             displaced: vec!["dead-agent", "agent-b"],
+            widened: Vec::new(),
         },
         "oldest first, and both of them: keeping only the most recent is this same loss one \
          scale down"
@@ -194,7 +197,7 @@ fn Write_A_Claimed_Item_With_No_Claim(directory: &Path) -> PathBuf
              \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\
              \"patterns\":[]}},\
              \"state\":\"Claimed\",\"depends_on\":[],\"blocked\":null,\"claim\":null,\
-             \"verification\":null,\"verified\":null,\"abandoned\":[],\"displaced\":[]}}\
+             \"verification\":null,\"verified\":null,\"abandoned\":[],\"displaced\":[],\"widened\":[]}}\
              ]\n}}\n"
         ),
     )

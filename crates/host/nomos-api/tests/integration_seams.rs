@@ -164,8 +164,8 @@ fn Scratch_Board_With_A_Claimable_Item(id: &str) -> PathBuf
     let _ignored = std::fs::remove_dir_all(&directory);
     std::fs::create_dir_all(&directory).expect("creates a fresh scratch directory");
     let ledger = format!(
-        "{{\"schema_version\": 5, \"items\": [{{\"id\": \"{id}\", \"title\": \"t\", \"why\": \"w\", \
-         \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \"Proposed\", \"territory\": \
+        "{{\"schema_version\": 6, \"items\": [{{\"id\": \"{id}\", \"title\": \"t\", \"why\": \"w\", \
+         \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \"Proposed\", \"widened\": [], \"territory\": \
          {{\"resolution\": \"File\", \"paths\": [\"a\"], \"patterns\": []}}, \"state\": \"Ready\"}}]}}\n"
     );
     std::fs::write(directory.join("ledger.json"), ledger).expect("writes a minimal valid ledger");

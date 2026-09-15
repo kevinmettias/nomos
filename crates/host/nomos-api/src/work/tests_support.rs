@@ -40,7 +40,7 @@ pub(crate) fn Unique_Scratch_Directory(label: &str) -> std::path::PathBuf
 pub(crate) fn Scratch_Board() -> std::path::PathBuf
 {
     let directory = Unique_Scratch_Directory("list");
-    std::fs::write(directory.join("ledger.json"), "{\"schema_version\": 5, \"items\": []}\n")
+    std::fs::write(directory.join("ledger.json"), "{\"schema_version\": 6, \"items\": []}\n")
         .expect("writes a minimal valid ledger");
 
     return directory;
@@ -53,8 +53,8 @@ pub(crate) fn Scratch_Board_With_One_Item() -> (std::path::PathBuf, ItemId)
     let directory = Unique_Scratch_Directory("show");
     let id = ItemId::New("SCRATCH-ITEM");
     let ledger = format!(
-        "{{\"schema_version\": 5, \"items\": [{{\"id\": \"{id}\", \"title\": \"t\", \"why\": \"w\", \
-         \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \"Proposed\", \"territory\": \
+        "{{\"schema_version\": 6, \"items\": [{{\"id\": \"{id}\", \"title\": \"t\", \"why\": \"w\", \
+         \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \"Proposed\", \"widened\": [], \"territory\": \
          {{\"resolution\": \"File\", \"paths\": [], \"patterns\": []}}, \"state\": \"Ready\"}}]}}\n"
     );
     std::fs::write(directory.join("ledger.json"), ledger).expect("writes a minimal valid ledger");
@@ -72,12 +72,12 @@ pub(crate) fn Scratch_Board_With_A_Blocked_Item() -> (std::path::PathBuf, ItemId
     let dependency = ItemId::New("SCRATCH-DEPENDENCY");
     let blocked = ItemId::New("SCRATCH-BLOCKED");
     let ledger = format!(
-        "{{\"schema_version\": 5, \"items\": [{{\"id\": \"{dependency}\", \"title\": \"t\", \
+        "{{\"schema_version\": 6, \"items\": [{{\"id\": \"{dependency}\", \"title\": \"t\", \
          \"why\": \"w\", \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \
-         \"Proposed\", \"territory\": {{\"resolution\": \"File\", \"paths\": [\"a\"], \
+         \"Proposed\", \"widened\": [], \"territory\": {{\"resolution\": \"File\", \"paths\": [\"a\"], \
          \"patterns\": []}}, \"state\": \"Ready\"}}, {{\"id\": \"{blocked}\", \"title\": \"t\", \
          \"why\": \"w\", \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \
-         \"Proposed\", \"territory\": {{\"resolution\": \"File\", \"paths\": [\"b\"], \
+         \"Proposed\", \"widened\": [], \"territory\": {{\"resolution\": \"File\", \"paths\": [\"b\"], \
          \"patterns\": []}}, \"state\": \"Ready\", \"depends_on\": [\"{dependency}\"]}}]}}\n"
     );
     std::fs::write(directory.join("ledger.json"), ledger).expect("writes a minimal valid ledger");
@@ -94,8 +94,8 @@ pub(crate) fn Scratch_Board_With_A_Claimable_Item() -> (std::path::PathBuf, Item
     let directory = Unique_Scratch_Directory("claimable");
     let id = ItemId::New("SCRATCH-CLAIMABLE");
     let ledger = format!(
-        "{{\"schema_version\": 5, \"items\": [{{\"id\": \"{id}\", \"title\": \"t\", \"why\": \"w\", \
-         \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \"Proposed\", \"territory\": \
+        "{{\"schema_version\": 6, \"items\": [{{\"id\": \"{id}\", \"title\": \"t\", \"why\": \"w\", \
+         \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \"Proposed\", \"widened\": [], \"territory\": \
          {{\"resolution\": \"File\", \"paths\": [\"a\"], \"patterns\": []}}, \"state\": \"Ready\"}}]}}\n"
     );
     std::fs::write(directory.join("ledger.json"), ledger).expect("writes a minimal valid ledger");
@@ -111,8 +111,8 @@ pub(crate) fn Scratch_Board_With_A_Claimed_Item(holder: &str, expires_at_unix: i
     let directory = Unique_Scratch_Directory("claimed");
     let id = ItemId::New("SCRATCH-CLAIMED");
     let ledger = format!(
-        "{{\"schema_version\": 5, \"items\": [{{\"id\": \"{id}\", \"title\": \"t\", \"why\": \"w\", \
-         \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \"Proposed\", \"territory\": \
+        "{{\"schema_version\": 6, \"items\": [{{\"id\": \"{id}\", \"title\": \"t\", \"why\": \"w\", \
+         \"done_when\": \"d\", \"kind\": \"Capability\", \"origin\": \"Proposed\", \"widened\": [], \"territory\": \
          {{\"resolution\": \"File\", \"paths\": [\"a\"], \"patterns\": []}}, \"state\": \"Claimed\", \
          \"claim\": {{\"holder\": \"{holder}\", \"acquired_at\": 1, \"lease_expires_at\": \
          {expires_at_unix}}}}}]}}\n"
@@ -134,14 +134,14 @@ pub(crate) fn Scratch_Board_With_A_Held_Territory_Conflict() -> (std::path::Path
     let held = ItemId::New("SCRATCH-HELD");
     let contested = ItemId::New("SCRATCH-CONTESTED");
     let ledger = format!(
-        "{{\"schema_version\": 5, \"items\": [\
+        "{{\"schema_version\": 6, \"items\": [\
          {{\"id\": \"{held}\", \"title\": \"t\", \"why\": \"w\", \"done_when\": \"d\", \
-         \"kind\": \"Capability\", \"origin\": \"Proposed\", \"territory\": \
+         \"kind\": \"Capability\", \"origin\": \"Proposed\", \"widened\": [], \"territory\": \
          {{\"resolution\": \"File\", \"paths\": [\"shared\"], \"patterns\": []}}, \"state\": \"Claimed\", \
          \"claim\": {{\"holder\": \"someone-else\", \"acquired_at\": 1, \"lease_expires_at\": \
          {far_future}}}}}, \
          {{\"id\": \"{contested}\", \"title\": \"t\", \"why\": \"w\", \"done_when\": \"d\", \
-         \"kind\": \"Capability\", \"origin\": \"Proposed\", \"territory\": \
+         \"kind\": \"Capability\", \"origin\": \"Proposed\", \"widened\": [], \"territory\": \
          {{\"resolution\": \"File\", \"paths\": [\"shared\"], \"patterns\": []}}, \"state\": \"Ready\"}}\
          ]}}\n",
         far_future = i64::from(u32::MAX)
@@ -202,7 +202,7 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        assert_eq!(*parsed.get("schema_version").expect("a written ledger always carries schema_version"), 5);
+        assert_eq!(*parsed.get("schema_version").expect("a written ledger always carries schema_version"), 6);
         assert!(parsed.get("items").expect("a written ledger always carries items").as_array().expect("items is an array").is_empty());
     }
 

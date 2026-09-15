@@ -26,6 +26,7 @@ fn Item(id: &str) -> LedgerItem
         verified: None,
         abandoned: Vec::new(),
         displaced: Vec::new(),
+        widened: Vec::new(),
         declined: None,
     };
 }
@@ -359,7 +360,7 @@ fn Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version()
 
     assert_eq!(
         fields.len(),
-        16,
+        17,
         "a field was added to `LedgerItem`. Raise `SCHEMA_VERSION` in `store.rs` and this \
          count together, or a build that predates the field will be told the ledger is \
          malformed instead of being told it is old"

@@ -71,7 +71,7 @@ pub use exclusion::{Blocker, ExclusionLedger, Reservation};
 pub use finish::{Abandonment, Declination, Finish_Item, FinishRefusal, Finishing};
 pub use finish::release_outcome::ReleaseOutcome;
 pub use gate::{Derive_Step, GATE_WORKFLOW, GateOutcome, GateUnknown, LINT_STEP, StepName, Workflow_Path, WorkflowText};
-pub use item::{DEFAULT_LEASE, DeclineReason, Holder, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, MAXIMUM_LEASE};
+pub use item::{DEFAULT_LEASE, DeclineReason, Holder, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, MAXIMUM_LEASE, Widening};
 pub use ledger_error::LedgerError;
 pub use nomos_scope_verification::{Normalize_Path, Territory};
 pub use store::{AddRefusal, Claim_Refusal, Eligible_Items, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, SCHEMA_VERSION, Validate_Document};

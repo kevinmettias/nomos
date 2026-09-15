@@ -9,9 +9,23 @@
 //! the parse is what makes such a writer stop at the door instead of succeeding quietly.
 //! `OD-LEDGER-008` records the decision and what it does not reach.
 //!
-//! The refusal is asymmetric on purpose: a new build still reads an old file, because every
-//! added field carries `#[serde(default)]`, and an old build no longer reads a new one.
+//! The refusal is asymmetric on purpose, and the two directions have two different
+//! mechanisms. An old build no longer reads a new file: `deny_unknown_fields` refuses the
+//! parse on a key it does not know, which is mechanical and applies to any field ever added.
 //! Forward compatibility for this file was only ever buying the ability to lose it.
+//!
+//! Whether a *new* build reads an *old* file is decided per field by `#[serde(default)]`, and
+//! it is not uniform. The fields added before `OD-LEDGER-024` carry one and are read as empty
+//! on a row written before they existed, which for each of them is exactly true. `kind`,
+//! `origin` and `widened` carry none, so a row missing any of the three is refused and the
+//! board is migrated instead — an absence that a reader could not tell from an oversight is
+//! worth more than the convenience of accepting it.
+//!
+//! Neither direction is the schema number's doing. `SCHEMA_VERSION` is consulted *after* a
+//! parse has already failed and decides only which sentence the operator reads, which
+//! `OD-LEDGER-008` chose deliberately: a field once arrived without the number moving, so a
+//! guard resting on the bump would have reported clean on the next instance of the defect it
+//! was built for.
 //!
 //! Nothing enumerates these attributes, because a hand-written list of types is only as
 //! complete as the hand — `OD-COMPLETENESS-001`. What holds them in place is
@@ -39,9 +53,12 @@ pub use state::State as ItemState;
 mod decline_reason;
 #[path = "item/ledger_item.rs"]
 mod ledger_item;
+#[path = "item/widening.rs"]
+mod widening;
 
 pub use decline_reason::DeclineReason;
 pub use ledger_item::LedgerItem;
+pub use widening::Widening;
 
 #[cfg(test)]
 #[path = "item/tests.rs"]

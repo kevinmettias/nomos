@@ -154,6 +154,7 @@ nomos work takeover --item <id> --holder <name> [--lease 2h]
 nomos work finish  --item <id> --holder <name>
 nomos work abandon --item <id> --holder <name> --reason <text>
 nomos work decline --item <id> --holder <name> --reason <text>
+nomos work widen   --item <id> --holder <name> --territory <path> [--territory <path> ...]
 nomos work validate
 nomos work audit
 ```

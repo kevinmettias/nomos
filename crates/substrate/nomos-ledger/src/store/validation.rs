@@ -25,6 +25,7 @@ pub fn Validate_Document(document: &LedgerDocument, now: Timestamp) -> Vec<Strin
         Check_Predicate(item, &mut violations);
         Check_Territory(item, &mut violations);
         Check_Pattern(item, &mut violations);
+        Check_Widenings(item, &mut violations);
     }
 
     violations.extend(Dependency_Cycles(document));
@@ -262,6 +263,44 @@ fn Check_Territory(item: &LedgerItem, violations: &mut Vec<String>)
     }
 }
 
+/// A recorded widening naming a path the territory does not hold.
+///
+/// The two are written in one operation and there is no ordering of [`crate::LedgerItem::Widen`]
+/// in which the row lands and the paths do not, so this cannot be reached by the verb. It is
+/// here for the two ways it can be reached anyway: a hand edit, and a future writer that grows
+/// the territory and records the enlargement as two statements rather than one.
+///
+/// What it protects is the measurement. These rows exist so that how often a predicted cone
+/// escaped its reservation is answerable from the board, and a row naming a path nothing
+/// reserves overstates the escape while looking exactly like a row that does not. Compared
+/// after [`crate::Normalize_Path`], for the reason the verb compares that way: two spellings of
+/// one path are one path.
+fn Check_Widenings(item: &LedgerItem, violations: &mut Vec<String>)
+{
+    use crate::Normalize_Path;
+
+    for widening in &item.widened
+    {
+        for added in &widening.added
+        {
+            let held = item
+                .territory
+                .paths
+                .iter()
+                .any(|path| return Normalize_Path(path) == Normalize_Path(added));
+
+            if !held
+            {
+                violations.push(format!(
+                    "{} records a widening by {} that added `{added}`, which its territory does \
+                     not reserve; the enlargement and the record it is kept in have come apart",
+                    item.id, widening.holder
+                ));
+            }
+        }
+    }
+}
+
 /// A territory that still carries an unexpanded pattern.
 ///
 /// `OD-LEDGER-013` withdrew `work add --territory-pattern`, the only authoring surface that
@@ -473,6 +512,55 @@ mod tests
         assert!(cycles.is_empty(), "a diamond is not a cycle: {cycles:?}");
     }
 
+    /// A widening row that names a path the territory does not reserve is a corruption.
+    ///
+    /// Unreachable through `Widen`, which grows the territory and records the growth in one
+    /// operation. Reachable by a hand edit and by any future writer that does the two as two
+    /// statements, which is exactly the shape `OD-LEDGER-039` keeps these rows to avoid.
+    ///
+    /// The falsifier for `Check_Widenings`. Without it the check is a guard nobody has watched
+    /// fail, which this repository counts as no guard at all.
+    #[test]
+    fn Test_A_Widening_Naming_A_Path_The_Territory_Lost_Should_Be_Reported()
+    {
+        let mut item = Workable_Item(ItemId::New("K-1"));
+        item.widened.push(crate::Widening {
+            holder: "agent-a".to_owned(),
+            added: vec!["src/b.rs".to_owned()],
+            widened_at: Timestamp::From_Unix_Seconds(1_000),
+        });
+
+        let violations = Validate_Document(&Document(vec![item]), Timestamp::From_Unix_Seconds(1_000));
+
+        assert!(
+            violations.iter().any(|line| return line.contains("src/b.rs") && line.contains("come apart")),
+            "a widening naming ground the territory does not hold must be reported: {violations:?}"
+        );
+    }
+
+    /// The control: the same widening, on a territory that does reserve what it added.
+    ///
+    /// Without this the check above is satisfied by a rule that reports every widening, which
+    /// would make a correctly widened board invalid -- and the board this lands on has one.
+    #[test]
+    fn Test_A_Widening_Whose_Paths_The_Territory_Reserves_Should_Be_Accepted()
+    {
+        let mut item = Workable_Item(ItemId::New("K-1"));
+        item.territory.paths.push("src/b.rs".to_owned());
+        item.widened.push(crate::Widening {
+            holder: "agent-a".to_owned(),
+            added: vec!["src/b.rs".to_owned()],
+            widened_at: Timestamp::From_Unix_Seconds(1_000),
+        });
+
+        let violations = Validate_Document(&Document(vec![item]), Timestamp::From_Unix_Seconds(1_000));
+
+        assert!(
+            violations.is_empty(),
+            "a widening whose paths the territory holds is the ordinary case: {violations:?}"
+        );
+    }
+
     /// Every cycle violation `Validate_Document` reports over `document`, and nothing else.
     fn Cycles_Among(document: &LedgerDocument) -> Vec<String>
     {
@@ -516,6 +604,7 @@ mod tests
             verified: None,
             abandoned: Vec::new(),
             displaced: Vec::new(),
+            widened: Vec::new(),
             declined: None,
         };
     }

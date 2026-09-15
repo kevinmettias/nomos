@@ -33,7 +33,7 @@ use listing::{
 };
 use report::{
     Amendment_Note, Blocking_Refusal, Code_For_Refusal, Ended, Print_Blocked, Report_Claim,
-    Report_Decline, Report_Error, Report_Finish, Report_Release, Report_Validation,
+    Report_Decline, Report_Error, Report_Finish, Report_Release, Report_Validation, Report_Widen,
 };
 
 /// Runs a command against the ledger at `directory`, writing to `output`.
@@ -205,6 +205,10 @@ fn Render_Outcome(command: &WorkCommand, outcome: WorkOutcome, output: &mut impl
         | (WorkCommand::Renew(_), WorkOutcome::Renew(result))
         | (WorkCommand::TakeOver(_), WorkOutcome::TakeOver(result)) => Report_Claim(result, output),
         (WorkCommand::Abandon(_), WorkOutcome::Abandon(result)) => Report_Release(result, output),
+        (WorkCommand::Widen { item, .. }, WorkOutcome::Widen(result)) =>
+        {
+            Report_Widen(item, result, output)
+        }
         (WorkCommand::Decline(request), WorkOutcome::Decline { declined, board }) =>
         {
             let ended =

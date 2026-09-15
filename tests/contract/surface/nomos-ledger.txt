@@ -86,6 +86,7 @@ pub use item::ItemOrigin
 pub use item::ItemState
 pub use item::LedgerItem
 pub use item::MAXIMUM_LEASE
+pub use item::Widening
 pub use nomos_scope_verification::Normalize_Path
 pub use nomos_scope_verification::Territory
 pub use store::AddRefusal

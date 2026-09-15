@@ -21,7 +21,7 @@ use crate::LedgerError;
 use crate::Reservation;
 
 use super::file::Decide_Under_Lock;
-use super::refusal::{Decline_Refusal, Takeover_Refusal};
+use super::refusal::{Decline_Refusal, Enlargement, Takeover_Refusal, Widen_Refusal};
 use super::reservation::{RecordDeclaration, Refuse_A_Spent_Record};
 use super::FileLedger;
 
@@ -68,6 +68,50 @@ pub(super) fn Add_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessL
         document.items.push(item.clone());
 
         return Ok(());
+    });
+}
+
+/// The body of [`FileLedger::Widen`], which keeps the documentation and the signature.
+///
+/// Read, refuse, enlarge, record and write are one mutation inside one acquisition of the
+/// cross-process lock, which is what [`Decide_Under_Lock`] is. Calling the same exclusion a
+/// claim calls is necessary and is not the property: two widenings running at once can each
+/// observe a board on which their own added paths are free, and jointly produce the overlap
+/// that check exists to prevent. Sharing the function does nothing about that; deciding and
+/// writing without releasing the lock between them does. `OD-LEDGER-015` is what the three
+/// verbs before this one cost by deciding outside it.
+///
+/// Returns the paths actually added, so a caller can report what happened rather than echoing
+/// what was asked for. They differ whenever a path was already reserved.
+pub(super) fn Widen_Territory<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+    ledger: &mut FileLedger<Files, TimeSource, Lock>,
+    item: &ItemId,
+    holder: Holder<'_>,
+    adding: &[String],
+) -> Result<Vec<String>, ClaimRefusal>
+{
+    let requested = Enlargement { item, holder: holder.As_Text(), adding };
+
+    return Decide_Under_Lock(ledger, holder.As_Text(), |document, now| {
+        if let Some(refusal) = Widen_Refusal(document, &requested, now)
+        {
+            return Err(refusal);
+        }
+
+        let mut added = Vec::new();
+        for candidate in &mut document.items
+        {
+            if &candidate.id == item
+            {
+                // `LedgerItem::Widen` and not two statements here, for the reason
+                // `Decline` is one call: a call site that extended the territory itself
+                // would be free to extend it and not record what it extended it by, and
+                // the record is the half `OD-LEDGER-039` exists to keep.
+                added = candidate.Widen(adding, holder, now);
+            }
+        }
+
+        return Ok(added);
     });
 }
 
@@ -312,6 +356,7 @@ mod tests
             verified: None,
             abandoned: Vec::new(),
             displaced: Vec::new(),
+            widened: Vec::new(),
             declined: None,
         };
     }

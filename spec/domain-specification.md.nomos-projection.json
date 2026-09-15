@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:013387bd5e95d385cc78b639eacdafcc583771613e4385075abad5b10c056089",
-  "inputs_digest": "sha256:a2cb1cf0af7e85dfce14e894455966ca948b5a3e9f7eb403ac9b0cc86407770e",
+  "content_digest": "sha256:e186fb3cb57c5bca1cc9e18c899c42fd29b5f6e9763843c6be86d4fbc870ce79",
+  "inputs_digest": "sha256:f25a97df11224a3d841c8a4d9a072339ee40eff9c4c855b4c767efa1b45f5e93",
   "sections": [
     [
       "Documents",
-      247
+      248
     ],
     [
       "Sections",
-      2052
+      2066
     ],
     [
       "Source blocks",
-      7214
+      7259
     ]
   ],
   "inputs": [
@@ -804,6 +804,11 @@
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md@authored",
       "hash": "sha256:5c7849568533836d07c6844c09979f45b1d256845c3b09136bb51a9a9d5137f5"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md@authored",
+      "hash": "sha256:844727432856f31929b4e334136e241c81c3c25ed23cbddcda8923af41ba995f"
     },
     {
       "content": "documents",
@@ -7729,6 +7734,76 @@
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#37",
       "hash": "sha256:96d2218efa949e4cd319bb62aa76f24abcbc2d619d918384f79a9e07e5b60d01"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#1",
+      "hash": "sha256:8cbc236123b1e8abcebae2c4ff1351a5c3d53ea19f091dbeb6703dfaabcbf703"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#2",
+      "hash": "sha256:a5bbdd433ec155877c35bb385b34c8bf4e14000622b52a5aeb5a855857b72b95"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#7",
+      "hash": "sha256:5783458924455125648ab6562a222ee603aa85cc9756f20ced846b18e9494390"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#13",
+      "hash": "sha256:96c9eec99c3771875ad9eadcc40a7c154c44968fa35cb3a18a54f73ec7501081"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#14",
+      "hash": "sha256:bdce1311246d2687f3a4c2a5d59aca68199641206e406be9b34c816d0da1911b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#17",
+      "hash": "sha256:5380c45d15ae0a478e5c99a9735e4cd7041df83014e6e6103267b68248404c95"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#20",
+      "hash": "sha256:a63e8b068444c0a629c7a526bfe6a2469fd40ea5d0815ae60a5027a1ea75e799"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#23",
+      "hash": "sha256:9d604d21558eecd4ec692374f3c8fd863763097f9eba1fe3fbe04f400c4dbea8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#26",
+      "hash": "sha256:e28b8c1f358549f61e422504ae354b90e4dc59862207270cd625636503400ef9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#30",
+      "hash": "sha256:aec8a34407e9172325f04d5d16e64d9021ff6f21dc351e8e80c6ad5e3de9cd91"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#35",
+      "hash": "sha256:8f1759678ce89817ebc1efde767bf2fcb41f8563a96548dde49ebc2be1cbd639"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#40",
+      "hash": "sha256:8f156bfec5f11f27e0f2ecb413f859bb136b91aef6055f9926d707e2b49198b5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#42",
+      "hash": "sha256:688350bf2cfba22c9c5a404835f9ea1b54a794b7c08ecfa1a5da3c05acec7eea"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#44",
+      "hash": "sha256:8efaa9b25e89d51e0a40a0737737ccc947b62e44ff36f0725a7a0b4a28872c27"
     },
     {
       "content": "headings",
@@ -34299,6 +34374,231 @@
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md#38",
       "hash": "sha256:53e6eb5b044f5f6785aee92d51da8209f2fc646d8133967d40ec04da0dc359a0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#1",
+      "hash": "sha256:be3aab5171cbb491b6bd0e2413fd9cc34cf7d6404127eb4d812369d5cf50c624"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#3",
+      "hash": "sha256:d5d64c905ac24b78fa46ec1fba7469f3bf5e5d07ed04883aaf43cb83d68a9539"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#4",
+      "hash": "sha256:da4fc5af80004ef4a7c4f6dd11f289683643db199b1fa39fc52344447c93c004"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#5",
+      "hash": "sha256:de065385ff6dc5d674ba5dd84e91b0a8c659f17bd814c7e72e77dfd6dfd6c103"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#6",
+      "hash": "sha256:ded03a8832d479c14890364c6671d315a299e0630eb6e68c7d59531db9b68adb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#7",
+      "hash": "sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#8",
+      "hash": "sha256:ab5fbbb1b7216bb1c00447df3b9f860d0720fd88a8698150c0668255fc47b090"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#9",
+      "hash": "sha256:e283d7c7d801e9ea1ccff0e1cc8a05da7cc979fc69eeb20720b0a47447fe2736"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#10",
+      "hash": "sha256:a224d0acaa5287b28bf504c1c27dae882274f3c8539e222ce6bbca3cdab22a91"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#11",
+      "hash": "sha256:428f231a310d65b152ed1b427e250ab9faa64857a6d7f3b105c4abcc8d05c2d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#12",
+      "hash": "sha256:3fcc925ebbad39aa22d32ff122d3bc3168de69b4f94d4c594dc54e1c5997156a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#13",
+      "hash": "sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#14",
+      "hash": "sha256:732eb12e5838bdc2a91e8ebdc0e6a81f30ec82e522822298173d85448e246602"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#15",
+      "hash": "sha256:3429d6dd6b52bb249a849eb829b2796ea92ca7a8d35e2a28b8c091c275044041"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#16",
+      "hash": "sha256:5b80d638953783d0564ac2afb1cc75902a4191531766adede174246945845a48"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#17",
+      "hash": "sha256:f8c37797e05d4af53a5b0c698bec49e76d00b1e14178754fdb0466d518edf87b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#18",
+      "hash": "sha256:d455ab57c1471037056f611c9e082fd05b26a227b812ef5884e06612d2a1e0c8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#19",
+      "hash": "sha256:492f666ee896cf22e378fbaa06140e6f9f60a6ab7a8b55fb084f25f06fc87e7e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#20",
+      "hash": "sha256:98c5bf5cd529611c237817f2c47bd2f61ff754b69a8a349544ffb0e680300f6d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#21",
+      "hash": "sha256:cec359555c8535045828161fb9e4624af86a8b87cc85919cc9360a13049625fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#22",
+      "hash": "sha256:27c324e72f93e393ff9ff486770934e5402783d09ba49dd3eb2fb5fa7932a993"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#23",
+      "hash": "sha256:f7bf81a1cc51d92944b32c755c803b1c7e8278bc714304d9535810f882ee144e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#24",
+      "hash": "sha256:39c3aeb0d15a515ef0f059a1a5d58ac9072721b53be1d358bf0e5362699e0c5e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#25",
+      "hash": "sha256:a75c204dd725bb5705d547a00781125d94084430a935f070ab7d5a948a4cd614"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#26",
+      "hash": "sha256:79763b84f75b4f6300c31a271f05f1dae398793a53ee38aaac417555e60b77a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#27",
+      "hash": "sha256:d588c3acd7edfab42866355059fc596edf41527d0ccb6d3cd38e57e9a641fb0e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#28",
+      "hash": "sha256:d674e3e20f01b6a233af9597aa76f0c4f814e31a864582fd837cc560fca10b6e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#29",
+      "hash": "sha256:7c5b9597346a00c2771b7e1ea173bece9acb9d819b454867b5c3e1f182cd2b63"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#30",
+      "hash": "sha256:7727cbd7b8232b2902c8e9d34a47d89e9e533a118b2a33f1ae98f76a9266f7da"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#31",
+      "hash": "sha256:ce11b73bafad3e134678f5b35cf00276455cd5b4b2d2a850d549d1a7c3a211d9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#32",
+      "hash": "sha256:b45ea9f8895e6870c700eb5a85540911c867a5e7f7d5cf5fe2eb94bfba2b8466"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#33",
+      "hash": "sha256:ffc463b5a6a3ae73ff2c1fc4f3c0c4bde80166f879349cb111aa05e4e7ae2d4b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#34",
+      "hash": "sha256:e3cc1e1b915f5f88858efa42d63ae3b41008a7174ae01974ac9504c092e73bf2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#35",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#36",
+      "hash": "sha256:447a89a4e024fe34a287cfdca7d5501581e1c9cbd6a325a6e407282c8f0f861b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#37",
+      "hash": "sha256:6cb28dec057835a8366e80505312927b468020a6b8f7504b48c4b703c3e289c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#38",
+      "hash": "sha256:91e6b20e3efb96384b9827bbf32f95dab6989c9e706352abb2acbc9b9ef7e80b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#39",
+      "hash": "sha256:cc18ade89c7d04972f737953a12da98ddf53bec44fa9ebf784c79fed023147cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#40",
+      "hash": "sha256:8f7f0641d3cd5b809218d2d25798211bc5d57fcdce7846941623bef23aa8bd85"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#41",
+      "hash": "sha256:a13ffab4d377d04b01dbdd53aa83d788653b613184090f9b86c79927a38ac05a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#42",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#43",
+      "hash": "sha256:a5f58f1bac769ae6ed296ac217bac291ac9f57126c5f946ac2f197bf8df118bc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#44",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#45",
+      "hash": "sha256:f22858b9b3f28b7c48333558845dbbe989c4b8615db324173f96323a7f18e6b0"
     },
     {
       "content": "blocks",

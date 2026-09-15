@@ -118,7 +118,20 @@ pub(crate) fn Saved(name: &str, document: &LedgerDocument) -> (Scratch, Board)
     let directory = Temporary_Directory(name);
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
-    ledger.Save(document).expect("the doctored board is still a valid ledger");
+    // Every subject in this suite is an item whose territory has been replaced by a
+    // projection of it -- the records it reserves, the record directory, a contested path.
+    // A recorded widening names paths of the *real* territory, so carrying one onto a
+    // projection produces an item claiming to have added ground it does not reserve, which
+    // `Validate_Document` correctly refuses. The projection is not that item and does not
+    // inherit its history; dropping it here rather than at seven call sites is what keeps
+    // the next projection from having to remember.
+    let mut document = document.clone();
+    for item in &mut document.items
+    {
+        item.widened.clear();
+    }
+
+    ledger.Save(&document).expect("the doctored board is still a valid ledger");
 
     return (directory, ledger);
 }

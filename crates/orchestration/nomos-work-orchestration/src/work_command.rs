@@ -38,6 +38,21 @@ pub enum WorkCommand
         /// silently at exit 0, which is what `OD-LEDGER-008` prices.
         amending: Territory,
     },
+    /// Enlarge a held item's territory by paths its holder found it short of.
+    ///
+    /// The paths are beside the item rather than a request struct of their own, because the
+    /// three fields have no reader after the verb refuses or applies -- the same shape, and
+    /// the same reason, as [`WorkCommand::Add`]'s `amending`.
+    Widen
+    {
+        /// Which item.
+        item: ItemId,
+        /// Who is widening it, which must be the live holder.
+        holder: String,
+        /// The paths to add. Never a replacement territory: dropping a path drops the
+        /// `done_when` clause it carried, so there is deliberately no way to spell one here.
+        adding: Vec<String>,
+    },
     /// Run an item's verification predicate and record it done if it passes.
     Finish
     {

@@ -45,9 +45,10 @@ claiming is declared, not enforced, so nothing stops it from naming an item whos
 peer already holds. Claiming a different eligible item with cleanly disjoint territory
 instead is still sound judgment; the line names an answer, not a rule against a better one.
 
-If the board names none, you are authoring one. The territory is the part that is hard to
-change later — there is no `work edit`, and widening mid-claim is the failure this
-repository has already had twice. Reserve, in addition to the code you will edit:
+If the board names none, you are authoring one. The territory is the part to get right
+first: `work widen` can add a path you turn out to need, and nothing can change an item's
+terms — there is no `work edit`, so a wrong `done_when` costs the item. Reserve, in addition
+to the code you will edit:
 
 - the record identifier under `docs/records/` if the work makes a decision, **and** the
   registration file under `crates/spec/nomos-spec-store/records/` that makes it governing;
@@ -106,7 +107,10 @@ replacing it. So: reserve statically, validate dynamically.
 2. Implement. The compiler, the tests, module visibility and the fixtures reveal the cone the
    change actually has.
 3. Before finishing, compare that cone against the reservation.
-4. If it escapes, stop -- abandon, decline, re-author.
+4. If it escapes, stop. `work widen --item <id> --holder <name> --territory <path>` adds
+   the missing paths while you still hold a live claim; if the claim has lapsed, take the
+   item over first, because a lapsed claim has stopped excluding and a peer may hold the
+   ground you are about to reserve.
 5. Only then finish.
 
 **The actual cone is not the set of files you edited.** `git diff --name-only` is the cheap
@@ -126,12 +130,21 @@ without ever appearing in a diff until somebody goes looking:
 Only the first announces itself. The others are found by asking what the change made untrue,
 which is a different question from what the change edited.
 
-The fourth move is expensive and the price is worth stating rather than glossing: there is no
-widen verb, so one legitimate escaped file costs the whole item, and declining it strands
-every dependent, each of which must be re-authored against the replacement id. That is an
-argument for reserving generously wherever the paths are genuinely uncertain. It is not an
-argument for skipping the comparison, which is how a reservation nobody checked becomes a
-claim nobody held.
+**A widening is a repair, not a reservation strategy.** `OD-LEDGER-039` added the verb
+because an escape used to cost the whole item — abandon, decline, re-author, and re-author
+every dependent the decline stranded — and because the board could not say how often a
+predicted cone was short, a decline carrying only a holder, a timestamp and prose. Both of
+those are fixed by recording the enlargement, which is the thing the verb is actually for.
+
+Which is exactly why reserving loosely and discovering territory as you go defeats it. An
+escape rate says nothing unless the reservations it is measured against were genuine attempts
+to get the territory right, so a board on which widening is routine has lost the measurement
+rather than gained a convenience. Reserve what you can defend, generously where the paths are
+genuinely uncertain, and widen when execution proves you wrong.
+
+The comparison is still the step that matters. Skipping it is how a reservation nobody checked
+becomes a claim nobody held, and a cheaper repair does nothing about that — a widening you
+never knew you needed does not happen.
 
 Check the record identifier is unused before adding the item. Nothing else will, and two
 items reserving one identifier turns a shared guard red for a reason that reads like

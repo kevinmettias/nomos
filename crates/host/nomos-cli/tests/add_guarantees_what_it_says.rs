@@ -113,7 +113,7 @@ fn Item(id: &str, paths: &str, state: &str, tail: &str) -> String
         "{{\"id\":\"{id}\",\"title\":\"item {id}\",\"why\":\"because\",\
          \"done_when\":\"the tests pass\",\
          \"kind\":\"Correction\",\"origin\":\"Proposed\",\
-         \"territory\":{{\"resolution\":\"File\",\"paths\":[{paths}],\"patterns\":[]}},\
+         \"widened\": [], \"territory\":{{\"resolution\":\"File\",\"paths\":[{paths}],\"patterns\":[]}},\
          \"state\":\"{state}\",\"depends_on\":[],\"blocked\":null,{tail}}}"
     );
 }

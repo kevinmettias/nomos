@@ -109,6 +109,7 @@ fn Item_Reserving(id: &str, territory: Territory, verification: Option<Verificat
         verified: None,
         abandoned: Vec::new(),
         displaced: Vec::new(),
+        widened: Vec::new(),
         declined: None,
     };
 }

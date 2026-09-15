@@ -36,6 +36,13 @@ pub enum WorkOutcome
     TakeOver(Result<Reservation, ClaimRefusal>),
     /// `abandon`: whether the claim was given up.
     Abandon(Result<(), ClaimRefusal>),
+    /// `widen`: the paths actually added to the territory, or what refused the widening.
+    ///
+    /// What was added rather than what was asked for. A path the territory already reserved
+    /// contributes nothing and is not recorded, so the two differ whenever a holder names one
+    /// twice or names one they already had, and a caller echoing the request would report a
+    /// widening that did not happen.
+    Widen(Result<Vec<String>, ClaimRefusal>),
     /// `decline`: whether the item was ended, and the board as it stands afterwards.
     ///
     /// `board` carries the same thing, for the same reason, as [`WorkOutcome::Finish`]'s.

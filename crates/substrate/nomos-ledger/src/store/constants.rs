@@ -27,7 +27,8 @@ pub const LOCK_STALE_AFTER: Duration = Duration::from_secs(15 * 60);
 /// on the next instance of the defect it was built for. Here a forgotten bump can only degrade
 /// a message, and can never cost a field.
 ///
-/// `5` since `OD-LEDGER-024` added [`crate::LedgerItem::kind`] and
+/// `6` since `OD-LEDGER-039` added [`crate::LedgerItem::widened`];
+/// `5` was `OD-LEDGER-024`'s [`crate::LedgerItem::kind`] and
 /// [`crate::LedgerItem::origin`]; `4` was `OD-LEDGER-027`'s
 /// [`crate::VerificationRecord::revision`]; `3` was `OD-LEDGER-019`'s
 /// [`crate::LedgerItem::declined`]; `2` was `OD-LEDGER-012`'s [`crate::LedgerItem::displaced`].
@@ -35,9 +36,16 @@ pub const LOCK_STALE_AFTER: Duration = Duration::from_secs(15 * 60);
 /// counts the keys on a serialized item, so a field arriving without this number moving is a
 /// refusal that misstates why.
 ///
-/// `kind` and `origin` carry no `#[serde(default)]`, unlike every field before them — every
-/// item on the board was migrated to carry both in the same commit that raised this number,
-/// so a build older than this one refuses the file outright rather than silently accepting a
-/// row missing either. `nomos work validate` prints the same two numbers on request, which is
-/// how to tell before that refusal arrives rather than at it.
-pub const SCHEMA_VERSION: u32 = 5;
+/// `kind`, `origin` and `widened` carry no `#[serde(default)]`, unlike every field before them
+/// — every item on the board was migrated to carry each one in the same commit that raised
+/// this number, so a build older than that commit refuses the file outright rather than
+/// silently accepting a row missing it. `nomos work validate` prints the same two numbers on
+/// request, which is how to tell before that refusal arrives rather than at it.
+///
+/// Note which mechanism does which, because attributing either to the other is how a guard
+/// comes to rest on something that does not hold it. An **older build meeting a newer file**
+/// is stopped by `deny_unknown_fields`, mechanically, for any field ever added. A **newer
+/// build meeting an older file** is stopped, per field, by the absence of
+/// `#[serde(default)]` — which is what forces a migration rather than a silent default. This
+/// number stops neither.
+pub const SCHEMA_VERSION: u32 = 6;
