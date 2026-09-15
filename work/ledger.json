@@ -77424,7 +77424,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-8, which carries the same title, why, done_when and dependency over a measured territory. Nothing had executed; the cone was measured 2026-09-15 before claiming, which is what this item's predecessor's decline directed in its own words: measure the cone before editing and expect to re-author if it escapes. It escapes by roughly an order of magnitude, so this is the re-authoring.\n\nThe measurement. The done_when's first clause requires what counts as test material to reach the three security checks as a declared criterion rather than a path list compiled into security_text.rs, and its second requires whichever declaration path the architecture item established rather than a second one. OD-RULES-029 fixes the kind of fact: a repository's policy parameters are an OD-RULES-011 family parameterizing a judgment the rule keeps making, and this is one, so it is deliberately not a description that joins nomos-architecture.json. OD-HOST-009 fixes where it travels: not standards.json, which code-standards decodes with unknown fields disallowed, but a dedicated language-neutral file at the repository root, the convention nomos-gate.json and nomos-architecture.json already set. Those two together make the work a sixth OD-RULES-011 family.\n\nThe precedent is P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-8, the structurally identical item, which shipped at 52 paths across seven crates with a 3600-second predicate: a capability contract crate, a provider module in nomos-repo-policy, a materializer in nomos-check-orchestration, a rule reading through nomos_analysis::FactReader, the workspace entries, the contract tests' enumerations, surface snapshots, and a repository-root carrier with a fixture carrying one. Measured against that, a reservation of two files in nomos-rules is short by an order of magnitude and not by a file.\n\nWidening was refused deliberately, and the refusal is this item's own record's, not a preference. OD-LEDGER-039 says a widening is an evidence-backed repair for the case where execution disproves a prediction and is not the first move of an incremental discovery of territory, and warns that a board on which widening is routine has lost the measurement rather than gained a convenience. No execution occurred, and a twenty-eight-path enlargement discovered from a document rather than from a build is exactly the discovery that record refuses. The verb is also unavailable without first claiming a territory already known to be wrong, which is the loosely-reserved claim the same record forbids.\n\nNothing depends on this item, so nothing is stranded by ending it. `work list` may confirm that against the board rather than take this sentence's word for it."
+        }
+      },
       "depends_on": [
         "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-8"
       ],
@@ -77443,7 +77447,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "fable-p100",
+        "declined_at": 1789490172
+      },
       "widened": []
     },
     {
@@ -77806,10 +77813,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p109d",
+        "acquired_at": 1789489498,
+        "lease_expires_at": 1789496698
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -77859,6 +77870,78 @@
           "policy::gate_policy_file"
         ],
         "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-8",
+      "title": "The security rules decide what is test material from a nine-clause hardcoded path convention, so a repository that files fixtures elsewhere gets false credential findings",
+      "why": "Auditing all 42 SourceText rules for repository-specific criteria found exactly one family. Is_Test_Or_Fixture_Source in security_text.rs matches tests/, /tests/, /test/, /testdata/, /fixtures/, /examples/, _test.rs, _tests.rs and _test.go, and the three security rules all exempt a source on that basis; rust_text.rs carries the same notion independently in its unwrap-outside-tests-and-examples wording. Some clauses are toolchain-fixed and portable: Cargo owns tests/ and examples/, Go owns _test.go. testdata and fixtures are neither, they are a project convention. A repository filing its fixtures under resources or spec or samples is judged as if a fixture credential were a real one, and an exemption that is too narrow produces false positives rather than misses, which is the damaging direction for a security rule.\n\nThis is the successor to P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-7, which carried this why, done_when and dependency over a territory of two files. That item was declined on 2026-09-15 with the measurement below. Nothing had executed; the cone was measured before claiming, which is what P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-6's own decline directed and what its text asked for. The measurement is the reason this item exists rather than a widened predecessor. OD-LEDGER-039 says a widening is an evidence-backed repair for the case where execution disproves a prediction and is not the first move of an incremental discovery of territory, and widening here would have been exactly the discovery that record refuses, over a reservation short by an order of magnitude rather than by a file.\n\nThe measurement, in two halves.\n\nWhat kind of fact this is. OD-RULES-029 decides it: an OD-RULES-011 family is a repository's policy parameters, parameterizing a judgment the rule keeps making, and this is one -- the rule keeps asking whether a file is test material and the repository answers where its specimens live. The same record draws the contrast this item must respect: a declared architecture is a description the rule judges against and is therefore deliberately not a family, so this declaration does not join nomos-architecture.json.\n\nWhere it travels. OD-HOST-009 decides that: not standards.json, because code-standards decodes that file with unknown fields disallowed and a key nomos owns outright would make another tool fail to read a file it has always read, but a dedicated, language-neutral file at the repository root, the convention nomos-gate.json and nomos-architecture.json already set. So the original done_when's second clause is discharged by a record rather than by the item it named, and no second declaration path is invented: nomos-test-material.json at the root, following that convention.\n\nTogether those make the change a sixth OD-RULES-011 family. The precedent is P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-8, the structurally identical item, which shipped at 52 paths across seven crates with a 3600-second predicate: a capability contract crate, a provider module in nomos-repo-policy (a module and not a crate, because OD-PACKAGE-015 collapsed six provider crates into one), a materializer in nomos-check-orchestration, a rule that reads the fact through nomos_analysis::FactReader, the workspace member and dependency entries, the contract tests' own enumerations, five surface snapshots, and a repository declaring locations no clause of the nine already names.\n\nThe territory below is a prediction and not a measurement of the change, unlike the seven-crate predicate, which is copied from the precedent. Two clauses are why it is nonetheless broad: the fifth clause moves rust_text.rs, which changes the signature of a check whose cone follows the caller chain, and the fourth requires a repository to declare its locations, which means a carrier file and a fixture that carries one. Whoever claims this should measure the cone before editing, as the predecessor's decline directed, and expect to widen if execution disproves this one.\n\nThe original title said eight clauses while the why and the done_when both said nine. Nine is correct, and this item says so.",
+      "done_when": "What counts as test material reaches the three security checks in security_text.rs as a declared criterion rather than a path list compiled into that file, composed from the toolchain-fixed clauses plus whatever the repository declares, so that stable Cargo and Go semantics do not become configuration. It uses the repository-root carrier OD-HOST-009 establishes -- a dedicated, language-neutral nomos-<concern>.json file at the repository root, the way nomos-gate.json and nomos-architecture.json already reach their readers -- rather than inventing a second one, and it reaches the rules as an OD-RULES-011 capability fact read through nomos_analysis::FactReader the way the five existing policy families do. A repository declaring nothing keeps today behaviour, clause for clause. A repository declaring its own fixture locations has them exempted, proved against a fixture whose test material sits under none of the nine current clauses. rust_text.rs stops carrying a second independent notion of the same thing.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-test-material-policy",
+          "crates/repository/nomos-repo-policy",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/tests/incremental_equivalence.rs",
+          "tests/contract/Cargo.toml",
+          "tests/contract/tests/boundaries/bands.rs",
+          "tests/contract/tests/boundaries/graph.rs",
+          "tests/contract/tests/boundaries/readme.rs",
+          "tests/contract/tests/boundaries/manifest_bands.rs",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "tests/contract/surface/nomos-cap-test-material-policy.txt",
+          "tests/contract/surface/nomos-repo-policy.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/integration/tests/calibration.rs",
+          "tests/integration/fixtures/third-party/hex-0.4.3/nomos-test-material.json",
+          "nomos-test-material.json",
+          "README.md",
+          "Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-8"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-test-material-policy",
+          "-p",
+          "nomos-repo-policy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 3600
       },
       "verified": null,
       "abandoned": [],
