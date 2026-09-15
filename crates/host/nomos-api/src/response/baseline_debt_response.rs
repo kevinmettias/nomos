@@ -53,28 +53,34 @@ mod tests
     use super::*;
     use nomos_rules::COMPLETENESS_MIRROR;
 
+    /// What the debt accepts, named once so the constructor below and the assertion
+    /// about its rendering cannot drift apart.
+    const ACCEPTED_OCCURRENCES: u32 = 2;
+
     #[test]
     fn Test_From_Should_Carry_The_Debts_Rule_Subject_Rationale_And_Allowance()
     {
-        let debt = BaselineDebt {
-            rule: RuleId::New(COMPLETENESS_MIRROR),
-            subject: nomos_model::Subject_Of_Path("a.rs"),
-            rationale: "a real rationale".to_owned(),
-            allowance: nomos_gate_orchestration::BaselineAllowance::AtMost(2),
-            declared_path: Some("./a.rs".to_owned()),
-        };
-
+        let debt = Debt_Accepting(nomos_gate_orchestration::BaselineAllowance::AtMost(ACCEPTED_OCCURRENCES));
         let response = BaselineDebtResponse::From(debt.clone());
 
         assert_eq!(response.rule, debt.rule);
         assert_eq!(response.subject, debt.subject);
         assert_eq!(response.rationale, debt.rationale);
-        let rendered = serde_json::to_value(&response).expect("always serializes");
-        assert_eq!(rendered.pointer("/allowance/accepted_occurrence_count").and_then(serde_json::Value::as_u64), Some(2), "{rendered}");
-        assert_eq!(
-            rendered.get("declared_path").and_then(serde_json::Value::as_str),
-            Some("./a.rs"),
-            "the spelling the author wrote is what makes this entry findable again: {rendered}"
-        );
+
+        let rendered = serde_json::to_value(&response)
+            .expect("every field is a plain id, string or optional string, so the derive cannot fail");
+        assert_eq!(rendered.pointer("/allowance/accepted_occurrence_count").and_then(serde_json::Value::as_u64), Some(u64::from(ACCEPTED_OCCURRENCES)), "{rendered}");
+        assert_eq!(rendered.get("declared_path").and_then(serde_json::Value::as_str), Some("./a.rs"), "the spelling the author wrote is what makes this entry findable again: {rendered}");
+    }
+
+    fn Debt_Accepting(allowance: nomos_gate_orchestration::BaselineAllowance) -> BaselineDebt
+    {
+        return BaselineDebt {
+            rule: RuleId::New(COMPLETENESS_MIRROR),
+            subject: nomos_model::Subject_Of_Path("a.rs"),
+            rationale: "a real rationale".to_owned(),
+            allowance,
+            declared_path: Some("./a.rs".to_owned()),
+        };
     }
 }
