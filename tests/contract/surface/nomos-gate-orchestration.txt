@@ -2,6 +2,7 @@ pub const fn nomos_gate_orchestration::Admissibility::Is_A_Judgment(self) -> boo
 pub const fn nomos_gate_orchestration::SuppressionStatus::Suppresses(self) -> bool
 pub const nomos_gate_orchestration::ARCHITECTURE_DECLARATION_FILE: &str
 pub enum nomos_gate_orchestration::Admissibility
+pub enum nomos_gate_orchestration::BaselineAllowance
 pub enum nomos_gate_orchestration::Comparability
 pub enum nomos_gate_orchestration::CoveragePolicy
 pub enum nomos_gate_orchestration::Explanation
@@ -18,6 +19,8 @@ pub enum nomos_gate_orchestration::SuppressionStatus
 pub enum variant nomos_gate_orchestration::Admissibility::NotJudged
 pub enum variant nomos_gate_orchestration::Admissibility::Permitted
 pub enum variant nomos_gate_orchestration::Admissibility::Refused
+pub enum variant nomos_gate_orchestration::BaselineAllowance::AtMost(u32)
+pub enum variant nomos_gate_orchestration::BaselineAllowance::Unbounded
 pub enum variant nomos_gate_orchestration::Comparability::Compatible
 pub enum variant nomos_gate_orchestration::Comparability::CompatibleWith(Vec<JudgmentDifference>)
 pub enum variant nomos_gate_orchestration::Comparability::Incomparable(Vec<RunId>)
@@ -81,6 +84,7 @@ pub fn nomos_gate_orchestration::SuppressionPolicy::Suppressing<'a>(&'a self, fi
 pub impl nomos_gate_orchestration::RuleCompositionError implements From<RuleRegistryError>
 pub impl nomos_gate_orchestration::RuleCompositionError implements From<RuleResolutionError>
 pub struct field nomos_gate_orchestration::AdoptionPolicy::calibrated: Vec<RuleCalibration>
+pub struct field nomos_gate_orchestration::BaselineDebt::allowance: BaselineAllowance
 pub struct field nomos_gate_orchestration::BaselineDebt::rationale: String
 pub struct field nomos_gate_orchestration::BaselineDebt::rule: RuleId
 pub struct field nomos_gate_orchestration::BaselineDebt::subject: SubjectId

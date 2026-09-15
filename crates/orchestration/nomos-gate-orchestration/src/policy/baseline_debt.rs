@@ -22,10 +22,10 @@ use nomos_contracts::{Finding, RuleId, SubjectId};
 ///
 /// What would justify widening is a declared file that has to attribute or expire a
 /// tolerance, in the order `Suppression::owner` already followed: the key appears on the
-/// declared entry first, and this type grows a field to carry it. A named entry here is a
-/// closed, specific piece of debt, not a scope a diff could grow or shrink; scoping by
-/// source geometry and revision is a later increment's concern, once a real caller needs
-/// one.
+/// declared entry first, and this type grows a field to carry it. `allowance` is the first
+/// field that arrived that way. A named entry here is a closed, specific piece of debt, not a
+/// scope a diff could grow or shrink; scoping by source geometry and revision is a later
+/// increment's concern, once a real caller needs one.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct BaselineDebt
 {
@@ -37,6 +37,50 @@ pub struct BaselineDebt
     /// [`crate::Suppression::rationale`] is: a tolerance with no stated reason is not
     /// distinguishable from an oversight.
     pub rationale: String,
+    /// How many occurrences this entry accepted at adoption.
+    ///
+    /// `OD-GATE-030`: an adopted baseline records the maximum occurrence population accepted
+    /// for its scope, and a later run may tolerate no more than that quantity.
+    pub allowance: BaselineAllowance,
+}
+
+/// How much debt one [`BaselineDebt`] accepted.
+///
+/// A state that names itself rather than an `Option<u32>` whose `None` a reader has to
+/// interpret. The interpretation is load-bearing and counter-intuitive -- absence means
+/// *unlimited*, not zero and not one -- so it is spelled, and every match over it has to say
+/// which case it is handling.
+///
+/// # Why absence is unbounded rather than one
+///
+/// `OD-GATE-030` decides this and states the alternative it rejected. Every entry authored
+/// before the quantity existed names none, and reading those as a single occurrence would
+/// start blocking builds over debt a repository did adopt, with the gate claiming a number
+/// nobody wrote. Reading them as unlimited keeps the meaning they were written under; what
+/// makes that honest rather than a silent hole is that the state is *named*, so a run can
+/// report the entry as unbounded instead of it being indistinguishable from a bounded one.
+///
+/// # What a count is not
+///
+/// It bounds capacity and establishes nothing about history. A scope that accepted five and
+/// observes five is equally consistent with the same five persisting and with all five having
+/// been fixed while five different violations appeared. `OD-GATE-030` says so at length, and
+/// this type is deliberately not named for continuity, persistence or reintroduction so that
+/// nobody reaches for it to answer one of those.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum BaselineAllowance
+{
+    /// The entry names no count, so it tolerates however many occurrences its scope holds.
+    ///
+    /// The state every entry authored before `OD-GATE-030` v2 is in, and the one a run reports
+    /// rather than passes over in silence.
+    Unbounded,
+    /// The entry accepted at most this many occurrences.
+    ///
+    /// Never zero: an entry accepting none tolerates nothing, which is what declining to write
+    /// the entry already does, so the declared reader refuses it rather than storing a value
+    /// whose only effect would be to block what it claims to permit.
+    AtMost(u32),
 }
 
 impl BaselineDebt
@@ -53,7 +97,7 @@ impl BaselineDebt
 #[cfg(test)]
 mod tests
 {
-    use super::{BaselineDebt, BaselinePolicy};
+    use super::{BaselineAllowance, BaselineDebt, BaselinePolicy};
     use nomos_contracts::{Digest128, Finding, RuleId, SubjectId};
     use nomos_contracts::{Applicability, EvidenceClass, GateCategory};
 
@@ -75,6 +119,7 @@ mod tests
             rule: RuleId::New("naming-convention"),
             subject: finding.subject,
             rationale: "pre-existing, tracked for later cleanup".to_owned(),
+            allowance: BaselineAllowance::Unbounded,
         };
         let policy = BaselinePolicy { debt: vec![debt.clone()] };
 
@@ -89,6 +134,7 @@ mod tests
             rule: RuleId::New("naming-convention"),
             subject: SubjectId::From_Digest(Digest128::From_Bytes([DISTINCT_SEED_BYTE; Digest128::BYTE_LENGTH])),
             rationale: "different subject".to_owned(),
+            allowance: BaselineAllowance::Unbounded,
         };
         let policy = BaselinePolicy { debt: vec![debt] };
 
@@ -103,6 +149,7 @@ mod tests
             rule: RuleId::New("dependency-direction"),
             subject: finding.subject,
             rationale: "different rule".to_owned(),
+            allowance: BaselineAllowance::Unbounded,
         };
         let policy = BaselinePolicy { debt: vec![debt] };
 

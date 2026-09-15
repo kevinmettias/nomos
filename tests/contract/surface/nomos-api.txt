@@ -4,6 +4,7 @@ pub enum nomos_api::AgentDispatchResponse
 pub enum nomos_api::AgentExecutionErrorResponse
 pub enum nomos_api::AgentJudgeRoleResponse
 pub enum nomos_api::AuditResponse
+pub enum nomos_api::BaselineAllowanceResponse
 pub enum nomos_api::BlockChangeResponse
 pub enum nomos_api::CheckOutcomeResponse
 pub enum nomos_api::CheckResponse
@@ -63,6 +64,8 @@ pub enum variant nomos_api::AgentJudgeRoleResponse::NoDeclaredRoleOrSurface
 pub enum variant nomos_api::AgentJudgeRoleResponse::NoFinding
 pub enum variant nomos_api::AuditResponse::Audited { blocked: Vec<BlockedItem>, #[serde(with = "nomos_platform::timestamp_serde")] now: Timestamp, }
 pub enum variant nomos_api::AuditResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::BaselineAllowanceResponse::AtMost { accepted_occurrence_count: u32, }
+pub enum variant nomos_api::BaselineAllowanceResponse::Unbounded
 pub enum variant nomos_api::BlockChangeResponse::Added { ordinal: u32, kind: String }
 pub enum variant nomos_api::BlockChangeResponse::Moved { from: u32, to: u32 }
 pub enum variant nomos_api::BlockChangeResponse::Reflowed { ordinal: u32 }
@@ -246,6 +249,7 @@ pub struct field nomos_api::AgentExecutionOutcomeResponse::denied_tool_uses: Vec
 pub struct field nomos_api::AgentExecutionOutcomeResponse::duration_ms: u64
 pub struct field nomos_api::AgentExecutionOutcomeResponse::is_error: bool
 pub struct field nomos_api::AgentExecutionOutcomeResponse::unresolved_questions: Vec<String>
+pub struct field nomos_api::BaselineDebtResponse::allowance: BaselineAllowanceResponse
 pub struct field nomos_api::BaselineDebtResponse::rationale: String
 pub struct field nomos_api::BaselineDebtResponse::rule: RuleId
 pub struct field nomos_api::BaselineDebtResponse::subject: SubjectId

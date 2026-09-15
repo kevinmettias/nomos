@@ -35,13 +35,14 @@ impl BaselinePolicy
 mod tests
 {
     use super::{BaselineDebt, BaselinePolicy};
+    use crate::BaselineAllowance;
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 
     #[test]
     fn Test_Tolerating_Should_Find_The_Entry_That_Applies_To_A_Finding()
     {
         let finding = Finding_For("naming-convention");
-        let debt = BaselineDebt { rule: finding.rule.clone(), subject: finding.subject, rationale: "tracked".to_owned() };
+        let debt = BaselineDebt { rule: finding.rule.clone(), subject: finding.subject, rationale: "tracked".to_owned(), allowance: BaselineAllowance::Unbounded };
         let policy = BaselinePolicy { debt: vec![debt.clone()] };
 
         assert_eq!(policy.Tolerating(&finding), Some(&debt));

@@ -58,7 +58,8 @@ use serde::Deserialize;
 use std::path::Path;
 
 use super::{
-    AdoptionPolicy, BaselineDebt, BaselinePolicy, CoveragePolicy, RuleCalibration, Suppression, SuppressionDisposition, SuppressionPolicy,
+    AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, CoveragePolicy, RuleCalibration, Suppression, SuppressionDisposition,
+    SuppressionPolicy,
 };
 use crate::{GateCommand, NoVerdict};
 
@@ -165,6 +166,10 @@ pub(crate) fn Resolve_Gate_Policy<Fs: FileSystem>(root: &Path, filesystem: &Fs) 
     let declared: DeclaredPolicy = serde_json::from_str(&text).map_err(|error| return GatePolicyError::Malformed(error.to_string()))?;
 
     if let Some(problem) = declared.suppressions.iter().find_map(DeclaredSuppression::Problem)
+    {
+        return Err(GatePolicyError::Malformed(problem));
+    }
+    if let Some(problem) = declared.baseline.iter().find_map(DeclaredDebt::Problem)
     {
         return Err(GatePolicyError::Malformed(problem));
     }
@@ -283,14 +288,51 @@ struct DeclaredDebt
     rule: String,
     path: String,
     rationale: String,
+    /// How many occurrences of this rule at this path were accepted at adoption.
+    ///
+    /// Optional, and its absence is not an oversight to be defaulted away: `OD-GATE-030`
+    /// decides that an entry naming no count keeps the meaning it was written under, which is
+    /// unbounded. Every entry authored before the key existed is in that state, and reading
+    /// them as one occurrence would start blocking builds over debt a repository did adopt.
+    ///
+    /// Spelled out rather than shortened because this is a file a person writes by hand once
+    /// and reads much later, and `accepted` alone would not say accepted *when* or *how many*.
+    #[serde(default)]
+    accepted_occurrence_count: Option<u32>,
 }
 
 impl DeclaredDebt
 {
+    /// What is wrong with this entry, if anything -- the baseline counterpart to
+    /// [`DeclaredSuppression::Problem`], and refused at the same point for the same reason.
+    ///
+    /// Zero is the only refusable value. An entry accepting no occurrences tolerates nothing,
+    /// so its only possible effect is to block exactly what writing it claims to permit, and
+    /// an author who wrote it meant something else. Not writing the entry is already how a
+    /// repository tolerates none, so there is nothing this value could mean that is not
+    /// already said more clearly another way.
+    fn Problem(&self) -> Option<String>
+    {
+        if self.accepted_occurrence_count != Some(0)
+        {
+            return None;
+        }
+
+        return Some(format!(
+            "the baseline entry for rule '{}' on '{}' accepts zero occurrences. An entry that              accepts none tolerates nothing, which is what leaving the entry out already does:              give it the number of occurrences you adopted, or remove it.",
+            self.rule, self.path
+        ));
+    }
+
     /// This entry as the domain type, with its subject computed from its path.
     fn Resolved(self) -> BaselineDebt
     {
-        return BaselineDebt { rule: RuleId::New(&self.rule), subject: Subject_Of_Path(&self.path), rationale: self.rationale };
+        return BaselineDebt {
+            rule: RuleId::New(&self.rule),
+            subject: Subject_Of_Path(&self.path),
+            rationale: self.rationale,
+            allowance: self.accepted_occurrence_count.map_or(BaselineAllowance::Unbounded, BaselineAllowance::AtMost),
+        };
     }
 }
 
@@ -378,7 +420,7 @@ impl DeclaredCoverage
 mod tests
 {
     use super::{GatePolicyError, GatePolicyFile, Resolve_Gate_Policy, GATE_POLICY_FILE};
-    use crate::{CoveragePolicy, GateCommand, SuppressionDisposition};
+    use crate::{BaselineAllowance, CoveragePolicy, GateCommand, SuppressionDisposition};
     use nomos_model::Subject_Of_Path;
     use nomos_platform_std::StdFileSystem;
     use std::path::PathBuf;
@@ -399,6 +441,63 @@ mod tests
         std::fs::write(root.join(GATE_POLICY_FILE), contents).expect("writable");
 
         return root;
+    }
+
+    /// The quantity `OD-GATE-030` v2 requires an author to be able to state, read off the file.
+    #[test]
+    fn Test_A_Declared_Entry_Should_Carry_The_Occurrence_Count_It_Accepted()
+    {
+        let root = Root_With_Policy(
+            "accepted-count",
+            r#"{ "baseline": [ { "rule": "todo-format", "path": "src/legacy.rs", "rationale": "adopted", "accepted_occurrence_count": 3 } ] }"#,
+        );
+
+        let resolved = Resolve_Gate_Policy(&root, &StdFileSystem).expect("readable").expect("present");
+
+        assert_eq!(resolved.baseline.debt.first().expect("one entry").allowance, BaselineAllowance::AtMost(3));
+    }
+
+    /// An entry naming no count keeps the meaning it was written under.
+    ///
+    /// `OD-GATE-030` v2 decides this against the alternative of reading absence as one
+    /// occurrence, which would begin blocking builds over debt a repository did adopt. Every
+    /// entry authored before the key existed is this case, so it is the migration path and not
+    /// an edge.
+    #[test]
+    fn Test_An_Entry_Naming_No_Count_Should_Be_Unbounded_Rather_Than_Assumed()
+    {
+        let root = Root_With_Policy(
+            "no-count",
+            r#"{ "baseline": [ { "rule": "todo-format", "path": "src/legacy.rs", "rationale": "adopted before the count existed" } ] }"#,
+        );
+
+        let resolved = Resolve_Gate_Policy(&root, &StdFileSystem).expect("readable").expect("present");
+
+        assert_eq!(resolved.baseline.debt.first().expect("one entry").allowance, BaselineAllowance::Unbounded);
+    }
+
+    /// Zero is refused to the author rather than stored.
+    ///
+    /// An entry accepting no occurrences tolerates nothing, so its only effect would be to block
+    /// exactly what writing it claims to permit. The refusal names the entry and says what to do
+    /// instead, the same shape `DeclaredSuppression::Problem` already refuses in.
+    #[test]
+    fn Test_An_Entry_Accepting_Zero_Occurrences_Should_Be_Refused()
+    {
+        let root = Root_With_Policy(
+            "zero-count",
+            r#"{ "baseline": [ { "rule": "todo-format", "path": "src/legacy.rs", "rationale": "adopted", "accepted_occurrence_count": 0 } ] }"#,
+        );
+
+        let refusal = Resolve_Gate_Policy(&root, &StdFileSystem).expect_err("zero is refused");
+
+        let GatePolicyError::Malformed(sentence) = refusal
+        else
+        {
+            panic!("a declared entry this module read and rejected is malformed, not unreadable");
+        };
+        assert!(sentence.contains("accepts zero occurrences"), "{sentence}");
+        assert!(sentence.contains("leaving the entry out"), "the refusal has to say what to do instead: {sentence}");
     }
 
     #[test]

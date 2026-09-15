@@ -75,6 +75,9 @@ fn Baseline_Of(finding: &Finding) -> BaselineDebt
         rule: finding.rule.clone(),
         subject: finding.subject,
         rationale: "test fixture".to_owned(),
+        // The state every entry authored before `OD-GATE-030` v2 is in, so these fixtures go
+        // on asserting exactly what they asserted before the quantity existed.
+        allowance: crate::BaselineAllowance::Unbounded,
     };
 }
 

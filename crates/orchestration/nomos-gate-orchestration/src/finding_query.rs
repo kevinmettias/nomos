@@ -163,7 +163,7 @@ fn Contract_Of(rule: &RuleId) -> Option<(String, u32)>
 mod tests
 {
     use super::{Explain_Gate, FindingQuery};
-    use crate::{BaselineDebt, Explanation, GateCommand, GateEnvironment};
+    use crate::{BaselineAllowance, BaselineDebt, Explanation, GateCommand, GateEnvironment};
     use nomos_model::Subject_Of_Path;
     use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
     use nomos_rules::{SourceFile, COMPLETENESS_MIRROR, NO_SINGLE_LINE_FUNCTION_BODIES};
@@ -230,7 +230,7 @@ mod tests
         };
         assert_eq!(
             baselined_by,
-            Some(BaselineDebt { rule: nomos_contracts::RuleId::New(NO_SINGLE_LINE_FUNCTION_BODIES), subject: Subject_Of_Path("a.rs"), rationale: "pre-existing at adoption".to_owned() }),
+            Some(BaselineDebt { rule: nomos_contracts::RuleId::New(NO_SINGLE_LINE_FUNCTION_BODIES), subject: Subject_Of_Path("a.rs"), rationale: "pre-existing at adoption".to_owned(), allowance: BaselineAllowance::Unbounded }),
             "the declared entry is what a real run would apply, so it is what explains the finding"
         );
         assert!(!would_block, "a finding a real run tolerates must not be reported as one that blocks");

@@ -17,6 +17,7 @@
 //! [`GateExplainResponse`] -- and every twin type that exists only to serialize one of their
 //! own fields gets a file of its own beside them.
 
+mod baseline_allowance_response;
 mod baseline_debt_response;
 mod check_outcome_response;
 mod comparability_response;
@@ -32,6 +33,7 @@ mod rule_offer_response;
 mod suppression_disposition_response;
 mod suppression_response;
 
+pub use baseline_allowance_response::BaselineAllowanceResponse;
 pub use baseline_debt_response::BaselineDebtResponse;
 pub use check_outcome_response::CheckOutcomeResponse;
 pub use comparability_response::{ComparabilityResponse, JudgmentDifferenceResponse};
