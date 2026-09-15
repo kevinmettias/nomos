@@ -1,6 +1,6 @@
 ---
 name: nomos-task
-description: Run one unit of work in this repository end to end through the ledger - observe the board, claim an item, implement inside its territory, verify, finish, commit, re-read. Use whenever you are about to change this repository and are not already holding a claim, and when authoring a new item so its territory is right the first time.
+description: Run one unit of work in this repository end to end through the ledger - observe the board, claim an item, implement inside its territory, verify, finish, commit, re-read. Use whenever you are about to change this repository and are not already holding a claim, and when authoring a new item, whose territory is proposed before the work and validated by it.
 ---
 
 # Taking a task through the ledger
@@ -81,6 +81,57 @@ before it was ever claimed.
 
 Nothing enforces any of this. Two instances justify stating a rule, not building one to check
 it, and that is deliberate rather than an omission.
+
+**A predicted territory is provisional, and execution is what validates it.** Everything above
+is how you propose one. None of it is how you find out whether the proposal was right. A third
+item was declined twice more for territory *after* that rule existed, authored and worked by
+the session that wrote it and actively applying it. The first escape was a re-export: the
+helper the item's own rule had to call sat in a private module, so no other crate could name
+it, and `crates/spec/nomos-spec-ingest/src/lib.rs`, which carries the module declaration, was
+not reserved -- the corollary two paragraphs up says precisely that, and saying it did not
+produce the reservation. The second escape was two fixtures whose bodies the new invariant
+made vacuous: leaving them was not an option, because they would have gone on passing while
+proving nothing, and editing them was outside the reservation. Neither file was reachable by
+grepping what the predicate reads. Both were produced by running the change and reading what
+broke.
+
+That does not retire the reservation, and the failure is not that reserving is useless. The
+reservation is a *concurrency claim*: it has to exist before any editing or two sessions
+collide on one file, and it can only ever be predicted, because the change has not been
+attempted yet. The measurement is *evidence about whether that claim was sufficient*, and it
+cannot exist until the change has been attempted. The second validates the first rather than
+replacing it. So: reserve statically, validate dynamically.
+
+1. Author the item reserving the smallest defensible predicted territory.
+2. Implement. The compiler, the tests, module visibility and the fixtures reveal the cone the
+   change actually has.
+3. Before finishing, compare that cone against the reservation.
+4. If it escapes, stop -- abandon, decline, re-author.
+5. Only then finish.
+
+**The actual cone is not the set of files you edited.** `git diff --name-only` is the cheap
+reading of the third move and it answers the wrong question: it reports what you already
+decided to touch, which is the thing being checked. What the comparison needs is the minimal
+set required for the change to be **truthful and verified**, and four kinds of file qualify
+without ever appearing in a diff until somebody goes looking:
+
+- a declaration that module visibility forces, since a `pub` item nothing can path to is not
+  reachable;
+- a fixture whose assumption the change invalidated, which keeps passing for a reason that is
+  no longer the one it claims;
+- a generated file or a snapshot under `tests/contract/surface` that the change stales;
+- a dependent item's acceptance condition the change falsified, which is on the board and not
+  in the tree at all.
+
+Only the first announces itself. The others are found by asking what the change made untrue,
+which is a different question from what the change edited.
+
+The fourth move is expensive and the price is worth stating rather than glossing: there is no
+widen verb, so one legitimate escaped file costs the whole item, and declining it strands
+every dependent, each of which must be re-authored against the replacement id. That is an
+argument for reserving generously wherever the paths are genuinely uncertain. It is not an
+argument for skipping the comparison, which is how a reservation nobody checked becomes a
+claim nobody held.
 
 Check the record identifier is unused before adding the item. Nothing else will, and two
 items reserving one identifier turns a shared guard red for a reason that reads like
@@ -174,6 +225,30 @@ have spent the run, so doing it by hand is purely for speed.
 A green run is weaker than it looks in two places: `cargo test` stops early without
 `--no-fail-fast`, so the failure count you read may be one of several, and a test that
 cannot find its corpus passes having read nothing.
+
+**A guard owns a falsifier.** When an increment introduces a filter, a threshold, a
+normalization rule, an exclusion or any other predicate, at least one test must distinguish
+the guarded implementation from the same implementation with that predicate removed or
+inverted. A test that passes over the guarded code and would have passed without it is one
+more example, not a discriminator, and from a green run the two are the same colour.
+
+Every *site* the guard is applied at owns one. A threshold shared between three callers has
+three ways to diverge, and a test of the first says nothing about the other two -- which is
+usually the entire reason it was shared.
+
+Measured, on the increment that prompted this paragraph: one shared eligibility threshold,
+five mutations, and three of the five killed nothing. Two of its three applications had no
+falsifier at all, because every other fixture in those modules sat far past the threshold and
+not one of them moved when the filter was deleted -- so the divergence the shared threshold
+exists to prevent was unprotected while looking covered. The third was a test written in that
+same increment to pin that eligibility is counted over *normalized* text, and both its
+fixtures cleared the threshold whichever length was counted, so it agreed with the
+implementation it was written to exclude. Writing the test is not the proof. Removing the
+guard, watching the named test fail, and restoring the file byte-identically is.
+
+Then **compare the cone against the reservation**, before `work finish` rather than after it.
+Step 3 says what that comparison is, which four kinds of file a diff will not show you, and
+what it costs when it fails.
 
 ## 8. Finish through the ledger
 

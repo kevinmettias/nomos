@@ -75423,6 +75423,113 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P107-A-RUN-DISCARDS-EVERY-INPUT-THAT-DECIDED-ITS-OWN-JUDGMENT",
+      "title": "A run discards every input that decided its own judgment",
+      "why": "OD-GATE-031 decided that a run carries the identity of what judged it, sized to the four inputs that can differ between two sides of a comparison today, and built no mechanism. This is the value half: without it, the comparability verdict has nothing to read.\n\nEvery component is already inside Run_Gate and already discarded. The walked source is a parameter. BuildVariant and the run's moment are GateEnvironment fields. The rule selector and the scope selector are GateCommand fields. The effective policy is computed a few lines above the return. GateRunResult keeps none of them, so a finished run cannot say what judged it even though the function that produced it held all five.\n\nMeasured 2026-09-14 so the territory is right before it is written rather than after. GateRunResult has five construction sites: one in gate_environment.rs, one in gate_compare.rs and three in nomos-cli's report tests, which a new field breaks and which a compile lists in one pass. A new public type additionally needs the module that re-exports its neighbours (gate_plan.rs) and the crate root (lib.rs), neither of which a compile finds for you: the first shows up as a private-type-in-public-field error, and the second fails nothing at all -- build, clippy and test are all green while the surface snapshot silently omits the type. P106 paid for that lesson across three separate items in one session; this one reserves the whole chain up front.\n\nDigest_Of_Parts length-prefixes every part, so a digest over an ordered sequence is injective across part boundaries rather than a concatenation that can collide. nomos_rules::DESCRIPTORS is a static table carrying each rule's id, contract record and contract record version, which is the same content Registered copies into its offers, so the instrument is computable without composing a registry and without a second failure path in Run_Gate.",
+      "done_when": "GateRunProvenance exists, carrying the five components OD-GATE-031 named and no others: the source judged, the effective policy judged under, the selection judged with, the instrument, and the moment. The first four are digests over ordered, length-prefixed parts; the moment is the Timestamp itself, because a moment is not an identity and a reader comparing two runs wants to see which was later.\n\nRun_Gate fills every one from what it already holds. The source from each walked file's path and text. The policy from the effective GatePolicyFile after the declared file was resolved over the command, not from the command alone, so a difference in either shows. The selection from the rule selector and both halves of the scope selector. The instrument from BuildVariant's target, profile, toolchain and features together with every entry of nomos_rules::DESCRIPTORS.\n\nGateRunResult::provenance is Option, and Run_Gate always fills Some. None is what an unknown run carries -- one built by hand, or one that a later increment reads back from a store that predates this field -- and OD-GATE-031 decided it resolves to incomparable rather than to compatible. Representing it is this item's job; acting on it is the comparison item's.\n\nProved by measurement rather than by construction: two runs over the same tree with different nomos-gate.json files produce different policy digests and identical source digests, and two runs differing only in rule selection produce different selection digests and identical everything else. A run repeated with the same inputs produces the same digests. At least one test drives Run_Gate over a real root rather than over a constructed value, since that is the function whose discarding is the defect.\n\nNo verdict is computed here and Compare_Gate_Runs is unchanged except for whatever a new field costs its own construction site. The headless response and the CLI rendering are their own items.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_run_result.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p107",
+        "acquired_at": 1789433222,
+        "lease_expires_at": 1789444022
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-THE-TASK-SKILL-READS-A-RESERVATION-AS-PROVEN-AND-A-NEW-GUARD-AS-COVERED",
+      "title": "The task skill reads a predicted territory as authoritative and a new guard as covered",
+      "why": "Two disciplines in the task skill each acquired a third measured instance in one session, and neither of the two sentences that would have to change has changed.\n\nTerritory. Step 3 already says territory follows the acceptance predicate's dependency cone rather than the sites where the failure appears, and both instances it cites were authored before that rule existed. The third happened under it, authored and worked by the session that wrote it, actively applying it, and it was still wrong twice. The first escape was a re-export: the helper the predicate's own rule had to call lived in a private module, so nothing outside the crate could name it, and the file carrying the module declaration was not reserved. The skill warns about exactly that in the abstract, two paragraphs above, and the warning did not produce the reservation. The second escape was two fixtures whose bodies the new invariant invalidated -- they would have gone on passing while proving nothing, so leaving them was not an option and editing them was outside the reservation. Neither file was reachable by grepping what the predicate reads. Both were produced by running the change and reading what broke.\n\nThat does not falsify the rule. A reservation is a concurrency claim and it still has to be made before any editing, or two sessions collide. What it falsifies is the reading that a statically derived reservation is the answer rather than a proposal: the predicted cone and the actual cone differ, and the difference is only visible after the attempt.\n\nGuards. The same increment introduced a shared eligibility predicate and mutated it five ways to prove the tests held it. Three of the five killed nothing. Two of the three applications of the threshold had no falsifier at all -- every other fixture in those modules repeated a body far past it, so removing the filter moved no test, and the divergence between the rule and the report that the shared threshold exists to prevent was unprotected while looking covered. The third was worse: a test written in the same increment specifically to pin that eligibility is counted over normalized text was vacuous, because both its fixtures cleared the threshold whichever length was counted, so it agreed with the implementation it was written to exclude. Three tests were added and the mutations then killed the right one each.\n\nThe shape is the same in both halves. There is a test and there is a test that would fail without this are different claims, and only the second is evidence -- which is the thing this repository already refuses to accept one level down, in a rule about corpora that pass having read nothing.",
+      "done_when": "Step 3 of the task skill states that a predicted territory is provisional until execution validates it, and says what validating it means. The reservation is still authored first and still derived from the acceptance predicate's dependency cone -- that paragraph is not weakened, because the claim has to exist before the editing does. What is added is that the derivation is a proposal: before finishing, the set actually required is compared against the set reserved, and an escape stops the finish rather than being absorbed into it.\n\nThe skill says what actually required means, because the cheap reading of it is wrong. It is the minimal set of files required for the change to be truthful and verified, which is not the same as the set that was edited: a fixture whose assumption the change invalidated is required whether or not anybody edited it, and so is a module declaration that visibility forces, a snapshot a moved surface stales, and a dependent item's acceptance condition the change falsified. Naming those four kinds is the point, since each of them is a thing a diff of edited files does not report.\n\nThe skill says what an escape costs today, honestly: there is no widen verb, so the answer is abandon, decline and re-author, which strands dependents and is why the cost is worth stating rather than glossing. It does not promise one is coming.\n\nStep 7 carries the second principle where it bites: a guard owns a falsifier. When an increment introduces a filter, a threshold, a normalization rule, an exclusion or any other predicate, at least one test must distinguish the guarded implementation from the same implementation with that predicate removed or inverted -- and every site the guard is applied at owns its own, because a shared threshold applied in three places has three ways to diverge and one passing test about the first says nothing about the other two. The measured instance is stated, since three of five is the evidence and a rule without it is an opinion.\n\nThe frontmatter description moves too. It currently promises the skill makes an item's territory right the first time, which is the claim this item exists to retract.\n\nNo item identifier appears anywhere in the new text. The harness derives every identifier a skill names and fails on one that is not declared as a temporary hazard, the declared list is empty, and it is empty on purpose.\n\nNo mechanism is built and no governing record is written. This is authoring discipline for the board, and the record becomes the right authority level if the ledger ever computes or validates a cone itself, which is a different thing from telling an author to measure one.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-task/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 14 tests\ntest Test_The_Contract_Should_Name_The_Selection_Authority_Rather_Than_Instruct_Picking ... ok\ntest checks::Test_The_Adapter_Should_Import_The_Contract_Rather_Than_Repeat_It ... ok\ntest checks::Test_The_Contract_Should_Stay_Inside_Its_Line_Budget ... ok\ntest checks::Test_The_Repository_Should_Have_An_Agent_Front_Door ... ok\ntest checks::Test_The_Contract_Should_Name_Every_Authority_It_Routes_To ... ok\ntest checks::Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory ... ok\ntest Test_A_Cited_Contract_Step_Should_Still_Say_What_Is_Quoted_From_It ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Ledger_Verb_Reference ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Gate_Command_List ... ok\ntest checks::Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard ... ok\ntest checks::Test_Every_Path_The_Harness_Names_Should_Exist ... ok\ntest checks::Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open ... ok\ntest controls::Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on shared package cache\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 19.17s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-cb6ddcb0c46d55b5.exe)\n",
+        "verified_at": 1789433678,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "13cbd37dfcdaa10a84a24821401a8b71d202f295"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
