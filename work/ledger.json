@@ -75034,6 +75034,103 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2",
+      "title": "A corpus has no way to declare canonical text its own layout repeats, so its front matter is a form letter",
+      "why": "OD-SPEC-004 version 3 decided that a corpus may declare the text its own layout repeats, that the declaration is corpus-side data, and that it names structural roles rather than strings. Nothing carries such a declaration today. Measured 2026-09-14 over the ten v14.19 domain volumes, 2,988 subjects: NSV-PRESERVE-004 reports 16 violations and every one is contentful text repeated where the suite format puts it. Four are suite-wide front matter at 10 sections across 10 documents, the edition line, the suite title, the volume-ownership sentence and the Word navigation note. Eleven are volume abstracts at 3 sections across 2 documents, which is the cover line, the Document purpose section and the suite index entry, so a ten-volume suite crosses SHARED_BY by construction. A seventeenth case is a 51-character status line in the sibling suites. The amendment refuses both obvious shortcuts: extending FILLER_PATTERNS would make a lineage row say a volume abstract is prose that says a section exists without saying what it says, which is false, and a second compiled-in list is this repository's opinion about another corpus's layout and goes stale the way the blocklist did when one adjective changed. A store table is forced rather than chosen: Rule Evaluate receives only a SpecificationStore, so a declaration the rule can consult has to be rows, and a new table is a bundle change because the bundle is the authority committed to git and a table that does not travel in it is content a rebuilt store cannot hold.",
+      "done_when": "A corpus can declare that a canonical block is intentionally projected into named structural positions, the declaration is ingested into rows, and those rows survive a bundle round trip. The declaration identifies roles or declared repeated structures and derives expected multiplicity from them. It does not store literal strings under a better name: that is the second list the amendment refused, and an implementation that reaches the same place by a different route has not satisfied this item. MULTIPLICITY AND IDENTITY SURVIVE EXPORT AND IMPORT EXACTLY, and this is a named acceptance condition rather than a consequence of the word survive, because it is the corruption that would otherwise pass. Multiplicity is part of what a declaration means. An exporter and importer that preserved every declared text while coalescing two declarations of one block into one row, or while merging declarations that name different roles, would leave the text intact and the meaning destroyed, and a round-trip fixture that only compares text would report that as success. So the fixture distinguishes them: it carries a case where the same block is declared more than once, and a case where two declarations differ only in the roles they name, and it is observed to fail when the exporter or importer coalesces either. The bundle budget is paid in full and is the part of this item that is easy to leave half-done, because none of it is reachable from the crate that owns the table: the column coverage list, an exporter, an importer, both driver lists, and the round-trip fixture that must insert at least one row per table. Expect nomos-spec-store to stay green through all of it while the bundle is still incomplete. Coverage is proved from an in-repo fixture, not from either corpus. THIS ITEM DOES NOT TURN THE TWO CORPUS TESTS GREEN and must not be judged as though it should: restoration.rs and siblings.rs go green only when the corpora themselves carry declarations, and the corpora live outside this repository and are not territory any item here can reserve. Implementing the mechanism cannot make an undeclared corpus compliant. Neither file is edited and no count is pinned into either. The rule consulting these rows is the separate item that depends on this one, so nothing here changes what NSV-PRESERVE-004 reports. VERIFICATION SCOPE: the predicate is the three crates this item changes, selected as lib plus the named integration targets that judge transport, so that it excludes nomos-spec-ingest tests restoration.rs and siblings.rs, which are red by design and are not this item's obligation. That exclusion is the convention step 3 of the task skill carries.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/src/table.rs",
+          "crates/spec/nomos-spec-store/src/migration.rs",
+          "crates/spec/nomos-spec-bundle/src/columns.rs",
+          "crates/spec/nomos-spec-bundle/src/columns/coverage.rs",
+          "crates/spec/nomos-spec-bundle/src/columns/tests.rs",
+          "crates/spec/nomos-spec-bundle/src/export.rs",
+          "crates/spec/nomos-spec-bundle/src/import.rs",
+          "crates/spec/nomos-spec-bundle/src/bundle.rs",
+          "crates/spec/nomos-spec-bundle/tests/round_trip/populated.rs",
+          "crates/spec/nomos-spec-ingest/src/archive.rs",
+          "tests/contract/surface/nomos-spec-store.txt",
+          "tests/contract/surface/nomos-spec-bundle.txt",
+          "tests/contract/surface/nomos-spec-ingest.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-ingest",
+          "--lib",
+          "--test",
+          "round_trip",
+          "--test",
+          "durable_load",
+          "--test",
+          "store_holds",
+          "--test",
+          "round_trip_holds",
+          "--test",
+          "archive_reads"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE-2",
+      "title": "NSV-PRESERVE-004 cannot consult a repetition declaration, so declaring one would change nothing",
+      "why": "OD-SPEC-004 version 3 decided that a block appearing in the places its declaration names is admitted and is not filler, while a further undeclared occurrence of that same block is still a violation. The carrier item makes the declaration into rows a rule can read. This item is the half that makes reading them change an answer, and it is deliberately separate because the two have different failure boundaries: changing the store and bundle schema fails at transport and is proved by a round trip, while teaching one rule to read those rows fails at judgement and is proved by what the rule reports. Landing the carrier alone would leave a corpus able to declare its layout and a rule that still calls it a form letter.",
+      "done_when": "NSV-PRESERVE-004 consults the declaration rows and admits a repetition whose occurrences are the ones its declaration names. The falsifier is asserted in the same run and is the whole point of the item: a block declared for three named roles that appears a fourth time, undeclared, is still reported, and a repetition nothing declared at all is still reported. Without that assertion the mechanism is a suppression list with extra steps, which is what the amendment refused. The blocklist keeps its separate job and is not extended: Get_Filler_Pattern still names which known pattern a template matched for a lineage row, and a declared block is admitted without being called filler, so no lineage row is made to assert something false about it. Both conditions are proved from an in-repo fixture. THIS ITEM DOES NOT TURN THE TWO CORPUS TESTS GREEN either: that needs the corpora to carry declarations, and they live outside this repository. Implementing the mechanism cannot make an undeclared corpus compliant. restoration.rs and siblings.rs are not edited and no count is pinned into either. If, once the rule can see declarations, the ten-times-in-one-document parity note still reports, that is correct and is the question OD-SPEC-004 version 3 deliberately left open, not a defect in this item. VERIFICATION SCOPE: the predicate is nomos-spec-validate, the one crate whose behaviour this item claims and which owns no corpus-gated test; the ingest crate is not in it though the declaration rows come from there, because this item claims what the rule does with rows and not how they arrive.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs",
+          "crates/spec/nomos-spec-validate/tests/preservation_holds.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2",
+        "P103-A-REPEATED-FRAGMENT-BELOW-A-LENGTH-FLOOR-IS-NOT-A-TEMPLATE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
