@@ -75937,14 +75937,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Territory short by eight files, measured before any editing rather than after.\n\nTwo are the new type: a public type in a substrate crate needs its own file, and it needs the module root that declares it -- crates/substrate/nomos-ledger/src/holder.rs, which is the item module by #[path] and is not named item.rs, so nothing about the module's name leads to it. The same escape as the crate-root re-export that declined this item's first predecessor.\n\nSix are the verb: WorkCommand and WorkOutcome are enums in nomos-work-orchestration, run.rs dispatches over the first with no catch-all arm, the crate root re-exports, the CLI seam test names the enum, and the crate has a surface snapshot. nomos-api needs nothing, because it reads outcomes through refutable lets rather than an exhaustive match, and that difference is why the count is six rather than nine.\n\nRe-authored as -4 with those eight added and everything else carried forward off this item unchanged, plus a paragraph in the why recording the measurement, since this item's subject is exactly that measurement. No dependents to strand. Nothing was written under the claim."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p103-widen",
-        "acquired_at": 1789440433,
-        "lease_expires_at": 1789451233
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -75964,9 +75964,18 @@
         "timeout_seconds": 3600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "opus-p103-widen",
+          "reason": "Territory short by eight files, measured before editing. Declining and re-authoring as -4.",
+          "abandoned_at": 1789440667
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "opus-p103-widen",
+        "declined_at": 1789440668
+      }
     },
     {
       "id": "P109-A-BASELINE-TOLERANCE-IS-UNBOUNDED-AND-THE-RECORD-NAMES-THE-WRONG-FIRST-INCREMENT",
@@ -76106,6 +76115,150 @@
           "--no-fail-fast"
         ],
         "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P109-B-A-BASELINE-ENTRY-CANNOT-SAY-HOW-MUCH-IT-ACCEPTED",
+      "title": "a baseline entry cannot say how much it accepted",
+      "why": "OD-GATE-030 v2 decides that an adopted baseline records the maximum occurrence population accepted for its rule and subject scope, and that a later run may tolerate no more than that quantity. Nothing can carry that quantity yet. DeclaredDebt is rule, path and rationale; BaselineDebt is rule, subject and rationale; BaselineDebtResponse is the same three. So the decision cannot be stated by an author, cannot be held by the domain, and cannot reach a headless caller. The record names the order this follows, the same order Suppression's owner field already took: the key appears on the declared entry first, and the domain type grows a field to carry it. This item carries the quantity and enforces nothing with it, which is deliberate and is why it is separable: a run that reads the field and ignores it behaves exactly as today, so the carrier can land and be reviewed before the behavior that depends on it.",
+      "done_when": "A declared baseline entry may name the occurrence count it accepted, and the domain type carries it as a state that names itself rather than as a bare Option a reader has to interpret: an entry naming no count is Unbounded, and one naming a count is bounded by it. A count of zero is refused at resolution with a message addressed to the author, the way DeclaredSuppression::Problem already refuses a temporary waiver with no expiry, because an entry accepting zero occurrences tolerates nothing and declining to write the entry already does that. An entry naming no count keeps exactly the meaning it was written under, which OD-GATE-030 v2 requires and which the existing tests over countless entries prove by continuing to pass unchanged. The headless twin names the quantity too, as a tagged state rather than a nullable number, so a caller reads unbounded as a word and not as an absence. Both surface snapshots are re-blessed and committed. The predicate is the two crates' own lib tests. It deliberately does not reach tests/contract/tests/public_surface.rs, whose obligation is the whole workspace's surface and which goes red on any peer's unblessed snapshot, nor this crate's integration seam, nor the host CLI, which names no baseline quantity in this item.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt/baseline_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/host/nomos-api/src/response/baseline_debt_response.rs",
+          "crates/host/nomos-api/src/response/baseline_allowance_response.rs",
+          "crates/host/nomos-api/src/response.rs",
+          "crates/host/nomos-api/src/lib.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-opus-5",
+        "acquired_at": 1789440632,
+        "lease_expires_at": 1789447832
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api",
+          "--lib"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-A-TERRITORY-EXECUTION-PROVES-INSUFFICIENT-COSTS-THE-WHOLE-ITEM-4",
+      "title": "A territory that execution proves insufficient costs the whole item",
+      "why": "A reservation is authored before the change is attempted, so it is a prediction, and a prediction is sometimes wrong by one file. The ledger has no proportionate answer to that. Territory is immutable under claim and there is no widen verb, so the only route is abandon, decline and re-author -- and declining an item strands every dependent, each of which must itself be declined and re-authored against the replacement identifier.\n\nMeasured 2026-09-14 on one item, which was declined three times for exactly this. The first escape was the crate root: the helper the item's own rule had to call sat in a private module, so nothing outside the crate could name it, and the file carrying the module declaration was not reserved. The second was two fixtures whose bodies the change made vacuous -- leaving them would have left two tests passing for a reason that was no longer the one they claimed, and editing them was outside the reservation. Neither was reachable by grepping what the predicate reads. Both appeared only when the change was run. The third attempt reserved what an actual build and test run named, and held.\n\nThe cost was not the editing. It was five ledger transitions and a dependent re-authored twice, for work whose only defect was that one file it legitimately had to touch could not be predicted before the attempt.\n\nThe immutability is not the defect and must survive. A holder who could rewrite their own reservation could take a path a peer holds, and the exclusion check would never be asked. What is wrong is that the refusal is total rather than proportionate: the ledger answers a request to add one path by ending the item.\n\nThere is a second loss, and it is the one that compounds. The board cannot say how often a predicted cone escapes its reservation. A decline stores a holder, a timestamp and free prose, so the number is not derivable and a stated one would be a figure nobody could check. The task skill now instructs an author to compare the actual cone against the reservation before finishing; nothing anywhere records the answer. A widening that is refused into a decline is evidence destroyed at the moment it is produced.\n\nThe territory below is large because a field added to an item breaks every site that constructs one. Measured rather than estimated: 29 files across five crates construct a LedgerItem, two further matches in nomos-spec-ingest are an unrelated Filler.displaced and are excluded, and a compile lists the real set in one pass. Reserving the whole chain up front is deliberate -- this is the item whose subject is what an under-reservation costs, and discovering its own escape mid-claim would cost exactly what it exists to describe.\n\nThe reservation was measured a second time before any editing, against the conventions this workspace actually holds rather than against the item's own subject matter, and it was short by eight files. Recorded here because this item is about that measurement and a silent correction would be the wrong shape.\n\nTwo are the type. A new public type in a substrate crate needs a file of its own -- ef1c93f gave every substrate type one, and it is the commit whose file splits the decline of P11-AMEND-TERRITORY measured -- and it needs the module root that declares it. That root is crates/substrate/nomos-ledger/src/holder.rs, reached as the item module through a #[path] attribute rather than being named item.rs, so grepping for the module's name finds the directory and not the file that declares it. This is the same escape as the crate-root re-export that declined the first predecessor of this item, one level down and wearing a different name.\n\nSix are the verb. A ledger verb is a WorkCommand variant, the dispatch in run.rs matches that enum with no catch-all arm, the outcome is a second enum beside it, and both enums are public surface with a snapshot. The two hosts differ here and the difference is the whole reason the count is six and not nine: nomos-api reads each outcome through a refutable let rather than an exhaustive match, so a new variant does not break it and no headless response is owed, while nomos-cli renders through a match that must gain an arm.\n\nBoth were found by reading, which is worth stating precisely because it is not a counterexample to the rule this item exists to repair. Neither was predictable when the item was first authored; both were predictable once the work had been looked at closely enough to know which conventions it would meet. That is the same information execution would have produced, obtained earlier and more cheaply, and it does not make the reservation authoritative -- a build has still not been run.",
+      "done_when": "A holder can widen the territory of an item they hold, and can only widen it. The verb is authored beside the others rather than as a special case of add, because add allocates and this does not.\n\n# One mutation, not a check followed by a write\n\nLoad, holder check, enlarged territory, exclusion against every other live claim, history append, territory replacement, whole-ledger validation and the write are one mutation inside one lock acquisition, through the same guarded path the fourth board-changing verb uses. OD-LEDGER-015 is the record of what the other three cost by deciding outside the lock, and this is the fifth.\n\nCalling the same exclusion the claim called is necessary and is not the invariant. Two simultaneous widenings can each observe a board on which their own new paths are free and jointly create the overlap the check exists to prevent, and no amount of sharing the function fixes that. Atomicity is the property, and it owns a falsifier: a test in which a second widening interleaved between the first one's read and its write is refused rather than applied.\n\nThe exclusion is re-run against the board as it is at widen time, never inherited from the claim. Independence was established when the claim was granted and the board has moved since.\n\n# What is refused, each with its own test\n\n- A widening whose new paths overlap a live claim, through the exclusion check a claim goes through -- called and not copied, so a widening cannot come to a different answer about contention than a claim would. This is the refusal the whole verb has to earn.\n- A widening by anybody who is not the current holder.\n- A widening of an item that is not claimed, or that is done, or that is declined.\n- A widening by a holder whose lease has run out. This is the boundary case and it is not covered by the holder check: the name still matches and the claim is still on the item. store/refusal.rs already records that a lapsed claim stops excluding, so another item may since have been claimed over exactly the files this one reserves -- a lapsed holder enlarging a reservation that currently excludes nobody is that hazard reached through a new verb. The authorization test is therefore liveness, not name equality: Has_Active_Claim is already false once the lease has gone, and a name match on a dead lease must authorize nothing. A lapsed holder is told to take the item over first.\n- A narrowing. Widen takes paths to add; it does not take a replacement territory. Dropping a path drops the done_when clause that path carried, which this repository has already recorded as a rule, and a verb accepting a whole new territory would put narrowing one typo away.\n\n# The widening is recorded, not merged silently\n\nWhich paths were added, by which holder, at what moment, kept on the item the way a displaced claim is kept. That record is the measurement the board cannot make today: it is what lets an escape be counted without anybody reading a decline's prose, and it is the only evidence that would ever justify computing a dependency cone rather than predicting one. A widening that leaves the territory correct and the history empty does not satisfy this item.\n\n# Compatibility, stated as two directions with two mechanisms\n\nThe schema moves to 6 and every item on the board carries the new field after the same commit. The record states both directions separately and names the mechanism for each, because attributing either to the other is how a guard comes to rest on something that does not hold it.\n\nAn older build meeting schema 6 is refused by deny_unknown_fields on LedgerItem, which is mechanical and applies to any new field. The version probe in store/document.rs is consulted after that refusal and never to decide whether to refuse; its whole job is to make the operator read Unrecognized rather than Malformed. The protection is therefore not the version bump, and OD-LEDGER-008 is why that matters: a field once arrived without the number moving, so a guard resting on the bump would report clean on the next instance of the defect it was built for. A forgotten bump costs a sentence and cannot cost a field.\n\nA newer build meeting schema 5 is refused by the absent serde default on the missing key. That is what the absent default is for, and it is the opposite direction: it makes every historical item be migrated rather than silently read as one that was never widened. kind and origin carry none for the same reason.\n\nThe bump itself is still not discretionary -- a test counts the keys on a serialized item -- but the done_when does not claim it protects anything.\n\nwork/ledger.json is deliberately not reserved: reserving the board would block every other claim, and the migration is an obligation stated here rather than an exclusion.\n\n# The rest of the surface\n\nshow reports every widening with its paths and its holder. list does not gain a column, because list is one line per item and this is prose.\n\nREADME.md carries the verb in the reference the contract routes to, and .claude/skills/nomos-task/SKILL.md loses the sentence saying no widen verb exists, which this item makes false. The skill keeps the rest of that paragraph unchanged: the comparison before finishing is still required, and a cheaper repair is not a reason to reserve carelessly.\n\nOD-LEDGER-039 records the decision, since every previous field on an item came with one and the semantic is the load-bearing part: territory is a concurrency claim that its holder may enlarge, under the same exclusion the claim was granted under, while the claim is still live, and the enlargement is durable history.\n\nThe record states two things the verb is not, because each is a way it could decay into something worse than the gap it closes.\n\nIt is not cone inference. Nothing here infers, validates or proposes a dependency cone, and an author still measures. The recorded widenings are the only evidence that would ever justify changing that, and there are none yet.\n\nIt is not a licence to reserve loosely. A claim is the author's best pre-work reservation and a widening is an evidence-backed repair for the case where execution disproves that prediction. It is not the first move of an incremental discovery of territory, and neither the record nor the verb's own help text may read as an invitation to treat it as one. The distinction is what keeps the history worth having: a board on which widening is routine has lost the measurement rather than gained a convenience, because an escape rate says nothing unless the reservations it is measured against were genuine attempts to get the territory right.\n\nNot closed by a verb that mutates territory without recording the mutation, by one that accepts a replacement territory, by one that decides outside the lock, or by one that authorizes a holder whose lease has gone.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/item/ledger_item.rs",
+          "crates/substrate/nomos-ledger/src/item/tests.rs",
+          "crates/substrate/nomos-ledger/src/store/constants.rs",
+          "crates/substrate/nomos-ledger/src/store/document.rs",
+          "crates/substrate/nomos-ledger/src/store/verbs.rs",
+          "crates/substrate/nomos-ledger/src/store/refusal.rs",
+          "crates/substrate/nomos-ledger/src/store/claiming.rs",
+          "crates/substrate/nomos-ledger/src/store/rendering.rs",
+          "crates/substrate/nomos-ledger/src/store/validation.rs",
+          "crates/substrate/nomos-ledger/src/store/reservation.rs",
+          "crates/substrate/nomos-ledger/src/store/file.rs",
+          "crates/substrate/nomos-ledger/src/file_ledger.rs",
+          "crates/substrate/nomos-ledger/src/exclusion_ledger.rs",
+          "crates/substrate/nomos-ledger/src/claim.rs",
+          "crates/substrate/nomos-ledger/src/finish.rs",
+          "crates/substrate/nomos-ledger/src/finish/release_outcome.rs",
+          "crates/substrate/nomos-ledger/src/finish/running.rs",
+          "crates/substrate/nomos-ledger/src/lib.rs",
+          "crates/substrate/nomos-ledger/tests/declining_ends_an_item.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/board.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/lapse.rs",
+          "crates/substrate/nomos-ledger/tests/exclusion_holds/takeover.rs",
+          "crates/substrate/nomos-ledger/tests/gate_covers_finish/launcher.rs",
+          "crates/substrate/nomos-ledger/tests/scope_verification_integration.rs",
+          "crates/substrate/nomos-ledger/tests/widening_is_recorded.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/work/parse.rs",
+          "crates/host/nomos-cli/src/work/report.rs",
+          "crates/host/nomos-cli/src/work/listing.rs",
+          "crates/host/nomos-cli/src/work/tests.rs",
+          "crates/host/nomos-cli/tests/takeover_is_recorded.rs",
+          "crates/host/nomos-api/src/work/add_response.rs",
+          "crates/orchestration/nomos-work-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-work-orchestration/tests/integration_seams.rs",
+          "crates/agent/nomos-agent-executor-claude-code/tests/integration_seams.rs",
+          "crates/agent/nomos-model-backend-ollama/tests/integration_seams.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "README.md",
+          ".claude/skills/nomos-task/SKILL.md",
+          "docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md",
+          "crates/spec/nomos-spec-store/records/OD-LEDGER-039.record",
+          "crates/substrate/nomos-ledger/src/item/widening.rs",
+          "crates/substrate/nomos-ledger/src/holder.rs",
+          "crates/orchestration/nomos-work-orchestration/src/work_command.rs",
+          "crates/orchestration/nomos-work-orchestration/src/run.rs",
+          "crates/orchestration/nomos-work-orchestration/src/board_view/work_outcome.rs",
+          "crates/orchestration/nomos-work-orchestration/src/lib.rs",
+          "crates/host/nomos-cli/tests/work_orchestration_seam.rs",
+          "tests/contract/surface/nomos-work-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "opus-p103-widen",
+        "acquired_at": 1789440668,
+        "lease_expires_at": 1789451468
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
       },
       "verified": null,
       "abandoned": [],
