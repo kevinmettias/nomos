@@ -116,6 +116,7 @@ profile: domain-specification
 | docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md@authored | docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md | authored | 30 | 10 | sha256:06232c06f6b8a8ad4f60e2fe18f30876fd9ef9d49529207a7dd1531d7454963a |
 | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md@authored | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md | authored | 41 | 8 | sha256:ac575bc06aa94ff1e34178e278645a40b331da87f233d0b3bf58f97cf3e913ba |
 | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md@authored | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md | authored | 31 | 6 | sha256:a6afa613786d72b5021c8eb78a1667996d917658d7c478db9396d478dac8f4ce |
+| docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md@authored | docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md | authored | 33 | 6 | sha256:144fc0a0a362fdfb6b88913446ae17c051ff9c6c72675109af37a715a25a29a9 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -1108,6 +1109,12 @@ profile: domain-specification
 | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#16 | authored | 2 | Decision |
 | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#24 | authored | 2 | What This Does Not Decide |
 | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#30 | authored | 2 | Status |
+| docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#1 | authored | 1 | A declared tolerance can name only a finding whose subject is its file |
+| docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#15 | authored | 2 | Decision |
+| docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#26 | authored | 2 | What This Does Not Decide |
+| docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#32 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -29915,6 +29922,303 @@ today rather than to the eventual shape. Which rules could look stays derivable 
 findings rather than duplicated. A comparison reports compatible, compatible with stated
 differences, or incomparable, and unknown provenance is incomparable. `OD-GATE-022-A`'s
 run-history deferral and `OD-GATE-030`'s baseline continuity question are both untouched. No
+mechanism is built here.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#1
+
+*revision: authored · kind: heading · heading: A declared tolerance can name only a finding whose subject is its file · hash: sha256:d3e42ed5c3d29234968946941988885adb0435c0a703be28d090a6bddec4ff29*
+
+# A declared tolerance can name only a finding whose subject is its file
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#2
+
+*revision: authored · kind: heading · heading: A declared tolerance can name only a finding whose subject is its file / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#3
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Question · hash: sha256:13ef93260bc084fe397e6493a123a2febbc4d3b97c195b7429d3bacca97d6d26*
+
+`P109` gave the four gate policies a declared source in `nomos-gate.json`, and a later P109
+item made the exceeded-baseline report name the scope its author actually wrote. Both reach a
+finding through `nomos_model::Subject_Of_Path`: a declared entry names a **path**, and the run
+computes the identity that path folds to. A suppression reaches its finding the same way.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#4
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Question · hash: sha256:5a140ccb27b6ec35bbb477bd8f209f020deeee02d3901ca8676c9270caf32d26*
+
+That addresses a finding whose subject *is* its file. It does not address one whose subject is
+something inside the file, and the failure is silent in both directions: the entry matches
+nothing, the finding is not tolerated, and until recently nothing said so.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#5
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Question · hash: sha256:741e9cba935912a8718499497913751cd71bd4c12d644e687c4aded940741410*
+
+`gate_policy_file.rs`'s own module doc states this limit under "What a path-authored entry does
+not reach", names the shape of an answer — sub-item findings carrying an addressable name a
+person can write — and then defers it explicitly: "That is a question about `Finding` rather
+than about this file, and it belongs to whichever item takes it up." This record is that
+decision.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#6
+
+*revision: authored · kind: heading · heading: A declared tolerance can name only a finding whose subject is its file / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#7
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What Was Measured · hash: sha256:6ea15158f24ef052d134b4767835c974853e7634b8c264402b8f10518b8fabd0*
+
+**The population is sixteen construction sites in fourteen files, and that is the unit the
+item's own figure disagrees about.** Every site is
+`SubjectId::From_Digest(Content_Digest(qualified.as_bytes()))`, measured at `35464ec8` and
+unchanged at `2bf7df52`, the commit that boarded this item. Thirteen of the sixteen sit under
+`checks/naming/`, across eleven files; three sit outside it, in `checks/function_shape.rs`,
+`checks/guarantee_exerciser.rs` and `checks/mirror/verdict.rs`. The item records "fourteen rule
+construction sites", and fourteen is exactly the *file* count, so the two figures differ by the
+unit counted rather than by a mistake in either. This record states its own count and its own
+unit, because a number without a unit is the thing that made the two look like a disagreement.
+A later reader re-measuring will get a different number again — this is a census of a moving
+tree — and what is stable is the shape rather than the count.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#8
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What Was Measured · hash: sha256:2c2b33c4339c7e73f15c5164c9c101d6c97a4c94dbac031a72add36245c72440*
+
+**`qualified` is not one string, and no author can predict it.** Three files from one family:
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#9
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What Was Measured · hash: sha256:096d4d4b2edecabae1f6e54a66fad16cf98443ce953a1ae024f77e81afbe9c32*
+
+- `checks/naming/violations.rs` builds `format!("{path}::{}", item.qualified_name)`;
+- `checks/naming/abbreviations.rs` builds `format!("{path}::{}::{name}", item.qualified_name)`;
+- `checks/naming/file_names.rs` builds `format!("{path}::{}", item.qualified_name)`.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#10
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What Was Measured · hash: sha256:94a6d025adebaea50029a4aac24864a6837235afc314b8c50fac3acf0de32da9*
+
+Each is assembled at the site, over the raw bytes, with no shared constructor and no
+normalization. So the string an entry would have to name is private to the rule that built it —
+a person cannot write it from the file they are looking at, and a policy that guessed would be
+wrong in a way the run could not detect.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#11
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What Was Measured · hash: sha256:25c9271653f5ce211f025447acfa8f5d89e547987efc8bc64912c27c6c3e0ab7*
+
+**`subject_name` is the bare name, so it is not the composite and cannot address it.**
+`item.qualified_name.clone()` in `violations.rs`, `name.to_owned()` in `abbreviations.rs`,
+`type_name.to_owned()` in `file_names.rs`. `subject` is a digest over the composite while
+`subject_name` is one member of it, so the two are related by containment rather than by
+equality. This is the fact `OD-GATE-024` did not have when it first decided: its remedy compared
+an authored string against `subject_name`, and over this family that comparison would either
+fail to match at all or — were the composite ever collapsed to the member — match every symbol
+sharing a display name at once. That is broadening, not addressing.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#12
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What Was Measured · hash: sha256:89297e2ed9e087c95b4f06a2a4c473b8be5ed7659ad8f4b2e961cb07dc7a3474*
+
+**The naming family's derivation is a fourth derivation `OD-ANALYSIS-011` does not name.**
+`tests/contract/tests/boundaries/findings.rs` permits exactly three: `subject` is
+`Content_Digest(subject_name)`, or `Subject_Of_Path(location)`, or `Subject_Of_Path` of the file
+part of a `path:line` location. A naming-family finding satisfies none of them. The guard does
+not catch it because its fixture is two fact-free rules and never exercises this family, and the
+guard's own doc anticipates exactly this: "That is not automatically wrong -- it is a fourth
+derivation nobody has decided on, and `OD-ANALYSIS-011` is where the decision would have to be
+amended before the rule lands."
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#13
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What Was Measured · hash: sha256:6b5e0f3c843361bc7a681e1178d559b77e7835905941a92f2061f989da12e728*
+
+**Matching is digest equality in both policies, so this is not a baseline-only gap.**
+`Suppression::Is_Applicable_To` and `BaselineDebt::Is_Applicable_To` are both `rule` and
+`subject` compared for equality — `OD-GATE-024` cites these same two implementations under
+their former name, `Matches`. Nothing in either can see a name, and the suppression one says so
+in its own doc: matching "invents no addressing scheme of its own". A later reader who fixes one
+of these and believes the other followed has fixed half of this. The naming family is also what
+a repository adopting on existing code reaches for first, so the configuration language is
+weakest at exactly the point adoption depends on it.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#14
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What Was Measured · hash: sha256:4ff7e830de86eb5699a4d9bcd06d315455bd9b1e112cc0de2650b62c1a8abbfc*
+
+**An entry that matches nothing is now reported rather than silent.** `GateRunResult` carries
+`unmatched_policy`, and its own doc records that `OD-GATE-024` was filed because that silence
+was the whole of the defect. That clause is independent of how addressing is spelled, and it is
+what makes the third acceptance case below observable rather than merely intended.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#15
+
+*revision: authored · kind: heading · heading: A declared tolerance can name only a finding whose subject is its file / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#16
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Decision · hash: sha256:820d5ed461cb4340e266108a3af7ff99e1807b3e66b52c2d3862371e8d0db4c5*
+
+**A declared entry addresses its finding through a tagged selector with exactly one addressing
+mode, and a rule that subjects its findings to something inside the file declares an address a
+person can write.**
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#17
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Decision · hash: sha256:1a47ab01f31b67bf68d38cb86632df781bc0f354ffb656b93e7299a3fdd6e97b*
+
+The measurement exposes two candidate answers, and they are not equally good.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#18
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Decision · hash: sha256:a2114663470faaa4c483b1c6a28b5a014a632efca51053d2e0c0d935f32198d5*
+
+The first is to give these findings an addressable name a person can write, and have the
+selector resolve that name to the identity the finding already carries. This is the answer the
+module doc named, and it is the one taken here.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#19
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Decision · hash: sha256:4f004109b57aa4729e4cad9ef1dfdd7ade205ec448c82b9dc622553e216096f7*
+
+The second is to let a declared entry name a subject some other way — a raw `SubjectId` digest,
+or the `subject_name` string that `OD-GATE-024`'s first decision reached for. The module doc
+already refuses the first, because a file naming a raw digest is the unauthorable identity that
+module exists to compute rather than accept; and the second is already retracted, because
+`subject_name` is not reliably the preimage of the subject beside it. Neither is reopened here.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#20
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Decision · hash: sha256:efe15506f6d7e4be4201b7561e137cc60054bb265141fe75edd6d88e42c6a421*
+
+1. **The selector is one tagged value, not two optional fields.** A declared subject is either a
+   path or a qualified name, and the two cannot both be present. Two independent optional fields
+   would admit a declaration that means two things at once, with a precedence nobody decided and
+   only `deny_unknown_fields` standing between it and a run. One tag makes the invalid
+   combination unrepresentable rather than refused, which is the stronger of the two answers.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#21
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Decision · hash: sha256:a7609e1c2752cdeb2a12cd28a8971ac1ae2903fc74f97b137508d9f6e9f3ea4f*
+
+2. **The path selector keeps today's semantics exactly.** It resolves through `Subject_Of_Path`,
+   byte for byte as it does now, including the folding that makes two spellings one subject.
+   Every entry that works today keeps working, and this record changes nothing about it.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#22
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Decision · hash: sha256:08770647a8735a03516ec49bcaee079a882bafb786c01b4465158c5b16403be6*
+
+3. **The qualified-name selector names the address a rule declares, and a rule that declares
+   none cannot be addressed this way.** The naming sites stop assembling a composite privately
+   and declare the address on the finding, so the string a policy entry writes is a string the
+   run can print back. That is what makes the entry authorable rather than guessable, and it is
+   the change to `Finding` that the module doc named.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#23
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Decision · hash: sha256:dbe49ab6eb775d4f753209ca2c299580fdd8837282e7d78f062139fb177c56a3*
+
+4. **Matching stays on `subject`.** The selector resolves to a `SubjectId` and the comparison is
+   unchanged, so the run still matches on identity while the address remains authoring and
+   display material. This preserves the separation the baseline work has been keeping —
+   canonical identity is not presentation identity — and it is why a name-addressed entry cannot
+   silently broaden: it resolves to one composite digest, never to a display name that several
+   symbols share.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#24
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Decision · hash: sha256:633321f4fa732c4554901ab75fcb61984840365bfa9eae29217b046a52981c9e*
+
+5. **A selector that resolves to nothing is refused rather than reported unmatched.** The
+   `unmatched_policy` line already reports an entry that reached no finding. A selector naming
+   an address no rule in the run can produce is a different event and must read differently: it
+   is a declaration the run could not interpret, and reporting it as "matched nothing" would
+   tell an author their symbol was fixed when in fact they misspelled it.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#25
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Decision · hash: sha256:2668755748f9224808212aa7bef916c3795e00c03161b739ede81888fb96e823*
+
+6. **The naming family's derivation becomes a named one, and `OD-ANALYSIS-011` is amended to
+   carry it.** The boundary guard permits three derivations today and this family satisfies
+   none, which is a defect in the record set rather than in the rules. The fourth is the digest
+   of the address the rule declares, and it is added to the permitted set with the guard
+   extended to exercise it — a guard whose fixture cannot produce the shape it exists for has
+   already been written once in this repository and is not worth writing again.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#26
+
+*revision: authored · kind: heading · heading: A declared tolerance can name only a finding whose subject is its file / What This Does Not Decide · hash: sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569*
+
+## What This Does Not Decide
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#27
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What This Does Not Decide · hash: sha256:740937b21e1d13a2834fadb3b16c2816d67c7ddefef4f0faa317dacf6c2f2009*
+
+**It does not decide baseline capacity.** `OD-GATE-030` owns how much a tolerance may cover, and
+it is untouched by which findings a tolerance can name. The two questions meet at the same
+declared file and are otherwise independent.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#28
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What This Does Not Decide · hash: sha256:8dc890d9d6655d7d0f7b23bca04d1863b36fe430792df65cd20af1d24b84350f*
+
+**It does not re-open `OD-GATE-024`'s retracted decisions.** Comparing an authored string
+against `subject_name` stays retracted, for the reason that record measured. The selector here
+resolves a name to a digest rather than comparing strings, which is the substantive difference
+between the two designs and the reason this one survives the fact that killed the other.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#29
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What This Does Not Decide · hash: sha256:112a15507e39188179c5088a1b6acb85226708702c7770a418d4fd64ef30fc76*
+
+**It does not change `Normalize_Path`, `Subject_Of_Path`, or how territory and fact identity are
+computed.** Those answer whether two paths are one file, which is `OD-MODEL-001`'s question and
+not this one.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#30
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What This Does Not Decide · hash: sha256:d664480158ec91df7e7b915c522b20321e59505c90c81dff4e476e7f5f5fa510*
+
+**It does not put a digest in the declared file.** A selector names an address a person can read
+and the run computes the identity, which is the property the original design exists to keep.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#31
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / What This Does Not Decide · hash: sha256:57d3e93fcb074ec91b5bedf6cd7697e8edfe03ad618977730a1b2b43c6a6b782*
+
+**It does not implement any of this.** The selector type, the address on `Finding`, the sixteen
+construction sites, the two matching implementations, the refusal path and the
+`OD-ANALYSIS-011` amendment are a follow-up item's own territory, none of which this record
+holds.
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#32
+
+*revision: authored · kind: heading · heading: A declared tolerance can name only a finding whose subject is its file / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#33
+
+*revision: authored · kind: prose · heading: A declared tolerance can name only a finding whose subject is its file / Status · hash: sha256:61f63fae9d42f7c6cf7868d69bc74e6c651ad4bcdcdb909f75ef0d3b0610bea1*
+
+Accepted. A declared tolerance addresses its finding through a tagged selector with exactly one
+addressing mode: a path, which keeps today's semantics exactly, or a qualified name, which names
+an address the rule declares rather than a composite the rule assembles privately. Matching
+stays on `subject`, so canonical identity and authoring address remain separate and a
+name-addressed entry cannot broaden across symbols sharing a display name. A selector that
+resolves to nothing is refused rather than reported as an entry that matched nothing. The naming
+family's fourth derivation is named and `OD-ANALYSIS-011` is amended to carry it. `OD-GATE-030`'s
+baseline capacity question and `OD-GATE-024`'s retracted decisions are both untouched, and no
 mechanism is built here.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
