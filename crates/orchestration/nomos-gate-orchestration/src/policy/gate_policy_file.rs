@@ -250,7 +250,7 @@ impl DeclaredSuppression
         if waiver && self.expiry.is_none()
         {
             return Some(format!(
-                "the temporary-waiver for rule '{}' on '{}' names no expiry. A temporary                  waiver without an end date never ends, which is a formal-risk-acceptance                  wearing another name: give it an expiry, or declare the disposition you                  actually mean.",
+                "the temporary-waiver for rule '{}' on '{}' names no expiry. A temporary waiver without an end date never ends, which is a formal-risk-acceptance wearing another name: give it an expiry, or declare the disposition you actually mean.",
                 self.rule, self.path
             ));
         }
@@ -258,7 +258,7 @@ impl DeclaredSuppression
         if !waiver && self.expiry.is_some()
         {
             return Some(format!(
-                "the suppression for rule '{}' on '{}' names an expiry, and only a                  temporary-waiver has one. Every other disposition applies until it is                  removed, so a date here would be read by nothing and would tell a later                  reader something untrue.",
+                "the suppression for rule '{}' on '{}' names an expiry, and only a temporary-waiver has one. Every other disposition applies until it is removed, so a date here would be read by nothing and would tell a later reader something untrue.",
                 self.rule, self.path
             ));
         }
@@ -319,7 +319,7 @@ impl DeclaredDebt
         }
 
         return Some(format!(
-            "the baseline entry for rule '{}' on '{}' accepts zero occurrences. An entry that              accepts none tolerates nothing, which is what leaving the entry out already does:              give it the number of occurrences you adopted, or remove it.",
+            "the baseline entry for rule '{}' on '{}' accepts zero occurrences. An entry that accepts none tolerates nothing, which is what leaving the entry out already does: give it the number of occurrences you adopted, or remove it.",
             self.rule, self.path
         ));
     }
@@ -508,6 +508,74 @@ mod tests
         };
         assert!(sentence.contains("accepts zero occurrences"), "{sentence}");
         assert!(sentence.contains("leaving the entry out"), "the refusal has to say what to do instead: {sentence}");
+    }
+
+    /// Every refusal this module writes reaches its author as single-spaced prose.
+    ///
+    /// The defect this catches is invisible in the source and appears only in the output: a
+    /// sentence wrapped across source lines with the wrapping whitespace left inside the
+    /// literal renders as one line carrying a run of spaces where each break was, so a reader
+    /// is handed text that reads as a formatting accident at the exact moment they are being
+    /// told how to repair their policy. The assertion is therefore on the rendered string and
+    /// not on the literals -- a test reading the source would have to re-derive what the
+    /// wrapping renders to, which is the defect restated rather than caught.
+    ///
+    /// All three, because they are three separately written sentences and a fix applied to
+    /// one leaves the others rendering collapsed with nothing to say so. The phrase each case
+    /// must carry is asserted beside the spacing for the same reason: a fixture whose
+    /// disposition spelling `serde` does not know is refused by `serde` instead, and a
+    /// single-spaced parse error would satisfy a spacing assertion while proving nothing
+    /// about the refusal it was written for.
+    #[test]
+    fn Test_Every_Refusal_Sentence_Should_Render_As_Single_Spaced_Prose()
+    {
+        let refusals = [
+            (
+                "single-spaced-waiver-without-expiry",
+                r#"{ "suppressions": [ { "rule": "todo-format", "path": "src/legacy.rs", "disposition": "temporary-waiver", "rationale": "while the rename lands", "owner": "author" } ] }"#,
+                "names no expiry",
+            ),
+            (
+                "single-spaced-expiry-on-a-non-waiver",
+                r#"{ "suppressions": [ { "rule": "todo-format", "path": "src/legacy.rs", "disposition": "false-positive", "rationale": "generated code", "owner": "author", "expiry": 1000 } ] }"#,
+                "names an expiry",
+            ),
+            (
+                "single-spaced-zero-count",
+                r#"{ "baseline": [ { "rule": "todo-format", "path": "src/legacy.rs", "rationale": "adopted", "accepted_occurrence_count": 0 } ] }"#,
+                "accepts zero occurrences",
+            ),
+        ];
+
+        for (name, policy, expected) in refusals
+        {
+            let sentence = Refused_Sentence(name, policy);
+
+            assert!(
+                sentence.contains(expected),
+                "{name}: this is not the refusal it was written for, so it proves nothing about one: {sentence:?}"
+            );
+            assert_eq!(
+                sentence.split_whitespace().collect::<Vec<_>>().join(" "),
+                sentence,
+                "{name}: this refusal does not reach its author as single-spaced prose"
+            );
+        }
+    }
+
+    /// The sentence [`Resolve_Gate_Policy`] hands an author who wrote `contents`.
+    fn Refused_Sentence(name: &str, contents: &str) -> String
+    {
+        let root = Root_With_Policy(name, contents);
+        let refusal = Resolve_Gate_Policy(&root, &StdFileSystem).expect_err("a refused entry is what this fixture writes");
+
+        let GatePolicyError::Malformed(sentence) = refusal
+        else
+        {
+            panic!("{name}: a declared entry this module read and rejected is malformed, not unreadable");
+        };
+
+        return sentence;
     }
 
     #[test]
