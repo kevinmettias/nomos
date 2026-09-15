@@ -573,6 +573,7 @@ mod tests
     fn Test_Render_Run_Should_Report_Vacuous_When_The_Check_Outcome_Never_Reached_Judged()
     {
         let result = GateRunResult {
+            provenance: None,
             no_verdict: None,
             unmatched_policy: Vec::new(),
             run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
@@ -679,6 +680,8 @@ mod tests
     fn Judged_Without_A_Verdict(finding: &Finding, cause: Option<NoVerdict>) -> GateRunResult
     {
         return GateRunResult {
+            // These tests are about rendering, and say nothing about what judged the run.
+            provenance: None,
             no_verdict: cause,
             unmatched_policy: Vec::new(),
             run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
@@ -700,6 +703,7 @@ mod tests
     {
         let run = Fresh_Run_Id(Timestamp::From_Unix_Seconds(0));
         let result = GateRunResult {
+            provenance: None,
             no_verdict: None,
             unmatched_policy: Vec::new(),
             run,
@@ -731,6 +735,7 @@ mod tests
     {
         let finding = Example_Finding(GateCategory::Blocking);
         let result = GateRunResult {
+            provenance: None,
             no_verdict: None,
             unmatched_policy: Vec::new(),
             run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),

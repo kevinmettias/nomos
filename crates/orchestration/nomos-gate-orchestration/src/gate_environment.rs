@@ -2,7 +2,8 @@
 //! platform, walking a tree or rendering the answer.
 
 use nomos_check_orchestration::{CheckOutcome, Claim, Claim_Of};
-use nomos_contracts::{Finding, RuleId, RunId, SubjectId};
+use nomos_contracts::{Digest128, Finding, RuleId, RunId, SubjectId};
+use nomos_model::Digest_Of_Parts;
 use std::collections::BTreeMap;
 use nomos_platform::{Environment, FileSystem, ProcessLauncher, Timestamp};
 use nomos_rules::SourceFile;
@@ -11,8 +12,9 @@ use std::path::Path;
 
 use crate::policy::{GatePolicyFile, Resolve_Gate_Policy};
 use crate::{
-    AdoptionPolicy, BaselinePolicy, CoveragePolicy, Disposition_Of_Findings, Evaluated_Phases, GateCommand, GateFindings, GateRunOutcome, GateRunResult,
-    NoVerdict, Phased_Disposition, RuleSelector, ScopeSelector, SuppressionPolicy, SuppressionReason,
+    AdoptionPolicy, BaselinePolicy, CoveragePolicy, Disposition_Of_Findings, Evaluated_Phases, GateCommand, GateFindings, GateRunOutcome,
+    GateRunProvenance, GateRunResult, NoVerdict, Phased_Disposition, RuleSelector, ScopeSelector, SuppressionDisposition, SuppressionPolicy,
+    SuppressionReason,
 };
 
 /// Judges `walked` exactly as `nomos check` would.
@@ -131,6 +133,19 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
         Ok(None) | Err(_) => GatePolicyFile::default().Resolved_Over(command),
     };
 
+    // Taken here rather than at the return, because this is the last point at which every
+    // input is still in hand: `walked` is moved into the judging below and `variant` into the
+    // context it judges under. `OD-GATE-031` is why a run carries this at all -- every one of
+    // these five reached this function and was discarded by it, so a finished run could not
+    // say what judged it.
+    let provenance = GateRunProvenance {
+        source: Source_Digest(walked.as_deref()),
+        policy: Policy_Digest(&effective),
+        selection: Selection_Digest(command),
+        instrument: Instrument_Digest(&variant),
+        at: now,
+    };
+
     // `OD-GATE-025`: the scope never reaches the judging. Every walked file is judged, and
     // the scope narrows the findings afterwards -- a rule answering a cross-file question
     // must see the whole world or it answers a different question and labels it the same.
@@ -179,8 +194,195 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
         // downgrades under one. Written as a preference anyway rather than as an assumption,
         // because the fallback is in a different function than this line.
         no_verdict: unusable_policy.or(reduced.no_verdict),
+        provenance: Some(provenance),
     };
 }
+
+/// The digest of an ordered sequence of owned parts.
+///
+/// [`Digest_Of_Parts`] borrows, and every component below builds material that does not
+/// outlive its own call -- a version number as bytes, a timestamp, a subject's own digest.
+/// Owning the parts and borrowing once here is what lets each component read as a list of
+/// what it covers rather than as lifetime plumbing.
+fn Digest_Of_Owned(parts: &[Vec<u8>]) -> Digest128
+{
+    let borrowed: Vec<&[u8]> = parts.iter().map(|part| return part.as_slice()).collect();
+
+    return Digest_Of_Parts(&borrowed);
+}
+
+/// Every file this run judged, by path and content.
+///
+/// Sorted by path before hashing, so the walker's own ordering cannot decide the identity.
+/// Two runs over identical content must agree here or a comparison reads a difference in
+/// directory iteration as a difference in the repository, which is the exact failure
+/// `OD-GATE-031` exists to stop -- and it would be the worst possible instance of it,
+/// because nothing about the tree would have changed at all.
+///
+/// An unwalked root is a distinct identity rather than an empty one. `CheckOutcome` already
+/// keeps `Unreadable` and `NoSource` apart, and folding them together here would let a tree
+/// that could not be read match one that held nothing.
+fn Source_Digest(walked: Option<&[SourceFile]>) -> Digest128
+{
+    let Some(sources) = walked
+    else
+    {
+        return Digest_Of_Owned(&[b"unwalked".to_vec()]);
+    };
+
+    let mut ordered: Vec<(&str, &str)> = sources.iter().map(|source| return (source.path.as_str(), source.text.as_str())).collect();
+    ordered.sort_unstable();
+
+    let mut parts: Vec<Vec<u8>> = vec![b"walked".to_vec()];
+    for (path, text) in ordered
+    {
+        parts.push(path.as_bytes().to_vec());
+        parts.push(text.as_bytes().to_vec());
+    }
+
+    return Digest_Of_Owned(&parts);
+}
+
+/// The policy this run judged under, in authoring order.
+///
+/// Authoring order rather than sorted, unlike [`Selection_Digest`], and the difference is
+/// not a style choice: `SuppressionPolicy::Suppressing` and `BaselinePolicy::Tolerating`
+/// both take the *first* entry that applies, so reordering two entries that match the same
+/// finding changes which one wins. An identity that ignored order would call two genuinely
+/// different policies the same.
+fn Policy_Digest(policy: &GatePolicyFile) -> Digest128
+{
+    let mut parts: Vec<Vec<u8>> = Vec::new();
+
+    for suppression in &policy.suppressions.suppressions
+    {
+        parts.push(b"suppression".to_vec());
+        parts.push(suppression.rule.As_Str().as_bytes().to_vec());
+        parts.push(suppression.subject.Digest().Bytes().to_vec());
+        parts.push(Disposition_Tag(suppression.disposition).as_bytes().to_vec());
+        parts.push(suppression.rationale.as_bytes().to_vec());
+        parts.push(suppression.owner.as_bytes().to_vec());
+        parts.push(Expiry_Bytes(suppression.expiry));
+    }
+
+    for debt in &policy.baseline.debt
+    {
+        parts.push(b"baseline".to_vec());
+        parts.push(debt.rule.As_Str().as_bytes().to_vec());
+        parts.push(debt.subject.Digest().Bytes().to_vec());
+        parts.push(debt.rationale.as_bytes().to_vec());
+    }
+
+    for calibration in &policy.adoption.calibrated
+    {
+        parts.push(b"calibration".to_vec());
+        parts.push(calibration.rule.As_Str().as_bytes().to_vec());
+        parts.push(calibration.rationale.as_bytes().to_vec());
+    }
+
+    parts.push(Coverage_Tag(policy.coverage).as_bytes().to_vec());
+
+    return Digest_Of_Owned(&parts);
+}
+
+/// A waiver's expiry as bytes, with absence distinct from any moment.
+///
+/// An empty part rather than a sentinel number: [`Digest_Of_Parts`] length-prefixes, so an
+/// empty part and an eight-byte one cannot collide, and no real timestamp has to be reserved
+/// to mean "none".
+fn Expiry_Bytes(expiry: Option<Timestamp>) -> Vec<u8>
+{
+    return match expiry
+    {
+        Some(moment) => moment.Unix_Seconds().to_le_bytes().to_vec(),
+        None => Vec::new(),
+    };
+}
+
+/// A suppression disposition as a stable tag.
+///
+/// Written out rather than derived from `Debug`, so that renaming a variant cannot silently
+/// change every recorded policy identity, and exhaustive so that adding one fails to compile
+/// here rather than hashing to whatever the last arm happened to be.
+const fn Disposition_Tag(disposition: SuppressionDisposition) -> &'static str
+{
+    return match disposition
+    {
+        SuppressionDisposition::InlineSuppression => "inline-suppression",
+        SuppressionDisposition::RepositoryPolicyException => "repository-policy-exception",
+        SuppressionDisposition::TemporaryWaiver => "temporary-waiver",
+        SuppressionDisposition::AcceptedBaselineDebt => "accepted-baseline-debt",
+        SuppressionDisposition::FalsePositiveDisposition => "false-positive",
+        SuppressionDisposition::FormalRiskAcceptance => "formal-risk-acceptance",
+    };
+}
+
+/// A coverage floor as a stable tag, exhaustive for the same reason [`Disposition_Tag`] is.
+const fn Coverage_Tag(coverage: CoveragePolicy) -> &'static str
+{
+    return match coverage
+    {
+        CoveragePolicy::Unset => "unset",
+        CoveragePolicy::RequireCompleteness => "require-completeness",
+    };
+}
+
+/// Which rules were allowed to count and which paths were in scope, sorted.
+///
+/// Sorted rather than in authoring order, unlike [`Policy_Digest`], because
+/// `RuleSelector::Is_Included` and `ScopeSelector::Is_In_Scope` both answer with `any`, so
+/// two selections listing the same things in different orders select identically. Hashing
+/// the order would report a difference where a caller made none, and a stated difference
+/// nobody caused is how a reader learns to stop reading them.
+fn Selection_Digest(command: &GateCommand) -> Digest128
+{
+    let mut rules: Vec<&str> = command.rules.include.iter().map(|rule| return rule.As_Str()).collect();
+    let mut included: Vec<&str> = command.scope.include.iter().map(String::as_str).collect();
+    let mut excluded: Vec<&str> = command.scope.exclude.iter().map(String::as_str).collect();
+    rules.sort_unstable();
+    included.sort_unstable();
+    excluded.sort_unstable();
+
+    let mut parts: Vec<Vec<u8>> = vec![b"rules".to_vec()];
+    parts.extend(rules.iter().map(|rule| return rule.as_bytes().to_vec()));
+    parts.push(b"include".to_vec());
+    parts.extend(included.iter().map(|prefix| return prefix.as_bytes().to_vec()));
+    parts.push(b"exclude".to_vec());
+    parts.extend(excluded.iter().map(|prefix| return prefix.as_bytes().to_vec()));
+
+    return Digest_Of_Owned(&parts);
+}
+
+/// What did the judging: this build's variant, and the rule set it carries.
+///
+/// The rule set comes from `nomos_rules::DESCRIPTORS` rather than from
+/// [`crate::Registered`], which copies the same three fields into its offers. Reading the
+/// table directly costs no registry composition and, more to the point, introduces no second
+/// failure path into [`Run_Gate`]: `Registered` returns a `Result`, and a run that could not
+/// name its own instrument would need a whole answer for that, for a case a static table
+/// cannot produce.
+fn Instrument_Digest(variant: &BuildVariant) -> Digest128
+{
+    let mut parts: Vec<Vec<u8>> = vec![
+        b"variant".to_vec(),
+        variant.target.as_bytes().to_vec(),
+        variant.profile.as_bytes().to_vec(),
+        variant.toolchain.as_bytes().to_vec(),
+    ];
+    // `features` is a `BTreeSet`, so this is already in a stable order.
+    parts.extend(variant.features.iter().map(|feature| return feature.as_bytes().to_vec()));
+
+    parts.push(b"rules".to_vec());
+    for descriptor in nomos_rules::DESCRIPTORS
+    {
+        parts.push(descriptor.Rule().As_Str().as_bytes().to_vec());
+        parts.push(descriptor.contract_record.as_bytes().to_vec());
+        parts.push(descriptor.contract_record_version.to_le_bytes().to_vec());
+    }
+
+    return Digest_Of_Owned(&parts);
+}
+
 
 /// `outcome`'s findings narrowed to what `scope` admits, the judging behind them untouched.
 ///
@@ -410,7 +612,7 @@ fn Reduced_With_Coverage(outcome: GateRunOutcome, coverage: CoveragePolicy, sele
 mod tests
 {
     use super::{JudgeContext, Judged_Sources, Run_Gate};
-    use crate::{CoveragePolicy, GateCommand, GatePhase, GateRunOutcome, NoVerdict, PhaseApproval, PhaseThreshold};
+    use crate::{CoveragePolicy, GateCommand, GatePhase, GateRunOutcome, GateRunProvenance, NoVerdict, PhaseApproval, PhaseThreshold, RuleSelector};
     use nomos_check_orchestration::{CheckOutcome, Claim};
     use nomos_contracts::{Digest128, RuleId, RunId};
     use nomos_model::Subject_Of_Path;
@@ -551,6 +753,137 @@ mod tests
             summary: "no provider offered the capability this rule requires".to_owned(),
             locations: vec!["a.rs".to_owned()],
         };
+    }
+
+
+    /// What `Run_Gate` recorded about a run over `root` judging `sources` under `rules`.
+    ///
+    /// Every provenance test below differs from its partner in exactly one argument, which is
+    /// what makes each of them a statement about that one input rather than about a run.
+    ///
+    /// They judge scratch roots rather than this repository's own, for two reasons. The
+    /// policy digest reads the `nomos-gate.json` under the root, and this tree's is shared
+    /// with live sessions, so a peer editing it mid-run would move a digest under a test
+    /// that is not about policy at all. And materializing this workspace's capabilities
+    /// costs a minute per call, for findings none of these assertions read.
+    fn Provenance_Over(root: &std::path::Path, sources: Vec<SourceFile>, rules: &RuleSelector) -> GateRunProvenance
+    {
+        let command = GateCommand { root: root.to_path_buf(), rules: rules.clone(), ..Default::default() };
+        let run = RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
+
+        let result = Run_Gate(
+            Some(sources),
+            super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) },
+            &command,
+            run,
+        );
+
+        return result.provenance.expect("Run_Gate always records what judged a run");
+    }
+
+    /// One tree, two policies: the source agrees and the policy does not.
+    ///
+    /// The likeliest instance of the whole defect. `Run_Gate` reads the policy from
+    /// `command.root` and a comparison judges two roots, so comparing two checkouts compares
+    /// two policies without anyone having asked for it, and every finding that moved bucket
+    /// for that reason reads as movement in the code.
+    #[test]
+    fn Test_Two_Policies_Over_One_Source_Should_Differ_In_The_Policy_Alone()
+    {
+        let lenient = Root_With_Policy("provenance-lenient", r#"{ "coverage": "unset" }"#);
+        let strict = Root_With_Policy("provenance-strict", r#"{ "coverage": "require-completeness" }"#);
+
+        let one = Provenance_Over(&lenient, Blocking_Sources(), &RuleSelector::default());
+        let other = Provenance_Over(&strict, Blocking_Sources(), &RuleSelector::default());
+
+        assert_eq!(one.source, other.source, "the same files were judged on both sides");
+        assert_ne!(one.policy, other.policy, "and they were judged under different policies");
+        assert_eq!(one.selection, other.selection);
+        assert_eq!(one.instrument, other.instrument);
+    }
+
+    /// One tree, two selections: a side told to look at less must be distinguishable from a
+    /// side that looked at everything and found less.
+    #[test]
+    fn Test_Two_Selections_Over_One_Source_Should_Differ_In_The_Selection_Alone()
+    {
+        let root = Root_With_Policy("provenance-selection", "{}");
+        let everything = RuleSelector::default();
+        let narrowed = RuleSelector { include: vec![RuleId::New("naming-convention")] };
+
+        let whole = Provenance_Over(&root, Blocking_Sources(), &everything);
+        let part = Provenance_Over(&root, Blocking_Sources(), &narrowed);
+
+        assert_eq!(whole.source, part.source);
+        assert_eq!(whole.policy, part.policy);
+        assert_ne!(whole.selection, part.selection);
+        assert_eq!(whole.instrument, part.instrument);
+    }
+
+    /// The licensed case: the source moved and nothing else did, so a difference in findings
+    /// is a difference in the repository and a comparison may say so.
+    #[test]
+    fn Test_A_Changed_Source_Should_Change_The_Source_And_Nothing_Else()
+    {
+        let root = Root_With_Policy("provenance-source", "{}");
+
+        let before = Provenance_Over(&root, Blocking_Sources(), &RuleSelector::default());
+        let after = Provenance_Over(&root, vec![Source("a.rs", "pub fn Different() {}\n")], &RuleSelector::default());
+
+        assert_ne!(before.source, after.source);
+        assert_eq!(before.policy, after.policy);
+        assert_eq!(before.selection, after.selection);
+        assert_eq!(before.instrument, after.instrument);
+    }
+
+    /// The same inputs record the same identity, which is what makes any of the assertions
+    /// above mean anything: a digest that varied on its own would make every one of them pass
+    /// for the wrong reason.
+    #[test]
+    fn Test_The_Same_Inputs_Should_Record_The_Same_Provenance()
+    {
+        let root = Root_With_Policy("provenance-repeat", "{}");
+
+        let once = Provenance_Over(&root, Blocking_Sources(), &RuleSelector::default());
+        let again = Provenance_Over(&root, Blocking_Sources(), &RuleSelector::default());
+
+        assert_eq!(once, again);
+    }
+
+    /// The walker's ordering must not decide the source identity.
+    ///
+    /// Without the sort in `Source_Digest`, two runs over identical content would disagree
+    /// whenever directory iteration did -- and a comparison would report the repository as
+    /// changed when nothing about it had, which is the worst available instance of the
+    /// failure `OD-GATE-031` exists to stop.
+    #[test]
+    fn Test_The_Same_Files_In_A_Different_Order_Should_Record_One_Source()
+    {
+        let root = Root_With_Policy("provenance-order", "{}");
+        let first = Source("a.rs", "pub fn One() {}\n");
+        let second = Source("b.rs", "pub fn Two() {}\n");
+
+        let forwards = Provenance_Over(&root, vec![first.clone(), second.clone()], &RuleSelector::default());
+        let backwards = Provenance_Over(&root, vec![second, first], &RuleSelector::default());
+
+        assert_eq!(forwards.source, backwards.source);
+    }
+
+    /// A reordered selection selects identically, so it must not read as a different one.
+    ///
+    /// `RuleSelector::Is_Included` answers with `any`. A stated difference nobody caused is
+    /// how a reader learns to stop reading them, which costs more than it saves.
+    #[test]
+    fn Test_A_Reordered_Selection_Should_Not_Read_As_A_Different_One()
+    {
+        let root = Root_With_Policy("provenance-reorder", "{}");
+        let one_way = RuleSelector { include: vec![RuleId::New("naming-convention"), RuleId::New("nesting-depth")] };
+        let other_way = RuleSelector { include: vec![RuleId::New("nesting-depth"), RuleId::New("naming-convention")] };
+
+        let first = Provenance_Over(&root, Blocking_Sources(), &one_way);
+        let second = Provenance_Over(&root, Blocking_Sources(), &other_way);
+
+        assert_eq!(first.selection, second.selection);
     }
 
     #[test]

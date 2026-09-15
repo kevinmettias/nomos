@@ -121,10 +121,16 @@ pub struct field nomos_gate_orchestration::GatePhase::name: String
 pub struct field nomos_gate_orchestration::GatePhase::rules: Vec<RuleId>
 pub struct field nomos_gate_orchestration::GatePhase::threshold: PhaseThreshold
 pub struct field nomos_gate_orchestration::GatePlan::rules: Vec<RuleOffer>
+pub struct field nomos_gate_orchestration::GateRunProvenance::at: Timestamp
+pub struct field nomos_gate_orchestration::GateRunProvenance::instrument: Digest128
+pub struct field nomos_gate_orchestration::GateRunProvenance::policy: Digest128
+pub struct field nomos_gate_orchestration::GateRunProvenance::selection: Digest128
+pub struct field nomos_gate_orchestration::GateRunProvenance::source: Digest128
 pub struct field nomos_gate_orchestration::GateRunResult::check_outcome: CheckOutcome
 pub struct field nomos_gate_orchestration::GateRunResult::disposition: GateRunOutcome
 pub struct field nomos_gate_orchestration::GateRunResult::findings: GateFindings
 pub struct field nomos_gate_orchestration::GateRunResult::no_verdict: Option<NoVerdict>
+pub struct field nomos_gate_orchestration::GateRunResult::provenance: Option<GateRunProvenance>
 pub struct field nomos_gate_orchestration::GateRunResult::root: PathBuf
 pub struct field nomos_gate_orchestration::GateRunResult::run: RunId
 pub struct field nomos_gate_orchestration::GateRunResult::unmatched_policy: Vec<String>
@@ -164,6 +170,7 @@ pub struct nomos_gate_orchestration::GateExplainResult
 pub struct nomos_gate_orchestration::GateFindings
 pub struct nomos_gate_orchestration::GatePhase
 pub struct nomos_gate_orchestration::GatePlan
+pub struct nomos_gate_orchestration::GateRunProvenance
 pub struct nomos_gate_orchestration::GateRunResult
 pub struct nomos_gate_orchestration::PhaseApproval
 pub struct nomos_gate_orchestration::PhaseOutcome

@@ -421,6 +421,21 @@ mod tests
         assert_eq!(change.after, FindingDisposition::Suppressed);
     }
 
+    /// The provenance every [`Result_With`] result carries, so that two of them differ in
+    /// their findings and in nothing else.
+    fn Identical_Provenance() -> crate::GateRunProvenance
+    {
+        let digest = Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]);
+
+        return crate::GateRunProvenance {
+            source: digest,
+            policy: digest,
+            selection: digest,
+            instrument: digest,
+            at: nomos_platform::Timestamp::From_Unix_Seconds(0),
+        };
+    }
+
     pub(super) fn Result_With(run: RunId, findings: GateFindings) -> GateRunResult
     {
         return GateRunResult {
@@ -431,6 +446,10 @@ mod tests
             findings,
             disposition: crate::GateRunOutcome::Indeterminate,
             no_verdict: None,
+            // One fixed provenance for every result this helper builds, so two of them are
+            // judged alike by construction and a test about findings stays a test about
+            // findings. A test that wants its two sides judged differently says so itself.
+            provenance: Some(Identical_Provenance()),
         };
     }
 }

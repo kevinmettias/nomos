@@ -223,7 +223,7 @@ pub use gate_command::GateCommand;
 pub use gate_compare::{CollidingOccurrences, Compare_Gate_Runs, DispositionChange, FindingDisposition, GateCompareResult};
 pub use gate_environment::{GateEnvironment, Run_Gate};
 pub use gate_phase::{Evaluated_Phases, GatePhase, PhaseApproval, PhaseDisposition, PhaseOutcome, PhaseThreshold, Phased_Disposition};
-pub use gate_plan::{Disposition_Of_Findings, GateFindings, GateOutcome, GatePlan, GateRunOutcome, GateRunResult, NoVerdict};
+pub use gate_plan::{Disposition_Of_Findings, GateFindings, GateOutcome, GatePlan, GateRunOutcome, GateRunProvenance, GateRunResult, NoVerdict};
 pub use policy::{
     AdoptionPolicy, BaselineDebt, BaselinePolicy, CoveragePolicy, RuleCalibration, RuleSelector, ScopeSelector,
     Suppression, SuppressionDisposition, SuppressionPolicy, SuppressionReason, SuppressionStatus,
