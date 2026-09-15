@@ -331,7 +331,8 @@ mod tests
         let root = std::env::temp_dir().join("nomos-correction-orchestration-candidate-for");
         let _ignored = std::fs::remove_dir_all(&root);
         std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-        std::fs::write(root.join("a.rs"), "/// Mirrored by `Test_Ghost`.\npub const TABLES: &[&str] = &[];\n").expect("writable");
+        std::fs::write(root.join("a.rs"), "/// Mirrored by `Test_Ghost`.\npub const TABLES: &[&str] = &[];\n")
+            .expect("the temporary root the two statements above created holds this file");
 
         let finding = Phantom_Finding(PhantomFixture { claimed: "Test_Ghost", path: "a.rs" });
         let claim = Phantom_Claim(&finding).expect("this is a real phantom");

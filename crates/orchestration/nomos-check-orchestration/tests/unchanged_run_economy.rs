@@ -44,9 +44,13 @@ fn Test_Variant() -> BuildVariant
     return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
 }
 
-fn Source(path: &str, text: &str) -> SourceFile
+/// The text half of a [`Source`]. A distinct type from the path half, so the two adjacent
+/// string positions cannot be transposed at a call site and still compile.
+struct SourceText<'a>(&'a str);
+
+fn Source(path: &str, text: SourceText<'_>) -> SourceFile
 {
-    return SourceFile::New(path, Subject_Of_Path(path), text);
+    return SourceFile::New(path, Subject_Of_Path(path), text.0);
 }
 
 /// What one `Run` answered, and what it cost the store to answer it.
@@ -57,67 +61,62 @@ struct Answer
     produced: u32,
 }
 
-/// One `Run`, reusing whatever `workspace` and `store` are handed in, reduced to an
-/// [`Answer`] carrying how many facts the store gained while it ran.
-fn Answered(
-    sources: &[SourceFile],
-    root: &Path,
-    selected: &[RuleId],
-    workspace: &mut Option<Workspace>,
-    store: &mut MemoryFactStore,
-) -> Answer
+/// The workspace and store a caller carries from one `Run` to the next, held together as one
+/// value so a call site cannot thread half the pair to a different run than the other half.
+struct Carried
 {
-    let before = store.Materializations();
-
-    let outcome = Run(
-        sources,
-        RunContext {
-            variant: Test_Variant(),
-            root,
-            launcher: &StdProcessLauncher,
-            filesystem: &StdFileSystem,
-            environment: &StdEnvironment,
-            workspace,
-            store,
-        },
-        selected,
-    );
-
-    let produced = store.Materializations().saturating_sub(before);
-
-    let CheckOutcome::Judged { findings, claim, .. } = outcome
-    else
-    {
-        panic!("the fixture is readable, so a run over it must reach Judged");
-    };
-
-    return Answer { findings, claim, produced };
+    workspace: Option<Workspace>,
+    store: MemoryFactStore,
 }
 
-/// A second run over an unchanged tree produces nothing, and answers the same.
-#[test]
-fn Test_An_Unchanged_Second_Run_Should_Produce_No_New_Facts()
+impl Carried
 {
-    let sources = [
-        Source("src/lib.rs", "pub fn Judged_Thing() -> u8\n{\n    return 1;\n}\n"),
-        Source("src/other.rs", "pub fn Second_Thing() -> u8\n{\n    return 2;\n}\n"),
-    ];
-    let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR)];
-    let root = Path::new(".");
+    fn New() -> Self
+    {
+        return Self { workspace: None, store: MemoryFactStore::New() };
+    }
 
-    let mut workspace = None;
-    let mut store = MemoryFactStore::New();
+    /// One `Run` over `sources` at `root` under `selected`, reusing this value's own workspace
+    /// and store, reduced to an [`Answer`] carrying how many facts the store gained while the
+    /// run was in flight.
+    fn Answered(&mut self, sources: &[SourceFile], root: &Path, selected: &[RuleId]) -> Answer
+    {
+        let before = self.store.Materializations();
 
-    let first = Answered(&sources, root, &selected, &mut workspace, &mut store);
-    let second = Answered(&sources, root, &selected, &mut workspace, &mut store);
+        let outcome = Run(
+            sources,
+            RunContext { variant: Test_Variant(), root, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut self.workspace, store: &mut self.store },
+            selected,
+        );
 
+        let produced = self.store.Materializations().saturating_sub(before);
+
+        let CheckOutcome::Judged { findings, claim, .. } = outcome
+        else
+        {
+            panic!("the fixture is readable, so a run over it must reach Judged");
+        };
+
+        return Answer { findings, claim, produced };
+    }
+}
+
+/// Guards the vacuity every economy assertion below would otherwise hide: a store that never
+/// materializes anything trivially materializes nothing the second time.
+fn Assert_First_Run_Produced_Something(first: &Answer)
+{
     assert!(
         first.produced > 0,
         "the first run produced no facts at all, so this fixture proves nothing about reuse: \
          a store that never materializes anything trivially materializes nothing the second \
          time"
     );
+}
 
+/// Asserts a second run paid the store for no new fact and still answered exactly what the
+/// first run answered.
+fn Assert_Second_Run_Cost_Nothing(first: &Answer, second: &Answer)
+{
     assert_eq!(
         second.produced, 0,
         "an unchanged second run produced {} new fact(s). Nothing about the tree, the \
@@ -128,18 +127,35 @@ fn Test_An_Unchanged_Second_Run_Should_Produce_No_New_Facts()
          comparison.",
         second.produced
     );
-
     assert_eq!(
         second.findings, first.findings,
         "the second run answered different findings, so whatever economy it bought was bought \
          by answering a different question"
     );
-
     assert_eq!(
         second.claim, first.claim,
         "the second run reached a different claim, so its coverage is not the first run's even \
          though it produced nothing"
     );
+}
+
+/// A second run over an unchanged tree produces nothing, and answers the same.
+#[test]
+fn Test_An_Unchanged_Second_Run_Should_Produce_No_New_Facts()
+{
+    let sources = [
+        Source("src/lib.rs", SourceText("pub fn Judged_Thing() -> u8\n{\n    return 1;\n}\n")),
+        Source("src/other.rs", SourceText("pub fn Second_Thing() -> u8\n{\n    return 2;\n}\n")),
+    ];
+    let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR)];
+    let root = Path::new(".");
+
+    let mut carried = Carried::New();
+    let first = carried.Answered(&sources, root, &selected);
+    let second = carried.Answered(&sources, root, &selected);
+
+    Assert_First_Run_Produced_Something(&first);
+    Assert_Second_Run_Cost_Nothing(&first, &second);
 }
 
 /// A second run over a *changed* tree does produce a fact.
@@ -152,22 +168,16 @@ fn Test_An_Unchanged_Second_Run_Should_Produce_No_New_Facts()
 #[test]
 fn Test_A_Second_Run_Over_A_Changed_Source_Should_Produce_A_Fact()
 {
-    let before = [Source("src/lib.rs", "pub fn Judged_Thing() -> u8\n{\n    return 1;\n}\n")];
-    let after = [Source("src/lib.rs", "pub fn Judged_Thing() -> u8\n{\n    return 99;\n}\n")];
+    let before = [Source("src/lib.rs", SourceText("pub fn Judged_Thing() -> u8\n{\n    return 1;\n}\n"))];
+    let after = [Source("src/lib.rs", SourceText("pub fn Judged_Thing() -> u8\n{\n    return 99;\n}\n"))];
     let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR)];
     let root = Path::new(".");
 
-    let mut workspace = None;
-    let mut store = MemoryFactStore::New();
+    let mut carried = Carried::New();
+    let first = carried.Answered(&before, root, &selected);
+    let changed = carried.Answered(&after, root, &selected);
 
-    let first = Answered(&before, root, &selected, &mut workspace, &mut store);
-    let changed = Answered(&after, root, &selected, &mut workspace, &mut store);
-
-    assert!(
-        first.produced > 0,
-        "the first run produced nothing, so this control establishes nothing either"
-    );
-
+    Assert_First_Run_Produced_Something(&first);
     assert!(
         changed.produced > 0,
         "a source whose bytes moved produced no new fact, so the counter this file asserts \

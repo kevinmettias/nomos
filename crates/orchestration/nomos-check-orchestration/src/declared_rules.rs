@@ -15,6 +15,13 @@ use nomos_rules::{RuleDescriptor, DESCRIPTORS};
 /// `nomos_rule_package::Read_Manifest` is for and this function deliberately is not.
 const DECLARED_AT: PackageVersion = PackageVersion::New(1, 0, 0);
 
+/// The contract version every declaration below states at both ends of its protocol range.
+///
+/// Both ends, and the same version, because these declarations describe what this build
+/// itself speaks: a range wider than one version would claim a compatibility nobody
+/// measured, and the two ends would then be two more numbers to keep in step.
+const DECLARED_VERSION: ContractVersion = ContractVersion::New(1, 0);
+
 /// Every rule this workspace declares, derived from `nomos_rules::DESCRIPTORS`.
 ///
 /// Derived rather than authored, which is the whole point. `OD-GATE-020` named the missing
@@ -47,7 +54,7 @@ fn Declared(descriptor: &RuleDescriptor) -> RulePackage
         package_id: PackageId::New(format!("nomos.rule.{}", descriptor.id)),
         package_kind: PackageKind::RulePackage,
         package_version: DECLARED_AT,
-        protocol_range: ProtocolRange::New(ContractVersion::New(1, 0), ContractVersion::New(1, 0)),
+        protocol_range: ProtocolRange::New(DECLARED_VERSION, DECLARED_VERSION),
         rule_id: descriptor.Rule(),
         contract: Cited(descriptor),
         judgment: Judgment::Mechanical,

@@ -11,238 +11,27 @@
 //! returns a count by for the identical reason: a caller that does not need the answer is
 //! free to ignore it, and one that does (a future caller, or a test) is not left
 //! re-deriving it from the store's own side effects.
+//!
+//! # One submodule per provider
+//!
+//! Every `Materialize_*` below wraps exactly one `nomos_repo_policy` (or
+//! `nomos_cap_requirement_trace`) provider, and each sits in a module named after that
+//! provider. Reading `standards.json` five times is five responsibilities that happen to
+//! share a spelling, not one responsibility -- the shared `Materialize` prefix named a
+//! boundary this module had not drawn, and this is that boundary.
 
-use nomos_analysis::{Context, MemoryFactStore};
-use nomos_platform::FileSystem;
-use std::path::Path;
+mod architecture;
+mod goals;
+mod limits;
+mod naming;
+mod requirement_trace;
+mod scripting;
+mod words;
 
-/// Reads `root`'s own `standards.json` through `filesystem` and writes the one `nomos.cap.
-/// naming.policy` fact it declares into `store`.
-///
-/// A missing or unreadable `standards.json` is not reported as a finding: `OD-CAPABILITY-004`
-/// already decided an absent optional capability is silently "no override" from whichever
-/// caller reads it (`nomos_rules::Resolve_Case`), so a materialization that cannot produce
-/// the fact simply leaves the store without one, the same way an unmaterialized syntax fact
-/// for one file does not abort judging the rest. Returns `1` if the fact landed in `store`,
-/// `0` if it did not.
-pub fn Materialize_Naming_Policy<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
-{
-    let production = Naming_Production(context);
-
-    let Ok(fact) = nomos_repo_policy::naming::Materialize_Workspace(root, production, filesystem)
-    else
-    {
-        return 0;
-    };
-
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
-}
-
-/// The reading context as `nomos_repo_policy::naming`'s provider takes it -- the same
-/// four-field carry [`super::dependency_materialization::Deny_Production`] already does for
-/// `nomos_lang_rust_deny`, since every provider's own `FactContext` shape agrees on
-/// snapshot/variant/configuration/generation.
-fn Naming_Production(context: &Context) -> nomos_repo_policy::naming::FactContext
-{
-    return nomos_repo_policy::naming::FactContext {
-        snapshot: context.snapshot,
-        variant: context.variant,
-        configuration: context.configuration,
-        generation: context.generation,
-    };
-}
-
-/// Reads `root`'s own `nomos-architecture.json` through `filesystem` and writes the one
-/// `nomos.cap.architecture.declaration` fact it declares into `store`.
-///
-/// The same shape its five siblings here have, over a different file, and for a reason
-/// `nomos_repo_policy::architecture::reading` states in full: `standards.json` is shared with a
-/// tool that decodes it with unknown fields disallowed, so the one key this repository would
-/// own outright is not available in it.
-///
-/// Unlike every policy section beside it, an absent fact here is not a fallback. The three
-/// dependency rules report a declaration they cannot read rather than judging against a
-/// remembered default, because there is no default an architecture could have. Returns `1` if
-/// the fact landed in `store`, `0` if it did not.
-pub fn Materialize_Architecture<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
-{
-    let production = Architecture_Production(context);
-
-    let Ok(fact) = nomos_repo_policy::architecture::Materialize_Workspace(root, production, filesystem)
-    else
-    {
-        return 0;
-    };
-
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
-}
-
-fn Architecture_Production(context: &Context) -> nomos_repo_policy::architecture::FactContext
-{
-    return nomos_repo_policy::architecture::FactContext {
-        snapshot: context.snapshot,
-        variant: context.variant,
-        configuration: context.configuration,
-        generation: context.generation,
-    };
-}
-
-/// Reads `root`'s own `standards.json` through `filesystem` and writes the one `nomos.cap.
-/// limits.policy` fact it declares into `store`.
-///
-/// The identical shape [`Materialize_Naming_Policy`] has, and absent for the identical
-/// `OD-CAPABILITY-004` reason: the five rules that read this capability through
-/// `nomos_rules`' own `Resolve_Limit` each treat a failed read as "no override" and keep
-/// their prior hardcoded threshold.
-///
-/// Worth knowing what this does and does not buy on *this* repository: `standards.json`
-/// declares exactly the numbers those fallbacks already carry, so no finding here moves.
-/// What moves is that the thresholds are read rather than assumed. Returns `1` if the fact
-/// landed in `store`, `0` if it did not.
-pub fn Materialize_Limits_Policy<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
-{
-    let production = Limits_Production(context);
-
-    let Ok(fact) = nomos_repo_policy::limits::Materialize_Workspace(root, production, filesystem)
-    else
-    {
-        return 0;
-    };
-
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
-}
-
-fn Limits_Production(context: &Context) -> nomos_repo_policy::limits::FactContext
-{
-    return nomos_repo_policy::limits::FactContext {
-        snapshot: context.snapshot,
-        variant: context.variant,
-        configuration: context.configuration,
-        generation: context.generation,
-    };
-}
-
-/// Reads `root`'s own `standards.json` through `filesystem` and writes the one `nomos.cap.
-/// scripting.policy` fact it declares into `store`.
-///
-/// Same shape as its two siblings above, but the consequence of *not* calling it differs and
-/// that is the reason this one mattered most. `Check_Declared_Tooling_Language_For_Scripts`
-/// has no prior default to fall back to -- the rule never existed before the capability did
-/// -- so an absent fact makes it report nothing rather than report against an assumption.
-/// Without this materialization the rule ran in every real check and could never fire.
-/// Returns `1` if the fact landed in `store`, `0` if it did not.
-pub fn Materialize_Scripting_Policy<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
-{
-    let production = Scripting_Production(context);
-
-    let Ok(fact) = nomos_repo_policy::scripting::Materialize_Workspace(root, production, filesystem)
-    else
-    {
-        return 0;
-    };
-
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
-}
-
-fn Scripting_Production(context: &Context) -> nomos_repo_policy::scripting::FactContext
-{
-    return nomos_repo_policy::scripting::FactContext {
-        snapshot: context.snapshot,
-        variant: context.variant,
-        configuration: context.configuration,
-        generation: context.generation,
-    };
-}
-
-/// Reads `root`'s own `standards.json` through `filesystem` and writes the one `nomos.cap.
-/// goals.policy` fact it declares into `store`.
-///
-/// The same shape as its three siblings above. The difference is what an absent fact means
-/// to the one rule that reads it: `Check_Goals_And_Parts_Line_Up` treats no policy and an
-/// empty policy as the same answer, because a repository that declared no purposes has not
-/// taken goal traceability on and there is no prior default to fall back to either. So this
-/// materialization changes nothing for a repository like this one -- which declares no goals
-/// -- and everything for one that does. Returns `1` if the fact landed in `store`, `0` if it
-/// did not.
-pub fn Materialize_Goals_Policy<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
-{
-    let production = Goals_Production(context);
-
-    let Ok(fact) = nomos_repo_policy::goals::Materialize_Workspace(root, production, filesystem)
-    else
-    {
-        return 0;
-    };
-
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
-}
-
-fn Goals_Production(context: &Context) -> nomos_repo_policy::goals::FactContext
-{
-    return nomos_repo_policy::goals::FactContext {
-        snapshot: context.snapshot,
-        variant: context.variant,
-        configuration: context.configuration,
-        generation: context.generation,
-    };
-}
-
-/// Reads `root`'s own `standards.json` through `filesystem` and writes the one `nomos.cap.
-/// words.policy` fact it declares into `store`.
-///
-/// The last of the four, and the only one whose payload *extends* a default rather than
-/// replacing or overriding it: `Check_Abbreviations` ships code-standards' own approved and
-/// banned vocabularies and reads this capability for a repository's own additions to the
-/// approved half. So an absent fact is not a missing threshold or a silent rule -- it is the
-/// shipped vocabulary with nothing added, which is a perfectly good answer and the one every
-/// check gave before this call existed. Returns `1` if the fact landed in `store`, `0` if it
-/// did not.
-pub fn Materialize_Words_Policy<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
-{
-    let production = Words_Production(context);
-
-    let Ok(fact) = nomos_repo_policy::words::Materialize_Workspace(root, production, filesystem)
-    else
-    {
-        return 0;
-    };
-
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
-}
-
-fn Words_Production(context: &Context) -> nomos_repo_policy::words::FactContext
-{
-    return nomos_repo_policy::words::FactContext {
-        snapshot: context.snapshot,
-        variant: context.variant,
-        configuration: context.configuration,
-        generation: context.generation,
-    };
-}
-
-/// Reads `root`'s own `tests/contract/requirements/` through `filesystem` and writes the
-/// one `nomos.cap.requirement.trace` fact it declares into `store`.
-///
-/// Unlike its four `standards.json`-reading siblings above, this one can never fail to
-/// produce a fact: [`nomos_cap_requirement_trace::Materialize_Workspace`] is infallible by
-/// its own design, because a missing `tests/contract/requirements/` directory is this
-/// capability's ordinary case (every repository this rule judges except this one, today)
-/// rather than a read failure — see that function's own module doc. Returns `1` if the fact
-/// landed in `store`, `0` if it did not.
-pub fn Materialize_Requirement_Trace<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
-{
-    let production = Requirement_Trace_Production(context);
-    let fact = nomos_cap_requirement_trace::Materialize_Workspace(root, production, filesystem);
-
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
-}
-
-fn Requirement_Trace_Production(context: &Context) -> nomos_cap_requirement_trace::FactContext
-{
-    return nomos_cap_requirement_trace::FactContext {
-        snapshot: context.snapshot,
-        variant: context.variant,
-        configuration: context.configuration,
-        generation: context.generation,
-    };
-}
+pub use architecture::Materialize_Architecture;
+pub use goals::Materialize_Goals_Policy;
+pub use limits::Materialize_Limits_Policy;
+pub use naming::Materialize_Naming_Policy;
+pub use requirement_trace::Materialize_Requirement_Trace;
+pub use scripting::Materialize_Scripting_Policy;
+pub use words::Materialize_Words_Policy;

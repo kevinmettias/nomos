@@ -20,8 +20,9 @@
 //! itself will refuse) and reads its result back off `Absence.cause`, which is the only view of
 //! that seam a caller outside this crate ever gets.
 
+use nomos_spec_model::{Origin, SubmissionKind, SubmissionState};
 use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest};
-use nomos_spec_orchestration::{Run, SpecCommand, SpecOutcome};
+use nomos_spec_orchestration::{Run, SpecCommand, SpecOutcome, Submit_Corpus_Request, SubmitRequest};
 
 fn No_Corpus() -> CorpusRequest
 {
@@ -44,7 +45,8 @@ fn Test_Assemble_Corpus_Should_Seed_A_Real_Specification_Store()
 {
     let assembly = Assemble_Corpus(&No_Corpus()).expect("assembles from the embedded records alone");
 
-    let summary: Option<nomos_spec_store::NodeSummary> = assembly.store.Node_Summary("D-129").expect("queries");
+    let summary: Option<nomos_spec_store::NodeSummary> =
+        assembly.store.Node_Summary("D-129").expect("the store answers a summary query for a seeded node");
     assert!(summary.is_some(), "the embedded records travel with the binary and do not depend on a corpus");
 }
 
@@ -57,8 +59,9 @@ fn Test_Assemble_Corpus_Should_Report_A_Refused_Corpus_File()
 {
     let root = Scratch("malformed-catalog");
     let catalog_dir = root.join("02_machine/catalog");
-    std::fs::create_dir_all(&catalog_dir).expect("creates");
-    std::fs::write(catalog_dir.join("catalog.json"), "not valid json").expect("writes");
+    std::fs::create_dir_all(&catalog_dir).expect("the scratch catalogue directory is created under the root");
+    std::fs::write(catalog_dir.join("catalog.json"), "not valid json")
+        .expect("the malformed catalogue document is written to disk");
     let request = CorpusRequest { variable: "A_SEAM_TEST_CORPUS_VARIABLE".to_owned(), root: Some(root), revision: "v14.36".to_owned() };
 
     let assembly = Assemble_Corpus(&request).expect("assembles even with a malformed catalog");
@@ -87,7 +90,7 @@ fn Test_Run_Should_List_And_Render_A_Real_Shipped_Profile()
     let profile: &nomos_spec_project::Profile = profiles
         .iter()
         .find(|profile| return profile.id == EMBEDDED_PROFILE)
-        .expect("the shipped catalogue always carries domain-specification");
+        .expect("the shipped catalogue lists the domain-specification profile");
 
     let into = Scratch("render-seam");
     let render = Run(
@@ -98,17 +101,11 @@ fn Test_Run_Should_List_And_Render_A_Real_Shipped_Profile()
     assert!(matches!(render, SpecOutcome::Render(Ok(_))));
 }
 
-/// The happy path across the `nomos_spec_model` boundary: a submission's `Origin` and
-/// `SubmissionKind`/`SubmissionState` -- `nomos_spec_model`'s own public types -- accepted
-/// through `nomos_spec_orchestration::corpus::Assembly` and `Submit_Corpus_Request`.
-#[test]
-fn Test_Submit_Corpus_Request_Should_Accept_A_Real_Submission()
+/// A complete feature request: every universal field plus the five `OD-SPEC-010` requires of
+/// `SubmissionKind::FeatureRequest`, built through `nomos_spec_model`'s own public types.
+fn Seam_Feature_Request() -> SubmitRequest
 {
-    use nomos_spec_model::{Origin, SubmissionKind, SubmissionState};
-    use nomos_spec_orchestration::{Submit_Corpus_Request, SubmitRequest};
-
-    let mut assembly = Assemble_Corpus(&No_Corpus()).expect("assembles from the embedded records alone");
-    let request = SubmitRequest {
+    return SubmitRequest {
         kind: SubmissionKind::FeatureRequest,
         id: "FR-SEAM-001".to_owned(),
         by: "seam-test".to_owned(),
@@ -125,8 +122,19 @@ fn Test_Submit_Corpus_Request_Should_Accept_A_Real_Submission()
         submitted_through: "seam-test".to_owned(),
         into: None,
     };
+}
 
-    let answer = Submit_Corpus_Request(&mut assembly, &request, &nomos_platform_std::StdFileSystem).expect("a complete feature request is accepted");
+/// The happy path across the `nomos_spec_model` boundary: a submission's `Origin` and
+/// `SubmissionKind`/`SubmissionState` -- `nomos_spec_model`'s own public types -- accepted
+/// through `nomos_spec_orchestration::corpus::Assembly` and `Submit_Corpus_Request`.
+#[test]
+fn Test_Submit_Corpus_Request_Should_Accept_A_Real_Submission()
+{
+    let mut assembly = Assemble_Corpus(&No_Corpus()).expect("assembles from the embedded records alone");
+    let request = Seam_Feature_Request();
+
+    let answer = Submit_Corpus_Request(&mut assembly, &request, &nomos_platform_std::StdFileSystem)
+        .expect("a complete feature request is accepted");
 
     assert!(answer.submission.values.iter().all(|value| return value.origin == Origin::Submitted));
 }
@@ -138,7 +146,7 @@ fn Test_Submit_Corpus_Request_Should_Accept_A_Real_Submission()
 /// trait every test above hands `Run`, not a type that merely happens to match its shape.
 fn Round_Tripped_Through_Generic_File_System<Filesystem: nomos_platform::FileSystem>(filesystem: &Filesystem, path: &std::path::Path, contents: &str) -> String
 {
-    filesystem.Replace_Atomically(path, contents).expect("writes");
+    filesystem.Replace_Atomically(path, contents).expect("the round-trip file is replaced at the path handed in");
     return filesystem.Read_To_String(path).expect("reads back what was just written");
 }
 

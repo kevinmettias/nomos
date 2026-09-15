@@ -46,9 +46,13 @@ fn Test_Variant() -> BuildVariant
     return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
 }
 
-fn Source(path: &str, text: &str) -> SourceFile
+/// The text half of a [`Source`]. A distinct type from the path half, so the two adjacent
+/// string positions cannot be transposed at a call site and still compile.
+struct SourceText<'a>(&'a str);
+
+fn Source(path: &str, text: SourceText<'_>) -> SourceFile
 {
-    return SourceFile::New(path, Subject_Of_Path(path), text);
+    return SourceFile::New(path, Subject_Of_Path(path), text.0);
 }
 
 /// What one `Run` answered, reduced to the two halves this file compares.
@@ -58,60 +62,113 @@ struct Answer
     claim: Claim,
 }
 
-/// One `Run` over `root` with `sources`, reusing whatever `workspace` and `store` are handed
-/// in, reduced to an [`Answer`]. Panics rather than returning an outcome: every call in this
-/// file is over a readable fixture, so a non-judged answer is a broken fixture rather than a
-/// result worth comparing.
-fn Answered(
-    sources: &[SourceFile], root: &Path, selected: &[RuleId], workspace: &mut Option<Workspace>, store: &mut MemoryFactStore,
-) -> Answer
+/// The three answers a class test compares: the run before its mutation, a run over the
+/// mutated input that reuses the first run's workspace and store, and a clean recomputation
+/// of that same input to measure the reuse against.
+struct Comparison
 {
-    let outcome = Run(
-        sources,
-        RunContext {
-            variant: Test_Variant(),
-            root,
-            launcher: &StdProcessLauncher,
-            filesystem: &StdFileSystem,
-            environment: &StdEnvironment,
-            workspace,
-            store,
-        },
-        selected,
-    );
+    before: Answer,
+    reused: Answer,
+    clean: Answer,
+}
 
-    let CheckOutcome::Judged { findings, claim, .. } = outcome
-    else
+/// The workspace and store a caller carries from one `Run` to the next, held together as one
+/// value so a call site cannot thread half the pair to a different run than the other half.
+struct Carried
+{
+    workspace: Option<Workspace>,
+    store: MemoryFactStore,
+}
+
+impl Carried
+{
+    fn New() -> Self
     {
-        panic!("a run over a readable fixture must be judged");
-    };
+        return Self { workspace: None, store: MemoryFactStore::New() };
+    }
 
-    return Answer { findings, claim };
+    /// One `Run` over `root` with `sources`, reusing this value's own workspace and store,
+    /// reduced to an [`Answer`]. Panics rather than returning an outcome: every call in this
+    /// file is over a readable fixture, so a non-judged answer is a broken fixture rather
+    /// than a result worth comparing.
+    fn Answered(&mut self, sources: &[SourceFile], root: &Path, selected: &[RuleId]) -> Answer
+    {
+        let outcome = Run(
+            sources,
+            RunContext {
+                variant: Test_Variant(),
+                root,
+                launcher: &StdProcessLauncher,
+                filesystem: &StdFileSystem,
+                environment: &StdEnvironment,
+                workspace: &mut self.workspace,
+                store: &mut self.store,
+            },
+            selected,
+        );
+
+        let CheckOutcome::Judged { findings, claim, .. } = outcome
+        else
+        {
+            panic!("a run over a readable fixture must be judged");
+        };
+
+        return Answer { findings, claim };
+    }
 }
 
 /// One `Run` over `root` with `sources`, over a workspace and store that have never been
 /// used -- the clean recomputation every test below compares its reused run against.
 fn Answered_Cleanly(sources: &[SourceFile], root: &Path, selected: &[RuleId]) -> Answer
 {
-    return Answered(sources, root, selected, &mut None, &mut MemoryFactStore::New());
+    return Carried::New().Answered(sources, root, selected);
 }
 
-/// Asserts the property this file exists for, over the three answers a test produced.
-fn Assert_Reuse_Agrees_With_Recomputation(before: &Answer, reused: &Answer, clean: &Answer, class: &str)
+/// The source-derived class's shape: `before` judged once, then `after` judged again over the
+/// same carried workspace and store, with a clean recomputation of `after` to compare against.
+/// The mutation here is the caller's own source list, which `Run` sees directly.
+fn Compare_Across_An_Edit(fixture: &Fixture, before: &[SourceFile], after: &[SourceFile], selected: &[RuleId]) -> Comparison
+{
+    let mut carried = Carried::New();
+
+    let original = carried.Answered(before, fixture.Path(), selected);
+    let reused = carried.Answered(after, fixture.Path(), selected);
+    let clean = Answered_Cleanly(after, fixture.Path(), selected);
+
+    return Comparison { before: original, reused, clean };
+}
+
+/// The shape the other two classes share: `sources` judged once, then a file under `fixture`'s
+/// root that no caller passes rewritten by `mutate`, then the same sources judged again over
+/// the carried workspace and store, and once more cleanly.
+fn Compare_Across_A_Mutation(fixture: &Fixture, sources: &[SourceFile], selected: &[RuleId], mutate: impl FnOnce(&Fixture)) -> Comparison
+{
+    let mut carried = Carried::New();
+
+    let before = carried.Answered(sources, fixture.Path(), selected);
+    mutate(fixture);
+    let reused = carried.Answered(sources, fixture.Path(), selected);
+    let clean = Answered_Cleanly(sources, fixture.Path(), selected);
+
+    return Comparison { before, reused, clean };
+}
+
+/// Asserts the property this file exists for, over the three answers a comparison holds.
+fn Assert_Reuse_Agrees_With_Recomputation(comparison: &Comparison, class: &str)
 {
     assert!(
-        before.findings != reused.findings || before.claim != reused.claim,
+        comparison.before.findings != comparison.reused.findings || comparison.before.claim != comparison.reused.claim,
         "{class}: the mutation must change what the run answers, or this fixture proves \
          nothing about invalidation -- recomputing everything and recomputing nothing both \
          pass an unchanged comparison"
     );
     assert_eq!(
-        reused.claim, clean.claim,
+        comparison.reused.claim, comparison.clean.claim,
         "{class}: a workspace and store reused across a mutation must reach the claim a clean \
          recomputation reaches"
     );
     assert_eq!(
-        reused.findings, clean.findings,
+        comparison.reused.findings, comparison.clean.findings,
         "{class}: a workspace and store reused across a mutation must report the findings a \
          clean recomputation reports"
     );
@@ -133,12 +190,12 @@ impl Fixture
         return Self { root };
     }
 
-    fn Write(&self, relative: &str, text: &str)
+    fn Write(&self, relative: &str, text: SourceText<'_>)
     {
         let path = self.root.join(relative);
-        let parent = path.parent().expect("a fixture path always has a parent");
+        let parent = path.parent().expect("a joined fixture path names a file below its root");
         std::fs::create_dir_all(parent).expect("a fixture directory");
-        std::fs::write(&path, text).expect("a fixture file");
+        std::fs::write(&path, text.0).expect("a fixture file");
     }
 
     fn Path(&self) -> &Path
@@ -191,20 +248,16 @@ const FIXTURE_ARCHITECTURE: &str = "{\"components\":[\"Lower\",\"Upper\"],\"memb
 fn Test_A_Source_Derived_Family_Reused_Across_An_Edit_Should_Agree_With_A_Clean_Recomputation()
 {
     let fixture = Fixture::New("source");
-    fixture.Write("Cargo.toml", WORKSPACE_MANIFEST);
+    fixture.Write("Cargo.toml", SourceText(WORKSPACE_MANIFEST));
 
     let selected = [RuleId::New(nomos_rules::NAMING_CONVENTION)];
-    let untouched = Source("b.rs", "pub fn Untouched() {}\n");
-    let unedited = [Source("a.rs", "pub fn Ok() {}\n"), untouched.clone()];
-    let edited = [Source("a.rs", "pub fn Ok() {}\npub fn badly_named() {}\n"), untouched];
+    let untouched = Source("b.rs", SourceText("pub fn Untouched() {}\n"));
+    let unedited = [Source("a.rs", SourceText("pub fn Ok() {}\n")), untouched.clone()];
+    let edited = [Source("a.rs", SourceText("pub fn Ok() {}\npub fn badly_named() {}\n")), untouched];
 
-    let mut workspace = None;
-    let mut store = MemoryFactStore::New();
-    let before = Answered(&unedited, fixture.Path(), &selected, &mut workspace, &mut store);
-    let reused = Answered(&edited, fixture.Path(), &selected, &mut workspace, &mut store);
-    let clean = Answered_Cleanly(&edited, fixture.Path(), &selected);
+    let comparison = Compare_Across_An_Edit(&fixture, &unedited, &edited, &selected);
 
-    Assert_Reuse_Agrees_With_Recomputation(&before, &reused, &clean, "source-derived");
+    Assert_Reuse_Agrees_With_Recomputation(&comparison, "source-derived");
 }
 
 /// The workspace-derived class: the input is a manifest tree under `root` that no caller
@@ -216,26 +269,20 @@ fn Test_A_Source_Derived_Family_Reused_Across_An_Edit_Should_Agree_With_A_Clean_
 fn Test_A_Workspace_Derived_Family_Reused_Across_A_Manifest_Edit_Should_Agree_With_A_Clean_Recomputation()
 {
     let fixture = Fixture::New("workspace");
-    fixture.Write("Cargo.toml", WORKSPACE_MANIFEST);
-    fixture.Write("nomos-architecture.json", FIXTURE_ARCHITECTURE);
-    fixture.Write("alpha/Cargo.toml", DEPENDENT_MANIFEST_WITH_EDGE);
-    fixture.Write("alpha/src/lib.rs", "pub fn Ok() {}\n");
-    fixture.Write("beta/Cargo.toml", DEPENDED_MANIFEST);
-    fixture.Write("beta/src/lib.rs", "pub fn Ok() {}\n");
-
     let selected = [RuleId::New(nomos_rules::DEPENDENCY_DIRECTION)];
-    let sources = [Source("alpha/src/lib.rs", "pub fn Ok() {}\n")];
+    fixture.Write("Cargo.toml", SourceText(WORKSPACE_MANIFEST));
+    fixture.Write("nomos-architecture.json", SourceText(FIXTURE_ARCHITECTURE));
+    fixture.Write("alpha/Cargo.toml", SourceText(DEPENDENT_MANIFEST_WITH_EDGE));
+    fixture.Write("alpha/src/lib.rs", SourceText("pub fn Ok() {}\n"));
+    fixture.Write("beta/Cargo.toml", SourceText(DEPENDED_MANIFEST));
+    fixture.Write("beta/src/lib.rs", SourceText("pub fn Ok() {}\n"));
+    let sources = [Source("alpha/src/lib.rs", SourceText("pub fn Ok() {}\n"))];
 
-    let mut workspace = None;
-    let mut store = MemoryFactStore::New();
-    let before = Answered(&sources, fixture.Path(), &selected, &mut workspace, &mut store);
+    let comparison = Compare_Across_A_Mutation(&fixture, &sources, &selected, |fixture| {
+        fixture.Write("alpha/Cargo.toml", SourceText(DEPENDENT_MANIFEST_WITHOUT_EDGE));
+    });
 
-    fixture.Write("alpha/Cargo.toml", DEPENDENT_MANIFEST_WITHOUT_EDGE);
-
-    let reused = Answered(&sources, fixture.Path(), &selected, &mut workspace, &mut store);
-    let clean = Answered_Cleanly(&sources, fixture.Path(), &selected);
-
-    Assert_Reuse_Agrees_With_Recomputation(&before, &reused, &clean, "workspace-derived");
+    Assert_Reuse_Agrees_With_Recomputation(&comparison, "workspace-derived");
 }
 
 /// The repository-derived class: the input is a file under `root` read through the
@@ -245,24 +292,18 @@ fn Test_A_Workspace_Derived_Family_Reused_Across_A_Manifest_Edit_Should_Agree_Wi
 fn Test_A_Repository_Derived_Family_Reused_Across_A_Corpus_Edit_Should_Agree_With_A_Clean_Recomputation()
 {
     let fixture = Fixture::New("repository");
-    fixture.Write("Cargo.toml", WORKSPACE_MANIFEST);
-    fixture.Write("src/lib.rs", "pub fn Ok() {}\n");
+    let selected = [RuleId::New(nomos_rules::REQUIREMENT_TRACE_STALENESS)];
+    fixture.Write("Cargo.toml", SourceText(WORKSPACE_MANIFEST));
+    fixture.Write("src/lib.rs", SourceText("pub fn Ok() {}\n"));
 
     let resolved = "verdict: Met\nrecord: OD-FIXTURE-001\nsite: src/lib.rs#Ok\n";
     let unresolved = "verdict: Met\nrecord: OD-FIXTURE-001\nsite: src/absent.rs#Gone\n";
-    fixture.Write("tests/contract/requirements/CHK-001.assessment", resolved);
+    fixture.Write("tests/contract/requirements/CHK-001.assessment", SourceText(resolved));
+    let sources = [Source("src/lib.rs", SourceText("pub fn Ok() {}\n"))];
 
-    let selected = [RuleId::New(nomos_rules::REQUIREMENT_TRACE_STALENESS)];
-    let sources = [Source("src/lib.rs", "pub fn Ok() {}\n")];
+    let comparison = Compare_Across_A_Mutation(&fixture, &sources, &selected, |fixture| {
+        fixture.Write("tests/contract/requirements/CHK-001.assessment", SourceText(unresolved));
+    });
 
-    let mut workspace = None;
-    let mut store = MemoryFactStore::New();
-    let before = Answered(&sources, fixture.Path(), &selected, &mut workspace, &mut store);
-
-    fixture.Write("tests/contract/requirements/CHK-001.assessment", unresolved);
-
-    let reused = Answered(&sources, fixture.Path(), &selected, &mut workspace, &mut store);
-    let clean = Answered_Cleanly(&sources, fixture.Path(), &selected);
-
-    Assert_Reuse_Agrees_With_Recomputation(&before, &reused, &clean, "repository-derived");
+    Assert_Reuse_Agrees_With_Recomputation(&comparison, "repository-derived");
 }

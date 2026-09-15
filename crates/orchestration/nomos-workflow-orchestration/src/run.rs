@@ -113,8 +113,16 @@ fn Dispatch<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(body: &
             Ok(outcome) => Ok(StepOutcome::Ollama(outcome)),
             Err(error) => Err(DispatchError::Ollama(error)),
         },
-        Body::Check(check) => Ok(StepOutcome::Check(Dispatched_Check(check, platform, variant))),
-        Body::Correction(correction) => Ok(StepOutcome::Correction(Dispatched_Correction(correction, platform, variant))),
+        Body::Check(check) =>
+        {
+            let judged = Dispatched_Check(check, platform, variant);
+            Ok(StepOutcome::Check(judged))
+        }
+        Body::Correction(correction) =>
+        {
+            let corrected = Dispatched_Correction(correction, platform, variant);
+            Ok(StepOutcome::Correction(corrected))
+        }
         Body::Gate(gate) => match Dispatched_Gate(gate, platform, variant, run)
         {
             result if result.disposition == GateRunOutcome::Failed => Err(DispatchError::Gate(result)),
@@ -155,7 +163,7 @@ fn Dispatched_Correction<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environ
     correction: &crate::CorrectionBody, platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant,
 ) -> nomos_correction_orchestration::CorrectionOutcome
 {
-    let command = CorrectionCommand { root: correction.root.clone(), commit: correction.commit };
+    let command = CorrectionCommand { root: correction.root.clone(), commit: correction.commit.Commits() };
     let environment = CorrectionEnvironment { variant: variant.clone(), launcher: platform.launcher, filesystem: platform.filesystem, environment: platform.environment };
 
     return Run_Correction(Some(correction.sources.clone()), environment, &command);

@@ -16,6 +16,10 @@ use nomos_ledger::{ClaimRefusal, FileLedger, ItemId, ItemKind, ItemOrigin, ItemS
 use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
 use nomos_work_orchestration::{ClaimRequest, EndingRequest, Run, WorkCommand, WorkOutcome};
 
+/// The lease this suite's claims ask for: far longer than any test here could run, so an
+/// expired lease is never the reason a seam assertion failed.
+const LEASE_SECONDS: u64 = 60;
+
 /// A ledger under a directory unique to this process and this test, left for a person to read
 /// if a test fails mid-run -- the OS cleans the temp root, not this suite.
 fn Scratch_Ledger(name: &str) -> FileLedger<StdFileSystem, SystemClock, FileLock>
@@ -70,6 +74,24 @@ fn Item(id: &str) -> LedgerItem
     };
 }
 
+/// Adds `item` through [`Run`], asserting the real ledger took it, so each test below starts
+/// from an item that is genuinely on the board rather than one whose add was dropped on the
+/// floor.
+fn Added(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: &LedgerItem)
+{
+    let added = Run(
+        &WorkCommand::Add {
+            item: Box::new(item.clone()),
+            amending: Territory::Empty(),
+        },
+        ledger,
+        &Unreached,
+        Territory::Empty,
+    );
+
+    assert!(matches!(added, WorkOutcome::Add(Ok(()))), "a real ledger accepts an add for a fresh item");
+}
+
 /// The happy path across the boundary: an item added through a real `FileLedger`, then read
 /// back through the same seam.
 #[test]
@@ -77,9 +99,7 @@ fn Test_Run_Should_Add_Then_Show_An_Item_Through_A_Real_Ledger()
 {
     let mut ledger = Scratch_Ledger("add-show");
     let item = Item("SEAM-ONE");
-
-    let added = Run(&WorkCommand::Add { item: Box::new(item.clone()), amending: Territory::Empty() }, &mut ledger, &Unreached, Territory::Empty);
-    assert!(matches!(added, WorkOutcome::Add(Ok(()))));
+    Added(&mut ledger, &item);
 
     let shown = Run(&WorkCommand::Show { item: item.id.clone() }, &mut ledger, &Unreached, Territory::Empty);
     let WorkOutcome::Show(Ok(view)) = shown
@@ -97,13 +117,13 @@ fn Test_Run_Should_Surface_A_Real_Ledger_Claim_Refusal()
 {
     let mut ledger = Scratch_Ledger("claim-refusal");
     let item = Item("SEAM-TWO");
-    let _ = Run(&WorkCommand::Add { item: Box::new(item.clone()), amending: Territory::Empty() }, &mut ledger, &Unreached, Territory::Empty);
+    Added(&mut ledger, &item);
 
-    let request = ClaimRequest { item: item.id.clone(), holder: "agent-a".to_owned(), lease: Duration::from_secs(60) };
+    let request = ClaimRequest { item: item.id.clone(), holder: "agent-a".to_owned(), lease: Duration::from_secs(LEASE_SECONDS) };
     let first = Run(&WorkCommand::Claim(request), &mut ledger, &Unreached, Territory::Empty);
     assert!(matches!(first, WorkOutcome::Claim(Ok(_))));
 
-    let request = ClaimRequest { item: item.id, holder: "agent-b".to_owned(), lease: Duration::from_secs(60) };
+    let request = ClaimRequest { item: item.id, holder: "agent-b".to_owned(), lease: Duration::from_secs(LEASE_SECONDS) };
     let second = Run(&WorkCommand::Claim(request), &mut ledger, &Unreached, Territory::Empty);
     let WorkOutcome::Claim(Err(refusal)) = second
     else
@@ -121,7 +141,7 @@ fn Test_Run_Should_Make_A_Decline_Visible_To_A_Later_Audit()
 {
     let mut ledger = Scratch_Ledger("decline-audit");
     let item = Item("SEAM-THREE");
-    let _ = Run(&WorkCommand::Add { item: Box::new(item.clone()), amending: Territory::Empty() }, &mut ledger, &Unreached, Territory::Empty);
+    Added(&mut ledger, &item);
 
     let declined = Run(
         &WorkCommand::Decline(EndingRequest { item: item.id.clone(), holder: "nomos work decline".to_owned(), reason: "not work".to_owned() }),

@@ -48,45 +48,63 @@ pub fn Resolve_Rules(declared: &[RulePackage], registered: &[RuleId]) -> Result<
     }
 
     let available: BTreeSet<&RuleId> = registered.iter().collect();
-    let mut mechanical = BTreeSet::new();
-    let mut model_judged = BTreeSet::new();
-    let mut unimplemented = BTreeSet::new();
-    let mut contradicted = BTreeSet::new();
+    let placements = Place_Declarations(declared, &available);
+    let undeclared = Undeclared_Rules(declared, available);
 
-    for package in declared
-    {
-        let implemented = available.contains(&package.rule_id);
-        let rule = package.rule_id.clone();
-
-        match Placement_Of(package, implemented)
-        {
-            Placement::Mechanical => mechanical.insert(rule),
-            Placement::ModelJudged => model_judged.insert(rule),
-            Placement::Unimplemented => unimplemented.insert(rule),
-            Placement::Contradicted => contradicted.insert(rule),
-        };
-    }
-
-    let claimed: BTreeSet<&RuleId> = declared.iter().map(|package| return &package.rule_id).collect();
-    let undeclared: BTreeSet<RuleId> = available
-        .into_iter()
-        .filter(|rule| return !claimed.contains(rule))
-        .cloned()
-        .collect();
-
-    if !unimplemented.is_empty() || !undeclared.is_empty() || !contradicted.is_empty()
+    if Is_Disagreed(&placements, &undeclared)
     {
         return Err(RuleResolutionError::Disagreed {
-            unimplemented: unimplemented.into_iter().collect(),
+            unimplemented: placements.unimplemented.into_iter().collect(),
             undeclared: undeclared.into_iter().collect(),
-            contradicted: contradicted.into_iter().collect(),
+            contradicted: placements.contradicted.into_iter().collect(),
         });
     }
 
     return Ok(RuleResolution {
-        mechanical: mechanical.into_iter().collect(),
-        model_judged: model_judged.into_iter().collect(),
+        mechanical: placements.mechanical.into_iter().collect(),
+        model_judged: placements.model_judged.into_iter().collect(),
     });
+}
+
+/// Every declaration sorted into the placement its own judgment and registration give it.
+///
+/// The four sets are built here and handed back together, so `Resolve_Rules` reads as the
+/// three steps it is -- classify, compare, answer -- rather than as the loop that does the
+/// classifying.
+fn Place_Declarations(declared: &[RulePackage], available: &BTreeSet<&RuleId>) -> Placements
+{
+    let mut placements = Placements::default();
+
+    for package in declared
+    {
+        let implementation = Implementation::Of(&package.rule_id, available);
+        let rule = package.rule_id.clone();
+
+        match Placement_Of(package, implementation)
+        {
+            Placement::Mechanical => placements.mechanical.insert(rule),
+            Placement::ModelJudged => placements.model_judged.insert(rule),
+            Placement::Unimplemented => placements.unimplemented.insert(rule),
+            Placement::Contradicted => placements.contradicted.insert(rule),
+        };
+    }
+
+    return placements;
+}
+
+/// The four sets one declaration can be sorted into, named rather than passed around
+/// separately.
+#[derive(Default)]
+struct Placements
+{
+    /// Declared mechanical, and implemented.
+    mechanical: BTreeSet<RuleId>,
+    /// Declared model-judged, and not implemented.
+    model_judged: BTreeSet<RuleId>,
+    /// Declared mechanical, and not implemented.
+    unimplemented: BTreeSet<RuleId>,
+    /// Declared model-judged, and implemented anyway.
+    contradicted: BTreeSet<RuleId>,
 }
 
 /// Where one declaration lands, given its own judgment and whether its rule is implemented.
@@ -106,20 +124,74 @@ enum Placement
     Contradicted,
 }
 
+/// Whether this build has an implementation registered for a declared rule.
+///
+/// A named two-state type rather than a `bool`, because a position is not a name: the call
+/// site reads which of the two states it hands over, and no combination of arguments can
+/// reach a fifth placement by accident.
+enum Implementation
+{
+    /// This build has code for the rule.
+    Registered,
+    /// This build has none.
+    Missing,
+}
+
+impl Implementation
+{
+    /// Which state `available` puts `rule` in.
+    fn Of(rule: &RuleId, available: &BTreeSet<&RuleId>) -> Self
+    {
+        if available.contains(rule)
+        {
+            return Self::Registered;
+        }
+
+        return Self::Missing;
+    }
+}
+
 /// Which placement one declaration takes.
 ///
 /// The four outcomes are every combination of the two questions this step asks — does the
 /// declaration need an implementation, and is one registered — so there is no fifth case and
 /// no default arm.
-fn Placement_Of(package: &RulePackage, implemented: bool) -> Placement
+fn Placement_Of(package: &RulePackage, implementation: Implementation) -> Placement
 {
-    return match (package.judgment.Needs_An_Implementation(), implemented)
+    return match (package.judgment.Needs_An_Implementation(), implementation)
     {
-        (true, true) => Placement::Mechanical,
-        (true, false) => Placement::Unimplemented,
-        (false, false) => Placement::ModelJudged,
-        (false, true) => Placement::Contradicted,
+        (true, Implementation::Registered) => Placement::Mechanical,
+        (true, Implementation::Missing) => Placement::Unimplemented,
+        (false, Implementation::Missing) => Placement::ModelJudged,
+        (false, Implementation::Registered) => Placement::Contradicted,
     };
+}
+
+/// Every registered rule no declaration claims.
+fn Undeclared_Rules(declared: &[RulePackage], available: BTreeSet<&RuleId>) -> BTreeSet<RuleId>
+{
+    let claimed: BTreeSet<&RuleId> = declared.iter().map(|package| return &package.rule_id).collect();
+
+    return available.into_iter().filter(|rule| return !claimed.contains(rule)).cloned().collect();
+}
+
+/// Whether the three disagreements this resolution refuses over stand.
+///
+/// The three questions are asked one at a time rather than joined by `||`, so the condition
+/// at the branch reads as what it is for and each question can be read on its own.
+fn Is_Disagreed(placements: &Placements, undeclared: &BTreeSet<RuleId>) -> bool
+{
+    if !placements.unimplemented.is_empty()
+    {
+        return true;
+    }
+
+    if !undeclared.is_empty()
+    {
+        return true;
+    }
+
+    return !placements.contradicted.is_empty();
 }
 
 #[cfg(test)]
@@ -132,35 +204,13 @@ mod tests
         ApplicabilitySemantics, Judgment, PackageVersion, ProtocolRange, RulePackage,
     };
 
-    /// A declaration for `rule`, carrying `judgment` and nothing else worth varying here.
+    /// The contract version every declaration in this module states at both ends of its
+    /// protocol range.
     ///
-    /// Every other field is at the shape `OD-PACKAGE-008`'s four-rule measurement found
-    /// convergent, because this function resolves identity and judgment and reads none of
-    /// them.
-    fn Declaration(rule: &str, judgment: Judgment) -> RulePackage
-    {
-        return RulePackage {
-            package_id: PackageId::New(format!("nomos.rule.{rule}")),
-            package_kind: PackageKind::RulePackage,
-            package_version: PackageVersion::New(1, 0, 0),
-            protocol_range: ProtocolRange::New(ContractVersion::New(1, 0), ContractVersion::New(1, 0)),
-            rule_id: RuleId::New(rule),
-            contract: None,
-            judgment,
-            applicability: ApplicabilitySemantics::AlwaysSupported,
-            required_capabilities: Vec::new(),
-            evidence_schema: EvidenceClass::Derived,
-            enhanced_implementation: Vec::new(),
-            external_diagnostics: Vec::new(),
-            correction_and_suppression: None,
-            examples: Vec::new(),
-            counterexamples: Vec::new(),
-            conformance_fixtures: Vec::new(),
-            evaluation_corpus: None,
-            agent_guidance: Vec::new(),
-            title: format!("the {rule} rule"),
-        };
-    }
+    /// One named version rather than a literal pair, for the reason the production
+    /// declarations give: a range is a claim about compatibility, and stating it twice
+    /// invites the two ends to drift apart.
+    const DECLARED_VERSION: ContractVersion = ContractVersion::New(1, 0);
 
     /// Every rule this workspace's own run composes, declared mechanical, resolves.
     ///
@@ -184,6 +234,36 @@ mod tests
         let mut expected = composed;
         expected.sort();
         assert_eq!(resolved, RuleResolution { mechanical: expected, model_judged: Vec::new() });
+    }
+
+    /// A declaration for `rule`, carrying `judgment` and nothing else worth varying here.
+    ///
+    /// Every other field is at the shape `OD-PACKAGE-008`'s four-rule measurement found
+    /// convergent, because this function resolves identity and judgment and reads none of
+    /// them.
+    fn Declaration(rule: &str, judgment: Judgment) -> RulePackage
+    {
+        return RulePackage {
+            package_id: PackageId::New(format!("nomos.rule.{rule}")),
+            package_kind: PackageKind::RulePackage,
+            package_version: PackageVersion::New(1, 0, 0),
+            protocol_range: ProtocolRange::New(DECLARED_VERSION, DECLARED_VERSION),
+            rule_id: RuleId::New(rule),
+            contract: None,
+            judgment,
+            applicability: ApplicabilitySemantics::AlwaysSupported,
+            required_capabilities: Vec::new(),
+            evidence_schema: EvidenceClass::Derived,
+            enhanced_implementation: Vec::new(),
+            external_diagnostics: Vec::new(),
+            correction_and_suppression: None,
+            examples: Vec::new(),
+            counterexamples: Vec::new(),
+            conformance_fixtures: Vec::new(),
+            evaluation_corpus: None,
+            agent_guidance: Vec::new(),
+            title: format!("the {rule} rule"),
+        };
     }
 
     /// A model-judged declaration resolves without an implementation and is reported apart

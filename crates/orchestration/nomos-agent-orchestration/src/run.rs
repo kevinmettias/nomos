@@ -37,7 +37,7 @@
 
 use std::path::Path;
 
-use crate::{AgentDispatchOutcome, Backend};
+use crate::{AgentDispatchOutcome, Backend, DispatchConfig};
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_contracts::{Finding, SchemaId};
 use nomos_model_package::EffortLevel;
@@ -54,19 +54,6 @@ use nomos_scope_verification::Territory;
 pub struct AgentEnvironment<'a, Launcher: ProcessLauncher>
 {
     pub launcher: &'a Launcher,
-}
-
-/// The effort and backend a dispatch carries, together -- grouped because every caller of
-/// [`Run_Agent_Execute`]/[`Run_Agent_Judgment`] threads them together, never one without
-/// the other, the same reason `nomos_cli::agent::DispatchConfig` grouped them before this
-/// crate existed. Also what keeps `Run_Agent_Judgment` inside this crate's own
-/// `parameter-count` limit: `pair`, `finding`, `environment` and this one value are four,
-/// not five.
-#[derive(Clone, Copy)]
-pub struct DispatchConfig
-{
-    pub effort: EffortLevel,
-    pub backend: Backend,
 }
 
 /// Assembles a bare `TaskEnvelope` naming only `goal` and `config.effort`, and dispatches
@@ -87,6 +74,29 @@ pub fn Run_Agent_Execute<Launcher: ProcessLauncher>(goal: &str, config: Dispatch
     return Dispatched(&task, config.backend, environment);
 }
 
+/// A bare `TaskEnvelope` naming only `goal` and `effort`. `scope`, `prohibited_changes`
+/// and `available_tools` are the empty value `OD-EXECUTOR-001` already reads as "nothing
+/// enumerated, nothing granted" -- a direct call has no configuration surface to fill them
+/// from yet, and inventing one ahead of a real need would repeat a mistake this workspace
+/// has already declined to make elsewhere. `expected_output_schema` names this call site
+/// rather than a real schema, since nothing here validates a response against one. Named
+/// `Bare_Task` rather than `Execute_Task`, the name this held in `nomos-cli`'s own
+/// `dispatch.rs`, so it is never mistaken for either backend crate's own, differently
+/// shaped, public `Execute_Task`.
+fn Bare_Task(goal: &str, effort: EffortLevel) -> TaskEnvelope
+{
+    return TaskEnvelope {
+        goal: goal.to_owned(),
+        scope: Territory::Of_Files(Vec::<String>::new()),
+        knowledge_context: Vec::new(),
+        applicable_rules: Vec::new(),
+        prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
+        available_tools: Vec::new(),
+        expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
+        effort,
+    };
+}
+
 /// Assembles the judgment `role_surface.rs`'s own module doc says
 /// `Check_Declared_Role_Matches_Surface` cannot reach for itself -- whether `pair`'s
 /// declared role and actual surface agree -- into a `TaskEnvelope` carrying `finding`'s
@@ -105,6 +115,34 @@ pub fn Run_Agent_Judgment<Launcher: ProcessLauncher>(
     let task = Judgment_Task(pair, finding, config.effort);
 
     return Dispatched(&task, config.backend, environment);
+}
+
+/// The judgment `role_surface.rs`'s own module doc says this rule cannot reach itself --
+/// whether `pair`'s declared role and actual surface agree -- carrying `finding.summary`
+/// so the dispatched question is traceably the rule's own, not a paraphrase invented here.
+fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding, effort: EffortLevel) -> TaskEnvelope
+{
+    let goal = format!(
+        concat!(
+            "A Rust crate's declared role, from its workspace README's band table: {}\n\n",
+            "The crate's actual public surface, as a list of every item it exports:\n{}\n\n",
+            "{}. Does the declared role accurately and completely describe what the surface ",
+            "exports? Name anything the role claims that the surface does not show, or anything ",
+            "the surface exports that the role does not mention, in 2-4 sentences.",
+        ),
+        pair.declared_role, pair.actual_surface, finding.summary
+    );
+
+    return TaskEnvelope {
+        goal,
+        scope: Territory::Of_Files(Vec::<String>::new()),
+        knowledge_context: Vec::new(),
+        applicable_rules: vec![finding.rule.clone()],
+        prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
+        available_tools: Vec::new(),
+        expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
+        effort,
+    };
 }
 
 /// The root this seam has to resolve `prohibited_changes` against: none.
@@ -138,55 +176,6 @@ fn Dispatched<Launcher: ProcessLauncher>(task: &TaskEnvelope, backend: Backend, 
             Ok(outcome) => AgentDispatchOutcome::Ollama(outcome),
             Err(error) => AgentDispatchOutcome::Unavailable(error.to_string()),
         },
-    };
-}
-
-/// A bare `TaskEnvelope` naming only `goal` and `effort`. `scope`, `prohibited_changes`
-/// and `available_tools` are the empty value `OD-EXECUTOR-001` already reads as "nothing
-/// enumerated, nothing granted" -- a direct call has no configuration surface to fill them
-/// from yet, and inventing one ahead of a real need would repeat a mistake this workspace
-/// has already declined to make elsewhere. `expected_output_schema` names this call site
-/// rather than a real schema, since nothing here validates a response against one. Named
-/// `Bare_Task` rather than `Execute_Task`, the name this held in `nomos-cli`'s own
-/// `dispatch.rs`, so it is never mistaken for either backend crate's own, differently
-/// shaped, public `Execute_Task`.
-fn Bare_Task(goal: &str, effort: EffortLevel) -> TaskEnvelope
-{
-    return TaskEnvelope {
-        goal: goal.to_owned(),
-        scope: Territory::Of_Files(Vec::<String>::new()),
-        knowledge_context: Vec::new(),
-        applicable_rules: Vec::new(),
-        prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
-        available_tools: Vec::new(),
-        expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
-        effort,
-    };
-}
-
-/// The judgment `role_surface.rs`'s own module doc says this rule cannot reach itself --
-/// whether `pair`'s declared role and actual surface agree -- carrying `finding.summary`
-/// so the dispatched question is traceably the rule's own, not a paraphrase invented here.
-fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding, effort: EffortLevel) -> TaskEnvelope
-{
-    let goal = format!(
-        "A Rust crate's declared role, from its workspace README's band table: {}\n\n\
-         The crate's actual public surface, as a list of every item it exports:\n{}\n\n\
-         {}. Does the declared role accurately and completely describe what the surface \
-         exports? Name anything the role claims that the surface does not show, or anything \
-         the surface exports that the role does not mention, in 2-4 sentences.",
-        pair.declared_role, pair.actual_surface, finding.summary
-    );
-
-    return TaskEnvelope {
-        goal,
-        scope: Territory::Of_Files(Vec::<String>::new()),
-        knowledge_context: Vec::new(),
-        applicable_rules: vec![finding.rule.clone()],
-        prohibited_changes: Territory::Of_Files(Vec::<String>::new()),
-        available_tools: Vec::new(),
-        expected_output_schema: SchemaId::New("nomos.agent.executor.cli.v1"),
-        effort,
     };
 }
 
@@ -237,16 +226,6 @@ mod tests
         }
     }
 
-    fn Claude_Code_Success_Json() -> String
-    {
-        return r#"{"result": "PONG", "structured_output": {"assumptions": ["PONG"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#.to_owned();
-    }
-
-    fn Config(backend: Backend) -> DispatchConfig
-    {
-        return DispatchConfig { effort: EffortLevel::BackendDefault, backend };
-    }
-
     #[test]
     fn Test_Run_Agent_Execute_Should_Reach_Claude_Code_With_A_Scripted_Launcher()
     {
@@ -287,27 +266,6 @@ mod tests
 
             assert!(matches!(outcome, AgentDispatchOutcome::Unavailable(_)), "{backend:?}: {outcome:?}");
         }
-    }
-
-    fn Fixture_Pair() -> RoleSurfacePair
-    {
-        return RoleSurfacePair {
-            crate_root: "crates/example/nomos-example".to_owned(),
-            crate_name: "nomos-example".to_owned(),
-            declared_role: "An example crate.".to_owned(),
-            actual_surface: "pub fn Something();\n".to_owned(),
-        };
-    }
-
-    /// The real `Finding` `nomos_rules::Check_Declared_Role_Matches_Surface` produces for
-    /// [`Fixture_Pair`] -- built through the real rule rather than hand-guessed, the same
-    /// "already judged" input [`Run_Agent_Judgment`] itself expects from a caller.
-    fn Fixture_Finding() -> Finding
-    {
-        let pair = Fixture_Pair();
-        let mut findings = nomos_rules::Check_Declared_Role_Matches_Surface(std::slice::from_ref(&pair));
-
-        return findings.pop().expect("the rule reports exactly one finding per subject");
     }
 
     #[test]
@@ -352,5 +310,36 @@ mod tests
         assert_eq!(task.effort, EffortLevel::Minimal);
         assert!(task.applicable_rules.is_empty());
         assert!(task.available_tools.is_empty());
+    }
+
+    fn Claude_Code_Success_Json() -> String
+    {
+        return r#"{"result": "PONG", "structured_output": {"assumptions": ["PONG"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#.to_owned();
+    }
+
+    fn Config(backend: Backend) -> DispatchConfig
+    {
+        return DispatchConfig { effort: EffortLevel::BackendDefault, backend };
+    }
+
+    fn Fixture_Pair() -> RoleSurfacePair
+    {
+        return RoleSurfacePair {
+            crate_root: "crates/example/nomos-example".to_owned(),
+            crate_name: "nomos-example".to_owned(),
+            declared_role: "An example crate.".to_owned(),
+            actual_surface: "pub fn Something();\n".to_owned(),
+        };
+    }
+
+    /// The real `Finding` `nomos_rules::Check_Declared_Role_Matches_Surface` produces for
+    /// [`Fixture_Pair`] -- built through the real rule rather than hand-guessed, the same
+    /// "already judged" input [`Run_Agent_Judgment`] itself expects from a caller.
+    fn Fixture_Finding() -> Finding
+    {
+        let pair = Fixture_Pair();
+        let mut findings = nomos_rules::Check_Declared_Role_Matches_Surface(std::slice::from_ref(&pair));
+
+        return findings.pop().expect("the rule reports exactly one finding per subject");
     }
 }

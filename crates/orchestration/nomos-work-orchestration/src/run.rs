@@ -56,8 +56,8 @@ where
         WorkCommand::Renew(request) => Renew_Outcome(ledger, request),
         WorkCommand::TakeOver(request) => TakeOver_Outcome(ledger, request),
         WorkCommand::Abandon(request) => Abandon_Outcome(ledger, request),
-        WorkCommand::Widen { item, holder, adding } => Widen_Outcome(ledger, item, holder, adding),
         WorkCommand::Decline(request) => Decline_Outcome(ledger, request),
+        WorkCommand::Widen { item, holder, adding } => Widen_Outcome(ledger, item, holder, adding),
         WorkCommand::Validate => WorkOutcome::Validate(Validated_Board(ledger)),
         WorkCommand::Audit => WorkOutcome::Audit(Board_View(ledger)),
     };
@@ -149,32 +149,9 @@ fn Finish_Outcome<
 {
     let finishing = Finishing { item, holder };
     let finished = Finish_Item(ledger, launcher, &finishing, None);
-    let board = Board_After(ledger, finished.is_ok());
+    let board = Board_After(ledger, &finished);
 
     return WorkOutcome::Finish { finished, board };
-}
-
-/// The board as it stands after a transition, for the caller that has to say what the
-/// transition just made reachable or unreachable.
-///
-/// A second read rather than a value the transition returns: `Finish_Item` and `Decline`
-/// each answer what they did, not what the board looks like afterwards, and widening either
-/// to carry a document would make every caller pay for a report only one of them writes.
-///
-/// `None` when nothing was ended, and `None` when the re-read failed. The second is
-/// deliberate: the transition is already committed by this point, and failing the verb over
-/// a report it could not assemble would turn a succeeded ending into a reported failure.
-fn Board_After<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
-    ledger: &FileLedger<Filesystem, ClockSource, Lock>,
-    ended: bool,
-) -> Option<LedgerDocument>
-{
-    if !ended
-    {
-        return None;
-    }
-
-    return ledger.Load().ok();
 }
 
 /// The outcome of granting `request`, for [`WorkCommand::Claim`].
@@ -232,7 +209,7 @@ fn Decline_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProces
 ) -> WorkOutcome
 {
     let declined = ledger.Decline(&request.item, &request.holder, &request.reason);
-    let board = Board_After(ledger, declined.is_ok());
+    let board = Board_After(ledger, &declined);
 
     return WorkOutcome::Decline { declined, board };
 }
@@ -245,7 +222,9 @@ fn Widen_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessL
     adding: &[String],
 ) -> WorkOutcome
 {
-    return WorkOutcome::Widen(ledger.Widen(item, holder.into(), adding));
+    let widened = ledger.Widen(item, holder.into(), adding);
+
+    return WorkOutcome::Widen(widened);
 }
 
 /// The board, once it is known to satisfy its own invariants.
@@ -261,6 +240,38 @@ fn Validated_Board<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProces
     }
 
     return Ok(document);
+}
+
+/// The board as it stands after a transition, for the caller that has to say what the
+/// transition just made reachable or unreachable.
+///
+/// A second read rather than a value the transition returns: `Finish_Item` and `Decline`
+/// each answer what they did, not what the board looks like afterwards, and widening either
+/// to carry a document would make every caller pay for a report only one of them writes.
+///
+/// The transition's own outcome is the parameter rather than a bare `bool` derived from it,
+/// so a call site hands over the value that already says which of the two states it is in.
+///
+/// `None` when nothing was ended, and `None` when the re-read failed. The second is
+/// deliberate: the transition is already committed by this point, and failing the verb over
+/// a report it could not assemble would turn a succeeded ending into a reported failure.
+fn Board_After<
+    Filesystem: FileSystem,
+    ClockSource: Clock,
+    Lock: CrossProcessLock,
+    Attempt,
+    Refusal,
+>(
+    ledger: &FileLedger<Filesystem, ClockSource, Lock>,
+    transition: &Result<Attempt, Refusal>,
+) -> Option<LedgerDocument>
+{
+    if transition.is_err()
+    {
+        return None;
+    }
+
+    return ledger.Load().ok();
 }
 
 #[cfg(test)]

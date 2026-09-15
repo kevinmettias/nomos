@@ -14,7 +14,13 @@ use nomos_platform::{Clock, Command, ExitOutcome, ProcessLauncher, ProcessOutput
 use nomos_platform_std::StdFileSystem;
 use nomos_workspace::BuildVariant;
 
-use crate::{Body, CheckBody, CorrectionBody, DispatchError, GateBody, Platform, Run, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
+use crate::{Body, CheckBody, CommitIntent, CorrectionBody, DispatchError, GateBody, Platform, Run, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
+
+/// The retry limit [`Incoherent_Step`] declares. The count itself is not what makes that step
+/// incoherent -- `WF-012`'s failure is a retry with neither a deduplication token nor a
+/// compensation -- so any value past the first attempt would do, and naming it keeps the
+/// number out of the expression.
+const MAX_ATTEMPTS: u32 = 3;
 
 /// This process's own build variant is not what a workflow step should be judged as --
 /// `nomos_check_orchestration::Run`'s own doc says `variant` must come from the
@@ -81,7 +87,7 @@ fn Incoherent_Step() -> WorkflowStep
     step.has_side_effects = true;
     step.idempotent = false;
     step.retry = RetryPolicy::Retry {
-        max_attempts: NonZeroU32::new(3).expect("3 is nonzero"),
+        max_attempts: NonZeroU32::new(MAX_ATTEMPTS).expect("the constant above is a nonzero attempt limit"),
         deduplication_token_required: false,
     };
 
@@ -152,190 +158,84 @@ fn Failing_Response(stderr: &str) -> ProcessOutput
     return ProcessOutput { outcome: ExitOutcome::Exited { code: 1 }, stdout: String::new(), stderr: stderr.to_owned() };
 }
 
-#[test]
-fn Test_An_Empty_Plan_Completes_Vacuously()
+/// Runs `plan` through [`Run`] with a launcher scripted to answer its steps in the order
+/// queued, and hands back the run's own outcome.
+///
+/// The platform every test in this file needs is the same one — a scripted launcher, the real
+/// standard filesystem, this process's own environment, and one fixed moment — so building it
+/// in a single place is what makes a test's result depend on its plan and its script alone.
+fn Ran(plan: &[WorkflowStepPlan], answers: Vec<ProcessOutput>) -> WorkflowOutcome
 {
-    let launcher = Scripted::Of(Vec::new());
+    let launcher = Scripted::Of(answers);
+    let platform = Platform {
+        launcher: &launcher,
+        filesystem: &StdFileSystem,
+        environment: &nomos_platform_std::StdEnvironment,
+        now: nomos_platform::Timestamp::From_Unix_Seconds(0),
+    };
 
-    let outcome = Run(&[], &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
-
-    assert_eq!(outcome, WorkflowOutcome::Completed { completed: Vec::new() });
+    return Run(plan, &platform, &Test_Variant(), Test_Run_Id());
 }
 
-#[test]
-fn Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes()
+/// The steps `plan` completed through [`Run`], asserting the run reached the end of the plan.
+///
+/// Asserts rather than reports the `Completed` outcome: the tests reusing this are proving what
+/// a completed run carries, so a refusal or a failure has to stop here with its own message
+/// rather than surfacing later as a puzzling assertion about a step.
+fn Ran_To_Completion(plan: &[WorkflowStepPlan], answers: Vec<ProcessOutput>) -> Vec<StepOutcome>
 {
-    let launcher = Scripted::Of(vec![Clean_Claude_Code_Response("PONG")]);
-    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("say PONG")) }];
-
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
+    let outcome = Ran(plan, answers);
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
     {
         panic!("expected Completed: {outcome:?}")
     };
-    assert_eq!(completed.len(), 1);
-    let first = completed.first().expect("asserted len 1 above");
-    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["PONG".to_owned()]));
+    assert_eq!(completed.len(), plan.len(), "every declared step completed");
+
+    return completed;
 }
 
-#[test]
-fn Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes()
+/// The single step a one-body plan completed through [`Run`] — the one-step shape most of the
+/// tests below are about.
+fn Only_Step(body: Body, answers: Vec<ProcessOutput>) -> StepOutcome
 {
-    let launcher = Scripted::Of(vec![Clean_Ollama_Response("PONG")]);
-    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("say PONG")) }];
+    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body }];
+    let completed = Ran_To_Completion(&plan, answers);
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
-
-    let WorkflowOutcome::Completed { completed } = outcome
-    else
-    {
-        panic!("expected Completed: {outcome:?}")
-    };
-    assert_eq!(completed.len(), 1);
-    let first = completed.first().expect("asserted len 1 above");
-    assert!(matches!(first, StepOutcome::Ollama(answer) if answer.response == "PONG"));
+    return completed.into_iter().next().expect("the run above asserted a step for every body");
 }
 
-#[test]
-fn Test_A_Two_Step_Sequence_Completes_In_Order()
+/// A check body judging `text` filed under `a.rs`, restricted to the one rule whose own
+/// applicability a single in-memory file can satisfy.
+fn Check_Body_Over(text: &str) -> CheckBody
 {
-    let launcher = Scripted::Of(vec![Clean_Claude_Code_Response("first"), Clean_Ollama_Response("second")]);
-    let plan = [
-        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("first")) },
-        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("second")) },
-    ];
+    let sources = vec![nomos_rules::SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), text.to_owned())];
+    let selected = vec![RuleId::New(nomos_rules::COMPLETENESS_MIRROR)];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
-
-    let WorkflowOutcome::Completed { completed } = outcome
-    else
-    {
-        panic!("expected Completed: {outcome:?}")
-    };
-    assert_eq!(completed.len(), 2);
-    let first = completed.first().expect("asserted len 2 above");
-    let second = completed.get(1).expect("asserted len 2 above");
-    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["first".to_owned()]));
-    assert!(matches!(second, StepOutcome::Ollama(answer) if answer.response == "second"));
+    return CheckBody::New(std::path::PathBuf::from("."), sources, selected);
 }
 
-#[test]
-fn Test_An_Incoherent_Step_Is_Refused_Before_Dispatch()
+/// A correction body over `root`, whose already-walked source is `text` filed under `a.rs`, and
+/// which asks `Run_Correction` to commit the fix it validates rather than only stage it.
+fn Correction_Body_Over(root: &std::path::Path, text: &str) -> CorrectionBody
 {
-    let launcher = Scripted::Of(Vec::new());
-    let plan = [WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task("never runs")) }];
+    let sources = vec![nomos_rules::SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), text.to_owned())];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
-
-    assert_eq!(outcome, WorkflowOutcome::Refused { completed: Vec::new(), index: 0 });
+    return CorrectionBody::New(root.to_path_buf(), sources, CommitIntent::Commit);
 }
 
-#[test]
-fn Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions()
+/// A gate body judging `text` filed under `a.rs`, narrowed to `parameter-count` alone so this
+/// test dispatches no subprocess-backed section (`GateCommand::default`'s own empty selection
+/// would otherwise also select `dependency-policy`, `lint-diagnostics` and
+/// `dependency-direction`, each of which launches a real `cargo` subprocess against a fixture
+/// tree that has no `Cargo.toml` at all).
+fn Gate_Body_Over(text: &str) -> GateBody
 {
-    let launcher = Scripted::Of(vec![Clean_Claude_Code_Response("first")]);
-    let plan = [
-        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("first")) },
-        WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task("never runs")) },
-    ];
+    let sources = vec![nomos_rules::SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), text.to_owned())];
+    let narrowed = GateCommand { rules: RuleSelector { include: vec![RuleId::New(nomos_rules::PARAMETER_COUNT)] }, ..GateCommand::default() };
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
-
-    let WorkflowOutcome::Refused { completed, index } = outcome
-    else
-    {
-        panic!("expected Refused: {outcome:?}")
-    };
-    assert_eq!(index, 1);
-    assert_eq!(completed.len(), 1);
-    let first = completed.first().expect("asserted len 1 above");
-    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["first".to_owned()]));
-}
-
-#[test]
-fn Test_A_Failed_Dispatch_Stops_The_Run()
-{
-    let launcher = Scripted::Of(vec![Failing_Response("claude exited 1")]);
-    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("fails")) }];
-
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
-
-    let WorkflowOutcome::Failed { completed, index, error } = outcome
-    else
-    {
-        panic!("expected Failed: {outcome:?}")
-    };
-    assert_eq!(index, 0);
-    assert!(completed.is_empty());
-    assert!(matches!(error, DispatchError::ClaudeCode(_)));
-}
-
-/// `P40-WORKFLOW-CHECK-BODY`'s own `done_when`: a two-step workflow whose first step is a
-/// check runs through `nomos-check-orchestration::Run` against the canonical check seam,
-/// its outcome carried in the same `StepOutcome` shape the agent and model bodies already
-/// use, and its second step still dispatches through `nomos-model-backend-ollama`
-/// afterward -- proving the new body composes with the two that already existed rather
-/// than replacing them.
-#[test]
-fn Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonical_Seam()
-{
-    let launcher = Scripted::Of(vec![Clean_Ollama_Response("second")]);
-    let sources = vec![nomos_rules::SourceFile::New(
-        "a.rs",
-        nomos_model::Subject_Of_Path("a.rs"),
-        "pub fn Ok() {}\n",
-    )];
-    let check = CheckBody::New(
-        std::path::PathBuf::from("."),
-        sources,
-        vec![nomos_contracts::RuleId::New(nomos_rules::COMPLETENESS_MIRROR)],
-    );
-    let plan = [
-        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Check(check) },
-        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("second")) },
-    ];
-
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
-
-    let WorkflowOutcome::Completed { completed } = outcome
-    else
-    {
-        panic!("expected Completed: {outcome:?}")
-    };
-    assert_eq!(completed.len(), 2);
-    let first = completed.first().expect("asserted len 2 above");
-    let second = completed.get(1).expect("asserted len 2 above");
-    assert!(
-        matches!(first, StepOutcome::Check(nomos_check_orchestration::CheckOutcome::Judged { findings, .. }) if findings.is_empty()),
-        "{first:?}"
-    );
-    assert!(matches!(second, StepOutcome::Ollama(answer) if answer.response == "second"));
-}
-
-/// Only one scripted answer: if the second step's body were ever dispatched, the
-/// launcher would have nothing left queued for it and `Scripted::Run` would report that
-/// as its own failure instead of the second step ever producing a real outcome — proof
-/// the second step's body never ran, not merely that its result went unchecked.
-#[test]
-fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
-{
-    let launcher = Scripted::Of(vec![Failing_Response("claude exited 1")]);
-    let plan = [
-        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("fails")) },
-        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Ollama(Task("never runs")) },
-    ];
-
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
-
-    let WorkflowOutcome::Failed { completed, index, .. } = outcome
-    else
-    {
-        panic!("expected Failed: {outcome:?}")
-    };
-    assert_eq!(index, 0);
-    assert!(completed.is_empty());
+    return GateBody::New(sources, narrowed);
 }
 
 /// A real phantom-mirror claim: a declared universe with no test naming it as its mirror.
@@ -357,38 +257,152 @@ fn Fresh_Root(name: &str) -> std::path::PathBuf
     return root;
 }
 
+#[test]
+fn Test_An_Empty_Plan_Completes_Vacuously()
+{
+    let outcome = Ran(&[], Vec::new());
+
+    assert_eq!(outcome, WorkflowOutcome::Completed { completed: Vec::new() });
+}
+
+#[test]
+fn Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes()
+{
+    let step = Only_Step(Body::ClaudeCode(Task("say PONG")), vec![Clean_Claude_Code_Response("PONG")]);
+
+    assert!(matches!(step, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["PONG".to_owned()]));
+}
+
+#[test]
+fn Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes()
+{
+    let step = Only_Step(Body::Ollama(Task("say PONG")), vec![Clean_Ollama_Response("PONG")]);
+
+    assert!(matches!(step, StepOutcome::Ollama(answer) if answer.response == "PONG"));
+}
+
+#[test]
+fn Test_A_Two_Step_Sequence_Completes_In_Order()
+{
+    let bodies = [Body::ClaudeCode(Task("first")), Body::Ollama(Task("second"))];
+    let plan: Vec<WorkflowStepPlan> = bodies.into_iter().map(|body| return WorkflowStepPlan { declaration: Coherent_Step(), body }).collect();
+
+    let completed = Ran_To_Completion(&plan, vec![Clean_Claude_Code_Response("first"), Clean_Ollama_Response("second")]);
+
+    let first = completed.first().expect("the run above asserted a step for every body");
+    let second = completed.get(1).expect("the run above asserted a step for every body");
+    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["first".to_owned()]));
+    assert!(matches!(second, StepOutcome::Ollama(answer) if answer.response == "second"));
+}
+
+#[test]
+fn Test_An_Incoherent_Step_Is_Refused_Before_Dispatch()
+{
+    let coherent = WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task("never runs")) };
+
+    let outcome = Ran(&[coherent], Vec::new());
+
+    assert_eq!(outcome, WorkflowOutcome::Refused { completed: Vec::new(), index: 0 });
+}
+
+#[test]
+fn Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions()
+{
+    let plan = [
+        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("first")) },
+        WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task("never runs")) },
+    ];
+
+    let outcome = Ran(&plan, vec![Clean_Claude_Code_Response("first")]);
+
+    let WorkflowOutcome::Refused { completed, index } = outcome
+    else
+    {
+        panic!("expected Refused: {outcome:?}")
+    };
+    assert_eq!(index, 1, "the second step is the incoherent one");
+    assert_eq!(completed.len(), 1, "only the step before the refusal ran");
+    let first = completed.first().expect("the assertion above fixes the length at one");
+    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["first".to_owned()]));
+}
+
+#[test]
+fn Test_A_Failed_Dispatch_Stops_The_Run()
+{
+    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("fails")) }];
+
+    let outcome = Ran(&plan, vec![Failing_Response("claude exited 1")]);
+
+    assert!(
+        matches!(outcome, WorkflowOutcome::Failed { ref completed, index: 0, ref error }
+            if completed.is_empty() && matches!(error, DispatchError::ClaudeCode(_))),
+        "a failing first step stops the run as Failed and completes nothing: {outcome:?}"
+    );
+}
+
+/// Only one scripted answer: if the second step's body were ever dispatched, the
+/// launcher would have nothing left queued for it and `Scripted::Run` would report that
+/// as its own failure instead of the second step ever producing a real outcome — proof
+/// the second step's body never ran, not merely that its result went unchecked.
+#[test]
+fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
+{
+    let bodies = [Body::ClaudeCode(Task("fails")), Body::Ollama(Task("never runs"))];
+    let plan: Vec<WorkflowStepPlan> = bodies.into_iter().map(|body| return WorkflowStepPlan { declaration: Coherent_Step(), body }).collect();
+
+    let outcome = Ran(&plan, vec![Failing_Response("claude exited 1")]);
+
+    assert!(
+        matches!(outcome, WorkflowOutcome::Failed { ref completed, index: 0, .. } if completed.is_empty()),
+        "the first step's failure ends the run before the second step could run: {outcome:?}"
+    );
+}
+
+/// `P40-WORKFLOW-CHECK-BODY`'s own `done_when`: a two-step workflow whose first step is a
+/// check runs through `nomos-check-orchestration::Run` against the canonical check seam,
+/// its outcome carried in the same `StepOutcome` shape the agent and model bodies already
+/// use, and its second step still dispatches through `nomos-model-backend-ollama`
+/// afterward -- proving the new body composes with the two that already existed rather
+/// than replacing them.
+#[test]
+fn Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonical_Seam()
+{
+    let bodies = [Body::Check(Check_Body_Over("pub fn Ok() {}\n")), Body::Ollama(Task("second"))];
+    let plan: Vec<WorkflowStepPlan> = bodies.into_iter().map(|body| return WorkflowStepPlan { declaration: Coherent_Step(), body }).collect();
+
+    let completed = Ran_To_Completion(&plan, vec![Clean_Ollama_Response("second")]);
+
+    let first = completed.first().expect("the run above asserted a step for every body");
+    let second = completed.get(1).expect("the run above asserted a step for every body");
+    assert!(
+        matches!(first, StepOutcome::Check(nomos_check_orchestration::CheckOutcome::Judged { findings, .. }) if findings.is_empty()),
+        "{first:?}"
+    );
+    assert!(matches!(second, StepOutcome::Ollama(answer) if answer.response == "second"));
+}
+
 /// `P40-WORKFLOW-CORRECTION-BODY`'s own `done_when`, the committed half: a workflow step
 /// whose body is a correction reaches Preview, Stage, Validate and Commit through
 /// `nomos-correction-orchestration::Run_Correction`, and its outcome is carried in the
-/// same `StepOutcome` shape the other three bodies already use.
+/// same `StepOutcome` shape the other four bodies already use.
 #[test]
 fn Test_A_Correction_Step_Should_Commit_A_Real_Phantom_Claim()
 {
     let root = Fresh_Root("nomos-workflow-orchestration-correction-body-commit");
     let path = root.join("a.rs");
-    std::fs::write(&path, PHANTOM_FIXTURE).expect("writable");
-    let sources = vec![nomos_rules::SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), PHANTOM_FIXTURE.to_owned())];
-    let launcher = Scripted::Of(Vec::new());
-    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Correction(CorrectionBody::New(root.clone(), sources, true)) }];
+    std::fs::write(&path, PHANTOM_FIXTURE).expect("the fixture root Fresh_Root just created holds this file");
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
-    let corrected = std::fs::read_to_string(&path).expect("still readable");
-
+    let body = Correction_Body_Over(&root, PHANTOM_FIXTURE);
+    let step = Only_Step(Body::Correction(body), Vec::new());
+    let corrected = std::fs::read_to_string(&path).expect("the committed correction left the file readable");
     let _ignored = std::fs::remove_dir_all(&root);
-    let WorkflowOutcome::Completed { completed } = outcome
+
+    let StepOutcome::Correction(nomos_correction_orchestration::CorrectionOutcome::Committed { path: committed_path, .. }) = step
     else
     {
-        panic!("expected Completed: {outcome:?}")
+        panic!("expected Committed: {step:?}")
     };
-    let first = completed.first().expect("one step ran");
-    match first
-    {
-        StepOutcome::Correction(nomos_correction_orchestration::CorrectionOutcome::Committed { path: committed_path, .. }) =>
-        {
-            assert_eq!(committed_path, "a.rs");
-        }
-        other => panic!("expected Committed: {other:?}"),
-    }
+    assert_eq!(committed_path, "a.rs");
     assert_eq!(corrected, "/// A list of things this crate owns.\npub const THINGS: &[&str] = &[\"a\"];\n");
 }
 
@@ -401,33 +415,15 @@ fn Test_A_Correction_Step_Should_Refuse_An_Ambiguous_Claim_Without_Committing()
     let root = Fresh_Root("nomos-workflow-orchestration-correction-body-refused");
     let path = root.join("a.rs");
     let ambiguous = format!("{PHANTOM_FIXTURE}\n{PHANTOM_FIXTURE}");
-    std::fs::write(&path, &ambiguous).expect("writable");
-    let sources = vec![nomos_rules::SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), ambiguous.clone())];
-    let launcher = Scripted::Of(Vec::new());
-    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Correction(CorrectionBody::New(root.clone(), sources, true)) }];
+    std::fs::write(&path, &ambiguous).expect("the fixture root Fresh_Root just created holds this file");
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
-    let untouched = std::fs::read_to_string(&path).expect("still readable");
-
+    let body = Correction_Body_Over(&root, &ambiguous);
+    let step = Only_Step(Body::Correction(body), Vec::new());
+    let untouched = std::fs::read_to_string(&path).expect("a refused correction left the file readable");
     let _ignored = std::fs::remove_dir_all(&root);
-    let WorkflowOutcome::Completed { completed } = outcome
-    else
-    {
-        panic!("expected Completed: {outcome:?}")
-    };
-    let first = completed.first().expect("one step ran");
-    assert!(matches!(first, StepOutcome::Correction(nomos_correction_orchestration::CorrectionOutcome::Refused(_))), "{first:?}");
-    assert_eq!(untouched, ambiguous, "a refused correction must not touch the file");
-}
 
-/// `parameter-count`, narrowed to alone so this test dispatches no subprocess-backed
-/// section (`GateCommand::default`'s own empty selection would otherwise also select
-/// `dependency-policy`, `lint-diagnostics` and `dependency-direction`, each of which
-/// launches a real `cargo` subprocess against a fixture tree that has no `Cargo.toml` at
-/// all).
-fn Narrowed_To_Parameter_Count() -> GateCommand
-{
-    return GateCommand { rules: RuleSelector { include: vec![RuleId::New(nomos_rules::PARAMETER_COUNT)] }, ..GateCommand::default() };
+    assert!(matches!(step, StepOutcome::Correction(nomos_correction_orchestration::CorrectionOutcome::Refused(_))), "{step:?}");
+    assert_eq!(untouched, ambiguous, "a refused correction must not touch the file");
 }
 
 /// `P40-WORKFLOW-GATE-BODY`'s own `done_when`, the passing half: a gate step whose own
@@ -436,20 +432,9 @@ fn Narrowed_To_Parameter_Count() -> GateCommand
 #[test]
 fn Test_A_Passing_Gate_Step_Completes_As_A_Step_Outcome()
 {
-    let sources = vec![nomos_rules::SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n".to_owned())];
-    let gate = GateBody::New(sources, Narrowed_To_Parameter_Count());
-    let launcher = Scripted::Of(Vec::new());
-    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Gate(gate) }];
+    let step = Only_Step(Body::Gate(Gate_Body_Over("pub fn Ok() {}\n")), Vec::new());
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
-
-    let WorkflowOutcome::Completed { completed } = outcome
-    else
-    {
-        panic!("expected Completed: {outcome:?}")
-    };
-    let first = completed.first().expect("one step ran");
-    assert!(matches!(first, StepOutcome::Gate(result) if result.disposition == GateRunOutcome::Passed), "{first:?}");
+    assert!(matches!(step, StepOutcome::Gate(ref result) if result.disposition == GateRunOutcome::Passed), "{step:?}");
 }
 
 /// `P40-WORKFLOW-GATE-BODY`'s own `done_when`, the failing half: a gate step whose own
@@ -460,19 +445,14 @@ fn Test_A_Passing_Gate_Step_Completes_As_A_Step_Outcome()
 fn Test_A_Failing_Gate_Step_Ends_The_Workflow_Rather_Than_Completing()
 {
     let over_limit = "pub fn Something(a: i32, b: i32, c: i32, d: i32, e: i32) {}\n";
-    let sources = vec![nomos_rules::SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), over_limit.to_owned())];
-    let gate = GateBody::New(sources, Narrowed_To_Parameter_Count());
-    let launcher = Scripted::Of(Vec::new());
-    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Gate(gate) }];
+    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Gate(Gate_Body_Over(over_limit)) }];
 
-    let outcome = Run(&plan, &Platform { launcher: &launcher, filesystem: &StdFileSystem, environment: &nomos_platform_std::StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &Test_Variant(), Test_Run_Id());
+    let outcome = Ran(&plan, Vec::new());
 
-    let WorkflowOutcome::Failed { completed, index, error } = outcome
-    else
-    {
-        panic!("expected Failed: {outcome:?}")
-    };
-    assert_eq!(index, 0);
-    assert!(completed.is_empty());
-    assert!(matches!(error, DispatchError::Gate(ref result) if result.disposition == GateRunOutcome::Failed), "{error:?}");
+    assert!(
+        matches!(outcome, WorkflowOutcome::Failed { ref completed, index: 0, ref error }
+            if completed.is_empty()
+                && matches!(error, DispatchError::Gate(result) if result.disposition == GateRunOutcome::Failed)),
+        "a failing gate step ends the workflow as DispatchError::Gate: {outcome:?}"
+    );
 }

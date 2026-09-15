@@ -21,6 +21,11 @@ use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
 
 use crate::{ClaimRequest, EndingRequest, Run, WorkCommand, WorkOutcome};
 
+/// The lease every claim below asks for: a minute, chosen because it is longer than any
+/// test in this file could run, so an expired lease is never the reason an assertion here
+/// failed.
+const LEASE_SECONDS: u64 = 60;
+
 /// A ledger under a directory unique to this process and this test, removed by nobody —
 /// the temporary root is cleaned by the OS, and the suites this crate keeps its shape
 /// closest to (`crates/host/nomos-cli/tests/scratch_ledger/board.rs`) make the same choice
@@ -94,13 +99,15 @@ impl nomos_platform::ProcessLauncher for Unreached
 /// Adds `item` to `ledger` through [`Run`], exactly the way `nomos work add` would, and
 /// hands `item` back so a test can claim, decline or validate against it next.
 ///
-/// Discards the [`WorkOutcome::Add`] itself: the tests reusing this fixture (`Claim_Then_
-/// Second_Claim`, `Decline_Should_End_An_Unclaimed_Item`) are proving what happens *after*
-/// the add, not the add itself -- `Test_Add_Then_Show_Should_Find_What_Add_Wrote` already
-/// proves `Add`'s own outcome and keeps checking it inline.
+/// Asserts the [`WorkOutcome::Add`] rather than reporting it: the tests reusing this fixture
+/// (`Claim_Then_Second_Claim`, `Decline_Should_End_An_Unclaimed_Item`) are proving what
+/// happens *after* the add, not the add itself, so a refused add has to stop here with its own
+/// message instead of surfacing two steps later as a puzzling failure about something else.
+/// `Test_Add_Then_Show_Should_Find_What_Add_Wrote` proves `Add`'s own outcome and keeps
+/// checking it inline.
 fn Added(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: LedgerItem) -> LedgerItem
 {
-    let _ = Run(
+    let added = Run(
         &WorkCommand::Add {
             item: Box::new(item.clone()),
             amending: Territory::Empty(),
@@ -108,6 +115,11 @@ fn Added(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: Le
         ledger,
         &Unreached,
         Territory::Empty,
+    );
+
+    assert!(
+        matches!(added, WorkOutcome::Add(Ok(()))),
+        "the fixture this test reuses starts from an item Run's add actually accepted"
     );
 
     return item;
@@ -119,7 +131,7 @@ fn Claimed(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: 
     let request = ClaimRequest {
         item: item.clone(),
         holder: holder.to_owned(),
-        lease: Duration::from_secs(60),
+        lease: Duration::from_secs(LEASE_SECONDS),
     };
 
     return Run(&WorkCommand::Claim(request), ledger, &Unreached, Territory::Empty);
@@ -215,16 +227,7 @@ fn Test_Claim_Then_Second_Claim_Should_Be_Refused_As_Held()
 fn Test_Validate_Should_Accept_A_Board_This_Run_Wrote()
 {
     let mut ledger = Scratch_Ledger("validate");
-    let item = Item("T-THREE");
-    let _ = Run(
-        &WorkCommand::Add {
-            item: Box::new(item),
-            amending: Territory::Empty(),
-        },
-        &mut ledger,
-        &Unreached,
-        Territory::Empty,
-    );
+    Added(&mut ledger, Item("T-THREE"));
 
     let validated = Run(&WorkCommand::Validate, &mut ledger, &Unreached, Territory::Empty);
     assert!(matches!(validated, WorkOutcome::Validate(Ok(_))));

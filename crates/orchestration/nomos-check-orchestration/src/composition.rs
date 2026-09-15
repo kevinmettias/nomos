@@ -184,23 +184,6 @@ fn Declare_Limits_Policy_Capability(registry: &mut Registry) -> Result<(), Regis
     return Ok(());
 }
 
-/// An eighth capability, one offer against it -- and unlike its two policy siblings above,
-/// this one is a live defect being closed rather than an assumption being replaced.
-///
-/// `Check_Declared_Tooling_Language_For_Scripts` resolves an absent
-/// `nomos.cap.scripting.policy` to *no findings at all* rather than to a prior default,
-/// because the rule never existed before the capability did and there was no earlier value to
-/// fall back to. So with nothing declaring this capability, that rule has been silent in every
-/// real run since it landed, while `standards.json` named a tooling language and five
-/// forbidden extensions that nothing enforced.
-fn Declare_Scripting_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
-{
-    registry.Declare(nomos_cap_scripting_policy::Capability_Contract())?;
-    registry.Offer(nomos_repo_policy::scripting::Provider_Offer())?;
-
-    return Ok(());
-}
-
 /// A ninth capability, one offer against it -- the last of `OD-RULES-011`'s five families to
 /// reach a real run.
 ///
@@ -221,6 +204,23 @@ fn Declare_Architecture_Capability(registry: &mut Registry) -> Result<(), Regist
 {
     registry.Declare(nomos_cap_architecture::Capability_Contract())?;
     registry.Offer(nomos_repo_policy::architecture::Provider_Offer())?;
+
+    return Ok(());
+}
+
+/// An eighth capability, one offer against it -- and unlike its two policy siblings above,
+/// this one is a live defect being closed rather than an assumption being replaced.
+///
+/// `Check_Declared_Tooling_Language_For_Scripts` resolves an absent
+/// `nomos.cap.scripting.policy` to *no findings at all* rather than to a prior default,
+/// because the rule never existed before the capability did and there was no earlier value to
+/// fall back to. So with nothing declaring this capability, that rule has been silent in every
+/// real run since it landed, while `standards.json` named a tooling language and five
+/// forbidden extensions that nothing enforced.
+fn Declare_Scripting_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_scripting_policy::Capability_Contract())?;
+    registry.Offer(nomos_repo_policy::scripting::Provider_Offer())?;
 
     return Ok(());
 }

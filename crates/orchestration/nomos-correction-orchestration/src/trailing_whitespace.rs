@@ -142,19 +142,27 @@ mod tests
     use nomos_model::Content_Digest;
     use nomos_platform_std::StdFileSystem;
 
+    /// The line number the second `a.rs` finding below names -- a fixture's own second
+    /// line, rather than an unexplained `2` in the middle of a list.
+    const SECOND_LINE: usize = 2;
+
+    /// How many `no-trailing-whitespace` findings the fixtures below put on one file, and
+    /// how many lines of [`TRAILING_WHITESPACE_FILE`] carry trailing whitespace.
+    const FLAGGED_LINE_COUNT: usize = 2;
+
     #[test]
     fn Test_Trailing_Whitespace_Claim_Should_Name_The_First_File_And_Count_Its_Findings()
     {
         let findings = vec![
             Whitespace_Finding("b.rs", 1),
             Whitespace_Finding("a.rs", 1),
-            Whitespace_Finding("a.rs", 2),
+            Whitespace_Finding("a.rs", SECOND_LINE),
         ];
 
         let claim = Trailing_Whitespace_Claim(&findings).expect("two files carry a real finding");
 
         assert_eq!(claim.path, "a.rs");
-        assert_eq!(claim.line_count, 2);
+        assert_eq!(claim.line_count, FLAGGED_LINE_COUNT);
     }
 
     #[test]
@@ -193,19 +201,24 @@ mod tests
         assert_eq!(after, "fn Clean()\r\n{\n    return;\n}\n no newline");
     }
 
+    /// The file [`Test_Candidate_For_Should_Strip_Every_Flagged_Line_In_One_Read`] writes:
+    /// two lines ending in a trailing space or tab, and two that do not.
+    const TRAILING_WHITESPACE_FILE: &str = "fn Clean()\n{\n    return; \n}\t\n";
+
     #[test]
     fn Test_Candidate_For_Should_Strip_Every_Flagged_Line_In_One_Read()
     {
         let root = std::env::temp_dir().join("nomos-correction-orchestration-trailing-whitespace-candidate");
         let _ignored = std::fs::remove_dir_all(&root);
         std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-        std::fs::write(root.join("a.rs"), "fn Clean()\n{\n    return; \n}\t\n").expect("writable");
+        std::fs::write(root.join("a.rs"), TRAILING_WHITESPACE_FILE)
+            .expect("the temporary root the two statements above created holds this file");
 
-        let claim = TrailingWhitespaceClaim { path: "a.rs", line_count: 2 };
+        let claim = TrailingWhitespaceClaim { path: "a.rs", line_count: FLAGGED_LINE_COUNT };
         let (candidate, before, after) = Candidate_For(&root, &claim, &StdFileSystem).expect("a real file with trailing whitespace");
 
         let _ignored = std::fs::remove_dir_all(&root);
-        assert_eq!(before, "fn Clean()\n{\n    return; \n}\t\n");
+        assert_eq!(before, TRAILING_WHITESPACE_FILE);
         assert_eq!(after, "fn Clean()\n{\n    return;\n}\n");
         assert!(candidate.Description().contains("2 line(s)"), "{}", candidate.Description());
     }

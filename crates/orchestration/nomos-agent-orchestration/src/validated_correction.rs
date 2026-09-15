@@ -81,63 +81,12 @@ mod tests
 
     const CONFIGURATION_SEED_BYTE: u8 = 0x91;
 
-    /// A real workspace, built the way a real consumer would, with `a.rs` present holding
-    /// `"old"` -- the same shape `nomos-corrections`' own public-API test uses.
-    fn Real_Workspace() -> Workspace
-    {
-        let variant = BuildVariant::New("x86_64-unknown-none", "test", "fixed", Vec::<String>::new());
-        let configuration = ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_SEED_BYTE; Digest128::BYTE_LENGTH]));
-        let mut workspace = Workspace::Empty(variant, configuration);
-
-        let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
-        workspace.Apply(&initial).expect("a fresh present is always accepted");
-
-        return workspace;
-    }
-
-    fn Agent_Judged() -> Evidence
-    {
-        return Evidence {
-            class: EvidenceClass::AgentJudged,
-            producer: ProviderId::New("nomos-agent-orchestration"),
-            supporting: Vec::new(),
-        };
-    }
-
-    fn Result_Proposing(before: &str, after: &str) -> WorkResult
-    {
-        let edit = Edit::New("a.rs", Some(before.to_owned()), Some(after.to_owned()));
-        let candidate = CorrectionCandidate::New("rewrite a.rs", ChangeSet::Empty().With(edit), CorrectionClass::Agent, vec![]);
-        let plan = CorrectionPlan::New(vec![candidate]).expect("one candidate is a valid plan");
-
-        return WorkResult {
-            plan: Some(plan),
-            claims: Vec::new(),
-            tests: Vec::new(),
-            requested_verification: None,
-            assumptions: Vec::new(),
-            unresolved_questions: Vec::new(),
-        };
-    }
-
-    fn Judgment_Only_Result() -> WorkResult
-    {
-        return WorkResult {
-            plan: None,
-            claims: Vec::new(),
-            tests: Vec::new(),
-            requested_verification: None,
-            assumptions: Vec::new(),
-            unresolved_questions: vec!["does this warrant a follow-up correction?".to_owned()],
-        };
-    }
-
     #[test]
     fn Test_A_Sound_Plan_Should_Commit_Against_The_Real_Workspace()
     {
         let mut workspace = Real_Workspace();
         let starting = workspace.Id();
-        let result = Result_Proposing("old", "new");
+        let result = Result_Proposing(Rewrite { before: "old", after: "new" });
 
         let outcome = Run_Validated_Correction(&result, &mut workspace, Agent_Judged()).expect("a sound plan commits cleanly");
 
@@ -165,7 +114,7 @@ mod tests
     {
         let mut workspace = Real_Workspace();
         let starting = workspace.Id();
-        let result = Result_Proposing("not what is there", "new");
+        let result = Result_Proposing(Rewrite { before: "not what is there", after: "new" });
 
         let refusal = Run_Validated_Correction(&result, &mut workspace, Agent_Judged()).expect_err("the declared prior content is wrong");
 
@@ -191,5 +140,68 @@ mod tests
 
         assert_eq!(outcome, ValidatedCorrectionOutcome::NoPlan);
         assert_eq!(workspace.Id(), starting);
+    }
+
+    fn Judgment_Only_Result() -> WorkResult
+    {
+        return WorkResult {
+            plan: None,
+            claims: Vec::new(),
+            tests: Vec::new(),
+            requested_verification: None,
+            assumptions: Vec::new(),
+            unresolved_questions: vec!["does this warrant a follow-up correction?".to_owned()],
+        };
+    }
+
+    /// A real workspace, built the way a real consumer would, with `a.rs` present holding
+    /// `"old"` -- the same shape `nomos-corrections`' own public-API test uses.
+    fn Real_Workspace() -> Workspace
+    {
+        let variant = BuildVariant::New("x86_64-unknown-none", "test", "fixed", Vec::<String>::new());
+        let configuration = ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_SEED_BYTE; Digest128::BYTE_LENGTH]));
+        let mut workspace = Workspace::Empty(variant, configuration);
+
+        let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");
+        workspace.Apply(&initial).expect("Workspace::Empty holds no entry for a.rs, so this Present inserts rather than contradicts");
+
+        return workspace;
+    }
+
+    fn Agent_Judged() -> Evidence
+    {
+        return Evidence {
+            class: EvidenceClass::AgentJudged,
+            producer: ProviderId::New("nomos-agent-orchestration"),
+            supporting: Vec::new(),
+        };
+    }
+
+    fn Result_Proposing(requested: Rewrite<'_>) -> WorkResult
+    {
+        let edit = Edit::New("a.rs", Some(requested.before.to_owned()), Some(requested.after.to_owned()));
+        let candidate = CorrectionCandidate::New("rewrite a.rs", ChangeSet::Empty().With(edit), CorrectionClass::Agent, vec![]);
+        let plan = CorrectionPlan::New(vec![candidate]).expect("one candidate is a valid plan");
+
+        return WorkResult {
+            plan: Some(plan),
+            claims: Vec::new(),
+            tests: Vec::new(),
+            requested_verification: None,
+            assumptions: Vec::new(),
+            unresolved_questions: Vec::new(),
+        };
+    }
+
+    /// The two contents one `Result_Proposing` call names: what `a.rs` holds now, and what
+    /// the plan proposes it should hold instead.
+    ///
+    /// Named fields rather than two adjacent `&str` parameters, so a caller cannot hand the
+    /// pair over in the wrong order -- `a.rs`'s prior content and its replacement are both
+    /// strings, and nothing in a positional call site tells them apart.
+    struct Rewrite<'a>
+    {
+        before: &'a str,
+        after: &'a str,
     }
 }

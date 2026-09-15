@@ -1,4 +1,5 @@
 pub enum nomos_workflow_orchestration::Body
+pub enum nomos_workflow_orchestration::CommitIntent
 pub enum nomos_workflow_orchestration::DispatchError
 pub enum nomos_workflow_orchestration::StepOutcome
 pub enum nomos_workflow_orchestration::WorkflowOutcome
@@ -7,6 +8,8 @@ pub enum variant nomos_workflow_orchestration::Body::ClaudeCode(TaskEnvelope)
 pub enum variant nomos_workflow_orchestration::Body::Correction(CorrectionBody)
 pub enum variant nomos_workflow_orchestration::Body::Gate(GateBody)
 pub enum variant nomos_workflow_orchestration::Body::Ollama(TaskEnvelope)
+pub enum variant nomos_workflow_orchestration::CommitIntent::Commit
+pub enum variant nomos_workflow_orchestration::CommitIntent::Stage
 pub enum variant nomos_workflow_orchestration::DispatchError::ClaudeCode(nomos_agent_executor_claude_code::AgentExecutionError)
 pub enum variant nomos_workflow_orchestration::DispatchError::Gate(nomos_gate_orchestration::GateRunResult)
 pub enum variant nomos_workflow_orchestration::DispatchError::Ollama(nomos_model_backend_ollama::AgentExecutionError)
@@ -19,13 +22,15 @@ pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Completed { comp
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Failed { completed: Vec<StepOutcome>, index: usize, error: DispatchError, }
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Refused { completed: Vec<StepOutcome>, index: usize, }
 pub fn nomos_workflow_orchestration::CheckBody::New(root: PathBuf, sources: Vec<SourceFile>, selected: Vec<RuleId>) -> Self
-pub fn nomos_workflow_orchestration::CorrectionBody::New(root: PathBuf, sources: Vec<SourceFile>, commit: bool) -> Self
+pub fn nomos_workflow_orchestration::CommitIntent::Commits(self) -> bool
+pub fn nomos_workflow_orchestration::CommitIntent::From_Flag(flag: bool) -> Self
+pub fn nomos_workflow_orchestration::CorrectionBody::New(root: PathBuf, sources: Vec<SourceFile>, commit: CommitIntent) -> Self
 pub fn nomos_workflow_orchestration::GateBody::New(sources: Vec<SourceFile>, command: GateCommand) -> Self
 pub fn nomos_workflow_orchestration::Run<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> WorkflowOutcome
 pub struct field nomos_workflow_orchestration::CheckBody::root: PathBuf
 pub struct field nomos_workflow_orchestration::CheckBody::selected: Vec<RuleId>
 pub struct field nomos_workflow_orchestration::CheckBody::sources: Vec<SourceFile>
-pub struct field nomos_workflow_orchestration::CorrectionBody::commit: bool
+pub struct field nomos_workflow_orchestration::CorrectionBody::commit: CommitIntent
 pub struct field nomos_workflow_orchestration::CorrectionBody::root: PathBuf
 pub struct field nomos_workflow_orchestration::CorrectionBody::sources: Vec<SourceFile>
 pub struct field nomos_workflow_orchestration::GateBody::command: GateCommand

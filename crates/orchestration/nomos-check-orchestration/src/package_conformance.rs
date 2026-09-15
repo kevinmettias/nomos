@@ -79,34 +79,55 @@ pub struct DeclaredPackage<'a>
 #[must_use]
 pub fn Check_Package_Conformance(packages: &[DeclaredPackage<'_>], registry: &Registry) -> Vec<Finding>
 {
-    let registered: BTreeSet<ProviderId> =
-        registry.Declared().flat_map(|contract| registry.Offers(&contract.id)).map(|offer| offer.provider.clone()).collect();
+    let registered = Registered_Providers(registry);
+    let declared = Declared_Providers(packages);
+    let mut findings = Unregistered_Provider_Findings(packages, &registered);
+    let unclaimed = Unclaimed_Provider_Findings(&registered, &declared, packages);
+    findings.extend(unclaimed);
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
 
+/// Every provider identity `registry` offers, under any capability.
+fn Registered_Providers(registry: &Registry) -> BTreeSet<ProviderId>
+{
+    return registry
+        .Declared()
+        .flat_map(|contract| registry.Offers(&contract.id))
+        .map(|offer| return offer.provider.clone())
+        .collect();
+}
+
+/// Every provider identity the checked manifests declare.
+fn Declared_Providers(packages: &[DeclaredPackage<'_>]) -> BTreeSet<ProviderId>
+{
+    return packages
+        .iter()
+        .flat_map(|package| package.providers.iter())
+        .map(|registration| return registration.provider.clone())
+        .collect();
+}
+
+/// One finding per declared provider the registry never registers for any capability.
+///
+/// Unscoped, unlike the other direction: a manifest claiming a provider nothing registers is
+/// wrong regardless of which namespace it claimed, so there is no prefix to filter on.
+fn Unregistered_Provider_Findings(packages: &[DeclaredPackage<'_>], registered: &BTreeSet<ProviderId>) -> Vec<Finding>
+{
     let mut findings = Vec::new();
-    let mut declared: BTreeSet<ProviderId> = BTreeSet::new();
 
     for package in packages
     {
         for registration in package.providers
         {
-            declared.insert(registration.provider.clone());
-
             if !registered.contains(&registration.provider)
             {
-                findings.push(Unregistered_Provider_Finding(package.manifest_path, &registration.provider));
+                let finding = Unregistered_Provider_Finding(package.manifest_path, &registration.provider);
+                findings.push(finding);
             }
         }
     }
 
-    for provider in &registered
-    {
-        if provider.As_Str().starts_with(LANGUAGE_PROVIDER_PREFIX) && !declared.contains(provider)
-        {
-            findings.push(Unclaimed_Provider_Finding(provider, packages));
-        }
-    }
-
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;
 }
 
@@ -125,6 +146,40 @@ fn Unregistered_Provider_Finding(manifest_path: &str, provider: &ProviderId) -> 
         ),
         locations: vec![manifest_path.to_owned()],
     };
+}
+
+/// One finding per registered language provider no checked manifest claims.
+fn Unclaimed_Provider_Findings(registered: &BTreeSet<ProviderId>, declared: &BTreeSet<ProviderId>, packages: &[DeclaredPackage<'_>]) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for provider in registered
+    {
+        if Is_Unclaimed_Language_Provider(provider, declared)
+        {
+            let finding = Unclaimed_Provider_Finding(provider, packages);
+            findings.push(finding);
+        }
+    }
+
+    return findings;
+}
+
+/// Whether `provider` is one this check owes an unclaimed finding for.
+///
+/// The two questions are asked one at a time rather than joined by `&&` at the loop, so the
+/// loop reads as one question put to each provider. The prefix half is why this direction is
+/// scoped at all -- see this module's own doc: the registry also offers `nomos.repo.*` policy
+/// providers, the review connector and the requirement-trace provider, and no
+/// `LanguagePackage` manifest was ever meant to claim any of them.
+fn Is_Unclaimed_Language_Provider(provider: &ProviderId, declared: &BTreeSet<ProviderId>) -> bool
+{
+    if !provider.As_Str().starts_with(LANGUAGE_PROVIDER_PREFIX)
+    {
+        return false;
+    }
+
+    return !declared.contains(provider);
 }
 
 /// A registered language provider that no manifest among `packages` claims.
@@ -163,44 +218,6 @@ mod tests
     };
     use nomos_package::PackageVersion;
     use std::path::Path;
-
-    fn Test_Guarantee() -> Guarantee
-    {
-        return Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Sound, IncrementalGranularity::WholeWorkspace);
-    }
-
-    fn Test_Registry(providers: &[&str]) -> Registry
-    {
-        let mut registry = Registry::New();
-        let capability = CapabilityId::New("nomos.cap.test.language");
-        registry
-            .Declare(CapabilityContract {
-                id: capability.clone(),
-                version: ContractVersion::New(1, 0),
-                summary: "a synthetic capability for this test".to_owned(),
-                ceiling: Test_Guarantee(),
-            })
-            .expect("a fresh registry's first declaration cannot conflict");
-
-        for provider in providers
-        {
-            registry
-                .Offer(ProviderOffer {
-                    provider: ProviderId::New(*provider),
-                    capability: capability.clone(),
-                    version: ContractVersion::New(1, 0),
-                    guarantee: Test_Guarantee(),
-                })
-                .expect("one offer per distinct provider cannot conflict");
-        }
-
-        return registry;
-    }
-
-    fn Registration(provider: &str) -> ProviderRegistration
-    {
-        return ProviderRegistration { provider: ProviderId::New(provider), tool_version: PackageVersion::New(0, 1, 0) };
-    }
 
     #[test]
     fn Test_Check_Package_Conformance_Should_Report_Nothing_When_Declared_And_Registered_Agree()
@@ -314,5 +331,56 @@ mod tests
             "{findings:?}"
         );
         assert!(findings.iter().all(|finding| return finding.gate == GateCategory::Advisory), "{findings:?}");
+    }
+
+    /// A registry declaring one synthetic capability and offering `providers` under it.
+    fn Test_Registry(providers: &[&str]) -> Registry
+    {
+        let capability = CapabilityId::New("nomos.cap.test.language");
+        let mut registry = Registry::New();
+        Declare_Test_Capability(&mut registry, &capability);
+        Offer_Each_Provider(&mut registry, &capability, providers);
+        return registry;
+    }
+
+    /// Declares the one capability every offer below is made under.
+    fn Declare_Test_Capability(registry: &mut Registry, capability: &CapabilityId)
+    {
+        registry
+            .Declare(CapabilityContract {
+                id: capability.clone(),
+                version: ContractVersion::New(1, 0),
+                summary: "a synthetic capability for this test".to_owned(),
+                ceiling: Test_Guarantee(),
+            })
+            .expect("a fresh registry's first declaration cannot conflict");
+    }
+
+    /// Offers `providers` the declared capability, one offer each.
+    fn Offer_Each_Provider(registry: &mut Registry, capability: &CapabilityId, providers: &[&str])
+    {
+        for provider in providers
+        {
+            registry
+                .Offer(ProviderOffer {
+                    provider: ProviderId::New(*provider),
+                    capability: capability.clone(),
+                    version: ContractVersion::New(1, 0),
+                    guarantee: Test_Guarantee(),
+                })
+                .expect("one offer per distinct provider cannot conflict");
+        }
+    }
+
+    /// The guarantee these fixtures state, at the strongest assurance a real provider could.
+    fn Test_Guarantee() -> Guarantee
+    {
+        return Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Sound, IncrementalGranularity::WholeWorkspace);
+    }
+
+    /// A manifest registration for `provider`, at a version none of these tests reads.
+    fn Registration(provider: &str) -> ProviderRegistration
+    {
+        return ProviderRegistration { provider: ProviderId::New(provider), tool_version: PackageVersion::New(0, 1, 0) };
     }
 }

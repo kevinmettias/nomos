@@ -1,6 +1,7 @@
 //! What a correction-body step names, before `nomos-correction-orchestration::Run_Correction`
 //! ever sees it.
 
+use super::CommitIntent;
 use nomos_rules::SourceFile;
 use std::path::PathBuf;
 
@@ -23,17 +24,17 @@ pub struct CorrectionBody
     pub root: PathBuf,
     /// The already-walked source this correction judges.
     pub sources: Vec<SourceFile>,
-    /// Whether to actually commit and write the corrected file, or stop after staging and
-    /// validating it -- `nomos_correction_orchestration::CorrectionCommand::commit`'s own
-    /// field, carried here under the identical name.
-    pub commit: bool,
+    /// Whether this body commits the fix it validates or stops once it has staged one --
+    /// `nomos_correction_orchestration::CorrectionCommand::commit`'s own field, carried here
+    /// under the identical name and given the pair of names that field cannot.
+    pub commit: CommitIntent,
 }
 
 impl CorrectionBody
 {
     /// Constructs a correction body.
     #[must_use]
-    pub fn New(root: PathBuf, sources: Vec<SourceFile>, commit: bool) -> Self
+    pub fn New(root: PathBuf, sources: Vec<SourceFile>, commit: CommitIntent) -> Self
     {
         return Self { root, sources, commit };
     }
@@ -47,8 +48,8 @@ mod tests
     #[test]
     fn Test_Bodies_With_Equal_Content_Should_Be_Equal()
     {
-        let one = CorrectionBody::New(PathBuf::from("."), Vec::new(), false);
-        let other = CorrectionBody::New(PathBuf::from("."), Vec::new(), false);
+        let one = CorrectionBody::New(PathBuf::from("."), Vec::new(), CommitIntent::Stage);
+        let other = CorrectionBody::New(PathBuf::from("."), Vec::new(), CommitIntent::Stage);
 
         assert_eq!(one, other);
     }
@@ -56,8 +57,8 @@ mod tests
     #[test]
     fn Test_A_Different_Commit_Flag_Should_Change_Equality()
     {
-        let staged_only = CorrectionBody::New(PathBuf::from("."), Vec::new(), false);
-        let committing = CorrectionBody::New(PathBuf::from("."), Vec::new(), true);
+        let staged_only = CorrectionBody::New(PathBuf::from("."), Vec::new(), CommitIntent::Stage);
+        let committing = CorrectionBody::New(PathBuf::from("."), Vec::new(), CommitIntent::Commit);
 
         assert_ne!(staged_only, committing);
     }

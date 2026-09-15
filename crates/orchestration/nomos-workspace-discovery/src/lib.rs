@@ -144,7 +144,8 @@ fn Read_Entry(root: &Path, path: PathBuf, recognized: &[&str], collected: &mut C
     if path.extension().and_then(std::ffi::OsStr::to_str).is_some_and(|extension| return recognized.contains(&extension))
         && let Ok(text) = std::fs::read_to_string(&path)
     {
-        collected.sources.push(Read_Source(root, &path, text));
+        let source = Read_Source(root, &path, text);
+        collected.sources.push(source);
     }
 }
 
@@ -219,7 +220,7 @@ pub fn Relative_Path(root: &Path, path: &Path) -> String
 mod tests
 {
     use super::{Read_Source, Read_Sources, Registered_Extensions, Relative_Path, ROOT_MARKER, Walked_Sources, SCRIPT_EXTENSIONS};
-    use std::path::PathBuf;
+    use std::path::{Path, PathBuf};
 
     #[test]
     fn Test_Registered_Extensions_Should_Name_Rust_And_Go()
@@ -249,13 +250,13 @@ mod tests
     fn Test_Walked_Sources_Should_Discover_A_Go_File_Alongside_A_Rust_One()
     {
         let root = Fresh_Root("nomos-workspace-discovery-go-discovery");
-        std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
-        std::fs::write(root.join("main.go"), "package main\n\nfunc One() {}\n").expect("writable");
+        Write_Fixture(root.join("a.rs"), "pub fn One() {}\n");
+        Write_Fixture(root.join("main.go"), "package main\n\nfunc One() {}\n");
 
         let sources = Walked_Sources(&root, &Registered_Extensions()).expect("a directory returns Some");
 
         let _ignored = std::fs::remove_dir_all(&root);
-        let paths: Vec<&str> = sources.iter().map(|source| return source.path.as_str()).collect();
+        let paths: Vec<String> = sources.iter().map(|source| return source.path.clone()).collect();
         assert_eq!(paths, vec!["a.rs", "main.go"], "{paths:?}");
     }
 
@@ -263,16 +264,16 @@ mod tests
     fn Test_Read_Sources_Should_Only_Recognize_The_Extensions_It_Was_Given()
     {
         let root = Fresh_Root("nomos-workspace-discovery-caller-supplied-recognition");
-        std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
-        std::fs::write(root.join("deploy.sh"), "#!/bin/bash\n").expect("writable");
+        Write_Fixture(root.join("a.rs"), "pub fn One() {}\n");
+        Write_Fixture(root.join("deploy.sh"), "#!/bin/bash\n");
 
         let rust_only = Read_Sources(&root, &["rs"]);
         let rust_and_scripts = Read_Sources(&root, &["rs", "sh"]);
 
         let _ignored = std::fs::remove_dir_all(&root);
-        assert_eq!(rust_only.iter().map(|source| return source.path.as_str()).collect::<Vec<_>>(), vec!["a.rs"]);
+        assert_eq!(rust_only.iter().map(|source| return source.path.clone()).collect::<Vec<_>>(), vec!["a.rs"]);
         assert_eq!(
-            rust_and_scripts.iter().map(|source| return source.path.as_str()).collect::<Vec<_>>(),
+            rust_and_scripts.iter().map(|source| return source.path.clone()).collect::<Vec<_>>(),
             vec!["a.rs", "deploy.sh"]
         );
     }
@@ -281,14 +282,12 @@ mod tests
     fn Test_Read_Sources_Should_Skip_Target_And_Git_Directories()
     {
         let root = Fresh_Root("nomos-workspace-discovery-skip-generated");
-        std::fs::create_dir_all(root.join("target")).expect("writable");
-        std::fs::write(root.join("target").join("built.rs"), "pub fn Built() {}\n").expect("writable");
-        std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
+        Make_Fixture_Directory(root.join("target"));
+        Write_Fixture(root.join("target/built.rs"), "pub fn Built() {}\n");
+        Write_Fixture(root.join("a.rs"), "pub fn One() {}\n");
 
-        let sources = Read_Sources(&root, &Registered_Extensions());
+        let paths = Read_Paths(&root);
 
-        let _ignored = std::fs::remove_dir_all(&root);
-        let paths: Vec<&str> = sources.iter().map(|source| return source.path.as_str()).collect();
         assert_eq!(paths, vec!["a.rs"], "{paths:?}");
     }
 
@@ -299,16 +298,13 @@ mod tests
     fn Test_Read_Sources_Should_Not_Descend_Into_A_Nested_Git_Worktree()
     {
         let root = Fresh_Root("nomos-workspace-discovery-nested-worktree");
-        std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
-        let worktree = root.join("worktree");
-        std::fs::create_dir_all(&worktree).expect("writable");
-        std::fs::write(worktree.join(".git"), "gitdir: /elsewhere/.git/worktrees/example\n").expect("writable");
-        std::fs::write(worktree.join("stale.rs"), "pub fn Stale() {}\n").expect("writable");
+        Write_Fixture(root.join("a.rs"), "pub fn One() {}\n");
+        Make_Fixture_Directory(root.join("worktree"));
+        Write_Fixture(root.join("worktree/.git"), "gitdir: /elsewhere/.git/worktrees/example\n");
+        Write_Fixture(root.join("worktree/stale.rs"), "pub fn Stale() {}\n");
 
-        let sources = Read_Sources(&root, &Registered_Extensions());
+        let paths = Read_Paths(&root);
 
-        let _ignored = std::fs::remove_dir_all(&root);
-        let paths: Vec<&str> = sources.iter().map(|source| return source.path.as_str()).collect();
         assert_eq!(paths, vec!["a.rs"], "{paths:?}");
     }
 
@@ -322,17 +318,14 @@ mod tests
     fn Test_Read_Sources_Should_Not_Descend_Into_A_Nested_Repository_Root()
     {
         let root = Fresh_Root("nomos-workspace-discovery-nested-root");
-        std::fs::write(root.join(ROOT_MARKER), "{}\n").expect("writable");
-        std::fs::write(root.join("a.rs"), "pub fn One() {}\n").expect("writable");
-        let vendored = root.join("vendored");
-        std::fs::create_dir_all(&vendored).expect("writable");
-        std::fs::write(vendored.join(ROOT_MARKER), "{}\n").expect("writable");
-        std::fs::write(vendored.join("foreign.rs"), "pub fn two() {}\n").expect("writable");
+        Write_Fixture(root.join(ROOT_MARKER), "{}\n");
+        Write_Fixture(root.join("a.rs"), "pub fn One() {}\n");
+        Make_Fixture_Directory(root.join("vendored"));
+        Write_Fixture(root.join("vendored/standards.json"), "{}\n");
+        Write_Fixture(root.join("vendored/foreign.rs"), "pub fn two() {}\n");
 
-        let sources = Read_Sources(&root, &Registered_Extensions());
+        let paths = Read_Paths(&root);
 
-        let _ignored = std::fs::remove_dir_all(&root);
-        let paths: Vec<&str> = sources.iter().map(|source| return source.path.as_str()).collect();
         assert_eq!(paths, vec!["a.rs"], "{paths:?}");
     }
 
@@ -342,15 +335,12 @@ mod tests
     fn Test_Read_Sources_Should_Descend_Into_An_Ordinary_Nested_Directory()
     {
         let root = Fresh_Root("nomos-workspace-discovery-ordinary-nesting");
-        std::fs::write(root.join(ROOT_MARKER), "{}\n").expect("writable");
-        let nested = root.join("nested");
-        std::fs::create_dir_all(&nested).expect("writable");
-        std::fs::write(nested.join("b.rs"), "pub fn Two() {}\n").expect("writable");
+        Write_Fixture(root.join(ROOT_MARKER), "{}\n");
+        Make_Fixture_Directory(root.join("nested"));
+        Write_Fixture(root.join("nested/b.rs"), "pub fn Two() {}\n");
 
-        let sources = Read_Sources(&root, &Registered_Extensions());
+        let paths = Read_Paths(&root);
 
-        let _ignored = std::fs::remove_dir_all(&root);
-        let paths: Vec<&str> = sources.iter().map(|source| return source.path.as_str()).collect();
         assert_eq!(paths, vec!["nested/b.rs"], "{paths:?}");
     }
 
@@ -373,6 +363,36 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&root);
         assert_eq!(source.path, "a.rs");
+    }
+
+    /// The paths [`Read_Sources`] reports under `root`, with the fixture root removed again.
+    ///
+    /// Every test above asserts against this list, so removing the temporary tree lives in one
+    /// place rather than once per test.
+    fn Read_Paths(root: &Path) -> Vec<String>
+    {
+        let sources = Read_Sources(root, &Registered_Extensions());
+        let _ignored = std::fs::remove_dir_all(root);
+        return sources.iter().map(|source| return source.path.clone()).collect();
+    }
+
+    /// Writes one fixture file, whose parent directory a [`Make_Fixture_Directory`] call has
+    /// already created.
+    ///
+    /// Same promise as [`Make_Fixture_Directory`], from the same [`Fresh_Root`] the caller
+    /// just made: the path lies under a temporary tree this test's own process owns.
+    fn Write_Fixture(path: PathBuf, text: &str)
+    {
+        std::fs::write(path, text).expect("the fixture root is a tempdir this test owns");
+    }
+
+    /// Creates one directory under a fixture root, so a file can then be written inside it.
+    ///
+    /// The promise holds because every caller passes `root.join(...)` for the [`Fresh_Root`] it
+    /// made moments earlier in this test's own process.
+    fn Make_Fixture_Directory(path: PathBuf)
+    {
+        std::fs::create_dir_all(path).expect("the fixture root is a tempdir this test owns");
     }
 
     fn Fresh_Root(name: &str) -> PathBuf

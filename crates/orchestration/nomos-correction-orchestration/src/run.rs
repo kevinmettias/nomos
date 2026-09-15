@@ -13,10 +13,20 @@
 //! fix, over a second real finding shape. [`Judged`] now selects both rules at once, and
 //! [`Claimed_Fix`] tries each family's own claim-recognizer against the one resulting
 //! `findings` list, in a fixed priority order, and hands whichever matches to the one
-//! `plan`/`preview`/seed/stage/validate/commit pipeline [`Run_Correction`]'s own body
-//! runs exactly once. Neither family's own module knows the other exists; both build the
-//! same [`ClaimedFix`] shape, and everything downstream of that point -- roughly two
-//! thirds of this function's own body -- is unaware which family produced it.
+//! `plan`/`preview`/seed/stage/validate/commit pipeline [`Staged`] runs exactly once.
+//! Neither family's own module knows the other exists; both build the same [`ClaimedFix`]
+//! shape, and everything downstream of that point — the whole of [`Staged`] and
+//! [`Committed`] — is unaware which family produced it.
+//!
+//! # Why the pipeline is four functions rather than one
+//!
+//! This crate's own `function-size` budget is a 24-row body, and the pipeline above is
+//! longer than that read end to end. So it is split where it already has seams:
+//! [`Run_Correction`] answers the walk's own two refusals, [`Corrected`] judges and
+//! recognizes a claim, [`Staged`] plans and drives the lifecycle, and [`Committed`] writes
+//! the corrected file back. Each step keeps the ordering the single body had, and the
+//! `Result<_, CorrectionOutcome>` [`Corrected`] and [`Staged`] return is what carries an
+//! early refusal from whichever step produced it to the one caller that reports it.
 //!
 //! ## What this proves about batching
 //!
@@ -48,7 +58,7 @@ use crate::phantom_mirror::{self, ClaimError, Finding_Reference, Phantom_Claim, 
 use crate::trailing_whitespace::{self, TrailingWhitespaceClaim};
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{ConfigurationId, EvidenceClass, Finding, ProviderId, RuleId};
-use nomos_corrections::{CorrectionCandidate, CorrectionPlan, ValidatedPlan};
+use nomos_corrections::{CommittedPlan, CorrectionCandidate, CorrectionPlan, ValidatedPlan};
 use nomos_model::{Content_Digest, Evidence, EvidenceRef};
 use nomos_platform::{Environment, FileSystem, ProcessLauncher};
 use nomos_rules::SourceFile;
@@ -86,73 +96,47 @@ pub fn Run_Correction<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environmen
     {
         return CorrectionOutcome::UnreadableRoot;
     };
+
+    return match Corrected(&sources, RunRequest { variant, launcher, filesystem, environment, command })
+    {
+        Ok(outcome) => outcome,
+        Err(outcome) => outcome,
+    };
+}
+
+/// Everything the rest of the pipeline needs once the walk is known to have carried no
+/// refusal: the platform the composition root chose, and the command naming the root.
+struct RunRequest<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
+{
+    variant: BuildVariant,
+    launcher: &'a Launcher,
+    filesystem: &'a Fs,
+    environment: &'a Env,
+    command: &'a CorrectionCommand,
+}
+
+/// The pipeline past the walk: an empty walk is refused, the tree is judged, one family's
+/// claim is recognized, and [`Staged`] carries it through the lifecycle.
+///
+/// `Ok` is the run's own outcome; `Err` is the [`CorrectionOutcome`] that ended it before
+/// [`Staged`] was reached. Both halves are the same type because a refusal here is not a
+/// distinct kind of failure, it is the answer a refusal always was.
+fn Corrected<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], request: RunRequest<'_, Launcher, Fs, Env>) -> Result<CorrectionOutcome, CorrectionOutcome>
+{
     if sources.is_empty()
     {
-        return CorrectionOutcome::NoSourceFound;
+        return Err(CorrectionOutcome::NoSourceFound);
     }
 
-    let findings = match Judged(&sources, JudgeContext { launcher, filesystem, environment, variant: variant.clone(), root: &command.root })
-    {
-        Ok(findings) => findings,
-        Err(outcome) => return outcome,
-    };
+    let findings = Judged(sources, JudgeContext { launcher: request.launcher, filesystem: request.filesystem, environment: request.environment, variant: request.variant.clone(), root: &request.command.root })?;
+    let fix = Claimed_Fix(&request.command.root, &findings, request.filesystem)?.ok_or(CorrectionOutcome::Clean)?;
 
-    let fix = match Claimed_Fix(&command.root, &findings, filesystem)
-    {
-        None => return CorrectionOutcome::Clean,
-        Some(Err(outcome)) => return outcome,
-        Some(Ok(fix)) => fix,
-    };
-
-    let plan = match CorrectionPlan::New(vec![fix.candidate])
-    {
-        Ok(plan) => plan,
-        Err(error) => return CorrectionOutcome::Refused(error.to_string()),
-    };
-    let preview = plan.Preview().Rendered().to_vec();
-
-    let workspace_configuration = ConfigurationId::From_Digest(Content_Digest(command.root.display().to_string().as_bytes()));
-    let mut workspace = Workspace::Empty(variant, workspace_configuration);
-    let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present(fix.path.clone(), fix.before.clone());
-    // A one-member, non-empty change set applied to a fresh empty workspace cannot refuse
-    // -- see `nomos-cli`'s own former `Seeded_Workspace` for the full reasoning this
-    // carries forward unchanged. An unreachable refusal here is not reported further;
-    // `Stage` below would then see no content at `fix.path` and refuse the plan as stale
-    // on its own.
-    let _ignored = workspace.Apply(&initial);
-
-    let staged = match plan.Stage(&workspace)
-    {
-        Ok(staged) => staged,
-        Err(error) => return CorrectionOutcome::Refused(error.to_string()),
-    };
-    let validated: ValidatedPlan = match staged.Validate(&workspace)
-    {
-        Ok(validated) => validated,
-        Err(error) => return CorrectionOutcome::Refused(error.to_string()),
-    };
-
-    if !command.commit
-    {
-        return CorrectionOutcome::Staged { path: fix.path, summary: fix.summary, preview };
-    }
-
-    return Committed(Committing {
-        root: &command.root,
-        path: fix.path,
-        summary: fix.summary,
-        evidence_reference: fix.evidence_reference,
-        validated,
-        workspace: &mut workspace,
-        after: &fix.after,
-        preview,
-        filesystem,
-    });
+    return Staged(fix, request);
 }
 
 /// What [`Judged`] judges a walked tree against, apart from the walk itself and the
-/// platform used to run it -- the same grouping [`nomos_check_orchestration`]'s own
-/// callers use to stay within this crate's parameter-count limit.
+/// platform used to run it -- the same grouping this crate's own callers use to stay
+/// within its parameter-count limit.
 struct JudgeContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
 {
     /// The process launcher a provider's subprocess runs through.
@@ -184,6 +168,13 @@ fn Judged<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(sources: 
         &selected,
     );
 
+    return Judged_Outcome(outcome);
+}
+
+/// The findings [`CheckOutcome::Judged`] carries, or the [`CorrectionOutcome`] every other
+/// check outcome already decides.
+fn Judged_Outcome(outcome: CheckOutcome) -> Result<Vec<Finding>, CorrectionOutcome>
+{
     return match outcome
     {
         CheckOutcome::Judged { findings, .. } => Ok(findings),
@@ -211,17 +202,15 @@ struct ClaimedFix
 }
 
 /// Tries each [`CorrectionFamily`] against `findings`, in [`CorrectionFamily::ALL`]'s own
-/// declared order -- the first to recognize a claim wins. `None` if none does, a clean
-/// run. `Some(Err(...))` if a family recognized a claim but could not safely build a
-/// candidate for it. This crate's own module doc says what that priority order is and is
-/// not.
+/// declared order -- the first to recognize a claim wins. `Ok(None)` if none does, a clean
+/// run. `Err(...)` if a family recognized a claim but could not build a candidate for it.
+/// This crate's own module doc says what that priority order is and is not.
 ///
-/// Iterating the family list and matching exhaustively over it is deliberate, and is the
-/// mechanism the whole declaration rests on: a variant added to [`CorrectionFamily`] does
-/// not compile until it is wired to a real recognizer here, so a family cannot be selected
-/// by [`Judged`] and then be recognized by nobody. An `if let` chain, which is what this
-/// was, would have accepted the new family in silence.
-fn Claimed_Fix<Fs: FileSystem>(root: &Path, findings: &[Finding], filesystem: &Fs) -> Option<Result<ClaimedFix, CorrectionOutcome>>
+/// Matching `family` exhaustively is the mechanism the whole declaration rests on: a
+/// variant added to [`CorrectionFamily`] does not compile until it is wired to a real
+/// recognizer here, so a family cannot be selected by [`Judged`] and then be recognized
+/// by nobody.
+fn Claimed_Fix<Fs: FileSystem>(root: &Path, findings: &[Finding], filesystem: &Fs) -> Result<Option<ClaimedFix>, CorrectionOutcome>
 {
     for family in CorrectionFamily::ALL
     {
@@ -231,20 +220,20 @@ fn Claimed_Fix<Fs: FileSystem>(root: &Path, findings: &[Finding], filesystem: &F
             {
                 if let Some(claim) = findings.iter().find_map(Phantom_Claim)
                 {
-                    return Some(Phantom_Mirror_Fix(root, &claim, filesystem));
+                    return Ok(Some(Phantom_Mirror_Fix(root, &claim, filesystem)?));
                 }
             }
             CorrectionFamily::TrailingWhitespace =>
             {
                 if let Some(claim) = trailing_whitespace::Trailing_Whitespace_Claim(findings)
                 {
-                    return Some(Trailing_Whitespace_Fix(root, &claim, filesystem));
+                    return Ok(Some(Trailing_Whitespace_Fix(root, &claim, filesystem)?));
                 }
             }
         }
     }
 
-    return None;
+    return Ok(None);
 }
 
 /// Builds the [`ClaimedFix`] phantom-mirror's own candidate makes for `claim`, or the
@@ -294,6 +283,65 @@ fn Trailing_Whitespace_Fix<Fs: FileSystem>(root: &Path, claim: &TrailingWhitespa
     });
 }
 
+/// Plans `fix`, seeds a workspace from the prior content it read, stages and validates the
+/// plan against that workspace, and either reports the staged plan or commits it through
+/// [`Committed`].
+///
+/// The `Result` is [`Corrected`]'s own: `Err` is the [`CorrectionOutcome`] one of the two
+/// checked steps refused with, carried back unchanged.
+fn Staged<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(fix: ClaimedFix, request: RunRequest<'_, Launcher, Fs, Env>) -> Result<CorrectionOutcome, CorrectionOutcome>
+{
+    let mut workspace = Seeded_Workspace(request.variant, request.command, &fix);
+    let plan = CorrectionPlan::New(vec![fix.candidate]).map_err(|error| return CorrectionOutcome::Refused(error.to_string()))?;
+    let preview = plan.Preview().Rendered().to_vec();
+    let validated = Staged_And_Validated(&plan, &workspace)?;
+
+    if !request.command.commit
+    {
+        return Ok(CorrectionOutcome::Staged { path: fix.path, summary: fix.summary, preview });
+    }
+
+    return Ok(Committed(Committing {
+        root: &request.command.root,
+        path: fix.path,
+        summary: fix.summary,
+        evidence_reference: fix.evidence_reference,
+        validated,
+        workspace: &mut workspace,
+        after: &fix.after,
+        preview,
+        filesystem: request.filesystem,
+    }));
+}
+
+/// The workspace `plan` is staged and validated against: a fresh empty one seeded with
+/// `fix.path`'s own prior content, which is what `Stage` compares the plan's declared
+/// prior content to.
+///
+/// A one-member, non-empty change set applied to a fresh empty workspace cannot refuse --
+/// see `nomos-cli`'s own former `Seeded_Workspace` for the full reasoning this carries
+/// forward unchanged. A refusal here is not reported further; `Stage` below would then see
+/// no content at `fix.path` and refuse the plan as stale on its own.
+fn Seeded_Workspace(variant: BuildVariant, command: &CorrectionCommand, fix: &ClaimedFix) -> Workspace
+{
+    let configuration = ConfigurationId::From_Digest(Content_Digest(command.root.display().to_string().as_bytes()));
+    let mut workspace = Workspace::Empty(variant, configuration);
+    let initial = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present(fix.path.clone(), fix.before.clone());
+    let _ignored = workspace.Apply(&initial);
+
+    return workspace;
+}
+
+/// Stages and validates `plan` against `workspace`, or the [`CorrectionOutcome`] whichever
+/// step refused with. `Stage` catches a plan whose declared prior content no longer
+/// matches `workspace`; `Validate` catches the workspace moving between the two.
+fn Staged_And_Validated(plan: &CorrectionPlan, workspace: &Workspace) -> Result<ValidatedPlan, CorrectionOutcome>
+{
+    let staged = plan.Stage(workspace).map_err(|error| return CorrectionOutcome::Refused(error.to_string()))?;
+
+    return staged.Validate(workspace).map_err(|error| return CorrectionOutcome::Refused(error.to_string()));
+}
+
 /// Everything [`Committed`] needs to commit a validated plan and write the corrected file,
 /// grouped into one value so that function stays within this crate's own parameter-count
 /// limit.
@@ -315,17 +363,10 @@ struct Committing<'a, Fs: FileSystem>
 fn Committed<Fs: FileSystem>(committing: Committing<'_, Fs>) -> CorrectionOutcome
 {
     let Committing { root, path, summary, evidence_reference, validated, workspace, after, preview, filesystem } = committing;
-
-    let evidence = Evidence {
-        class: EvidenceClass::Derived,
-        producer: ProviderId::New("nomos-correction-orchestration"),
-        supporting: vec![evidence_reference],
-    };
-
-    let committed = match validated.Commit(workspace, evidence)
+    let committed = match Committed_Plan(validated, workspace, evidence_reference)
     {
         Ok(committed) => committed,
-        Err(error) => return CorrectionOutcome::Refused(error.to_string()),
+        Err(outcome) => return outcome,
     };
 
     if let Err(error) = filesystem.Replace_Atomically(&root.join(&path), after)
@@ -342,172 +383,14 @@ fn Committed<Fs: FileSystem>(committing: Committing<'_, Fs>) -> CorrectionOutcom
     };
 }
 
-#[cfg(test)]
-mod tests
+/// Commits `validated` through the workspace's one door, submitting under the derived
+/// evidence `evidence_reference` supports, or reports the refusal.
+fn Committed_Plan(validated: ValidatedPlan, workspace: &mut Workspace, evidence_reference: EvidenceRef) -> Result<CommittedPlan, CorrectionOutcome>
 {
-    use super::*;
-    use nomos_model::Subject_Of_Path;
-    use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+    let evidence = Evidence { class: EvidenceClass::Derived, producer: ProviderId::New("nomos-correction-orchestration"), supporting: vec![evidence_reference] };
 
-    fn Fresh_Root(name: &str) -> std::path::PathBuf
-    {
-        let root = std::env::temp_dir().join(name);
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-        return root;
-    }
-
-    fn Test_Variant() -> BuildVariant
-    {
-        return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
-    }
-
-    fn Walked(root: &Path) -> Option<Vec<SourceFile>>
-    {
-        let mut sources = Vec::new();
-        for entry in std::fs::read_dir(root).ok()?.flatten()
-        {
-            let path = entry.path();
-            if path.extension().is_some_and(|extension| return extension == "rs")
-            {
-                let text = std::fs::read_to_string(&path).expect("readable");
-                let relative = path.strip_prefix(root).expect("under root").display().to_string();
-                sources.push(SourceFile::New(relative.clone(), Subject_Of_Path(&relative), text));
-            }
-        }
-        return Some(sources);
-    }
-
-    #[test]
-    fn Test_An_Unwalked_Root_Should_Be_Unreadable()
-    {
-        let command = CorrectionCommand { root: "does/not/exist".into(), commit: false };
-        let outcome = Run_Correction(None, CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
-
-        assert_eq!(outcome, CorrectionOutcome::UnreadableRoot);
-    }
-
-    #[test]
-    fn Test_An_Empty_Walk_Should_Report_No_Source_Found()
-    {
-        let command = CorrectionCommand { root: "irrelevant".into(), commit: false };
-        let outcome = Run_Correction(Some(Vec::new()), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
-
-        assert_eq!(outcome, CorrectionOutcome::NoSourceFound);
-    }
-
-    #[test]
-    fn Test_A_Tree_With_Neither_Claim_Should_Be_Clean()
-    {
-        let root = Fresh_Root("nomos-correction-orchestration-clean-tree");
-        std::fs::write(root.join("a.rs"), "pub fn Something() -> u32 { return 1; }\n").expect("writable");
-        let command = CorrectionCommand { root: root.clone(), commit: false };
-
-        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
-
-        let _ignored = std::fs::remove_dir_all(&root);
-        assert_eq!(outcome, CorrectionOutcome::Clean);
-    }
-
-    const PHANTOM_FIXTURE: &str = "/// A list of things this crate owns.\n\
-        /// Mirrored by `Test_Nonexistent_Check_That_Does_Not_Exist`.\n\
-        pub const THINGS: &[&str] = &[\"a\"];\n";
-
-    #[test]
-    fn Test_A_Dry_Run_Should_Stage_And_Validate_Without_Touching_Disk()
-    {
-        let root = Fresh_Root("nomos-correction-orchestration-dry-run");
-        let path = root.join("a.rs");
-        std::fs::write(&path, PHANTOM_FIXTURE).expect("writable");
-        let command = CorrectionCommand { root: root.clone(), commit: false };
-
-        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
-        let on_disk = std::fs::read_to_string(&path).expect("still readable");
-
-        let _ignored = std::fs::remove_dir_all(&root);
-        match outcome
-        {
-            CorrectionOutcome::Staged { path: staged_path, summary, .. } =>
-            {
-                assert_eq!(staged_path, "a.rs");
-                assert!(summary.contains("Test_Nonexistent_Check_That_Does_Not_Exist"), "{summary}");
-            }
-            other => panic!("expected Staged, got {other:?}"),
-        }
-        assert_eq!(on_disk, PHANTOM_FIXTURE, "a dry run must not touch the file");
-    }
-
-    #[test]
-    fn Test_Committing_Should_Strike_The_Claim_On_Disk_And_Leave_A_Clean_Rerun()
-    {
-        let root = Fresh_Root("nomos-correction-orchestration-commit");
-        let path = root.join("a.rs");
-        std::fs::write(&path, PHANTOM_FIXTURE).expect("writable");
-        let command = CorrectionCommand { root: root.clone(), commit: true };
-
-        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
-
-        match &outcome
-        {
-            CorrectionOutcome::Committed { path: committed_path, .. } => assert_eq!(committed_path, "a.rs"),
-            other => panic!("expected Committed, got {other:?}"),
-        }
-
-        let corrected = std::fs::read_to_string(&path).expect("still readable");
-        assert_eq!(corrected, "/// A list of things this crate owns.\npub const THINGS: &[&str] = &[\"a\"];\n", "only the phantom claim's own line should be gone");
-
-        let second = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
-        let _ignored = std::fs::remove_dir_all(&root);
-        assert_eq!(second, CorrectionOutcome::Clean, "the corrected universe now declares no mirror at all, an admitted gap rather than a second phantom");
-    }
-
-    const TRAILING_WHITESPACE_FIXTURE: &str = "pub fn Something() -> u32 \n{\n    return 1; \t\n}\n";
-
-    #[test]
-    fn Test_A_Trailing_Whitespace_Dry_Run_Should_Batch_Every_Flagged_Line_In_One_Candidate()
-    {
-        let root = Fresh_Root("nomos-correction-orchestration-whitespace-dry-run");
-        let path = root.join("a.rs");
-        std::fs::write(&path, TRAILING_WHITESPACE_FIXTURE).expect("writable");
-        let command = CorrectionCommand { root: root.clone(), commit: false };
-
-        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
-        let on_disk = std::fs::read_to_string(&path).expect("still readable");
-
-        let _ignored = std::fs::remove_dir_all(&root);
-        match outcome
-        {
-            CorrectionOutcome::Staged { path: staged_path, summary, .. } =>
-            {
-                assert_eq!(staged_path, "a.rs");
-                assert!(summary.contains("2 line(s)"), "two lines carry trailing whitespace in the fixture: {summary}");
-            }
-            other => panic!("expected Staged, got {other:?}"),
-        }
-        assert_eq!(on_disk, TRAILING_WHITESPACE_FIXTURE, "a dry run must not touch the file");
-    }
-
-    #[test]
-    fn Test_Committing_A_Trailing_Whitespace_Fix_Should_Strip_Every_Flagged_Line_At_Once()
-    {
-        let root = Fresh_Root("nomos-correction-orchestration-whitespace-commit");
-        let path = root.join("a.rs");
-        std::fs::write(&path, TRAILING_WHITESPACE_FIXTURE).expect("writable");
-        let command = CorrectionCommand { root: root.clone(), commit: true };
-
-        let outcome = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
-
-        match &outcome
-        {
-            CorrectionOutcome::Committed { path: committed_path, .. } => assert_eq!(committed_path, "a.rs"),
-            other => panic!("expected Committed, got {other:?}"),
-        }
-
-        let corrected = std::fs::read_to_string(&path).expect("still readable");
-        assert_eq!(corrected, "pub fn Something() -> u32\n{\n    return 1;\n}\n", "both flagged lines are stripped by the one committed candidate");
-
-        let second = Run_Correction(Walked(&root), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
-        let _ignored = std::fs::remove_dir_all(&root);
-        assert_eq!(second, CorrectionOutcome::Clean, "a corrected file must not still claim trailing whitespace on a rerun");
-    }
+    return validated.Commit(workspace, evidence).map_err(|error| return CorrectionOutcome::Refused(error.to_string()));
 }
+
+#[cfg(test)]
+mod tests;

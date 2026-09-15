@@ -2,10 +2,12 @@
 //! through.
 
 mod check_body;
+mod commit_intent;
 mod correction_body;
 mod gate_body;
 
 pub use check_body::CheckBody;
+pub use commit_intent::CommitIntent;
 pub use correction_body::CorrectionBody;
 pub use gate_body::GateBody;
 
