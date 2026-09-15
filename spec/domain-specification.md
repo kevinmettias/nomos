@@ -115,6 +115,7 @@ profile: domain-specification
 | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md@authored | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md | authored | 36 | 9 | sha256:855d8b317af7d76c6c6f78e25c68675633d826d2abfbbca039b201bdc462f2db |
 | docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md@authored | docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md | authored | 30 | 10 | sha256:06232c06f6b8a8ad4f60e2fe18f30876fd9ef9d49529207a7dd1531d7454963a |
 | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md@authored | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md | authored | 24 | 6 | sha256:fa382a625375899dba6f78a0139b79d0900c97d646f7ff4f8ba2344e12484d34 |
+| docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md@authored | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md | authored | 31 | 6 | sha256:a6afa613786d72b5021c8eb78a1667996d917658d7c478db9396d478dac8f4ce |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -1098,6 +1099,12 @@ profile: domain-specification
 | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#12 | authored | 2 | Decision |
 | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#17 | authored | 2 | What Would Make Continuity Provable |
 | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#21 | authored | 2 | What This Does Not Decide |
+| docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#1 | authored | 1 | A comparison attributes a difference to the repository only when the rest of the judgment was compatible |
+| docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#16 | authored | 2 | Decision |
+| docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#24 | authored | 2 | What This Does Not Decide |
+| docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#30 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -29448,6 +29455,287 @@ in the meaning of a baseline entry.
 
 **When the run history gets built.** `OD-GATE-022-A` owns that deferral. This record adds a
 second consumer to the case for one, and does not schedule it.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#1
+
+*revision: authored · kind: heading · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible · hash: sha256:b008ae8d7667b9916c570533b2caf4c25d6553fa3ef469f805f0c95837cb1509*
+
+# A comparison attributes a difference to the repository only when the rest of the judgment was compatible
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#2
+
+*revision: authored · kind: heading · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#3
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Question · hash: sha256:a128e8d05abd8ad18630a09a56f32fd60aa69ded7205380db103ad0c52a08e2e*
+
+`Compare_Gate_Runs` reports which findings were added, removed, and moved between buckets
+across two runs. A caller reads that as a fact about the repository, because that is what a
+gate is for. It is only that when every judgment input other than the source was compatible
+between the two sides, and today nothing checks it, nothing records it, and nothing in the
+result says it was not checked.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#4
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Question · hash: sha256:c1e427a7b5353ada6766089c1a0a7611638ddc7d2ce42bdd294ea2db5edfe9c3*
+
+So `before ≠ after` currently means only *these two `GateRunResult` values differ*, and it is
+read as *the repository changed*. Where the actual cause was a different gate policy, a
+different rule selection, or a rule that could look on one side and not the other, the report
+is not merely incomplete. It is a false causal story, told confidently, by the tool whose
+whole purpose is to stop exactly that.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#5
+
+*revision: authored · kind: heading · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#6
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What Was Measured · hash: sha256:e04b4711cd128f1306c76ed33d0d1c23af9410681b33edf4632a32a9da083651*
+
+Checked 2026-09-14 against the tree, and the measurement narrowed this record's scope rather
+than confirming a plan. What matters here is not the list of things that *could* vary in
+principle; it is which of them can vary **between the two sides of a comparison today**.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#7
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What Was Measured · hash: sha256:5a6a866c903f40a8bd1640257cb7c6f3763925c34bbba6e8964997eeb29f5310*
+
+**Two can vary through this workspace's own hosts.**
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#8
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What Was Measured · hash: sha256:e7ca4ce656bb870a50c0b6f620fbdcaf8f26dbbbb4281b52797e4bdaf9e479f6*
+
+*The effective gate policy.* `Run_Gate` resolves `nomos-gate.json` from `command.root`, and
+`compare` judges two roots. `nomos-cli`'s own usage text promises that every flag other than
+`--against` narrows both sides alike, and that promise does not reach the policy, because a
+policy file is not a flag — it is a property of each tree. Comparing two checkouts compares
+two policies, and a finding that moved because a suppression was added reports as movement.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#9
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What Was Measured · hash: sha256:a150235284946020a449a3668a034843e94438e55cff71a465a71c021bbd559c*
+
+*Which capabilities could be materialized at each root.* Measured on `P106`'s probe tree: a
+root with no `deny.toml` leaves `dependency-policy` unmaterialized, which changes the findings
+and the claim together. Two roots differing only in that produce different findings for a
+reason that is not the code, and a rule that could not look on one side is not a rule that
+found nothing there.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#10
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What Was Measured · hash: sha256:c4b0ed653b5652c0869efa22bd4810473d5789dbc4d65bde2fa10986a7a25605*
+
+**Two more can vary through the published library surface, though not through these hosts.**
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#11
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What Was Measured · hash: sha256:940b988119bff5d7bf5efb3a8251c625156204f64f753d8ab9a2a3f616908765*
+
+*The whole `GateCommand`.* `nomos_api::Handle_Gate_Compare` takes two independent ones, and
+its own module documentation names "one tree under two policies" as an intended case. A
+narrower `rules.include` on one side means that side never looked, and the findings it
+therefore lacks are reported as `added` on the other — the clearest available form of the
+failure this record is about.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#12
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What Was Measured · hash: sha256:94b18dfe72e090f54e9d2b02d2fe424380e54a9f9ae5b24cba5c5088864272f9*
+
+*`BuildVariant` and the run's moment.* Both are `GateEnvironment` fields a caller supplies per
+`Run_Gate` call, and `Compare_Gate_Runs` is public and takes two finished results. This
+workspace's hosts pass one variant and one clock reading to both sides; the crate publishes no
+constraint saying a caller must, so the guarantee is a habit of two call sites rather than a
+property of the type.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#13
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What Was Measured · hash: sha256:3f79b36aa629dc103c808730ed2256a2dd4bb89f14d7675f812828fbe940273d*
+
+**One cannot vary yet, and that is why this record is smaller than the question looks.** The
+nomos build itself, and the provider binaries it runs, are identical across both sides by
+construction: `OD-GATE-022-A` decided a compare caller re-derives both runs inside one process,
+builds no run-history store, and serializes no `GateRunResult`. A different tool version on one
+side becomes reachable when a run outlives the process that made it, which that record defers.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#14
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What Was Measured · hash: sha256:66d5c961e18b5be95c9835d740c9d653e027cec2ea12f8cfc51d7fdfdb4f98c4*
+
+**`GateRunResult` records none of it.** It carries `run`, `root`, `check_outcome`, `findings`,
+`disposition`, `unmatched_policy` and `no_verdict`. Not the command, not the variant, not the
+resolved policy, not the moment judged against, and not which rules were able to look.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#15
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What Was Measured · hash: sha256:1f1287513b032cff92461f9879f7182361c38219d1e042ebbc24a4722baf48cc*
+
+**The vocabulary for all of this is already published, and it already says the hard part.**
+`nomos-contracts`' domain table — the one `OD-DETERMINISM-002` made a derived universe — puts
+"Analysis kernel — facts, checks, findings" at `StateTemporal`, `CrossPlatform`,
+`BitIdentical`. Two things follow that were not obvious before reading it. `StateTemporal`
+makes **time a declared judgment input**, and it genuinely is one, because a temporary waiver
+stops applying against the run's own moment. And `CrossPlatform` is strictly weaker than
+`CrossBinary` in that scale, so the table has always said that findings are **not** claimed to
+reproduce across builds of this tool — which is precisely the claim a comparison across two
+tool versions would have to rely on.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#16
+
+*revision: authored · kind: heading · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#17
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Decision · hash: sha256:0a0c2daa23ba26c08873a2803afa27cc3671ed07d271c35ed5b85e1ae1248b14*
+
+**A comparison attributes a difference to repository state only when the non-source judgment
+inputs of its two sides were compatible, or their differences are explicitly represented in
+what it reports.** Never by the absence of evidence that they differed.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#18
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Decision · hash: sha256:5c5c0c96ba95b5248bb95ecfeeefd6adfaeaf2a69d5e5ba91bd4478cdf0350ad*
+
+This is the invariant, and the rest of this record exists to make it checkable rather than
+aspirational.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#19
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Decision · hash: sha256:45a3bbe9fda0315fff27b6c540defdf1ce144df26f89c0206d77ed012a2a528b*
+
+**A run carries the identity of what judged it, and that identity is sized to what can differ
+today.** Enough to answer the comparability question for the four varying inputs measured
+above, and no more:
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#20
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Decision · hash: sha256:8ff8148a0f9852e9dc4442ea6ec6617f030b4a7070abd00c36db9c405a269644*
+
+- **the source it judged**, so that "the repository changed" is a fact the comparison can
+  establish rather than the residue left when nothing else explains the difference;
+- **the effective policy it judged under**, after `nomos-gate.json` was resolved over the
+  command, because that is the input most likely to differ and least likely to be noticed;
+- **the selection it judged with** — which rules were allowed to count, and which paths were in
+  scope — because a side that did not look has no findings to contribute and must not read as a
+  side that looked and found nothing;
+- **the instrument** — the `BuildVariant` and the registered rule set with its contract record
+  versions — because two different instruments measuring the same tree is the case the domain
+  table already declines to claim reproducibility for;
+- **the moment**, because `StateTemporal` says so and waivers expire.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#21
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Decision · hash: sha256:494ee22e00590818bbb6fe438ac15ae65015975236160a951905cd172b15ded5*
+
+**Which rules could actually look is not a sixth component, because it is already derivable.**
+A rule whose provider could not run reports a finding carrying `MissingCapability` or
+`ProviderUnavailable`, and `Claim_Of` already reads exactly those. A comparison holds both
+sides' findings, so it can establish that difference from what it already has. Adding a field
+for it would be a second encoding of a fact the findings carry, which is the defect class
+`OD-GATE-011` names.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#22
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Decision · hash: sha256:581ce180f1e764debb0c38636f9ed941ccf98a86087920d05c4f9da18da5b8a4*
+
+**A comparison reports its own comparability, in three states.** Compatible, where every
+non-source input agreed and a difference is therefore a difference in the repository.
+Compatible-with-stated-differences, where something else did differ and the report names what,
+so a reader attributes the difference themselves rather than being told a story. And
+incomparable, where the two sides cannot be meaningfully diffed at all.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#23
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Decision · hash: sha256:9e7108d79302fe32aa98ec566986896a2b57b950194e413f36af2c528ef4d3fa*
+
+**Unknown provenance is incomparable, not compatible.** A run that carries no identity, or one
+whose identity a comparison cannot interpret, resolves to incomparable rather than being
+assumed to match. This is the same discipline `Applicability` holds one layer down, where
+`MissingCapability` is kept apart from a clean result so that "nothing could look" never reads
+as "nothing was wrong", and the same one `OD-GATE-030` holds for a baseline entry whose
+continuity cannot be shown. A comparability claim made from the absence of evidence is the
+failure this record exists to prevent, and it would be perverse to introduce it in the
+mechanism meant to stop it.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#24
+
+*revision: authored · kind: heading · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What This Does Not Decide · hash: sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569*
+
+## What This Does Not Decide
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#25
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What This Does Not Decide · hash: sha256:662f3a89b4a6dc478ec0100fb7d0facf328f85ee8b4f7888fb6b795025fa1167*
+
+**It does not schedule a run history.** `OD-GATE-022-A` owns that deferral and keeps it. This
+record adds a third consumer to the case for one — after `OD-GATE-030`'s second — and does not
+schedule it. Everything decided here is answerable inside one process, which is where a
+comparison lives today.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#26
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What This Does Not Decide · hash: sha256:64d0e3e12f82dc5d1ec6c242d9e2c5f736d7fd7dd4b34625af7e6a328a34f680*
+
+**It does not add provenance for what cannot differ.** A provider binary's version, the host
+operating system, and the identity of the nomos build itself are all constant across a
+same-process comparison. Recording them now would be shape ahead of a body: a field nothing can
+make differ is a field no test can prove is read. They belong to the same increment as the run
+history, and their absence is stated here so that a later reader knows it was a decision.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#27
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What This Does Not Decide · hash: sha256:bd4c478ea54a1dd03f2c42e4b85f7b4442bbf3f1894763c2ef2735cbf93d4223*
+
+**It does not reopen `OD-GATE-030`.** A baseline entry's snapshot identity, and the occurrence
+continuity that would make `PersistentDebt` and `Reintroduced` separable, are that record's
+question. The identity decided here is of a *run*, not of a baseline entry, and the two are not
+the same thing even though both are provenance.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#28
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What This Does Not Decide · hash: sha256:45f0d0bc2e8feec38f7495dc9327a7be0795aa8a4cc668fac8c27bce4c3797a0*
+
+**It does not decide what a caller should do about an incomparable pair.** Whether a
+continuous-enforcement loop treats stated differences as tolerable, or refuses to proceed, is a
+policy question of the kind `nomos-gate.json` already carries, and it belongs with the others
+rather than in the meaning of a comparison.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#29
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / What This Does Not Decide · hash: sha256:2b8b217fd25adfbbfc399c4c5d573f6ebd98afbbd89fd37836c874dfe160450d*
+
+**It builds no mechanism.** The follow-up work is a value on `GateRunResult` filled by
+`Run_Gate`, a comparability verdict on `Compare_Gate_Runs`' own result, and the rendering of
+both at the two surfaces — named precisely enough here for an item's territory, and not
+written here.
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#30
+
+*revision: authored · kind: heading · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#31
+
+*revision: authored · kind: prose · heading: A comparison attributes a difference to the repository only when the rest of the judgment was compatible / Status · hash: sha256:4cb2ffce0a5b28b4cd109b23aba8035c3eb47affc6a4fa2774bca11fdbd13bde*
+
+Accepted. A comparison may attribute a difference to the repository only when the non-source
+judgment inputs were compatible or their differences are represented, and never from the
+absence of evidence. A run carries the identity of what judged it — source, effective policy,
+selection, instrument, moment — sized to the four inputs that can differ between two sides
+today rather than to the eventual shape. Which rules could look stays derivable from the
+findings rather than duplicated. A comparison reports compatible, compatible with stated
+differences, or incomparable, and unknown provenance is incomparable. `OD-GATE-022-A`'s
+run-history deferral and `OD-GATE-030`'s baseline continuity question are both untouched. No
+mechanism is built here.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

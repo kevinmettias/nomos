@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5c7d1d06d826c3eaf5e6a87dc213dbd97a373586407d1ee4931017da9b90e134",
-  "inputs_digest": "sha256:fd64d39241a311e1b4341040dbd1548073c3368a2c0cebf9fce18c658995fb36",
+  "content_digest": "sha256:c1790e98d427af8e10104f1ba57714c3f8587152dbe31995a9c274f5275b5b7a",
+  "inputs_digest": "sha256:dc0523386ea5411ba543a33971f0bd3b7d3ac2dd08abee71df02eafb4f2477be",
   "sections": [
     [
       "Documents",
-      246
+      247
     ],
     [
       "Sections",
-      2044
+      2050
     ],
     [
       "Source blocks",
-      7166
+      7197
     ]
   ],
   "inputs": [
@@ -544,6 +544,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md@authored",
       "hash": "sha256:fa382a625375899dba6f78a0139b79d0900c97d646f7ff4f8ba2344e12484d34"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md@authored",
+      "hash": "sha256:a6afa613786d72b5021c8eb78a1667996d917658d7c478db9396d478dac8f4ce"
     },
     {
       "content": "documents",
@@ -5434,6 +5439,36 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#21",
       "hash": "sha256:8b39de5554763895604704d33a63cc53bd9c07794ca8df067f596d70a8e27fa6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#1",
+      "hash": "sha256:b06eb8f8e2f6b9214ca899b2931d3386437b8093b9fb873bbbca2cd55f9139ae"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#2",
+      "hash": "sha256:5173071abdf39947c58a229efaa837f366e98c9b2f4ef1ff658df966a1fad3a1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#5",
+      "hash": "sha256:113da8d7d5e682c03e47ca50759271e0b67aafceeb6328cd274e759c93b36677"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#16",
+      "hash": "sha256:20cb1b138614f49dc603d5e2fc87d9a354df8c9299343a69f24c991752d57a55"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#24",
+      "hash": "sha256:c8446518bf54f9689accbf3d236b34bf2c7ee4443a7d3634a92f8b70b41c8d61"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#30",
+      "hash": "sha256:536718132a7248a485f87f472967e67ff8d77e59c376877d2c7e96d0746f695f"
     },
     {
       "content": "headings",
@@ -26019,6 +26054,161 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#24",
       "hash": "sha256:6ae70b13a91734d67aad785c2f71b0239b57c31aec56ba4a817efb2471714a75"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#1",
+      "hash": "sha256:b008ae8d7667b9916c570533b2caf4c25d6553fa3ef469f805f0c95837cb1509"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#3",
+      "hash": "sha256:a128e8d05abd8ad18630a09a56f32fd60aa69ded7205380db103ad0c52a08e2e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#4",
+      "hash": "sha256:c1e427a7b5353ada6766089c1a0a7611638ddc7d2ce42bdd294ea2db5edfe9c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#6",
+      "hash": "sha256:e04b4711cd128f1306c76ed33d0d1c23af9410681b33edf4632a32a9da083651"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#7",
+      "hash": "sha256:5a6a866c903f40a8bd1640257cb7c6f3763925c34bbba6e8964997eeb29f5310"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#8",
+      "hash": "sha256:e7ca4ce656bb870a50c0b6f620fbdcaf8f26dbbbb4281b52797e4bdaf9e479f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#9",
+      "hash": "sha256:a150235284946020a449a3668a034843e94438e55cff71a465a71c021bbd559c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#10",
+      "hash": "sha256:c4b0ed653b5652c0869efa22bd4810473d5789dbc4d65bde2fa10986a7a25605"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#11",
+      "hash": "sha256:940b988119bff5d7bf5efb3a8251c625156204f64f753d8ab9a2a3f616908765"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#12",
+      "hash": "sha256:94b18dfe72e090f54e9d2b02d2fe424380e54a9f9ae5b24cba5c5088864272f9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#13",
+      "hash": "sha256:3f79b36aa629dc103c808730ed2256a2dd4bb89f14d7675f812828fbe940273d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#14",
+      "hash": "sha256:66d5c961e18b5be95c9835d740c9d653e027cec2ea12f8cfc51d7fdfdb4f98c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#15",
+      "hash": "sha256:1f1287513b032cff92461f9879f7182361c38219d1e042ebbc24a4722baf48cc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#16",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#17",
+      "hash": "sha256:0a0c2daa23ba26c08873a2803afa27cc3671ed07d271c35ed5b85e1ae1248b14"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#18",
+      "hash": "sha256:5c5c0c96ba95b5248bb95ecfeeefd6adfaeaf2a69d5e5ba91bd4478cdf0350ad"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#19",
+      "hash": "sha256:45a3bbe9fda0315fff27b6c540defdf1ce144df26f89c0206d77ed012a2a528b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#20",
+      "hash": "sha256:8ff8148a0f9852e9dc4442ea6ec6617f030b4a7070abd00c36db9c405a269644"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#21",
+      "hash": "sha256:494ee22e00590818bbb6fe438ac15ae65015975236160a951905cd172b15ded5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#22",
+      "hash": "sha256:581ce180f1e764debb0c38636f9ed941ccf98a86087920d05c4f9da18da5b8a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#23",
+      "hash": "sha256:9e7108d79302fe32aa98ec566986896a2b57b950194e413f36af2c528ef4d3fa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#24",
+      "hash": "sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#25",
+      "hash": "sha256:662f3a89b4a6dc478ec0100fb7d0facf328f85ee8b4f7888fb6b795025fa1167"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#26",
+      "hash": "sha256:64d0e3e12f82dc5d1ec6c242d9e2c5f736d7fd7dd4b34625af7e6a328a34f680"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#27",
+      "hash": "sha256:bd4c478ea54a1dd03f2c42e4b85f7b4442bbf3f1894763c2ef2735cbf93d4223"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#28",
+      "hash": "sha256:45f0d0bc2e8feec38f7495dc9327a7be0795aa8a4cc668fac8c27bce4c3797a0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#29",
+      "hash": "sha256:2b8b217fd25adfbbfc399c4c5d573f6ebd98afbbd89fd37836c874dfe160450d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#30",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#31",
+      "hash": "sha256:4cb2ffce0a5b28b4cd109b23aba8035c3eb47affc6a4fa2774bca11fdbd13bde"
     },
     {
       "content": "blocks",

@@ -546,6 +546,7 @@ graph LR
     od_determinism_002 -->|"relates-to"| od_completeness_001
     od_determinism_002 -->|"relates-to"| od_gate_001
     od_determinism_002 -->|"relates-to"| od_gate_009
+    od_determinism_002 -->|"relates-to"| od_gate_031["OD-GATE-031"]
     od_executor_001 -->|"affected_by"| od_platform_003
     od_executor_001 -->|"relates-to"| arc_connector_001
     od_executor_001 -->|"relates-to"| od_connector_001
@@ -763,6 +764,7 @@ graph LR
     od_gate_020 -->|"relates-to"| od_rules_008
     od_gate_020 -->|"relates-to"| od_rules_009
     od_gate_020 -->|"relates-to"| od_rules_010
+    od_gate_022 -->|"affected_by"| od_gate_031
     od_gate_022 -->|"relates-to"| od_analysis_009
     od_gate_022 -->|"relates-to"| od_gate_030
     od_gate_022 -->|"relates-to"| od_host_002
@@ -797,6 +799,10 @@ graph LR
     od_gate_030 -->|"affects"| od_gate_015
     od_gate_030 -->|"relates-to"| od_gate_022
     od_gate_030 -->|"relates-to"| od_gate_028
+    od_gate_030 -->|"relates-to"| od_gate_031
+    od_gate_031 -->|"affects"| od_gate_022
+    od_gate_031 -->|"relates-to"| od_determinism_002
+    od_gate_031 -->|"relates-to"| od_gate_030
     od_host_001 -->|"relates-to"| od_agent_004
     od_host_001 -->|"relates-to"| od_host_002
     od_host_001 -->|"relates-to"| od_host_003
@@ -1840,6 +1846,7 @@ graph LR
     od_gate_028
     od_gate_029
     od_gate_030
+    od_gate_031
     od_host_001
     od_host_002
     od_host_003

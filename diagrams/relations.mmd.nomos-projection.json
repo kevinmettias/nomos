@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:6b8e34696b047f0a660303b009967172c6434e35347375b34de226e7b886e743",
-  "inputs_digest": "sha256:52af65fa85669871dddf2b92b4ceaacb8cb0b26df66b003f4ff4c75d02d06ac2",
+  "content_digest": "sha256:938f88703f059cf75738214d00f8a20065c2046ef3f1ff5d63613f7dec57623e",
+  "inputs_digest": "sha256:7fe7a2118a2ad57c7bfe3fc7bb47859d7ed4eb16714da5d6db930f7fe94d4aac",
   "sections": [
     [
       "Relations",
-      1738
+      1744
     ],
     [
       "Decisions",
-      238
+      239
     ]
   ],
   "inputs": [
@@ -2733,6 +2733,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-DETERMINISM-002 relates-to OD-GATE-031",
+      "hash": "sha256:cd99e719b2b68da1573812643c84ee4859b7a328b6501caf78beddc9558a7d68"
+    },
+    {
+      "content": "relations",
       "identity": "OD-EXECUTOR-001 affected_by OD-PLATFORM-003",
       "hash": "sha256:70c3299fbdceb1f27a3df750095a7bba47dc6ce31fc83fa3da225a611d390b6b"
     },
@@ -3818,6 +3823,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-022 affected_by OD-GATE-031",
+      "hash": "sha256:c2d46c3cc098bc59cdfd28282ca9f5a94fec3fd1fc1d3a4229de1c43404d7c9b"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-022 relates-to OD-ANALYSIS-009",
       "hash": "sha256:5e7abaddcb9854e386dce2d7aa3b06e5d4ba1a2bb88d142fbc7c639627e19923"
     },
@@ -3985,6 +3995,26 @@
       "content": "relations",
       "identity": "OD-GATE-030 relates-to OD-GATE-028",
       "hash": "sha256:46b494f2f24360171e05d96d630788b3a6c0fa88ecad66e0a9a537596d7a8b44"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-030 relates-to OD-GATE-031",
+      "hash": "sha256:f40f47b14c0c88c1d60798fd3bd047dafd991ab0a88cbd0093170d8698186c64"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-031 affects OD-GATE-022",
+      "hash": "sha256:2215fc524d1ca61e2ddcdea43240f0c3ce6afd777bff06edc46b6fd3339f7fb6"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-031 relates-to OD-DETERMINISM-002",
+      "hash": "sha256:4fd5ad99347aee62b0f95271d08c52d94ff38972821e3cb19d7591287d5f1a3f"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-031 relates-to OD-GATE-030",
+      "hash": "sha256:d74221221b0a76bdce33e0366d0af383e73361b866695a7aa8ad383ac0f7d9a7"
     },
     {
       "content": "relations",
@@ -9190,6 +9220,11 @@
       "content": "nodes",
       "identity": "OD-GATE-030",
       "hash": "sha256:62ebe1558dcd4fbf8c2685dffbfe3f1b2d6485cf609a4e5634fff11eefe2bcf5"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-GATE-031",
+      "hash": "sha256:fd8772b031f3d7d64ed3a835b79242eec7da56f4be2bc5c5d1df6eab1602ee2a"
     },
     {
       "content": "nodes",
