@@ -9,6 +9,7 @@ pub enum nomos_api::CheckOutcomeResponse
 pub enum nomos_api::CheckResponse
 pub enum nomos_api::ClaimResponse
 pub enum nomos_api::CommitResponse
+pub enum nomos_api::ComparabilityResponse
 pub enum nomos_api::CorrectionResponse
 pub enum nomos_api::DeclineResponse
 pub enum nomos_api::DispatchErrorResponse
@@ -18,6 +19,7 @@ pub enum nomos_api::FinishResponse
 pub enum nomos_api::FreshnessResponse
 pub enum nomos_api::GateExplainResponse
 pub enum nomos_api::GatePlanResponse
+pub enum nomos_api::JudgmentDifferenceResponse
 pub enum nomos_api::ListResponse
 pub enum nomos_api::MarkdownResponse
 pub enum nomos_api::NoVerdictResponse
@@ -83,6 +85,9 @@ pub enum variant nomos_api::CommitResponse::Refused { cause: String, }
 pub enum variant nomos_api::CommitResponse::StoreRefused { preview: CommittedPreviewResponse, cause: String, }
 pub enum variant nomos_api::CommitResponse::Unreadable { path: String, cause: String, }
 pub enum variant nomos_api::CommitResponse::Unwritable { preview: CommittedPreviewResponse, report: CommitReportResponse, path: String, cause: String, }
+pub enum variant nomos_api::ComparabilityResponse::Compatible
+pub enum variant nomos_api::ComparabilityResponse::CompatibleWith { differences: Vec<JudgmentDifferenceResponse>, }
+pub enum variant nomos_api::ComparabilityResponse::Incomparable { unknown: Vec<RunId>, }
 pub enum variant nomos_api::CorrectionResponse::Clean
 pub enum variant nomos_api::CorrectionResponse::Committed { path: String, summary: String, preview: String, base: String, after: String, }
 pub enum variant nomos_api::CorrectionResponse::ContradictoryRegistry { reason: String, }
@@ -114,6 +119,9 @@ pub enum variant nomos_api::GateExplainResponse::Found { finding: Box<Finding>, 
 pub enum variant nomos_api::GateExplainResponse::NotFound
 pub enum variant nomos_api::GatePlanResponse::Contradictory { cause: String, }
 pub enum variant nomos_api::GatePlanResponse::Planned { rules: Vec<RuleOfferResponse>, }
+pub enum variant nomos_api::JudgmentDifferenceResponse::Instrument
+pub enum variant nomos_api::JudgmentDifferenceResponse::Policy
+pub enum variant nomos_api::JudgmentDifferenceResponse::Selection
 pub enum variant nomos_api::ListResponse::Listed { document: LedgerDocument, #[serde(with = "nomos_platform::timestamp_serde")] now: Timestamp, }
 pub enum variant nomos_api::ListResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::MarkdownResponse::Refused { cause: String, }
@@ -290,6 +298,7 @@ pub struct field nomos_api::GateCompareResponse::added: Vec<Finding>
 pub struct field nomos_api::GateCompareResponse::baseline: RunId
 pub struct field nomos_api::GateCompareResponse::candidate: RunId
 pub struct field nomos_api::GateCompareResponse::changed: Vec<BucketChange>
+pub struct field nomos_api::GateCompareResponse::comparability: Option<ComparabilityResponse>
 pub struct field nomos_api::GateCompareResponse::removed: Vec<Finding>
 pub struct field nomos_api::GateCompareResponse::uncomparable: Option<RunId>
 pub struct field nomos_api::GateFindings::baselined_findings: Vec<Finding>

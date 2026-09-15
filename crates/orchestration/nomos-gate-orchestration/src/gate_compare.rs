@@ -118,7 +118,134 @@ pub struct GateCompareResult
     pub removed: Vec<Finding>,
     /// Present in both, but which bucket it fell into changed.
     pub changed: Vec<DispositionChange>,
+    /// What these two runs' own provenance says about attributing the difference above.
+    ///
+    /// Read this before the three lists. `OD-GATE-031`: a difference may be attributed to
+    /// repository state only when the rest of the judgment was compatible, or its differences
+    /// are represented — and they are represented here.
+    pub comparability: Comparability,
 }
+/// Whether a difference between two runs may be attributed to the repository.
+///
+/// `OD-GATE-031`'s invariant, made into a value: a comparison attributes a difference to
+/// repository state only when the non-source judgment inputs of its two sides were
+/// compatible, or their differences are explicitly represented — never by the absence of
+/// evidence that they differed.
+///
+/// # Why this qualifies rather than refuses
+///
+/// A refusal would throw away the findings diff, which is real information the caller asked
+/// for, in order to report something *about* it. `P106` settled the same question one verb
+/// over, where a run that reaches no verdict still prints every finding it found: refusing
+/// the verdict is not refusing the answer. So a comparison always reports what moved, and
+/// says alongside it what a reader is entitled to conclude from that.
+///
+/// # Why the moment is not one of these
+///
+/// Two runs essentially always have different moments, so classifying that as a discrepancy
+/// would put a line on every comparison ever made, which is how a reader learns to skip the
+/// line that matters. And deciding whether a moment difference *could* have changed anything
+/// means knowing whether a waiver expired between the two, which needs the policy itself
+/// rather than the digest [`crate::GateRunProvenance`] carries of it.
+///
+/// What this must not do is imply the moments were equal, and it does not: a caller holds
+/// both runs, each carries its own moment, and `Compatible` is a statement about the policy,
+/// the selection and the instrument rather than about time.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Comparability
+{
+    /// Both sides recorded what judged them, and the policy, the selection and the instrument
+    /// all agree. A difference is a difference in the repository, and may be read as one.
+    Compatible,
+    /// Both sides recorded what judged them, and something other than the source differed
+    /// too. The differences are named so that a reader attributes the change themselves.
+    ///
+    /// Never empty: an empty list is [`Self::Compatible`], and constructing one here would
+    /// make "there were stated differences" true of a comparison that had none.
+    CompatibleWith(Vec<JudgmentDifference>),
+    /// At least one side does not say what judged it, so nothing can be attributed either
+    /// way. Names the runs that did not.
+    ///
+    /// `OD-GATE-031` decided this rather than assuming a match, for the reason `Applicability`
+    /// keeps `MissingCapability` apart from a clean result: nothing could look must never read
+    /// as nothing was wrong. A comparability claim made from missing evidence is precisely the
+    /// failure the whole mechanism exists to prevent.
+    Incomparable(Vec<RunId>),
+}
+
+/// One judgment input, other than the source, that differed between two runs.
+///
+/// The source is deliberately absent. A difference there is the licensed cause — the thing a
+/// comparison exists to attribute a change to — rather than a caveat on attributing one.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
+pub enum JudgmentDifference
+{
+    /// The two sides judged under different policies.
+    ///
+    /// The likeliest of the three by far, and the least visible: `Run_Gate` resolves
+    /// `nomos-gate.json` from `command.root`, and a comparison judges two roots, so comparing
+    /// two checkouts compares two policies whether or not anybody meant to.
+    Policy,
+    /// The two sides were allowed to look at different things — different rules counted, or
+    /// different paths were in scope. A side told to look at less has fewer findings for that
+    /// reason, and its absent findings otherwise read as the other side's additions.
+    Selection,
+    /// The two sides were judged by different instruments: a different build variant, or a
+    /// different rule set. The domain table in `nomos-contracts` declares the analysis kernel
+    /// `CrossPlatform`, which is strictly weaker than `CrossBinary`, so reproducibility across
+    /// two instruments is not claimed by this workspace and must not be assumed by a caller.
+    Instrument,
+}
+
+/// What the two runs' provenance says about attributing a difference between them.
+///
+/// Reads both sides' [`crate::GateRunProvenance`] and nothing else — in particular not the
+/// findings, which is what keeps this a statement about the instruments rather than a second
+/// opinion about the diff.
+#[must_use]
+fn Comparability_Of(baseline: &GateRunResult, candidate: &GateRunResult) -> Comparability
+{
+    let unknown: Vec<RunId> = [baseline, candidate]
+        .iter()
+        .filter(|result| return result.provenance.is_none())
+        .map(|result| return result.run)
+        .collect();
+    if !unknown.is_empty()
+    {
+        return Comparability::Incomparable(unknown);
+    }
+
+    let (Some(before), Some(after)) = (baseline.provenance.as_ref(), candidate.provenance.as_ref())
+    else
+    {
+        // Unreachable past the filter above, and answered rather than asserted away: an
+        // unreachable claim about exactly this shape is what aborted `nomos gate run` before
+        // `P106` measured it.
+        return Comparability::Incomparable(vec![baseline.run, candidate.run]);
+    };
+
+    let mut differences = Vec::new();
+    if before.policy != after.policy
+    {
+        differences.push(JudgmentDifference::Policy);
+    }
+    if before.selection != after.selection
+    {
+        differences.push(JudgmentDifference::Selection);
+    }
+    if before.instrument != after.instrument
+    {
+        differences.push(JudgmentDifference::Instrument);
+    }
+
+    if differences.is_empty()
+    {
+        return Comparability::Compatible;
+    }
+
+    return Comparability::CompatibleWith(differences);
+}
+
 
 /// Compares `baseline` and `candidate`'s own reduced findings, identifying one occurrence
 /// with another across the two runs by [`FindingOccurrenceId`].
@@ -199,7 +326,14 @@ pub fn Compare_Gate_Runs(
         return (&left.rule, &left.subject_name, &left.locations).cmp(&(&right.rule, &right.subject_name, &right.locations));
     });
 
-    return Ok(GateCompareResult { baseline: baseline.run, candidate: candidate.run, added, removed, changed });
+    return Ok(GateCompareResult {
+        baseline: baseline.run,
+        candidate: candidate.run,
+        added,
+        removed,
+        changed,
+        comparability: Comparability_Of(baseline, candidate),
+    });
 }
 
 /// What a finding sorts by in a rendered comparison.
@@ -288,6 +422,7 @@ mod tests
 {
     use super::*;
     use crate::{GateCommand, GateEnvironment, Run_Gate};
+    use crate::RuleSelector;
     use nomos_contracts::{Digest128, GateCategory};
     use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
     use nomos_rules::SourceFile;
@@ -314,8 +449,6 @@ mod tests
     /// test asked about.
     fn Run_Over(sources: Vec<SourceFile>, run: RunId) -> GateRunResult
     {
-        use crate::RuleSelector;
-
         let command = GateCommand {
             root: std::path::PathBuf::from("."),
             rules: RuleSelector { include: vec![RuleId::New(nomos_rules::COMPLETENESS_MIRROR)] },
@@ -323,6 +456,127 @@ mod tests
         };
 
         return Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, run);
+    }
+
+
+    /// A scratch root carrying `policy` as its own `nomos-gate.json`, so two runs can be
+    /// judged under two different declared policies over identical source -- which is what
+    /// makes the policy case reachable through this workspace's own hosts at all.
+    fn Root_Declaring(name: &str, policy: &str) -> std::path::PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-gate-comparability-{name}-{}", std::process::id()));
+        std::fs::create_dir_all(&root).expect("creatable");
+        std::fs::write(root.join("nomos-gate.json"), policy).expect("writable");
+
+        return root;
+    }
+
+    /// [`Run_Over`] with a root and a rule selection of its own.
+    fn Run_Over_Root(root: &std::path::Path, rules: RuleSelector, run: RunId) -> GateRunResult
+    {
+        let command = GateCommand { root: root.to_path_buf(), rules, ..GateCommand::default() };
+
+        return Run_Gate(
+            Some(vec![Source("a.rs", "pub const THINGS: &[&str] = &[\"a\"];\n")]),
+            GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) },
+            &command,
+            run,
+        );
+    }
+
+    /// A run that found nothing, for the two tests below that are about provenance alone.
+    fn Empty_Findings() -> GateFindings
+    {
+        return GateFindings {
+            blocking_findings: Vec::new(),
+            calibrated_findings: Vec::new(),
+            suppressed_findings: Vec::new(),
+            baselined_findings: Vec::new(),
+            suppression_reasons: Default::default(),
+        };
+    }
+
+    /// The licensed case: two runs differing only in their source are compatible, so the
+    /// difference between them is a difference in the repository and may be read as one.
+    ///
+    /// This is the assertion that keeps the other three honest. A comparability that reported
+    /// a caveat on every comparison would satisfy `OD-GATE-031`'s letter and destroy the verb.
+    #[test]
+    fn Test_Two_Runs_Differing_Only_In_Source_Should_Be_Compatible()
+    {
+        let clean = vec![Source("a.rs", "pub const THINGS: &[&str] = &[\"a\"];\n")];
+        let dirty = vec![Source("a.rs", "/// Mirrored by `Test_Comparability_Ghost`.\npub const THINGS: &[&str] = &[\"a\"];\n")];
+
+        let compared = Compare_Gate_Runs(&Run_Over(clean, Run_Id_Of(1)), &Run_Over(dirty, Run_Id_Of(2))).expect("both sides were judged");
+
+        assert!(!compared.added.is_empty(), "the fixture is supposed to differ");
+        assert_eq!(compared.comparability, Comparability::Compatible);
+    }
+
+    /// One source, two declared policies: the comparison says so rather than reporting the
+    /// movement as the repository's.
+    ///
+    /// The reachable instance of the whole defect, and the reason it is reachable is not
+    /// exotic: `Run_Gate` resolves `nomos-gate.json` from `command.root`, and `compare`
+    /// judges two roots, so comparing two checkouts compares two policies.
+    #[test]
+    fn Test_Two_Policies_Over_One_Source_Should_State_The_Policy_Difference()
+    {
+        let lenient = Root_Declaring("lenient", r#"{ "coverage": "unset" }"#);
+        let strict = Root_Declaring("strict", r#"{ "coverage": "require-completeness" }"#);
+
+        let compared = Compare_Gate_Runs(
+            &Run_Over_Root(&lenient, RuleSelector::default(), Run_Id_Of(3)),
+            &Run_Over_Root(&strict, RuleSelector::default(), Run_Id_Of(4)),
+        )
+        .expect("both sides were judged");
+
+        assert_eq!(compared.comparability, Comparability::CompatibleWith(vec![JudgmentDifference::Policy]));
+    }
+
+    /// One source and one policy, two selections: a side told to look at less is named as
+    /// such, rather than having its absent findings read as the other side's additions.
+    #[test]
+    fn Test_Two_Selections_Over_One_Source_Should_State_The_Selection_Difference()
+    {
+        let root = Root_Declaring("selection", "{}");
+        let narrowed = RuleSelector { include: vec![RuleId::New(nomos_rules::COMPLETENESS_MIRROR)] };
+
+        let compared = Compare_Gate_Runs(
+            &Run_Over_Root(&root, RuleSelector::default(), Run_Id_Of(5)),
+            &Run_Over_Root(&root, narrowed, Run_Id_Of(6)),
+        )
+        .expect("both sides were judged");
+
+        assert_eq!(compared.comparability, Comparability::CompatibleWith(vec![JudgmentDifference::Selection]));
+    }
+
+    /// A side that does not say what judged it makes the pair incomparable, and is named.
+    ///
+    /// `OD-GATE-031` decided this rather than assuming a match. A comparability claim made
+    /// from missing evidence is the failure the whole mechanism exists to prevent, so the
+    /// mechanism must not make one itself.
+    #[test]
+    fn Test_A_Run_That_Cannot_Say_What_Judged_It_Should_Make_The_Pair_Incomparable()
+    {
+        let known = Result_With(Run_Id_Of(7), Empty_Findings());
+        let unknown = GateRunResult { provenance: None, ..Result_With(Run_Id_Of(8), Empty_Findings()) };
+
+        let compared = Compare_Gate_Runs(&known, &unknown).expect("both sides were judged");
+
+        assert_eq!(compared.comparability, Comparability::Incomparable(vec![Run_Id_Of(8)]));
+    }
+
+    /// Neither side saying is both sides named, not one.
+    #[test]
+    fn Test_Two_Runs_That_Cannot_Say_Should_Both_Be_Named()
+    {
+        let one = GateRunResult { provenance: None, ..Result_With(Run_Id_Of(9), Empty_Findings()) };
+        let other = GateRunResult { provenance: None, ..Result_With(Run_Id_Of(10), Empty_Findings()) };
+
+        let compared = Compare_Gate_Runs(&one, &other).expect("both sides were judged");
+
+        assert_eq!(compared.comparability, Comparability::Incomparable(vec![Run_Id_Of(9), Run_Id_Of(10)]));
     }
 
     /// Two runs over a tree that gained one real blocking finding between them: the

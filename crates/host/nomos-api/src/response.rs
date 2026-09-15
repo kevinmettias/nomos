@@ -19,6 +19,7 @@
 
 mod baseline_debt_response;
 mod check_outcome_response;
+mod comparability_response;
 mod disposition;
 mod gate_compare_response;
 mod gate_explain_response;
@@ -33,6 +34,7 @@ mod suppression_response;
 
 pub use baseline_debt_response::BaselineDebtResponse;
 pub use check_outcome_response::CheckOutcomeResponse;
+pub use comparability_response::{ComparabilityResponse, JudgmentDifferenceResponse};
 pub use disposition::Disposition;
 pub use gate_compare_response::{BucketChange, FindingBucket, GateCompareResponse, Handle_Gate_Compare};
 pub use gate_explain_response::{GateExplainResponse, Handle_Gate_Explain};

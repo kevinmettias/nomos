@@ -30,6 +30,8 @@ use nomos_gate_orchestration::{
 use nomos_platform::Clock;
 use serde::Serialize;
 
+use super::ComparabilityResponse;
+
 /// Judges `baseline.root` and `candidate.root` exactly as `nomos gate run` would, and hands
 /// back what changed between them as a JSON-serializable [`GateCompareResponse`].
 ///
@@ -268,6 +270,20 @@ pub struct GateCompareResponse
     /// which is what a consumer needs to act; the pairing is one `nomos gate compare` away and
     /// is already typed for a Rust caller.
     pub uncomparable: Option<RunId>,
+    /// What a reader may conclude from the three lists above.
+    ///
+    /// `OD-GATE-031`: a difference may be attributed to repository state only when the
+    /// non-source judgment inputs of the two runs were compatible, or their differences are
+    /// explicitly represented. Without this field a wire consumer reading `added` and
+    /// `removed` has no way to tell a repository that changed from two runs judged under
+    /// different policies, and a continuous enforcement loop is precisely the consumer that
+    /// acts on that reading with no person in between.
+    ///
+    /// `None` only when `uncomparable` is `Some`: no comparison ran, so there is nothing to
+    /// conclude from one. That is a different answer from
+    /// [`ComparabilityResponse::Incomparable`], which is a comparison that did run and could
+    /// not attribute what it found.
+    pub comparability: Option<ComparabilityResponse>,
 }
 
 impl GateCompareResponse
@@ -279,6 +295,7 @@ impl GateCompareResponse
             candidate: result.candidate,
             added: result.added,
             removed: result.removed,
+            comparability: Some(ComparabilityResponse::From(&result.comparability)),
             changed: result.changed.into_iter().map(BucketChange::From).collect(),
             uncomparable: None,
         };
@@ -297,6 +314,10 @@ impl GateCompareResponse
             removed: Vec::new(),
             changed: Vec::new(),
             uncomparable: Some(uncomparable),
+            // No comparison ran, so there is nothing to say a reader may conclude from one.
+            // `None` here is that absence, and is not the same answer as `Incomparable`, which
+            // is a comparison that happened and could not attribute what it found.
+            comparability: None,
         };
     }
 }
@@ -306,6 +327,78 @@ mod tests
 {
     use super::*;
     use std::path::PathBuf;
+
+    /// One field of a serialized value, by path.
+    ///
+    /// `serde_json::Value`'s own `Index` panics on a missing key, which is the failure
+    /// `clippy::indexing_slicing` is denied in this workspace to prevent.
+    fn At(value: &serde_json::Value, path: &[&str]) -> serde_json::Value
+    {
+        const NOTHING: serde_json::Value = serde_json::Value::Null;
+
+        let mut current = value;
+        for step in path
+        {
+            current = current.get(step).unwrap_or(&NOTHING);
+        }
+
+        return current.clone();
+    }
+
+    /// A one-crate tree with real source and a declared `nomos-gate.json`, so a run over it
+    /// reaches `Judged` and resolves a policy of its own.
+    fn Probe_Tree(name: &str, policy: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-api-comparability-{name}-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(root.join("src")).expect("creates a probe tree");
+        let manifest = "[package]\nname = \"probe\"\nversion = \"0.1.0\"\nedition = \"2021\"\n";
+        std::fs::write(root.join("Cargo.toml"), manifest).expect("writable");
+        std::fs::write(root.join("src").join("lib.rs"), "pub fn thing() -> i32 { return 1; }\n").expect("writable");
+        std::fs::write(root.join("nomos-gate.json"), policy).expect("writable");
+
+        return root;
+    }
+
+    /// The defect, end to end through the handler a transport calls: two trees under two
+    /// declared policies come back saying so, rather than reporting the movement as the
+    /// repository's.
+    ///
+    /// Driven through `Handle_Gate_Compare` over real roots because that is what makes this
+    /// reachable at all -- a run resolves its policy from its own root, and this handler takes
+    /// two whole commands, so nobody has to do anything unusual to hit it.
+    #[test]
+    fn Test_Two_Policies_Should_Reach_A_Headless_Caller_As_A_Stated_Difference()
+    {
+        let lenient = Probe_Tree("lenient", r#"{ "coverage": "unset" }"#);
+        let strict = Probe_Tree("strict", r#"{ "coverage": "require-completeness" }"#);
+
+        let response = Handle_Gate_Compare(&Command_At(&lenient.to_string_lossy()), &Command_At(&strict.to_string_lossy()));
+
+        let _ignored = std::fs::remove_dir_all(&lenient);
+        let _ignored = std::fs::remove_dir_all(&strict);
+        let rendered = serde_json::to_value(&response).expect("always serializes");
+        assert_eq!(At(&rendered, &["comparability", "comparability"]), "compatible_with", "{rendered}");
+        assert_eq!(At(&rendered, &["comparability", "differences"]).to_string(), "[\"policy\"]", "{rendered}");
+    }
+
+    /// Two runs over one tree under one policy are compatible, so a caller may read the
+    /// difference between them as the repository's.
+    ///
+    /// The assertion that keeps the one above honest: a comparability that caveated every
+    /// comparison would satisfy the record's letter and destroy the verb.
+    #[test]
+    fn Test_One_Tree_Under_One_Policy_Should_Reach_A_Headless_Caller_As_Compatible()
+    {
+        let root = Probe_Tree("compatible", "{}");
+
+        let response = Handle_Gate_Compare(&Command_At(&root.to_string_lossy()), &Command_At(&root.to_string_lossy()));
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        let rendered = serde_json::to_value(&response).expect("always serializes");
+        assert_eq!(At(&rendered, &["comparability", "comparability"]), "compatible", "{rendered}");
+        assert!(At(&rendered, &["comparability"]).get("differences").is_none(), "{rendered}");
+    }
 
     /// [`GateCommand`] over `root`, every selector at its select-everything default.
     fn Command_At(root: &str) -> GateCommand

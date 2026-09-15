@@ -11,9 +11,10 @@
 use super::ExitCode;
 use nomos_capability::RegistryError;
 use nomos_check_orchestration::CheckOutcome;
-use nomos_contracts::Finding;
+use nomos_contracts::{Finding, RunId};
 use nomos_gate_orchestration::{
-    Admissibility, BaselineDebt, Explanation, GateExplainResult, GateOutcome, GateRunOutcome, GateRunResult, NoVerdict, RuleCalibration, Suppression,
+    Admissibility, BaselineDebt, Comparability, Explanation, GateExplainResult, GateOutcome, GateRunOutcome, GateRunResult, JudgmentDifference,
+    NoVerdict, RuleCalibration, Suppression,
 };
 use std::io::Write;
 use std::path::Path;
@@ -225,6 +226,8 @@ pub(super) fn Render_Compare(
         candidate.root.display()
     );
 
+    Report_Comparability(&compared.comparability, stdout);
+
     for finding in &compared.added
     {
         let _ = writeln!(stdout, "+ {}", finding.Describe());
@@ -284,6 +287,81 @@ fn Unjudged(result: &GateRunResult, flag: &str, stderr: &mut impl Write) -> Opti
         // Guarded by the matches! above, which returns before reaching here.
         CheckOutcome::Judged { .. } => ExitCode::Ok,
     });
+}
+
+/// Says what a reader may conclude from the difference below, before they read it.
+///
+/// Before rather than after, because a reader who takes the diff at face value has already
+/// been misled by the time they reach a footnote. `OD-GATE-031` requires that a difference be
+/// attributed to the repository only when the rest of the judgment was compatible or its
+/// differences are stated, and a statement nobody reaches in time is not one.
+///
+/// Silent when the two runs were judged alike, which is the ordinary case and the one with
+/// nothing to say. A caveat printed on every comparison is how a reader learns to skip the
+/// line that matters.
+fn Report_Comparability(comparability: &Comparability, stdout: &mut impl Write)
+{
+    match comparability
+    {
+        Comparability::Compatible => (),
+        Comparability::CompatibleWith(differences) => Report_Stated_Differences(differences, stdout),
+        Comparability::Incomparable(runs) => Report_Incomparable(runs, stdout),
+    }
+}
+
+/// The two runs both said what judged them, and something other than the source differed.
+///
+/// The difference is named and the conclusion is left to the reader, which is the whole
+/// point: this is not a warning that something is wrong -- comparing two policies on purpose
+/// is a real thing to want -- it is the fact that makes the diff below readable.
+fn Report_Stated_Differences(differences: &[JudgmentDifference], stdout: &mut impl Write)
+{
+    let _ = writeln!(stdout, "\nthese two runs were not judged alike:");
+    for difference in differences
+    {
+        let _ = writeln!(stdout, "  {}", Difference_Sentence(*difference));
+    }
+
+    let _ = writeln!(
+        stdout,
+        "A finding that moved may have moved for one of those reasons rather than because the \
+         code did."
+    );
+}
+
+/// At least one side does not say what judged it.
+///
+/// Reported, and the diff still printed. `P106` settled the same question one verb over:
+/// refusing the verdict is not refusing the answer, and throwing away what the caller asked
+/// for in order to say something about it is the worse trade.
+fn Report_Incomparable(runs: &[RunId], stdout: &mut impl Write)
+{
+    let _ = writeln!(stdout, "\nthese two runs cannot be told apart from their instruments:");
+    for run in runs
+    {
+        let _ = writeln!(stdout, "  run {run} does not record what judged it");
+    }
+
+    let _ = writeln!(
+        stdout,
+        "Nothing below can be attributed to the repository rather than to a difference in \
+         policy, selection or build, because there is no evidence either way -- and the \
+         absence of evidence is not evidence that they matched."
+    );
+}
+
+/// One judgment difference, as a reader would need it said.
+///
+/// Written out rather than derived from `Debug`, for the reason every other rendering in this
+/// file is: a variant name is an identifier and this is a sentence to a person.
+const fn Difference_Sentence(difference: JudgmentDifference) -> &'static str
+{
+    return match difference
+    {
+        JudgmentDifference::Policy => "they judged under different declared policies",
+        JudgmentDifference::Selection => "they were allowed to look at different things",
+        JudgmentDifference::Instrument => "they were judged by different builds, or by different rule sets",
+    };
 }
 
 /// Reduces a real run's disposition to the [`ExitCode`] it reports.
@@ -562,7 +640,7 @@ mod tests
     use super::*;
     use nomos_check_orchestration::{Claim, Examined};
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
-    use nomos_gate_orchestration::{Fresh_Run_Id, GateFindings};
+    use nomos_gate_orchestration::{Fresh_Run_Id, GateFindings, GateRunProvenance};
     use nomos_platform::Timestamp;
     use std::path::PathBuf;
 
@@ -591,6 +669,101 @@ mod tests
         assert_eq!(code, ExitCode::Vacuous, "{rendered_stderr}");
         assert!(rendered_stderr.contains("nothing was judged"), "{rendered_stderr}");
         assert!(String::from_utf8_lossy(&stdout).is_empty());
+    }
+
+    /// A judged run that found nothing, carrying `provenance` -- the only thing the
+    /// comparability rendering reads, so every test below differs in that alone.
+    fn Judged_With(fill: u8, provenance: Option<GateRunProvenance>) -> GateRunResult
+    {
+        return GateRunResult {
+            provenance,
+            no_verdict: None,
+            unmatched_policy: Vec::new(),
+            run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(i64::from(fill))),
+            root: PathBuf::from("."),
+            check_outcome: CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: 1, facts: 1 }, claim: Claim::Complete },
+            findings: Empty_Findings(),
+            disposition: GateRunOutcome::Passed,
+        };
+    }
+
+    /// A provenance whose policy is `policy` and whose every other component is shared, so
+    /// that two of them differ in the policy and in nothing else.
+    fn Provenance_With(policy: u8) -> GateRunProvenance
+    {
+        let shared = Digest128::From_Bytes([1; Digest128::BYTE_LENGTH]);
+
+        return GateRunProvenance {
+            source: shared,
+            policy: Digest128::From_Bytes([policy; Digest128::BYTE_LENGTH]),
+            selection: shared,
+            instrument: shared,
+            at: Timestamp::From_Unix_Seconds(0),
+        };
+    }
+
+    /// Two runs judged alike say nothing about it.
+    ///
+    /// A caveat printed on every comparison is how a reader learns to skip the line that
+    /// matters, which would cost more than the caveat saves.
+    #[test]
+    fn Test_Render_Compare_Should_Say_Nothing_When_The_Two_Runs_Were_Judged_Alike()
+    {
+        let baseline = Judged_With(1, Some(Provenance_With(7)));
+        let candidate = Judged_With(2, Some(Provenance_With(7)));
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Compare(&baseline, &candidate, &mut stdout, &mut stderr);
+
+        let rendered = String::from_utf8_lossy(&stdout).into_owned();
+        assert_eq!(code, ExitCode::Ok, "{rendered}");
+        assert!(!rendered.contains("not judged alike"), "{rendered}");
+        assert!(!rendered.contains("does not record what judged it"), "{rendered}");
+    }
+
+    /// A policy difference is stated, and stated *before* the diff.
+    ///
+    /// Order is the assertion, not decoration: a reader who takes the diff at face value has
+    /// already been misled by the time they reach a footnote, so a correct sentence in the
+    /// wrong place does not satisfy `OD-GATE-031`.
+    #[test]
+    fn Test_Render_Compare_Should_State_A_Policy_Difference_Before_The_Difference()
+    {
+        let baseline = Judged_With(1, Some(Provenance_With(7)));
+        let candidate = Judged_With(2, Some(Provenance_With(8)));
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Compare(&baseline, &candidate, &mut stdout, &mut stderr);
+
+        let rendered = String::from_utf8_lossy(&stdout).into_owned();
+        assert_eq!(code, ExitCode::Ok, "a comparability is not a verdict: {rendered}");
+        assert!(rendered.contains("different declared policies"), "{rendered}");
+        let stated = rendered.find("not judged alike").unwrap_or(usize::MAX);
+        let counted = rendered.find(" added, ").unwrap_or(0);
+        assert!(stated < counted, "the caveat has to arrive first: {rendered}");
+    }
+
+    /// A run that does not say what judged it is named, and the diff is still printed.
+    ///
+    /// `P106` settled the same trade one verb over: refusing the verdict is not refusing the
+    /// answer, and throwing away what the caller asked for in order to say something about it
+    /// is the worse of the two.
+    #[test]
+    fn Test_Render_Compare_Should_Name_A_Run_That_Cannot_Say_What_Judged_It()
+    {
+        let baseline = Judged_With(1, Some(Provenance_With(7)));
+        let candidate = Judged_With(2, None);
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Compare(&baseline, &candidate, &mut stdout, &mut stderr);
+
+        let rendered = String::from_utf8_lossy(&stdout).into_owned();
+        assert_eq!(code, ExitCode::Ok, "{rendered}");
+        assert!(rendered.contains("does not record what judged it"), "{rendered}");
+        assert!(rendered.contains("0 added, 0 removed"), "the difference is still reported: {rendered}");
     }
 
     /// A judged run whose disposition is `Indeterminate` says there is no verdict, says which

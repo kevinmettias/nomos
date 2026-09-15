@@ -220,7 +220,9 @@ pub use admissibility::{Admissibility, Admits, Admits_Under, DependedCrate, Depe
 pub use composition::Registered;
 pub use finding_query::{Explain_Gate, Explanation, FindingQuery, GateExplainResult};
 pub use gate_command::GateCommand;
-pub use gate_compare::{CollidingOccurrences, Compare_Gate_Runs, DispositionChange, FindingDisposition, GateCompareResult};
+pub use gate_compare::{
+    CollidingOccurrences, Comparability, Compare_Gate_Runs, DispositionChange, FindingDisposition, GateCompareResult, JudgmentDifference,
+};
 pub use gate_environment::{GateEnvironment, Run_Gate};
 pub use gate_phase::{Evaluated_Phases, GatePhase, PhaseApproval, PhaseDisposition, PhaseOutcome, PhaseThreshold, Phased_Disposition};
 pub use gate_plan::{Disposition_Of_Findings, GateFindings, GateOutcome, GatePlan, GateRunOutcome, GateRunProvenance, GateRunResult, NoVerdict};

@@ -2,11 +2,13 @@ pub const fn nomos_gate_orchestration::Admissibility::Is_A_Judgment(self) -> boo
 pub const fn nomos_gate_orchestration::SuppressionStatus::Suppresses(self) -> bool
 pub const nomos_gate_orchestration::ARCHITECTURE_DECLARATION_FILE: &str
 pub enum nomos_gate_orchestration::Admissibility
+pub enum nomos_gate_orchestration::Comparability
 pub enum nomos_gate_orchestration::CoveragePolicy
 pub enum nomos_gate_orchestration::Explanation
 pub enum nomos_gate_orchestration::FindingDisposition
 pub enum nomos_gate_orchestration::GateOutcome
 pub enum nomos_gate_orchestration::GateRunOutcome
+pub enum nomos_gate_orchestration::JudgmentDifference
 pub enum nomos_gate_orchestration::NoVerdict
 pub enum nomos_gate_orchestration::PhaseDisposition
 pub enum nomos_gate_orchestration::PhaseThreshold
@@ -16,6 +18,9 @@ pub enum nomos_gate_orchestration::SuppressionStatus
 pub enum variant nomos_gate_orchestration::Admissibility::NotJudged
 pub enum variant nomos_gate_orchestration::Admissibility::Permitted
 pub enum variant nomos_gate_orchestration::Admissibility::Refused
+pub enum variant nomos_gate_orchestration::Comparability::Compatible
+pub enum variant nomos_gate_orchestration::Comparability::CompatibleWith(Vec<JudgmentDifference>)
+pub enum variant nomos_gate_orchestration::Comparability::Incomparable(Vec<RunId>)
 pub enum variant nomos_gate_orchestration::CoveragePolicy::RequireCompleteness
 pub enum variant nomos_gate_orchestration::CoveragePolicy::Unset
 pub enum variant nomos_gate_orchestration::Explanation::Found { finding: Box<Finding>, would_block: bool, calibrated_by: Option<RuleCalibration>, suppressed_by: Option<Suppression>, baselined_by: Option<BaselineDebt>, contract: Option<(String, u32)>, }
@@ -29,6 +34,9 @@ pub enum variant nomos_gate_orchestration::GateOutcome::Planned(GatePlan)
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Failed
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Indeterminate
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Passed
+pub enum variant nomos_gate_orchestration::JudgmentDifference::Instrument
+pub enum variant nomos_gate_orchestration::JudgmentDifference::Policy
+pub enum variant nomos_gate_orchestration::JudgmentDifference::Selection
 pub enum variant nomos_gate_orchestration::NoVerdict::IncompleteCoverage
 pub enum variant nomos_gate_orchestration::NoVerdict::MalformedPolicy(String)
 pub enum variant nomos_gate_orchestration::NoVerdict::UnreadablePolicy(String)
@@ -103,6 +111,7 @@ pub struct field nomos_gate_orchestration::GateCompareResult::added: Vec<Finding
 pub struct field nomos_gate_orchestration::GateCompareResult::baseline: RunId
 pub struct field nomos_gate_orchestration::GateCompareResult::candidate: RunId
 pub struct field nomos_gate_orchestration::GateCompareResult::changed: Vec<DispositionChange>
+pub struct field nomos_gate_orchestration::GateCompareResult::comparability: Comparability
 pub struct field nomos_gate_orchestration::GateCompareResult::removed: Vec<Finding>
 pub struct field nomos_gate_orchestration::GateEnvironment::environment: &'a Env
 pub struct field nomos_gate_orchestration::GateEnvironment::filesystem: &'a Fs
