@@ -77780,6 +77780,91 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P109-D-THE-BASELINE-REPORT-NAMES-A-DIGEST-WHERE-ITS-AUTHOR-WROTE-A-PATH",
+      "title": "the baseline report names a digest where its author wrote a path",
+      "why": "P109-C made the exceeded-baseline report the headline output of the whole adoption feature, and it names the scope by its SubjectId. Measured against the built binary on 2026-09-14, an author who wrote path src/lib.rs in their nomos-gate.json is told: no-single-line-function-bodies at e3f85dfb5b619eeb400b77bf17e6437c: 5 occurrence(s) now, 1 accepted at adoption, 4 more than accepted. The digest is the right identity and the wrong thing to print. A subject is deliberately content-addressed and a declared entry is deliberately authored by path, and the mapping between them runs one way only, so the reader of the message cannot get back to what they wrote. This is display material and OD-ANALYSIS-011 already separates that from identity: the finding's own subject_name is not the answer either, because for a file-subjected rule it is a file and line, which names one occurrence rather than the scope the count is about.",
+      "done_when": "The exceeded-baseline report names the scope the way its author wrote it. The declared path is carried as display material from DeclaredDebt through BaselineDebt to BaselinePopulation rather than re-derived, since the mapping from path to subject is one-way and re-deriving it is not possible. It is documented as display material and not identity, so no later reader matches on it: BaselineDebt::Is_Applicable_To keeps comparing rule and subject alone, and a test asserts that two entries differing only in the display path still match the same findings. The headless twin carries it too. Both surface snapshots are re-blessed. The predicate is the three packages' lib and bin targets.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/baseline_debt/baseline_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-api/src/response/baseline_debt_response.rs",
+          "crates/host/nomos-api/src/response/baseline_population_response.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P109-E-TWO-DECLARED-POLICY-REFUSALS-REACH-THEIR-AUTHOR-WITH-COLLAPSED-WHITESPACE",
+      "title": "two declared-policy refusals reach their author with collapsed whitespace",
+      "why": "Both refusal sentences a nomos-gate.json author can actually hit reach them with a run of interior spaces where a line break was folded. Measured against the built binary: the baseline entry for rule 'no-single-line-function-bodies' on 'src/lib.rs' accepts zero occurrences. An entry that              accepts none tolerates nothing. DeclaredSuppression::Problem has the same shape in both of its sentences and predates this. These are the only messages in the crate written to be read by a person editing a config file rather than by a reader of a report, so they are the ones where it shows.",
+      "done_when": "Both of DeclaredSuppression::Problem's sentences and DeclaredDebt::Problem's sentence read as single spaced prose when rendered, and a test asserts it on the rendered string rather than on the source, since the defect is invisible in the source and only appears in the output. Nothing about which entries are refused changes.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "--lib",
+          "policy::gate_policy_file"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
