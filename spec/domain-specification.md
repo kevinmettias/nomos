@@ -114,7 +114,7 @@ profile: domain-specification
 | docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md@authored | docs/records/OD-GATE-027-remote-gate-evidence-is-unavailable-and-a-red-check-currently-means-the-workflow-was-never-scheduled.md | authored | 25 | 7 | sha256:6e06898cbe0b96289a1aeb71c9910b523db4ff387c6fa72afcf1b8bb541605ee |
 | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md@authored | docs/records/OD-GATE-028-a-verification-predicate-can-repair-or-bypass-the-condition-it-exists-to-observe.md | authored | 36 | 9 | sha256:855d8b317af7d76c6c6f78e25c68675633d826d2abfbbca039b201bdc462f2db |
 | docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md@authored | docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md | authored | 30 | 10 | sha256:06232c06f6b8a8ad4f60e2fe18f30876fd9ef9d49529207a7dd1531d7454963a |
-| docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md@authored | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md | authored | 24 | 6 | sha256:fa382a625375899dba6f78a0139b79d0900c97d646f7ff4f8ba2344e12484d34 |
+| docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md@authored | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md | authored | 41 | 8 | sha256:ac575bc06aa94ff1e34178e278645a40b331da87f233d0b3bf58f97cf3e913ba |
 | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md@authored | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md | authored | 31 | 6 | sha256:a6afa613786d72b5021c8eb78a1667996d917658d7c478db9396d478dac8f4ce |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
@@ -1095,10 +1095,12 @@ profile: domain-specification
 | docs/records/OD-GATE-029-a-newly-authored-gate-is-given-require-completeness-and-an-absent-field-still-means-unset.md#29 | authored | 2 | Status |
 | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#1 | authored | 1 | A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown |
 | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#2 | authored | 2 | Question |
-| docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#6 | authored | 2 | What Was Measured |
-| docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#12 | authored | 2 | Decision |
-| docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#17 | authored | 2 | What Would Make Continuity Provable |
-| docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#21 | authored | 2 | What This Does Not Decide |
+| docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#7 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#13 | authored | 3 | Remeasured before the first increment was built |
+| docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#18 | authored | 2 | Decision |
+| docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#23 | authored | 3 | Baseline tolerance is bounded by the quantity that was adopted |
+| docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#29 | authored | 2 | What Would Make Continuity Provable |
+| docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#37 | authored | 2 | What This Does Not Decide |
 | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#1 | authored | 1 | A comparison attributes a difference to the repository only when the rest of the judgment was compatible |
 | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#5 | authored | 2 | What Was Measured |
@@ -29296,6 +29298,16 @@ disagree exactly where it matters.
 
 ### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#5
 
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Question · hash: sha256:29e4a2bd42a851a16af38e722035b369d77aae2d585bdf809333ba3f2090cc7e*
+
+They disagree along a second axis too, and it is the one that can be settled. The entry says
+nothing about **how many** occurrences were adopted, so it tolerates however many the scope
+comes to hold. A repository that adopted one violation and later writes four more has them
+tolerated by the entry it wrote for the first, and neither the run nor the report says the debt
+grew.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#6
+
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Question · hash: sha256:30410f4e763d1c044d97c8e30f1a8a68dc8ed72ca9df9ac3f98c52ddedc0cf82*
 
 Adoption is the whole point of a baseline. A repository that adopts Nomos on existing debt and
@@ -29304,20 +29316,20 @@ introduced or hiding a regression behind the tolerance it granted for a differen
 The first is handled — baselined findings sit in their own bucket and `Compare_Gate_Runs`
 reports a `Baselined → Blocking` move with both ends. The second is not.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#6
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#7
 
 *revision: authored · kind: heading · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
 
 ## What Was Measured
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#7
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#8
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Was Measured · hash: sha256:59ca1dc72c5328cd0f087e0ecba77300799843540809cb949a6c88187871fa67*
 
 Checked 2026-09-14, and the measurement changed what this record could decide rather than
 confirming a plan.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#8
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#9
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Was Measured · hash: sha256:46b9d2a3672b950f8f4838f40190e6959b4ed65efabdb97bdeddcb918b55c1d2*
 
@@ -29325,7 +29337,7 @@ confirming a plan.
 `applicability`, `evidence`, `gate`, `summary`, `locations`. Nothing distinguishes *this*
 occurrence of a violation from another occurrence of the same violation at the same subject.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#9
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#10
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Was Measured · hash: sha256:a4b82823210ed0f5b0ef0700c14604a188af10d31287d28c966a93b416bcfeaf*
 
@@ -29333,7 +29345,7 @@ occurrence of a violation from another occurrence of the same violation at the s
 does not record what tree it was taken against, so "existed at the baseline" is implied by the
 entry's existence rather than stated by it.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#10
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#11
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Was Measured · hash: sha256:67e38b290f6be92da5b378db5a40629284de7dc35d287f5db3c6305c7dd77560*
 
@@ -29341,7 +29353,7 @@ entry's existence rather than stated by it.
 in one process, builds no run-history store and serializes no `GateRunResult`, and that
 cross-process comparison is deferred until a real caller needs it. No store exists.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#11
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#12
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Was Measured · hash: sha256:dadf460a4c0f87ecf4754861abdf094e8c3437ff25a9f54c1dd8ade24cc77078*
 
@@ -29350,20 +29362,59 @@ baseline entry. It cannot see whether that finding persisted since the baseline 
 and returned, because the evidence that would distinguish them — the states in between — is not
 kept anywhere.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#12
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#13
+
+*revision: authored · kind: heading · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Was Measured / Remeasured before the first increment was built · hash: sha256:210142b31069aeebacb6c4af7c5c9fb53ecb04bb7998fe13b1cbe2b496d98f10*
+
+### Remeasured before the first increment was built
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#14
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Was Measured / Remeasured before the first increment was built · hash: sha256:65b85657eedf32a66874c2742f553b1886733c2276ef066e9bbb798be8cd55bd*
+
+Version 1 named a snapshot identity on the entry as the part that could be built today. Costed
+against the built binary rather than by reading, on the same day, it closes nothing.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#15
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Was Measured / Remeasured before the first increment was built · hash: sha256:12797ddb1da6fefef46f3406253626e63fce09f794fd939606a8a8eb20ef0d68*
+
+**A file's subject is the digest of its normalized path, not of its content.** So a baseline
+entry survives every content change by construction — which is deliberate, and is why a
+tolerated entry is not lost to an unrelated edit above it. A tree digest on the entry could
+therefore establish continuity only while the tree is byte-identical to adoption: true until the
+first commit after adopting, and false forever after.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#16
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Was Measured / Remeasured before the first increment was built · hash: sha256:5019739bbf499f092f1940658d56e6df94ba1af6e14772d1b016527e620e65aa*
+
+**Meanwhile the unbounded tolerance is reachable in four steps.** Adopt one entry for one
+violation; fix that violation; write five new ones at the same subject; run the gate. It reports
+five baselined and exits clean. Every one of the five was written after adoption, and the report
+attributes all five to debt that existed before it.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#17
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Was Measured / Remeasured before the first increment was built · hash: sha256:a42b9729336d3ad077b645bf75a97e9bf8b37e301479c31ef5cbe62d651e3e2a*
+
+**The useful half of "existed at a snapshot" is *how much*, not *which tree*.** A quantity is
+decidable from one run, and it is what the reachable defect is about.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#18
 
 *revision: authored · kind: heading · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
 
 ## Decision
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#13
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#19
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Decision · hash: sha256:a82b71c23be3ee344a09d6468a2de18b956fa19379b655f22c09501a897f849e*
 
 **A baseline entry is evidence that an occurrence existed at a named snapshot. It is not a
 standing exemption for a `rule`/`subject` pair.**
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#14
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#20
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Decision · hash: sha256:4fcd73ee24589c95596570d814ee3dc25e2cb036a576c326ac9ac6072e7b713c*
 
@@ -29373,7 +29424,7 @@ is **undetermined** — not that this is persistent debt. Reporting persistent d
 that may have been reintroduced is precisely the hiding failure a gate exists to prevent, and
 it would be a claim made by the absence of evidence rather than by any.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#15
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#21
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Decision · hash: sha256:45cb3a242912bb57a486ca654852dafe27d3c301e6d9cefaee2244c4d26c25dd*
 
@@ -29382,7 +29433,7 @@ This is the same discipline `Applicability` already applies one layer down, wher
 "nothing could look" never reads as "nothing was wrong". An undetermined continuity is that
 state for a baselined finding.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#16
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#22
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Decision · hash: sha256:e865a5f8a90b94cefe8914b5f961c0b06aebb964ec82c086793949b855c2d23d*
 
@@ -29392,55 +29443,158 @@ a repository is relying on the gate to be exact about what it is tolerating. The
 needs is a **finding's lifecycle across snapshots**, which fits what this workspace already has
 — content-addressed subjects, run identities, a fact store — better than source geometry does.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#17
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#23
+
+*revision: authored · kind: heading · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Decision / Baseline tolerance is bounded by the quantity that was adopted · hash: sha256:271fbb758b70f336dbcfea047894c6c3d42aa6d0573881b6ab54809ecb68a0fb*
+
+### Baseline tolerance is bounded by the quantity that was adopted
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#24
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Decision / Baseline tolerance is bounded by the quantity that was adopted · hash: sha256:edbb44cb56c7fd5a52e626cd49e2cae5822929b67891115ad1e1ea5e5ecefbcc*
+
+**An adopted baseline records the maximum occurrence population accepted for its `rule`/`subject`
+scope. A later run may tolerate no more than that quantity, and an observed population above the
+accepted count is a baseline expansion the baseline must not hide.**
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#25
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Decision / Baseline tolerance is bounded by the quantity that was adopted · hash: sha256:090324932fdc45eceb6b3249a97dd06c0b9de47314d8a87cce4e4c093c79e124*
+
+The argument is a counting one and nothing else. Where a scope accepted `N` occurrences and a
+run observes `M` greater than `N`, at least `M - N` of the observed occurrences cannot belong to
+the population that was adopted. Nothing has to be matched to an earlier occurrence for that to
+hold, no revision has to be diffed, and nothing has to be remembered between runs. It is exact
+where the refused heuristic above is approximate, and it is stable under the edit that made
+occurrence-scoped matching unsafe: moving a line changes no count.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#26
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Decision / Baseline tolerance is bounded by the quantity that was adopted · hash: sha256:676c2d1d890b0ec4a6e8d506d30cea1cb4e786bf8ceebd218d54b8682e286bca*
+
+**The count proves nothing about continuity.** `M` at most `N` is not evidence that the adopted
+occurrences persisted. A scope that accepted five and observes five is equally consistent with
+the same five persisting and with all five having been fixed while five different violations
+appeared, and no reading of the two numbers separates those histories. Occurrence continuity,
+persistence and reintroduction remain exactly as unresolved as this record's first version left
+them, and they remain so until historical identity evidence exists. A reader who takes this
+bound for partial reintroduction detection has read the record backwards: what is bounded is
+capacity, not history.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#27
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Decision / Baseline tolerance is bounded by the quantity that was adopted · hash: sha256:14e56cc275767c58182921a49373a5f0630d270a7654529a7a6a624baa413662*
+
+**No occurrence inside an exceeded population is attributed.** Where `M` exceeds `N`, a run knows
+that the population is over its allowance by `M - N` and does not know *which* of the `M`
+occurrences are the adopted ones. Sorting them by any stable key and calling the first `N`
+historical would manufacture precisely the evidence the paragraph above says nobody has, and
+would hand the decision to the key: under an occurrence identity that takes locations, a
+reformatting commit would change which occurrences a repository is said to have adopted. The
+honest report is about the population — what it accepted, what it observed, and the excess. An
+interface that must place every finding somewhere places the whole affected population in a
+state of its own, rather than splitting it into some findings said to be old and others said to
+be new.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#28
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / Decision / Baseline tolerance is bounded by the quantity that was adopted · hash: sha256:c06cde4ae592628b70739b82a025e60916d1b1e1829d67606044a3d79d064614*
+
+**An entry naming no count tolerates without limit, and is reported as doing so.** Every entry
+authored before this decision names none, and neither silent reading of that is acceptable:
+reading it as one occurrence blocks a build over debt the repository did adopt, and reading it
+as unlimited without remark preserves the defect this decision exists to remove. So an entry
+with no count keeps the meaning it was written under and is reported as unbounded — a statement
+an author can act on, and not a quantity anybody invented on their behalf. A count that *is*
+written must be positive: an entry accepting zero occurrences tolerates nothing, which is what
+declining to write the entry already does.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#29
 
 *revision: authored · kind: heading · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Would Make Continuity Provable · hash: sha256:75f46529cd237bb453777ce353188ec6711d867c6931ab6fd396e8c16bcd7b8b*
 
 ## What Would Make Continuity Provable
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#18
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#30
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Would Make Continuity Provable · hash: sha256:457a056b51e42e577ee5517f596473fec41e893751dabf89ed6d1cce61ec7f70*
 
 Named so a later reader knows what is missing rather than re-deriving it, and in the order the
 parts would arrive.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#19
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#31
 
-*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Would Make Continuity Provable · hash: sha256:47ce8001202c35a99f41c731cf262581826b165d769e4da87bdd2383b8b8826d*
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Would Make Continuity Provable · hash: sha256:fae409cdb83efb92b243daabb37224929f37e54563e399d5ccad5e04b0780801*
 
-1. **A snapshot identity on the entry.** A baseline entry says which tree state it was taken
-   against, so "existed at B" is recorded rather than inferred. This is the part that can be
-   built today, and `BaselineDebt`'s own doc already names the order: the key appears on the
-   declared entry first, and the domain type grows a field to carry it.
-2. **An occurrence identity on the finding.** Enough to say that the occurrence seen now is the
-   one seen at B, rather than another occurrence of the same rule at the same subject.
+1. **A quantity on the entry.** A baseline entry says how many occurrences its scope accepted, so
+   "this much existed at adoption" is recorded rather than implied by the entry's existence. This
+   is the part that can be built today, and `BaselineDebt`'s own doc already names the order: the
+   key appears on the declared entry first, and the domain type grows a field to carry it.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#32
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Would Make Continuity Provable · hash: sha256:9d646c77d2e3ffb95199689b6658c0ffe197878f015376daf4598b213fc99802*
+
+   Version 1 named a *snapshot identity* here — the tree state the entry was taken against — and
+   the remeasurement above retired it. It is not deferred for cost; it is the wrong artifact,
+   because a path-addressed entry outlives every tree it could be compared against. This step
+   bounds capacity and establishes no continuity, which is why it is first: it is the only one of
+   the three that closes anything on its own.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#33
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Would Make Continuity Provable · hash: sha256:1bd0b3b2957e9abc6ddcfac3f1a6a5ecf581f8c5ffa99c5896da25a9993b87f5*
+
+2. **An occurrence identity that survives a revision.** Enough to say that the occurrence seen now
+   is the one seen at adoption, rather than another occurrence of the same rule at the same
+   subject. `FindingOccurrenceId` exists and is deliberately not this: it is scoped to one pinned
+   result, it takes the finding's locations as the only occurrence-discriminating material there
+   is, and its own documentation refuses its use for matching a tolerance across revisions,
+   because an identity that moves when a line moves would expire every tolerated entry on the
+   next reformatting commit.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#34
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Would Make Continuity Provable · hash: sha256:1163a54de3cad51640e95dfe604622d2e8784226d787daf4e3157d4a5440aa5b*
+
 3. **A history between them.** Some record of the states in between, which is the run history
-   `OD-GATE-022-A` deferred. Without it, 1 and 2 establish that an occurrence matching B's is
-   present now, and still not that it never left.
+   `OD-GATE-022-A` deferred. Without it, 1 and 2 establish that an occurrence matching adoption's
+   is present now, and still not that it never left.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#20
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#35
 
-*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Would Make Continuity Provable · hash: sha256:a688172102ec44c40840ba0eee9dad28438e31972a8bca7abad6a921e13d45d5*
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Would Make Continuity Provable · hash: sha256:9a204cb262861a40c0ec39278c462e3a0f15551b77c4c937959eb5ba15c8a984*
 
-Only the third makes `PersistentDebt` and `Reintroduced` separable. The first two narrow the
-undetermined state; they do not close it, and a record that implied otherwise would be setting
-up the next reader to over-claim.
+   When it arrives it names its states with `IdentityTransitionKind`, which this workspace
+   already publishes: `ExactContinuity`, `Recreated` — whose own doc says it is "not continuity,
+   and it must not be reported as such" — `Unresolved`, and an `Is_History_Preserving` rule that
+   already decides a tolerance must not survive a recreation. Measured 2026-09-14: no gate code
+   reads it. A second `Persistent`/`Reintroduced`/`Moved` vocabulary minted in gate code beside
+   that one would be the duplicated authority this repository files records about.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#21
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#36
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What Would Make Continuity Provable · hash: sha256:340ce2448abdd2e5561bc4bf43ba9f7c7e292e9afc0fea0ab2b1f91364c64920*
+
+Only the third makes persistence and reintroduction separable. The first bounds how much may be
+tolerated and settles nothing about history; the second would narrow the undetermined state and
+still not close it. A record that implied otherwise would be setting up the next reader to
+over-claim.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#37
 
 *revision: authored · kind: heading · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What This Does Not Decide · hash: sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569*
 
 ## What This Does Not Decide
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#22
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#38
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What This Does Not Decide · hash: sha256:511bb3b5b6ca6469a452248a9fda86d884161e26f879f720f73ade64e82df567*
 
 **Scope by source geometry.** `BaselineDebt`'s own doc defers scoping by revision and source
 shape until a real caller needs one, and nothing here reopens it.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#23
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#39
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What This Does Not Decide · hash: sha256:4ca96e6a42582bb7fbe0f57c908b0b84f5fd6aa29f953bbf7ca9bd01d8c187bc*
 
@@ -29449,12 +29603,23 @@ reasonably treat undetermined continuity as tolerable during adoption and as blo
 has tightened — and it belongs with the other policy choices a `nomos-gate.json` carries, not
 in the meaning of a baseline entry.
 
-### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#24
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#40
 
 *revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What This Does Not Decide · hash: sha256:6ae70b13a91734d67aad785c2f71b0239b57c31aec56ba4a817efb2471714a75*
 
 **When the run history gets built.** `OD-GATE-022-A` owns that deferral. This record adds a
 second consumer to the case for one, and does not schedule it.
+
+### docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#41
+
+*revision: authored · kind: prose · heading: A baseline entry is evidence of an occurrence at a snapshot, and continuity is not claimed until it can be shown / What This Does Not Decide · hash: sha256:1f0d285bcdf14007424c7e2d35b91f7bf1646263895c94bef7f37dc40a657dab*
+
+**How a declared entry addresses a finding that is not subjected to a file.** `DeclaredSuppression`
+and `DeclaredDebt` both compute their subject from a path, so a rule whose findings are subjected
+to a qualified name can be named by neither — measured 2026-09-14 at fourteen rule sites outside
+test code, including every rule in the naming family. That is an addressing-model gap in the
+configuration language, it applies to suppression identically, and it is not a question about
+baseline capacity. It belongs to its own item.
 
 ### docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md#1
 

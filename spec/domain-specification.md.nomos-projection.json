@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:c1790e98d427af8e10104f1ba57714c3f8587152dbe31995a9c274f5275b5b7a",
-  "inputs_digest": "sha256:dc0523386ea5411ba543a33971f0bd3b7d3ac2dd08abee71df02eafb4f2477be",
+  "content_digest": "sha256:013387bd5e95d385cc78b639eacdafcc583771613e4385075abad5b10c056089",
+  "inputs_digest": "sha256:a2cb1cf0af7e85dfce14e894455966ca948b5a3e9f7eb403ac9b0cc86407770e",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2050
+      2052
     ],
     [
       "Source blocks",
-      7197
+      7214
     ]
   ],
   "inputs": [
@@ -543,7 +543,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md@authored",
-      "hash": "sha256:fa382a625375899dba6f78a0139b79d0900c97d646f7ff4f8ba2344e12484d34"
+      "hash": "sha256:ac575bc06aa94ff1e34178e278645a40b331da87f233d0b3bf58f97cf3e913ba"
     },
     {
       "content": "documents",
@@ -5422,23 +5422,33 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#6",
-      "hash": "sha256:1c0b0dc177081acf4e087e9884786d4542663ea91734040a2f3e7b60613e52a8"
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#7",
+      "hash": "sha256:6c28bd5b6268b62b48e5b146fd0693dd01585aa086a1592b7b2f7f39042b2918"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#12",
-      "hash": "sha256:ff1de6302756b82ff10d45a1cea7ab52e2c09096427086a9507050c7018fe31f"
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#13",
+      "hash": "sha256:111673b7b3f99579f84075b2983809d8c7ed6612e9f0d1034933fc6aae6414b7"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#17",
-      "hash": "sha256:4cd40f8a6a36137d56da906ae5db2a882c614cc029f9f5f3fd1a905f9f86bff0"
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#18",
+      "hash": "sha256:5a7820bd00a61bb841953cd3c71e8faa207be20028d7f5ef8d1dc7831edf2b47"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#21",
-      "hash": "sha256:8b39de5554763895604704d33a63cc53bd9c07794ca8df067f596d70a8e27fa6"
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#23",
+      "hash": "sha256:adb822f14f7827ee616e809ead3e15817d294a2a324cbeae44d715e11cfbf33f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#29",
+      "hash": "sha256:acf42cfd7c44c62297016dbe8d39903348e24a55ea49ea2f21d7e36649435a74"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#37",
+      "hash": "sha256:af15f52b68537b39f2d5a159192dc2582f955b21e6e852d2c24e8b35b933c4e7"
     },
     {
       "content": "headings",
@@ -25958,102 +25968,187 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#5",
-      "hash": "sha256:30410f4e763d1c044d97c8e30f1a8a68dc8ed72ca9df9ac3f98c52ddedc0cf82"
+      "hash": "sha256:29e4a2bd42a851a16af38e722035b369d77aae2d585bdf809333ba3f2090cc7e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#6",
-      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+      "hash": "sha256:30410f4e763d1c044d97c8e30f1a8a68dc8ed72ca9df9ac3f98c52ddedc0cf82"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#7",
-      "hash": "sha256:59ca1dc72c5328cd0f087e0ecba77300799843540809cb949a6c88187871fa67"
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#8",
-      "hash": "sha256:46b9d2a3672b950f8f4838f40190e6959b4ed65efabdb97bdeddcb918b55c1d2"
+      "hash": "sha256:59ca1dc72c5328cd0f087e0ecba77300799843540809cb949a6c88187871fa67"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#9",
-      "hash": "sha256:a4b82823210ed0f5b0ef0700c14604a188af10d31287d28c966a93b416bcfeaf"
+      "hash": "sha256:46b9d2a3672b950f8f4838f40190e6959b4ed65efabdb97bdeddcb918b55c1d2"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#10",
-      "hash": "sha256:67e38b290f6be92da5b378db5a40629284de7dc35d287f5db3c6305c7dd77560"
+      "hash": "sha256:a4b82823210ed0f5b0ef0700c14604a188af10d31287d28c966a93b416bcfeaf"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#11",
-      "hash": "sha256:dadf460a4c0f87ecf4754861abdf094e8c3437ff25a9f54c1dd8ade24cc77078"
+      "hash": "sha256:67e38b290f6be92da5b378db5a40629284de7dc35d287f5db3c6305c7dd77560"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#12",
-      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+      "hash": "sha256:dadf460a4c0f87ecf4754861abdf094e8c3437ff25a9f54c1dd8ade24cc77078"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#13",
-      "hash": "sha256:a82b71c23be3ee344a09d6468a2de18b956fa19379b655f22c09501a897f849e"
+      "hash": "sha256:210142b31069aeebacb6c4af7c5c9fb53ecb04bb7998fe13b1cbe2b496d98f10"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#14",
-      "hash": "sha256:4fcd73ee24589c95596570d814ee3dc25e2cb036a576c326ac9ac6072e7b713c"
+      "hash": "sha256:65b85657eedf32a66874c2742f553b1886733c2276ef066e9bbb798be8cd55bd"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#15",
-      "hash": "sha256:45cb3a242912bb57a486ca654852dafe27d3c301e6d9cefaee2244c4d26c25dd"
+      "hash": "sha256:12797ddb1da6fefef46f3406253626e63fce09f794fd939606a8a8eb20ef0d68"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#16",
-      "hash": "sha256:e865a5f8a90b94cefe8914b5f961c0b06aebb964ec82c086793949b855c2d23d"
+      "hash": "sha256:5019739bbf499f092f1940658d56e6df94ba1af6e14772d1b016527e620e65aa"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#17",
-      "hash": "sha256:75f46529cd237bb453777ce353188ec6711d867c6931ab6fd396e8c16bcd7b8b"
+      "hash": "sha256:a42b9729336d3ad077b645bf75a97e9bf8b37e301479c31ef5cbe62d651e3e2a"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#18",
-      "hash": "sha256:457a056b51e42e577ee5517f596473fec41e893751dabf89ed6d1cce61ec7f70"
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#19",
-      "hash": "sha256:47ce8001202c35a99f41c731cf262581826b165d769e4da87bdd2383b8b8826d"
+      "hash": "sha256:a82b71c23be3ee344a09d6468a2de18b956fa19379b655f22c09501a897f849e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#20",
-      "hash": "sha256:a688172102ec44c40840ba0eee9dad28438e31972a8bca7abad6a921e13d45d5"
+      "hash": "sha256:4fcd73ee24589c95596570d814ee3dc25e2cb036a576c326ac9ac6072e7b713c"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#21",
-      "hash": "sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569"
+      "hash": "sha256:45cb3a242912bb57a486ca654852dafe27d3c301e6d9cefaee2244c4d26c25dd"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#22",
-      "hash": "sha256:511bb3b5b6ca6469a452248a9fda86d884161e26f879f720f73ade64e82df567"
+      "hash": "sha256:e865a5f8a90b94cefe8914b5f961c0b06aebb964ec82c086793949b855c2d23d"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#23",
-      "hash": "sha256:4ca96e6a42582bb7fbe0f57c908b0b84f5fd6aa29f953bbf7ca9bd01d8c187bc"
+      "hash": "sha256:271fbb758b70f336dbcfea047894c6c3d42aa6d0573881b6ab54809ecb68a0fb"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#24",
+      "hash": "sha256:edbb44cb56c7fd5a52e626cd49e2cae5822929b67891115ad1e1ea5e5ecefbcc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#25",
+      "hash": "sha256:090324932fdc45eceb6b3249a97dd06c0b9de47314d8a87cce4e4c093c79e124"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#26",
+      "hash": "sha256:676c2d1d890b0ec4a6e8d506d30cea1cb4e786bf8ceebd218d54b8682e286bca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#27",
+      "hash": "sha256:14e56cc275767c58182921a49373a5f0630d270a7654529a7a6a624baa413662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#28",
+      "hash": "sha256:c06cde4ae592628b70739b82a025e60916d1b1e1829d67606044a3d79d064614"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#29",
+      "hash": "sha256:75f46529cd237bb453777ce353188ec6711d867c6931ab6fd396e8c16bcd7b8b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#30",
+      "hash": "sha256:457a056b51e42e577ee5517f596473fec41e893751dabf89ed6d1cce61ec7f70"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#31",
+      "hash": "sha256:fae409cdb83efb92b243daabb37224929f37e54563e399d5ccad5e04b0780801"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#32",
+      "hash": "sha256:9d646c77d2e3ffb95199689b6658c0ffe197878f015376daf4598b213fc99802"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#33",
+      "hash": "sha256:1bd0b3b2957e9abc6ddcfac3f1a6a5ecf581f8c5ffa99c5896da25a9993b87f5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#34",
+      "hash": "sha256:1163a54de3cad51640e95dfe604622d2e8784226d787daf4e3157d4a5440aa5b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#35",
+      "hash": "sha256:9a204cb262861a40c0ec39278c462e3a0f15551b77c4c937959eb5ba15c8a984"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#36",
+      "hash": "sha256:340ce2448abdd2e5561bc4bf43ba9f7c7e292e9afc0fea0ab2b1f91364c64920"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#37",
+      "hash": "sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#38",
+      "hash": "sha256:511bb3b5b6ca6469a452248a9fda86d884161e26f879f720f73ade64e82df567"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#39",
+      "hash": "sha256:4ca96e6a42582bb7fbe0f57c908b0b84f5fd6aa29f953bbf7ca9bd01d8c187bc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#40",
       "hash": "sha256:6ae70b13a91734d67aad785c2f71b0239b57c31aec56ba4a817efb2471714a75"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md#41",
+      "hash": "sha256:1f0d285bcdf14007424c7e2d35b91f7bf1646263895c94bef7f37dc40a657dab"
     },
     {
       "content": "blocks",
