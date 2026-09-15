@@ -176,7 +176,8 @@ pub use agent::{AgentDispatchResponse, AgentJudgeRoleResponse, Handle_Agent_Exec
 pub use check::{CheckResponse, ClaimResponse, ExaminedResponse, Handle_Check_Run};
 pub use correction::{CorrectionResponse, Handle_Correction_Run};
 pub use response::{
-    BaselineAllowanceResponse, BaselineDebtResponse, BucketChange, CheckOutcomeResponse, ComparabilityResponse, Disposition, FindingBucket,
+    BaselineAllowanceResponse, BaselineDebtResponse, BaselinePopulationResponse, BucketChange, CheckOutcomeResponse, ComparabilityResponse,
+    Disposition, FindingBucket,
     GateCompareResponse, GateExplainResponse, GateFindings, GatePlanResponse, GateRunResponse, Handle_Gate_Compare,
     Handle_Gate_Explain, Handle_Gate_Plan, Handle_Gate_Run, JudgmentDifferenceResponse, NoVerdictResponse,
     RuleCalibrationResponse, RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse,

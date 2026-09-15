@@ -77702,6 +77702,84 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P109-C-A-RUN-TOLERATES-MORE-DEBT-THAN-ITS-BASELINE-ACCEPTED",
+      "title": "a run tolerates more debt than its baseline accepted",
+      "why": "P109-B gave a baseline entry a quantity and nothing reads it. Partitioned_Findings still tolerates a finding whenever any entry matches its rule and subject, one finding at a time, so a scope that accepted one occurrence tolerates five. Measured against the built binary on 2026-09-14: adopt one entry, fix the violation it named, write five new ones at the same subject, and the run reports five baselined and exits 0. OD-GATE-030 v2 decides that a later run may tolerate no more than the quantity adopted and that an observed population above it is a baseline expansion the baseline must not hide. The decision it also makes, and the one that shapes this item more than the bound does, is that no occurrence inside an exceeded population may be attributed: where five are observed and one was accepted, the run knows the population is over by four and does not know which four, so sorting by any stable key and calling the first one historical would manufacture the evidence the record says nobody has, and would let a reformatting commit change which occurrences a repository is said to have adopted.",
+      "done_when": "A run groups the findings a baseline entry matched by rule and subject, compares each group's observed count against what that entry accepted, and reports the comparison as an aggregate carrying the rule, the subject, what was allowed and what was observed. A group within its allowance is tolerated exactly as today. A group above it is not tolerated at all: the whole affected population moves to a state of its own rather than being split into some findings called old and others called new, and the run fails because the group exceeds its ceiling. An entry that named no count tolerates its group whatever the count, since OD-GATE-030 v2 keeps that meaning, and the aggregate still reports the population as unbounded so a reader can see what was not bounded. Compare does not lose the new state: Population_Of walks exactly the buckets GateFindings holds, so a finding in a bucket it does not walk reads as removed between two runs, which is the false story this whole line of work exists to stop -- the disposition vocabulary gains the state and compare walks it. The CLI says what a person needs: how many occurrences are present, how many were accepted, by how much the debt exceeds the baseline, and that the historical identity of the individual occurrences is not known. The headless twin carries the aggregate as its own tagged response rather than as prose. Both surface snapshots are re-blessed. The predicate is the three packages' own lib and bin test targets. It deliberately does not reach tests/contract/tests/public_surface.rs, which goes red on any peer's unblessed snapshot, nor the nomos-cli integration tests that judge this repository's own tree, which declares no nomos-gate.json and therefore has no baseline population to report either before or after this change.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-api/src/response/gate_findings.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "crates/host/nomos-api/src/response/baseline_population_response.rs",
+          "crates/host/nomos-api/src/response.rs",
+          "crates/host/nomos-api/src/lib.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins"
+        ],
+        "exit_code": 0,
+        "output_tail": "n_Gate_Should_Record_No_Reason_When_It_Reached_A_Verdict ... ok\ntest tests::Test_Explain_Should_Ignore_Scope ... ok\ntest tests::Test_A_Genuinely_Orphaned_Module_Should_Still_Be_Reported_By_A_Narrowed_Run ... ok\ntest gate_environment::tests::Test_Run_Gate_Should_Pass_When_A_Phase_Approval_Covers_Every_Blocking_Finding ... ok\ntest gate_compare::occurrence_tests::Test_Every_Finding_Of_A_Real_Run_Should_Get_Its_Own_Identity ... ok\ntest tests::Test_A_Calibrated_Suppressed_And_Baselined_Finding_Should_Report_As_Calibrated ... ok\ntest tests::Test_A_Baselined_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Calibrated_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Narrowed_Run_And_A_Whole_Run_Should_Agree_About_A_Declared_Module ... ok\ntest tests::Test_A_Suppressed_Finding_Should_Not_Block ... ok\ntest tests::Test_Explain_Should_Report_A_Baseline_That_Applies ... ok\ntest tests::Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed ... ok\ntest tests::Test_Explain_Should_Report_A_Suppression_That_Applies ... ok\ntest tests::Test_A_Declared_Entry_That_Matched_Should_Not_Be_Reported_As_Unmatched ... ok\ntest tests::Test_Explain_Should_Report_A_Calibration_That_Applies ... ok\n\ntest result: ok. 155 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 59.23s\n\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n   Compiling nomos-workflow-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-workflow-orchestration)\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-cli)\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.59s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-c92991675f500aa9.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-2bf94287aee3e49e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-a71e917b2e4028f5.exe)\n",
+        "verified_at": 1789444429,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e06c36a5ed0f6c178ea6498c494f9fb7151b570c"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

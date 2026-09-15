@@ -31,7 +31,13 @@ use std::collections::BTreeMap;
 
 use crate::{GateFindings, GateRunResult, SuppressionReason};
 
-/// Which of [`GateFindings`]'s own four buckets a finding fell into.
+/// Which of [`GateFindings`]'s own buckets a finding fell into.
+///
+/// One variant per bucket, and that correspondence is load-bearing rather than tidy:
+/// [`Population_Of`] walks this list to build the population a comparison is computed over, so
+/// a bucket with no variant here is a bucket whose findings are invisible to `compare`. They
+/// would not be reported as unchanged -- they would be missing from one side, which reads as
+/// *removed*, which is the false causal story this crate's comparison work exists to stop.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum FindingDisposition
 {
@@ -39,6 +45,13 @@ pub enum FindingDisposition
     Calibrated,
     Suppressed,
     Baselined,
+    /// A baseline entry matched, and its scope held more occurrences than the entry accepted.
+    ///
+    /// Distinct from [`Self::Blocking`] because the two answer differently when a reader asks
+    /// why: this one is a tolerance that ran out of room, and moving between the two is a real
+    /// transition a comparison should show rather than absorb. Distinct from
+    /// [`Self::Baselined`] because it did not hold.
+    BaselineExceeded,
 }
 
 /// A run whose findings do not yield one identity each, so it cannot be compared.
@@ -369,6 +382,7 @@ fn Population_Of(findings: &GateFindings) -> Vec<(FindingDisposition, &Finding)>
         (&findings.calibrated_findings, FindingDisposition::Calibrated),
         (&findings.suppressed_findings, FindingDisposition::Suppressed),
         (&findings.baselined_findings, FindingDisposition::Baselined),
+        (&findings.baseline_exceeded_findings, FindingDisposition::BaselineExceeded),
     ]
     {
         for finding in bucket
@@ -492,6 +506,8 @@ mod tests
             calibrated_findings: Vec::new(),
             suppressed_findings: Vec::new(),
             baselined_findings: Vec::new(),
+            baseline_exceeded_findings: Vec::new(),
+            baseline_populations: Vec::new(),
             suppression_reasons: Default::default(),
         };
     }
@@ -661,8 +677,8 @@ mod tests
             locations: vec!["a.rs".to_owned()],
         };
 
-        let baseline = Result_With(Run_Id_Of(7), GateFindings { blocking_findings: vec![finding.clone()], calibrated_findings: vec![], suppressed_findings: vec![], baselined_findings: vec![], suppression_reasons: Default::default() });
-        let candidate = Result_With(Run_Id_Of(8), GateFindings { blocking_findings: vec![], calibrated_findings: vec![], suppressed_findings: vec![finding], baselined_findings: vec![], suppression_reasons: Default::default() });
+        let baseline = Result_With(Run_Id_Of(7), GateFindings { blocking_findings: vec![finding.clone()], calibrated_findings: vec![], suppressed_findings: vec![], baselined_findings: vec![], baseline_exceeded_findings: vec![], baseline_populations: vec![], suppression_reasons: Default::default() });
+        let candidate = Result_With(Run_Id_Of(8), GateFindings { blocking_findings: vec![], calibrated_findings: vec![], suppressed_findings: vec![finding], baselined_findings: vec![], baseline_exceeded_findings: vec![], baseline_populations: vec![], suppression_reasons: Default::default() });
 
         let compared = Compare_Gate_Runs(&baseline, &candidate)
             .expect("these fixtures hold distinct occurrences; a collision here is the guard firing, not the case under test");
@@ -753,11 +769,14 @@ mod reason_tests
             calibrated_findings: Vec::new(),
             suppressed_findings: Vec::new(),
             baselined_findings: Vec::new(),
+            baseline_exceeded_findings: Vec::new(),
+            baseline_populations: Vec::new(),
             suppression_reasons: reasons,
         };
 
         match bucket
         {
+            FindingDisposition::BaselineExceeded => findings.baseline_exceeded_findings.push(finding),
             FindingDisposition::Blocking => findings.blocking_findings.push(finding),
             FindingDisposition::Calibrated => findings.calibrated_findings.push(finding),
             FindingDisposition::Suppressed => findings.suppressed_findings.push(finding),
@@ -905,6 +924,8 @@ mod occurrence_tests
             calibrated_findings: Vec::new(),
             suppressed_findings: Vec::new(),
             baselined_findings: Vec::new(),
+            baseline_exceeded_findings: Vec::new(),
+            baseline_populations: Vec::new(),
             suppression_reasons: BTreeMap::new(),
         };
     }
@@ -996,6 +1017,8 @@ mod occurrence_tests
             calibrated_findings: vec![advisory.clone()],
             suppressed_findings: Vec::new(),
             baselined_findings: Vec::new(),
+            baseline_exceeded_findings: Vec::new(),
+            baseline_populations: Vec::new(),
             suppression_reasons: BTreeMap::new(),
         };
 
@@ -1052,6 +1075,8 @@ mod occurrence_tests
             calibrated_findings: Vec::new(),
             suppressed_findings: vec![Occurrence_At(10), Occurrence_At(20)],
             baselined_findings: Vec::new(),
+            baseline_exceeded_findings: Vec::new(),
+            baseline_populations: Vec::new(),
             suppression_reasons: reasons,
         };
 
@@ -1092,6 +1117,8 @@ mod occurrence_tests
                 calibrated_findings: vec![Occurrence_At(10), Occurrence_At(20)],
                 suppressed_findings: Vec::new(),
                 baselined_findings: Vec::new(),
+                baseline_exceeded_findings: Vec::new(),
+                baseline_populations: Vec::new(),
                 suppression_reasons: BTreeMap::new(),
             },
         );

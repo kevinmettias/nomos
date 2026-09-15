@@ -108,6 +108,7 @@ pub enum variant nomos_api::DispatchErrorResponse::Ollama(OllamaExecutionErrorRe
 pub enum variant nomos_api::Disposition::Failed
 pub enum variant nomos_api::Disposition::Indeterminate
 pub enum variant nomos_api::Disposition::Passed
+pub enum variant nomos_api::FindingBucket::BaselineExceeded
 pub enum variant nomos_api::FindingBucket::Baselined
 pub enum variant nomos_api::FindingBucket::Blocking
 pub enum variant nomos_api::FindingBucket::Calibrated
@@ -253,6 +254,11 @@ pub struct field nomos_api::BaselineDebtResponse::allowance: BaselineAllowanceRe
 pub struct field nomos_api::BaselineDebtResponse::rationale: String
 pub struct field nomos_api::BaselineDebtResponse::rule: RuleId
 pub struct field nomos_api::BaselineDebtResponse::subject: SubjectId
+pub struct field nomos_api::BaselinePopulationResponse::allowed: BaselineAllowanceResponse
+pub struct field nomos_api::BaselinePopulationResponse::excess: u32
+pub struct field nomos_api::BaselinePopulationResponse::observed: u32
+pub struct field nomos_api::BaselinePopulationResponse::rule: RuleId
+pub struct field nomos_api::BaselinePopulationResponse::subject: SubjectId
 pub struct field nomos_api::BlockedItem::cause: String
 pub struct field nomos_api::BlockedItem::item: LedgerItem
 pub struct field nomos_api::BucketChange::after: FindingBucket
@@ -305,6 +311,8 @@ pub struct field nomos_api::GateCompareResponse::changed: Vec<BucketChange>
 pub struct field nomos_api::GateCompareResponse::comparability: Option<ComparabilityResponse>
 pub struct field nomos_api::GateCompareResponse::removed: Vec<Finding>
 pub struct field nomos_api::GateCompareResponse::uncomparable: Option<RunId>
+pub struct field nomos_api::GateFindings::baseline_exceeded_findings: Vec<Finding>
+pub struct field nomos_api::GateFindings::baseline_populations: Vec<BaselinePopulationResponse>
 pub struct field nomos_api::GateFindings::baselined_findings: Vec<Finding>
 pub struct field nomos_api::GateFindings::blocking_findings: Vec<Finding>
 pub struct field nomos_api::GateFindings::calibrated_findings: Vec<Finding>
@@ -376,6 +384,7 @@ pub struct field nomos_api::VacatedResponse::path: PathBuf
 pub struct nomos_api::AbsenceResponse
 pub struct nomos_api::AgentExecutionOutcomeResponse
 pub struct nomos_api::BaselineDebtResponse
+pub struct nomos_api::BaselinePopulationResponse
 pub struct nomos_api::BlockedItem
 pub struct nomos_api::BucketChange
 pub struct nomos_api::CommitReportResponse

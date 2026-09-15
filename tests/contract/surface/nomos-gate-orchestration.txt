@@ -1,4 +1,6 @@
 pub const fn nomos_gate_orchestration::Admissibility::Is_A_Judgment(self) -> bool
+pub const fn nomos_gate_orchestration::BaselinePopulation::Excess(&self) -> u32
+pub const fn nomos_gate_orchestration::BaselinePopulation::Is_Exceeded(&self) -> bool
 pub const fn nomos_gate_orchestration::SuppressionStatus::Suppresses(self) -> bool
 pub const nomos_gate_orchestration::ARCHITECTURE_DECLARATION_FILE: &str
 pub enum nomos_gate_orchestration::Admissibility
@@ -28,6 +30,7 @@ pub enum variant nomos_gate_orchestration::CoveragePolicy::RequireCompleteness
 pub enum variant nomos_gate_orchestration::CoveragePolicy::Unset
 pub enum variant nomos_gate_orchestration::Explanation::Found { finding: Box<Finding>, would_block: bool, calibrated_by: Option<RuleCalibration>, suppressed_by: Option<Suppression>, baselined_by: Option<BaselineDebt>, contract: Option<(String, u32)>, }
 pub enum variant nomos_gate_orchestration::Explanation::NotFound
+pub enum variant nomos_gate_orchestration::FindingDisposition::BaselineExceeded
 pub enum variant nomos_gate_orchestration::FindingDisposition::Baselined
 pub enum variant nomos_gate_orchestration::FindingDisposition::Blocking
 pub enum variant nomos_gate_orchestration::FindingDisposition::Calibrated
@@ -89,6 +92,10 @@ pub struct field nomos_gate_orchestration::BaselineDebt::rationale: String
 pub struct field nomos_gate_orchestration::BaselineDebt::rule: RuleId
 pub struct field nomos_gate_orchestration::BaselineDebt::subject: SubjectId
 pub struct field nomos_gate_orchestration::BaselinePolicy::debt: Vec<BaselineDebt>
+pub struct field nomos_gate_orchestration::BaselinePopulation::allowed: BaselineAllowance
+pub struct field nomos_gate_orchestration::BaselinePopulation::observed: u32
+pub struct field nomos_gate_orchestration::BaselinePopulation::rule: RuleId
+pub struct field nomos_gate_orchestration::BaselinePopulation::subject: SubjectId
 pub struct field nomos_gate_orchestration::CollidingOccurrences::collisions: Vec<OccurrenceCollision>
 pub struct field nomos_gate_orchestration::CollidingOccurrences::run: RunId
 pub struct field nomos_gate_orchestration::DispositionChange::after: FindingDisposition
@@ -125,6 +132,8 @@ pub struct field nomos_gate_orchestration::GateEnvironment::variant: BuildVarian
 pub struct field nomos_gate_orchestration::GateExplainResult::check_outcome: CheckOutcome
 pub struct field nomos_gate_orchestration::GateExplainResult::explanation: Explanation
 pub struct field nomos_gate_orchestration::GateExplainResult::root: PathBuf
+pub struct field nomos_gate_orchestration::GateFindings::baseline_exceeded_findings: Vec<Finding>
+pub struct field nomos_gate_orchestration::GateFindings::baseline_populations: Vec<BaselinePopulation>
 pub struct field nomos_gate_orchestration::GateFindings::baselined_findings: Vec<Finding>
 pub struct field nomos_gate_orchestration::GateFindings::blocking_findings: Vec<Finding>
 pub struct field nomos_gate_orchestration::GateFindings::calibrated_findings: Vec<Finding>
@@ -171,6 +180,7 @@ pub struct field nomos_gate_orchestration::SuppressionReason::status: Suppressio
 pub struct nomos_gate_orchestration::AdoptionPolicy
 pub struct nomos_gate_orchestration::BaselineDebt
 pub struct nomos_gate_orchestration::BaselinePolicy
+pub struct nomos_gate_orchestration::BaselinePopulation
 pub struct nomos_gate_orchestration::CollidingOccurrences
 pub struct nomos_gate_orchestration::DependedCrate<'a>(pub &'a str)
 pub struct nomos_gate_orchestration::DependingCrate<'a>(pub &'a str)

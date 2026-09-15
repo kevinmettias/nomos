@@ -12,9 +12,9 @@ use std::path::Path;
 
 use crate::policy::{GatePolicyFile, Resolve_Gate_Policy};
 use crate::{
-    AdoptionPolicy, BaselinePolicy, CoveragePolicy, Disposition_Of_Findings, Evaluated_Phases, GateCommand, GateFindings, GateRunOutcome,
-    GateRunProvenance, GateRunResult, NoVerdict, Phased_Disposition, RuleSelector, ScopeSelector, SuppressionDisposition, SuppressionPolicy,
-    SuppressionReason,
+    AdoptionPolicy, BaselineAllowance, BaselinePolicy, BaselinePopulation, CoveragePolicy, Disposition_Of_Findings, Evaluated_Phases,
+    GateCommand, GateFindings, GateRunOutcome, GateRunProvenance, GateRunResult, NoVerdict, Phased_Disposition, RuleSelector, ScopeSelector,
+    SuppressionDisposition, SuppressionPolicy, SuppressionReason,
 };
 
 /// Judges `walked` exactly as `nomos check` would.
@@ -499,7 +499,14 @@ fn Reduced_Findings(
 
     let selected: Vec<Finding> = findings.iter().filter(|finding| return rules.Is_Included(&finding.rule)).cloned().collect();
     let findings = Partitioned_Findings(&selected, policies);
-    let disposition = Reduced_With_Coverage(Disposition_Of_Findings(&findings.blocking_findings), coverage, &selected);
+
+    // Both buckets, because both are findings nothing licensed. `OD-GATE-030`: a population
+    // above the quantity its entry accepted is a baseline expansion the baseline must not
+    // hide, and a run that reported it and still passed would be hiding it in the only way
+    // that matters to a build. Composed here rather than by widening `Disposition_Of_Findings`,
+    // which answers about a list of findings and is right as it is.
+    let unlicensed: Vec<Finding> = findings.blocking_findings.iter().chain(findings.baseline_exceeded_findings.iter()).cloned().collect();
+    let disposition = Reduced_With_Coverage(Disposition_Of_Findings(&unlicensed), coverage, &selected);
 
     let unmatched_policy = Unmatched_Entries(&selected, policies);
 
@@ -522,6 +529,8 @@ fn Unjudged() -> Reduction
             calibrated_findings: Vec::new(),
             suppressed_findings: Vec::new(),
             baselined_findings: Vec::new(),
+            baseline_exceeded_findings: Vec::new(),
+            baseline_populations: Vec::new(),
             suppression_reasons: std::collections::BTreeMap::new(),
         },
         disposition: GateRunOutcome::Indeterminate,
@@ -543,11 +552,95 @@ fn Partitioned_Findings(selected: &[Finding], policies: DispositionPolicies<'_>)
         blockable.into_iter().partition(|finding| return policies.adoption.Calibrating(finding).is_some());
     let (suppressed_findings, remaining): (Vec<Finding>, Vec<Finding>) =
         uncalibrated.into_iter().partition(|finding| return policies.suppressions.Suppressing(finding, policies.now).is_some());
-    let (baselined_findings, blocking_findings): (Vec<Finding>, Vec<Finding>) =
+    let (matched, blocking_findings): (Vec<Finding>, Vec<Finding>) =
         remaining.into_iter().partition(|finding| return policies.baseline.Tolerating(finding).is_some());
+    let Tolerated { baselined_findings, baseline_exceeded_findings, baseline_populations } = Tolerated_Within_Allowance(matched, policies.baseline);
     let suppression_reasons = Recorded_Reasons(selected, policies);
 
-    return GateFindings { blocking_findings, calibrated_findings, suppressed_findings, baselined_findings, suppression_reasons };
+    return GateFindings {
+        blocking_findings,
+        calibrated_findings,
+        suppressed_findings,
+        baselined_findings,
+        baseline_exceeded_findings,
+        baseline_populations,
+        suppression_reasons,
+    };
+}
+
+/// What [`Tolerated_Within_Allowance`] split one run's baseline-matched findings into.
+struct Tolerated
+{
+    baselined_findings: Vec<Finding>,
+    baseline_exceeded_findings: Vec<Finding>,
+    baseline_populations: Vec<BaselinePopulation>,
+}
+
+/// Splits the findings a baseline entry matched by whether their scope stayed inside the
+/// quantity that entry accepted.
+///
+/// `OD-GATE-030` decides the shape, and two of its clauses are the reason this is a grouping
+/// rather than the per-finding filter it replaced.
+///
+/// **The unit is the scope, not the finding.** An entry accepts a quantity for a
+/// `rule`/`subject` scope, so whether it is exceeded is a fact about every occurrence in that
+/// scope at once. A filter that asked each finding separately could only ever answer "an entry
+/// matches you", which is what tolerated five occurrences against an entry that accepted one.
+///
+/// **An exceeded scope moves whole.** Where five are observed and one was accepted, four of
+/// them provably post-date adoption and *which* four is unknown. Leaving one in
+/// `baselined_findings` would pick a historical occurrence out of five candidates on no
+/// evidence, and would let the next reformatting commit pick a different one. So the group
+/// goes to `baseline_exceeded_findings` entire, and the arithmetic that explains it travels
+/// beside it.
+///
+/// Grouped through a `BTreeMap` on the same `rule`/`subject` key `suppression_reasons` already
+/// uses, so the populations come out in one order on every run over one tree rather than in
+/// whatever order the walk happened to produce.
+fn Tolerated_Within_Allowance(matched: Vec<Finding>, baseline: &BaselinePolicy) -> Tolerated
+{
+    let mut scopes: BTreeMap<(RuleId, SubjectId), Vec<Finding>> = BTreeMap::new();
+    for finding in matched
+    {
+        scopes.entry((finding.rule.clone(), finding.subject)).or_default().push(finding);
+    }
+
+    let mut tolerated = Tolerated { baselined_findings: Vec::new(), baseline_exceeded_findings: Vec::new(), baseline_populations: Vec::new() };
+    for ((rule, subject), occurrences) in scopes
+    {
+        // Every finding here matched some entry, or the partition above would not have kept
+        // it, and each group shares one rule and subject so one lookup answers for all of
+        // them. The fallback is unreachable and is written as the permissive reading anyway:
+        // an entry nobody could find must not invent a bound nobody declared.
+        let allowed = occurrences
+            .first()
+            .and_then(|finding| return baseline.Tolerating(finding))
+            .map_or(BaselineAllowance::Unbounded, |entry| return entry.allowance);
+        let population = BaselinePopulation { rule, subject, allowed, observed: Occurrence_Count(occurrences.len()) };
+
+        if population.Is_Exceeded()
+        {
+            tolerated.baseline_exceeded_findings.extend(occurrences);
+        }
+        else
+        {
+            tolerated.baselined_findings.extend(occurrences);
+        }
+        tolerated.baseline_populations.push(population);
+    }
+
+    return tolerated;
+}
+
+/// A group's size as the count a [`BaselinePopulation`] reports.
+///
+/// A checked conversion rather than `as`, which would wrap a population past `u32::MAX` to a
+/// small number and report a scope holding four billion occurrences as comfortably inside an
+/// allowance of ten. Unreachable on any real tree and one line to make unreachable in
+/// principle, which is cheaper than the argument for why it cannot happen.
+fn Occurrence_Count(occurrences: usize) -> u32
+{
+    return u32::try_from(occurrences).unwrap_or(u32::MAX);
 }
 
 /// Why a disposition applied to each finding one names, recorded at the moment it was decided.

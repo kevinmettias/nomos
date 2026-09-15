@@ -13,8 +13,8 @@ use nomos_capability::RegistryError;
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{Finding, RunId};
 use nomos_gate_orchestration::{
-    Admissibility, BaselineDebt, Comparability, Explanation, GateExplainResult, GateOutcome, GateRunOutcome, GateRunResult, JudgmentDifference,
-    NoVerdict, RuleCalibration, Suppression,
+    Admissibility, BaselineAllowance, BaselineDebt, BaselinePopulation, Comparability, Explanation, GateExplainResult, GateOutcome,
+    GateRunOutcome, GateRunResult, JudgmentDifference, NoVerdict, RuleCalibration, Suppression,
 };
 use std::io::Write;
 use std::path::Path;
@@ -122,12 +122,15 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
         stdout,
         "\n{} finding(s), {} of which can fail a build, {} calibrated, {} suppressed, {} baselined",
         findings.len(),
-        result.findings.blocking_findings.len(),
+        // Both, because both failed the build. Counted together and explained apart: the
+        // report below says which of them is a tolerance that ran out of room.
+        result.findings.blocking_findings.len().saturating_add(result.findings.baseline_exceeded_findings.len()),
         result.findings.calibrated_findings.len(),
         result.findings.suppressed_findings.len(),
         result.findings.baselined_findings.len()
     );
 
+    Report_Exceeded_Baselines(&result.findings.baseline_populations, stdout);
     Report_Unmatched_Policy(result, stdout);
 
     return Exit_Code_For(result, stderr);
@@ -361,6 +364,61 @@ const fn Difference_Sentence(difference: JudgmentDifference) -> &'static str
         JudgmentDifference::Policy => "they judged under different declared policies",
         JudgmentDifference::Selection => "they were allowed to look at different things",
         JudgmentDifference::Instrument => "they were judged by different builds, or by different rule sets",
+    };
+}
+
+/// Says which baselined scopes hold more debt than they accepted, and refuses to say more.
+///
+/// Only the exceeded ones. A line for every baselined scope would put the ordinary case --
+/// adopted debt sitting where it was adopted -- in front of a reader on every clean run, and a
+/// report whose every line is routine is one whose exceptional line gets skipped.
+///
+/// The closing sentence is the part that is easy to drop and must not be. `OD-GATE-030` refuses
+/// attribution inside an exceeded population: a run knows the scope is over its allowance by a
+/// number and does not know which of the occurrences present are the adopted ones. Saying only
+/// "4 more than accepted" invites a reader to decide for themselves which four, which is
+/// exactly the claim nothing here can support.
+fn Report_Exceeded_Baselines(populations: &[BaselinePopulation], stdout: &mut impl Write)
+{
+    let exceeded: Vec<&BaselinePopulation> = populations.iter().filter(|population| return population.Is_Exceeded()).collect();
+    if exceeded.is_empty()
+    {
+        return;
+    }
+
+    let _ = writeln!(stdout, "\nbaseline debt has grown past what was adopted:");
+    for population in exceeded
+    {
+        let _ = writeln!(
+            stdout,
+            "  {} at {}: {} occurrence(s) now, {} accepted at adoption, {} more than accepted",
+            population.rule.As_Str(),
+            population.subject,
+            population.observed,
+            Accepted_Count(population.allowed),
+            population.Excess()
+        );
+    }
+
+    let _ = writeln!(
+        stdout,
+        "Which of the occurrences present are the ones that were adopted is not known, so none \
+         of them is reported as new. What is known is the quantity: a scope holding more than \
+         it accepted holds at least that many occurrences that cannot be the adopted ones."
+    );
+}
+
+/// The accepted quantity, for a scope that has one.
+///
+/// An unbounded scope never reaches this, because it can never be exceeded. The word is here
+/// rather than a zero anyway, so that a caller who later prints every population does not
+/// report "0 accepted" for an entry that accepted everything.
+fn Accepted_Count(allowance: BaselineAllowance) -> String
+{
+    return match allowance
+    {
+        BaselineAllowance::Unbounded => "no stated limit".to_owned(),
+        BaselineAllowance::AtMost(count) => count.to_string(),
     };
 }
 
@@ -669,6 +727,64 @@ mod tests
         assert_eq!(code, ExitCode::Vacuous, "{rendered_stderr}");
         assert!(rendered_stderr.contains("nothing was judged"), "{rendered_stderr}");
         assert!(String::from_utf8_lossy(&stdout).is_empty());
+    }
+
+    /// A run whose baselined scope holds `observed` occurrences against an allowance of
+    /// `allowed`, rendered.
+    fn Rendered_Population(allowed: BaselineAllowance, observed: u32) -> String
+    {
+        let population = BaselinePopulation {
+            rule: RuleId::New("no-single-line-function-bodies"),
+            subject: nomos_model::Subject_Of_Path("src/lib.rs"),
+            allowed,
+            observed,
+        };
+        let mut result = Judged_With(1, None);
+        result.findings.baseline_populations = vec![population];
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let _ = Render_Run(&result, &mut stdout, &mut stderr);
+
+        return String::from_utf8_lossy(&stdout).into_owned();
+    }
+
+    /// The numbers a reader acts on, and the sentence that stops them acting on more.
+    ///
+    /// `OD-GATE-030` refuses attribution inside an exceeded population. A report that gave the
+    /// excess and stopped would leave a reader to pick which occurrences are new, which is the
+    /// claim the run cannot support, so the disclaimer is asserted as part of the output rather
+    /// than left to a reviewer to notice going missing.
+    #[test]
+    fn Test_An_Exceeded_Scope_Should_Report_Its_Arithmetic_And_Refuse_To_Name_Which_Are_New()
+    {
+        let rendered = Rendered_Population(BaselineAllowance::AtMost(1), 5);
+
+        assert!(rendered.contains("baseline debt has grown past what was adopted"), "{rendered}");
+        assert!(rendered.contains("5 occurrence(s) now"), "{rendered}");
+        assert!(rendered.contains("1 accepted at adoption"), "{rendered}");
+        assert!(rendered.contains("4 more than accepted"), "{rendered}");
+        assert!(rendered.contains("is not known"), "the report must refuse to name which are new: {rendered}");
+    }
+
+    /// A scope inside its allowance says nothing at all.
+    ///
+    /// A line on every clean run is how the exceptional line stops being read.
+    #[test]
+    fn Test_A_Scope_Within_Its_Allowance_Should_Report_Nothing()
+    {
+        let rendered = Rendered_Population(BaselineAllowance::AtMost(5), 2);
+
+        assert!(!rendered.contains("baseline debt has grown"), "{rendered}");
+    }
+
+    /// An unbounded scope is never exceeded, however much it holds.
+    #[test]
+    fn Test_An_Unbounded_Scope_Should_Report_Nothing_However_Much_It_Holds()
+    {
+        let rendered = Rendered_Population(BaselineAllowance::Unbounded, 900);
+
+        assert!(!rendered.contains("baseline debt has grown"), "{rendered}");
     }
 
     /// A judged run that found nothing, carrying `provenance` -- the only thing the
@@ -1052,6 +1168,10 @@ mod tests
             blocking_findings: Vec::new(),
             calibrated_findings: Vec::new(),
             suppressed_findings: Vec::new(),
-            baselined_findings: Vec::new(), suppression_reasons: Default::default() };
+            baselined_findings: Vec::new(),
+            baseline_exceeded_findings: Vec::new(),
+            baseline_populations: Vec::new(),
+            suppression_reasons: Default::default(),
+        };
     }
 }

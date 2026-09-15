@@ -19,6 +19,7 @@
 
 mod baseline_allowance_response;
 mod baseline_debt_response;
+mod baseline_population_response;
 mod check_outcome_response;
 mod comparability_response;
 mod disposition;
@@ -35,6 +36,7 @@ mod suppression_response;
 
 pub use baseline_allowance_response::BaselineAllowanceResponse;
 pub use baseline_debt_response::BaselineDebtResponse;
+pub use baseline_population_response::BaselinePopulationResponse;
 pub use check_outcome_response::CheckOutcomeResponse;
 pub use comparability_response::{ComparabilityResponse, JudgmentDifferenceResponse};
 pub use disposition::Disposition;

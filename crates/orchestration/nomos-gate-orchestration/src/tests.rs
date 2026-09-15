@@ -2,9 +2,9 @@
 //! disposition reduction over an already-judged list of findings.
 
 use crate::{
-    AdoptionPolicy, BaselineDebt, BaselinePolicy, CoveragePolicy, Disposition_Of_Findings, Explain_Gate, Explanation, FindingQuery, GateCommand,
-    GateEnvironment, GateOutcome, GateRunOutcome, GateRunResult, RuleCalibration, RuleSelector, Run, Run_Gate, ScopeSelector, Suppression,
-    SuppressionDisposition, SuppressionPolicy,
+    AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, CoveragePolicy, Disposition_Of_Findings, Explain_Gate, Explanation,
+    FindingQuery, GateCommand, GateEnvironment, GateOutcome, GateRunOutcome, GateRunResult, RuleCalibration, RuleSelector, Run, Run_Gate,
+    ScopeSelector, Suppression, SuppressionDisposition, SuppressionPolicy,
 };
 use nomos_check_orchestration::{Claim, CheckOutcome};
 use nomos_contracts::{
@@ -13,7 +13,7 @@ use nomos_contracts::{
 use nomos_model::Subject_Of_Path;
 use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
 use nomos_rules::{
-    SourceFile, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION,
+    SourceFile, NO_SINGLE_LINE_FUNCTION_BODIES, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION,
     DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
     NAMING_CONVENTION, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
     UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
@@ -608,6 +608,131 @@ fn Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed()
         "the double-matched finding must not also report as baselined: {:?}",
         result.findings.baselined_findings
     );
+}
+
+/// Several collapsed function bodies in one file, so one rule reports many occurrences under
+/// one `rule`/`subject` scope -- the shape a baseline quantity is about, and the one every
+/// other fixture in this file deliberately does not have.
+///
+/// Built rather than written out so that no line of *this* file is itself a collapsed body:
+/// `no-single-line-function-bodies` is a text rule and this repository judges its own sources.
+fn Collapsed_Bodies(count: u32) -> SourceFile
+{
+    let text: String = (0..count).map(|index| return format!("pub fn Thing_{index}() -> i32 {{ return {index}; }}
+")).collect();
+
+    return Source("collapsed.rs", &text);
+}
+
+/// A baseline entry for `rule` at `collapsed.rs`, accepting `allowance`.
+fn Baseline_Accepting(allowance: BaselineAllowance) -> BaselineDebt
+{
+    return BaselineDebt {
+        rule: RuleId::New(NO_SINGLE_LINE_FUNCTION_BODIES),
+        subject: Subject_Of_Path("collapsed.rs"),
+        rationale: "adopted at the baseline".to_owned(),
+        allowance,
+    };
+}
+
+/// Runs `Run_Gate` over `count` collapsed bodies under a baseline accepting `allowance`.
+fn Run_Over_Collapsed_Bodies(count: u32, allowance: BaselineAllowance) -> GateRunResult
+{
+    let command = GateCommand {
+        baseline: BaselinePolicy { debt: vec![Baseline_Accepting(allowance)] },
+        rules: RuleSelector { include: vec![RuleId::New(NO_SINGLE_LINE_FUNCTION_BODIES)] },
+        ..Command_At(Repository_Root())
+    };
+
+    return Run_Gate(
+        Some(vec![Collapsed_Bodies(count)]),
+        GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) },
+        &command,
+        Test_Run_Id(),
+    );
+}
+
+/// A scope inside its allowance is tolerated exactly as it was before the quantity existed.
+///
+/// The assertion that keeps every other test here honest: a bound that also blocked the debt a
+/// repository legitimately adopted would satisfy `OD-GATE-030`'s letter and destroy the verb.
+#[test]
+fn Test_A_Scope_Within_Its_Allowance_Should_Still_Be_Tolerated()
+{
+    let result = Run_Over_Collapsed_Bodies(2, BaselineAllowance::AtMost(2));
+
+    assert_eq!(result.findings.baselined_findings.len(), 2, "{:?}", result.findings.baselined_findings);
+    assert!(result.findings.baseline_exceeded_findings.is_empty(), "{:?}", result.findings.baseline_exceeded_findings);
+    assert_eq!(result.disposition, GateRunOutcome::Passed);
+}
+
+/// The defect, closed. One occurrence was accepted and five are present, so the run fails.
+///
+/// Before `OD-GATE-030` v2 this reported five baselined and exited clean, which attributed
+/// four violations written after adoption to debt that existed before it.
+#[test]
+fn Test_A_Scope_Above_Its_Allowance_Should_Fail_The_Run()
+{
+    let result = Run_Over_Collapsed_Bodies(5, BaselineAllowance::AtMost(1));
+
+    assert_eq!(result.disposition, GateRunOutcome::Failed, "{:?}", result.findings);
+}
+
+/// The clause that shapes this more than the bound does: an exceeded scope moves **whole**.
+///
+/// `OD-GATE-030` refuses attribution inside an exceeded population. With five present and one
+/// accepted, four provably post-date adoption and which four is unknown, so leaving any one of
+/// them in `baselined_findings` would pick a historical occurrence out of five candidates on no
+/// evidence -- and would let the next reformatting commit pick a different one.
+#[test]
+fn Test_An_Exceeded_Scope_Should_Move_Whole_Rather_Than_Naming_Which_Occurrences_Are_New()
+{
+    let result = Run_Over_Collapsed_Bodies(5, BaselineAllowance::AtMost(1));
+
+    assert!(
+        result.findings.baselined_findings.is_empty(),
+        "no occurrence in an exceeded scope may be reported as the adopted one: {:?}",
+        result.findings.baselined_findings
+    );
+    assert_eq!(result.findings.baseline_exceeded_findings.len(), 5, "{:?}", result.findings.baseline_exceeded_findings);
+    assert!(
+        result.findings.blocking_findings.is_empty(),
+        "an exceeded tolerance is not the same answer as a rule nobody addressed: {:?}",
+        result.findings.blocking_findings
+    );
+}
+
+/// The arithmetic a reader acts on, reported per scope.
+#[test]
+fn Test_An_Exceeded_Scope_Should_Report_What_It_Accepted_And_What_It_Found()
+{
+    let result = Run_Over_Collapsed_Bodies(5, BaselineAllowance::AtMost(1));
+
+    let population = result.findings.baseline_populations.first().expect("one baselined scope");
+    assert_eq!(population.rule, RuleId::New(NO_SINGLE_LINE_FUNCTION_BODIES));
+    assert_eq!(population.subject, Subject_Of_Path("collapsed.rs"));
+    assert_eq!(population.allowed, BaselineAllowance::AtMost(1));
+    assert_eq!(population.observed, 5);
+    assert_eq!(population.Excess(), 4);
+}
+
+/// An entry authored before the quantity existed tolerates whatever its scope holds.
+///
+/// `OD-GATE-030` v2 requires this: reading a count-less entry as bounded would begin blocking
+/// builds over debt a repository did adopt, on a number nobody wrote. The population is still
+/// reported, so what was left unbounded is visible rather than silent.
+#[test]
+fn Test_An_Unbounded_Entry_Should_Tolerate_Whatever_Its_Scope_Holds()
+{
+    let result = Run_Over_Collapsed_Bodies(5, BaselineAllowance::Unbounded);
+
+    assert_eq!(result.findings.baselined_findings.len(), 5, "{:?}", result.findings.baselined_findings);
+    assert!(result.findings.baseline_exceeded_findings.is_empty());
+    assert_eq!(result.disposition, GateRunOutcome::Passed);
+    let population = result.findings.baseline_populations.first().expect("one baselined scope");
+    assert_eq!(population.allowed, BaselineAllowance::Unbounded);
+    assert_eq!(population.observed, 5);
+    assert!(!population.Is_Exceeded());
 }
 
 /// A [`RuleCalibration`] matching the one blocking finding this fixture produces: the run

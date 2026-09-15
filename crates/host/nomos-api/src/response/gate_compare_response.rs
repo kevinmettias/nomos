@@ -100,6 +100,14 @@ pub enum FindingBucket
     Suppressed,
     /// A `BaselineDebt` entry kept it from blocking.
     Baselined,
+    /// A `BaselineDebt` entry matched, and its scope held more occurrences than it accepted,
+    /// so nothing kept it from blocking.
+    ///
+    /// Kept apart from [`Self::Blocking`] so a caller can see a tolerance running out of room
+    /// as the distinct event it is -- a finding moving between the two is a real transition,
+    /// and collapsing them would report a repository's debt growing past what it adopted as
+    /// though a rule had simply started failing.
+    BaselineExceeded,
 }
 
 impl FindingBucket
@@ -112,6 +120,7 @@ impl FindingBucket
             FindingDisposition::Calibrated => Self::Calibrated,
             FindingDisposition::Suppressed => Self::Suppressed,
             FindingDisposition::Baselined => Self::Baselined,
+            FindingDisposition::BaselineExceeded => Self::BaselineExceeded,
         };
     }
 }
