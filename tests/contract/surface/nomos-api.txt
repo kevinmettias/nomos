@@ -5,6 +5,7 @@ pub enum nomos_api::AgentExecutionErrorResponse
 pub enum nomos_api::AgentJudgeRoleResponse
 pub enum nomos_api::AuditResponse
 pub enum nomos_api::BlockChangeResponse
+pub enum nomos_api::CheckOutcomeResponse
 pub enum nomos_api::CheckResponse
 pub enum nomos_api::ClaimResponse
 pub enum nomos_api::CommitResponse
@@ -19,6 +20,7 @@ pub enum nomos_api::GateExplainResponse
 pub enum nomos_api::GatePlanResponse
 pub enum nomos_api::ListResponse
 pub enum nomos_api::MarkdownResponse
+pub enum nomos_api::NoVerdictResponse
 pub enum nomos_api::NormativeOutcomeResponse
 pub enum nomos_api::OllamaExecutionErrorResponse
 pub enum nomos_api::OriginResponse
@@ -64,6 +66,11 @@ pub enum variant nomos_api::BlockChangeResponse::Moved { from: u32, to: u32 }
 pub enum variant nomos_api::BlockChangeResponse::Reflowed { ordinal: u32 }
 pub enum variant nomos_api::BlockChangeResponse::Removed { ordinal: u32, kind: String }
 pub enum variant nomos_api::BlockChangeResponse::Reworded { ordinal: u32, before: String, after: String }
+pub enum variant nomos_api::CheckOutcomeResponse::Contradictory { cause: String, }
+pub enum variant nomos_api::CheckOutcomeResponse::Judged { files: usize, facts: usize, complete: bool, }
+pub enum variant nomos_api::CheckOutcomeResponse::NoFacts { files: usize, }
+pub enum variant nomos_api::CheckOutcomeResponse::NoSource
+pub enum variant nomos_api::CheckOutcomeResponse::Unreadable
 pub enum variant nomos_api::CheckResponse::Contradictory { cause: String, }
 pub enum variant nomos_api::CheckResponse::Judged { findings: Vec<Finding>, examined: ExaminedResponse, claim: ClaimResponse, }
 pub enum variant nomos_api::CheckResponse::NoFacts { files: usize, }
@@ -111,6 +118,9 @@ pub enum variant nomos_api::ListResponse::Listed { document: LedgerDocument, #[s
 pub enum variant nomos_api::ListResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::MarkdownResponse::Refused { cause: String, }
 pub enum variant nomos_api::MarkdownResponse::Resolved { node_id: String, path: String, revision: String, markdown: String, source_hash: String, projected_hash: String, matches_source: bool, }
+pub enum variant nomos_api::NoVerdictResponse::IncompleteCoverage
+pub enum variant nomos_api::NoVerdictResponse::MalformedPolicy { detail: String, }
+pub enum variant nomos_api::NoVerdictResponse::UnreadablePolicy { detail: String, }
 pub enum variant nomos_api::NormativeOutcomeResponse::Gone { from: u32 }
 pub enum variant nomos_api::NormativeOutcomeResponse::Held { block: u32 }
 pub enum variant nomos_api::NormativeOutcomeResponse::Moved { from: u32, to: u32 }
@@ -282,10 +292,17 @@ pub struct field nomos_api::GateCompareResponse::candidate: RunId
 pub struct field nomos_api::GateCompareResponse::changed: Vec<BucketChange>
 pub struct field nomos_api::GateCompareResponse::removed: Vec<Finding>
 pub struct field nomos_api::GateCompareResponse::uncomparable: Option<RunId>
+pub struct field nomos_api::GateFindings::baselined_findings: Vec<Finding>
+pub struct field nomos_api::GateFindings::blocking_findings: Vec<Finding>
+pub struct field nomos_api::GateFindings::calibrated_findings: Vec<Finding>
+pub struct field nomos_api::GateFindings::suppressed_findings: Vec<Finding>
+pub struct field nomos_api::GateRunResponse::check_outcome: CheckOutcomeResponse
 pub struct field nomos_api::GateRunResponse::disposition: Disposition
 pub struct field nomos_api::GateRunResponse::findings: GateFindings
+pub struct field nomos_api::GateRunResponse::no_verdict: Option<NoVerdictResponse>
 pub struct field nomos_api::GateRunResponse::root: PathBuf
 pub struct field nomos_api::GateRunResponse::run: RunId
+pub struct field nomos_api::GateRunResponse::unmatched_policy: Vec<String>
 pub struct field nomos_api::IdentityChangeResponse::after: String
 pub struct field nomos_api::IdentityChangeResponse::before: String
 pub struct field nomos_api::IdentityChangeResponse::field: String
@@ -356,6 +373,7 @@ pub struct nomos_api::ExaminedResponse
 pub struct nomos_api::FailureResponse
 pub struct nomos_api::FieldValueResponse
 pub struct nomos_api::GateCompareResponse
+pub struct nomos_api::GateFindings
 pub struct nomos_api::GateRunResponse
 pub struct nomos_api::IdentityChangeResponse
 pub struct nomos_api::NodeSummaryResponse

@@ -18,24 +18,28 @@
 //! own fields gets a file of its own beside them.
 
 mod baseline_debt_response;
+mod check_outcome_response;
 mod disposition;
 mod gate_compare_response;
 mod gate_explain_response;
 mod gate_findings;
 mod gate_plan_response;
 mod gate_run_response;
+mod no_verdict_response;
 mod rule_calibration_response;
 mod rule_offer_response;
 mod suppression_disposition_response;
 mod suppression_response;
 
 pub use baseline_debt_response::BaselineDebtResponse;
+pub use check_outcome_response::CheckOutcomeResponse;
 pub use disposition::Disposition;
 pub use gate_compare_response::{BucketChange, FindingBucket, GateCompareResponse, Handle_Gate_Compare};
 pub use gate_explain_response::{GateExplainResponse, Handle_Gate_Explain};
 pub use gate_findings::GateFindings;
 pub use gate_plan_response::{GatePlanResponse, Handle_Gate_Plan};
 pub use gate_run_response::{GateRunResponse, Handle_Gate_Run};
+pub use no_verdict_response::NoVerdictResponse;
 pub use rule_calibration_response::RuleCalibrationResponse;
 pub use rule_offer_response::RuleOfferResponse;
 pub use suppression_disposition_response::SuppressionDispositionResponse;

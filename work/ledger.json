@@ -74548,7 +74548,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Re-authored with a sharper acceptance rather than a changed premise. The done_when required declaration rows to survive a bundle round trip, which is too weak to exclude the corruption that actually matters: multiplicity is part of what a declaration means, so an export and import that preserved the text while coalescing two declarations of the same block into one would pass that clause and destroy the rule's semantics. The replacement requires multiplicity and identity to survive exactly, and requires the round-trip fixture to be able to fail if they do not. Nothing else about the item changes."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -74580,7 +74584,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p103spec",
+        "declined_at": 1789431962
+      }
     },
     {
       "id": "P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE",
@@ -74597,7 +74604,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded to keep its dependency edge live. Its carrier is being re-authored so that the bundle round trip must prove declaration multiplicity and identity survive export and import exactly, and a dependent pointing at a declined carrier is stranded rather than waiting. Re-authored unchanged in substance as the -2 item against the new carrier id."
+        }
+      },
       "depends_on": [
         "P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS",
         "P103-A-REPEATED-FRAGMENT-BELOW-A-LENGTH-FLOOR-IS-NOT-A-TEMPLATE"
@@ -74617,7 +74628,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p103spec",
+        "declined_at": 1789431953
+      }
     },
     {
       "id": "P103-THE-CORPUS-HOLE-REPORT-IS-UNREACHABLE-FROM-THE-SCOPED-RUN-EVERY-PREDICATE-USES",
@@ -74804,7 +74818,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P106-A-RUN-THAT-REACHES-NO-VERDICT-DISCARDS-THE-REASON-IT-HAS-ONE"
       ],
@@ -74822,7 +74836,30 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "imports)]` on by default\n\nwarning: `nomos-api` (lib) generated 1 warning (run `cargo fix --lib -p nomos-api` to apply 1 suggestion)\nwarning: `nomos-api` (lib test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.57s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-c92991675f500aa9.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-bb2d2d3fc56dfa8b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7d5d82e5a8a7ebe8.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-3bec1af1063ceb60.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-7358b0061e6f661e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fedd6ca2583f5459.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-942aecabffe820f7.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-926ea058624128e1.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-5d8bdd3ad46949ca.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9081f35afc78d185.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-00551ef005ff6ac5.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-55c03e2f58ca2c01.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-1c48d29768a13792.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-d14649c9426f51eb.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-d043c73da60b6806.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-a0cddea1b2e75030.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-91836b81fba1bcf2.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789431944,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d3ab6adafcac5d89112688fb87da4b5f7a11e285"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -74876,6 +74913,123 @@
           "exit_code": 0
         },
         "revision": "7d470186ddc69af8643a0af5792b872335a4c09e"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P106-THE-TWO-TWINS-THE-HEADLESS-CAUSE-NEEDS-HAVE-NO-FILES",
+      "title": "The two twins the headless cause needs have no files",
+      "why": "P106-THE-HEADLESS-RUN-RESPONSE-CANNOT-SAY-WHY-A-RUN-GAVE-NO-CLEAN-VERDICT has to put two new twin types on the wire: one for the check outcome behind a run, and one for the NoVerdict a judged run now carries. response.rs's own module doc states where they go, in the sentence that ends every twin type that exists only to serialize one of their own fields gets a file of its own beside them, and the module keeps it consistently -- disposition.rs, gate_findings.rs, baseline_debt_response.rs, rule_calibration_response.rs, suppression_response.rs and three more are each exactly that.\n\nMeasured before writing. The parent item reserves gate_run_response.rs, response.rs and the surface snapshot, which are the three files an existing shape would need; it does not reserve files that do not exist yet, and folding the twins into gate_run_response.rs to stay inside it would break a convention stated in the very file the parent edits, for bookkeeping rather than for a reason.\n\nSplit rather than folded, for the reason the gate_plan.rs split already had: a path added to a claimed item is a widening no other session can see, and the board staying true is worth an entry.",
+      "done_when": "Two files exist, each holding one public type named for its own stem, so the file-name rule is satisfied by the type rather than by an exemption.\n\ncheck_outcome_response.rs holds a serializable twin of nomos_check_orchestration::CheckOutcome with the Judged findings left out, because GateRunResponse already carries the reduced findings and a second copy on the same wire would be two encodings of one list. Its Judged arm keeps what is otherwise lost -- the examined counts and the claim -- which GateRunResult's own doc says it carries for information only and which no headless caller can read today.\n\nno_verdict_response.rs holds a serializable twin of nomos_gate_orchestration::NoVerdict, all three variants, keeping the two policy causes apart from the coverage floor because that is the distinction the domain type exists to draw.\n\nNeither type is reachable from anywhere but the parent item's response, and the parent's own predicate is what proves them: a twin with no field carrying it compiles and means nothing.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/response/check_outcome_response.rs",
+          "crates/host/nomos-api/src/response/no_verdict_response.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "imports)]` on by default\n\nwarning: `nomos-api` (lib) generated 1 warning (run `cargo fix --lib -p nomos-api` to apply 1 suggestion)\nwarning: `nomos-api` (lib test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.56s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-c92991675f500aa9.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-bb2d2d3fc56dfa8b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7d5d82e5a8a7ebe8.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-3bec1af1063ceb60.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-7358b0061e6f661e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fedd6ca2583f5459.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-942aecabffe820f7.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-926ea058624128e1.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-5d8bdd3ad46949ca.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9081f35afc78d185.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-00551ef005ff6ac5.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-55c03e2f58ca2c01.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-1c48d29768a13792.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-d14649c9426f51eb.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-d043c73da60b6806.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-a0cddea1b2e75030.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-91836b81fba1bcf2.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789431891,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d3ab6adafcac5d89112688fb87da4b5f7a11e285"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P106-THREE-RESPONSE-TWINS-ARE-NOT-NAMEABLE-FROM-THE-CRATE-ROOT",
+      "title": "Three response twins are not nameable from the crate root",
+      "why": "nomos-api's response module exports every twin type it owns, and lib.rs re-exports a named list of them. Three names are in the first list and not the second: GateFindings, missing for as long as that type has existed, and CheckOutcomeResponse and NoVerdictResponse, which P106-THE-HEADLESS-RUN-RESPONSE-CANNOT-SAY-WHY-A-RUN-GAVE-NO-CLEAN-VERDICT adds.\n\nMeasured 2026-09-14 by comparing the two lists mechanically rather than by reading either, and the public-surface snapshot agrees: blessing nomos-api after the new fields landed recorded the three struct fields and neither of the two types that name them, because that scanner records what a caller can reach from the crate root and nothing else.\n\nSo GateRunResponse has three public fields whose types a Rust caller cannot name. Serializing the response still works, which is why nothing has ever gone red over it, and a caller wanting to match on no_verdict rather than on its JSON cannot. This workspace already treats that shape as a defect rather than a style: P104-THE-COMPARE-FAILURE-TYPE-IS-UNREACHABLE-FROM-THE-CRATE-ROOT was filed and closed for the same thing one crate over.\n\nSeparate from the item that adds the two, and doing the work the same session, because lib.rs is not that item's territory and a path added to a claimed item is a widening no other session can see. GateFindings rides along rather than waiting for an item of its own: it is the same line, the same claim and the same measurement, and fixing two of three would make the list arbitrary.",
+      "done_when": "lib.rs re-exports all three from response, inside the existing alphabetically ordered list and nowhere else.\n\nProved by the surface snapshot recording CheckOutcomeResponse and NoVerdictResponse as types, beside the fields that carry them, rather than only the fields. That snapshot file is reserved by the headless item this one serves and is blessed once there, for both, so the two do not each rewrite it.\n\nNothing else moves. No type changes, no field changes, no module becomes public, and the response module's own export list is untouched.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "imports)]` on by default\n\nwarning: `nomos-api` (lib) generated 1 warning (run `cargo fix --lib -p nomos-api` to apply 1 suggestion)\nwarning: `nomos-api` (lib test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.62s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-c92991675f500aa9.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-bb2d2d3fc56dfa8b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7d5d82e5a8a7ebe8.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-3bec1af1063ceb60.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-7358b0061e6f661e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fedd6ca2583f5459.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-942aecabffe820f7.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-926ea058624128e1.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-5d8bdd3ad46949ca.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9081f35afc78d185.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-00551ef005ff6ac5.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-55c03e2f58ca2c01.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-1c48d29768a13792.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-d14649c9426f51eb.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-d043c73da60b6806.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-a0cddea1b2e75030.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-91836b81fba1bcf2.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1789431918,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d3ab6adafcac5d89112688fb87da4b5f7a11e285"
       },
       "abandoned": [],
       "displaced": [],
