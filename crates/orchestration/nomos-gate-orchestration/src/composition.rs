@@ -27,9 +27,21 @@
 //! executes -- and `crate::tests` now compares this table against it on every `cargo test`.
 //! A rule composed into `Run` without a row here is a red test, not a silent lie.
 //!
-//! This is not yet a shared derivation: the rows below are still authored, because a rule's
-//! contract citation is knowledge no export carries. It is the shape `OD-GATE-020` described
-//! as the fix -- one hand-typed list and one comparison against it.
+//! This *is* a shared derivation now, and the reason this paragraph used to give for the debt
+//! was the part that went stale: a rule's contract citation is knowledge an export does carry
+//! -- `RuleDescriptor::contract_record` and `contract_record_version`, on the same public
+//! `nomos_rules::DESCRIPTORS` table this crate registers from. [`Registered`] reads both
+//! straight off each descriptor and types no row of its own, so there is no hand-authored list
+//! here to keep in step, and the "one hand-typed list and one comparison against it" that
+//! `OD-GATE-020` described as the fix was the shape of the step before this one. The comparison
+//! survives as the test below, which checks what is offered against `Composed_Rules` rather
+//! than against a list written out here.
+//!
+//! `OD-RULES-027` measured what remained after that, and decided it rather than leaving it to
+//! be rediscovered: `Run`'s own seventy-entry array can be derived the same way, that derivation
+//! is available and is not `OD-RULES-009`'s demand planner, and building it is a capability
+//! item's territory rather than this file's. Until that lands, `Run` is the side of this parity
+//! still hand-typed, and the test below is what keeps the two from diverging quietly.
 //!
 //! # What each rule cites, audited rule by rule
 //!

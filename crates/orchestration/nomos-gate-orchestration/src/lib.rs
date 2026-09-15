@@ -10,7 +10,16 @@
 //! policy: required phases, thresholds, coverage, unsupported-analysis policy, waivers,
 //! approvals, and blocking behavior."
 //!
-//! Most of that is still unbuilt. Verified directly, not assumed, at this crate's own start:
+//! "Most of that is still unbuilt" was true of this crate's own start and was read in the
+//! present tense for the twelve increments below, which is the half of it that went stale:
+//! `ScopeSelector`, `RuleSelector`, `SuppressionPolicy`, `BaselinePolicy`, `AdoptionPolicy`,
+//! `CoveragePolicy` (where `WF-001`'s unsupported-analysis policy was reached), required
+//! phases, thresholds, approvals and failure disposition each have a real type here now, named
+//! where each was built. Two elements of the two lists above still have none, and saying which
+//! is the part that keeps this paragraph checkable: `ApplicabilityPolicy`, which the
+//! `ARC-ROADMAP-001` quotation names and nothing in this workspace defines, and evidence
+//! requirements, which `nomos_contracts::Finding`'s own `EvidenceClass` classifies but no gate
+//! policy reads. Verified directly, not assumed, at this crate's own start:
 //! `nomos-check-orchestration::run::Run` called four rules unconditionally over every source
 //! it was handed -- `Check_Completeness_Mirrors`, `Check_Naming_Convention`, (since
 //! `P13-DEPENDENCY-WIRE-1`) `Check_Dependency_Direction`, and (since
@@ -189,11 +198,16 @@
 //! doc for why a disposition diff, not a raw finding diff. It can also refuse: a run whose
 //! findings do not yield one occurrence identity each is returned as
 //! [`CollidingOccurrences`] rather than compared, because the only alternatives to refusing
-//! are ways of dropping a finding quietly. It is not CLI-wired: no flag or
-//! config file reaches it from a `nomos gate` invocation, and `nomos-cli`'s own gate-command
-//! parser still refuses a `compare` subcommand outright, the same "no invented shape ahead
-//! of a real body" this crate's own [`command`] module documents for the wiring, if not the
-//! verb itself. `GatePlan`
+//! are ways of dropping a finding quietly. It is CLI-wired now, which is what the restraint
+//! stated here was waiting on rather than a reversal of it: `nomos gate compare` has its own
+//! line in the gate verb's printed usage, `--against` is a required flag of that line, and
+//! `nomos-cli`'s gate-command parser builds a compare invocation from it instead of refusing
+//! the subcommand outright. What survives of the restraint is narrower and is stated where it
+//! was decided -- `P101-THE-HEADLESS-SURFACES-STILL-STOP-AT-THREE-GATE-VERBS` records that a
+//! surface reaching this crate without a terminal still stops at three gate verbs, so the verb
+//! is reachable by a human at a shell and by no other caller yet. The restraint the wiring was
+//! originally held under is [`crate::gate_command`]'s own -- the "no invented shape ahead of a
+//! real body" it documents for the verbs -- and this is the verb whose body arrived. `GatePlan`
 //! still does not vary by [`GateCommand::root`] or `scope` -- it
 //! reports the registry, not a walk, so neither selection applies to it yet.
 

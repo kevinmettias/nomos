@@ -77691,10 +77691,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p110a",
+        "acquired_at": 1789495714,
+        "lease_expires_at": 1789510114
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -77813,14 +77817,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p109d",
-        "acquired_at": 1789489498,
-        "lease_expires_at": 1789496698
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -77836,7 +77836,33 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins"
+        ],
+        "exit_code": 0,
+        "output_tail": "-rust-deny)\n   Compiling nomos-corrections v0.1.0 (F:\\repos\\finish-p109d\\crates\\corrections\\nomos-corrections)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\finish-p109d\\crates\\rules\\nomos-rules)\n   Compiling nomos-agent-contracts v0.1.0 (F:\\repos\\finish-p109d\\crates\\agent\\nomos-agent-contracts)\n   Compiling nomos-work-orchestration v0.1.0 (F:\\repos\\finish-p109d\\crates\\orchestration\\nomos-work-orchestration)\n   Compiling nomos-model-backend-ollama v0.1.0 (F:\\repos\\finish-p109d\\crates\\agent\\nomos-model-backend-ollama)\n   Compiling nomos-agent-executor-claude-code v0.1.0 (F:\\repos\\finish-p109d\\crates\\agent\\nomos-agent-executor-claude-code)\n   Compiling nomos-spec-ingest v0.1.0 (F:\\repos\\finish-p109d\\crates\\spec\\nomos-spec-ingest)\n   Compiling nomos-spec-project v0.1.0 (F:\\repos\\finish-p109d\\crates\\spec\\nomos-spec-project)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\finish-p109d\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-workspace-discovery v0.1.0 (F:\\repos\\finish-p109d\\crates\\orchestration\\nomos-workspace-discovery)\n   Compiling nomos-agent-orchestration v0.1.0 (F:\\repos\\finish-p109d\\crates\\orchestration\\nomos-agent-orchestration)\n   Compiling nomos-correction-orchestration v0.1.0 (F:\\repos\\finish-p109d\\crates\\orchestration\\nomos-correction-orchestration)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\finish-p109d\\crates\\orchestration\\nomos-gate-orchestration)\n   Compiling nomos-spec-orchestration v0.1.0 (F:\\repos\\finish-p109d\\crates\\orchestration\\nomos-spec-orchestration)\n   Compiling nomos-workflow-orchestration v0.1.0 (F:\\repos\\finish-p109d\\crates\\orchestration\\nomos-workflow-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 35.25s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-c92991675f500aa9.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-2bf94287aee3e49e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-a71e917b2e4028f5.exe)\n",
+        "verified_at": 1789495644,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
