@@ -430,6 +430,7 @@ mod tests
             check_outcome: nomos_check_orchestration::CheckOutcome::NoSource,
             findings,
             disposition: crate::GateRunOutcome::Indeterminate,
+            no_verdict: None,
         };
     }
 }

@@ -7,6 +7,7 @@ pub enum nomos_gate_orchestration::Explanation
 pub enum nomos_gate_orchestration::FindingDisposition
 pub enum nomos_gate_orchestration::GateOutcome
 pub enum nomos_gate_orchestration::GateRunOutcome
+pub enum nomos_gate_orchestration::NoVerdict
 pub enum nomos_gate_orchestration::PhaseDisposition
 pub enum nomos_gate_orchestration::PhaseThreshold
 pub enum nomos_gate_orchestration::RuleCompositionError
@@ -28,6 +29,9 @@ pub enum variant nomos_gate_orchestration::GateOutcome::Planned(GatePlan)
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Failed
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Indeterminate
 pub enum variant nomos_gate_orchestration::GateRunOutcome::Passed
+pub enum variant nomos_gate_orchestration::NoVerdict::IncompleteCoverage
+pub enum variant nomos_gate_orchestration::NoVerdict::MalformedPolicy(String)
+pub enum variant nomos_gate_orchestration::NoVerdict::UnreadablePolicy(String)
 pub enum variant nomos_gate_orchestration::PhaseDisposition::Failed
 pub enum variant nomos_gate_orchestration::PhaseDisposition::Passed
 pub enum variant nomos_gate_orchestration::PhaseDisposition::Skipped
@@ -120,6 +124,7 @@ pub struct field nomos_gate_orchestration::GatePlan::rules: Vec<RuleOffer>
 pub struct field nomos_gate_orchestration::GateRunResult::check_outcome: CheckOutcome
 pub struct field nomos_gate_orchestration::GateRunResult::disposition: GateRunOutcome
 pub struct field nomos_gate_orchestration::GateRunResult::findings: GateFindings
+pub struct field nomos_gate_orchestration::GateRunResult::no_verdict: Option<NoVerdict>
 pub struct field nomos_gate_orchestration::GateRunResult::root: PathBuf
 pub struct field nomos_gate_orchestration::GateRunResult::run: RunId
 pub struct field nomos_gate_orchestration::GateRunResult::unmatched_policy: Vec<String>

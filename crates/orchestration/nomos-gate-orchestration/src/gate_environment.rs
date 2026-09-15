@@ -12,7 +12,7 @@ use std::path::Path;
 use crate::policy::{GatePolicyFile, Resolve_Gate_Policy};
 use crate::{
     AdoptionPolicy, BaselinePolicy, CoveragePolicy, Disposition_Of_Findings, Evaluated_Phases, GateCommand, GateFindings, GateRunOutcome, GateRunResult,
-    Phased_Disposition, RuleSelector, ScopeSelector, SuppressionPolicy, SuppressionReason,
+    NoVerdict, Phased_Disposition, RuleSelector, ScopeSelector, SuppressionPolicy, SuppressionReason,
 };
 
 /// Judges `walked` exactly as `nomos check` would.
@@ -155,19 +155,30 @@ pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
     let phase_outcomes = Evaluated_Phases(&command.phases, &reduced.findings.blocking_findings, &command.approvals);
     let disposition = Phased_Disposition(reduced.disposition, &command.phases, &phase_outcomes, &reduced.findings.blocking_findings);
 
+    // A policy file that exists and could not be turned into a policy refuses the run rather
+    // than letting it report a disposition reached under policy nobody authored. The judgment
+    // above still happens and `check_outcome` still carries it in full, so a caller sees
+    // exactly what the check found; what it does not get is a verdict, because the rules for
+    // turning findings into one were unreadable. Reported after judging rather than instead of
+    // it so the answer stays as informative as it honestly can be.
+    //
+    // The cause travels with the refusal. It used to be read as `declared.is_err()` and
+    // dropped, which left every consumer able to say that there was no verdict and unable to
+    // say why -- including for the reader's own message naming the key it refused.
+    let unusable_policy = declared.as_ref().err().map(|error| return error.As_No_Verdict());
+
     return GateRunResult {
         root: command.root.clone(),
         run,
         check_outcome: outcome,
         findings: reduced.findings,
         unmatched_policy: reduced.unmatched_policy,
-        // A policy file that exists and could not be turned into a policy refuses the run
-        // rather than letting it report a disposition reached under policy nobody authored.
-        // The judgment above still happens and `check_outcome` still carries it in full, so a
-        // caller sees exactly what the check found; what it does not get is a verdict, because
-        // the rules for turning findings into one were unreadable. Reported after judging
-        // rather than instead of it so the answer stays as informative as it honestly can be.
-        disposition: if declared.is_err() { GateRunOutcome::Indeterminate } else { disposition },
+        disposition: if unusable_policy.is_some() { GateRunOutcome::Indeterminate } else { disposition },
+        // The policy failure wins when both could apply. It cannot: an unreadable file falls
+        // back to a default policy whose coverage is Unset, so Reduced_With_Coverage never
+        // downgrades under one. Written as a preference anyway rather than as an assumption,
+        // because the fallback is in a different function than this line.
+        no_verdict: unusable_policy.or(reduced.no_verdict),
     };
 }
 
@@ -215,6 +226,10 @@ struct Reduction
     findings: GateFindings,
     disposition: GateRunOutcome,
     unmatched_policy: Vec<String>,
+    /// Why this reduction reached no verdict, when it judged findings and reached none.
+    /// Only [`Reduced_With_Coverage`] can produce one here; the policy file is read before
+    /// any of this runs and [`Run_Gate`] carries that cause itself.
+    no_verdict: Option<NoVerdict>,
 }
 
 /// The blocking findings, the findings an `AdoptionPolicy` calibration kept from blocking,
@@ -286,7 +301,12 @@ fn Reduced_Findings(
 
     let unmatched_policy = Unmatched_Entries(&selected, policies);
 
-    return Reduction { findings, disposition, unmatched_policy };
+    // Disposition_Of_Findings answers Passed or Failed and never Indeterminate, so an
+    // Indeterminate here is Reduced_With_Coverage's own downgrade and nothing else. Read off
+    // the result rather than recomputing the claim, so the two can never disagree about why.
+    let no_verdict = (disposition == GateRunOutcome::Indeterminate).then_some(NoVerdict::IncompleteCoverage);
+
+    return Reduction { findings, disposition, unmatched_policy, no_verdict };
 }
 
 /// [`Reduced_Findings`]'s own result when `outcome` was never judged -- nothing was found, so
@@ -305,6 +325,9 @@ fn Unjudged() -> Reduction
         disposition: GateRunOutcome::Indeterminate,
         // Nothing was judged, so no entry failed to match -- none was asked.
         unmatched_policy: Vec::new(),
+        // Nothing was judged, so check_outcome is already the reason and this does not
+        // restate it. See GateRunResult::no_verdict's own doc.
+        no_verdict: None,
     };
 }
 
@@ -387,8 +410,8 @@ fn Reduced_With_Coverage(outcome: GateRunOutcome, coverage: CoveragePolicy, sele
 mod tests
 {
     use super::{JudgeContext, Judged_Sources, Run_Gate};
-    use crate::{GateCommand, GatePhase, GateRunOutcome, PhaseApproval, PhaseThreshold};
-    use nomos_check_orchestration::CheckOutcome;
+    use crate::{CoveragePolicy, GateCommand, GatePhase, GateRunOutcome, NoVerdict, PhaseApproval, PhaseThreshold};
+    use nomos_check_orchestration::{CheckOutcome, Claim};
     use nomos_contracts::{Digest128, RuleId, RunId};
     use nomos_model::Subject_Of_Path;
     use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
@@ -410,6 +433,124 @@ mod tests
             "a.rs",
             "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
         )];
+    }
+
+
+    /// A scratch root carrying `policy` as its own `nomos-gate.json`.
+    ///
+    /// A third private copy of a helper `gate_policy_file.rs` and `tests.rs` each keep one of
+    /// already. Reaching across for either would make it public for a caller that wants three
+    /// lines, which costs this crate's surface more than the repetition costs a reader.
+    fn Root_With_Policy(name: &str, policy: &str) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-gate-environment-{name}-{}", std::process::id()));
+        std::fs::create_dir_all(&root).expect("creatable");
+        std::fs::write(root.join("nomos-gate.json"), policy).expect("writable");
+
+        return root;
+    }
+
+    /// A policy file whose key is mis-spelled leaves the run without a verdict, and the run
+    /// says so *and* says which key was refused.
+    ///
+    /// The likeliest operator error there is, in the one file a repository adopting this tool
+    /// writes by hand, and `DeclaredPolicy` refuses it under `deny_unknown_fields` on purpose.
+    /// The reader's message naming the offending key was computed and discarded until
+    /// `no_verdict` existed, so this asserts the key itself reaches a caller rather than only
+    /// that something went wrong.
+    #[test]
+    fn Test_Run_Gate_Should_Name_The_Key_A_Malformed_Policy_Was_Refused_For()
+    {
+        let root = Root_With_Policy("malformed", r#"{ "basline": [] }"#);
+        let command = GateCommand { root: root.clone(), ..Default::default() };
+        let run = RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
+
+        let result = Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, run);
+
+        assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
+        let Some(NoVerdict::MalformedPolicy(detail)) = result.no_verdict
+        else
+        {
+            panic!("expected a malformed policy, got {:?}", result.no_verdict);
+        };
+        assert!(detail.contains("basline"), "{detail}");
+        // The judging still happened and is still reported in full. Refusing the verdict is
+        // not refusing the answer, which is what Run_Gate's own comment promises.
+        assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }));
+    }
+
+    /// A run that reaches a real verdict records no reason for one, so a caller reading
+    /// `no_verdict` on an ordinary run is told nothing rather than something empty.
+    #[test]
+    fn Test_Run_Gate_Should_Record_No_Reason_When_It_Reached_A_Verdict()
+    {
+        let root = Repository_Root();
+        let command = GateCommand { root: root.clone(), ..Default::default() };
+        let run = RunId::From_Digest(Digest128::From_Bytes([0; Digest128::BYTE_LENGTH]));
+
+        let result = Run_Gate(Some(Blocking_Sources()), super::GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, run);
+
+        assert_eq!(result.disposition, GateRunOutcome::Failed);
+        assert_eq!(result.no_verdict, None);
+    }
+
+    /// The coverage floor downgrading an otherwise-passing run names itself, and is therefore
+    /// tellable apart from a broken policy file -- the distinction that matters most in this
+    /// enum, because this one is not a fault and the other two are.
+    ///
+    /// Driven through `Reduced_Findings` rather than `Run_Gate`: this is the exact mechanism
+    /// `OD-GATE-016` decided, and reaching it through a real walk would make the test depend
+    /// on which capabilities happen to be materializable on the machine running it.
+    #[test]
+    fn Test_Reduced_Findings_Should_Name_The_Coverage_Floor_That_Downgraded_A_Pass()
+    {
+        let outcome = CheckOutcome::Judged {
+            findings: vec![Unjudgeable_Finding()],
+            examined: nomos_check_orchestration::Examined { files: 1, facts: 1 },
+            claim: Claim::Incomplete,
+        };
+        let (adoption, suppressions, baseline) = (Default::default(), Default::default(), Default::default());
+        let policies = super::DispositionPolicies { adoption: &adoption, suppressions: &suppressions, baseline: &baseline, now: nomos_platform::Timestamp::From_Unix_Seconds(0) };
+
+        let reduced = super::Reduced_Findings(&outcome, &Default::default(), policies, CoveragePolicy::RequireCompleteness);
+
+        assert_eq!(reduced.disposition, GateRunOutcome::Indeterminate);
+        assert_eq!(reduced.no_verdict, Some(NoVerdict::IncompleteCoverage));
+        assert!(reduced.findings.blocking_findings.is_empty(), "nothing here can fail a build; the floor is the whole reason");
+    }
+
+    /// The same findings without a declared floor reach a verdict and name no reason, which is
+    /// what makes the assertion above about the floor rather than about the findings.
+    #[test]
+    fn Test_Reduced_Findings_Should_Pass_The_Same_Findings_With_No_Declared_Floor()
+    {
+        let outcome = CheckOutcome::Judged {
+            findings: vec![Unjudgeable_Finding()],
+            examined: nomos_check_orchestration::Examined { files: 1, facts: 1 },
+            claim: Claim::Incomplete,
+        };
+        let (adoption, suppressions, baseline) = (Default::default(), Default::default(), Default::default());
+        let policies = super::DispositionPolicies { adoption: &adoption, suppressions: &suppressions, baseline: &baseline, now: nomos_platform::Timestamp::From_Unix_Seconds(0) };
+
+        let reduced = super::Reduced_Findings(&outcome, &Default::default(), policies, CoveragePolicy::Unset);
+
+        assert_eq!(reduced.disposition, GateRunOutcome::Passed);
+        assert_eq!(reduced.no_verdict, None);
+    }
+
+    /// One finding a rule could not judge, which is what makes a claim `Incomplete`.
+    fn Unjudgeable_Finding() -> nomos_contracts::Finding
+    {
+        return nomos_contracts::Finding {
+            rule: RuleId::New("dependency-policy"),
+            subject: Subject_Of_Path("a.rs"),
+            subject_name: "a.rs".to_owned(),
+            applicability: nomos_contracts::Applicability::MissingCapability,
+            evidence: nomos_contracts::EvidenceClass::Derived,
+            gate: nomos_contracts::GateCategory::Advisory,
+            summary: "no provider offered the capability this rule requires".to_owned(),
+            locations: vec!["a.rs".to_owned()],
+        };
     }
 
     #[test]

@@ -13,7 +13,7 @@ use nomos_capability::RegistryError;
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::Finding;
 use nomos_gate_orchestration::{
-    Admissibility, BaselineDebt, Explanation, GateExplainResult, GateOutcome, GateRunOutcome, GateRunResult, RuleCalibration, Suppression,
+    Admissibility, BaselineDebt, Explanation, GateExplainResult, GateOutcome, GateRunOutcome, GateRunResult, NoVerdict, RuleCalibration, Suppression,
 };
 use std::io::Write;
 use std::path::Path;
@@ -129,7 +129,7 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
 
     Report_Unmatched_Policy(result, stdout);
 
-    return Exit_Code_For(result.disposition, stderr);
+    return Exit_Code_For(result, stderr);
 }
 
 /// Names every declared policy entry that matched no finding in this run.
@@ -292,43 +292,63 @@ fn Unjudged(result: &GateRunResult, flag: &str, stderr: &mut impl Write) -> Opti
 /// included: `Run_Gate` assigns that disposition *after* a full judgment in two deliberate
 /// cases, which [`Render_Run_No_Verdict`] names. This function asserted the opposite and
 /// aborted the process on both until the cases were measured.
-fn Exit_Code_For(disposition: GateRunOutcome, stderr: &mut impl Write) -> ExitCode
+///
+/// Takes the whole result rather than the disposition alone, because the cause and the
+/// disposition are one answer: reading `Indeterminate` without the `NoVerdict` beside it is
+/// exactly the half-answer this repository had before the result carried one.
+fn Exit_Code_For(result: &GateRunResult, stderr: &mut impl Write) -> ExitCode
 {
-    return match disposition
+    return match result.disposition
     {
         GateRunOutcome::Failed => ExitCode::Violations,
         GateRunOutcome::Passed => ExitCode::Ok,
-        GateRunOutcome::Indeterminate => Render_Run_No_Verdict(stderr),
+        GateRunOutcome::Indeterminate => Render_Run_No_Verdict(result.no_verdict.as_ref(), stderr),
     };
 }
 
 /// The tree was judged, the findings reported above are all of them, and no verdict was
-/// reached.
+/// reached. Says which of the three mechanisms produced that.
 ///
-/// Two deliberate mechanisms in `nomos_gate_orchestration::Run_Gate` produce this, and a
-/// `GateRunResult` records neither of them. A `nomos-gate.json` that is present and cannot
-/// be turned into a policy: the rules for reducing findings to a verdict were never
-/// assembled, so the run reports what it found and refuses to call it anything. And a
-/// declared coverage floor of `require-completeness` over a run whose selected findings are
-/// an incomplete claim, which is `OD-GATE-016`'s own decision that a run where some rules
-/// could not look must not be called a pass.
+/// Each wants a different reaction, which is the whole reason `GateRunResult` carries the
+/// cause rather than only the disposition. Two are a broken `nomos-gate.json` and send a
+/// reader to that file with the reader's own message about it -- for a mis-spelled key,
+/// the key. The third is `OD-GATE-016`'s coverage floor doing exactly what the repository
+/// asked it to, where there is no fault to find and a reader sent looking for one would
+/// waste the trip.
 ///
-/// Which of the two is deliberately not named. The result does not carry it, and a guess
-/// here would be worse than the silence -- it would send a reader to the wrong file. What
-/// is named is the state and where to look first, the same discipline the non-judged
-/// renderers above already keep: say what did not happen, and never let it read as a clean
-/// result.
-fn Render_Run_No_Verdict(stderr: &mut impl Write) -> ExitCode
+/// `None` is not reachable from a real `Run_Gate` today, which fills the cause on every
+/// path that produces this disposition after judging. It is still answered rather than
+/// asserted away: an unreachable claim about this exact arm is what aborted the process
+/// before, and the honest rendering of a missing reason is to say the reason is missing.
+fn Render_Run_No_Verdict(cause: Option<&NoVerdict>, stderr: &mut impl Write) -> ExitCode
 {
-    let _ = writeln!(
-        stderr,
-        "\nthis run judged the tree and reached no verdict, so the findings above are \
-         complete and none of them decided anything.\n\
-         A `nomos-gate.json` that is present and cannot be read as a policy does this, and \
-         so does a declared coverage floor of `require-completeness` over a run that could \
-         not look everywhere it selected. This run does not record which, so the policy \
-         file is where to look first."
-    );
+    let _ = match cause
+    {
+        Some(NoVerdict::UnreadablePolicy(detail)) => writeln!(
+            stderr,
+            "\nthis run judged the tree and reached no verdict: the `nomos-gate.json` under its \
+             root could not be read, so there were no declared rules to reduce the findings \
+             above by.\n  {detail}"
+        ),
+        Some(NoVerdict::MalformedPolicy(detail)) => writeln!(
+            stderr,
+            "\nthis run judged the tree and reached no verdict: the `nomos-gate.json` under its \
+             root is not a policy this reader accepts, so there were no declared rules to \
+             reduce the findings above by.\n  {detail}"
+        ),
+        Some(NoVerdict::IncompleteCoverage) => writeln!(
+            stderr,
+            "\nthis run judged the tree, found nothing that can fail a build, and is still not \
+             a pass: its declared coverage floor is `require-completeness` and some rules \
+             could not look.\n\
+             Nothing is wrong with the tree or with the policy. A clean result here would \
+             mean only that the rules which did run found nothing."
+        ),
+        None => writeln!(
+            stderr,
+            "\nthis run judged the tree and reached no verdict, and did not record why."
+        ),
+    };
 
     return ExitCode::Contradictory;
 }
@@ -553,6 +573,7 @@ mod tests
     fn Test_Render_Run_Should_Report_Vacuous_When_The_Check_Outcome_Never_Reached_Judged()
     {
         let result = GateRunResult {
+            no_verdict: None,
             unmatched_policy: Vec::new(),
             run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
             root: PathBuf::from("does/not/matter"),
@@ -571,23 +592,94 @@ mod tests
         assert!(String::from_utf8_lossy(&stdout).is_empty());
     }
 
-    /// A judged run whose disposition is `Indeterminate` says there is no verdict and
-    /// exits `Contradictory`, instead of aborting the process.
+    /// A judged run whose disposition is `Indeterminate` says there is no verdict, says which
+    /// mechanism produced that, and exits `Contradictory` -- instead of aborting the process.
     ///
-    /// The arm this covers was `unreachable!` until it was measured, on the claim that
-    /// `Run_Gate` only assigns `Indeterminate` to a run that never reached `Judged`. It
-    /// assigns it to a judged run in two deliberate cases -- an unreadable
-    /// `nomos-gate.json`, and a `require-completeness` floor over an incomplete claim --
-    /// and a real `nomos gate run` aborted with 101 on both.
+    /// The arm these cover was `unreachable!` until it was measured, on the claim that
+    /// `Run_Gate` only assigns `Indeterminate` to a run which never reached `Judged`. It
+    /// assigns it to a judged run in three cases, and a real `nomos gate run` aborted with
+    /// 101 on every one.
     ///
-    /// The findings are asserted on `stdout` as well, because the abort came *after* they
-    /// were written: what the panic destroyed was the verdict line and the exit code, and
-    /// a fix that reported the state by dropping the report would be a worse answer.
+    /// One test per cause rather than one over all of them, because the whole point of
+    /// carrying a cause is that the three read differently to a person: two send a reader to
+    /// the policy file, and the third tells them not to go looking for a fault at all.
     #[test]
-    fn Test_Render_Run_Should_Report_No_Verdict_When_A_Judged_Run_Is_Indeterminate()
+    fn Test_Render_Run_Should_Name_A_Malformed_Policy_As_The_Reason_There_Is_No_Verdict()
     {
         let finding = Example_Finding(GateCategory::Advisory);
-        let result = GateRunResult {
+        let result = Judged_Without_A_Verdict(&finding, Some(NoVerdict::MalformedPolicy("unknown field `basline`".to_owned())));
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Run(&result, &mut stdout, &mut stderr);
+
+        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
+        assert_eq!(code, ExitCode::Contradictory, "{rendered_stderr}");
+        assert!(rendered_stderr.contains("not a policy this reader accepts"), "{rendered_stderr}");
+        assert!(rendered_stderr.contains("basline"), "{rendered_stderr}");
+        // The abort came *after* the findings were written, so what it destroyed was the
+        // verdict line and the exit code. A fix that reported the state by dropping the
+        // report would be the worse answer.
+        assert!(String::from_utf8_lossy(&stdout).contains(&finding.Describe()));
+    }
+
+    #[test]
+    fn Test_Render_Run_Should_Name_An_Unreadable_Policy_Separately_From_A_Malformed_One()
+    {
+        let finding = Example_Finding(GateCategory::Advisory);
+        let result = Judged_Without_A_Verdict(&finding, Some(NoVerdict::UnreadablePolicy("nomos-gate.json: PermissionDenied".to_owned())));
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Run(&result, &mut stdout, &mut stderr);
+
+        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
+        assert_eq!(code, ExitCode::Contradictory, "{rendered_stderr}");
+        assert!(rendered_stderr.contains("could not be read"), "{rendered_stderr}");
+        assert!(rendered_stderr.contains("PermissionDenied"), "{rendered_stderr}");
+    }
+
+    /// The coverage floor is the one cause where nothing is wrong, so its rendering says so
+    /// rather than sending a reader to look for a fault that is not there.
+    #[test]
+    fn Test_Render_Run_Should_Say_Nothing_Is_Wrong_When_The_Coverage_Floor_Withheld_The_Pass()
+    {
+        let finding = Example_Finding(GateCategory::Advisory);
+        let result = Judged_Without_A_Verdict(&finding, Some(NoVerdict::IncompleteCoverage));
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Run(&result, &mut stdout, &mut stderr);
+
+        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
+        assert_eq!(code, ExitCode::Contradictory, "{rendered_stderr}");
+        assert!(rendered_stderr.contains("require-completeness"), "{rendered_stderr}");
+        assert!(rendered_stderr.contains("Nothing is wrong"), "{rendered_stderr}");
+    }
+
+    /// A cause `Run_Gate` does not currently leave unset is still answered rather than
+    /// asserted away: an unreachable claim about this exact arm is what aborted the process
+    /// before it carried one, and the honest rendering of a missing reason says it is missing.
+    #[test]
+    fn Test_Render_Run_Should_Say_The_Reason_Is_Missing_Rather_Than_Assume_One()
+    {
+        let finding = Example_Finding(GateCategory::Advisory);
+        let result = Judged_Without_A_Verdict(&finding, None);
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Render_Run(&result, &mut stdout, &mut stderr);
+
+        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
+        assert_eq!(code, ExitCode::Contradictory, "{rendered_stderr}");
+        assert!(rendered_stderr.contains("did not record why"), "{rendered_stderr}");
+    }
+
+    /// A run that judged `finding` and came out with no verdict, for `cause`.
+    fn Judged_Without_A_Verdict(finding: &Finding, cause: Option<NoVerdict>) -> GateRunResult
+    {
+        return GateRunResult {
+            no_verdict: cause,
             unmatched_policy: Vec::new(),
             run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
             root: PathBuf::from("."),
@@ -599,16 +691,6 @@ mod tests
             findings: Empty_Findings(),
             disposition: GateRunOutcome::Indeterminate,
         };
-        let mut stdout = Vec::new();
-        let mut stderr = Vec::new();
-
-        let code = Render_Run(&result, &mut stdout, &mut stderr);
-
-        let rendered_stdout = String::from_utf8_lossy(&stdout).into_owned();
-        let rendered_stderr = String::from_utf8_lossy(&stderr).into_owned();
-        assert_eq!(code, ExitCode::Contradictory, "{rendered_stderr}");
-        assert!(rendered_stderr.contains("reached no verdict"), "{rendered_stderr}");
-        assert!(rendered_stdout.contains(&finding.Describe()), "{rendered_stdout}");
     }
 
     /// A judged run with nothing blocking reports `Ok` and names its own `RunId` -- the
@@ -618,6 +700,7 @@ mod tests
     {
         let run = Fresh_Run_Id(Timestamp::From_Unix_Seconds(0));
         let result = GateRunResult {
+            no_verdict: None,
             unmatched_policy: Vec::new(),
             run,
             root: PathBuf::from("."),
@@ -648,6 +731,7 @@ mod tests
     {
         let finding = Example_Finding(GateCategory::Blocking);
         let result = GateRunResult {
+            no_verdict: None,
             unmatched_policy: Vec::new(),
             run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
             root: PathBuf::from("."),

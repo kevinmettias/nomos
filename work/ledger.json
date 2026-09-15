@@ -74736,7 +74736,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -74756,7 +74756,34 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "6c5d3ee5.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-54884038136b13b2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-7d5d82e5a8a7ebe8.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-3bec1af1063ceb60.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-7358b0061e6f661e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fedd6ca2583f5459.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-942aecabffe820f7.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-926ea058624128e1.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-5d8bdd3ad46949ca.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-9081f35afc78d185.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-00551ef005ff6ac5.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-55c03e2f58ca2c01.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-1c48d29768a13792.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-d14649c9426f51eb.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-d043c73da60b6806.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-a0cddea1b2e75030.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-91836b81fba1bcf2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-a71e917b2e4028f5.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-bd58adf0b6e7d466.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-10ca627467baeed0.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1789431260,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7d470186ddc69af8643a0af5792b872335a4c09e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null
@@ -74796,6 +74823,60 @@
         "timeout_seconds": 2700
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P106-THE-NO-VERDICT-CAUSE-IS-UNREACHABLE-FROM-THE-CRATE-ROOT",
+      "title": "The no-verdict cause is unreachable from the crate root",
+      "why": "P106-A-RUN-THAT-REACHES-NO-VERDICT-DISCARDS-THE-REASON-IT-HAS-ONE puts a NoVerdict on GateRunResult, in gate_plan/gate_run_result.rs, which that item reserves. A public field cannot have a private type, and the module that re-exports its neighbours is gate_plan.rs, which that item does not reserve and which is reserved by nobody.\n\nMeasured before writing rather than discovered while writing: gate_plan.rs line 16 is pub use gate_run_result::GateRunResult, and lib.rs line 226 re-exports the whole set from gate_plan, so the crate root cannot name a type gate_plan.rs has not first. lib.rs is already reserved by the parent item; this one path is the only thing between the new type and a caller.\n\nSplit rather than folded into the parent, because the parent is still literally true and its territory was measured against the edit it was written for. A path added to a claimed item is a widening no other session can see, and the rule this repository works to is that the board stays true even when that costs an entry.",
+      "done_when": "gate_plan.rs re-exports NoVerdict beside GateRunResult, from the same module and on the same line, because they are one type and the field that carries it. Nothing else in that file moves: no module is added, no other re-export changes, and GatePlan itself is untouched.\n\nProved by the parent item's own predicate reaching green, which it cannot do without this: a public field of a private type does not compile.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "et_Its_Own_Identity ... ok\ntest tests::Test_A_Baselined_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Suppressed_And_Baselined_Finding_Should_Report_As_Suppressed ... ok\ntest tests::Test_A_Declared_Entry_That_Matched_Should_Not_Be_Reported_As_Unmatched ... ok\ntest tests::Test_A_Suppressed_Finding_Should_Not_Block ... ok\ntest tests::Test_A_Narrowed_Run_And_A_Whole_Run_Should_Agree_About_A_Declared_Module ... ok\ntest tests::Test_A_Calibrated_Finding_Should_Not_Block ... ok\n\ntest result: ok. 134 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 58.85s\n\n\nrunning 4 tests\ntest Test_Run_Gate_Should_Report_An_Unreadable_Check_Outcome_As_Indeterminate ... ok\ntest Test_Run_Gate_Should_Accept_A_Real_Nomos_Platform_Process_Launcher ... ok\ntest Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified ... ok\ntest Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestration_Seam ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.39s\n\n\nrunning 4 tests\ntest Test_Disposition_Of_Findings_Should_Fail_On_A_Blocking_Finding ... ok\ntest Test_Disposition_Of_Findings_Should_Fail_With_One_Blocking_Finding_Among_Many ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_When_Nothing_Can_Fail_A_Build ... ok\ntest Test_Disposition_Of_Findings_Should_Pass_With_No_Findings ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-441acf4888ebc08b.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-51ff4d6c2ef7792a.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-274283f7a8f3c89b.exe)\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1789431103,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7d470186ddc69af8643a0af5792b872335a4c09e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

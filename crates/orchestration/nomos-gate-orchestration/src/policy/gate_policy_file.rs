@@ -60,7 +60,7 @@ use std::path::Path;
 use super::{
     AdoptionPolicy, BaselineDebt, BaselinePolicy, CoveragePolicy, RuleCalibration, Suppression, SuppressionDisposition, SuppressionPolicy,
 };
-use crate::GateCommand;
+use crate::{GateCommand, NoVerdict};
 
 /// The file a run resolves its policies from, relative to the run's own root.
 ///
@@ -126,6 +126,23 @@ pub(crate) enum GatePolicyError
     Unreadable(String),
     /// The file was read and is not the shape this module expects.
     Malformed(String),
+}
+
+impl GatePolicyError
+{
+    /// This failure as the reason a run reached no verdict.
+    ///
+    /// The mapping lives here rather than at the call site so that a variant added to this
+    /// enum has to answer what it means to a run, in the file that added it, instead of
+    /// silently folding into whatever arm the caller wrote last.
+    pub(crate) fn As_No_Verdict(&self) -> NoVerdict
+    {
+        return match self
+        {
+            Self::Unreadable(detail) => NoVerdict::UnreadablePolicy(detail.clone()),
+            Self::Malformed(detail) => NoVerdict::MalformedPolicy(detail.clone()),
+        };
+    }
 }
 
 /// The policy [`GATE_POLICY_FILE`] under `root` declares, or `Ok(None)` when there is none.

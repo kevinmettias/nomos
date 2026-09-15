@@ -13,7 +13,7 @@ mod gate_run_result;
 pub use gate_findings::GateFindings;
 pub use gate_outcome::GateOutcome;
 pub use gate_run_outcome::{Disposition_Of_Findings, GateRunOutcome};
-pub use gate_run_result::GateRunResult;
+pub use gate_run_result::{GateRunResult, NoVerdict};
 
 use nomos_rules::RuleOffer;
 
