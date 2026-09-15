@@ -15,6 +15,15 @@ pub struct BaselineDebtResponse
     pub rule: RuleId,
     /// The subject this debt applies to.
     pub subject: SubjectId,
+    /// The path this entry was written with, or `null` when no file declared it.
+    ///
+    /// Display material beside `subject`'s identity, for the reason
+    /// [`super::baseline_population_response::BaselinePopulationResponse::declared_path`] gives
+    /// at length: it is what a caller can name the entry by to the person who wrote it.
+    ///
+    /// `explain` carries this because it answers *why* one finding is tolerated, and the
+    /// answer is only actionable if the reader can find the line that tolerates it.
+    pub declared_path: Option<String>,
     /// Why this finding is tolerated rather than fixed.
     pub rationale: String,
     /// How many occurrences this entry accepted at adoption.
@@ -28,7 +37,13 @@ impl BaselineDebtResponse
 {
     pub(crate) fn From(debt: BaselineDebt) -> Self
     {
-        return Self { rule: debt.rule, subject: debt.subject, rationale: debt.rationale, allowance: BaselineAllowanceResponse::From(debt.allowance) };
+        return Self {
+            rule: debt.rule,
+            subject: debt.subject,
+            declared_path: debt.declared_path,
+            rationale: debt.rationale,
+            allowance: BaselineAllowanceResponse::From(debt.allowance),
+        };
     }
 }
 
@@ -46,6 +61,7 @@ mod tests
             subject: nomos_model::Subject_Of_Path("a.rs"),
             rationale: "a real rationale".to_owned(),
             allowance: nomos_gate_orchestration::BaselineAllowance::AtMost(2),
+            declared_path: Some("./a.rs".to_owned()),
         };
 
         let response = BaselineDebtResponse::From(debt.clone());
@@ -55,5 +71,10 @@ mod tests
         assert_eq!(response.rationale, debt.rationale);
         let rendered = serde_json::to_value(&response).expect("always serializes");
         assert_eq!(rendered.pointer("/allowance/accepted_occurrence_count").and_then(serde_json::Value::as_u64), Some(2), "{rendered}");
+        assert_eq!(
+            rendered.get("declared_path").and_then(serde_json::Value::as_str),
+            Some("./a.rs"),
+            "the spelling the author wrote is what makes this entry findable again: {rendered}"
+        );
     }
 }

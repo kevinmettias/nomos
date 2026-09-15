@@ -612,11 +612,13 @@ fn Tolerated_Within_Allowance(matched: Vec<Finding>, baseline: &BaselinePolicy) 
         // it, and each group shares one rule and subject so one lookup answers for all of
         // them. The fallback is unreachable and is written as the permissive reading anyway:
         // an entry nobody could find must not invent a bound nobody declared.
-        let allowed = occurrences
-            .first()
-            .and_then(|finding| return baseline.Tolerating(finding))
-            .map_or(BaselineAllowance::Unbounded, |entry| return entry.allowance);
-        let population = BaselinePopulation { rule, subject, allowed, observed: Occurrence_Count(occurrences.len()) };
+        let entry = occurrences.first().and_then(|finding| return baseline.Tolerating(finding));
+        let allowed = entry.map_or(BaselineAllowance::Unbounded, |entry| return entry.allowance);
+        // Cloned rather than borrowed for the reason the whole field exists: this outlives the
+        // policy the run resolved, because a caller reads a finished run long after the file
+        // it came from may have changed.
+        let declared_path = entry.and_then(|entry| return entry.declared_path.clone());
+        let population = BaselinePopulation { rule, subject, declared_path, allowed, observed: Occurrence_Count(occurrences.len()) };
 
         if population.Is_Exceeded()
         {

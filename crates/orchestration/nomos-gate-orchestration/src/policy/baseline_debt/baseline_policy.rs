@@ -42,7 +42,13 @@ mod tests
     fn Test_Tolerating_Should_Find_The_Entry_That_Applies_To_A_Finding()
     {
         let finding = Finding_For("naming-convention");
-        let debt = BaselineDebt { rule: finding.rule.clone(), subject: finding.subject, rationale: "tracked".to_owned(), allowance: BaselineAllowance::Unbounded };
+        let debt = BaselineDebt {
+            rule: finding.rule.clone(),
+            subject: finding.subject,
+            rationale: "tracked".to_owned(),
+            allowance: BaselineAllowance::Unbounded,
+            declared_path: Some("src/lib.rs".to_owned()),
+        };
         let policy = BaselinePolicy { debt: vec![debt.clone()] };
 
         assert_eq!(policy.Tolerating(&finding), Some(&debt));

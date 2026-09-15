@@ -393,7 +393,7 @@ fn Report_Exceeded_Baselines(populations: &[BaselinePopulation], stdout: &mut im
             stdout,
             "  {} at {}: {} occurrence(s) now, {} accepted at adoption, {} more than accepted",
             population.rule.As_Str(),
-            population.subject,
+            Scope_Name(population),
             population.observed,
             Accepted_Count(population.allowed),
             population.Excess()
@@ -406,6 +406,27 @@ fn Report_Exceeded_Baselines(populations: &[BaselinePopulation], stdout: &mut im
          of them is reported as new. What is known is the quantity: a scope holding more than \
          it accepted holds at least that many occurrences that cannot be the adopted ones."
     );
+}
+
+/// The scope as its author wrote it, which is the whole reason this is not `population.subject`.
+///
+/// A declared entry names a path and the run matches the digest that path folds to, so the
+/// digest is the right identity and the wrong thing to print: the fold is one way, and a reader
+/// told `a scope at e3f85dfb…` cannot find the entry they wrote. Several spellings of one path
+/// fold together -- `./a.rs`, `a.rs`, `A.rs` -- so the author's own spelling is not recoverable
+/// from the subject by anyone, this function included, which is why the entry carries it.
+///
+/// The digest appears only when there is no authored spelling to prefer, which means a policy
+/// built in code rather than declared in a file. Saying the digest there is honest and saying
+/// one of several possible paths would not be. It is printed bare rather than dressed as a path
+/// so that a reader can tell the two cases apart.
+fn Scope_Name(population: &BaselinePopulation) -> String
+{
+    return match &population.declared_path
+    {
+        Some(path) => path.clone(),
+        None => population.subject.to_string(),
+    };
 }
 
 /// The accepted quantity, for a scope that has one.
@@ -731,11 +752,22 @@ mod tests
 
     /// A run whose baselined scope holds `observed` occurrences against an allowance of
     /// `allowed`, rendered.
+    ///
+    /// The declared path is spelled the way an author would plausibly write it rather than the
+    /// way `Subject_Of_Path` normalizes it, so that the output a test reads is the one the
+    /// failing behavior actually produced: a digest where the author wrote a path.
     fn Rendered_Population(allowed: BaselineAllowance, observed: u32) -> String
+    {
+        return Rendered_Population_Declared(Some("./src/lib.rs"), allowed, observed);
+    }
+
+    /// The same, for an entry no file declared -- a policy a caller built in code.
+    fn Rendered_Population_Declared(declared_path: Option<&str>, allowed: BaselineAllowance, observed: u32) -> String
     {
         let population = BaselinePopulation {
             rule: RuleId::New("no-single-line-function-bodies"),
             subject: nomos_model::Subject_Of_Path("src/lib.rs"),
+            declared_path: declared_path.map(str::to_owned),
             allowed,
             observed,
         };
@@ -765,6 +797,39 @@ mod tests
         assert!(rendered.contains("1 accepted at adoption"), "{rendered}");
         assert!(rendered.contains("4 more than accepted"), "{rendered}");
         assert!(rendered.contains("is not known"), "the report must refuse to name which are new: {rendered}");
+    }
+
+    /// The scope is named the way its author wrote it, not by the identity it folds to.
+    ///
+    /// The defect this closes, as a reader met it: `no-single-line-function-bodies at
+    /// e3f85dfb5b619eeb400b77bf17e6437c` for an entry whose author typed `./src/lib.rs`. Both
+    /// halves are asserted, because either alone is satisfied by the wrong thing -- a report
+    /// that printed the path *and* the digest would pass a containment check on the path, and
+    /// one that printed neither would pass a check on the digest.
+    #[test]
+    fn Test_An_Exceeded_Scope_Should_Be_Named_As_Its_Author_Wrote_It_Rather_Than_By_Its_Digest()
+    {
+        let rendered = Rendered_Population(BaselineAllowance::AtMost(1), 5);
+        let digest = nomos_model::Subject_Of_Path("src/lib.rs").to_string();
+
+        assert!(rendered.contains("./src/lib.rs"), "the author's own spelling is what they can act on: {rendered}");
+        assert!(!rendered.contains(&digest), "a digest is the identity and not something the author can search their own configuration for: {rendered}");
+    }
+
+    /// An entry no file declared has no authored spelling, so the digest is printed and is not
+    /// dressed up as a path.
+    ///
+    /// The converse control. Without it, a report that always printed the subject would satisfy
+    /// the test above only by accident of the fixture, and a reader of a programmatically built
+    /// policy would be shown a path that no file contains.
+    #[test]
+    fn Test_An_Exceeded_Scope_No_File_Declared_Should_Be_Named_By_Its_Digest_Alone()
+    {
+        let rendered = Rendered_Population_Declared(None, BaselineAllowance::AtMost(1), 5);
+        let digest = nomos_model::Subject_Of_Path("src/lib.rs").to_string();
+
+        assert!(rendered.contains(&digest), "{rendered}");
+        assert!(!rendered.contains("src/lib.rs"), "no path may be invented for an entry that named none: {rendered}");
     }
 
     /// A scope inside its allowance says nothing at all.

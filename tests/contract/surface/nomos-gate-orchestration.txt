@@ -88,11 +88,13 @@ pub impl nomos_gate_orchestration::RuleCompositionError implements From<RuleRegi
 pub impl nomos_gate_orchestration::RuleCompositionError implements From<RuleResolutionError>
 pub struct field nomos_gate_orchestration::AdoptionPolicy::calibrated: Vec<RuleCalibration>
 pub struct field nomos_gate_orchestration::BaselineDebt::allowance: BaselineAllowance
+pub struct field nomos_gate_orchestration::BaselineDebt::declared_path: Option<String>
 pub struct field nomos_gate_orchestration::BaselineDebt::rationale: String
 pub struct field nomos_gate_orchestration::BaselineDebt::rule: RuleId
 pub struct field nomos_gate_orchestration::BaselineDebt::subject: SubjectId
 pub struct field nomos_gate_orchestration::BaselinePolicy::debt: Vec<BaselineDebt>
 pub struct field nomos_gate_orchestration::BaselinePopulation::allowed: BaselineAllowance
+pub struct field nomos_gate_orchestration::BaselinePopulation::declared_path: Option<String>
 pub struct field nomos_gate_orchestration::BaselinePopulation::observed: u32
 pub struct field nomos_gate_orchestration::BaselinePopulation::rule: RuleId
 pub struct field nomos_gate_orchestration::BaselinePopulation::subject: SubjectId

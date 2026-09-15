@@ -88,6 +88,15 @@ pub struct BaselinePopulation
     pub rule: RuleId,
     /// The subject whose occurrences this scope counts.
     pub subject: SubjectId,
+    /// The path the entry that matched this scope was written with, when a declared file is
+    /// where it came from.
+    ///
+    /// Copied off [`crate::BaselineDebt::declared_path`] rather than recomputed, and for the
+    /// reason it exists there: a report names a scope by what its author typed, and `subject`
+    /// is a digest no reader can get back to their own configuration from. Never identity --
+    /// matching stays on `rule`/`subject`, and two populations here can differ in this field
+    /// while being the one scope those two spellings denote.
+    pub declared_path: Option<String>,
     /// What the declared entry accepted.
     pub allowed: BaselineAllowance,
     /// How many occurrences this run found in the scope.

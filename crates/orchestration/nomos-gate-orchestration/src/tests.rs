@@ -78,6 +78,10 @@ fn Baseline_Of(finding: &Finding) -> BaselineDebt
         // The state every entry authored before `OD-GATE-030` v2 is in, so these fixtures go
         // on asserting exactly what they asserted before the quantity existed.
         allowance: crate::BaselineAllowance::Unbounded,
+        // `None` because this entry is built in code and names no file, which is the state a
+        // caller-authored policy is in. A fixture that wanted to assert what a *declared*
+        // entry does with its path has to go through `gate_policy_file` to get one.
+        declared_path: None,
     };
 }
 
@@ -625,6 +629,11 @@ fn Collapsed_Bodies(count: u32) -> SourceFile
 }
 
 /// A baseline entry for `rule` at `collapsed.rs`, accepting `allowance`.
+///
+/// The declared path is spelled the way an author plausibly would and not the way
+/// `Subject_Of_Path` normalizes it, so that a fixture reaching the report reads the same as a
+/// real run's. `P109-D`: the entry's reach is decided by the subject either way, and this
+/// spelling is only what a report names it by.
 fn Baseline_Accepting(allowance: BaselineAllowance) -> BaselineDebt
 {
     return BaselineDebt {
@@ -632,6 +641,7 @@ fn Baseline_Accepting(allowance: BaselineAllowance) -> BaselineDebt
         subject: Subject_Of_Path("collapsed.rs"),
         rationale: "adopted at the baseline".to_owned(),
         allowance,
+        declared_path: Some("./collapsed.rs".to_owned()),
     };
 }
 

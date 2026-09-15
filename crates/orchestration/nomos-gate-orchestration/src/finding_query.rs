@@ -230,7 +230,13 @@ mod tests
         };
         assert_eq!(
             baselined_by,
-            Some(BaselineDebt { rule: nomos_contracts::RuleId::New(NO_SINGLE_LINE_FUNCTION_BODIES), subject: Subject_Of_Path("a.rs"), rationale: "pre-existing at adoption".to_owned(), allowance: BaselineAllowance::Unbounded }),
+            Some(BaselineDebt {
+                rule: nomos_contracts::RuleId::New(NO_SINGLE_LINE_FUNCTION_BODIES),
+                subject: Subject_Of_Path("a.rs"),
+                rationale: "pre-existing at adoption".to_owned(),
+                allowance: BaselineAllowance::Unbounded,
+                declared_path: Some("a.rs".to_owned()),
+            }),
             "the declared entry is what a real run would apply, so it is what explains the finding"
         );
         assert!(!would_block, "a finding a real run tolerates must not be reported as one that blocks");

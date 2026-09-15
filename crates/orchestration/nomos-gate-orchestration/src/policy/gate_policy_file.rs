@@ -325,6 +325,12 @@ impl DeclaredDebt
     }
 
     /// This entry as the domain type, with its subject computed from its path.
+    ///
+    /// Both the subject and the declared path come off the one field, and they are not
+    /// redundant: the subject folds every spelling of a path to one digest, and the declared
+    /// path is the spelling this author happened to write. The subject is what a run matches
+    /// on; the path is what a report names the scope by, because the fold is one way and a
+    /// reader cannot recover their own spelling from a digest.
     fn Resolved(self) -> BaselineDebt
     {
         return BaselineDebt {
@@ -332,6 +338,10 @@ impl DeclaredDebt
             subject: Subject_Of_Path(&self.path),
             rationale: self.rationale,
             allowance: self.accepted_occurrence_count.map_or(BaselineAllowance::Unbounded, BaselineAllowance::AtMost),
+            // `self.path` is moved here and borrowed above. A struct literal evaluates its
+            // fields in the order they are written, so the borrow has already been taken by
+            // the time this line runs; reordering these two would not compile.
+            declared_path: Some(self.path),
         };
     }
 }

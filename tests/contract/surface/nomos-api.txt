@@ -251,10 +251,12 @@ pub struct field nomos_api::AgentExecutionOutcomeResponse::duration_ms: u64
 pub struct field nomos_api::AgentExecutionOutcomeResponse::is_error: bool
 pub struct field nomos_api::AgentExecutionOutcomeResponse::unresolved_questions: Vec<String>
 pub struct field nomos_api::BaselineDebtResponse::allowance: BaselineAllowanceResponse
+pub struct field nomos_api::BaselineDebtResponse::declared_path: Option<String>
 pub struct field nomos_api::BaselineDebtResponse::rationale: String
 pub struct field nomos_api::BaselineDebtResponse::rule: RuleId
 pub struct field nomos_api::BaselineDebtResponse::subject: SubjectId
 pub struct field nomos_api::BaselinePopulationResponse::allowed: BaselineAllowanceResponse
+pub struct field nomos_api::BaselinePopulationResponse::declared_path: Option<String>
 pub struct field nomos_api::BaselinePopulationResponse::excess: u32
 pub struct field nomos_api::BaselinePopulationResponse::observed: u32
 pub struct field nomos_api::BaselinePopulationResponse::rule: RuleId
