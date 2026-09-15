@@ -75956,6 +75956,98 @@
       "abandoned": [],
       "displaced": [],
       "declined": null
+    },
+    {
+      "id": "P109-A-BASELINE-TOLERANCE-IS-UNBOUNDED-AND-THE-RECORD-NAMES-THE-WRONG-FIRST-INCREMENT",
+      "title": "baseline tolerance is unbounded, and the record names the wrong first increment",
+      "why": "OD-GATE-030 names a snapshot identity on the entry as the first buildable increment toward honest adoption. Measured 2026-09-14 against the built binary, that is the wrong first increment and it would close nothing. A baseline entry is keyed on rule and subject, and a file's subject is the digest of its normalized path rather than its content, so the entry survives every content change by construction. A snapshot digest would therefore prove continuity only while the tree is byte-identical to adoption, which is true until the first commit after adopting and false forever after. What it would not touch is the defect that is live now: adopt one entry for one violation, fix that violation, write five new ones in the same file, and a run reports five baselined and exits 0. The tolerance a repository granted for one occurrence is unbounded in quantity, which is the hiding failure this record says a gate exists to prevent. A count closes that without any of the machinery the record defers: if a scope accepted N occurrences and a run observes M greater than N, then at least M minus N of them cannot belong to the adopted population. That is exact rather than a line-age or diff-age proxy, needs no run history, needs no cross-revision occurrence matching, and is stable under reformatting, which is the objection FindingOccurrenceId's own doc raises against giving baseline occurrence scope.",
+      "done_when": "The record is at version 2 and decides bounded baseline capacity: an adopted baseline records the maximum occurrence population accepted for a rule and subject scope, a later run may tolerate no more than that quantity, and an observed population above the accepted count is a baseline expansion the baseline must not hide. It states, in its own words rather than by implication, that a count establishes neither occurrence continuity, persistence nor reintroduction, and that those stay unresolved until historical identity evidence exists, so a reader cannot take the new bound for partial reintroduction detection. It refuses per-finding attribution within an exceeded population explicitly, because choosing which occurrences are the historical ones would manufacture the evidence the record says nobody has. It decides migration semantics for entries authored before the count existed rather than leaving them to become silently unlimited. It corrects its own What Would Make Continuity Provable list, where step 1 currently names the wrong artifact. It keeps the existing addressing scopes intact, and it names IdentityTransitionKind as the vocabulary a later continuity increment reuses rather than reinventing. The projections are re-rendered from a worktree holding exactly the records this commit publishes, per OD-GATE-005, and all four halves are committed with it.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-opus-5",
+        "acquired_at": 1789440144,
+        "lease_expires_at": 1789447344
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-A-RESERVATION-THAT-DECAYED-UNDER-A-PEERS-REFACTOR-IS-REPORTED-BY-NOTHING",
+      "title": "A reservation that decayed under a peer's refactor is reported by nothing",
+      "why": "Territory is authored once and the tree moves under it. A reservation names repository paths; a peer's refactor renames or splits those files; the reservation is then false while continuing to look exactly like a correct one. Nothing reports that.\n\nThis is not under-reservation and it is not an authoring error. The author predicted the cone correctly and the prediction was invalidated afterwards by somebody else's commit, which is why it is worth a separate mechanism from anything about how territory is predicted.\n\nMeasured, and the measurement is already on this board rather than newly assembled. The decline of P11-AMEND-TERRITORY records it in full: the item reserved crates/substrate/nomos-ledger/src/store.rs, which held both the guard it was changing and the refusal wording its done_when required to change, and that was correct when it was authored. The commit ef1c93f, Give every substrate type its own file, moved AddRefusal into its own file. The guard stayed reserved and the sentence an author reads did not, so the item could implement half its done_when and could not satisfy the clause it had been reissued to carry. It was found while holding the claim, after the work had started.\n\nThe same decline states the population rather than the instance: the three refactor commits 43c5a63 to ef1c93f split 49 files into 99, and eight open items reserved a file that was split -- P11-EXEC-IDLE, P10-DECLINED-DEPENDENCY, P11-DISPATCH-SPLIT, P11-NEXT-WORK, P11-ITEM-DISCRIMINANT, P11-PREFERENCE-STRENGTH, P11-INVALIDATION-ORDER and that item. It says the failure mode is not specific to that item and is live, and no item was ever opened for it: searched 2026-09-14 across every item's title, why and done_when, and the twenty-five that mention a split or a rename are items that happened to involve one, not items about reservations going stale.\n\nwork audit is the verb that already answers this shape of question and it does not answer this one. Verified 2026-09-14 by running it: it reported a stranded item behind a declined dependency and a waiting item behind an unfinished one, exit 0, and said nothing about any reserved path. So the gap is a missing check inside an existing verb rather than a missing verb, and the composition root already holds what it needs -- crates/host/nomos-cli/src/work.rs takes a FileSystem and a root directory and already walks the record directory through it, and crates/host/nomos-api/src/work/audit_response.rs takes a directory too.",
+      "done_when": "work audit reports, for every item that could still be worked, each reserved path that is not in the tree. Done and declined items are not reported: their territory is history and a stale path in it is not debt.\n\n# Detection only\n\nThe report says what it found and nothing else. It does not infer a replacement path, propose a widening, edit the item, add a field to it, or read git history. Whether the repair is a widening, a re-authoring or closing the item is a judgment about the work, and the caller is the one holding the context that decides it.\n\n# The report must not claim to know which case it is\n\nAn absent reserved path is ambiguous and the ambiguity is not resolvable from the board. An item that reserves a file it is going to create is indistinguishable, by existence alone, from one whose file a peer moved. Both are real: P103-A-TERRITORY-EXECUTION-PROVES-INSUFFICIENT-COSTS-THE-WHOLE-ITEM-3 reserves crates/substrate/nomos-ledger/tests/widening_is_recorded.rs, which does not exist because that item creates it.\n\nSo the finding is authored as absent rather than as decayed, and the wording states both readings. A report that called the first case decay would be wrong on a board that already contains one, and an author who learned the report cries wolf would stop reading it -- which costs more than the check is worth. A test drives both shapes against one board and asserts the finding does not distinguish them, so a later change that starts guessing fails here.\n\n# Where it lives\n\nBoth hosts render audit and neither may grow its own copy of the check. Blocking_Refusal was lifted into crates/host/nomos-cli/src/work/report.rs and is called by the CLI; the headless answer is crates/host/nomos-api/src/work/audit_response.rs. Whatever computes absent reserved paths is one function both reach, in the crate that owns territory, not two agreeing implementations.\n\nThreading a root and a FileSystem into the audit path is expected and is this item's cost to pay: the verb currently answers from the document alone, and the question cannot be answered without the tree. It uses the FileSystem the composition root already chooses rather than std::fs, because that is what OD-HOST-001 decided and what makes the check testable against a constructed tree.\n\n# What it is not\n\nNot closed by a check that reports absent paths on done or declined items, which would bury the live findings under the board's whole history. Not closed by a check that runs during claim or add and refuses -- reserving a file you are about to create is legitimate and refusing it would break the ordinary case to report an occasional one. Not closed by making audit exit non-zero on an absent path: audit reports and does not fail today, a stale reservation is not a reason to stop a run, and changing the exit code would make every caller that branches on it start treating board debt as an error.\n\nNo record. This adds a report to an existing verb and decides nothing about what territory means.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-scope-verification/src/territory.rs",
+          "crates/substrate/nomos-scope-verification/src/lib.rs",
+          "crates/substrate/nomos-ledger/src/lib.rs",
+          "crates/substrate/nomos-ledger/src/store/reservation.rs",
+          "crates/substrate/nomos-ledger/src/store/validation.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/work/report.rs",
+          "crates/host/nomos-cli/src/work/parse.rs",
+          "crates/host/nomos-cli/src/work/tests.rs",
+          "crates/host/nomos-api/src/work/audit_response.rs",
+          "crates/orchestration/nomos-work-orchestration/src/run.rs",
+          "crates/orchestration/nomos-work-orchestration/src/tests.rs",
+          "tests/contract/surface/nomos-ledger.txt",
+          "tests/contract/surface/nomos-scope-verification.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-scope-verification",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
     }
   ]
 }
