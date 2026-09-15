@@ -73328,7 +73328,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Mechanically unreachable board debt, not a judgment about the work. This item depends on P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-7, which is Declined and can never become Done, so work audit reports it stranded and no retry resolves it.\n\nThe subject survived that decline. The dependency was re-authored as -8 with three more files and -8 is Done, so the declaration path this item's done_when defers to now exists and is authored in nomos-architecture.json at the repository root. The premise did not die with the dependency; only the edge is stale.\n\nRe-authored as -7 with the dependency retargeted to -8. Why, territory, predicate and timeout are read off this item and carried forward unchanged. One word of the done_when changes: it abbreviated its dependency as P100-...-7, which now names a declined item, and reads P100-...-8.\n\nFlagged rather than repaired, because widening another author's item is a judgment about their work and this is an edge repair. The territory is two files in nomos-rules, and the done_when requires what counts as test material to reach the rules as a declared criterion using whichever path the dependency established. That path is read in crates/repository/nomos-repo-policy/src/architecture/reading.rs and fact_context.rs and materialized in crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs, none of which is reserved. Measured 2026-09-14 by grep, not by running the change, so it is a prediction and not a finding. Whoever claims -7 should measure the cone before editing and expect to re-author if it escapes."
+        }
+      },
       "depends_on": [
         "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-7"
       ],
@@ -73347,7 +73351,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "opus-p103-board",
+        "declined_at": 1789440242
+      }
     },
     {
       "id": "P104-COMPARE-COLLAPSES-EVERY-FINDING-A-RULE-MAKES-ABOUT-ONE-SUBJECT-INTO-ONE-2",
@@ -76043,6 +76050,42 @@
           "nomos-contract-tests"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-7",
+      "title": "The security rules decide what is test material from an eight-clause hardcoded path convention, so a repository that files fixtures elsewhere gets false credential findings",
+      "why": "Auditing all 42 SourceText rules for repository-specific criteria found exactly one family. Is_Test_Or_Fixture_Source in security_text.rs matches tests/, /tests/, /test/, /testdata/, /fixtures/, /examples/, _test.rs, _tests.rs and _test.go, and the three security rules all exempt a source on that basis; rust_text.rs carries the same notion independently in its unwrap-outside-tests-and-examples wording. Some clauses are toolchain-fixed and portable: Cargo owns tests/ and examples/, Go owns _test.go. testdata and fixtures are neither, they are a project convention. A repository filing its fixtures under resources or spec or samples is judged as if a fixture credential were a real one, and an exemption that is too narrow produces false positives rather than misses, which is the damaging direction for a security rule.",
+      "done_when": "What counts as test material reaches the security rules as a declared criterion rather than a path list compiled into security_text.rs, composed from the toolchain-fixed clauses plus whatever the repository declares, so that stable Cargo and Go semantics do not become configuration. It uses whichever declaration path P100-...-8 establishes rather than inventing a second one. A repository declaring nothing keeps today behaviour. A repository declaring its own fixture locations has them exempted, proved against a fixture whose test material sits under none of the nine current clauses. rust_text.rs stops carrying a second independent notion of the same thing.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-8"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-rules",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 1200
       },
       "verified": null,
       "abandoned": [],
