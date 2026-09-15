@@ -74274,7 +74274,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -74287,7 +74287,27 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api"
+        ],
+        "exit_code": 0,
+        "output_tail": "hould_Produce_A_Response_That_Round_Trips_As_Json ... ok\ntest response::gate_run_response::tests::Test_Handle_Gate_Run_And_Walked_Sources_Should_Reach_A_Judgment_Over_A_Real_Tree ... ok\ntest response::gate_run_response::tests::Test_A_Run_That_Reached_A_Verdict_Should_Carry_No_Reason_For_Not_Having_One ... ok\ntest response::gate_compare_response::tests::Test_A_Real_Comparison_Should_Report_No_Refusal ... ok\ntest response::gate_compare_response::tests::Test_Comparing_A_Tree_With_Itself_Should_Report_No_Change ... ok\ntest response::gate_compare_response::tests::Test_The_Two_Sides_Should_Be_Distinct_Runs ... ok\n\ntest result: ok. 156 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 15.73s\n\n\nrunning 8 tests\ntest Test_Handle_Spec_Profiles_Should_List_Real_Nomos_Spec_Project_Profiles ... ok\ntest Test_Handle_Work_Claim_Should_Grant_A_Reservation_Whose_Expiry_Is_A_Real_System_Clock_Lease ... ok\ntest Test_Handle_Gate_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers ... ok\ntest Test_Handle_Gate_Explain_Should_Find_A_Real_Blocking_Finding_Over_A_Real_Walked_Directory ... ok\ntest Test_Handle_Spec_Submit_Should_Accept_A_Complete_Submission_With_Submitted_Origin ... ok\ntest Test_An_Incomplete_Submission_Should_Be_Refused ... ok\ntest Test_Handle_Spec_Record_Should_Resolve_The_Same_Document_On_Repeated_Real_Reads ... ok\ntest Test_This_Packages_Build_Variant_Should_Be_Well_Formed_For_A_Real_Gate_Run ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.15s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.25s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-c92991675f500aa9.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-bb2d2d3fc56dfa8b.exe)\n   Doc-tests nomos_api\n",
+        "verified_at": 1789434280,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a42c0e98f020217397ff6e9db1fb4e1ec7d9525f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null

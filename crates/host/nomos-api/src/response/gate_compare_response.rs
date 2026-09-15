@@ -25,8 +25,7 @@ use crate::{composition, sources};
 use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use nomos_contracts::{Finding, RuleId, RunId, SubjectId};
 use nomos_gate_orchestration::{
-    DispositionChange, FindingDisposition, GateCommand, GateCompareResult, GateRunResult, SuppressionDisposition, SuppressionReason,
-    SuppressionStatus,
+    DispositionChange, FindingDisposition, GateCommand, GateCompareResult, GateRunResult, SuppressionDisposition, SuppressionStatus,
 };
 use nomos_platform::Clock;
 use serde::Serialize;
