@@ -1,6 +1,7 @@
 //! The preservation rules over a real store.
 
-use nomos_spec_ingest::{Ingest_Block_Dispositions, Ingest_Source_Document};
+use nomos_spec_ingest::{Ingest_Block_Dispositions, Ingest_Source_Document, Is_Template_Eligible,
+                        TEMPLATE_FLOOR};
 use nomos_spec_store::SpecificationStore;
 use nomos_spec_validate::{DECLARED_RULES, Registered, RuleOutcome, Validate_Rules};
 
@@ -271,7 +272,14 @@ fn Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously()
 
 /// A document whose paragraph body repeats, verbatim, across three sections — the shape
 /// `OD-SPEC-004` measured hollowing 44 restored members with one undeclared adjective.
-const REPEATED_UNDECLARED: &str = "---\nid: X\n---\n# Title\n\n## A\n\nRepeated body.\n\n## B\n\nRepeated body.\n\n## C\n\nRepeated body.\n";
+///
+/// The body was `Repeated body.` until the eligibility floor landed. Fourteen characters
+/// is below [`TEMPLATE_FLOOR`], so this fixture would have gone on passing while proving
+/// nothing: the rule would have dismissed it for its length and the test would have read
+/// that as the rule working. It repeats something substantive now, and
+/// `Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004` asserts the length so
+/// the same thing cannot happen quietly again.
+const REPEATED_UNDECLARED: &str = "---\nid: X\n---\n# Title\n\n## A\n\nThis paragraph is repeated verbatim below.\n\n## B\n\nThis paragraph is repeated verbatim below.\n\n## C\n\nThis paragraph is repeated verbatim below.\n";
 
 /// The same shape, but the repeated text is one `FILLER_PATTERNS` already names.
 const REPEATED_DECLARED: &str = "---\nid: X\n---\n# Title\n\n## A\n\nThis section groups related specification material.\n\n## B\n\nThis section groups related specification material.\n\n## C\n\nThis section groups related specification material.\n";
@@ -287,10 +295,17 @@ fn Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004()
 
     let run = Validate_Rules(&store, &Registered());
 
+    assert!(
+        Is_Template_Eligible(REPEATED_BODY),
+        "this fixture repeats {} characters, under the floor of {TEMPLATE_FLOOR}, so the \
+         rule would dismiss it for its length and the assertion below would be about \
+         nothing",
+        REPEATED_BODY.chars().count()
+    );
     assert!(!run.Is_Passed(), "an undeclared template must not pass");
     let violations = run.Violations();
     assert!(
-        violations.iter().any(|violation| violation.detail.contains("Repeated body.")),
+        violations.iter().any(|violation| violation.detail.contains("This paragraph is repeated verbatim below.")),
         "the violation must name the repeated text: {violations:?}"
     );
 }
@@ -315,5 +330,136 @@ fn Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004()
         matches!(template_rule.outcome, RuleOutcome::Satisfied { .. }),
         "a declared pattern must not violate: {:?}",
         template_rule.outcome
+    );
+}
+
+/// The body [`REPEATED_UNDECLARED`] repeats, named so the test can measure it.
+const REPEATED_BODY: &str = "This paragraph is repeated verbatim below.";
+
+/// Five sections carrying the longest fragment that collided by accident in a real corpus.
+const BELOW_FLOOR: &str = "Recommended language: Rust one";
+
+/// Three sections carrying the shortest body a real corpus repeated on purpose.
+const AT_STRUCTURAL_MINIMUM: &str = "This volume owns the domain material shown.";
+
+/// `body` repeated across `sections` sections of one document.
+fn Repeating(body: &str, sections: usize) -> String
+{
+    let mut document = String::from("---\nid: X\n---\n# Title\n");
+    for section in 0..sections
+    {
+        let title = char::from(b'A'.saturating_add(u8::try_from(section).unwrap_or(0)));
+        document.push_str(&format!("\n## {title}\n\n{body}\n"));
+    }
+
+    return document;
+}
+
+/// The outcome `NSV-PRESERVE-004` reached over one document.
+fn Template_Outcome(document: &str) -> RuleOutcome
+{
+    let mut store = SpecificationStore::In_Memory().expect("opens");
+    Ingest_Source_Document(&mut store, "a.md", "v14.36", document).expect("ingests");
+
+    return Validate_Rules(&store, &Registered())
+        .results
+        .into_iter()
+        .find(|result| return result.id == "NSV-PRESERVE-004")
+        .expect("the rule ran")
+        .outcome;
+}
+
+/// Repetition is necessary and not sufficient, which is the whole of `OD-SPEC-004` version 3.
+///
+/// Thirty characters is the longest body that collided by accident anywhere in the sibling
+/// suites, and it is carried here by five sections rather than the three the threshold needs
+/// — so nothing about this document is marginal on repetition. It is dismissed on length or
+/// the floor is not doing its job.
+#[test]
+fn Test_A_Body_Below_The_Floor_Should_Not_Violate_Preserve_004_However_Often_It_Repeats()
+{
+    assert_eq!(
+        BELOW_FLOOR.chars().count(),
+        30,
+        "this fixture is the measured ceiling of the accidental population and has drifted"
+    );
+
+    let outcome = Template_Outcome(&Repeating(BELOW_FLOOR, 5));
+
+    assert!(
+        matches!(outcome, RuleOutcome::Satisfied { .. }),
+        "a 30-character body repeated five times is a lexical collision, not a form letter: {outcome:?}"
+    );
+}
+
+/// The other side of the same band, and the reason the floor is not higher.
+///
+/// Forty-three characters is the shortest body the domain volumes repeat on purpose. A floor
+/// that dismissed it would be giving the right answer for the wrong reason: that text is
+/// contentful, and what admits it is a corpus declaring the roles it is projected into, which
+/// is a separate mechanism. Until that exists this must still report.
+#[test]
+fn Test_A_Body_At_The_Shortest_Deliberate_Length_Should_Still_Violate_Preserve_004()
+{
+    assert_eq!(
+        AT_STRUCTURAL_MINIMUM.chars().count(),
+        43,
+        "this fixture is the measured floor of the deliberate population and has drifted"
+    );
+
+    let outcome = Template_Outcome(&Repeating(AT_STRUCTURAL_MINIMUM, 3));
+
+    assert!(
+        matches!(outcome, RuleOutcome::Violated { .. }),
+        "the floor must not swallow the shortest body a corpus repeats by design: {outcome:?}"
+    );
+}
+
+/// The boundary decided, rather than left where an off-by-one would put it.
+///
+/// Both populations this floor separates are measured, and neither lies next to it — 30 and
+/// 43 against a floor of 36. So nothing real turns on whether the comparison is `>=` or `>`,
+/// and that is exactly why it is pinned here: an off-by-one would never show up in either
+/// corpus, and would surface years later against a body nobody had measured.
+#[test]
+fn Test_The_Floor_Should_Admit_A_Body_Of_Exactly_Its_Own_Length()
+{
+    let under: String = "x".repeat(TEMPLATE_FLOOR.saturating_sub(1));
+    let at: String = "x".repeat(TEMPLATE_FLOOR);
+
+    assert!(!Is_Template_Eligible(&under), "one character under the floor is not eligible");
+    assert!(Is_Template_Eligible(&at), "a body of exactly the floor is eligible");
+}
+
+/// Length is counted over the normalized text, not the text as written.
+///
+/// `normalized_hash` is what groups a template, so two bodies that differ only in whitespace
+/// are one template — and if eligibility were counted on the raw text, one of them could be
+/// eligible while the other was not, which would make the answer depend on which member of
+/// the group the query happened to sample.
+#[test]
+fn Test_Eligibility_Should_Be_Counted_Over_The_Normalized_Text()
+{
+    // Twelve of these normalize to 35 characters, one under the floor, and the padded
+    // form is 84 before normalizing. A fixture comfortably over the floor in both forms
+    // would agree under either implementation and assert nothing -- which is what the
+    // first version of this test did.
+    let compact: String = "ab ".repeat(12);
+    let padded = compact.replace(' ', "     ");
+
+    assert!(
+        padded.chars().count() > TEMPLATE_FLOOR,
+        "the padded form must clear the floor on raw length, or counting raw length would \
+         give the same answer and this test would be about nothing"
+    );
+    assert!(
+        !Is_Template_Eligible(&compact),
+        "35 normalized characters is under the floor"
+    );
+    assert!(
+        !Is_Template_Eligible(&padded),
+        "padding the same 35 characters with whitespace must not buy eligibility: counted \
+         raw it is {} characters",
+        padded.chars().count()
     );
 }

@@ -15,7 +15,7 @@ mod restore;
 mod revisions;
 mod siblings;
 
-pub use archaeology::{Regression_Between_Revisions, Revision, SHARED_BY};
+pub use archaeology::{Is_Template_Eligible, Regression_Between_Revisions, Revision, SHARED_BY, TEMPLATE_FLOOR};
 pub use archive::{Archive, Archives_In};
 pub use archive::error::Error;
 pub use archive::error_kind::ErrorKind;

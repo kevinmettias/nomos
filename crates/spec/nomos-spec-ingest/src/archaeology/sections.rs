@@ -7,7 +7,7 @@
 // responsibility: allow same reason -- the coupling that keeps this file whole is
 // check-test-coverage's stem-based companion attribution, not a design choice.
 
-use super::{SourceBlock, BTreeSet, BTreeMap, Get_Filler_Pattern, SHARED_BY, Segment, BlockKind, Table_Rows, RowKind, TableRow, Models_In};
+use super::{SourceBlock, BTreeSet, BTreeMap, Get_Filler_Pattern, Is_Template_Eligible, SHARED_BY, Segment, BlockKind, Table_Rows, RowKind, TableRow, Models_In};
 
 /// Where a section sits: which document, under what heading.
 #[derive(Clone, Copy)]
@@ -149,7 +149,12 @@ impl Later
             .get(&key)
             .map_or(0, |repetition| return repetition.sections);
 
-        if declared.is_some() || shared >= SHARED_BY
+        // `declared` is deliberately not gated by the floor. The blocklist names known
+        // filler outright, and the floor is about repetition being insufficient evidence,
+        // which is a different question. In practice nothing turns on it -- every
+        // `FILLER_PATTERNS` entry is longer than the floor -- but gating it would make the
+        // blocklist unreachable for a short pattern somebody adds later.
+        if declared.is_some() || (shared >= SHARED_BY && Is_Template_Eligible(&key))
         {
             return Body::Template {
                 shared_with: shared,
@@ -343,9 +348,9 @@ mod tests
     fn Test_Read_Should_Index_Headings_As_Positions_And_Judge_Repeated_Bodies()
     {
         let documents = Documents(&[
-            ("a.md", "# Shared\n\nRefer to the owning domain.\n"),
-            ("b.md", "# Shared\n\nRefer to the owning domain.\n"),
-            ("c.md", "# Shared\n\nRefer to the owning domain.\n"),
+            ("a.md", "# Shared\n\nRefer to the owning domain volume for this material.\n"),
+            ("b.md", "# Shared\n\nRefer to the owning domain volume for this material.\n"),
+            ("c.md", "# Shared\n\nRefer to the owning domain volume for this material.\n"),
         ]);
 
         let later = Later::Read(&documents);
@@ -356,6 +361,34 @@ mod tests
             position,
             Position::Heading { body: Some(Body::Template { shared_with: 3, declared: None }), .. }
         )));
+    }
+
+    /// A repeated body under the floor leaves its section narrative rather than hollowed.
+    ///
+    /// The falsifier for the floor being applied here as well as in the census and the rule.
+    /// A section whose body is a connective repeated across the corpus has not been hollowed
+    /// by a form letter, and reporting it as `Template` is what sent `OD-SPEC-004` version 3
+    /// looking at 102 of them.
+    #[test]
+    fn Test_A_Repeated_Body_Below_The_Floor_Should_Read_As_Narrative()
+    {
+        let documents = Documents(&[
+            ("a.md", "# Shared\n\nShort shared line.\n"),
+            ("b.md", "# Shared\n\nShort shared line.\n"),
+            ("c.md", "# Shared\n\nShort shared line.\n"),
+        ]);
+
+        let later = Later::Read(&documents);
+
+        let positions = later.authored.get("Shared").expect("the heading is indexed");
+        assert_eq!(positions.len(), 3, "all three sections are indexed under one heading");
+        assert!(
+            positions.iter().all(|position| return matches!(
+                position,
+                Position::Heading { body: Some(Body::Narrative), .. }
+            )),
+            "a body under the floor repeated three times is narrative, not a template: {positions:?}"
+        );
     }
 
     #[test]
@@ -506,9 +539,9 @@ mod tests
     #[test]
     fn Test_Template_Key_Should_Elide_The_Sections_Own_Title_From_Its_Text()
     {
-        let key = Template_Key(SectionText("Read Widget within the owning contract."), SectionTitle("Widget"));
+        let key = Template_Key(SectionText("Read Widget within the owning domain contract."), SectionTitle("Widget"));
 
-        assert_eq!(key, "Read {} within the owning contract.");
+        assert_eq!(key, "Read {} within the owning domain contract.");
         assert_eq!(Template_Key(SectionText("No title inside."), SectionTitle("")), "No title inside.");
     }
 

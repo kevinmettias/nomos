@@ -74496,7 +74496,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory could not carry the acceptance, measured by implementing it. The floor must be one constant applied by NSV-PRESERVE-004 in nomos-spec-validate and by the archaeology census in nomos-spec-ingest, because the rule already documents that those two must not become two numbers somebody has to notice disagree. The helper therefore has to be nameable from another crate, and archaeology is declared mod archaeology at src/lib.rs line 8, private, so the re-export in lib.rs is not a convenience but the only way the rule can reach it. The item reserved tests/contract/surface/nomos-spec-ingest.txt, which is where the export becomes visible, and not the file that produces it -- the same dependency-cone miss the territory rule was written for, on an item authored after that rule landed. Re-authored with src/lib.rs added and nothing else changed; the implementation is already written and parked as a patch."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -74518,9 +74522,18 @@
         "timeout_seconds": 1800
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-p103floor",
+          "reason": "Territory cannot carry the change. The floor has to be one constant shared by the rule and the archaeology report, and the rule is in another crate, so the helper must be re-exported from nomos-spec-ingest. That re-export is in src/lib.rs, which this item did not reserve: it reserved the surface snapshot the export shows up in but not the file that produces it. Re-authored with lib.rs added.",
+          "abandoned_at": 1789432331
+        }
+      ],
       "displaced": [],
-      "declined": null
+      "declined": {
+        "holder": "fable-p103floor",
+        "declined_at": 1789432343
+      }
     },
     {
       "id": "P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS",
@@ -75110,7 +75123,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stale dependency edge, not a change of subject. It depends on the length-floor item, which was declined because its territory could not carry the re-export the rule needs, so this one can never become ready however its own terms read. Re-authored unchanged in substance against the two replacement ids."
+        }
+      },
       "depends_on": [
         "P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2",
         "P103-A-REPEATED-FRAGMENT-BELOW-A-LENGTH-FLOOR-IS-NOT-A-TEMPLATE"
@@ -75126,6 +75143,264 @@
           "nomos-spec-validate"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p103floor",
+        "declined_at": 1789432401
+      }
+    },
+    {
+      "id": "P103-A-REPEATED-FRAGMENT-BELOW-A-LENGTH-FLOOR-IS-NOT-A-TEMPLATE-2",
+      "title": "NSV-PRESERVE-004 has no minimum length, so 102 connectives and a horizontal rule are form letters",
+      "why": "OD-SPEC-004 version 3 decided that repetition is necessary and not sufficient evidence of filler, and question one of that amendment is the length floor. Measured 2026-09-14 over the sibling suites, 18,873 subjects: NSV-PRESERVE-004 reports 103 violations and 102 of them are 30 characters or fewer. The largest single contributor is three characters of horizontal rule carried by 562 sections across 2 documents; the rest are ordinary connectives and labels, among them a single downward arrow at 9 sections, and Or, or:, So:, LLM, KWB, Add:, Use:, Bad:, Why?, Then:, Good:, Example:, For example: at 148. The rule groups prose blocks by normalized hash and has no eligibility test at all, so in any corpus of ordinary authored prose short fragments collide and every collision is reported as an undeclared form letter. The amendment derives the floor rather than guessing it: the longest accidental collision observed is 30 characters, the shortest body repeated by design is 43, the shortest entry in FILLER_PATTERNS is 50 and Get_Filler_Pattern is substring containment so every block this repository has ever declared to be filler is at least that long. The distribution is empty between 31 and 42 in both corpora and the record fixes the floor at 36. This replaces an item whose territory could not carry the change: the helper must be nameable from nomos-spec-validate, archaeology is a private module, and the re-export lives in src/lib.rs, which the first item did not reserve.",
+      "done_when": "A prose block shorter than the floor is not eligible to be a template, and the floor is 36 characters of normalized block text as OD-SPEC-004 version 3 fixes it. The threshold lives beside SHARED_BY rather than in the rule, because the rule already documents that the value it enforces and the value archaeology Shared_Templates reports over a revision pair must stay one constant and not two numbers somebody has to notice disagree; census.rs and sections.rs both apply it or the item has created exactly that divergence. That is also why src/lib.rs is reserved: archaeology is private, so without the re-export the rule cannot name the helper and the two would have to be written twice. Length is counted over normalized text and in characters, so one arrow is one character. Boundary tests assert both sides from the measurement rather than from round numbers: a body of 30 characters repeated five times is not a violation, a body of 43 characters repeated three times is, and a body of exactly the floor is decided explicitly rather than left to an off-by-one. THE EXISTING UNDECLARED FIXTURE IS REPAIRED IN THE SAME COMMIT: it repeats a 14-character body, which the floor makes ineligible, so left alone it would keep passing while proving nothing -- the rule dismissing it for length and the test reading that as the rule working. It must repeat something above the floor and must assert its own length so the same thing cannot recur quietly. The sibling measurement is re-run with both corpora exported and the new count is reported in the commit message; it is expected to fall from 103 to 1, the survivor being a 51-character status line that is question two of the amendment and not this item to fix. Neither restoration.rs nor siblings.rs is edited and no count is pinned into either: restoration stays at 16 because every one of those bodies is past the floor, and quieting a corpus test with an accepted number is the suppression the rule exists to make visible. VERIFICATION SCOPE: the predicate is the two crates this item changes, selected as lib plus named integration targets so that it excludes nomos-spec-ingest tests restoration.rs and siblings.rs, which are red by design until the declaration mechanism lands and are not this item's obligation to turn green. That exclusion is deliberate and is the convention step 3 of the task skill carries.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/src/lib.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/census.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/sections.rs",
+          "crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs",
+          "crates/spec/nomos-spec-validate/tests/preservation_holds.rs",
+          "tests/contract/surface/nomos-spec-ingest.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory short by one file, and this time the cone was measured instead of reasoned about. Applying the floor and running every target of both crates except the two that are red by design reports exactly five failures in three files: two in archaeology/census.rs, one in archaeology/sections.rs, and two in archaeology/tests.rs, which this item did not reserve. All five are fixtures that repeat a body shorter than the floor, so they are the same repair the preservation fixture needs and not separate defects. Everything else in both crates stays green. Re-authored with that file added and with the measured cone recorded, so the third attempt is not another guess."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-spec-ingest",
+          "--lib",
+          "--test",
+          "preservation_holds",
+          "--test",
+          "model_seam"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "fable-p103floor",
+          "reason": "Territory still short by one file, measured by running the whole affected surface rather than guessing again: archaeology/tests.rs holds two of the five fixtures that exercise the threshold.",
+          "abandoned_at": 1789432516
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p103floor",
+        "declined_at": 1789432524
+      }
+    },
+    {
+      "id": "P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE-3",
+      "title": "NSV-PRESERVE-004 cannot consult a repetition declaration, so declaring one would change nothing",
+      "why": "OD-SPEC-004 version 3 decided that a block appearing in the places its declaration names is admitted and is not filler, while a further undeclared occurrence of that same block is still a violation. The carrier item makes the declaration into rows a rule can read. This item is the half that makes reading them change an answer, and it is deliberately separate because the two have different failure boundaries: changing the store and bundle schema fails at transport and is proved by a round trip, while teaching one rule to read those rows fails at judgement and is proved by what the rule reports. Landing the carrier alone would leave a corpus able to declare its layout and a rule that still calls it a form letter. This replaces an item whose only defect was a dependency on a length-floor item that was itself declined for territory.",
+      "done_when": "NSV-PRESERVE-004 consults the declaration rows and admits a repetition whose occurrences are the ones its declaration names. The falsifier is asserted in the same run and is the whole point of the item: a block declared for three named roles that appears a fourth time, undeclared, is still reported, and a repetition nothing declared at all is still reported. Without that assertion the mechanism is a suppression list with extra steps, which is what the amendment refused. The blocklist keeps its separate job and is not extended: Get_Filler_Pattern still names which known pattern a template matched for a lineage row, and a declared block is admitted without being called filler, so no lineage row is made to assert something false about it. Both conditions are proved from an in-repo fixture. THIS ITEM DOES NOT TURN THE TWO CORPUS TESTS GREEN either: that needs the corpora to carry declarations, and they live outside this repository. Implementing the mechanism cannot make an undeclared corpus compliant. restoration.rs and siblings.rs are not edited and no count is pinned into either. If, once the rule can see declarations, the ten-times-in-one-document parity note still reports, that is correct and is the question OD-SPEC-004 version 3 deliberately left open, not a defect in this item. VERIFICATION SCOPE: the predicate is nomos-spec-validate, the one crate whose behaviour this item claims and which owns no corpus-gated test; the ingest crate is not in it though the declaration rows come from there, because this item claims what the rule does with rows and not how they arrive.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs",
+          "crates/spec/nomos-spec-validate/tests/preservation_holds.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Stale dependency edge again, same cause: the length-floor item it names was declined for territory. Re-authored unchanged in substance against the surviving ids."
+        }
+      },
+      "depends_on": [
+        "P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2",
+        "P103-A-REPEATED-FRAGMENT-BELOW-A-LENGTH-FLOOR-IS-NOT-A-TEMPLATE-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p103floor",
+        "declined_at": 1789432575
+      }
+    },
+    {
+      "id": "P103-A-REPEATED-FRAGMENT-BELOW-A-LENGTH-FLOOR-IS-NOT-A-TEMPLATE-3",
+      "title": "NSV-PRESERVE-004 has no minimum length, so 102 connectives and a horizontal rule are form letters",
+      "why": "OD-SPEC-004 version 3 decided that repetition is necessary and not sufficient evidence of filler, and question one of that amendment is the length floor. Measured 2026-09-14 over the sibling suites, 18,873 subjects: NSV-PRESERVE-004 reports 103 violations and 102 of them are 30 characters or fewer. The largest single contributor is three characters of horizontal rule carried by 562 sections across 2 documents; the rest are ordinary connectives and labels, among them a single downward arrow at 9 sections, and Or, or:, So:, LLM, KWB, Add:, Use:, Bad:, Why?, Then:, Good:, Example:, For example: at 148. The rule groups prose blocks by normalized hash and has no eligibility test at all, so in any corpus of ordinary authored prose short fragments collide and every collision is reported as an undeclared form letter. The amendment derives the floor rather than guessing it: the longest accidental collision observed is 30 characters, the shortest body repeated by design is 43, the shortest entry in FILLER_PATTERNS is 50 and Get_Filler_Pattern is substring containment so every block this repository has ever declared to be filler is at least that long. The distribution is empty between 31 and 42 in both corpora and the record fixes the floor at 36. THE TERRITORY BELOW IS MEASURED AND NOT REASONED ABOUT. Two predecessors were declined for reserving less than the change needs. Applying the floor and running every target of both crates except the two that are red by design reports exactly five failures in three files -- two in archaeology/census.rs, one in archaeology/sections.rs, two in archaeology/tests.rs -- and every other target of both crates stays green.",
+      "done_when": "A prose block shorter than the floor is not eligible to be a template, and the floor is 36 characters of normalized block text as OD-SPEC-004 version 3 fixes it. The threshold lives beside SHARED_BY rather than in the rule, because the rule already documents that the value it enforces and the value archaeology Shared_Templates reports over a revision pair must stay one constant and not two numbers somebody has to notice disagree; census.rs and sections.rs both apply it or the item has created exactly that divergence. That is also why src/lib.rs is reserved: archaeology is declared mod archaeology and is private, so without the re-export the rule in the other crate cannot name the helper and the two would have to be written twice, which is the divergence again. Length is counted over normalized text and in characters, so one arrow is one character and not the three bytes it occupies. Boundary tests assert both sides from the measurement rather than from round numbers: a body of 30 characters repeated five times is not a violation, a body of 43 characters repeated three times is, and a body of exactly the floor is decided explicitly rather than left to an off-by-one. FIVE EXISTING FIXTURES REPEAT A BODY BELOW THE FLOOR AND ARE REPAIRED IN THE SAME COMMIT, not quieted: two in archaeology/census.rs, one in archaeology/sections.rs, two in archaeology/tests.rs, and one in preservation_holds.rs whose body is 14 characters. Left alone each would keep passing while proving nothing -- the rule dismissing the fixture for its length and the test reading that as the rule working, which is the same vacuity NSV-PRESERVE-004 exists to catch one level down. Each repaired fixture repeats something above the floor, and the preservation one asserts its own length so the same thing cannot recur quietly. The sibling measurement is re-run with both corpora exported and the new count is reported in the commit message; it is expected to fall from 103 to 1, the survivor being a 51-character status line that is question two of the amendment and not this item to fix. The regression report is re-run with the archives present, because the census now filters and that is a real behaviour change in a corpus-backed path. Neither restoration.rs nor siblings.rs is edited and no count is pinned into either: restoration stays at 16 because every one of those bodies is past the floor, and quieting a corpus test with an accepted number is the suppression the rule exists to make visible. VERIFICATION SCOPE: the predicate is the two crates this item changes, selected as lib plus named integration targets so that it excludes nomos-spec-ingest tests restoration.rs and siblings.rs, which are red by design until the declaration mechanism lands and are not this item's obligation to turn green. That exclusion is deliberate and is the convention step 3 of the task skill carries.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/src/lib.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/census.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/sections.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/tests.rs",
+          "crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs",
+          "crates/spec/nomos-spec-validate/tests/preservation_holds.rs",
+          "tests/contract/surface/nomos-spec-ingest.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-spec-ingest",
+          "--lib",
+          "--test",
+          "preservation_holds",
+          "--test",
+          "model_seam"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate",
+          "-p",
+          "nomos-spec-ingest",
+          "--lib",
+          "--test",
+          "preservation_holds",
+          "--test",
+          "model_seam"
+        ],
+        "exit_code": 0,
+        "output_tail": "_For_It ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 16 tests\ntest Test_Eligibility_Should_Be_Counted_Over_The_Normalized_Text ... ok\ntest Test_Registered_Should_Build_One_Rule_Object_Per_Declared_Identifier ... ok\ntest Test_The_Floor_Should_Admit_A_Body_Of_Exactly_Its_Own_Length ... ok\ntest Test_The_Registry_Should_Match_The_Manifest ... ok\ntest Test_A_Body_Below_The_Floor_Should_Not_Violate_Preserve_004_However_Often_It_Repeats ... ok\ntest Test_A_Traced_Statement_Should_Satisfy_Preserve_006 ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004 ... ok\ntest Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006 ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_An_Empty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_Disposed_Blocks_Should_Satisfy_Preserve_002 ... ok\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_A_Body_At_The_Shortest_Deliberate_Length_Should_Still_Violate_Preserve_004 ... ok\ntest Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004 ... ok\ntest Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.00s\n\n   Compiling nomos-spec-ingest v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-ingest)\n   Compiling nomos-spec-validate v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-validate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.26s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-b91882f9705d3be2.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-acd7b674edff1f45.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-cc86bb37eb4785b6.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n",
+        "verified_at": 1789432900,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f5ff62a9070d79ea125c7ea9c50e7db3399324bb"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE-4",
+      "title": "NSV-PRESERVE-004 cannot consult a repetition declaration, so declaring one would change nothing",
+      "why": "OD-SPEC-004 version 3 decided that a block appearing in the places its declaration names is admitted and is not filler, while a further undeclared occurrence of that same block is still a violation. The carrier item makes the declaration into rows a rule can read. This item is the half that makes reading them change an answer, and it is deliberately separate because the two have different failure boundaries: changing the store and bundle schema fails at transport and is proved by a round trip, while teaching one rule to read those rows fails at judgement and is proved by what the rule reports. Landing the carrier alone would leave a corpus able to declare its layout and a rule that still calls it a form letter. Its predecessors were declined only for dependency edges left stale when the length-floor item was re-authored; nothing about this item's own subject has changed.",
+      "done_when": "NSV-PRESERVE-004 consults the declaration rows and admits a repetition whose occurrences are the ones its declaration names. The falsifier is asserted in the same run and is the whole point of the item: a block declared for three named roles that appears a fourth time, undeclared, is still reported, and a repetition nothing declared at all is still reported. Without that assertion the mechanism is a suppression list with extra steps, which is what the amendment refused. The blocklist keeps its separate job and is not extended: Get_Filler_Pattern still names which known pattern a template matched for a lineage row, and a declared block is admitted without being called filler, so no lineage row is made to assert something false about it. Both conditions are proved from an in-repo fixture. THIS ITEM DOES NOT TURN THE TWO CORPUS TESTS GREEN either: that needs the corpora to carry declarations, and they live outside this repository. Implementing the mechanism cannot make an undeclared corpus compliant. restoration.rs and siblings.rs are not edited and no count is pinned into either. If, once the rule can see declarations, the ten-times-in-one-document parity note still reports, that is correct and is the question OD-SPEC-004 version 3 deliberately left open, not a defect in this item. VERIFICATION SCOPE: the predicate is nomos-spec-validate, the one crate whose behaviour this item claims and which owns no corpus-gated test; the ingest crate is not in it though the declaration rows come from there, because this item claims what the rule does with rows and not how they arrive.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-validate/src/rule/no_undeclared_filler_template.rs",
+          "crates/spec/nomos-spec-validate/tests/preservation_holds.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2",
+        "P103-A-REPEATED-FRAGMENT-BELOW-A-LENGTH-FLOOR-IS-NOT-A-TEMPLATE-3"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null
+    },
+    {
+      "id": "P107-A-GATE-COMPARISON-CANNOT-SAY-WHETHER-ITS-TWO-RUNS-WERE-JUDGED-ALIKE",
+      "title": "A gate comparison cannot say whether its two runs were judged alike",
+      "why": "Compare_Gate_Runs reports added, removed and changed findings between two runs and says nothing about whether the two were judged by the same instrument. A caller reads a difference as a fact about the repository, because that is what a gate is for. It is only that when every judgment input other than the source was compatible, and nothing checks or records that.\n\nMeasured 2026-09-14 against the tree, and the measurement narrowed the scope rather than confirming a plan.\n\nWhat can actually differ between the two sides today, through nomos's own hosts: the effective gate policy, because Run_Gate resolves nomos-gate.json from command.root and compare judges two roots, so the CLI's own promise that every other flag narrows both sides alike does not reach it -- a policy file is not a flag. And which capabilities could be materialized at each root: P106 measured a probe tree where a missing deny.toml left dependency-policy unmaterialized, which changed both the findings and the claim, so two roots differing only in that produce different findings for a reason that is not the code.\n\nWhat can differ through the published library surface but not through nomos's own hosts: the whole GateCommand, since Handle_Gate_Compare takes two independent ones and its own module doc names one tree under two policies as an intended case -- a narrower rules.include means that side did not look, and its absent findings are reported as added on the other. And BuildVariant and now, both GateEnvironment fields a caller supplies per Run_Gate call, with Compare_Gate_Runs public and taking two results; nomos's hosts pass one variant and one clock to both sides, and the crate publishes no constraint saying a caller must.\n\nWhat cannot differ yet: the nomos build and the provider binaries, because OD-GATE-022-A has compare re-derive both runs in one process. Those arrive when a run outlives its process, which that record defers and this one does not schedule.\n\nGateRunResult records none of it. It carries run, root, check_outcome, findings, disposition, unmatched_policy and no_verdict, and not the command, the variant, the policy, the moment, or which rules could look.\n\nThe vocabulary for this already exists and is published. nomos-contracts' domain table puts the analysis kernel -- facts, checks, findings -- at StateTemporal, CrossPlatform, BitIdentical. StateTemporal makes time a declared judgment input, and it is one: a temporary waiver expires against the run's own moment. CrossPlatform is strictly weaker than CrossBinary, so the table already says findings are not claimed to reproduce across builds of the tool, which is exactly the claim a cross-binary comparison would need.",
+      "done_when": "OD-GATE-031 is authored and registered, and decides three things.\n\nWhat comparability means, as the invariant a person stated: a difference between two runs may be attributed to repository state only when the non-source judgment inputs were compatible, or their differences are explicitly represented. Never by the absence of evidence that they differed.\n\nThe minimum identity a run must carry for that question to be answerable at all, derived from the measurement rather than from the long-term shape: what can differ today, what cannot yet, and which of the two the identity is sized for. The record states explicitly which components it is NOT adding and why -- a provider-binary version cannot differ between two same-process runs, so recording one now would be shape ahead of a body.\n\nThat a missing or unknown provenance resolves to incomparable rather than to compatible, for the reason Applicability already keeps MissingCapability apart from a clean result and OD-GATE-030 refuses to claim continuity it cannot show: nothing could look must never read as nothing was wrong.\n\nThe record is explicit about what it does not decide: it does not schedule the run history OD-GATE-022-A defers, does not reopen OD-GATE-030's baseline continuity, and builds no mechanism. It names the follow-up items' territory precisely enough to author them and no more.\n\nBoth projections are re-rendered from a worktree holding exactly the records this commit publishes, per OD-GATE-005, and both freshness checks exit 0.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-031.record",
+          "diagrams/relations.mmd",
+          "spec/domain-specification.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p107",
+        "acquired_at": 1789432838,
+        "lease_expires_at": 1789443638
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
       },
       "verified": null,
       "abandoned": [],

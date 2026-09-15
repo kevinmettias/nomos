@@ -1,6 +1,6 @@
 //! How much of a revision says nothing, counted rather than sampled.
 
-use super::{Later, FillerCensus, Template, SHARED_BY, Repetition, Get_Filler_Pattern};
+use super::{Later, FillerCensus, Template, SHARED_BY, Is_Template_Eligible, Repetition, Get_Filler_Pattern};
 
 pub(super) fn Census_Fillers(later: &Later) -> FillerCensus
 {
@@ -20,7 +20,13 @@ pub(super) fn Shared_Templates(later: &Later) -> Vec<Template>
     let mut templates: Vec<Template> = later
         .templates
         .iter()
-        .filter(|(_, repetition)| return repetition.sections >= SHARED_BY)
+        .filter(|(key, repetition)| {
+            // The floor is applied here and in `NSV-PRESERVE-004` from one constant. The
+            // rule documents why they must not become two numbers somebody has to notice
+            // disagree, and a report that still called a connective a template while the
+            // rule had stopped would be exactly that divergence.
+            return repetition.sections >= SHARED_BY && Is_Template_Eligible(key);
+        })
         .map(|(key, repetition)| return Described_Template(key, repetition))
         .collect();
     templates.sort_by(|first, second| {
@@ -73,9 +79,9 @@ mod tests
     fn Test_Census_Fillers_Should_Combine_Repeated_Templates_With_Stub_Documents()
     {
         let documents = Documents(&[
-            ("a.md", "# A\n\nRefer to the owning domain.\n"),
-            ("b.md", "# B\n\nRefer to the owning domain.\n"),
-            ("c.md", "# C\n\nRefer to the owning domain.\n"),
+            ("a.md", "# A\n\nRefer to the owning domain volume for this material.\n"),
+            ("b.md", "# B\n\nRefer to the owning domain volume for this material.\n"),
+            ("c.md", "# C\n\nRefer to the owning domain volume for this material.\n"),
         ]);
         let later = Later::Read(&documents);
 
@@ -86,13 +92,38 @@ mod tests
         assert_eq!(census.stubs, vec!["a.md".to_owned(), "b.md".to_owned(), "c.md".to_owned()]);
     }
 
+    /// The report applies the same floor as `NSV-PRESERVE-004`, and this is what says so.
+    ///
+    /// Without it the two could diverge silently: the rule would stop calling a connective a
+    /// form letter while the cross-revision report went on doing it, which is precisely the
+    /// two-numbers-somebody-has-to-notice-disagree that the threshold is shared to prevent.
+    /// The other fixtures here all repeat a body well past the floor, so none of them moves
+    /// if the filter is removed.
+    #[test]
+    fn Test_A_Body_Below_The_Floor_Should_Not_Surface_As_A_Shared_Template()
+    {
+        let documents = Documents(&[
+            ("a.md", "# A\n\nShort shared line.\n"),
+            ("b.md", "# B\n\nShort shared line.\n"),
+            ("c.md", "# C\n\nShort shared line.\n"),
+        ]);
+        let later = Later::Read(&documents);
+
+        let templates = Shared_Templates(&later);
+
+        assert!(
+            templates.is_empty(),
+            "eighteen characters carried by three sections is a collision, not a template: {templates:?}"
+        );
+    }
+
     #[test]
     fn Test_Shared_Templates_Should_Sort_By_Reach_Then_By_Text()
     {
         let documents = Documents(&[
-            ("a.md", "# A\n\nRefer to the owning domain.\n"),
-            ("b.md", "# B\n\nRefer to the owning domain.\n"),
-            ("c.md", "# C\n\nRefer to the owning domain.\n"),
+            ("a.md", "# A\n\nRefer to the owning domain volume for this material.\n"),
+            ("b.md", "# B\n\nRefer to the owning domain volume for this material.\n"),
+            ("c.md", "# C\n\nRefer to the owning domain volume for this material.\n"),
             ("d.md", "# D\n\nSomething else entirely.\n"),
         ]);
         let later = Later::Read(&documents);
@@ -100,7 +131,7 @@ mod tests
         let templates = Shared_Templates(&later);
 
         assert_eq!(templates.len(), 1, "a block repeated only once must not surface as a template");
-        assert_eq!(templates.first().expect("the assertion above confirms exactly one template").text, "Refer to the owning domain.");
+        assert_eq!(templates.first().expect("the assertion above confirms exactly one template").text, "Refer to the owning domain volume for this material.");
         assert_eq!(templates.first().expect("the assertion above confirms exactly one template").sections, 3);
     }
 

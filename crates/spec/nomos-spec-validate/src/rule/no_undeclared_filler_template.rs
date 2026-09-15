@@ -3,7 +3,7 @@
 use crate::RuleOutcome;
 use crate::Rule;
 use crate::Violation;
-use nomos_spec_ingest::{Get_Filler_Pattern, SHARED_BY};
+use nomos_spec_ingest::{Get_Filler_Pattern, Is_Template_Eligible, SHARED_BY};
 use nomos_spec_store::{SpecificationStore, Table};
 
 /// Every prose block's body, grouped by exact text, widest group first.
@@ -87,6 +87,16 @@ fn Undeclared_Templates(store: &SpecificationStore) -> Result<Vec<Violation>, St
     let mut violations = Vec::new();
     for (sections, documents, sample) in Template_Rows(store)?
     {
+        // Eligibility first, because a body below the floor is not a template that
+        // happens to be undeclared -- it is not a template at all, and reporting it as
+        // one is what `OD-SPEC-004` version 3 measured 102 times over the sibling
+        // suites. Every member of a group shares a normalized body, so deciding this on
+        // the sample decides it for the group.
+        if !Is_Template_Eligible(&sample)
+        {
+            continue;
+        }
+
         if Get_Filler_Pattern(&sample).is_some()
         {
             continue;

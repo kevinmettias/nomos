@@ -65,9 +65,9 @@ fn Reported(later: &[(&str, &str)]) -> RegressionReport
 fn Test_A_Heading_Over_A_Repeated_Paragraph_Should_Be_Hollowed()
 {
     let report = Reported(&[
-        ("a.md", "# Counterfactual Analysis Service\n\nRefer to the owning domain.\n"),
-        ("b.md", "# Something else\n\nRefer to the owning domain.\n"),
-        ("c.md", "# A third\n\nRefer to the owning domain.\n"),
+        ("a.md", "# Counterfactual Analysis Service\n\nRefer to the owning domain volume for this material.\n"),
+        ("b.md", "# Something else\n\nRefer to the owning domain volume for this material.\n"),
+        ("c.md", "# A third\n\nRefer to the owning domain volume for this material.\n"),
     ]);
 
     assert_eq!(
@@ -86,8 +86,8 @@ fn Test_A_Heading_Over_A_Repeated_Paragraph_Should_Be_Hollowed()
 fn Test_A_Paragraph_Two_Sections_Share_Should_Not_Be_A_Template()
 {
     let report = Reported(&[
-        ("a.md", "# Counterfactual Analysis Service\n\nRefer to the owning domain.\n"),
-        ("b.md", "# Something else\n\nRefer to the owning domain.\n"),
+        ("a.md", "# Counterfactual Analysis Service\n\nRefer to the owning domain volume for this material.\n"),
+        ("b.md", "# Something else\n\nRefer to the owning domain volume for this material.\n"),
     ]);
 
     assert_eq!(
@@ -290,10 +290,10 @@ fn Test_A_Template_Naming_Its_Own_Section_Should_Read_As_One_Template()
         (
             "a.md",
             "# Counterfactual Analysis Service\n\nRead Counterfactual Analysis Service \
-             within the owning contract.\n",
+             within the owning domain contract.\n",
         ),
-        ("b.md", "# Second\n\nRead Second within the owning contract.\n"),
-        ("c.md", "# Third\n\nRead Third within the owning contract.\n"),
+        ("b.md", "# Second\n\nRead Second within the owning domain contract.\n"),
+        ("c.md", "# Third\n\nRead Third within the owning domain contract.\n"),
     ]);
 
     assert!(
