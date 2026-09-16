@@ -39,6 +39,14 @@ mod tests
 {
     use super::*;
 
+    /// An arbitrary byte fill that is neither extreme. The third seed in `Sample_Seeds`, `0`,
+    /// is the identity and is left bare there.
+    const ARBITRARY_SEED_BYTE: u8 = 7;
+
+    /// The top of the `u8` range, so the round trip is shown for a byte whose bits are all
+    /// set as well as for one that is not.
+    const MAX_SEED_BYTE: u8 = 255;
+
     #[test]
     fn Test_Of_Should_Be_Deterministic_For_The_Same_Parts()
     {
@@ -71,6 +79,6 @@ mod tests
     /// A handful of distinct byte fills, so the round trip is shown for more than one value.
     fn Sample_Seeds() -> [u8; 3]
     {
-        return [0, 7, 255];
+        return [0, ARBITRARY_SEED_BYTE, MAX_SEED_BYTE];
     }
 }

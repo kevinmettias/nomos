@@ -221,7 +221,8 @@ mod local_tests
         let mut registry = Registry::New();
         registry.Declare(Contract()).expect("declared once");
 
-        let resolution = registry.Resolve(&Requirement::New(Capability(), Version(), Floor()));
+        let requirement = Requirement::New(Capability(), Version(), Floor());
+        let resolution = registry.Resolve(&requirement);
 
         assert!(matches!(
             resolution,
@@ -239,7 +240,8 @@ mod local_tests
         registry.Declare_And_Offer(Contract(), Offer()).expect("declared and offered");
         let absent = ProviderId::New("nomos.test.absent");
 
-        let resolution = registry.Resolve_Requiring(&Requirement::New(Capability(), Version(), Floor()), &absent);
+        let requirement = Requirement::New(Capability(), Version(), Floor());
+        let resolution = registry.Resolve_Requiring(&requirement, &absent);
 
         assert!(matches!(resolution, RequiredResolution::Unsatisfied { .. }));
     }

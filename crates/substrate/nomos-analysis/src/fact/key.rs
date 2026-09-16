@@ -81,12 +81,27 @@ mod tests
     use super::*;
     use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
 
+    /// One part per field of [`Key`], in the order `Parts` lists them.
+    const KEY_PART_COUNT: usize = 9;
+
+    /// The generation the sample key is paired with. One named value, because these tests
+    /// compare an identity against the generation it was built at and never across two.
+    const SAMPLE_GENERATION: u64 = 7;
+
+    /// The variant component of the sample key, seeded apart from the subject and the
+    /// configuration so a key assembled with the wrong one still asserts unequal.
+    const VARIANT_SEED: u8 = 3;
+
+    /// The configuration component of the sample key; distinct from [`VARIANT_SEED`] for the
+    /// reason given there.
+    const CONFIGURATION_SEED: u8 = 4;
+
     #[test]
     fn Test_Parts_Should_Carry_Every_Field_As_A_Non_Empty_Byte_Vector()
     {
         let parts = Sample().Parts();
 
-        assert_eq!(parts.len(), 9);
+        assert_eq!(parts.len(), KEY_PART_COUNT);
         assert!(parts.iter().all(|part| !part.is_empty()));
     }
 
@@ -103,10 +118,10 @@ mod tests
     fn Test_At_Should_Pair_The_Key_With_A_Generation()
     {
         let key = Sample();
-        let identity = key.clone().At(GenerationId::From_Raw(7));
+        let identity = key.clone().At(GenerationId::From_Raw(SAMPLE_GENERATION));
 
         assert_eq!(identity.Key(), &key);
-        assert_eq!(identity.generation, GenerationId::From_Raw(7));
+        assert_eq!(identity.generation, GenerationId::From_Raw(SAMPLE_GENERATION));
     }
 
     fn Seeded(seed: u8) -> Digest128
@@ -116,6 +131,13 @@ mod tests
 
     fn Sample() -> Key
     {
+        let guarantee = Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
+
         return Key {
             contract: CapabilityId::New("nomos.cap.test.key"),
             contract_version: ContractVersion::New(1, 0),
@@ -123,14 +145,9 @@ mod tests
             semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
             provider: ProviderId::New("nomos.provider.test"),
             provider_version: ContractVersion::New(1, 0),
-            guarantee: GuaranteeDigest::Of(&Guarantee::New(
-                FactVariant::Syntactic,
-                Assurance::Sound,
-                Assurance::Sound,
-                IncrementalGranularity::File,
-            )),
-            variant: BuildVariantId::From_Digest(Seeded(3)),
-            configuration: ConfigurationId::From_Digest(Seeded(4)),
+            guarantee: GuaranteeDigest::Of(&guarantee),
+            variant: BuildVariantId::From_Digest(Seeded(VARIANT_SEED)),
+            configuration: ConfigurationId::From_Digest(Seeded(CONFIGURATION_SEED)),
         };
     }
 }

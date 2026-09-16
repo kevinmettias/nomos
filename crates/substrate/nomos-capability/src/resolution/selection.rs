@@ -184,6 +184,10 @@ mod tests
         Assurance, CapabilityId, ContractVersion, FactVariant, IncrementalGranularity,
     };
 
+    /// How many offers `Test_Ranking_Should_Return_Every_Offer_It_Was_Given` hands the
+    /// ranking. The assertion it guards is that the count coming back is this one.
+    const OFFERS_GIVEN: usize = 3;
+
     fn Offer_With_Guarantee(provider: &str, guarantee: Guarantee) -> ProviderOffer
     {
         return ProviderOffer {
@@ -302,7 +306,7 @@ mod tests
                 .expect("every offer given is returned");
         };
 
-        assert_eq!(ranked.len(), 3, "an offer was dropped: {ranked:?}");
+        assert_eq!(ranked.len(), OFFERS_GIVEN, "an offer was dropped: {ranked:?}");
         assert_eq!(at("parse"), 0, "nothing is stronger than the parser here");
         assert!(at("scan") > at("parse"), "and the parser is strictly stronger than the scan");
     }

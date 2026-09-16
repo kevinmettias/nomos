@@ -341,18 +341,40 @@ mod tests
         FactVariant, Guarantee, GenerationId, IncrementalGranularity, ProviderId, SchemaId, SnapshotId, SubjectId,
     };
 
+    /// The subject of the second key in a pair. The first key's subject is `1`, which is
+    /// identity rather than a choice; the two differ so a group of one key cannot pass for a
+    /// group of two.
+    const SECOND_SUBJECT_SEED: u8 = 2;
+
+    /// The variant component of every key in this module.
+    const VARIANT_SEED: u8 = 3;
+
+    /// The configuration component of every key in this module.
+    const CONFIGURATION_SEED: u8 = 4;
+
+    /// The workspace state the synthesized facts were measured against.
+    const SNAPSHOT_SEED: u8 = 2;
+
+    /// The variant the invalidation report blames. Seeded apart from [`VARIANT_SEED`] so a
+    /// report whose cause drifted to the key's own variant would not compare equal.
+    const CAUSE_VARIANT_SEED: u8 = 9;
+
+    /// The generation the report widens from, one past the generation the facts were
+    /// materialized at, which is what makes them worth invalidating.
+    const REPORT_GENERATION: u64 = 2;
+
     #[test]
     fn Test_Is_Cycle_Should_Be_True_Only_For_A_Group_Of_More_Than_One_Member()
     {
         assert!(!RematerializationGroup { members: vec![Key_For(1)] }.Is_Cycle());
-        assert!(RematerializationGroup { members: vec![Key_For(1), Key_For(2)] }.Is_Cycle());
+        assert!(RematerializationGroup { members: vec![Key_For(1), Key_For(SECOND_SUBJECT_SEED)] }.Is_Cycle());
     }
 
     #[test]
     fn Test_Condensation_Of_Should_Group_Two_Facts_That_Depend_On_Each_Other()
     {
         let a = Key_For(1);
-        let b = Key_For(2);
+        let b = Key_For(SECOND_SUBJECT_SEED);
         let store = Mutually_Dependent(&a, &b);
         let report = Report_Naming(&[a.clone(), b.clone()]);
 
@@ -374,8 +396,8 @@ mod tests
             provider: ProviderId::New("nomos.provider.test"),
             provider_version: ContractVersion::New(1, 0),
             guarantee: GuaranteeDigest::Of(&File_Guarantee()),
-            variant: BuildVariantId::From_Digest(Seeded(3)),
-            configuration: ConfigurationId::From_Digest(Seeded(4)),
+            variant: BuildVariantId::From_Digest(Seeded(VARIANT_SEED)),
+            configuration: ConfigurationId::From_Digest(Seeded(CONFIGURATION_SEED)),
         };
     }
 
@@ -406,7 +428,7 @@ mod tests
     {
         return MaterializedFact {
             identity: key.clone().At(generation),
-            snapshot: SnapshotId::From_Digest(Seeded(2)),
+            snapshot: SnapshotId::From_Digest(Seeded(SNAPSHOT_SEED)),
             evidence: EvidenceClass::Derived,
             guarantee: File_Guarantee(),
             payload: FactPayload::New(SchemaId::New("nomos.test.rematerialization_group.v1"), b"tree".to_vec()),
@@ -416,8 +438,8 @@ mod tests
     fn Report_Naming(keys: &[FactKey]) -> InvalidationReport
     {
         return InvalidationReport {
-            cause: GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded(9)) },
-            from: GenerationId::From_Raw(2),
+            cause: GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded(CAUSE_VARIANT_SEED)) },
+            from: GenerationId::From_Raw(REPORT_GENERATION),
             direct: keys.to_vec(),
             dependent: Vec::new(),
             broadened: Vec::new(),

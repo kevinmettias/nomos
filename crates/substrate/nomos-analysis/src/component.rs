@@ -81,6 +81,10 @@ mod tests
 {
     use super::*;
 
+    /// One per variant `Component::All` lists. `Label`'s exhaustive match over every
+    /// variant is what keeps this list and the enum in step, so this pins the count.
+    const COMPONENT_COUNT: usize = 9;
+
     #[test]
     fn Test_Label_Should_Give_Each_Variant_A_Distinct_Lowercase_Name()
     {
@@ -98,7 +102,7 @@ mod tests
     {
         let all = Component::All();
 
-        assert_eq!(all.len(), 9);
+        assert_eq!(all.len(), COMPONENT_COUNT);
         assert!(all.contains(&Component::Configuration));
     }
 }

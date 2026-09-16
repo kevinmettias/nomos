@@ -76,6 +76,22 @@ mod tests
         Digest128, FactVariant, Guarantee, IncrementalGranularity, ProviderId, SubjectId,
     };
 
+    /// The subject of the second key a trail records. The first key's subject is `1`, which
+    /// is identity rather than a choice; the two must differ or a trail that recorded one
+    /// key twice would read as a trail that recorded two.
+    const SECOND_SUBJECT_SEED: u8 = 2;
+
+    /// How many reads the order test records. The two `expect` messages at its assertions
+    /// name this same number, so they move together.
+    const RECORDED_COUNT: usize = 2;
+
+    /// The variant component of every key in this module.
+    const VARIANT_SEED: u8 = 9;
+
+    /// The configuration component of every key in this module; seeded apart from
+    /// [`VARIANT_SEED`] so the two components cannot be confused for one another.
+    const CONFIGURATION_SEED: u8 = 8;
+
     #[test]
     fn Test_New_Should_Start_Empty()
     {
@@ -97,7 +113,7 @@ mod tests
     fn Test_Note_Miss_Should_Record_A_Dependency_Unavailable_Degraded_Outcome()
     {
         let mut trail = Trail::New();
-        let key = Key_For(2);
+        let key = Key_For(SECOND_SUBJECT_SEED);
 
         trail.Note_Miss(&key);
 
@@ -115,11 +131,11 @@ mod tests
     {
         let mut trail = Trail::New();
         trail.Note(&Key_For(1), ReadOutcome::Materialized);
-        trail.Note(&Key_For(2), ReadOutcome::Absent);
+        trail.Note(&Key_For(SECOND_SUBJECT_SEED), ReadOutcome::Absent);
 
-        assert_eq!(trail.Recorded().len(), 2);
+        assert_eq!(trail.Recorded().len(), RECORDED_COUNT);
         assert_eq!(trail.Recorded().first().expect("the assertion above found 2 entries").key, Key_For(1));
-        assert_eq!(trail.Recorded().get(1).expect("the assertion above found 2 entries").key, Key_For(2));
+        assert_eq!(trail.Recorded().get(1).expect("the assertion above found 2 entries").key, Key_For(SECOND_SUBJECT_SEED));
     }
 
     #[test]
@@ -140,6 +156,13 @@ mod tests
 
     fn Key_For(subject_seed: u8) -> FactKey
     {
+        let guarantee = Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
+
         return FactKey {
             contract: CapabilityId::New("nomos.cap.test.trail"),
             contract_version: ContractVersion::New(1, 0),
@@ -147,14 +170,9 @@ mod tests
             semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
             provider: ProviderId::New("nomos.provider.test"),
             provider_version: ContractVersion::New(1, 0),
-            guarantee: GuaranteeDigest::Of(&Guarantee::New(
-                FactVariant::Syntactic,
-                Assurance::Sound,
-                Assurance::Sound,
-                IncrementalGranularity::File,
-            )),
-            variant: BuildVariantId::From_Digest(Seeded(9)),
-            configuration: ConfigurationId::From_Digest(Seeded(8)),
+            guarantee: GuaranteeDigest::Of(&guarantee),
+            variant: BuildVariantId::From_Digest(Seeded(VARIANT_SEED)),
+            configuration: ConfigurationId::From_Digest(Seeded(CONFIGURATION_SEED)),
         };
     }
 }

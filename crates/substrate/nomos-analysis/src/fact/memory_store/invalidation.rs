@@ -16,7 +16,6 @@ use nomos_contracts::Digest128;
 use nomos_contracts::GenerationId;
 use crate::InvalidationReport;
 use crate::GenerationCause;
-use crate::propagation::DependencyPropagation;
 
 use super::MemoryFactStore;
 
@@ -108,9 +107,7 @@ fn Propagate_To_Dependents(
     report: &mut InvalidationReport,
 ) -> BTreeSet<Digest128>
 {
-    let propagation = Taken_Propagation(store);
-    let walk = Walked_Dependents(store, propagation.as_ref(), roots);
-    store.propagation = Some(propagation);
+    let walk = Walked_Dependents(store, roots);
 
     for consumer in walk.reached
     {
@@ -120,41 +117,17 @@ fn Propagate_To_Dependents(
     return walk.seen;
 }
 
-/// Takes `store.propagation` out so the first pass in [`Propagate_To_Dependents`] can call it under an
-/// immutable borrow of `store` without a live mutable borrow of this one field left behind
-/// to conflict with it.
-// Returns the boxed `dyn DependencyPropagation` unchanged from how `store.propagation` already
-// holds it -- this function only relocates ownership of that trait object for the duration of
-// the walk, it does not itself choose dynamic dispatch over a generic parameter.
-fn Taken_Propagation(store: &mut MemoryFactStore) -> Box<dyn DependencyPropagation>
-{
-    // `store.propagation` is `Some` between any two calls into this type — see the field's
-    // own doc comment on `MemoryFactStore` — so an absence here is this file's own
-    // invariant broken, not a failure a caller could recover from. `unreachable!` says
-    // that; forcing a `Result` the caller has to handle would misclassify a bug as an
-    // outcome.
-    let Some(propagation) = store.propagation.take()
-    else
-    {
-        // rust-panic: allow: propagation is always present between calls -- see the field's own
-        // doc comment on MemoryFactStore -- so an absence here is this file's own invariant
-        // broken, not a failure a caller could recover from.
-        unreachable!("propagation implementation is always present between calls");
-    };
-
-    return propagation;
-}
-
 /// The first pass of [`Propagate_To_Dependents`]'s walk.
-// Takes the propagation strategy as `&dyn DependencyPropagation`, matching how `MemoryFactStore`
-// stores it boxed, so the walk runs against whichever implementation the store was built with
-// (`LocalGraphPropagation` by default, or a test's substitute) rather than one fixed here.
-fn Walked_Dependents(store: &MemoryFactStore, propagation: &dyn DependencyPropagation, roots: Vec<Digest128>) -> Walk
+// Reaches the strategy through `store.propagation` rather than taking it as a parameter, and
+// reads it by shared borrow: the walk only reads `store` (`dependents`, `keys` through
+// `Is_Already_Invalidated`), so the borrow it holds ends with the returned [`Walk`], which is
+// owned, and the second pass's `&mut store` is free to start then.
+fn Walked_Dependents(store: &MemoryFactStore, roots: Vec<Digest128>) -> Walk
 {
     let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
     let mut reached: Vec<Digest128> = Vec::new();
 
-    propagation.Spread(&store.dependents, roots, &mut |consumer| {
+    store.propagation.Spread(&store.dependents, roots, &mut |consumer| {
         seen.insert(consumer);
         if store.Is_Already_Invalidated(consumer)
         {
@@ -258,13 +231,31 @@ mod tests
         FactVariant, Guarantee, ProviderId, SchemaId, SnapshotId, SubjectId,
     };
 
+    /// The generation the invalidation under test is applied at. Ahead of the generation the
+    /// fact was materialized at (the exempt `1`), because a cause cannot invalidate a fact the
+    /// store has not been told about yet.
+    const INVALIDATION_GENERATION: u64 = 2;
+
+    /// The variant component of [`Key_For`]'s key, seeded apart from that key's configuration
+    /// and its subject so a fixture that mixes two of them up still asserts unequal.
+    const VARIANT_SEED: u8 = 3;
+
+    /// The configuration component of [`Key_For`]'s key; distinct from [`VARIANT_SEED`] for
+    /// the reason given there.
+    const CONFIGURATION_SEED: u8 = 4;
+
+    /// The workspace state [`Fact_For`] measures its fact against. Provenance rather than part
+    /// of the fact's identity (`OD-ANALYSIS-001`), so one value serves every fixture here.
+    const SNAPSHOT_SEED: u8 = 2;
+
     #[test]
     fn Test_Invalidate_Reached_Should_Name_The_Fact_A_Cause_Reaches_Directly()
     {
         let mut store = MemoryFactStore::New();
         let key = Key_For(1);
+        let fact = Fact_For(&key, GenerationId::From_Raw(1));
         store
-            .Materialize(Fact_For(&key, GenerationId::From_Raw(1)), &[])
+            .Materialize(fact, &[])
             .expect("first materialization cannot conflict");
 
         let cause = GenerationCause::SubjectChanged {
@@ -272,7 +263,7 @@ mod tests
             granularity: IncrementalGranularity::File,
         };
 
-        let report = Invalidate_Reached(&mut store, &cause, GenerationId::From_Raw(2));
+        let report = Invalidate_Reached(&mut store, &cause, GenerationId::From_Raw(INVALIDATION_GENERATION));
 
         assert_eq!(report.direct, vec![key]);
         assert_eq!(report.retained, 0);
@@ -288,8 +279,8 @@ mod tests
             provider: ProviderId::New("nomos.provider.test"),
             provider_version: ContractVersion::New(1, 0),
             guarantee: GuaranteeDigest::Of(&File_Guarantee()),
-            variant: BuildVariantId::From_Digest(Seeded(3)),
-            configuration: ConfigurationId::From_Digest(Seeded(4)),
+            variant: BuildVariantId::From_Digest(Seeded(VARIANT_SEED)),
+            configuration: ConfigurationId::From_Digest(Seeded(CONFIGURATION_SEED)),
         };
     }
 
@@ -297,7 +288,7 @@ mod tests
     {
         return MaterializedFact {
             identity: key.clone().At(generation),
-            snapshot: SnapshotId::From_Digest(Seeded(2)),
+            snapshot: SnapshotId::From_Digest(Seeded(SNAPSHOT_SEED)),
             evidence: EvidenceClass::Derived,
             guarantee: File_Guarantee(),
             payload: FactPayload::New(SchemaId::New("nomos.test.invalidation.v1"), b"tree".to_vec()),

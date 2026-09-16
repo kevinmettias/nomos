@@ -90,6 +90,13 @@ mod tests
 
     const SOURCE: &str = include_str!("propagation.rs");
 
+    /// The seed of the node immediately downstream of the root in every walk below.
+    const DOWNSTREAM_SEED: u8 = 2;
+
+    /// The seed of the node one step beyond [`DOWNSTREAM_SEED`], which only a walk that
+    /// actually followed the chain can have reached.
+    const SECOND_DOWNSTREAM_SEED: u8 = 3;
+
     #[test]
     fn Test_This_Modules_Code_Should_Carry_No_Fact_Identity_Vocabulary()
     {
@@ -141,8 +148,8 @@ mod tests
     fn Test_Spread_Should_Reach_Every_Downstream_Node_Once()
     {
         let a = Digest_From_Byte(1);
-        let b = Digest_From_Byte(2);
-        let c = Digest_From_Byte(3);
+        let b = Digest_From_Byte(DOWNSTREAM_SEED);
+        let c = Digest_From_Byte(SECOND_DOWNSTREAM_SEED);
 
         let dependents = Graph_From_Edges(&[(a, b), (b, c)]);
 
@@ -155,7 +162,7 @@ mod tests
     fn Test_Spread_Should_Terminate_On_A_Cycle()
     {
         let a = Digest_From_Byte(1);
-        let b = Digest_From_Byte(2);
+        let b = Digest_From_Byte(DOWNSTREAM_SEED);
 
         let dependents = Graph_From_Edges(&[(a, b), (b, a)]);
 
@@ -168,8 +175,8 @@ mod tests
     fn Test_Declining_A_Node_Should_Stop_The_Walk_There()
     {
         let a = Digest_From_Byte(1);
-        let b = Digest_From_Byte(2);
-        let c = Digest_From_Byte(3);
+        let b = Digest_From_Byte(DOWNSTREAM_SEED);
+        let c = Digest_From_Byte(SECOND_DOWNSTREAM_SEED);
 
         let dependents = Graph_From_Edges(&[(a, b), (b, c)]);
 
@@ -180,7 +187,7 @@ mod tests
 
     fn Digest_From_Byte(byte: u8) -> Digest128
     {
-        return Digest128::From_Bytes([byte; 16]);
+        return Digest128::From_Bytes([byte; Digest128::BYTE_LENGTH]);
     }
 
     /// A dependents adjacency map built from `(from, to)` edges, one insertion per edge.

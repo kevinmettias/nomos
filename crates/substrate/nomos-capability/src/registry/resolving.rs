@@ -201,7 +201,8 @@ mod tests
         let mut registry = Registry::New();
         registry.Declare(Contract()).expect("declared once");
 
-        let resolution = Resolve_Requirement(&registry, &Requirement::New(Capability(), Version(), Floor()));
+        let requirement = Requirement::New(Capability(), Version(), Floor());
+        let resolution = Resolve_Requirement(&registry, &requirement);
 
         assert!(matches!(resolution, Resolution::Unsatisfied { reason: Unmet::NoProvider, .. }));
     }
@@ -212,8 +213,8 @@ mod tests
         let registry = Registry_With_One_Offer();
         let required = ProviderId::New("nomos.test.absent");
 
-        let resolution =
-            Resolve_Requiring(&registry, &Requirement::New(Capability(), Version(), Floor()), &required);
+        let requirement = Requirement::New(Capability(), Version(), Floor());
+        let resolution = Resolve_Requiring(&registry, &requirement, &required);
 
         assert!(matches!(resolution, RequiredResolution::Unsatisfied { .. }));
     }

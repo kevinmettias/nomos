@@ -75,6 +75,21 @@ mod tests
 
     use crate::WorkspaceChangeSet;
 
+    /// The ordinal each source is recorded at, one per [`ChangeSource::All`] in that list's
+    /// own order. `Test_Every_ChangeSource_Should_Be_Matched_Exhaustively` is what holds the
+    /// two in step: it asserts every one of these against the position `All` puts its source
+    /// at, so a reordering here is a failing assertion rather than a silent one.
+    const CORRECTION_ORDINAL: usize = 0;
+    const IDE_EDIT_ORDINAL: usize = 1;
+    const GIT_CHECKOUT_ORDINAL: usize = 2;
+    const AGENT_EDIT_ORDINAL: usize = 3;
+    const CODE_GENERATOR_ORDINAL: usize = 4;
+
+    /// How many changes `Test_A_Change_Set_Should_Carry_Its_Source_And_Its_Changes` submits
+    /// through the builder — one `Present` and one `Absent`, which is the whole of what the
+    /// assertions there are about.
+    const CHANGES_IN_THE_SET: usize = 2;
+
     #[test]
     fn Test_Path_Should_Return_The_Submitted_Path()
     {
@@ -98,7 +113,7 @@ mod tests
             .Absent("src/old.rs");
 
         assert_eq!(set.Source(), ChangeSource::GitCheckout);
-        assert_eq!(set.Changes().len(), 2);
+        assert_eq!(set.Changes().len(), CHANGES_IN_THE_SET);
         assert!(!set.Is_Empty());
     }
 
@@ -160,11 +175,11 @@ mod tests
         {
             return match source
             {
-                ChangeSource::Correction => 0,
-                ChangeSource::IdeEdit => 1,
-                ChangeSource::GitCheckout => 2,
-                ChangeSource::AgentEdit => 3,
-                ChangeSource::CodeGenerator => 4,
+                ChangeSource::Correction => CORRECTION_ORDINAL,
+                ChangeSource::IdeEdit => IDE_EDIT_ORDINAL,
+                ChangeSource::GitCheckout => GIT_CHECKOUT_ORDINAL,
+                ChangeSource::AgentEdit => AGENT_EDIT_ORDINAL,
+                ChangeSource::CodeGenerator => CODE_GENERATOR_ORDINAL,
             };
         }
 

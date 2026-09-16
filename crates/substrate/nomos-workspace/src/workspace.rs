@@ -261,6 +261,10 @@ mod local_tests
     use super::*;
     use crate::ChangeSource;
 
+    /// The byte [`Fresh_Workspace`]'s configuration is seeded from. Distinct from the variant's
+    /// own identity so a workspace built with the wrong component still asserts unequal.
+    const SAMPLE_CONFIGURATION_SEED: u8 = 0x24;
+
     #[test]
     fn Test_Empty_Should_Have_No_Members_And_A_Fresh_Counter()
     {
@@ -276,7 +280,7 @@ mod local_tests
         let mut workspace = Fresh_Workspace();
         let changes = WorkspaceChangeSet::From(ChangeSource::IdeEdit).Present("a.rs", "fn a() {}");
 
-        workspace.Apply(&changes).expect("applies");
+        workspace.Apply(&changes).expect("the set names one workspace-relative path once, which is every way Apply refuses");
 
         assert_eq!(workspace.Generation(), GenerationId::From_Raw(1));
     }
@@ -287,7 +291,7 @@ mod local_tests
         let mut workspace = Fresh_Workspace();
         let changes = WorkspaceChangeSet::From(ChangeSource::IdeEdit).Present("a.rs", "fn a() {}");
 
-        workspace.Apply(&changes).expect("applies");
+        workspace.Apply(&changes).expect("the set names one workspace-relative path once, which is every way Apply refuses");
 
         assert_eq!(workspace.Snapshot().Length(), 1);
         assert!(!workspace.Snapshot().Is_Empty());
@@ -306,7 +310,7 @@ mod local_tests
     {
         let mut workspace = Fresh_Workspace();
         let changes = WorkspaceChangeSet::From(ChangeSource::IdeEdit).Present("src/a.rs", "fn a() {}");
-        workspace.Apply(&changes).expect("applies");
+        workspace.Apply(&changes).expect("the set names one workspace-relative path once, which is every way Apply refuses");
 
         let expected = nomos_model::Content_Digest("fn a() {}".as_bytes());
 
@@ -346,7 +350,7 @@ mod local_tests
 
         let decoded =
             WorkspaceSnapshot::Decode(&recorded.first().expect("the assertion above found exactly one recorded document").bytes)
-                .expect("it decodes");
+                .expect("these bytes are WorkspaceSnapshot::Encode's own output for this workspace's snapshot");
         assert_eq!(decoded.Id(), workspace.Id());
     }
 
@@ -363,7 +367,7 @@ mod local_tests
 
     fn Sample_Configuration() -> ConfigurationId
     {
-        return ConfigurationId::From_Digest(Digest128::From_Bytes([0x24; 16]));
+        return ConfigurationId::From_Digest(Digest128::From_Bytes([SAMPLE_CONFIGURATION_SEED; Digest128::BYTE_LENGTH]));
     }
 
     fn Fresh_Workspace() -> Workspace

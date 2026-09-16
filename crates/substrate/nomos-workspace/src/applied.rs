@@ -63,16 +63,25 @@ mod tests
 {
     use super::*;
 
+    /// The generation the advanced outcome under test is taken at, and the one its assertion
+    /// reads back. Anything but `GenerationId::INITIAL`, which would make the assertion pass
+    /// against an outcome that never advanced.
+    const ADVANCED_GENERATION: u64 = 3;
+
+    /// The byte the sample snapshot digest is filled with. Any byte will do; naming it keeps
+    /// the snapshot the outcomes share from reading as a different one per test.
+    const SAMPLE_SNAPSHOT_BYTE: u8 = 0x42;
+
     #[test]
     fn Test_Generation_Should_Report_The_Generation_Of_An_Advanced_Outcome()
     {
         let applied = Applied::Advanced {
-            generation: GenerationId::From_Raw(3),
+            generation: GenerationId::From_Raw(ADVANCED_GENERATION),
             snapshot: Sample_Snapshot(),
             effects: Sample_Effects(),
         };
 
-        assert_eq!(applied.Generation(), GenerationId::From_Raw(3));
+        assert_eq!(applied.Generation(), GenerationId::From_Raw(ADVANCED_GENERATION));
     }
 
     #[test]
@@ -111,6 +120,9 @@ mod tests
 
     fn Sample_Snapshot() -> SnapshotId
     {
-        return SnapshotId::From_Digest(nomos_contracts::Digest128::From_Bytes([0x42; 16]));
+        let bytes = [SAMPLE_SNAPSHOT_BYTE; nomos_contracts::Digest128::BYTE_LENGTH];
+        let digest = nomos_contracts::Digest128::From_Bytes(bytes);
+
+        return SnapshotId::From_Digest(digest);
     }
 }

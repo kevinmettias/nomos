@@ -36,17 +36,19 @@ pub struct MemoryFactStore
     dependents: BTreeMap<Digest128, BTreeSet<Digest128>>,
     keys: BTreeMap<Digest128, FactKey>,
     materializations: u32,
-    /// Held as `Option` rather than bare `Box<dyn DependencyPropagation>` so `Invalidate`
-    /// can take it out with [`Option::take`] before the walk: the walk's callback needs
-    /// `&mut self` for `Try_Invalidate_One` and `self.keys`, which cannot coexist with a borrow
-    /// of this field for the call that runs it. Always `Some` between calls; taking it and
-    /// never restoring it is the one invariant this field asks a caller inside this file to
-    /// keep.
+    /// The strategy `Invalidate` spreads an invalidation with.
+    ///
+    /// A bare field rather than an `Option`: [the walk](self::invalidation::Propagate_To_Dependents)
+    /// takes it by shared borrow, and the mutation it does afterwards
+    /// (`Try_Invalidate_One`) sits in a second pass that runs after that borrow has ended, so
+    /// there is no window in which the field has to be vacated and no absent state for a
+    /// caller to trip over. `OD-ANALYSIS-008` is the two-pass split that removed the window;
+    /// the `Option` and its `take` outlived it.
     // Boxed as `dyn DependencyPropagation` rather than a generic parameter on `MemoryFactStore`
     // itself, because a type parameter here would spread into every public signature that
     // names this store; a swappable implementation behind one boxed trait object keeps that
     // seam local to this one field, which is exactly what `With_Propagation` below needs.
-    propagation: Option<Box<dyn DependencyPropagation>>,
+    propagation: Box<dyn DependencyPropagation>,
 }
 
 impl MemoryFactStore
@@ -61,7 +63,7 @@ impl MemoryFactStore
             dependents: BTreeMap::new(),
             keys: BTreeMap::new(),
             materializations: 0,
-            propagation: Some(Box::new(LocalGraphPropagation)),
+            propagation: Box::new(LocalGraphPropagation),
         };
     }
 
@@ -270,7 +272,7 @@ impl MemoryFactStore
             dependents: BTreeMap::new(),
             keys: BTreeMap::new(),
             materializations: 0,
-            propagation: Some(propagation),
+            propagation,
         };
     }
 }
@@ -293,6 +295,33 @@ mod local_tests
         FactVariant, Guarantee, IncrementalGranularity, ProviderId, SchemaId, SnapshotId, SubjectId,
     };
 
+    /// The generation the accepted write in the backdating test is made at. It has to be
+    /// later than the rewrite that follows, which is what the store refuses.
+    const CURRENT_GENERATION: u64 = 5;
+
+    /// The generation the store is invalidated at, later than every write here so the
+    /// invalidation has something to reach.
+    const INVALIDATION_GENERATION: u64 = 2;
+
+    /// The subject of the second key a store writes, distinct from the first key's `1`.
+    const SECOND_SUBJECT_SEED: u8 = 2;
+
+    /// The subject of the key the dependency test names: nothing else in that test reads it,
+    /// so it only has to differ from the key that carries the dependency.
+    const DEPENDENCY_SUBJECT_SEED: u8 = 9;
+
+    /// How many writes the counting test makes; one per `Materialize` call above it.
+    const EXPECTED_MATERIALIZATIONS: u32 = 2;
+
+    /// The variant component of every key in this module.
+    const VARIANT_SEED: u8 = 3;
+
+    /// The configuration component of every key in this module.
+    const CONFIGURATION_SEED: u8 = 4;
+
+    /// The workspace state the synthesized facts were measured against.
+    const SNAPSHOT_SEED: u8 = 2;
+
     #[test]
     fn Test_New_Should_Start_Completely_Empty()
     {
@@ -307,11 +336,13 @@ mod local_tests
     {
         let mut store = MemoryFactStore::New();
         let key = Key_For(1);
+        let current = Fact_For(&key, GenerationId::From_Raw(CURRENT_GENERATION));
         store
-            .Materialize(Fact_For(&key, GenerationId::From_Raw(5)), &[])
+            .Materialize(current, &[])
             .expect("first write cannot conflict");
 
-        let backdated = store.Materialize(Fact_For(&key, GenerationId::From_Raw(1)), &[]);
+        let backdated_fact = Fact_For(&key, GenerationId::From_Raw(1));
+        let backdated = store.Materialize(backdated_fact, &[]);
 
         assert!(matches!(backdated, Err(FactError::Backdated { .. })));
     }
@@ -320,14 +351,16 @@ mod local_tests
     fn Test_Materializations_Should_Count_Every_Successful_Write()
     {
         let mut store = MemoryFactStore::New();
+        let first = Fact_For(&Key_For(1), GenerationId::From_Raw(1));
         store
-            .Materialize(Fact_For(&Key_For(1), GenerationId::From_Raw(1)), &[])
-            .expect("first write");
+            .Materialize(first, &[])
+            .expect("Refuse_Backdated finds no entry under this key on a store this test just built");
+        let second = Fact_For(&Key_For(SECOND_SUBJECT_SEED), GenerationId::From_Raw(1));
         store
-            .Materialize(Fact_For(&Key_For(2), GenerationId::From_Raw(1)), &[])
+            .Materialize(second, &[])
             .expect("second write");
 
-        assert_eq!(store.Materializations(), 2);
+        assert_eq!(store.Materializations(), EXPECTED_MATERIALIZATIONS);
     }
 
     #[test]
@@ -335,12 +368,13 @@ mod local_tests
     {
         let mut store = MemoryFactStore::New();
         let key = Key_For(1);
+        let fact = Fact_For(&key, GenerationId::From_Raw(1));
         store
-            .Materialize(Fact_For(&key, GenerationId::From_Raw(1)), &[])
-            .expect("first write");
+            .Materialize(fact, &[])
+            .expect("Refuse_Backdated finds no entry under this key on a store this test just built");
         assert_eq!(store.Live(), 1);
 
-        store.Try_Invalidate_One(key.Digest(), GenerationId::From_Raw(2), "test");
+        store.Try_Invalidate_One(key.Digest(), GenerationId::From_Raw(INVALIDATION_GENERATION), "test");
         assert_eq!(store.Live(), 0);
     }
 
@@ -349,13 +383,14 @@ mod local_tests
     {
         let mut store = MemoryFactStore::New();
         let dependency = Dependency {
-            key: Key_For(9),
+            key: Key_For(DEPENDENCY_SUBJECT_SEED),
             outcome: ReadOutcome::Materialized,
         };
         let key = Key_For(1);
+        let fact = Fact_For(&key, GenerationId::From_Raw(1));
         store
-            .Materialize(Fact_For(&key, GenerationId::From_Raw(1)), &[dependency.clone()])
-            .expect("first write");
+            .Materialize(fact, &[dependency.clone()])
+            .expect("Refuse_Backdated finds no entry under this key on a store this test just built");
 
         assert_eq!(store.Dependencies_Of(&key), vec![dependency]);
     }
@@ -377,9 +412,10 @@ mod local_tests
     {
         let mut store = MemoryFactStore::New();
         let key = Key_For(1);
+        let fact = Fact_For(&key, GenerationId::From_Raw(1));
         store
-            .Materialize(Fact_For(&key, GenerationId::From_Raw(1)), &[])
-            .expect("first write");
+            .Materialize(fact, &[])
+            .expect("Refuse_Backdated finds no entry under this key on a store this test just built");
 
         assert_eq!(store.Superseded_At(&key), None);
     }
@@ -419,8 +455,8 @@ mod local_tests
             provider: ProviderId::New("nomos.provider.test"),
             provider_version: ContractVersion::New(1, 0),
             guarantee: GuaranteeDigest::Of(&File_Guarantee()),
-            variant: BuildVariantId::From_Digest(Seeded(3)),
-            configuration: ConfigurationId::From_Digest(Seeded(4)),
+            variant: BuildVariantId::From_Digest(Seeded(VARIANT_SEED)),
+            configuration: ConfigurationId::From_Digest(Seeded(CONFIGURATION_SEED)),
         };
     }
 
@@ -428,7 +464,7 @@ mod local_tests
     {
         return MaterializedFact {
             identity: key.clone().At(generation),
-            snapshot: SnapshotId::From_Digest(Seeded(2)),
+            snapshot: SnapshotId::From_Digest(Seeded(SNAPSHOT_SEED)),
             evidence: EvidenceClass::Derived,
             guarantee: File_Guarantee(),
             payload: FactPayload::New(SchemaId::New("nomos.test.memory_fact_store.v1"), b"tree".to_vec()),

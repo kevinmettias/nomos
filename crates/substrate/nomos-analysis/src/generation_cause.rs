@@ -133,6 +133,20 @@ mod tests
     use crate::InputDigest;
     use nomos_contracts::{Assurance, CapabilityId, ContractVersion, Digest128, FactVariant, Guarantee};
 
+    /// The variant `Describe` is asked about. Its value is arbitrary — the test asserts only
+    /// that the description names the component that changed.
+    const DESCRIBED_VARIANT_SEED: u8 = 2;
+
+    /// The subject a cause does not name, seeded apart from the subject it does so that a
+    /// cause matching both is distinguishable from one matching the right subject.
+    const OTHER_SUBJECT_SEED: u8 = 2;
+
+    /// The configuration and variant the two keys in
+    /// `Test_Is_Naming_Should_Match_Only_The_Subject_A_Change_Names` are built with. They are
+    /// held equal across both keys, so the test fails only on the subject.
+    const KEY_CONFIGURATION_SEED: u8 = 3;
+    const KEY_VARIANT_SEED: u8 = 4;
+
     #[test]
     fn Test_Describe_Should_Name_What_Changed_For_Every_Variant()
     {
@@ -147,7 +161,7 @@ mod tests
                 .contains("provider")
         );
         assert!(
-            GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded(2)) }
+            GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded(DESCRIBED_VARIANT_SEED)) }
                 .Describe()
                 .contains("build variant")
         );
@@ -172,20 +186,20 @@ mod tests
     fn Test_Is_Naming_Should_Match_Only_The_Subject_A_Change_Names()
     {
         let subject = SubjectId::From_Digest(Seeded(1));
-        let other_subject = SubjectId::From_Digest(Seeded(2));
+        let other_subject = SubjectId::From_Digest(Seeded(OTHER_SUBJECT_SEED));
         let cause = GenerationCause::SubjectChanged { subject, granularity: IncrementalGranularity::File };
 
         let key = Key_With(
             subject,
-            ConfigurationId::From_Digest(Seeded(3)),
+            ConfigurationId::From_Digest(Seeded(KEY_CONFIGURATION_SEED)),
             ProviderId::New("nomos.test.provider"),
-            BuildVariantId::From_Digest(Seeded(4)),
+            BuildVariantId::From_Digest(Seeded(KEY_VARIANT_SEED)),
         );
         let other_key = Key_With(
             other_subject,
-            ConfigurationId::From_Digest(Seeded(3)),
+            ConfigurationId::From_Digest(Seeded(KEY_CONFIGURATION_SEED)),
             ProviderId::New("nomos.test.provider"),
-            BuildVariantId::From_Digest(Seeded(4)),
+            BuildVariantId::From_Digest(Seeded(KEY_VARIANT_SEED)),
         );
 
         assert!(cause.Is_Naming(&key));
@@ -199,6 +213,13 @@ mod tests
         variant: BuildVariantId,
     ) -> FactKey
     {
+        let guarantee = Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
+
         return FactKey {
             contract: CapabilityId::New("nomos.cap.test.generation_cause"),
             contract_version: ContractVersion::New(1, 0),
@@ -206,12 +227,7 @@ mod tests
             semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
             provider,
             provider_version: ContractVersion::New(1, 0),
-            guarantee: GuaranteeDigest::Of(&Guarantee::New(
-                FactVariant::Syntactic,
-                Assurance::Sound,
-                Assurance::Sound,
-                IncrementalGranularity::File,
-            )),
+            guarantee: GuaranteeDigest::Of(&guarantee),
             variant,
             configuration,
         };

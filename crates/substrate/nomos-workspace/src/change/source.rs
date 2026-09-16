@@ -73,6 +73,10 @@ mod tests
 {
     use super::*;
 
+    /// One per variant `Source::All` lists. `Label`'s exhaustive match over every variant is
+    /// what keeps that list and the enum in step, so this pins the count.
+    const SOURCE_COUNT: usize = 5;
+
     #[test]
     fn Test_Label_Should_Spell_Every_Source_Distinctly()
     {
@@ -86,7 +90,7 @@ mod tests
     {
         let all = Source::All();
 
-        assert_eq!(all.len(), 5);
+        assert_eq!(all.len(), SOURCE_COUNT);
         assert!(all.contains(&Source::Correction));
         assert!(all.contains(&Source::CodeGenerator));
 

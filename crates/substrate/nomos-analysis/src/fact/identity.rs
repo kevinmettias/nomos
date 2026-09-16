@@ -49,11 +49,23 @@ mod tests
         Guarantee, IncrementalGranularity, ProviderId, SubjectId,
     };
 
+    /// The generation every identity in this module is taken at. Nothing here compares two
+    /// generations against each other, so one named value stands for both.
+    const SAMPLE_GENERATION: u64 = 5;
+
+    /// The variant component of the sample key, seeded apart from the subject and the
+    /// configuration so a key built with the wrong one still asserts unequal.
+    const VARIANT_SEED: u8 = 3;
+
+    /// The configuration component of the sample key; distinct from [`VARIANT_SEED`] for the
+    /// reason given there.
+    const CONFIGURATION_SEED: u8 = 4;
+
     #[test]
     fn Test_Key_Should_Return_The_Identitys_Own_Key()
     {
         let key = Sample_Key();
-        let identity = key.clone().At(GenerationId::From_Raw(5));
+        let identity = key.clone().At(GenerationId::From_Raw(SAMPLE_GENERATION));
 
         assert_eq!(identity.Key(), &key);
     }
@@ -62,7 +74,7 @@ mod tests
     fn Test_Digest_Should_Match_The_Keys_Own_Digest()
     {
         let key = Sample_Key();
-        let identity = key.clone().At(GenerationId::From_Raw(5));
+        let identity = key.clone().At(GenerationId::From_Raw(SAMPLE_GENERATION));
 
         assert_eq!(identity.Digest(), key.Digest());
     }
@@ -74,6 +86,13 @@ mod tests
 
     fn Sample_Key() -> FactKey
     {
+        let guarantee = Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
+
         return FactKey {
             contract: CapabilityId::New("nomos.cap.test.identity"),
             contract_version: ContractVersion::New(1, 0),
@@ -81,14 +100,9 @@ mod tests
             semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
             provider: ProviderId::New("nomos.provider.test"),
             provider_version: ContractVersion::New(1, 0),
-            guarantee: GuaranteeDigest::Of(&Guarantee::New(
-                FactVariant::Syntactic,
-                Assurance::Sound,
-                Assurance::Sound,
-                IncrementalGranularity::File,
-            )),
-            variant: BuildVariantId::From_Digest(Seeded(3)),
-            configuration: ConfigurationId::From_Digest(Seeded(4)),
+            guarantee: GuaranteeDigest::Of(&guarantee),
+            variant: BuildVariantId::From_Digest(Seeded(VARIANT_SEED)),
+            configuration: ConfigurationId::From_Digest(Seeded(CONFIGURATION_SEED)),
         };
     }
 }

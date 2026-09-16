@@ -203,6 +203,10 @@ mod tests
 {
     use super::*;
 
+    /// Any position but the first. `Is_Ordinal` refuses position 0 whatever the text, which
+    /// is what stops a year at the head of a filename reading as a record's ordinal.
+    const BEYOND_THE_FIRST_COMPONENT: usize = 2;
+
     #[test]
     fn Test_Up_To_The_Ordinal_Should_Stop_At_The_First_All_Digit_Component()
     {
@@ -214,7 +218,7 @@ mod tests
     fn Test_Is_Ordinal_Should_Reject_The_First_Component()
     {
         assert!(!Is_Ordinal("2026", 0));
-        assert!(Is_Ordinal("006", 2));
+        assert!(Is_Ordinal("006", BEYOND_THE_FIRST_COMPONENT));
         assert!(!Is_Ordinal("ledger", 1));
     }
 

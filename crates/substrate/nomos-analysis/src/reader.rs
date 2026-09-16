@@ -335,6 +335,20 @@ mod tests
         Guarantee, IncrementalGranularity, ProviderId, SnapshotId,
     };
 
+    /// The subject of the sample key. Distinct from the variant, configuration and
+    /// generation seeds around it, so a key assembled with the wrong component still
+    /// asserts unequal.
+    const SUBJECT_SEED: u8 = 5;
+
+    /// The build variant the sample context names.
+    const VARIANT_SEED: u8 = 2;
+
+    /// The configuration the sample context names.
+    const CONFIGURATION_SEED: u8 = 3;
+
+    /// The generation the sample context names.
+    const GENERATION: u64 = 4;
+
     #[test]
     fn Test_On_Should_Build_A_Reader_With_An_Empty_Trail()
     {
@@ -373,19 +387,21 @@ mod tests
 
     fn Sample_Key() -> FactKey
     {
+        let guarantee = Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
+
         return FactKey {
             contract: CapabilityId::New("nomos.cap.test.reader"),
             contract_version: ContractVersion::New(1, 0),
-            subject: SubjectId::From_Digest(Seeded(5)),
+            subject: SubjectId::From_Digest(Seeded(SUBJECT_SEED)),
             semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
             provider: ProviderId::New("nomos.provider.test"),
             provider_version: ContractVersion::New(1, 0),
-            guarantee: GuaranteeDigest::Of(&Guarantee::New(
-                FactVariant::Syntactic,
-                Assurance::Sound,
-                Assurance::Sound,
-                IncrementalGranularity::File,
-            )),
+            guarantee: GuaranteeDigest::Of(&guarantee),
             variant: Sample_Context().variant,
             configuration: Sample_Context().configuration,
         };
@@ -400,9 +416,9 @@ mod tests
     {
         return Context {
             snapshot: SnapshotId::From_Digest(Seeded(1)),
-            variant: BuildVariantId::From_Digest(Seeded(2)),
-            configuration: ConfigurationId::From_Digest(Seeded(3)),
-            generation: GenerationId::From_Raw(4),
+            variant: BuildVariantId::From_Digest(Seeded(VARIANT_SEED)),
+            configuration: ConfigurationId::From_Digest(Seeded(CONFIGURATION_SEED)),
+            generation: GenerationId::From_Raw(GENERATION),
         };
     }
 }
