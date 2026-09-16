@@ -31,7 +31,7 @@
 //! read. This connector's ceiling is not pinned to a complete mapping of `CodeRabbit`'s own
 //! comment vocabulary -- a curated subset, not the full schema.
 
-use crate::identity::ReviewFindingId;
+use crate::ReviewFindingId;
 use crate::payload::finding_payload::FindingPayload;
 
 /// The GitHub account every comment this connector translates must be posted by.

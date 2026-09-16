@@ -3,7 +3,7 @@
 pub(crate) mod finding_payload;
 pub(crate) mod payload_refusal;
 
-use crate::identity::ReviewFindingId;
+use crate::ReviewFindingId;
 use finding_payload::FindingPayload;
 use payload_refusal::PayloadRefusal;
 

@@ -1,4 +1,4 @@
-use crate::identity::ReviewFindingId;
+use crate::ReviewFindingId;
 
 /// One review comment's own observed fields, canonically named, kept apart from any
 /// judgment about whether the finding is valid or what it bears on.
