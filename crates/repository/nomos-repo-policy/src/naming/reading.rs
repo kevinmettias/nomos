@@ -7,7 +7,7 @@
 
 use nomos_cap_naming_policy::{Case, PolicyRow, Scope};
 use nomos_platform::FileSystem;
-use crate::standards_document::{Read_Standards_Document, STANDARDS_JSON};
+use crate::standards_document::{StandardsDocumentError, STANDARDS_JSON};
 use std::path::Path;
 
 /// `standards.json` could not be read as this reader expects.
@@ -38,38 +38,14 @@ impl core::fmt::Display for NamingPolicyError
 /// cannot read is one it would silently ignore, and this reader refuses instead.
 pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<Vec<PolicyRow>, NamingPolicyError>
 {
-    let value = Read_Standards_Document(root, filesystem).map_err(|error| NamingPolicyError { reason: error.reason })?;
-
-    let mut rows = Vec::new();
-    Naming_Rows_Into(&value, &Scope::Repository, &mut rows)?;
-
-    if let Some(languages) = value.get("languages").and_then(serde_json::Value::as_object)
-    {
-        for (language, declared) in languages
-        {
-            Naming_Rows_Into(declared, &Scope::Language(language.clone()), &mut rows)?;
-        }
-    }
-
-    return Ok(Canonical_Order(rows));
-}
-
-/// Reads `value`'s own `naming` object, if it has one, into `rows` at `scope`.
-fn Naming_Rows_Into(value: &serde_json::Value, scope: &Scope, rows: &mut Vec<PolicyRow>) -> Result<(), NamingPolicyError>
-{
-    let Some(naming) = value.get("naming").and_then(serde_json::Value::as_object)
-    else
-    {
-        return Ok(());
-    };
-
-    for (symbol, declared_case) in naming
-    {
-        let row = Naming_Row(scope, symbol, declared_case)?;
-        rows.push(row);
-    }
-
-    return Ok(());
+    return crate::scaffolding::Discover_Scoped_Rows(root, filesystem, &crate::scaffolding::ScopedBlock {
+        block: "naming",
+        repository_scope: Scope::Repository,
+        language_scope: |language| Scope::Language(language),
+        decode: Naming_Row,
+        wrap: |error: StandardsDocumentError| NamingPolicyError { reason: error.reason },
+    })
+    .map(Canonical_Order);
 }
 
 /// One `naming.<symbol>` entry as a [`PolicyRow`] at `scope`, refused if it is not a string

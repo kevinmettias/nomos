@@ -26,26 +26,21 @@ pub use crate::scaffolding::{FactContext, PolicyFact};
 pub fn Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, filesystem: &Fs) -> Result<PolicyFact, ArchitectureError>
 {
     let payload = Discover_Workspace(root, filesystem)?;
-    let subject = nomos_model::Subject_Of_Path("");
-    let guarantee = Declared_Guarantee();
-    let payload_bytes = Encode_Payload(&payload);
-    let identity = scaffolding::CapabilityIdentity {
-        capability: Capability(),
-        contract_version: CONTRACT_VERSION,
-        provider: PROVIDER,
-        provider_version: CONTRACT_VERSION,
-    };
-    let key = scaffolding::Compute_Fact_Key(&identity, subject, guarantee, context);
-    let payload = scaffolding::EncodedPayload { schema: Payload_Schema(), bytes: payload_bytes };
 
-    return Ok(scaffolding::Materialize_Fact(subject, guarantee, scaffolding::FactFiling { context, key }, payload));
+    return Ok(scaffolding::Materialize_Whole_Workspace(scaffolding::WholeWorkspaceFiling {
+        subject: scaffolding::Workspace_Subject(),
+        guarantee: Declared_Guarantee(),
+        identity: scaffolding::Identity(Capability(), CONTRACT_VERSION, PROVIDER, CONTRACT_VERSION),
+        context,
+        schema: Payload_Schema(),
+        bytes: Encode_Payload(&payload),
+    }));
 }
 
 #[cfg(test)]
 mod tests
 {
     use super::*;
-    use nomos_analysis::GuaranteeDigest;
     use nomos_platform::{DeterminismStrength, FileSystemError, ReproducibilityScope, Strategy, TraceEquivalence};
 
     /// A [`FileSystem`] that hands back fixed text instead of reading a real path.
@@ -89,13 +84,10 @@ mod tests
 
         let PolicyFact { subject, fact } = Materialize_Workspace(Path::new("."), Context(), &filesystem).expect("well-formed JSON");
 
-        assert_eq!(subject, nomos_model::Subject_Of_Path(""));
-        assert_eq!(fact.guarantee, Declared_Guarantee());
-        assert_eq!(fact.Key().guarantee, GuaranteeDigest::Of(&Declared_Guarantee()));
-        assert_eq!(fact.payload.schema, Payload_Schema());
-
         let decoded = nomos_cap_architecture::Parse_Payload(&fact.payload.bytes).expect("this crate's own encoding");
         assert_eq!(decoded.Component_Of("billing"), Some("Domain"));
+
+        scaffolding::test_support::Assert_Carries_Its_Declaration(&subject, &fact, Declared_Guarantee(), &Payload_Schema());
     }
 
     /// A repository declaring nothing still gets a fact, carrying an empty declaration.
@@ -113,24 +105,9 @@ mod tests
     #[test]
     fn Test_A_Fact_Key_Should_Depend_On_The_Guarantee()
     {
-        let subject = nomos_model::Subject_Of_Path("");
-        let weaker = nomos_contracts::Guarantee::New(
-            nomos_contracts::FactVariant::Syntactic,
-            nomos_contracts::Assurance::Unsound,
-            nomos_contracts::Assurance::Unknown,
-            nomos_contracts::IncrementalGranularity::WholeWorkspace,
-        );
+        let identity = scaffolding::Identity(Capability(), CONTRACT_VERSION, PROVIDER, CONTRACT_VERSION);
 
-        let identity = scaffolding::CapabilityIdentity {
-            capability: Capability(),
-            contract_version: CONTRACT_VERSION,
-            provider: PROVIDER,
-            provider_version: CONTRACT_VERSION,
-        };
-        let strong_key = scaffolding::Compute_Fact_Key(&identity, subject, Declared_Guarantee(), Context());
-        let weak_key = scaffolding::Compute_Fact_Key(&identity, subject, weaker, Context());
-
-        assert_ne!(strong_key.Digest(), weak_key.Digest(), "two offers of the same subject at different guarantees must file apart");
+        scaffolding::test_support::Assert_Keys_File_Apart_By_Guarantee(&identity, Declared_Guarantee());
     }
 
     /// This test's own fixture, shared with its five siblings — see

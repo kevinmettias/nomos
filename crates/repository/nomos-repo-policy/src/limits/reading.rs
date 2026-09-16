@@ -10,7 +10,7 @@
 
 use nomos_cap_limits_policy::{PolicyRow, Scope};
 use nomos_platform::FileSystem;
-use crate::standards_document::{Read_Standards_Document, STANDARDS_JSON};
+use crate::standards_document::{StandardsDocumentError, STANDARDS_JSON};
 use std::path::Path;
 
 /// `standards.json` could not be read as this reader expects.
@@ -41,38 +41,14 @@ impl core::fmt::Display for LimitsPolicyError
 /// non-negative integer.
 pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<Vec<PolicyRow>, LimitsPolicyError>
 {
-    let value = Read_Standards_Document(root, filesystem).map_err(|error| LimitsPolicyError { reason: error.reason })?;
-
-    let mut rows = Vec::new();
-    Limits_Rows_Into(&value, &Scope::Repository, &mut rows)?;
-
-    if let Some(languages) = value.get("languages").and_then(serde_json::Value::as_object)
-    {
-        for (language, declared) in languages
-        {
-            Limits_Rows_Into(declared, &Scope::Language(language.clone()), &mut rows)?;
-        }
-    }
-
-    return Ok(Canonical_Order(rows));
-}
-
-/// Reads `value`'s own `limits` object, if it has one, into `rows` at `scope`.
-fn Limits_Rows_Into(value: &serde_json::Value, scope: &Scope, rows: &mut Vec<PolicyRow>) -> Result<(), LimitsPolicyError>
-{
-    let Some(limits) = value.get("limits").and_then(serde_json::Value::as_object)
-    else
-    {
-        return Ok(());
-    };
-
-    for (key, declared_value) in limits
-    {
-        let row = Limits_Row(scope, key, declared_value)?;
-        rows.push(row);
-    }
-
-    return Ok(());
+    return crate::scaffolding::Discover_Scoped_Rows(root, filesystem, &crate::scaffolding::ScopedBlock {
+        block: "limits",
+        repository_scope: Scope::Repository,
+        language_scope: |language| Scope::Language(language),
+        decode: Limits_Row,
+        wrap: |error: StandardsDocumentError| LimitsPolicyError { reason: error.reason },
+    })
+    .map(Canonical_Order);
 }
 
 /// One `limits.<key>` entry as a [`PolicyRow`] at `scope`, refused if it is not a
