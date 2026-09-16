@@ -106,14 +106,40 @@ mod tests
     use super::*;
     use crate::{ItemKind, ItemOrigin, ItemState, Territory};
 
-    fn Claimed_Item(id: &str, holder: &str) -> LedgerItem
+    /// When the fixture claims were taken.
+    const CLAIM_TAKEN_AT_SECONDS: i64 = 1_000;
+
+    /// When those claims' leases run out, which is the instant the liveness cases turn on.
+    const LEASE_ENDS_AT_SECONDS: i64 = 2_000;
+
+    /// When the takeover case acts: after the first lease has lapsed, so what it exercises is
+    /// the ordinary replacement rather than a live holder being displaced.
+    const TAKEOVER_AT_SECONDS: i64 = 5_000;
+
+    /// When the takeover claim's own lease runs out. Later than the one it replaced, as a
+    /// fresh claim's always is.
+    const TAKEOVER_LEASE_ENDS_AT_SECONDS: i64 = 9_000;
+
+    /// An item identifier as a fixture spells it.
+    ///
+    /// Wrapped, and its neighbour below is too, because [`Claimed_Item`] takes two strings and
+    /// a call site that swapped them would still compile and still build an item — one whose
+    /// holder is an identifier nobody claimed under.
+    #[derive(Clone, Copy)]
+    struct FixtureId<'a>(&'a str);
+
+    /// The holder a fixture claim belongs to, wrapped for the reason [`FixtureId`] is.
+    #[derive(Clone, Copy)]
+    struct FixtureHolder<'a>(&'a str);
+
+    fn Claimed_Item(id: FixtureId<'_>, holder: FixtureHolder<'_>) -> LedgerItem
     {
-        let mut item = Item(id);
+        let mut item = Item(id.0);
         item.state = ItemState::Claimed;
         item.claim = Some(Claim {
-            holder: holder.to_owned(),
-            acquired_at: Timestamp::From_Unix_Seconds(1_000),
-            lease_expires_at: Timestamp::From_Unix_Seconds(2_000),
+            holder: holder.0.to_owned(),
+            acquired_at: Timestamp::From_Unix_Seconds(CLAIM_TAKEN_AT_SECONDS),
+            lease_expires_at: Timestamp::From_Unix_Seconds(LEASE_ENDS_AT_SECONDS),
         });
         return item;
     }
@@ -147,8 +173,8 @@ mod tests
         let mut document = Document_Of(vec![Item("T-1")]);
         let granted = Claim {
             holder: "agent-a".to_owned(),
-            acquired_at: Timestamp::From_Unix_Seconds(1_000),
-            lease_expires_at: Timestamp::From_Unix_Seconds(2_000),
+            acquired_at: Timestamp::From_Unix_Seconds(CLAIM_TAKEN_AT_SECONDS),
+            lease_expires_at: Timestamp::From_Unix_Seconds(LEASE_ENDS_AT_SECONDS),
         };
 
         Install_Claim(&mut document, &ItemId::New("T-1"), &granted);
@@ -161,7 +187,7 @@ mod tests
     #[test]
     fn Test_With_Own_Claim_Should_Refuse_A_Holder_That_Does_Not_Match()
     {
-        let mut document = Document_Of(vec![Claimed_Item("T-2", "agent-a")]);
+        let mut document = Document_Of(vec![Claimed_Item(FixtureId("T-2"), FixtureHolder("agent-a"))]);
 
         let refusal = With_Own_Claim(&mut document, &ItemId::New("T-2"), "agent-b", |_| {})
             .expect_err("a different holder must be refused");
@@ -180,14 +206,14 @@ mod tests
     #[test]
     fn Test_Replace_Lapsed_Should_Move_The_Old_Claim_Aside_And_Install_The_New_One()
     {
-        let mut document = Document_Of(vec![Claimed_Item("T-3", "dead-agent")]);
+        let mut document = Document_Of(vec![Claimed_Item(FixtureId("T-3"), FixtureHolder("dead-agent"))]);
         let replacement = Claim {
             holder: "agent-c".to_owned(),
-            acquired_at: Timestamp::From_Unix_Seconds(5_000),
-            lease_expires_at: Timestamp::From_Unix_Seconds(9_000),
+            acquired_at: Timestamp::From_Unix_Seconds(TAKEOVER_AT_SECONDS),
+            lease_expires_at: Timestamp::From_Unix_Seconds(TAKEOVER_LEASE_ENDS_AT_SECONDS),
         };
 
-        Replace_Lapsed(&mut document, &ItemId::New("T-3"), &replacement, Timestamp::From_Unix_Seconds(5_000))
+        Replace_Lapsed(&mut document, &ItemId::New("T-3"), &replacement, Timestamp::From_Unix_Seconds(TAKEOVER_AT_SECONDS))
             .expect("a lapsed claim must be replaceable");
 
         let item = document.items.first().expect("Document_Of built one item");

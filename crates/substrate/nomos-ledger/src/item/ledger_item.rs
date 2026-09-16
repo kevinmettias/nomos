@@ -300,14 +300,30 @@ mod tests
 {
     use super::*;
 
+    /// When the fixture item's claim was taken.
+    const CLAIM_TAKEN_AT_SECONDS: i64 = 1_000;
+
+    /// When that claim's lease runs out, which is the instant the liveness cases turn on.
+    const LEASE_ENDS_AT_SECONDS: i64 = 2_000;
+
+    /// One second before the lease ends, where the claim still excludes.
+    const ONE_SECOND_BEFORE_THE_LEASE: i64 = 1_999;
+
+    /// One second after it, where the claim has lapsed.
+    const ONE_SECOND_PAST_THE_LEASE: i64 = 2_001;
+
+    /// When the takeover claim's own lease runs out. Past the lapsed one's, as a fresh claim's
+    /// always is.
+    const TAKEOVER_LEASE_ENDS_AT_SECONDS: i64 = 9_000;
+
     #[test]
     fn Test_Has_Active_Claim_Should_Be_False_Once_The_Claim_Has_Lapsed()
     {
         let mut item = Item("T-1");
-        item.claim = Some(Claimed_By("agent-a", 2_000));
+        item.claim = Some(Claimed_By("agent-a", LEASE_ENDS_AT_SECONDS));
 
-        assert!(item.Has_Active_Claim(At(1_999)));
-        assert!(!item.Has_Active_Claim(At(2_001)));
+        assert!(item.Has_Active_Claim(At(ONE_SECOND_BEFORE_THE_LEASE)));
+        assert!(!item.Has_Active_Claim(At(ONE_SECOND_PAST_THE_LEASE)));
     }
 
     #[test]
@@ -315,9 +331,9 @@ mod tests
     {
         let mut item = Item("T-1");
         item.state = ItemState::Claimed;
-        item.claim = Some(Claimed_By("dead-agent", 2_000));
+        item.claim = Some(Claimed_By("dead-agent", LEASE_ENDS_AT_SECONDS));
 
-        assert!(item.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", 9_000), At(2_001)));
+        assert!(item.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", TAKEOVER_LEASE_ENDS_AT_SECONDS), At(ONE_SECOND_PAST_THE_LEASE)));
 
         assert_eq!(
             item.claim.as_ref().map(|claim| return claim.holder.clone()),
@@ -338,7 +354,7 @@ mod tests
     {
         let mut item = Item("T-1");
 
-        item.Decline("superseded", "agent-a", At(2_000));
+        item.Decline("superseded", "agent-a", At(LEASE_ENDS_AT_SECONDS));
 
         assert_eq!(
             item.state,
@@ -350,7 +366,7 @@ mod tests
             .declined
             .expect("Decline must record who ended it and when");
         assert_eq!(declined.holder, "agent-a");
-        assert_eq!(declined.declined_at, At(2_000));
+        assert_eq!(declined.declined_at, At(LEASE_ENDS_AT_SECONDS));
     }
 
     fn Item(id: &str) -> LedgerItem
@@ -385,7 +401,7 @@ mod tests
     {
         return Claim {
             holder: holder.to_owned(),
-            acquired_at: At(1_000),
+            acquired_at: At(CLAIM_TAKEN_AT_SECONDS),
             lease_expires_at: At(expires),
         };
     }

@@ -39,6 +39,13 @@ mod tests
     use super::*;
     use crate::LedgerDocument;
 
+    /// A schema version this build cannot read. Far past [`crate::SCHEMA_VERSION`], so no bump
+    /// within this crate's range reaches it.
+    ///
+    /// The same number as the one spelled without a separator inside the raw text below, which
+    /// is where the probe in the case under test reads it from.
+    const A_FUTURE_SCHEMA_VERSION: u32 = 999_999;
+
     #[test]
     fn Test_Explain_Parse_Failure_Should_Report_Unrecognized_For_A_Schema_Newer_Than_This_Build()
     {
@@ -52,7 +59,7 @@ mod tests
         let explained = Explain_Parse_Failure(path, text, &error);
 
         assert!(
-            matches!(explained, LedgerError::Unrecognized { found: 999_999, .. }),
+            matches!(explained, LedgerError::Unrecognized { found: A_FUTURE_SCHEMA_VERSION, .. }),
             "got {explained:?}"
         );
     }

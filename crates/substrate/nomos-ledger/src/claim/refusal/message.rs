@@ -97,10 +97,21 @@ mod tests
 {
     use super::*;
 
+    /// When the lease the held-item sentences report runs out. The cases read the shape of
+    /// the sentence, so the instant only has to be one the sentence can carry.
+    const LEASE_ENDS_AT_SECONDS: i64 = 2_000;
+
+    /// A lease request far past any ceiling, so the refusal is about the ceiling rather
+    /// than about the request sitting near it.
+    const AN_OVERLONG_LEASE_SECONDS: u64 = 9_999_999;
+
+    /// The longest lease the ledger grants, as the refusal spells it back.
+    const A_CEILING_LEASE_SECONDS: u64 = 3_600;
+
     #[test]
     fn Test_Held_By_Should_Name_The_Item_The_Holder_And_The_Lease()
     {
-        let said = Held_By(&ItemId::New("T-1"), "agent-a", Timestamp::From_Unix_Seconds(2_000));
+        let said = Held_By(&ItemId::New("T-1"), "agent-a", Timestamp::From_Unix_Seconds(LEASE_ENDS_AT_SECONDS));
 
         assert!(said.contains("T-1"), "{said}");
         assert!(said.contains("agent-a"), "{said}");
@@ -120,8 +131,8 @@ mod tests
     #[test]
     fn Test_Lease_Too_Long_Should_Name_Both_The_Request_And_The_Ceiling()
     {
-        let requested = Duration::from_secs(9_999_999);
-        let maximum = Duration::from_secs(3_600);
+        let requested = Duration::from_secs(AN_OVERLONG_LEASE_SECONDS);
+        let maximum = Duration::from_secs(A_CEILING_LEASE_SECONDS);
 
         let said = Lease_Too_Long(requested, maximum);
 
@@ -176,7 +187,7 @@ mod tests
     #[test]
     fn Test_Lapsed_Claim_Should_Name_The_Holder_And_The_Takeover_Remedy()
     {
-        let said = Lapsed_Claim(&ItemId::New("T-1"), "dead-agent", Timestamp::From_Unix_Seconds(2_000));
+        let said = Lapsed_Claim(&ItemId::New("T-1"), "dead-agent", Timestamp::From_Unix_Seconds(LEASE_ENDS_AT_SECONDS));
 
         assert!(said.contains("T-1"), "{said}");
         assert!(said.contains("dead-agent"), "{said}");
@@ -186,7 +197,7 @@ mod tests
     #[test]
     fn Test_Still_Held_Should_Name_The_Holder_And_Whose_Call_It_Is_To_End_It()
     {
-        let said = Still_Held(&ItemId::New("T-1"), "agent-a", Timestamp::From_Unix_Seconds(2_000));
+        let said = Still_Held(&ItemId::New("T-1"), "agent-a", Timestamp::From_Unix_Seconds(LEASE_ENDS_AT_SECONDS));
 
         assert!(said.contains("T-1"), "{said}");
         assert!(said.contains("agent-a"), "{said}");

@@ -227,6 +227,21 @@ mod tests
 {
     use super::*;
 
+    /// The exit code a gate step reported when it failed. A real `cargo clippy` run's code,
+    /// so the sentence under test is the one an author would actually read.
+    const A_GATE_EXIT_CODE: i32 = 101;
+
+    /// The exit code a predicate reported when it failed. Any nonzero would do; the case
+    /// reads the number back out of the sentence.
+    const A_PREDICATE_EXIT_CODE: i32 = 7;
+
+    /// How long a tail the case asks [`Tail_Of`] to keep.
+    const TAIL_LIMIT_CHARS: usize = 3;
+
+    /// A report comfortably longer than [`TAIL_LIMIT_CHARS`], so the truncation the case is
+    /// about actually happens rather than the whole text being handed straight back.
+    const REPORT_TEXT_CHARS: usize = 10;
+
     #[test]
     fn Test_Describe_Should_Word_The_Not_Recorded_Case_Inline()
     {
@@ -251,7 +266,7 @@ mod tests
             Refusal::GateFailed {
                 item: item.clone(),
                 argv: vec!["cargo".to_owned()],
-                exit_code: 101,
+                exit_code: A_GATE_EXIT_CODE,
                 output_tail: String::new(),
             }
             .Has_Judged_The_Work()
@@ -301,7 +316,7 @@ mod tests
     {
         let item = ItemId::New("T-4");
 
-        let sentence = Predicate_Failed(&item, 7, "assertion failed");
+        let sentence = Predicate_Failed(&item, A_PREDICATE_EXIT_CODE, "assertion failed");
 
         assert!(sentence.contains("exited 7"));
         assert!(sentence.contains("assertion failed"));
@@ -323,7 +338,7 @@ mod tests
     {
         let item = ItemId::New("T-6");
 
-        let sentence = Gate_Failed_From_Argv(&item, &["cargo".to_owned(), "clippy".to_owned()], 101, "warnings found");
+        let sentence = Gate_Failed_From_Argv(&item, &["cargo".to_owned(), "clippy".to_owned()], A_GATE_EXIT_CODE, "warnings found");
 
         assert!(sentence.contains("cargo clippy"));
         assert!(sentence.contains("exited 101"));
@@ -333,9 +348,9 @@ mod tests
     #[test]
     fn Test_Tail_Of_Should_Keep_The_Last_Bytes_On_A_Character_Boundary()
     {
-        let text = "a".repeat(10) + "END";
+        let text = "a".repeat(REPORT_TEXT_CHARS) + "END";
 
-        let tail = Tail_Of(&text, 3);
+        let tail = Tail_Of(&text, TAIL_LIMIT_CHARS);
 
         assert_eq!(tail, "END");
     }

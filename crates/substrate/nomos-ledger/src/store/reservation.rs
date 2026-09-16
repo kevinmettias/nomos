@@ -272,7 +272,7 @@ mod tests
         let published = Territory::Of_Files(["docs/records/OD-LEDGER-999-a-slug.md"]);
         let document = Document_Of(Vec::new());
 
-        let undeclared = Item_Reserving("NEW-1", "docs/records/OD-LEDGER-999");
+        let undeclared = Item_Reserving("NEW-1", Territory::Of_Files(["docs/records/OD-LEDGER-999"]));
         let refusal = Refuse_A_Spent_Record(
             &undeclared,
             &document,
@@ -282,7 +282,7 @@ mod tests
         assert!(matches!(refusal, AddRefusal::RecordPublished { .. }), "got {refusal:?}");
 
         let amending = Territory::Of_Files(["docs/records/OD-LEDGER-999"]);
-        let declared_edit = Item_Reserving("EDIT-1", "docs/records/OD-LEDGER-999");
+        let declared_edit = Item_Reserving("EDIT-1", Territory::Of_Files(["docs/records/OD-LEDGER-999"]));
         Refuse_A_Spent_Record(
             &declared_edit,
             &document,
@@ -296,7 +296,7 @@ mod tests
         return LedgerDocument { schema_version: crate::SCHEMA_VERSION, items };
     }
 
-    fn Item_Reserving(id: &str, path: &str) -> LedgerItem
+    fn Item_Reserving(id: &str, territory: Territory) -> LedgerItem
     {
         return LedgerItem {
             id: ItemId::New(id),
@@ -305,7 +305,7 @@ mod tests
             done_when: "when it is done".to_owned(),
             kind: ItemKind::Decision,
             origin: ItemOrigin::Proposed,
-            territory: Territory::Of_Files([path.to_owned()]),
+            territory,
             state: ItemState::Ready,
             depends_on: Vec::new(),
             blocked: None,

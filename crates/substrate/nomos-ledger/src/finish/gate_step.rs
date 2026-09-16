@@ -107,6 +107,19 @@ mod tests
                             \x20     - name: Test\n\
                             \x20       run: cargo test --workspace\n";
 
+    /// The exit code a lint step reports when it found problems. It is the code [`WORKFLOW`]'s
+    /// Lint step turns into a refusal, so the fixture's launcher and the case's expectation
+    /// read the same number.
+    const LINT_EXIT_CODE: i32 = 101;
+
+    /// The instant the gate cases ask at. Any fixed second does; what they need is that it
+    /// does not move between runs.
+    const NOW_SECONDS: i64 = 1_000;
+
+    /// How long the runner lets the lint step take. Long enough that no case here is a race
+    /// against the bound rather than a case about the gate.
+    const GATE_TIMEOUT_SECONDS: u64 = 60;
+
     /// A launcher standing in for a lint step that finds a problem.
     struct AlwaysFails;
 
@@ -123,7 +136,7 @@ mod tests
         fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
         {
             return Ok(ProcessOutput {
-                outcome: ExitOutcome::Exited { code: 101 },
+                outcome: ExitOutcome::Exited { code: LINT_EXIT_CODE },
                 stdout: String::new(),
                 stderr: "clippy found problems".to_owned(),
             });
@@ -134,7 +147,7 @@ mod tests
     fn Test_Gate_Argv_Should_Derive_The_Lint_Steps_Command_From_The_Workflow()
     {
         let directory = Tree_With_Workflow("gate-argv");
-        let clock = FixedClock(1_000);
+        let clock = FixedClock(NOW_SECONDS);
         let ledger = Ledger_At(&directory, &clock);
         let item = ItemId::New("G-1");
 
@@ -153,7 +166,7 @@ mod tests
     fn Test_Gate_Argv_Should_Report_An_Undetermined_Gate_When_No_Workflow_Exists()
     {
         let directory = Temporary_Directory("gate-argv-missing");
-        let clock = FixedClock(1_000);
+        let clock = FixedClock(NOW_SECONDS);
         let ledger = Ledger_At(&directory, &clock);
         let item = ItemId::New("G-1B");
 
@@ -172,19 +185,19 @@ mod tests
     fn Test_Run_Gate_Step_Should_Refuse_When_The_Lint_Command_Exits_Nonzero()
     {
         let directory = Tree_With_Workflow("run-gate-step");
-        let clock = FixedClock(1_000);
+        let clock = FixedClock(NOW_SECONDS);
         let ledger = Ledger_At(&directory, &clock);
         let item = ItemId::New("G-2");
         let runner = Runner {
             working_directory: Some(directory.as_path()),
-            timeout: std::time::Duration::from_secs(60),
+            timeout: std::time::Duration::from_secs(GATE_TIMEOUT_SECONDS),
         };
         let launcher = AlwaysFails;
 
         let refusal = Run_Gate_Step(&ledger, &&launcher, &item, runner).expect_err("a nonzero lint exit must refuse");
 
         assert!(
-            matches!(refusal, FinishRefusal::GateFailed { exit_code: 101, .. }),
+            matches!(refusal, FinishRefusal::GateFailed { exit_code: LINT_EXIT_CODE, .. }),
             "got {refusal:?}"
         );
     }
@@ -193,8 +206,10 @@ mod tests
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-gate-step-{name}-{}", std::process::id()));
-        // error-info: allow this is a best-effort clean slate before creating the directory fresh below
-        let _ = std::fs::remove_dir_all(&path);
+        if path.exists()
+        {
+            std::fs::remove_dir_all(&path).expect("the previous run's synthetic directory is removable");
+        }
         std::fs::create_dir_all(&path).expect("test needs a temp directory");
         return path;
     }

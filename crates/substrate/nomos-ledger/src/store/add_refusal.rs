@@ -179,10 +179,7 @@ impl AddRefusal
             // The wording [`LedgerError::Invalid`] would have produced, because this arm
             // exists to carry that refusal out through a different channel and not to
             // rephrase it. An operator who has seen one of these should recognise the other.
-            Self::WouldBeInvalid { violations } =>
-            {
-                format!("ledger is invalid:\n  {}", violations.join("\n  "))
-            }
+            Self::WouldBeInvalid { violations } => format!("ledger is invalid:\n  {}", violations.join("\n  ")),
             Self::LedgerUnusable { cause } => cause.clone(),
         };
     }

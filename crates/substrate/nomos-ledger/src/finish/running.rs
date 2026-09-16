@@ -173,6 +173,18 @@ mod tests
     use crate::{ItemKind, ItemOrigin, ItemState, LedgerItem, Territory};
     use nomos_platform::ProcessOutput;
 
+    /// A nonzero exit code, which is all [`Refuse_Nonzero`] asks about. The case reads the
+    /// number back out of the refusal.
+    const NONZERO_EXIT_CODE: i32 = 3;
+
+    /// How long the predicate in the tail case is given. Any positive bound does; the
+    /// launcher answers immediately rather than running anything.
+    const A_PREDICATE_TIMEOUT_SECONDS: u64 = 10;
+
+    /// How long the runner in the working-directory case is given. A real gate's order of
+    /// magnitude, so the case exercises the shape [`Command_From_Argv`] is built for.
+    const A_RUNNER_TIMEOUT_SECONDS: u64 = 120;
+
     #[test]
     fn Test_Refuse_Nonzero_Should_Pass_A_Zero_Exit_Through_And_Refuse_Everything_Else()
     {
@@ -180,17 +192,18 @@ mod tests
 
         assert!(Refuse_Nonzero(&item, 0, "all good").is_ok());
 
-        let refusal = Refuse_Nonzero(&item, 3, "boom").expect_err("a nonzero exit must refuse");
-        assert!(matches!(refusal, FinishRefusal::PredicateFailed { exit_code: 3, .. }), "got {refusal:?}");
+        let refusal = Refuse_Nonzero(&item, NONZERO_EXIT_CODE, "boom").expect_err("a nonzero exit must refuse");
+        assert!(matches!(refusal, FinishRefusal::PredicateFailed { exit_code: NONZERO_EXIT_CODE, .. }), "got {refusal:?}");
     }
 
     #[test]
     fn Test_Runnable_Predicate_Should_Refuse_An_Argv_With_No_Program()
     {
-        let document = Board_Of(Item_With_Predicate(
+        let item_with_predicate = Item_With_Predicate(
             "T-2",
             Some(VerificationPredicate::From_String_Arguments(vec![])),
-        ));
+        );
+        let document = Board_Of(item_with_predicate);
 
         let refusal = Runnable_Predicate(&document, &ItemId::New("T-2")).expect_err("an empty argv cannot be run");
 
@@ -200,7 +213,8 @@ mod tests
     #[test]
     fn Test_Predicate_Of_Should_Report_No_Predicate_When_The_Item_Declares_None()
     {
-        let document = Board_Of(Item_With_Predicate("T-3", None));
+        let item_with_predicate = Item_With_Predicate("T-3", None);
+        let document = Board_Of(item_with_predicate);
 
         let no_predicate =
             Predicate_Of(&document, &ItemId::New("T-3")).expect_err("an item with none declared has none to return");
@@ -247,7 +261,7 @@ mod tests
     fn Test_Ran_To_Completion_Should_Combine_Standard_Out_And_Error_Into_One_Tail()
     {
         let item = ItemId::New("T-4");
-        let command = Command::New(vec!["a-predicate".to_owned()], std::time::Duration::from_secs(10));
+        let command = Command::New(vec!["a-predicate".to_owned()], std::time::Duration::from_secs(A_PREDICATE_TIMEOUT_SECONDS));
         let launcher = Scripted { code: 0, stdout: "out-".to_owned(), stderr: "err".to_owned() };
 
         let ran = Ran_To_Completion(&&launcher, &command, &item).expect("a zero exit is a verdict");
@@ -261,7 +275,7 @@ mod tests
     {
         let runner = Runner {
             working_directory: Some(Path::new("some/tree")),
-            timeout: std::time::Duration::from_secs(120),
+            timeout: std::time::Duration::from_secs(A_RUNNER_TIMEOUT_SECONDS),
         };
 
         let command = Command_From_Argv(vec!["cargo".to_owned(), "test".to_owned()], runner);

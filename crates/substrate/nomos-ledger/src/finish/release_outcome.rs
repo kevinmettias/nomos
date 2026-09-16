@@ -75,6 +75,19 @@ mod tests
     use super::*;
     use crate::{Claim, ItemId, ItemKind, ItemOrigin, ItemState, Territory};
 
+    /// When the verification record being carried onto the item was taken.
+    const VERIFIED_AT_SECONDS: i64 = 1_500;
+
+    /// The instant the release is recorded at. Later than [`VERIFIED_AT_SECONDS`], as a
+    /// verification always is.
+    const RECORDED_AT_SECONDS: i64 = 2_500;
+
+    /// When the fixture item's claim was taken.
+    const CLAIM_TAKEN_AT_SECONDS: i64 = 1_000;
+
+    /// When that claim's lease runs out.
+    const LEASE_ENDS_AT_SECONDS: i64 = 2_000;
+
     #[test]
     fn Test_Record_On_Should_Clear_The_Claim_And_Mark_A_Finished_Item_Done()
     {
@@ -83,12 +96,12 @@ mod tests
             argv: vec!["cargo".to_owned(), "test".to_owned()],
             exit_code: 0,
             output_tail: String::new(),
-            verified_at: Timestamp::From_Unix_Seconds(1_500),
+            verified_at: Timestamp::From_Unix_Seconds(VERIFIED_AT_SECONDS),
             gate: None,
             revision: None,
         };
 
-        ReleaseOutcome::Finished(record.clone()).Record_On(&mut item, "agent-a", Timestamp::From_Unix_Seconds(2_500));
+        ReleaseOutcome::Finished(record.clone()).Record_On(&mut item, "agent-a", Timestamp::From_Unix_Seconds(RECORDED_AT_SECONDS));
 
         assert_eq!(item.state, ItemState::Done);
         assert_eq!(item.claim, None, "a finished item is no longer held");
@@ -101,7 +114,7 @@ mod tests
         let mut item = Item("T-2");
 
         ReleaseOutcome::Abandoned { reason: "wrong approach".to_owned() }
-            .Record_On(&mut item, "agent-b", Timestamp::From_Unix_Seconds(2_500));
+            .Record_On(&mut item, "agent-b", Timestamp::From_Unix_Seconds(RECORDED_AT_SECONDS));
 
         assert_eq!(item.state, ItemState::Ready);
         assert_eq!(item.claim, None, "an abandoned item is no longer held either");
@@ -126,8 +139,8 @@ mod tests
             blocked: None,
             claim: Some(Claim {
                 holder: "agent-a".to_owned(),
-                acquired_at: Timestamp::From_Unix_Seconds(1_000),
-                lease_expires_at: Timestamp::From_Unix_Seconds(2_000),
+                acquired_at: Timestamp::From_Unix_Seconds(CLAIM_TAKEN_AT_SECONDS),
+                lease_expires_at: Timestamp::From_Unix_Seconds(LEASE_ENDS_AT_SECONDS),
             }),
             verification: None,
             verified: None,

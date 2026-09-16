@@ -201,7 +201,7 @@ mod tests
     fn Test_Save_Document_Should_Refuse_An_Invalid_Document_Without_Writing_It()
     {
         let directory = Temporary_Directory("save-document");
-        let clock = FixedClock(1_000);
+        let clock = FixedClock(NOW_SECONDS);
         let ledger = Ledger_At(&directory, &clock);
         let mut reserves_nothing = Workable_Item("BAD-1");
         reserves_nothing.territory = Territory::Empty();
@@ -221,7 +221,7 @@ mod tests
     fn Test_Decide_Under_Lock_Should_Convert_A_Store_Failure_Through_The_Callers_Own_Error()
     {
         let directory = Temporary_Directory("decide-under-lock");
-        let clock = FixedClock(1_000);
+        let clock = FixedClock(NOW_SECONDS);
         let ledger = Ledger_At(&directory, &clock);
 
         let outcome: Result<(), AddRefusal> = Decide_Under_Lock(&ledger, "agent-a", |document, _now| {
@@ -238,7 +238,7 @@ mod tests
     fn Test_Load_Document_Should_Parse_The_Text_On_Disk_Into_A_Document()
     {
         let directory = Temporary_Directory("load-document");
-        let clock = FixedClock(1_000);
+        let clock = FixedClock(NOW_SECONDS);
         let ledger = Ledger_At(&directory, &clock);
         let raw = serde_json::to_string(&LedgerDocument {
             schema_version: SCHEMA_VERSION,
@@ -276,8 +276,10 @@ mod tests
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-store-file-{name}-{}", std::process::id()));
-        // error-info: allow this is a best-effort clean slate before creating the directory fresh below
-        let _ = std::fs::remove_dir_all(&path);
+        if path.exists()
+        {
+            std::fs::remove_dir_all(&path).expect("the previous run's synthetic directory is removable");
+        }
         std::fs::create_dir_all(&path).expect("test needs a temp directory");
         return path;
     }

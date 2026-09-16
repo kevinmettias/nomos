@@ -213,6 +213,13 @@ mod tests
     use crate::{Claim, ItemKind, ItemOrigin, ItemState, Territory};
     use nomos_platform_std::{FileLock, StdFileSystem};
 
+    /// The instant the tests here act at, named so that a fixture change is one edit.
+    const NOW_SECONDS: i64 = 1_000;
+
+    /// When the live claim's lease runs out. Far past [`NOW_SECONDS`], so the holder the decline
+    /// case refuses against is still holding the item at the instant that case asks.
+    const LEASE_ENDS_AT_SECONDS: i64 = 9_000;
+
     struct FixedClock(i64);
 
     /// Fixed instants, so both the values and their timing reproduce.
@@ -235,7 +242,7 @@ mod tests
     fn Test_Validate_Current_Should_Load_And_Report_Todays_Violations()
     {
         let directory = Temporary_Directory("validate-current");
-        let clock = FixedClock(1_000);
+        let clock = FixedClock(NOW_SECONDS);
         let ledger = Ledger_At(&directory, &clock);
         let mut reserves_nothing = Workable_Item("BAD-1");
         reserves_nothing.territory = Territory::Empty();
@@ -255,7 +262,7 @@ mod tests
     fn Test_Add_Item_Should_Refuse_A_Duplicate_Identifier()
     {
         let directory = Temporary_Directory("add-item");
-        let clock = FixedClock(1_000);
+        let clock = FixedClock(NOW_SECONDS);
         let mut ledger = Ledger_At(&directory, &clock);
         let item = Workable_Item("A-1");
         ledger
@@ -273,7 +280,7 @@ mod tests
     fn Test_Decline_Item_Should_Refuse_An_Item_Someone_Else_Is_Holding()
     {
         let directory = Temporary_Directory("decline-item");
-        let clock = FixedClock(1_000);
+        let clock = FixedClock(NOW_SECONDS);
         let mut ledger = Ledger_Holding_A_Live_Claim(&directory, &clock);
 
         let refusal = Decline_Item(
@@ -301,8 +308,8 @@ mod tests
         claimed.state = ItemState::Claimed;
         claimed.claim = Some(Claim {
             holder: "agent-a".to_owned(),
-            acquired_at: Timestamp::From_Unix_Seconds(1_000),
-            lease_expires_at: Timestamp::From_Unix_Seconds(9_000),
+            acquired_at: Timestamp::From_Unix_Seconds(NOW_SECONDS),
+            lease_expires_at: Timestamp::From_Unix_Seconds(LEASE_ENDS_AT_SECONDS),
         });
         ledger
             .Save(&LedgerDocument { schema_version: crate::SCHEMA_VERSION, items: vec![claimed] })
@@ -314,7 +321,7 @@ mod tests
     fn Test_Take_Over_Should_Refuse_A_Lease_Request_Beyond_The_Ceiling()
     {
         let directory = Temporary_Directory("take-over-verb");
-        let clock = FixedClock(1_000);
+        let clock = FixedClock(NOW_SECONDS);
         let mut ledger = Ledger_At(&directory, &clock);
 
         let refusal = Take_Over(
@@ -332,8 +339,10 @@ mod tests
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-store-verbs-{name}-{}", std::process::id()));
-        // error-info: allow this is a best-effort clean slate before creating the directory fresh below
-        let _ = std::fs::remove_dir_all(&path);
+        if path.exists()
+        {
+            std::fs::remove_dir_all(&path).expect("the previous run's synthetic directory is removable");
+        }
         std::fs::create_dir_all(&path).expect("test needs a temp directory");
         return path;
     }

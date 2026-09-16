@@ -56,6 +56,15 @@ mod tests
 {
     use super::*;
 
+    /// When the claim under test was taken.
+    const CLAIM_TAKEN_AT_SECONDS: i64 = 1_000;
+
+    /// When that claim's lease runs out, which is the instant the boundary case turns on.
+    const LEASE_ENDS_AT_SECONDS: i64 = 2_000;
+
+    /// One second past the lease, where the claim has lapsed.
+    const ONE_SECOND_PAST_THE_LEASE: i64 = 2_001;
+
     /// The boundary case: a lease expiring exactly now has not yet lapsed, or a holder
     /// renewing at the moment of expiry would race against being displaced.
     #[test]
@@ -63,11 +72,11 @@ mod tests
     {
         let claim = Claim {
             holder: "agent-a".to_owned(),
-            acquired_at: Timestamp::From_Unix_Seconds(1_000),
-            lease_expires_at: Timestamp::From_Unix_Seconds(2_000),
+            acquired_at: Timestamp::From_Unix_Seconds(CLAIM_TAKEN_AT_SECONDS),
+            lease_expires_at: Timestamp::From_Unix_Seconds(LEASE_ENDS_AT_SECONDS),
         };
 
-        assert!(!claim.Has_Lapsed(Timestamp::From_Unix_Seconds(2_000)));
-        assert!(claim.Has_Lapsed(Timestamp::From_Unix_Seconds(2_001)));
+        assert!(!claim.Has_Lapsed(Timestamp::From_Unix_Seconds(LEASE_ENDS_AT_SECONDS)));
+        assert!(claim.Has_Lapsed(Timestamp::From_Unix_Seconds(ONE_SECOND_PAST_THE_LEASE)));
     }
 }

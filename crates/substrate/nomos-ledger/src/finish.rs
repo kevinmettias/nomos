@@ -220,6 +220,10 @@ mod local_tests
     }
 
     const NOW: i64 = 1_000_000;
+
+    /// How long the fixture claim's lease runs, measured from [`NOW`]. Long enough that the
+    /// item is still held at every instant the cases here ask about.
+    const CLAIM_LEASE_SECONDS: i64 = 3_600;
     const HOLDER: &str = "agent-a";
 
     const WORKFLOW: &str = "name: gate\n\
@@ -273,7 +277,7 @@ mod local_tests
             claim: Some(Claim {
                 holder: HOLDER.to_owned(),
                 acquired_at: Timestamp::From_Unix_Seconds(NOW),
-                lease_expires_at: Timestamp::From_Unix_Seconds(NOW + 3_600),
+                lease_expires_at: Timestamp::From_Unix_Seconds(NOW + CLAIM_LEASE_SECONDS),
             }),
             verification: Some(VerificationPredicate::From_String_Arguments(vec![
                 "a-predicate".to_owned(),
@@ -314,8 +318,10 @@ mod local_tests
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-finish-item-{name}-{}", std::process::id()));
-        // error-info: allow this is a best-effort clean slate before creating the directory fresh below
-        let _ = std::fs::remove_dir_all(&path);
+        if path.exists()
+        {
+            std::fs::remove_dir_all(&path).expect("the previous run's synthetic directory is removable");
+        }
         std::fs::create_dir_all(&path).expect("test needs a temp directory");
         return path;
     }

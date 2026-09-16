@@ -314,6 +314,10 @@ mod self_tests
 {
     use super::*;
 
+    /// When the lease a `HeldBy` refusal reports runs out. The value is arbitrary; what
+    /// the cases here read is the *shape* of the refusal, not the instant it names.
+    const LEASE_ENDS_AT_SECONDS: i64 = 2_000;
+
     #[test]
     fn Test_Describe_Should_Name_The_State_A_Not_Claimable_Item_Is_In()
     {
@@ -332,7 +336,7 @@ mod self_tests
     {
         let held_by = Refusal::HeldBy {
             holder: "agent-a".to_owned(),
-            until: Timestamp::From_Unix_Seconds(2_000),
+            until: Timestamp::From_Unix_Seconds(LEASE_ENDS_AT_SECONDS),
             item: ItemId::New("T-1"),
         };
         let dependency_declined = Refusal::DependencyDeclined {
@@ -350,7 +354,7 @@ mod self_tests
     {
         let held_by = Refusal::HeldBy {
             holder: "agent-a".to_owned(),
-            until: Timestamp::From_Unix_Seconds(2_000),
+            until: Timestamp::From_Unix_Seconds(LEASE_ENDS_AT_SECONDS),
             item: ItemId::New("T-1"),
         };
         let not_claimable = Refusal::NotClaimable {
@@ -382,7 +386,7 @@ mod self_tests
     {
         let held_by = Refusal::HeldBy {
             holder: "agent-a".to_owned(),
-            until: Timestamp::From_Unix_Seconds(2_000),
+            until: Timestamp::From_Unix_Seconds(LEASE_ENDS_AT_SECONDS),
             item: ItemId::New("T-1"),
         };
 
