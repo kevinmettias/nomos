@@ -23,10 +23,15 @@ mod tests
     use super::*;
     use nomos_contracts::Digest128;
 
+    /// The byte the one symbol identity in this test is filled with. It is a seed and
+    /// not a value the test reads back, so any other byte would do; naming it keeps it
+    /// from reading as a decision about which symbol this is.
+    const SYMBOL_SEED: u8 = 5;
+
     #[test]
     fn Test_A_Subject_May_Be_A_Symbol_A_Scope_Or_A_Task_Description()
     {
-        let symbol = ChangeContextSubject::Symbol(SubjectId::From_Digest(Digest128::From_Bytes([5; Digest128::BYTE_LENGTH])));
+        let symbol = ChangeContextSubject::Symbol(SubjectId::From_Digest(Digest128::From_Bytes([SYMBOL_SEED; Digest128::BYTE_LENGTH])));
         let scope = ChangeContextSubject::Scope(Territory::Of_Files(["crates/agent"]));
         let task = ChangeContextSubject::TaskDescription("add a test".to_owned());
 

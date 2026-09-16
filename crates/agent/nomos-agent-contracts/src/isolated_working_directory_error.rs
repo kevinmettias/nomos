@@ -108,8 +108,11 @@ mod tests
 
         // Best-effort cleanup: the system temp root is reclaimed independently of this
         // test, and a failure to remove this directory changes nothing the assertions
-        // above already established.
-        let _ = std::fs::remove_dir(&directory);
+        // above already established -- so it is reported rather than raised.
+        if let Err(error) = std::fs::remove_dir(&directory)
+        {
+            eprintln!("failed to remove the isolated directory {}: {error}", directory.display());
+        }
     }
 
     #[test]
@@ -122,8 +125,14 @@ mod tests
 
         // Best-effort cleanup: the system temp root is reclaimed independently of this
         // test, and a failure to remove either directory changes nothing the assertion
-        // above already established.
-        let _ = std::fs::remove_dir(&first);
-        let _ = std::fs::remove_dir(&second);
+        // above already established -- so it is reported rather than raised.
+        if let Err(error) = std::fs::remove_dir(&first)
+        {
+            eprintln!("failed to remove the isolated directory {}: {error}", first.display());
+        }
+        if let Err(error) = std::fs::remove_dir(&second)
+        {
+            eprintln!("failed to remove the isolated directory {}: {error}", second.display());
+        }
     }
 }

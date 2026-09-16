@@ -62,6 +62,15 @@ mod tests
     use super::*;
     use nomos_contracts::Digest128;
 
+    /// The byte every snapshot digest in these tests is filled with. Distinct from
+    /// [`BUILD_VARIANT_SEED`] so a context that swapped the two identities could not
+    /// still compare equal.
+    const SNAPSHOT_SEED: u8 = 3;
+
+    /// The byte every build-variant digest in these tests is filled with; see
+    /// [`SNAPSHOT_SEED`].
+    const BUILD_VARIANT_SEED: u8 = 4;
+
     #[test]
     fn Test_A_Context_Carries_Exactly_What_It_Was_Given()
     {
@@ -69,8 +78,8 @@ mod tests
         applicability.insert(RuleId::New("check-naming-convention"), Applicability::Supported);
 
         let context = NomosResolvedChangeContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([4; Digest128::BYTE_LENGTH])),
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([SNAPSHOT_SEED; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([BUILD_VARIANT_SEED; Digest128::BYTE_LENGTH])),
             requested: ChangeContextSubject::TaskDescription("close AGT-007's gap".to_owned()),
             applicability,
             permitted_scope: Territory::Of_Files(["crates/agent/nomos-agent-contracts"]),

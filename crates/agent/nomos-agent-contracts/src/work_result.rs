@@ -45,20 +45,16 @@ mod tests
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
     use nomos_corrections::{ChangeSet, CorrectionCandidate, CorrectionClass, Edit};
 
-    fn Example_Plan() -> CorrectionPlan
-    {
-        let edit = Edit::New("src/lib.rs", None, Some("pub mod work_result;".to_owned()));
-        let change = ChangeSet::Empty().With(edit);
-        let candidate = CorrectionCandidate::New("wire the new module", change, CorrectionClass::Mechanical, vec![]);
-
-        return CorrectionPlan::New(vec![candidate]).expect("one candidate never conflicts with itself");
-    }
+    /// The byte the one subject digest in these tests is filled with. It is a seed and
+    /// not a value the tests read back, so any other byte would do; naming it keeps it
+    /// from reading as a decision about which subject this is.
+    const FINDING_SUBJECT_SEED: u8 = 9;
 
     fn Example_Finding() -> Finding
     {
         return Finding {
             rule: RuleId::New("check-naming-convention"),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH])),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([FINDING_SUBJECT_SEED; Digest128::BYTE_LENGTH])),
             subject_name: "WorkResult".to_owned(),
             applicability: Applicability::Supported,
             evidence: EvidenceClass::AgentJudged,
@@ -86,6 +82,18 @@ mod tests
         assert!(result.requested_verification.is_some());
         assert_eq!(result.assumptions.len(), 1);
         assert!(result.unresolved_questions.is_empty());
+    }
+
+    /// The plan the one plan-carrying test builds. Its single caller is the test above,
+    /// so it sits directly below that caller -- the position `check-vertical-organization`
+    /// reads the file in.
+    fn Example_Plan() -> CorrectionPlan
+    {
+        let edit = Edit::New("src/lib.rs", None, Some("pub mod work_result;".to_owned()));
+        let change = ChangeSet::Empty().With(edit);
+        let candidate = CorrectionCandidate::New("wire the new module", change, CorrectionClass::Mechanical, vec![]);
+
+        return CorrectionPlan::New(vec![candidate]).expect("one candidate never conflicts with itself");
     }
 
     /// The case `OD-CONTRACTS-003` exists for: a judgment-only response, proposing no
