@@ -25,9 +25,9 @@ pub fn Handle_Spec_Table(request: &TableRequest) -> TableResponse
     let nomos_spec_orchestration::SpecOutcome::Table(result) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the SpecOutcome variant
-        // naming the SpecCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
+        return TableResponse::Unreadable {
+            cause: super::UNANSWERED_SPEC_OUTCOME.to_owned(),
+        };
     };
 
     return TableResponse::From(result);
@@ -132,6 +132,7 @@ mod tests
 
         let response = Handle_Spec_Table(&request);
 
-        Assert_Round_Trips_As_Json(&response, "no_such_document");
+        Assert_Round_Trips_As_Json(&response, "no_such_document")
+            .expect("a no-such-document response serializes and parses back as a tagged object");
     }
 }

@@ -58,13 +58,19 @@ mod tests
     use nomos_ledger::ItemId;
     use nomos_platform::Timestamp;
 
+    /// The granted reservation's expiry.
+    const GRANTED_EXPIRY_UNIX_SECONDS: i64 = 42;
+    /// When the other holder's lease lapses -- far enough ahead of `GRANTED_EXPIRY_UNIX_SECONDS`
+    /// that the two fixtures could not be confused for one another.
+    const HELD_UNTIL_UNIX_SECONDS: i64 = 2_000;
+
     #[test]
     fn Test_From_Should_Map_A_Granted_Reservation_Into_Reserved()
     {
         let reservation = Reservation {
             item: ItemId::New("SCRATCH-OUTCOME-RESERVED"),
             holder: "test-holder".to_owned(),
-            expires_at: Timestamp::From_Unix_Seconds(42),
+            expires_at: Timestamp::From_Unix_Seconds(GRANTED_EXPIRY_UNIX_SECONDS),
         };
 
         let response = ReservationOutcomeResponse::From(Ok(reservation));
@@ -77,7 +83,7 @@ mod tests
     {
         let refusal = ClaimRefusal::HeldBy {
             holder: "someone-else".to_owned(),
-            until: Timestamp::From_Unix_Seconds(2_000),
+            until: Timestamp::From_Unix_Seconds(HELD_UNTIL_UNIX_SECONDS),
             item: ItemId::New("SCRATCH-OUTCOME-HELD"),
         };
 

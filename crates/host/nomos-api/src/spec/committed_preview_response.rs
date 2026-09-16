@@ -54,9 +54,12 @@ impl CommittedPreviewResponse
 mod tests
 {
     use super::*;
-    use crate::test_support::{Staged_Heading_Rename, Unique_Scratch_Directory};
+    use crate::test_support::{Area, Staged_Heading_Rename, Unique_Scratch_Directory};
     use nomos_composer_std::FILE_SYSTEM;
     use nomos_spec_orchestration::{EditRequest, SpecCommand};
+
+    /// The area this module's one scratch path is named under.
+    const COMMITTED_PREVIEW_AREA: Area = Area("committed-preview-response");
 
     /// Mirrors [`crate::spec::preview_response::Handle_Spec_Preview`]'s own fixture: a real
     /// heading rename staged against `D-132`, a real embedded governing record, so this needs
@@ -65,7 +68,10 @@ mod tests
     #[test]
     fn Test_From_Should_Carry_Wording_Moved_For_A_Real_Heading_Rename()
     {
-        let staged = Staged_Heading_Rename("D-132", &Unique_Scratch_Directory("committed-preview-response", "from"));
+        let into = Unique_Scratch_Directory(COMMITTED_PREVIEW_AREA, "from")
+            .expect("the temp directory is writable and this call's own name is fresh");
+        let staged = Staged_Heading_Rename("D-132", &into)
+            .expect("D-132 is a governing record embedded in this binary");
         let request = EditRequest { id: "D-132".to_owned(), from: staged, rename: None };
         let corpus_request = crate::spec::Build_Corpus_Request();
 

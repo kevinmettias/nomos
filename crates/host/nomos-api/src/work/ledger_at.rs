@@ -41,12 +41,16 @@ pub(crate) fn Run_Reservation_Command(directory: &Path, command: WorkCommand) ->
 mod tests
 {
     use super::*;
-    use crate::work::tests_support::{Claim_Request, Scratch_Board_With_A_Claimable_Item};
+    use crate::work::tests_support::{
+        BoardWithAClaimableItem, Claim_Request, Scratch_Board_With_A_Claimable_Item,
+    };
 
     #[test]
     fn Test_Ledger_At_Should_Compose_A_File_Ledger_That_Loads_A_Real_Boards_Own_File()
     {
-        let (directory, _id) = Scratch_Board_With_A_Claimable_Item();
+        let BoardWithAClaimableItem { directory, .. } =
+            Scratch_Board_With_A_Claimable_Item()
+                .expect("the temp directory is writable and the scratch ledger is writable");
 
         let ledger = Ledger_At(&directory);
         let loaded = ledger.Load().expect("loads the ledger this fixture just wrote");
@@ -59,7 +63,9 @@ mod tests
     #[test]
     fn Test_Run_Reservation_Command_Should_Run_A_Real_Claim_Against_The_Board_At_Directory()
     {
-        let (directory, id) = Scratch_Board_With_A_Claimable_Item();
+        let BoardWithAClaimableItem { directory, id } =
+            Scratch_Board_With_A_Claimable_Item()
+                .expect("the temp directory is writable and the scratch ledger is writable");
         let request = Claim_Request(id, "test-holder");
 
         let outcome = Run_Reservation_Command(&directory, WorkCommand::Claim(request));

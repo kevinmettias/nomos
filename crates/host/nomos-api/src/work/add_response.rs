@@ -27,9 +27,9 @@ pub fn Handle_Work_Add(directory: &Path, item: &LedgerItem, amending: &Territory
     let nomos_work_orchestration::WorkOutcome::Add(added) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
-        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+        return AddResponse::Refused {
+            cause: super::UNANSWERED_WORK_OUTCOME.to_owned(),
+        };
     };
 
     return AddResponse::From(added);
@@ -133,13 +133,15 @@ fn Record_Files(root: &Path, filesystem: &impl FileSystem) -> Vec<String>
 mod tests
 {
     use super::*;
-    use crate::work::tests_support::{Scratch_Board, Scratch_Board_With_A_Claimable_Item};
+    use crate::work::tests_support::{
+        BoardWithAClaimableItem, Scratch_Board, Scratch_Board_With_A_Claimable_Item,
+    };
     use nomos_ledger::{ItemId, ItemKind, ItemOrigin, ItemState};
 
     #[test]
     fn Test_Handle_Work_Add_Should_Record_A_Real_Well_Formed_Item_On_A_Fresh_Board()
     {
-        let directory = Scratch_Board();
+        let directory = Scratch_Board().expect("the temp directory is writable and the scratch ledger is writable");
         let item = Real_New_Item(ItemId::New("SCRATCH-NEW"), "a");
 
         let response = Handle_Work_Add(&directory, &item, &Territory::Empty());
@@ -152,7 +154,9 @@ mod tests
     #[test]
     fn Test_From_Should_Refuse_An_Item_Whose_Id_Is_Already_On_The_Board()
     {
-        let (directory, id) = Scratch_Board_With_A_Claimable_Item();
+        let BoardWithAClaimableItem { directory, id } =
+            Scratch_Board_With_A_Claimable_Item()
+                .expect("the temp directory is writable and the scratch ledger is writable");
         let item = Real_New_Item(id, "b");
 
         let response = Handle_Work_Add(&directory, &item, &Territory::Empty());
@@ -173,14 +177,15 @@ mod tests
     #[test]
     fn Test_Assert_Round_Trips_As_Json_Should_Accept_A_Real_Added_Response()
     {
-        let directory = Scratch_Board();
+        let directory = Scratch_Board().expect("the temp directory is writable and the scratch ledger is writable");
         let item = Real_New_Item(ItemId::New("SCRATCH-NEW"), "a");
 
         let response = Handle_Work_Add(&directory, &item, &Territory::Empty());
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        crate::test_support::Assert_Round_Trips_As_Json(&response, "added");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "added")
+            .expect("an added response serializes and parses back as a tagged object");
     }
 
     /// A well-formed, real `LedgerItem` this test's own -- `id` is the only field a caller

@@ -48,20 +48,29 @@ mod tests
 {
     use super::*;
 
+    /// The block the held statement stays in. Distinct from the moved and gone ordinals
+    /// below, so a `From` that crossed two variants' blocks would not still match.
+    const HELD_BLOCK_ORDINAL: u32 = 3;
+    /// Where the moved statement lands. Its origin is `1`, which stays literal as the
+    /// identity end of the move rather than a chosen position.
+    const MOVED_TO_BLOCK_ORDINAL: u32 = 2;
+    /// The block the gone statement was recorded against.
+    const GONE_FROM_BLOCK_ORDINAL: u32 = 4;
+
     #[test]
     fn Test_From_Should_Map_Every_Domain_Variant_To_Its_Own_Response_Variant()
     {
         assert!(matches!(
-            NormativeOutcomeResponse::From(NormativeOutcome::Held { block: 3 }),
-            NormativeOutcomeResponse::Held { block: 3 }
+            NormativeOutcomeResponse::From(NormativeOutcome::Held { block: HELD_BLOCK_ORDINAL }),
+            NormativeOutcomeResponse::Held { block: HELD_BLOCK_ORDINAL }
         ));
         assert!(matches!(
-            NormativeOutcomeResponse::From(NormativeOutcome::Moved { from: 1, to: 2 }),
-            NormativeOutcomeResponse::Moved { from: 1, to: 2 }
+            NormativeOutcomeResponse::From(NormativeOutcome::Moved { from: 1, to: MOVED_TO_BLOCK_ORDINAL }),
+            NormativeOutcomeResponse::Moved { from: 1, to: MOVED_TO_BLOCK_ORDINAL }
         ));
         assert!(matches!(
-            NormativeOutcomeResponse::From(NormativeOutcome::Gone { from: 4 }),
-            NormativeOutcomeResponse::Gone { from: 4 }
+            NormativeOutcomeResponse::From(NormativeOutcome::Gone { from: GONE_FROM_BLOCK_ORDINAL }),
+            NormativeOutcomeResponse::Gone { from: GONE_FROM_BLOCK_ORDINAL }
         ));
         assert!(matches!(
             NormativeOutcomeResponse::From(NormativeOutcome::Unlocatable),

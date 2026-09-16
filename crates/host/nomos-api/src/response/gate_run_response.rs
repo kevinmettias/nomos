@@ -244,9 +244,10 @@ mod tests
             Disposition::Indeterminate => "indeterminate",
         };
 
-        let json = serde_json::to_string(&response).expect("a GateRunResponse always serializes");
+        let json = serde_json::to_string(&response).expect("a derived Serialize over owned data has nothing to refuse");
         let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let disposition = parsed.get("disposition").expect("a serialized GateRunResponse always has this field");
+        let disposition =
+            parsed.get("disposition").expect("an internally tagged enum writes its tag under this field name");
 
         assert_eq!(disposition, expected, "{json}");
     }

@@ -18,9 +18,10 @@ pub fn Handle_Work_Renew(directory: &Path, request: &ClaimRequest) -> Reservatio
     let nomos_work_orchestration::WorkOutcome::Renew(renewed) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
-        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+        return ReservationOutcomeResponse::Refused {
+            retryable: false,
+            cause: super::UNANSWERED_WORK_OUTCOME.to_owned(),
+        };
     };
 
     return ReservationOutcomeResponse::From(renewed);
@@ -30,12 +31,16 @@ pub fn Handle_Work_Renew(directory: &Path, request: &ClaimRequest) -> Reservatio
 mod tests
 {
     use super::*;
-    use crate::work::tests_support::{Claim_Request, Scratch_Board_With_A_Claimed_Item};
+    use crate::work::tests_support::{
+        BoardWithAClaimedItem, Claim_Request, Scratch_Board_With_A_Claimed_Item,
+    };
 
     #[test]
     fn Test_Claim_Request_Should_Let_Handle_Work_Renew_Extend_This_Holders_Own_Lease()
     {
-        let (directory, id) = Scratch_Board_With_A_Claimed_Item("test-holder", i64::from(u32::MAX));
+        let BoardWithAClaimedItem { directory, id } =
+            Scratch_Board_With_A_Claimed_Item("test-holder", i64::from(u32::MAX))
+                .expect("the temp directory is writable and the scratch ledger is writable");
         let request = Claim_Request(id.clone(), "test-holder");
 
         let response = Handle_Work_Renew(&directory, &request);

@@ -200,6 +200,11 @@ mod tests
     use super::*;
     use crate::fake_launcher::{Scripted, Stderr, Stdout};
 
+    /// The exit code a real `git diff` returns for a revision it cannot resolve -- `git`'s
+    /// own convention, named so the fixture below reads as "a refused revision" rather than
+    /// as a number that happens to be 128.
+    const BAD_REVISION_EXIT_CODE: i32 = 128;
+
     #[test]
     fn Test_A_Blank_Diff_Means_No_Finding()
     {
@@ -215,7 +220,7 @@ mod tests
     #[test]
     fn Test_A_Changed_Surface_With_No_Records_Commit_Is_A_Finding()
     {
-        let launcher = Changed_Surface_Launcher("", "deadbeef\treblessed\n");
+        let launcher = Changed_Surface_Launcher(SurfaceCommits { records: "", surface: "deadbeef\treblessed\n" });
         let finding = Joined_Finding(&launcher, Repository_Range(), "nomos-model");
 
         assert!(finding.surface_changed);
@@ -228,7 +233,10 @@ mod tests
     #[test]
     fn Test_Records_Touched_Should_Suppress_A_Finding_Despite_A_Changed_Surface()
     {
-        let launcher = Changed_Surface_Launcher("cafef00d\n", "deadbeef\treal change\n");
+        let launcher = Changed_Surface_Launcher(SurfaceCommits {
+            records: "cafef00d\n",
+            surface: "deadbeef\treal change\n",
+        });
         let finding = Joined_Finding(&launcher, Repository_Range(), "nomos-model");
 
         assert!(finding.surface_changed);
@@ -239,7 +247,8 @@ mod tests
     #[test]
     fn Test_Finding_For_Should_Fail_On_A_Bad_Revision_Rather_Than_Report_A_Finding()
     {
-        let launcher = Scripted::New().Answer("diff", 128, Stdout(""), Stderr("fatal: bad revision 'nonsense'"));
+        let launcher = Scripted::New()
+            .Answer("diff", BAD_REVISION_EXIT_CODE, Stdout(""), Stderr("fatal: bad revision 'nonsense'"));
         let query = Query {
             range: CommitRange { root: Path::new("/repo"), since: "nonsense", until: "b" },
             records_touched: false,
@@ -276,10 +285,12 @@ mod tests
     fn Joined_Finding(launcher: &Scripted, range: CommitRange<'_>, krate: &str) -> CrateFinding
     {
         let records_touched =
-            Records_Touched(launcher, range.root, git::Since(range.since), git::Until(range.until)).expect("must run");
+            Records_Touched(launcher, range.root, git::Since(range.since), git::Until(range.until))
+                .expect("the launcher is scripted to answer this range's own log query");
         let query = Query { range, records_touched };
 
-        return Finding_For(launcher, &query, krate).expect("must run");
+        return Finding_For(launcher, &query, krate)
+            .expect("the launcher is scripted to answer the diff query this join asks");
     }
 
     /// The range and root every test in this module scripts a launcher against -- the git
@@ -292,13 +303,29 @@ mod tests
 
     /// A launcher scripted for `nomos-model`'s surface file changing -- the "diff touched
     /// the surface" premise both `Test_A_Changed_Surface_With_*` tests share, differing only
-    /// in what commits the two `log` answers report: `records_log` for whether a records
-    /// commit touched the range, `surface_log` for the surface commit itself.
-    fn Changed_Surface_Launcher(records_log: &str, surface_log: &str) -> Scripted
+    /// in what commits the two `log` answers report: [`SurfaceCommits::records`] for whether
+    /// a records commit touched the range, [`SurfaceCommits::surface`] for the surface
+    /// commit itself.
+    fn Changed_Surface_Launcher(commits: SurfaceCommits<'_>) -> Scripted
     {
         return Scripted::New()
             .Answer("diff", 0, Stdout("tests/contract/surface/nomos-model.txt\n"), Stderr(""))
-            .Answer("log a..b --format=%H --", 0, Stdout(records_log), Stderr(""))
-            .Answer("log a..b --format=%H\t%s --", 0, Stdout(surface_log), Stderr(""));
+            .Answer("log a..b --format=%H --", 0, Stdout(commits.records), Stderr(""))
+            .Answer("log a..b --format=%H\t%s --", 0, Stdout(commits.surface), Stderr(""));
+    }
+
+    /// The two `log` answers one changed-surface fixture scripts, each named for the question
+    /// it answers.
+    ///
+    /// Named fields rather than two adjacent `&str` positions, which is what a call reading
+    /// `Changed_Surface_Launcher(records_log, surface_log)` could transpose without the
+    /// compiler objecting. Two shared borrows, so a copy is what passing it by value is.
+    #[derive(Clone, Copy)]
+    struct SurfaceCommits<'text>
+    {
+        /// What the records-log answer reports: which commits in the range touched a record.
+        records: &'text str,
+        /// What the surface-log answer reports: which commits touched the surface file.
+        surface: &'text str,
     }
 }

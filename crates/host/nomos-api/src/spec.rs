@@ -92,3 +92,11 @@ pub use table_response::{Handle_Spec_Table, TableResponse};
 pub use vacate_outcome_response::VacateOutcomeResponse;
 pub use vacated_response::VacatedResponse;
 pub use verdict_response::VerdictResponse;
+
+/// Why every `Handle_Spec_*` handler here refuses an outcome it did not ask for -- the same
+/// pairing `crate::work`'s own `UNANSWERED_WORK_OUTCOME` names, one orchestration crate over:
+/// each handler names the single `SpecCommand` it runs and destructures the single
+/// `SpecOutcome` that command produces, and only `nomos_spec_orchestration`'s own `Run`
+/// decides which of the two an outcome comes back as.
+pub(crate) const UNANSWERED_SPEC_OUTCOME: &str =
+    "Run answered a SpecOutcome other than the one this SpecCommand names";

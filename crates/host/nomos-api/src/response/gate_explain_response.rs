@@ -129,9 +129,12 @@ impl GateExplainResponse
 mod tests
 {
     use super::*;
-    use crate::test_support::Assert_Round_Trips_As_Json;
+    use crate::test_support::{Area, Assert_Round_Trips_As_Json};
     use nomos_contracts::RuleId;
     use nomos_rules::COMPLETENESS_MIRROR;
+
+    /// The area every scratch path in this module is named under.
+    const GATE_EXPLAIN_AREA: Area = Area("gate-explain");
 
     /// The `COMPLETENESS_MIRROR` rule's contract record version, cited in
     /// `Test_Explaining_A_Real_Trigger_Should_Find_A_Real_Blocking_Finding`'s own assertion
@@ -147,7 +150,8 @@ mod tests
     #[test]
     fn Test_Handle_Gate_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers()
     {
-        let directory = Scratch_Source_Tree("not-found", "a.rs", "pub fn Ok() {}\n");
+        let directory =
+            Scratch_Source_Tree("not-found", SourceFile { name: "a.rs", content: "pub fn Ok() {}\n" });
         let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "nowhere.rs".to_owned() };
 
         let response = Handle_Gate_Explain(&directory, &query);
@@ -209,7 +213,8 @@ mod tests
     {
         let response = Explained_Trigger("json");
 
-        Assert_Round_Trips_As_Json(&response, "found");
+        Assert_Round_Trips_As_Json(&response, "found")
+            .expect("a found explanation serializes and parses back as a tagged object");
     }
 
     /// The explanation `label`'s own fresh tree produces for the one trigger `Test_Nowhere`'s
@@ -217,8 +222,10 @@ mod tests
     /// synthetic `SourceFile` list. The tree is removed again before this returns.
     fn Explained_Trigger(label: &str) -> GateExplainResponse
     {
-        let directory =
-            Scratch_Source_Tree(label, "a.rs", "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n");
+        let directory = Scratch_Source_Tree(
+            label,
+            SourceFile { name: "a.rs", content: "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n" },
+        );
         let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
 
         let response = Handle_Gate_Explain(&directory, &query);
@@ -227,14 +234,29 @@ mod tests
         return response;
     }
 
+    /// The one source file a scratch tree should hold: the name to write it under and the
+    /// exact text to write.
+    ///
+    /// Named fields rather than two adjacent `&str` positions, which is what a call reading
+    /// `Scratch_Source_Tree("not-found", "a.rs", content)` could transpose without the
+    /// compiler objecting.
+    struct SourceFile<'text>
+    {
+        /// The file's name within the scratch tree.
+        name: &'text str,
+        /// The file's exact content.
+        content: &'text str,
+    }
+
     /// A real, freshly walkable scratch tree of this test's own -- never the real repository
     /// tree, which live sessions write to concurrently. Several tests above build a tree
     /// holding the same trigger content, so this delegates its own uniqueness to
     /// [`crate::test_support::Unique_Scratch_Directory`] rather than keeping a second counter.
-    fn Scratch_Source_Tree(label: &str, file_name: &str, content: &str) -> std::path::PathBuf
+    fn Scratch_Source_Tree(label: &str, file: SourceFile<'_>) -> std::path::PathBuf
     {
-        let directory = crate::test_support::Unique_Scratch_Directory("gate-explain", label);
-        std::fs::write(directory.join(file_name), content).expect("writes a real source file");
+        let directory = crate::test_support::Unique_Scratch_Directory(GATE_EXPLAIN_AREA, label)
+            .expect("the temp directory is writable and this call's own name is fresh");
+        std::fs::write(directory.join(file.name), file.content).expect("writes a real source file");
 
         return directory;
     }

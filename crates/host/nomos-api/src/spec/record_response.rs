@@ -27,9 +27,9 @@ pub fn Handle_Spec_Record(request: &RecordRequest) -> RecordResponse
     let nomos_spec_orchestration::SpecOutcome::Record(result) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the SpecOutcome variant
-        // naming the SpecCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
+        return RecordResponse::Unreadable {
+            cause: super::UNANSWERED_SPEC_OUTCOME.to_owned(),
+        };
     };
 
     return RecordResponse::From(result);
@@ -140,6 +140,7 @@ mod tests
 
         let response = Handle_Spec_Record(&request);
 
-        Assert_Round_Trips_As_Json(&response, "resolved");
+        Assert_Round_Trips_As_Json(&response, "resolved")
+            .expect("a resolved response serializes and parses back as a tagged object");
     }
 }

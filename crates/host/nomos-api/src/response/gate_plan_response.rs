@@ -90,9 +90,9 @@ mod tests
     {
         let response = Handle_Gate_Plan();
 
-        let json = serde_json::to_string(&response).expect("a GatePlanResponse always serializes");
+        let json = serde_json::to_string(&response).expect("a derived Serialize over owned data has nothing to refuse");
         let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
-        let outcome = parsed.get("outcome").expect("a serialized GatePlanResponse always has this field");
+        let outcome = parsed.get("outcome").expect("an internally tagged enum writes its tag under this field name");
 
         assert_eq!(outcome, "planned", "{json}");
     }

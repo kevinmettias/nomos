@@ -49,3 +49,11 @@ pub use reservation_response::ReservationResponse;
 pub use show_response::{Handle_Work_Show, ShowResponse};
 pub use take_over::Handle_Work_TakeOver;
 pub use validate_response::{Handle_Work_Validate, ValidateResponse};
+
+/// Why every `Handle_Work_*` handler here refuses an outcome it did not ask for -- each one
+/// names the single `WorkCommand` it runs and destructures the single `WorkOutcome` that
+/// command produces, and only `nomos_work_orchestration`'s own `Run` decides which of the two
+/// an outcome comes back as, so an outcome of any other variant means that pairing has
+/// drifted apart rather than that a caller did something wrong.
+pub(crate) const UNANSWERED_WORK_OUTCOME: &str =
+    "Run answered a WorkOutcome other than the one this WorkCommand names";

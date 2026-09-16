@@ -33,9 +33,9 @@ pub fn Handle_Spec_Render(request: &RenderRequest) -> RenderResponse
     let nomos_spec_orchestration::SpecOutcome::Render(result) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the SpecOutcome variant
-        // naming the SpecCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
+        return RenderResponse::Unreadable {
+            cause: super::UNANSWERED_SPEC_OUTCOME.to_owned(),
+        };
     };
 
     return RenderResponse::From(result);
@@ -103,7 +103,10 @@ impl RenderResponse
 mod tests
 {
     use super::*;
-    use crate::test_support::{Assert_Round_Trips_As_Json, Unique_Scratch_Directory};
+    use crate::test_support::{Area, Assert_Round_Trips_As_Json, Unique_Scratch_Directory};
+
+    /// The area every scratch path in this module is named under.
+    const RENDER_AREA: Area = Area("spec-render");
 
     /// Builds from the embedded governing records alone, so a test naming it needs no corpus
     /// -- the same profile `nomos_spec_orchestration`'s own `tests.rs` and
@@ -113,7 +116,8 @@ mod tests
     #[test]
     fn Test_Handle_Spec_Render_Should_Place_Both_Files_On_Disk()
     {
-        let into = Unique_Scratch_Directory("spec-render", "render");
+        let into = Unique_Scratch_Directory(RENDER_AREA, "render")
+            .expect("the temp directory is writable and this call's own name is fresh");
         let request = RenderRequest { profile: EMBEDDED_PROFILE.to_owned(), into: into.clone(), subject: None };
 
         let response = Handle_Spec_Render(&request);
@@ -138,7 +142,8 @@ mod tests
     {
         let request = RenderRequest {
             profile: "definitely-not-a-real-profile".to_owned(),
-            into: Unique_Scratch_Directory("spec-render", "render-unknown"),
+            into: Unique_Scratch_Directory(RENDER_AREA, "render-unknown")
+                .expect("the temp directory is writable and this call's own name is fresh"),
             subject: None,
         };
 
@@ -152,12 +157,14 @@ mod tests
     {
         let request = RenderRequest {
             profile: EMBEDDED_PROFILE.to_owned(),
-            into: Unique_Scratch_Directory("spec-render", "render-json"),
+            into: Unique_Scratch_Directory(RENDER_AREA, "render-json")
+                .expect("the temp directory is writable and this call's own name is fresh"),
             subject: None,
         };
 
         let response = Handle_Spec_Render(&request);
 
-        Assert_Round_Trips_As_Json(&response, "placed");
+        Assert_Round_Trips_As_Json(&response, "placed")
+            .expect("a placed response serializes and parses back as a tagged object");
     }
 }

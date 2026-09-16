@@ -112,8 +112,11 @@ fn Render_Refusal_Cause(refusal: RenderRefusal) -> String
 mod tests
 {
     use super::*;
-    use crate::test_support::{Assert_Round_Trips_As_Json, Unique_Scratch_Directory};
+    use crate::test_support::{Area, Assert_Round_Trips_As_Json, Unique_Scratch_Directory};
     use nomos_spec_model::{SubmissionKind, SubmissionState};
+
+    /// The area every scratch path in this module is named under.
+    const SUBMIT_AREA: Area = Area("spec-submit");
 
     #[test]
     fn Test_Handle_Spec_Submit_Should_Accept_A_Complete_Submission_With_Submitted_Origin()
@@ -144,7 +147,8 @@ mod tests
     #[test]
     fn Test_A_Real_Submission_With_Into_Should_Place_Its_Subject_Dossier_Projection()
     {
-        let into = Unique_Scratch_Directory("spec-submit", "submit");
+        let into = Unique_Scratch_Directory(SUBMIT_AREA, "submit")
+            .expect("the temp directory is writable and this call's own name is fresh");
         let request = Complete_Feature_Request("FR-API-002", Some(into));
 
         let response = Handle_Spec_Submit(&request);
@@ -191,7 +195,8 @@ mod tests
 
         let response = Handle_Spec_Submit(&request);
 
-        Assert_Round_Trips_As_Json(&response, "accepted");
+        Assert_Round_Trips_As_Json(&response, "accepted")
+            .expect("an accepted response serializes and parses back as a tagged object");
     }
 
     /// Every universal field and every field `OD-SPEC-010` requires of `SubmissionKind::

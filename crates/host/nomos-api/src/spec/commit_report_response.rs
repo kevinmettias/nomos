@@ -38,15 +38,21 @@ mod tests
 {
     use super::*;
 
+    /// The fixture's block count, chosen distinct from the removals and relation counts
+    /// below so a `From` that copied one field into another would fail the equality checks.
+    const BLOCKS_AFTER_COMMIT: usize = 4;
+    /// The relations the fixture's commit added.
+    const RELATIONS_ADDED: usize = 2;
+
     #[test]
     fn Test_From_Should_Copy_Every_Field_Of_The_Domain_Commit_Report()
     {
         let report = CommitReport {
             node_id: "D-132".to_owned(),
             path: "docs/records/d-132.md".to_owned(),
-            blocks: 4,
+            blocks: BLOCKS_AFTER_COMMIT,
             blocks_removed: 1,
-            relations_added: 2,
+            relations_added: RELATIONS_ADDED,
             relations_removed: 0,
             renamed: true,
         };

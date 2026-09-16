@@ -82,6 +82,7 @@ mod tests
     {
         let response = Handle_Spec_Profiles();
 
-        Assert_Round_Trips_As_Json(&response, "listed");
+        Assert_Round_Trips_As_Json(&response, "listed")
+            .expect("a listed response serializes and parses back as a tagged object");
     }
 }

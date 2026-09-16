@@ -19,9 +19,10 @@ pub fn Handle_Work_Claim(directory: &Path, request: &ClaimRequest) -> Reservatio
     let nomos_work_orchestration::WorkOutcome::Claim(claimed) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
-        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+        return ReservationOutcomeResponse::Refused {
+            retryable: false,
+            cause: super::UNANSWERED_WORK_OUTCOME.to_owned(),
+        };
     };
 
     return ReservationOutcomeResponse::From(claimed);
@@ -32,13 +33,16 @@ mod tests
 {
     use super::*;
     use crate::work::tests_support::{
-        Claim_Request, Scratch_Board_With_A_Claimable_Item, Scratch_Board_With_A_Held_Territory_Conflict,
+        BoardWithAClaimableItem, BoardWithAHeldTerritoryConflict, Claim_Request,
+        Scratch_Board_With_A_Claimable_Item, Scratch_Board_With_A_Held_Territory_Conflict,
     };
 
     #[test]
     fn Test_Handle_Work_Claim_Should_Grant_A_Reservation_For_A_Real_Ready_Item()
     {
-        let (directory, id) = Scratch_Board_With_A_Claimable_Item();
+        let BoardWithAClaimableItem { directory, id } =
+            Scratch_Board_With_A_Claimable_Item()
+                .expect("the temp directory is writable and the scratch ledger is writable");
         let request = Claim_Request(id.clone(), "test-holder");
 
         let response = Handle_Work_Claim(&directory, &request);
@@ -61,7 +65,9 @@ mod tests
     #[test]
     fn Test_Scratch_Board_With_A_Held_Territory_Conflict_Should_Refuse_A_Claim_And_Mark_It_Retryable()
     {
-        let (directory, id) = Scratch_Board_With_A_Held_Territory_Conflict();
+        let BoardWithAHeldTerritoryConflict { directory, id } =
+            Scratch_Board_With_A_Held_Territory_Conflict()
+                .expect("the temp directory is writable and the scratch ledger is writable");
         let request = Claim_Request(id, "test-holder");
 
         let response = Handle_Work_Claim(&directory, &request);
@@ -83,13 +89,16 @@ mod tests
     #[test]
     fn Test_From_Should_Produce_A_Reserved_Response_That_Round_Trips_As_Json()
     {
-        let (directory, id) = Scratch_Board_With_A_Claimable_Item();
+        let BoardWithAClaimableItem { directory, id } =
+            Scratch_Board_With_A_Claimable_Item()
+                .expect("the temp directory is writable and the scratch ledger is writable");
         let request = Claim_Request(id, "test-holder");
 
         let response = Handle_Work_Claim(&directory, &request);
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        crate::test_support::Assert_Round_Trips_As_Json(&response, "reserved");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "reserved")
+            .expect("a reserved response serializes and parses back as a tagged object");
     }
 }

@@ -40,9 +40,9 @@ pub fn Handle_Work_Audit(directory: &Path) -> AuditResponse
     let nomos_work_orchestration::WorkOutcome::Audit(audited) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
-        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+        return AuditResponse::Unreadable {
+            cause: super::UNANSWERED_WORK_OUTCOME.to_owned(),
+        };
     };
 
     return AuditResponse::From(audited);
@@ -103,12 +103,16 @@ impl AuditResponse
 mod tests
 {
     use super::*;
-    use crate::work::tests_support::{Scratch_Board, Scratch_Board_With_A_Blocked_Item};
+    use crate::work::tests_support::{
+        BoardWithABlockedItem, Scratch_Board, Scratch_Board_With_A_Blocked_Item,
+    };
 
     #[test]
     fn Test_Handle_Work_Audit_And_Scratch_Board_With_A_Blocked_Item_Should_Name_The_Blocked_Item_Not_Its_Dependency()
     {
-        let (directory, dependency, blocked) = Scratch_Board_With_A_Blocked_Item();
+        let BoardWithABlockedItem { directory, dependency, blocked } =
+            Scratch_Board_With_A_Blocked_Item()
+                .expect("the temp directory is writable and the scratch ledger is writable");
 
         let response = Handle_Work_Audit(&directory);
 
@@ -131,7 +135,7 @@ mod tests
     #[test]
     fn Test_Scratch_Board_And_Unique_Scratch_Directory_Should_Report_Nothing_Blocked_On_An_Empty_Board()
     {
-        let directory = Scratch_Board();
+        let directory = Scratch_Board().expect("the temp directory is writable and the scratch ledger is writable");
 
         let response = Handle_Work_Audit(&directory);
 
@@ -151,12 +155,14 @@ mod tests
     #[test]
     fn Test_From_Should_Produce_An_Audited_Response_That_Round_Trips_As_Json()
     {
-        let (directory, _dependency, _blocked) = Scratch_Board_With_A_Blocked_Item();
+        let BoardWithABlockedItem { directory, .. } = Scratch_Board_With_A_Blocked_Item()
+            .expect("the temp directory is writable and the scratch ledger is writable");
 
         let response = Handle_Work_Audit(&directory);
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        crate::test_support::Assert_Round_Trips_As_Json(&response, "audited");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "audited")
+            .expect("an audited response serializes and parses back as a tagged object");
     }
 }

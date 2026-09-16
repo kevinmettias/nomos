@@ -18,9 +18,10 @@ pub fn Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest) -> Reserva
     let nomos_work_orchestration::WorkOutcome::TakeOver(taken_over) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
-        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+        return ReservationOutcomeResponse::Refused {
+            retryable: false,
+            cause: super::UNANSWERED_WORK_OUTCOME.to_owned(),
+        };
     };
 
     return ReservationOutcomeResponse::From(taken_over);
@@ -30,12 +31,16 @@ pub fn Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest) -> Reserva
 mod tests
 {
     use super::*;
-    use crate::work::tests_support::{Claim_Request, Scratch_Board_With_A_Claimed_Item};
+    use crate::work::tests_support::{
+        BoardWithAClaimedItem, Claim_Request, Scratch_Board_With_A_Claimed_Item,
+    };
 
     #[test]
     fn Test_Run_Reservation_Command_Should_Let_Handle_Work_TakeOver_Grant_A_Reservation_For_A_Real_Lapsed_Claim()
     {
-        let (directory, id) = Scratch_Board_With_A_Claimed_Item("old-holder", 1);
+        let BoardWithAClaimedItem { directory, id } =
+            Scratch_Board_With_A_Claimed_Item("old-holder", 1)
+                .expect("the temp directory is writable and the scratch ledger is writable");
         let request = Claim_Request(id.clone(), "new-holder");
 
         let response = Handle_Work_TakeOver(&directory, &request);

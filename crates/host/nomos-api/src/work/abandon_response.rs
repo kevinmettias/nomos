@@ -25,9 +25,10 @@ pub fn Handle_Work_Abandon(directory: &Path, request: &EndingRequest) -> Abandon
     let nomos_work_orchestration::WorkOutcome::Abandon(released) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
-        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+        return AbandonResponse::Refused {
+            retryable: false,
+            cause: super::UNANSWERED_WORK_OUTCOME.to_owned(),
+        };
     };
 
     return AbandonResponse::From(released);
@@ -73,12 +74,16 @@ impl AbandonResponse
 mod tests
 {
     use super::*;
-    use crate::work::tests_support::{Ending_Request, Scratch_Board_With_A_Claimed_Item};
+    use crate::work::tests_support::{
+        BoardWithAClaimedItem, Ending_Request, Scratch_Board_With_A_Claimed_Item,
+    };
 
     #[test]
     fn Test_Handle_Work_Abandon_And_Scratch_Board_With_A_Claimed_Item_Should_Release_A_Real_Claim_This_Holder_Actually_Has()
     {
-        let (directory, id) = Scratch_Board_With_A_Claimed_Item("test-holder", i64::from(u32::MAX));
+        let BoardWithAClaimedItem { directory, id } =
+            Scratch_Board_With_A_Claimed_Item("test-holder", i64::from(u32::MAX))
+                .expect("the temp directory is writable and the scratch ledger is writable");
         let request = Ending_Request(id, "test fixture");
 
         let response = Handle_Work_Abandon(&directory, &request);
@@ -91,7 +96,9 @@ mod tests
     #[test]
     fn Test_From_Should_Refuse_And_Mark_Retryable_A_Claim_A_Different_Holder_Actually_Has()
     {
-        let (directory, id) = Scratch_Board_With_A_Claimed_Item("someone-else", i64::from(u32::MAX));
+        let BoardWithAClaimedItem { directory, id } =
+            Scratch_Board_With_A_Claimed_Item("someone-else", i64::from(u32::MAX))
+                .expect("the temp directory is writable and the scratch ledger is writable");
         let request = Ending_Request(id, "test fixture");
 
         let response = Handle_Work_Abandon(&directory, &request);

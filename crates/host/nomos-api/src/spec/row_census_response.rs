@@ -35,10 +35,26 @@ mod tests
 {
     use super::*;
 
+    /// Every pipe line in the fixture table. Kept equal to the fixture's own header,
+    /// content and separator counts so the census is internally consistent -- a `From` that
+    /// crossed two fields could not then reproduce it.
+    const CENSUS_LINES: u32 = 10;
+    /// The fixture table's content rows, disjoint from `CENSUS_LINES` and from the
+    /// authored-line total below.
+    const CENSUS_CONTENT: u32 = 7;
+    /// The fixture table's authored lines: its one header plus `CENSUS_CONTENT`.
+    const CENSUS_NON_SEPARATOR: u32 = 8;
+
     #[test]
     fn Test_From_Should_Copy_Every_Field_Of_The_Domain_Row_Census()
     {
-        let census = RowCensus { lines: 10, header: 1, content: 7, separator: 1, non_separator: 8 };
+        let census = RowCensus {
+            lines: CENSUS_LINES,
+            header: 1,
+            content: CENSUS_CONTENT,
+            separator: 1,
+            non_separator: CENSUS_NON_SEPARATOR,
+        };
 
         let response = RowCensusResponse::From(census);
 

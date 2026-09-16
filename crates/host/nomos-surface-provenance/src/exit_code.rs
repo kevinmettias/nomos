@@ -32,6 +32,11 @@ mod tests
 {
     use super::*;
 
+    /// The numeric code `ExitCode::Usage` is declared with. Named rather than written inline
+    /// so the assertion below reads as "the value matches the declaration", not as a number
+    /// that happens to agree with one.
+    const USAGE_DISCRIMINANT: i32 = 2;
+
     /// `main()` feeds this straight into `u8::try_from`, so a code that silently drifted
     /// from the discriminant it was declared with would arrive as the wrong process exit
     /// rather than as a compile error.
@@ -40,6 +45,6 @@ mod tests
     {
         assert_eq!(ExitCode::Ok.Value(), 0);
         assert_eq!(ExitCode::QueryFailed.Value(), 1);
-        assert_eq!(ExitCode::Usage.Value(), 2);
+        assert_eq!(ExitCode::Usage.Value(), USAGE_DISCRIMINANT);
     }
 }

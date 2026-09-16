@@ -25,9 +25,9 @@ pub fn Handle_Work_Validate(directory: &Path) -> ValidateResponse
     let nomos_work_orchestration::WorkOutcome::Validate(validated) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
-        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+        return ValidateResponse::Invalid {
+            cause: super::UNANSWERED_WORK_OUTCOME.to_owned(),
+        };
     };
 
     return ValidateResponse::From(validated);
@@ -75,12 +75,14 @@ impl ValidateResponse
 mod tests
 {
     use super::*;
-    use crate::work::tests_support::{Scratch_Board, Scratch_Board_With_One_Item};
+    use crate::work::tests_support::{
+        BoardWithOneItem, Scratch_Board, Scratch_Board_With_One_Item,
+    };
 
     #[test]
     fn Test_Handle_Work_Validate_Should_Report_A_Real_Well_Formed_Board_As_Valid()
     {
-        let directory = Scratch_Board();
+        let directory = Scratch_Board().expect("the temp directory is writable and the scratch ledger is writable");
 
         let response = Handle_Work_Validate(&directory);
 
@@ -103,7 +105,8 @@ mod tests
         // `Scratch_Board_With_One_Item`'s item is `Ready` with an empty territory --
         // `nomos_ledger::store::validation::Check_Territory`'s own "workable but reserves
         // nothing" violation, not a fixture built for this test alone.
-        let (directory, _id) = Scratch_Board_With_One_Item();
+        let BoardWithOneItem { directory, .. } = Scratch_Board_With_One_Item()
+            .expect("the temp directory is writable and the scratch ledger is writable");
 
         let response = Handle_Work_Validate(&directory);
 
@@ -124,12 +127,13 @@ mod tests
     #[test]
     fn Test_From_Should_Produce_A_Valid_Response_That_Round_Trips_As_Json()
     {
-        let directory = Scratch_Board();
+        let directory = Scratch_Board().expect("the temp directory is writable and the scratch ledger is writable");
 
         let response = Handle_Work_Validate(&directory);
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        crate::test_support::Assert_Round_Trips_As_Json(&response, "valid");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "valid")
+            .expect("a valid response serializes and parses back as a tagged object");
     }
 }

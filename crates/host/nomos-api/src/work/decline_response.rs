@@ -25,9 +25,10 @@ pub fn Handle_Work_Decline(directory: &Path, request: &EndingRequest) -> Decline
     let nomos_work_orchestration::WorkOutcome::Decline { declined, .. } = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
-        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+        return DeclineResponse::Refused {
+            retryable: false,
+            cause: super::UNANSWERED_WORK_OUTCOME.to_owned(),
+        };
     };
 
     return DeclineResponse::From(declined);
@@ -68,12 +69,17 @@ impl DeclineResponse
 mod tests
 {
     use super::*;
-    use crate::work::tests_support::{Ending_Request, Scratch_Board_With_A_Claimable_Item, Scratch_Board_With_A_Claimed_Item};
+    use crate::work::tests_support::{
+        BoardWithAClaimableItem, BoardWithAClaimedItem, Ending_Request,
+        Scratch_Board_With_A_Claimable_Item, Scratch_Board_With_A_Claimed_Item,
+    };
 
     #[test]
     fn Test_Handle_Work_Decline_Should_End_A_Real_Unclaimed_Ready_Item()
     {
-        let (directory, id) = Scratch_Board_With_A_Claimable_Item();
+        let BoardWithAClaimableItem { directory, id } =
+            Scratch_Board_With_A_Claimable_Item()
+                .expect("the temp directory is writable and the scratch ledger is writable");
         let request = Ending_Request(id, "superseded");
 
         let response = Handle_Work_Decline(&directory, &request);
@@ -86,7 +92,9 @@ mod tests
     #[test]
     fn Test_Ending_Request_Should_Be_Refused_And_Retryable_When_A_Real_Active_Claim_Still_Holds_The_Item()
     {
-        let (directory, id) = Scratch_Board_With_A_Claimed_Item("someone-else", i64::from(u32::MAX));
+        let BoardWithAClaimedItem { directory, id } =
+            Scratch_Board_With_A_Claimed_Item("someone-else", i64::from(u32::MAX))
+                .expect("the temp directory is writable and the scratch ledger is writable");
         let request = Ending_Request(id, "superseded");
 
         let response = Handle_Work_Decline(&directory, &request);
@@ -108,13 +116,16 @@ mod tests
     #[test]
     fn Test_From_Should_Produce_A_Declined_Response_That_Round_Trips_As_Json()
     {
-        let (directory, id) = Scratch_Board_With_A_Claimable_Item();
+        let BoardWithAClaimableItem { directory, id } =
+            Scratch_Board_With_A_Claimable_Item()
+                .expect("the temp directory is writable and the scratch ledger is writable");
         let request = Ending_Request(id, "superseded");
 
         let response = Handle_Work_Decline(&directory, &request);
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        crate::test_support::Assert_Round_Trips_As_Json(&response, "declined");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "declined")
+            .expect("a declined response serializes and parses back as a tagged object");
     }
 }

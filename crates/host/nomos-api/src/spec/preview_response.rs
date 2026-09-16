@@ -33,9 +33,9 @@ pub fn Handle_Spec_Preview(request: &EditRequest) -> PreviewResponse
     let nomos_spec_orchestration::SpecOutcome::Preview(result) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the SpecOutcome variant
-        // naming the SpecCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
+        return PreviewResponse::Refused {
+            cause: super::UNANSWERED_SPEC_OUTCOME.to_owned(),
+        };
     };
 
     return PreviewResponse::From(result);
@@ -122,12 +122,18 @@ impl PreviewResponse
 mod tests
 {
     use super::*;
-    use crate::test_support::{Assert_Round_Trips_As_Json, Staged_Heading_Rename, Unique_Scratch_Directory};
+    use crate::test_support::{Area, Assert_Round_Trips_As_Json, Staged_Heading_Rename, Unique_Scratch_Directory};
+
+    /// The area every scratch path in this module is named under.
+    const PREVIEW_AREA: Area = Area("spec-preview");
 
     #[test]
     fn Test_Handle_Spec_Preview_Should_Report_Wording_Moved_For_A_Heading_Rename()
     {
-        let staged = Staged_Heading_Rename("D-132", &Unique_Scratch_Directory("spec-preview", "preview"));
+        let into = Unique_Scratch_Directory(PREVIEW_AREA, "preview")
+            .expect("the temp directory is writable and this call's own name is fresh");
+        let staged = Staged_Heading_Rename("D-132", &into)
+            .expect("D-132 is a governing record embedded in this binary");
         let request = EditRequest { id: "D-132".to_owned(), from: staged, rename: None };
 
         let response = Handle_Spec_Preview(&request);
@@ -160,11 +166,15 @@ mod tests
     #[test]
     fn Test_From_Should_Round_Trip_As_Json()
     {
-        let staged = Staged_Heading_Rename("D-132", &Unique_Scratch_Directory("spec-preview", "preview-json"));
+        let into = Unique_Scratch_Directory(PREVIEW_AREA, "preview-json")
+            .expect("the temp directory is writable and this call's own name is fresh");
+        let staged = Staged_Heading_Rename("D-132", &into)
+            .expect("D-132 is a governing record embedded in this binary");
         let request = EditRequest { id: "D-132".to_owned(), from: staged, rename: None };
 
         let response = Handle_Spec_Preview(&request);
 
-        Assert_Round_Trips_As_Json(&response, "previewed");
+        Assert_Round_Trips_As_Json(&response, "previewed")
+            .expect("a previewed response serializes and parses back as a tagged object");
     }
 }

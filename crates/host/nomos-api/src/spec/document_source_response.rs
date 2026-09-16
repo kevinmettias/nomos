@@ -37,11 +37,15 @@ mod tests
 {
     use super::*;
 
+    /// The ingested document's own row id. `DocumentSourceResponse` has no `uid` field for it
+    /// to land in, so the number exists only to prove the conversion drops it.
+    const SOURCE_UID: i64 = 99;
+
     #[test]
     fn Test_From_Should_Copy_Every_Field_Except_The_Never_Exported_Uid()
     {
         let document = DocumentSource {
-            uid: 99,
+            uid: SOURCE_UID,
             path: "docs/records/d-132.md".to_owned(),
             revision: "1".to_owned(),
             content_hash: "abc123".to_owned(),

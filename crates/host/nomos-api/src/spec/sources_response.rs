@@ -28,9 +28,9 @@ pub fn Handle_Spec_Sources() -> SourcesResponse
     let nomos_spec_orchestration::SpecOutcome::Sources(sourced) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the SpecOutcome variant
-        // naming the SpecCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
+        return SourcesResponse::Unreadable {
+            cause: super::UNANSWERED_SPEC_OUTCOME.to_owned(),
+        };
     };
 
     return SourcesResponse::From(sourced);
@@ -98,6 +98,7 @@ mod tests
     {
         let response = Handle_Spec_Sources();
 
-        Assert_Round_Trips_As_Json(&response, "assembled");
+        Assert_Round_Trips_As_Json(&response, "assembled")
+            .expect("an assembled response serializes and parses back as a tagged object");
     }
 }

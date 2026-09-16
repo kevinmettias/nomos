@@ -32,9 +32,9 @@ pub fn Handle_Work_Show(directory: &Path, item: &ItemId) -> ShowResponse
     let nomos_work_orchestration::WorkOutcome::Show(shown) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
-        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+        return ShowResponse::Unreadable {
+            cause: super::UNANSWERED_WORK_OUTCOME.to_owned(),
+        };
     };
 
     return ShowResponse::From(item, shown);
@@ -108,12 +108,13 @@ impl ShowResponse
 mod tests
 {
     use super::*;
-    use crate::work::tests_support::Scratch_Board_With_One_Item;
+    use crate::work::tests_support::{BoardWithOneItem, Scratch_Board_With_One_Item};
 
     #[test]
     fn Test_Handle_Work_Show_Should_Find_An_Item_On_The_Board()
     {
-        let (directory, id) = Scratch_Board_With_One_Item();
+        let BoardWithOneItem { directory, id } = Scratch_Board_With_One_Item()
+            .expect("the temp directory is writable and the scratch ledger is writable");
 
         let response = Handle_Work_Show(&directory, &id);
 
@@ -133,7 +134,8 @@ mod tests
     #[test]
     fn Test_Ledger_At_Should_Read_Cleanly_Even_When_An_Absent_Id_Is_Not_Found()
     {
-        let (directory, _id) = Scratch_Board_With_One_Item();
+        let BoardWithOneItem { directory, .. } = Scratch_Board_With_One_Item()
+            .expect("the temp directory is writable and the scratch ledger is writable");
         let absent = ItemId::New("NO-SUCH-ITEM");
 
         let response = Handle_Work_Show(&directory, &absent);
@@ -154,12 +156,14 @@ mod tests
     #[test]
     fn Test_From_Should_Produce_A_Found_Response_That_Round_Trips_As_Json()
     {
-        let (directory, id) = Scratch_Board_With_One_Item();
+        let BoardWithOneItem { directory, id } = Scratch_Board_With_One_Item()
+            .expect("the temp directory is writable and the scratch ledger is writable");
 
         let response = Handle_Work_Show(&directory, &id);
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        crate::test_support::Assert_Round_Trips_As_Json(&response, "found");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "found")
+            .expect("a found response serializes and parses back as a tagged object");
     }
 }

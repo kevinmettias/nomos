@@ -42,13 +42,19 @@ mod tests
 {
     use super::*;
 
+    /// The block the fixture line sits in. Different from `LINE_ROW_ORDINAL` so a `From` that
+    /// copied one ordinal field into the other could not pass.
+    const LINE_BLOCK_ORDINAL: u32 = 2;
+    /// The fixture line's position within its block.
+    const LINE_ROW_ORDINAL: u32 = 3;
+
     #[test]
     fn Test_From_Should_Copy_Every_Field_Of_The_Domain_Table_Line()
     {
         let line = TableLine {
-            block_ordinal: 2,
+            block_ordinal: LINE_BLOCK_ORDINAL,
             table_ordinal: 1,
-            row_ordinal: 3,
+            row_ordinal: LINE_ROW_ORDINAL,
             kind: "content".to_owned(),
             cells: vec!["a".to_owned(), "b".to_owned()],
             text: "| a | b |".to_owned(),

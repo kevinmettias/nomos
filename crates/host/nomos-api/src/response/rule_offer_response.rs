@@ -37,13 +37,17 @@ mod tests
     use super::*;
     use nomos_rules::COMPLETENESS_MIRROR;
 
+    /// A version number that is not the crate's current one, so a `From` that substituted the
+    /// live contract version for the offer's own would fail the equality check below.
+    const OFFERED_CONTRACT_RECORD_VERSION: u32 = 2;
+
     #[test]
     fn Test_From_Should_Carry_The_Offers_Rule_And_Contract_Record()
     {
         let offer = RuleOffer {
             rule: RuleId::New(COMPLETENESS_MIRROR),
             contract_record: "D-134".to_owned(),
-            contract_record_version: 2,
+            contract_record_version: OFFERED_CONTRACT_RECORD_VERSION,
         };
 
         let response = RuleOfferResponse::From(offer.clone());

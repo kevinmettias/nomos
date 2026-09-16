@@ -27,9 +27,9 @@ pub fn Handle_Spec_Freshness(request: &FreshnessRequest) -> FreshnessResponse
     let nomos_spec_orchestration::SpecOutcome::Freshness(result) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the SpecOutcome variant
-        // naming the SpecCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
+        return FreshnessResponse::Unreadable {
+            cause: super::UNANSWERED_SPEC_OUTCOME.to_owned(),
+        };
     };
 
     return FreshnessResponse::From(result);
@@ -93,13 +93,17 @@ mod tests
 {
     use super::*;
     use crate::spec::VerdictResponse;
-    use crate::test_support::{Assert_Round_Trips_As_Json, Unique_Scratch_Directory};
+    use crate::test_support::{Area, Assert_Round_Trips_As_Json, Unique_Scratch_Directory};
+
+    /// The area every scratch path in this module is named under.
+    const FRESHNESS_AREA: Area = Area("spec-freshness");
 
     #[test]
     fn Test_Handle_Spec_Freshness_Should_Examine_Every_Profile_As_Absent_Over_An_Empty_Root()
     {
         let request = FreshnessRequest {
-            into: Unique_Scratch_Directory("spec-freshness", "empty-root"),
+            into: Unique_Scratch_Directory(FRESHNESS_AREA, "empty-root")
+                .expect("the temp directory is writable and this call's own name is fresh"),
             profile: None,
             require: Vec::new(),
         };
@@ -125,7 +129,8 @@ mod tests
     fn Test_An_Unknown_Required_Profile_Should_Report_No_Such_Profile()
     {
         let request = FreshnessRequest {
-            into: Unique_Scratch_Directory("spec-freshness", "unknown-required"),
+            into: Unique_Scratch_Directory(FRESHNESS_AREA, "unknown-required")
+                .expect("the temp directory is writable and this call's own name is fresh"),
             profile: None,
             require: vec!["definitely-not-a-real-profile".to_owned()],
         };
@@ -139,13 +144,15 @@ mod tests
     fn Test_From_Should_Round_Trip_As_Json()
     {
         let request = FreshnessRequest {
-            into: Unique_Scratch_Directory("spec-freshness", "round-trip"),
+            into: Unique_Scratch_Directory(FRESHNESS_AREA, "round-trip")
+                .expect("the temp directory is writable and this call's own name is fresh"),
             profile: None,
             require: Vec::new(),
         };
 
         let response = Handle_Spec_Freshness(&request);
 
-        Assert_Round_Trips_As_Json(&response, "examined");
+        Assert_Round_Trips_As_Json(&response, "examined")
+            .expect("an examined response serializes and parses back as a tagged object");
     }
 }

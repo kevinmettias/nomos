@@ -272,7 +272,10 @@ mod tests
         assert!(text.contains("FINDING nomos-model"));
         assert!(text.contains("deadbeef"));
 
-        let _ = std::fs::remove_dir_all(&root);
+        if let Err(error) = std::fs::remove_dir_all(&root)
+        {
+            eprintln!("could not remove the scratch root {}: {error}", root.display());
+        }
     }
 
     /// An unknown `--crate` name is refused rather than silently reporting nothing for
@@ -294,7 +297,10 @@ mod tests
         assert_eq!(code, ExitCode::Usage);
         assert!(String::from_utf8_lossy(&stderr).contains("no-such-crate"));
 
-        let _ = std::fs::remove_dir_all(&root);
+        if let Err(error) = std::fs::remove_dir_all(&root)
+        {
+            eprintln!("could not remove the scratch root {}: {error}", root.display());
+        }
     }
 
     /// Every test above passes `--root` explicitly (through [`Arguments_With_Extra`]), so

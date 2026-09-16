@@ -33,9 +33,9 @@ pub fn Handle_Work_List(directory: &Path) -> ListResponse
     let nomos_work_orchestration::WorkOutcome::List(listed) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the WorkOutcome variant
-        // naming the WorkCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the WorkOutcome variant naming the WorkCommand it was given")
+        return ListResponse::Unreadable {
+            cause: super::UNANSWERED_WORK_OUTCOME.to_owned(),
+        };
     };
 
     return ListResponse::From(listed);
@@ -90,7 +90,7 @@ mod tests
     #[test]
     fn Test_Handle_Work_List_Should_Read_A_Real_Empty_Board_Not_Refuse_It()
     {
-        let directory = Scratch_Board();
+        let directory = Scratch_Board().expect("the temp directory is writable and the scratch ledger is writable");
 
         let response = Handle_Work_List(&directory);
 
@@ -110,12 +110,13 @@ mod tests
     #[test]
     fn Test_From_Should_Produce_A_Listed_Response_That_Round_Trips_As_Json()
     {
-        let directory = Scratch_Board();
+        let directory = Scratch_Board().expect("the temp directory is writable and the scratch ledger is writable");
 
         let response = Handle_Work_List(&directory);
 
         let _ignored = std::fs::remove_dir_all(&directory);
 
-        crate::test_support::Assert_Round_Trips_As_Json(&response, "listed");
+        crate::test_support::Assert_Round_Trips_As_Json(&response, "listed")
+            .expect("a listed response serializes and parses back as a tagged object");
     }
 }

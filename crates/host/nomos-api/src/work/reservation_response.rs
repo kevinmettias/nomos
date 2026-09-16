@@ -35,13 +35,17 @@ mod tests
 {
     use super::*;
 
+    /// The fixture lease's expiry, distinct from every other timestamp in this crate's tests
+    /// so a `From` that read the wrong field could not still compare equal below.
+    const RESERVATION_EXPIRY_UNIX_SECONDS: i64 = 42;
+
     #[test]
     fn Test_From_Should_Carry_The_Reservations_Item_Holder_And_Expiry()
     {
         let reservation = Reservation {
             item: ItemId::New("SCRATCH-RESERVATION"),
             holder: "test-holder".to_owned(),
-            expires_at: Timestamp::From_Unix_Seconds(42),
+            expires_at: Timestamp::From_Unix_Seconds(RESERVATION_EXPIRY_UNIX_SECONDS),
         };
 
         let response = ReservationResponse::From(reservation.clone());

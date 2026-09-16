@@ -34,9 +34,9 @@ pub fn Handle_Spec_Commit(request: &CommitRequest) -> CommitResponse
     let nomos_spec_orchestration::SpecOutcome::Commit(result) = outcome
     else
     {
-        // rust-panic: allow: Run's own contract guarantees it returns the SpecOutcome variant
-        // naming the SpecCommand it was given -- any other outcome means Run itself is broken.
-        unreachable!("Run always returns the SpecOutcome variant naming the SpecCommand it was given")
+        return CommitResponse::Refused {
+            cause: super::UNANSWERED_SPEC_OUTCOME.to_owned(),
+        };
     };
 
     return CommitResponse::From(result);
@@ -140,14 +140,19 @@ fn Refusal_Cause(error: CommitRefusalError) -> String
 mod tests
 {
     use super::*;
-    use crate::test_support::{Assert_Round_Trips_As_Json, Staged_Heading_Rename, Unique_Scratch_Directory};
+    use crate::test_support::{Area, Assert_Round_Trips_As_Json, Staged_Heading_Rename, Unique_Scratch_Directory};
     use nomos_spec_orchestration::EditRequest;
+
+    /// The area every scratch path in this module is named under.
+    const COMMIT_AREA: Area = Area("spec-commit");
 
     #[test]
     fn Test_Handle_Spec_Commit_Should_Write_The_Record_And_Close_The_Round_Trip()
     {
-        let into = Unique_Scratch_Directory("spec-commit", "commit");
-        let staged = Staged_Heading_Rename("D-132", &into);
+        let into = Unique_Scratch_Directory(COMMIT_AREA, "commit")
+            .expect("the temp directory is writable and this call's own name is fresh");
+        let staged = Staged_Heading_Rename("D-132", &into)
+            .expect("D-132 is a governing record embedded in this binary");
         let edited = std::fs::read_to_string(&staged).expect("the staged file was just written");
         let request = CommitRequest { edit: EditRequest { id: "D-132".to_owned(), from: staged, rename: None }, into };
 
@@ -177,7 +182,8 @@ mod tests
                 from: std::path::PathBuf::from("no-such-staged-file-anywhere.md"),
                 rename: None,
             },
-            into: Unique_Scratch_Directory("spec-commit", "commit-unreadable"),
+            into: Unique_Scratch_Directory(COMMIT_AREA, "commit-unreadable")
+                .expect("the temp directory is writable and this call's own name is fresh"),
         };
 
         let response = Handle_Spec_Commit(&request);
@@ -188,12 +194,15 @@ mod tests
     #[test]
     fn Test_From_Should_Round_Trip_As_Json()
     {
-        let into = Unique_Scratch_Directory("spec-commit", "commit-json");
-        let staged = Staged_Heading_Rename("D-132", &into);
+        let into = Unique_Scratch_Directory(COMMIT_AREA, "commit-json")
+            .expect("the temp directory is writable and this call's own name is fresh");
+        let staged = Staged_Heading_Rename("D-132", &into)
+            .expect("D-132 is a governing record embedded in this binary");
         let request = CommitRequest { edit: EditRequest { id: "D-132".to_owned(), from: staged, rename: None }, into };
 
         let response = Handle_Spec_Commit(&request);
 
-        Assert_Round_Trips_As_Json(&response, "committed");
+        Assert_Round_Trips_As_Json(&response, "committed")
+            .expect("a committed response serializes and parses back as a tagged object");
     }
 }
