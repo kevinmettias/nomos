@@ -128,7 +128,7 @@ mod tests
         assert_eq!(identity.generation, GenerationId::From_Raw(SAMPLE_GENERATION));
     }
 
-    fn Seeded(seed: u8) -> Digest128
+    fn Seeded_Digest(seed: u8) -> Digest128
     {
         return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
     }
@@ -145,13 +145,13 @@ mod tests
         return FactKey {
             contract: CapabilityId::New("nomos.cap.test.key"),
             contract_version: ContractVersion::New(1, 0),
-            subject: SubjectId::From_Digest(Seeded(1)),
+            subject: SubjectId::From_Digest(Seeded_Digest(1)),
             semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
             provider: ProviderId::New("nomos.provider.test"),
             provider_version: ContractVersion::New(1, 0),
             guarantee: GuaranteeDigest::Of(&guarantee),
-            variant: BuildVariantId::From_Digest(Seeded(VARIANT_SEED)),
-            configuration: ConfigurationId::From_Digest(Seeded(CONFIGURATION_SEED)),
+            variant: BuildVariantId::From_Digest(Seeded_Digest(VARIANT_SEED)),
+            configuration: ConfigurationId::From_Digest(Seeded_Digest(CONFIGURATION_SEED)),
         };
     }
 }

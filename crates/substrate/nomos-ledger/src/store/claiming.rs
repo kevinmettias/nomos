@@ -134,7 +134,7 @@ mod tests
 
     fn Claimed_Item(id: FixtureId<'_>, holder: FixtureHolder<'_>) -> LedgerItem
     {
-        let mut item = Item(id.0);
+        let mut item = Named_Ledger_Item(id.0);
         item.state = ItemState::Claimed;
         item.claim = Some(Claim {
             holder: holder.0.to_owned(),
@@ -144,7 +144,7 @@ mod tests
         return item;
     }
 
-    fn Item(id: &str) -> LedgerItem
+    fn Named_Ledger_Item(id: &str) -> LedgerItem
     {
         return LedgerItem {
             id: ItemId::New(id),
@@ -170,7 +170,7 @@ mod tests
     #[test]
     fn Test_Install_Claim_Should_Mark_The_Item_Claimed_And_Record_The_Grant()
     {
-        let mut document = Document_Of(vec![Item("T-1")]);
+        let mut document = Document_Of(vec![Named_Ledger_Item("T-1")]);
         let granted = Claim {
             holder: "agent-a".to_owned(),
             acquired_at: Timestamp::From_Unix_Seconds(CLAIM_TAKEN_AT_SECONDS),

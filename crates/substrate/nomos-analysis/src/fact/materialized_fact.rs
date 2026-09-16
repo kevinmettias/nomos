@@ -75,7 +75,7 @@ mod tests
     {
         return MaterializedFact {
             identity: Sample_Key().At(GenerationId::From_Raw(SAMPLE_GENERATION)),
-            snapshot: SnapshotId::From_Digest(Seeded(SNAPSHOT_SEED)),
+            snapshot: SnapshotId::From_Digest(Seeded_Digest(SNAPSHOT_SEED)),
             evidence: EvidenceClass::Derived,
             guarantee: Sample_Guarantee(),
             payload: FactPayload::New(SchemaId::New("nomos.test.materialized.v1"), b"tree".to_vec()),
@@ -87,13 +87,13 @@ mod tests
         return FactKey {
             contract: CapabilityId::New("nomos.cap.test.materialized"),
             contract_version: ContractVersion::New(1, 0),
-            subject: SubjectId::From_Digest(Seeded(1)),
+            subject: SubjectId::From_Digest(Seeded_Digest(1)),
             semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
             provider: ProviderId::New("nomos.provider.test"),
             provider_version: ContractVersion::New(1, 0),
             guarantee: GuaranteeDigest::Of(&Sample_Guarantee()),
-            variant: BuildVariantId::From_Digest(Seeded(VARIANT_SEED)),
-            configuration: ConfigurationId::From_Digest(Seeded(CONFIGURATION_SEED)),
+            variant: BuildVariantId::From_Digest(Seeded_Digest(VARIANT_SEED)),
+            configuration: ConfigurationId::From_Digest(Seeded_Digest(CONFIGURATION_SEED)),
         };
     }
 
@@ -109,7 +109,7 @@ mod tests
         assert_eq!(Sample_Fact().Generation(), GenerationId::From_Raw(SAMPLE_GENERATION));
     }
 
-    fn Seeded(seed: u8) -> Digest128
+    fn Seeded_Digest(seed: u8) -> Digest128
     {
         return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
     }

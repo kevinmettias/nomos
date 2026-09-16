@@ -91,7 +91,7 @@ mod tests
     #[test]
     fn Test_Record_On_Should_Clear_The_Claim_And_Mark_A_Finished_Item_Done()
     {
-        let mut item = Item("T-1");
+        let mut item = Named_Ledger_Item("T-1");
         let record = VerificationRecord {
             argv: vec!["cargo".to_owned(), "test".to_owned()],
             exit_code: 0,
@@ -111,7 +111,7 @@ mod tests
     #[test]
     fn Test_Record_On_Should_Reopen_An_Abandoned_Item_Keeping_Its_Reason()
     {
-        let mut item = Item("T-2");
+        let mut item = Named_Ledger_Item("T-2");
 
         ReleaseOutcome::Abandoned { reason: "wrong approach".to_owned() }
             .Record_On(&mut item, "agent-b", Timestamp::From_Unix_Seconds(RECORDED_AT_SECONDS));
@@ -124,7 +124,7 @@ mod tests
         assert_eq!(abandonment.reason, "wrong approach");
     }
 
-    fn Item(id: &str) -> LedgerItem
+    fn Named_Ledger_Item(id: &str) -> LedgerItem
     {
         return LedgerItem {
             id: ItemId::New(id),

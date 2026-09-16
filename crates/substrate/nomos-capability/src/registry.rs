@@ -203,7 +203,7 @@ mod local_tests
     }
 
     #[test]
-    fn Test_Declare_And_Offer_Should_Do_Both_In_One_Call()
+    fn Test_Declare_And_Offer_Should_Record_Both_In_One_Call()
     {
         let mut registry = Registry::New();
 

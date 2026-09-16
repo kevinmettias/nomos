@@ -87,13 +87,13 @@ mod tests
         return FactKey {
             contract: CapabilityId::New("nomos.cap.test.report"),
             contract_version: ContractVersion::New(1, 0),
-            subject: SubjectId::From_Digest(Seeded(subject_seed)),
+            subject: SubjectId::From_Digest(Seeded_Digest(subject_seed)),
             semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
             provider: ProviderId::New("nomos.provider.test"),
             provider_version: ContractVersion::New(1, 0),
             guarantee: GuaranteeDigest::Of(&guarantee),
-            variant: BuildVariantId::From_Digest(Seeded(VARIANT_SEED)),
-            configuration: ConfigurationId::From_Digest(Seeded(CONFIGURATION_SEED)),
+            variant: BuildVariantId::From_Digest(Seeded_Digest(VARIANT_SEED)),
+            configuration: ConfigurationId::From_Digest(Seeded_Digest(CONFIGURATION_SEED)),
         };
     }
 
@@ -116,7 +116,7 @@ mod tests
         assert!(text.contains("retaining 3"), "{text}");
     }
 
-    fn Seeded(seed: u8) -> Digest128
+    fn Seeded_Digest(seed: u8) -> Digest128
     {
         return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
     }
@@ -124,7 +124,7 @@ mod tests
     fn Empty_Report() -> InvalidationReport
     {
         return InvalidationReport {
-            cause: GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded(1)) },
+            cause: GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded_Digest(1)) },
             from: GenerationId::From_Raw(REPORT_GENERATION),
             direct: Vec::new(),
             dependent: Vec::new(),

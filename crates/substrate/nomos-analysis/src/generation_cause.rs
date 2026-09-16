@@ -151,7 +151,7 @@ mod tests
     fn Test_Describe_Should_Name_What_Changed_For_Every_Variant()
     {
         assert!(
-            GenerationCause::ConfigurationChanged { configuration: ConfigurationId::From_Digest(Seeded(1)) }
+            GenerationCause::ConfigurationChanged { configuration: ConfigurationId::From_Digest(Seeded_Digest(1)) }
                 .Describe()
                 .contains("configuration")
         );
@@ -161,7 +161,7 @@ mod tests
                 .contains("provider")
         );
         assert!(
-            GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded(DESCRIBED_VARIANT_SEED)) }
+            GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded_Digest(DESCRIBED_VARIANT_SEED)) }
                 .Describe()
                 .contains("build variant")
         );
@@ -171,7 +171,7 @@ mod tests
     fn Test_Granularity_Should_Read_A_Subject_Change_Own_Stated_Granularity()
     {
         let cause = GenerationCause::SubjectChanged {
-            subject: SubjectId::From_Digest(Seeded(1)),
+            subject: SubjectId::From_Digest(Seeded_Digest(1)),
             granularity: IncrementalGranularity::Symbol,
         };
 
@@ -185,21 +185,21 @@ mod tests
     #[test]
     fn Test_Is_Naming_Should_Match_Only_The_Subject_A_Change_Names()
     {
-        let subject = SubjectId::From_Digest(Seeded(1));
-        let other_subject = SubjectId::From_Digest(Seeded(OTHER_SUBJECT_SEED));
+        let subject = SubjectId::From_Digest(Seeded_Digest(1));
+        let other_subject = SubjectId::From_Digest(Seeded_Digest(OTHER_SUBJECT_SEED));
         let cause = GenerationCause::SubjectChanged { subject, granularity: IncrementalGranularity::File };
 
         let key = Key_With(
             subject,
-            ConfigurationId::From_Digest(Seeded(KEY_CONFIGURATION_SEED)),
+            ConfigurationId::From_Digest(Seeded_Digest(KEY_CONFIGURATION_SEED)),
             ProviderId::New("nomos.test.provider"),
-            BuildVariantId::From_Digest(Seeded(KEY_VARIANT_SEED)),
+            BuildVariantId::From_Digest(Seeded_Digest(KEY_VARIANT_SEED)),
         );
         let other_key = Key_With(
             other_subject,
-            ConfigurationId::From_Digest(Seeded(KEY_CONFIGURATION_SEED)),
+            ConfigurationId::From_Digest(Seeded_Digest(KEY_CONFIGURATION_SEED)),
             ProviderId::New("nomos.test.provider"),
-            BuildVariantId::From_Digest(Seeded(KEY_VARIANT_SEED)),
+            BuildVariantId::From_Digest(Seeded_Digest(KEY_VARIANT_SEED)),
         );
 
         assert!(cause.Is_Naming(&key));
@@ -233,7 +233,7 @@ mod tests
         };
     }
 
-    fn Seeded(seed: u8) -> Digest128
+    fn Seeded_Digest(seed: u8) -> Digest128
     {
         return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
     }

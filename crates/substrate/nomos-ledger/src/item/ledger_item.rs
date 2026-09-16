@@ -319,21 +319,21 @@ mod tests
     #[test]
     fn Test_Has_Active_Claim_Should_Be_False_Once_The_Claim_Has_Lapsed()
     {
-        let mut item = Item("T-1");
+        let mut item = Named_Ledger_Item("T-1");
         item.claim = Some(Claimed_By("agent-a", LEASE_ENDS_AT_SECONDS));
 
-        assert!(item.Has_Active_Claim(At(ONE_SECOND_BEFORE_THE_LEASE)));
-        assert!(!item.Has_Active_Claim(At(ONE_SECOND_PAST_THE_LEASE)));
+        assert!(item.Has_Active_Claim(Timestamp_At_Seconds(ONE_SECOND_BEFORE_THE_LEASE)));
+        assert!(!item.Has_Active_Claim(Timestamp_At_Seconds(ONE_SECOND_PAST_THE_LEASE)));
     }
 
     #[test]
     fn Test_Try_Replace_Lapsed_Claim_Should_Keep_The_Claim_It_Replaced()
     {
-        let mut item = Item("T-1");
+        let mut item = Named_Ledger_Item("T-1");
         item.state = ItemState::Claimed;
         item.claim = Some(Claimed_By("dead-agent", LEASE_ENDS_AT_SECONDS));
 
-        assert!(item.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", TAKEOVER_LEASE_ENDS_AT_SECONDS), At(ONE_SECOND_PAST_THE_LEASE)));
+        assert!(item.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", TAKEOVER_LEASE_ENDS_AT_SECONDS), Timestamp_At_Seconds(ONE_SECOND_PAST_THE_LEASE)));
 
         assert_eq!(
             item.claim.as_ref().map(|claim| return claim.holder.clone()),
@@ -352,9 +352,9 @@ mod tests
     #[test]
     fn Test_Decline_Should_Set_The_Declined_State_And_Record_The_Declination()
     {
-        let mut item = Item("T-1");
+        let mut item = Named_Ledger_Item("T-1");
 
-        item.Decline("superseded", "agent-a", At(LEASE_ENDS_AT_SECONDS));
+        item.Decline("superseded", "agent-a", Timestamp_At_Seconds(LEASE_ENDS_AT_SECONDS));
 
         assert_eq!(
             item.state,
@@ -366,10 +366,10 @@ mod tests
             .declined
             .expect("Decline must record who ended it and when");
         assert_eq!(declined.holder, "agent-a");
-        assert_eq!(declined.declined_at, At(LEASE_ENDS_AT_SECONDS));
+        assert_eq!(declined.declined_at, Timestamp_At_Seconds(LEASE_ENDS_AT_SECONDS));
     }
 
-    fn Item(id: &str) -> LedgerItem
+    fn Named_Ledger_Item(id: &str) -> LedgerItem
     {
         return LedgerItem {
             id: ItemId::New(id),
@@ -392,7 +392,7 @@ mod tests
         };
     }
 
-    fn At(seconds: i64) -> Timestamp
+    fn Timestamp_At_Seconds(seconds: i64) -> Timestamp
     {
         return Timestamp::From_Unix_Seconds(seconds);
     }
@@ -401,8 +401,8 @@ mod tests
     {
         return Claim {
             holder: holder.to_owned(),
-            acquired_at: At(CLAIM_TAKEN_AT_SECONDS),
-            lease_expires_at: At(expires),
+            acquired_at: Timestamp_At_Seconds(CLAIM_TAKEN_AT_SECONDS),
+            lease_expires_at: Timestamp_At_Seconds(expires),
         };
     }
 }
