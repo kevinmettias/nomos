@@ -78308,14 +78308,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-a5",
-        "acquired_at": 1789497619,
-        "lease_expires_at": 1789544623
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "C:\\Python314\\python.exe",
@@ -78324,7 +78320,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "capabilities-connectors"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: capabilities-connectors -- 14 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789541754,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4c584a7fcf072b95adb82353afead5be74d012b8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -78999,14 +79014,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-a5",
-        "acquired_at": 1789497623,
-        "lease_expires_at": 1789544623
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "C:\\Python314\\python.exe",
@@ -79015,7 +79026,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: rules -- 1 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789541738,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4c584a7fcf072b95adb82353afead5be74d012b8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -80144,14 +80174,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-a5",
-        "acquired_at": 1789539314,
-        "lease_expires_at": 1789553714
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "python.exe",
@@ -80159,7 +80185,25 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "python.exe",
+          "C:/Users/kmett/AppData/Local/Temp/nomos-gate/waivers_bind_check.py"
+        ],
+        "exit_code": 0,
+        "output_tail": "live sweep target                   : F:\\repos\\nomos\r\nreported findings                   : 7291\r\nwaived findings                     : 343\r\npre-prune entries                   : 2315\r\nsurviving entries                   : 323\r\nstale entries at prune time         : 1992\r\nstale entries in the live sweep     : 0\r\n\r\nOK: surviving entries and the prune-time stale list partition the pre-prune file,\r\nand the live sweep reports no stale entry.\r\n",
+        "verified_at": 1789541834,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4c584a7fcf072b95adb82353afead5be74d012b8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
