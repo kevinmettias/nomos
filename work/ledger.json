@@ -80255,14 +80255,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-a5",
-        "acquired_at": 1789545080,
-        "lease_expires_at": 1789552280
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "C:\\Python314\\python.exe",
@@ -80271,7 +80267,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: placement-rules -- 1 owned path(s), zero undeclared placement findings, reported and waived alike\r\n    accepted floor, 1 finding(s), each reported rather than suppressed:\r\n      folder-organization         crates/rules/nomos-rules/src/checks:0\r\n            The finding is the layer rather than a file, and the layer is the rule registry itself. The check reports 21 facade/directory pairs at this level against a ceiling of 8, and this level holds the crate's entire rule registry -- every rule this crate ships is one module here, so the message's remedy (\"group top-level modules by a higher-level subsystem or contract boundary\") is not a move of one misplaced file but a re-grouping of the whole registry into at most 8 subsystems that are each at most 10 modules wide. Which rule belongs to which subsystem is a decision about how this crate's rules are organized: it would be taken once, in a record, and it would move every internal path in the crate with it. That is a different decision from this item's, which is why it is left reported instead of invented here. The message's other route is closed twice over: it names a `folder-organization: coherent` marker as the alternative, the check's own fixed message set removes that escape for the facade/directory-pair signal (\"has no marker escape\"), and this item's done_when forbids adding a marker in any case. Left reported so a reader sees the layer rather than a zero that hides it.\r\n",
+        "verified_at": 1789547174,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5e7f8e6955b569b04bd9ae7ef793cc4a6ac5f4b6"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
