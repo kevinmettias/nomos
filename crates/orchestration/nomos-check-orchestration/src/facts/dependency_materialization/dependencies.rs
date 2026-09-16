@@ -32,20 +32,14 @@ pub fn Materialize_Dependencies<Launcher: ProcessLauncher, Env: Environment>(
     subprocess: Subprocess<'_, Launcher, Env>,
 ) -> DependencyMaterialization
 {
-    let production = Cargo_Production(context);
+    let materialized = super::Materialize_Through(
+        || nomos_lang_rust_cargo::Materialize_Workspace(root, Cargo_Production(context), subprocess.launcher, subprocess.environment),
+        store,
+        Materialized_Dependency_Sources,
+        Dependency_Capability_Unavailable,
+    );
 
-    let facts = match nomos_lang_rust_cargo::Materialize_Workspace(root, production, subprocess.launcher, subprocess.environment)
-    {
-        Ok(facts) => facts,
-        Err(error) => return DependencyMaterialization {
-            sources: Vec::new(),
-            findings: vec![Dependency_Capability_Unavailable(&error)],
-        },
-    };
-
-    let sources = Materialized_Dependency_Sources(facts, store);
-
-    return DependencyMaterialization { sources, findings: Vec::new() };
+    return DependencyMaterialization { sources: materialized.sources, findings: materialized.findings };
 }
 
 /// The reading context as `nomos_lang_rust_cargo`'s provider takes it.

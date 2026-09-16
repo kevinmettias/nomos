@@ -5,9 +5,8 @@ use std::path::PathBuf;
 
 use nomos_platform_std::StdFileSystem;
 
-use crate::SpecCommand;
+use crate::{Run, SpecCommand};
 use crate::request::{FreshnessRequest, RenderRequest};
-use crate::run::Run;
 use crate::spec_outcome::{FreshnessRefusal, RenderAnswer, RenderRefusal, SpecOutcome, Verdict};
 
 use super::{EMBEDDED_PROFILE, No_Corpus, Scratch};

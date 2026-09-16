@@ -30,6 +30,7 @@ pub use review_materialization::{Materialize_Review, ReviewMaterialization};
 pub use subprocess::Subprocess;
 pub use syntax::{Materialize_Reachability, Materialize_Syntax};
 
+use nomos_analysis::MemoryFactStore;
 use nomos_contracts::Finding;
 use nomos_rules::SourceFile;
 
@@ -42,6 +43,52 @@ pub struct DependencyMaterialization
 {
     pub sources: Vec<SourceFile>,
     pub findings: Vec<Finding>,
+}
+
+/// What [`Materialize_Through`] hands back before a caller renames it as its own answer: the
+/// pair of lists every one of the three wrappers carries, named here so the helper returns a
+/// type rather than the tuple it started as.
+struct Materialized
+{
+    sources: Vec<SourceFile>,
+    findings: Vec<Finding>,
+}
+
+/// The one sequence three provider-backed materializations had each spelled out in full:
+/// call the capability, turn its refusal into a finding rather than into an empty answer,
+/// file what it returned, and hand back the pair a caller reads.
+///
+/// `dependencies`, `lint_materialization` and `policy_materialization` were the same four
+/// statements with every identifier changed. What genuinely differs between them is only the
+/// provider, that provider's error type, the rule and wording of the finding a refusal
+/// produces, and the type the caller reads the answer as -- so those are the parameters, and
+/// the sequence lives here once.
+///
+/// `sources_of` stays the caller's because the two shapes really are different: `cargo
+/// metadata` and `cargo clippy` answer one fact per workspace member, while `cargo deny`
+/// answers exactly one for the whole workspace. Both end as a [`SourceFile`] list because
+/// `run_context::Judged` calls every rule uniformly over one.
+///
+/// Private, and deliberately not `pub(super)`: this is the module's own seam between its
+/// children, not something a caller outside it should reach.
+fn Materialize_Through<Answer, ProviderError, Call, Sources, Unavailable>(
+    call: Call,
+    store: &mut MemoryFactStore,
+    sources_of: Sources,
+    unavailable: Unavailable,
+) -> Materialized
+where
+    Call: FnOnce() -> Result<Answer, ProviderError>,
+    Sources: FnOnce(Answer, &mut MemoryFactStore) -> Vec<SourceFile>,
+    Unavailable: FnOnce(&ProviderError) -> Finding,
+{
+    let materialized = match call()
+    {
+        Ok(materialized) => materialized,
+        Err(error) => return Materialized { sources: Vec::new(), findings: vec![unavailable(&error)] },
+    };
+
+    return Materialized { sources: sources_of(materialized, store), findings: Vec::new() };
 }
 
 #[cfg(test)]

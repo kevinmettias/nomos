@@ -51,9 +51,7 @@
 //! would make that decidable; a second family whose own fix shape never overlaps the
 //! first's is not that population yet.
 
-use crate::correction_command::CorrectionCommand;
-use crate::correction_family::CorrectionFamily;
-use crate::correction_outcome::CorrectionOutcome;
+use crate::{CorrectionCommand, CorrectionFamily, CorrectionOutcome};
 use crate::phantom_mirror::{self, ClaimError, Finding_Reference, Phantom_Claim, PhantomClaim};
 use crate::trailing_whitespace::{self, TrailingWhitespaceClaim};
 use nomos_check_orchestration::CheckOutcome;

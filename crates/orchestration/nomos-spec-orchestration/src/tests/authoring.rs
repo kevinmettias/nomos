@@ -5,9 +5,8 @@ use std::path::PathBuf;
 
 use nomos_platform_std::StdFileSystem;
 
-use crate::SpecCommand;
+use crate::{Run, SpecCommand};
 use crate::request::{CommitRequest, EditRequest, RecordRequest};
-use crate::run::Run;
 use crate::spec_outcome::{CommitAnswer, PreviewRefusal, Reproduction, SpecOutcome};
 
 use super::{No_Corpus, Scratch};

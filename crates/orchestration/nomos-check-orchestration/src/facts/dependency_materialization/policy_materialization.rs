@@ -36,20 +36,14 @@ pub fn Materialize_Policy<Launcher: ProcessLauncher, Env: Environment>(
     subprocess: Subprocess<'_, Launcher, Env>,
 ) -> PolicyMaterialization
 {
-    let production = Deny_Production(context);
+    let materialized = super::Materialize_Through(
+        || nomos_lang_rust_deny::Materialize_Workspace(root, Deny_Production(context), subprocess.launcher, subprocess.environment),
+        store,
+        Materialized_Policy_Sources,
+        Policy_Capability_Unavailable,
+    );
 
-    let fact = match nomos_lang_rust_deny::Materialize_Workspace(root, production, subprocess.launcher, subprocess.environment)
-    {
-        Ok(fact) => fact,
-        Err(error) => return PolicyMaterialization {
-            sources: Vec::new(),
-            findings: vec![Policy_Capability_Unavailable(&error)],
-        },
-    };
-
-    let sources = Materialized_Policy_Sources(fact, store);
-
-    return PolicyMaterialization { sources, findings: Vec::new() };
+    return PolicyMaterialization { sources: materialized.sources, findings: materialized.findings };
 }
 
 /// The reading context as `nomos_lang_rust_deny`'s provider takes it.

@@ -36,20 +36,14 @@ pub fn Materialize_Lint<Launcher: ProcessLauncher, Env: Environment>(
     subprocess: Subprocess<'_, Launcher, Env>,
 ) -> LintMaterialization
 {
-    let production = Clippy_Production(context);
+    let materialized = super::Materialize_Through(
+        || nomos_lang_rust_clippy::Materialize_Workspace(root, Clippy_Production(context), subprocess.launcher, subprocess.environment),
+        store,
+        Materialized_Lint_Sources,
+        Lint_Capability_Unavailable,
+    );
 
-    let facts = match nomos_lang_rust_clippy::Materialize_Workspace(root, production, subprocess.launcher, subprocess.environment)
-    {
-        Ok(facts) => facts,
-        Err(error) => return LintMaterialization {
-            sources: Vec::new(),
-            findings: vec![Lint_Capability_Unavailable(&error)],
-        },
-    };
-
-    let sources = Materialized_Lint_Sources(facts, store);
-
-    return LintMaterialization { sources, findings: Vec::new() };
+    return LintMaterialization { sources: materialized.sources, findings: materialized.findings };
 }
 
 /// The reading context as `nomos_lang_rust_clippy`'s provider takes it.
