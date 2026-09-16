@@ -2,7 +2,7 @@
 
 use crate::RuleOutcome;
 #[derive(Clone, Debug)]
-pub struct Result
+pub struct RuleResult
 {
     pub id: String,
     pub outcome: RuleOutcome,

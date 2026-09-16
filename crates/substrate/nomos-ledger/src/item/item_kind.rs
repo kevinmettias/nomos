@@ -19,7 +19,7 @@ use serde::Serialize;
 /// with nothing for the thing it corrects against has nowhere to put the corpus's own
 /// first half.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub enum Kind
+pub enum ItemKind
 {
     /// Builds a capability that did not exist: a crate, a command, a data shape. Nothing
     /// was wrong beforehand; there was simply nothing there yet.

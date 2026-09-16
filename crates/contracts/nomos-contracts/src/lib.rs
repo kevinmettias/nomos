@@ -121,3 +121,6 @@ pub use package_kind::PackageKind;
 pub use peer::{PeerAvailability, SynchronizationState};
 pub use reporting::{Applicability, DisplayLabel, EnforcementBreach, EnforcementReach, EnforcerRef, EvidenceClass, Finding, GateCategory};
 pub use workflow_step::{Cacheability, CancellationBehavior, Compensation, RetryPolicy, Timeout, WorkflowStep};
+
+#[cfg(test)]
+mod tests;

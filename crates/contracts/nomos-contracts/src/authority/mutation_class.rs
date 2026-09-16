@@ -78,7 +78,7 @@ impl core::fmt::Display for MutationClass
 #[cfg(test)]
 mod tests
 {
-    use alloc::vec::Vec;
+    use crate::tests::Assert_Labels_Distinct;
     use super::*;
 
     #[test]
@@ -133,11 +133,6 @@ mod tests
             MutationClass::Rollback,
         ];
 
-        let mut labels: Vec<&str> = all.iter().map(|class| return class.Label()).collect();
-        let count = labels.len();
-        labels.sort_unstable();
-        labels.dedup();
-
-        assert_eq!(labels.len(), count, "two mutation classes share a wire spelling");
+        Assert_Labels_Distinct(all.iter().map(|class| return class.Label()), "mutation classes");
     }
 }

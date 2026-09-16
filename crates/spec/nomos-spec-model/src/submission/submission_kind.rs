@@ -2,7 +2,7 @@
 
 /// Which of the three kinds `OD-SPEC-008` governs.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum Kind
+pub enum SubmissionKind
 {
     /// What somebody asked for, before anybody decided how or whether to answer it.
     FeatureRequest,
@@ -12,7 +12,7 @@ pub enum Kind
     FeatureResult,
 }
 
-impl Kind
+impl SubmissionKind
 {
     /// The label this kind is stored and cited under.
     #[must_use]
@@ -66,9 +66,9 @@ mod tests
     #[test]
     fn Test_Label_Should_Match_The_Stored_Spelling()
     {
-        assert_eq!(Kind::FeatureRequest.Label(), "feature-request");
-        assert_eq!(Kind::DesignSpec.Label(), "design-spec");
-        assert_eq!(Kind::FeatureResult.Label(), "feature-result");
+        assert_eq!(SubmissionKind::FeatureRequest.Label(), "feature-request");
+        assert_eq!(SubmissionKind::DesignSpec.Label(), "design-spec");
+        assert_eq!(SubmissionKind::FeatureResult.Label(), "feature-result");
     }
 
     #[test]
@@ -76,25 +76,25 @@ mod tests
     {
         for kind in All_Kinds()
         {
-            assert_eq!(Kind::Parse(kind.Label()), Some(kind));
+            assert_eq!(SubmissionKind::Parse(kind.Label()), Some(kind));
         }
-        assert_eq!(Kind::Parse("unknown"), None);
+        assert_eq!(SubmissionKind::Parse("unknown"), None);
     }
 
-    fn All_Kinds() -> [Kind; 3]
+    fn All_Kinds() -> [SubmissionKind; 3]
     {
-        return [Kind::FeatureRequest, Kind::DesignSpec, Kind::FeatureResult];
+        return [SubmissionKind::FeatureRequest, SubmissionKind::DesignSpec, SubmissionKind::FeatureResult];
     }
 
     #[test]
     fn Test_Required_Fields_Should_Differ_By_Kind()
     {
         assert_eq!(
-            Kind::FeatureRequest.Required_Fields(),
+            SubmissionKind::FeatureRequest.Required_Fields(),
             &["goal", "behaviour", "acceptance", "invariants"]
         );
         assert_eq!(
-            Kind::FeatureResult.Required_Fields(),
+            SubmissionKind::FeatureResult.Required_Fields(),
             &["implements", "evidence", "deviations", "owed"]
         );
     }

@@ -24,7 +24,7 @@ use crate::RuleId;
 /// A rule may honestly declare [`GateCategory::Unreachable`]. That is a true statement
 /// about a real gap, and it is exactly what makes the gap countable.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Reach
+pub struct EnforcementReach
 {
     /// The rule this describes.
     pub rule: RuleId,
@@ -38,7 +38,7 @@ pub struct Reach
     pub breaches: Vec<EnforcementBreach>,
 }
 
-impl Reach
+impl EnforcementReach
 {
     /// Whether the rule's claims about its own enforcement are true.
     ///
@@ -198,9 +198,9 @@ mod tests
         declared: Vec<EnforcerRef>,
         expected: GateCategory,
         computed: GateCategory,
-    ) -> Reach
+    ) -> EnforcementReach
     {
-        return Reach {
+        return EnforcementReach {
             rule: RuleId::New("example-rule"),
             declared,
             expected,

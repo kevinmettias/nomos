@@ -1,5 +1,5 @@
 use super::StatementId;
-use super::kind::Kind as StatementKind;
+use super::statement_kind::StatementKind;
 use crate::{ContentHash, Is_Normalized, Normalize_Whitespace};
 
 #[derive(Clone, Debug, PartialEq, Eq)]

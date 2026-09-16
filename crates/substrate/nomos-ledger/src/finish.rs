@@ -23,14 +23,14 @@ pub(super) mod release_outcome;
 pub use abandonment::Abandonment;
 pub use declination::Declination;
 
-#[path = "finish/refusal.rs"]
+#[path = "finish/finish_refusal.rs"]
 mod refusal;
 mod running;
 mod gate_step;
 #[cfg(test)]
 mod tests;
 
-pub use refusal::Refusal as FinishRefusal;
+pub use refusal::FinishRefusal;
 use refusal::Tail_Of;
 use running::{Command_From_Argv, Ran, Ran_To_Completion, Refuse_Nonzero, Runnable_Predicate, Runner};
 

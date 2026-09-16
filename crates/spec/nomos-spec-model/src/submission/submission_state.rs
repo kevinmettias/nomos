@@ -6,7 +6,7 @@
 /// submission able to attribute its own state is a submission able to assert its own
 /// acceptance — `OD-SPEC-013` keeps it a column for that reason.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum State
+pub enum SubmissionState
 {
     /// A complete submission that has not been accepted.
     Draft,
@@ -14,7 +14,7 @@ pub enum State
     Accepted,
 }
 
-impl State
+impl SubmissionState
 {
     /// The label this state is stored under.
     #[must_use]
@@ -48,8 +48,8 @@ mod tests
     #[test]
     fn Test_Label_Should_Match_The_Stored_Spelling()
     {
-        assert_eq!(State::Draft.Label(), "draft");
-        assert_eq!(State::Accepted.Label(), "accepted");
+        assert_eq!(SubmissionState::Draft.Label(), "draft");
+        assert_eq!(SubmissionState::Accepted.Label(), "accepted");
     }
 
     #[test]
@@ -57,13 +57,13 @@ mod tests
     {
         for state in All_States()
         {
-            assert_eq!(State::Parse(state.Label()), Some(state));
+            assert_eq!(SubmissionState::Parse(state.Label()), Some(state));
         }
-        assert_eq!(State::Parse("unknown"), None);
+        assert_eq!(SubmissionState::Parse("unknown"), None);
     }
 
-    fn All_States() -> [State; 2]
+    fn All_States() -> [SubmissionState; 2]
     {
-        return [State::Draft, State::Accepted];
+        return [SubmissionState::Draft, SubmissionState::Accepted];
     }
 }

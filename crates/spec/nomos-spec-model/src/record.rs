@@ -3,11 +3,11 @@
 // A record's front matter, the relations it declares, and the refusals parsing one raises.
 pub(crate) mod error;
 pub(crate) mod front_matter;
-mod relation;
+mod record_relation;
 
 use error::Error as RecordError;
 use front_matter::FrontMatter as RecordFrontMatter;
-pub use relation::Relation as RecordRelation;
+pub use record_relation::RecordRelation;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Record

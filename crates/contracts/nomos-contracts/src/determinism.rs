@@ -63,10 +63,10 @@
 
 mod reproducibility_scope;
 mod strategy;
-mod strength;
+mod determinism_strength;
 mod trace_equivalence;
 
 pub use reproducibility_scope::ReproducibilityScope;
-pub use strength::Strength as DeterminismStrength;
+pub use determinism_strength::DeterminismStrength;
 pub use strategy::{Declaration_Is_Coherent, Strategy};
 pub use trace_equivalence::TraceEquivalence;

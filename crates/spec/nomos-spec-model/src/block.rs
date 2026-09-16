@@ -1,11 +1,10 @@
 // What kind of block this is, beneath the block it describes.
-pub(crate) mod kind;
+pub(crate) mod block_kind;
 mod source_block;
 
-// `Kind` would collide with `statement::kind::Kind` if flattened bare, so `lib.rs` reaches
-// this module directly and keeps the longer, table-naming public name at the crate root;
-// this local alias is for this file's own use only, not part of the public surface.
-use kind::Kind as BlockKind;
+// The type is declared `BlockKind`, not a bare `Kind`: this crate declares three kind enums,
+// and a bare name could stand for only one of them at the crate root.
+use block_kind::BlockKind;
 pub use source_block::SourceBlock;
 
 /// Splits an authored markdown document into the blocks the preservation ledger tracks.

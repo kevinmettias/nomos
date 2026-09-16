@@ -4,7 +4,7 @@ use serde::Deserialize;
 
 /// A typed edge declared in a record's front matter.
 #[derive(Clone, Debug, PartialEq, Eq, Deserialize)]
-pub struct Relation
+pub struct RecordRelation
 {
     pub target: String,
     /// v14 and most of v15 spell this `type`; v15's `spec-governance` records spell it

@@ -75,7 +75,7 @@ impl core::fmt::Display for IncrementalGranularity
 #[cfg(test)]
 mod tests
 {
-    use alloc::vec::Vec;
+    use crate::tests::Assert_Labels_Distinct;
     use super::*;
 
     #[test]
@@ -108,11 +108,6 @@ mod tests
             IncrementalGranularity::Region,
         ];
 
-        let mut labels: Vec<&str> = all.iter().map(|granularity| return granularity.Label()).collect();
-        let count = labels.len();
-        labels.sort_unstable();
-        labels.dedup();
-
-        assert_eq!(labels.len(), count, "two granularities share a wire spelling");
+        Assert_Labels_Distinct(all.iter().map(|granularity| return granularity.Label()), "granularities");
     }
 }

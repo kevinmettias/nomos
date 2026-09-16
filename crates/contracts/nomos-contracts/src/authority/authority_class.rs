@@ -22,7 +22,7 @@ const PUBLISH_LABEL: &str = "Publish";
 /// deliberately no `PartialOrd` to invite `>=` comparisons that would grant approval to
 /// anything allowed to write.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum Class
+pub enum AuthorityClass
 {
     /// Observe state.
     Read,
@@ -40,7 +40,7 @@ pub enum Class
     Publish,
 }
 
-impl Class
+impl AuthorityClass
 {
     /// The variant's stable `PascalCase` name.
     #[must_use]
@@ -72,7 +72,7 @@ impl Class
     }
 }
 
-impl core::fmt::Display for Class
+impl core::fmt::Display for AuthorityClass
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -83,15 +83,15 @@ impl core::fmt::Display for Class
 #[cfg(test)]
 mod tests
 {
-    use alloc::vec::Vec;
+    use crate::tests::Assert_Labels_Distinct;
     use super::*;
 
     #[test]
     fn Test_Is_Explicit_Grant_Required_Should_Be_False_For_Reading_Proposing_And_Previewing()
     {
-        assert!(!Class::Read.Is_Explicit_Grant_Required());
-        assert!(!Class::Propose.Is_Explicit_Grant_Required());
-        assert!(!Class::Preview.Is_Explicit_Grant_Required());
+        assert!(!AuthorityClass::Read.Is_Explicit_Grant_Required());
+        assert!(!AuthorityClass::Propose.Is_Explicit_Grant_Required());
+        assert!(!AuthorityClass::Preview.Is_Explicit_Grant_Required());
     }
 
     /// `Label` is the `Display` form every variant renders through; pinning it here is
@@ -100,20 +100,15 @@ mod tests
     fn Test_Label_Should_Spell_Every_Variant_Distinctly()
     {
         let all = [
-            Class::Read,
-            Class::Propose,
-            Class::Preview,
-            Class::Mutate,
-            Class::Execute,
-            Class::Approve,
-            Class::Publish,
+            AuthorityClass::Read,
+            AuthorityClass::Propose,
+            AuthorityClass::Preview,
+            AuthorityClass::Mutate,
+            AuthorityClass::Execute,
+            AuthorityClass::Approve,
+            AuthorityClass::Publish,
         ];
 
-        let mut labels: Vec<&str> = all.iter().map(|class| return class.Label()).collect();
-        let count = labels.len();
-        labels.sort_unstable();
-        labels.dedup();
-
-        assert_eq!(labels.len(), count, "two authority classes share a wire spelling");
+        Assert_Labels_Distinct(all.iter().map(|class| return class.Label()), "authority classes");
     }
 }

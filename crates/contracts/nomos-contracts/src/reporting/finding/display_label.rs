@@ -71,7 +71,7 @@ impl core::fmt::Display for DisplayLabel
 #[cfg(test)]
 mod tests
 {
-    use alloc::vec::Vec;
+    use crate::tests::Assert_Labels_Distinct;
     use super::*;
 
     /// `Label` is the `Display` form every variant renders through. `NotApplicable`'s
@@ -90,11 +90,6 @@ mod tests
             DisplayLabel::AgentRequired,
         ];
 
-        let mut labels: Vec<&str> = all.iter().map(|label| return label.Label()).collect();
-        let count = labels.len();
-        labels.sort_unstable();
-        labels.dedup();
-
-        assert_eq!(labels.len(), count, "two display labels share a spelling");
+        Assert_Labels_Distinct(all.iter().map(|label| return label.Label()), "display labels");
     }
 }

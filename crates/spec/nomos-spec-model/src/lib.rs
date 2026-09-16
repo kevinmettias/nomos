@@ -32,9 +32,9 @@ mod statement;
 mod submission;
 mod table;
 
-// `Kind` would collide between `block::kind::Kind` and `statement::kind::Kind` if either
-// flattened bare, so both keep their longer, table-naming public names here.
-pub use block::kind::Kind as BlockKind;
+// The three kind enums are declared under their qualified names at their own leaves, so each
+// arrives at the surface under the name it already carries.
+pub use block::block_kind::BlockKind;
 pub use block::{Segment, SourceBlock};
 pub use content_hash::{ContentHash, HASH_PREFIX, Is_Normalized, Normalize_Whitespace};
 pub use failure::{DecisionGap, Failure, Refusal, Severity};
@@ -43,7 +43,7 @@ pub use record::front_matter::FrontMatter;
 pub use record::{Parse_Record, Record, RecordRelation};
 pub use render_error::{Is_Round_Trip, Render_Record, RenderError};
 pub use statement::id::Id;
-pub use statement::kind::Kind as StatementKind;
+pub use statement::statement_kind::StatementKind;
 pub use statement::NormativeStatement;
 pub use submission::{FieldValue, Origin, Submission, SubmissionKind, SubmissionState, Validate_Submission};
 pub use table::defect::Defect;

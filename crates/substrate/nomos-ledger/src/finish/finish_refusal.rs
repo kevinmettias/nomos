@@ -17,7 +17,7 @@ pub(super) const OUTPUT_TAIL_LIMIT: usize = 2_000;
 /// is that nobody found out. That is the same conflation this system exists to prevent
 /// one level up, so it is not permitted here either.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Refusal
+pub enum FinishRefusal
 {
     /// The item is not this holder's to finish, or does not exist.
     NotHeld
@@ -101,7 +101,7 @@ pub enum Refusal
     },
 }
 
-impl Refusal
+impl FinishRefusal
 {
     /// A one-line explanation a person or an agent can act on.
     #[must_use]
@@ -245,7 +245,7 @@ mod tests
     #[test]
     fn Test_Describe_Should_Word_The_Not_Recorded_Case_Inline()
     {
-        let refusal = Refusal::NotRecorded { cause: "disk full".to_owned() };
+        let refusal = FinishRefusal::NotRecorded { cause: "disk full".to_owned() };
 
         assert_eq!(
             refusal.Describe(),
@@ -259,11 +259,11 @@ mod tests
         let item = ItemId::New("T-1");
 
         assert!(
-            Refusal::PredicateFailed { item: item.clone(), exit_code: 1, output_tail: String::new() }
+            FinishRefusal::PredicateFailed { item: item.clone(), exit_code: 1, output_tail: String::new() }
                 .Has_Judged_The_Work()
         );
         assert!(
-            Refusal::GateFailed {
+            FinishRefusal::GateFailed {
                 item: item.clone(),
                 argv: vec!["cargo".to_owned()],
                 exit_code: A_GATE_EXIT_CODE,
@@ -271,9 +271,9 @@ mod tests
             }
             .Has_Judged_The_Work()
         );
-        assert!(!Refusal::NotRecorded { cause: "locked".to_owned() }.Has_Judged_The_Work());
+        assert!(!FinishRefusal::NotRecorded { cause: "locked".to_owned() }.Has_Judged_The_Work());
         assert!(
-            !Refusal::NoPredicate { item, done_when: "when it works".to_owned() }.Has_Judged_The_Work()
+            !FinishRefusal::NoPredicate { item, done_when: "when it works".to_owned() }.Has_Judged_The_Work()
         );
     }
 

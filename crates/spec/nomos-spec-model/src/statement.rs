@@ -2,7 +2,7 @@
 
 // A normative statement's identity and its kind.
 pub(crate) mod id;
-pub(crate) mod kind;
+pub(crate) mod statement_kind;
 mod normative_statement;
 
 use id::Id as StatementId;
@@ -82,11 +82,7 @@ mod tests
 
     fn Statement_From_Text(text: &str) -> NormativeStatement
     {
-        // `Kind` would collide with `block::kind::Kind` if flattened bare, so `lib.rs` reaches
-        // this module directly and keeps the longer, table-naming public name at the crate
-        // root; this local alias is for this function's own use only, not part of the public
-        // surface.
-        use super::kind::Kind as StatementKind;
+        use super::statement_kind::StatementKind;
 
         return NormativeStatement {
             id: StatementId::Parse("AGT-001")

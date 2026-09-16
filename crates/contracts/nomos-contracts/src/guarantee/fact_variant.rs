@@ -55,7 +55,7 @@ impl core::fmt::Display for FactVariant
 #[cfg(test)]
 mod tests
 {
-    use alloc::vec::Vec;
+    use crate::tests::Assert_Labels_Distinct;
     use super::*;
 
     /// `Label` is the `Display` form every variant renders through.
@@ -70,11 +70,6 @@ mod tests
             FactVariant::RuntimeObserved,
         ];
 
-        let mut labels: Vec<&str> = all.iter().map(|variant| return variant.Label()).collect();
-        let count = labels.len();
-        labels.sort_unstable();
-        labels.dedup();
-
-        assert_eq!(labels.len(), count, "two fact variants share a wire spelling");
+        Assert_Labels_Distinct(all.iter().map(|variant| return variant.Label()), "fact variants");
     }
 }

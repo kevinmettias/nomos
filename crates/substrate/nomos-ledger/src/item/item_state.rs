@@ -8,7 +8,7 @@ use serde::Serialize;
 /// only in one tool's imagination is a state no query can filter on.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub enum State
+pub enum ItemState
 {
     /// Available to claim.
     Ready,
@@ -35,7 +35,7 @@ pub enum State
     },
 }
 
-impl State
+impl ItemState
 {
     /// Whether an item in this state may be claimed.
     #[must_use]
@@ -93,33 +93,33 @@ mod tests
     #[test]
     fn Test_Is_Claimable_Should_Be_True_Only_For_Ready()
     {
-        assert!(State::Ready.Is_Claimable());
-        assert!(!State::Claimed.Is_Claimable());
-        assert!(!State::Done.Is_Claimable());
+        assert!(ItemState::Ready.Is_Claimable());
+        assert!(!ItemState::Claimed.Is_Claimable());
+        assert!(!ItemState::Done.Is_Claimable());
     }
 
     #[test]
     fn Test_Is_Finished_Should_Be_True_For_Done_And_Declined_Only()
     {
-        assert!(State::Done.Is_Finished());
+        assert!(ItemState::Done.Is_Finished());
         assert!(
-            State::Declined {
+            ItemState::Declined {
                 reason: "superseded".to_owned()
             }
             .Is_Finished()
         );
-        assert!(!State::Ready.Is_Finished());
-        assert!(!State::Claimed.Is_Finished());
+        assert!(!ItemState::Ready.Is_Finished());
+        assert!(!ItemState::Claimed.Is_Finished());
     }
 
     #[test]
     fn Test_Describe_Should_Cut_A_Declined_Reason_To_Its_First_Line()
     {
-        let state = State::Declined {
+        let state = ItemState::Declined {
             reason: "duplicate of P1-MODEL\nsecond paragraph".to_owned(),
         };
 
         assert_eq!(state.Describe(), "Declined: duplicate of P1-MODEL […]");
-        assert_eq!(State::Done.Describe(), "Done");
+        assert_eq!(ItemState::Done.Describe(), "Done");
     }
 }

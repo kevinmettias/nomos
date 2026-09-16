@@ -20,11 +20,11 @@ pub use field_value::FieldValue;
 pub use origin::Origin;
 
 // What a submission is of, and where it stands.
-mod kind;
-mod state;
+mod submission_kind;
+mod submission_state;
 
-pub use kind::Kind as SubmissionKind;
-pub use state::State as SubmissionState;
+pub use submission_kind::SubmissionKind;
+pub use submission_state::SubmissionState;
 
 use crate::DecisionGap;
 use crate::Failure;

@@ -6,7 +6,7 @@ use crate::Violation;
 /// `Satisfied` carries what it looked at. A rule that examined nothing and concluded
 /// nothing is wrong is not evidence, and without the count the two are indistinguishable.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Outcome
+pub enum RuleOutcome
 {
     Satisfied
     {

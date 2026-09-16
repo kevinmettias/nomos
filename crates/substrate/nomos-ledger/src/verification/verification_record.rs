@@ -7,7 +7,7 @@ use nomos_platform::Timestamp;
 /// What happened when the predicate was run.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct Record
+pub struct VerificationRecord
 {
     /// What was run.
     pub argv: Vec<String>,

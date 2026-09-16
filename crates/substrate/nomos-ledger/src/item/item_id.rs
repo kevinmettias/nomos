@@ -4,9 +4,9 @@ use serde::Deserialize;
 use serde::Serialize;
 /// A ledger item's stable identifier.
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
-pub struct Id(String);
+pub struct ItemId(String);
 
-impl Id
+impl ItemId
 {
     /// Wraps an authored identifier.
     #[must_use]
@@ -23,7 +23,7 @@ impl Id
     }
 }
 
-impl core::fmt::Display for Id
+impl core::fmt::Display for ItemId
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -42,14 +42,14 @@ mod tests
     #[test]
     fn Test_New_Should_Wrap_Whatever_Identifier_Was_Authored()
     {
-        assert_eq!(Id::New("P1-MODEL").As_Text(), "P1-MODEL");
-        assert_eq!(Id::New("P1-MODEL".to_owned()).As_Text(), "P1-MODEL");
+        assert_eq!(ItemId::New("P1-MODEL").As_Text(), "P1-MODEL");
+        assert_eq!(ItemId::New("P1-MODEL".to_owned()).As_Text(), "P1-MODEL");
     }
 
     #[test]
     fn Test_As_Text_Should_Return_The_Identifier_As_Authored()
     {
-        let id = Id::New("P1-MODEL");
+        let id = ItemId::New("P1-MODEL");
 
         assert_eq!(id.As_Text(), "P1-MODEL");
     }
