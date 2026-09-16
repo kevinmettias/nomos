@@ -126,7 +126,7 @@ const SOURCES_EDITED_BY_THE_FIXTURE: u32 = 1;
 /// [`nomos_analysis::MemoryFactStore::Materializations`] writes: the cold judgement's own total,
 /// the extra an unchanged re-judgement cost on top of it, and the extra a third cost on top of
 /// both after one source was edited.
-struct Materialization_Counts
+struct MaterializationCounts
 {
     cold: u32,
     unchanged: u32,
@@ -140,7 +140,7 @@ struct Materialization_Counts
 /// The cold judgement's own emptiness is asserted here rather than handed back: a count read off
 /// a tree nothing ever judged is a number about nothing, and this is the only place that can say
 /// so while the judgement itself is still in hand.
-fn Counted_By_Judging_Three_Times(root: &std::path::Path, provider: &mut NomosDiagnosticProvider) -> Materialization_Counts
+fn Counted_By_Judging_Three_Times(root: &std::path::Path, provider: &mut NomosDiagnosticProvider) -> MaterializationCounts
 {
     std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("the fresh root above was just created");
     std::fs::write(root.join("b.rs"), "pub fn Fine() {}\n").expect("the fresh root above was just created");
@@ -156,13 +156,13 @@ fn Counted_By_Judging_Three_Times(root: &std::path::Path, provider: &mut NomosDi
     let _ignored = provider.Diagnose(root);
     let edited = provider.store.Materializations().saturating_sub(cold).saturating_sub(unchanged);
 
-    return Materialization_Counts { cold, unchanged, edited };
+    return MaterializationCounts { cold, unchanged, edited };
 }
 
 /// The three claims the counts make, in the order the fixture establishes them: an unchanged
 /// re-judgement is cheaper than the cold one, the cold one paid for one syntax fact per source
 /// beyond that per-call cost, and the edit re-derived exactly one of them.
-fn Assert_Only_The_Moved_Source_Was_Charged(counted: Materialization_Counts)
+fn Assert_Only_The_Moved_Source_Was_Charged(counted: MaterializationCounts)
 {
     let per_source = counted.cold.saturating_sub(counted.unchanged);
     let after_edit = counted.edited.saturating_sub(counted.unchanged);
@@ -222,7 +222,7 @@ fn Test_A_Reusing_Provider_Should_Answer_What_A_Fresh_One_Answers_Over_The_Same_
 /// The four judgements this fixture compares, all over the same two-source tree: a reusing
 /// provider's cold one, its second over an unchanged tree, its third after `a.rs` gained an
 /// item, and one from a provider that had never judged this tree at all.
-struct Provider_Answers
+struct ProviderAnswers
 {
     cold: Vec<SourceDiagnostic>,
     unchanged: Vec<SourceDiagnostic>,
@@ -231,9 +231,9 @@ struct Provider_Answers
 }
 
 /// Writes the two-source fixture under `root`, then reaches all four of the judgements
-/// [`Provider_Answers`] names -- three through one provider that keeps its state, and one
+/// [`ProviderAnswers`] names -- three through one provider that keeps its state, and one
 /// through a provider created for that single call.
-fn Answers_Over(root: &std::path::Path) -> Provider_Answers
+fn Answers_Over(root: &std::path::Path) -> ProviderAnswers
 {
     std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("the fresh root above was just created");
     std::fs::write(root.join("b.rs"), "pub fn Fine() {}\n").expect("the fresh root above was just created");
@@ -246,7 +246,7 @@ fn Answers_Over(root: &std::path::Path) -> Provider_Answers
     let after_edit = reusing.Diagnose(root);
     let recomputed = NomosDiagnosticProvider::New().Diagnose(root);
 
-    return Provider_Answers { cold, unchanged, after_edit, recomputed };
+    return ProviderAnswers { cold, unchanged, after_edit, recomputed };
 }
 
 /// A cold judgement is what the unreassessed path produces, argument for argument.

@@ -59,7 +59,7 @@ pub(crate) fn Headings_Matching(corpus: &Path, stem: &str, depth: usize, prefixe
                 return heading
                     .title
                     .strip_prefix(*prefix)
-                    .is_some_and(|rest| return rest.starts_with(|c: char| return c.is_ascii_digit()));
+                    .is_some_and(|rest| return rest.starts_with(|character: char| return character.is_ascii_digit()));
             });
         })
         .count();
@@ -113,7 +113,7 @@ fn Is_Lettered(title: &str, letter: char, parts: usize) -> bool
         && segments
             .iter()
             .skip(1)
-            .all(|segment| return !segment.is_empty() && segment.chars().all(|c| return c.is_ascii_digit()));
+            .all(|segment| return !segment.is_empty() && segment.chars().all(|character| return character.is_ascii_digit()));
 }
 
 pub(crate) fn Prefixed(corpus: &Path, stem: &str, depth: usize, prefix: &str) -> u32
@@ -126,7 +126,7 @@ pub(crate) fn Prefixed(corpus: &Path, stem: &str, depth: usize, prefix: &str) ->
             return heading
                 .title
                 .strip_prefix(prefix)
-                .is_some_and(|rest| return rest.starts_with(|c: char| return c.is_ascii_digit()));
+                .is_some_and(|rest| return rest.starts_with(|character: char| return character.is_ascii_digit()));
         })
         .count();
 
@@ -192,7 +192,7 @@ fn Counted_Under_Section_Six(headings: &[Heading]) -> SectionCounts
         {
             all = all.saturating_add(1);
             leaves = leaves.saturating_add(u32::from(heading.depth == LEAF_DEPTH));
-            services = services.saturating_add(u32::from(Names_A_Service(heading)));
+            services = services.saturating_add(u32::from(Is_A_Service_Leaf(heading)));
         }
     }
 
@@ -204,7 +204,7 @@ fn Counted_Under_Section_Six(headings: &[Heading]) -> SectionCounts
 }
 
 /// Whether a leaf heading names a service, which is the count the register quotes.
-fn Names_A_Service(heading: &Heading) -> bool
+fn Is_A_Service_Leaf(heading: &Heading) -> bool
 {
     if heading.depth != LEAF_DEPTH
     {

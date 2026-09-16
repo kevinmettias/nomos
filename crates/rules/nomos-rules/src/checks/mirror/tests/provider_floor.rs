@@ -113,7 +113,7 @@ fn Assert_The_Run_Reports_A_Missing_Capability(findings: &[Finding])
         "with only a scanner admitted the rule could not run, so it may not block"
     );
     assert!(
-        !Blocks_Anything(findings),
+        !Has_A_Blocking_Finding(findings),
         "an approximate provider must not be able to produce a blocking finding here"
     );
 }

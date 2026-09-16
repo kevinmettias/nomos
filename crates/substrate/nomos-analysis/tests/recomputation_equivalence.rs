@@ -43,7 +43,7 @@ const DOWNSTREAM_SUBJECT_SEED: u8 = 2;
 /// Whether the downstream fact is materialized with the dependency edge that makes it
 /// followable, or without it.
 #[derive(Clone, Copy)]
-enum Dependency_Edge
+enum DependencyEdge
 {
     /// The shape a real producer has: the downstream fact records what it read, so the walk
     /// reaches it.
@@ -54,7 +54,7 @@ enum Dependency_Edge
 }
 
 /// The two facts this fixture is about: the leaf, and the derived fact that reads it.
-struct Fixture_Facts
+struct FixtureFacts
 {
     upstream: MaterializedFact,
     downstream: MaterializedFact,
@@ -164,7 +164,7 @@ fn Downstream_Dependency() -> Dependency
 /// caller would, rather than assuming the answer.
 ///
 /// `edge` decides whether the downstream fact records a dependency at all.
-/// [`Dependency_Edge::Omitted`] materializes it with no edge — what an under-invalidating
+/// [`DependencyEdge::Omitted`] materializes it with no edge — what an under-invalidating
 /// producer looks like from the store's side, since `Follow_Edges` walks exactly the edges
 /// `Materialize` was given. With no edge, the real `Invalidate` correctly reports nothing to
 /// follow, the loop below never touches the downstream fact, and its original, now-stale
@@ -173,14 +173,14 @@ fn Downstream_Dependency() -> Dependency
 fn Recompute_Incrementally(
     initial_upstream: &[u8],
     changed_upstream: &[u8],
-    edge: Dependency_Edge,
-) -> Fixture_Facts
+    edge: DependencyEdge,
+) -> FixtureFacts
 {
     let mut store = MemoryFactStore::New();
     let dependency_edges: Vec<Dependency> = match edge
     {
-        Dependency_Edge::Recorded => vec![Downstream_Dependency()],
-        Dependency_Edge::Omitted => Vec::new(),
+        DependencyEdge::Recorded => vec![Downstream_Dependency()],
+        DependencyEdge::Omitted => Vec::new(),
     };
 
     Materialize_Pair(&mut store, initial_upstream, GenerationId::INITIAL, &dependency_edges);
@@ -253,7 +253,7 @@ fn Rematerialize_Named(
 }
 
 /// Reads both fixture facts back at `gen1`, the state the incremental path above ends at.
-fn Current_After_Recompute(store: &MemoryFactStore, gen1: GenerationId) -> Fixture_Facts
+fn Current_After_Recompute(store: &MemoryFactStore, gen1: GenerationId) -> FixtureFacts
 {
     let upstream_now = store
         .Current(&Upstream_Key().At(gen1), gen1)
@@ -265,7 +265,7 @@ fn Current_After_Recompute(store: &MemoryFactStore, gen1: GenerationId) -> Fixtu
              rather than merely stale, the fixture's negative control needs a different shape",
         );
 
-    return Fixture_Facts {
+    return FixtureFacts {
         upstream: upstream_now,
         downstream: downstream_now,
     };
@@ -273,7 +273,7 @@ fn Current_After_Recompute(store: &MemoryFactStore, gen1: GenerationId) -> Fixtu
 
 /// Builds the same two facts from an empty store, at the input state the incremental path
 /// ends at, with no history and nothing to invalidate.
-fn Recompute_From_Empty(upstream_payload: &[u8], generation: GenerationId) -> Fixture_Facts
+fn Recompute_From_Empty(upstream_payload: &[u8], generation: GenerationId) -> FixtureFacts
 {
     let mut store = MemoryFactStore::New();
     Materialize_Pair(&mut store, upstream_payload, generation, &[Downstream_Dependency()]);
@@ -285,7 +285,7 @@ fn Recompute_From_Empty(upstream_payload: &[u8], generation: GenerationId) -> Fi
         .Current(&Downstream_Key().At(generation), generation)
         .expect("downstream must be readable in a clean build");
 
-    return Fixture_Facts { upstream, downstream };
+    return FixtureFacts { upstream, downstream };
 }
 
 /// The property this file exists to state: incremental recomputation after a change agrees
@@ -304,7 +304,7 @@ fn Test_Incremental_Recomputation_After_A_Change_Agrees_With_A_Clean_Rebuild()
 
     let gen1 = GenerationId::INITIAL.Next();
 
-    let incremental = Recompute_Incrementally(&initial, &changed, Dependency_Edge::Recorded);
+    let incremental = Recompute_Incrementally(&initial, &changed, DependencyEdge::Recorded);
     let clean = Recompute_From_Empty(&changed, gen1);
 
     assert_eq!(
@@ -331,7 +331,7 @@ fn Test_An_Unrecorded_Dependency_Edge_Leaves_A_Stale_Downstream_Value_That_Disag
     let changed = b"omega-longer".to_vec();
     let gen1 = GenerationId::INITIAL.Next();
 
-    let incremental = Recompute_Incrementally(&initial, &changed, Dependency_Edge::Omitted);
+    let incremental = Recompute_Incrementally(&initial, &changed, DependencyEdge::Omitted);
     let clean = Recompute_From_Empty(&changed, gen1);
 
     assert_ne!(

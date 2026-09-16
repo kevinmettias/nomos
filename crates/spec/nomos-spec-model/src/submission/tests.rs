@@ -102,11 +102,11 @@ fn Test_A_Draft_Should_Be_Refused_For_Incompleteness_Exactly_As_An_Accepted_One_
     let draft = Validate_Submission(&as_draft);
     let accepted = Validate_Submission(&as_accepted);
 
-    let draft_fields: Vec<&String> = draft.iter().map(|f| return &f.field).collect();
+    let draft_fields: Vec<&String> = draft.iter().map(|finding| return &finding.field).collect();
     let accepted_fields: Vec<&String> = accepted
         .iter()
-        .filter(|f| return f.rule == "required-field")
-        .map(|f| return &f.field)
+        .filter(|finding| return finding.rule == "required-field")
+        .map(|finding| return &finding.field)
         .collect();
 
     assert_eq!(draft_fields, accepted_fields);

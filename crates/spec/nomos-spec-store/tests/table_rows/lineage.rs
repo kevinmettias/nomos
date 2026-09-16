@@ -8,11 +8,11 @@ use crate::stored::{AUTHORED, Blame, Segment, SpecificationStore, Stored, TABLE,
 use nomos_spec_store::{NodeRow, Table};
 
 /// One column of one row, from a query that binds nothing.
-fn One<T: rusqlite::types::FromSql>(
+fn One<Value: rusqlite::types::FromSql>(
     store: &SpecificationStore,
     sql: &str,
     blame: Blame<'_>,
-) -> T
+) -> Value
 {
     let found = store.Connection().query_row(sql, [], |row| return row.get(0));
 

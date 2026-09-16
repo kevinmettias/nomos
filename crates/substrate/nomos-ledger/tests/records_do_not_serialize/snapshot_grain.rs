@@ -1,7 +1,7 @@
 //! The second acceptance criterion: the snapshot is an artefact, not a directory.
 
 use crate::board::{
-    Claimed, Contest, Contested, Covers, DeclaredPath, Record_Writers, ReservedPath, Saved,
+    Claimed, Contest, Contested, Is_Covering, DeclaredPath, Record_Writers, ReservedPath, Saved,
     SavedBoard, Unclaimed_Copy,
 };
 use nomos_ledger::{Holder, ItemId, LedgerDocument, LedgerItem, Normalize_Path, Territory};
@@ -26,7 +26,7 @@ fn Reserved_Snapshots(item: &LedgerItem) -> BTreeSet<String>
         .iter()
         .map(|path| return Normalize_Path(path))
         .filter(|path| {
-            return Covers(ReservedPath(SNAPSHOT_DIRECTORY), DeclaredPath(path.as_str()))
+            return Is_Covering(ReservedPath(SNAPSHOT_DIRECTORY), DeclaredPath(path.as_str()))
                 && path.as_str() != SNAPSHOT_DIRECTORY;
         })
         .collect();

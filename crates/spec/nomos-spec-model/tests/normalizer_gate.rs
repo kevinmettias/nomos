@@ -66,7 +66,7 @@ fn Read(name: &str) -> String
         .unwrap_or_else(|error| panic!("the gate needs {}: {error}", path.display()));
 }
 
-fn Load<T: serde::de::DeserializeOwned>(name: &str) -> Vec<T>
+fn Load<Record: serde::de::DeserializeOwned>(name: &str) -> Vec<Record>
 {
     return serde_json::from_str(&Read(name)).expect("fixture is valid json");
 }

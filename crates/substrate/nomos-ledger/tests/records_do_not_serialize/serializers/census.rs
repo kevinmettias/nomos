@@ -7,7 +7,7 @@
 //! with two answers, so the census reads as its own file rather than as the second half of
 //! one that was already the longest here.
 
-use crate::board::{PathText, Paths_Collide, RECORD_DIRECTORY};
+use crate::board::{PathText, Is_Colliding, RECORD_DIRECTORY};
 use nomos_ledger::{LedgerItem, Normalize_Path};
 
 use super::Declared;
@@ -55,7 +55,7 @@ fn Count_Exclusion(counted: &mut Exclusions, pair: (&LedgerItem, &LedgerItem), d
     if Shared_Paths(left, right).iter().all(|path| {
         return declared
             .iter()
-            .any(|known| return Paths_Collide(PathText(known), PathText(path)));
+            .any(|known| return Is_Colliding(PathText(known), PathText(path)));
     })
     {
         counted.structural = counted.structural.saturating_add(1);
@@ -95,7 +95,7 @@ fn Broader_Of(mine: &str, right: &LedgerItem) -> Vec<String>
         .paths
         .iter()
         .filter(|theirs| return !Normalize_Path(theirs).starts_with(RECORD_DIRECTORY))
-        .filter(|theirs| return Paths_Collide(PathText(mine), PathText(theirs)))
+        .filter(|theirs| return Is_Colliding(PathText(mine), PathText(theirs)))
         .map(|theirs| return Broader(PathText(mine), PathText(theirs)))
         .collect();
 }
@@ -104,7 +104,7 @@ fn Broader_Of(mine: &str, right: &LedgerItem) -> Vec<String>
 ///
 /// An item reserving a whole crate is what a file inside it collides with, and naming the
 /// file would report the symptom. The shorter normalized spelling is the container — the
-/// same tie-break `Covers` takes the direction of a containment from.
+/// same tie-break `Is_Covering` takes the direction of a containment from.
 ///
 /// Both positions are a [`PathText`] rather than a `&str`, and the same one, because this
 /// asks a symmetric question: the answer is whichever of the two is broader, so a caller

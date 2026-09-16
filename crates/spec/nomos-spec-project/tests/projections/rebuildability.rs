@@ -58,7 +58,7 @@ const SEEDED_BY_RECORDS: &[Content] = &[
 /// So the missing half is data-dependent and cannot be read off a profile at all. Whether a
 /// filter selects anything is a question about a store, which is why requirability is
 /// established by rendering and this is only the cheap screen in front of it.
-fn Reaches_Only_Seeded_Content(profile: &Profile) -> bool
+fn Is_Reaching_Only_Seeded_Content(profile: &Profile) -> bool
 {
     return profile
         .sections
@@ -180,7 +180,7 @@ fn Screen_The_Shipped_Profiles(store: &SpecificationStore) -> Outcomes
 /// Whether one profile renders, and whether the screen said it would.
 fn Sort_One_Profile(store: &SpecificationStore, profile: &Profile, screened: &mut Outcomes)
 {
-    let reaches = Reaches_Only_Seeded_Content(profile);
+    let reaches = Is_Reaching_Only_Seeded_Content(profile);
     let rendered = Build(store, profile).is_ok();
 
     assert!(
@@ -247,14 +247,14 @@ fn Assert_The_Rendering_Profiles_Are_The_Pinned_Set(screened: &Outcomes)
 }
 
 /// The profiles the screen passes and the build still refuses: the witnesses to
-/// `Reaches_Only_Seeded_Content` being necessary and not sufficient. An empty set would mean
+/// `Is_Reaching_Only_Seeded_Content` being necessary and not sufficient. An empty set would mean
 /// the screen had silently become the answer.
 fn Assert_The_Witnesses_Are_The_Pinned_Pair(screened: &Outcomes)
 {
     assert_eq!(
         screened.screened_but_refuses,
         Named(&["feature-design", "release-specification"]),
-        "the witnesses to Reaches_Only_Seeded_Content being insufficient moved. Each reaches \
+        "the witnesses to Is_Reaching_Only_Seeded_Content being insufficient moved. Each reaches \
          only seeded kinds and still refuses, because it filters nodes on a kind only a corpus \
          has. An empty set here would mean the screen had silently become the answer."
     );
@@ -311,7 +311,7 @@ fn Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store()
         let profile = Profile_Named(id);
 
         assert!(
-            Reaches_Only_Seeded_Content(&profile),
+            Is_Reaching_Only_Seeded_Content(&profile),
             "{id} is required by the gate and reaches a content kind no runner can answer for"
         );
         Build(&store, &profile)

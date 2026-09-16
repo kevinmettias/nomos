@@ -398,7 +398,7 @@ pub(crate) fn Project_Onto_Records(document: &mut LedgerDocument, writers: &[Ite
 
 /// A path as this ledger's own rule reads one.
 ///
-/// Both positions of [`Paths_Collide`] and [`Broader`] carry this type, and the same one on
+/// Both positions of [`Is_Colliding`] and [`Broader`] carry this type, and the same one on
 /// purpose: exclusion is symmetric, so there is no order at a call site for a reader to get
 /// wrong and no wrong answer for a swap to reach. A bare `&str` in both positions would say
 /// there was one.
@@ -411,7 +411,7 @@ pub(crate) struct PathText<'a>(pub(crate) &'a str);
 /// Single-path territories rather than a containment check written here. `a/b` contains
 /// `a/b/c` and two spellings of one path are one path, and a second implementation of
 /// either would be a second answer waiting to disagree with `Territory::Intersect`.
-pub(crate) fn Paths_Collide(left: PathText<'_>, right: PathText<'_>) -> bool
+pub(crate) fn Is_Colliding(left: PathText<'_>, right: PathText<'_>) -> bool
 {
     return !Territory::Of_Files([left.0])
         .Intersect(&Territory::Of_Files([right.0]))
@@ -420,7 +420,7 @@ pub(crate) fn Paths_Collide(left: PathText<'_>, right: PathText<'_>) -> bool
 
 /// Whether reserving `reserved` reserves `declared` — the coarse direction, not either one.
 ///
-/// [`Paths_Collide`] answers a symmetric question, because exclusion is symmetric: an item
+/// [`Is_Colliding`] answers a symmetric question, because exclusion is symmetric: an item
 /// reserving a directory and an item reserving a file inside it exclude each other, and
 /// which of them is broader does not change that. Whether a *declared serializer* is still
 /// serializing is not that question. It asks whether anybody still reserves the coarse path
@@ -436,16 +436,16 @@ pub(crate) fn Paths_Collide(left: PathText<'_>, right: PathText<'_>) -> bool
 /// [`super::serializers::census::Shared_Paths`]
 /// already uses to name the broader of two paths. A containment check written out here would
 /// be a second answer waiting to disagree with `Territory::Intersect`.
-pub(crate) fn Covers(reserved: ReservedPath<'_>, declared: DeclaredPath<'_>) -> bool
+pub(crate) fn Is_Covering(reserved: ReservedPath<'_>, declared: DeclaredPath<'_>) -> bool
 {
-    return Paths_Collide(PathText(reserved.0), PathText(declared.0))
+    return Is_Colliding(PathText(reserved.0), PathText(declared.0))
         && Normalize_Path(reserved.0).len() <= Normalize_Path(declared.0).len();
 }
 
 /// A path an item reserves, kept distinct from a path it merely declares so that the two
-/// positions of [`Covers`] cannot be swapped at a call site.
+/// positions of [`Is_Covering`] cannot be swapped at a call site.
 ///
-/// [`Covers`] asks about one direction only — a reservation covers a declaration, never the
+/// [`Is_Covering`] asks about one direction only — a reservation covers a declaration, never the
 /// other way round — and the swap is silent: two `&str` positions accept either order and
 /// answer `false` for a question whose whole point is that it is not symmetric.
 pub(crate) struct ReservedPath<'a>(pub(crate) &'a str);

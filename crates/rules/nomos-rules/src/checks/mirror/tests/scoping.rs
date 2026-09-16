@@ -136,7 +136,7 @@ fn Assert_The_Unread_Subject_Is_Advisory(findings: &[Finding])
         "a rule that did not read a subject must not stop anybody over it: {unread:?}"
     );
     assert!(
-        !Blocks_Anything(findings),
+        !Has_A_Blocking_Finding(findings),
         "nothing may be reported as a phantom out of a file nobody read: {findings:?}"
     );
 }
@@ -231,7 +231,7 @@ fn Test_With_No_Provider_Admitted_No_Claim_Should_Be_A_Phantom()
     assert_eq!(unread.gate, GateCategory::Advisory);
     assert!(!unread.Can_Fail_A_Build());
     assert!(
-        !Blocks_Anything(&findings),
+        !Has_A_Blocking_Finding(&findings),
         "with no provider admitted there is no index for a name to be absent from, so \
          nothing may be called a phantom: {findings:?}"
     );

@@ -99,7 +99,7 @@ fn Store_Volumes(store: &mut SpecificationStore, directory: &Path) -> VolumesSto
 
     for path in Volumes(directory)
     {
-        let carries = Store_Volume(store, &path);
+        let carries = Is_A_Volume_With_Tables(store, &path);
 
         volumes = volumes.saturating_add(1);
         with_tables = with_tables.saturating_add(u32::from(carries));
@@ -111,8 +111,8 @@ fn Store_Volumes(store: &mut SpecificationStore, directory: &Path) -> VolumesSto
     };
 }
 
-/// One volume, stored, and whether it carries a table at all.
-fn Store_Volume(store: &mut SpecificationStore, path: &Path) -> bool
+/// Stores one volume, and reports whether it carries a table at all.
+fn Is_A_Volume_With_Tables(store: &mut SpecificationStore, path: &Path) -> bool
 {
     let markdown = std::fs::read_to_string(path)
         // `Volumes` enumerated this path moments ago, so a read failure is the corpus changing
@@ -200,7 +200,7 @@ fn Test_The_Canonical_Domain_Model_Should_Answer_30_And_28()
     );
     let mut store =
         SpecificationStore::In_Memory().expect("In_Memory is this measurement's own store");
-    Store_Volume(&mut store, &path);
+    Is_A_Volume_With_Tables(&mut store, &path);
     let (block_uid, table_ordinal): (i64, u32) = Two(
         &store,
         "SELECT source_block_uid, table_ordinal FROM source_table_rows

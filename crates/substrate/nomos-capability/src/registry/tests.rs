@@ -172,7 +172,7 @@ fn Test_Every_Absence_Should_Report_As_A_Missing_Capability_Today()
 /// second strength does not exist.
 /// A registry that has declared `Contract()` and can answer it via `Offer()`, alongside the
 /// provider these tests ask for and never offer, and the provider that actually answers.
-struct Registry_With_One_Offer
+struct RegistryWithOneOffer
 {
     registry: Registry,
     absent: ProviderId,
@@ -182,7 +182,7 @@ struct Registry_With_One_Offer
 /// A registry that has declared `Contract()` and can answer it via `Offer()` — but not
 /// via the `absent` provider these tests ask for and never offer. Returns the registry,
 /// `absent`, and who actually answers, since every assertion below needs at least one.
-fn Registry_With_One_Offer() -> Registry_With_One_Offer
+fn RegistryWithOneOffer() -> RegistryWithOneOffer
 {
     let mut registry = Registry::New();
     registry.Declare(Contract()).expect("declared once");
@@ -191,7 +191,7 @@ fn Registry_With_One_Offer() -> Registry_With_One_Offer
     let absent = ProviderId::New("nomos.test.absent");
     let answering = Offer().provider;
 
-    return Registry_With_One_Offer {
+    return RegistryWithOneOffer {
         registry,
         absent,
         answering,
@@ -244,7 +244,7 @@ fn Assert_Requirement_Refuses(via_requirement: RequiredResolution, required: Pro
 #[test]
 fn Test_A_Required_Naming_Should_Refuse_What_A_Preferred_Naming_Falls_Back_To()
 {
-    let fixture = Registry_With_One_Offer();
+    let fixture = RegistryWithOneOffer();
 
     let via_preference = fixture.registry.Resolve(&Need().Preferring(fixture.absent.clone()));
     let via_requirement = fixture.registry.Resolve_Requiring(&Need(), &fixture.absent);

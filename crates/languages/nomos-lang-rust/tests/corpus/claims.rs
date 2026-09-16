@@ -245,7 +245,7 @@ fn Has_Misplaced_Inner_Documentation_Comment(source: &str) -> bool
 
     for line in source.lines()
     {
-        if Line_Is_Misplaced_Inner_Documentation_Comment(line, &mut seen_item)
+        if Is_Misplaced_Inner_Documentation_Comment(line, &mut seen_item)
         {
             return true;
         }
@@ -257,7 +257,7 @@ fn Has_Misplaced_Inner_Documentation_Comment(source: &str) -> bool
 /// One line's contribution to the scan: whether it is itself an inner doc comment or
 /// attribute arriving after a real item already began the file, and — if it is neither —
 /// whether it is the item that would make a later one misplaced.
-fn Line_Is_Misplaced_Inner_Documentation_Comment(line: &str, seen_item: &mut bool) -> bool
+fn Is_Misplaced_Inner_Documentation_Comment(line: &str, seen_item: &mut bool) -> bool
 {
     let trimmed = line.trim_start();
 

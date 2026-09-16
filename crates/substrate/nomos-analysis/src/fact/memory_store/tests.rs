@@ -111,14 +111,14 @@ impl DependencyPropagation for QueueOrderPropagation
 
 /// The store a test drives, and the two keys it holds: `upstream`, which the report's
 /// cause names directly, and `derived`, which only the dependency edge reaches.
-struct Two_Fact_Store
+struct TwoFactStore
 {
     store: MemoryFactStore,
     upstream: FactKey,
     derived: FactKey,
 }
 
-fn Two_Fact_Store(propagation: Box<dyn DependencyPropagation>) -> Two_Fact_Store
+fn TwoFactStore(propagation: Box<dyn DependencyPropagation>) -> TwoFactStore
 {
     let upstream = Key_For(1);
     // A different subject than `upstream`, so `derived` is reached only by following
@@ -129,7 +129,7 @@ fn Two_Fact_Store(propagation: Box<dyn DependencyPropagation>) -> Two_Fact_Store
     let derived_fact = Fact_For(&derived, GenerationId::INITIAL);
     let store = Store_With_Edge(propagation, &upstream, derived_fact);
 
-    return Two_Fact_Store {
+    return TwoFactStore {
         store,
         upstream,
         derived,
@@ -165,8 +165,8 @@ fn Test_An_Alternate_Propagation_Implementation_Should_Produce_The_Same_Report()
 {
     use crate::propagation::LocalGraphPropagation;
 
-    let mut default_fixture = Two_Fact_Store(Box::new(LocalGraphPropagation));
-    let mut alternate_fixture = Two_Fact_Store(Box::new(QueueOrderPropagation));
+    let mut default_fixture = TwoFactStore(Box::new(LocalGraphPropagation));
+    let mut alternate_fixture = TwoFactStore(Box::new(QueueOrderPropagation));
     let next = GenerationId::INITIAL.Next();
     let cause = GenerationCause::SubjectChanged {
         subject: default_fixture.upstream.subject,

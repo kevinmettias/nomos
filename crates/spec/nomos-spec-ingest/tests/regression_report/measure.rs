@@ -96,11 +96,11 @@ fn Members_Figure(key: &str, report: &RegressionReport) -> Option<u32>
         "members.gone" => Some(Members_Whose_Fate(report, |fate| return *fate == Fate::Gone)),
         "members.hollowed_by_a_declared_pattern" =>
         {
-            Some(Members_Whose_Fate(report, Hollowed_By_A_Declared_Pattern))
+            Some(Members_Whose_Fate(report, Is_Hollowed_By_A_Declared_Pattern))
         }
         "members.hollowed_by_an_undeclared_template" =>
         {
-            Some(Members_Whose_Fate(report, Hollowed_By_An_Undeclared_Template))
+            Some(Members_Whose_Fate(report, Is_Hollowed_By_An_Undeclared_Template))
         }
         _ => None,
     };
@@ -114,7 +114,7 @@ fn Members_Whose_Fate(report: &RegressionReport, wanted: impl Fn(&Fate) -> bool)
     return Count(matched.count());
 }
 
-fn Hollowed_By_A_Declared_Pattern(fate: &Fate) -> bool
+fn Is_Hollowed_By_A_Declared_Pattern(fate: &Fate) -> bool
 {
     return matches!(
         fate,
@@ -127,7 +127,7 @@ fn Hollowed_By_A_Declared_Pattern(fate: &Fate) -> bool
     );
 }
 
-fn Hollowed_By_An_Undeclared_Template(fate: &Fate) -> bool
+fn Is_Hollowed_By_An_Undeclared_Template(fate: &Fate) -> bool
 {
     return matches!(
         fate,

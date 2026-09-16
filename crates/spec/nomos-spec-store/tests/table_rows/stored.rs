@@ -44,11 +44,11 @@ pub(crate) fn Census(store: &SpecificationStore, scope: RowScope) -> RowCensus
 pub(crate) struct Blame<'a>(pub(crate) &'a str);
 
 /// Two columns of one row, which is what it takes to address a table row.
-pub(crate) fn Two<A: rusqlite::types::FromSql, B: rusqlite::types::FromSql>(
+pub(crate) fn Two<First: rusqlite::types::FromSql, Second: rusqlite::types::FromSql>(
     store: &SpecificationStore,
     sql: &str,
     blame: Blame<'_>,
-) -> (A, B)
+) -> (First, Second)
 {
     let found = store.Connection().query_row(sql, [], |row| return Ok((row.get(0)?, row.get(1)?)));
 

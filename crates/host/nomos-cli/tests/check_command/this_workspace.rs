@@ -31,7 +31,7 @@ const FEWEST_FILES_IN_THIS_WORKSPACE: usize = 150;
 /// were last emptied together.
 ///
 /// Empty today, and that is the assertion rather than the absence of one: with no entry,
-/// [`Only_Accepted_Findings_Are_Blocking`] means this workspace's own tree carries no
+/// [`Has_No_Unaccepted_Blocking_Findings`] means this workspace's own tree carries no
 /// `[Blocking]` finding at all, which is strictly stronger than the two-named version it
 /// replaces.
 ///
@@ -55,7 +55,7 @@ const ACCEPTED_BLOCKING_FINDINGS: &[&str] = &[];
 
 /// Whether `output` carries no `[Blocking]` line other than the ones
 /// [`ACCEPTED_BLOCKING_FINDINGS`] names.
-fn Only_Accepted_Findings_Are_Blocking(output: &str) -> bool
+fn Has_No_Unaccepted_Blocking_Findings(output: &str) -> bool
 {
     return output
         .lines()
@@ -104,7 +104,7 @@ fn Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build()
         root.display()
     );
     assert!(
-        Only_Accepted_Findings_Are_Blocking(&output),
+        Has_No_Unaccepted_Blocking_Findings(&output),
         "a Blocking finding exists that ACCEPTED_BLOCKING_FINDINGS does not name -- a real, \
          new regression, or an accepted finding whose exact rendered text drifted: {output}"
     );

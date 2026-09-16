@@ -1,8 +1,8 @@
 //! What still serializes them, named rather than assumed.
 
 use crate::board::{
-    Constructed_Writers, Covers, CONTESTING_WRITERS, DeclaredPath, Is_Open, Only_Records,
-    PathText, Paths_Collide, RECORD_DIRECTORY, Record_Writers, ReservedPath, Unclaimed_Copy,
+    Constructed_Writers, Is_Covering, CONTESTING_WRITERS, DeclaredPath, Is_Open, Only_Records,
+    PathText, Is_Colliding, RECORD_DIRECTORY, Record_Writers, ReservedPath, Unclaimed_Copy,
     Writer_Ids,
 };
 use nomos_ledger::{ItemId, LedgerDocument, LedgerItem, Normalize_Path, Territory};
@@ -144,7 +144,7 @@ fn Test_Every_Universal_Reservation_Should_Be_Declared()
 /// comes out in the commit that earned it rather than surviving as an explanation for a
 /// coupling nobody has any more.
 ///
-/// Counted with [`Covers`] and not with [`Paths_Collide`]. See that function for why the
+/// Counted with [`Is_Covering`] and not with [`Is_Colliding`]. See that function for why the
 /// symmetric reading made the register unemptiable, which is the defect `OD-LEDGER-011`
 /// found while closing.
 #[test]
@@ -177,7 +177,7 @@ fn Reserving(writers: &[&LedgerItem], declared: &str) -> usize
                 .territory
                 .paths
                 .iter()
-                .any(|path| return Covers(ReservedPath(path.as_str()), DeclaredPath(declared)));
+                .any(|path| return Is_Covering(ReservedPath(path.as_str()), DeclaredPath(declared)));
         })
         .count();
 }
@@ -247,7 +247,7 @@ fn Undeclared_Serializers(document: &LedgerDocument) -> BTreeSet<String>
         .territory
         .paths
         .iter()
-        .filter(|candidate| return Serializes(candidate, &writers, &declared))
+        .filter(|candidate| return Is_Serialized(candidate, &writers, &declared))
         .map(|candidate| return Normalize_Path(candidate))
         .collect();
 }
@@ -266,7 +266,7 @@ fn First_Writer_If_Comparable<'a>(writers: &[&'a LedgerItem]) -> Option<&'a Ledg
 }
 
 /// Whether every record writer reserves this path, and nobody declared it.
-fn Serializes(candidate: &str, writers: &[&LedgerItem], declared: &[&str]) -> bool
+fn Is_Serialized(candidate: &str, writers: &[&LedgerItem], declared: &[&str]) -> bool
 {
     if Normalize_Path(candidate).starts_with(RECORD_DIRECTORY)
     {
@@ -274,7 +274,7 @@ fn Serializes(candidate: &str, writers: &[&LedgerItem], declared: &[&str]) -> bo
     }
     if declared
         .iter()
-        .any(|known| return Paths_Collide(PathText(known), PathText(candidate)))
+        .any(|known| return Is_Colliding(PathText(known), PathText(candidate)))
     {
         return false;
     }
@@ -284,7 +284,7 @@ fn Serializes(candidate: &str, writers: &[&LedgerItem], declared: &[&str]) -> bo
             .territory
             .paths
             .iter()
-            .any(|path| return Paths_Collide(PathText(candidate), PathText(path)));
+            .any(|path| return Is_Colliding(PathText(candidate), PathText(path)));
     });
 }
 

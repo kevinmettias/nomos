@@ -96,7 +96,7 @@ fn Test_An_Empty_Store_Should_Not_Report_A_Clean_Tree()
         "a rule that read nothing must not stop anybody: {findings:?}"
     );
     assert!(
-        !Blocks_Anything(&findings),
+        !Has_A_Blocking_Finding(&findings),
         "nothing may be reported as a phantom out of an index that was never built"
     );
 }

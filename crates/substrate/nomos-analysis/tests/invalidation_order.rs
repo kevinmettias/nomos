@@ -121,7 +121,7 @@ fn Subject_Changed(store: &mut MemoryFactStore, subject: SubjectId) -> Invalidat
 }
 
 /// The four-node chain `a` → `b` → `c` → `d` in a fresh store, alongside its four keys.
-struct Four_Long_Chain
+struct FourLongChain
 {
     store: MemoryFactStore,
     a: FactKey,
@@ -139,7 +139,7 @@ struct Four_Long_Chain
 /// incidental to this graph's shape, and `Condensation_Of` is computed fresh from the
 /// store's own dependency edges among the invalidated keys, so it does not vary with where
 /// the walk entered.
-fn Four_Long_Chain() -> Four_Long_Chain
+fn FourLongChain() -> FourLongChain
 {
     /// The subject seed of each node, in the order the chain reads: `a` reads `b` reads `c`
     /// reads `d`. Only distinctness matters — no assertion compares a seed's value.
@@ -159,13 +159,13 @@ fn Four_Long_Chain() -> Four_Long_Chain
     Depends_On(&mut store, &b, &[&c]);
     Depends_On(&mut store, &a, &[&b]);
 
-    return Four_Long_Chain { store, a, b, c, d };
+    return FourLongChain { store, a, b, c, d };
 }
 
 #[test]
 fn Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_Order()
 {
-    let mut fixture = Four_Long_Chain();
+    let mut fixture = FourLongChain();
 
     let report = Subject_Changed(&mut fixture.store, fixture.d.subject);
     assert_eq!(report.direct, vec![fixture.d.clone()]);
@@ -187,7 +187,7 @@ fn Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_
 }
 
 /// The four-node cycle `w` → `x` → `y` → `z` → `w` in a fresh store, alongside its four keys.
-struct Four_Cycle
+struct FourCycle
 {
     store: MemoryFactStore,
     w: FactKey,
@@ -202,7 +202,7 @@ struct Four_Cycle
 /// A cycle is a shape of the dependency graph, not a fault the store refuses: it must
 /// condense into exactly one group naming all four, with no claim of a total order among
 /// them.
-fn Four_Cycle() -> Four_Cycle
+fn FourCycle() -> FourCycle
 {
     /// The subject seed of each node, in the order the cycle reads. Only distinctness
     /// matters — no assertion compares a seed's value.
@@ -222,13 +222,13 @@ fn Four_Cycle() -> Four_Cycle
     Depends_On(&mut store, &y, &[&z]);
     Depends_On(&mut store, &z, &[&w]);
 
-    return Four_Cycle { store, w, x, y, z };
+    return FourCycle { store, w, x, y, z };
 }
 
 #[test]
 fn Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four()
 {
-    let mut fixture = Four_Cycle();
+    let mut fixture = FourCycle();
 
     let report = Subject_Changed(&mut fixture.store, fixture.w.subject);
     assert_eq!(report.direct, vec![fixture.w.clone()]);
@@ -259,7 +259,7 @@ fn Assert_Names_Exactly(group: &RematerializationGroup, keys: &[&FactKey])
 
 /// The chain-through-a-cycle fixture: `p` reads `q`, `q` and `r` read each other, and `r`
 /// also reads `s`.
-struct Chain_Through_Cycle
+struct ChainThroughCycle
 {
     store: MemoryFactStore,
     p: FactKey,
@@ -276,7 +276,7 @@ struct Chain_Through_Cycle
 /// `Condensation_Of` must preserve both: the acyclic ordering around the cycle (S before the
 /// cycle, the cycle before P), and the mutual-dependency group inside it (Q and R named
 /// together, with no order claimed between them).
-fn Chain_Through_Cycle() -> Chain_Through_Cycle
+fn ChainThroughCycle() -> ChainThroughCycle
 {
     /// The subject seed of each node, in the order the chain reads. Only distinctness
     /// matters — no assertion compares a seed's value.
@@ -296,7 +296,7 @@ fn Chain_Through_Cycle() -> Chain_Through_Cycle
     Depends_On(&mut store, &q, &[&r]);
     Depends_On(&mut store, &p, &[&q]);
 
-    return Chain_Through_Cycle { store, p, q, r, s };
+    return ChainThroughCycle { store, p, q, r, s };
 }
 
 /// Asserts `groups` is exactly three, in order: `before` alone, `cycle`'s two members
@@ -329,7 +329,7 @@ fn Assert_Chain_Around_Cycle(
 #[test]
 fn Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group()
 {
-    let mut fixture = Chain_Through_Cycle();
+    let mut fixture = ChainThroughCycle();
 
     let report = Subject_Changed(&mut fixture.store, fixture.s.subject);
     assert_eq!(report.direct, vec![fixture.s.clone()]);
@@ -377,7 +377,7 @@ fn Deep_Chain_Keys(depth: u32) -> Vec<FactKey>
 
 /// The two ends of a chain built from a key list: the root it starts from, and the leaf it
 /// reaches last.
-struct Chain_Ends
+struct ChainEnds
 {
     root: FactKey,
     leaf: FactKey,
@@ -385,7 +385,7 @@ struct Chain_Ends
 
 /// The root (last) and leaf (first) of a chain built from `keys` — panics if `keys` is
 /// empty, which only a zero depth could produce.
-fn Chain_Ends(keys: &[FactKey]) -> Chain_Ends
+fn ChainEnds(keys: &[FactKey]) -> ChainEnds
 {
     let Some(root) = keys.last().cloned()
     else
@@ -398,7 +398,7 @@ fn Chain_Ends(keys: &[FactKey]) -> Chain_Ends
         panic!("DEPTH is nonzero");
     };
 
-    return Chain_Ends { root, leaf };
+    return ChainEnds { root, leaf };
 }
 
 /// Materializes `keys` as one chain, root first, each fact depending on the next so its
@@ -432,7 +432,7 @@ fn Assert_All_Singletons(groups: &[RematerializationGroup])
 
 /// A chain of `depth` facts held in a fresh store, alongside the root and leaf keys that
 /// bound it.
-struct Deep_Chain
+struct DeepChain
 {
     store: MemoryFactStore,
     root: FactKey,
@@ -440,15 +440,15 @@ struct Deep_Chain
 }
 
 /// `depth` fact keys chained root-to-leaf in a fresh store, alongside the root and leaf
-/// keys — merges [`Deep_Chain_Keys`], [`Chain_Ends`] and [`Deep_Chain_Store`] into the one
+/// keys — merges [`Deep_Chain_Keys`], [`ChainEnds`] and [`Deep_Chain_Store`] into the one
 /// fixture the deep-chain test asserts over.
-fn Deep_Chain(depth: u32) -> Deep_Chain
+fn DeepChain(depth: u32) -> DeepChain
 {
     let keys = Deep_Chain_Keys(depth);
-    let ends = Chain_Ends(&keys);
+    let ends = ChainEnds(&keys);
     let store = Deep_Chain_Store(&keys, &ends.root);
 
-    return Deep_Chain {
+    return DeepChain {
         store,
         root: ends.root,
         leaf: ends.leaf,
@@ -456,7 +456,7 @@ fn Deep_Chain(depth: u32) -> Deep_Chain
 }
 
 /// Asserts `groups`' first group is `root` alone and its last is `leaf` alone — the root end
-/// and the leaf end of the chain [`Deep_Chain`] built.
+/// and the leaf end of the chain [`DeepChain`] built.
 fn Assert_Chain_Ends(groups: &[RematerializationGroup], root: FactKey, leaf: FactKey)
 {
     let Some(first_group) = groups.first()
@@ -477,7 +477,7 @@ fn Assert_Chain_Ends(groups: &[RematerializationGroup], root: FactKey, leaf: Fac
 fn Test_A_Chain_One_Hundred_Thousand_Deep_Should_Condense_Without_Overflowing_The_Stack()
 {
     const DEPTH: u32 = 100_000;
-    let mut fixture = Deep_Chain(DEPTH);
+    let mut fixture = DeepChain(DEPTH);
 
     let report = Subject_Changed(&mut fixture.store, fixture.root.subject);
     assert_eq!(report.Invalidated(), DEPTH as usize, "the deep chain did not fully invalidate");

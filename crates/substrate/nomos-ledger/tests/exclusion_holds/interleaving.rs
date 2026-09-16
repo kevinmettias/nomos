@@ -61,7 +61,7 @@ impl Gate
     }
 
     /// Waits up to `limit`, and reports whether the gate opened within it.
-    fn Opened_Within(&self, limit: Duration) -> bool
+    fn Has_Opened_Within(&self, limit: Duration) -> bool
     {
         let open = self.open.lock().expect("the harness never panics under this lock");
         let (_held, timing) = self
@@ -119,7 +119,7 @@ impl Interleaving
         *held = Some(std::thread::current().id());
     }
 
-    fn Holds(&self, path: &Path) -> bool
+    fn Is_Held_By_This_Thread(&self, path: &Path) -> bool
     {
         if path != self.ledger
         {
@@ -133,7 +133,7 @@ impl Interleaving
 
     /// Whether the hold ever happened. The harness asserts this: a run in which the seam
     /// never fired proves nothing about interleaving, however green it is.
-    fn Stopped(&self) -> bool
+    fn Has_Stopped(&self) -> bool
     {
         return self.stopped.load(Ordering::SeqCst);
     }
@@ -155,7 +155,7 @@ impl FileSystem for &Interleaving
 
         // After the read, never before it. The point of the hold is that this thread is
         // carrying a snapshot of the document that somebody else is about to change.
-        if self.Holds(path) && !self.stopped.swap(true, Ordering::SeqCst)
+        if self.Is_Held_By_This_Thread(path) && !self.stopped.swap(true, Ordering::SeqCst)
         {
             self.read.Open();
             self.resume.Wait();
@@ -224,7 +224,7 @@ pub(crate) fn Two_Writers(
 
     Interleaved(over, first, second);
     assert!(
-        filesystem.Stopped(),
+        filesystem.Has_Stopped(),
         "the seam never fired, so nothing was interleaved and this run proves nothing"
     );
 
@@ -269,7 +269,7 @@ pub(crate) fn Interleaved(
             over.finished.Open();
         });
 
-        over.finished.Opened_Within(SECOND_WRITER_LIMIT);
+        over.finished.Has_Opened_Within(SECOND_WRITER_LIMIT);
         over.shared.resume.Open();
     });
 }

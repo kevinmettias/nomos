@@ -148,13 +148,13 @@ fn Test_Handle_Work_Claim_Should_Grant_A_Reservation_Whose_Expiry_Is_A_Real_Syst
     let after = nomos_composer_std::CLOCK.Now();
 
     let _ignored = std::fs::remove_dir_all(&directory);
-    Assert_Lease_Granted(response, id, Lease_Window { lease, before, after });
+    Assert_Lease_Granted(response, id, LeaseWindow { lease, before, after });
 }
 
 /// One claim's clock window: the lease the caller asked for and the two real
 /// `nomos_composer_std::CLOCK` readings that bracketed the call. Bundled so the granted
 /// expiry is checked against a window rather than an exact, flaky-by-construction instant.
-struct Lease_Window
+struct LeaseWindow
 {
     lease: Duration,
     before: nomos_platform::Timestamp,
@@ -163,7 +163,7 @@ struct Lease_Window
 
 /// `granted` asserted to be the reservation `id`'s own claim grants, expiring one
 /// `window.lease` after the real clock reading `window` reports.
-fn Assert_Lease_Granted(granted: nomos_api::ReservationOutcomeResponse, id: &str, window: Lease_Window)
+fn Assert_Lease_Granted(granted: nomos_api::ReservationOutcomeResponse, id: &str, window: LeaseWindow)
 {
     let nomos_api::ReservationOutcomeResponse::Reserved { reservation } = granted
     else

@@ -261,7 +261,7 @@ fn Judged_In(world: &World, sources: &[SourceFile]) -> Vec<Finding>
 }
 
 /// Whether anything in a run was called a phantom, which is the only verdict that blocks.
-fn Blocks_Anything(findings: &[Finding]) -> bool
+fn Has_A_Blocking_Finding(findings: &[Finding]) -> bool
 {
     return findings
         .iter()

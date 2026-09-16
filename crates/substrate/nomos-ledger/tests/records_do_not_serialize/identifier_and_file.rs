@@ -1,7 +1,7 @@
 //! OD-LEDGER-016: the identifier and the file it names are one record.
 
 use crate::board::{
-    Contest, Contested, PathText, Paths_Collide, RECORD_DIRECTORY, Repository_Root,
+    Contest, Contested, PathText, Is_Colliding, RECORD_DIRECTORY, Repository_Root,
     Two_Record_Writers, TwoWriters,
 };
 use nomos_ledger::{ClaimRefusal, Territory};
@@ -139,7 +139,7 @@ fn Test_Every_Record_On_Disk_Should_Be_One_Subject_With_Its_Identifier()
         .filter(|(identifier, path)| {
             let reserved = format!("{RECORD_DIRECTORY}/{identifier}");
 
-            return !Paths_Collide(PathText(&reserved), PathText(path.as_str()));
+            return !Is_Colliding(PathText(&reserved), PathText(path.as_str()));
         })
         .map(|(identifier, path)| return format!("{identifier} != {path}"))
         .collect();

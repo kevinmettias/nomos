@@ -146,7 +146,7 @@ fn Test_Render_Plan_Should_Report_Every_Rule_A_Check_Run_Composes()
 /// accepted rather than fixed.
 ///
 /// Empty today, and that is the assertion rather than the absence of one: with no entry,
-/// [`Only_Accepted_Findings_Are_Blocking`] means this workspace's own tree carries no
+/// [`Has_No_Unaccepted_Blocking_Findings`] means this workspace's own tree carries no
 /// `[Blocking]` finding at all, which is strictly stronger than the two-named version it
 /// replaces.
 ///
@@ -170,7 +170,7 @@ const ACCEPTED_BLOCKING_FINDINGS: &[&str] = &[];
 
 /// Whether `rendered` carries no `[Blocking]` line other than the ones
 /// [`ACCEPTED_BLOCKING_FINDINGS`] names.
-fn Only_Accepted_Findings_Are_Blocking(rendered: &str) -> bool
+fn Has_No_Unaccepted_Blocking_Findings(rendered: &str) -> bool
 {
     return rendered
         .lines()
@@ -203,7 +203,7 @@ fn Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_
         summary.output
     );
     assert!(
-        Only_Accepted_Findings_Are_Blocking(&summary.output),
+        Has_No_Unaccepted_Blocking_Findings(&summary.output),
         "a Blocking finding exists that ACCEPTED_BLOCKING_FINDINGS does not name -- a real, \
          new regression, or an accepted finding whose exact rendered text drifted: {}",
         summary.output
@@ -223,7 +223,7 @@ fn Test_Read_Source_Should_Underlie_A_Real_Runs_RunId_Report()
     let summary = Run_Over_This_Tree(Invocation::Run(command));
 
     assert_eq!(summary.code, ExitCode::Ok, "{}", summary.output);
-    assert!(Only_Accepted_Findings_Are_Blocking(&summary.output), "{}", summary.output);
+    assert!(Has_No_Unaccepted_Blocking_Findings(&summary.output), "{}", summary.output);
     let run_line = summary.output.lines().find(|line| line.starts_with("run: ")).unwrap_or_else(|| panic!("no `run: ` line in: {}", summary.output));
     let hex = run_line.trim_start_matches("run: ");
     assert_eq!(

@@ -169,7 +169,7 @@ pub(crate) struct TableHeading<'a>(pub(crate) &'a str);
 ///
 /// Named rather than written into the condition below, because `Table_Rows` is a pipeline:
 /// the reader would have to run it to answer the yes-or-no question being asked.
-fn Carries_Rows(block: &SourceBlock) -> bool
+fn Has_Table_Rows(block: &SourceBlock) -> bool
 {
     return !nomos_spec_model::Table_Rows(block).is_empty();
 }
@@ -186,7 +186,7 @@ pub(crate) fn Table_Under(corpus: &Path, stem: &str, heading: TableHeading<'_>) 
     for block in Segment(&markdown)
     {
         let directly_under = block.heading_path.last().map(String::as_str) == Some(heading);
-        if directly_under && Carries_Rows(&block)
+        if directly_under && Has_Table_Rows(&block)
         {
             found.push(block);
         }
