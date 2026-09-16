@@ -134,7 +134,9 @@ mod tests
         let claimed = A_Claimed_Record();
 
         let staged =
-            claimed.Stage(CANONICAL, Some("docs/records/renamed.md")).expect("stages");
+            claimed
+                .Stage(CANONICAL, Some("docs/records/renamed.md"))
+                .expect("the staged text parses as a record named D-900");
 
         assert_eq!(staged.path, "docs/records/renamed.md");
         assert_eq!(staged.markdown, CANONICAL);

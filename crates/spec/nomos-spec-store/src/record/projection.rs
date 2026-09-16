@@ -34,22 +34,27 @@ mod tests
 {
     use super::*;
 
-    fn A_Projection(source_hash: &str, projected_hash: &str) -> Projection
+    #[derive(Clone, Copy)]
+    struct SourceHash<'a>(&'a str);
+    #[derive(Clone, Copy)]
+    struct ProjectedHash<'a>(&'a str);
+
+    fn A_Projection(source_hash: SourceHash<'_>, projected_hash: ProjectedHash<'_>) -> Projection
     {
         return Projection {
             node_id: "D-1".to_owned(),
             path: "records/D-1.md".to_owned(),
             revision: "v1".to_owned(),
             markdown: "# D-1\n".to_owned(),
-            source_hash: source_hash.to_owned(),
-            projected_hash: projected_hash.to_owned(),
+            source_hash: source_hash.0.to_owned(),
+            projected_hash: projected_hash.0.to_owned(),
         };
     }
 
     #[test]
     fn Test_Is_Matching_Source_Should_Compare_The_Two_Content_Addresses()
     {
-        assert!(A_Projection("sha256:same", "sha256:same").Is_Matching_Source());
-        assert!(!A_Projection("sha256:one", "sha256:other").Is_Matching_Source());
+        assert!(A_Projection(SourceHash("sha256:same"), ProjectedHash("sha256:same")).Is_Matching_Source());
+        assert!(!A_Projection(SourceHash("sha256:one"), ProjectedHash("sha256:other")).Is_Matching_Source());
     }
 }

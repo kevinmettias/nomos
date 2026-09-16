@@ -302,6 +302,16 @@ mod tests
     use super::*;
     use nomos_spec_model::BlockKind;
 
+    /// The ordinal of the second block in the two-block pairs these tests build.
+    const SECOND_ORDINAL: u32 = 2;
+
+    /// The version the "after" front matter declares in the identity test.
+    const SECOND_VERSION: u32 = 2;
+
+    /// How many identity fields differ between the two front matters that test
+    /// compares: the title and the version.
+    const CHANGED_IDENTITY_FIELDS: usize = 2;
+
     fn Block(ordinal: u32, text: &str) -> SourceBlock
     {
         return SourceBlock {
@@ -312,26 +322,31 @@ mod tests
         };
     }
 
-    fn A_Relation(target: &str, relation: &str) -> RecordRelation
+    #[derive(Clone, Copy)]
+    struct RelationTarget<'a>(&'a str);
+    #[derive(Clone, Copy)]
+    struct RelationName<'a>(&'a str);
+
+    fn A_Relation(target: RelationTarget<'_>, relation: RelationName<'_>) -> RecordRelation
     {
         return RecordRelation {
-            target: target.to_owned(),
-            relation: relation.to_owned(),
+            target: target.0.to_owned(),
+            relation: relation.0.to_owned(),
         };
     }
 
     #[test]
     fn Test_Block_Changes_Should_Report_Additions_Removals_And_Rewordings()
     {
-        let before = vec![Block(1, "kept"), Block(2, "old text")];
-        let after = vec![Block(1, "kept"), Block(2, "new text")];
+        let before = vec![Block(1, "kept"), Block(SECOND_ORDINAL, "old text")];
+        let after = vec![Block(1, "kept"), Block(SECOND_ORDINAL, "new text")];
 
         let changes = Block_Changes(&before, &after);
 
         assert_eq!(changes.len(), 1);
         assert!(matches!(
             changes.first().expect("asserted above to contain exactly one change"),
-            BlockChange::Reworded { ordinal: 2, .. }
+            BlockChange::Reworded { ordinal: SECOND_ORDINAL, .. }
         ));
     }
 
@@ -339,11 +354,11 @@ mod tests
     fn Test_Identity_Changes_Should_Report_Only_The_Fields_That_Differ()
     {
         let before = Front_Matter("Old title", 1);
-        let after = Front_Matter("New title", 2);
+        let after = Front_Matter("New title", SECOND_VERSION);
 
         let changes = Identity_Changes(&before, &after);
 
-        assert_eq!(changes.len(), 2);
+        assert_eq!(changes.len(), CHANGED_IDENTITY_FIELDS);
         assert!(changes.iter().any(|change| return change.field == "title"));
         assert!(changes.iter().any(|change| return change.field == "version"));
     }
@@ -351,13 +366,19 @@ mod tests
     #[test]
     fn Test_Relation_Changes_Should_Report_What_Was_Added_And_Removed()
     {
-        let before = vec![A_Relation("D-2", "relates-to")];
-        let after = vec![A_Relation("D-3", "relates-to")];
+        let before = vec![A_Relation(RelationTarget("D-2"), RelationName("relates-to"))];
+        let after = vec![A_Relation(RelationTarget("D-3"), RelationName("relates-to"))];
 
         let changes = Relation_Changes(&before, &after);
 
-        assert_eq!(changes.added, vec![A_Relation("D-3", "relates-to")]);
-        assert_eq!(changes.removed, vec![A_Relation("D-2", "relates-to")]);
+        assert_eq!(
+            changes.added,
+            vec![A_Relation(RelationTarget("D-3"), RelationName("relates-to"))]
+        );
+        assert_eq!(
+            changes.removed,
+            vec![A_Relation(RelationTarget("D-2"), RelationName("relates-to"))]
+        );
     }
 
     #[test]
@@ -365,7 +386,7 @@ mod tests
     {
         let before = vec![Block(1, "the statement text")];
         let after_held = vec![Block(1, "the statement text")];
-        let after_moved = vec![Block(2, "the statement text")];
+        let after_moved = vec![Block(SECOND_ORDINAL, "the statement text")];
         let after_gone: Vec<SourceBlock> = Vec::new();
 
         assert!(matches!(
@@ -374,7 +395,7 @@ mod tests
         ));
         assert!(matches!(
             Located_Statement("the statement text", &before, &after_moved),
-            NormativeOutcome::Moved { from: 1, to: 2 }
+            NormativeOutcome::Moved { from: 1, to: SECOND_ORDINAL }
         ));
         assert!(matches!(
             Located_Statement("the statement text", &before, &after_gone),

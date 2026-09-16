@@ -79,6 +79,14 @@ mod tests
 {
     use super::*;
 
+    /// A document surrogate, for the scope that names one.
+    const A_DOCUMENT_UID: i64 = 7;
+
+    /// A block surrogate and the ordinal of the table inside it, for the scope that
+    /// names both.
+    const A_BLOCK_UID: i64 = 3;
+    const A_TABLE_ORDINAL: u32 = 2;
+
     #[test]
     fn Test_Statement_Should_Carry_The_Right_Predicate_For_Each_Scope()
     {
@@ -95,10 +103,11 @@ mod tests
     fn Test_Arguments_Should_Bind_What_Each_Scopes_Statement_Needs()
     {
         assert_eq!(RowScope::Everything.Arguments(), Vec::<i64>::new());
-        assert_eq!(RowScope::Document(7).Arguments(), vec![7]);
+        assert_eq!(RowScope::Document(A_DOCUMENT_UID).Arguments(), vec![A_DOCUMENT_UID]);
         assert_eq!(
-            RowScope::Table { block_uid: 3, table_ordinal: 2 }.Arguments(),
-            vec![3, 2]
+            RowScope::Table { block_uid: A_BLOCK_UID, table_ordinal: A_TABLE_ORDINAL }
+                .Arguments(),
+            vec![A_BLOCK_UID, i64::from(A_TABLE_ORDINAL)]
         );
     }
 }

@@ -327,11 +327,11 @@ mod inline_coverage
     #[test]
     fn Test_Accept_Submission_Should_Persist_A_Valid_Request_As_A_Node()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        Seed_Governing_Records(&mut store).expect("seeds");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
+        Seed_Governing_Records(&mut store).expect("the governing record set is compiled in, so seeding reads no file");
 
         let uid =
-            Accept_Submission(&mut store, &Minimal_Request("FR-900")).expect("accepted");
+            Accept_Submission(&mut store, &Minimal_Request("FR-900")).expect("the request names every field the form contract asks for");
 
         assert!(uid > 0);
         assert!(store.Node_Uid("FR-900").expect("looks up").is_some());

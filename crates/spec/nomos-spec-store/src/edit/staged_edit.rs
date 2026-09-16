@@ -59,7 +59,8 @@ mod tests
     #[test]
     fn Test_Preview_Should_Report_What_A_Staged_Edit_Would_Change()
     {
-        let PreviewedEdit { store: _store, preview } = Previewed_Edit_Of_D900();
+        let PreviewedEdit { store: _store, preview } = Previewed_Edit_Of_D900()
+            .expect("the fixture seeds its store and stages its edit against D-900");
 
         assert_eq!(preview.Node_Id(), "D-900");
         assert!(!preview.Has_No_Changes());

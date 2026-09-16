@@ -298,12 +298,22 @@ mod tests
     use super::*;
     use crate::Seed_Governing_Records;
 
+    /// How much of the front matter the assertion prints when it fails.
+    const FRONT_MATTER_PREVIEW: usize = 40;
+
+    /// How many documents carry `model` in their name: `a/model.md` and
+    /// `b/model.md.old`.
+    const FRAGMENT_MATCHES: usize = 2;
+
+    /// The index of the first content row, after the header and the separator.
+    const FIRST_CONTENT_ROW: usize = 2;
+
     #[test]
     fn Test_A_Record_Should_Come_Back_As_The_Bytes_It_Went_In_As()
     {
         let store = Seeded();
 
-        let documents = store.Documents_Behind("D-132", None).expect("queries");
+        let documents = store.Documents_Behind("D-132", None).expect("the query runs against this store's own tables");
 
         let first = documents.first().expect("D-132 is seeded from a document");
         assert_eq!(documents.len(), 1);
@@ -312,7 +322,7 @@ mod tests
         assert!(
             first.text.starts_with("---\nid: D-132\n"),
             "the front matter did not survive: {:?}",
-            first.text.get(..40)
+            first.text.get(..FRONT_MATTER_PREVIEW)
         );
     }
 
@@ -324,9 +334,9 @@ mod tests
     {
         let store = Seeded();
 
-        assert!(store.Node_Summary("ADR-DOC-001").expect("queries").is_some());
-        assert!(store.Documents_Behind("ADR-DOC-001", None).expect("queries").is_empty());
-        assert!(store.Node_Summary("D-9999").expect("queries").is_none());
+        assert!(store.Node_Summary("ADR-DOC-001").expect("the query runs against this store's own tables").is_some());
+        assert!(store.Documents_Behind("ADR-DOC-001", None).expect("the query runs against this store's own tables").is_empty());
+        assert!(store.Node_Summary("D-9999").expect("the query runs against this store's own tables").is_none());
     }
 
     #[test]
@@ -337,14 +347,14 @@ mod tests
         assert_eq!(
             store
                 .Documents_Behind("D-132", Some(crate::store::AUTHORED))
-                .expect("queries")
+                .expect("the query runs against this store's own tables")
                 .len(),
             1
         );
         assert!(
             store
                 .Documents_Behind("D-132", Some("v14.36"))
-                .expect("queries")
+                .expect("the query runs against this store's own tables")
                 .is_empty()
         );
     }
@@ -354,20 +364,20 @@ mod tests
     #[test]
     fn Test_Documents_Named_Should_Prefer_A_Whole_Path_Over_A_Fragment()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        store.Put_Source_Document("a/model.md", "v1", "# one\n").expect("writes");
-        store.Put_Source_Document("b/model.md.old", "v1", "# two\n").expect("writes");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
+        store.Put_Source_Document("a/model.md", "v1", "# one\n").expect("the path and revision are free, so the insert takes");
+        store.Put_Source_Document("b/model.md.old", "v1", "# two\n").expect("the path and revision are free, so the insert takes");
 
-        let (exact, tier) = store.Documents_Named("a/model.md", None).expect("queries");
+        let (exact, tier) = store.Documents_Named("a/model.md", None).expect("the query runs against this store's own tables");
         assert_eq!(exact.len(), 1);
         assert_eq!(tier, PathMatch::Exact);
 
-        let (named, tier) = store.Documents_Named("model.md", None).expect("queries");
+        let (named, tier) = store.Documents_Named("model.md", None).expect("the query runs against this store's own tables");
         assert_eq!(named.len(), 1, "the file name should not have matched the .old file");
         assert_eq!(tier, PathMatch::FileName);
 
-        let (fragment, tier) = store.Documents_Named("model", None).expect("queries");
-        assert_eq!(fragment.len(), 2);
+        let (fragment, tier) = store.Documents_Named("model", None).expect("the query runs against this store's own tables");
+        assert_eq!(fragment.len(), FRAGMENT_MATCHES);
         assert_eq!(tier, PathMatch::Fragment);
     }
 
@@ -376,7 +386,7 @@ mod tests
     {
         let store = Seeded();
 
-        let (found, _) = store.Documents_Named("no-such-document.md", None).expect("queries");
+        let (found, _) = store.Documents_Named("no-such-document.md", None).expect("the query runs against this store's own tables");
 
         assert!(found.is_empty());
     }
@@ -384,21 +394,21 @@ mod tests
     #[test]
     fn Test_Table_Lines_Should_Come_Back_Typed_And_In_Order()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
         let markdown = "# Volume\n\n| Concept | Meaning |\n| --- | --- |\n| Ledger | a claim |\n| Gate | a stop |\n";
-        let uid = store.Put_Source_Document("volume.md", "v14.36", markdown).expect("writes");
+        let uid = store.Put_Source_Document("volume.md", "v14.36", markdown).expect("the path and revision are free, so the insert takes");
         store
             .Put_Source_Blocks(uid, &nomos_spec_model::Segment(markdown))
             .expect("writes blocks");
 
-        let lines = store.Table_Lines(uid, None, None).expect("queries");
+        let lines = store.Table_Lines(uid, None, None).expect("the query runs against this store's own tables");
 
         assert_eq!(
             lines.iter().map(|line| return line.kind.as_str()).collect::<Vec<&str>>(),
             vec!["header", "separator", "content", "content"]
         );
         assert_eq!(
-            lines.get(2).map(|line| return line.cells.clone()),
+            lines.get(FIRST_CONTENT_ROW).map(|line| return line.cells.clone()),
             Some(vec!["Ledger".to_owned(), "a claim".to_owned()])
         );
         assert!(
@@ -415,7 +425,7 @@ mod tests
     #[test]
     fn Test_A_Document_With_No_Table_Should_Return_No_Lines()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
         let markdown = "# Volume\n\nprose, and not a table.\n";
         let uid = store
             .Put_Source_Document("volume.md", "v14.36", markdown)
@@ -424,13 +434,13 @@ mod tests
             .Put_Source_Blocks(uid, &nomos_spec_model::Segment(markdown))
             .expect("writes blocks");
 
-        assert!(store.Table_Lines(uid, None, None).expect("queries").is_empty());
+        assert!(store.Table_Lines(uid, None, None).expect("the query runs against this store's own tables").is_empty());
     }
 
     fn Seeded() -> SpecificationStore
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        Seed_Governing_Records(&mut store).expect("seeds");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
+        Seed_Governing_Records(&mut store).expect("the governing record set is compiled in, so seeding reads no file");
         return store;
     }
 }

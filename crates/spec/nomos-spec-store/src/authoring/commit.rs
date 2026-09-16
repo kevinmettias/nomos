@@ -348,13 +348,17 @@ mod tests
     #[test]
     fn Test_Apply_Preview_Should_Write_The_Staged_Edit_Through_The_Connection_It_Is_Given()
     {
-        let PreviewedEdit { store, preview } = Previewed_Edit_Of_D900();
+        let PreviewedEdit { store, preview } = Previewed_Edit_Of_D900()
+            .expect("the fixture seeds its store and stages its edit against D-900");
         let edited = preview.staged.markdown.clone();
 
-        let report = Apply_Preview(store.Connection(), &preview).expect("applies");
+        let report = Apply_Preview(store.Connection(), &preview)
+            .expect("the preview's target path is free in this store");
 
         assert_eq!(report.node_id, "D-900");
-        let projection = store.Record_Markdown("D-900", None).expect("projects");
+        let projection = store
+            .Record_Markdown("D-900", None)
+            .expect("Put_Record gave D-900 a declared front matter and blocks");
         assert_eq!(projection.markdown, edited);
     }
 }

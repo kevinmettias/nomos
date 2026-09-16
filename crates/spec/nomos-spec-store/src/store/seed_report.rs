@@ -457,9 +457,9 @@ mod tests
     #[test]
     fn Test_Seed_Governing_Records_Should_Report_A_Nonzero_Seed()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
 
-        let report = Seed_Governing_Records(&mut store).expect("seeds");
+        let report = Seed_Governing_Records(&mut store).expect("the governing record set is compiled in, so seeding reads no file");
 
         assert!(report.records > 0, "the embedded record set must not be empty");
         assert!(report.blocks > 0);

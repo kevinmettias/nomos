@@ -175,6 +175,9 @@ mod tests
 {
     use super::*;
 
+    /// How many tables the schema declares.
+    const DECLARED_TABLES: usize = 19;
+
     #[test]
     fn Test_Name_Should_Return_Every_Tables_Own_Snake_Case_Name()
     {
@@ -192,7 +195,7 @@ mod tests
     #[test]
     fn Test_All_Should_List_One_Entry_Per_Declared_Variant()
     {
-        assert_eq!(Table::All().len(), 19);
+        assert_eq!(Table::All().len(), DECLARED_TABLES);
         assert!(Table::All().contains(&Table::Blobs));
         assert!(Table::All().contains(&Table::SubmissionGaps));
     }

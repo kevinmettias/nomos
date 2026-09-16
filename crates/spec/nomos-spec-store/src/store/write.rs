@@ -27,14 +27,26 @@ mod tests
 {
     use super::*;
 
+    /// The middle row of the three this test collects.
+    const A_SECOND_ROW: i64 = 2;
+
+    /// The last row of the three this test collects.
+    const A_THIRD_ROW: i64 = 3;
+
+    /// A column index no row in this test carries.
+    const AN_ABSENT_COLUMN: usize = 9;
+
     #[test]
     fn Test_Collected_Rows_Should_Gather_Every_Row_Or_Stop_At_The_First_Failure()
     {
-        let rows: Vec<rusqlite::Result<i64>> = vec![Ok(1), Ok(2), Ok(3)];
-        assert_eq!(Collected_Rows(rows.into_iter()).expect("all ok"), vec![1, 2, 3]);
+        let rows: Vec<rusqlite::Result<i64>> = vec![Ok(1), Ok(A_SECOND_ROW), Ok(A_THIRD_ROW)];
+        assert_eq!(
+            Collected_Rows(rows.into_iter()).expect("all ok"),
+            vec![1, A_SECOND_ROW, A_THIRD_ROW]
+        );
 
         let with_failure: Vec<rusqlite::Result<i64>> =
-            vec![Ok(1), Err(rusqlite::Error::InvalidColumnIndex(9)), Ok(3)];
+            vec![Ok(1), Err(rusqlite::Error::InvalidColumnIndex(AN_ABSENT_COLUMN)), Ok(A_THIRD_ROW)];
         assert!(Collected_Rows(with_failure.into_iter()).is_err());
     }
 }

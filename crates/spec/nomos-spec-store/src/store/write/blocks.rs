@@ -210,7 +210,7 @@ mod tests
     #[test]
     fn Test_Write_Source_Blocks_Should_Write_Every_Block_And_Its_Table_Rows()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
         let markdown = "# Title\n\n| A | B |\n| --- | --- |\n| 1 | 2 |\n";
         let document_uid = Write_Source_Document(
             store.Connection(),
@@ -221,14 +221,15 @@ mod tests
         .expect("writes document");
         let blocks = Segment(markdown);
 
-        let written = Write_Source_Blocks(store.Connection(), document_uid, &blocks).expect("writes");
+        let written = Write_Source_Blocks(store.Connection(), document_uid, &blocks)
+            .expect("the document row exists, so its blocks and rows can be written");
 
         assert_eq!(written, blocks.len());
 
         let rows: u32 = store
             .Connection()
             .query_row("SELECT count(*) FROM source_table_rows", [], |row| return row.get(0))
-            .expect("counts");
+            .expect("the count runs against source_table_rows in this store");
         assert!(rows > 0, "the table's rows must be written alongside the block");
     }
 }

@@ -39,26 +39,34 @@ mod tests
     use super::*;
     use rusqlite::Connection;
 
+    /// The first column's value in the two-column row this test reads.
+    const FIRST_COLUMN: i64 = 7;
+
+    /// The three values the second row carries, in the order the SELECT names them.
+    const FIRST_OF_THREE: i64 = 10;
+    const SECOND_OF_THREE: i64 = 20;
+    const THIRD_OF_THREE: i64 = 30;
+
     #[test]
     fn Test_Of_Should_Wrap_A_Row_Starting_Before_Its_First_Column()
     {
-        let connection = Connection::open_in_memory().expect("opens");
+        let connection = Connection::open_in_memory().expect("Connection::open_in_memory builds its own schema, so no file is opened");
 
         connection
             .query_row("SELECT 7, 'seven'", [], |row| {
                 let mut columns = Columns::Of(row);
                 let number: i64 = columns.Next()?;
 
-                assert_eq!(number, 7, "Of should start reading at the row's first column");
+                assert_eq!(number, FIRST_COLUMN, "Of should start reading at the row's first column");
                 return Ok(());
             })
-            .expect("reads");
+            .expect("the SELECT names the columns the closure reads");
     }
 
     #[test]
     fn Test_Next_Should_Advance_Past_Each_Column_It_Reads()
     {
-        let connection = Connection::open_in_memory().expect("opens");
+        let connection = Connection::open_in_memory().expect("Connection::open_in_memory builds its own schema, so no file is opened");
 
         connection
             .query_row("SELECT 10, 20, 30", [], |row| {
@@ -67,9 +75,12 @@ mod tests
                 let second: i64 = columns.Next()?;
                 let third: i64 = columns.Next()?;
 
-                assert_eq!((first, second, third), (10, 20, 30));
+                assert_eq!(
+                    (first, second, third),
+                    (FIRST_OF_THREE, SECOND_OF_THREE, THIRD_OF_THREE)
+                );
                 return Ok(());
             })
-            .expect("reads");
+            .expect("the SELECT names the columns the closure reads");
     }
 }

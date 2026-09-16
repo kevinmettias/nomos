@@ -77,6 +77,12 @@ mod tests
 {
     use super::*;
 
+    /// The ordinal a moved block reports as its destination.
+    const MOVED_TO_ORDINAL: u32 = 2;
+
+    /// The ordinal an added block reports.
+    const ADDED_ORDINAL: u32 = 3;
+
     #[test]
     fn Test_Is_Disturbing_Wording_Should_Be_True_Only_When_Wording_Actually_Changed()
     {
@@ -89,7 +95,7 @@ mod tests
             }
             .Is_Disturbing_Wording()
         );
-        assert!(BlockChange::Moved { from: 1, to: 2 }.Is_Disturbing_Wording());
+        assert!(BlockChange::Moved { from: 1, to: MOVED_TO_ORDINAL }.Is_Disturbing_Wording());
         assert!(!BlockChange::Added { ordinal: 1, kind: "prose".to_owned() }.Is_Disturbing_Wording());
         assert!(!BlockChange::Reflowed { ordinal: 1 }.Is_Disturbing_Wording());
     }
@@ -98,9 +104,9 @@ mod tests
     fn Test_Describe_Should_Name_The_Ordinal_And_What_Happened_To_It()
     {
         assert_eq!(
-            BlockChange::Added { ordinal: 3, kind: "prose".to_owned() }.Describe(),
+            BlockChange::Added { ordinal: ADDED_ORDINAL, kind: "prose".to_owned() }.Describe(),
             "block 3 added (prose)"
         );
-        assert_eq!(BlockChange::Moved { from: 1, to: 2 }.Describe(), "block 1 moved to 2, wording unchanged");
+        assert_eq!(BlockChange::Moved { from: 1, to: MOVED_TO_ORDINAL }.Describe(), "block 1 moved to 2, wording unchanged");
     }
 }

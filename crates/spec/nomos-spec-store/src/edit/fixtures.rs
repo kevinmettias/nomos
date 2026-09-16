@@ -2,7 +2,7 @@
 //! test their own side of it: `authoring::commit` applies the preview, `edit::staged_edit`
 //! asserts on the preview itself.
 
-use crate::{EditPreview, Seed_Governing_Records, SpecificationStore};
+use crate::{EditError, EditPreview, Seed_Governing_Records, SpecificationStore};
 
 /// The synthetic record both callers stage an edit against.
 pub(crate) const CANONICAL: &str = "---\nid: D-900\ntype: decision\ntitle: A synthetic record\n\
@@ -25,22 +25,29 @@ pub(crate) struct PreviewedEdit
 
 /// A store seeded with governing records, holding [`CANONICAL`] as authored at [`PATH`], with
 /// one edit already staged and previewed against it.
-pub(crate) fn Previewed_Edit_Of_D900() -> PreviewedEdit
+///
+/// Every fallible step returns rather than unwrapping: this helper is compiled under
+/// `cfg(test)` and both callers depend on it, so a refusal is better reported as the value
+/// the caller asked for than as a panic raised inside the fixture.
+///
+/// # Errors
+///
+/// Returns [`EditError`] if the in-memory schema or the governing seed fails, if the
+/// synthetic record's markdown does not parse as a record, if `D-900` does not resolve to
+/// exactly one held record, or if the staged edit's target path is not free.
+pub(crate) fn Previewed_Edit_Of_D900() -> Result<PreviewedEdit, EditError>
 {
     use crate::store::AUTHORED;
 
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    Seed_Governing_Records(&mut store).expect("seeds");
-    store.Put_Record(PATH, AUTHORED, CANONICAL).expect("writes");
+    let mut store = SpecificationStore::In_Memory()?;
+    Seed_Governing_Records(&mut store)?;
+    store.Put_Record(PATH, AUTHORED, CANONICAL)?;
     let edited = CANONICAL.replace("First paragraph.", "First paragraph, edited.");
 
     let preview = store
-        .Claim_For_Edit("D-900", None)
-        .expect("claims")
-        .Stage(&edited, None)
-        .expect("stages")
-        .Preview(&store)
-        .expect("previews");
+        .Claim_For_Edit("D-900", None)?
+        .Stage(&edited, None)?
+        .Preview(&store)?;
 
-    return PreviewedEdit { store, preview };
+    return Ok(PreviewedEdit { store, preview });
 }

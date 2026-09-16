@@ -331,6 +331,9 @@ mod tests
     use crate::NodeRow;
     use crate::SpecificationStore;
 
+    /// The cardinality the relation types in this file declare.
+    const RELATION_CAP: u32 = 5;
+
     #[test]
     fn Test_Write_Relation_Should_Record_The_Edge_Between_Two_Nodes()
     {
@@ -342,7 +345,7 @@ mod tests
             RelationTypeName("relates-to"),
             ToNodeId("B"),
         )
-        .expect("writes");
+        .expect("both nodes were minted, so the edge's foreign keys resolve");
 
         let count: i64 = store
             .Connection()
@@ -351,7 +354,7 @@ mod tests
                 [],
                 |row| return row.get(0),
             )
-            .expect("counts");
+            .expect("the count runs against relations in this store");
         assert_eq!(count, 1);
     }
 
@@ -363,10 +366,10 @@ mod tests
             .Put_Relation_Type(
                 "relates-from",
                 "seed",
-                &RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node: 5 },
+                &RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node: RELATION_CAP },
             )
-            .expect("registers");
-        store.Pair_Relation_Type("relates-to", "relates-from").expect("pairs");
+            .expect("the type declares a domain, a range and a nonzero cap");
+        store.Pair_Relation_Type("relates-to", "relates-from").expect("both types are registered, so the pairing can name them");
 
         assert_eq!(
             Inverse_Of(store.Connection(), "relates-to").expect("reads"),
@@ -377,7 +380,7 @@ mod tests
 
     fn Store_With_A_Relation_Type() -> SpecificationStore
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
         store
             .Upsert_Node(NodeRow {
                 node_id: "A",
@@ -386,7 +389,7 @@ mod tests
                 representation: "record",
                 title: "A",
             })
-            .expect("mints");
+            .expect("the node id is free in this store, so the insert mints it");
         store
             .Upsert_Node(NodeRow {
                 node_id: "B",
@@ -395,14 +398,14 @@ mod tests
                 representation: "record",
                 title: "B",
             })
-            .expect("mints");
+            .expect("the node id is free in this store, so the insert mints it");
         store
             .Put_Relation_Type(
                 "relates-to",
                 "seed",
-                &RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node: 5 },
+                &RelationConstraint { domain: &["widget"], range: &["widget"], max_per_node: RELATION_CAP },
             )
-            .expect("registers");
+            .expect("the type declares a domain, a range and a nonzero cap");
         return store;
     }
 }

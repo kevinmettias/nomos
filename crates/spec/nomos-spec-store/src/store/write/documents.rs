@@ -135,11 +135,14 @@ mod tests
     #[test]
     fn Test_Write_Blob_Should_Store_The_Same_Bytes_Once()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
 
-        let first = Write_Blob(store.Connection(), b"same bytes").expect("writes");
-        let second = Write_Blob(store.Connection(), b"same bytes").expect("writes");
-        let other = Write_Blob(store.Connection(), b"different bytes").expect("writes");
+        let first = Write_Blob(store.Connection(), b"same bytes")
+            .expect("this connection's schema takes the blob row");
+        let second = Write_Blob(store.Connection(), b"same bytes")
+            .expect("the same bytes hash to the same blob row");
+        let other = Write_Blob(store.Connection(), b"different bytes")
+            .expect("different bytes mint a second blob row");
 
         assert_eq!(first, second);
         assert_ne!(first, other);
@@ -148,14 +151,14 @@ mod tests
     #[test]
     fn Test_Write_Source_Document_Should_Be_Idempotent_For_One_Path_And_Revision()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
 
         let first =
             Write_Source_Document(store.Connection(), DocumentPath("a.md"), DocumentRevision("v1"), "one")
-                .expect("writes");
+                .expect("the path and revision are free, so the insert takes");
         let second =
             Write_Source_Document(store.Connection(), DocumentPath("a.md"), DocumentRevision("v1"), "one")
-                .expect("writes");
+                .expect("the path and revision are free, so the insert takes");
 
         assert_eq!(first, second);
     }
@@ -163,7 +166,7 @@ mod tests
     #[test]
     fn Test_Write_Node_Should_Insert_A_New_Node()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
 
         let uid = Write_Node(
             store.Connection(),
@@ -175,7 +178,7 @@ mod tests
                 title: "D-1",
             },
         )
-        .expect("writes");
+        .expect("the node id is free in this store, so the insert mints it");
 
         assert!(uid > 0);
     }

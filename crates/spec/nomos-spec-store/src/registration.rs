@@ -155,27 +155,25 @@ fn Read_Registration(file: &Path, root: &Path) -> Result<Registration, Registrat
     });
 }
 
-/// Two registrations naming one record would make the two generated tables disagree in
-/// length, so the second one is refused rather than taken.
-fn Assert_One_Identity_Per_Record(found: &[Registration]) -> Result<(), RegistrationError>
+/// Whether a stem is a record identifier: `ARC-SPECDB-001`, `D-129`, `OD-LEDGER-007`.
+///
+/// Hyphen-separated segments of upper-case ASCII letters and digits, the first of which
+/// begins with a letter. Written out rather than matched against a pattern because this
+/// reader carries no dependency, and a build script that pulled in a regular expression
+/// engine would move the crate's band and the contracts allowlist with it.
+fn Is_Identifier(stem: &str) -> bool
 {
-    use std::collections::BTreeMap;
-
-    let mut by_record: BTreeMap<String, String> = BTreeMap::new();
-
-    for registration in found
+    if !stem.starts_with(|character: char| return character.is_ascii_uppercase())
     {
-        if let Some(first) = by_record.insert(registration.path.clone(), registration.id.clone())
-        {
-            return Err(RegistrationError::Shared {
-                named: registration.path.clone(),
-                first,
-                second: registration.id.clone(),
-            });
-        }
+        return false;
     }
 
-    return Ok(());
+    return stem.split('-').all(|segment| {
+        return !segment.is_empty()
+            && segment.chars().all(|character| {
+                return character.is_ascii_uppercase() || character.is_ascii_digit();
+            });
+    });
 }
 
 /// The record a registration body names.
@@ -284,16 +282,6 @@ struct PathShape
     markdown: bool,
 }
 
-/// Whether a registered path is one this store will read a record from.
-///
-/// `shape.inside` and `shape.markdown` are the two halves already computed above. The other
-/// two clauses are traversal: a `..` or a backslash would leave the record directory while
-/// still spelling a name that looks as though it sits inside it.
-fn Is_A_Record_Path(named: &str, shape: PathShape) -> bool
-{
-    return shape.inside && shape.markdown && !named.contains("..") && !named.contains('\\');
-}
-
 /// That what a registration names is a record file, and that it is there.
 fn Check_Is_A_Record(named: &str, at: At<'_>, root: &Path) -> Result<(), RegistrationError>
 {
@@ -323,25 +311,37 @@ fn Check_Is_A_Record(named: &str, at: At<'_>, root: &Path) -> Result<(), Registr
     return Ok(());
 }
 
-/// Whether a stem is a record identifier: `ARC-SPECDB-001`, `D-129`, `OD-LEDGER-007`.
+/// Whether a registered path is one this store will read a record from.
 ///
-/// Hyphen-separated segments of upper-case ASCII letters and digits, the first of which
-/// begins with a letter. Written out rather than matched against a pattern because this
-/// reader carries no dependency, and a build script that pulled in a regular expression
-/// engine would move the crate's band and the contracts allowlist with it.
-fn Is_Identifier(stem: &str) -> bool
+/// `shape.inside` and `shape.markdown` are the two halves already computed above. The other
+/// two clauses are traversal: a `..` or a backslash would leave the record directory while
+/// still spelling a name that looks as though it sits inside it.
+fn Is_A_Record_Path(named: &str, shape: PathShape) -> bool
 {
-    if !stem.starts_with(|character: char| return character.is_ascii_uppercase())
+    return shape.inside && shape.markdown && !named.contains("..") && !named.contains('\\');
+}
+
+/// Two registrations naming one record would make the two generated tables disagree in
+/// length, so the second one is refused rather than taken.
+fn Assert_One_Identity_Per_Record(found: &[Registration]) -> Result<(), RegistrationError>
+{
+    use std::collections::BTreeMap;
+
+    let mut by_record: BTreeMap<String, String> = BTreeMap::new();
+
+    for registration in found
     {
-        return false;
+        if let Some(first) = by_record.insert(registration.path.clone(), registration.id.clone())
+        {
+            return Err(RegistrationError::Shared {
+                named: registration.path.clone(),
+                first,
+                second: registration.id.clone(),
+            });
+        }
     }
 
-    return stem.split('-').all(|segment| {
-        return !segment.is_empty()
-            && segment.chars().all(|character| {
-                return character.is_ascii_uppercase() || character.is_ascii_digit();
-            });
-    });
+    return Ok(());
 }
 
 /// Coverage for the two items declared in this file. `registration/tests.rs` is a separate
@@ -356,6 +356,9 @@ mod inline_coverage
     /// A record that is really on disk, so a fixture can be well-formed.
     const A_REAL_RECORD: &str = "docs/records/OD-GATE-001-a-skipped-test-reports-ok.md";
 
+    /// How many directories up the repository root sits from the crate's own directory.
+    const ROOT_ANCESTORS: usize = 3;
+
     #[test]
     fn Test_Registrations_In_Should_Read_A_Well_Formed_Directory()
     {
@@ -366,7 +369,8 @@ mod inline_coverage
         )
         .expect("writes a fixture");
 
-        let found = Registrations_In(&directory, &Root()).expect("reads");
+        let found = Registrations_In(&directory, &Root())
+            .expect("the synthetic directory holds one well-formed registration");
 
         assert_eq!(
             found,
@@ -375,16 +379,19 @@ mod inline_coverage
                 path: A_REAL_RECORD.to_owned(),
             }]
         );
-        // error-info: allow this is best-effort cleanup after the assertions already ran
-        let _ = std::fs::remove_dir_all(&directory);
+        std::fs::remove_dir_all(&directory)
+            .expect("the synthetic directory this test wrote into can be removed");
     }
 
     fn Synthetic(name: &str) -> PathBuf
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-registration-inline-{name}-{}", std::process::id()));
-        // error-info: allow this is a best-effort clean slate before creating the directory
-        let _ = std::fs::remove_dir_all(&path);
+        if path.exists()
+        {
+            std::fs::remove_dir_all(&path)
+                .expect("the previous run's synthetic directory is removable");
+        }
         std::fs::create_dir_all(&path).expect("a test needs a temporary directory");
         return path;
     }
@@ -393,7 +400,7 @@ mod inline_coverage
     {
         return Path::new(env!("CARGO_MANIFEST_DIR"))
             .ancestors()
-            .nth(3)
+            .nth(ROOT_ANCESTORS)
             .expect("the crate sits three directories below the repository root")
             .to_path_buf();
     }

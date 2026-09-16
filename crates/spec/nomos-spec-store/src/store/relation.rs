@@ -54,6 +54,9 @@ mod tests
     struct TestNodeId<'a>(&'a str);
     struct TestNodeKind<'a>(&'a str);
 
+    /// The cardinality these tests declare for the `joins` relation type.
+    const JOINS_MAX_PER_NODE: u32 = 4;
+
     #[test]
     fn Test_Assert_Constraint_Is_Declared_Should_Refuse_An_Empty_Domain_Range_Or_Cardinality()
     {
@@ -105,7 +108,7 @@ mod tests
     #[test]
     fn Test_Registering_A_Relation_Type_With_No_Domain_Should_Be_Refused()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
 
         let refusal = store.Put_Relation_Type(
             "nothing",
@@ -123,7 +126,7 @@ mod tests
     #[test]
     fn Test_Registering_A_Relation_Type_With_Zero_Cardinality_Should_Be_Refused()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
 
         let refusal = store.Put_Relation_Type(
             "nothing",
@@ -142,10 +145,10 @@ mod tests
     #[test]
     fn Test_An_Edge_Whose_Endpoint_Kind_Is_Not_Admitted_Should_Be_Refused_By_Name()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
         Insert_Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
         Insert_Node(&mut store, TestNodeId("B"), TestNodeKind("gadget"));
-        Put_Joins_Relation_Type(&mut store, 4);
+        Put_Joins_Relation_Type(&mut store, JOINS_MAX_PER_NODE);
 
         let error = store.Put_Relation("A", "joins", "B").expect_err("B is a gadget, not a widget");
 
@@ -168,7 +171,7 @@ mod tests
     #[test]
     fn Test_An_Edge_Past_The_Declared_Cardinality_Should_Be_Refused_By_Name()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
         Insert_Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
         Insert_Node(&mut store, TestNodeId("B"), TestNodeKind("widget"));
         Insert_Node(&mut store, TestNodeId("C"), TestNodeKind("widget"));
@@ -196,11 +199,11 @@ mod tests
     #[test]
     fn Test_Re_Writing_The_Same_Edge_Should_Not_Count_Against_Cardinality()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
         Insert_Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
         Insert_Node(&mut store, TestNodeId("B"), TestNodeKind("widget"));
         Put_Joins_Relation_Type(&mut store, 1);
-        store.Put_Relation("A", "joins", "B").expect("first write");
+        store.Put_Relation("A", "joins", "B").expect("joins admits widget at both ends, so this first edge fits");
 
         store.Put_Relation("A", "joins", "B").expect("an idempotent re-write must not refuse");
     }
@@ -210,10 +213,10 @@ mod tests
     #[test]
     fn Test_A_Placeholder_Endpoint_Should_Be_Exempt_From_The_Kind_Check()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
         Insert_Node(&mut store, TestNodeId("A"), TestNodeKind("widget"));
         store.Reference_Node("B").expect("mints a placeholder");
-        Put_Joins_Relation_Type(&mut store, 4);
+        Put_Joins_Relation_Type(&mut store, JOINS_MAX_PER_NODE);
 
         store
             .Put_Relation("A", "joins", "B")
@@ -243,6 +246,6 @@ mod tests
                 "seed",
                 &Constraint { domain: &["widget"], range: &["widget"], max_per_node },
             )
-            .expect("registers");
+            .expect("the joins type declares a domain, a range and a nonzero cap");
     }
 }

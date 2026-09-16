@@ -258,7 +258,7 @@ mod tests
                 [write.document_uid],
                 |row| return row.get(0),
             )
-            .expect("counts");
+            .expect("the SELECT counts the heading rows the write just inserted");
 
         assert_eq!(headings, write.headings);
         assert!(headings > 0);
@@ -278,7 +278,7 @@ mod tests
                 [],
                 |row| return row.get(0),
             )
-            .expect("counts");
+            .expect("the SELECT counts the lineage rows the write just inserted");
 
         assert_eq!(dispositions, write.blocks);
     }
@@ -297,7 +297,7 @@ mod tests
                 [write.document_uid],
                 |row| return Ok((row.get(0)?, row.get(1)?)),
             )
-            .expect("reads");
+            .expect("the front matter row the write just inserted is there to read");
 
         assert_eq!(status, "accepted");
         assert_eq!(version, 1);
@@ -310,7 +310,7 @@ mod tests
         let write = Written(store.Connection());
 
         let replaced = Write_Declared_Relations(store.Connection(), write.document_uid, &[])
-            .expect("writes");
+            .expect("the document row exists, so replacing its relations runs");
 
         let remaining: u32 = store
             .Connection()
@@ -319,7 +319,7 @@ mod tests
                 [write.document_uid],
                 |row| return row.get(0),
             )
-            .expect("counts");
+            .expect("the count runs against record_relations in this store");
 
         assert_eq!(replaced, 0);
         assert_eq!(remaining, 0, "an empty list must replace, not merge with, what was there");
@@ -327,7 +327,8 @@ mod tests
 
     fn Store() -> SpecificationStore
     {
-        return SpecificationStore::In_Memory().expect("opens");
+        return SpecificationStore::In_Memory()
+            .expect("In_Memory builds its own schema, so opening touches no file");
     }
 
     fn A_Record() -> Record
@@ -363,6 +364,6 @@ mod tests
             },
             &record,
         )
-        .expect("writes");
+        .expect("the record parses and this connection's schema takes every row");
     }
 }

@@ -144,7 +144,7 @@ mod tests
     #[test]
     fn Test_Unresolved_Citations_Should_Report_A_Target_That_Was_Never_Filed()
     {
-        let mut store = SpecificationStore::In_Memory().expect("a store");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory builds its own schema, so opening touches no file");
         Seed_Governing_Records(&mut store).expect("a seeded store");
         let design = Design_Citing("FR-404");
 
