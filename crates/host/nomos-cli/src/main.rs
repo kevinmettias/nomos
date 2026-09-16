@@ -165,7 +165,7 @@ fn Run_Correct_Group(rest: &[String]) -> i32
 {
     let mut stdout = std::io::stdout();
     let mut stderr = std::io::stderr();
-    let Ok(command) = correct::Parse(rest).inspect_err(|message| eprintln!("{message}"))
+    let Ok(command) = correct::Correct_Command_From_String_Arguments(rest).inspect_err(|message| eprintln!("{message}"))
     else
     {
         return correct::ExitCode::Usage.Value();

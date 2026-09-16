@@ -22,13 +22,13 @@ pub(super) const USAGE: &str = "usage: nomos correct phantom-mirrors [--root <pa
      is not exactly once in the file, or the plan does not stage/validate against live \
      content); 2 usage; 5 unreadable tree; 6 nothing was judged";
 
-/// Parses the group's arguments.
+/// Parses the group's arguments, from words a caller already split.
 ///
 /// # Errors
 ///
 /// Returns the usage message when the verb is missing or unrecognized, or an argument is
 /// not understood.
-pub fn Parse(arguments: &[String]) -> Result<CorrectCommand, String>
+pub fn Correct_Command_From_String_Arguments(arguments: &[String]) -> Result<CorrectCommand, String>
 {
     let Some((verb, rest)) = arguments.split_first()
     else
@@ -62,7 +62,7 @@ mod tests
     #[test]
     fn Test_The_Bare_Verb_Defaults_Root_And_Commit()
     {
-        let command = Parse(&Arguments("phantom-mirrors")).expect("`phantom-mirrors` is the verb this parser accepts, and it needs no flag");
+        let command = Correct_Command_From_String_Arguments(&Argument_Words("phantom-mirrors")).expect("`phantom-mirrors` is the verb this parser accepts, and it needs no flag");
 
         assert_eq!(command.root, PathBuf::from("."));
         assert!(!command.commit);
@@ -71,7 +71,7 @@ mod tests
     #[test]
     fn Test_An_Explicit_Root_And_Commit_Are_Read()
     {
-        let command = Parse(&Arguments("phantom-mirrors --root some/tree --commit"))
+        let command = Correct_Command_From_String_Arguments(&Argument_Words("phantom-mirrors --root some/tree --commit"))
             .expect("`--root` and `--commit` are the only flags the parser accepts, and both are given");
 
         assert_eq!(command.root, PathBuf::from("some/tree"));
@@ -81,7 +81,7 @@ mod tests
     #[test]
     fn Test_No_Verb_Is_A_Usage_Error()
     {
-        let error = Parse(&[]).expect_err("must refuse");
+        let error = Correct_Command_From_String_Arguments(&[]).expect_err("must refuse");
 
         assert!(error.contains("usage"));
     }
@@ -89,7 +89,7 @@ mod tests
     #[test]
     fn Test_An_Unknown_Verb_Is_A_Usage_Error()
     {
-        let error = Parse(&Arguments("dance")).expect_err("must refuse");
+        let error = Correct_Command_From_String_Arguments(&Argument_Words("dance")).expect_err("must refuse");
 
         assert!(error.contains("dance"));
     }
@@ -97,12 +97,12 @@ mod tests
     #[test]
     fn Test_An_Unknown_Flag_Is_A_Usage_Error()
     {
-        let error = Parse(&Arguments("phantom-mirrors --wat")).expect_err("must refuse");
+        let error = Correct_Command_From_String_Arguments(&Argument_Words("phantom-mirrors --wat")).expect_err("must refuse");
 
         assert!(error.contains("--wat"));
     }
 
-    fn Arguments(text: &str) -> Vec<String>
+    fn Argument_Words(text: &str) -> Vec<String>
     {
         return text.split_whitespace().map(str::to_owned).collect();
     }

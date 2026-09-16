@@ -151,10 +151,10 @@ pub(crate) fn Stance_Of(group: Group) -> Stance
                       way a checked-out tree or a queried record can be",
         },
         Group::Correct => Stance::Guarded {
-            decided_in: "correct::Walked / nomos_check_orchestration::Run",
+            decided_in: "correct::Correction_Sources / nomos_check_orchestration::Run",
         },
         Group::Workflow => Stance::Guarded {
-            decided_in: "workflow::Walked / nomos_check_orchestration::Run",
+            decided_in: "workflow::Workflow_Sources / nomos_check_orchestration::Run",
         },
     };
 }

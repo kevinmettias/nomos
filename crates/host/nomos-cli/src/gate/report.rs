@@ -53,11 +53,11 @@ pub(super) fn Render_Compare(
     stderr: &mut impl Write,
 ) -> ExitCode
 {
-    if let Some(code) = Unjudged(baseline, "--root", stderr)
+    if let Some(code) = Unjudged_Side(baseline, "--root", stderr)
     {
         return code;
     }
-    if let Some(code) = Unjudged(candidate, "--against", stderr)
+    if let Some(code) = Unjudged_Side(candidate, "--against", stderr)
     {
         return code;
     }
@@ -79,7 +79,7 @@ pub(super) fn Render_Compare(
 /// `None` when the side was judged and there is nothing to report about it. Reuses
 /// [`Render_Run`]'s own refusals rather than restating them, so `compare` cannot drift into
 /// describing an unreadable tree differently from `run`.
-fn Unjudged(result: &GateRunResult, flag: &str, stderr: &mut impl Write) -> Option<ExitCode>
+fn Unjudged_Side(result: &GateRunResult, flag: &str, stderr: &mut impl Write) -> Option<ExitCode>
 {
     if matches!(result.check_outcome, CheckOutcome::Judged { .. })
     {

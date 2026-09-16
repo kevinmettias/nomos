@@ -72,7 +72,7 @@ mod tests
     /// `clippy::indexing_slicing` is denied in this workspace to prevent, so these tests read
     /// through `get` and report a missing key as `Null` rather than as a panic inside an
     /// assertion.
-    fn At(value: &serde_json::Value, path: &[&str]) -> serde_json::Value
+    fn Field_At(value: &serde_json::Value, path: &[&str]) -> serde_json::Value
     {
         const NOTHING: serde_json::Value = serde_json::Value::Null;
 
@@ -88,9 +88,9 @@ mod tests
     #[test]
     fn Test_Every_Cause_Should_Serialize_Under_A_Name_Of_Its_Own()
     {
-        assert_eq!(At(&Rendered(&NoVerdict::UnreadablePolicy(String::new())), &["cause"]), "unreadable_policy");
-        assert_eq!(At(&Rendered(&NoVerdict::MalformedPolicy(String::new())), &["cause"]), "malformed_policy");
-        assert_eq!(At(&Rendered(&NoVerdict::IncompleteCoverage), &["cause"]), "incomplete_coverage");
+        assert_eq!(Field_At(&Rendered_Cause(&NoVerdict::UnreadablePolicy(String::new())), &["cause"]), "unreadable_policy");
+        assert_eq!(Field_At(&Rendered_Cause(&NoVerdict::MalformedPolicy(String::new())), &["cause"]), "malformed_policy");
+        assert_eq!(Field_At(&Rendered_Cause(&NoVerdict::IncompleteCoverage), &["cause"]), "incomplete_coverage");
     }
 
     /// The detail is what a person acts on, so it has to survive the crossing intact.
@@ -99,20 +99,20 @@ mod tests
     {
         let cause = NoVerdict::MalformedPolicy("unknown field `basline`, expected one of `suppressions`".to_owned());
 
-        assert_eq!(At(&Rendered(&cause), &["detail"]), "unknown field `basline`, expected one of `suppressions`");
+        assert_eq!(Field_At(&Rendered_Cause(&cause), &["detail"]), "unknown field `basline`, expected one of `suppressions`");
     }
 
     /// The coverage floor carries no detail, because there is nothing to go and look at.
     #[test]
     fn Test_The_Coverage_Floor_Should_Carry_No_Detail_To_Go_And_Read()
     {
-        let rendered = Rendered(&NoVerdict::IncompleteCoverage);
+        let rendered = Rendered_Cause(&NoVerdict::IncompleteCoverage);
 
         assert!(rendered.get("detail").is_none(), "{rendered}");
     }
 
     /// `cause` as the wire publishes it, so a test can read one field of it by path.
-    fn Rendered(cause: &NoVerdict) -> serde_json::Value
+    fn Rendered_Cause(cause: &NoVerdict) -> serde_json::Value
     {
         return serde_json::to_value(NoVerdictResponse::From(cause)).expect("a derived Serialize over owned data has nothing to refuse");
     }

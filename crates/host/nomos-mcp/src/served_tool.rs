@@ -240,7 +240,7 @@ fn Correction_Schema() -> Value
 mod tests
 {
     use super::ServedTool;
-    use crate::test_support::At;
+    use crate::test_support::Field_At;
 
     /// Every registered tool round-trips through its own name -- so a name added to
     /// [`ServedTool::Name`] without a matching [`ServedTool::REGISTRY`] entry is unreachable
@@ -262,10 +262,10 @@ mod tests
         assert_eq!(ServedTool::Named("gate_run"), None);
     }
 
-    /// Every listing carries a name, a non-empty description and an object schema -- the
+    /// Every listing carries a name, a non-empty description and an input schema -- the
     /// three fields a client needs to decide whether and how to call the tool.
     #[test]
-    fn Test_Every_Listing_Should_Carry_A_Name_A_Description_And_An_Object_Schema()
+    fn Test_Every_Listing_Should_Carry_A_Name_A_Description_And_An_Input_Schema()
     {
         for tool in ServedTool::REGISTRY
         {
@@ -274,7 +274,7 @@ mod tests
                 serde_json::from_str(&descriptor.input_schema).expect("a schema is a document");
             assert_eq!(descriptor.name, tool.Name(), "{descriptor:?}");
             assert!(!descriptor.description.is_empty(), "{descriptor:?}");
-            assert_eq!(At(&schema, "/type"), "object", "{schema}");
+            assert_eq!(Field_At(&schema, "/type"), "object", "{schema}");
         }
     }
 

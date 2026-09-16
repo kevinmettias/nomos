@@ -13,7 +13,7 @@
 //! served, which are refused, and what each one makes of its arguments.
 
 use super::*;
-use crate::test_support::{At, Count_At};
+use crate::test_support::{Count_At, Field_At};
 use serde_json::Value;
 
 /// An answer this service produced, parsed.
@@ -23,7 +23,7 @@ use serde_json::Value;
 /// the engine's parser to reach this crate's dispatch.
 fn Answered(method: ServedMethod, parameters: &str) -> RemoteCallOutcome
 {
-    return NomosApiService.Answer(method.Name(), parameters);
+    return NomosApiDispatch.Answer(method.Name(), parameters);
 }
 
 /// The document an answered outcome carries.
@@ -61,7 +61,7 @@ fn Refusal_Code(outcome: &RemoteCallOutcome) -> i32
 #[test]
 fn Test_The_Served_Methods_Should_Be_Exactly_The_Admitted_Registry()
 {
-    let served = NomosApiService.Served_Methods();
+    let served = NomosApiDispatch.Served_Methods();
 
     assert_eq!(served.len(), ServedMethod::REGISTRY.len(), "{served:?}");
     for method in ServedMethod::REGISTRY
@@ -79,7 +79,7 @@ fn Test_The_Served_Methods_Should_Be_Exactly_The_Admitted_Registry()
 #[test]
 fn Test_No_Repo_Tooling_Operation_Should_Be_In_The_Registry()
 {
-    let served = NomosApiService.Served_Methods();
+    let served = NomosApiDispatch.Served_Methods();
 
     for method in ["nomos.work.finish", "nomos.spec.commit", "nomos.work.list"]
     {
@@ -116,7 +116,7 @@ fn Test_A_Plan_With_No_Arguments_Should_Reach_A_Real_Registry()
     let outcome = Answered(ServedMethod::GatePlan, "{}");
 
     let result = Document(&outcome);
-    assert_eq!(At(&result, "/outcome"), "planned", "{result}");
+    assert_eq!(Field_At(&result, "/outcome"), "planned", "{result}");
     assert!(Count_At(&result, "/rules") > 0, "{result}");
 }
 
@@ -137,5 +137,5 @@ fn Test_A_Correction_Run_Over_A_Clean_Tree_Should_Reach_A_Real_Clean_Answer()
 
     let _ignored = std::fs::remove_dir_all(&root);
     let result = Document(&outcome);
-    assert_eq!(At(&result, "/outcome"), "clean", "{result}");
+    assert_eq!(Field_At(&result, "/outcome"), "clean", "{result}");
 }

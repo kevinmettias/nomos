@@ -26,7 +26,7 @@
 //!
 //! The boundary `OD-HOST-007` drew is unchanged and is still structural. A tool
 //! name *is* a served method name, so a call goes to
-//! `nomos_api_transport::NomosApiService` under the name the client asked for,
+//! `nomos_api_transport::NomosApiDispatch` under the name the client asked for,
 //! and this crate never names a `nomos_api::Handle_*` function or depends on
 //! `nomos-api` at all. Widening what a `tools/call` can reach would first have to
 //! widen `ServedMethod`, in that crate, where the exclusion is already policed.

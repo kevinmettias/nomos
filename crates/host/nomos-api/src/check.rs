@@ -43,14 +43,14 @@ pub fn Handle_Check_Run(command: &CheckCommand) -> CheckResponse
         return CheckResponse::NoSource;
     }
 
-    let outcome = Judged(&sources, &command.root);
+    let outcome = Judged_Sources(&sources, &command.root);
 
     return CheckResponse::From(outcome);
 }
 
 /// Every registered rule run over `sources`, with the build variant this crate's own
 /// composition root names.
-fn Judged(sources: &[SourceFile], root: &Path) -> CheckOutcome
+fn Judged_Sources(sources: &[SourceFile], root: &Path) -> CheckOutcome
 {
     let mut store = nomos_analysis::MemoryFactStore::New();
 

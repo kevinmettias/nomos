@@ -16,9 +16,9 @@ use xvpe_remote_call::{RemoteCallOutcome, RemoteCallRefusal, RemoteCallStrategy}
 /// against a tree the *request* names, so there is no configuration for an
 /// instance to carry and nothing for two of them to disagree about.
 #[derive(Clone, Copy, Debug, Default)]
-pub struct NomosApiService;
+pub struct NomosApiDispatch;
 
-impl Strategy for NomosApiService
+impl Strategy for NomosApiDispatch
 {
     // `None`: every served verb walks and judges a real tree. What a run finds
     // depends on what is on disk when it looks, so nothing here can promise that
@@ -28,7 +28,7 @@ impl Strategy for NomosApiService
     const TRACE: TraceEquivalence = TraceEquivalence::NotApplicable;
 }
 
-impl RemoteCallStrategy for NomosApiService
+impl RemoteCallStrategy for NomosApiDispatch
 {
     /// The registry `OD-HOST-007` asks to be declared explicitly, projected from
     /// [`ServedMethod::REGISTRY`] rather than restated beside it.
@@ -56,12 +56,12 @@ impl RemoteCallStrategy for NomosApiService
             return RemoteCallOutcome::Refused(unknown);
         };
 
-        return Answered(method, parameters);
+        return Answered_Method(method, parameters);
     }
 }
 
 /// The operation `method` names, called with the arguments it carried.
-fn Answered(method: ServedMethod, parameters: &str) -> RemoteCallOutcome
+fn Answered_Method(method: ServedMethod, parameters: &str) -> RemoteCallOutcome
 {
     return match method
     {
@@ -82,15 +82,15 @@ fn Answered(method: ServedMethod, parameters: &str) -> RemoteCallOutcome
 /// this transport should fail.
 fn Planned() -> RemoteCallOutcome
 {
-    return Serialized(&nomos_api::Handle_Gate_Plan());
+    return Serialized_Response(&nomos_api::Handle_Gate_Plan());
 }
 
 /// A judged run over the tree the caller named in `root`.
 fn Ran_Gate(parameters: &str) -> RemoteCallOutcome
 {
-    return match Parsed::<GateParameters>(parameters)
+    return match Parsed_Parameters::<GateParameters>(parameters)
     {
-        Ok(parameters) => Serialized(&nomos_api::Handle_Gate_Run(&parameters.Command())),
+        Ok(parameters) => Serialized_Response(&nomos_api::Handle_Gate_Run(&parameters.Command())),
         Err(refusal) => RemoteCallOutcome::Refused(refusal),
     };
 }
@@ -98,13 +98,13 @@ fn Ran_Gate(parameters: &str) -> RemoteCallOutcome
 /// Why one finding stands, as the caller's `root` and `query` name it.
 fn Explained_Finding(parameters: &str) -> RemoteCallOutcome
 {
-    return match Parsed::<FindingParameters>(parameters)
+    return match Parsed_Parameters::<FindingParameters>(parameters)
     {
         Ok(parameters) =>
         {
             let explanation =
                 nomos_api::Handle_Gate_Explain(&parameters.Root(), &parameters.Query());
-            Serialized(&explanation)
+            Serialized_Response(&explanation)
         }
         Err(refusal) => RemoteCallOutcome::Refused(refusal),
     };
@@ -113,13 +113,13 @@ fn Explained_Finding(parameters: &str) -> RemoteCallOutcome
 /// How two trees' judgements differ, named by the caller's `baseline` and `candidate`.
 fn Compared_Trees(parameters: &str) -> RemoteCallOutcome
 {
-    return match Parsed::<CompareParameters>(parameters)
+    return match Parsed_Parameters::<CompareParameters>(parameters)
     {
         Ok(parameters) =>
         {
             let comparison =
                 nomos_api::Handle_Gate_Compare(&parameters.Baseline(), &parameters.Candidate());
-            Serialized(&comparison)
+            Serialized_Response(&comparison)
         }
         Err(refusal) => RemoteCallOutcome::Refused(refusal),
     };
@@ -128,9 +128,9 @@ fn Compared_Trees(parameters: &str) -> RemoteCallOutcome
 /// A correction run over the tree the caller named in `root`.
 fn Ran_Correction(parameters: &str) -> RemoteCallOutcome
 {
-    return match Parsed::<CorrectionParameters>(parameters)
+    return match Parsed_Parameters::<CorrectionParameters>(parameters)
     {
-        Ok(parameters) => Serialized(&nomos_api::Handle_Correction_Run(&parameters.Command())),
+        Ok(parameters) => Serialized_Response(&nomos_api::Handle_Correction_Run(&parameters.Command())),
         Err(refusal) => RemoteCallOutcome::Refused(refusal),
     };
 }
@@ -140,14 +140,14 @@ fn Ran_Correction(parameters: &str) -> RemoteCallOutcome
 /// The engine hands an operation that carried no arguments an empty object, so
 /// an operation whose arguments are all optional is callable with none and no
 /// parameter type here has to spell that case itself.
-fn Parsed<Parameters: serde::de::DeserializeOwned>(parameters: &str) -> Result<Parameters, RemoteCallRefusal>
+fn Parsed_Parameters<Parameters: serde::de::DeserializeOwned>(parameters: &str) -> Result<Parameters, RemoteCallRefusal>
 {
     return serde_json::from_str(parameters)
         .map_err(|error| return RemoteCallRefusal::Bad_Arguments(error.to_string()));
 }
 
 /// An operation's own response, as the document the answer carries.
-fn Serialized<Response: Serialize>(response: &Response) -> RemoteCallOutcome
+fn Serialized_Response<Response: Serialize>(response: &Response) -> RemoteCallOutcome
 {
     return match serde_json::to_string(response)
     {

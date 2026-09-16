@@ -103,7 +103,7 @@ mod tests
     fn Test_A_Declared_Scope_Should_Cross_The_Wire_As_Its_Author_Wrote_It()
     {
         let rendered =
-            Rendered(Some("./src/lib.rs"), BaselineAllowance::AtMost(1), OBSERVED_OCCURRENCES);
+            Rendered_Population(Some("./src/lib.rs"), BaselineAllowance::AtMost(1), OBSERVED_OCCURRENCES);
 
         assert_eq!(rendered.get("declared_path").and_then(serde_json::Value::as_str), Some("./src/lib.rs"), "{rendered}");
     }
@@ -116,7 +116,7 @@ mod tests
     #[test]
     fn Test_A_Scope_No_File_Declared_Should_Cross_The_Wire_With_No_Path_At_All()
     {
-        let rendered = Rendered(None, BaselineAllowance::AtMost(1), OBSERVED_OCCURRENCES);
+        let rendered = Rendered_Population(None, BaselineAllowance::AtMost(1), OBSERVED_OCCURRENCES);
 
         assert_eq!(rendered.get("declared_path"), Some(&serde_json::Value::Null), "{rendered}");
     }
@@ -126,7 +126,7 @@ mod tests
     #[test]
     fn Test_An_Exceeded_Scope_Should_Carry_What_It_Accepted_What_It_Found_And_The_Difference()
     {
-        let rendered = Population(BaselineAllowance::AtMost(1), OBSERVED_OCCURRENCES);
+        let rendered = Population_Value(BaselineAllowance::AtMost(1), OBSERVED_OCCURRENCES);
 
         assert_eq!(rendered.pointer("/allowed/accepted_occurrence_count").and_then(serde_json::Value::as_u64), Some(1), "{rendered}");
         assert_eq!(rendered.get("observed").and_then(serde_json::Value::as_u64), Some(u64::from(OBSERVED_OCCURRENCES)), "{rendered}");
@@ -138,7 +138,7 @@ mod tests
     fn Test_A_Scope_Within_Its_Allowance_Should_Report_No_Excess()
     {
         let rendered =
-            Population(BaselineAllowance::AtMost(ADOPTED_ALLOWANCE), OBSERVED_WITHIN_ALLOWANCE);
+            Population_Value(BaselineAllowance::AtMost(ADOPTED_ALLOWANCE), OBSERVED_WITHIN_ALLOWANCE);
 
         assert_eq!(rendered.get("excess").and_then(serde_json::Value::as_u64), Some(0), "{rendered}");
     }
@@ -148,7 +148,7 @@ mod tests
     #[test]
     fn Test_An_Unbounded_Scope_Should_Report_No_Excess_And_Name_Itself()
     {
-        let rendered = Population(BaselineAllowance::Unbounded, OBSERVED_UNBOUNDED);
+        let rendered = Population_Value(BaselineAllowance::Unbounded, OBSERVED_UNBOUNDED);
 
         assert_eq!(rendered.pointer("/allowed/allowance").and_then(serde_json::Value::as_str), Some("unbounded"), "{rendered}");
         assert_eq!(rendered.get("observed").and_then(serde_json::Value::as_u64), Some(u64::from(OBSERVED_UNBOUNDED)), "{rendered}");
@@ -156,13 +156,13 @@ mod tests
     }
 
     /// A population of `observed` occurrences under `allowed`, as a caller receives it.
-    fn Population(allowed: BaselineAllowance, observed: u32) -> serde_json::Value
+    fn Population_Value(allowed: BaselineAllowance, observed: u32) -> serde_json::Value
     {
-        return Rendered(Some("./src/lib.rs"), allowed, observed);
+        return Rendered_Population(Some("./src/lib.rs"), allowed, observed);
     }
 
     /// A population carrying `declared_path` under `allowed`, as a caller receives it.
-    fn Rendered(
+    fn Rendered_Population(
         declared_path: Option<&str>,
         allowed: BaselineAllowance,
         observed: u32,

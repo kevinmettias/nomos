@@ -109,7 +109,7 @@ mod tests
     /// `clippy::indexing_slicing` is denied in this workspace to prevent, so these tests read
     /// through `get` and report a missing key as `Null` rather than as a panic inside an
     /// assertion.
-    fn At(value: &serde_json::Value, path: &[&str]) -> serde_json::Value
+    fn Field_At(value: &serde_json::Value, path: &[&str]) -> serde_json::Value
     {
         const NOTHING: serde_json::Value = serde_json::Value::Null;
 
@@ -125,10 +125,10 @@ mod tests
     #[test]
     fn Test_Every_Non_Judged_Outcome_Should_Serialize_Under_A_Name_Of_Its_Own()
     {
-        assert_eq!(At(&Rendered(&CheckOutcome::Unreadable), &["outcome"]), "unreadable");
-        assert_eq!(At(&Rendered(&CheckOutcome::NoSource), &["outcome"]), "no_source");
-        assert_eq!(At(&Rendered(&CheckOutcome::NoFacts { files: READ_FILES }), &["outcome"]), "no_facts");
-        assert_eq!(At(&Rendered(&CheckOutcome::NoFacts { files: READ_FILES }), &["files"]).as_u64(), Some(READ_FILES as u64));
+        assert_eq!(Field_At(&Rendered_Outcome(&CheckOutcome::Unreadable), &["outcome"]), "unreadable");
+        assert_eq!(Field_At(&Rendered_Outcome(&CheckOutcome::NoSource), &["outcome"]), "no_source");
+        assert_eq!(Field_At(&Rendered_Outcome(&CheckOutcome::NoFacts { files: READ_FILES }), &["outcome"]), "no_facts");
+        assert_eq!(Field_At(&Rendered_Outcome(&CheckOutcome::NoFacts { files: READ_FILES }), &["files"]).as_u64(), Some(READ_FILES as u64));
     }
 
     /// The distinction this type exists for: two outcomes that both produce an
@@ -136,7 +136,7 @@ mod tests
     #[test]
     fn Test_No_Source_And_No_Facts_Should_Not_Serialize_Alike()
     {
-        assert_ne!(Rendered(&CheckOutcome::NoSource), Rendered(&CheckOutcome::NoFacts { files: 1 }));
+        assert_ne!(Rendered_Outcome(&CheckOutcome::NoSource), Rendered_Outcome(&CheckOutcome::NoFacts { files: 1 }));
     }
 
     #[test]
@@ -144,17 +144,17 @@ mod tests
     {
         let outcome = CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: JUDGED_FILES, facts: JUDGED_FACTS }, claim: Claim::Incomplete };
 
-        let rendered = Rendered(&outcome);
+        let rendered = Rendered_Outcome(&outcome);
 
-        assert_eq!(At(&rendered, &["outcome"]), "judged");
-        assert_eq!(At(&rendered, &["files"]).as_u64(), Some(JUDGED_FILES as u64));
-        assert_eq!(At(&rendered, &["facts"]).as_u64(), Some(JUDGED_FACTS as u64));
-        assert_eq!(At(&rendered, &["complete"]).as_bool(), Some(false));
+        assert_eq!(Field_At(&rendered, &["outcome"]), "judged");
+        assert_eq!(Field_At(&rendered, &["files"]).as_u64(), Some(JUDGED_FILES as u64));
+        assert_eq!(Field_At(&rendered, &["facts"]).as_u64(), Some(JUDGED_FACTS as u64));
+        assert_eq!(Field_At(&rendered, &["complete"]).as_bool(), Some(false));
         assert!(rendered.get("findings").is_none(), "the response's own findings field carries them, grouped: {rendered}");
     }
 
     /// An outcome as a caller receives it.
-    fn Rendered(outcome: &CheckOutcome) -> serde_json::Value
+    fn Rendered_Outcome(outcome: &CheckOutcome) -> serde_json::Value
     {
         return serde_json::to_value(CheckOutcomeResponse::From(outcome))
             .expect("a derived Serialize over owned data has nothing to refuse");

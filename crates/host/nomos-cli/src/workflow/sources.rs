@@ -18,16 +18,16 @@ use std::path::Path;
 /// The walk itself, and the `target`/`.git`/nested-root skips a walk owes, are
 /// `nomos-workspace-discovery`'s: `OD-HOST-008` put one beneath every composition root, so
 /// this module and `correct.rs` each call it instead of each carrying a copy.
-fn Walked(root: &Path) -> Option<Vec<SourceFile>>
+fn Workflow_Sources(root: &Path) -> Option<Vec<SourceFile>>
 {
     return Walked_Sources(root, &Registered_Extensions());
 }
 
 /// `check`, with its own `sources` replaced by a real walk of its `root` -- `None` if `root` is
-/// not a directory, the guard [`Walked`] itself answers a tree that cannot be read at all with.
+/// not a directory, the guard [`Workflow_Sources`] itself answers a tree that cannot be read at all with.
 pub(super) fn Walked_Check(check: &CheckBody) -> Option<CheckBody>
 {
-    let sources = Walked(&check.root)?;
+    let sources = Workflow_Sources(&check.root)?;
 
     return Some(CheckBody::New(check.root.clone(), sources, check.selected.clone()));
 }
@@ -39,7 +39,7 @@ pub(super) fn Walked_Check(check: &CheckBody) -> Option<CheckBody>
 /// `Body::Check`.
 pub(super) fn Walked_Correction(correction: &CorrectionBody) -> Option<CorrectionBody>
 {
-    let sources = Walked(&correction.root)?;
+    let sources = Workflow_Sources(&correction.root)?;
 
     return Some(CorrectionBody::New(correction.root.clone(), sources, correction.commit));
 }
@@ -49,7 +49,7 @@ pub(super) fn Walked_Correction(correction: &CorrectionBody) -> Option<Correctio
 /// already give.
 pub(super) fn Walked_Gate(gate: &GateBody) -> Option<GateBody>
 {
-    let sources = Walked(&gate.command.root)?;
+    let sources = Workflow_Sources(&gate.command.root)?;
 
     return Some(GateBody::New(sources, gate.command.clone()));
 }

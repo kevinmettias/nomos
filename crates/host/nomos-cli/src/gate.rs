@@ -122,7 +122,7 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
 /// renders what came back -- the self-contained unit `Invocation::Run`'s own arm was.
 fn Run_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
-    return Render_Run(&Judged(command), stdout, stderr);
+    return Render_Run(&Judged_Command(command), stdout, stderr);
 }
 
 /// Judges both commands the same way `run` judges one, and renders what moved.
@@ -138,7 +138,7 @@ fn Compare_Verb(
     stderr: &mut impl Write,
 ) -> ExitCode
 {
-    return Render_Compare(&Judged(baseline), &Judged(candidate), stdout, stderr);
+    return Render_Compare(&Judged_Command(baseline), &Judged_Command(candidate), stdout, stderr);
 }
 
 /// Answers the one verb that walks nothing, and renders the verdict.
@@ -210,7 +210,7 @@ fn Declaring_Root() -> PathBuf
 /// Shared by `run` and both sides of `compare` so the two verbs cannot drift about what
 /// judging a tree means: a compare whose sides were composed differently from a run would
 /// report differences that only exist between the two code paths.
-fn Judged(command: &GateCommand) -> nomos_gate_orchestration::GateRunResult
+fn Judged_Command(command: &GateCommand) -> nomos_gate_orchestration::GateRunResult
 {
     let walked = sources::Walked_Sources(&command.root);
     let now = CLOCK.Now();

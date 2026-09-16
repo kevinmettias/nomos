@@ -6,7 +6,7 @@
 //! judge, find the one claim, plan, seed a workspace, stage, validate, and optionally
 //! commit — into `nomos-correction-orchestration`, so `nomos-api` could reach the same
 //! lifecycle without depending on this crate. What is left here is exactly what `gate.rs`'s
-//! own doc names for `Gate`: walking the tree ([`Walked`] — `nomos-workspace-discovery`'s
+//! own doc names for `Gate`: walking the tree ([`Correction_Sources`] — `nomos-workspace-discovery`'s
 //! own [`Walked_Sources`], the one walk `OD-HOST-008` put beneath every composition root,
 //! which `check`, `gate`, `workflow` and this module now all call rather than each carrying
 //! its own), reading what this binary was compiled as
@@ -24,7 +24,7 @@ mod parsing;
 mod tests;
 
 pub(crate) use exit_code::ExitCode;
-pub use parsing::Parse;
+pub use parsing::Correct_Command_From_String_Arguments;
 
 use crate::arguments::Named_Value_From_String_Arguments;
 use nomos_correction_orchestration::{CorrectionCommand as SeamCommand, CorrectionEnvironment, CorrectionOutcome, Run_Correction};
@@ -48,13 +48,13 @@ pub(crate) struct CorrectCommand
 /// Runs the correction and renders what it did.
 pub fn Run(command: &CorrectCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
-    let walked = Walked(&command.root);
+    let walked = Correction_Sources(&command.root);
     let seam_command = SeamCommand { root: command.root.clone(), commit: command.commit };
     let environment = CorrectionEnvironment { variant: Correction_Variant(), launcher: &LAUNCHER, filesystem: &FILE_SYSTEM, environment: &ENVIRONMENT };
 
     let outcome = Run_Correction(walked, environment, &seam_command);
 
-    return Rendered(&outcome, &command.root, stdout, stderr);
+    return Rendered_Correction_Outcome(&outcome, &command.root, stdout, stderr);
 }
 
 /// The Rust and Go sources under `root`, or `None` if `root` is not a directory -- the
@@ -68,7 +68,7 @@ pub fn Run(command: &CorrectCommand, stdout: &mut impl Write, stderr: &mut impl 
 /// workspace registers reach this walk without an edit here -- and it is the same argument
 /// the shared walk's own doc gives for holding the population rather than each composition
 /// root holding a copy of it.
-fn Walked(root: &Path) -> Option<Vec<SourceFile>>
+fn Correction_Sources(root: &Path) -> Option<Vec<SourceFile>>
 {
     return Walked_Sources(root, &Registered_Extensions());
 }
@@ -78,7 +78,7 @@ fn Walked(root: &Path) -> Option<Vec<SourceFile>>
 /// sharing it costs a visibility boundary or a hoist to a crate beneath both, and neither has
 /// been taken. The walk this module once argued the same way about is not this case -- it is
 /// `nomos-workspace-discovery`'s one, which `OD-HOST-008` put beneath every composition root
-/// and [`Walked`] now calls.
+/// and [`Correction_Sources`] now calls.
 fn Correction_Variant() -> BuildVariant
 {
     return BuildVariant::New(
@@ -95,34 +95,34 @@ fn Correction_Variant() -> BuildVariant
 /// Each arm is one case: the outcome on the left, the sentence it renders and the code it
 /// answers with on the right. The bytes are unchanged from the written-out form this
 /// replaced -- [`Announced`] ends its text with the same newline `writeln!` did.
-fn Rendered(outcome: &CorrectionOutcome, root: &Path, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+fn Rendered_Correction_Outcome(outcome: &CorrectionOutcome, root: &Path, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
     return match outcome
     {
         CorrectionOutcome::UnreadableRoot =>
-            Announced(stderr, ExitCode::Unreadable, format!("`{}` is not a directory", root.display())),
+            Announced_Line(stderr, ExitCode::Unreadable, format!("`{}` is not a directory", root.display())),
         CorrectionOutcome::NoSourceFound =>
-            Announced(stderr, ExitCode::Vacuous, format!("no `.rs` or `.go` source found under `{}`", root.display())),
+            Announced_Line(stderr, ExitCode::Vacuous, format!("no `.rs` or `.go` source found under `{}`", root.display())),
         CorrectionOutcome::UnreadableWorkspaceState =>
-            Announced(stderr, ExitCode::Vacuous, "the tree could not be read as a workspace state".to_owned()),
+            Announced_Line(stderr, ExitCode::Vacuous, "the tree could not be read as a workspace state".to_owned()),
         CorrectionOutcome::ContradictoryRegistry(error) =>
-            Announced(stderr, ExitCode::Vacuous, format!("this build's own capability registry is self-contradictory: {error}")),
+            Announced_Line(stderr, ExitCode::Vacuous, format!("this build's own capability registry is self-contradictory: {error}")),
         CorrectionOutcome::NoFactsMaterialized(files) =>
-            Announced(stderr, ExitCode::Vacuous, format!("{files} file(s) were read but no syntax fact was materialized for any of them")),
+            Announced_Line(stderr, ExitCode::Vacuous, format!("{files} file(s) were read but no syntax fact was materialized for any of them")),
         CorrectionOutcome::Refused(reason) =>
-            Announced(stderr, ExitCode::Refused, reason.clone()),
+            Announced_Line(stderr, ExitCode::Refused, reason.clone()),
         CorrectionOutcome::Clean =>
-            Announced(stdout, ExitCode::Ok, format!("clean: no blocking correction claim under `{}`", root.display())),
+            Announced_Line(stdout, ExitCode::Ok, format!("clean: no blocking correction claim under `{}`", root.display())),
         CorrectionOutcome::Staged { path, summary, preview } =>
-            Announced(stdout, ExitCode::Ok, format!("{}\ndry run: `{path}`: {summary}. Pass --commit to apply it.", String::from_utf8_lossy(preview))),
+            Announced_Line(stdout, ExitCode::Ok, format!("{}\ndry run: `{path}`: {summary}. Pass --commit to apply it.", String::from_utf8_lossy(preview))),
         CorrectionOutcome::Committed { path, summary, preview, base, after_snapshot } =>
-            Announced(stdout, ExitCode::Ok, format!("{}\ncommitted: `{path}`: {summary} ({base} -> {after_snapshot})", String::from_utf8_lossy(preview))),
+            Announced_Line(stdout, ExitCode::Ok, format!("{}\ncommitted: `{path}`: {summary} ({base} -> {after_snapshot})", String::from_utf8_lossy(preview))),
     };
 }
 
 /// Writes `text` to `stream` as one line and answers with `code` -- the two steps every arm
-/// of [`Rendered`] ends in, so that each of those arms states one case rather than three.
-fn Announced(stream: &mut impl Write, code: ExitCode, text: String) -> ExitCode
+/// of [`Rendered_Correction_Outcome`] ends in, so that each of those arms states one case rather than three.
+fn Announced_Line(stream: &mut impl Write, code: ExitCode, text: String) -> ExitCode
 {
     let _ = writeln!(stream, "{text}");
     return code;

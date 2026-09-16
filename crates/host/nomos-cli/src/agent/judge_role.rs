@@ -55,7 +55,7 @@ pub(super) fn Judge_Role(
 
     let outcome = Run_Agent_Judgment(&pair, &finding, config, &AgentEnvironment { launcher: &LAUNCHER });
 
-    return super::dispatch::Rendered(&outcome, output, notes);
+    return super::dispatch::Rendered_Dispatch_Outcome(&outcome, output, notes);
 }
 
 /// `request`'s declared role and actual surface, read and paired -- [`Judge_Role`]'s own

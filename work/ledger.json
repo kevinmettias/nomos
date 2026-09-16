@@ -81844,6 +81844,329 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-HOST",
+      "title": "The naming-clarity check reads zero, live and waived, over the host territory",
+      "why": "check-naming-clarity reports 33 live finding(s) and 2 waiver(s) over crates/host, measured at unix 1789586478 over the whole crates/ tree. This item renames every one of them, the waived ones included, so that the territory reaches zero without adding a suppression and without keeping the ones it has: the check's own finding for a site that is renamed is gone, and the waiver that named it is left for the campaign's closing phase item to prune. Renaming rather than suppressing is OD-RULES-018's trade, which renamed five sites instead of adding three words to the repository's words policy on the ground that a shared approval masks the finding the rule exists to catch. The naming campaign's earlier territories -- repository, contracts, connectors, corrections, agent, kernel, capabilities -- took the same trade; the one waiver kept anywhere is the contracts one whose reason is about the corpus taxonomy rather than about the check.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/host, verified by this item's predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. Where a renamed item is public, its callers and its surface snapshot in tests/contract/surface/ are corrected in the same commit, and the territory item that owns them is widened here rather than edited without a claim.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/host",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/host",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0   190 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789588093,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1f567e6cc2280b460b7006c6af7961f67cbe9a15"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P114-CLARITY-RULES",
+      "title": "The naming-clarity check reads zero, live and waived, over the rules territory",
+      "why": "check-naming-clarity reports 31 live finding(s) and 5 waiver(s) over crates/rules, measured at unix 1789586478 over the whole crates/ tree. This item renames every one of them, the waived ones included, so that the territory reaches zero without adding a suppression and without keeping the ones it has: the check's own finding for a site that is renamed is gone, and the waiver that named it is left for the campaign's closing phase item to prune. Renaming rather than suppressing is OD-RULES-018's trade, which renamed five sites instead of adding three words to the repository's words policy on the ground that a shared approval masks the finding the rule exists to catch. The naming campaign's earlier territories -- repository, contracts, connectors, corrections, agent, kernel, capabilities -- took the same trade; the one waiver kept anywhere is the contracts one whose reason is about the corpus taxonomy rather than about the check.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/rules, verified by this item's predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. Where a renamed item is public, its callers and its surface snapshot in tests/contract/surface/ are corrected in the same commit, and the territory item that owns them is widened here rather than edited without a claim.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/rules",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P114-CLARITY-ORCHESTRATION",
+      "title": "The naming-clarity check reads zero, live and waived, over the orchestration territory",
+      "why": "check-naming-clarity reports 19 live finding(s) and 7 waiver(s) over crates/orchestration, measured at unix 1789586478 over the whole crates/ tree. This item renames every one of them, the waived ones included, so that the territory reaches zero without adding a suppression and without keeping the ones it has: the check's own finding for a site that is renamed is gone, and the waiver that named it is left for the campaign's closing phase item to prune. Renaming rather than suppressing is OD-RULES-018's trade, which renamed five sites instead of adding three words to the repository's words policy on the ground that a shared approval masks the finding the rule exists to catch. The naming campaign's earlier territories -- repository, contracts, connectors, corrections, agent, kernel, capabilities -- took the same trade; the one waiver kept anywhere is the contracts one whose reason is about the corpus taxonomy rather than about the check.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/orchestration, verified by this item's predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. Where a renamed item is public, its callers and its surface snapshot in tests/contract/surface/ are corrected in the same commit, and the territory item that owns them is widened here rather than edited without a claim.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/orchestration",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P114-CLARITY-SPEC",
+      "title": "The naming-clarity check reads zero, live and waived, over the spec territory",
+      "why": "check-naming-clarity reports 5 live finding(s) and 17 waiver(s) over crates/spec, measured at unix 1789586478 over the whole crates/ tree. This item renames every one of them, the waived ones included, so that the territory reaches zero without adding a suppression and without keeping the ones it has: the check's own finding for a site that is renamed is gone, and the waiver that named it is left for the campaign's closing phase item to prune. Renaming rather than suppressing is OD-RULES-018's trade, which renamed five sites instead of adding three words to the repository's words policy on the ground that a shared approval masks the finding the rule exists to catch. The naming campaign's earlier territories -- repository, contracts, connectors, corrections, agent, kernel, capabilities -- took the same trade; the one waiver kept anywhere is the contracts one whose reason is about the corpus taxonomy rather than about the check.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/spec, verified by this item's predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. Where a renamed item is public, its callers and its surface snapshot in tests/contract/surface/ are corrected in the same commit, and the territory item that owns them is widened here rather than edited without a claim.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/spec",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P114-CLARITY-SUBSTRATE",
+      "title": "The naming-clarity check reads zero, live and waived, over the substrate territory",
+      "why": "check-naming-clarity reports 0 live finding(s) and 15 waiver(s) over crates/substrate, measured at unix 1789586478 over the whole crates/ tree. This item renames every one of them, the waived ones included, so that the territory reaches zero without adding a suppression and without keeping the ones it has: the check's own finding for a site that is renamed is gone, and the waiver that named it is left for the campaign's closing phase item to prune. Renaming rather than suppressing is OD-RULES-018's trade, which renamed five sites instead of adding three words to the repository's words policy on the ground that a shared approval masks the finding the rule exists to catch. The naming campaign's earlier territories -- repository, contracts, connectors, corrections, agent, kernel, capabilities -- took the same trade; the one waiver kept anywhere is the contracts one whose reason is about the corpus taxonomy rather than about the check.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/substrate, verified by this item's predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. Where a renamed item is public, its callers and its surface snapshot in tests/contract/surface/ are corrected in the same commit, and the territory item that owns them is widened here rather than edited without a claim.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/substrate",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P114-CLARITY-LANGUAGES",
+      "title": "The naming-clarity check reads zero, live and waived, over the languages territory",
+      "why": "check-naming-clarity reports 4 live finding(s) and 8 waiver(s) over crates/languages, measured at unix 1789586478 over the whole crates/ tree. This item renames every one of them, the waived ones included, so that the territory reaches zero without adding a suppression and without keeping the ones it has: the check's own finding for a site that is renamed is gone, and the waiver that named it is left for the campaign's closing phase item to prune. Renaming rather than suppressing is OD-RULES-018's trade, which renamed five sites instead of adding three words to the repository's words policy on the ground that a shared approval masks the finding the rule exists to catch. The naming campaign's earlier territories -- repository, contracts, connectors, corrections, agent, kernel, capabilities -- took the same trade; the one waiver kept anywhere is the contracts one whose reason is about the corpus taxonomy rather than about the check.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/languages, verified by this item's predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. Where a renamed item is public, its callers and its surface snapshot in tests/contract/surface/ are corrected in the same commit, and the territory item that owns them is widened here rather than edited without a claim.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/languages",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P114-CLARITY-PLATFORM",
+      "title": "The naming-clarity check reads zero, live and waived, over the platform territory",
+      "why": "check-naming-clarity reports 4 live finding(s) and 5 waiver(s) over crates/platform, measured at unix 1789586478 over the whole crates/ tree. This item renames every one of them, the waived ones included, so that the territory reaches zero without adding a suppression and without keeping the ones it has: the check's own finding for a site that is renamed is gone, and the waiver that named it is left for the campaign's closing phase item to prune. Renaming rather than suppressing is OD-RULES-018's trade, which renamed five sites instead of adding three words to the repository's words policy on the ground that a shared approval masks the finding the rule exists to catch. The naming campaign's earlier territories -- repository, contracts, connectors, corrections, agent, kernel, capabilities -- took the same trade; the one waiver kept anywhere is the contracts one whose reason is about the corpus taxonomy rather than about the check.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/platform, verified by this item's predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. Where a renamed item is public, its callers and its surface snapshot in tests/contract/surface/ are corrected in the same commit, and the territory item that owns them is widened here rather than edited without a claim.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/platform",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

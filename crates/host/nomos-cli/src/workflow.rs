@@ -47,7 +47,7 @@ pub use exit_code::ExitCode;
 pub use parsing::Command_From_String_Arguments;
 
 use self::composition::{Coherent_Declaration, Workflow_Variant};
-use self::report::{Rendered, Rendered_Check};
+use self::report::{Rendered_Check, Rendered_Workflow_Outcome};
 use self::sources::{Walked_Check, Walked_Correction, Walked_Gate};
 use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use nomos_platform::Clock;
@@ -73,7 +73,7 @@ pub fn Run(command: &WorkflowCommand, stdout: &mut impl Write, stderr: &mut impl
 
     let outcome = Ran_Step(body);
 
-    return Rendered(&outcome, stdout, stderr);
+    return Rendered_Workflow_Outcome(&outcome, stdout, stderr);
 }
 
 /// `command`'s own body, with its `root` already walked. `Err` names the code the process leaves

@@ -153,10 +153,10 @@ mod tests
         assert_eq!(only.severity, DiagnosticSeverity::Error);
 
         let carried = only.detail.as_ref().expect("walk-outward data is attached");
-        let data: serde_json::Value = serde_json::from_str(carried).expect("walk-outward data is a document");
-        assert_eq!(At(&data, &["governing_rule", "rule"]), Some(nomos_rules::COMPLETENESS_MIRROR));
-        assert_eq!(At(&data, &["architectural_component", "crate_name"]), Some("nomos-spec-store"));
-        assert_eq!(At(&data, &["available_correction", "family"]), Some(nomos_rules::COMPLETENESS_MIRROR));
+        let document: serde_json::Value = serde_json::from_str(carried).expect("walk-outward data is a document");
+        assert_eq!(Field_At(&document, &["governing_rule", "rule"]), Some(nomos_rules::COMPLETENESS_MIRROR));
+        assert_eq!(Field_At(&document, &["architectural_component", "crate_name"]), Some("nomos-spec-store"));
+        assert_eq!(Field_At(&document, &["available_correction", "family"]), Some(nomos_rules::COMPLETENESS_MIRROR));
     }
 
     /// The two free-form facts a fixture `COMPLETENESS_MIRROR` finding carries: what the rule
@@ -167,12 +167,12 @@ mod tests
         location: &'a str,
     }
 
-    /// The string at the end of `path` in `data`, read through `Value::get` rather than
+    /// The string at the end of `path` in `document`, read through `Value::get` rather than
     /// `Value`'s own `Index` -- this workspace's `indexing_slicing` lint policy denies the
     /// bracket form everywhere, not only on a slice.
-    fn At<'a>(data: &'a serde_json::Value, path: &[&str]) -> Option<&'a str>
+    fn Field_At<'a>(document: &'a serde_json::Value, path: &[&str]) -> Option<&'a str>
     {
-        let mut cursor = data;
+        let mut cursor = document;
         for step in path
         {
             cursor = cursor.get(step)?;

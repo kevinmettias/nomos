@@ -5,7 +5,7 @@ use nomos_workflow_orchestration::{StepOutcome, WorkflowOutcome};
 use std::io::Write;
 
 /// Renders `outcome` and reports the [`ExitCode`] it earns.
-pub(super) fn Rendered(outcome: &WorkflowOutcome, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+pub(super) fn Rendered_Workflow_Outcome(outcome: &WorkflowOutcome, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
     return match outcome
     {

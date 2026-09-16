@@ -56,8 +56,8 @@ mod tests
     #[test]
     fn Test_Each_State_Should_Serialize_Under_A_Name_Of_Its_Own()
     {
-        let unbounded = Rendered(BaselineAllowance::Unbounded);
-        let bounded = Rendered(BaselineAllowance::AtMost(ADOPTED_OCCURRENCES));
+        let unbounded = Rendered_Allowance(BaselineAllowance::Unbounded);
+        let bounded = Rendered_Allowance(BaselineAllowance::AtMost(ADOPTED_OCCURRENCES));
 
         assert_eq!(unbounded.get("allowance").and_then(serde_json::Value::as_str), Some("unbounded"), "{unbounded}");
         assert_eq!(bounded.get("allowance").and_then(serde_json::Value::as_str), Some("at_most"), "{bounded}");
@@ -72,13 +72,13 @@ mod tests
     #[test]
     fn Test_An_Unbounded_Allowance_Should_Carry_No_Count()
     {
-        let rendered = Rendered(BaselineAllowance::Unbounded);
+        let rendered = Rendered_Allowance(BaselineAllowance::Unbounded);
 
         assert!(rendered.get("accepted_occurrence_count").is_none(), "{rendered}");
     }
 
     /// An allowance as a caller receives it.
-    fn Rendered(allowance: BaselineAllowance) -> serde_json::Value
+    fn Rendered_Allowance(allowance: BaselineAllowance) -> serde_json::Value
     {
         return serde_json::to_value(BaselineAllowanceResponse::From(allowance))
             .expect("a derived Serialize over owned data has nothing to refuse");

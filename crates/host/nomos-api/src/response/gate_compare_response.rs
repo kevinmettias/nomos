@@ -42,8 +42,8 @@ use super::ComparabilityResponse;
 #[must_use]
 pub fn Handle_Gate_Compare(baseline: &GateCommand, candidate: &GateCommand) -> GateCompareResponse
 {
-    let before = Judged(baseline);
-    let after = Judged(candidate);
+    let before = Judged_Command(baseline);
+    let after = Judged_Command(candidate);
 
     return match nomos_gate_orchestration::Compare_Gate_Runs(&before, &after)
     {
@@ -60,7 +60,7 @@ pub fn Handle_Gate_Compare(baseline: &GateCommand, candidate: &GateCommand) -> G
 /// overlap. This is deliberately the same composition `gate_run_response.rs` performs and
 /// `nomos-cli`'s own `gate.rs` performs; unifying the three is a change to that file rather
 /// than this one.
-fn Judged(command: &GateCommand) -> GateRunResult
+fn Judged_Command(command: &GateCommand) -> GateRunResult
 {
     let walked = sources::Walked_Sources(&command.root);
     let now = CLOCK.Now();
@@ -194,7 +194,7 @@ mod tests
     ///
     /// `serde_json::Value`'s own `Index` panics on a missing key, which is the failure
     /// `clippy::indexing_slicing` is denied in this workspace to prevent.
-    fn At(value: &serde_json::Value, path: &[&str]) -> serde_json::Value
+    fn Field_At(value: &serde_json::Value, path: &[&str]) -> serde_json::Value
     {
         const NOTHING: serde_json::Value = serde_json::Value::Null;
 
@@ -228,8 +228,8 @@ mod tests
         let _ignored = std::fs::remove_dir_all(&strict);
         let rendered = serde_json::to_value(&response)
             .expect("a derived Serialize over owned data has nothing to refuse");
-        assert_eq!(At(&rendered, &["comparability", "comparability"]), "compatible_with", "{rendered}");
-        assert_eq!(At(&rendered, &["comparability", "differences"]).to_string(), "[\"policy\"]", "{rendered}");
+        assert_eq!(Field_At(&rendered, &["comparability", "comparability"]), "compatible_with", "{rendered}");
+        assert_eq!(Field_At(&rendered, &["comparability", "differences"]).to_string(), "[\"policy\"]", "{rendered}");
     }
 
     /// Two runs over one tree under one policy are compatible, so a caller may read the
@@ -248,8 +248,8 @@ mod tests
         let _ignored = std::fs::remove_dir_all(&root);
         let rendered = serde_json::to_value(&response)
             .expect("a derived Serialize over owned data has nothing to refuse");
-        assert_eq!(At(&rendered, &["comparability", "comparability"]), "compatible", "{rendered}");
-        assert!(At(&rendered, &["comparability"]).get("differences").is_none(), "{rendered}");
+        assert_eq!(Field_At(&rendered, &["comparability", "comparability"]), "compatible", "{rendered}");
+        assert!(Field_At(&rendered, &["comparability"]).get("differences").is_none(), "{rendered}");
     }
 
     /// Comparing a tree with itself under one policy reports nothing changed.

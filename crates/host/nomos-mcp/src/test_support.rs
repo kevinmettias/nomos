@@ -9,7 +9,7 @@ use serde_json::Value;
 /// exception for tests the way `clippy.toml` does for `unwrap`. A JSON pointer asks the same
 /// question and cannot panic, so the assertion that reads a field of an answer fails on the
 /// field being wrong rather than on the field being absent.
-pub(crate) fn At(value: &Value, pointer: &str) -> Value
+pub(crate) fn Field_At(value: &Value, pointer: &str) -> Value
 {
     return value.pointer(pointer).cloned().unwrap_or(Value::Null);
 }

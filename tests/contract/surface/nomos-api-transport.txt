@@ -1,7 +1,7 @@
 pub const fn nomos_api_transport::ServedMethod::Name(self) -> &'static str
-pub const nomos_api_transport::NomosApiService::SCOPE: ReproducibilityScope
-pub const nomos_api_transport::NomosApiService::STRENGTH: DeterminismStrength
-pub const nomos_api_transport::NomosApiService::TRACE: TraceEquivalence
+pub const nomos_api_transport::NomosApiDispatch::SCOPE: ReproducibilityScope
+pub const nomos_api_transport::NomosApiDispatch::STRENGTH: DeterminismStrength
+pub const nomos_api_transport::NomosApiDispatch::TRACE: TraceEquivalence
 pub const nomos_api_transport::ServedMethod::REGISTRY: [Self; 5]
 pub enum nomos_api_transport::ServedMethod
 pub enum variant nomos_api_transport::ServedMethod::Correction
@@ -15,12 +15,12 @@ pub fn nomos_api_transport::CorrectionParameters::Command(&self) -> CorrectionCo
 pub fn nomos_api_transport::FindingParameters::Query(&self) -> FindingQuery
 pub fn nomos_api_transport::FindingParameters::Root(&self) -> PathBuf
 pub fn nomos_api_transport::GateParameters::Command(&self) -> GateCommand
-pub fn nomos_api_transport::NomosApiService::Answer(&self, method: &str, parameters: &str) -> RemoteCallOutcome
-pub fn nomos_api_transport::NomosApiService::Served_Methods(&self) -> Vec<&'static str>
+pub fn nomos_api_transport::NomosApiDispatch::Answer(&self, method: &str, parameters: &str) -> RemoteCallOutcome
+pub fn nomos_api_transport::NomosApiDispatch::Served_Methods(&self) -> Vec<&'static str>
 pub fn nomos_api_transport::ServedMethod::Named(name: &str) -> Option<Self>
 pub fn nomos_api_transport::ServedMethod::Operation(self) -> OperationName
-pub impl nomos_api_transport::NomosApiService implements RemoteCallStrategy
-pub impl nomos_api_transport::NomosApiService implements Strategy
+pub impl nomos_api_transport::NomosApiDispatch implements RemoteCallStrategy
+pub impl nomos_api_transport::NomosApiDispatch implements Strategy
 pub struct field nomos_api_transport::CompareParameters::baseline: GateParameters
 pub struct field nomos_api_transport::CompareParameters::candidate: GateParameters
 pub struct field nomos_api_transport::CorrectionParameters::commit: bool
@@ -36,4 +36,4 @@ pub struct nomos_api_transport::CompareParameters
 pub struct nomos_api_transport::CorrectionParameters
 pub struct nomos_api_transport::FindingParameters
 pub struct nomos_api_transport::GateParameters
-pub struct nomos_api_transport::NomosApiService
+pub struct nomos_api_transport::NomosApiDispatch

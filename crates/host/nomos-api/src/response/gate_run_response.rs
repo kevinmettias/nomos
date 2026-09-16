@@ -149,7 +149,7 @@ mod tests
         // Which indeterminate, not merely that it is one. Before this crate carried the
         // check outcome, this assertion could not be written here at all.
         let rendered = serde_json::to_value(&response).expect("a derived Serialize over owned data has nothing to refuse");
-        assert_eq!(At(&rendered, &["check_outcome", "outcome"]), "no_source", "{rendered}");
+        assert_eq!(Field_At(&rendered, &["check_outcome", "outcome"]), "no_source", "{rendered}");
     }
 
     /// A tree with real source reports what it looked at, which is the other half of telling
@@ -160,8 +160,8 @@ mod tests
         let response = Handle_Gate_Run(&Command_At(PathBuf::from(".")));
 
         let rendered = serde_json::to_value(&response).expect("a derived Serialize over owned data has nothing to refuse");
-        assert_eq!(At(&rendered, &["check_outcome", "outcome"]), "judged", "{rendered}");
-        assert!(At(&rendered, &["check_outcome", "files"]).as_u64().unwrap_or(0) > 0, "{rendered}");
+        assert_eq!(Field_At(&rendered, &["check_outcome", "outcome"]), "judged", "{rendered}");
+        assert!(Field_At(&rendered, &["check_outcome", "files"]).as_u64().unwrap_or(0) > 0, "{rendered}");
     }
 
     /// A run that reached a verdict names no reason for not having one.
@@ -189,12 +189,12 @@ mod tests
 
         let _ignored = std::fs::remove_dir_all(&root);
         let rendered = serde_json::to_value(&response).expect("a derived Serialize over owned data has nothing to refuse");
-        assert_eq!(At(&rendered, &["disposition"]), "indeterminate", "{rendered}");
+        assert_eq!(Field_At(&rendered, &["disposition"]), "indeterminate", "{rendered}");
         // Judged, and still without a verdict -- the combination that was indistinguishable
         // from an unwalkable tree until both fields were carried.
-        assert_eq!(At(&rendered, &["check_outcome", "outcome"]), "judged", "{rendered}");
-        assert_eq!(At(&rendered, &["no_verdict", "cause"]), "malformed_policy", "{rendered}");
-        let detail = At(&rendered, &["no_verdict", "detail"]).as_str().unwrap_or_default().to_owned();
+        assert_eq!(Field_At(&rendered, &["check_outcome", "outcome"]), "judged", "{rendered}");
+        assert_eq!(Field_At(&rendered, &["no_verdict", "cause"]), "malformed_policy", "{rendered}");
+        let detail = Field_At(&rendered, &["no_verdict", "detail"]).as_str().unwrap_or_default().to_owned();
         assert!(detail.contains("basline"), "{detail}");
     }
 
@@ -204,7 +204,7 @@ mod tests
     /// `clippy::indexing_slicing` is denied in this workspace to prevent, so these tests read
     /// through `get` and report a missing key as `Null` rather than as a panic inside an
     /// assertion.
-    fn At(value: &serde_json::Value, path: &[&str]) -> serde_json::Value
+    fn Field_At(value: &serde_json::Value, path: &[&str]) -> serde_json::Value
     {
         const NOTHING: serde_json::Value = serde_json::Value::Null;
 

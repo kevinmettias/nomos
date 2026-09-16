@@ -1,7 +1,7 @@
 //! The four tools this server offers, and the one call that reaches them.
 
 use crate::ServedTool;
-use nomos_api_transport::NomosApiService;
+use nomos_api_transport::NomosApiDispatch;
 use xvpe_primitives::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use xvpe_remote_call::{
     RemoteCallOutcome, RemoteCallStrategy as _, ServerIdentity, ToolAnswer, ToolCatalogStrategy,
@@ -53,7 +53,7 @@ impl ToolCatalogStrategy for NomosToolCatalog
     ///
     /// The boundary `OD-HOST-007` drew is unchanged, and is still structural: a
     /// tool name *is* a served method name, so a call goes to
-    /// [`NomosApiService`] under the name the client asked for, and this crate
+    /// [`NomosApiDispatch`] under the name the client asked for, and this crate
     /// never names a `nomos_api::Handle_*` function or depends on `nomos-api` at
     /// all. Widening what a call can reach would first have to widen
     /// `ServedMethod`, in the crate where `tests/contract` already polices it.
@@ -65,7 +65,7 @@ impl ToolCatalogStrategy for NomosToolCatalog
     /// contract to meet at. They have one now, so the call is a call.
     fn Call_With_Json_Arguments(&self, name: &str, arguments: &str) -> ToolAnswer
     {
-        return match NomosApiService.Answer(name, arguments)
+        return match NomosApiDispatch.Answer(name, arguments)
         {
             RemoteCallOutcome::Answered(result) => ToolAnswer::Produced(result),
             RemoteCallOutcome::Refused(refusal) => ToolAnswer::Failed(refusal.message),

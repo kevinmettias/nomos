@@ -37,7 +37,7 @@ pub(super) fn Execute_Goal(goal: &str, config: DispatchConfig, output: &mut impl
 
     let outcome = Run_Agent_Execute(goal, config, &AgentEnvironment { launcher: &LAUNCHER });
 
-    return Rendered(&outcome, output, notes);
+    return Rendered_Dispatch_Outcome(&outcome, output, notes);
 }
 
 /// Renders `outcome` into the exact text and [`ExitCode`] this command has always
@@ -48,7 +48,7 @@ pub(super) fn Execute_Goal(goal: &str, config: DispatchConfig, output: &mut impl
 /// caller's own observation rather than a line that only appears when there is bad news to
 /// report -- `OD-EXECUTOR-001`'s rule, restated at the one place this workspace renders an
 /// executor's answer for a person to read.
-pub(super) fn Rendered(outcome: &AgentDispatchOutcome, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
+pub(super) fn Rendered_Dispatch_Outcome(outcome: &AgentDispatchOutcome, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
 {
     return match outcome
     {

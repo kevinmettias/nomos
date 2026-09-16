@@ -25,7 +25,7 @@
 //! What stays is what was always this workspace's: **which verbs are served**
 //! ([`ServedMethod`]), **what each one's arguments mean** ([`GateParameters`],
 //! [`FindingParameters`], [`CorrectionParameters`]), and the dispatch that turns
-//! one into a `nomos_api::Handle_*` call ([`NomosApiService`]).
+//! one into a `nomos_api::Handle_*` call ([`NomosApiDispatch`]).
 //!
 //! # What it serves, and why that is four verbs rather than twenty-six or more
 //!
@@ -52,7 +52,7 @@
 //!
 //! # How a caller serves this
 //!
-//! [`NomosApiService`] is an `xvpe_remote_call::RemoteCallStrategy`. A caller hands it to
+//! [`NomosApiDispatch`] is an `xvpe_remote_call::RemoteCallStrategy`. A caller hands it to
 //! `xvpe_remote_call_backend_json::Serve_Listener` with a listener it bound, or to
 //! `Serve_Methods` with any pair of streams.
 //!
@@ -74,14 +74,14 @@ mod compare_parameters;
 mod correction_parameters;
 mod finding_parameters;
 mod gate_parameters;
-mod nomos_api_service;
+mod nomos_api_dispatch;
 mod served_method;
 
 pub use compare_parameters::CompareParameters;
 pub use correction_parameters::CorrectionParameters;
 pub use finding_parameters::FindingParameters;
 pub use gate_parameters::GateParameters;
-pub use nomos_api_service::NomosApiService;
+pub use nomos_api_dispatch::NomosApiDispatch;
 pub use served_method::ServedMethod;
 
 /// Test-only helpers shared by more than one module here.

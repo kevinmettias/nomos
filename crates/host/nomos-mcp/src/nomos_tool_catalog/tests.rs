@@ -14,7 +14,7 @@
 //! exist, and where a call to one actually lands.
 
 use super::*;
-use crate::test_support::At;
+use crate::test_support::Field_At;
 
 /// A call must reach the real registry rather than a description of it.
 const CALL_REACHES_THE_REGISTRY: &str = "a call reaches the handler behind the tool";
@@ -28,7 +28,7 @@ const CATALOGUE_IS_THE_REGISTRY: &str =
 fn Test_The_Catalogue_Should_Offer_Exactly_The_Served_Operations()
 {
     let offered = NomosToolCatalog.Tools();
-    let served = NomosApiService.Served_Methods();
+    let served = NomosApiDispatch.Served_Methods();
 
     assert_eq!(offered.len(), served.len(), "{CATALOGUE_IS_THE_REGISTRY}");
     for tool in &offered
@@ -57,7 +57,7 @@ fn Test_A_Call_Should_Reach_The_Real_Registry()
     assert!(!answer.Is_A_Failure(), "{CALL_REACHES_THE_REGISTRY}");
     let document: serde_json::Value =
         serde_json::from_str(answer.Text()).expect("a produced answer is a JSON document");
-    assert_eq!(At(&document, "/outcome"), "planned", "{CALL_REACHES_THE_REGISTRY}");
+    assert_eq!(Field_At(&document, "/outcome"), "planned", "{CALL_REACHES_THE_REGISTRY}");
 }
 
 #[test]

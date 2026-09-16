@@ -153,7 +153,7 @@
 //! `nomos-api-transport` is the real second caller this section once said a follow-up
 //! increment would wire "once one exists to design it against": it serves
 //! [`Handle_Gate_Run`] over a wire, dispatching to it directly from its own
-//! `nomos_api_service.rs`. The boundary above is unmoved by that, which is why it still
+//! `nomos_api_dispatch.rs`. The boundary above is unmoved by that, which is why it still
 //! stands word for word -- that crate's own module doc quotes this section's
 //! argv/socket/framing sentence as the hole it fills, and says `nomos-api` gains no socket,
 //! no protocol dependency and no new handler from it. Proving this seam reachable and

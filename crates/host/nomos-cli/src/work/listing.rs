@@ -289,7 +289,7 @@ mod tests
     #[test]
     fn Test_Listing_Label_Should_Report_Declined_For_A_Declined_Item()
     {
-        let mut item = Item("T-1");
+        let mut item = Item_For_Id("T-1");
         item.Decline("superseded by T-2", "agent-a", Timestamp::From_Unix_Seconds(1));
         let document = Board_With(item);
         let found = document.items.first().expect("the fixture has an item");
@@ -303,7 +303,7 @@ mod tests
     #[test]
     fn Test_Listed_As_Should_Report_The_Items_Label_When_No_Filter_Is_Given()
     {
-        let document = Board_With(Item("T-1"));
+        let document = Board_With(Item_For_Id("T-1"));
         let item = document.items.first().expect("the fixture has an item");
 
         assert_eq!(
@@ -315,7 +315,7 @@ mod tests
     #[test]
     fn Test_Listed_As_Should_Exclude_An_Item_Whose_Label_Does_Not_Match_The_Filter()
     {
-        let document = Board_With(Item("T-1"));
+        let document = Board_With(Item_For_Id("T-1"));
         let item = document.items.first().expect("the fixture has an item");
 
         assert_eq!(
@@ -348,7 +348,7 @@ mod tests
     #[test]
     fn Test_Print_Listing_Should_Print_The_Items_Identifier_Label_And_Title()
     {
-        let item = Item("T-1");
+        let item = Item_For_Id("T-1");
         let mut output = Vec::new();
 
         Print_Listing(&item, "ready", &mut output);
@@ -362,7 +362,7 @@ mod tests
     #[test]
     fn Test_Print_Listing_Should_Show_The_Holder_Of_A_Claimed_Item()
     {
-        let mut item = Item("T-1");
+        let mut item = Item_For_Id("T-1");
         item.claim = Some(nomos_ledger::Claim {
             holder: "agent-a".to_owned(),
             acquired_at: Timestamp::From_Unix_Seconds(1),
@@ -381,7 +381,7 @@ mod tests
     #[test]
     fn Test_Print_Claim_Should_Print_Nothing_For_An_Item_With_No_Claim()
     {
-        let item = Item("T-1");
+        let item = Item_For_Id("T-1");
         let mut output = Vec::new();
 
         Print_Claim(&item, Timestamp::From_Unix_Seconds(0), &mut output);
@@ -392,7 +392,7 @@ mod tests
     #[test]
     fn Test_Print_Claim_Should_Mark_A_Lapsed_Claim()
     {
-        let mut item = Item("T-1");
+        let mut item = Item_For_Id("T-1");
         item.claim = Some(nomos_ledger::Claim {
             holder: "agent-a".to_owned(),
             acquired_at: Timestamp::From_Unix_Seconds(0),
@@ -426,7 +426,7 @@ mod tests
     /// verification stamped against the revision the test reads back.
     fn An_Item_With_A_Full_History() -> LedgerItem
     {
-        let mut item = Item("T-1");
+        let mut item = Item_For_Id("T-1");
         item.displaced.push(nomos_ledger::Claim {
             holder: "agent-a".to_owned(),
             acquired_at: Timestamp::From_Unix_Seconds(0),
@@ -451,7 +451,7 @@ mod tests
 
     /// A minimal, ready item: enough to exercise the listing surface without a claim, a
     /// history or a territory that matters to any test here.
-    fn Item(id: &str) -> LedgerItem
+    fn Item_For_Id(id: &str) -> LedgerItem
     {
         return LedgerItem {
             id: ItemId::New(id),
