@@ -1,4 +1,16 @@
 //! Every way reading the environment fails.
+//!
+//! # Why this file sits at the crate root rather than inside `environment/`
+//!
+//! It was `environment/environment_error.rs`, and its own name repeated its parent folder —
+//! `check-tree-legibility` reports a redundant parent prefix. The remedy that rule states for
+//! a repeated word that is a declared type's own name is to rename the *type*, not the file,
+//! because `file-name-matches-declared-type` would put the repeated word straight back. A type
+//! called `EnvironmentError` inside `environment/` is unsatisfiable for that reason; at the
+//! crate root the name repeats no parent folder and both rules pass on the same file.
+//!
+//! The public path is unchanged: `lib.rs` re-exports this, so `nomos_platform::EnvironmentError`
+//! is still the name every caller uses.
 
 /// Why an environment read failed.
 ///
@@ -7,7 +19,7 @@
 /// which is what every caller in this workspace already did with them before the port
 /// existed — so there is nothing for it to report here.
 ///
-/// [`Environment::Variable`]: super::Environment::Variable
+/// [`Environment::Variable`]: crate::Environment::Variable
 #[derive(Debug)]
 pub enum EnvironmentError
 {

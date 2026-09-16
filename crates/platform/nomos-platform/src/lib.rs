@@ -63,11 +63,18 @@
 // One module per port, each holding the trait and the types only that port's callers
 // name. Flat, this level was thirteen files a reader had to sort into ports by opening
 // them; the ports are the crate's whole structure and the tree now says so.
+//
+// A port's error type sits here rather than inside the port's own folder, because the
+// name it is published under already carries the port: `file_system/file_system_error.rs`
+// repeats its parent folder, and `file_system/error.rs` declaring `Error` needs an alias
+// to be published at all. See each file's own header.
 mod clock;
 mod file_system;
+mod file_system_error;
 mod process_launcher;
 mod cross_process_lock;
 mod environment;
+mod environment_error;
 
 // The determinism vocabulary the four ports declare in, re-exported so that an
 // implementor names it through the crate whose trait it is implementing. Every implementor
@@ -78,7 +85,9 @@ mod environment;
 pub use nomos_contracts::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 
 pub use clock::{Clock, Timestamp, timestamp_serde};
-pub use file_system::{FileSystem, FileSystemError};
+pub use file_system::FileSystem;
+pub use file_system_error::FileSystemError;
 pub use process_launcher::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
 pub use cross_process_lock::{CrossProcessLock, LockAcquisition, LockError, StaleTakeover};
-pub use environment::{Environment, EnvironmentError};
+pub use environment::Environment;
+pub use environment_error::EnvironmentError;

@@ -5,7 +5,7 @@ use nomos_contracts::Strategy;
 mod timestamp;
 
 pub use timestamp::Timestamp;
-pub use timestamp::serialization as timestamp_serde;
+pub use timestamp::timestamp_serde;
 
 /// The source of the current time.
 ///

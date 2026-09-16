@@ -1,8 +1,25 @@
 //! Every way a file operation fails, kept apart from what it was trying to do.
+//!
+//! # Why this file sits at the crate root rather than inside `file_system/`
+//!
+//! It was `file_system/error.rs`, declaring `Error`, and `file_system.rs` published it as
+//! `pub use error::Error as FileSystemError;`. Three rules pull against that shape, and
+//! moving the file here is the only arrangement that satisfies all three at once:
+//!
+//! - `file-name-matches-declared-type` requires a file to be named after the public type it
+//!   declares, so a type called `FileSystemError` forces the file to be `file_system_error`.
+//! - `check-tree-legibility` forbids a file repeating its parent folder, so
+//!   `file_system/file_system_error.rs` is out.
+//! - `check-facade-surface` counts `pub use x::Y as Z;` a second public name for one item, so
+//!   keeping `Error` and qualifying it at the facade is out too.
+//!
+//! At the crate root the name repeats no parent, the file matches the type, and no alias is
+//! needed. The public path is unchanged -- `lib.rs` re-exports it, so `nomos_platform::FileSystemError`
+//! is still what every caller names.
 
 /// Why a filesystem operation failed.
 #[derive(Debug)]
-pub enum Error
+pub enum FileSystemError
 {
     /// The path does not exist.
     NotFound
@@ -28,7 +45,7 @@ pub enum Error
     },
 }
 
-impl Error
+impl FileSystemError
 {
     /// The path the failure concerns.
     #[must_use]
@@ -41,7 +58,7 @@ impl Error
     }
 }
 
-impl core::fmt::Display for Error
+impl core::fmt::Display for FileSystemError
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -54,7 +71,7 @@ impl core::fmt::Display for Error
     }
 }
 
-impl std::error::Error for Error
+impl std::error::Error for FileSystemError
 {}
 
 #[cfg(test)]
@@ -65,13 +82,13 @@ mod tests
     #[test]
     fn Test_Path_Should_Read_Back_Whichever_Variant_Carries_It()
     {
-        assert_eq!(Error::NotFound { path: "a/missing".to_owned() }.Path(), "a/missing");
+        assert_eq!(FileSystemError::NotFound { path: "a/missing".to_owned() }.Path(), "a/missing");
         assert_eq!(
-            Error::Denied { path: "b/locked".to_owned(), cause: "permission denied".to_owned() }.Path(),
+            FileSystemError::Denied { path: "b/locked".to_owned(), cause: "permission denied".to_owned() }.Path(),
             "b/locked"
         );
         assert_eq!(
-            Error::Other { path: "c/odd".to_owned(), cause: "disk full".to_owned() }.Path(),
+            FileSystemError::Other { path: "c/odd".to_owned(), cause: "disk full".to_owned() }.Path(),
             "c/odd"
         );
     }

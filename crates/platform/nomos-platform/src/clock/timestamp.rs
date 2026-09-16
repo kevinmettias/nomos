@@ -10,7 +10,7 @@
 //! rather than wraps — is what moved, unchanged and with its tests.
 //!
 //! What stays here is the one thing that is genuinely Nomos's: how a timestamp is
-//! written into the work ledger. See [`serialization`].
+//! written into the work ledger. See [`timestamp_serde`].
 
 pub use xvpe_clock::Timestamp;
 
@@ -36,7 +36,11 @@ pub use xvpe_clock::Timestamp;
 /// Nine fields across eight types name it, all of them a bare `Timestamp` — there is
 /// no `Option` or collection shape to serve, which is why this module has one pair of
 /// functions and not a family.
-pub mod serialization
+///
+/// The module is named for the path it is reached by, rather than `serialization` and
+/// re-exported under a shorter name: an alias is a second public name for one item, and
+/// this one was the only reason `clock` published two paths to the same module.
+pub mod timestamp_serde
 {
     use serde::{Deserialize, Deserializer, Serializer};
 
@@ -82,7 +86,7 @@ mod tests
     #[derive(serde::Serialize, serde::Deserialize, PartialEq, Eq, Debug)]
     struct Record
     {
-        #[serde(with = "super::serialization")]
+        #[serde(with = "super::timestamp_serde")]
         acquired_at: Timestamp,
     }
 

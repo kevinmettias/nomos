@@ -1,9 +1,6 @@
 //! Reading and writing files, with the durability rules stated rather than assumed.
 
-mod error;
-
-pub use error::Error as FileSystemError;
-
+use crate::FileSystemError;
 use nomos_contracts::Strategy;
 use std::path::{Path, PathBuf};
 

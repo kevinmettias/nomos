@@ -80208,6 +80208,438 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P112-PLACEMENT-REPOSITORY",
+      "title": "Placement zero across the repository territory",
+      "why": "The code-standards placement phase reports 30 findings across this territory (30 reported, 0 waived) against a crates/-rooted sweep at the revision this item was boarded on. Placement is root-sensitive: a crate-rooted or band-rooted sweep is a strict subset of a crates/-rooted one, measured at 166 and 194 of 243 respectively, because check-dependency-placement resolves a crate's edges against the whole workspace and check-folder-organization reports the folder layer itself. So the predicate sweeps crates/ and selects by path prefix rather than judging this territory's crate roots alone.",
+      "done_when": "Every placement finding this territory owns is resolved, verified by running this item's predicate. No entry is added to suppressions.json and no new in-code allow marker is added. A finding that cannot be fixed without gaming a matcher is left reported with its reason recorded on this item rather than waived.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository/nomos-repo-policy"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-repository"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P112-PLACEMENT-RULES",
+      "title": "Placement zero across the rules territory",
+      "why": "The code-standards placement phase reports 22 findings across this territory (22 reported, 0 waived) against a crates/-rooted sweep at the revision this item was boarded on. Placement is root-sensitive: a crate-rooted or band-rooted sweep is a strict subset of a crates/-rooted one, measured at 166 and 194 of 243 respectively, because check-dependency-placement resolves a crate's edges against the whole workspace and check-folder-organization reports the folder layer itself. So the predicate sweeps crates/ and selects by path prefix rather than judging this territory's crate roots alone.",
+      "done_when": "Every placement finding this territory owns is resolved, verified by running this item's predicate. No entry is added to suppressions.json and no new in-code allow marker is added. A finding that cannot be fixed without gaming a matcher is left reported with its reason recorded on this item rather than waived.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-rules"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P112-PLACEMENT-HOST",
+      "title": "Placement zero across the host territory",
+      "why": "The code-standards placement phase reports 30 findings across this territory (22 reported, 8 waived) against a crates/-rooted sweep at the revision this item was boarded on. Placement is root-sensitive: a crate-rooted or band-rooted sweep is a strict subset of a crates/-rooted one, measured at 166 and 194 of 243 respectively, because check-dependency-placement resolves a crate's edges against the whole workspace and check-folder-organization reports the folder layer itself. So the predicate sweeps crates/ and selects by path prefix rather than judging this territory's crate roots alone.",
+      "done_when": "Every placement finding this territory owns is resolved, verified by running this item's predicate. No entry is added to suppressions.json and no new in-code allow marker is added. A finding that cannot be fixed without gaming a matcher is left reported with its reason recorded on this item rather than waived.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api",
+          "crates/host/nomos-api-transport",
+          "crates/host/nomos-cli",
+          "crates/host/nomos-lsp",
+          "crates/host/nomos-surface-provenance"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-host"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P112-PLACEMENT-LANGUAGES",
+      "title": "Placement zero across the languages territory",
+      "why": "The code-standards placement phase reports 43 findings across this territory (20 reported, 23 waived) against a crates/-rooted sweep at the revision this item was boarded on. Placement is root-sensitive: a crate-rooted or band-rooted sweep is a strict subset of a crates/-rooted one, measured at 166 and 194 of 243 respectively, because check-dependency-placement resolves a crate's edges against the whole workspace and check-folder-organization reports the folder layer itself. So the predicate sweeps crates/ and selects by path prefix rather than judging this territory's crate roots alone.",
+      "done_when": "Every placement finding this territory owns is resolved, verified by running this item's predicate. No entry is added to suppressions.json and no new in-code allow marker is added. A finding that cannot be fixed without gaming a matcher is left reported with its reason recorded on this item rather than waived.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go",
+          "crates/languages/nomos-lang-go-modules",
+          "crates/languages/nomos-lang-rust",
+          "crates/languages/nomos-lang-rust-cargo",
+          "crates/languages/nomos-lang-rust-clippy",
+          "crates/languages/nomos-lang-rust-compiler",
+          "crates/languages/nomos-lang-rust-deny",
+          "crates/languages/nomos-lang-rust-scan"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-languages"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P112-PLACEMENT-CAPABILITIES",
+      "title": "Placement zero across the capabilities territory",
+      "why": "The code-standards placement phase reports 24 findings across this territory (14 reported, 10 waived) against a crates/-rooted sweep at the revision this item was boarded on. Placement is root-sensitive: a crate-rooted or band-rooted sweep is a strict subset of a crates/-rooted one, measured at 166 and 194 of 243 respectively, because check-dependency-placement resolves a crate's edges against the whole workspace and check-folder-organization reports the folder layer itself. So the predicate sweeps crates/ and selects by path prefix rather than judging this territory's crate roots alone.",
+      "done_when": "Every placement finding this territory owns is resolved, verified by running this item's predicate. No entry is added to suppressions.json and no new in-code allow marker is added. A finding that cannot be fixed without gaming a matcher is left reported with its reason recorded on this item rather than waived.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities",
+          "crates/capabilities/nomos-cap-architecture",
+          "crates/capabilities/nomos-cap-controlflow",
+          "crates/capabilities/nomos-cap-dependency",
+          "crates/capabilities/nomos-cap-dependency-policy",
+          "crates/capabilities/nomos-cap-goals-policy",
+          "crates/capabilities/nomos-cap-limits-policy",
+          "crates/capabilities/nomos-cap-lint",
+          "crates/capabilities/nomos-cap-naming-policy",
+          "crates/capabilities/nomos-cap-requirement-trace",
+          "crates/capabilities/nomos-cap-scripting-policy",
+          "crates/capabilities/nomos-cap-words-policy"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-capabilities"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P112-PLACEMENT-ORCHESTRATION",
+      "title": "Placement zero across the orchestration territory",
+      "why": "The code-standards placement phase reports 36 findings across this territory (20 reported, 16 waived) against a crates/-rooted sweep at the revision this item was boarded on. Placement is root-sensitive: a crate-rooted or band-rooted sweep is a strict subset of a crates/-rooted one, measured at 166 and 194 of 243 respectively, because check-dependency-placement resolves a crate's edges against the whole workspace and check-folder-organization reports the folder layer itself. So the predicate sweeps crates/ and selects by path prefix rather than judging this territory's crate roots alone.",
+      "done_when": "Every placement finding this territory owns is resolved, verified by running this item's predicate. No entry is added to suppressions.json and no new in-code allow marker is added. A finding that cannot be fixed without gaming a matcher is left reported with its reason recorded on this item rather than waived.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-agent-orchestration",
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-correction-orchestration",
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/orchestration/nomos-spec-orchestration",
+          "crates/orchestration/nomos-workflow-orchestration"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-orchestration"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P112-PLACEMENT-SPEC",
+      "title": "Placement zero across the spec territory",
+      "why": "The code-standards placement phase reports 16 findings across this territory (2 reported, 14 waived) against a crates/-rooted sweep at the revision this item was boarded on. Placement is root-sensitive: a crate-rooted or band-rooted sweep is a strict subset of a crates/-rooted one, measured at 166 and 194 of 243 respectively, because check-dependency-placement resolves a crate's edges against the whole workspace and check-folder-organization reports the folder layer itself. So the predicate sweeps crates/ and selects by path prefix rather than judging this territory's crate roots alone.",
+      "done_when": "Every placement finding this territory owns is resolved, verified by running this item's predicate. No entry is added to suppressions.json and no new in-code allow marker is added. A finding that cannot be fixed without gaming a matcher is left reported with its reason recorded on this item rather than waived.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-bundle",
+          "crates/spec/nomos-spec-ingest",
+          "crates/spec/nomos-spec-project",
+          "crates/spec/nomos-spec-store"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-spec"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P112-PLACEMENT-SUBSTRATE",
+      "title": "Placement zero across the substrate territory",
+      "why": "The code-standards placement phase reports 16 findings across this territory (0 reported, 16 waived) against a crates/-rooted sweep at the revision this item was boarded on. Placement is root-sensitive: a crate-rooted or band-rooted sweep is a strict subset of a crates/-rooted one, measured at 166 and 194 of 243 respectively, because check-dependency-placement resolves a crate's edges against the whole workspace and check-folder-organization reports the folder layer itself. So the predicate sweeps crates/ and selects by path prefix rather than judging this territory's crate roots alone.",
+      "done_when": "Every placement finding this territory owns is resolved, verified by running this item's predicate. No entry is added to suppressions.json and no new in-code allow marker is added. A finding that cannot be fixed without gaming a matcher is left reported with its reason recorded on this item rather than waived.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis",
+          "crates/substrate/nomos-capability",
+          "crates/substrate/nomos-scope-verification",
+          "crates/substrate/nomos-workspace"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-substrate"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P112-PLACEMENT-KERNEL",
+      "title": "Placement zero across the kernel territory",
+      "why": "The code-standards placement phase reports 10 findings across this territory (0 reported, 10 waived) against a crates/-rooted sweep at the revision this item was boarded on. Placement is root-sensitive: a crate-rooted or band-rooted sweep is a strict subset of a crates/-rooted one, measured at 166 and 194 of 243 respectively, because check-dependency-placement resolves a crate's edges against the whole workspace and check-folder-organization reports the folder layer itself. So the predicate sweeps crates/ and selects by path prefix rather than judging this territory's crate roots alone.",
+      "done_when": "Every placement finding this territory owns is resolved, verified by running this item's predicate. No entry is added to suppressions.json and no new in-code allow marker is added. A finding that cannot be fixed without gaming a matcher is left reported with its reason recorded on this item rather than waived.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel/nomos-model",
+          "crates/kernel/nomos-store"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-kernel"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P112-PLACEMENT-PLATFORM",
+      "title": "Placement zero across the platform territory",
+      "why": "The code-standards placement phase reports 5 findings across this territory (3 reported, 2 waived) against a crates/-rooted sweep at the revision this item was boarded on. Placement is root-sensitive: a crate-rooted or band-rooted sweep is a strict subset of a crates/-rooted one, measured at 166 and 194 of 243 respectively, because check-dependency-placement resolves a crate's edges against the whole workspace and check-folder-organization reports the folder layer itself. So the predicate sweeps crates/ and selects by path prefix rather than judging this territory's crate roots alone.",
+      "done_when": "Every placement finding this territory owns is resolved, verified by running this item's predicate. No entry is added to suppressions.json and no new in-code allow marker is added. A finding that cannot be fixed without gaming a matcher is left reported with its reason recorded on this item rather than waived.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform",
+          "crates/platform/nomos-platform-xvpe"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-a5",
+        "acquired_at": 1789543697,
+        "lease_expires_at": 1789558097
+      },
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-platform"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P112-PLACEMENT-AGENTS-CONNECTORS",
+      "title": "Placement zero across the agents-connectors territory",
+      "why": "The code-standards placement phase reports 9 findings across this territory (5 reported, 4 waived) against a crates/-rooted sweep at the revision this item was boarded on. Placement is root-sensitive: a crate-rooted or band-rooted sweep is a strict subset of a crates/-rooted one, measured at 166 and 194 of 243 respectively, because check-dependency-placement resolves a crate's edges against the whole workspace and check-folder-organization reports the folder layer itself. So the predicate sweeps crates/ and selects by path prefix rather than judging this territory's crate roots alone.",
+      "done_when": "Every placement finding this territory owns is resolved, verified by running this item's predicate. No entry is added to suppressions.json and no new in-code allow marker is added. A finding that cannot be fixed without gaming a matcher is left reported with its reason recorded on this item rather than waived.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts",
+          "crates/agent/nomos-agent-executor-claude-code",
+          "crates/agent/nomos-model-backend-ollama",
+          "crates/connectors/nomos-connector-coderabbit",
+          "crates/composer/nomos-composer-std"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-agents-connectors"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P112-PLACEMENT-CRATES-HELD-BY-P111",
+      "title": "Placement zero across the crates-held-by-p111 territory",
+      "why": "The code-standards placement phase reports 32 findings across this territory (1 reported, 31 waived) against a crates/-rooted sweep at the revision this item was boarded on. Placement is root-sensitive: a crate-rooted or band-rooted sweep is a strict subset of a crates/-rooted one, measured at 166 and 194 of 243 respectively, because check-dependency-placement resolves a crate's edges against the whole workspace and check-folder-organization reports the folder layer itself. So the predicate sweeps crates/ and selects by path prefix rather than judging this territory's crate roots alone. These six crates are held separately because a live claim still reserves paths inside them, so this item is not claimable until that clears. Splitting them out keeps the band items from being asked to cover paths they cannot be given.",
+      "done_when": "Every placement finding this territory owns is resolved, verified by running this item's predicate. No entry is added to suppressions.json and no new in-code allow marker is added. A finding that cannot be fixed without gaming a matcher is left reported with its reason recorded on this item rather than waived.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts",
+          "crates/corrections/nomos-corrections",
+          "crates/platform/nomos-platform-std",
+          "crates/spec/nomos-spec-model",
+          "crates/spec/nomos-spec-validate",
+          "crates/substrate/nomos-ledger"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-crates-held-by-p111"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

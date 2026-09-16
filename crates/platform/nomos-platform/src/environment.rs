@@ -1,9 +1,6 @@
 //! The process's own environment, as a dependency rather than as an ambient fact.
 
-mod environment_error;
-
-pub use environment_error::EnvironmentError;
-
+use crate::EnvironmentError;
 use nomos_contracts::Strategy;
 use std::ffi::OsString;
 use std::path::PathBuf;
