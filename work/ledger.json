@@ -78156,7 +78156,8 @@
           "crates/orchestration/nomos-gate-orchestration/src/tests/explain.rs",
           "crates/orchestration/nomos-gate-orchestration/src/tests/coverage.rs",
           "crates/orchestration/nomos-gate-orchestration/src/tests/declared_policy.rs",
-          "crates/orchestration/nomos-gate-orchestration/src/tests/narrowing.rs"
+          "crates/orchestration/nomos-gate-orchestration/src/tests/narrowing.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/run_id.rs"
         ],
         "patterns": []
       },
@@ -78166,7 +78167,7 @@
       "claim": {
         "holder": "nomos-a5",
         "acquired_at": 1789497612,
-        "lease_expires_at": 1789526412
+        "lease_expires_at": 1789544623
       },
       "verification": {
         "argv": [
@@ -78214,6 +78215,13 @@
             "crates/orchestration/nomos-gate-orchestration/src/tests/narrowing.rs"
           ],
           "widened_at": 1789503746
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/orchestration/nomos-gate-orchestration/src/run_id.rs"
+          ],
+          "widened_at": 1789522824
         }
       ]
     },
@@ -78259,7 +78267,21 @@
           "tests/contract/surface/nomos-cap-requirement-trace.txt",
           "crates/capabilities/nomos-cap-requirement-trace/src/lib.rs",
           "tests/contract/tests/requirement_trace/registry.rs",
-          "tests/contract/tests/requirement_trace/reader.rs"
+          "tests/contract/tests/requirement_trace/reader.rs",
+          "crates/capabilities/nomos-cap-goals-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-lint/src/payload.rs",
+          "crates/capabilities/nomos-cap-scripting-policy/src/payload.rs",
+          "crates/capabilities/nomos-cap-syntax/src/payload/parse.rs",
+          "crates/capabilities/nomos-cap-syntax/src/payload_item.rs",
+          "crates/capabilities/nomos-cap-syntax/src/payload_refusal.rs",
+          "crates/capabilities/nomos-cap-syntax/src/payload_refusal_kind.rs",
+          "crates/capabilities/nomos-cap-syntax/src/syntax_payload.rs",
+          "crates/languages/nomos-lang-rust/src/fact_context.rs",
+          "crates/languages/nomos-lang-rust/src/reachability/provider.rs",
+          "crates/languages/nomos-lang-rust/src/rollup/encode.rs",
+          "crates/languages/nomos-lang-rust/src/rollup/materialize.rs",
+          "crates/languages/nomos-lang-rust/src/rollup/module/index.rs",
+          "crates/languages/nomos-lang-rust/src/rollup/parse.rs"
         ],
         "patterns": []
       },
@@ -78269,7 +78291,7 @@
       "claim": {
         "holder": "nomos-a5",
         "acquired_at": 1789497619,
-        "lease_expires_at": 1789526419
+        "lease_expires_at": 1789544623
       },
       "verification": {
         "argv": [
@@ -78310,6 +78332,26 @@
             "tests/contract/tests/requirement_trace/reader.rs"
           ],
           "widened_at": 1789502415
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/capabilities/nomos-cap-goals-policy/src/payload.rs",
+            "crates/capabilities/nomos-cap-lint/src/payload.rs",
+            "crates/capabilities/nomos-cap-scripting-policy/src/payload.rs",
+            "crates/capabilities/nomos-cap-syntax/src/payload/parse.rs",
+            "crates/capabilities/nomos-cap-syntax/src/payload_item.rs",
+            "crates/capabilities/nomos-cap-syntax/src/payload_refusal.rs",
+            "crates/capabilities/nomos-cap-syntax/src/payload_refusal_kind.rs",
+            "crates/capabilities/nomos-cap-syntax/src/syntax_payload.rs",
+            "crates/languages/nomos-lang-rust/src/fact_context.rs",
+            "crates/languages/nomos-lang-rust/src/reachability/provider.rs",
+            "crates/languages/nomos-lang-rust/src/rollup/encode.rs",
+            "crates/languages/nomos-lang-rust/src/rollup/materialize.rs",
+            "crates/languages/nomos-lang-rust/src/rollup/module/index.rs",
+            "crates/languages/nomos-lang-rust/src/rollup/parse.rs"
+          ],
+          "widened_at": 1789522836
         }
       ]
     },
@@ -78387,7 +78429,22 @@
           "crates/host/nomos-cli/src/gate/report/tests/compare.rs",
           "crates/host/nomos-cli/src/gate/report/tests/explain.rs",
           "crates/host/nomos-cli/src/gate/report/tests/plan.rs",
-          "crates/host/nomos-cli/src/gate/report/tests/verdicts.rs"
+          "crates/host/nomos-cli/src/gate/report/tests/verdicts.rs",
+          "crates/host/nomos-cli/src/agent/parsing.rs",
+          "crates/host/nomos-cli/src/check/parsing.rs",
+          "crates/host/nomos-cli/src/check/report.rs",
+          "crates/host/nomos-cli/src/correct/parsing.rs",
+          "crates/host/nomos-cli/src/request/parsing.rs",
+          "crates/host/nomos-cli/src/spec/exit_code.rs",
+          "crates/host/nomos-cli/src/spec/parsing.rs",
+          "crates/host/nomos-cli/src/spec/reporting.rs",
+          "crates/host/nomos-cli/src/spec/verb/editing.rs",
+          "crates/host/nomos-cli/src/spec/verb/freshness.rs",
+          "crates/host/nomos-cli/src/spec/verb/listing.rs",
+          "crates/host/nomos-cli/src/spec/verb/markdown.rs",
+          "crates/host/nomos-cli/src/spec/verb/render.rs",
+          "crates/host/nomos-cli/src/spec/verb/table.rs",
+          "crates/host/nomos-cli/src/work/exit_code.rs"
         ],
         "patterns": []
       },
@@ -78397,7 +78454,7 @@
       "claim": {
         "holder": "nomos-a5",
         "acquired_at": 1789497620,
-        "lease_expires_at": 1789526420
+        "lease_expires_at": 1789544623
       },
       "verification": {
         "argv": [
@@ -78453,6 +78510,27 @@
             "crates/host/nomos-cli/src/gate/report/tests/verdicts.rs"
           ],
           "widened_at": 1789504063
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/host/nomos-cli/src/agent/parsing.rs",
+            "crates/host/nomos-cli/src/check/parsing.rs",
+            "crates/host/nomos-cli/src/check/report.rs",
+            "crates/host/nomos-cli/src/correct/parsing.rs",
+            "crates/host/nomos-cli/src/request/parsing.rs",
+            "crates/host/nomos-cli/src/spec/exit_code.rs",
+            "crates/host/nomos-cli/src/spec/parsing.rs",
+            "crates/host/nomos-cli/src/spec/reporting.rs",
+            "crates/host/nomos-cli/src/spec/verb/editing.rs",
+            "crates/host/nomos-cli/src/spec/verb/freshness.rs",
+            "crates/host/nomos-cli/src/spec/verb/listing.rs",
+            "crates/host/nomos-cli/src/spec/verb/markdown.rs",
+            "crates/host/nomos-cli/src/spec/verb/render.rs",
+            "crates/host/nomos-cli/src/spec/verb/table.rs",
+            "crates/host/nomos-cli/src/work/exit_code.rs"
+          ],
+          "widened_at": 1789522837
         }
       ]
     },
@@ -78840,7 +78918,24 @@
           "crates/rules/nomos-rules/src/lib.rs",
           "crates/rules/nomos-rules/src/rule_descriptor.rs",
           "crates/rules/nomos-rules/src/universe_kind.rs",
-          "crates/rules/nomos-rules/tests/integration_seams.rs"
+          "crates/rules/nomos-rules/tests/integration_seams.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+          "crates/rules/nomos-rules/src/checks/crosslang/reading.rs",
+          "crates/rules/nomos-rules/src/checks/domain_type_alias.rs",
+          "crates/rules/nomos-rules/src/checks/enum_shape.rs",
+          "crates/rules/nomos-rules/src/checks/error_text.rs",
+          "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
+          "crates/rules/nomos-rules/src/checks/mirror/index.rs",
+          "crates/rules/nomos-rules/src/checks/naming.rs",
+          "crates/rules/nomos-rules/src/checks/naming/reading.rs",
+          "crates/rules/nomos-rules/src/checks/placement.rs",
+          "crates/rules/nomos-rules/src/checks/reachability.rs",
+          "crates/rules/nomos-rules/src/checks/role_surface_pair.rs",
+          "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/rules/nomos-rules/src/checks/test_support.rs",
+          "crates/rules/nomos-rules/src/registry/rule_registry.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor/rule_judgment.rs"
         ],
         "patterns": []
       },
@@ -78850,7 +78945,7 @@
       "claim": {
         "holder": "nomos-a5",
         "acquired_at": 1789497623,
-        "lease_expires_at": 1789526423
+        "lease_expires_at": 1789544623
       },
       "verification": {
         "argv": [
@@ -78864,7 +78959,31 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+            "crates/rules/nomos-rules/src/checks/crosslang/reading.rs",
+            "crates/rules/nomos-rules/src/checks/domain_type_alias.rs",
+            "crates/rules/nomos-rules/src/checks/enum_shape.rs",
+            "crates/rules/nomos-rules/src/checks/error_text.rs",
+            "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
+            "crates/rules/nomos-rules/src/checks/mirror/index.rs",
+            "crates/rules/nomos-rules/src/checks/naming.rs",
+            "crates/rules/nomos-rules/src/checks/naming/reading.rs",
+            "crates/rules/nomos-rules/src/checks/placement.rs",
+            "crates/rules/nomos-rules/src/checks/reachability.rs",
+            "crates/rules/nomos-rules/src/checks/role_surface_pair.rs",
+            "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+            "crates/rules/nomos-rules/src/checks/security_text.rs",
+            "crates/rules/nomos-rules/src/checks/test_support.rs",
+            "crates/rules/nomos-rules/src/registry/rule_registry.rs",
+            "crates/rules/nomos-rules/src/rule_descriptor/rule_judgment.rs"
+          ],
+          "widened_at": 1789522837
+        }
+      ]
     },
     {
       "id": "P111-EIGHT-PHASE-SPEC-CORE",
@@ -78903,7 +79022,21 @@
           "crates/spec/nomos-spec-project/tests/projections/store.rs",
           "crates/spec/nomos-spec-project/tests/projections/subjects.rs",
           "crates/spec/nomos-spec-project/src/render/mermaid.rs",
-          "crates/spec/nomos-spec-project/src/select/sections/lineage.rs"
+          "crates/spec/nomos-spec-project/src/select/sections/lineage.rs",
+          "crates/spec/nomos-spec-bundle/src/bundle.rs",
+          "crates/spec/nomos-spec-bundle/src/columns.rs",
+          "crates/spec/nomos-spec-bundle/src/export/submission.rs",
+          "crates/spec/nomos-spec-bundle/src/import/disjoint.rs",
+          "crates/spec/nomos-spec-bundle/src/import/reference.rs",
+          "crates/spec/nomos-spec-bundle/src/import/resolve.rs",
+          "crates/spec/nomos-spec-bundle/src/row/record.rs",
+          "crates/spec/nomos-spec-project/src/build.rs",
+          "crates/spec/nomos-spec-project/src/catalogue.rs",
+          "crates/spec/nomos-spec-project/src/profile.rs",
+          "crates/spec/nomos-spec-project/src/projection.rs",
+          "crates/spec/nomos-spec-project/src/projection/format.rs",
+          "crates/spec/nomos-spec-project/src/projection/output.rs",
+          "crates/spec/nomos-spec-project/src/select/query.rs"
         ],
         "patterns": []
       },
@@ -78913,7 +79046,7 @@
       "claim": {
         "holder": "nomos-a5",
         "acquired_at": 1789497624,
-        "lease_expires_at": 1789526424
+        "lease_expires_at": 1789544623
       },
       "verification": {
         "argv": [
@@ -78935,6 +79068,26 @@
             "crates/spec/nomos-spec-project/src/select/sections/lineage.rs"
           ],
           "widened_at": 1789502312
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/spec/nomos-spec-bundle/src/bundle.rs",
+            "crates/spec/nomos-spec-bundle/src/columns.rs",
+            "crates/spec/nomos-spec-bundle/src/export/submission.rs",
+            "crates/spec/nomos-spec-bundle/src/import/disjoint.rs",
+            "crates/spec/nomos-spec-bundle/src/import/reference.rs",
+            "crates/spec/nomos-spec-bundle/src/import/resolve.rs",
+            "crates/spec/nomos-spec-bundle/src/row/record.rs",
+            "crates/spec/nomos-spec-project/src/build.rs",
+            "crates/spec/nomos-spec-project/src/catalogue.rs",
+            "crates/spec/nomos-spec-project/src/profile.rs",
+            "crates/spec/nomos-spec-project/src/projection.rs",
+            "crates/spec/nomos-spec-project/src/projection/format.rs",
+            "crates/spec/nomos-spec-project/src/projection/output.rs",
+            "crates/spec/nomos-spec-project/src/select/query.rs"
+          ],
+          "widened_at": 1789522837
         }
       ]
     },
@@ -78971,7 +79124,32 @@
           "crates/spec/nomos-spec-ingest/tests/regression_report/archives.rs",
           "crates/spec/nomos-spec-ingest/tests/restoration.rs",
           "crates/spec/nomos-spec-ingest/tests/revisions.rs",
-          "crates/spec/nomos-spec-ingest/tests/siblings.rs"
+          "crates/spec/nomos-spec-ingest/tests/siblings.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/census.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/judgment.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/regression.rs",
+          "crates/spec/nomos-spec-ingest/src/archaeology/revision.rs",
+          "crates/spec/nomos-spec-ingest/src/archive.rs",
+          "crates/spec/nomos-spec-ingest/src/archive/listing.rs",
+          "crates/spec/nomos-spec-ingest/src/content/block/mismatch.rs",
+          "crates/spec/nomos-spec-ingest/src/family.rs",
+          "crates/spec/nomos-spec-ingest/src/phases/blob.rs",
+          "crates/spec/nomos-spec-ingest/src/phases/catalog.rs",
+          "crates/spec/nomos-spec-ingest/src/phases/gate_report.rs",
+          "crates/spec/nomos-spec-ingest/src/phases/statements.rs",
+          "crates/spec/nomos-spec-ingest/src/reconciliation/lineage.rs",
+          "crates/spec/nomos-spec-ingest/src/reconciliation/overlay/artifact.rs",
+          "crates/spec/nomos-spec-ingest/src/reconciliation/overlay/report.rs",
+          "crates/spec/nomos-spec-ingest/src/reconciliation/report/filler_census.rs",
+          "crates/spec/nomos-spec-ingest/src/reconciliation/report/reconciliation_report.rs",
+          "crates/spec/nomos-spec-ingest/src/reconciliation/report/regression_report.rs",
+          "crates/spec/nomos-spec-ingest/src/reconciliation/report/tally.rs",
+          "crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs",
+          "crates/spec/nomos-spec-ingest/src/revisions.rs",
+          "crates/spec/nomos-spec-ingest/src/revisions/labels.rs",
+          "crates/spec/nomos-spec-ingest/src/siblings.rs",
+          "crates/spec/nomos-spec-ingest/src/siblings/commentary.rs",
+          "crates/spec/nomos-spec-ingest/src/siblings/sibling.rs"
         ],
         "patterns": []
       },
@@ -78981,7 +79159,7 @@
       "claim": {
         "holder": "nomos-a5",
         "acquired_at": 1789497625,
-        "lease_expires_at": 1789526425
+        "lease_expires_at": 1789544623
       },
       "verification": {
         "argv": [
@@ -78995,7 +79173,39 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/spec/nomos-spec-ingest/src/archaeology/census.rs",
+            "crates/spec/nomos-spec-ingest/src/archaeology/judgment.rs",
+            "crates/spec/nomos-spec-ingest/src/archaeology/regression.rs",
+            "crates/spec/nomos-spec-ingest/src/archaeology/revision.rs",
+            "crates/spec/nomos-spec-ingest/src/archive.rs",
+            "crates/spec/nomos-spec-ingest/src/archive/listing.rs",
+            "crates/spec/nomos-spec-ingest/src/content/block/mismatch.rs",
+            "crates/spec/nomos-spec-ingest/src/family.rs",
+            "crates/spec/nomos-spec-ingest/src/phases/blob.rs",
+            "crates/spec/nomos-spec-ingest/src/phases/catalog.rs",
+            "crates/spec/nomos-spec-ingest/src/phases/gate_report.rs",
+            "crates/spec/nomos-spec-ingest/src/phases/statements.rs",
+            "crates/spec/nomos-spec-ingest/src/reconciliation/lineage.rs",
+            "crates/spec/nomos-spec-ingest/src/reconciliation/overlay/artifact.rs",
+            "crates/spec/nomos-spec-ingest/src/reconciliation/overlay/report.rs",
+            "crates/spec/nomos-spec-ingest/src/reconciliation/report/filler_census.rs",
+            "crates/spec/nomos-spec-ingest/src/reconciliation/report/reconciliation_report.rs",
+            "crates/spec/nomos-spec-ingest/src/reconciliation/report/regression_report.rs",
+            "crates/spec/nomos-spec-ingest/src/reconciliation/report/tally.rs",
+            "crates/spec/nomos-spec-ingest/src/reconciliation/restored.rs",
+            "crates/spec/nomos-spec-ingest/src/revisions.rs",
+            "crates/spec/nomos-spec-ingest/src/revisions/labels.rs",
+            "crates/spec/nomos-spec-ingest/src/siblings.rs",
+            "crates/spec/nomos-spec-ingest/src/siblings/commentary.rs",
+            "crates/spec/nomos-spec-ingest/src/siblings/sibling.rs"
+          ],
+          "widened_at": 1789522837
+        }
+      ]
     },
     {
       "id": "P111-EIGHT-PHASE-SPEC-STORE",
@@ -79188,7 +79398,19 @@
           "crates/substrate/nomos-ledger/tests/records_do_not_serialize/record_directory.rs",
           "crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs",
           "crates/substrate/nomos-ledger/tests/scope_verification_integration.rs",
-          "crates/substrate/nomos-ledger/tests/widening_is_recorded.rs"
+          "crates/substrate/nomos-ledger/tests/widening_is_recorded.rs",
+          "crates/substrate/nomos-ledger/src/claim.rs",
+          "crates/substrate/nomos-ledger/src/claim/refusal.rs",
+          "crates/substrate/nomos-ledger/src/claim/refusal/message.rs",
+          "crates/substrate/nomos-ledger/src/finish/gate_step.rs",
+          "crates/substrate/nomos-ledger/src/finish/refusal.rs",
+          "crates/substrate/nomos-ledger/src/finish/release_outcome.rs",
+          "crates/substrate/nomos-ledger/src/finish/running.rs",
+          "crates/substrate/nomos-ledger/src/store/add_refusal.rs",
+          "crates/substrate/nomos-ledger/src/store/claiming.rs",
+          "crates/substrate/nomos-ledger/src/store/document.rs",
+          "crates/substrate/nomos-ledger/src/store/file.rs",
+          "crates/substrate/nomos-ledger/src/store/reservation.rs"
         ],
         "patterns": []
       },
@@ -79198,7 +79420,7 @@
       "claim": {
         "holder": "nomos-a5",
         "acquired_at": 1789497627,
-        "lease_expires_at": 1789526427
+        "lease_expires_at": 1789544624
       },
       "verification": {
         "argv": [
@@ -79209,6 +79431,449 @@
         "timeout_seconds": 1800
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/substrate/nomos-ledger/src/claim.rs",
+            "crates/substrate/nomos-ledger/src/claim/refusal.rs",
+            "crates/substrate/nomos-ledger/src/claim/refusal/message.rs",
+            "crates/substrate/nomos-ledger/src/finish/gate_step.rs",
+            "crates/substrate/nomos-ledger/src/finish/refusal.rs",
+            "crates/substrate/nomos-ledger/src/finish/release_outcome.rs",
+            "crates/substrate/nomos-ledger/src/finish/running.rs",
+            "crates/substrate/nomos-ledger/src/store/add_refusal.rs",
+            "crates/substrate/nomos-ledger/src/store/claiming.rs",
+            "crates/substrate/nomos-ledger/src/store/document.rs",
+            "crates/substrate/nomos-ledger/src/store/file.rs",
+            "crates/substrate/nomos-ledger/src/store/reservation.rs"
+          ],
+          "widened_at": 1789522837
+        }
+      ]
+    },
+    {
+      "id": "P111-EIGHT-PHASE-SPEC-STORE-FOLLOWUP",
+      "title": "Eight-phase zero across the spec-store territory, counting waived findings",
+      "why": "The territory was closed by an item whose predicate read the reported findings alone. 146 findings in these crates were not reported: they were standing behind suppressions.json, so the crates were never clean and the earlier verdict measured the waiver file rather than the code. This item finishes the same territory counting reported and waived alike, with no new suppression.",
+      "done_when": "Every crate in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on and counting waived findings as outstanding, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-store/src/authoring.rs",
+          "crates/spec/nomos-spec-store/src/authoring/commit.rs",
+          "crates/spec/nomos-spec-store/src/authoring/difference.rs",
+          "crates/spec/nomos-spec-store/src/authoring/write.rs",
+          "crates/spec/nomos-spec-store/src/edit/block_change.rs",
+          "crates/spec/nomos-spec-store/src/edit/fixtures.rs",
+          "crates/spec/nomos-spec-store/src/edit/normative_outcome.rs",
+          "crates/spec/nomos-spec-store/src/edit/preview.rs",
+          "crates/spec/nomos-spec-store/src/read.rs",
+          "crates/spec/nomos-spec-store/src/read/columns.rs",
+          "crates/spec/nomos-spec-store/src/record/claimed_record.rs",
+          "crates/spec/nomos-spec-store/src/record/projection.rs",
+          "crates/spec/nomos-spec-store/src/registration.rs",
+          "crates/spec/nomos-spec-store/src/store/relation.rs",
+          "crates/spec/nomos-spec-store/src/store/seed_report.rs",
+          "crates/spec/nomos-spec-store/src/store/write.rs",
+          "crates/spec/nomos-spec-store/src/store/write/blocks.rs",
+          "crates/spec/nomos-spec-store/src/store/write/documents.rs",
+          "crates/spec/nomos-spec-store/src/store/write/relations.rs",
+          "crates/spec/nomos-spec-store/src/submission.rs",
+          "crates/spec/nomos-spec-store/src/submission/citation.rs",
+          "crates/spec/nomos-spec-store/src/table.rs",
+          "crates/spec/nomos-spec-store/src/table/row_scope.rs",
+          "crates/spec/nomos-spec-store/src/table/rows.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-KERNEL-PLATFORM-FOLLOWUP",
+      "title": "Eight-phase zero across the kernel-platform territory, counting waived findings",
+      "why": "The territory was closed by an item whose predicate read the reported findings alone. 129 findings in these crates were not reported: they were standing behind suppressions.json, so the crates were never clean and the earlier verdict measured the waiver file rather than the code. This item finishes the same territory counting reported and waived alike, with no new suppression.",
+      "done_when": "Every crate in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on and counting waived findings as outstanding, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts/src/contract_version.rs",
+          "crates/contracts/nomos-contracts/src/digest128/generation_id.rs",
+          "crates/contracts/nomos-contracts/src/reporting/finding.rs",
+          "crates/contracts/nomos-contracts/src/workflow_step.rs",
+          "crates/contracts/nomos-contracts/src/workflow_step/retry_policy.rs",
+          "crates/contracts/nomos-contracts/src/workflow_step/timeout.rs",
+          "crates/corrections/nomos-corrections/src/change_set.rs",
+          "crates/corrections/nomos-corrections/src/correction_choice.rs",
+          "crates/corrections/nomos-corrections/src/correction_id.rs",
+          "crates/corrections/nomos-corrections/src/correction_plan.rs",
+          "crates/corrections/nomos-corrections/src/preview.rs",
+          "crates/corrections/nomos-corrections/src/staged_plan.rs",
+          "crates/corrections/nomos-corrections/src/test_support.rs",
+          "crates/kernel/nomos-model/src/confidence.rs",
+          "crates/kernel/nomos-model/src/evidence/coverage.rs",
+          "crates/kernel/nomos-model/src/subject/set.rs",
+          "crates/kernel/nomos-model/src/transition.rs",
+          "crates/kernel/nomos-store/src/commit.rs",
+          "crates/kernel/nomos-store/src/document_store.rs",
+          "crates/kernel/nomos-store/src/index.rs",
+          "crates/platform/nomos-platform-std/src/file_lock.rs",
+          "crates/platform/nomos-platform-std/src/launcher/drain.rs",
+          "crates/platform/nomos-platform-std/src/launcher/spawn.rs",
+          "crates/platform/nomos-platform-std/src/launcher/wait.rs",
+          "crates/platform/nomos-platform-std/src/std_file_system.rs",
+          "crates/spec/nomos-spec-model/src/block.rs",
+          "crates/spec/nomos-spec-model/src/content_hash.rs",
+          "crates/spec/nomos-spec-model/src/record.rs",
+          "crates/spec/nomos-spec-model/src/render_error.rs",
+          "crates/spec/nomos-spec-model/src/statement.rs",
+          "crates/spec/nomos-spec-model/src/statement/id.rs",
+          "crates/spec/nomos-spec-model/src/statement/normative_statement.rs",
+          "crates/spec/nomos-spec-model/src/table/row_kind.rs",
+          "crates/spec/nomos-spec-validate/src/offending.rs",
+          "crates/spec/nomos-spec-validate/src/validation_run.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "kernel-platform"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-SUBSTRATE-FOLLOWUP",
+      "title": "Eight-phase zero across the substrate territory, counting waived findings",
+      "why": "The territory was closed by an item whose predicate read the reported findings alone. 108 findings in these crates were not reported: they were standing behind suppressions.json, so the crates were never clean and the earlier verdict measured the waiver file rather than the code. This item finishes the same territory counting reported and waived alike, with no new suppression.",
+      "done_when": "Every crate in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on and counting waived findings as outstanding, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/component.rs",
+          "crates/substrate/nomos-analysis/src/fact/identity.rs",
+          "crates/substrate/nomos-analysis/src/fact/key.rs",
+          "crates/substrate/nomos-analysis/src/fact/materialized_fact.rs",
+          "crates/substrate/nomos-analysis/src/fact/memory_fact_store.rs",
+          "crates/substrate/nomos-analysis/src/fact/memory_store/invalidation.rs",
+          "crates/substrate/nomos-analysis/src/generation_cause.rs",
+          "crates/substrate/nomos-analysis/src/input_digest.rs",
+          "crates/substrate/nomos-analysis/src/invalidation/report.rs",
+          "crates/substrate/nomos-analysis/src/propagation.rs",
+          "crates/substrate/nomos-analysis/src/reader.rs",
+          "crates/substrate/nomos-analysis/src/reading/trail.rs",
+          "crates/substrate/nomos-analysis/src/store/rematerialization_group.rs",
+          "crates/substrate/nomos-capability/src/contract_testing.rs",
+          "crates/substrate/nomos-capability/src/registry.rs",
+          "crates/substrate/nomos-capability/src/registry/resolving.rs",
+          "crates/substrate/nomos-capability/src/resolution/selection.rs",
+          "crates/substrate/nomos-scope-verification/src/territory/spelling.rs",
+          "crates/substrate/nomos-workspace/src/applied.rs",
+          "crates/substrate/nomos-workspace/src/change.rs",
+          "crates/substrate/nomos-workspace/src/change/source.rs",
+          "crates/substrate/nomos-workspace/src/workspace.rs",
+          "crates/substrate/nomos-workspace/src/workspace_snapshot.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "substrate"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-HOST-SURFACES-FOLLOWUP",
+      "title": "Eight-phase zero across the host-surfaces territory, counting waived findings",
+      "why": "The territory was closed by an item whose predicate read the reported findings alone. 71 findings in these crates were not reported: they were standing behind suppressions.json, so the crates were never clean and the earlier verdict measured the waiver file rather than the code. This item finishes the same territory counting reported and waived alike, with no new suppression.",
+      "done_when": "Every crate in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on and counting waived findings as outstanding, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/response/gate_explain_response.rs",
+          "crates/host/nomos-api/src/response/gate_plan_response.rs",
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "crates/host/nomos-api/src/response/rule_offer_response.rs",
+          "crates/host/nomos-api/src/spec/block_change_response.rs",
+          "crates/host/nomos-api/src/spec/commit_report_response.rs",
+          "crates/host/nomos-api/src/spec/committed_preview_response.rs",
+          "crates/host/nomos-api/src/spec/document_source_response.rs",
+          "crates/host/nomos-api/src/spec/normative_movement_response.rs",
+          "crates/host/nomos-api/src/spec/normative_outcome_response.rs",
+          "crates/host/nomos-api/src/spec/preview_response.rs",
+          "crates/host/nomos-api/src/spec/row_census_response.rs",
+          "crates/host/nomos-api/src/spec/table_line_response.rs",
+          "crates/host/nomos-api/src/test_support.rs",
+          "crates/host/nomos-api/src/work/reservation_outcome_response.rs",
+          "crates/host/nomos-api/src/work/reservation_response.rs",
+          "crates/host/nomos-api/src/work/tests_support.rs",
+          "crates/host/nomos-surface-provenance/src/evaluate.rs",
+          "crates/host/nomos-surface-provenance/src/exit_code.rs",
+          "crates/host/nomos-surface-provenance/src/main.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "host-surfaces-followup"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-LANGUAGES-AGENTS-FOLLOWUP",
+      "title": "Eight-phase zero across the languages-agents territory, counting waived findings",
+      "why": "The territory was closed by an item whose predicate read the reported findings alone. 8 findings in these crates were not reported: they were standing behind suppressions.json, so the crates were never clean and the earlier verdict measured the waiver file rather than the code. This item finishes the same territory counting reported and waived alike, with no new suppression.",
+      "done_when": "Every crate in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on and counting waived findings as outstanding, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go-modules/src/fact_context.rs",
+          "crates/languages/nomos-lang-go-modules/src/module_error.rs",
+          "crates/languages/nomos-lang-go/src/fact_context.rs",
+          "crates/languages/nomos-lang-go/src/syntax/walk.rs",
+          "crates/languages/nomos-lang-go/src/syntax/walk/support.rs",
+          "crates/languages/nomos-lang-rust-scan/src/fact_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "languages-agents-followup"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "languages-agents-followup"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: languages-agents-followup -- 3 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789524140,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "161bb4e99fed257249070079041f601f6e3edb27"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-ORCHESTRATION-FOLLOWUP",
+      "title": "Eight-phase zero across the orchestration territory, counting waived findings",
+      "why": "The territory was closed by an item whose predicate read the reported findings alone. 23 findings in these crates were not reported: they were standing behind suppressions.json, so the crates were never clean and the earlier verdict measured the waiver file rather than the code. This item finishes the same territory counting reported and waived alike, with no new suppression.",
+      "done_when": "Every crate in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on and counting waived findings as outstanding, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-spec-orchestration/src/corpus.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/corpus/assembly.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/corpus/layer.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/corpus/roots.rs",
+          "crates/orchestration/nomos-spec-orchestration/src/corpus/volumes.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "orchestration-followup"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-PLATFORM",
+      "title": "Eight-phase zero across the nomos-platform territory",
+      "why": "No item ever owned these crates. 12 findings in them were standing behind suppressions.json, so nothing judged them and no verdict covered them. The campaign's scope is all of crates/, so this item takes them counting reported and waived alike, with no new suppression.",
+      "done_when": "Every crate in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on and counting waived findings as outstanding, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform/src/clock.rs",
+          "crates/platform/nomos-platform/src/process_launcher/command.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "platform"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "platform"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: platform -- 1 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789523484,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "db68c76e9a95c7e39ba156ca47e4e587dc75176f"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-AGENT-CONTRACTS",
+      "title": "Eight-phase zero across the nomos-agent-contracts territory",
+      "why": "No item ever owned these crates. 8 findings in them were standing behind suppressions.json, so nothing judged them and no verdict covered them. The campaign's scope is all of crates/, so this item takes them counting reported and waived alike, with no new suppression.",
+      "done_when": "Every crate in this item's territory reports zero findings in the eight phases (clean-file, code-shape, concurrency-and-unsafe, declare-types, decompose-file, errors, formatting, numerics) with --include-tests on and counting waived findings as outstanding, verified by running this item's predicate. No entry is added to suppressions.json and no in-code `// <concern>: allow` marker is added; pre-existing markers are retired where the underlying finding is fixed.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts/src/isolated_working_directory_error.rs",
+          "crates/agent/nomos-agent-contracts/src/nomos_resolved_change_context.rs",
+          "crates/agent/nomos-agent-contracts/src/nomos_resolved_change_context/change_context_subject.rs",
+          "crates/agent/nomos-agent-contracts/src/work_result.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "agent-contracts"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "agent-contracts"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: agent-contracts -- 1 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789524131,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "161bb4e99fed257249070079041f601f6e3edb27"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
