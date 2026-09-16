@@ -80464,7 +80464,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -80476,7 +80476,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-spec"
+        ],
+        "exit_code": 0,
+        "output_tail": "statement's carries its subsystem. Stale-instrument artifact.\r\n      tree-legibility             crates/spec/nomos-spec-project/src/profile/profile_section.rs:0\r\n            [ROT] declares `pub struct ProfileSection`, so the current source exempts it too; this one is already waived by @claude-p19-campaign, whose reason records that lib.rs keeps the longer name because profile's `section::Section` -- a different concept, a rendered-projection section -- is also exported bare from this crate. Neither added nor removed by this item. Stale-instrument artifact.\r\n      tree-legibility             crates/spec/nomos-spec-store/src/edit/edit_error.rs:0\r\n            [ROT] declares `pub enum EditError`. The name is forced in both directions: two of the crate's nine subsystems declare an error, and the published name has to say which; the file is named for the type because check-file-name binds a stem to its declared type. Stale-instrument artifact.\r\n      tree-legibility             crates/spec/nomos-spec-store/src/edit/edit_preview.rs:0\r\n            [ROT] declares `pub struct EditPreview`, for the same reason as its sibling one line above: the crate root publishes nine subsystems' vocabulary and a bare `Preview` would not say whose it is. Stale-instrument artifact.\r\n      tree-legibility             crates/spec/nomos-spec-store/src/record/record_projection.rs:0\r\n            [ROT] declares `pub struct RecordProjection`, the name the crate root publishes, where the store also exposes projections of other shapes. Stale-instrument artifact.\r\n      tree-legibility             crates/spec/nomos-spec-store/src/store/store_error.rs:0\r\n            [ROT] declares `pub enum StoreError`, the other of the two subsystem errors whose published names must differ. Stale-instrument artifact.\r\n      tree-legibility             crates/spec/nomos-spec-store/src/table/table_line.rs:0\r\n            [ROT] declares `pub struct TableLine`, the name the crate root publishes. Stale-instrument artifact.\r\n",
+        "verified_at": 1789552669,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "432420475a886ccf62383f7851bb18f0e94c7ea9"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
