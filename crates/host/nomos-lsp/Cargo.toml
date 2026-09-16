@@ -32,7 +32,6 @@ nomos-cap-architecture = { workspace = true }
 # reads it the same way it already composes a platform.
 nomos-repo-policy = { workspace = true }
 nomos-rules = { workspace = true }
-nomos-platform = { workspace = true }
 nomos-composer-std = { workspace = true }
 nomos-workspace = { workspace = true }
 nomos-analysis = { workspace = true }

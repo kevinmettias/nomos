@@ -17,9 +17,10 @@
 //! `P42-LSP-PROJECTION` named the shape this crate must not become: not another analyzer.
 //! Every finding published here was judged by `nomos_check_orchestration::Run`, the
 //! identical seam `nomos-cli::check` and `nomos-correction-orchestration::run` already call
-//! -- this crate adds a walk (`sources.rs`, a third copy of the same shape those two
-//! crates' own composition roots each carry, since `nomos-check-orchestration` composes no
-//! [`nomos_platform::FileSystem`] and the port's own `Read_Directory` is one level) and a
+//! -- this crate adds a walk (`sources.rs`, a thin wrapper over the one walk
+//! `nomos-workspace-discovery` holds beneath every composition root since `OD-HOST-008`,
+//! since `nomos-check-orchestration` composes no platform `FileSystem` port and that port's
+//! own `Read_Directory` is one level) and a
 //! translation ([`file_diagnostic::Diagnostics_For`]) from [`nomos_contracts::Finding`] to
 //! `xvpe_diagnostics::SourceDiagnostic`, never a second judgment.
 //!

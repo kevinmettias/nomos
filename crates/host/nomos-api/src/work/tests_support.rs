@@ -209,6 +209,38 @@ pub(crate) fn Scratch_Board_With_A_Claimed_Item(
     return Ok(BoardWithAClaimedItem { directory, id });
 }
 
+/// The holder [`With_A_Board_Somebody_Else_Holds`] claims its item under -- a name no ending
+/// verb's own `Ending_Request` carries, so a real refusal is the only outcome
+/// `Handle_Work_Abandon` and `Handle_Work_Decline` can reach over that board.
+const OTHER_HOLDER: &str = "someone-else";
+
+/// Runs `handler` over a scratch board whose one item [`OTHER_HOLDER`] holds under a lease
+/// that has not lapsed, disposes of the scratch directory, and hands back whatever `handler`
+/// answered.
+///
+/// The board, the request and the teardown are three statements `abandon_response.rs` and
+/// `decline_response.rs` each spelled out identically around their own one call, which is
+/// what `check-interfile-duplication` flagged and why they live here once instead. What the
+/// two callers genuinely differ on is the verb under test and the reason that verb records
+/// -- those are the two things a caller supplies.
+///
+/// The expiry is `i64::from(u32::MAX)` seconds after the epoch, the same far-future lease
+/// `Scratch_Board_With_A_Held_Territory_Conflict` writes: an ending verb must refuse because
+/// another holder *has* the item, not because a lease happened to lapse under it.
+#[must_use]
+pub(crate) fn With_A_Board_Somebody_Else_Holds<R>(reason: &str, handler: impl FnOnce(&std::path::Path, &EndingRequest) -> R) -> R
+{
+    let BoardWithAClaimedItem { directory, id } = Scratch_Board_With_A_Claimed_Item(OTHER_HOLDER, i64::from(u32::MAX))
+        .expect("the temp directory is writable and the scratch ledger is writable");
+    let request = Ending_Request(id, reason);
+
+    let response = handler(&directory, &request);
+
+    let _ignored = std::fs::remove_dir_all(&directory);
+
+    return response;
+}
+
 /// A scratch board and the one contested id `Scratch_Board_With_A_Held_Territory_Conflict`
 /// left `Ready` over territory another item's live claim already holds.
 #[derive(Debug)]

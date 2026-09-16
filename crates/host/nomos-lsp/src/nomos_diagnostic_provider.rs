@@ -2,7 +2,7 @@
 //! being asked twice.
 
 use crate::build_variant::Host_Variant;
-use crate::file_diagnostic::Diagnostics_For;
+use crate::Diagnostics_For;
 use crate::sources::Walked_Sources;
 use nomos_analysis::MemoryFactStore;
 use nomos_composer_std::{ENVIRONMENT, FILE_SYSTEM, LAUNCHER};

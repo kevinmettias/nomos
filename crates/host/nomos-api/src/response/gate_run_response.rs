@@ -107,9 +107,13 @@ impl GateRunResponse
 mod tests
 {
     use super::*;
+    use crate::test_support::{Area, Probe_Tree, TreeName};
     use nomos_contracts::RuleId;
     use nomos_gate_orchestration::RuleSelector;
     use nomos_rules::NAMING_CONVENTION;
+
+    /// The subsystem this module's own probe trees are named under.
+    const GATE_RUN_AREA: Area = Area("gate-run");
 
     /// A real run over this crate's own tree reaches a real judgment -- not
     /// [`Disposition::Indeterminate`], the state a walk that never became a judged check
@@ -178,7 +182,8 @@ mod tests
     #[test]
     fn Test_A_Malformed_Policy_Should_Reach_A_Headless_Caller_With_The_Key_It_Refused()
     {
-        let root = Probe_Tree(TreeName("malformed"), r#"{ "basline": [] }"#);
+        let root = Probe_Tree(GATE_RUN_AREA, TreeName("malformed"), r#"{ "basline": [] }"#)
+            .expect("the temp directory is writable and this call's own name is fresh");
 
         let response = Handle_Gate_Run(&Command_At(root.clone()));
 
@@ -218,7 +223,8 @@ mod tests
     fn Test_A_Declared_Entry_That_Matched_Nothing_Should_Reach_A_Headless_Caller()
     {
         let policy = "{ \"baseline\": [ { \"rule\": \"a-rule-no-registry-holds\", \"path\": \"src/lib.rs\", \"rationale\": \"tracked\" } ] }";
-        let root = Probe_Tree(TreeName("unmatched"), policy);
+        let root = Probe_Tree(GATE_RUN_AREA, TreeName("unmatched"), policy)
+            .expect("the temp directory is writable and this call's own name is fresh");
 
         let response = Handle_Gate_Run(&Command_At(root.clone()));
 
@@ -290,21 +296,4 @@ mod tests
         return GateCommand { root, ..Default::default() };
     }
 
-    /// The directory name a probe tree is created under.
-    struct TreeName<'a>(&'a str);
-
-    /// A one-crate tree with real source and a declared `nomos-gate.json`, so a run over it
-    /// reaches `Judged` and resolves a policy -- the two things an empty directory cannot do.
-    fn Probe_Tree(name: TreeName, policy: &str) -> PathBuf
-    {
-        let root = std::env::temp_dir().join(format!("nomos-api-gate-run-{}-{}", name.0, std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(root.join("src")).expect("creates a probe tree");
-        let manifest = "[package]\nname = \"probe\"\nversion = \"0.1.0\"\nedition = \"2021\"\n";
-        std::fs::write(root.join("Cargo.toml"), manifest).expect("the probe root above was just created");
-        std::fs::write(root.join("src").join("lib.rs"), "pub fn thing() -> i32 { return 1; }\n").expect("the probe src directory above was just created");
-        std::fs::write(root.join("nomos-gate.json"), policy).expect("the probe root above was just created");
-
-        return root;
-    }
 }

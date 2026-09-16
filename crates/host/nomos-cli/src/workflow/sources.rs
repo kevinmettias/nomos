@@ -3,85 +3,31 @@
 
 use nomos_rules::SourceFile;
 use nomos_workflow_orchestration::{CheckBody, CorrectionBody, GateBody};
-use std::path::{Path, PathBuf};
+use nomos_workspace_discovery::{Registered_Extensions, Walked_Sources};
+use std::path::Path;
 
-/// Every `.rs` or `.go` file under `root`, with its text and the subject its facts are filed
-/// under -- a near-duplicate of `correct.rs`'s own walk rather than a shared dependency on it,
-/// the identical division that module's own doc names: a composition root's own territory is
-/// per group, not shared through a third module neither group's item reserved.
-pub(super) fn Read_Sources(root: &Path) -> Vec<SourceFile>
+/// Every file under `root` this group recognizes, or `None` if `root` is not a directory.
+///
+/// The registered languages, which is what `correct.rs`'s own walk takes as well: a body's
+/// `sources` arrive unwalked through [`super::Run`], so this is what turns the `root` a body
+/// named into the files it is actually judged over. The population is deliberately not
+/// `check::sources`'s -- the script extensions `check-script-discipline` judges are that
+/// group's own additional recognition, and widening these bodies to cover them is a change to
+/// what `nomos workflow` judges rather than a change to where its walk lives.
+///
+/// The walk itself, and the `target`/`.git`/nested-root skips a walk owes, are
+/// `nomos-workspace-discovery`'s: `OD-HOST-008` put one beneath every composition root, so
+/// this module and `correct.rs` each call it instead of each carrying a copy.
+fn Walked(root: &Path) -> Option<Vec<SourceFile>>
 {
-    let mut sources = Vec::new();
-    let mut pending = vec![root.to_path_buf()];
-
-    while let Some(directory) = pending.pop()
-    {
-        let Ok(entries) = std::fs::read_dir(&directory)
-        else
-        {
-            continue;
-        };
-
-        for entry in entries.flatten()
-        {
-            let path = entry.path();
-            Read_Entry(root, path, &mut pending, &mut sources);
-        }
-    }
-
-    sources.sort_by(|left, right| return left.path.cmp(&right.path));
-    return sources;
-}
-
-fn Read_Entry(root: &Path, path: PathBuf, pending: &mut Vec<PathBuf>, sources: &mut Vec<SourceFile>)
-{
-    if path.is_dir()
-    {
-        let skipped = path.file_name().is_some_and(|name| return name == "target" || name == ".git");
-
-        if !skipped
-        {
-            pending.push(path);
-        }
-
-        return;
-    }
-
-    if path.extension().is_some_and(|extension| return extension == "rs" || extension == "go") && let Ok(text) = std::fs::read_to_string(&path)
-    {
-        let source = Read_Source(root, &path, text);
-
-        sources.push(source);
-    }
-}
-
-fn Read_Source(root: &Path, path: &Path, text: String) -> SourceFile
-{
-    use nomos_model::Subject_Of_Path;
-
-    let relative = Relative(root, path);
-    let subject = Subject_Of_Path(&relative);
-
-    return SourceFile::New(relative, subject, text);
-}
-
-/// A path as it should be reported: relative to the tree, forward slashes.
-fn Relative(root: &Path, path: &Path) -> String
-{
-    return path.strip_prefix(root).unwrap_or(path).display().to_string().replace('\\', "/");
+    return Walked_Sources(root, &Registered_Extensions());
 }
 
 /// `check`, with its own `sources` replaced by a real walk of its `root` -- `None` if `root` is
-/// not a directory, the identical guard `gate.rs`'s and `correct.rs`'s own walks already give a
-/// tree that cannot be read at all.
+/// not a directory, the guard [`Walked`] itself answers a tree that cannot be read at all with.
 pub(super) fn Walked_Check(check: &CheckBody) -> Option<CheckBody>
 {
-    if !check.root.is_dir()
-    {
-        return None;
-    }
-
-    let sources = Read_Sources(&check.root);
+    let sources = Walked(&check.root)?;
 
     return Some(CheckBody::New(check.root.clone(), sources, check.selected.clone()));
 }
@@ -93,12 +39,7 @@ pub(super) fn Walked_Check(check: &CheckBody) -> Option<CheckBody>
 /// `Body::Check`.
 pub(super) fn Walked_Correction(correction: &CorrectionBody) -> Option<CorrectionBody>
 {
-    if !correction.root.is_dir()
-    {
-        return None;
-    }
-
-    let sources = Read_Sources(&correction.root);
+    let sources = Walked(&correction.root)?;
 
     return Some(CorrectionBody::New(correction.root.clone(), sources, correction.commit));
 }
@@ -108,12 +49,7 @@ pub(super) fn Walked_Correction(correction: &CorrectionBody) -> Option<Correctio
 /// already give.
 pub(super) fn Walked_Gate(gate: &GateBody) -> Option<GateBody>
 {
-    if !gate.command.root.is_dir()
-    {
-        return None;
-    }
-
-    let sources = Read_Sources(&gate.command.root);
+    let sources = Walked(&gate.command.root)?;
 
     return Some(GateBody::New(sources, gate.command.clone()));
 }

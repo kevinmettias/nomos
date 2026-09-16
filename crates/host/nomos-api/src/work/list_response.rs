@@ -1,7 +1,8 @@
 //! [`Handle_Work_List`] and its own [`ListResponse`].
 
-use nomos_ledger::{LedgerDocument, Territory};
+use nomos_ledger::LedgerDocument;
 use nomos_platform::Timestamp;
+use nomos_work_orchestration::WorkCommand;
 use serde::Serialize;
 use std::path::Path;
 
@@ -11,24 +12,14 @@ use std::path::Path;
 /// `directory` is expected to hold `ledger.json` and `ledger.lock`, the same layout
 /// `crates/host/nomos-cli/src/work.rs`'s own composition root reads. The `published`
 /// closure `nomos_work_orchestration::Run` takes is asked for lazily and reached only by
-/// `WorkCommand::Add` (that crate's own doc), so `List` never reaches it -- an empty,
-/// real `Territory` is handed here rather than a closure that would panic if this crate's
-/// own scope ever widened past `List` without updating this comment.
+/// `WorkCommand::Add` (that crate's own doc), so `List` never reaches it: this handler runs
+/// through [`super::Run_Empty_Territory_Command`], which hands the empty, real `Territory`
+/// every non-`Add` verb wants rather than a closure that would panic if this crate's own
+/// scope ever widened past `List` without updating this comment.
 #[must_use]
 pub fn Handle_Work_List(directory: &Path) -> ListResponse
 {
-    use super::Ledger_At;
-    use nomos_composer_std::LAUNCHER;
-    use nomos_work_orchestration::WorkCommand;
-
-    let mut ledger = Ledger_At(directory);
-
-    let outcome = nomos_work_orchestration::Run(
-        &WorkCommand::List { state: None },
-        &mut ledger,
-        &LAUNCHER,
-        || Territory::Of_Files(std::iter::empty::<String>()),
-    );
+    let outcome = super::Run_Empty_Territory_Command(directory, WorkCommand::List { state: None });
 
     let nomos_work_orchestration::WorkOutcome::List(listed) = outcome
     else

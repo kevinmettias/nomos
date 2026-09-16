@@ -1494,7 +1494,6 @@ dependencies = [
  "nomos-contracts",
  "nomos-correction-orchestration",
  "nomos-model",
- "nomos-platform",
  "nomos-repo-policy",
  "nomos-rules",
  "nomos-workspace",

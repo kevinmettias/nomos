@@ -1,6 +1,6 @@
 //! [`Handle_Work_Abandon`] and its own [`AbandonResponse`].
 
-use nomos_ledger::{ClaimRefusal, Territory};
+use nomos_ledger::ClaimRefusal;
 use nomos_work_orchestration::{EndingRequest, WorkCommand};
 use serde::Serialize;
 use std::path::Path;
@@ -10,17 +10,7 @@ use std::path::Path;
 #[must_use]
 pub fn Handle_Work_Abandon(directory: &Path, request: &EndingRequest) -> AbandonResponse
 {
-    use super::Ledger_At;
-    use nomos_composer_std::LAUNCHER;
-
-    let mut ledger = Ledger_At(directory);
-
-    let outcome = nomos_work_orchestration::Run(
-        &WorkCommand::Abandon(request.clone()),
-        &mut ledger,
-        &LAUNCHER,
-        || Territory::Of_Files(std::iter::empty::<String>()),
-    );
+    let outcome = super::Run_Empty_Territory_Command(directory, WorkCommand::Abandon(request.clone()));
 
     let nomos_work_orchestration::WorkOutcome::Abandon(released) = outcome
     else
@@ -76,6 +66,7 @@ mod tests
     use super::*;
     use crate::work::tests_support::{
         BoardWithAClaimedItem, Ending_Request, Scratch_Board_With_A_Claimed_Item,
+        With_A_Board_Somebody_Else_Holds,
     };
 
     #[test]
@@ -96,19 +87,12 @@ mod tests
     #[test]
     fn Test_From_Should_Refuse_And_Mark_Retryable_A_Claim_A_Different_Holder_Actually_Has()
     {
-        let BoardWithAClaimedItem { directory, id } =
-            Scratch_Board_With_A_Claimed_Item("someone-else", i64::from(u32::MAX))
-                .expect("the temp directory is writable and the scratch ledger is writable");
-        let request = Ending_Request(id, "test fixture");
-
-        let response = Handle_Work_Abandon(&directory, &request);
-
-        let _ignored = std::fs::remove_dir_all(&directory);
+        let response = With_A_Board_Somebody_Else_Holds("test fixture", Handle_Work_Abandon);
 
         let AbandonResponse::Refused { retryable, cause } = response
         else
         {
-            // This fixture claims the item as "someone-else" and then abandons it as
+            // The board holds the item as "someone-else" and this verb reaches it as
             // "test-holder", so a real refusal is the only correct outcome -- reaching any
             // other variant means the holder check itself stopped enforcing, not a condition
             // this test should assert around.

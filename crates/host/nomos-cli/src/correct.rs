@@ -6,10 +6,10 @@
 //! judge, find the one claim, plan, seed a workspace, stage, validate, and optionally
 //! commit — into `nomos-correction-orchestration`, so `nomos-api` could reach the same
 //! lifecycle without depending on this crate. What is left here is exactly what `gate.rs`'s
-//! own doc names for `Gate`: walking the tree ([`Walked`], a near-duplicate of
-//! `check::sources` rather than a shared dependency on it — `OD-HOST-002`'s own division
-//! of a composition root's territory is per group, not shared through a third module
-//! neither group's item reserved), reading what this binary was compiled as
+//! own doc names for `Gate`: walking the tree ([`Walked`] — `nomos-workspace-discovery`'s
+//! own [`Walked_Sources`], the one walk `OD-HOST-008` put beneath every composition root,
+//! which `check`, `gate`, `workflow` and this module now all call rather than each carrying
+//! its own), reading what this binary was compiled as
 //! ([`Correction_Variant`]), choosing a
 //! [`nomos_platform::ProcessLauncher`]/[`nomos_platform::FileSystem`]
 //! ([`nomos_composer_std::LAUNCHER`]/[`nomos_composer_std::FILE_SYSTEM`]) for
@@ -31,6 +31,7 @@ use nomos_correction_orchestration::{CorrectionCommand as SeamCommand, Correctio
 use nomos_composer_std::{ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
+use nomos_workspace_discovery::{Registered_Extensions, Walked_Sources};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
@@ -59,82 +60,25 @@ pub fn Run(command: &CorrectCommand, stdout: &mut impl Write, stderr: &mut impl 
 /// The Rust and Go sources under `root`, or `None` if `root` is not a directory -- the
 /// walk `Run_Correction` itself does not do, the same division `gate.rs` keeps with
 /// `Run_Gate`.
+///
+/// [`Registered_Extensions`] is what this module used to spell out as a two-extension test:
+/// Rust and Go, because `Check_Completeness_Mirrors` needs every `.rs` and `.go` file under
+/// the root, since a check name claimed in one language's file can be declared in the
+/// other's. Naming the registry rather than the extensions is what lets a language this
+/// workspace registers reach this walk without an edit here -- and it is the same argument
+/// the shared walk's own doc gives for holding the population rather than each composition
+/// root holding a copy of it.
 fn Walked(root: &Path) -> Option<Vec<SourceFile>>
 {
-    if !root.is_dir()
-    {
-        return None;
-    }
-
-    return Some(Read_Sources(root));
-}
-
-/// Every `.rs` or `.go` file under `root`, with its text and the subject its facts are
-/// filed under. `target` is skipped: it holds generated source nobody authored.
-fn Read_Sources(root: &Path) -> Vec<SourceFile>
-{
-    let mut sources = Vec::new();
-    let mut pending = vec![root.to_path_buf()];
-
-    while let Some(directory) = pending.pop()
-    {
-        let Ok(entries) = std::fs::read_dir(&directory)
-        else
-        {
-            continue;
-        };
-
-        for entry in entries.flatten()
-        {
-            let path = entry.path();
-            Read_Entry(root, path, &mut pending, &mut sources);
-        }
-    }
-
-    sources.sort_by(|left, right| return left.path.cmp(&right.path));
-    return sources;
-}
-
-fn Read_Entry(root: &Path, path: PathBuf, pending: &mut Vec<PathBuf>, sources: &mut Vec<SourceFile>)
-{
-    if path.is_dir()
-    {
-        let skipped = path.file_name().is_some_and(|name| return name == "target" || name == ".git");
-
-        if !skipped
-        {
-            pending.push(path);
-        }
-
-        return;
-    }
-
-    if path.extension().is_some_and(Is_Recognized_Extension) && let Ok(text) = std::fs::read_to_string(&path)
-    {
-        let source = Read_Source(root, &path, text);
-        sources.push(source);
-    }
-}
-
-fn Read_Source(root: &Path, path: &Path, text: String) -> SourceFile
-{
-    use nomos_model::Subject_Of_Path;
-
-    let relative = Relative(root, path);
-    let subject = Subject_Of_Path(&relative);
-
-    return SourceFile::New(relative, subject, text);
-}
-
-/// A path as it should be reported: relative to the tree, forward slashes.
-fn Relative(root: &Path, path: &Path) -> String
-{
-    return path.strip_prefix(root).unwrap_or(path).display().to_string().replace('\\', "/");
+    return Walked_Sources(root, &Registered_Extensions());
 }
 
 /// The build variant this binary was compiled as. A near-duplicate of `check::composition::
-/// Host_Variant`, not a shared dependency on it: that function is `pub(super)` to `check`,
-/// the same reasoning `sources.rs`'s own doc gives for not sharing that module's walk.
+/// Host_Variant`, not a shared dependency on it: that function is `pub(super)` to `check`, so
+/// sharing it costs a visibility boundary or a hoist to a crate beneath both, and neither has
+/// been taken. The walk this module once argued the same way about is not this case -- it is
+/// `nomos-workspace-discovery`'s one, which `OD-HOST-008` put beneath every composition root
+/// and [`Walked`] now calls.
 fn Correction_Variant() -> BuildVariant
 {
     return BuildVariant::New(
@@ -182,11 +126,4 @@ fn Announced(stream: &mut impl Write, code: ExitCode, text: String) -> ExitCode
 {
     let _ = writeln!(stream, "{text}");
     return code;
-}
-
-/// Rust or Go -- `Check_Completeness_Mirrors` needs every `.rs` and `.go` file under the
-/// root, since a check name claimed in one language's file can be declared in the other's.
-fn Is_Recognized_Extension(extension: &std::ffi::OsStr) -> bool
-{
-    return extension == "rs" || extension == "go";
 }

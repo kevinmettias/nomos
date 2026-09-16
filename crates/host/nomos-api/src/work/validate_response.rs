@@ -1,6 +1,7 @@
 //! [`Handle_Work_Validate`] and its own [`ValidateResponse`].
 
-use nomos_ledger::{LedgerDocument, Territory};
+use nomos_ledger::LedgerDocument;
+use nomos_work_orchestration::WorkCommand;
 use serde::Serialize;
 use std::path::Path;
 
@@ -9,18 +10,7 @@ use std::path::Path;
 #[must_use]
 pub fn Handle_Work_Validate(directory: &Path) -> ValidateResponse
 {
-    use super::Ledger_At;
-    use nomos_composer_std::LAUNCHER;
-    use nomos_work_orchestration::WorkCommand;
-
-    let mut ledger = Ledger_At(directory);
-
-    let outcome = nomos_work_orchestration::Run(
-        &WorkCommand::Validate,
-        &mut ledger,
-        &LAUNCHER,
-        || Territory::Of_Files(std::iter::empty::<String>()),
-    );
+    let outcome = super::Run_Empty_Territory_Command(directory, WorkCommand::Validate);
 
     let nomos_work_orchestration::WorkOutcome::Validate(validated) = outcome
     else

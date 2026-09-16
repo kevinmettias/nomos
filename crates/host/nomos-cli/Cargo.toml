@@ -14,9 +14,6 @@ path = "src/main.rs"
 [dependencies]
 nomos-contracts = { workspace = true }
 nomos-ledger = { workspace = true }
-# One digest function, for the subject a fact is filed under and for the identity of the
-# policy this run resolved. Content addressing is the kernel's and is not respelled here.
-nomos-model = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-composer-std = { workspace = true }
 nomos-rules = { workspace = true }
@@ -113,6 +110,17 @@ nomos-lang-go = { workspace = true }
 # a test-only dependency rather than deleted, so no existing coverage is lost.
 nomos-agent-executor-claude-code = { workspace = true }
 nomos-model-backend-ollama = { workspace = true }
+# `Subject_Of_Path` itself: `gate/report/tests/baselines.rs` builds real `BaselinePopulation`
+# values over a subject addressed the way a real run addresses one rather than over an invented
+# `SubjectId`, and `tests/model_seam.rs` ties a real run's printed location back to that same
+# function. Test-only, and moved here from `[dependencies]` by `P112-PLACEMENT-HOST`: nothing
+# this crate *ships* names `nomos_model` any more. The comment `[dependencies]` carried for it
+# described a digest use for the subject a fact is filed under, and that call -- `Read_Source`'s
+# own `Subject_Of_Path` -- has belonged to the shared walk's crate, `nomos-workspace-discovery`,
+# since `OD-HOST-008` moved the walk beneath every composition root. A dependency only a test
+# target reaches does not ship, and a manifest declaring it as though it did is a wider claim
+# than the fact under it.
+nomos-model = { workspace = true }
 
 [lints]
 workspace = true

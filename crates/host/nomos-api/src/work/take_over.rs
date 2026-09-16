@@ -6,14 +6,14 @@
 use nomos_work_orchestration::{ClaimRequest, WorkCommand};
 use std::path::Path;
 
-use super::{ReservationOutcomeResponse, Run_Reservation_Command};
+use super::{ReservationOutcomeResponse, Run_Empty_Territory_Command};
 
 /// Takes over `request`'s item on the board at `directory` from a lapsed holder, exactly as
 /// `nomos work takeover` would, and hands back a JSON-serializable response.
 #[must_use]
 pub fn Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest) -> ReservationOutcomeResponse
 {
-    let outcome = Run_Reservation_Command(directory, WorkCommand::TakeOver(request.clone()));
+    let outcome = Run_Empty_Territory_Command(directory, WorkCommand::TakeOver(request.clone()));
 
     let nomos_work_orchestration::WorkOutcome::TakeOver(taken_over) = outcome
     else
@@ -36,7 +36,7 @@ mod tests
     };
 
     #[test]
-    fn Test_Run_Reservation_Command_Should_Let_Handle_Work_TakeOver_Grant_A_Reservation_For_A_Real_Lapsed_Claim()
+    fn Test_Run_Empty_Territory_Command_Should_Let_Handle_Work_TakeOver_Grant_A_Reservation_For_A_Real_Lapsed_Claim()
     {
         let BoardWithAClaimedItem { directory, id } =
             Scratch_Board_With_A_Claimed_Item("old-holder", 1)

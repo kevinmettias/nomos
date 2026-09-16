@@ -47,6 +47,40 @@ pub(crate) fn Unique_Scratch_Directory(area: Area, label: &str) -> Result<PathBu
     return Ok(directory);
 }
 
+/// The directory name a [`Probe_Tree`] is created under -- the half of that fixture's own
+/// naming that varies from probe to probe, `area` being the half its caller fixes.
+///
+/// A type of its own rather than a second `&str`, the same reason [`Area`] is one: a call
+/// reading `Probe_Tree(area, name, policy)` would take two transposable strings beside the
+/// one input that is not a name, and the compiler would raise nothing.
+pub(crate) struct TreeName<'a>(pub(crate) &'a str);
+
+/// A one-crate tree with real source and a declared `nomos-gate.json`, so a gate run over it
+/// reaches `Judged` and resolves a policy of its own -- the two things an empty directory
+/// cannot do.
+///
+/// `area` and `name` name the scratch directory and nothing else; the tree itself is fixed
+/// here, and `policy` is the one thing a caller varies, because the policy is what a gate run
+/// reads. Built by `crate::response::gate_compare_response` and
+/// `crate::response::gate_run_response`, which wrote byte-identical trees under their own
+/// `<prefix>-{name}-{pid}` names before this existed.
+///
+/// # Errors
+///
+/// Returns whatever [`Unique_Scratch_Directory`] or the three writes below refuse -- a temp
+/// directory that is not writable, or a name already taken.
+pub(crate) fn Probe_Tree(area: Area, name: TreeName, policy: &str) -> Result<PathBuf, std::io::Error>
+{
+    let root = Unique_Scratch_Directory(area, name.0)?;
+    std::fs::create_dir_all(root.join("src"))?;
+    let manifest = "[package]\nname = \"probe\"\nversion = \"0.1.0\"\nedition = \"2021\"\n";
+    std::fs::write(root.join("Cargo.toml"), manifest)?;
+    std::fs::write(root.join("src").join("lib.rs"), "pub fn thing() -> i32 { return 1; }\n")?;
+    std::fs::write(root.join("nomos-gate.json"), policy)?;
+
+    return Ok(root);
+}
+
 /// Asserts that `response` serializes, round-trips through `serde_json`, and carries
 /// `expected_outcome` under the `"outcome"` field every `#[serde(tag = "outcome", ...)]`
 /// response in this crate tags itself with.

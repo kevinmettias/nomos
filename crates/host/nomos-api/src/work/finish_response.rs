@@ -1,6 +1,7 @@
 //! [`Handle_Work_Finish`] and its own [`FinishResponse`].
 
-use nomos_ledger::{FinishRefusal, ItemId, Territory, VerificationRecord};
+use nomos_ledger::{FinishRefusal, ItemId, VerificationRecord};
+use nomos_work_orchestration::WorkCommand;
 use serde::Serialize;
 use std::path::Path;
 
@@ -16,17 +17,9 @@ use std::path::Path;
 #[must_use]
 pub fn Handle_Work_Finish(directory: &Path, item: &ItemId, holder: &str) -> FinishResponse
 {
-    use super::Ledger_At;
-    use nomos_composer_std::LAUNCHER;
-    use nomos_work_orchestration::WorkCommand;
-
-    let mut ledger = Ledger_At(directory);
-
-    let outcome = nomos_work_orchestration::Run(
-        &WorkCommand::Finish { item: item.clone(), holder: holder.to_owned() },
-        &mut ledger,
-        &LAUNCHER,
-        || Territory::Of_Files(std::iter::empty::<String>()),
+    let outcome = super::Run_Empty_Territory_Command(
+        directory,
+        WorkCommand::Finish { item: item.clone(), holder: holder.to_owned() },
     );
 
     let nomos_work_orchestration::WorkOutcome::Finish { finished, .. } = outcome

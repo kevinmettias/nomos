@@ -6,14 +6,14 @@
 use nomos_work_orchestration::{ClaimRequest, WorkCommand};
 use std::path::Path;
 
-use super::{ReservationOutcomeResponse, Run_Reservation_Command};
+use super::{ReservationOutcomeResponse, Run_Empty_Territory_Command};
 
 /// Extends `request`'s already-held lease on the board at `directory`, exactly as `nomos
 /// work renew` would, and hands back a JSON-serializable response.
 #[must_use]
 pub fn Handle_Work_Renew(directory: &Path, request: &ClaimRequest) -> ReservationOutcomeResponse
 {
-    let outcome = Run_Reservation_Command(directory, WorkCommand::Renew(request.clone()));
+    let outcome = Run_Empty_Territory_Command(directory, WorkCommand::Renew(request.clone()));
 
     let nomos_work_orchestration::WorkOutcome::Renew(renewed) = outcome
     else

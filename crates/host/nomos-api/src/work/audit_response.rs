@@ -1,11 +1,12 @@
 //! [`Handle_Work_Audit`] and its own [`AuditResponse`].
 
-use nomos_ledger::{Claim_Refusal, ItemState, Territory};
+use nomos_ledger::{Claim_Refusal, ItemState};
 use nomos_platform::Timestamp;
+use nomos_work_orchestration::WorkCommand;
 use serde::Serialize;
 use std::path::Path;
 
-use super::{BlockedItem, Ledger_At};
+use super::BlockedItem;
 
 /// Audits the board at `directory` for what stands between a `Ready` item and an agent that
 /// would take it, exactly as `nomos work audit` would, and hands back a JSON-serializable
@@ -25,17 +26,7 @@ use super::{BlockedItem, Ledger_At};
 #[must_use]
 pub fn Handle_Work_Audit(directory: &Path) -> AuditResponse
 {
-    use nomos_composer_std::LAUNCHER;
-    use nomos_work_orchestration::WorkCommand;
-
-    let mut ledger = Ledger_At(directory);
-
-    let outcome = nomos_work_orchestration::Run(
-        &WorkCommand::Audit,
-        &mut ledger,
-        &LAUNCHER,
-        || Territory::Of_Files(std::iter::empty::<String>()),
-    );
+    let outcome = super::Run_Empty_Territory_Command(directory, WorkCommand::Audit);
 
     let nomos_work_orchestration::WorkOutcome::Audit(audited) = outcome
     else

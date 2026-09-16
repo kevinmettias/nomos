@@ -173,10 +173,11 @@ impl GateCompareResponse
 mod tests
 {
     use super::*;
-    use crate::response::finding_bucket::FindingBucket;
+    use crate::response::FindingBucket;
     use crate::response::suppressed_because::SuppressedBecause;
     use crate::response::suppression_standing::SuppressionStanding;
     use nomos_contracts::{RuleId, SubjectId};
+    use crate::test_support::{Area, Probe_Tree, TreeName};
     use nomos_gate_orchestration::FindingDisposition;
     use std::path::PathBuf;
 
@@ -186,6 +187,8 @@ mod tests
     const BASELINE_BYTES: [u8; DIGEST_BYTES] = [1; DIGEST_BYTES];
     /// The digest bytes the candidate side of a refused comparison is given.
     const CANDIDATE_BYTES: [u8; DIGEST_BYTES] = [2; DIGEST_BYTES];
+    /// The subsystem this module's own probe trees are named under.
+    const COMPARABILITY_AREA: Area = Area("comparability");
 
     /// One field of a serialized value, by path.
     ///
@@ -214,8 +217,10 @@ mod tests
     #[test]
     fn Test_Two_Policies_Should_Reach_A_Headless_Caller_As_A_Stated_Difference()
     {
-        let lenient = Probe_Tree(TreeName("lenient"), r#"{ "coverage": "unset" }"#);
-        let strict = Probe_Tree(TreeName("strict"), r#"{ "coverage": "require-completeness" }"#);
+        let lenient = Probe_Tree(COMPARABILITY_AREA, TreeName("lenient"), r#"{ "coverage": "unset" }"#)
+            .expect("the temp directory is writable and this call's own name is fresh");
+        let strict = Probe_Tree(COMPARABILITY_AREA, TreeName("strict"), r#"{ "coverage": "require-completeness" }"#)
+            .expect("the temp directory is writable and this call's own name is fresh");
 
         let response = Handle_Gate_Compare(&Command_At(&lenient.to_string_lossy()), &Command_At(&strict.to_string_lossy()));
 
@@ -235,7 +240,8 @@ mod tests
     #[test]
     fn Test_One_Tree_Under_One_Policy_Should_Reach_A_Headless_Caller_As_Compatible()
     {
-        let root = Probe_Tree(TreeName("compatible"), "{}");
+        let root = Probe_Tree(COMPARABILITY_AREA, TreeName("compatible"), "{}")
+            .expect("the temp directory is writable and this call's own name is fresh");
 
         let response = Handle_Gate_Compare(&Command_At(&root.to_string_lossy()), &Command_At(&root.to_string_lossy()));
 
@@ -361,28 +367,6 @@ mod tests
                 && rendered.contains("\"after_standing\":\"expired\""),
             "a bucket change must carry both ends in snake_case, and rendered as {rendered}"
         );
-    }
-
-    /// The directory name a probe tree is created under.
-    ///
-    /// A type of its own rather than a plain `&str`: [`Probe_Tree`]'s other argument is a
-    /// `&str` too, so a call site reading `Probe_Tree(name, policy)` would let a caller
-    /// transpose the two with the compiler raising nothing.
-    struct TreeName<'a>(&'a str);
-
-    /// A one-crate tree with real source and a declared `nomos-gate.json`, so a run over it
-    /// reaches `Judged` and resolves a policy of its own.
-    fn Probe_Tree(name: TreeName, policy: &str) -> PathBuf
-    {
-        let root = std::env::temp_dir().join(format!("nomos-api-comparability-{}-{}", name.0, std::process::id()));
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(root.join("src")).expect("creates a probe tree");
-        let manifest = "[package]\nname = \"probe\"\nversion = \"0.1.0\"\nedition = \"2021\"\n";
-        std::fs::write(root.join("Cargo.toml"), manifest).expect("the probe root above was just created");
-        std::fs::write(root.join("src").join("lib.rs"), "pub fn thing() -> i32 { return 1; }\n").expect("the probe src directory above was just created");
-        std::fs::write(root.join("nomos-gate.json"), policy).expect("the probe root above was just created");
-
-        return root;
     }
 
     /// [`GateCommand`] over `root`, every selector at its select-everything default.

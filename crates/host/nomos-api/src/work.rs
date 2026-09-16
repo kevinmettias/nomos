@@ -12,8 +12,8 @@
 //! [`take_over`]) rather than three-in-one-file becoming the very `Handle_Work` cluster this
 //! split exists to avoid -- see [`reservation_outcome_response`]'s own doc. [`ledger_at`] is the one file with
 //! no response type at all: [`Ledger_At`] is the `FileLedger` composition every handler here
-//! shares, and it also carries [`Run_Reservation_Command`], the ledger/territory/launcher
-//! wiring `Claim`, `Renew` and `TakeOver` share past that.
+//! shares, and it also carries [`Run_Empty_Territory_Command`], the ledger/launcher wiring
+//! every verb here except `Add` shares past that.
 
 mod abandon_response;
 mod add_response;
@@ -41,7 +41,7 @@ pub use blocked_item::BlockedItem;
 pub use claim::Handle_Work_Claim;
 pub use decline_response::{DeclineResponse, Handle_Work_Decline};
 pub use finish_response::{FinishResponse, Handle_Work_Finish};
-pub(crate) use ledger_at::{Ledger_At, Run_Reservation_Command};
+pub(crate) use ledger_at::{Ledger_At, Run_Empty_Territory_Command};
 pub use list_response::{Handle_Work_List, ListResponse};
 pub use renew::Handle_Work_Renew;
 pub use reservation_outcome_response::ReservationOutcomeResponse;

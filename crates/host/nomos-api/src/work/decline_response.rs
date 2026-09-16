@@ -1,6 +1,6 @@
 //! [`Handle_Work_Decline`] and its own [`DeclineResponse`].
 
-use nomos_ledger::{ClaimRefusal, Territory};
+use nomos_ledger::ClaimRefusal;
 use nomos_work_orchestration::{EndingRequest, WorkCommand};
 use serde::Serialize;
 use std::path::Path;
@@ -10,17 +10,7 @@ use std::path::Path;
 #[must_use]
 pub fn Handle_Work_Decline(directory: &Path, request: &EndingRequest) -> DeclineResponse
 {
-    use super::Ledger_At;
-    use nomos_composer_std::LAUNCHER;
-
-    let mut ledger = Ledger_At(directory);
-
-    let outcome = nomos_work_orchestration::Run(
-        &WorkCommand::Decline(request.clone()),
-        &mut ledger,
-        &LAUNCHER,
-        || Territory::Of_Files(std::iter::empty::<String>()),
-    );
+    let outcome = super::Run_Empty_Territory_Command(directory, WorkCommand::Decline(request.clone()));
 
     let nomos_work_orchestration::WorkOutcome::Decline { declined, .. } = outcome
     else
@@ -70,8 +60,8 @@ mod tests
 {
     use super::*;
     use crate::work::tests_support::{
-        BoardWithAClaimableItem, BoardWithAClaimedItem, Ending_Request,
-        Scratch_Board_With_A_Claimable_Item, Scratch_Board_With_A_Claimed_Item,
+        BoardWithAClaimableItem, Ending_Request, Scratch_Board_With_A_Claimable_Item,
+        With_A_Board_Somebody_Else_Holds,
     };
 
     #[test]
@@ -92,20 +82,13 @@ mod tests
     #[test]
     fn Test_Ending_Request_Should_Be_Refused_And_Retryable_When_A_Real_Active_Claim_Still_Holds_The_Item()
     {
-        let BoardWithAClaimedItem { directory, id } =
-            Scratch_Board_With_A_Claimed_Item("someone-else", i64::from(u32::MAX))
-                .expect("the temp directory is writable and the scratch ledger is writable");
-        let request = Ending_Request(id, "superseded");
-
-        let response = Handle_Work_Decline(&directory, &request);
-
-        let _ignored = std::fs::remove_dir_all(&directory);
+        let response = With_A_Board_Somebody_Else_Holds("superseded", Handle_Work_Decline);
 
         let DeclineResponse::Refused { retryable, cause } = response
         else
         {
-            // This fixture claims the item as "someone-else" and leaves that claim active, so
-            // declining it as "test-holder" must refuse -- reaching `Declined` here means the
+            // The board holds the item as "someone-else" and leaves that claim active, so
+            // reaching it as "test-holder" must refuse -- reaching `Declined` here means the
             // active-claim check itself stopped enforcing, not a condition this test should
             // assert around.
             panic!("an item a real active claim still holds is a real refusal, not an end");
