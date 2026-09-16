@@ -22,6 +22,14 @@ mod tests
     use nomos_spec_store::SpecificationStore;
     use rusqlite::Transaction;
 
+    /// The `authority_root` column of the `suites` row [`Insert_Suites`] places, after the
+    /// `suite_id` and the `title`.
+    const AUTHORITY_ROOT_COLUMN: usize = 2;
+
+    /// The relation type the fixture seeds: no inverse, no domain or range kinds, and a
+    /// `max_per_node` a test can tell apart from the column default.
+    const FIXTURE_MAX_PER_NODE: u32 = 4;
+
     #[test]
     fn Test_Insert_Suites_Should_Place_A_Suite_Row()
     {
@@ -34,16 +42,17 @@ mod tests
                 authority_root: true,
             })],
         )
-        .expect("builds");
+        .expect("a record of strings, integers and enums serialises");
 
-        store.In_Transaction(|transaction| Insert_Suites(transaction, &bundle)).expect("inserts");
+        store.In_Transaction(|transaction| Insert_Suites(transaction, &bundle))
+            .expect("the Fixture holds every row these references name");
 
         let row: (String, String, i64) = store
             .Connection()
             .query_row("SELECT suite_id, title, authority_root FROM suites", [], |row| {
-                return Ok((row.get(0)?, row.get(1)?, row.get(2)?));
+                return Ok((row.get(0)?, row.get(1)?, row.get(AUTHORITY_ROOT_COLUMN)?));
             })
-            .expect("reads back");
+            .expect("the table holds only the rows this test placed");
         assert_eq!(row, ("nomos".to_owned(), "The Nomos Specification".to_owned(), 1));
     }
 
@@ -63,14 +72,14 @@ mod tests
                 suite_id: None,
             })],
         )
-        .expect("builds");
+        .expect("a record of strings, integers and enums serialises");
 
-        store.In_Transaction(|transaction| Insert_Nodes(transaction, &bundle)).expect("inserts");
+        store.In_Transaction(|transaction| Insert_Nodes(transaction, &bundle)).expect("the Fixture holds every row these references name");
 
         let kind: String = store
             .Connection()
             .query_row("SELECT kind FROM nodes WHERE node_id = 'N3'", [], |row| row.get(0))
-            .expect("reads back");
+            .expect("the table holds only the rows this test placed");
         assert_eq!(kind, "requirement");
     }
 
@@ -85,9 +94,9 @@ mod tests
                 node_id: "N1".to_owned(),
             })],
         )
-        .expect("builds");
+        .expect("a record of strings, integers and enums serialises");
 
-        store.In_Transaction(|transaction| Insert_Node_Aliases(transaction, &bundle)).expect("inserts");
+        store.In_Transaction(|transaction| Insert_Node_Aliases(transaction, &bundle)).expect("the Fixture holds every row these references name");
 
         let node_id: String = store
             .Connection()
@@ -97,7 +106,7 @@ mod tests
                 [],
                 |row| row.get(0),
             )
-            .expect("reads back");
+            .expect("the table holds only the rows this test placed");
         assert_eq!(node_id, "N1");
     }
 
@@ -131,7 +140,7 @@ mod tests
                 inverse_of: None,
                 domain: Vec::new(),
                 range: Vec::new(),
-                max_per_node: 4,
+                max_per_node: FIXTURE_MAX_PER_NODE,
             }),
             Insert_Relation_Types,
             "SELECT tier FROM relation_types WHERE name = 'depends_on'",
@@ -290,7 +299,8 @@ mod tests
     /// relation type this file's functions can resolve their references against.
     fn Fixture() -> SpecificationStore
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
         store
             .Connection()
             .execute_batch(

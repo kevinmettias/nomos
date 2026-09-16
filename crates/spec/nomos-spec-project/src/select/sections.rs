@@ -36,7 +36,8 @@ mod tests
              VALUES ('nomos', 'The Nomos specification', 1);",
         );
 
-        let items = Gather_Suites(store.Connection(), &Filter::default()).expect("gathers");
+        let items = Gather_Suites(store.Connection(), &Filter::default())
+            .expect("the store holds only the rows this test seeded");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -52,10 +53,13 @@ mod tests
     #[test]
     fn Test_Gather_Documents_Should_Read_A_Documents_Path_And_Revision()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        store.Put_Source_Document("volumes/one.md", "v1", "Body text.\n").expect("stores");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
+        store.Put_Source_Document("volumes/one.md", "v1", "Body text.\n")
+            .expect("the store accepts the document this test gives it");
 
-        let items = Gather_Documents(store.Connection(), &Filter::default()).expect("gathers");
+        let items = Gather_Documents(store.Connection(), &Filter::default())
+            .expect("the store holds only the rows this test seeded");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -71,17 +75,20 @@ mod tests
     #[test]
     fn Test_Gather_Headings_Should_Read_A_Headings_Title()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let document = store.Put_Source_Document("volumes/one.md", "v1", "# One\n").expect("stores");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
+        let document = store.Put_Source_Document("volumes/one.md", "v1", "# One\n")
+            .expect("the store accepts the document this test gives it");
         store
             .Connection()
             .execute_batch(&format!(
                 "INSERT INTO source_headings (document_uid, ordinal, depth, title) \
                  VALUES ({document}, 1, 1, 'One');"
             ))
-            .expect("seeds");
+            .expect("the batch is the SQL literal this test declares");
 
-        let items = Gather_Headings(store.Connection(), &Filter::default()).expect("gathers");
+        let items = Gather_Headings(store.Connection(), &Filter::default())
+            .expect("the store holds only the rows this test seeded");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -93,13 +100,16 @@ mod tests
     #[test]
     fn Test_Gather_Blocks_Should_Read_A_Blocks_Kind_And_Text()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let document = store.Put_Source_Document("volumes/one.md", "v1", "Body text.\n").expect("stores");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
+        let document = store.Put_Source_Document("volumes/one.md", "v1", "Body text.\n")
+            .expect("the store accepts the document this test gives it");
         store
             .Put_Source_Blocks(document, &nomos_spec_model::Segment("Body text.\n"))
-            .expect("stores");
+            .expect("the store accepts the block this test gives it");
 
-        let items = Gather_Blocks(store.Connection(), &Filter::default()).expect("gathers");
+        let items = Gather_Blocks(store.Connection(), &Filter::default())
+            .expect("the store holds only the rows this test seeded");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -115,16 +125,21 @@ mod tests
     #[test]
     fn Test_Gather_Rows_Should_Read_A_Content_Rows_Cells()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
         let table = "| a | b |\n| --- | --- |\n| 1 | 2 |\n";
-        let document = store.Put_Source_Document("volumes/one.md", "v1", table).expect("stores");
-        store.Put_Source_Blocks(document, &nomos_spec_model::Segment(table)).expect("stores");
+        let document = store.Put_Source_Document("volumes/one.md", "v1", table)
+            .expect("the store accepts the document this test gives it");
+        store
+            .Put_Source_Blocks(document, &nomos_spec_model::Segment(table))
+            .expect("the store accepts the block this test gives it");
 
         let filter = Filter {
             row_kind: Some("content".to_owned()),
             ..Filter::default()
         };
-        let items = Gather_Rows(store.Connection(), &filter).expect("gathers");
+        let items = Gather_Rows(store.Connection(), &filter)
+            .expect("the store holds only the rows this test seeded");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -143,7 +158,8 @@ mod tests
              VALUES ('CDM-GONE', 'concept', 'canonical', 'record', 'Gone', '2026-01-01T00:00:00Z');",
         );
 
-        let items = Gather_Nodes(store.Connection(), &Filter::default()).expect("gathers");
+        let items = Gather_Nodes(store.Connection(), &Filter::default())
+            .expect("the store holds only the rows this test seeded");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -164,7 +180,8 @@ mod tests
                     'sha256:aa', NULL FROM nodes WHERE node_id = 'AGT-EXEC-001';",
         );
 
-        let items = Gather_Statements(store.Connection(), &Filter::default()).expect("gathers");
+        let items = Gather_Statements(store.Connection(), &Filter::default())
+            .expect("the store holds only the rows this test seeded");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -192,7 +209,8 @@ mod tests
              WHERE f.node_id = 'CDM-ONE' AND t.node_id = 'AGT-EXEC-001';",
         );
 
-        let items = Gather_Relations(store.Connection(), &Filter::default()).expect("gathers");
+        let items = Gather_Relations(store.Connection(), &Filter::default())
+            .expect("the store holds only the rows this test seeded");
         let relation = The_One_Item(&items);
 
         assert_eq!(relation.Field("from"), Some("CDM-ONE"));
@@ -210,7 +228,8 @@ mod tests
              WHERE n.node_id = 'CDM-ONE';",
         );
 
-        let items = Gather_Lineage(store.Connection(), &Filter::default()).expect("gathers");
+        let items = Gather_Lineage(store.Connection(), &Filter::default())
+            .expect("the store holds only the rows this test seeded");
         let lineage = The_One_Item(&items);
 
         assert_eq!(lineage.Field("disposition"), Some("preserved-verbatim"));
@@ -220,20 +239,21 @@ mod tests
     #[test]
     fn Test_Cited_Source_Should_Address_A_Row_By_Block_And_Ordinal()
     {
-        let connection = rusqlite::Connection::open_in_memory().expect("opens");
+        let connection = rusqlite::Connection::open_in_memory()
+            .expect("SQLite opens an in-memory database with no file");
         connection
             .execute_batch(
                 "CREATE TABLE t (path TEXT, block INTEGER, ordinal INTEGER, heading TEXT);
                  INSERT INTO t VALUES ('volumes/one.md', 3, 2, '');",
             )
-            .expect("seeds");
+            .expect("the batch is the SQL literal this test declares");
 
         let cited = connection
             .query_row("SELECT path, block, ordinal, heading FROM t", [], |row| {
                 let mut columns = Columns::Of(row);
                 return Cited_Source(&mut columns);
             })
-            .expect("reads");
+            .expect("the table holds only the row the batch inserted");
 
         assert_eq!(cited, "volumes/one.md#3:2");
     }
@@ -246,7 +266,8 @@ mod tests
              SELECT uid, 'superseded', 'replaced by the v15 records', 'D-129' FROM source_blocks;",
         );
 
-        let items = Gather_Omissions(store.Connection(), &Filter::default()).expect("gathers");
+        let items = Gather_Omissions(store.Connection(), &Filter::default())
+            .expect("the store holds only the rows this test seeded");
         let omission = The_One_Item(&items);
 
         assert_eq!(omission.Field("reason"), Some("superseded"));
@@ -257,8 +278,12 @@ mod tests
     /// document shares.
     fn Store_With(sql: &str) -> SpecificationStore
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        store.Connection().execute_batch(sql).expect("seeds");
+        let store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
+        store
+            .Connection()
+            .execute_batch(sql)
+            .expect("the batch is the SQL literal this test declares");
         return store;
     }
 
@@ -279,10 +304,17 @@ mod tests
     /// `sql` — the setup every `Gather_*` test that needs a block already loaded shares.
     fn Store_With_A_Block(sql: &str) -> SpecificationStore
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let document = store.Put_Source_Document("volumes/one.md", "v1", "Body text.\n").expect("stores");
-        store.Put_Source_Blocks(document, &nomos_spec_model::Segment("Body text.\n")).expect("stores");
-        store.Connection().execute_batch(sql).expect("seeds");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
+        let document = store.Put_Source_Document("volumes/one.md", "v1", "Body text.\n")
+            .expect("the store accepts the document this test gives it");
+        store
+            .Put_Source_Blocks(document, &nomos_spec_model::Segment("Body text.\n"))
+            .expect("the store accepts the block this test gives it");
+        store
+            .Connection()
+            .execute_batch(sql)
+            .expect("the batch is the SQL literal this test declares");
         return store;
     }
 }

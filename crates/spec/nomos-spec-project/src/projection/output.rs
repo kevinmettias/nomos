@@ -25,10 +25,15 @@ mod tests
     use super::*;
     use crate::Format;
 
+    /// How many items the sample's one section reports, which is nothing the render decides.
+    const ITEMS_IN_THE_NODES_SECTION: u32 = 2;
+
     #[test]
     fn Test_Sidecar_Should_Render_The_Stamp_As_Json()
     {
-        let rendered = Sample_Output().Sidecar().expect("renders");
+        let rendered = Sample_Output()
+            .Sidecar()
+            .expect("a stamp of strings, integers and enums serialises");
 
         assert!(rendered.contains("\"profile\": \"one\""), "{rendered}");
     }
@@ -46,7 +51,7 @@ mod tests
                 output: "one.md".to_owned(),
                 content_digest: "sha256:bb".to_owned(),
                 inputs_digest: "sha256:cc".to_owned(),
-                sections: vec![("Nodes".to_owned(), 2)],
+                sections: vec![("Nodes".to_owned(), ITEMS_IN_THE_NODES_SECTION)],
                 inputs: Vec::new(),
             },
         };

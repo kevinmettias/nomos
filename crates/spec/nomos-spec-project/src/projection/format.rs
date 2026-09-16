@@ -67,6 +67,15 @@ mod tests
 {
     use super::*;
 
+    /// Where each variant sits in [`Format::All`], which is what the loop below asserts the
+    /// match's ordinals against.
+    const POSITION_OF_MARKDOWN: usize = 0;
+    const POSITION_OF_YAML: usize = 1;
+    const POSITION_OF_JSON: usize = 2;
+    const POSITION_OF_HTML: usize = 3;
+    const POSITION_OF_MERMAID: usize = 4;
+    const POSITION_OF_CONTEXTPACK: usize = 5;
+
     /// `Format::All()`'s own mirror, named in the doc comment above it.
     ///
     /// The match has no wildcard arm. A variant added to `Format` without a matching arm
@@ -79,12 +88,12 @@ mod tests
         {
             return match format
             {
-                Format::Markdown => 0,
-                Format::Yaml => 1,
-                Format::Json => 2,
-                Format::Html => 3,
-                Format::Mermaid => 4,
-                Format::Contextpack => 5,
+                Format::Markdown => POSITION_OF_MARKDOWN,
+                Format::Yaml => POSITION_OF_YAML,
+                Format::Json => POSITION_OF_JSON,
+                Format::Html => POSITION_OF_HTML,
+                Format::Mermaid => POSITION_OF_MERMAID,
+                Format::Contextpack => POSITION_OF_CONTEXTPACK,
             };
         }
 

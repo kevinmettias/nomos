@@ -119,7 +119,8 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Collect_Submissions(store.Connection(), &mut records).expect("collects");
+        Collect_Submissions(store.Connection(), &mut records)
+            .expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -142,7 +143,8 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Submission_Values(store.Connection(), &mut records).expect("collects");
+        Submission_Values(store.Connection(), &mut records)
+            .expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -167,7 +169,7 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Submission_Gaps(store.Connection(), &mut records).expect("collects");
+        Submission_Gaps(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -185,7 +187,8 @@ mod tests
     /// One node filed as a submission, one attributed value and one open gap.
     fn Fixture() -> SpecificationStore
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
         store
             .Connection()
             .execute_batch(

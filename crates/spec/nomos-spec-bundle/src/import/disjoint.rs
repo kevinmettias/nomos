@@ -145,8 +145,10 @@ mod tests
     #[test]
     fn Test_Assert_Disjoint_Should_Accept_A_Bundle_The_Store_Does_Not_Already_Hold()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
-        let bundle = Bundle::New(1, vec![A_Node()]).expect("builds");
+        let store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
+        let bundle = Bundle::New(1, vec![A_Node()])
+            .expect("a record of strings, integers and enums serialises");
 
         assert!(Assert_Disjoint(&store, &bundle).is_ok());
     }
@@ -154,7 +156,8 @@ mod tests
     #[test]
     fn Test_Assert_Disjoint_Should_Refuse_A_Node_The_Store_Already_Holds()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
         store
             .Connection()
             .execute_batch(
@@ -162,8 +165,9 @@ mod tests
                      (node_id, kind, authority, representation, title, deleted_at, suite_uid)
                      VALUES ('N1', 'requirement', 'canonical', 'record', 'Node One', NULL, NULL);",
             )
-            .expect("seeds");
-        let bundle = Bundle::New(1, vec![A_Node()]).expect("builds");
+            .expect("the node this test then collides with is inserted");
+        let bundle = Bundle::New(1, vec![A_Node()])
+            .expect("a record of strings, integers and enums serialises");
 
         let refusal = Assert_Disjoint(&store, &bundle).expect_err("a collision must be refused");
         assert!(

@@ -110,12 +110,15 @@ mod tests
     use crate::Blob;
     use crate::Encoding as BlobEncoding;
 
+    /// The two bytes of `hi`, which is the content this test's blob carries.
+    const FIXTURE_BLOB_BYTE_LENGTH: i64 = 2;
+
     #[test]
     fn Test_Table_Should_Name_The_Table_Each_Variant_Belongs_To()
     {
         let record = Record::Blob(Blob {
             sha256: "sha256:aa".to_owned(),
-            byte_length: 2,
+            byte_length: FIXTURE_BLOB_BYTE_LENGTH,
             encoding: BlobEncoding::Utf8,
             content: "hi".to_owned(),
         });

@@ -195,7 +195,8 @@ mod tests
         let store = Populated_Store();
         let profile = One_Section_Profile();
 
-        let output = Build_Projection(&store, &profile).expect("builds");
+        let output = Build_Projection(&store, &profile)
+            .expect("the store holds every section content the profile names");
 
         assert_eq!(output.path, "one.md");
         assert!(output.body.contains("nomos"), "{}", output.body);
@@ -220,7 +221,8 @@ mod tests
         let store = Populated_Store();
         let profile = One_Section_Profile();
 
-        let freshness = Check_Freshness(&store, &profile, None, None).expect("checks");
+        let freshness = Check_Freshness(&store, &profile, None, None)
+            .expect("the freshness check reads only what the store holds");
 
         assert!(freshness.absent);
     }
@@ -230,11 +232,13 @@ mod tests
     {
         let store = Populated_Store();
         let profile = One_Section_Profile();
-        let output = Build_Projection(&store, &profile).expect("builds");
-        let sidecar = output.Sidecar().expect("renders");
+        let output = Build_Projection(&store, &profile)
+            .expect("the store holds every section content the profile names");
+        let sidecar =
+            output.Sidecar().expect("a stamp of strings, integers and enums serialises");
 
-        let freshness =
-            Check_Freshness(&store, &profile, Some(&output.body), Some(&sidecar)).expect("checks");
+        let freshness = Check_Freshness(&store, &profile, Some(&output.body), Some(&sidecar))
+            .expect("the freshness check reads only what the store holds");
 
         assert!(!freshness.absent);
         assert!(freshness.stale.is_none());
@@ -244,7 +248,8 @@ mod tests
 
     fn Populated_Store() -> SpecificationStore
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
         store
             .Connection()
             .execute_batch(
@@ -264,6 +269,6 @@ mod tests
                 "sections": [{ "title": "Suites", "content": "suites" }]
             }"#,
         )
-        .expect("parses");
+        .expect("that literal carries every field the profile parser names");
     }
 }

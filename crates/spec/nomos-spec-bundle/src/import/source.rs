@@ -209,31 +209,46 @@ mod tests
     use super::*;
     use nomos_spec_store::SpecificationStore;
 
+    /// The three bytes of `bye`, which is the content the blob test places.
+    const FIXTURE_BLOB_BYTE_LENGTH: i64 = 3;
+    /// The second slot, which is what makes the placed heading and block distinguishable
+    /// from the first row the fixture already holds.
+    const SECOND_ORDINAL: i64 = 2;
+
     #[test]
     fn Test_Insert_Blobs_Should_Place_A_Blob_By_Its_Declared_Digest()
     {
         let mut store = Fixture();
         let digest = nomos_spec_model::ContentHash::Of_Bytes(b"bye").As_String_Slice().to_owned();
-        let bundle = Bundle::New(
-            1,
-            vec![Record::Blob(Blob {
-                sha256: digest.clone(),
-                byte_length: 3,
-                encoding: crate::Encoding::Utf8,
-                content: "bye".to_owned(),
-            })],
-        )
-        .expect("builds");
+        let bundle = A_Blob_Reading_Bye(digest.clone());
 
-        store.In_Transaction(|transaction| Insert_Blobs(transaction, &bundle)).expect("inserts");
+        store
+            .In_Transaction(|transaction| Insert_Blobs(transaction, &bundle))
+            .expect("the Fixture holds every row these references name");
 
         let byte_length: i64 = store
             .Connection()
             .query_row("SELECT byte_length FROM blobs WHERE sha256 = ?1", [&digest], |row| {
                 row.get(0)
             })
-            .expect("reads back");
-        assert_eq!(byte_length, 3);
+            .expect("the table holds only the rows this test placed");
+        assert_eq!(byte_length, FIXTURE_BLOB_BYTE_LENGTH);
+    }
+
+    /// A bundle carrying one blob whose declared digest is the caller's and whose content
+    /// is `bye` — so the row it places carries a length no other fixture here holds.
+    fn A_Blob_Reading_Bye(digest: String) -> Bundle
+    {
+        return Bundle::New(
+            1,
+            vec![Record::Blob(Blob {
+                sha256: digest,
+                byte_length: FIXTURE_BLOB_BYTE_LENGTH,
+                encoding: crate::Encoding::Utf8,
+                content: "bye".to_owned(),
+            })],
+        )
+        .expect("a record of strings, integers and enums serialises");
     }
 
     #[test]
@@ -248,16 +263,18 @@ mod tests
                 blob_sha256: "sha256:aa".to_owned(),
             })],
         )
-        .expect("builds");
+        .expect("a record of strings, integers and enums serialises");
 
-        store.In_Transaction(|transaction| Insert_Source_Documents(transaction, &bundle)).expect("inserts");
+        store
+            .In_Transaction(|transaction| Insert_Source_Documents(transaction, &bundle))
+            .expect("the Fixture holds every row these references name");
 
         let revision: String = store
             .Connection()
             .query_row("SELECT revision FROM source_documents WHERE path = 'other.md'", [], |row| {
                 row.get(0)
             })
-            .expect("reads back");
+            .expect("the table holds only the rows this test placed");
         assert_eq!(revision, "v2");
     }
 
@@ -270,7 +287,7 @@ mod tests
                     path: "doc.md".to_owned(),
                     revision: "v1".to_owned(),
                 },
-                ordinal: 2,
+                ordinal: SECOND_ORDINAL,
                 depth: 1,
                 title: "Section Two".to_owned(),
             }),
@@ -289,7 +306,7 @@ mod tests
                     path: "doc.md".to_owned(),
                     revision: "v1".to_owned(),
                 },
-                ordinal: 2,
+                ordinal: SECOND_ORDINAL,
                 kind: "paragraph".to_owned(),
                 heading_path: "Intro".to_owned(),
                 text: "World.".to_owned(),
@@ -357,7 +374,8 @@ mod tests
     /// table this file's inserts can resolve a reference against.
     fn Fixture() -> SpecificationStore
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
         store
             .Connection()
             .execute_batch(

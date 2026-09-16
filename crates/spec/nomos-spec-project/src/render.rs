@@ -46,13 +46,15 @@ mod tests
     fn Test_Render_Projection_Should_Dispatch_To_The_Format_The_Projection_Declares()
     {
         let mut projection = One_Section_Projection();
-        let markdown = Render_Projection(&projection).expect("renders");
+        let markdown = Render_Projection(&projection)
+            .expect("the projection's section holds the one item the renderer walks");
 
         assert!(markdown.contains("# One"), "{markdown}");
         assert!(markdown.contains("## Nodes"), "{markdown}");
 
         projection.format = Format::Json;
-        let json = Render_Projection(&projection).expect("renders");
+        let json = Render_Projection(&projection)
+            .expect("the projection's section holds the one item the renderer walks");
 
         assert!(json.contains("\"title\": \"One\""), "{json}");
     }

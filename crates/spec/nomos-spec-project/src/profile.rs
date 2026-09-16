@@ -201,7 +201,7 @@ mod tests
     #[test]
     fn Test_A_Minimal_Profile_Should_Parse()
     {
-        let profile = Profile::Parse(MINIMAL).expect("parses");
+        let profile = Profile::Parse(MINIMAL).expect("MINIMAL carries every field the profile parser names");
 
         assert_eq!(profile.format, Format::Markdown);
         assert_eq!(profile.sections.first().map(|section| section.content), Some(Content::Nodes));
@@ -265,11 +265,12 @@ mod tests
     fn Test_Is_Per_Subject_Should_Detect_The_Placeholder_In_Output_Or_A_Filter()
     {
         let per_subject = MINIMAL.replace("one.md", "{subject}.md");
-        let per_subject = Profile::Parse(&per_subject).expect("parses");
+        let per_subject = Profile::Parse(&per_subject)
+            .expect("the replacement edits only one value MINIMAL carries");
 
         assert!(per_subject.Is_Per_Subject());
 
-        let whole_store = Profile::Parse(MINIMAL).expect("parses");
+        let whole_store = Profile::Parse(MINIMAL).expect("MINIMAL carries every field the profile parser names");
 
         assert!(!whole_store.Is_Per_Subject());
     }
@@ -277,8 +278,10 @@ mod tests
     #[test]
     fn Test_For_Should_Resolve_A_Per_Subject_Profile()
     {
-        let per_subject = Profile::Parse(&MINIMAL.replace("one.md", "{subject}.md")).expect("parses");
-        let whole_store = Profile::Parse(MINIMAL).expect("parses");
+        let per_subject = MINIMAL.replace("one.md", "{subject}.md");
+        let per_subject = Profile::Parse(&per_subject)
+            .expect("the replacement edits only one value MINIMAL carries");
+        let whole_store = Profile::Parse(MINIMAL).expect("MINIMAL carries every field the profile parser names");
 
         assert!(per_subject.For(Some("AGT-EXEC-001")).is_ok());
         assert!(matches!(
@@ -294,7 +297,9 @@ mod tests
     #[test]
     fn Test_Resolved_For_Should_Replace_The_Subject_Placeholder_Throughout()
     {
-        let per_subject = Profile::Parse(&MINIMAL.replace("one.md", "{subject}.md")).expect("parses");
+        let per_subject = MINIMAL.replace("one.md", "{subject}.md");
+        let per_subject = Profile::Parse(&per_subject)
+            .expect("the replacement edits only one value MINIMAL carries");
 
         let resolved = per_subject.Resolved_For("AGT-EXEC-001");
 
@@ -305,11 +310,13 @@ mod tests
     #[test]
     fn Test_The_Digest_Should_Follow_The_Profile()
     {
-        let profile = Profile::Parse(MINIMAL).expect("parses");
+        let profile = Profile::Parse(MINIMAL).expect("MINIMAL carries every field the profile parser names");
         let renamed_source = MINIMAL.replace("\"One\"", "\"Two\"");
-        let renamed = Profile::Parse(&renamed_source).expect("parses");
+        let renamed = Profile::Parse(&renamed_source)
+            .expect("the replacement edits only one value MINIMAL carries");
 
-        assert_eq!(profile.Digest(), Profile::Parse(MINIMAL).expect("parses").Digest());
+        let rebuilt = Profile::Parse(MINIMAL).expect("MINIMAL carries every field the profile parser names");
+        assert_eq!(profile.Digest(), rebuilt.Digest());
         assert_ne!(profile.Digest(), renamed.Digest());
     }
 }

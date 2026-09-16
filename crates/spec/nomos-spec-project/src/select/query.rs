@@ -234,6 +234,14 @@ mod tests
 {
     use super::*;
 
+    /// The rows the one batch in this file inserts, which is what sizes every assertion about
+    /// the result of running a query over it.
+    const ROWS_THE_BATCH_INSERTS: usize = 2;
+    /// What the batch in the column-advance test puts in `t.a`.
+    const VALUE_IN_COLUMN_A: i64 = 10;
+    /// What that same batch puts in `t.b`.
+    const VALUE_IN_COLUMN_B: i64 = 20;
+
     #[test]
     fn Test_On_Should_Start_A_Query_From_The_Given_Base_Sql()
     {
@@ -288,10 +296,11 @@ mod tests
     #[test]
     fn Test_Run_Should_Read_Every_Matching_Row_Through_The_Given_Reader()
     {
-        let connection = Connection::open_in_memory().expect("opens");
+        let connection = Connection::open_in_memory()
+            .expect("SQLite opens an in-memory database with no file");
         connection
             .execute_batch("CREATE TABLE t (n TEXT); INSERT INTO t (n) VALUES ('a'), ('b');")
-            .expect("seeds");
+            .expect("the batch is the SQL literal this test declares");
 
         let query = Query::On("SELECT n FROM t");
         let items = query
@@ -299,24 +308,26 @@ mod tests
                 let text: String = row.get(0)?;
                 return Ok(Item::Of(&text));
             })
-            .expect("reads");
+            .expect("the table holds only the rows the batch inserted");
 
-        assert_eq!(items.len(), 2);
+        assert_eq!(items.len(), ROWS_THE_BATCH_INSERTS);
     }
 
     #[test]
     fn Test_Gather_Items_Should_Dispatch_By_Content_Kind()
     {
-        let store = nomos_spec_store::SpecificationStore::In_Memory().expect("opens");
+        let store = nomos_spec_store::SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
         store
             .Connection()
             .execute(
                 "INSERT INTO suites (suite_id, title, authority_root) VALUES ('nomos', 'The Nomos specification', 1)",
                 [],
             )
-            .expect("seeds");
+            .expect("the batch is the SQL literal this test declares");
 
-        let items = Gather_Items(store.Connection(), Content::Suites, &Filter::default()).expect("gathers");
+        let items = Gather_Items(store.Connection(), Content::Suites, &Filter::default())
+            .expect("the store holds only the row this test inserted");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -328,16 +339,17 @@ mod tests
     #[test]
     fn Test_Of_Should_Position_Reading_At_The_Rows_First_Column()
     {
-        let connection = Connection::open_in_memory().expect("opens");
+        let connection = Connection::open_in_memory()
+            .expect("SQLite opens an in-memory database with no file");
         connection
             .execute_batch("CREATE TABLE t (a TEXT, b TEXT); INSERT INTO t VALUES ('first', 'second');")
-            .expect("seeds");
+            .expect("the batch is the SQL literal this test declares");
 
         let first = connection
             .query_row("SELECT a, b FROM t", [], |row| {
                 return Columns::Of(row).Text();
             })
-            .expect("reads");
+            .expect("the table holds only the rows the batch inserted");
 
         assert_eq!(first, "first");
     }
@@ -345,16 +357,17 @@ mod tests
     #[test]
     fn Test_Text_Should_Read_A_Null_Column_As_An_Empty_String()
     {
-        let connection = Connection::open_in_memory().expect("opens");
+        let connection = Connection::open_in_memory()
+            .expect("SQLite opens an in-memory database with no file");
         connection
             .execute_batch("CREATE TABLE t (a TEXT); INSERT INTO t (a) VALUES (NULL);")
-            .expect("seeds");
+            .expect("the batch is the SQL literal this test declares");
 
         let text = connection
             .query_row("SELECT a FROM t", [], |row| {
                 return Columns::Of(row).Text();
             })
-            .expect("reads");
+            .expect("the table holds only the rows the batch inserted");
 
         assert_eq!(text, "");
     }
@@ -362,10 +375,11 @@ mod tests
     #[test]
     fn Test_Next_Should_Advance_Past_Each_Column_It_Reads()
     {
-        let connection = Connection::open_in_memory().expect("opens");
+        let connection = Connection::open_in_memory()
+            .expect("SQLite opens an in-memory database with no file");
         connection
             .execute_batch("CREATE TABLE t (a INTEGER, b INTEGER); INSERT INTO t VALUES (10, 20);")
-            .expect("seeds");
+            .expect("the batch is the SQL literal this test declares");
 
         let (first, second): (i64, i64) = connection
             .query_row("SELECT a, b FROM t", [], |row| {
@@ -374,9 +388,9 @@ mod tests
                 let second: i64 = columns.Next()?;
                 return Ok((first, second));
             })
-            .expect("reads");
+            .expect("the table holds only the rows the batch inserted");
 
-        assert_eq!((first, second), (10, 20));
+        assert_eq!((first, second), (VALUE_IN_COLUMN_A, VALUE_IN_COLUMN_B));
     }
 
     #[test]

@@ -327,13 +327,20 @@ mod tests
     use crate::Blob;
     use crate::Encoding as BlobEncoding;
 
+    /// A bundle holding no records is exactly two lines: the header and the manifest.
+    const LINES_IN_A_RECORDLESS_BUNDLE: usize = 2;
+    /// Deliberately not the format version, so the header assertion cannot pass by reading it.
+    const SCHEMA_VERSION_DISTINCT_FROM_THE_FORMAT: u32 = 7;
+    /// The two bytes of `hi`, which is the content [`One_Blob`] carries.
+    const FIXTURE_BLOB_BYTE_LENGTH: i64 = 2;
+
     #[test]
     fn Test_Parse_Should_Recover_The_Bundle_Written_Beforehand()
     {
-        let bundle = Bundle::New(1, One_Blob()).expect("builds");
+        let bundle = Bundle::New(1, One_Blob()).expect("a record of strings, integers and enums serialises");
 
-        let text = bundle.Write().expect("writes");
-        let read = Bundle::Parse(&text).expect("parses");
+        let text = bundle.Write().expect("Write emits the same strings, integers and enums");
+        let read = Bundle::Parse(&text).expect("the text was written by Write from this bundle");
 
         assert_eq!(read, bundle);
         assert_eq!(read.Write().expect("rewrites"), text);
@@ -343,9 +350,9 @@ mod tests
     fn Test_Write_Should_End_Every_Line_With_Line_Feed_And_Never_Carriage_Return()
     {
         let text = Bundle::New(1, One_Blob())
-            .expect("builds")
+            .expect("a record of strings, integers and enums serialises")
             .Write()
-            .expect("writes");
+            .expect("Write emits the same strings, integers and enums");
 
         assert!(text.ends_with('\n'));
         assert!(!text.contains('\r'), "CRLF would make the bundle diff per platform");
@@ -356,9 +363,9 @@ mod tests
     fn Test_An_Altered_Record_Should_Be_Refused()
     {
         let text = Bundle::New(1, One_Blob())
-            .expect("builds")
+            .expect("a record of strings, integers and enums serialises")
             .Write()
-            .expect("writes");
+            .expect("Write emits the same strings, integers and enums");
 
         let tampered = text.replace("\"hi\"", "\"ho\"");
         assert_ne!(tampered, text, "the negative control must actually alter the bundle");
@@ -372,8 +379,8 @@ mod tests
     #[test]
     fn Test_A_Removed_Record_Should_Be_Refused()
     {
-        let bundle = Bundle::New(1, One_Blob()).expect("builds");
-        let text = bundle.Write().expect("writes");
+        let bundle = Bundle::New(1, One_Blob()).expect("a record of strings, integers and enums serialises");
+        let text = bundle.Write().expect("Write emits the same strings, integers and enums");
 
         let kept: Vec<&str> = text
             .lines()
@@ -395,8 +402,8 @@ mod tests
     #[test]
     fn Test_A_Reformatted_Bundle_Should_Be_Refused()
     {
-        let bundle = Bundle::New(1, One_Blob()).expect("builds");
-        let text = bundle.Write().expect("writes");
+        let bundle = Bundle::New(1, One_Blob()).expect("a record of strings, integers and enums serialises");
+        let text = bundle.Write().expect("Write emits the same strings, integers and enums");
 
         let loosened = text.replace("\"format\":1", "\"format\": 1");
         assert_ne!(loosened, text);
@@ -408,13 +415,13 @@ mod tests
     #[test]
     fn Test_A_Newer_Format_Should_Be_Refused()
     {
-        let mut bundle = Bundle::New(1, Vec::new()).expect("builds");
+        let mut bundle = Bundle::New(1, Vec::new()).expect("a record of strings, integers and enums serialises");
         bundle.header.format = FORMAT.saturating_add(1);
-        let rebuilt = Bundle::New(1, Vec::new()).expect("builds");
+        let rebuilt = Bundle::New(1, Vec::new()).expect("a record of strings, integers and enums serialises");
         let text = format!(
             "{}{}",
-            Bundle::Line_Text(&Line::Header(bundle.header)).expect("writes"),
-            Bundle::Line_Text(&Line::Manifest(rebuilt.manifest)).expect("writes")
+            Bundle::Line_Text(&Line::Header(bundle.header)).expect("a header carries integers"),
+            Bundle::Line_Text(&Line::Manifest(rebuilt.manifest)).expect("a manifest holds strings and integers")
         );
 
         let refusal = Bundle::Parse(&text).expect_err("a newer format must be refused");
@@ -427,26 +434,31 @@ mod tests
     #[test]
     fn Test_New_Should_Produce_A_Well_Formed_Bundle_From_An_Empty_List_Of_Entries()
     {
-        let bundle = Bundle::New(1, Vec::new()).expect("builds");
-        let text = bundle.Write().expect("writes");
+        let bundle = Bundle::New(1, Vec::new()).expect("a record of strings, integers and enums serialises");
+        let text = bundle.Write().expect("Write emits the same strings, integers and enums");
 
-        assert_eq!(text.lines().count(), 2, "a header and a manifest");
-        assert_eq!(Bundle::Parse(&text).expect("parses"), bundle);
+        assert_eq!(text.lines().count(), LINES_IN_A_RECORDLESS_BUNDLE, "a header and a manifest");
+        let read = Bundle::Parse(&text).expect("the text was written by Write from this bundle");
+        assert_eq!(read, bundle);
     }
 
     #[test]
     fn Test_Header_Should_Return_The_Format_And_Schema_Version_It_Was_Built_With()
     {
-        let bundle = Bundle::New(7, Vec::new()).expect("builds");
+        let bundle = Bundle::New(
+            SCHEMA_VERSION_DISTINCT_FROM_THE_FORMAT,
+            Vec::new(),
+        )
+        .expect("a record of strings, integers and enums serialises");
 
         assert_eq!(bundle.Header().format, FORMAT);
-        assert_eq!(bundle.Header().schema_version, 7);
+        assert_eq!(bundle.Header().schema_version, SCHEMA_VERSION_DISTINCT_FROM_THE_FORMAT);
     }
 
     #[test]
     fn Test_Manifest_Should_Report_The_Entry_Count_Recorded_At_Build_Time()
     {
-        let bundle = Bundle::New(1, One_Blob()).expect("builds");
+        let bundle = Bundle::New(1, One_Blob()).expect("a record of strings, integers and enums serialises");
 
         assert_eq!(bundle.Manifest().records, 1);
     }
@@ -454,7 +466,7 @@ mod tests
     #[test]
     fn Test_Records_Should_Return_The_Same_Entries_The_Bundle_Was_Built_With()
     {
-        let bundle = Bundle::New(1, One_Blob()).expect("builds");
+        let bundle = Bundle::New(1, One_Blob()).expect("a record of strings, integers and enums serialises");
 
         assert_eq!(bundle.Records().len(), 1);
     }
@@ -462,7 +474,7 @@ mod tests
     #[test]
     fn Test_Verify_Counts_Should_Accept_A_Bundle_Whose_Total_Matches_Its_Entries()
     {
-        let bundle = Bundle::New(1, One_Blob()).expect("builds");
+        let bundle = Bundle::New(1, One_Blob()).expect("a record of strings, integers and enums serialises");
 
         assert!(bundle.Verify_Counts().is_ok());
     }
@@ -471,7 +483,7 @@ mod tests
     {
         return vec![Record::Blob(Blob {
             sha256: "sha256:aa".to_owned(),
-            byte_length: 2,
+            byte_length: FIXTURE_BLOB_BYTE_LENGTH,
             encoding: BlobEncoding::Utf8,
             content: "hi".to_owned(),
         })];

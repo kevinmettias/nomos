@@ -28,7 +28,7 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Collect_Suites(store.Connection(), &mut records).expect("collects");
+        Collect_Suites(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -82,7 +82,7 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Node_Aliases(store.Connection(), &mut records).expect("collects");
+        Node_Aliases(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -99,7 +99,7 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Node_Histories(store.Connection(), &mut records).expect("collects");
+        Node_Histories(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -121,7 +121,7 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Relation_Types(store.Connection(), &mut records).expect("collects");
+        Relation_Types(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -131,7 +131,7 @@ mod tests
                 inverse_of: None,
                 domain: Vec::new(),
                 range: Vec::new(),
-                max_per_node: 4,
+                max_per_node: FIXTURE_MAX_PER_NODE,
             })]
         );
     }
@@ -142,7 +142,8 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Collect_Relations(store.Connection(), &mut records).expect("collects");
+        Collect_Relations(store.Connection(), &mut records)
+            .expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -160,7 +161,8 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Normative_Statements(store.Connection(), &mut records).expect("collects");
+        Normative_Statements(store.Connection(), &mut records)
+            .expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -181,7 +183,7 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Collect_Lineages(store.Connection(), &mut records).expect("collects");
+        Collect_Lineages(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -208,7 +210,8 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Collect_Omissions(store.Connection(), &mut records).expect("collects");
+        Collect_Omissions(store.Connection(), &mut records)
+            .expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -234,7 +237,8 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Record_Front_Matter(store.Connection(), &mut records).expect("collects");
+        Record_Front_Matter(store.Connection(), &mut records)
+            .expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -257,7 +261,7 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Record_Relations(store.Connection(), &mut records).expect("collects");
+        Record_Relations(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -273,49 +277,56 @@ mod tests
         );
     }
 
+    /// The relation type `verifies`, as the fixture seeds it: no inverse, no domain or range
+    /// kinds, and a `max_per_node` this test can tell apart from the column default.
+    const FIXTURE_MAX_PER_NODE: u32 = 4;
+
     /// One row of everything this file reads: a suite, two nodes (one inside it and one
     /// not), an alias, a history entry, a relation type, a relation between the two nodes,
     /// a normative statement, a heading-anchored lineage row, a heading-anchored omission,
     /// and one record's declared front matter and one declared relation.
+    const SEED_SQL: &str =
+        "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
+         INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
+         INSERT INTO source_headings (document_uid, ordinal, depth, title)
+             VALUES (1, 1, 1, 'Intro');
+         INSERT INTO suites (suite_id, title, authority_root)
+             VALUES ('nomos', 'The Nomos Specification', 1);
+         INSERT INTO nodes
+             (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+             VALUES ('N1', 'requirement', 'canonical', 'record', 'Node One', NULL, 1);
+         INSERT INTO nodes
+             (node_id, kind, authority, representation, title, deleted_at, suite_uid)
+             VALUES ('N2', 'concept', 'canonical', 'record', 'Node Two', NULL, NULL);
+         INSERT INTO node_aliases (alias, node_uid) VALUES ('N1-OLD', 1);
+         INSERT INTO node_history
+             (node_uid, ordinal, event, reason, previous_event_hash, event_hash, recorded_at)
+             VALUES (1, 1, 'created', 'seeded', NULL, 'sha256:01', '2026-01-01T00:00:00Z');
+         INSERT INTO relation_types
+             (name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node)
+             VALUES ('verifies', 'core', NULL, '[]', '[]', 4);
+         INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
+             VALUES (2, 'verifies', 1);
+         INSERT INTO normative_statements
+             (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
+             VALUES (1, 'STMT-1', 'Requirement', 'Text', 'sha256:aa', NULL);
+         INSERT INTO lineage (source_heading_uid, disposition, target_node_uid)
+             VALUES (1, 'preserved-normalized', 1);
+         INSERT INTO omissions (source_heading_uid, reason, justification, decision_record)
+             VALUES (1, 'superseded', 'replaced', 'D-1');
+         INSERT INTO record_front_matter (document_uid, node_uid, status, version, tags_json)
+             VALUES (1, 1, 'accepted', 1, '[]');
+         INSERT INTO record_relations (document_uid, ordinal, target, relation)
+             VALUES (1, 1, 'N2', 'affects');";
+
+    /// The store [`SEED_SQL`] fills.
     fn Fixture() -> SpecificationStore
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
         store
             .Connection()
-            .execute_batch(
-                "INSERT INTO blobs (sha256, byte_length, content) VALUES ('sha256:aa', 2, x'6869');
-                 INSERT INTO source_documents (path, revision, blob_uid) VALUES ('doc.md', 'v1', 1);
-                 INSERT INTO source_headings (document_uid, ordinal, depth, title)
-                     VALUES (1, 1, 1, 'Intro');
-                 INSERT INTO suites (suite_id, title, authority_root)
-                     VALUES ('nomos', 'The Nomos Specification', 1);
-                 INSERT INTO nodes
-                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
-                     VALUES ('N1', 'requirement', 'canonical', 'record', 'Node One', NULL, 1);
-                 INSERT INTO nodes
-                     (node_id, kind, authority, representation, title, deleted_at, suite_uid)
-                     VALUES ('N2', 'concept', 'canonical', 'record', 'Node Two', NULL, NULL);
-                 INSERT INTO node_aliases (alias, node_uid) VALUES ('N1-OLD', 1);
-                 INSERT INTO node_history
-                     (node_uid, ordinal, event, reason, previous_event_hash, event_hash, recorded_at)
-                     VALUES (1, 1, 'created', 'seeded', NULL, 'sha256:01', '2026-01-01T00:00:00Z');
-                 INSERT INTO relation_types
-                     (name, tier, inverse_of, domain_kinds_json, range_kinds_json, max_per_node)
-                     VALUES ('verifies', 'core', NULL, '[]', '[]', 4);
-                 INSERT INTO relations (from_node_uid, relation_type, to_node_uid)
-                     VALUES (2, 'verifies', 1);
-                 INSERT INTO normative_statements
-                     (node_uid, statement_id, kind, canonical_text, canonical_hash, supersedes_hash)
-                     VALUES (1, 'STMT-1', 'Requirement', 'Text', 'sha256:aa', NULL);
-                 INSERT INTO lineage (source_heading_uid, disposition, target_node_uid)
-                     VALUES (1, 'preserved-normalized', 1);
-                 INSERT INTO omissions (source_heading_uid, reason, justification, decision_record)
-                     VALUES (1, 'superseded', 'replaced', 'D-1');
-                 INSERT INTO record_front_matter (document_uid, node_uid, status, version, tags_json)
-                     VALUES (1, 1, 'accepted', 1, '[]');
-                 INSERT INTO record_relations (document_uid, ordinal, target, relation)
-                     VALUES (1, 1, 'N2', 'affects');",
-            )
+            .execute_batch(SEED_SQL)
             .expect("populates every table this file reads");
 
         return store;

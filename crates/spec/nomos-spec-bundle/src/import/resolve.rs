@@ -398,7 +398,7 @@ mod tests
                 }),
             ],
         )
-        .expect("builds");
+        .expect("a record of strings, integers and enums serialises");
 
         assert!(Assert_Self_Contained(&bundle).is_ok());
     }
@@ -418,7 +418,7 @@ mod tests
                 suite_id: Some("ghost".to_owned()),
             })],
         )
-        .expect("builds");
+        .expect("a record of strings, integers and enums serialises");
 
         let refusal =
             Assert_Self_Contained(&bundle).expect_err("a reference to an uncarried suite must be refused");

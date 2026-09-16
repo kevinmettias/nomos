@@ -205,12 +205,17 @@ mod tests
 {
     use super::*;
 
+    /// The two bytes of `hi`, which is the content every blob fixture here carries.
+    const FIXTURE_BLOB_BYTE_LENGTH: i64 = 2;
+
     #[test]
     fn Test_Export_Store_Should_Produce_An_Empty_Bundle_For_A_Fresh_Store()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
 
-        let bundle = Export_Store(&store).expect("exports");
+        let bundle =
+            Export_Store(&store).expect("a fresh store carries every column Export_Store reads");
 
         assert!(bundle.Records().is_empty());
         assert_eq!(bundle.Manifest().records, 0);
@@ -237,7 +242,7 @@ mod tests
             .Connection()
             .execute(
                 "INSERT INTO blobs (sha256, byte_length, content) VALUES (?1, ?2, ?3)",
-                rusqlite::params!["sha256:aa", 2i64, b"hi".as_slice()],
+                rusqlite::params!["sha256:aa", FIXTURE_BLOB_BYTE_LENGTH, b"hi".as_slice()],
             )
             .expect("the blob row this test queries for is inserted");
 
@@ -251,7 +256,7 @@ mod tests
         let sha256: String = row.get(0)?;
         return Ok(Record::Blob(crate::Blob {
             sha256,
-            byte_length: 2,
+            byte_length: FIXTURE_BLOB_BYTE_LENGTH,
             encoding: crate::Encoding::Utf8,
             content: "hi".to_owned(),
         }));
@@ -262,7 +267,7 @@ mod tests
     {
         return vec![Record::Blob(crate::Blob {
             sha256: "sha256:aa".to_owned(),
-            byte_length: 2,
+            byte_length: FIXTURE_BLOB_BYTE_LENGTH,
             encoding: crate::Encoding::Utf8,
             content: "hi".to_owned(),
         })];
@@ -271,7 +276,8 @@ mod tests
     #[test]
     fn Test_Decode_Json_Column_Should_Deserialize_A_Vec_Of_Strings()
     {
-        let decoded: Vec<String> = Decode_Json_Column(r#"["a","b"]"#).expect("decodes");
+        let decoded: Vec<String> = Decode_Json_Column(r#"["a","b"]"#)
+            .expect("that literal is a JSON array of two strings");
         assert_eq!(decoded, vec!["a".to_owned(), "b".to_owned()]);
 
         let refusal = Decode_Json_Column::<Vec<String>>("not json").expect_err("malformed JSON must be refused");

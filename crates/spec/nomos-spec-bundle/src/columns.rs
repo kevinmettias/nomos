@@ -207,7 +207,8 @@ mod entry_point_tests
     #[test]
     fn Test_Assert_Columns_Covered_Should_Accept_A_Fresh_Store_With_No_Records()
     {
-        let store = nomos_spec_store::SpecificationStore::In_Memory().expect("opens");
+        let store = nomos_spec_store::SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
 
         assert!(Assert_Columns_Covered(store.Connection(), &[]).is_ok());
     }

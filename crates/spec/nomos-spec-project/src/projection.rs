@@ -68,12 +68,16 @@ mod tests
 {
     use super::*;
 
+    /// The two items in the first section of [`Two_Section_Projection`] plus the one in the
+    /// second.
+    const ITEMS_ACROSS_TWO_SECTIONS: usize = 3;
+
     #[test]
     fn Test_Items_Should_Sum_Every_Sections_Length()
     {
         let projection = Two_Section_Projection();
 
-        assert_eq!(projection.Items(), 3);
+        assert_eq!(projection.Items(), ITEMS_ACROSS_TWO_SECTIONS);
     }
 
     #[test]

@@ -208,19 +208,22 @@ mod tests
     use super::*;
     use nomos_spec_store::SpecificationStore;
 
+    /// The two bytes of `hi`, which is the content the fixture's blob carries.
+    const FIXTURE_BLOB_BYTE_LENGTH: i64 = 2;
+
     #[test]
     fn Test_Collect_Blobs_Should_Spell_Utf8_Content_As_Text()
     {
         let store = Fixture();
         let mut records = Vec::new();
 
-        Collect_Blobs(store.Connection(), &mut records).expect("collects");
+        Collect_Blobs(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
             vec![Record::Blob(crate::Blob {
                 sha256: "sha256:aa".to_owned(),
-                byte_length: 2,
+                byte_length: FIXTURE_BLOB_BYTE_LENGTH,
                 encoding: crate::Encoding::Utf8,
                 content: "hi".to_owned(),
             })]
@@ -233,7 +236,7 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Source_Documents(store.Connection(), &mut records).expect("collects");
+        Source_Documents(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -251,7 +254,7 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Source_Headings(store.Connection(), &mut records).expect("collects");
+        Source_Headings(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -273,7 +276,7 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Source_Blocks(store.Connection(), &mut records).expect("collects");
+        Source_Blocks(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
 
         assert_eq!(
             records,
@@ -330,7 +333,8 @@ mod tests
     /// inside that block — one row of everything this file reads.
     fn Fixture() -> SpecificationStore
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
         store
             .Connection()
             .execute_batch(

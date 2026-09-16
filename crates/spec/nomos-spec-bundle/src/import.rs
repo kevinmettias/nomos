@@ -294,23 +294,28 @@ mod tests
 {
     use super::*;
 
+    /// The two bytes of `hi`, which is the content every blob fixture here carries.
+    const FIXTURE_BLOB_BYTE_LENGTH: i64 = 2;
+
     #[test]
     fn Test_Import_Bundle_Should_Place_Every_Record_And_Report_Its_Counts()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("an in-memory store applies the schema this build carries");
         let digest = nomos_spec_model::ContentHash::Of_Bytes(b"hi").As_String_Slice().to_owned();
         let bundle = Bundle::New(
             store.Version(),
             vec![Record::Blob(crate::Blob {
                 sha256: digest,
-                byte_length: 2,
+                byte_length: FIXTURE_BLOB_BYTE_LENGTH,
                 encoding: crate::Encoding::Utf8,
                 content: "hi".to_owned(),
             })],
         )
-        .expect("builds");
+        .expect("a record of strings, integers and enums serialises");
 
-        let report = Import_Bundle(&mut store, &bundle).expect("imports");
+        let report = Import_Bundle(&mut store, &bundle)
+            .expect("a fresh store holds none of the records the bundle places");
 
         assert_eq!(report.records, 1);
         assert_eq!(store.Count(Table::Blobs).expect("counts"), 1);
@@ -354,7 +359,7 @@ mod tests
                 }),
                 Record::Blob(crate::Blob {
                     sha256: nomos_spec_model::ContentHash::Of_Bytes(b"hi").As_String_Slice().to_owned(),
-                    byte_length: 2,
+                    byte_length: FIXTURE_BLOB_BYTE_LENGTH,
                     encoding: crate::Encoding::Utf8,
                     content: "hi".to_owned(),
                 }),

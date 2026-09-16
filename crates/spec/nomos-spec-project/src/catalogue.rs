@@ -190,7 +190,8 @@ mod tests
     fn Test_Profiles_Should_Return_Every_Profile_It_Was_Built_From()
     {
         let entries = Two_Entries();
-        let catalogue = Catalogue::Of(entries.clone()).expect("distinct");
+        let catalogue = Catalogue::Of(entries.clone())
+            .expect("Two_Entries gives each of its profiles a distinct identifier");
 
         assert_eq!(catalogue.Profiles(), entries.as_slice());
     }
@@ -198,7 +199,8 @@ mod tests
     #[test]
     fn Test_Named_Should_Find_A_Profile_By_Its_Identifier()
     {
-        let catalogue = Catalogue::Of(Two_Entries()).expect("distinct");
+        let catalogue = Catalogue::Of(Two_Entries())
+            .expect("Two_Entries gives each of its profiles a distinct identifier");
 
         assert_eq!(catalogue.Named("two").map(|profile| return profile.id.as_str()), Some("two"));
         assert!(catalogue.Named("missing").is_none());
@@ -212,14 +214,14 @@ mod tests
                 "sections": [{ "title": "Nodes", "content": "nodes" }]
             }"#,
         )
-        .expect("parses");
+        .expect("that literal carries every field the profile parser names");
         let two = Profile::Parse(
             r#"{
                 "id": "two", "title": "Two", "format": "markdown", "output": "two.md",
                 "sections": [{ "title": "Nodes", "content": "nodes" }]
             }"#,
         )
-        .expect("parses");
+        .expect("that literal carries every field the profile parser names");
 
         return vec![one, two];
     }
