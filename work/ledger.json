@@ -80495,11 +80495,17 @@
           "crates/substrate/nomos-analysis",
           "crates/substrate/nomos-capability",
           "crates/substrate/nomos-scope-verification",
-          "crates/substrate/nomos-workspace"
+          "crates/substrate/nomos-workspace",
+          "tests/contract/surface/nomos-analysis.txt",
+          "tests/contract/surface/nomos-capability.txt",
+          "tests/contract/surface/nomos-workspace.txt",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "tests/contract/requirements/AGT-013.assessment",
+          "suppressions.json"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -80511,11 +80517,61 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-substrate"
+        ],
+        "exit_code": 0,
+        "output_tail": "ored form of what an item touches, and its module documentation (lines 1-20) is entirely about why that form exists -- the ledger is a committed file, and a territory has to be readable in a `git diff`, which is why paths are stored as written and compared as identities. `nomos-contracts` is the shared band-0 identity vocabulary published beyond this repository; a `Territory` is a claim about work, not an identity, and `OD-LEDGER-037` moved `Territory` and `VerificationPredicate` out of `nomos-ledger` into this crate by name, for the crate's own reason that neither encodes a ledger claim, a lease or a holder. Moving it into `nomos-contracts` would undo that decision and put a ledger concept in band 0. \"It is general form that belongs beneath them both\": the general form here is not the file but the one name it uses, `SubjectId`, and that name already is beneath them both -- it is band-0, published outside this repository, and is not this crate's to redefine or relocate; there is no third crate beneath a band-0 contracts crate and a scope crate for it to be hoisted into. The third answer is the true one: the file is exactly where it should be and the edge is genuinely the crate's. `territory.rs:31` is this crate's only `nomos_contracts` reference, and it is there because converting authored paths into identities is this file's entire job and its output type is a `SubjectId`; the crate exists to be depended on for exactly these two types, and the check's arithmetic (\"the whole crate carries an edge that one part of it needs\") is true of it only because the crate has one part. The same file records that at lines 27-30, which is the in-code form the check asks a reviewer to leave; the check reports it anyway, because a comment is prose and this check honours no marker. Left reported. The suppressions.json entry that already covers it (`@claude-p20-campaign`, expiring 2026-11-27) is pre-existing, its reason is unchanged and still true, and this item adds nothing to it.\r\n",
+        "verified_at": 1789551023,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a0feeb389050592e3db133daba7b15f524573192"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "tests/contract/surface/nomos-analysis.txt",
+            "tests/contract/surface/nomos-capability.txt",
+            "tests/contract/surface/nomos-workspace.txt"
+          ],
+          "widened_at": 1789550037
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "tests/contract/tests/completeness_universes/table.rs"
+          ],
+          "widened_at": 1789550790
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "tests/contract/requirements/AGT-013.assessment"
+          ],
+          "widened_at": 1789550797
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "suppressions.json"
+          ],
+          "widened_at": 1789550807
+        }
+      ]
     },
     {
       "id": "P112-PLACEMENT-KERNEL",
