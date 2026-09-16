@@ -80620,7 +80620,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -80632,7 +80632,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-agents-connectors"
+        ],
+        "exit_code": 0,
+        "output_tail": "eSystem, Environment, ProcessLauncher, and the determinism words) IS nomos-platform's own declaration, already at the bottom of its band, so there is nothing beneath both to hoist it to -- and the same holds for the five type members, which name a crate that is itself beneath the composer. A composer with no dependency on the ports it composes is not a composer.\r\n      tree-legibility             crates/connectors/nomos-connector-coderabbit/src/payload/payload_refusal.rs:0\r\n            The repeated word is the declared type's own name (`pub struct PayloadRefusal`, from `check-file-name`'s requirement that a file be named after the public type it declares), and that is the one case this check's own source now exempts. code-standards' `declared_name.go` (2026-09-15) returns no finding when a file declares a public type whose name is its own stem, calls it \"a fact, not one repository's policy\", and cites xvpe's MUST `type-name-wins-over-folder-stutter` for the resolution: \"There is no third filename ... do not rename the file, and do not rename the type to remove the repetition\", because check-file-name's navigational guarantee outranks this legibility preference and both of this message's remedies are closed -- renaming the file alone reintroduces the check-file-name mismatch the message itself predicts, and renaming the type is what that MUST forbids. The finding is live HERE because the measuring binary rust-run-all.exe predates the exemption (built 2026-09-15 16:31; the exemption written 20:43-20:49), and the check's current build agrees with the standard: `check.exe check-tree-legibility` reports zero findings over this crate's src/. Left reported rather than renamed, because renaming a public type to satisfy a folder-prefix rule whose own implementation has withdrawn it is the matcher-gaming this item's done_when forbids. This entry must be struck when the checker is rebuilt: it names a finding the standard no longer makes, and the [ROT] rule above will say so.\r\n",
+        "verified_at": 1789548172,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5b8f081ca06362315c1300cccc66f899c9aaff5c"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
