@@ -107,7 +107,7 @@ pub fn Unresolved_Records<Fs: FileSystem>(root: &Path, assessments: &[Assessment
 /// Why one named record does not resolve to a registered governing record, if it does not.
 fn Unregistered<Fs: FileSystem>(root: &Path, assessment: &Assessment, record: &str, filesystem: &Fs) -> Option<Problem>
 {
-    if !Registration_Exists(root, record, filesystem)
+    if !Has_A_Registration(root, record, filesystem)
     {
         return Some(Problem {
             kind: ProblemKind::UnresolvedRecord,
@@ -119,7 +119,7 @@ fn Unregistered<Fs: FileSystem>(root: &Path, assessment: &Assessment, record: &s
             ),
         });
     }
-    if Document_Exists(root, record, filesystem)
+    if Has_A_Document(root, record, filesystem)
     {
         return None;
     }
@@ -135,7 +135,7 @@ fn Unregistered<Fs: FileSystem>(root: &Path, assessment: &Assessment, record: &s
 }
 
 /// Whether a record identifier has a registration file.
-fn Registration_Exists<Fs: FileSystem>(root: &Path, record: &str, filesystem: &Fs) -> bool
+fn Has_A_Registration<Fs: FileSystem>(root: &Path, record: &str, filesystem: &Fs) -> bool
 {
     return filesystem.Exists(&root.join("crates/spec/nomos-spec-store/records").join(format!("{record}.record")));
 }
@@ -144,7 +144,7 @@ fn Registration_Exists<Fs: FileSystem>(root: &Path, record: &str, filesystem: &F
 ///
 /// By stem prefix, because the slug is not derivable from the identifier — the same reason
 /// `OD-SPEC-007` puts the path inside the registration rather than computing it.
-fn Document_Exists<Fs: FileSystem>(root: &Path, record: &str, filesystem: &Fs) -> bool
+fn Has_A_Document<Fs: FileSystem>(root: &Path, record: &str, filesystem: &Fs) -> bool
 {
     let prefix = format!("{record}-");
     let Ok(entries) = filesystem.Read_Directory(&root.join("docs/records"))

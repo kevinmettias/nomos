@@ -25,7 +25,7 @@ impl PhaseThreshold
     /// declared a module away, in [`crate::GatePhase`], and the comparison belongs with the
     /// values it compares rather than beside its caller.
     #[must_use]
-    pub(crate) const fn Exceeded_By(&self, count: usize) -> bool
+    pub(crate) const fn Is_Exceeded_By(&self, count: usize) -> bool
     {
         return match *self
         {

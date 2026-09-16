@@ -222,7 +222,7 @@ of language.
 thirty-ninth and fortieth rules, the same "a Rust construct needs an adjacent
 explanatory comment" shape [`Check_Panics_Are_Justified_Documented_And_Validated`] and
 [`Check_Shared_Interior_Mutability_Says_Why`] already generalize through
-`rust_text::Previous_Comment_Block_Has` — a real third and fourth consumer of that
+`rust_text::Has_A_Previous_Comment_Block` — a real third and fourth consumer of that
 primitive, not a new one invented for them.
 
 [`Check_A_Discarded_Error_Is_Explained`], [`Check_A_Skipped_Test_States_Why`],
@@ -311,7 +311,7 @@ states.
 fifty-ninth and sixtieth rules, two more `rust_text` additions on the same "a Rust
 construct needs an adjacent explanatory comment" shape [`Check_Every_Allow_Carries_A_
 Justification`] and [`Check_Unsafe_Justification`] already generalize through
-`rust_text::Previous_Comment_Block_Has` — a fifth and sixth consumer of that primitive.
+`rust_text::Has_A_Previous_Comment_Block` — a fifth and sixth consumer of that primitive.
 `#[inline(always)]` reads exactly like `#[allow(...)]`: any adjacent comment satisfies
 it. A bare `#[ignore]` is flagged the same way, but an `#[ignore = "reason"]` value in
 the attribute itself already states why and is never flagged regardless of a comment —
@@ -398,7 +398,7 @@ authority" design was true today and checkable against the identical
 `nomos.cap.dependency.edges` fact this crate already reads, while the one concrete
 reading of ownership anyone could name (type-name uniqueness) was falsified by this
 workspace's own surface snapshots before any code was written. No new capability, no new
-provider: a declared allow-list is judged the same way [`Permits`] already judges a zone
+provider: a declared allow-list is judged the same way [`Is_Permitted`] already judges a zone
 crossing, aimed at authority instead of direction. [`WRITE_DOORS`] is that table.
 
 [`Check_Review_Findings`] is the sixty-eighth rule, `OD-RULES-010`'s third real instance
@@ -417,7 +417,7 @@ transport. Its contract lives bundled with its one provider in
 `nomos-connector-coderabbit` itself rather than in a `nomos-cap-*` crate of its own —
 `OD-CAPABILITY-002` licenses that for a single-provider capability — classified
 Capability Contract zone rather than Provider zone specifically so this crate may
-depend on it at all, since [`Permits`] forbids Rules zone from naming Provider zone.
+depend on it at all, since [`Is_Permitted`] forbids Rules zone from naming Provider zone.
 
 [`Check_Requirement_Trace_Staleness`] is the sixty-ninth rule, and a second whose
 subject is not source: `OD-TRACE-001` already required a corpus requirement's

@@ -34,7 +34,7 @@ impl SuppressionStatus
 {
     /// Whether a run should honor the disposition this status describes.
     #[must_use]
-    pub const fn Suppresses(self) -> bool
+    pub const fn Is_Suppressing(self) -> bool
     {
         return matches!(self, Self::Active);
     }
@@ -48,7 +48,7 @@ mod tests
     #[test]
     fn Test_Only_Active_Should_Suppress()
     {
-        assert!(SuppressionStatus::Active.Suppresses());
-        assert!(!SuppressionStatus::Expired.Suppresses());
+        assert!(SuppressionStatus::Active.Is_Suppressing());
+        assert!(!SuppressionStatus::Expired.Is_Suppressing());
     }
 }

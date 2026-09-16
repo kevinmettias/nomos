@@ -70,7 +70,7 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
 
 /// One item's own violations: skipped entirely if it is a `use` binding (a name chosen
 /// wherever the binding's target was declared, not here), otherwise its own name -- unless
-/// that name is one of its own generic parameters, see [`Names_Its_Own_Generic_Parameter`] --
+/// that name is one of its own generic parameters, see [`Is_Naming_Its_Own_Generic_Parameter`] --
 /// and (for a struct) its fields, against the single-letter rule.
 fn Item_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
 {
@@ -81,7 +81,7 @@ fn Item_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
 
     let mut findings = Vec::new();
 
-    if Is_Single_Letter(item.Own_Name()) && !Names_Its_Own_Generic_Parameter(item)
+    if Is_Single_Letter(item.Own_Name()) && !Is_Naming_Its_Own_Generic_Parameter(item)
     {
         let finding = Violation_Finding(path, item, item.Own_Name());
         findings.push(finding);
@@ -104,7 +104,7 @@ fn Item_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
 /// upper-case letter would also hide `impl Trait for X` over a real struct somebody named
 /// `X`, which is the case this rule exists for. A `None` here is a `shape` no `impl` block
 /// wrote, and answers `false` rather than exempting on a field it could not read.
-fn Names_Its_Own_Generic_Parameter(item: &PayloadItem) -> bool
+fn Is_Naming_Its_Own_Generic_Parameter(item: &PayloadItem) -> bool
 {
     if item.kind != IMPLEMENTATION
     {

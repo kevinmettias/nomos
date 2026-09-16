@@ -1,7 +1,7 @@
 pub const fn nomos_cap_requirement_trace::Ceiling() -> Guarantee
 pub const fn nomos_cap_requirement_trace::Declared_Guarantee() -> Guarantee
+pub const fn nomos_cap_requirement_trace::Verdict::Has_A_Record_Obligation(self) -> bool
 pub const fn nomos_cap_requirement_trace::Verdict::Label(self) -> &'static str
-pub const fn nomos_cap_requirement_trace::Verdict::Owes_A_Record(self) -> bool
 pub const nomos_cap_requirement_trace::CAPABILITY: &str
 pub const nomos_cap_requirement_trace::CONTRACT_VERSION: ContractVersion
 pub const nomos_cap_requirement_trace::PROVIDER: &str

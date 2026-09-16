@@ -95,7 +95,7 @@ pub(crate) fn Load_Crate<Env: Environment>(root: &Path, environment: &Env) -> Re
     for (file_id, vfs_path) in vfs.iter()
     {
         let path_str = vfs_path.to_string();
-        if !Source_Under_Root(&path_str, &absolute_root)
+        if !Is_Source_Under_Root(&path_str, &absolute_root)
         {
             continue;
         }
@@ -143,7 +143,7 @@ fn Loader_Configuration() -> LoadCargoConfig
 /// absolutized `root`, and therefore neither sysroot source nor another crate's -- the
 /// filter that keeps [`Load_Crate`] answering for the one crate it was asked about rather
 /// than for the standard library it had to load to answer honestly.
-fn Source_Under_Root(path: &str, absolute_root: &Path) -> bool
+fn Is_Source_Under_Root(path: &str, absolute_root: &Path) -> bool
 {
     let is_rust_source = std::path::Path::new(path).extension().is_some_and(|extension| return extension.eq_ignore_ascii_case("rs"));
     let is_under_root = std::path::Path::new(path).starts_with(absolute_root);
@@ -195,7 +195,7 @@ fn Locations_Of(sema: &Semantics<'_, RootDatabase>, files: &[(EditionedFileId, S
 
         for call in source_file.syntax().descendants().filter_map(ast::MethodCallExpr::cast)
         {
-            if Clone_On_Copy(sema, &call)
+            if Is_A_Clone_On_Copy(sema, &call)
             {
                 let start = call.syntax().text_range().start();
                 let position = line_index.line_col(start);
@@ -209,7 +209,7 @@ fn Locations_Of(sema: &Semantics<'_, RootDatabase>, files: &[(EditionedFileId, S
 
 /// Whether `call` is a `.clone()` call whose own resolved return type -- `Self`, per
 /// `Clone::clone(&self) -> Self` -- already implements `Copy`.
-fn Clone_On_Copy(sema: &Semantics<'_, RootDatabase>, call: &ast::MethodCallExpr) -> bool
+fn Is_A_Clone_On_Copy(sema: &Semantics<'_, RootDatabase>, call: &ast::MethodCallExpr) -> bool
 {
     let Some(name_ref) = call.name_ref()
     else

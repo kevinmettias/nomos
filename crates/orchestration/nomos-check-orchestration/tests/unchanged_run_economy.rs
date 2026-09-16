@@ -12,7 +12,7 @@
 //! # Why the observable is the store's counter and not `Examined`
 //!
 //! [`nomos_analysis::MemoryFactStore::Materializations`] counts store writes: it is
-//! incremented inside `Materialize`, and `Already_Current` short-circuits before that call,
+//! incremented inside `Materialize`, and `Is_Already_Current` short-circuits before that call,
 //! so a reused subject does not increment it. It is exactly production.
 //!
 //! `CheckOutcome::Judged`'s own `Examined { files, facts }` is deliberately *not* that

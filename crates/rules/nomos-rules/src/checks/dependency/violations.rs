@@ -117,12 +117,12 @@ fn Violation_If_Wrong_Direction(architecture: &ArchitecturePayload, source: &Sou
 {
     if violation.component == violation.dependency_component
     {
-        if architecture.Excepts(Depending(violation.package), Depended(&violation.edge.target))
+        if architecture.Is_Excepted(Depending(violation.package), Depended(&violation.edge.target))
         {
             return None;
         }
     }
-    else if architecture.Permits(Depending(violation.component), Depended(violation.dependency_component))
+    else if architecture.Is_Permitted(Depending(violation.component), Depended(violation.dependency_component))
     {
         return None;
     }

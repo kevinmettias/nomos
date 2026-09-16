@@ -90,12 +90,12 @@ fn Comment_Line_In_Block_At<'a>(lines: &[&'a str], previous: usize) -> Option<&'
 /// `every-allow-carries-a-justification`'s own example is plain prose with no special
 /// marker, unlike the panic and smart-pointer rules' `panic:`/`smart-pointer: allow:`
 /// keywords — so any non-empty comment satisfies it.
-pub(super) fn Comment_Is_Non_Empty(line: &str) -> bool
+pub(super) fn Is_A_Non_Empty_Comment(line: &str) -> bool
 {
     return Comment_Text_Of(line).is_some_and(|comment| return !comment.trim().is_empty());
 }
 
-pub(super) fn Previous_Comment_Block_Has(lines: &[&str], index: usize, predicate: fn(&str) -> bool) -> bool
+pub(super) fn Has_A_Previous_Comment_Block(lines: &[&str], index: usize, predicate: fn(&str) -> bool) -> bool
 {
     let mut cursor = index;
     while let Some(previous) = cursor.checked_sub(1)

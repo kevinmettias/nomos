@@ -55,13 +55,13 @@ const UNCHOSEN_LIFETIMES: [&str; 2] = ["static", "_"];
 const DECLARATION_KEYWORDS: [Keyword<'static>; 6] =
     [Keyword("struct"), Keyword("enum"), Keyword("trait"), Keyword("impl"), Keyword("fn"), Keyword("type")];
 
-/// One of the keywords above, as a value rather than a bare `&str`: [`Names_The_Word`] takes
+/// One of the keywords above, as a value rather than a bare `&str`: [`Is_Naming_The_Word`] takes
 /// it beside the text it is looked for in, and two bare `&str`s in adjacent positions are
 /// transposable at a call site with nothing to catch it.
 #[derive(Clone, Copy)]
 struct Keyword<'a>(&'a str);
 
-/// An identifier read out of a line, for the same reason: [`Closes_A_Char_Literal`] takes it
+/// An identifier read out of a line, for the same reason: [`Is_Closing_A_Char_Literal`] takes it
 /// beside the text it was read out of.
 #[derive(Clone, Copy)]
 struct Identifier<'a>(&'a str);
@@ -109,7 +109,7 @@ fn Terse_Lifetime_Finding_For(source: &SourceFile, line: &str, index: usize) -> 
     // prose from being read as chosen syntax.
     let code = Code_With_String_Bodies_Masked(&Code_Prefix(line));
 
-    if !Opens_A_Declaration(&code)
+    if !Is_Opening_A_Declaration(&code)
     {
         return None;
     }
@@ -127,9 +127,9 @@ fn Terse_Lifetime_Finding_For(source: &SourceFile, line: &str, index: usize) -> 
 
 /// Whether `code` opens a declaration a lifetime list can sit on. The keyword may carry a
 /// leading visibility, which is why this looks for the word rather than the line's start.
-fn Opens_A_Declaration(code: &str) -> bool
+fn Is_Opening_A_Declaration(code: &str) -> bool
 {
-    return DECLARATION_KEYWORDS.iter().any(|keyword| return Names_The_Word(code, *keyword));
+    return DECLARATION_KEYWORDS.iter().any(|keyword| return Is_Naming_The_Word(code, *keyword));
 }
 
 /// Every distinct lifetime name an author chose on this line, without the leading quote and
@@ -169,7 +169,7 @@ fn Chosen_Lifetime_At<'a>(code: &'a str, start: usize) -> Option<Identifier<'a>>
     let after_quote = code.get(start.saturating_add(1)..).unwrap_or("");
     let identifier = Leading_Identifier(after_quote)?;
 
-    if Closes_A_Char_Literal(after_quote, identifier) || UNCHOSEN_LIFETIMES.contains(&identifier.0)
+    if Is_Closing_A_Char_Literal(after_quote, identifier) || UNCHOSEN_LIFETIMES.contains(&identifier.0)
     {
         return None;
     }
@@ -197,7 +197,7 @@ fn Leading_Identifier(code: &str) -> Option<Identifier<'_>>
 
 /// Whether the quote that opened `after_quote` was a char literal's rather than a
 /// lifetime's, told by a closing quote immediately after the name.
-fn Closes_A_Char_Literal(after_quote: &str, name: Identifier<'_>) -> bool
+fn Is_Closing_A_Char_Literal(after_quote: &str, name: Identifier<'_>) -> bool
 {
     return after_quote.get(name.0.len()..).is_some_and(|rest| return rest.starts_with('\''));
 }
@@ -251,7 +251,7 @@ fn Static_Bound_Findings_In(source: &SourceFile) -> Vec<Finding>
         // Same reason as `Terse_Lifetime_Findings_In`: a string literal's own prose can
         // quote `'static` without that being a real trait bound.
         let code = Code_With_String_Bodies_Masked(&Code_Prefix(line));
-        if Bounds_By_Static(&code) && !Has_Adjacent_Explanation(&lines, index)
+        if Is_Bounding_By_Static(&code) && !Has_Adjacent_Explanation(&lines, index)
         {
             let finding = Static_Bound_Finding(source, index.saturating_add(1));
             findings.push(finding);
@@ -264,9 +264,9 @@ fn Static_Bound_Findings_In(source: &SourceFile) -> Vec<Finding>
 /// Whether `code` bounds something by `'static` — a trait bound after a colon or a plus, or
 /// a `where` clause naming it. A `&'static str` is a *reference* to something with that
 /// lifetime rather than a bound placed on a caller's type, and is not this rule's subject.
-fn Bounds_By_Static(code: &str) -> bool
+fn Is_Bounding_By_Static(code: &str) -> bool
 {
-    if Names_The_Word(code, Keyword("where")) && code.contains("'static")
+    if Is_Naming_The_Word(code, Keyword("where")) && code.contains("'static")
     {
         return true;
     }
@@ -280,7 +280,7 @@ fn Bounds_By_Static(code: &str) -> bool
     {
         let after = code.get(offset.saturating_add(1)..).unwrap_or("").trim_start();
 
-        if after.starts_with("'static") && !Continues_An_Identifier(after, "'static".len())
+        if after.starts_with("'static") && !Is_Continuing_An_Identifier(after, "'static".len())
         {
             return true;
         }
@@ -339,7 +339,7 @@ fn Static_Bound_Finding(source: &SourceFile, line_number: usize) -> Finding
 /// Whether `haystack` contains `word` bounded on both sides by something that is not part of
 /// an identifier, so `transform` does not contain `fn` and `structure` does not contain
 /// `struct`.
-fn Names_The_Word(haystack: &str, word: Keyword<'_>) -> bool
+fn Is_Naming_The_Word(haystack: &str, word: Keyword<'_>) -> bool
 {
     let mut searched_from = 0usize;
 
@@ -347,8 +347,8 @@ fn Names_The_Word(haystack: &str, word: Keyword<'_>) -> bool
     {
         let start = searched_from.saturating_add(offset);
         let end = start.saturating_add(word.0.len());
-        let before_is_open = start == 0 || !Continues_An_Identifier(haystack, start.saturating_sub(1));
-        let after_is_open = !Continues_An_Identifier(haystack, end);
+        let before_is_open = start == 0 || !Is_Continuing_An_Identifier(haystack, start.saturating_sub(1));
+        let after_is_open = !Is_Continuing_An_Identifier(haystack, end);
 
         if before_is_open && after_is_open
         {
@@ -362,7 +362,7 @@ fn Names_The_Word(haystack: &str, word: Keyword<'_>) -> bool
 }
 
 /// Whether the byte at `offset` is one an identifier can be made of.
-fn Continues_An_Identifier(text: &str, offset: usize) -> bool
+fn Is_Continuing_An_Identifier(text: &str, offset: usize) -> bool
 {
     return text
         .as_bytes()

@@ -110,7 +110,7 @@ pub fn Admits(architecture: &ArchitecturePayload, depending: DependingCrate<'_>,
         return Is_A_Declared_Peer(architecture, depending, depended);
     }
 
-    if architecture.Permits(Depending(from), Depended(to))
+    if architecture.Is_Permitted(Depending(from), Depended(to))
     {
         return Admissibility::Permitted;
     }
@@ -125,7 +125,7 @@ pub fn Admits(architecture: &ArchitecturePayload, depending: DependingCrate<'_>,
 /// exactly the cycles a component forbidding its own members exists to prevent.
 fn Is_A_Declared_Peer(architecture: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
 {
-    if architecture.Excepts(Depending(depending.0), Depended(depended.0))
+    if architecture.Is_Excepted(Depending(depending.0), Depended(depended.0))
     {
         return Admissibility::Permitted;
     }

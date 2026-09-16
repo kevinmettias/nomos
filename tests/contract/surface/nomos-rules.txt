@@ -2,8 +2,8 @@ pub const fn nomos_rules::FunctionArityPolicy::Allow_One_Receiver_For_Qualified_
 pub const fn nomos_rules::FunctionArityPolicy::For_Language(mut self, language: &'static str) -> Self
 pub const fn nomos_rules::FunctionArityPolicy::New(rule: &'static str, max_value_parameters: u32) -> Self
 pub const fn nomos_rules::FunctionArityPolicy::With_Gate(mut self, gate: GateCategory) -> Self
-pub const fn nomos_rules::RuleDescriptor::Cites_A_Versioned_Record(&self) -> bool
 pub const fn nomos_rules::RuleDescriptor::Citing(self, record: &'static str, version: u32) -> Self
+pub const fn nomos_rules::RuleDescriptor::Is_Citing_A_Versioned_Record(&self) -> bool
 pub const nomos_rules::ABBREVIATIONS: &str
 pub const nomos_rules::AN_EXCLUDED_FILE_SAYS_WHY: &str
 pub const nomos_rules::ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED: &str

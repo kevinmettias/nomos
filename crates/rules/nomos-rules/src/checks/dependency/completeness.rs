@@ -55,7 +55,7 @@ pub fn Check_Every_Member_Declares_A_Band(sources: &[SourceFile], facts: &mut dy
 /// as string literals, so every member of any other repository looked like a gap. The fix that
 /// followed inferred "did this repository declare anything" from whether *any* member resolved,
 /// which was right in every case anyone had and was still an inference. The declaration answers
-/// it outright now — [`ArchitecturePayload::Declares_An_Architecture`] — so a repository that
+/// it outright now — [`ArchitecturePayload::Has_An_Architecture`] — so a repository that
 /// writes the file, names its components and has placed nothing yet is correctly read as
 /// declaring an architecture, which the member-set inference would have called silence.
 #[must_use]
@@ -66,7 +66,7 @@ pub(super) fn Violations_In(architecture: &ArchitecturePayload, payload: &Depend
         return Vec::new();
     }
 
-    if !architecture.Declares_An_Architecture()
+    if !architecture.Has_An_Architecture()
     {
         return vec![Unbound_Package(source, &payload.package)];
     }

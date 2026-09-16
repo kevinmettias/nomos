@@ -14,7 +14,7 @@
 //! walking a tree, or rendering the answer, exactly the three things a composition root
 //! still has to assemble. Application Service zone, reaching `nomos-check-orchestration`
 //! through one of the named same-zone edges the dependency model declares, and
-//! `nomos-corrections` across a zone boundary `Permits` already grants. The same shape
+//! `nomos-corrections` across a zone boundary `Is_Permitted` already grants. The same shape
 //! `nomos-gate-orchestration` has, and for the same reason: sharing a zone makes two
 //! crates peers, so an edge between them is an exception somebody wrote down rather than
 //! something membership confers.

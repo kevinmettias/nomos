@@ -303,7 +303,7 @@ fn Assert_Complete(
                 .to_owned(),
         );
     }
-    if verdict.Owes_A_Record() && record.is_none()
+    if verdict.Has_A_Record_Obligation() && record.is_none()
     {
         return Err(format!(
             "{} with no record; OD-TRACE-001 makes that not a verdict but the state it \

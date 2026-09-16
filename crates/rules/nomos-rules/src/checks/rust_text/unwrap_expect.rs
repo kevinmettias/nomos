@@ -53,7 +53,7 @@ fn Push_Unwrap_Finding(source: &SourceFile, code: &str, index: usize, findings: 
 
 fn Push_Placeholder_Expect_Finding(source: &SourceFile, code: &str, index: usize, findings: &mut Vec<Finding>)
 {
-    if Placeholder_Expect(code)
+    if Is_A_Placeholder_Expect(code)
     {
         let finding = Finding_For_Line(
             source,
@@ -65,7 +65,7 @@ fn Push_Placeholder_Expect_Finding(source: &SourceFile, code: &str, index: usize
     }
 }
 
-fn Placeholder_Expect(code: &str) -> bool
+fn Is_A_Placeholder_Expect(code: &str) -> bool
 {
     let Some(after_call) = code.split(".expect(").nth(1)
     else

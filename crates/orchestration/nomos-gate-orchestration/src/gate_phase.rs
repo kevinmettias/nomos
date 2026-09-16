@@ -80,7 +80,7 @@ fn Skipped(phase: &GatePhase) -> PhaseOutcome
 fn Judged_Phase(phase: &GatePhase, findings: &[Finding], approvals: &[PhaseApproval]) -> PhaseOutcome
 {
     let blocking_findings: Vec<Finding> = findings.iter().filter(|finding| return phase.rules.contains(&finding.rule)).cloned().collect();
-    let exceeded = phase.threshold.Exceeded_By(blocking_findings.len());
+    let exceeded = phase.threshold.Is_Exceeded_By(blocking_findings.len());
     let approved = exceeded && approvals.iter().any(|approval| return approval.phase == phase.name);
 
     return PhaseOutcome {

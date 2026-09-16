@@ -55,7 +55,7 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, module_case: Case, field_c
 
     for item in &payload.items
     {
-        if item.kind == MODULE && !module_case.Conforms(Unescaped(item.Own_Name()))
+        if item.kind == MODULE && !module_case.Is_The_Shape_Of(Unescaped(item.Own_Name()))
         {
             let finding = Violation_Finding(path, item, item.Own_Name());
             findings.push(finding);
@@ -81,7 +81,7 @@ fn Field_Violations_In(path: &str, item: &PayloadItem, field_case: Case) -> Vec<
 
     return fields
         .iter()
-        .filter(|(name, _type_name)| return !field_case.Conforms(Unescaped(name)))
+        .filter(|(name, _type_name)| return !field_case.Is_The_Shape_Of(Unescaped(name)))
         .map(|(name, _type_name)| return Violation_Finding(path, item, name))
         .collect();
 }

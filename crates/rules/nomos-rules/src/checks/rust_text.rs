@@ -6,7 +6,7 @@
 //! the same "an attribute or construct carries no adjacent explanatory comment" shape —
 //! `#[allow(...)]`, `unsafe` constructs, `#[inline(always)]`, and a bare `#[ignore]` with no
 //! `= "reason"` value. Three of the four — `#[allow(...)]`, `#[inline(always)]` and the bare
-//! `#[ignore]` — reuse `comment_block`'s `Previous_Comment_Block_Has`, the same "walk the
+//! `#[ignore]` — reuse `comment_block`'s `Has_A_Previous_Comment_Block`, the same "walk the
 //! contiguous comment block immediately above this line" primitive `panic`'s
 //! `Panic_Findings_In` and `interior_mutability`'s `Shared_Interior_Mutability_Findings_In`
 //! already share — real repeat consumers, not a new abstraction invented for them. `unsafe`
@@ -79,7 +79,7 @@ struct ConstructDetector(fn(&str) -> bool);
 
 impl ConstructDetector
 {
-    fn Detects(&self, code: &str) -> bool
+    fn Is_Detecting(&self, code: &str) -> bool
     {
         return (self.0)(code);
     }
@@ -91,7 +91,7 @@ struct JustificationDetector(fn(&[&str], usize) -> bool);
 
 impl JustificationDetector
 {
-    fn Detects(&self, lines: &[&str], index: usize) -> bool
+    fn Is_Detecting(&self, lines: &[&str], index: usize) -> bool
     {
         return (self.0)(lines, index);
     }
@@ -124,7 +124,7 @@ fn Unjustified_Construct_Findings_In(source: &SourceFile, rule: Rule<'_>, messag
         // string literal -- masking a literal's own body before the search can only drop a
         // false positive (prose quoting the construct it describes), never hide a real one.
         let code = Code_With_String_Bodies_Masked(&Code_Prefix(line));
-        if detector.has_construct.Detects(&code) && !detector.has_local_justification.Detects(&lines, index)
+        if detector.has_construct.Is_Detecting(&code) && !detector.has_local_justification.Is_Detecting(&lines, index)
         {
             let finding = Finding_For_Line(source, rule.0, Line_Number(index), message.0);
             findings.push(finding);

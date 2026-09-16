@@ -5,7 +5,7 @@
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::Finding;
 
-use super::comment_block::{Comment_Text_Of, Previous_Comment_Block_Has};
+use super::comment_block::{Comment_Text_Of, Has_A_Previous_Comment_Block};
 use super::{
     ConstructDetector, Detector, JustificationDetector, Message, Rule, Unjustified_Construct_Findings_In,
     PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED,
@@ -49,15 +49,15 @@ fn Has_Panic_Primitive(code: &str) -> bool
 
 fn Has_Local_Panic_Justification(lines: &[&str], index: usize) -> bool
 {
-    if lines.get(index).is_some_and(|line| return Comment_Has_Panic_Reason(line))
+    if lines.get(index).is_some_and(|line| return Has_A_Panic_Reason(line))
     {
         return true;
     }
 
-    return Previous_Comment_Block_Has(lines, index, Comment_Has_Panic_Reason);
+    return Has_A_Previous_Comment_Block(lines, index, Has_A_Panic_Reason);
 }
 
-fn Comment_Has_Panic_Reason(line: &str) -> bool
+fn Has_A_Panic_Reason(line: &str) -> bool
 {
     let Some(comment) = Comment_Text_Of(line)
     else

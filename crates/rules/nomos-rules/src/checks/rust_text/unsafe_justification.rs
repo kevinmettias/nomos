@@ -135,7 +135,7 @@ fn Has_Rustdoc_Safety_Section(lines: &[&str], index: usize) -> bool
 fn Has_Safety_Comment_Block(lines: &[&str], index: usize) -> bool
 {
     let block = Safety_Comment_Block(lines, index);
-    return Safety_Block_Has_A_Reason(&block);
+    return Has_A_Safety_Block_Reason(&block);
 }
 
 /// Every comment line of the block immediately above `index`, plus one written beside the
@@ -155,7 +155,7 @@ fn Safety_Comment_Block<'a>(lines: &[&'a str], index: usize) -> Vec<&'a str>
 /// marker's own line may hold the reason, or any later line of the block may. A marker with
 /// nothing after it anywhere in its block is `OD-RULES-021`'s vacuous-marker gap and does not
 /// satisfy the rule.
-fn Safety_Block_Has_A_Reason(block: &[&str]) -> bool
+fn Has_A_Safety_Block_Reason(block: &[&str]) -> bool
 {
     let mut seen_marker = false;
     let mut has_reason = false;
@@ -166,9 +166,9 @@ fn Safety_Block_Has_A_Reason(block: &[&str]) -> bool
         if let Some(after) = lower.strip_prefix("safety:")
         {
             seen_marker = true;
-            has_reason = has_reason || Comment_Line_Has_Text(after);
+            has_reason = has_reason || Is_A_Comment_Line_With_Text(after);
         }
-        else if seen_marker && Comment_Line_Has_Text(comment)
+        else if seen_marker && Is_A_Comment_Line_With_Text(comment)
         {
             has_reason = true;
         }
@@ -179,7 +179,7 @@ fn Safety_Block_Has_A_Reason(block: &[&str]) -> bool
 
 /// Whether a comment line carries text of its own, rather than only the whitespace a stripped
 /// marker can leave behind.
-fn Comment_Line_Has_Text(comment: &str) -> bool
+fn Is_A_Comment_Line_With_Text(comment: &str) -> bool
 {
     return !comment.trim().is_empty();
 }

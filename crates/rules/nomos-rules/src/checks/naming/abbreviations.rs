@@ -300,7 +300,7 @@ fn Abbreviation_Reason(word: &str, additions: &[String]) -> Option<&'static str>
     {
         return Some("known abbreviation; spell it out");
     }
-    if Contains_Digit(word)
+    if Is_Containing_A_Digit(word)
     {
         return Digit_Bearing_Abbreviation_Reason(word, additions);
     }
@@ -343,7 +343,7 @@ fn Is_Vowelless(word: &str) -> bool
     return !word.chars().any(|character| return VOWELS.contains(character));
 }
 
-fn Contains_Digit(word: &str) -> bool
+fn Is_Containing_A_Digit(word: &str) -> bool
 {
     return word.chars().any(|character| return character.is_ascii_digit());
 }

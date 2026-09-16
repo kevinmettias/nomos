@@ -46,7 +46,7 @@ pub fn Divergences_With_No_Record(assessments: &[Assessment]) -> Vec<Problem>
 {
     return assessments
         .iter()
-        .filter(|assessment| return assessment.verdict.Owes_A_Record() && assessment.record.is_none())
+        .filter(|assessment| return assessment.verdict.Has_A_Record_Obligation() && assessment.record.is_none())
         .map(|assessment| {
             return Problem {
                 kind: ProblemKind::DivergenceWithNoRecord,

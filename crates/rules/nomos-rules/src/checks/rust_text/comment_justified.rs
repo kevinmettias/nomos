@@ -9,7 +9,7 @@ use crate::checks::Is_Test_Or_Example_Source;
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::Finding;
 
-use super::comment_block::{Comment_Is_Non_Empty, Previous_Comment_Block_Has};
+use super::comment_block::{Is_A_Non_Empty_Comment, Has_A_Previous_Comment_Block};
 use super::{
     ConstructDetector, Detector, Is_Own_Implementation_File, JustificationDetector, Message, Rule,
     Unjustified_Construct_Findings_In, EVERY_ALLOW_CARRIES_A_JUSTIFICATION, INLINE_ALWAYS_JUSTIFICATION,
@@ -88,12 +88,12 @@ fn Has_Allow_Attribute(code: &str) -> bool
 
 fn Has_Local_Allow_Justification(lines: &[&str], index: usize) -> bool
 {
-    if lines.get(index).is_some_and(|line| return Comment_Is_Non_Empty(line))
+    if lines.get(index).is_some_and(|line| return Is_A_Non_Empty_Comment(line))
     {
         return true;
     }
 
-    return Previous_Comment_Block_Has(lines, index, Comment_Is_Non_Empty);
+    return Has_A_Previous_Comment_Block(lines, index, Is_A_Non_Empty_Comment);
 }
 fn Has_Inline_Always_Attribute(code: &str) -> bool
 {
@@ -102,10 +102,10 @@ fn Has_Inline_Always_Attribute(code: &str) -> bool
 
 fn Has_Local_Inline_Always_Justification(lines: &[&str], index: usize) -> bool
 {
-    if lines.get(index).is_some_and(|line| return Comment_Is_Non_Empty(line))
+    if lines.get(index).is_some_and(|line| return Is_A_Non_Empty_Comment(line))
     {
         return true;
     }
 
-    return Previous_Comment_Block_Has(lines, index, Comment_Is_Non_Empty);
+    return Has_A_Previous_Comment_Block(lines, index, Is_A_Non_Empty_Comment);
 }

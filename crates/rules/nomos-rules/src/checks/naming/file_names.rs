@@ -69,7 +69,7 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
         return Vec::new();
     };
 
-    if Declares_A_Public_Operation(payload)
+    if Is_Declaring_A_Public_Operation(payload)
     {
         return Vec::new();
     }
@@ -125,7 +125,7 @@ fn Comparable_Stem(path: &str) -> Option<String>
 /// check. A method does not count, because a method is named inside the type it belongs to
 /// and says nothing about what the module is for -- which is why this asks for a *free*
 /// function, using the same `Is_Top_Level` the sibling rule below reads.
-fn Declares_A_Public_Operation(payload: &SyntaxPayload) -> bool
+fn Is_Declaring_A_Public_Operation(payload: &SyntaxPayload) -> bool
 {
     return payload
         .items

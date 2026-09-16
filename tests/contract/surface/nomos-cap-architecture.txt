@@ -3,10 +3,10 @@ pub const nomos_cap_architecture::CAPABILITY: &str
 pub const nomos_cap_architecture::CONTRACT_VERSION: ContractVersion
 pub const nomos_cap_architecture::SCHEMA: &str
 pub fn nomos_cap_architecture::ArchitecturePayload::Component_Of(&self, package: &str) -> Option<&str>
-pub fn nomos_cap_architecture::ArchitecturePayload::Declares_An_Architecture(&self) -> bool
 pub fn nomos_cap_architecture::ArchitecturePayload::Doors_Into(&self, package: &str) -> Option<&[String]>
-pub fn nomos_cap_architecture::ArchitecturePayload::Excepts(&self, from: Depending<'_>, to: Depended<'_>) -> bool
-pub fn nomos_cap_architecture::ArchitecturePayload::Permits(&self, from: Depending<'_>, to: Depended<'_>) -> bool
+pub fn nomos_cap_architecture::ArchitecturePayload::Has_An_Architecture(&self) -> bool
+pub fn nomos_cap_architecture::ArchitecturePayload::Is_Excepted(&self, from: Depending<'_>, to: Depended<'_>) -> bool
+pub fn nomos_cap_architecture::ArchitecturePayload::Is_Permitted(&self, from: Depending<'_>, to: Depended<'_>) -> bool
 pub fn nomos_cap_architecture::Capability() -> CapabilityId
 pub fn nomos_cap_architecture::Capability_Contract() -> CapabilityContract
 pub fn nomos_cap_architecture::Encode_Payload(payload: &ArchitecturePayload) -> Vec<u8>

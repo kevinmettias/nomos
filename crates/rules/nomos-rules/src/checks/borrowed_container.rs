@@ -80,7 +80,7 @@ fn Borrowed_Container_Findings_In(source: &SourceFile) -> Vec<Finding>
     {
         let code = Code_Prefix(line);
 
-        if let Some(found) = BORROWED_CONTAINERS.iter().find(|container| return Borrows(&code, container))
+        if let Some(found) = BORROWED_CONTAINERS.iter().find(|container| return Is_Borrowing(&code, container))
         {
             let finding = Borrowed_Container_Finding(source, index.saturating_add(1), found);
             findings.push(finding);
@@ -92,7 +92,7 @@ fn Borrowed_Container_Findings_In(source: &SourceFile) -> Vec<Finding>
 
 /// Whether `code` borrows `container` in a typed position: a colon, optional space, an
 /// ampersand, optional space, the container's name, and then whatever ends it.
-fn Borrows(code: &str, container: &BorrowedContainer) -> bool
+fn Is_Borrowing(code: &str, container: &BorrowedContainer) -> bool
 {
     let mut rest = code;
 
@@ -100,7 +100,7 @@ fn Borrows(code: &str, container: &BorrowedContainer) -> bool
     {
         let after_colon = rest.get(offset.saturating_add(1)..).unwrap_or("");
 
-        if Names_Container_After_A_Borrow(after_colon, container)
+        if Is_Naming_Container_After_A_Borrow(after_colon, container)
         {
             return true;
         }
@@ -113,7 +113,7 @@ fn Borrows(code: &str, container: &BorrowedContainer) -> bool
 
 /// Whether the text right after a colon is a borrow of `container` and not of some other
 /// type whose name merely opens the same way.
-fn Names_Container_After_A_Borrow(after_colon: &str, container: &BorrowedContainer) -> bool
+fn Is_Naming_Container_After_A_Borrow(after_colon: &str, container: &BorrowedContainer) -> bool
 {
     let Some(after_ampersand) = after_colon.trim_start().strip_prefix('&')
     else

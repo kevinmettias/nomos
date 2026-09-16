@@ -104,7 +104,7 @@ impl RuleDescriptor
     /// caller who has to know that. `OD-GATE-020` accepted the sentinel and said what it
     /// means; this is where it is read.
     #[must_use]
-    pub const fn Cites_A_Versioned_Record(&self) -> bool
+    pub const fn Is_Citing_A_Versioned_Record(&self) -> bool
     {
         return self.contract_record_version != NO_VERSIONED_RECORD;
     }
@@ -274,7 +274,7 @@ mod descriptor_tests
             let is_prose = descriptor.contract_record == PORTED_STANDARD || descriptor.contract_record == WORKSPACE_CONVENTIONS;
             assert_eq!(
                 is_prose,
-                !descriptor.Cites_A_Versioned_Record(),
+                !descriptor.Is_Citing_A_Versioned_Record(),
                 "{} cites {} at version {}: a prose authority carries no version for a citation                  to be right or wrong about, and a record always has one",
                 descriptor.id,
                 descriptor.contract_record,

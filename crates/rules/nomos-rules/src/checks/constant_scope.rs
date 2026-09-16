@@ -267,14 +267,14 @@ fn Go_Constant_At_Line(line: &str, index: usize, scan: &mut GoConstantScan) -> O
         return None;
     }
 
-    if Ready_For_A_New_Go_Function(scan)
+    if Is_Ready_For_A_New_Go_Function(scan)
     {
         scan.block.pending = Go_Func_Header_Name(line);
     }
 
     let constant = Go_Constant_In_Open_Function(trimmed, index, scan);
 
-    if scan.block.Advance(line)
+    if scan.block.Try_Advance(line)
     {
         scan.in_const_block = false;
     }
@@ -284,7 +284,7 @@ fn Go_Constant_At_Line(line: &str, index: usize, scan: &mut GoConstantScan) -> O
 
 /// No function is currently open or about to open, and the scan sits at the file's own top
 /// level — the only place a new Go function header is looked for.
-fn Ready_For_A_New_Go_Function(scan: &GoConstantScan) -> bool
+fn Is_Ready_For_A_New_Go_Function(scan: &GoConstantScan) -> bool
 {
     return scan.block.open.is_none() && scan.block.pending.is_none() && scan.block.depth == 0;
 }

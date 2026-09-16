@@ -26,7 +26,7 @@ fn Nolint_Findings_In(source: &SourceFile) -> Vec<Finding>
 
     for (index, line) in source.text.lines().enumerate()
     {
-        if Has_Nolint_Directive(line) && !Nolint_Has_Reason(line)
+        if Has_Nolint_Directive(line) && !Has_A_Nolint_Reason(line)
         {
             let finding = super::Finding_For_Line(
                 source,
@@ -46,7 +46,7 @@ fn Has_Nolint_Directive(line: &str) -> bool
     return line.contains("//nolint");
 }
 
-fn Nolint_Has_Reason(line: &str) -> bool
+fn Has_A_Nolint_Reason(line: &str) -> bool
 {
     let Some(start) = line.find("//nolint")
     else

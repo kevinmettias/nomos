@@ -1,7 +1,7 @@
 //! The name on the depending side of a directed relation.
 
 /// The name that would do the depending: a newtype rather than the bare `&str` it wraps,
-/// because [`crate::ArchitecturePayload::Permits`] and [`crate::ArchitecturePayload::Excepts`]
+/// because [`crate::ArchitecturePayload::Is_Permitted`] and [`crate::ArchitecturePayload::Is_Excepted`]
 /// take this beside a [`crate::Depended`], and both ends are strings, so two positions of one
 /// type would let a caller describe the reverse edge and nothing would say so.
 ///

@@ -16,7 +16,7 @@
 //!
 //! # Why there is no lang item for `Mutex`/`RwLock` to resolve through
 //!
-//! `Type::is_copy` (`crate::reading::Clone_On_Copy`) resolves `Copy` through
+//! `Type::is_copy` (`crate::reading::Is_A_Clone_On_Copy`) resolves `Copy` through
 //! `LangItem::Copy` because `Copy` is one of the traits `rustc`, and therefore
 //! `ra_ap_hir`, treats as load-bearing to the language itself. `Mutex` and `RwLock` are
 //! ordinary library structs with no such standing -- there is no `LangItem::Mutex` to
@@ -128,7 +128,7 @@ fn Locations_Of(sema: &Semantics<'_, RootDatabase>, files: &[(EditionedFileId, S
 
         for type_node in source_file.syntax().descendants().filter_map(ast::Type::cast)
         {
-            if Nested_Lock(sema, &type_node, mutex, rwlock)
+            if Is_A_Nested_Lock(sema, &type_node, mutex, rwlock)
             {
                 let start = type_node.syntax().text_range().start();
                 let position = line_index.line_col(start);
@@ -142,7 +142,7 @@ fn Locations_Of(sema: &Semantics<'_, RootDatabase>, files: &[(EditionedFileId, S
 
 /// Whether `type_node`'s own resolved type is a `Mutex`/`RwLock` whose type argument
 /// itself resolved to a `Mutex`/`RwLock`.
-fn Nested_Lock(sema: &Semantics<'_, RootDatabase>, type_node: &ast::Type, mutex: Struct, rwlock: Struct) -> bool
+fn Is_A_Nested_Lock(sema: &Semantics<'_, RootDatabase>, type_node: &ast::Type, mutex: Struct, rwlock: Struct) -> bool
 {
     let Some(resolved) = sema.resolve_type(type_node)
     else

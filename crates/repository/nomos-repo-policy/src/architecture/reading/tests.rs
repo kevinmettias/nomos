@@ -58,7 +58,7 @@ fn Test_Discover_Workspace_Should_Declare_Nothing_For_A_Missing_File()
     let payload = Discover_Workspace(&PathBuf::from("this/path/does/not/exist"), &StdFileSystem)
         .expect("a missing declaration file declares nothing rather than failing");
 
-    assert!(!payload.Declares_An_Architecture());
+    assert!(!payload.Has_An_Architecture());
 }
 
 /// A file that parses and declares none of the five keys is a repository that has written the
@@ -70,7 +70,7 @@ fn Test_Discover_Workspace_Should_Declare_Nothing_For_A_File_With_None_Of_The_Ke
 
     let payload = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON with no declared keys");
 
-    assert!(!payload.Declares_An_Architecture());
+    assert!(!payload.Has_An_Architecture());
 }
 
 #[test]
@@ -89,9 +89,9 @@ fn Test_Discover_Workspace_Should_Read_A_Whole_Declaration()
     assert_eq!(payload.components, vec!["Domain".to_owned(), "Api".to_owned()]);
     assert_eq!(payload.Component_Of("billing"), Some("Domain"));
     assert_eq!(payload.Component_Of("http"), Some("Api"));
-    assert!(payload.Permits(Depending("Api"), Depended("Domain")));
-    assert!(!payload.Permits(Depending("Domain"), Depended("Api")));
-    assert!(payload.Excepts(Depending("billing"), Depended("billing-core")));
+    assert!(payload.Is_Permitted(Depending("Api"), Depended("Domain")));
+    assert!(!payload.Is_Permitted(Depending("Domain"), Depended("Api")));
+    assert!(payload.Is_Excepted(Depending("billing"), Depended("billing-core")));
     assert_eq!(payload.Doors_Into("ledger-store"), Some(["billing".to_owned()].as_slice()));
 }
 

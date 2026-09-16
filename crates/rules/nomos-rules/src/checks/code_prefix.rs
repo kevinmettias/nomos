@@ -42,7 +42,7 @@
 //! It does not resolve a multi-line raw string or a multi-line block comment. Every syntax-
 //! shaped rule in this crate reads one line at a time with no cross-line state, and a raw
 //! string that opens on one line and closes on another is already outside what a per-line
-//! scanner can see — the same boundary `Previous_Comment_Block_Has` already accepts for a
+//! scanner can see — the same boundary `Has_A_Previous_Comment_Block` already accepts for a
 //! `//` comment block spanning lines it walks explicitly rather than one this function
 //! tracks silently. What this function adds is single-line correctness: a raw string that
 //! opens and closes within one line is read correctly, unbalanced quote and all.
@@ -175,7 +175,7 @@ fn Code_Step_At(bytes: &[u8], index: usize) -> Option<CodeStep>
     {
         return Some(CodeStep { start, end, is_literal: true });
     }
-    if Opens_Literal_Body(bytes, index)
+    if Is_Opening_A_Literal_Body(bytes, index)
     {
         let end = Literal_Body_End(bytes, index);
         return Some(CodeStep { start: index, end, is_literal: true });
@@ -185,15 +185,15 @@ fn Code_Step_At(bytes: &[u8], index: usize) -> Option<CodeStep>
 }
 
 /// Whether the byte at `index` opens a literal body: every `"` does, and a `'` only when
-/// [`Opens_Char_Literal`] confirms a real char literal rather than a lifetime.
-fn Opens_Literal_Body(bytes: &[u8], index: usize) -> bool
+/// [`Is_Opening_A_Char_Literal`] confirms a real char literal rather than a lifetime.
+fn Is_Opening_A_Literal_Body(bytes: &[u8], index: usize) -> bool
 {
     if bytes.get(index) == Some(&b'"')
     {
         return true;
     }
 
-    return bytes.get(index) == Some(&b'\'') && Opens_Char_Literal(bytes, index);
+    return bytes.get(index) == Some(&b'\'') && Is_Opening_A_Char_Literal(bytes, index);
 }
 
 /// One past the closing delimiter of the literal opening at `index`, dispatching on which
@@ -235,7 +235,7 @@ fn Skip_String_Body(bytes: &[u8], mut index: usize) -> usize
 /// later, `'\''` three. Checking for a real closing quote at that exact position, rather
 /// than assuming every `'` opens a literal, is what keeps `fn F<'a>(x: &'a str)` from being
 /// misread as an unterminated char literal that swallows the rest of the line.
-fn Opens_Char_Literal(bytes: &[u8], index: usize) -> bool
+fn Is_Opening_A_Char_Literal(bytes: &[u8], index: usize) -> bool
 {
     if bytes.get(index.saturating_add(1)) == Some(&b'\\')
     {
@@ -246,7 +246,7 @@ fn Opens_Char_Literal(bytes: &[u8], index: usize) -> bool
 }
 
 /// Advances past a char literal's own body (already confirmed real by
-/// [`Opens_Char_Literal`]), returning the index one past its closing `'`.
+/// [`Is_Opening_A_Char_Literal`]), returning the index one past its closing `'`.
 fn Skip_Char_Literal_Body(bytes: &[u8], mut index: usize) -> usize
 {
     if bytes.get(index) == Some(&b'\\')
@@ -324,7 +324,7 @@ fn Skip_Raw_String_Body(bytes: &[u8], mut index: usize, hashes: usize) -> usize
 {
     while bytes.get(index).is_some()
     {
-        if bytes.get(index) == Some(&b'"') && Raw_String_Closes_Here(bytes, index, hashes)
+        if bytes.get(index) == Some(&b'"') && Is_Raw_String_Closing_Here(bytes, index, hashes)
         {
             return index.saturating_add(1).saturating_add(hashes);
         }
@@ -336,7 +336,7 @@ fn Skip_Raw_String_Body(bytes: &[u8], mut index: usize, hashes: usize) -> usize
 
 /// Whether the closing delimiter of a `hashes`-hash raw string sits at `bytes[index]` (a
 /// `"`): exactly `hashes` `#` characters immediately follow it.
-fn Raw_String_Closes_Here(bytes: &[u8], index: usize, hashes: usize) -> bool
+fn Is_Raw_String_Closing_Here(bytes: &[u8], index: usize, hashes: usize) -> bool
 {
     let start = index.saturating_add(1);
     let end = start.saturating_add(hashes);

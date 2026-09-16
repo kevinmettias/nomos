@@ -63,7 +63,7 @@ fn Procedural_Macro_Findings_In(source: &SourceFile) -> Vec<Finding>
 
     for (index, line) in lines.iter().enumerate()
     {
-        if Declares_A_Function_Like_Procedural_Macro(&Code_Prefix(line)) && !Has_Adjacent_Explanation(&lines, index)
+        if Is_Declaring_A_Function_Like_Procedural_Macro(&Code_Prefix(line)) && !Has_Adjacent_Explanation(&lines, index)
         {
             let finding = Procedural_Macro_Finding(source, index.saturating_add(1));
             findings.push(finding);
@@ -75,7 +75,7 @@ fn Procedural_Macro_Findings_In(source: &SourceFile) -> Vec<Finding>
 
 /// Whether `code` carries the bare attribute: an opening `#[`, the name, and the closing
 /// `]` with nothing in between but space.
-fn Declares_A_Function_Like_Procedural_Macro(code: &str) -> bool
+fn Is_Declaring_A_Function_Like_Procedural_Macro(code: &str) -> bool
 {
     let mut searched_from = 0usize;
 
@@ -84,7 +84,7 @@ fn Declares_A_Function_Like_Procedural_Macro(code: &str) -> bool
         let start = searched_from.saturating_add(offset);
         let inside = code.get(start.saturating_add(ATTRIBUTE_OPENING_LENGTH)..).unwrap_or("");
 
-        if Closes_Immediately_After_The_Name(inside)
+        if Is_Closing_Immediately_After_The_Name(inside)
         {
             return true;
         }
@@ -97,7 +97,7 @@ fn Declares_A_Function_Like_Procedural_Macro(code: &str) -> bool
 
 /// Whether the text inside an attribute is exactly the name, so `proc_macro_derive` and
 /// `proc_macro_attribute` — which continue past it — do not match.
-fn Closes_Immediately_After_The_Name(inside: &str) -> bool
+fn Is_Closing_Immediately_After_The_Name(inside: &str) -> bool
 {
     return inside
         .trim_start()

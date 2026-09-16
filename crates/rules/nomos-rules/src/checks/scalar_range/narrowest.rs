@@ -75,12 +75,12 @@ fn Can_Hold_Range(bits: u32, signedness: Signedness, min: i64, max: i64) -> bool
 
     return match signedness
     {
-        Signedness::Unsigned => Fits_Unsigned(bits, min, max),
-        Signedness::Signed => Fits_Signed(bits, min, max),
+        Signedness::Unsigned => Is_Fitting_Unsigned(bits, min, max),
+        Signedness::Signed => Is_Fitting_Signed(bits, min, max),
     };
 }
 
-fn Fits_Unsigned(bits: u32, min: i64, max: i64) -> bool
+fn Is_Fitting_Unsigned(bits: u32, min: i64, max: i64) -> bool
 {
     if min < 0
     {
@@ -94,7 +94,7 @@ fn Fits_Unsigned(bits: u32, min: i64, max: i64) -> bool
     return i128::from(max) <= ceiling;
 }
 
-fn Fits_Signed(bits: u32, min: i64, max: i64) -> bool
+fn Is_Fitting_Signed(bits: u32, min: i64, max: i64) -> bool
 {
     if bits == MAX_SCALAR_BITS
     {

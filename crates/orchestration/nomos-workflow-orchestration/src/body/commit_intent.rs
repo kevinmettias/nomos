@@ -33,7 +33,7 @@ impl CommitIntent
     /// Whether this intent commits -- the same boundary read the other way, since
     /// `CorrectionCommand` still takes a `bool`.
     #[must_use]
-    pub fn Commits(self) -> bool
+    pub fn Is_A_Commit(self) -> bool
     {
         return matches!(self, Self::Commit);
     }
@@ -54,7 +54,7 @@ mod tests
     #[test]
     fn Test_Commits_Should_Report_Only_The_Committing_State()
     {
-        assert!(CommitIntent::Commit.Commits());
-        assert!(!CommitIntent::Stage.Commits());
+        assert!(CommitIntent::Commit.Is_A_Commit());
+        assert!(!CommitIntent::Stage.Is_A_Commit());
     }
 }

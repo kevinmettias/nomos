@@ -37,7 +37,7 @@ fn Todo_Findings_In(source: &SourceFile) -> Vec<Finding>
     For_Each_Line_Number(&source.text, |line_number, line| {
         if let Some(comment) = Comment_Text_Of(line)
         {
-            if Starts_With_Todo(comment) && !Has_Valid_Todo_Format(comment)
+            if Is_Starting_With_Todo(comment) && !Has_Valid_Todo_Format(comment)
             {
                 let finding = Finding_For_Line(
                     source,
@@ -55,7 +55,7 @@ fn Todo_Findings_In(source: &SourceFile) -> Vec<Finding>
 
 /// A marker opens the comment; a mention elsewhere in the comment's prose is not one, and is
 /// left unjudged rather than reported with no route to a conforming edit.
-fn Starts_With_Todo(comment: &str) -> bool
+fn Is_Starting_With_Todo(comment: &str) -> bool
 {
     return comment.starts_with("TODO");
 }

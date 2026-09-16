@@ -8,7 +8,7 @@ use nomos_rules::SourceFile;
 use crate::composition::Recognized_Syntax_Provider;
 
 /// Produces one syntax fact per source and returns how many sources now have a current
-/// one -- whether this call wrote it or [`Already_Current`] found the store already held
+/// one -- whether this call wrote it or [`Is_Already_Current`] found the store already held
 /// it. `crate::run_context::Materialized_Syntax_Facts`'s own vacuity gate and
 /// `Examined::facts`'s own coverage statistic both read this as "how many of `sources`
 /// this run can judge," and neither means "how much work this call actually did" --
@@ -33,7 +33,7 @@ use crate::composition::Recognized_Syntax_Provider;
 ///
 /// # Skipping a subject the store already has current
 ///
-/// `P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS`: before parsing, [`Already_Current`] builds
+/// `P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS`: before parsing, [`Is_Already_Current`] builds
 /// the exact [`FactKey`] parsing `source` would produce -- from `source.text`'s own raw
 /// digest, never from a parse -- and asks `store` whether it already holds a live fact
 /// under it. A caller that reuses the same `store` (and therefore the same, monotonically
@@ -46,7 +46,7 @@ pub fn Materialize_Syntax(sources: &[SourceFile], context: &Context, store: &mut
 
     for source in sources
     {
-        if Materialize_Source_Syntax(source, context, store)
+        if Try_Materialize_Source_Syntax(source, context, store)
         {
             current = current.saturating_add(1);
         }
@@ -57,7 +57,7 @@ pub fn Materialize_Syntax(sources: &[SourceFile], context: &Context, store: &mut
 
 /// One source's contribution to [`Materialize_Syntax`]'s own count: `true` when `source`
 /// has a current `nomos.cap.syntax.items` fact once this returns -- either because
-/// [`Already_Current`] found the store already held one, or because this call wrote one --
+/// [`Is_Already_Current`] found the store already held one, or because this call wrote one --
 /// and `false` for a path neither provider recognizes, or for a recognized path its own
 /// provider could not parse.
 ///
@@ -65,9 +65,9 @@ pub fn Materialize_Syntax(sources: &[SourceFile], context: &Context, store: &mut
 /// promise about coverage: a `false` is still counted by the caller exactly the way
 /// [`Materialize_Syntax`]'s own doc counts every uncovered source -- never dropped
 /// silently, named by the rule's own unread-subject finding instead.
-fn Materialize_Source_Syntax(source: &SourceFile, context: &Context, store: &mut MemoryFactStore) -> bool
+fn Try_Materialize_Source_Syntax(source: &SourceFile, context: &Context, store: &mut MemoryFactStore) -> bool
 {
-    if Already_Current(source, context, store)
+    if Is_Already_Current(source, context, store)
     {
         return true;
     }
@@ -94,7 +94,7 @@ fn Materialize_Source_Syntax(source: &SourceFile, context: &Context, store: &mut
 /// is the one caller outside either provider that ever needs to know what a fact it did
 /// not produce would be keyed under, and [`InputDigest::Of`] over `source.text`'s own
 /// bytes is a raw hash, not a parse -- the whole reason this check can run before one.
-fn Already_Current(source: &SourceFile, context: &Context, store: &MemoryFactStore) -> bool
+fn Is_Already_Current(source: &SourceFile, context: &Context, store: &MemoryFactStore) -> bool
 {
     let Some(provider) = Recognized_Syntax_Provider(&source.path)
     else

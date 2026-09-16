@@ -45,7 +45,7 @@ fn Test_An_Empty_Byte_String_Should_Decode_To_A_Repository_That_Declares_Nothing
 {
     let decoded = Parse_Payload(&[]).expect("no header line makes an empty payload unambiguous");
 
-    assert!(!decoded.Declares_An_Architecture());
+    assert!(!decoded.Has_An_Architecture());
     assert_eq!(decoded.Component_Of("billing"), None);
 }
 
@@ -57,7 +57,7 @@ fn Test_Components_With_No_Members_Should_Still_Declare_An_Architecture()
 {
     let decoded = Parse_Payload(b"component\tDomain\n").expect("one component line");
 
-    assert!(decoded.Declares_An_Architecture());
+    assert!(decoded.Has_An_Architecture());
 }
 
 #[test]
@@ -131,10 +131,10 @@ fn Test_Permits_Should_Answer_Exactly_What_The_Declaration_States()
 {
     let payload = Sample();
 
-    assert!(payload.Permits(Depending("Api"), Depended("Domain")));
-    assert!(payload.Permits(Depending("Infrastructure"), Depended("Domain")));
-    assert!(!payload.Permits(Depending("Domain"), Depended("Api")), "the reverse is not declared");
-    assert!(!payload.Permits(Depending("Api"), Depended("Infrastructure")), "an undeclared pair is not permitted");
+    assert!(payload.Is_Permitted(Depending("Api"), Depended("Domain")));
+    assert!(payload.Is_Permitted(Depending("Infrastructure"), Depended("Domain")));
+    assert!(!payload.Is_Permitted(Depending("Domain"), Depended("Api")), "the reverse is not declared");
+    assert!(!payload.Is_Permitted(Depending("Api"), Depended("Infrastructure")), "an undeclared pair is not permitted");
 }
 
 /// A declaration that states no self-permission gets `false` for one, which is how a
@@ -145,10 +145,10 @@ fn Test_Permits_Should_Answer_Exactly_What_The_Declaration_States()
 fn Test_Permits_Should_Follow_The_Declaration_For_A_Component_Against_Itself()
 {
     let payload = Sample();
-    assert!(!payload.Permits(Depending("Domain"), Depended("Domain")), "the sample declares no self-permission");
+    assert!(!payload.Is_Permitted(Depending("Domain"), Depended("Domain")), "the sample declares no self-permission");
 
     let permissive = Parse_Payload(b"component\tDomain\npermits\tDomain\tDomain\n").expect("a declaration may permit a component against itself");
-    assert!(permissive.Permits(Depending("Domain"), Depended("Domain")), "a declared self-permission is honoured");
+    assert!(permissive.Is_Permitted(Depending("Domain"), Depended("Domain")), "a declared self-permission is honoured");
 }
 
 #[test]
@@ -156,9 +156,9 @@ fn Test_Excepts_Should_Be_Directed()
 {
     let payload = Sample();
 
-    assert!(payload.Excepts(Depending("billing"), Depended("billing-core")));
+    assert!(payload.Is_Excepted(Depending("billing"), Depended("billing-core")));
     assert!(
-        !payload.Excepts(Depending("billing-core"), Depended("billing")),
+        !payload.Is_Excepted(Depending("billing-core"), Depended("billing")),
         "an exception is one real dependency, not a pair exemption"
     );
 }

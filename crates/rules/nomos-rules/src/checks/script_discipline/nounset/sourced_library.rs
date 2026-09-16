@@ -123,7 +123,7 @@ fn Step_In_Code(line: &str, character: u8, index: usize) -> StepOutcome
         // escapes the next character, quote or not
         return StepOutcome::Continue { state: QuoteState::None, next_index: index.saturating_add(ESCAPE_SEQUENCE_BYTES) };
     }
-    if character == b'#' && Begins_A_Word(line, index)
+    if character == b'#' && Is_Starting_A_Word(line, index)
     {
         // a comment: nothing after it is code
         return StepOutcome::StopAt(QuoteState::None);
@@ -140,7 +140,7 @@ fn Step_In_Code(line: &str, character: u8, index: usize) -> StepOutcome
 
 /// Whether the byte at `index` starts a word — it is first on the line, or the character
 /// before it is a space or a tab. Shell only treats `#` as a comment there.
-fn Begins_A_Word(line: &str, index: usize) -> bool
+fn Is_Starting_A_Word(line: &str, index: usize) -> bool
 {
     if index == 0
     {

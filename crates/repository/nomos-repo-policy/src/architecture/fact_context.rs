@@ -99,7 +99,7 @@ mod tests
         let PolicyFact { fact, .. } = Materialize_Workspace(Path::new("."), Context(), &filesystem).expect("well-formed JSON");
 
         let decoded = nomos_cap_architecture::Parse_Payload(&fact.payload.bytes).expect("this crate's own encoding");
-        assert!(!decoded.Declares_An_Architecture());
+        assert!(!decoded.Has_An_Architecture());
     }
 
     #[test]

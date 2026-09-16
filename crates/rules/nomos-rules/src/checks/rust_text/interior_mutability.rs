@@ -5,7 +5,7 @@
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::Finding;
 
-use super::comment_block::{Comment_Text_Of, Previous_Comment_Block_Has};
+use super::comment_block::{Comment_Text_Of, Has_A_Previous_Comment_Block};
 use super::{
     ConstructDetector, Detector, Is_Own_Implementation_File, JustificationDetector, Message, Rule,
     Unjustified_Construct_Findings_In, SHARED_INTERIOR_MUTABILITY_SAYS_WHY,
@@ -46,8 +46,8 @@ fn Has_Shared_RefCell_Construct(code: &str) -> bool
         .filter(|character| return !character.is_whitespace())
         .collect::<String>();
 
-    return Shared_Type_Contains_RefCell(CompactTypeText(&compact), WrapperName("Rc"))
-        || Shared_Type_Contains_RefCell(CompactTypeText(&compact), WrapperName("Arc"))
+    return Is_Shared_Type_Containing_RefCell(CompactTypeText(&compact), WrapperName("Rc"))
+        || Is_Shared_Type_Containing_RefCell(CompactTypeText(&compact), WrapperName("Arc"))
         || compact.contains("Rc::new(RefCell::new(")
         || compact.contains("Arc::new(RefCell::new(")
         || compact.contains("Rc::<RefCell<")
@@ -55,13 +55,13 @@ fn Has_Shared_RefCell_Construct(code: &str) -> bool
 }
 
 /// `compact` and `wrapper` are both `&str`; without a distinct type per position, a call
-/// site like `Shared_Type_Contains_RefCell(compact, wrapper)` reads as two interchangeable
+/// site like `Is_Shared_Type_Containing_RefCell(compact, wrapper)` reads as two interchangeable
 /// strings and a swap compiles silently.
 struct CompactTypeText<'a>(&'a str);
 
 struct WrapperName<'a>(&'a str);
 
-fn Shared_Type_Contains_RefCell(compact: CompactTypeText<'_>, wrapper: WrapperName<'_>) -> bool
+fn Is_Shared_Type_Containing_RefCell(compact: CompactTypeText<'_>, wrapper: WrapperName<'_>) -> bool
 {
     let compact = compact.0;
     let pattern = format!("{}<", wrapper.0);
@@ -90,15 +90,15 @@ fn Has_Local_Smart_Pointer_Reason(lines: &[&str], index: usize) -> bool
 {
     if lines
         .get(index)
-        .is_some_and(|line| return Comment_Has_Smart_Pointer_Reason(line))
+        .is_some_and(|line| return Has_A_Smart_Pointer_Reason(line))
     {
         return true;
     }
 
-    return Previous_Comment_Block_Has(lines, index, Comment_Has_Smart_Pointer_Reason);
+    return Has_A_Previous_Comment_Block(lines, index, Has_A_Smart_Pointer_Reason);
 }
 
-fn Comment_Has_Smart_Pointer_Reason(line: &str) -> bool
+fn Has_A_Smart_Pointer_Reason(line: &str) -> bool
 {
     let Some(comment) = Comment_Text_Of(line)
     else

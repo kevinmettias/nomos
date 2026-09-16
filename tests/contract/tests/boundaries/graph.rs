@@ -171,11 +171,11 @@ fn Test_Dependencies_Should_Run_Strictly_Downward()
 
             let permitted = if component == dependency_component
             {
-                architecture.Excepts(Depending(&member.name), Depended(dependency))
+                architecture.Is_Excepted(Depending(&member.name), Depended(dependency))
             }
             else
             {
-                architecture.Permits(Depending(component), Depended(dependency_component))
+                architecture.Is_Permitted(Depending(component), Depended(dependency_component))
             };
 
             assert!(

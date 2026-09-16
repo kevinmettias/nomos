@@ -81,7 +81,7 @@ fn Declared(descriptor: &RuleDescriptor) -> RulePackage
 /// the sentinel leaking into a type that has a better way to say it.
 fn Cited(descriptor: &RuleDescriptor) -> Option<RuleContract>
 {
-    if !descriptor.Cites_A_Versioned_Record()
+    if !descriptor.Is_Citing_A_Versioned_Record()
     {
         return None;
     }

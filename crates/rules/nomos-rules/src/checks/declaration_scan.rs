@@ -52,7 +52,7 @@ impl DeclarationBlock
     /// what keeps a `{` inside a signature's own generic list from opening a block early. The
     /// block closes on the first line whose depth has fallen back to the depth it opened at.
     /// A line with no block open does nothing and answers `false`.
-    pub(in crate::checks) fn Advance(&mut self, line: &str) -> bool
+    pub(in crate::checks) fn Try_Advance(&mut self, line: &str) -> bool
     {
         let (opened, closed) = Brace_Delta(line);
 

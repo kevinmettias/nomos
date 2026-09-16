@@ -74,7 +74,7 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding
         .items
         .iter()
         .filter(|item| return Is_Exported_Go_Function(item))
-        .filter(|item| return !case.Conforms(item.Own_Name()))
+        .filter(|item| return !case.Is_The_Shape_Of(item.Own_Name()))
         .map(|item| return Violation_Finding(path, item))
         .collect();
 }
@@ -97,7 +97,7 @@ fn Unexported_Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> 
         .items
         .iter()
         .filter(|item| return Is_Unexported_Go_Function(item))
-        .filter(|item| return !case.Conforms(item.Own_Name()))
+        .filter(|item| return !case.Is_The_Shape_Of(item.Own_Name()))
         .map(|item| return Unexported_Violation_Finding(path, item))
         .collect();
 }

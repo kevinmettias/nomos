@@ -227,7 +227,7 @@ fn Find_Sleep_Call(code: &str, call: Call<'_>) -> Option<usize>
     {
         let start = search_from.saturating_add(offset);
         let end = start.saturating_add(call.0.len());
-        if Has_Left_Boundary(bytes, start) && Followed_By_A_Call_Paren(code, end)
+        if Has_Left_Boundary(bytes, start) && Is_Followed_By_A_Call_Paren(code, end)
         {
             return Some(start);
         }
@@ -247,7 +247,7 @@ fn Is_Ident_Byte(byte: u8) -> bool
     return byte.is_ascii_alphanumeric() || byte == b'_';
 }
 
-fn Followed_By_A_Call_Paren(code: &str, end: usize) -> bool
+fn Is_Followed_By_A_Call_Paren(code: &str, end: usize) -> bool
 {
     return code.get(end..).is_some_and(|rest| return rest.trim_start().starts_with('('));
 }
@@ -290,7 +290,7 @@ fn Retry_Finding_At(source: &SourceFile, lines: &[&str], index: usize, line: &st
 {
     let attribute = Retry_Attribute_Name(line.trim())?;
 
-    if Has_Allow_Marker(line) || !Decorates_A_Function(lines, index)
+    if Has_Allow_Marker(line) || !Is_Decorating_A_Function(lines, index)
     {
         return None;
     }
@@ -326,7 +326,7 @@ fn Retry_Attribute_Name(trimmed: &str) -> Option<&'static str>
 /// The attribute stack is contiguous (`rust_Retry_Attribute`'s own comment names this): the
 /// next line that is neither blank nor another `#[...]` attribute must be a function
 /// declaration, or this attribute decorates something else entirely.
-fn Decorates_A_Function(lines: &[&str], attribute_index: usize) -> bool
+fn Is_Decorating_A_Function(lines: &[&str], attribute_index: usize) -> bool
 {
     for line in lines.iter().skip(attribute_index.saturating_add(1))
     {

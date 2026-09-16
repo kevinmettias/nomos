@@ -92,7 +92,7 @@ impl Case
     /// patterns: every shape below is `Line_By_Line` equivalent to its named regex, and
     /// [`tests`] checks each one against `case_validation.go`'s own worked examples.
     #[must_use]
-    pub fn Conforms(self, name: &str) -> bool
+    pub fn Is_The_Shape_Of(self, name: &str) -> bool
     {
         if self == Self::Any
         {
@@ -110,11 +110,11 @@ impl Case
             Self::UpperCamel => Is_Camel(name, Titled::Yes),
             Self::LowerCamel => Is_Camel(name, Titled::No),
             Self::UnderscoreCamel => name.strip_prefix('_').is_some_and(|rest| return Is_Camel(rest, Titled::No)),
-            Self::LowerSnake => Is_Segmented(name, '_', Segment_Is_Lower),
+            Self::LowerSnake => Is_Segmented(name, '_', Is_Segment_Lower),
             Self::UpperSnake => Is_Upper_Snake(name),
-            Self::ScreamingSnake => Is_Segmented(name, '_', Segment_Is_Screaming),
+            Self::ScreamingSnake => Is_Segmented(name, '_', Is_Segment_Screaming),
             Self::MixedSnake => Is_Mixed_Snake(name),
-            Self::LowerKebab => Is_Segmented(name, '-', Segment_Is_Lower),
+            Self::LowerKebab => Is_Segmented(name, '-', Is_Segment_Lower),
         };
     }
 }
@@ -154,7 +154,7 @@ fn Is_Segmented(name: &str, separator: char, segment_ok: fn(&str) -> bool) -> bo
     return name.split(separator).all(|segment| return !segment.is_empty() && segment_ok(segment));
 }
 
-fn Segment_Is_Screaming(segment: &str) -> bool
+fn Is_Segment_Screaming(segment: &str) -> bool
 {
     return segment.chars().all(|character| return character.is_ascii_uppercase() || character.is_ascii_digit());
 }
@@ -173,15 +173,15 @@ fn Is_Upper_Snake(name: &str) -> bool
         return false;
     };
 
-    if !Segment_Opens_Upper_Letter(first)
+    if !Is_Segment_Opening_Upper_Letter(first)
     {
         return false;
     }
 
-    return segments.all(Segment_Opens_Upper_Or_Digit);
+    return segments.all(Is_Segment_Opening_Upper_Or_Digit);
 }
 
-fn Segment_Opens_Upper_Letter(segment: &str) -> bool
+fn Is_Segment_Opening_Upper_Letter(segment: &str) -> bool
 {
     let mut characters = segment.chars();
     let Some(first) = characters.next()
@@ -205,7 +205,7 @@ fn Is_Mixed_Snake(name: &str) -> bool
         return false;
     };
 
-    if !Segment_Is_Lower(first)
+    if !Is_Segment_Lower(first)
     {
         return false;
     }
@@ -213,13 +213,13 @@ fn Is_Mixed_Snake(name: &str) -> bool
     return segments.all(|segment| return !segment.is_empty() && segment.chars().all(|character| return character.is_ascii_alphanumeric()));
 }
 
-fn Segment_Is_Lower(segment: &str) -> bool
+fn Is_Segment_Lower(segment: &str) -> bool
 {
     return !segment.is_empty()
         && segment.chars().all(|character| return character.is_ascii_lowercase() || character.is_ascii_digit());
 }
 
-fn Segment_Opens_Upper_Or_Digit(segment: &str) -> bool
+fn Is_Segment_Opening_Upper_Or_Digit(segment: &str) -> bool
 {
     let mut characters = segment.chars();
     let Some(first) = characters.next()
@@ -242,7 +242,7 @@ mod tests
     {
         for (case, name) in Worked_Examples()
         {
-            assert!(case.Conforms(name), "{case:?} should accept its own worked example {name:?}");
+            assert!(case.Is_The_Shape_Of(name), "{case:?} should accept its own worked example {name:?}");
         }
     }
 
@@ -277,7 +277,7 @@ mod tests
                     continue;
                 }
                 assert!(
-                    !case.Conforms(other_name),
+                    !case.Is_The_Shape_Of(other_name),
                     "{case:?} should reject {other_name:?}, {other_case:?}'s own worked example"
                 );
             }
@@ -287,39 +287,39 @@ mod tests
     #[test]
     fn Test_Upper_Snake_Should_Also_Accept_Screaming_Snakes_Own_Example()
     {
-        assert!(Case::UpperSnake.Conforms("COMPUTE_TOTAL"));
+        assert!(Case::UpperSnake.Is_The_Shape_Of("COMPUTE_TOTAL"));
     }
 
     #[test]
     fn Test_Upper_Snake_Should_Also_Accept_Upper_Camels_Own_Example()
     {
-        assert!(Case::UpperSnake.Conforms("ComputeTotal"));
+        assert!(Case::UpperSnake.Is_The_Shape_Of("ComputeTotal"));
     }
 
     #[test]
     fn Test_Mixed_Snake_Should_Also_Accept_Lower_Snakes_Own_Example()
     {
-        assert!(Case::MixedSnake.Conforms("compute_total"));
+        assert!(Case::MixedSnake.Is_The_Shape_Of("compute_total"));
     }
 
     #[test]
     fn Test_Upper_Snake_Should_Accept_A_Digit_Led_Segment_After_The_First()
     {
-        assert!(Case::UpperSnake.Conforms("Region_200"));
-        assert!(Case::UpperSnake.Conforms("Solve_Lp_2d"));
-        assert!(Case::UpperSnake.Conforms("Region_800x600"));
+        assert!(Case::UpperSnake.Is_The_Shape_Of("Region_200"));
+        assert!(Case::UpperSnake.Is_The_Shape_Of("Solve_Lp_2d"));
+        assert!(Case::UpperSnake.Is_The_Shape_Of("Region_800x600"));
     }
 
     #[test]
     fn Test_Upper_Snake_Should_Reject_A_Digit_Led_First_Segment()
     {
-        assert!(!Case::UpperSnake.Conforms("200_Region"));
+        assert!(!Case::UpperSnake.Is_The_Shape_Of("200_Region"));
     }
 
     #[test]
     fn Test_Upper_Snake_Should_Reject_A_Lower_Led_Segment()
     {
-        assert!(!Case::UpperSnake.Conforms("Compute_total"));
+        assert!(!Case::UpperSnake.Is_The_Shape_Of("Compute_total"));
     }
 
     #[test]
@@ -327,20 +327,20 @@ mod tests
     {
         for (_, name) in Worked_Examples()
         {
-            assert!(Case::Any.Conforms(name));
+            assert!(Case::Any.Is_The_Shape_Of(name));
         }
-        assert!(Case::Any.Conforms("literally anything"));
+        assert!(Case::Any.Is_The_Shape_Of("literally anything"));
     }
 
     #[test]
     fn Test_Conforms_Should_Reject_An_Empty_Name_For_Every_Case_But_Any()
     {
-        assert!(!Case::UpperCamel.Conforms(""));
-        assert!(!Case::LowerSnake.Conforms(""));
-        assert!(!Case::UpperSnake.Conforms(""));
-        assert!(!Case::ScreamingSnake.Conforms(""));
-        assert!(!Case::MixedSnake.Conforms(""));
-        assert!(Case::Any.Conforms(""));
+        assert!(!Case::UpperCamel.Is_The_Shape_Of(""));
+        assert!(!Case::LowerSnake.Is_The_Shape_Of(""));
+        assert!(!Case::UpperSnake.Is_The_Shape_Of(""));
+        assert!(!Case::ScreamingSnake.Is_The_Shape_Of(""));
+        assert!(!Case::MixedSnake.Is_The_Shape_Of(""));
+        assert!(Case::Any.Is_The_Shape_Of(""));
     }
 
     #[test]

@@ -178,7 +178,7 @@ fn Step_Inside_Double_Quote(index: usize, byte: u8, state: &mut RustLiteralState
 /// updates `*state` in place when the literal closes.
 fn Step_Inside_Raw_String(bytes: &[u8], index: usize, hashes: usize, state: &mut RustLiteralState) -> usize
 {
-    if Is_Quote_At(bytes, index) && Closes_Raw_String(bytes, index, hashes)
+    if Is_Quote_At(bytes, index) && Is_Closing_A_Raw_String(bytes, index, hashes)
     {
         *state = RustLiteralState::None;
         return index.saturating_add(1).saturating_add(hashes);
@@ -210,7 +210,7 @@ const ESCAPED_CHAR_LITERAL_LENGTH: usize = 4;
 
 /// Whether the `"` at `bytes[index]` closes a raw string that opened with `hashes` `#`s —
 /// the next `hashes` bytes must all be `#`.
-fn Closes_Raw_String(bytes: &[u8], index: usize, hashes: usize) -> bool
+fn Is_Closing_A_Raw_String(bytes: &[u8], index: usize, hashes: usize) -> bool
 {
     return (0..hashes).all(|offset| return bytes.get(index.saturating_add(1).saturating_add(offset)) == Some(&b'#'));
 }
@@ -310,7 +310,7 @@ fn Raw_String_Opener_Hashes(bytes: &[u8], index: usize) -> Option<usize>
     {
         return None;
     }
-    if Preceded_By_Identifier_Byte(bytes, index)
+    if Is_Preceded_By_An_Identifier_Byte(bytes, index)
     {
         return None;
     }
@@ -324,7 +324,7 @@ fn Raw_String_Opener_Hashes(bytes: &[u8], index: usize) -> Option<usize>
 
 /// Whether `bytes[index]` is immediately preceded by an identifier byte — an `r` ending an
 /// identifier (`foobar`) does not start a raw string, only one starting a word does.
-fn Preceded_By_Identifier_Byte(bytes: &[u8], index: usize) -> bool
+fn Is_Preceded_By_An_Identifier_Byte(bytes: &[u8], index: usize) -> bool
 {
     let previous_is_identifier_byte = bytes.get(index.saturating_sub(1)).is_some_and(|&before| return Is_Identifier_Byte(before));
 

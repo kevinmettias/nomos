@@ -138,7 +138,7 @@ fn Scoped_Row_Value(payload: &nomos_cap_limits_policy::LimitsPolicyPayload, scop
 /// it varies. This is [`crate::checks::Is_Test_Or_Example_Source`], the same exemption
 /// `concurrency_text` and `file_names` already read, applied here for the first time; it sits
 /// beside the policy's language filter rather than inside it because where a file sits and
-/// what it is written in are different questions, and `Policy_Accepts_Source` answers only
+/// what it is written in are different questions, and `Is_Policy_Accepting_Source` answers only
 /// the second.
 #[must_use]
 pub fn Check_Function_Arity_Policy(
@@ -151,7 +151,7 @@ pub fn Check_Function_Arity_Policy(
 
     for source in sources
     {
-        if !Policy_Accepts_Source(policy, source) || crate::checks::Is_Test_Or_Example_Source(source)
+        if !Is_Policy_Accepting_Source(policy, source) || crate::checks::Is_Test_Or_Example_Source(source)
         {
             continue;
         }
@@ -164,7 +164,7 @@ pub fn Check_Function_Arity_Policy(
     return findings;
 }
 
-fn Policy_Accepts_Source(policy: FunctionArityPolicy, source: &SourceFile) -> bool
+fn Is_Policy_Accepting_Source(policy: FunctionArityPolicy, source: &SourceFile) -> bool
 {
     return match policy.source
     {
@@ -196,12 +196,12 @@ fn Violations_In(policy: FunctionArityPolicy, payload: &SyntaxPayload, path: &st
         .iter()
         .filter(|item| return item.kind == FUNCTION)
         .filter_map(|item| return Function_Arity(&item.shape).map(|arity| return (item, arity)))
-        .filter(|(item, arity)| return Definitely_Too_Many_Value_Parameters(policy, item, *arity))
+        .filter(|(item, arity)| return Has_Definitely_Too_Many_Value_Parameters(policy, item, *arity))
         .map(|(item, arity)| return Violation_Finding(policy, path, item, arity))
         .collect();
 }
 
-fn Definitely_Too_Many_Value_Parameters(policy: FunctionArityPolicy, item: &PayloadItem, arity: u32) -> bool
+fn Has_Definitely_Too_Many_Value_Parameters(policy: FunctionArityPolicy, item: &PayloadItem, arity: u32) -> bool
 {
     let allowed = match policy.receiver_allowance
     {

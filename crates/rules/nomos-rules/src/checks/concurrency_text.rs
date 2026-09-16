@@ -218,7 +218,7 @@ fn Find_Ordering_Variant(code: &str, variant: Variant<'_>) -> Option<usize>
     while let Some(offset) = code.get(search_from..).and_then(|rest| return rest.find("Ordering"))
     {
         let start = search_from.saturating_add(offset);
-        if Has_Left_Boundary(bytes, start) && Match_Qualified_Variant(&code[start.saturating_add("Ordering".len())..], variant)
+        if Has_Left_Boundary(bytes, start) && Is_Matching_A_Qualified_Variant(&code[start.saturating_add("Ordering".len())..], variant)
         {
             return Some(start);
         }
@@ -240,7 +240,7 @@ fn Is_Ident_Byte(byte: u8) -> bool
 
 /// `rest` is everything after `"Ordering"`; this expects optional whitespace, `::`, optional
 /// whitespace, the variant name, then a non-identifier character or end of input.
-fn Match_Qualified_Variant(rest: &str, variant: Variant<'_>) -> bool
+fn Is_Matching_A_Qualified_Variant(rest: &str, variant: Variant<'_>) -> bool
 {
     let after_ws = rest.trim_start();
     let Some(after_colons) = after_ws.strip_prefix("::")
@@ -270,13 +270,13 @@ fn Has_Marker_Reason(lines: &[&str], index: usize) -> bool
         return true;
     }
 
-    return Marker_Reason_Found_Above(lines, index);
+    return Has_A_Marker_Reason_Above(lines, index);
 }
 
 /// Walks upward from `index` (exclusive) over a contiguous run of blank/comment/attribute
 /// lines, stopping at the first line that is not skippable -- returning whether a marker
 /// reason was found with a non-empty reason before that happened.
-fn Marker_Reason_Found_Above(lines: &[&str], index: usize) -> bool
+fn Has_A_Marker_Reason_Above(lines: &[&str], index: usize) -> bool
 {
     let mut cursor = index;
     while cursor > 0

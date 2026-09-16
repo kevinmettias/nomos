@@ -145,7 +145,7 @@ mod expiry_tests
         let before = Timestamp::From_Unix_Seconds(EXPIRY_SECONDS - 1);
 
         assert_eq!(waiver.Status_At(before), SuppressionStatus::Active);
-        assert!(waiver.Status_At(before).Suppresses());
+        assert!(waiver.Status_At(before).Is_Suppressing());
     }
 
     /// At the instant, it does not.
@@ -160,7 +160,7 @@ mod expiry_tests
         let exactly = Timestamp::From_Unix_Seconds(EXPIRY_SECONDS);
 
         assert_eq!(waiver.Status_At(exactly), SuppressionStatus::Expired);
-        assert!(!waiver.Status_At(exactly).Suppresses());
+        assert!(!waiver.Status_At(exactly).Is_Suppressing());
     }
 
     /// After it, it does not.

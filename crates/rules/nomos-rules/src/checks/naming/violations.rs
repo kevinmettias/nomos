@@ -27,7 +27,7 @@ pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> 
             continue;
         }
 
-        if !Conforms(case, item.Own_Name())
+        if !Is_The_Shape_Of(case, item.Own_Name())
         {
             let violation = Violation_Finding(path, item);
             findings.push(violation);
@@ -83,11 +83,11 @@ fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
 /// unused," orthogonal to whichever case a repository configures and not something
 /// `README.md`'s Conventions section speaks to.
 #[must_use]
-fn Conforms(case: Case, name: &str) -> bool
+fn Is_The_Shape_Of(case: Case, name: &str) -> bool
 {
     let name = name.strip_prefix('_').unwrap_or(name);
 
-    return case.Conforms(name);
+    return case.Is_The_Shape_Of(name);
 }
 
 #[cfg(test)]
@@ -97,7 +97,7 @@ mod tests
 
     mod casing
     {
-        use super::Conforms;
+        use super::Is_The_Shape_Of;
         use nomos_cap_naming_policy::Case;
 
         /// Exhaustive `Case::UpperSnake` behavior — every segment shape, digits, empty
@@ -107,15 +107,15 @@ mod tests
         #[test]
         fn Test_A_Single_Leading_Underscore_Should_Be_Stripped_Before_Judging()
         {
-            assert!(Conforms(Case::UpperSnake, "_Unused"));
-            assert!(!Conforms(Case::UpperSnake, "_unused"));
+            assert!(Is_The_Shape_Of(Case::UpperSnake, "_Unused"));
+            assert!(!Is_The_Shape_Of(Case::UpperSnake, "_unused"));
         }
 
         #[test]
         fn Test_Conforms_Should_Delegate_To_Whichever_Case_Is_Resolved()
         {
-            assert!(Conforms(Case::LowerSnake, "as_str"));
-            assert!(!Conforms(Case::UpperSnake, "as_str"));
+            assert!(Is_The_Shape_Of(Case::LowerSnake, "as_str"));
+            assert!(!Is_The_Shape_Of(Case::UpperSnake, "as_str"));
         }
     }
 

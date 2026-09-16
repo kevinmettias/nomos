@@ -65,7 +65,7 @@ fn Has_Nounset(lines: &[&str]) -> bool
             continue;
         }
 
-        if Fields_Enable_Nounset(&fields)
+        if Is_Fields_Enabling_Nounset(&fields)
         {
             return true;
         }
@@ -114,7 +114,7 @@ fn Unquoted_Hash_Index(line: &str) -> Option<usize>
 
 /// Whether `fields` (a `set ...` line's whitespace-split words) enables nounset in any
 /// spelling: the long `-o nounset`, or a short-flag group that contains `u`.
-fn Fields_Enable_Nounset(fields: &[&str]) -> bool
+fn Is_Fields_Enabling_Nounset(fields: &[&str]) -> bool
 {
     for (index, field) in fields.iter().enumerate().skip(1)
     {

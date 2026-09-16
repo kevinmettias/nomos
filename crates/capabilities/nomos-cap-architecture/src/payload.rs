@@ -81,7 +81,7 @@ impl ArchitecturePayload
     /// repository divides itself into and has not yet placed anything, which is a different
     /// claim from declaring nothing.
     #[must_use]
-    pub fn Declares_An_Architecture(&self) -> bool
+    pub fn Has_An_Architecture(&self) -> bool
     {
         return !self.components.is_empty();
     }
@@ -111,7 +111,7 @@ impl ArchitecturePayload
     /// permission gets `false` for one, which is how this workspace's own declaration keeps
     /// peers from naming each other without that rule being written here.
     #[must_use]
-    pub fn Permits(&self, from: Depending<'_>, to: Depended<'_>) -> bool
+    pub fn Is_Permitted(&self, from: Depending<'_>, to: Depended<'_>) -> bool
     {
         return self
             .permissions
@@ -125,7 +125,7 @@ impl ArchitecturePayload
     /// blanket exemption for a pair -- which is also why the two ends are [`Depending`] and
     /// [`Depended`] rather than two `&str`s, as [`Self::Permits`]'s own doc says.
     #[must_use]
-    pub fn Excepts(&self, from: Depending<'_>, to: Depended<'_>) -> bool
+    pub fn Is_Excepted(&self, from: Depending<'_>, to: Depended<'_>) -> bool
     {
         return self
             .exceptions

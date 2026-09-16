@@ -38,7 +38,7 @@ fn Path_Attribute_Findings_In(source: &SourceFile) -> Vec<Finding>
         let code = Code_Prefix(line);
         if let Some(value) = Path_Attribute_Value(&code)
         {
-            if Path_Is_Absolute_Or_Escaping(value)
+            if Is_Path_Absolute_Or_Escaping(value)
             {
                 let finding = Finding_For_Line(
                     source,
@@ -64,7 +64,7 @@ fn Path_Attribute_Value(code: &str) -> Option<&str>
     return after_first_quote.get(..second_quote);
 }
 
-fn Path_Is_Absolute_Or_Escaping(value: &str) -> bool
+fn Is_Path_Absolute_Or_Escaping(value: &str) -> bool
 {
     let path = std::path::Path::new(value);
     if path.is_absolute()
@@ -72,12 +72,12 @@ fn Path_Is_Absolute_Or_Escaping(value: &str) -> bool
         return true;
     }
 
-    return Relative_Path_Escapes_Its_Own_Subtree(path);
+    return Is_Relative_Path_Escaping_Its_Own_Subtree(path);
 }
 
 /// Walks a relative path's components, tracking how many directories deep it has descended,
 /// and reports whether a `..` ever climbs back above the starting point.
-fn Relative_Path_Escapes_Its_Own_Subtree(path: &std::path::Path) -> bool
+fn Is_Relative_Path_Escaping_Its_Own_Subtree(path: &std::path::Path) -> bool
 {
     let mut depth = 0usize;
     for component in path.components()

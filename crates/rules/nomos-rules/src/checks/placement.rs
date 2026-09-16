@@ -50,7 +50,7 @@ fn Package_Mismatch_Finding(source: &SourceFile) -> Option<Finding>
 
     let package = Non_Main_Package_Name(&source.text)?;
     let directory = Normalized_Directory_Name(&source.path)?;
-    if Package_Matches_Directory(&package, Directory(&directory))
+    if Is_Package_Matching_Directory(&package, Directory(&directory))
     {
         return None;
     }
@@ -93,7 +93,7 @@ struct Directory<'a>(&'a str);
 
 /// Whether `package` names `directory` -- exactly, or as the external test package
 /// `<directory>_test`.
-fn Package_Matches_Directory(package: &str, directory: Directory<'_>) -> bool
+fn Is_Package_Matching_Directory(package: &str, directory: Directory<'_>) -> bool
 {
     let directory = directory.0;
 

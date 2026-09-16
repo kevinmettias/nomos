@@ -163,7 +163,7 @@ fn Dispatched_Correction<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environ
     correction: &crate::CorrectionBody, platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant,
 ) -> nomos_correction_orchestration::CorrectionOutcome
 {
-    let command = CorrectionCommand { root: correction.root.clone(), commit: correction.commit.Commits() };
+    let command = CorrectionCommand { root: correction.root.clone(), commit: correction.commit.Is_A_Commit() };
     let environment = CorrectionEnvironment { variant: variant.clone(), launcher: platform.launcher, filesystem: platform.filesystem, environment: platform.environment };
 
     return Run_Correction(Some(correction.sources.clone()), environment, &command);

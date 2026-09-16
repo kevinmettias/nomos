@@ -88,10 +88,10 @@ fn Has_Go_Type_Case(item: &PayloadItem, exported_case: Case, unexported_case: Ca
 
     if item.Is_Public()
     {
-        return exported_case.Conforms(name);
+        return exported_case.Is_The_Shape_Of(name);
     }
 
-    return unexported_case.Conforms(name);
+    return unexported_case.Is_The_Shape_Of(name);
 }
 
 /// One Go type whose name does not carry the case its visibility requires.

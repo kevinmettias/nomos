@@ -79,13 +79,13 @@ fn Has_Marker_Reason(lines: &[&str], index: usize) -> bool
         return true;
     }
 
-    return Marker_Reason_Found_Above(lines, index);
+    return Has_A_Marker_Reason_Above(lines, index);
 }
 
 /// Walks upward from `index` (exclusive) over a contiguous run of blank/comment/attribute
 /// lines, stopping at the first line that is not skippable -- returning whether a marker
 /// reason was found with a non-empty reason before that happened.
-fn Marker_Reason_Found_Above(lines: &[&str], index: usize) -> bool
+fn Has_A_Marker_Reason_Above(lines: &[&str], index: usize) -> bool
 {
     let mut cursor = index;
     while cursor > 0

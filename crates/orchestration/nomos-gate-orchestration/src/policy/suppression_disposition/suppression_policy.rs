@@ -31,7 +31,7 @@ impl SuppressionPolicy
         return self
             .suppressions
             .iter()
-            .find(|suppression| return suppression.Is_Applicable_To(finding) && suppression.Status_At(now).Suppresses());
+            .find(|suppression| return suppression.Is_Applicable_To(finding) && suppression.Status_At(now).Is_Suppressing());
     }
 
     /// The dispositions that would have applied to `finding` but have expired.

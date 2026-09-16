@@ -22,8 +22,8 @@ pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Completed { comp
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Failed { completed: Vec<StepOutcome>, index: usize, error: DispatchError, }
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Refused { completed: Vec<StepOutcome>, index: usize, }
 pub fn nomos_workflow_orchestration::CheckBody::New(root: PathBuf, sources: Vec<SourceFile>, selected: Vec<RuleId>) -> Self
-pub fn nomos_workflow_orchestration::CommitIntent::Commits(self) -> bool
 pub fn nomos_workflow_orchestration::CommitIntent::From_Flag(flag: bool) -> Self
+pub fn nomos_workflow_orchestration::CommitIntent::Is_A_Commit(self) -> bool
 pub fn nomos_workflow_orchestration::CorrectionBody::New(root: PathBuf, sources: Vec<SourceFile>, commit: CommitIntent) -> Self
 pub fn nomos_workflow_orchestration::GateBody::New(sources: Vec<SourceFile>, command: GateCommand) -> Self
 pub fn nomos_workflow_orchestration::Run<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> WorkflowOutcome

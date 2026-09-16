@@ -39,7 +39,7 @@ fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
             continue;
         }
 
-        if !Names_Behavior(item.Own_Name())
+        if !Is_Stating_An_Expectation(item.Own_Name())
         {
             let finding = Violation_Finding(path, item);
             findings.push(finding);
@@ -54,7 +54,7 @@ fn Is_Test_Function(item: &PayloadItem) -> bool
     return item.kind == FUNCTION && !item.Declares_No_Visibility() && item.Own_Name().starts_with(TEST_PREFIX);
 }
 
-fn Names_Behavior(name: &str) -> bool
+fn Is_Stating_An_Expectation(name: &str) -> bool
 {
     return name.contains(POSITIVE_EXPECTATION) || name.contains(NEGATIVE_EXPECTATION);
 }

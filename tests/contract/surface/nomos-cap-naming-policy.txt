@@ -18,8 +18,8 @@ pub enum variant nomos_cap_naming_policy::Scope::Language(String)
 pub enum variant nomos_cap_naming_policy::Scope::Repository
 pub fn nomos_cap_naming_policy::Capability() -> CapabilityId
 pub fn nomos_cap_naming_policy::Capability_Contract() -> CapabilityContract
-pub fn nomos_cap_naming_policy::Case::Conforms(self, name: &str) -> bool
 pub fn nomos_cap_naming_policy::Case::From_Label(label: &str) -> Option<Self>
+pub fn nomos_cap_naming_policy::Case::Is_The_Shape_Of(self, name: &str) -> bool
 pub fn nomos_cap_naming_policy::Encode_Payload(payload: &NamingPolicyPayload) -> Vec<u8>
 pub fn nomos_cap_naming_policy::Parse_Payload(bytes: &[u8]) -> Result<NamingPolicyPayload, Refusal>
 pub fn nomos_cap_naming_policy::Payload_Schema() -> SchemaId

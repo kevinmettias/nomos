@@ -72,7 +72,7 @@ const NESTING_DEPTH_MAX_KEY: &str = "nesting-depth-max";
 const CONSTRUCT_KEYWORDS: [ConstructKeyword<'static>; 5] =
     [ConstructKeyword("if"), ConstructKeyword("while"), ConstructKeyword("for"), ConstructKeyword("loop"), ConstructKeyword("match")];
 
-/// One of the keywords above, as a value rather than a bare `&str`: [`Opens_Construct`] takes
+/// One of the keywords above, as a value rather than a bare `&str`: [`Is_Opening_A_Construct`] takes
 /// it beside the line it is looked for in, and two bare `&str`s in adjacent positions are
 /// transposable at a call site with nothing to catch it.
 #[derive(Clone, Copy)]
@@ -195,7 +195,7 @@ impl<'a> NestingWalk<'a>
         {
             self.Judge_Open_Function();
         }
-        if self.open.is_none() && Opens_A_Function(&code)
+        if self.open.is_none() && Is_Opening_A_Function(&code)
         {
             self.open = Some(self.Opened_Scan(opened));
         }
@@ -272,7 +272,7 @@ fn Nesting_Finding(source: &SourceFile, breach: &Breach) -> Finding
 }
 
 /// Whether this line declares a function, past any modifiers it carries.
-fn Opens_A_Function(code: &str) -> bool
+fn Is_Opening_A_Function(code: &str) -> bool
 {
     let mut rest = code.trim_start();
 
@@ -321,7 +321,7 @@ fn Consider_Line(scan: &mut FunctionScan, code: &str, position: LinePosition)
 fn Level_Opened_By(code: &str, open_constructs: usize) -> Option<usize>
 {
     let (rest, continues_a_decision) = Past_Else(Construct_Start(code))?;
-    let keyword = CONSTRUCT_KEYWORDS.iter().find(|keyword| return Opens_Construct(rest, **keyword))?;
+    let keyword = CONSTRUCT_KEYWORDS.iter().find(|keyword| return Is_Opening_A_Construct(rest, **keyword))?;
 
     if continues_a_decision && keyword.0 == "if"
     {
@@ -392,7 +392,7 @@ fn Without_Loop_Label(code: &str) -> &str
 /// Whether `code` opens `keyword` as a construct rather than as part of a longer name — and,
 /// for `for`, not as the higher-ranked `for<'lifetime>` of a `where` clause, which is a
 /// binder and not a loop.
-fn Opens_Construct(code: &str, keyword: ConstructKeyword<'_>) -> bool
+fn Is_Opening_A_Construct(code: &str, keyword: ConstructKeyword<'_>) -> bool
 {
     let Some(after_keyword) = code.strip_prefix(keyword.0)
     else

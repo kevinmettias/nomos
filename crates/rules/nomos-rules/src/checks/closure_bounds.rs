@@ -109,33 +109,33 @@ enum ClosureBoundShape
 
 fn Closure_Bound_Shape(code: &str) -> Option<ClosureBoundShape>
 {
-    if !Names_A_Closure_Trait_Call(code)
+    if !Is_Naming_A_Closure_Trait_Call(code)
     {
         return None;
     }
-    if Boxes_A_Dyn_Closure(code)
+    if Is_Boxing_A_Dyn_Closure(code)
     {
         return Some(ClosureBoundShape::BoxedDyn);
     }
-    if Widens_With_An_Extra_Bound(code)
+    if Is_Widening_With_An_Extra_Bound(code)
     {
         return Some(ClosureBoundShape::ExtraBound);
     }
-    if Opens_A_Public_Function_Signature(code)
+    if Is_Opening_A_Public_Function_Signature(code)
     {
         return Some(ClosureBoundShape::PublicApi);
     }
     return None;
 }
 
-fn Names_A_Closure_Trait_Call(code: &str) -> bool
+fn Is_Naming_A_Closure_Trait_Call(code: &str) -> bool
 {
-    return CLOSURE_TRAIT_CALLS.iter().any(|call| return Contains_With_Left_Boundary(code, *call));
+    return CLOSURE_TRAIT_CALLS.iter().any(|call| return Is_Containing_With_Left_Boundary(code, *call));
 }
 
 /// Whether `needle` occurs in `haystack` at a position not itself inside a longer
 /// identifier — `MyFn(` does not name a closure trait call, `impl Fn(` does.
-fn Contains_With_Left_Boundary(haystack: &str, needle: CallSpelling<'_>) -> bool
+fn Is_Containing_With_Left_Boundary(haystack: &str, needle: CallSpelling<'_>) -> bool
 {
     let mut searched_from = 0usize;
 
@@ -143,7 +143,7 @@ fn Contains_With_Left_Boundary(haystack: &str, needle: CallSpelling<'_>) -> bool
     {
         let start = searched_from.saturating_add(offset);
 
-        if start == 0 || !Continues_An_Identifier(haystack, start.saturating_sub(1))
+        if start == 0 || !Is_Continuing_An_Identifier(haystack, start.saturating_sub(1))
         {
             return true;
         }
@@ -165,7 +165,7 @@ const CLOSURE_TRAIT_CALLS: [CallSpelling<'static>; 3] =
 #[derive(Clone, Copy)]
 struct CallSpelling<'a>(&'a str);
 
-fn Boxes_A_Dyn_Closure(code: &str) -> bool
+fn Is_Boxing_A_Dyn_Closure(code: &str) -> bool
 {
     for wrapper in BOXED_CLOSURE_WRAPPERS
     {
@@ -174,10 +174,10 @@ fn Boxes_A_Dyn_Closure(code: &str) -> bool
         while let Some(offset) = code.get(searched_from..).and_then(|rest| return rest.find(wrapper))
         {
             let start = searched_from.saturating_add(offset);
-            let has_left_boundary = start == 0 || !Continues_An_Identifier(code, start.saturating_sub(1));
+            let has_left_boundary = start == 0 || !Is_Continuing_An_Identifier(code, start.saturating_sub(1));
             let after = code.get(start.saturating_add(wrapper.len())..).unwrap_or("");
 
-            if has_left_boundary && Opens_On_A_Dyn_Closure(after)
+            if has_left_boundary && Is_Opening_On_A_Dyn_Closure(after)
             {
                 return true;
             }
@@ -191,7 +191,7 @@ fn Boxes_A_Dyn_Closure(code: &str) -> bool
 
 /// Whether `after` — the text right past a wrapper name — opens `<dyn Fn*(`, allowing the
 /// whitespace the original's patterns tolerate around `<` and after `dyn`.
-fn Opens_On_A_Dyn_Closure(after: &str) -> bool
+fn Is_Opening_On_A_Dyn_Closure(after: &str) -> bool
 {
     let Some(after) = after.trim_start().strip_prefix('<')
     else
@@ -208,7 +208,7 @@ fn Opens_On_A_Dyn_Closure(after: &str) -> bool
     return CLOSURE_TRAIT_CALLS.iter().any(|call| return after.starts_with(call.0));
 }
 
-fn Widens_With_An_Extra_Bound(code: &str) -> bool
+fn Is_Widening_With_An_Extra_Bound(code: &str) -> bool
 {
     let mut searched_from = 0usize;
 
@@ -219,7 +219,7 @@ fn Widens_With_An_Extra_Bound(code: &str) -> bool
 
         let widens = EXTRA_BOUND_KEYWORDS
             .iter()
-            .any(|keyword| return after.starts_with(keyword) && !Continues_An_Identifier(after, keyword.len()));
+            .any(|keyword| return after.starts_with(keyword) && !Is_Continuing_An_Identifier(after, keyword.len()));
 
         if widens
         {
@@ -239,7 +239,7 @@ const BOXED_CLOSURE_WRAPPERS: [&str; 3] = ["Box", "Arc", "Rc"];
 /// A `pub fn` whose own line also ascribes a type to something — the original's
 /// `\bwhere\b|:` gate, read as "this signature line already carries a colon", since a
 /// closure parameter named inline always does and a bare `where` never appears without one.
-fn Opens_A_Public_Function_Signature(code: &str) -> bool
+fn Is_Opening_A_Public_Function_Signature(code: &str) -> bool
 {
     return code.contains("pub fn ") && code.contains(':');
 }
@@ -337,7 +337,7 @@ fn Boxed_Closure_Finding(source: &SourceFile, line_number: usize) -> Finding
 }
 
 /// Whether the byte at `offset` is one an identifier can be made of.
-fn Continues_An_Identifier(text: &str, offset: usize) -> bool
+fn Is_Continuing_An_Identifier(text: &str, offset: usize) -> bool
 {
     return text.as_bytes().get(offset).is_some_and(|byte| return byte.is_ascii_alphanumeric() || *byte == b'_');
 }

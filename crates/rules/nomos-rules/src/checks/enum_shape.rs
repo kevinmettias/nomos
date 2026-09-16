@@ -148,7 +148,7 @@ fn Tuple_Variant_At_Line(line: &str, index: usize, scan: &mut DeclarationBlock) 
 
     let variant = Variant_At_Line(line, index, scan);
 
-    scan.Advance(line);
+    scan.Try_Advance(line);
 
     return variant;
 }

@@ -158,7 +158,7 @@ fn Rust_Alias_At_Line(line: &str, index: usize, scan: &mut RustAliasScan) -> Opt
         return None;
     }
 
-    if Starts_A_New_Contract_Header(scan, line)
+    if Is_Starting_A_New_Contract_Header(scan, line)
     {
         scan.pending_contract = true;
     }
@@ -174,7 +174,7 @@ fn Rust_Alias_At_Line(line: &str, index: usize, scan: &mut RustAliasScan) -> Opt
 
 /// This line opens a new `impl`/`trait` body worth tracking: none is already open or about
 /// to open, and this line is itself the header.
-fn Starts_A_New_Contract_Header(scan: &RustAliasScan, line: &str) -> bool
+fn Is_Starting_A_New_Contract_Header(scan: &RustAliasScan, line: &str) -> bool
 {
     return scan.contract_open.is_none() && !scan.pending_contract && Is_Contract_Header(line);
 }
@@ -184,14 +184,14 @@ fn Starts_A_New_Contract_Header(scan: &RustAliasScan, line: &str) -> bool
 /// the keyword, not parse the rest.
 fn Is_Contract_Header(line: &str) -> bool
 {
-    return Contains_Word(line, Word("impl")) || Contains_Word(line, Word("trait"));
+    return Is_Containing_Word(line, Word("impl")) || Is_Containing_Word(line, Word("trait"));
 }
 
-/// The literal word [`Contains_Word`] searches for, wrapped so its parameter position
+/// The literal word [`Is_Containing_Word`] searches for, wrapped so its parameter position
 /// cannot be transposed with `line` — the text being searched — with nothing to catch it.
 struct Word<'a>(&'a str);
 
-fn Contains_Word(line: &str, word: Word<'_>) -> bool
+fn Is_Containing_Word(line: &str, word: Word<'_>) -> bool
 {
     let bytes = line.as_bytes();
     let mut search_from = 0usize;
@@ -201,7 +201,7 @@ fn Contains_Word(line: &str, word: Word<'_>) -> bool
         let start = search_from.saturating_add(offset);
         let end = start.saturating_add(word.0.len());
 
-        if Has_Left_Boundary(bytes, start) && Right_Boundary_Ends_The_Word(line, end)
+        if Has_Left_Boundary(bytes, start) && Is_Right_Boundary_Ending_The_Word(line, end)
         {
             return true;
         }
@@ -224,7 +224,7 @@ fn Is_Ident_Byte(byte: u8) -> bool
 
 /// Whether `end` (the byte offset just past a candidate word match) sits at a word boundary
 /// — the line runs out there, or the next character does not continue an identifier.
-fn Right_Boundary_Ends_The_Word(line: &str, end: usize) -> bool
+fn Is_Right_Boundary_Ending_The_Word(line: &str, end: usize) -> bool
 {
     return line.get(end..).is_none_or(|rest| return !rest.starts_with(Is_Ident_Char));
 }

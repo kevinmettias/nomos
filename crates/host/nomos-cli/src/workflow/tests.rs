@@ -22,7 +22,7 @@ fn Test_Command_From_String_Arguments_Should_Parse_A_Correct_Run()
 
     let command = Command_From_String_Arguments(&arguments).expect("the argv literal above names exactly one body flag, which this parser accepts");
 
-    assert!(matches!(command.body, Body::Correction(ref correction) if correction.commit.Commits()), "{command:?}");
+    assert!(matches!(command.body, Body::Correction(ref correction) if correction.commit.Is_A_Commit()), "{command:?}");
 }
 
 #[test]

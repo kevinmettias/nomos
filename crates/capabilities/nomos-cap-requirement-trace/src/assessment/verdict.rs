@@ -61,7 +61,7 @@ impl Verdict
     /// decision anybody made, so demanding a record for it would demand a reason for
     /// something that has none. Its obligation is a gap instead — see [`Self::Partial`].
     #[must_use]
-    pub const fn Owes_A_Record(self) -> bool
+    pub const fn Has_A_Record_Obligation(self) -> bool
     {
         return matches!(self, Self::Diverges | Self::NotBinding);
     }
