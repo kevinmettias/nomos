@@ -189,6 +189,14 @@ mod tests
     use crate::Recorded;
     use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SchemaId, SnapshotId};
 
+    /// The seeds `Taken` derives its build variant and configuration from. Named so a
+    /// reader can see the two digests are deliberately different.
+    const BUILD_VARIANT_SEED: u8 = 2;
+    const CONFIGURATION_SEED: u8 = 3;
+    /// What `Taken(1)` leaves in the store: the one `Fact` record it carries, plus the
+    /// manifest commit itself.
+    const ENTRIES_AFTER_ONE_FACT_COMMIT: usize = 2;
+
     #[test]
     fn Test_For_Should_Open_An_Empty_Store()
     {
@@ -206,17 +214,17 @@ mod tests
     {
         let mut store = Observed();
 
-        let id = store.Commit(&Taken(1)).expect("commits");
+        let id = store.Commit(&Taken(1)).expect("Authority::Observed admits the Fact record Taken(1) carries");
 
         assert!(store.Read(id).is_ok());
-        assert!(store.Length() >= 2);
+        assert!(store.Length() >= ENTRIES_AFTER_ONE_FACT_COMMIT);
     }
 
     #[test]
     fn Test_Read_Should_Return_A_Committed_Bytes_By_Id()
     {
         let mut store = Observed();
-        let id = store.Commit(&Taken(1)).expect("commits");
+        let id = store.Commit(&Taken(1)).expect("Authority::Observed admits the Fact record Taken(1) carries");
 
         assert!(store.Read(id).is_ok());
     }
@@ -225,7 +233,7 @@ mod tests
     fn Test_Documents_Should_Expose_Every_Document_The_Store_Holds()
     {
         let mut store = Observed();
-        store.Commit(&Taken(1)).expect("commits");
+        store.Commit(&Taken(1)).expect("Authority::Observed admits the Fact record Taken(1) carries");
 
         assert_eq!(store.Documents().len(), store.Length());
     }
@@ -236,7 +244,7 @@ mod tests
         let mut store = Observed();
         assert_eq!(store.Length(), 0);
 
-        store.Commit(&Taken(1)).expect("commits");
+        store.Commit(&Taken(1)).expect("Authority::Observed admits the Fact record Taken(1) carries");
 
         assert!(store.Length() > 0);
     }
@@ -245,7 +253,7 @@ mod tests
     fn Test_Index_Should_Derive_When_None_Is_Cached()
     {
         let mut store = Observed();
-        store.Commit(&Taken(1)).expect("commits");
+        store.Commit(&Taken(1)).expect("Authority::Observed admits the Fact record Taken(1) carries");
         store.Drop_Index();
 
         assert!(!store.Index().expect("indexes").Is_Empty());
@@ -255,8 +263,8 @@ mod tests
     fn Test_Drop_Index_Should_Clear_The_Cached_Index()
     {
         let mut store = Observed();
-        store.Commit(&Taken(1)).expect("commits");
-        store.Index().expect("indexes");
+        store.Commit(&Taken(1)).expect("Authority::Observed admits the Fact record Taken(1) carries");
+        store.Index().expect("every document in the store is one Index::Derive can read");
 
         store.Drop_Index();
 
@@ -278,7 +286,7 @@ mod tests
     fn Test_Unreachable_Should_Be_Empty_When_Every_Document_Is_Reachable()
     {
         let mut store = Observed();
-        store.Commit(&Taken(1)).expect("commits");
+        store.Commit(&Taken(1)).expect("Authority::Observed admits the Fact record Taken(1) carries");
 
         assert!(store.Unreachable().expect("indexes").is_empty());
     }
@@ -297,8 +305,8 @@ mod tests
     {
         return Commit::Under(
             SnapshotId::From_Digest(Digest(seed)),
-            BuildVariantId::From_Digest(Digest(2)),
-            ConfigurationId::From_Digest(Digest(3)),
+            BuildVariantId::From_Digest(Digest(BUILD_VARIANT_SEED)),
+            ConfigurationId::From_Digest(Digest(CONFIGURATION_SEED)),
             GenerationId::INITIAL,
         )
         .Recording(Fact("fn main() {}"));

@@ -44,6 +44,9 @@ mod tests
 {
     use super::*;
 
+    /// The attempt budget this case builds a `Retry` policy around.
+    const MAX_ATTEMPTS: u32 = 3;
+
     #[test]
     fn Test_No_Retry_Should_Not_Be_Retryable()
     {
@@ -54,7 +57,7 @@ mod tests
     fn Test_Is_Retryable_Should_Be_True_For_A_Retry_Policy()
     {
         let policy = RetryPolicy::Retry {
-            max_attempts: NonZeroU32::new(3).expect("3 is nonzero"),
+            max_attempts: NonZeroU32::new(MAX_ATTEMPTS).expect("MAX_ATTEMPTS is nonzero"),
             deduplication_token_required: false,
         };
 

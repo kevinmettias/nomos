@@ -168,7 +168,8 @@ mod tests
     fn Test_As_String_Slice_Should_Return_The_Digest_Text_Verbatim()
     {
         let text = "sha256:11fab7648eb13872bb5c78990b206a7bc3e25465a54d277edb730ca9eb72bd5d";
-        let hash = ContentHash::Parse(text).expect("valid");
+        let hash = ContentHash::Parse(text)
+            .expect("text is the sha256 prefix followed by 64 lower-case hex digits, the one shape Parse accepts");
 
         assert_eq!(hash.As_String_Slice(), text);
     }

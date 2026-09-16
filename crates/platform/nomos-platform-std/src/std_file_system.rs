@@ -135,10 +135,14 @@ mod tests
         let path = Temporary_Path("round-trip");
         let filesystem = StdFileSystem;
 
-        filesystem.Replace_Atomically(&path, "first").unwrap();
+        filesystem
+            .Replace_Atomically(&path, "first")
+            .expect("Temporary_Path cleared this path and the call creates any missing parent");
         assert_eq!(filesystem.Read_To_String(&path).unwrap(), "first");
 
-        filesystem.Replace_Atomically(&path, "second").unwrap();
+        filesystem
+            .Replace_Atomically(&path, "second")
+            .expect("the first replace created the directory this path sits in");
         assert_eq!(filesystem.Read_To_String(&path).unwrap(), "second");
 
         Removed_If_Present(&path);
@@ -152,7 +156,9 @@ mod tests
         let path = Temporary_Path("no-temp");
         let filesystem = StdFileSystem;
 
-        filesystem.Replace_Atomically(&path, "contents").unwrap();
+        filesystem
+            .Replace_Atomically(&path, "contents")
+            .expect("Temporary_Path cleared this path and the call creates any missing parent");
 
         assert!(!path.with_extension("tmp").exists());
         Removed_If_Present(&path);
@@ -181,7 +187,9 @@ mod tests
         path.push("ledger.json");
         let filesystem = StdFileSystem;
 
-        filesystem.Replace_Atomically(&path, "{}").unwrap();
+        filesystem
+            .Replace_Atomically(&path, "{}")
+            .expect("the call creates the two nested parent directories this path names");
 
         assert_eq!(filesystem.Read_To_String(&path).unwrap(), "{}");
         if let Some(root) = path.parent().and_then(Path::parent)
@@ -197,9 +205,13 @@ mod tests
     {
         let path = Temporary_Path("remove");
         let filesystem = StdFileSystem;
-        filesystem.Replace_Atomically(&path, "contents").unwrap();
+        filesystem
+            .Replace_Atomically(&path, "contents")
+            .expect("Temporary_Path cleared this path and the call creates any missing parent");
 
-        filesystem.Remove_File(&path).unwrap();
+        filesystem
+            .Remove_File(&path)
+            .expect("the replace on the previous line wrote the file this removes");
 
         assert!(!filesystem.Exists(&path));
     }

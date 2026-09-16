@@ -56,6 +56,9 @@ mod tests
 {
     use super::*;
 
+    /// How many edits `Test_Touched_Names_Every_Edited_Path` appends to its set.
+    const EDITS_APPENDED: usize = 2;
+
     #[test]
     fn Test_An_Empty_Change_Set_Touches_Nothing()
     {
@@ -74,7 +77,7 @@ mod tests
 
         assert_eq!(set.Touched(), BTreeSet::from(["a.rs", "b.rs"]));
         assert!(!set.Is_Empty());
-        assert_eq!(set.Edits().len(), 2);
+        assert_eq!(set.Edits().len(), EDITS_APPENDED);
     }
 
     #[test]

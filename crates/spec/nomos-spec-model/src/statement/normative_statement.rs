@@ -72,7 +72,8 @@ mod tests
     fn Sample(text: &str) -> NormativeStatement
     {
         return NormativeStatement {
-            id: StatementId::Parse("AGT-001").expect("valid"),
+            id: StatementId::Parse("AGT-001")
+                .expect("AGT-001 is an upper-case prefix, a dash and three digits, the one shape Parse accepts"),
             kind: StatementKind::Requirement,
             canonical_text: text.to_owned(),
             source_document: "x.md".to_owned(),

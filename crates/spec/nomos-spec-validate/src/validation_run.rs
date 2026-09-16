@@ -240,6 +240,14 @@ mod tests
     /// but not vacuous. Its exact value is not significant, only that it is not zero.
     const SOME_SUBJECTS_CHECKED: u32 = 10;
 
+    /// The subject count the `Summary` case asserts. Its expected line reads "over 5
+    /// subject(s)", so the fixture rule satisfied over a count must be this one.
+    const SUBJECTS_IN_THE_SUMMARY: u32 = 5;
+
+    /// How many rules [`One_Of_Each_Outcome`] takes from `DECLARED_RULES`. The third rule it
+    /// feeds is invented, so every declared rule but these is unregistered.
+    const RULES_THE_FIXTURE_REGISTERS: usize = 2;
+
     #[test]
     fn Test_Is_Passed_Should_Report_True_For_A_Complete_Satisfied_Run()
     {
@@ -331,7 +339,7 @@ mod tests
             run.Summary(),
             format!(
                 "3 rule(s) ran over 5 subject(s): 1 violation(s), 1 error(s), {} unregistered, 1 undeclared",
-                DECLARED_RULES.len() - 2
+                DECLARED_RULES.len() - RULES_THE_FIXTURE_REGISTERS
             )
         );
     }
@@ -348,7 +356,7 @@ mod tests
         return vec![
             Box::new(Fake(
                 *DECLARED_RULES.first().expect("DECLARED_RULES lists at least two rules"),
-                RuleOutcome::Satisfied { checked: 5 },
+                RuleOutcome::Satisfied { checked: SUBJECTS_IN_THE_SUMMARY },
             )),
             Box::new(Fake(
                 *DECLARED_RULES.get(1).expect("DECLARED_RULES lists at least two rules"),
@@ -390,7 +398,8 @@ mod tests
 
     fn Store() -> SpecificationStore
     {
-        return SpecificationStore::In_Memory().expect("opens");
+        return SpecificationStore::In_Memory()
+            .expect("an in-memory store has no file or schema to open against");
     }
 
     // Erased to the same `Box<dyn Rule>` the production caller passes, so these tests exercise

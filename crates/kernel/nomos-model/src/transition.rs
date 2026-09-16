@@ -54,6 +54,10 @@ mod tests
     use crate::IdentityTransition;
     use crate::IdentityTransitionKind;
 
+    /// The confidence these cases attach to an asserted probable rename. Any value in the
+    /// unit interval would do; neither case's subject is the confidence itself.
+    const ASSERTED_CONFIDENCE: f64 = 0.8;
+
     /// An unevidenced inference must be visibly unevidenced. This is the field a review
     /// looks at when asking why the system thinks two declarations are the same one.
     #[test]
@@ -61,7 +65,7 @@ mod tests
     {
         let asserted = IdentityTransition::Asserted(
             IdentityTransitionKind::ProbableRename,
-            Confidence::Of(0.8),
+            Confidence::Of(ASSERTED_CONFIDENCE),
         );
 
         assert!(!asserted.Is_Evidenced());
@@ -71,7 +75,7 @@ mod tests
     fn Test_Asserted_Should_Construct_A_Transition_With_No_Evidence()
     {
         let asserted =
-            IdentityTransition::Asserted(IdentityTransitionKind::ProbableRename, Confidence::Of(0.8));
+            IdentityTransition::Asserted(IdentityTransitionKind::ProbableRename, Confidence::Of(ASSERTED_CONFIDENCE));
 
         assert_eq!(asserted.kind, IdentityTransitionKind::ProbableRename);
         assert!(asserted.evidence.is_empty());

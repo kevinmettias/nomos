@@ -96,7 +96,8 @@ mod tests
         )])
         .expect("one candidate is a valid plan");
 
-        let rendered = String::from_utf8(plan.Preview().Rendered().to_vec()).expect("utf8");
+        let rendered = String::from_utf8(plan.Preview().Rendered().to_vec())
+            .expect("every byte of the buffer was appended from a format! string");
 
         assert!(rendered.contains("description\tfix a\n"));
         assert!(rendered.contains("edit\ta.rs\told\tnew\n"));

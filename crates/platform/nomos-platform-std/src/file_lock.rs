@@ -285,7 +285,7 @@ mod tests
         let path = Temporary_Path("uncontended");
         let lock = FileLock::At(&path);
 
-        let acquisition = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).unwrap();
+        let acquisition = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).expect("a path this test just created has no holder to contend with");
 
         assert!(acquisition.broke_stale.is_none());
         assert!(path.exists());
@@ -301,7 +301,7 @@ mod tests
         let path = Temporary_Path("contended");
         let lock = FileLock::At(&path);
 
-        let _held = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).unwrap();
+        let _held = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).expect("a path this test just created has no holder to contend with");
         let refused = lock.Acquire("agent-b", NO_WAIT, NEVER_STALE);
 
         assert!(matches!(refused, Err(LockError::Held { .. })));
@@ -314,7 +314,7 @@ mod tests
         let path = Temporary_Path("named-holder");
         let lock = FileLock::At(&path);
 
-        let _held = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).unwrap();
+        let _held = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).expect("a path this test just created has no holder to contend with");
 
         match lock.Acquire("agent-b", NO_WAIT, NEVER_STALE)
         {
@@ -334,13 +334,14 @@ mod tests
         let path = Temporary_Path("stale");
         let lock = FileLock::At(&path);
 
-        let abandoned = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).unwrap();
+        let abandoned = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).expect("a path this test just created has no holder to contend with");
         // Simulates a crashed holder: a killed process never runs the guard's destructor, so
         // forgetting it here (rather than dropping it) is what leaves the lock file behind for
         // the takeover this test is about to exercise.
         std::mem::forget(abandoned);
 
-        let taken_over = lock.Acquire("agent-b", NO_WAIT, ALWAYS_STALE).unwrap();
+        let taken_over = lock.Acquire("agent-b", NO_WAIT, ALWAYS_STALE)
+            .expect("the abandoned guard left a lock file older than this test's takeover threshold");
 
         let takeover = taken_over
             .broke_stale
@@ -362,7 +363,7 @@ mod tests
         let path = Temporary_Path("fresh");
         let lock = FileLock::At(&path);
 
-        let held = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).unwrap();
+        let held = lock.Acquire("agent-a", NO_WAIT, NEVER_STALE).expect("a path this test just created has no holder to contend with");
         let refused = lock.Acquire("agent-b", NO_WAIT, NEVER_STALE);
 
         assert!(
@@ -381,9 +382,11 @@ mod tests
         let path = Temporary_Path("clean");
         let lock = FileLock::At(&path);
 
-        let first = lock.Acquire("agent-a", NO_WAIT, ALWAYS_STALE).unwrap();
+        let first = lock.Acquire("agent-a", NO_WAIT, ALWAYS_STALE)
+            .expect("a path this test just created has no holder to contend with");
         drop(first);
-        let second = lock.Acquire("agent-b", NO_WAIT, ALWAYS_STALE).unwrap();
+        let second = lock.Acquire("agent-b", NO_WAIT, ALWAYS_STALE)
+            .expect("the guard dropped on the previous line released the path it held");
 
         assert!(
             second.broke_stale.is_none(),

@@ -56,16 +56,19 @@ mod tests
 {
     use super::*;
 
+    /// The counter value these cases wrap with `From_Raw` and read back with `Raw`.
+    const COUNTER_VALUE: u64 = 7;
+
     #[test]
     fn Test_From_Raw_Should_Wrap_The_Given_Counter_Value()
     {
-        assert_eq!(GenerationId::From_Raw(7).Raw(), 7);
+        assert_eq!(GenerationId::From_Raw(COUNTER_VALUE).Raw(), COUNTER_VALUE);
     }
 
     #[test]
     fn Test_Raw_Should_Return_The_Wrapped_Counter_Value()
     {
-        assert_eq!(GenerationId::From_Raw(7).Raw(), 7);
+        assert_eq!(GenerationId::From_Raw(COUNTER_VALUE).Raw(), COUNTER_VALUE);
         assert_eq!(GenerationId::INITIAL.Raw(), 0);
     }
 

@@ -296,9 +296,11 @@ mod tests
 
     fn Rendered_Record(markdown: &str) -> String
     {
-        let record = Parse_Record(markdown).expect("reads");
+        let record = Parse_Record(markdown)
+            .expect("every caller hands this a document whose heading repeats the title its front matter declares");
 
-        return Render_Record(&record.front_matter, &Segment(&record.body)).expect("renders");
+        return Render_Record(&record.front_matter, &Segment(&record.body))
+            .expect("the front matter and blocks both came from parsing the document this renders");
     }
 
     /// How many of `RECORD`'s blocks to keep for
@@ -320,7 +322,8 @@ mod tests
     #[test]
     fn Test_Rendering_Should_Use_The_Blocks_And_Not_The_Retained_Body()
     {
-        let record = Parse_Record(RECORD).expect("reads");
+        let record = Parse_Record(RECORD)
+            .expect("RECORD closes its front-matter fence and its heading repeats the title the front matter declares");
         let mut blocks = Segment(&record.body);
         blocks.truncate(BLOCKS_KEPT);
 
@@ -381,7 +384,8 @@ mod tests
     #[test]
     fn Test_A_Title_Holding_A_Colon_Should_Be_Refused_Rather_Than_Quoted()
     {
-        let record = Parse_Record(RECORD).expect("reads");
+        let record = Parse_Record(RECORD)
+            .expect("RECORD closes its front-matter fence and its heading repeats the title the front matter declares");
         let mut front_matter = record.front_matter;
         front_matter.title = "A title: with a colon".to_owned();
 
@@ -398,7 +402,8 @@ mod tests
     #[test]
     fn Test_An_Apostrophe_Inside_A_Title_Should_Be_Allowed()
     {
-        let record = Parse_Record(RECORD).expect("reads");
+        let record = Parse_Record(RECORD)
+            .expect("RECORD closes its front-matter fence and its heading repeats the title the front matter declares");
         let mut front_matter = record.front_matter;
         front_matter.title = "A document's validity".to_owned();
 
@@ -408,7 +413,8 @@ mod tests
     #[test]
     fn Test_A_Status_That_Reads_Back_As_Something_Else_Should_Be_Refused()
     {
-        let record = Parse_Record(RECORD).expect("reads");
+        let record = Parse_Record(RECORD)
+            .expect("RECORD closes its front-matter fence and its heading repeats the title the front matter declares");
 
         for (field, value) in Scalars_That_Read_Back_As_Something_Else()
         {

@@ -125,6 +125,10 @@ mod tests
     use super::*;
     use core::num::NonZeroU32;
 
+    /// The attempt budget every retry policy in these cases is built with. WF-012 reads
+    /// only whether a retry is covered, so the count itself is not what any case varies.
+    const MAX_ATTEMPTS: u32 = 3;
+
     #[test]
     fn Test_Is_Coherent_Should_Accept_A_Step_With_No_Retry()
     {
@@ -138,7 +142,7 @@ mod tests
     {
         let mut step = Base();
         step.retry = RetryPolicy::Retry {
-            max_attempts: NonZeroU32::new(3).expect("3 is nonzero"),
+            max_attempts: NonZeroU32::new(MAX_ATTEMPTS).expect("MAX_ATTEMPTS is nonzero"),
             deduplication_token_required: false,
         };
 
@@ -150,7 +154,7 @@ mod tests
     {
         let mut step = Base();
         step.retry = RetryPolicy::Retry {
-            max_attempts: NonZeroU32::new(3).expect("3 is nonzero"),
+            max_attempts: NonZeroU32::new(MAX_ATTEMPTS).expect("MAX_ATTEMPTS is nonzero"),
             deduplication_token_required: true,
         };
 
@@ -162,7 +166,7 @@ mod tests
     {
         let mut step = Base();
         step.retry = RetryPolicy::Retry {
-            max_attempts: NonZeroU32::new(3).expect("3 is nonzero"),
+            max_attempts: NonZeroU32::new(MAX_ATTEMPTS).expect("MAX_ATTEMPTS is nonzero"),
             deduplication_token_required: false,
         };
         step.compensation = Compensation::SelfCompensating;
@@ -178,7 +182,7 @@ mod tests
         let mut step = Base();
         step.idempotent = true;
         step.retry = RetryPolicy::Retry {
-            max_attempts: NonZeroU32::new(3).expect("3 is nonzero"),
+            max_attempts: NonZeroU32::new(MAX_ATTEMPTS).expect("MAX_ATTEMPTS is nonzero"),
             deduplication_token_required: false,
         };
 
@@ -193,7 +197,7 @@ mod tests
         let mut step = Base();
         step.has_side_effects = false;
         step.retry = RetryPolicy::Retry {
-            max_attempts: NonZeroU32::new(3).expect("3 is nonzero"),
+            max_attempts: NonZeroU32::new(MAX_ATTEMPTS).expect("MAX_ATTEMPTS is nonzero"),
             deduplication_token_required: false,
         };
 

@@ -83,6 +83,9 @@ mod tests
     use super::*;
     use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, Edit};
 
+    /// The weight `Choice_Over` records against `RankingCriterion::BehaviorPreservation`.
+    const BEHAVIOR_PRESERVATION_WEIGHT: u32 = 3;
+
     #[test]
     fn Test_New_Should_Carry_Every_Field_It_Was_Constructed_With()
     {
@@ -108,7 +111,7 @@ mod tests
     {
         let choice = Choice_Over(Candidate_Named("winner").Id(), Candidate_Named("loser").Id());
 
-        assert_eq!(choice.Objective_Weights(), [(RankingCriterion::BehaviorPreservation, 3)]);
+        assert_eq!(choice.Objective_Weights(), [(RankingCriterion::BehaviorPreservation, BEHAVIOR_PRESERVATION_WEIGHT)]);
     }
 
     #[test]
@@ -153,7 +156,7 @@ mod tests
         return CorrectionChoice::New(
             selected,
             ChoiceRecord {
-                objective_weights: vec![(RankingCriterion::BehaviorPreservation, 3)],
+                objective_weights: vec![(RankingCriterion::BehaviorPreservation, BEHAVIOR_PRESERVATION_WEIGHT)],
                 rejected_alternatives: vec![rejected],
                 predicted_side_effects: vec!["may slow the hot path".to_owned()],
                 unresolved_tradeoffs: vec!["unclear whether callers rely on the old error message".to_owned()],

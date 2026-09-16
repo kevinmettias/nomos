@@ -78,11 +78,19 @@ mod tests
 
     const FLOAT_TOLERANCE: f64 = 1e-9;
 
+    /// A confidence above the unit interval, to show `Of` clamps it down to 1.
+    const ABOVE_THE_UNIT_INTERVAL: f64 = 1.5;
+    /// A confidence below the unit interval, to show `Of` clamps it up to 0.
+    const BELOW_THE_UNIT_INTERVAL: f64 = 0.5;
+    /// The number `Test_Value_Should_Return_The_Number_A_Confidence_Was_Constructed_With`
+    /// asks `Value` to hand back unchanged.
+    const CARRIED_VALUE: f64 = 0.3;
+
     #[test]
     fn Test_Of_Should_Clamp_To_The_Unit_Interval()
     {
-        assert!(Confidence::Of(1.5).Value() <= 1.0);
-        assert!(Confidence::Of(-0.5).Value() >= 0.0);
+        assert!(Confidence::Of(ABOVE_THE_UNIT_INTERVAL).Value() <= 1.0);
+        assert!(Confidence::Of(-BELOW_THE_UNIT_INTERVAL).Value() >= 0.0);
     }
 
     /// A NaN confidence compares false against everything, including any threshold, so
@@ -100,6 +108,6 @@ mod tests
     #[test]
     fn Test_Value_Should_Return_The_Number_A_Confidence_Was_Constructed_With()
     {
-        assert!((Confidence::Of(0.3).Value() - 0.3).abs() < FLOAT_TOLERANCE);
+        assert!((Confidence::Of(CARRIED_VALUE).Value() - CARRIED_VALUE).abs() < FLOAT_TOLERANCE);
     }
 }

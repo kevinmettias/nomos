@@ -77,6 +77,13 @@ mod tests
     use super::*;
     use crate::Content_Digest;
 
+    /// How many subjects the run in these cases claims to have evaluated. Non-zero on
+    /// purpose: `Has_Effective_Coverage` is the property the other cases pin.
+    const EVALUATED: u64 = 3;
+    /// How many subjects `Test_Debt_Should_Exclude_Deliberate_Absences` claims to have
+    /// excluded, which is not the whole of `EVALUATED` and so is named separately.
+    const EXCLUDED: u64 = 2;
+
     /// The load-bearing case. A run that judged nothing must not be able to say it
     /// found nothing wrong.
     #[test]
@@ -90,8 +97,8 @@ mod tests
     fn Test_Debt_Should_Exclude_Deliberate_Absences()
     {
         let coverage = Coverage {
-            evaluated: 3,
-            excluded: 2,
+            evaluated: EVALUATED,
+            excluded: EXCLUDED,
             gaps: vec![
                 Gap_For_Subject("a.rs", Applicability::NotApplicable),
                 Gap_For_Subject("b.rs", Applicability::ConfigurationDisabled),
@@ -129,7 +136,7 @@ mod tests
     fn Test_Is_Complete_Should_Be_True_When_Only_Deliberate_Absences_Remain()
     {
         let coverage = Coverage {
-            evaluated: 3,
+            evaluated: EVALUATED,
             excluded: 1,
             gaps: vec![CoverageGap {
                 subject: Subject_Named("a.rs"),
@@ -147,7 +154,7 @@ mod tests
     fn Test_Agent_Required_Should_Be_A_Gap_That_Is_Not_Debt()
     {
         let coverage = Coverage {
-            evaluated: 3,
+            evaluated: EVALUATED,
             excluded: 1,
             gaps: vec![CoverageGap {
                 subject: Subject_Named("a.rs"),
@@ -157,7 +164,7 @@ mod tests
 
         assert_eq!(coverage.Debt().count(), 0, "no provider is missing");
         assert_eq!(coverage.Agent_Required().count(), 1);
-        assert_eq!(coverage.evaluated, 3, "a model has not judged it");
+        assert_eq!(coverage.evaluated, EVALUATED, "a model has not judged it");
         assert!(
             !coverage.Is_Complete(),
             "a subject nobody judged must not read as examined"

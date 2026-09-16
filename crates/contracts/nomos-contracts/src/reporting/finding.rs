@@ -156,6 +156,10 @@ mod tests
     use super::*;
     use crate::Digest128;
 
+    /// The byte `Example_Finding` fills its subject digest with. Any single repeated byte
+    /// would do; naming it keeps the digest's content out of the fixture's logic position.
+    const SUBJECT_DIGEST_BYTE: u8 = 7;
+
     #[test]
     fn Test_Can_Fail_A_Build_Should_Be_True_For_An_Evaluated_Blocking_Finding()
     {
@@ -256,7 +260,7 @@ mod tests
     {
         return Finding {
             rule: RuleId::New("completeness-mirror"),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([7; Digest128::BYTE_LENGTH])),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([SUBJECT_DIGEST_BYTE; Digest128::BYTE_LENGTH])),
             subject_name: "Table::All".to_owned(),
             applicability,
             evidence: EvidenceClass::Derived,

@@ -108,6 +108,11 @@ mod tests
     use crate::DocumentKind;
     use nomos_contracts::{Digest128, SchemaId};
 
+    /// The seeds `Empty_Commit` derives its build variant and configuration from. Named so
+    /// a reader can see the two digests are deliberately different.
+    const BUILD_VARIANT_SEED: u8 = 2;
+    const CONFIGURATION_SEED: u8 = 3;
+
     #[test]
     fn Test_Under_Should_Start_A_Commit_With_No_Records()
     {
@@ -130,7 +135,7 @@ mod tests
     {
         let commit = Empty_Commit().Recording(Fact("fn main() {}"));
 
-        let encoded = commit.Encode().expect("encodes");
+        let encoded = commit.Encode().expect("Manifest holds only schema strings and digest fields, which serde_json encodes");
         let manifest = Commit::Decode(&encoded).expect("reconstructs");
 
         assert_eq!(manifest.schema, COMMIT_SCHEMA);
@@ -160,8 +165,8 @@ mod tests
     {
         return Commit::Under(
             SnapshotId::From_Digest(Digest(1)),
-            BuildVariantId::From_Digest(Digest(2)),
-            ConfigurationId::From_Digest(Digest(3)),
+            BuildVariantId::From_Digest(Digest(BUILD_VARIANT_SEED)),
+            ConfigurationId::From_Digest(Digest(CONFIGURATION_SEED)),
             GenerationId::INITIAL,
         );
     }

@@ -127,6 +127,18 @@ mod tests
     use super::*;
     use std::time::{Duration, Instant};
 
+    /// The bytes the length case drains. The count it asserts is this slice's own length,
+    /// so the bytes and the number cannot drift apart.
+    const COUNTED_BYTES: &[u8] = b"0123456789";
+
+    /// A byte no UTF-8 sequence contains, placed between valid bytes so the lossy decode
+    /// has something on either side to preserve.
+    const NOT_UTF8_BYTE: u8 = 0xFF;
+
+    /// How long a case waits for its reader thread before calling it a hang. The source is
+    /// a `Cursor` that has already yielded end of file, so this bound is never approached.
+    const SETTLE_BOUND_SECONDS: u64 = 5;
+
     #[test]
     fn Test_Reading_Should_Collect_Everything_The_Source_Produces()
     {
@@ -150,11 +162,11 @@ mod tests
     #[test]
     fn Test_Length_Should_Report_Bytes_Collected_So_Far()
     {
-        let source = std::io::Cursor::new(b"0123456789".to_vec());
+        let source = std::io::Cursor::new(COUNTED_BYTES.to_vec());
 
         let drain = Awaited(Drain::Reading(source));
 
-        assert_eq!(drain.Length(), 10);
+        assert_eq!(drain.Length(), COUNTED_BYTES.len());
     }
 
     #[test]
@@ -162,7 +174,7 @@ mod tests
     {
         // Deliberately invalid UTF-8 -- `read_to_string` would refuse this whole buffer
         // and lose everything else the process wrote alongside it.
-        let source = std::io::Cursor::new(vec![b'o', b'k', 0xFF, b'!']);
+        let source = std::io::Cursor::new(vec![b'o', b'k', NOT_UTF8_BYTE, b'!']);
 
         let drain = Awaited(Drain::Reading(source));
 
@@ -182,8 +194,11 @@ mod tests
         let started = Instant::now();
         while !drain.Is_Finished()
         {
-            assert!(started.elapsed() < Duration::from_secs(5), "the drain never finished");
-            std::thread::sleep(TEST_POLL_INTERVAL); // flakiness: allow: same poll wait.rs's real Launcher uses
+            assert!(
+                started.elapsed() < Duration::from_secs(SETTLE_BOUND_SECONDS),
+                "the drain never finished"
+            );
+            std::thread::sleep(TEST_POLL_INTERVAL);
         }
 
         return drain;

@@ -65,6 +65,14 @@ mod tests
     use super::*;
     use std::time::Duration;
 
+    /// The time limit this fixture allows a program that echoes one word. Generous because
+    /// the value is a bound on a hang, not a measurement of anything.
+    const ECHO_BOUND_SECONDS: u64 = 5;
+
+    /// How long a case waits for its drain before calling it a hang. The child has already
+    /// been waited on, so this bound is never approached.
+    const SETTLE_BOUND_SECONDS: u64 = 5;
+
     #[test]
     fn Test_Spawned_With_Streams_Should_Capture_The_Childs_Own_Output()
     {
@@ -94,7 +102,7 @@ mod tests
             vec!["sh".to_owned(), "-c".to_owned(), format!("echo {word}")]
         };
 
-        return Command::New(argv, Duration::from_secs(5));
+        return Command::New(argv, Duration::from_secs(ECHO_BOUND_SECONDS));
     }
 
     /// How often this test's own wait loop re-checks a drain, distinct from
@@ -107,8 +115,11 @@ mod tests
         let started = std::time::Instant::now();
         while drain.is_some_and(|drain| return !drain.Is_Finished())
         {
-            assert!(started.elapsed() < Duration::from_secs(5), "the drain never finished");
-            std::thread::sleep(TEST_POLL_INTERVAL); // flakiness: allow: same poll wait.rs's real Launcher uses
+            assert!(
+                started.elapsed() < Duration::from_secs(SETTLE_BOUND_SECONDS),
+                "the drain never finished"
+            );
+            std::thread::sleep(TEST_POLL_INTERVAL);
         }
     }
 }

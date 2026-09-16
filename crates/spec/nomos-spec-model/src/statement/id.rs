@@ -89,7 +89,8 @@ mod tests
     #[test]
     fn Test_As_String_Slice_Should_Return_The_Identifier_Verbatim()
     {
-        let id = Id::Parse("AGT-001").expect("valid");
+        let id = Id::Parse("AGT-001")
+            .expect("AGT-001 is an upper-case prefix, a dash and three digits, the one shape Parse accepts");
 
         assert_eq!(id.As_String_Slice(), "AGT-001");
     }

@@ -174,14 +174,28 @@ mod tests
     /// undisposed by default.
     const DOCUMENT: &str = "---\nid: X\n---\n# Title\n\nOne.\n\n## Section\n\nTwo.\n";
 
+    /// The four blocks in [`DOCUMENT`], where a count is what `Counted_Rows` and
+    /// `RuleOutcome`'s `checked` field carry it as.
+    const BLOCKS_IN_DOCUMENT: u32 = 4;
+
+    /// The same four blocks where a slice's `len()` is what the case compares, which is a
+    /// `usize`.
+    const BLOCKS_IN_DOCUMENT_LENGTH: usize = 4;
+
+    /// How many rows the verdict cases claim to have judged. The number is the case's own
+    /// premise -- `Verdict_From_Violations` never inspects it -- so nothing downstream
+    /// depends on its value.
+    const CHECKED_IN_THESE_CASES: u32 = 3;
+
     #[test]
     fn Test_Counted_Rows_Should_Count_The_Table_It_Is_Asked_About()
     {
         let store = Ingested();
 
-        let blocks = Counted_Rows(&store, Table::SourceBlocks).expect("counts");
+        let blocks = Counted_Rows(&store, Table::SourceBlocks)
+            .expect("Ingested ran on this store, so the source_blocks table this counts exists");
 
-        assert_eq!(blocks, 4, "two headings and two prose paragraphs");
+        assert_eq!(blocks, BLOCKS_IN_DOCUMENT, "two headings and two prose paragraphs");
     }
 
     #[test]
@@ -196,20 +210,20 @@ mod tests
                 detail: "named by this test's query".to_owned(),
             });
         })
-        .expect("queries");
+        .expect("source_blocks is a column of the table Ingested created on this store");
 
-        assert_eq!(violations.len(), 4, "one violation per block row the query named");
+        assert_eq!(violations.len(), BLOCKS_IN_DOCUMENT_LENGTH, "one violation per block row the query named");
     }
 
     #[test]
     fn Test_Verdict_From_Violations_Should_Report_Satisfied_Only_When_Nothing_Offends()
     {
         assert!(matches!(
-            Verdict_From_Violations(3, Vec::new()),
-            RuleOutcome::Satisfied { checked: 3 }
+            Verdict_From_Violations(CHECKED_IN_THESE_CASES, Vec::new()),
+            RuleOutcome::Satisfied { checked: CHECKED_IN_THESE_CASES }
         ));
 
-        let violated = Verdict_From_Violations(3, vec![Violation {
+        let violated = Verdict_From_Violations(CHECKED_IN_THESE_CASES, vec![Violation {
             subject: "s".to_owned(),
             detail: "d".to_owned(),
         }]);
@@ -234,7 +248,7 @@ mod tests
             },
         );
 
-        assert!(matches!(outcome, RuleOutcome::Violated(violations) if violations.len() == 4));
+        assert!(matches!(outcome, RuleOutcome::Violated(violations) if violations.len() == BLOCKS_IN_DOCUMENT_LENGTH));
     }
 
     #[test]
@@ -254,7 +268,7 @@ mod tests
             },
         );
 
-        assert!(matches!(outcome, RuleOutcome::Satisfied { checked: 4 }));
+        assert!(matches!(outcome, RuleOutcome::Satisfied { checked: BLOCKS_IN_DOCUMENT }));
     }
 
     #[test]
@@ -272,13 +286,15 @@ mod tests
             label: "block",
         });
 
-        assert!(matches!(outcome, RuleOutcome::Violated(violations) if violations.len() == 4));
+        assert!(matches!(outcome, RuleOutcome::Violated(violations) if violations.len() == BLOCKS_IN_DOCUMENT_LENGTH));
     }
 
     fn Ingested() -> SpecificationStore
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        Ingest_Source_Document(&mut store, "a.md", "v14.36", DOCUMENT).expect("ingests");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("an in-memory store has no file or schema to open against");
+        Ingest_Source_Document(&mut store, "a.md", "v14.36", DOCUMENT)
+            .expect("DOCUMENT is front matter over Markdown that this ingest reads");
         return store;
     }
 }

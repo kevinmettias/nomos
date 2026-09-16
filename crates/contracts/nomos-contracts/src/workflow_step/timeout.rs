@@ -32,6 +32,9 @@ mod tests
 {
     use super::*;
 
+    /// The declared second count this case builds a bounded timeout around.
+    const DECLARED_SECONDS: u32 = 30;
+
     #[test]
     fn Test_Unbounded_Should_Not_Be_Bounded()
     {
@@ -41,6 +44,6 @@ mod tests
     #[test]
     fn Test_Is_Bounded_Should_Be_True_When_Seconds_Are_Declared()
     {
-        assert!(Timeout::Seconds(NonZeroU32::new(30).expect("30 is nonzero")).Is_Bounded());
+        assert!(Timeout::Seconds(NonZeroU32::new(DECLARED_SECONDS).expect("DECLARED_SECONDS is nonzero")).Is_Bounded());
     }
 }

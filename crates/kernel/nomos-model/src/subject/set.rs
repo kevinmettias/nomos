@@ -167,6 +167,9 @@ mod tests
 
     const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 20;
 
+    /// How many subjects the sets in these cases are built from.
+    const MEMBER_COUNT: usize = 2;
+
     #[test]
     fn Test_Disjoint_Sets_Should_Permit_Concurrency()
     {
@@ -182,7 +185,7 @@ mod tests
     {
         let set = Set::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
 
-        assert_eq!(set.Members().count(), 2);
+        assert_eq!(set.Members().count(), MEMBER_COUNT);
         assert!(set.Members().any(|member| return *member == Subject_Named("a.rs")));
     }
 
@@ -219,7 +222,7 @@ mod tests
     {
         let set = Set::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
 
-        assert_eq!(set.Length(), 2);
+        assert_eq!(set.Length(), MEMBER_COUNT);
     }
 
     #[test]

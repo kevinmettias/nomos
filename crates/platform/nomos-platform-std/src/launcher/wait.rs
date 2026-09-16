@@ -53,7 +53,7 @@ fn Polled_Until_Settled(
         at: context.started,
     };
 
-    loop
+    return loop
     {
         if let Some(outcome) = Already_Exited(child, program)?
         {
@@ -66,7 +66,7 @@ fn Polled_Until_Settled(
         }
 
         std::thread::sleep(super::POLL_INTERVAL);
-    }
+    };
 }
 
 /// Whether the child has already exited, and with what outcome if so.
@@ -75,7 +75,7 @@ fn Polled_Until_Settled(
 /// as an error rather than folding into either outcome.
 fn Already_Exited(child: &mut std::process::Child, program: &str) -> Result<Option<ExitOutcome>, String>
 {
-    match child.try_wait()
+    return match child.try_wait()
     {
         Ok(Some(status)) =>
         {
@@ -208,11 +208,15 @@ mod tests
     use super::*;
     use std::time::Duration;
 
+    /// The wall bound this case gives the child: long enough that a `cmd /C exit 0` finishes
+    /// well inside it, so the wait ends on the child's own exit rather than on the bound.
+    const WALL_BOUND_SECONDS: u64 = 5;
+
     #[test]
     fn Test_Waited_For_Child_Should_Report_A_Clean_Exit()
     {
         let mut child = Spawned_Exiting_With(0);
-        let command = Command::New(Vec::new(), Duration::from_secs(5));
+        let command = Command::New(Vec::new(), Duration::from_secs(WALL_BOUND_SECONDS));
         let streams = Streams { stdout: None, stderr: None };
 
         let outcome = Waited_For_Child(&mut child, "nomos-platform-std-wait-test", &command, &streams)

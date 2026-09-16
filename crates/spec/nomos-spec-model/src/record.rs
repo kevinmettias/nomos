@@ -152,7 +152,8 @@ mod tests
     #[test]
     fn Test_Parse_Record_Should_Read_Its_Declared_Identity()
     {
-        let record = Parse_Record(RECORD).expect("reads");
+        let record = Parse_Record(RECORD)
+            .expect("RECORD closes its front-matter fence and its heading repeats the title the front matter declares");
 
         assert_eq!(record.front_matter.id, "D-129");
         assert_eq!(record.front_matter.kind, "decision");

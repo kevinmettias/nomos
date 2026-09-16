@@ -46,24 +46,37 @@ mod tests
 {
     use super::*;
 
+    /// The version the reader under test was built against.
+    const READER_VERSION: ContractVersion = ContractVersion::New(1, 3);
+    /// One minor ahead of what `READER_VERSION` understands.
+    const A_NEWER_MINOR: u16 = 4;
+    /// A major line other than the reader's, at its first minor.
+    const A_DIFFERENT_MAJOR: u16 = 2;
+    /// A minor within a major line older than the reader's.
+    const AN_OLDER_MAJOR_MINOR: u16 = 9;
+
+    /// The major and minor `Test_New_Should_Construct_A_Version_From_Its_Major_And_Minor` builds from.
+    const CONSTRUCTED_MAJOR: u16 = 4;
+    const CONSTRUCTED_MINOR: u16 = 2;
+
     #[test]
     fn Test_Can_Read_Should_Accept_Its_Own_And_Older_Minors_Only()
     {
-        let reader = ContractVersion::New(1, 3);
+        let reader = READER_VERSION;
 
-        assert!(reader.Can_Read(ContractVersion::New(1, 3)));
+        assert!(reader.Can_Read(READER_VERSION));
         assert!(reader.Can_Read(ContractVersion::New(1, 0)));
-        assert!(!reader.Can_Read(ContractVersion::New(1, 4)));
-        assert!(!reader.Can_Read(ContractVersion::New(2, 0)));
-        assert!(!reader.Can_Read(ContractVersion::New(0, 9)));
+        assert!(!reader.Can_Read(ContractVersion::New(1, A_NEWER_MINOR)));
+        assert!(!reader.Can_Read(ContractVersion::New(A_DIFFERENT_MAJOR, 0)));
+        assert!(!reader.Can_Read(ContractVersion::New(0, AN_OLDER_MAJOR_MINOR)));
     }
 
     #[test]
     fn Test_New_Should_Construct_A_Version_From_Its_Major_And_Minor()
     {
-        let version = ContractVersion::New(4, 2);
+        let version = ContractVersion::New(CONSTRUCTED_MAJOR, CONSTRUCTED_MINOR);
 
-        assert_eq!(version.major, 4);
-        assert_eq!(version.minor, 2);
+        assert_eq!(version.major, CONSTRUCTED_MAJOR);
+        assert_eq!(version.minor, CONSTRUCTED_MINOR);
     }
 }

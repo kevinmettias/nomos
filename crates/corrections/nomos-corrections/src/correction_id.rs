@@ -42,10 +42,16 @@ mod tests
 {
     use super::*;
 
+    /// The one byte each of these cases fills a digest with. Two cases need two digests
+    /// that differ, so they use two different bytes.
+    const CARRIED_DIGEST_BYTE: u8 = 7;
+    const FIRST_DIGEST_BYTE: u8 = 1;
+    const SECOND_DIGEST_BYTE: u8 = 2;
+
     #[test]
     fn Test_From_Digest_Should_Construct_An_Id_Carrying_That_Digest()
     {
-        let digest = Digest128::From_Bytes([7u8; Digest128::BYTE_LENGTH]);
+        let digest = Digest128::From_Bytes([CARRIED_DIGEST_BYTE; Digest128::BYTE_LENGTH]);
         let id = CorrectionId::From_Digest(digest);
 
         assert_eq!(id.Digest(), digest);
@@ -54,8 +60,8 @@ mod tests
     #[test]
     fn Test_Digest_Should_Return_What_The_Id_Was_Constructed_From()
     {
-        let first = Digest128::From_Bytes([1u8; Digest128::BYTE_LENGTH]);
-        let second = Digest128::From_Bytes([2u8; Digest128::BYTE_LENGTH]);
+        let first = Digest128::From_Bytes([FIRST_DIGEST_BYTE; Digest128::BYTE_LENGTH]);
+        let second = Digest128::From_Bytes([SECOND_DIGEST_BYTE; Digest128::BYTE_LENGTH]);
 
         assert_ne!(CorrectionId::From_Digest(first).Digest(), CorrectionId::From_Digest(second).Digest());
     }

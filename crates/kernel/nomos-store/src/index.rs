@@ -196,13 +196,21 @@ mod tests
     use crate::{Recorded, COMMIT_SCHEMA};
     use nomos_contracts::{BuildVariantId, ConfigurationId, GenerationId, SchemaId};
 
+    /// The seed of a snapshot distinct from the first one a case builds, so the two commits
+    /// share no document and neither looks reachable from the other's snapshot.
+    const OTHER_SNAPSHOT_SEED: u8 = 4;
+    /// The seeds `Taken` derives its build variant and configuration from. Named so a
+    /// reader can see the two digests are deliberately different.
+    const BUILD_VARIANT_SEED: u8 = 2;
+    const CONFIGURATION_SEED: u8 = 3;
+
     #[test]
     fn Test_Derive_Should_Reach_Every_Recorded_Document()
     {
         let commit = Taken(1);
         let documents = Documents_From(&commit);
 
-        let index = Index::Derive(&documents).expect("derives");
+        let index = Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads");
         let reachable = index.In_Snapshot(commit.snapshot);
 
         for id in documents.keys()
@@ -215,7 +223,7 @@ mod tests
     fn Test_Of_Kind_Should_Group_Documents_By_Kind()
     {
         let documents = Documents_From(&Taken(1));
-        let index = Index::Derive(&documents).expect("derives");
+        let index = Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads");
 
         assert_eq!(index.Of_Kind(DocumentKind::Fact).len(), 1);
         assert_eq!(index.Of_Kind(DocumentKind::Commit).len(), 1);
@@ -225,7 +233,7 @@ mod tests
     fn Test_Of_Schema_Should_Group_Documents_By_Schema()
     {
         let documents = Documents_From(&Taken(1));
-        let index = Index::Derive(&documents).expect("derives");
+        let index = Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads");
 
         assert_eq!(index.Of_Schema("nomos.syntax.v1").len(), 1);
         assert!(index.Of_Schema("nomos.absent.v1").is_empty());
@@ -235,12 +243,12 @@ mod tests
     fn Test_In_Snapshot_Should_Not_Return_Members_Of_A_Different_Snapshot()
     {
         let first = Taken(1);
-        let second = Taken(4);
+        let second = Taken(OTHER_SNAPSHOT_SEED);
         let second_documents = Documents_From(&second);
         let mut documents = Documents_From(&first);
         documents.extend(second_documents.clone());
 
-        let index = Index::Derive(&documents).expect("derives");
+        let index = Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads");
         let first_members = index.In_Snapshot(first.snapshot);
 
         for id in second_documents.keys()
@@ -254,7 +262,7 @@ mod tests
     {
         let commit = Taken(1);
         let documents = Documents_From(&commit);
-        let index = Index::Derive(&documents).expect("derives");
+        let index = Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads");
 
         assert_eq!(index.Commits_Under(commit.snapshot).len(), 1);
     }
@@ -264,7 +272,7 @@ mod tests
     {
         let commit = Taken(1);
         let documents = Documents_From(&commit);
-        let index = Index::Derive(&documents).expect("derives");
+        let index = Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads");
 
         assert_eq!(index.Snapshots(), vec![commit.snapshot]);
     }
@@ -276,14 +284,14 @@ mod tests
 
         let documents = Documents_From(&Taken(1));
 
-        assert!(!Index::Derive(&documents).expect("derives").Is_Empty());
+        assert!(!Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads").Is_Empty());
     }
 
     #[test]
     fn Test_Digest_Should_Change_When_The_Indexed_Documents_Change()
     {
-        let first = Index::Derive(&Documents_From(&Taken(1))).expect("derives");
-        let second = Index::Derive(&Documents_From(&Taken(4))).expect("derives");
+        let first = Index::Derive(&Documents_From(&Taken(1))).expect("every Commit-kind document here is a manifest Commit::Decode reads");
+        let second = Index::Derive(&Documents_From(&Taken(OTHER_SNAPSHOT_SEED))).expect("every Commit-kind document here is a manifest Commit::Decode reads");
 
         assert_ne!(first.Digest(), second.Digest());
     }
@@ -306,8 +314,8 @@ mod tests
     {
         return Commit::Under(
             SnapshotId::From_Digest(Seeded_Digest(seed)),
-            BuildVariantId::From_Digest(Seeded_Digest(2)),
-            ConfigurationId::From_Digest(Seeded_Digest(3)),
+            BuildVariantId::From_Digest(Seeded_Digest(BUILD_VARIANT_SEED)),
+            ConfigurationId::From_Digest(Seeded_Digest(CONFIGURATION_SEED)),
             GenerationId::INITIAL,
         )
         .Recording(Fact(&format!("fn seed_{seed}() {{}}")));
@@ -325,7 +333,7 @@ mod tests
         let manifest = Document::New(
             DocumentKind::Commit,
             SchemaId::New(COMMIT_SCHEMA),
-            commit.Encode().expect("encodes"),
+            commit.Encode().expect("Manifest holds only schema strings and digest fields, which serde_json encodes"),
         );
         documents.insert(manifest.Id(), manifest);
 

@@ -210,12 +210,32 @@ mod tests
     /// A document with front matter, read here both with a leading mark and without one.
     const DOCUMENT: &str = "---\nid: D-045\n---\n\n# Runtime capture boundary\n\nBody.\n";
 
+    /// What `"---\nid: X\n---\n# Title\n\nBody.\n"` holds once its front matter is dropped:
+    /// the heading and the prose under it, and nothing for the fence itself.
+    const BLOCKS_AFTER_FRONT_MATTER: usize = 2;
+
+    /// What `"one\ntwo\n\nthree\n"` holds: the consecutive lines merge into one block, and
+    /// the blank line ends it, leaving a second.
+    const BLOCKS_ACROSS_TWO_PARAGRAPHS: usize = 2;
+
+    /// The position of `### C` in `"# A\n\n## B\n\n### C\n\n## D\n"`, counting from zero.
+    const THIRD_BLOCK_INDEX: usize = 2;
+
+    /// The position of `## D`, the block that pops the third heading back off the path.
+    const FOURTH_BLOCK_INDEX: usize = 3;
+
+    /// The depth of `### C`'s heading path: `A`, `B` and `C` itself.
+    const DEPTH_OF_A_THIRD_LEVEL_HEADING: usize = 3;
+
+    /// The ordinals a document's blocks carry, in order, when none was merged away.
+    const ORDINALS_IN_DOCUMENT_ORDER: [u32; 4] = [1, 2, 3, 4];
+
     #[test]
     fn Test_Front_Matter_Should_Not_Become_A_Block()
     {
         let blocks = Segment("---\nid: X\n---\n# Title\n\nBody.\n");
 
-        assert_eq!(blocks.len(), 2);
+        assert_eq!(blocks.len(), BLOCKS_AFTER_FRONT_MATTER);
         assert_eq!(blocks.first().map(|block| block.kind), Some(BlockKind::Heading));
         assert_eq!(blocks.get(1).map(|block| block.text.as_str()), Some("Body."));
     }
@@ -262,7 +282,7 @@ mod tests
     {
         let blocks = Segment("one\ntwo\n\nthree\n");
 
-        assert_eq!(blocks.len(), 2);
+        assert_eq!(blocks.len(), BLOCKS_ACROSS_TWO_PARAGRAPHS);
         assert_eq!(blocks.first().map(|block| block.text.as_str()), Some("one\ntwo"));
     }
 
@@ -282,9 +302,12 @@ mod tests
         let paths: Vec<&[String]> = blocks.iter().map(|block| block.heading_path.as_slice()).collect();
 
         assert_eq!(paths.first().map(|path| path.len()), Some(1));
-        assert_eq!(paths.get(2).map(|path| path.len()), Some(3));
         assert_eq!(
-            paths.get(3).map(|path| path.join("/")),
+            paths.get(THIRD_BLOCK_INDEX).map(|path| path.len()),
+            Some(DEPTH_OF_A_THIRD_LEVEL_HEADING)
+        );
+        assert_eq!(
+            paths.get(FOURTH_BLOCK_INDEX).map(|path| path.join("/")),
             Some("A/D".to_owned())
         );
     }
@@ -304,6 +327,6 @@ mod tests
         let blocks = Segment("# A\n\nbody\n\n## B\n\nmore\n");
         let ordinals: Vec<u32> = blocks.iter().map(|block| block.ordinal).collect();
 
-        assert_eq!(ordinals, vec![1, 2, 3, 4]);
+        assert_eq!(ordinals, ORDINALS_IN_DOCUMENT_ORDER);
     }
 }

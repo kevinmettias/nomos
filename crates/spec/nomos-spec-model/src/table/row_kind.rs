@@ -65,6 +65,10 @@ mod tests
 {
     use super::*;
 
+    /// How many kinds [`RowKind::All`] lists: one per variant, so a variant added to the
+    /// enum without being added to `All` fails the case below.
+    const ROW_KIND_COUNT: usize = 3;
+
     #[test]
     fn Test_Label_Should_Match_The_Stored_Spelling()
     {
@@ -88,7 +92,7 @@ mod tests
     {
         let kinds = RowKind::All();
 
-        assert_eq!(kinds.len(), 3);
+        assert_eq!(kinds.len(), ROW_KIND_COUNT);
         assert!(kinds.contains(&RowKind::Header));
         assert!(kinds.contains(&RowKind::Content));
         assert!(kinds.contains(&RowKind::Separator));
