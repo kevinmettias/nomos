@@ -89,7 +89,7 @@ mod tests
     fn Empty_Assembly() -> Assembly
     {
         return Assembly {
-            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
+            store: SpecificationStore::In_Memory().expect("Connection::open_in_memory() opens a database with no file behind it"),
             read: Vec::new(),
             absent: Vec::new(),
         };

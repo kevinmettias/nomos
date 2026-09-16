@@ -214,8 +214,10 @@ mod tests
         let mut assembly = Empty_Assembly();
         let root = std::env::temp_dir().join("nomos-spec-orchestration-volumes-real-root");
         let directory = root.join(crate::corpus::roots::DOMAIN_VOLUMES);
-        std::fs::create_dir_all(&directory).expect("creates");
-        std::fs::write(directory.join("a.md"), "# A\n\n| C | M |\n| --- | --- |\n| x | y |\n").expect("writes");
+        std::fs::create_dir_all(&directory)
+            .expect("std::env::temp_dir() exists and this process may create directories under it");
+        std::fs::write(directory.join("a.md"), "# A\n\n| C | M |\n| --- | --- |\n| x | y |\n")
+            .expect("the create_dir_all above creates the directory this write targets");
 
         Ingest_Volumes(&mut assembly, &root, "v14.36");
 
@@ -246,7 +248,8 @@ mod tests
     {
         let mut assembly = Empty_Assembly();
         let directory = std::env::temp_dir().join("nomos-spec-orchestration-volumes-under-empty");
-        std::fs::create_dir_all(&directory).expect("creates");
+        std::fs::create_dir_all(&directory)
+            .expect("std::env::temp_dir() exists and this process may create directories under it");
 
         let documents = Volumes_Under(&mut assembly, &directory);
 
@@ -259,8 +262,10 @@ mod tests
     {
         let mut assembly = Empty_Assembly();
         let directory = std::env::temp_dir().join("nomos-spec-orchestration-volumes-under-one");
-        std::fs::create_dir_all(&directory).expect("creates");
-        std::fs::write(directory.join("a.md"), "text").expect("writes");
+        std::fs::create_dir_all(&directory)
+            .expect("std::env::temp_dir() exists and this process may create directories under it");
+        std::fs::write(directory.join("a.md"), "text")
+            .expect("the create_dir_all above creates the directory this write targets");
 
         let documents = Volumes_Under(&mut assembly, &directory).expect("one markdown document");
 
@@ -272,10 +277,14 @@ mod tests
     fn Test_Read_Volumes_Should_Read_Every_Markdown_Entry_And_Name_The_Rest_Unreadable()
     {
         let directory = std::env::temp_dir().join("nomos-spec-orchestration-read-volumes");
-        std::fs::create_dir_all(&directory).expect("creates");
-        std::fs::write(directory.join("a.md"), "text a").expect("writes");
-        std::fs::write(directory.join("notes.txt"), "ignored").expect("writes");
-        let entries = std::fs::read_dir(&directory).expect("opens");
+        std::fs::create_dir_all(&directory)
+            .expect("std::env::temp_dir() exists and this process may create directories under it");
+        std::fs::write(directory.join("a.md"), "text a")
+            .expect("the create_dir_all above creates the directory this write targets");
+        std::fs::write(directory.join("notes.txt"), "ignored")
+            .expect("the create_dir_all above creates the directory this write targets");
+        let entries = std::fs::read_dir(&directory)
+            .expect("the create_dir_all above creates a directory this process may read");
 
         let read = Read_Volumes(entries);
 
@@ -287,7 +296,11 @@ mod tests
     #[test]
     fn Test_Read_Volume_Should_Insert_A_Markdown_File_Into_Documents()
     {
-        let read = Read_Volume_Fixture("nomos-spec-orchestration-read-volume-md", "a.md", "text");
+        let read = Read_Volume_Fixture(
+            ScratchName("nomos-spec-orchestration-read-volume-md"),
+            FileName("a.md"),
+            Contents("text"),
+        );
 
         assert_eq!(read.documents.get("a.md"), Some(&"text".to_owned()));
         assert!(read.unreadable.is_empty());
@@ -296,7 +309,11 @@ mod tests
     #[test]
     fn Test_Read_Volume_Should_Ignore_A_Non_Markdown_File()
     {
-        let read = Read_Volume_Fixture("nomos-spec-orchestration-read-volume-txt", "notes.txt", "text");
+        let read = Read_Volume_Fixture(
+            ScratchName("nomos-spec-orchestration-read-volume-txt"),
+            FileName("notes.txt"),
+            Contents("text"),
+        );
 
         assert!(read.documents.is_empty());
         assert!(read.unreadable.is_empty());
@@ -374,18 +391,40 @@ mod tests
         assert!(assembly.absent.is_empty(), "{:?}", assembly.absent);
     }
 
+    /// The scratch directory name one case of [`Read_Volume_Fixture`] reads in.
+    #[derive(Clone, Copy)]
+    struct ScratchName<'a>(&'a str);
+
+    /// The file name that case writes into the scratch directory.
+    #[derive(Clone, Copy)]
+    struct FileName<'a>(&'a str);
+
+    /// The text that file holds.
+    #[derive(Clone, Copy)]
+    struct Contents<'a>(&'a str);
+
     /// A single directory holding one file with `contents`, read through [`Read_Volume`] --
     /// the identical setup [`Test_Read_Volume_Should_Insert_A_Markdown_File_Into_Documents`]
     /// and [`Test_Read_Volume_Should_Ignore_A_Non_Markdown_File`] both need, differing only
     /// in which extension proves the dispatch. Returns [`Volumes`] -- the named pair
     /// [`Read_Volumes`] already carries for the identical shape -- rather than inventing a
     /// second, unnamed one.
-    fn Read_Volume_Fixture(scratch_name: &str, file_name: &str, contents: &str) -> Volumes
+    ///
+    /// The three positions are three types rather than three adjacent `&str`s, so a caller
+    /// that swapped the scratch name for the file name -- or either for the contents -- gets
+    /// a compile error instead of a fixture that silently reads the wrong thing.
+    fn Read_Volume_Fixture(
+        scratch_name: ScratchName<'_>,
+        file_name: FileName<'_>,
+        contents: Contents<'_>,
+    ) -> Volumes
     {
-        let directory = std::env::temp_dir().join(scratch_name);
-        std::fs::create_dir_all(&directory).expect("creates");
-        let path = directory.join(file_name);
-        std::fs::write(&path, contents).expect("writes");
+        let directory = std::env::temp_dir().join(scratch_name.0);
+        std::fs::create_dir_all(&directory)
+            .expect("std::env::temp_dir() exists and this process may create directories under it");
+        let path = directory.join(file_name.0);
+        std::fs::write(&path, contents.0)
+            .expect("the create_dir_all above creates the directory this write targets");
         let mut documents: BTreeMap<String, String> = BTreeMap::new();
         let mut unreadable: Vec<String> = Vec::new();
 
@@ -397,7 +436,7 @@ mod tests
     fn Empty_Assembly() -> Assembly
     {
         return Assembly {
-            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
+            store: SpecificationStore::In_Memory().expect("Connection::open_in_memory() opens a database with no file behind it"),
             read: Vec::new(),
             absent: Vec::new(),
         };

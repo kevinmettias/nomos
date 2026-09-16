@@ -113,7 +113,8 @@ mod colocated_tests
     {
         let request = CorpusRequest { variable: "A_CORPUS_VARIABLE".to_owned(), root: None, revision: DEFAULT_REVISION.to_owned() };
 
-        let assembly = Assemble_Corpus(&request).expect("assembles");
+        let assembly =
+            Assemble_Corpus(&request).expect("no corpus root is named, so seeding the embedded records is the only fallible step");
 
         assert!(
             assembly.store.Node_Summary("D-129").expect("queries").is_some(),

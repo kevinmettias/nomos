@@ -165,12 +165,17 @@ mod tests
     use nomos_spec_ingest::IngestError;
     use nomos_spec_store::SpecificationStore;
 
+    /// The count one formatting case passes. Named once because the call and the line it asserts
+    /// against have to agree on it, and two bare `3`s would let an edit to one drift from the other.
+    const CONTRIBUTED_STATEMENTS: u32 = 3;
+
     #[test]
     fn Test_Text_Of_Should_Read_A_File_That_Exists()
     {
         let mut assembly = Empty_Assembly();
         let path = std::env::temp_dir().join("nomos-spec-orchestration-layer-text-of.txt");
-        std::fs::write(&path, "the text").expect("writes");
+        std::fs::write(&path, "the text")
+            .expect("std::env::temp_dir() is an existing directory this process may write into");
 
         let text = Text_Of(&mut assembly, &Input_At(path));
 
@@ -216,7 +221,8 @@ mod tests
     {
         let mut assembly = Empty_Assembly();
         let path = std::env::temp_dir().join("nomos-spec-orchestration-layer-ingest-optional.txt");
-        std::fs::write(&path, "parsed text").expect("writes");
+        std::fs::write(&path, "parsed text")
+            .expect("std::env::temp_dir() is an existing directory this process may write into");
         let input = Input_At(path);
 
         let report = Ingest_Optional_Layer(
@@ -235,7 +241,8 @@ mod tests
     {
         let mut assembly = Empty_Assembly();
         let path = std::env::temp_dir().join("nomos-spec-orchestration-layer-ingest-optional-bad.txt");
-        std::fs::write(&path, "unparseable").expect("writes");
+        std::fs::write(&path, "unparseable")
+            .expect("std::env::temp_dir() is an existing directory this process may write into");
         let input = Input_At(path);
 
         let report = Ingest_Optional_Layer(
@@ -256,9 +263,9 @@ mod tests
         let mut assembly = Empty_Assembly();
         let input = Input_At(std::path::PathBuf::from("a/path.txt"));
 
-        Note_Contribution(&mut assembly, &input, 3, "statement(s)");
+        Note_Contribution(&mut assembly, &input, CONTRIBUTED_STATEMENTS, "statement(s)");
 
-        assert_eq!(assembly.read, vec!["3 statement(s) from a/path.txt".to_owned()]);
+        assert_eq!(assembly.read, vec![format!("{CONTRIBUTED_STATEMENTS} statement(s) from a/path.txt")]);
     }
 
     #[test]
@@ -266,7 +273,8 @@ mod tests
     {
         let mut assembly = Empty_Assembly();
         let root = std::env::temp_dir().join("nomos-spec-orchestration-layer-no-statements");
-        std::fs::create_dir_all(&root).expect("creates");
+        std::fs::create_dir_all(&root)
+            .expect("std::env::temp_dir() exists and this process may create directories under it");
 
         Ingest_Statement_File(&mut assembly, &root);
 
@@ -279,7 +287,8 @@ mod tests
     {
         let mut assembly = Empty_Assembly();
         let root = std::env::temp_dir().join("nomos-spec-orchestration-layer-no-catalog");
-        std::fs::create_dir_all(&root).expect("creates");
+        std::fs::create_dir_all(&root)
+            .expect("std::env::temp_dir() exists and this process may create directories under it");
 
         Ingest_Catalog_File(&mut assembly, &root);
 
@@ -303,7 +312,7 @@ mod tests
     fn Empty_Assembly() -> Assembly
     {
         return Assembly {
-            store: SpecificationStore::In_Memory().expect("an in-memory store always opens"),
+            store: SpecificationStore::In_Memory().expect("Connection::open_in_memory() opens a database with no file behind it"),
             read: Vec::new(),
             absent: Vec::new(),
         };
