@@ -98,7 +98,7 @@ pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Resul
 /// The declared document itself, once it is known to be present and parsed.
 fn Declared_Architecture(declared: &serde_json::Value) -> Result<ArchitecturePayload, ArchitectureError>
 {
-    let components = Components(declared)?;
+    let components = Component_Names(declared)?;
     let membership = Membership_Rows(declared)?;
     let permissions = Permission_Rows(declared)?;
     let exceptions = Exception_Rows(declared)?;
@@ -108,7 +108,7 @@ fn Declared_Architecture(declared: &serde_json::Value) -> Result<ArchitecturePay
 }
 
 /// `components`, in the order the repository wrote them.
-fn Components(declared: &serde_json::Value) -> Result<Vec<String>, ArchitectureError>
+fn Component_Names(declared: &serde_json::Value) -> Result<Vec<String>, ArchitectureError>
 {
     let Some(listed) = declared.get("components")
     else
@@ -119,10 +119,10 @@ fn Components(declared: &serde_json::Value) -> Result<Vec<String>, ArchitectureE
     let Some(entries) = listed.as_array()
     else
     {
-        return Err(Refusal("components is not an array"));
+        return Err(Refusal_For_Key("components is not an array"));
     };
 
-    return entries.iter().map(|entry| return Name(entry, "components")).collect();
+    return entries.iter().map(|entry| return Single_Name(entry, "components")).collect();
 }
 
 /// `members`, sorted by package so the encoding does not depend on a JSON object's own order.
@@ -137,13 +137,13 @@ fn Membership_Rows(declared: &serde_json::Value) -> Result<Vec<Membership>, Arch
     let Some(entries) = listed.as_object()
     else
     {
-        return Err(Refusal("members is not an object"));
+        return Err(Refusal_For_Key("members is not an object"));
     };
 
     let mut rows = Vec::new();
     for (package, component) in entries
     {
-        let component = Name(component, "members")?;
+        let component = Single_Name(component, "members")?;
         rows.push(Membership { package: package.clone(), component });
     }
     rows.sort_by(|left, right| return left.package.cmp(&right.package));
@@ -154,7 +154,7 @@ fn Membership_Rows(declared: &serde_json::Value) -> Result<Vec<Membership>, Arch
 /// `permits`, flattened from `component -> [component]` into one row per admitted pair.
 fn Permission_Rows(declared: &serde_json::Value) -> Result<Vec<Permission>, ArchitectureError>
 {
-    let pairs = Pairs(declared, "permits")?;
+    let pairs = Name_Pairs(declared, "permits")?;
 
     return Ok(pairs
         .into_iter()
@@ -165,7 +165,7 @@ fn Permission_Rows(declared: &serde_json::Value) -> Result<Vec<Permission>, Arch
 /// `exceptions`, flattened from `package -> [package]` into one row per named pair.
 fn Exception_Rows(declared: &serde_json::Value) -> Result<Vec<Exception>, ArchitectureError>
 {
-    let pairs = Pairs(declared, "exceptions")?;
+    let pairs = Name_Pairs(declared, "exceptions")?;
 
     return Ok(pairs
         .into_iter()
@@ -185,13 +185,13 @@ fn Authority_Rows(declared: &serde_json::Value) -> Result<Vec<Authority>, Archit
     let Some(entries) = listed.as_object()
     else
     {
-        return Err(Refusal("authorities is not an object"));
+        return Err(Refusal_For_Key("authorities is not an object"));
     };
 
     let mut rows = Vec::new();
     for (package, doors) in entries
     {
-        let mut doors = Names(doors, "authorities")?;
+        let mut doors = Name_Array(doors, "authorities")?;
         doors.sort();
         rows.push(Authority { package: package.clone(), doors });
     }
@@ -206,7 +206,7 @@ fn Authority_Rows(declared: &serde_json::Value) -> Result<Vec<Authority>, Archit
 /// means stays each caller's own: [`Permission`] is between components and [`Exception`] is
 /// between packages, which is why the two rows are built by the two functions above rather
 /// than here.
-fn Pairs(declared: &serde_json::Value, key: &str) -> Result<Vec<(String, String)>, ArchitectureError>
+fn Name_Pairs(declared: &serde_json::Value, key: &str) -> Result<Vec<(String, String)>, ArchitectureError>
 {
     let Some(listed) = declared.get(key)
     else
@@ -222,15 +222,15 @@ fn Pairs(declared: &serde_json::Value, key: &str) -> Result<Vec<(String, String)
         });
     };
 
-    let mut pairs = Flatten(entries, key)?;
+    let mut pairs = Flattened_Name_Pairs(entries, key)?;
     pairs.sort();
 
     return Ok(pairs);
 }
 
 /// Every name declared under every key of one block, as `(from, to)` pairs -- the flattening
-/// [`Pairs`] does once its two refusals have been discharged.
-fn Flatten(
+/// [`Name_Pairs`] does once its two refusals have been discharged.
+fn Flattened_Name_Pairs(
     entries: &serde_json::Map<String, serde_json::Value>,
     key: &str,
 ) -> Result<Vec<(String, String)>, ArchitectureError>
@@ -238,7 +238,7 @@ fn Flatten(
     let mut pairs = Vec::new();
     for (from, targets) in entries
     {
-        for to in Names(targets, &format!("{key}"))?
+        for to in Name_Array(targets, &format!("{key}"))?
         {
             pairs.push((from.clone(), to));
         }
@@ -248,7 +248,7 @@ fn Flatten(
 }
 
 /// An array of names, refused when it is not one.
-fn Names(value: &serde_json::Value, key: &str) -> Result<Vec<String>, ArchitectureError>
+fn Name_Array(value: &serde_json::Value, key: &str) -> Result<Vec<String>, ArchitectureError>
 {
     let Some(entries) = value.as_array()
     else
@@ -258,11 +258,11 @@ fn Names(value: &serde_json::Value, key: &str) -> Result<Vec<String>, Architectu
         });
     };
 
-    return entries.iter().map(|entry| return Name(entry, key)).collect();
+    return entries.iter().map(|entry| return Single_Name(entry, key)).collect();
 }
 
 /// One name, refused when it is not a string.
-fn Name(value: &serde_json::Value, key: &str) -> Result<String, ArchitectureError>
+fn Single_Name(value: &serde_json::Value, key: &str) -> Result<String, ArchitectureError>
 {
     let Some(name) = value.as_str()
     else
@@ -276,7 +276,7 @@ fn Name(value: &serde_json::Value, key: &str) -> Result<String, ArchitectureErro
 }
 
 /// A refusal naming one key, for the cases whose message needs nothing but the key.
-fn Refusal(what: &str) -> ArchitectureError
+fn Refusal_For_Key(what: &str) -> ArchitectureError
 {
     return ArchitectureError {
         reason: format!("{ARCHITECTURE_JSON}'s {what}"),

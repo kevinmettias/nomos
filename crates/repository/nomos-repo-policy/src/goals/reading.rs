@@ -289,7 +289,7 @@ mod tests
     #[test]
     fn Test_Discover_Workspace_Should_Read_Goals_A_Ceiling_And_The_Subsystem_Mapping()
     {
-        let filesystem = Declaring(&serde_json::json!({
+        let filesystem = Declaring_Filesystem(&serde_json::json!({
             "goals": ["render", "simulate"],
             "max_subsystems_per_goal": SAMPLE_CEILING,
             "subsystems": [
@@ -306,14 +306,14 @@ mod tests
         let graphics = payload.subsystems.first().expect("asserted len 2 above");
         assert_eq!(graphics.name, "graphics");
         assert_eq!(graphics.goals, vec!["render".to_owned()]);
-        let utils = payload.subsystems.get(1).expect("asserted len 2 above");
-        assert!(utils.goals.is_empty(), "a part declaring no goals is the purposeless case, kept: {utils:?}");
+        let purposeless = payload.subsystems.get(1).expect("asserted len 2 above");
+        assert!(purposeless.goals.is_empty(), "a part declaring no goals is the purposeless case, kept: {purposeless:?}");
     }
 
     #[test]
     fn Test_Discover_Workspace_Should_Read_A_Ceiling_At_Or_Below_Zero_As_Unbounded()
     {
-        let filesystem = Declaring(&serde_json::json!({ "max_subsystems_per_goal": -1 }));
+        let filesystem = Declaring_Filesystem(&serde_json::json!({ "max_subsystems_per_goal": -1 }));
 
         let payload = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON");
 
@@ -323,7 +323,7 @@ mod tests
     #[test]
     fn Test_Discover_Workspace_Should_Skip_A_Subsystem_With_No_Name()
     {
-        let filesystem = Declaring(&serde_json::json!({
+        let filesystem = Declaring_Filesystem(&serde_json::json!({
             "subsystems": [{ "paths": ["src/orphan"] }, { "subsystem": "storage" }]
         }));
 
@@ -336,7 +336,7 @@ mod tests
     #[test]
     fn Test_Discover_Workspace_Should_Preserve_Declaration_Order()
     {
-        let filesystem = Declaring(&serde_json::json!({ "goals": ["zeta", "alpha"] }));
+        let filesystem = Declaring_Filesystem(&serde_json::json!({ "goals": ["zeta", "alpha"] }));
 
         let payload = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON");
 
@@ -356,7 +356,7 @@ mod tests
     #[test]
     fn Test_Discover_Workspace_Should_Refuse_A_Non_Array_Goals_Declaration()
     {
-        let filesystem = Declaring(&serde_json::json!({ "goals": "render" }));
+        let filesystem = Declaring_Filesystem(&serde_json::json!({ "goals": "render" }));
 
         let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("goals is a list");
 
@@ -370,7 +370,7 @@ mod tests
     #[test]
     fn Test_Discover_Workspace_Should_Refuse_A_Non_String_Goal()
     {
-        let filesystem = Declaring(&serde_json::json!({ "goals": [NON_STRING_SENTINEL] }));
+        let filesystem = Declaring_Filesystem(&serde_json::json!({ "goals": [NON_STRING_SENTINEL] }));
 
         let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a goal is a name");
 
@@ -380,7 +380,7 @@ mod tests
     #[test]
     fn Test_Discover_Workspace_Should_Name_Which_Goals_List_Was_Malformed()
     {
-        let filesystem = Declaring(&serde_json::json!({
+        let filesystem = Declaring_Filesystem(&serde_json::json!({
             "subsystems": [{ "subsystem": "graphics", "goals": [NON_STRING_SENTINEL] }]
         }));
 
@@ -396,7 +396,7 @@ mod tests
     #[test]
     fn Test_Discover_Workspace_Should_Refuse_A_Non_Integer_Ceiling()
     {
-        let filesystem = Declaring(&serde_json::json!({ "max_subsystems_per_goal": "many" }));
+        let filesystem = Declaring_Filesystem(&serde_json::json!({ "max_subsystems_per_goal": "many" }));
 
         let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a ceiling is a count");
 
@@ -406,7 +406,7 @@ mod tests
     #[test]
     fn Test_Discover_Workspace_Should_Refuse_A_Non_Array_Subsystems_Declaration()
     {
-        let filesystem = Declaring(&serde_json::json!({ "subsystems": {} }));
+        let filesystem = Declaring_Filesystem(&serde_json::json!({ "subsystems": {} }));
 
         let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("subsystems is a list");
 
@@ -416,7 +416,7 @@ mod tests
     #[test]
     fn Test_Discover_Workspace_Should_Refuse_One_Subsystem_Declared_Twice()
     {
-        let filesystem = Declaring(&serde_json::json!({
+        let filesystem = Declaring_Filesystem(&serde_json::json!({
             "subsystems": [{ "subsystem": "graphics" }, { "subsystem": "graphics" }]
         }));
 
@@ -428,14 +428,14 @@ mod tests
     #[test]
     fn Test_Discover_Workspace_Should_Declare_Nothing_For_A_File_Naming_None_Of_The_Three_Keys()
     {
-        let filesystem = Declaring(&serde_json::json!({ "suppression": {} }));
+        let filesystem = Declaring_Filesystem(&serde_json::json!({ "suppression": {} }));
 
         let payload = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON with no goal block");
 
         assert_eq!(payload, GoalsPolicyPayload::default());
     }
 
-    fn Declaring(value: &serde_json::Value) -> FakeFileSystem
+    fn Declaring_Filesystem(value: &serde_json::Value) -> FakeFileSystem
     {
         return FakeFileSystem { text: value.to_string() };
     }

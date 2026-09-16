@@ -81282,6 +81282,77 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-REPOSITORY",
+      "title": "The naming-clarity check reads zero, live and waived, over the repository territory",
+      "why": "The rust naming phase must report zero violations with minimal suppressions over every crate in crates/. crates/repository carries ten live naming-clarity findings and no waivers. Nine are single-word helper names judged by the rule that asks a function taking parameters to name its operation target, resource, or source of input; the tenth is a local binding named utils, which the vague-word vocabulary already rejects. Renaming them keeps the count at zero without adding a suppression and without weakening the vocabulary for the whole repository, which is the trade the abbreviations precedent OD-RULES-018 declined when it renamed five sites instead of adding env, doc and docs to the words policy.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/repository, and cargo check --workspace --all-targets reports no error.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/repository"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards/check.exe",
+          "-cwd",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/repository",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards/check.exe",
+          "-cwd",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/repository",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    34 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789585142,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1800dbb322e9fbf751a40271b083f25c5f39316c"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

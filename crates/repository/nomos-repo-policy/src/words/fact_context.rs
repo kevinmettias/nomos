@@ -24,7 +24,7 @@ pub fn Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, 
     return Ok(scaffolding::Materialize_Whole_Workspace(scaffolding::WholeWorkspaceFiling {
         subject: scaffolding::Workspace_Subject(),
         guarantee: Declared_Guarantee(),
-        identity: scaffolding::Identity(Capability(), CONTRACT_VERSION, PROVIDER, CONTRACT_VERSION),
+        identity: scaffolding::Declared_Identity(Capability(), CONTRACT_VERSION, PROVIDER, CONTRACT_VERSION),
         context,
         schema: Payload_Schema(),
         bytes: Encode_Payload(&payload),
@@ -60,7 +60,7 @@ mod tests
     #[test]
     fn Test_A_Fact_Key_Should_Depend_On_The_Guarantee()
     {
-        let identity = scaffolding::Identity(Capability(), CONTRACT_VERSION, PROVIDER, CONTRACT_VERSION);
+        let identity = scaffolding::Declared_Identity(Capability(), CONTRACT_VERSION, PROVIDER, CONTRACT_VERSION);
 
         scaffolding::test_support::Assert_Keys_File_Apart_By_Guarantee(&identity, Declared_Guarantee());
     }

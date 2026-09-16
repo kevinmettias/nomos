@@ -38,7 +38,7 @@ pub const fn Declared_Guarantee() -> Guarantee
 #[must_use]
 pub fn Provider_Offer() -> ProviderOffer
 {
-    return scaffolding::Offer(PROVIDER, Capability(), CONTRACT_VERSION, Declared_Guarantee());
+    return scaffolding::Provider_Offer(PROVIDER, Capability(), CONTRACT_VERSION, Declared_Guarantee());
 }
 
 #[cfg(test)]

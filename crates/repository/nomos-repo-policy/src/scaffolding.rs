@@ -70,7 +70,7 @@ use std::path::Path;
 /// guarantee -- the `ProviderOffer` shell every one of the five modules' own `guarantee.rs`
 /// built by hand, identically.
 #[must_use]
-pub(crate) fn Offer(provider: &str, capability: CapabilityId, version: ContractVersion, guarantee: Guarantee) -> ProviderOffer
+pub(crate) fn Provider_Offer(provider: &str, capability: CapabilityId, version: ContractVersion, guarantee: Guarantee) -> ProviderOffer
 {
     return ProviderOffer {
         provider: ProviderId::New(provider),
@@ -158,7 +158,7 @@ pub(crate) fn Materialize_Fact(subject: SubjectId, guarantee: Guarantee, filing:
 /// parameters stay separate rather than collapsing into one: every provider here happens to
 /// version itself with its own contract, and a provider that stops doing so must still be
 /// able to say so through this function without the function changing.
-pub(crate) fn Identity(
+pub(crate) fn Declared_Identity(
     capability: CapabilityId,
     contract_version: ContractVersion,
     provider: &str,
@@ -431,7 +431,7 @@ mod tests
         let capability = CapabilityId::New(CAPABILITY);
         let version = ContractVersion::New(1, 0);
 
-        let offer = Offer(PROVIDER, capability, version, Sample_Guarantee());
+        let offer = Provider_Offer(PROVIDER, capability, version, Sample_Guarantee());
 
         assert_eq!(offer.provider, ProviderId::New(PROVIDER));
         assert_eq!(offer.capability, CapabilityId::New(CAPABILITY));
