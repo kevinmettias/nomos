@@ -59,6 +59,16 @@ mod tests
 {
     use super::*;
 
+    /// A wall-clock second the case below builds an id from. An arbitrary real epoch
+    /// second, distinct from `A_LATER_SECOND` so the two ids differ by the second as well
+    /// as by the sequence counter.
+    const AN_EARLIER_SECOND: i64 = 1_000;
+
+    /// A second after `AN_EARLIER_SECOND`, for the case asserting the id moves with the
+    /// clock. Its distinctness is what makes that observable: two equal seconds would
+    /// leave the assertion describing this process's sequence counter instead.
+    const A_LATER_SECOND: i64 = 2_000;
+
     /// The one guarantee this function actually makes: two calls never collide, regardless
     /// of how close together they land in wall-clock time.
     #[test]
@@ -75,8 +85,8 @@ mod tests
     #[test]
     fn Test_A_Later_Second_Should_Change_The_Id()
     {
-        let earlier = Fresh_Run_Id(Timestamp::From_Unix_Seconds(1_000));
-        let later = Fresh_Run_Id(Timestamp::From_Unix_Seconds(2_000));
+        let earlier = Fresh_Run_Id(Timestamp::From_Unix_Seconds(AN_EARLIER_SECOND));
+        let later = Fresh_Run_Id(Timestamp::From_Unix_Seconds(A_LATER_SECOND));
 
         assert_ne!(earlier, later);
     }

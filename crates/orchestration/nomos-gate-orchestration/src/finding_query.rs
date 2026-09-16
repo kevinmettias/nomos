@@ -182,9 +182,17 @@ mod tests
     /// caller can hand over in the wrong order and the compiler will accept both.
     struct ScratchName(&'static str);
 
-    fn Source(path: &str, text: &str) -> SourceFile
+    /// The path a fixture source is reported under, and the subject its findings are
+    /// addressed to -- distinct from the text beside it, because a caller handing the text
+    /// over where the path belongs compiles as readily as the other way round.
+    struct SourcePath(&'static str);
+
+    /// The text judged as the contents of one fixture source.
+    struct SourceText(&'static str);
+
+    fn Source(path: SourcePath, text: SourceText) -> SourceFile
     {
-        return SourceFile::New(path, Subject_Of_Path(path), text);
+        return SourceFile::New(path.0, Subject_Of_Path(path.0), text.0);
     }
 
     /// A real query naming the one blocking finding a phantom mirror produces answers `Found`,
@@ -194,8 +202,8 @@ mod tests
     fn Test_Explain_Gate_Should_Find_A_Real_Blocking_Finding()
     {
         let sources = vec![Source(
-            "a.rs",
-            "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n",
+            SourcePath("a.rs"),
+            SourceText("/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n"),
         )];
         let query = FindingQuery { rule: nomos_contracts::RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
         let command = GateCommand { root: Repository_Root(), ..Default::default() };
@@ -312,8 +320,8 @@ mod tests
     /// decides is which policy file is resolved -- which is what these two tests are about.
     fn Explained_Collapsed_Body(command: &GateCommand) -> Explanation
     {
-        let sources = vec![Source("a.rs", "pub fn A_Thing() -> i32 { return 1; }
-")];
+        let sources = vec![Source(SourcePath("a.rs"), SourceText("pub fn A_Thing() -> i32 { return 1; }
+"))];
         let query = FindingQuery { rule: nomos_contracts::RuleId::New(NO_SINGLE_LINE_FUNCTION_BODIES), location: "a.rs:1".to_owned() };
 
         let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, command, &query);
