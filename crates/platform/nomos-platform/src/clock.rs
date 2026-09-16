@@ -38,13 +38,31 @@ mod tests
     use super::*;
     use std::time::Duration;
 
+    /// The instant the elapsed-time cases measure from. An arbitrary real one.
+    const AN_INSTANT: i64 = 1_000;
+
+    /// A later instant than `AN_INSTANT`, for the case where the clock reports
+    /// the later time first.
+    const A_LATER_INSTANT: i64 = 2_000;
+
+    /// How far forward the measured case moves. One constant stands at both the
+    /// fixture and the expectation, so the two cannot drift apart.
+    const A_FORWARD_STEP: u64 = 30;
+
+    /// An advance from the largest representable instant, which must saturate
+    /// rather than wrap.
+    const A_SATURATING_ADVANCE: u64 = 60;
+
+    /// An arbitrary real epoch second, far from the zero the type also admits.
+    const A_ROUND_TRIP_INSTANT: i64 = 1_700_000_000;
+
     #[test]
     fn Test_Since_Should_Measure_Forward_Distance()
     {
-        let start = Timestamp::From_Unix_Seconds(1_000);
-        let later = start.Plus(Duration::from_secs(30));
+        let start = Timestamp::From_Unix_Seconds(AN_INSTANT);
+        let later = start.Plus(Duration::from_secs(A_FORWARD_STEP));
 
-        assert_eq!(later.Since(start), Duration::from_secs(30));
+        assert_eq!(later.Since(start), Duration::from_secs(A_FORWARD_STEP));
     }
 
     /// A clock that went backwards — a correction, a VM resume, a machine with a bad
@@ -54,8 +72,8 @@ mod tests
     #[test]
     fn Test_Since_Should_Report_Zero_When_The_Clock_Moved_Backwards()
     {
-        let earlier = Timestamp::From_Unix_Seconds(1_000);
-        let later = Timestamp::From_Unix_Seconds(2_000);
+        let earlier = Timestamp::From_Unix_Seconds(AN_INSTANT);
+        let later = Timestamp::From_Unix_Seconds(A_LATER_INSTANT);
 
         assert_eq!(earlier.Since(later), Duration::ZERO);
     }
@@ -66,7 +84,7 @@ mod tests
         let far_future = Timestamp::From_Unix_Seconds(i64::MAX);
 
         assert_eq!(
-            far_future.Plus(Duration::from_secs(60)).Unix_Seconds(),
+            far_future.Plus(Duration::from_secs(A_SATURATING_ADVANCE)).Unix_Seconds(),
             i64::MAX
         );
     }
@@ -74,6 +92,9 @@ mod tests
     #[test]
     fn Test_From_Unix_Seconds_Should_Round_Trip_Through_Unix_Seconds()
     {
-        assert_eq!(Timestamp::From_Unix_Seconds(1_700_000_000).Unix_Seconds(), 1_700_000_000);
+        assert_eq!(
+            Timestamp::From_Unix_Seconds(A_ROUND_TRIP_INSTANT).Unix_Seconds(),
+            A_ROUND_TRIP_INSTANT
+        );
     }
 }

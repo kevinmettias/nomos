@@ -79,6 +79,16 @@ mod tests
 
     use super::*;
 
+    /// A wall bound for the case that asserts only that the two bounds coincide.
+    const A_WALL_BOUND_SECONDS: u64 = 10;
+
+    /// The wall bound of the case that sets the idle bound apart from it.
+    const A_LONG_WALL_BOUND_SECONDS: u64 = 30;
+
+    /// The idle bound of that case. Shorter than the wall bound, so an assertion
+    /// that read the wrong field would fail rather than pass.
+    const A_SHORT_IDLE_BOUND_SECONDS: u64 = 5;
+
     #[test]
     fn Test_An_Empty_Argv_Should_Have_No_Program()
     {
@@ -90,7 +100,7 @@ mod tests
     #[test]
     fn Test_New_Should_Start_The_Idle_Bound_Equal_To_The_Wall_Bound()
     {
-        let command = Command::New(vec!["prog".to_owned()], Duration::from_secs(10));
+        let command = Command::New(vec!["prog".to_owned()], Duration::from_secs(A_WALL_BOUND_SECONDS));
 
         assert_eq!(
             command.idle_timeout, command.timeout,
@@ -101,9 +111,10 @@ mod tests
     #[test]
     fn Test_With_Idle_Timeout_Should_Set_The_Idle_Bound_Independently_Of_The_Wall_Bound()
     {
-        let command = Command::New(vec!["prog".to_owned()], Duration::from_secs(30)).With_Idle_Timeout(Duration::from_secs(5));
+        let command = Command::New(vec!["prog".to_owned()], Duration::from_secs(A_LONG_WALL_BOUND_SECONDS))
+            .With_Idle_Timeout(Duration::from_secs(A_SHORT_IDLE_BOUND_SECONDS));
 
-        assert_eq!(command.timeout, Duration::from_secs(30));
-        assert_eq!(command.idle_timeout, Duration::from_secs(5));
+        assert_eq!(command.timeout, Duration::from_secs(A_LONG_WALL_BOUND_SECONDS));
+        assert_eq!(command.idle_timeout, Duration::from_secs(A_SHORT_IDLE_BOUND_SECONDS));
     }
 }
