@@ -60,7 +60,7 @@ mod tests
     fn Test_Record_Import_Spec_Should_Bind_An_Unaliased_Imports_Final_Path_Segment()
     {
         let source = "package main\n\nimport \"path/filepath\"\n";
-        let tree = Parse(source);
+        let tree = Parsed_Fixture_Tree(source);
         let spec = Find_Kind(tree.root_node(), "import_spec").expect("the fixture declares an import");
         let mut items = Vec::new();
 
@@ -75,7 +75,7 @@ mod tests
     fn Test_Record_Import_Spec_Should_Bind_An_Aliased_Imports_Own_Alias()
     {
         let source = "package main\n\nimport str \"strings\"\n";
-        let tree = Parse(source);
+        let tree = Parsed_Fixture_Tree(source);
         let spec = Find_Kind(tree.root_node(), "import_spec").expect("the fixture declares an import");
         let mut items = Vec::new();
 
@@ -85,7 +85,7 @@ mod tests
         assert_eq!(item.name, "str");
     }
 
-    fn Parse(source: &str) -> tree_sitter::Tree
+    fn Parsed_Fixture_Tree(source: &str) -> tree_sitter::Tree
     {
         let mut parser = tree_sitter::Parser::new();
         parser

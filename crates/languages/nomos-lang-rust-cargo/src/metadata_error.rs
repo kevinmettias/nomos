@@ -179,8 +179,8 @@ fn Parse_Metadata_Document(stdout: &str) -> Result<serde_json::Value, MetadataEr
 fn Require_Workspace_Root_Is(document: &serde_json::Value, root: &Path) -> Result<(), MetadataError>
 {
     let declared = Declared_Workspace_Root(document)?;
-    let resolved = Canonicalized(Path::new(declared), "cargo metadata's own \"workspace_root\"")?;
-    let expected = Canonicalized(root, "the root cargo metadata was asked about")?;
+    let resolved = Canonical_Path_Of(Path::new(declared), "cargo metadata's own \"workspace_root\"")?;
+    let expected = Canonical_Path_Of(root, "the root cargo metadata was asked about")?;
 
     if resolved != expected
     {
@@ -206,7 +206,7 @@ fn Declared_Workspace_Root(document: &serde_json::Value) -> Result<&str, Metadat
 
 /// `path`, canonicalized -- or a refusal naming `what` and the path, so a comparison between
 /// two canonical paths says which of the two could not be read.
-fn Canonicalized(path: &Path, what: &str) -> Result<PathBuf, MetadataError>
+fn Canonical_Path_Of(path: &Path, what: &str) -> Result<PathBuf, MetadataError>
 {
     return std::fs::canonicalize(path).map_err(|error| MetadataError {
         reason: format!("{what} ({}) could not be read: {error}", path.display()),

@@ -118,7 +118,7 @@ mod tests
     fn Test_Record_Function_Should_Record_A_Top_Level_Function()
     {
         let source = "package main\n\nfunc One(a int) {}\n";
-        let tree = Parse(source);
+        let tree = Parsed_Fixture_Tree(source);
         let declaration = Declaration_Of_Kind(&tree, "function_declaration");
         let mut items = Vec::new();
 
@@ -135,7 +135,7 @@ mod tests
     fn Test_Record_Method_Should_Scope_The_Item_To_Its_Receiver_Type()
     {
         let source = "package main\n\ntype Counter struct{}\n\nfunc (c *Counter) Increment() {}\n";
-        let tree = Parse(source);
+        let tree = Parsed_Fixture_Tree(source);
         let declaration = Declaration_Of_Kind(&tree, "method_declaration");
         let mut items = Vec::new();
 
@@ -146,7 +146,7 @@ mod tests
         assert_eq!(item.scope, vec!["Counter".to_owned()]);
     }
 
-    fn Parse(source: &str) -> tree_sitter::Tree
+    fn Parsed_Fixture_Tree(source: &str) -> tree_sitter::Tree
     {
         let mut parser = tree_sitter::Parser::new();
         parser

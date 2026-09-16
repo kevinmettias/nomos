@@ -157,7 +157,7 @@ mod tests
     fn Test_Function_Name_Should_Read_The_Nodes_Own_Name_Field()
     {
         let source = "package main\n\nfunc One() {}\n";
-        let tree = Parse(source);
+        let tree = Parsed_Fixture_Tree(source);
         let declaration = Find_Kind(tree.root_node(), "function_declaration").expect("the fixture declares a function");
 
         assert_eq!(Function_Name(declaration, source.as_bytes()), Some("One".to_owned()));
@@ -167,7 +167,7 @@ mod tests
     fn Test_Parameter_Arity_Should_Count_Every_Name_Sharing_One_Type()
     {
         let source = "package main\n\nfunc f(a, b int, c string) {}\n";
-        let tree = Parse(source);
+        let tree = Parsed_Fixture_Tree(source);
         let list = Find_Kind(tree.root_node(), "parameter_list").expect("the fixture declares parameters");
 
         assert_eq!(Parameter_Arity(list), FIXTURE_PARAMETER_NAMES);
@@ -177,7 +177,7 @@ mod tests
     fn Test_Named_Field_Children_Should_Find_Every_Name_A_Shared_Type_Declares()
     {
         let source = "package main\n\nfunc f(a, b int) {}\n";
-        let tree = Parse(source);
+        let tree = Parsed_Fixture_Tree(source);
         let declaration = Find_Kind(tree.root_node(), "parameter_declaration").expect("the fixture declares a parameter");
 
         let names = Named_Field_Children(declaration, "name");
@@ -185,7 +185,7 @@ mod tests
         assert_eq!(names.len(), SHARED_TYPE_DECLARATION_NAMES, "{names:?}");
     }
 
-    fn Parse(source: &str) -> tree_sitter::Tree
+    fn Parsed_Fixture_Tree(source: &str) -> tree_sitter::Tree
     {
         let mut parser = tree_sitter::Parser::new();
         parser

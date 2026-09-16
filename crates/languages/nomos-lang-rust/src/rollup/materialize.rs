@@ -262,12 +262,12 @@ mod tests
     #[test]
     fn Test_Index_Key_Should_Not_Depend_On_The_Members_Own_Order()
     {
-        let a = Member::Of(Subject("a.rs"), "pub fn A() {}\n");
-        let b = Member::Of(Subject("b.rs"), "pub fn B() {}\n");
+        let a = Member::Of(Subject_Of_Fixture_Path("a.rs"), "pub fn A() {}\n");
+        let b = Member::Of(Subject_Of_Fixture_Path("b.rs"), "pub fn B() {}\n");
         let context = Test_Context();
 
-        let forwards = Index_Key(Subject("the/module"), &[a, b], context);
-        let backwards = Index_Key(Subject("the/module"), &[b, a], context);
+        let forwards = Index_Key(Subject_Of_Fixture_Path("the/module"), &[a, b], context);
+        let backwards = Index_Key(Subject_Of_Fixture_Path("the/module"), &[b, a], context);
 
         assert_eq!(forwards.Digest(), backwards.Digest());
     }
@@ -275,9 +275,9 @@ mod tests
     #[test]
     fn Test_Canonical_Members_Should_Sort_And_Deduplicate_By_Subject()
     {
-        let a = Member::Of(Subject("a.rs"), "pub fn A() {}\n");
-        let b = Member::Of(Subject("b.rs"), "pub fn B() {}\n");
-        let a_again = Member::Of(Subject("a.rs"), "pub fn A() {}\n");
+        let a = Member::Of(Subject_Of_Fixture_Path("a.rs"), "pub fn A() {}\n");
+        let b = Member::Of(Subject_Of_Fixture_Path("b.rs"), "pub fn B() {}\n");
+        let a_again = Member::Of(Subject_Of_Fixture_Path("a.rs"), "pub fn A() {}\n");
 
         let ordered = Canonical_Members(&[b, a, a_again]);
 
@@ -288,9 +288,9 @@ mod tests
     #[test]
     fn Test_Index_Inputs_Should_Depend_On_Both_Subject_And_Content()
     {
-        let a = Member::Of(Subject("a.rs"), "pub fn A() {}\n");
-        let a_edited = Member::Of(Subject("a.rs"), "pub fn A() {}\npub fn B() {}\n");
-        let renamed = Member::Of(Subject("b.rs"), "pub fn A() {}\n");
+        let a = Member::Of(Subject_Of_Fixture_Path("a.rs"), "pub fn A() {}\n");
+        let a_edited = Member::Of(Subject_Of_Fixture_Path("a.rs"), "pub fn A() {}\npub fn B() {}\n");
+        let renamed = Member::Of(Subject_Of_Fixture_Path("b.rs"), "pub fn A() {}\n");
 
         let original = Index_Inputs(&[a]);
 
@@ -313,7 +313,7 @@ mod tests
     #[test]
     fn Test_Entry_Of_Should_File_The_Item_Under_Its_Declaring_Member()
     {
-        let member = Subject("alpha.rs");
+        let member = Subject_Of_Fixture_Path("alpha.rs");
         let item = nomos_cap_syntax::PayloadItem {
             ordinal: ITEM_ORDINAL,
             kind: "Function".to_owned(),
@@ -343,7 +343,7 @@ mod tests
         let store = MemoryFactStore::New();
         let registry = Registry::New();
         let mut reader = Reader::On(&store, &registry, Reading_Context(Test_Context()));
-        let member = Member::Of(Subject("alpha.rs"), "pub fn Alpha() {}\n");
+        let member = Member::Of(Subject_Of_Fixture_Path("alpha.rs"), "pub fn Alpha() {}\n");
 
         assert!(Declared_By(&mut reader, &member, &Need()).is_none());
     }
@@ -355,11 +355,11 @@ mod tests
         let registry = Registry::New();
         let mut reader = Reader::On(&store, &registry, Reading_Context(Test_Context()));
         let mut index = Index {
-            module: Subject("the/module"),
+            module: Subject_Of_Fixture_Path("the/module"),
             members: Vec::new(),
             items: Vec::new(),
         };
-        let member = Member::Of(Subject("alpha.rs"), "pub fn Alpha() {}\n");
+        let member = Member::Of(Subject_Of_Fixture_Path("alpha.rs"), "pub fn Alpha() {}\n");
 
         Index_Member(&mut index, &mut reader, &member, &Need());
 
@@ -379,9 +379,9 @@ mod tests
             need: &need,
             context: Test_Context(),
         };
-        let member = Member::Of(Subject("alpha.rs"), "pub fn Alpha() {}\n");
+        let member = Member::Of(Subject_Of_Fixture_Path("alpha.rs"), "pub fn Alpha() {}\n");
 
-        let Members { index, dependencies: _ } = Read_Members(&store, &against, Subject("the/module"), &[member]);
+        let Members { index, dependencies: _ } = Read_Members(&store, &against, Subject_Of_Fixture_Path("the/module"), &[member]);
 
         assert_eq!(index.Unreachable(), 1, "a capability nothing declared has no readable answer for any member");
     }
@@ -389,9 +389,9 @@ mod tests
     #[test]
     fn Test_Rollup_Fact_Should_Carry_The_Declared_Guarantee_And_Derived_Evidence()
     {
-        let key = Index_Key(Subject("the/module"), &[], Test_Context());
+        let key = Index_Key(Subject_Of_Fixture_Path("the/module"), &[], Test_Context());
         let index = Index {
-            module: Subject("the/module"),
+            module: Subject_Of_Fixture_Path("the/module"),
             members: Vec::new(),
             items: Vec::new(),
         };
@@ -414,8 +414,8 @@ mod tests
             context: Test_Context(),
         };
         let module = Module {
-            subject: Subject("the/module"),
-            members: vec![Member::Of(Subject("alpha.rs"), "pub fn Alpha() {}\n")],
+            subject: Subject_Of_Fixture_Path("the/module"),
+            members: vec![Member::Of(Subject_Of_Fixture_Path("alpha.rs"), "pub fn Alpha() {}\n")],
         };
 
         let rolled = Materialize_Index(&mut store, &against, &module).expect("materializes even with nothing readable");
@@ -423,7 +423,7 @@ mod tests
         assert_eq!(rolled.index.Unreachable(), 1);
     }
 
-    fn Subject(path: &str) -> SubjectId
+    fn Subject_Of_Fixture_Path(path: &str) -> SubjectId
     {
         use nomos_model::Content_Digest;
 

@@ -151,7 +151,7 @@ mod tests
     fn Test_Documentation_Of_Declaration_Should_Read_A_Comment_Directly_Above_It()
     {
         let source = "package main\n\n// Adds two numbers.\nfunc Add() {}\n";
-        let tree = Parse(source);
+        let tree = Parsed_Fixture_Tree(source);
         let declaration = Function_Declaration(&tree);
 
         assert_eq!(
@@ -164,13 +164,13 @@ mod tests
     fn Test_Documentation_Of_Declaration_Should_Be_None_With_No_Comment_Directly_Above_It()
     {
         let source = "package main\n\nfunc Add() {}\n";
-        let tree = Parse(source);
+        let tree = Parsed_Fixture_Tree(source);
         let declaration = Function_Declaration(&tree);
 
         assert_eq!(Documentation_Of_Declaration(declaration, source.as_bytes()), None);
     }
 
-    fn Parse(source: &str) -> tree_sitter::Tree
+    fn Parsed_Fixture_Tree(source: &str) -> tree_sitter::Tree
     {
         let mut parser = tree_sitter::Parser::new();
         parser

@@ -55,7 +55,7 @@ mod tests
     fn Test_Record_Const_Or_Var_Spec_Should_Record_Each_Name_Sharing_One_Value_List()
     {
         let source = "package main\n\nconst A, B = 1, 2\n";
-        let tree = Parse(source);
+        let tree = Parsed_Fixture_Tree(source);
         let spec = Find_Kind(tree.root_node(), "const_spec").expect("the fixture declares a const spec");
         let mut items = Vec::new();
 
@@ -65,7 +65,7 @@ mod tests
         assert_eq!(names, vec!["A", "B"]);
     }
 
-    fn Parse(source: &str) -> tree_sitter::Tree
+    fn Parsed_Fixture_Tree(source: &str) -> tree_sitter::Tree
     {
         let mut parser = tree_sitter::Parser::new();
         parser

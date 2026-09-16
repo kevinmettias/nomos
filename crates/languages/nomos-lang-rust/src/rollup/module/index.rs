@@ -58,17 +58,17 @@ mod tests
     fn An_Index() -> Index
     {
         return Index {
-            module: Subject("the/module"),
+            module: Subject_Of_Fixture_Path("the/module"),
             members: vec![
-                MemberReading { subject: Subject("read.rs"), outcome: Outcome::Read },
-                MemberReading { subject: Subject("approx.rs"), outcome: Outcome::Approximate },
-                MemberReading { subject: Subject("missing.rs"), outcome: Outcome::Unreachable },
+                MemberReading { subject: Subject_Of_Fixture_Path("read.rs"), outcome: Outcome::Read },
+                MemberReading { subject: Subject_Of_Fixture_Path("approx.rs"), outcome: Outcome::Approximate },
+                MemberReading { subject: Subject_Of_Fixture_Path("missing.rs"), outcome: Outcome::Unreachable },
             ],
             items: Vec::new(),
         };
     }
 
-    fn Subject(path: &str) -> SubjectId
+    fn Subject_Of_Fixture_Path(path: &str) -> SubjectId
     {
         return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
     }

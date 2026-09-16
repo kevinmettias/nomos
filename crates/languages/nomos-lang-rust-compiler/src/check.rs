@@ -169,7 +169,7 @@ mod tests
         let subject = nomos_model::Subject_Of_Path("crates/example");
         let mut store = MemoryFactStore::New();
         let registry = Offered_Registry();
-        Materialize(
+        Materialize_Fact(
             &mut store,
             &registry,
             subject,
@@ -194,7 +194,7 @@ mod tests
         let subject = nomos_model::Subject_Of_Path("crates/example");
         let mut store = MemoryFactStore::New();
         let registry = Offered_Registry();
-        Materialize(&mut store, &registry, subject, &CloneOnCopyPayload { findings: Vec::new() });
+        Materialize_Fact(&mut store, &registry, subject, &CloneOnCopyPayload { findings: Vec::new() });
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Copy_Clones(subject, "crates/example", &mut reader);
@@ -228,7 +228,7 @@ mod tests
         return registry;
     }
 
-    fn Materialize(store: &mut MemoryFactStore, registry: &Registry, subject: SubjectId, payload: &CloneOnCopyPayload)
+    fn Materialize_Fact(store: &mut MemoryFactStore, registry: &Registry, subject: SubjectId, payload: &CloneOnCopyPayload)
     {
         let offer = registry.Offers(&Capability()).first().expect("Offered_Registry is the only writer of this registry, and it declares and offers one provider").clone();
         let context = Test_Context();

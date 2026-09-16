@@ -42,7 +42,7 @@ const DIFFERENT_VARIANT_DIGEST_FILL: u8 = 9;
 const COMPILE_FAILURE_EXIT_CODE: i32 = 101;
 
 /// `Discover_Workspace` absolutizes `root` against the real process working directory
-/// before relativizing any `package_id` against it (`Absolutized`, added for
+/// before relativizing any `package_id` against it (`Absolute_Path_Of`, added for
 /// `P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT`) — an already-absolute root such as
 /// this one, from a real (if never created) directory under the OS temp directory, passes
 /// through that step unchanged, so this fixture still proves the same string arithmetic a

@@ -56,7 +56,7 @@ impl core::fmt::Display for ClippyError
 pub fn Discover_Workspace<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<Vec<DiscoveredDiagnostics>, ClippyError>
 {
     let stdout = Run_Cargo_Clippy(root, launcher, environment)?;
-    let absolute_root = Absolutized(root, environment)?;
+    let absolute_root = Absolute_Path_Of(root, environment)?;
     let discovered = Grouped_By_Package(&stdout, &absolute_root);
 
     return Require_Nonempty(discovered);
@@ -147,7 +147,7 @@ fn Require_Clean_Exit(outcome: &ExitOutcome, stderr: &str) -> Result<(), ClippyE
 /// check`'s own CLI default is `.` -- must resolve to the same real directory `cargo
 /// clippy` itself ran in, or every first-party package it reports would fail to
 /// relativize against it and be excluded as if it were external.
-fn Absolutized<Env: Environment>(root: &Path, environment: &Env) -> Result<PathBuf, ClippyError>
+fn Absolute_Path_Of<Env: Environment>(root: &Path, environment: &Env) -> Result<PathBuf, ClippyError>
 {
     let current_dir = environment.Working_Directory().map_err(|error| ClippyError {
         reason: format!("the current directory could not be read: {error}"),
@@ -224,7 +224,7 @@ fn First_Party_Relative_Root_Of(value: &serde_json::Value, root: &Path) -> Optio
 /// enclosing workspace instead of refusing -- went unnoticed: every escaped package still
 /// got a manifest-relative-looking string, just one that was actually somebody else's
 /// absolute path. `root` is expected to already be absolute (`Discover_Workspace`'s own
-/// [`Absolutized`] guarantees this for every real caller); a package genuinely outside it
+/// [`Absolute_Path_Of`] guarantees this for every real caller); a package genuinely outside it
 /// is excluded, not included under a different key.
 fn First_Party_Relative_Root(package_id: &str, root: &Path) -> Option<String>
 {
@@ -434,8 +434,8 @@ mod local_tests
     /// A relative root -- `nomos check`'s own CLI default is `.` -- must resolve to the
     /// real directory the fake launcher's own report is genuinely nested under, not fail
     /// to relativize and be excluded. Built from the test's own real current directory
-    /// (`Discover_Workspace`'s [`Absolutized`] resolves `.` against exactly that), rather
-    /// than a hardcoded absolute path with no real relationship to it: before `Absolutized`
+    /// (`Discover_Workspace`'s [`Absolute_Path_Of`] resolves `.` against exactly that), rather
+    /// than a hardcoded absolute path with no real relationship to it: before `Absolute_Path_Of`
     /// existed, this test only passed because of the very fallback-to-inclusion bug
     /// `P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT` fixes, not because the package was
     /// ever really found under `.`.

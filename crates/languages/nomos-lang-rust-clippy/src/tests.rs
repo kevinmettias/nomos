@@ -69,7 +69,7 @@ fn Posix_First_Party_Package_Id_Cases() -> Vec<(&'static str, &'static str, &'st
 /// this test used to assert the *opposite* of, back when `root` not being an ancestor of
 /// `id` was read as "an unrelated root, so report the package anyway" rather than as the
 /// exact shape of the escape this reader now exists to catch. `Discover_Workspace`'s own
-/// `Absolutized` step is what makes a genuinely relative root (`.`) resolve to a real
+/// `Absolute_Path_Of` step is what makes a genuinely relative root (`.`) resolve to a real
 /// ancestor in practice; this unit test calls `First_Party_Relative_Root` directly and so
 /// never absolutizes `root` itself, which is exactly why `.` and an unrelated absolute `id`
 /// must disagree here.

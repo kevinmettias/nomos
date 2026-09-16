@@ -223,7 +223,7 @@ mod tests
     fn Test_Record_Type_Spec_Should_Record_A_Struct_By_Name()
     {
         let source = "package main\n\ntype Counter struct { n int }\n";
-        let tree = Parse(source);
+        let tree = Parsed_Fixture_Tree(source);
         let spec = Find_Kind(tree.root_node(), "type_spec").expect("the fixture declares a type");
         let mut items = Vec::new();
 
@@ -238,7 +238,7 @@ mod tests
     fn Test_Record_Type_Alias_Should_Record_The_Alias_By_Name()
     {
         let source = "package main\n\ntype Alias = string\n";
-        let tree = Parse(source);
+        let tree = Parsed_Fixture_Tree(source);
         let spec = Find_Kind(tree.root_node(), "type_alias").expect("the fixture declares a type alias");
         let mut items = Vec::new();
 
@@ -249,7 +249,7 @@ mod tests
         assert_eq!(item.kind, ItemKind::TypeAlias);
     }
 
-    fn Parse(source: &str) -> tree_sitter::Tree
+    fn Parsed_Fixture_Tree(source: &str) -> tree_sitter::Tree
     {
         let mut parser = tree_sitter::Parser::new();
         parser
