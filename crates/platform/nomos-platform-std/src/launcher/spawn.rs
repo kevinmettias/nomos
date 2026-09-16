@@ -119,7 +119,7 @@ mod tests
                 started.elapsed() < Duration::from_secs(SETTLE_BOUND_SECONDS),
                 "the drain never finished"
             );
-            std::thread::sleep(TEST_POLL_INTERVAL);
+            std::thread::sleep(TEST_POLL_INTERVAL); // flakiness: allow: same poll wait.rs's real Launcher uses
         }
     }
 }
