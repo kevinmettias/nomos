@@ -80387,7 +80387,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -80399,7 +80399,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-languages"
+        ],
+        "exit_code": 0,
+        "output_tail": "same test-only `Materialize` helper. Same reason as its sibling.\r\n      interfile-duplication       crates/languages/nomos-lang-rust-compiler/src/nested_lock/fact_context.rs:40\r\n            group 8874429ecea9e112, N=2: the other half of fact_context.rs:50. Same reason as its sibling.\r\n      interfile-duplication       crates/languages/nomos-lang-rust-compiler/src/nested_lock/fact_context.rs:41\r\n            group 63a293affa7acc43, N=3: the second member of the materialize-tail group whose third member is in nomos-lang-rust-deny. Same reason as fact_context.rs:51.\r\n      interfile-duplication       crates/languages/nomos-lang-rust-compiler/src/nested_lock/fact_context.rs:86\r\n            group 10212d99bf88f6e0, N=2, of which only this row is reported: the nested-lock fixture materialization test, whose counterpart is waived or outside this sweep. Same reason as fact_context.rs:97.\r\n      interfile-duplication       crates/languages/nomos-lang-rust-compiler/src/nested_lock/fact_context.rs:107\r\n            group 5f801eca202481b7, N=3: the other reported member of the guarantee-dependence group. Same reason as fact_context.rs:117.\r\n      interfile-duplication       crates/languages/nomos-lang-rust-deny/src/fact_context.rs:48\r\n            group 63a293affa7acc43, N=3: the third member of the materialize-tail group, the other two being in nomos-lang-rust-compiler. Cross-crate by measurement, and one of the two peers is a same-zone Provider; the shared home is nomos_analysis, outside this item's roots. Note this row is *reported* rather than waived, which is exactly why the group's shape cannot be closed from inside any one of the three crates.\r\n      interfile-duplication       crates/languages/nomos-lang-rust-deny/src/fact_context.rs:128\r\n            group 52408edd913aa6c4, N=3, of which only this row is reported: the guarantee-dependence test, the same run as its siblings in the compiler crate and one waived third file. Same reason as fact_context.rs:117, one crate over.\r\n",
+        "verified_at": 1789558011,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "8a3015dac4d8f318a188818093f8f0147ab0c681"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
