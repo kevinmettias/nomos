@@ -144,14 +144,17 @@ mod tests
         let code = List_Profiles(&mut channels);
 
         assert_eq!(code, ExitCode::Ok);
-        let expected = nomos_spec_orchestration::Profiles().expect("the embedded catalogue always loads").len();
+        let expected = nomos_spec_orchestration::Profiles()
+            .expect("the catalogue is embedded in nomos-spec-project, so only its own bytes can refuse")
+            .len();
         assert_eq!(String::from_utf8_lossy(&output).lines().count(), expected);
     }
 
     #[test]
     fn Test_Section_Labels_Should_Join_Every_Sections_Content_Label_With_A_Plus()
     {
-        let profiles = nomos_spec_orchestration::Profiles().expect("the embedded catalogue always loads");
+        let profiles = nomos_spec_orchestration::Profiles()
+            .expect("the catalogue is embedded in nomos-spec-project, so only its own bytes can refuse");
         let profile = profiles.first().expect("the catalogue ships at least one profile");
 
         let labels = Section_Labels(profile);
@@ -183,6 +186,6 @@ mod tests
             revision: DEFAULT_REVISION.to_owned(),
         };
 
-        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+        return Assemble_Corpus(&request).expect("the only fallible step is seeding the records this binary embeds into an in-memory store");
     }
 }

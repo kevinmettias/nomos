@@ -301,6 +301,10 @@ mod tests
         );
     }
 
+    /// The block ordinal this request is asked for. A block is addressed by its position, so
+    /// the number is a label rather than a count of anything.
+    const SAMPLE_BLOCK_ORDINAL: u32 = 2;
+
     #[test]
     fn Test_Table_Command_From_String_Arguments_Should_Parse_The_Optional_Block_And_Table_Ordinals()
     {
@@ -308,7 +312,7 @@ mod tests
             Table_Command_From_String_Arguments(&Arguments("--document x.md --block 2 --table 1")).expect("parses"),
             SpecCommand::Table(TableRequest {
                 document: "x.md".to_owned(),
-                block: Some(2),
+                block: Some(SAMPLE_BLOCK_ORDINAL),
                 table: Some(1),
                 revision: None
             })
@@ -390,11 +394,15 @@ mod tests
         );
     }
 
+    /// The ordinal `"3"` parses to. Named so the assertion reads as the parser's answer rather
+    /// than as a third copy of the digit in its own input.
+    const PARSED_BLOCK_ORDINAL: u32 = 3;
+
     #[test]
     fn Test_Parsed_Ordinal_Should_Accept_Absence_And_Whole_Numbers_And_Refuse_The_Rest()
     {
         assert_eq!(Parsed_Ordinal(None, "--block").expect("absent is fine"), None);
-        assert_eq!(Parsed_Ordinal(Some(&"3".to_owned()), "--block").expect("parses"), Some(3));
+        assert_eq!(Parsed_Ordinal(Some(&"3".to_owned()), "--block").expect("parses"), Some(PARSED_BLOCK_ORDINAL));
 
         let error = Parsed_Ordinal(Some(&"seven".to_owned()), "--block").expect_err("must refuse");
         assert!(error.contains("--block"), "{error}");

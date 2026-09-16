@@ -270,7 +270,8 @@ mod tests
         .map(|value| return (*value).to_owned())
         .collect();
 
-        let Command::Submit(submit) = Command_From_String_Arguments(&arguments).expect("parses");
+        let Command::Submit(submit) = Command_From_String_Arguments(&arguments)
+            .expect("`submit` requires `--kind`, `--id` and `--by`, and the list carries all three");
 
         assert_eq!(submit.kind, SubmissionKind::FeatureRequest);
         assert_eq!(submit.id, "FR-1");

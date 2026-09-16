@@ -217,7 +217,8 @@ mod tests
     {
         let arguments = vec!["plan".to_owned()];
 
-        let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("parses");
+        let invocation = Gate_Invocation_From_String_Arguments(&arguments)
+            .expect("`plan` is one of the gate verbs, and a bare verb carries no flag of its own");
 
         let Invocation::Plan(command) = invocation
         else
@@ -236,7 +237,8 @@ mod tests
     {
         let arguments = vec!["run".to_owned(), "--root".to_owned(), "some/tree".to_owned()];
 
-        let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("parses");
+        let invocation = Gate_Invocation_From_String_Arguments(&arguments)
+            .expect("`run` is one of the gate verbs, and `--root` is the flag it reads");
 
         assert!(matches!(invocation, Invocation::Run(_)), "{invocation:?}");
     }
@@ -278,7 +280,8 @@ mod tests
             "src".to_owned(),
         ];
 
-        let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("parses");
+        let invocation = Gate_Invocation_From_String_Arguments(&arguments)
+            .expect("`compare` needs `--against` beside `--root`, and the list carries both");
 
         let Invocation::Compare { baseline, candidate } = invocation
         else

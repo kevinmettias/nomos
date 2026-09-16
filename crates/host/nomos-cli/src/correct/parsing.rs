@@ -62,7 +62,7 @@ mod tests
     #[test]
     fn Test_The_Bare_Verb_Defaults_Root_And_Commit()
     {
-        let command = Parse(&Arguments("phantom-mirrors")).expect("parses");
+        let command = Parse(&Arguments("phantom-mirrors")).expect("`phantom-mirrors` is the verb this parser accepts, and it needs no flag");
 
         assert_eq!(command.root, PathBuf::from("."));
         assert!(!command.commit);
@@ -71,7 +71,8 @@ mod tests
     #[test]
     fn Test_An_Explicit_Root_And_Commit_Are_Read()
     {
-        let command = Parse(&Arguments("phantom-mirrors --root some/tree --commit")).expect("parses");
+        let command = Parse(&Arguments("phantom-mirrors --root some/tree --commit"))
+            .expect("`--root` and `--commit` are the only flags the parser accepts, and both are given");
 
         assert_eq!(command.root, PathBuf::from("some/tree"));
         assert!(command.commit);

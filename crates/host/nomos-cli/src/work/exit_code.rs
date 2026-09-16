@@ -40,6 +40,14 @@ mod tests
 {
     use super::*;
 
+    /// `work`'s exit codes as the shell sees them. The claim codes are what an agent retries
+    /// on, so their values are named here and pinned below, rather than left as bare literals
+    /// inside the assertions that read them.
+    const USAGE_CODE: i32 = 2;
+    const CLAIM_UNAVAILABLE_CODE: i32 = 3;
+    const CONFLICT_CODE: i32 = 4;
+    const STORE_ERROR_CODE: i32 = 5;
+
     /// The exit codes are a contract agents branch on, so their values are pinned.
     ///
     /// Named to avoid a false address: this file's `exit_code` unit is shared, by bare file
@@ -54,9 +62,9 @@ mod tests
     {
         assert_eq!(ExitCode::Ok.Value(), 0);
         assert_eq!(ExitCode::ValidationError.Value(), 1);
-        assert_eq!(ExitCode::Usage.Value(), 2);
-        assert_eq!(ExitCode::ClaimUnavailable.Value(), 3);
-        assert_eq!(ExitCode::Conflict.Value(), 4);
-        assert_eq!(ExitCode::StoreError.Value(), 5);
+        assert_eq!(ExitCode::Usage.Value(), USAGE_CODE);
+        assert_eq!(ExitCode::ClaimUnavailable.Value(), CLAIM_UNAVAILABLE_CODE);
+        assert_eq!(ExitCode::Conflict.Value(), CONFLICT_CODE);
+        assert_eq!(ExitCode::StoreError.Value(), STORE_ERROR_CODE);
     }
 }

@@ -74,12 +74,21 @@ mod tests
     /// rather than a value, and naming it says so.
     const PROJECTED_SUBMISSION_UID: i64 = 7;
 
+    /// The uid of an accepted answer with no projection. Above it is a value the test reads;
+    /// this one only has to be a row identifier the rendering can print.
+    const UNPROJECTED_SUBMISSION_UID: i64 = 42;
+
+    /// A hex digest's width. Both digests are opaque to the rendering, which reads only the
+    /// paths, so a repeated character of the right length is enough to make them the shape a
+    /// `Stamp` carries.
+    const DIGEST_WIDTH: usize = 32;
+
     /// An accepted submission with no `--into` renders its id, kind, state and uid, and
     /// nothing about a projection that was never asked for.
     #[test]
     fn Test_Report_Accepted_Should_Name_The_Submission_Its_Kind_State_And_Uid()
     {
-        let answer = SubmitAnswer { submission: Example_Submission(), uid: 42, written: None };
+        let answer = SubmitAnswer { submission: Example_Submission(), uid: UNPROJECTED_SUBMISSION_UID, written: None };
         let mut output = Vec::new();
 
         let code = Report_Accepted(&answer, &mut output);
@@ -122,11 +131,11 @@ mod tests
             sidecar: PathBuf::from("out/FR-1.sidecar.json"),
             stamp: Stamp {
                 profile: "subject-dossier".to_owned(),
-                profile_digest: "0".repeat(32),
+                profile_digest: "0".repeat(DIGEST_WIDTH),
                 format: Format::Markdown,
                 output: "out/FR-1.md".to_owned(),
-                content_digest: "0".repeat(32),
-                inputs_digest: "0".repeat(32),
+                content_digest: "0".repeat(DIGEST_WIDTH),
+                inputs_digest: "0".repeat(DIGEST_WIDTH),
                 sections: Vec::new(),
                 inputs: Vec::new(),
             },

@@ -193,6 +193,29 @@ mod tests
     use super::*;
     use nomos_spec_orchestration::corpus::{Assemble_Corpus, CorpusRequest, DEFAULT_REVISION};
 
+    /// The census a fixture document carries: every pipe line it has, then how those lines
+    /// the census does not already count by identity. Named so the note the test reads and the
+    /// fixture it was built from are two views of one document.
+    const SAMPLE_PIPE_LINES: u32 = 4;
+    const SAMPLE_CONTENT_ROWS: u32 = 2;
+    const SAMPLE_NON_SEPARATOR_ROWS: u32 = 3;
+
+    /// The block the sample lines are filed under. A block is addressed by its position, so
+    /// the ordinal is a label rather than a count of anything.
+    const SAMPLE_BLOCK_ORDINAL: u32 = 2;
+
+    /// How many documents a fixture says its address matched, for the message reporting a
+    /// several-way match. Nothing computes it: the fixture is standing in for a real count.
+    const MATCHED_DOCUMENT_COUNT: usize = 3;
+
+    /// How many pipe lines a fixture document is said to carry when the narrowing selected
+    /// none of them.
+    const SELECTED_PIPE_LINES: u32 = 5;
+
+    /// How many rows the printed output is expected to have: one per line handed to
+    /// [`Printed_Rows`].
+    const PRINTED_ROW_COUNT: usize = 2;
+
     fn Sample_Line(block_ordinal: u32, kind: &str) -> TableLine
     {
         return TableLine {
@@ -266,7 +289,7 @@ mod tests
     fn Test_Note_Document_Should_Note_A_Fragment_Match_And_Always_Note_The_Line_Census()
     {
         let document = Sample_Document();
-        let census = RowCensus { lines: 4, header: 1, content: 2, separator: 1, non_separator: 3 };
+        let census = RowCensus { lines: SAMPLE_PIPE_LINES, header: 1, content: SAMPLE_CONTENT_ROWS, separator: 1, non_separator: SAMPLE_NON_SEPARATOR_ROWS };
         let resolved = ResolvedDocument { document: &document, census, tier: PathMatch::Fragment };
         let mut notes = Vec::new();
 
@@ -294,7 +317,7 @@ mod tests
     {
         let mut notes = Vec::new();
 
-        let code = Several_Documents("record", 3, PathMatch::FileName, &mut notes);
+        let code = Several_Documents("record", MATCHED_DOCUMENT_COUNT, PathMatch::FileName, &mut notes);
 
         assert_eq!(code, ExitCode::NotFound);
         assert!(String::from_utf8_lossy(&notes).contains("record matches 3 documents by file name"));
@@ -309,7 +332,7 @@ mod tests
         assert_eq!(Nothing_Selected(&assembly, 0, &mut notes), ExitCode::Absent);
 
         let mut notes = Vec::new();
-        assert_eq!(Nothing_Selected(&assembly, 5, &mut notes), ExitCode::NotFound);
+        assert_eq!(Nothing_Selected(&assembly, SELECTED_PIPE_LINES, &mut notes), ExitCode::NotFound);
     }
 
     #[test]
@@ -324,7 +347,7 @@ mod tests
         let code = Printed_Rows(&lines, &request, &mut channels);
 
         assert_eq!(code, ExitCode::Ok);
-        assert_eq!(String::from_utf8_lossy(&output).lines().count(), 2);
+        assert_eq!(String::from_utf8_lossy(&output).lines().count(), PRINTED_ROW_COUNT);
         let summary = String::from_utf8_lossy(&notes);
         assert!(summary.contains("printed 2 row"));
         assert!(summary.contains("in block 1"));
@@ -334,15 +357,15 @@ mod tests
     fn Test_Narrowed_Description_Should_Describe_Each_Combination_Of_Block_And_Table()
     {
         assert_eq!(Narrowed_Description(None, None), "");
-        assert_eq!(Narrowed_Description(Some(2), None), " in block 2");
+        assert_eq!(Narrowed_Description(Some(SAMPLE_BLOCK_ORDINAL), None), " in block 2");
         assert_eq!(Narrowed_Description(None, Some(1)), " in table 1 of any block");
-        assert_eq!(Narrowed_Description(Some(2), Some(1)), " in table 1 of block 2");
+        assert_eq!(Narrowed_Description(Some(SAMPLE_BLOCK_ORDINAL), Some(1)), " in table 1 of block 2");
     }
 
     #[test]
     fn Test_Block_Ordinals_Should_List_Each_Distinct_Block_Once_In_First_Seen_Order()
     {
-        let lines = vec![Sample_Line(2, "header"), Sample_Line(2, "content"), Sample_Line(1, "content")];
+        let lines = vec![Sample_Line(SAMPLE_BLOCK_ORDINAL, "header"), Sample_Line(SAMPLE_BLOCK_ORDINAL, "content"), Sample_Line(1, "content")];
 
         assert_eq!(Block_Ordinals(&lines), "2, 1");
     }
@@ -358,7 +381,7 @@ mod tests
             revision: DEFAULT_REVISION.to_owned(),
         };
 
-        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+        return Assemble_Corpus(&request).expect("the only fallible step is seeding the records this binary embeds into an in-memory store");
     }
 
     fn Sample_Document() -> DocumentSource

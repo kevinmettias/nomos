@@ -167,6 +167,10 @@ mod tests
         assert!(text.contains("--revision"));
     }
 
+    /// The second document's own row identifier. It is only there to make the two entries
+    /// distinct -- nothing reads the number.
+    const SECOND_DOCUMENT_UID: i64 = 2;
+
     /// Two documents filed under one id, one per revision the store holds -- the ambiguity
     /// [`Ambiguous_Revision`] exists to report, and the only fixture here that carries more
     /// than one revision of the same id.
@@ -181,7 +185,7 @@ mod tests
                 text: String::new(),
             },
             DocumentSource {
-                uid: 2,
+                uid: SECOND_DOCUMENT_UID,
                 path: "b.md".to_owned(),
                 revision: "final".to_owned(),
                 content_hash: "h2".to_owned(),
@@ -232,7 +236,7 @@ mod tests
             revision: DEFAULT_REVISION.to_owned(),
         };
 
-        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+        return Assemble_Corpus(&request).expect("the only fallible step is seeding the records this binary embeds into an in-memory store");
     }
 
     fn Sample_Node() -> NodeSummary

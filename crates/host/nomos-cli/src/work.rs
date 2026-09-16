@@ -183,10 +183,10 @@ mod published_records_tests
 /// One `match` over `(command, outcome)` rather than a second dispatch on `command` alone:
 /// `outcome`'s variant is already the answer to which arm this is, and matching both
 /// together is what lets the compiler check that every arm actually reads the outcome
-/// shape the command it is paired with produces. The `_ => unreachable!()` arm exists only
-/// because Rust cannot see that invariant from the two enums' shapes alone —
-/// `nomos_work_orchestration::Run` always returns the one `WorkOutcome` variant naming the
-/// `WorkCommand` variant it was given.
+/// shape the command it is paired with produces. The last arm is the one Rust cannot see is
+/// empty -- `nomos_work_orchestration::Run` returns the one `WorkOutcome` variant naming the
+/// `WorkCommand` variant it was given -- so it reports that pairing coming apart rather than
+/// panicking on it.
 fn Render_Outcome(command: &WorkCommand, outcome: WorkOutcome, output: &mut impl std::io::Write) -> ExitCode
 {
     return match (command, outcome)
@@ -220,10 +220,9 @@ fn Render_Outcome(command: &WorkCommand, outcome: WorkOutcome, output: &mut impl
         }
         (WorkCommand::Validate, WorkOutcome::Validate(result)) => Report_Validation(result, output),
         (WorkCommand::Audit, WorkOutcome::Audit(result)) => Render_Audit(result, output),
-        // rust-panic: allow: Run is the only caller of this match, and it always builds
-        // WorkOutcome from the same WorkCommand variant it dispatched on -- no other pairing
-        // reaches this function.
-        (_, _) => unreachable!("Run always pairs a command with its own outcome shape"),
+        // `Run` above builds each `WorkOutcome` from the variant it dispatched on, so this arm
+        // is that pairing coming apart rather than an input a caller could have got right.
+        (_, _) => Report_Unmatched_Outcome(command, output),
     };
 }
 
@@ -390,6 +389,21 @@ fn Print_Audit(document: &LedgerDocument, now: nomos_platform::Timestamp, output
         // express what is blocking this", and only one of those is good news.
         let _ = writeln!(output, "nothing claimable is blocked");
     }
+}
+
+/// A `WorkOutcome` whose variant does not belong to the `WorkCommand` standing beside it.
+///
+/// [`Render_Outcome`]'s catch-all arm, named so the arm reads as one thing and the reporting
+/// it does has somewhere to live. Reported rather than panicked: the caller gets a message and
+/// an exit code either way, and a panic would give it neither.
+fn Report_Unmatched_Outcome(command: &WorkCommand, output: &mut impl std::io::Write) -> ExitCode
+{
+    let _ = writeln!(
+        output,
+        "the ledger answered {command:?} with an outcome of another verb's shape"
+    );
+
+    return ExitCode::StoreError;
 }
 
 /// This module's own composition-root test.

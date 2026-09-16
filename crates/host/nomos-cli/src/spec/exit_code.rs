@@ -59,6 +59,16 @@ mod tests
 {
     use super::*;
 
+    /// `spec`'s exit codes as the shell sees them. `Value()` is what a caller branches on, so
+    /// the numbers are named here and pinned below, rather than left as bare literals inside
+    /// the assertions that read them.
+    const USAGE_CODE: i32 = 2;
+    const STORE_ERROR_CODE: i32 = 5;
+    const ABSENT_CODE: i32 = 6;
+    const UNWRITABLE_CODE: i32 = 7;
+    const STALE_CODE: i32 = 8;
+    const REFUSED_CODE: i32 = 9;
+
     /// Every variant's discriminant, as declared above. `spec::tests::
     /// Test_Value_Should_Be_Stable_And_Not_Collide_With_Works_Claim_Codes` is the cross-cutting half
     /// of this claim -- that these numbers also do not collide with `work`'s own claim codes; this
@@ -68,11 +78,11 @@ mod tests
     {
         assert_eq!(ExitCode::Ok.Value(), 0);
         assert_eq!(ExitCode::NotFound.Value(), 1);
-        assert_eq!(ExitCode::Usage.Value(), 2);
-        assert_eq!(ExitCode::StoreError.Value(), 5);
-        assert_eq!(ExitCode::Absent.Value(), 6);
-        assert_eq!(ExitCode::Unwritable.Value(), 7);
-        assert_eq!(ExitCode::Stale.Value(), 8);
-        assert_eq!(ExitCode::Refused.Value(), 9);
+        assert_eq!(ExitCode::Usage.Value(), USAGE_CODE);
+        assert_eq!(ExitCode::StoreError.Value(), STORE_ERROR_CODE);
+        assert_eq!(ExitCode::Absent.Value(), ABSENT_CODE);
+        assert_eq!(ExitCode::Unwritable.Value(), UNWRITABLE_CODE);
+        assert_eq!(ExitCode::Stale.Value(), STALE_CODE);
+        assert_eq!(ExitCode::Refused.Value(), REFUSED_CODE);
     }
 }

@@ -262,11 +262,15 @@ mod tests
     use nomos_check_orchestration::Claim_Of;
     use nomos_contracts::{Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
 
+    /// The byte the fixture subject digest repeats to fill `Digest128`'s width. Opaque to
+    /// every rendering here: nothing reads it, only its width matters.
+    const EXAMPLE_SUBJECT_BYTE: u8 = 3;
+
     fn Finding_With(applicability: Applicability) -> Finding
     {
         return Finding {
             rule: RuleId::New("completeness-mirror"),
-            subject: SubjectId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([EXAMPLE_SUBJECT_BYTE; Digest128::BYTE_LENGTH])),
             subject_name: "Example".to_owned(),
             applicability,
             evidence: EvidenceClass::Derived,
@@ -380,6 +384,12 @@ mod tests
         }
     }
 
+    /// The counts the report is asked to print: every file the walk read, and the files a
+    /// syntax fact was materialized for. Named so the fixture and the assertions below that
+    /// read the rendered text are two views of one pair of numbers.
+    const EXAMINED_FILES: usize = 41;
+    const EXAMINED_FACTS: usize = 39;
+
     /// The counts are part of the result. Without them, a broken walk and a clean tree
     /// render the same line.
     #[test]
@@ -387,7 +397,7 @@ mod tests
     {
         let mut stdout = Vec::new();
 
-        let _code = Report_Findings(&[], Examined { files: 41, facts: 39 }, Claim::Complete, &mut stdout);
+        let _code = Report_Findings(&[], Examined { files: EXAMINED_FILES, facts: EXAMINED_FACTS }, Claim::Complete, &mut stdout);
 
         let rendered = String::from_utf8(stdout).expect("output is utf-8");
 
@@ -404,13 +414,13 @@ mod tests
         let clean_examined = Examined { files: 1, facts: 1 };
         let mut clean_stdout = Vec::new();
         let _clean_code = Report_Findings(&[], clean_examined, Claim_Of(&[]), &mut clean_stdout);
-        let clean_rendered = String::from_utf8(clean_stdout).expect("utf-8");
+        let clean_rendered = String::from_utf8(clean_stdout).expect("Report_Findings writes only str into the buffer");
 
         let debt = vec![Finding_With(Applicability::DependencyUnavailable)];
         let debt_examined = Examined { files: 1, facts: 0 };
         let mut debt_stdout = Vec::new();
         let _debt_code = Report_Findings(&debt, debt_examined, Claim_Of(&debt), &mut debt_stdout);
-        let debt_rendered = String::from_utf8(debt_stdout).expect("utf-8");
+        let debt_rendered = String::from_utf8(debt_stdout).expect("Report_Findings writes only str into the buffer");
 
         assert_ne!(
             clean_rendered, debt_rendered,

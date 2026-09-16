@@ -244,8 +244,14 @@ fn Report_One_Change(change: &DispositionChange, stdout: &mut impl Write)
     // non-unique: one subject can now contribute several changes, and without the geometry
     // they would print as identical lines. Omitted when a finding carries none, rather than
     // printing an empty bracket that says nothing.
-    let where_it_is =
-        if change.locations.is_empty() { String::new() } else { format!(" [{}]", change.locations.join(", ")) };
+    let where_it_is = if change.locations.is_empty()
+    {
+        String::new()
+    }
+    else
+    {
+        format!(" [{}]", change.locations.join(", "))
+    };
 
     let _ = writeln!(
         stdout,

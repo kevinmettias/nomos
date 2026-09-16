@@ -37,7 +37,8 @@ mod tests
     #[test]
     fn Test_Check_Command_From_String_Arguments_Should_Default_Root_To_The_Current_Directory()
     {
-        let command = Check_Command_From_String_Arguments(&[]).expect("parses");
+        let command =
+            Check_Command_From_String_Arguments(&[]).expect("no argument is present for the parser to refuse");
 
         assert_eq!(command.root, PathBuf::from("."));
     }
@@ -47,7 +48,8 @@ mod tests
     {
         let arguments = vec!["--root".to_owned(), "some/tree".to_owned()];
 
-        let command = Check_Command_From_String_Arguments(&arguments).expect("parses");
+        let command = Check_Command_From_String_Arguments(&arguments)
+            .expect("`--root` is the one flag the check parser accepts, and it carries a value");
 
         assert_eq!(command.root, PathBuf::from("some/tree"));
     }

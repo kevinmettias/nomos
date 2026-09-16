@@ -181,6 +181,11 @@ mod tests
         assert!(text.contains("diagram.mmd.stamp"));
     }
 
+    /// The section count the stamp fixture carries. Nothing asserts on the number itself --
+    /// the test reads the label and the count out of the rendered line -- so it is a label
+    /// rather than a value.
+    const SECTION_COUNT: u32 = 3;
+
     #[test]
     fn Test_Report_Stamp_Should_Print_Every_Section_Count_And_Both_Digests()
     {
@@ -191,7 +196,7 @@ mod tests
             output: "build/diagram.mmd".to_owned(),
             content_digest: "content-digest".to_owned(),
             inputs_digest: "inputs-digest".to_owned(),
-            sections: vec![("records".to_owned(), 3)],
+            sections: vec![("records".to_owned(), SECTION_COUNT)],
             inputs: Vec::new(),
         };
         let mut output = Vec::new();
@@ -215,6 +220,6 @@ mod tests
             revision: DEFAULT_REVISION.to_owned(),
         };
 
-        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+        return Assemble_Corpus(&request).expect("the only fallible step is seeding the records this binary embeds into an in-memory store");
     }
 }

@@ -82,7 +82,7 @@ mod tests
             revision: DEFAULT_REVISION.to_owned(),
         };
 
-        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+        return Assemble_Corpus(&request).expect("the only fallible step is seeding the records this binary embeds into an in-memory store");
     }
 
     #[test]

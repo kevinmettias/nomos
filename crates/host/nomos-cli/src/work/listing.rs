@@ -263,6 +263,23 @@ mod tests
     use super::*;
     use nomos_ledger::{ItemId, ItemKind, ItemOrigin, Territory};
 
+    /// The moment a listing is read, one second after the item it names was declined. Named
+    /// so the test reads as "after the decline" rather than as an unexplained second.
+    const AFTER_THE_DECLINE: i64 = 2;
+
+    /// A lease far enough ahead that a claim is still held when the listing is printed.
+    const HELD_LEASE_EXPIRES_AT: i64 = 1_000;
+
+    /// A lease that has run out by the moment the claim is printed, and that later moment.
+    const LAPSED_LEASE_EXPIRES_AT: i64 = 10;
+    const AFTER_THE_LEASE_LAPSES: i64 = 20;
+
+    /// The three moments the full-history fixture is stamped with, in the order its rows were
+    /// appended: a claim whose lease ran out, then the abandonment, then the verification.
+    const HISTORY_LEASE_EXPIRED_AT: i64 = 10;
+    const HISTORY_ABANDONED_AT: i64 = 20;
+    const HISTORY_VERIFIED_AT: i64 = 30;
+
     /// The column an agent reads before claiming has to say the item is over.
     ///
     /// This is the whole of what the state buys at the surface. `P10-REQUIRABLE-DECLARED` was
@@ -278,7 +295,7 @@ mod tests
         let found = document.items.first().expect("the fixture has an item");
 
         assert_eq!(
-            Listing_Label(&document, found, Timestamp::From_Unix_Seconds(2)),
+            Listing_Label(&document, found, Timestamp::From_Unix_Seconds(AFTER_THE_DECLINE)),
             "declined"
         );
     }
@@ -336,7 +353,7 @@ mod tests
 
         Print_Listing(&item, "ready", &mut output);
 
-        let printed = String::from_utf8(output).unwrap();
+        let printed = String::from_utf8(output).expect("Print_Listing writes only str into the buffer");
         assert!(printed.contains("T-1"), "{printed}");
         assert!(printed.contains("ready"), "{printed}");
         assert!(printed.contains("item T-1"), "{printed}");
@@ -349,7 +366,7 @@ mod tests
         item.claim = Some(nomos_ledger::Claim {
             holder: "agent-a".to_owned(),
             acquired_at: Timestamp::From_Unix_Seconds(1),
-            lease_expires_at: Timestamp::From_Unix_Seconds(1_000),
+            lease_expires_at: Timestamp::From_Unix_Seconds(HELD_LEASE_EXPIRES_AT),
         });
         let mut output = Vec::new();
 
@@ -379,13 +396,13 @@ mod tests
         item.claim = Some(nomos_ledger::Claim {
             holder: "agent-a".to_owned(),
             acquired_at: Timestamp::From_Unix_Seconds(0),
-            lease_expires_at: Timestamp::From_Unix_Seconds(10),
+            lease_expires_at: Timestamp::From_Unix_Seconds(LAPSED_LEASE_EXPIRES_AT),
         });
         let mut output = Vec::new();
 
-        Print_Claim(&item, Timestamp::From_Unix_Seconds(20), &mut output);
+        Print_Claim(&item, Timestamp::From_Unix_Seconds(AFTER_THE_LEASE_LAPSES), &mut output);
 
-        let printed = String::from_utf8(output).unwrap();
+        let printed = String::from_utf8(output).expect("Print_Claim writes only str into the buffer");
         assert!(printed.contains("agent-a"), "{printed}");
         assert!(printed.contains("(lapsed)"), "{printed}");
     }
@@ -398,7 +415,7 @@ mod tests
 
         Print_History(&item, Some("abc123"), &mut output);
 
-        let printed = String::from_utf8(output).unwrap();
+        let printed = String::from_utf8(output).expect("Print_History writes only str into the buffer");
         assert!(printed.contains("taken over from agent-a"), "{printed}");
         assert!(printed.contains("abandoned by agent-b"), "{printed}");
         assert!(printed.contains("verified by `cargo test`"), "{printed}");
@@ -413,18 +430,18 @@ mod tests
         item.displaced.push(nomos_ledger::Claim {
             holder: "agent-a".to_owned(),
             acquired_at: Timestamp::From_Unix_Seconds(0),
-            lease_expires_at: Timestamp::From_Unix_Seconds(10),
+            lease_expires_at: Timestamp::From_Unix_Seconds(HISTORY_LEASE_EXPIRED_AT),
         });
         item.abandoned.push(nomos_ledger::Abandonment {
             holder: "agent-b".to_owned(),
             reason: "superseded".to_owned(),
-            abandoned_at: Timestamp::From_Unix_Seconds(20),
+            abandoned_at: Timestamp::From_Unix_Seconds(HISTORY_ABANDONED_AT),
         });
         item.verified = Some(VerificationRecord {
             argv: vec!["cargo".to_owned(), "test".to_owned()],
             exit_code: 0,
             output_tail: String::new(),
-            verified_at: Timestamp::From_Unix_Seconds(30),
+            verified_at: Timestamp::From_Unix_Seconds(HISTORY_VERIFIED_AT),
             gate: None,
             revision: Some("abc123".to_owned()),
         });

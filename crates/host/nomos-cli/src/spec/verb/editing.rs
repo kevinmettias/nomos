@@ -135,15 +135,14 @@ fn Report_Vacated(vacated: &Vacated, channels: &mut Channels<'_>)
 }
 
 /// `CommitRefusalKind::Unreadable`'s own error is always [`CommitRefusalError::FileSystem`]
-/// -- see the constructor's own guarantee named in the `unreachable!` below.
+/// -- see the constructor's own pairing in `commit_refusal.rs`, and [`Report_Refusal_Mismatch`]
+/// for the arm where that pairing has come apart.
 fn Report_Unreadable_Refusal(path: &Path, error: CommitRefusalError, notes: &mut dyn std::io::Write) -> ExitCode
 {
-    let CommitRefusalError::FileSystem(error) = error else
+    let CommitRefusalError::FileSystem(error) = error
+    else
     {
-        // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
-        // CommitRefusal::Unreadable always pairs CommitRefusalKind::Unreadable with a
-        // CommitRefusalError::FileSystem; no other constructor produces this kind.
-        unreachable!("CommitRefusalKind::Unreadable always carries a filesystem CommitRefusalError")
+        return Report_Refusal_Mismatch("unreadable", notes);
     };
 
     return Unreadable_Source(path, &error, notes);
@@ -152,12 +151,10 @@ fn Report_Unreadable_Refusal(path: &Path, error: CommitRefusalError, notes: &mut
 /// `CommitRefusalKind::Edit`'s own error is always [`CommitRefusalError::Edit`].
 fn Report_Edit_Refusal(assembly: &Assembly, error: CommitRefusalError, notes: &mut dyn std::io::Write) -> ExitCode
 {
-    let CommitRefusalError::Edit(error) = error else
+    let CommitRefusalError::Edit(error) = error
+    else
     {
-        // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
-        // CommitRefusal::Edit always pairs CommitRefusalKind::Edit with a
-        // CommitRefusalError::Edit; no other constructor produces this kind.
-        unreachable!("CommitRefusalKind::Edit always carries an edit CommitRefusalError")
+        return Report_Refusal_Mismatch("an edit", notes);
     };
 
     return Report_Edit_Error(assembly, &error, notes);
@@ -171,12 +168,10 @@ fn Report_Refused_Refusal(
     channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    let CommitRefusalError::Edit(error) = error else
+    let CommitRefusalError::Edit(error) = error
+    else
     {
-        // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
-        // CommitRefusal::Refused always pairs CommitRefusalKind::Refused with a
-        // CommitRefusalError::Edit; no other constructor produces this kind.
-        unreachable!("CommitRefusalKind::Refused always carries an edit CommitRefusalError")
+        return Report_Refusal_Mismatch("a refused edit", channels.notes);
     };
 
     return Refused_Edit(assembly, preview, &error, channels);
@@ -202,12 +197,10 @@ fn Report_Unwritable_Refusal(
     channels: &mut Channels<'_>,
 ) -> ExitCode
 {
-    let CommitRefusalError::FileSystem(error) = error else
+    let CommitRefusalError::FileSystem(error) = error
+    else
     {
-        // rust-panic: allow: CommitRefusal's constructors are the only way to build one, and
-        // CommitRefusal::Unwritable always pairs CommitRefusalKind::Unwritable with a
-        // CommitRefusalError::FileSystem; no other constructor produces this kind.
-        unreachable!("CommitRefusalKind::Unwritable always carries a filesystem CommitRefusalError")
+        return Report_Refusal_Mismatch("an unwritable record", channels.notes);
     };
     let _ = writeln!(channels.output, "{}", preview.Describe());
 
@@ -250,6 +243,22 @@ pub(in crate::spec) fn Report_Edit_Error(
         | EditError::NotCanonical { .. }
         | EditError::PathTaken { .. } => ExitCode::Refused,
     };
+}
+
+/// A [`CommitRefusal`] whose kind and its own error disagree.
+///
+/// [`CommitRefusal`]'s four constructors each pair one [`CommitRefusalKind`] with the one
+/// [`CommitRefusalError`] that kind can carry, so this is reachable only if that pairing
+/// breaks. Reported rather than panicked: the caller gets a message and an exit code either
+/// way, and a panic would give it neither.
+///
+/// A shared helper rather than a piece of each caller: four of the arms above reach it, and
+/// they have nothing else in common -- so call order cannot pull it beneath any one of them.
+fn Report_Refusal_Mismatch(kind: &str, notes: &mut dyn std::io::Write) -> ExitCode
+{
+    let _ = writeln!(notes, "refused {kind}: the refusal's own error does not name that kind");
+
+    return ExitCode::StoreError;
 }
 
 /// `--from` named a file this build could not read.
@@ -343,7 +352,7 @@ mod tests
             revision: DEFAULT_REVISION.to_owned(),
         };
 
-        return Assemble_Corpus(&request).expect("the embedded governing records always seed");
+        return Assemble_Corpus(&request).expect("the only fallible step is seeding the records this binary embeds into an in-memory store");
     }
 
     /// A real file on disk, so `Preview_Staged_Edit`/`Commit_Staged_Edit` get past reading

@@ -194,7 +194,8 @@ mod tests
     {
         let arguments: Vec<String> = ["execute", "--goal", "say hello"].iter().map(|value| return (*value).to_owned()).collect();
 
-        let command = Command_From_String_Arguments(&arguments).expect("parses");
+        let command =
+            Command_From_String_Arguments(&arguments).expect("--goal is the only value `execute` requires, and the list carries it");
 
         assert_eq!(
             command,
