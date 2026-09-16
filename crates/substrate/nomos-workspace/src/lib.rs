@@ -39,26 +39,31 @@
 
 #![forbid(unsafe_code)]
 
-// A change's parts sit under `change`, an effect's kind under `effect`, and the change
-// set and refusals a workspace raises under `workspace`. Flat, this level was thirteen
-// files whose grouping was spelled only in their name prefixes.
-mod applied;
+// A workspace's parts sit under `workspace` and a snapshot's under `workspace_snapshot`.
+// Flat, this level was thirteen files whose grouping was spelled only in their name
+// prefixes.
+//
+// Four of them are declared here rather than inside the folder that would otherwise hold
+// them, because the name each is published under already carries its folder:
+// `workspace/workspace_change_set.rs` repeats its parent, and `workspace/change_set.rs`
+// declaring `ChangeSet` needs an alias to be published at all. See each file's own header.
 mod change;
+mod change_source;
 #[path = "snapshot_serialization.rs"]
 mod determinism;
 mod effect;
-mod member;
-#[path = "workspace_snapshot.rs"]
-mod snapshot;
-#[path = "build_variant.rs"]
-mod variant;
+mod effect_kind;
 mod workspace;
+mod workspace_change_set;
+mod workspace_error;
+mod workspace_snapshot;
 
-pub use applied::Applied;
-pub use change::{Change, ChangeSet, ChangeSource};
+pub use change::Change;
+pub use change_source::ChangeSource;
 pub use determinism::SnapshotSerialization;
-pub use effect::{Effect, EffectKind};
-pub use member::Member;
-pub use snapshot::{SNAPSHOT_SCHEMA, WorkspaceSnapshot};
-pub use variant::BuildVariant;
-pub use workspace::{Workspace, WorkspaceChangeSet, WorkspaceError};
+pub use effect::Effect;
+pub use effect_kind::EffectKind;
+pub use workspace::{Applied, Workspace};
+pub use workspace_change_set::WorkspaceChangeSet;
+pub use workspace_error::WorkspaceError;
+pub use workspace_snapshot::{BuildVariant, Member, SNAPSHOT_SCHEMA, WorkspaceSnapshot};

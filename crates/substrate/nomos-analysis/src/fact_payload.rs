@@ -1,23 +1,15 @@
-// Everything a fact is addressed, stored and read by. Eight files whose only relationship
-// was a shared name prefix now say it in the tree instead.
-#[path = "fact/error.rs"] mod error;
+// What a fact is addressed, stored and read by, less the five names declared at the crate
+// root: `lib.rs` says why there. What is left is the vocabulary whose published name does
+// not repeat the folder it sits in -- GuaranteeDigest, MaterializedFact and MemoryFactStore
+// -- together with the payload itself, which stays at this level because
+// `fact/fact_payload.rs` would repeat its parent.
 #[path = "fact/guarantee_digest.rs"] mod guarantee_digest;
-#[path = "fact/identity.rs"] mod identity;
-#[path = "fact/key.rs"] mod key;
 #[path = "fact/materialized_fact.rs"] mod materialized;
 #[path = "fact/memory_fact_store.rs"] mod memory_store;
-#[path = "fact/reader.rs"] mod reader;
-#[path = "fact/store.rs"] mod store;
 
-pub use error::Error as FactError;
 pub use guarantee_digest::GuaranteeDigest;
-pub use identity::Identity as FactIdentity;
-pub use key::Key as FactKey;
 pub use materialized::MaterializedFact;
 pub use memory_store::MemoryFactStore;
-pub use reader::Reader as FactReader;
-pub use store::Store as FactStore;
-pub(crate) use store::sealed;
 
 use nomos_contracts::{Digest128, SchemaId};
 

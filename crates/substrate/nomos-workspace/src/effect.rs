@@ -1,10 +1,10 @@
 //! One consequence of applying a change.
 
-// What kind of effect this is, beneath the effect it describes.
-#[path = "effect/kind.rs"]
-mod kind;
+// What kind of effect this is is declared at the crate root rather than beneath this
+// module, and `lib.rs` says why where it declares it: it is published as `EffectKind`, so
+// a file named for it cannot also sit inside `effect/`.
 
-pub use kind::Kind as EffectKind;
+use crate::EffectKind;
 
 /// What one change actually did, and to what.
 ///

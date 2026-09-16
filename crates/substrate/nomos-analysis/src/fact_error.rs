@@ -1,9 +1,13 @@
 //! Every way a fact refuses to be stored or read.
+//!
+//! Declared at the crate root rather than in `fact/`, and `lib.rs` says why where it
+//! declares it: the name it is published under already carries the fact, so a file named
+//! for it cannot also sit inside the folder that name would otherwise group it with.
 
 use nomos_contracts::GenerationId;
 use crate::FactIdentity;
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Error
+pub enum FactError
 {
     Absent
     {
@@ -21,7 +25,7 @@ pub enum Error
     },
 }
 
-impl core::fmt::Display for Error
+impl core::fmt::Display for FactError
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -49,5 +53,5 @@ impl core::fmt::Display for Error
     }
 }
 
-impl std::error::Error for Error
+impl std::error::Error for FactError
 {}

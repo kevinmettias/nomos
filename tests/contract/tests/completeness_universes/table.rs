@@ -206,8 +206,8 @@ pub(crate) const UNIVERSES: &[Universe] = &[
         },
     },
     Universe {
-        path: "crates/substrate/nomos-workspace/src/change/source.rs",
-        name: "Source::All",
+        path: "crates/substrate/nomos-workspace/src/change_source.rs",
+        name: "ChangeSource::All",
         kind: UniverseKind::Enumeration,
         standing: Standing::Mirrored {
             by: "Test_Every_ChangeSource_Should_Be_Matched_Exhaustively",

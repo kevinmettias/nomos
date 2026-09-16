@@ -5,14 +5,9 @@
 //! answers to what the workspace currently is, and the second one is always discovered
 //! after something has been built on the first.
 
-// A change set and the source a change came from are parts of a change.
-#[path = "change/set.rs"]
-mod set;
-#[path = "change/source.rs"]
-mod source;
-
-pub use set::Set as ChangeSet;
-pub use source::Source as ChangeSource;
+// The source a change came from is declared at the crate root rather than beneath this
+// module, and `lib.rs` says why where it declares it: it is published as `ChangeSource`,
+// so a file named for it cannot also sit inside `change/`.
 
 use nomos_contracts::Digest128;
 use nomos_model::Content_Digest;
@@ -73,6 +68,7 @@ mod tests
 {
     use super::*;
 
+    use crate::ChangeSource;
     use crate::WorkspaceChangeSet;
 
     /// The ordinal each source is recorded at, one per [`ChangeSource::All`] in that list's

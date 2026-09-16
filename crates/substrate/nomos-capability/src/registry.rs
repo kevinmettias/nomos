@@ -1,12 +1,6 @@
-// The two error types are the registry's own vocabulary and nobody else raises them, so
-// they live beneath it rather than beside it.
-#[path = "registry/error.rs"]
-mod error;
-#[path = "registry/error_kind.rs"]
-mod error_kind;
-
-pub use error::Error as RegistryError;
-pub use error_kind::ErrorKind as RegistryErrorKind;
+// The registry's two error types are declared at the crate root rather than beneath this
+// module, and `lib.rs` says why where it declares them: the name they are published under
+// already carries the registry, so a file named for it cannot also sit inside `registry/`.
 
 // The required-naming vocabulary (`RequiredUnmet`, `RequiredResolution`) and the two
 // responsibilities `Registry` itself carries (declaring/offering, and resolving) each keep
@@ -23,6 +17,7 @@ pub use required_resolution::RequiredResolution;
 
 use crate::CapabilityContract;
 use crate::ProviderOffer;
+use crate::RegistryError;
 use crate::Requirement;
 use crate::Resolution;
 use nomos_contracts::{CapabilityId, ProviderId};
@@ -170,6 +165,7 @@ mod tests;
 mod local_tests
 {
     use super::*;
+    use crate::RegistryErrorKind;
     use nomos_contracts::{Assurance, ContractVersion, FactVariant, Guarantee, IncrementalGranularity};
 
     #[test]

@@ -29,4 +29,4 @@ site: crates/spec/nomos-spec-store/src/table/suite_authority/suite_authority.rs#
 site: crates/spec/nomos-spec-ingest/src/siblings.rs#Ingest_Sibling_Suite
 site: docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md#adopted, as a clause of this record
 site: crates/spec/nomos-spec-ingest/src/siblings/commentary.rs#Statements_Sourced_Only_From_Commentary
-gap: crates/substrate/nomos-analysis/src/fact_payload.rs#FactKey
+gap: crates/substrate/nomos-analysis/src/fact_key.rs#FactKey

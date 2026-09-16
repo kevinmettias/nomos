@@ -1,4 +1,8 @@
 //! What a fact is about, before anything has been said about it.
+//!
+//! Declared at the crate root rather than in `fact/`, and `lib.rs` says why where it
+//! declares it: the name it is published under already carries the fact, so a file named
+//! for it cannot also sit inside the folder that name would otherwise group it with.
 
 use nomos_contracts::GenerationId;
 use nomos_contracts::Digest128;
@@ -12,7 +16,7 @@ use crate::FactIdentity;
 use crate::GuaranteeDigest;
 use crate::InputDigest;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub struct Key
+pub struct FactKey
 {
     pub contract: CapabilityId,
     pub contract_version: ContractVersion,
@@ -25,7 +29,7 @@ pub struct Key
     pub configuration: ConfigurationId,
 }
 
-impl Key
+impl FactKey
 {
     #[must_use]
     pub fn Parts(&self) -> Vec<Vec<u8>>
@@ -81,7 +85,7 @@ mod tests
     use super::*;
     use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity};
 
-    /// One part per field of [`Key`], in the order `Parts` lists them.
+    /// One part per field of [`FactKey`], in the order `Parts` lists them.
     const KEY_PART_COUNT: usize = 9;
 
     /// The generation the sample key is paired with. One named value, because these tests
@@ -129,7 +133,7 @@ mod tests
         return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
     }
 
-    fn Sample() -> Key
+    fn Sample() -> FactKey
     {
         let guarantee = Guarantee::New(
             FactVariant::Syntactic,
@@ -138,7 +142,7 @@ mod tests
             IncrementalGranularity::File,
         );
 
-        return Key {
+        return FactKey {
             contract: CapabilityId::New("nomos.cap.test.key"),
             contract_version: ContractVersion::New(1, 0),
             subject: SubjectId::From_Digest(Seeded(1)),

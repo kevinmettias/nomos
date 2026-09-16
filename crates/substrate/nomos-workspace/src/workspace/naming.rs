@@ -1,6 +1,6 @@
 //! Reducing the paths in a change set to names the workspace will accept.
 
-use super::{WorkspaceChangeSet, Change, WorkspaceError};
+use crate::{Change, WorkspaceChangeSet, WorkspaceError};
 
 /// Every change with its path validated and normalized, refusing the whole set on the first
 /// bad or repeated path.

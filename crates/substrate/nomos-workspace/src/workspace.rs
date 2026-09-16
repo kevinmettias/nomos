@@ -1,24 +1,25 @@
 //! The workspace, and the only thing that changes it.
 
-// A change set over a workspace, and the refusals a workspace raises.
-#[path = "workspace/change_set.rs"]
-mod change_set;
-#[path = "workspace/error.rs"]
-mod error;
+// The change set over a workspace and the refusals a workspace raises are declared at the
+// crate root rather than beneath this module, and `lib.rs` says why where it declares them:
+// each is published under a name that already carries the workspace, so a file named for it
+// cannot also sit inside `workspace/`.
 
-pub use change_set::ChangeSet as WorkspaceChangeSet;
-pub use error::Error as WorkspaceError;
-
+// What applying a change set came to, and the naming rules the door refuses a set by.
+mod applied;
 mod naming;
 #[cfg(test)]
 mod tests;
+
+pub use applied::Applied;
 
 use naming::{Normalize_Path, Normalized_Changes};
 
 use crate::Effect;
 use crate::EffectKind;
-use crate::Applied;
 use crate::Change;
+use crate::WorkspaceChangeSet;
+use crate::WorkspaceError;
 use crate::WorkspaceSnapshot;
 use crate::BuildVariant;
 use nomos_contracts::{ConfigurationId, Digest128, GenerationId, SchemaId, SnapshotId};
@@ -198,7 +199,7 @@ impl Workspace
     {
         let recorded = Recorded::New(
             DocumentKind::Fact,
-            SchemaId::New(crate::snapshot::SNAPSHOT_SCHEMA),
+            SchemaId::New(crate::SNAPSHOT_SCHEMA),
             self.snapshot.Encode(),
         );
 

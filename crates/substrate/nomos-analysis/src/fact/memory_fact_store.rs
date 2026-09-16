@@ -6,7 +6,7 @@
 // none of it is part of this type's public surface.
 #[path = "memory_store/invalidation.rs"] mod invalidation;
 
-use crate::fact::sealed;
+use crate::fact_store::sealed;
 use std::collections::BTreeSet;
 use std::collections::BTreeMap;
 use nomos_contracts::Digest128;

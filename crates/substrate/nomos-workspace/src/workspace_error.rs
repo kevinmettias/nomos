@@ -1,8 +1,19 @@
 //! Every way the workspace refuses a change.
+//!
+//! # Why this file sits at the crate root rather than inside `workspace/`
+//!
+//! It was `workspace/error.rs`, declaring `Error`, and `workspace.rs` published it as
+//! `pub use error::Error as WorkspaceError;`. The same three rules that put
+//! [`crate::WorkspaceChangeSet`] here apply one file along, and that file's header states
+//! the whole of it: the public name forces the file to be `workspace_error`,
+//! `workspace/workspace_error.rs` would repeat its parent folder, and keeping `Error` would
+//! need the alias.
 
 use nomos_store::StoreError;
+
+/// A refusal raised while applying a change set.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Error
+pub enum WorkspaceError
 {
     /// A change set with nothing in it.
     ///
@@ -29,7 +40,7 @@ pub enum Error
     Store(StoreError),
 }
 
-impl core::fmt::Display for Error
+impl core::fmt::Display for WorkspaceError
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -54,10 +65,10 @@ impl core::fmt::Display for Error
     }
 }
 
-impl std::error::Error for Error
+impl std::error::Error for WorkspaceError
 {}
 
-impl From<StoreError> for Error
+impl From<StoreError> for WorkspaceError
 {
     fn from(error: StoreError) -> Self
     {

@@ -1,11 +1,15 @@
 //! What an invalidation reached, and where it had to widen.
+//!
+//! Declared at the crate root rather than in `invalidation/`, and `lib.rs` says why where it
+//! declares it: the name it is published under already carries the invalidation, so a file
+//! named for it cannot also sit inside the folder that name would otherwise group it with.
 
 use nomos_contracts::GenerationId;
 use crate::Broadening;
 use crate::FactKey;
 use crate::GenerationCause;
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Report
+pub struct InvalidationReport
 {
     pub cause: GenerationCause,
     pub from: GenerationId,
@@ -15,7 +19,7 @@ pub struct Report
     pub retained: u32,
 }
 
-impl Report
+impl InvalidationReport
 {
     #[must_use]
     pub fn Invalidated(&self) -> usize
@@ -117,9 +121,9 @@ mod tests
         return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
     }
 
-    fn Empty_Report() -> Report
+    fn Empty_Report() -> InvalidationReport
     {
-        return Report {
+        return InvalidationReport {
             cause: GenerationCause::VariantChanged { variant: BuildVariantId::From_Digest(Seeded(1)) },
             from: GenerationId::From_Raw(REPORT_GENERATION),
             direct: Vec::new(),

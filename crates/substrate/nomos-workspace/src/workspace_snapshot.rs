@@ -1,7 +1,5 @@
 //! What the workspace is, in bytes somebody else can read.
 
-use crate::Member;
-use crate::BuildVariant;
 use nomos_contracts::{ConfigurationId, Digest128, SnapshotId};
 use nomos_model::Content_Digest;
 use nomos_store::StoreError;
@@ -11,8 +9,14 @@ use std::collections::BTreeMap;
 // spelled in. A sibling module rather than more of this file, because a file that both
 // writes a state down and reads it back is two responsibilities that only ever share the
 // schema constant.
-#[path = "workspace_snapshot/decoding.rs"]
 mod decoding;
+
+// What a snapshot is made of: the variant it was built for, and one file as it holds it.
+mod build_variant;
+mod member;
+
+pub use build_variant::BuildVariant;
+pub use member::Member;
 
 pub const SNAPSHOT_SCHEMA: &str = "nomos.workspace.snapshot.v1";
 

@@ -1,4 +1,20 @@
 //! Where a change was observed.
+//!
+//! # Why this file sits at the crate root rather than inside `change/`
+//!
+//! It was `change/source.rs`, declaring `Source`, and `change.rs` published it as
+//! `pub use source::Source as ChangeSource;`. Three rules pull against that shape, and
+//! moving the file here is the only arrangement that satisfies all three at once:
+//!
+//! - `file-name-matches-declared-type` requires a file to be named after the public type it
+//!   declares, so a type called `ChangeSource` forces the file to be `change_source`.
+//! - `check-tree-legibility` forbids a file repeating its parent folder, so
+//!   `change/change_source.rs` is out.
+//! - `check-facade-surface` counts `pub use x::Y as Z;` a second public name for one item, so
+//!   keeping `Source` and qualifying it at the facade is out too.
+//!
+//! The public path is unchanged: `lib.rs` re-exports this, so
+//! `nomos_workspace::ChangeSource` is what it always was.
 
 /// Who submitted a change.
 ///
@@ -12,7 +28,7 @@
 /// on the source would make an agent's edit and a human's edit of identical content two
 /// different states to analyze.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum Source
+pub enum ChangeSource
 {
     /// A correction applied by the system to its own recorded state.
     Correction,
@@ -26,7 +42,7 @@ pub enum Source
     CodeGenerator,
 }
 
-impl Source
+impl ChangeSource
 {
     #[must_use]
     pub const fn Label(self) -> &'static str
@@ -60,7 +76,7 @@ impl Source
     }
 }
 
-impl core::fmt::Display for Source
+impl core::fmt::Display for ChangeSource
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {
@@ -73,26 +89,26 @@ mod tests
 {
     use super::*;
 
-    /// One per variant `Source::All` lists. `Label`'s exhaustive match over every variant is
+    /// One per variant `ChangeSource::All` lists. `Label`'s exhaustive match over every variant is
     /// what keeps that list and the enum in step, so this pins the count.
     const SOURCE_COUNT: usize = 5;
 
     #[test]
     fn Test_Label_Should_Spell_Every_Source_Distinctly()
     {
-        assert_eq!(Source::Correction.Label(), "Correction");
-        assert_eq!(Source::AgentEdit.Label(), "AgentEdit");
-        assert_ne!(Source::IdeEdit.Label(), Source::GitCheckout.Label());
+        assert_eq!(ChangeSource::Correction.Label(), "Correction");
+        assert_eq!(ChangeSource::AgentEdit.Label(), "AgentEdit");
+        assert_ne!(ChangeSource::IdeEdit.Label(), ChangeSource::GitCheckout.Label());
     }
 
     #[test]
     fn Test_All_Should_List_Every_Source_Exactly_Once()
     {
-        let all = Source::All();
+        let all = ChangeSource::All();
 
         assert_eq!(all.len(), SOURCE_COUNT);
-        assert!(all.contains(&Source::Correction));
-        assert!(all.contains(&Source::CodeGenerator));
+        assert!(all.contains(&ChangeSource::Correction));
+        assert!(all.contains(&ChangeSource::CodeGenerator));
 
         let unique: std::collections::BTreeSet<_> = all.iter().collect();
         assert_eq!(unique.len(), all.len());

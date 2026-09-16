@@ -10,14 +10,20 @@
 
 #![forbid(unsafe_code)]
 
-// The registry's errors sit under the registry and resolution's parts under resolution.
-// Flat, this level was twelve files whose grouping a reader had to reconstruct from the
-// names; the two that have parts now say so in the tree.
+// Resolution's parts sit under resolution. Flat, this level was twelve files whose grouping
+// a reader had to reconstruct from the names.
+//
+// The registry's two error types sit here rather than inside `registry/`, because the name
+// each is published under already carries the registry: `registry/registry_error.rs` repeats
+// its parent folder, and `registry/error.rs` declaring `Error` needs an alias to be published
+// at all. See each file's own header.
 #[path = "capability_contract.rs"]
 mod contract;
 mod offer_refusal;
 mod provider_offer;
 mod registry;
+mod registry_error;
+mod registry_error_kind;
 mod requirement;
 mod resolution;
 
@@ -28,6 +34,8 @@ pub mod contract_testing;
 pub use contract::CapabilityContract;
 pub use offer_refusal::OfferRefusal;
 pub use provider_offer::ProviderOffer;
-pub use registry::{Registry, RegistryError, RegistryErrorKind, RequiredResolution, RequiredUnmet};
+pub use registry::{Registry, RequiredResolution, RequiredUnmet};
+pub use registry_error::RegistryError;
+pub use registry_error_kind::RegistryErrorKind;
 pub use requirement::Requirement;
 pub use resolution::{Remedy, Resolution, Selection, Standing, Unmet};

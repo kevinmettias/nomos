@@ -64,7 +64,7 @@ pub struct field nomos_capability::ProviderOffer::guarantee: Guarantee
 pub struct field nomos_capability::ProviderOffer::provider: ProviderId
 pub struct field nomos_capability::ProviderOffer::version: ContractVersion
 pub struct field nomos_capability::RegistryError::capability: CapabilityId
-pub struct field nomos_capability::RegistryError::kind: ErrorKind
+pub struct field nomos_capability::RegistryError::kind: RegistryErrorKind
 pub struct field nomos_capability::Requirement::capability: CapabilityId
 pub struct field nomos_capability::Requirement::minimum: Guarantee
 pub struct field nomos_capability::Requirement::preferred: Option<ProviderId>

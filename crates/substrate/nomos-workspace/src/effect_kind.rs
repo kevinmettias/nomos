@@ -1,8 +1,16 @@
 //! Which of the five things a change turned out to be.
+//!
+//! # Why this file sits at the crate root rather than inside `effect/`
+//!
+//! It was `effect/kind.rs`, declaring `Kind`, and `effect.rs` published it as
+//! `pub use kind::Kind as EffectKind;`. The same three rules that put
+//! [`crate::ChangeSource`] here apply one folder along: the type's public name forces the
+//! file to be `effect_kind`, `effect/effect_kind.rs` would repeat its parent folder, and
+//! keeping `Kind` would need the alias. That file's header states the whole of it.
 
 /// Which of the five things a change turned out to be.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub enum Kind
+pub enum EffectKind
 {
     Added,
     Modified,
@@ -22,7 +30,7 @@ pub enum Kind
     AlreadyAbsent,
 }
 
-impl Kind
+impl EffectKind
 {
     /// Whether an outcome of this kind changed what the workspace is.
     #[must_use]
@@ -40,10 +48,10 @@ mod tests
     #[test]
     fn Test_Is_Altered_Should_Be_True_Only_For_Added_Modified_Or_Removed()
     {
-        assert!(Kind::Added.Is_Altered());
-        assert!(Kind::Modified.Is_Altered());
-        assert!(Kind::Removed.Is_Altered());
-        assert!(!Kind::Redundant.Is_Altered());
-        assert!(!Kind::AlreadyAbsent.Is_Altered());
+        assert!(EffectKind::Added.Is_Altered());
+        assert!(EffectKind::Modified.Is_Altered());
+        assert!(EffectKind::Removed.Is_Altered());
+        assert!(!EffectKind::Redundant.Is_Altered());
+        assert!(!EffectKind::AlreadyAbsent.Is_Altered());
     }
 }

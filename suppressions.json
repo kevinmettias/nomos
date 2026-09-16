@@ -1722,7 +1722,7 @@
     },
     {
       "check": "check-abbreviations",
-      "path": "crates/substrate/nomos-analysis/src/fact/error.rs",
+      "path": "crates/substrate/nomos-analysis/src/fact_error.rs",
       "fingerprint": "b0dc6ceaf1d78f23",
       "reason": "fmt is the mandatory method name for std::fmt::Display/Debug -- the trait signature requires it letter for letter, so it cannot be renamed. This is a checker front-end gap (it does not special-case trait-mandated method names), not a nomos defect.",
       "owner": "@claude-p22-campaign",
@@ -1730,7 +1730,7 @@
     },
     {
       "check": "check-abbreviations",
-      "path": "crates/substrate/nomos-analysis/src/fact/identity.rs",
+      "path": "crates/substrate/nomos-analysis/src/fact_identity.rs",
       "fingerprint": "b0dc6ceaf1d78f23",
       "reason": "fmt is the mandatory method name for std::fmt::Display/Debug -- the trait signature requires it letter for letter, so it cannot be renamed. This is a checker front-end gap (it does not special-case trait-mandated method names), not a nomos defect.",
       "owner": "@claude-p22-campaign",
@@ -1738,7 +1738,7 @@
     },
     {
       "check": "check-abbreviations",
-      "path": "crates/substrate/nomos-capability/src/registry/error.rs",
+      "path": "crates/substrate/nomos-capability/src/registry_error.rs",
       "fingerprint": "b0dc6ceaf1d78f23",
       "reason": "fmt is the mandatory method name for std::fmt::Display/Debug -- the trait signature requires it letter for letter, so it cannot be renamed. This is a checker front-end gap (it does not special-case trait-mandated method names), not a nomos defect.",
       "owner": "@claude-p22-campaign",
@@ -1754,7 +1754,7 @@
     },
     {
       "check": "check-abbreviations",
-      "path": "crates/substrate/nomos-workspace/src/change/source.rs",
+      "path": "crates/substrate/nomos-workspace/src/change_source.rs",
       "fingerprint": "b0dc6ceaf1d78f23",
       "reason": "fmt is the mandatory method name for std::fmt::Display/Debug -- the trait signature requires it letter for letter, so it cannot be renamed. This is a checker front-end gap (it does not special-case trait-mandated method names), not a nomos defect.",
       "owner": "@claude-p22-campaign",
@@ -1762,7 +1762,7 @@
     },
     {
       "check": "check-abbreviations",
-      "path": "crates/substrate/nomos-workspace/src/workspace/error.rs",
+      "path": "crates/substrate/nomos-workspace/src/workspace_error.rs",
       "fingerprint": "b0dc6ceaf1d78f23",
       "reason": "fmt is the mandatory method name for std::fmt::Display/Debug -- the trait signature requires it letter for letter, so it cannot be renamed. This is a checker front-end gap (it does not special-case trait-mandated method names), not a nomos defect.",
       "owner": "@claude-p22-campaign",
@@ -2082,7 +2082,7 @@
     },
     {
       "check": "check-naming-clarity",
-      "path": "crates/substrate/nomos-analysis/src/fact/identity.rs",
+      "path": "crates/substrate/nomos-analysis/src/fact_identity.rs",
       "fingerprint": "4cc6f54badca4bf5",
       "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
@@ -2090,7 +2090,7 @@
     },
     {
       "check": "check-naming-clarity",
-      "path": "crates/substrate/nomos-analysis/src/fact/key.rs",
+      "path": "crates/substrate/nomos-analysis/src/fact_key.rs",
       "fingerprint": "4cc6f54badca4bf5",
       "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",
@@ -2130,7 +2130,7 @@
     },
     {
       "check": "check-naming-clarity",
-      "path": "crates/substrate/nomos-analysis/src/invalidation/report.rs",
+      "path": "crates/substrate/nomos-analysis/src/invalidation_report.rs",
       "fingerprint": "4cc6f54badca4bf5",
       "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
       "owner": "@claude-p24-regression",

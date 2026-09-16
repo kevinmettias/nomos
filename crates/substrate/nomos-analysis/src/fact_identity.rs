@@ -1,16 +1,20 @@
 //! A fact key together with the inputs and guarantee that produced it.
+//!
+//! Declared at the crate root rather than in `fact/`, and `lib.rs` says why where it
+//! declares it: the name it is published under already carries the fact, so a file named
+//! for it cannot also sit inside the folder that name would otherwise group it with.
 
 use nomos_contracts::Digest128;
 use nomos_contracts::GenerationId;
 use crate::FactKey;
 #[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub struct Identity
+pub struct FactIdentity
 {
     pub key: FactKey,
     pub generation: GenerationId,
 }
 
-impl Identity
+impl FactIdentity
 {
     #[must_use]
     pub const fn Key(&self) -> &FactKey
@@ -25,7 +29,7 @@ impl Identity
     }
 }
 
-impl core::fmt::Display for Identity
+impl core::fmt::Display for FactIdentity
 {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
     {

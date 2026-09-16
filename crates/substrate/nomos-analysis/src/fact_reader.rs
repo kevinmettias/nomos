@@ -1,4 +1,8 @@
 //! Asking the store a question and being told how well it was answered.
+//!
+//! Declared at the crate root rather than in `fact/`, and `lib.rs` says why where it
+//! declares it: the name it is published under already carries the fact, so a file named
+//! for it cannot also sit inside the folder that name would otherwise group it with.
 
 use nomos_contracts::Applicability;
 use nomos_capability::Requirement;
@@ -9,7 +13,7 @@ use crate::InputDigest;
 use crate::FactError;
 use crate::MaterializedFact;
 use crate::FactIdentity;
-pub trait Reader
+pub trait FactReader
 {
     /// # Errors
     ///
@@ -21,7 +25,7 @@ pub trait Reader
     ///
     /// Returns the resolved [`Applicability`] when the chosen provider has no answer —
     /// [`Applicability::DependencyUnavailable`] and its siblings name why, in the same
-    /// vocabulary [`Reader::Require_Any`] returns on total failure.
+    /// vocabulary [`FactReader::Require_Any`] returns on total failure.
     fn Require(
         &mut self,
         capability: &CapabilityId,
@@ -32,7 +36,7 @@ pub trait Reader
 
     /// The best answer any admitted provider has for this subject, and how good it is.
     ///
-    /// [`Reader::Require`] asks the chosen provider and stops. That is right when a
+    /// [`FactReader::Require`] asks the chosen provider and stops. That is right when a
     /// caller wants one provider's answer or none, and it is what leaves a lowered floor
     /// unspent: the offers the floor admitted are reachable and nothing looks at them.
     ///
