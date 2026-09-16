@@ -78161,14 +78161,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-a5",
-        "acquired_at": 1789497612,
-        "lease_expires_at": 1789544623
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "C:\\Python314\\python.exe",
@@ -78177,7 +78173,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "gate-orch"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: gate-orch -- 1 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789531465,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "80214268cc10bb35d03b7e465b43b2eaab37fe57"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -78281,7 +78296,15 @@
           "crates/languages/nomos-lang-rust/src/rollup/encode.rs",
           "crates/languages/nomos-lang-rust/src/rollup/materialize.rs",
           "crates/languages/nomos-lang-rust/src/rollup/module/index.rs",
-          "crates/languages/nomos-lang-rust/src/rollup/parse.rs"
+          "crates/languages/nomos-lang-rust/src/rollup/parse.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/admissibility.rs",
+          "crates/capabilities/nomos-cap-architecture/src/payload/tests.rs",
+          "tests/contract/surface/nomos-cap-architecture.txt",
+          "crates/capabilities/nomos-cap-architecture/src/lib.rs",
+          "crates/capabilities/nomos-cap-architecture/src/payload/depended.rs",
+          "crates/capabilities/nomos-cap-architecture/src/payload/depending.rs",
+          "crates/repository/nomos-repo-policy/src/architecture/reading/tests.rs",
+          "tests/contract/tests/boundaries/graph.rs"
         ],
         "patterns": []
       },
@@ -78352,6 +78375,26 @@
             "crates/languages/nomos-lang-rust/src/rollup/parse.rs"
           ],
           "widened_at": 1789522836
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/orchestration/nomos-gate-orchestration/src/admissibility.rs",
+            "crates/capabilities/nomos-cap-architecture/src/payload/tests.rs",
+            "tests/contract/surface/nomos-cap-architecture.txt"
+          ],
+          "widened_at": 1789531592
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/capabilities/nomos-cap-architecture/src/lib.rs",
+            "crates/capabilities/nomos-cap-architecture/src/payload/depended.rs",
+            "crates/capabilities/nomos-cap-architecture/src/payload/depending.rs",
+            "crates/repository/nomos-repo-policy/src/architecture/reading/tests.rs",
+            "tests/contract/tests/boundaries/graph.rs"
+          ],
+          "widened_at": 1789539238
         }
       ]
     },
@@ -78448,14 +78491,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-a5",
-        "acquired_at": 1789497620,
-        "lease_expires_at": 1789544623
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "C:\\Python314\\python.exe",
@@ -78464,7 +78503,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "host-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: host-cli -- 1 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789531481,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "80214268cc10bb35d03b7e465b43b2eaab37fe57"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -78935,7 +78993,9 @@
           "crates/rules/nomos-rules/src/checks/security_text.rs",
           "crates/rules/nomos-rules/src/checks/test_support.rs",
           "crates/rules/nomos-rules/src/registry/rule_registry.rs",
-          "crates/rules/nomos-rules/src/rule_descriptor/rule_judgment.rs"
+          "crates/rules/nomos-rules/src/rule_descriptor/rule_judgment.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context/judging.rs",
+          "tests/contract/surface/nomos-rules.txt"
         ],
         "patterns": []
       },
@@ -78982,6 +79042,14 @@
             "crates/rules/nomos-rules/src/rule_descriptor/rule_judgment.rs"
           ],
           "widened_at": 1789522837
+        },
+        {
+          "holder": "nomos-a5",
+          "added": [
+            "crates/orchestration/nomos-check-orchestration/src/run_context/judging.rs",
+            "tests/contract/surface/nomos-rules.txt"
+          ],
+          "widened_at": 1789539245
         }
       ]
     },
@@ -79040,14 +79108,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-a5",
-        "acquired_at": 1789497624,
-        "lease_expires_at": 1789544623
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "C:\\Python314\\python.exe",
@@ -79056,7 +79120,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "spec-core"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: spec-core -- 2 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789525874,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5b2e3f3c711a9980b37a89ffaa31bbe7fb146742"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -79153,14 +79236,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-a5",
-        "acquired_at": 1789497625,
-        "lease_expires_at": 1789544623
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "C:\\Python314\\python.exe",
@@ -79169,7 +79248,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "spec-ingest"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: spec-ingest -- 1 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789525785,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5b2e3f3c711a9980b37a89ffaa31bbe7fb146742"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -79492,7 +79590,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -79504,7 +79602,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: spec-store -- 1 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789525911,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5b2e3f3c711a9980b37a89ffaa31bbe7fb146742"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -79558,10 +79675,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-a5",
+        "acquired_at": 1789524607,
+        "lease_expires_at": 1789555445
+      },
       "verification": {
         "argv": [
           "C:\\Python314\\python.exe",
@@ -79612,7 +79733,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -79624,7 +79745,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "substrate"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: substrate -- 4 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789531526,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "80214268cc10bb35d03b7e465b43b2eaab37fe57"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -79663,7 +79803,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -79675,7 +79815,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "host-surfaces-followup"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: host-surfaces-followup -- 2 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789531492,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "80214268cc10bb35d03b7e465b43b2eaab37fe57"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -79755,7 +79914,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -79767,7 +79926,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "orchestration-followup"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: orchestration-followup -- 1 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789531502,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "80214268cc10bb35d03b7e465b43b2eaab37fe57"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -79874,6 +80052,114 @@
         },
         "revision": "161bb4e99fed257249070079041f601f6e3edb27"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-SPEC-CORE-CORRECTION",
+      "title": "Eight-phase spec-core: presumption reasons that name the fixture, not the call",
+      "why": "spec-core landed at a6b1791f with its predicate green, and one class of reason in it is untrue at its site. In crates/spec/nomos-spec-bundle/src/import/reference.rs, 23 In_Transaction calls carry the reason 'the Fixture holds the row this lookup names'. The test Test_Optional_Suite_Uid_Should_Return_None_When_No_Suite_Is_Given calls In_Transaction with None and asserts the result is None on the very next line, so the row being absent is the outcome the test wants and the fixture holding it is not what makes the call succeed. The rule asks what would have to change for this to become a bug; the change the reason names would not. check-presumption reads only the string, so neither the rule nor the predicate can see this, and a green predicate is the only evidence either one offers.",
+      "done_when": "Every reason attached to an unchecked extraction in this item's territory names what would make that call fail, rather than the fixture's contents or the test's assertion. The spec-core eight-phase predicate still exits zero; cargo test -p nomos-spec-bundle -p nomos-spec-project --no-fail-fast is green; nothing is added to suppressions.json and no in-code allow marker is added. The judgment is reported as prose: for each changed reason, the call it sits on and what would have to change for it to become a bug.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-bundle/src/bundle.rs",
+          "crates/spec/nomos-spec-bundle/src/columns.rs",
+          "crates/spec/nomos-spec-bundle/src/export.rs",
+          "crates/spec/nomos-spec-bundle/src/export/graph.rs",
+          "crates/spec/nomos-spec-bundle/src/export/source.rs",
+          "crates/spec/nomos-spec-bundle/src/export/submission.rs",
+          "crates/spec/nomos-spec-bundle/src/import.rs",
+          "crates/spec/nomos-spec-bundle/src/import/disjoint.rs",
+          "crates/spec/nomos-spec-bundle/src/import/graph.rs",
+          "crates/spec/nomos-spec-bundle/src/import/reference.rs",
+          "crates/spec/nomos-spec-bundle/src/import/resolve.rs",
+          "crates/spec/nomos-spec-bundle/src/import/source.rs",
+          "crates/spec/nomos-spec-bundle/src/import/submission.rs",
+          "crates/spec/nomos-spec-bundle/src/row/record.rs",
+          "crates/spec/nomos-spec-project/src/build.rs",
+          "crates/spec/nomos-spec-project/src/catalogue.rs",
+          "crates/spec/nomos-spec-project/src/profile.rs",
+          "crates/spec/nomos-spec-project/src/projection.rs",
+          "crates/spec/nomos-spec-project/src/projection/format.rs",
+          "crates/spec/nomos-spec-project/src/projection/output.rs",
+          "crates/spec/nomos-spec-project/src/render.rs",
+          "crates/spec/nomos-spec-project/src/select/query.rs",
+          "crates/spec/nomos-spec-project/src/select/sections.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "spec-core"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\eight_phase_check.py",
+          "spec-core"
+        ],
+        "exit_code": 0,
+        "output_tail": "OK: spec-core -- 2 crate(s), zero findings in the eight phases, reported and waived alike\r\n",
+        "verified_at": 1789531513,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "80214268cc10bb35d03b7e465b43b2eaab37fe57"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-STALE-WAIVER-PRUNE",
+      "title": "Only the waivers that still bind",
+      "why": "suppressions.json holds 2315 waivers against a workspace whose eight phases are at zero reported findings. 1995 of them match no finding at this HEAD, so the file records exemptions this repository has already earned the right to drop. A waiver that matches nothing is not a mild liability, it is unreadable: nothing in the file distinguishes an entry that still suppresses a real finding from one whose defect was fixed and forgotten, so the next reader cannot tell which entries remain load-bearing, and neither can the next prune. The campaign brief asks for zero violations with MINIMAL suppressions, and this is the second half of that sentence.",
+      "done_when": "A whole-repository sweep reports an empty waivers.stale array, and the surviving entries together with the prune-time stale list partition the pre-prune file exactly, so every dropped entry is one the sweep itself called stale and no entry that still binds was cut. What remains is the set that still suppresses a finding at this HEAD, including the five eight-phase findings no code change can reach.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "suppressions.json"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-a5",
+        "acquired_at": 1789539314,
+        "lease_expires_at": 1789553714
+      },
+      "verification": {
+        "argv": [
+          "python.exe",
+          "C:/Users/kmett/AppData/Local/Temp/nomos-gate/waivers_bind_check.py"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,

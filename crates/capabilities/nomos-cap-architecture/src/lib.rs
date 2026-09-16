@@ -52,6 +52,8 @@ mod payload;
 
 pub use contract::{Capability, Capability_Contract, Ceiling, CAPABILITY, CONTRACT_VERSION, Payload_Schema, SCHEMA};
 pub use payload::authority::Authority;
+pub use payload::depended::Depended;
+pub use payload::depending::Depending;
 pub use payload::exception::Exception;
 pub use payload::membership::Membership;
 pub use payload::permission::Permission;

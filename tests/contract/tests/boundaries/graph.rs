@@ -1,6 +1,7 @@
 //! What the dependency graph is allowed to do, and the vacuity guard in front of it.
 
 use crate::bands::Declared_Architecture;
+use nomos_cap_architecture::{Depended, Depending};
 use nomos_contract_tests::Workspace;
 
 /// Everything `nomos-contracts` is permitted to reach, transitively.
@@ -170,11 +171,11 @@ fn Test_Dependencies_Should_Run_Strictly_Downward()
 
             let permitted = if component == dependency_component
             {
-                architecture.Excepts(&member.name, dependency)
+                architecture.Excepts(Depending(&member.name), Depended(dependency))
             }
             else
             {
-                architecture.Permits(component, dependency_component)
+                architecture.Permits(Depending(component), Depended(dependency_component))
             };
 
             assert!(

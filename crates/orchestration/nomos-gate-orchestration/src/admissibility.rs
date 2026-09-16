@@ -38,7 +38,7 @@ mod depending_crate;
 pub use depended_crate::DependedCrate;
 pub use depending_crate::DependingCrate;
 
-use nomos_cap_architecture::ArchitecturePayload;
+use nomos_cap_architecture::{ArchitecturePayload, Depended, Depending};
 use nomos_platform::FileSystem;
 use std::path::Path;
 
@@ -110,7 +110,7 @@ pub fn Admits(architecture: &ArchitecturePayload, depending: DependingCrate<'_>,
         return Is_A_Declared_Peer(architecture, depending, depended);
     }
 
-    if architecture.Permits(from, to)
+    if architecture.Permits(Depending(from), Depended(to))
     {
         return Admissibility::Permitted;
     }
@@ -125,7 +125,7 @@ pub fn Admits(architecture: &ArchitecturePayload, depending: DependingCrate<'_>,
 /// exactly the cycles a component forbidding its own members exists to prevent.
 fn Is_A_Declared_Peer(architecture: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
 {
-    if architecture.Excepts(depending.0, depended.0)
+    if architecture.Excepts(Depending(depending.0), Depended(depended.0))
     {
         return Admissibility::Permitted;
     }

@@ -7,7 +7,7 @@
 
 use crate::SourceFile;
 use nomos_analysis::FactReader;
-use nomos_cap_architecture::ArchitecturePayload;
+use nomos_cap_architecture::{ArchitecturePayload, Depended, Depending};
 use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -117,12 +117,12 @@ fn Violation_If_Wrong_Direction(architecture: &ArchitecturePayload, source: &Sou
 {
     if violation.component == violation.dependency_component
     {
-        if architecture.Excepts(violation.package, &violation.edge.target)
+        if architecture.Excepts(Depending(violation.package), Depended(&violation.edge.target))
         {
             return None;
         }
     }
-    else if architecture.Permits(violation.component, violation.dependency_component)
+    else if architecture.Permits(Depending(violation.component), Depended(violation.dependency_component))
     {
         return None;
     }

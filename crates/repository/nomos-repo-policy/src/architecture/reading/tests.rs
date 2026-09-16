@@ -5,6 +5,7 @@
 //! `Domain` and `Api`, nothing here knows what a zone is.
 
 use super::*;
+use nomos_cap_architecture::{Depended, Depending};
 use nomos_platform::{DeterminismStrength, FileSystemError, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_platform_std::StdFileSystem;
 use std::path::PathBuf;
@@ -88,9 +89,9 @@ fn Test_Discover_Workspace_Should_Read_A_Whole_Declaration()
     assert_eq!(payload.components, vec!["Domain".to_owned(), "Api".to_owned()]);
     assert_eq!(payload.Component_Of("billing"), Some("Domain"));
     assert_eq!(payload.Component_Of("http"), Some("Api"));
-    assert!(payload.Permits("Api", "Domain"));
-    assert!(!payload.Permits("Domain", "Api"));
-    assert!(payload.Excepts("billing", "billing-core"));
+    assert!(payload.Permits(Depending("Api"), Depended("Domain")));
+    assert!(!payload.Permits(Depending("Domain"), Depended("Api")));
+    assert!(payload.Excepts(Depending("billing"), Depended("billing-core")));
     assert_eq!(payload.Doors_Into("ledger-store"), Some(["billing".to_owned()].as_slice()));
 }
 

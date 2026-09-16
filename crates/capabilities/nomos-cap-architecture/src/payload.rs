@@ -24,12 +24,16 @@
 //! would then have to reach a rules crate to ask a question that is not a rule's.
 
 pub(crate) mod authority;
+pub(crate) mod depended;
+pub(crate) mod depending;
 pub(crate) mod exception;
 pub(crate) mod membership;
 pub(crate) mod permission;
 pub(crate) mod refusal;
 
 use authority::Authority;
+use depended::Depended;
+use depending::Depending;
 use exception::Exception;
 use membership::Membership;
 use permission::Permission;
@@ -99,30 +103,34 @@ impl ArchitecturePayload
 
     /// Whether a package in `from` may depend on a package in `to`, by component alone.
     ///
+    /// The two ends are [`Depending`] and [`Depended`] rather than two `&str`s, because the
+    /// question is directed and a transposed pair of strings answers it backwards silently.
+    ///
     /// Two packages sharing a component are [`Self::Excepts`]'s question, not this one's, and
     /// this answers only what the declaration states: a repository that declares no `from -> from`
     /// permission gets `false` for one, which is how this workspace's own declaration keeps
     /// peers from naming each other without that rule being written here.
     #[must_use]
-    pub fn Permits(&self, from: &str, to: &str) -> bool
+    pub fn Permits(&self, from: Depending<'_>, to: Depended<'_>) -> bool
     {
         return self
             .permissions
             .iter()
-            .any(|permission| return permission.from == from && permission.to == to);
+            .any(|permission| return permission.from == from.0 && permission.to == to.0);
     }
 
     /// Whether `from` naming `to` is one of the package pairs this declaration excepts.
     ///
     /// Directed, because an exception is a statement about one real dependency and not a
-    /// blanket exemption for a pair.
+    /// blanket exemption for a pair -- which is also why the two ends are [`Depending`] and
+    /// [`Depended`] rather than two `&str`s, as [`Self::Permits`]'s own doc says.
     #[must_use]
-    pub fn Excepts(&self, from: &str, to: &str) -> bool
+    pub fn Excepts(&self, from: Depending<'_>, to: Depended<'_>) -> bool
     {
         return self
             .exceptions
             .iter()
-            .any(|exception| return exception.from == from && exception.to == to);
+            .any(|exception| return exception.from == from.0 && exception.to == to.0);
     }
 
     /// The doors into `package`, or `None` when this declaration does not call it an authority.

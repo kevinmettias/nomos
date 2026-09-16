@@ -17,6 +17,8 @@
 //! sources, and three of the four closure shapes differ only in which of two arguments they
 //! ignore. So one signature serves them all, it is a plain `fn` pointer, and a `fn` pointer
 //! is `const`-compatible -- which is what lets this stay a table while carrying the code.
+//! [`Described`] takes that pointer and [`RuleJudgment::New`] names it, so the pointer
+//! appears once here as the boundary it is and nowhere else.
 //!
 //! # What is still declared above this crate, and why
 //!
@@ -28,7 +30,9 @@
 //! capability slice and a materialization are orchestration concepts, and a descriptor table
 //! naming one would be a lower band describing an upper band's shape.
 
-use nomos_contracts::RuleId;
+use crate::SourceFile;
+use nomos_analysis::FactReader;
+use nomos_contracts::{Finding, RuleId};
 
 pub use required_fact::RequiredFact;
 pub use rule_judgment::RuleJudgment;
@@ -43,7 +47,7 @@ mod subject_kind;
 ///
 /// # Why this carries no `PartialEq`
 ///
-/// It used to, unused. [`Self::check`] is a `fn` pointer, and comparing two of those
+/// It used to, unused. [`Self::check`] carries a `fn` pointer, and comparing two of those
 /// compares addresses -- which the compiler is free to merge across distinct functions and
 /// to duplicate across codegen units, so a derived `==` here would answer a question it
 /// cannot actually answer, silently and in whichever direction the build happened to land.
@@ -79,7 +83,8 @@ pub struct RuleDescriptor
     /// Here rather than in a composition root's own array because a rule declared in one
     /// place and judged in another is two declarations, and this workspace has already
     /// measured that pair going silently out of step twice (`OD-GATE-020`). A run derives
-    /// its table from this field; see [`RuleJudgment`] for the one shape they share.
+    /// its table from this field and calls it through [`RuleJudgment::Judges`]; see
+    /// [`RuleJudgment`] for the one shape they share.
     pub check: RuleJudgment,
 }
 
@@ -144,13 +149,18 @@ pub const NO_VERSIONED_RECORD: u32 = 0;
 /// Cites [`PORTED_STANDARD`] at [`NO_VERSIONED_RECORD`], which is what all but eight rules in
 /// the table cite. The eight that cite something else say so with [`RuleDescriptor::Citing`],
 /// so the common case stays one line and the exceptions are visible as exceptions.
-const fn Described(id: &'static str, subject: SubjectKind, requires: &'static [RequiredFact], check: RuleJudgment) -> RuleDescriptor
+///
+/// `judge` is the plain `fn` pointer rather than the [`RuleJudgment`] that carries it, because
+/// this is the boundary where the table's own vocabulary -- a bare rule function or a closure
+/// widening one -- meets the named type. Every one of the seventy entries below passes its
+/// judgment in this shape, so [`RuleJudgment::New`] is named here and at no call site.
+const fn Described(id: &'static str, subject: SubjectKind, requires: &'static [RequiredFact], judge: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>) -> RuleDescriptor
 {
     return RuleDescriptor {
         id,
         subject,
         requires,
-        check,
+        check: RuleJudgment::New(judge),
         contract_record: PORTED_STANDARD,
         contract_record_version: NO_VERSIONED_RECORD,
     };

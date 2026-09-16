@@ -131,10 +131,10 @@ fn Test_Permits_Should_Answer_Exactly_What_The_Declaration_States()
 {
     let payload = Sample();
 
-    assert!(payload.Permits("Api", "Domain"));
-    assert!(payload.Permits("Infrastructure", "Domain"));
-    assert!(!payload.Permits("Domain", "Api"), "the reverse is not declared");
-    assert!(!payload.Permits("Api", "Infrastructure"), "an undeclared pair is not permitted");
+    assert!(payload.Permits(Depending("Api"), Depended("Domain")));
+    assert!(payload.Permits(Depending("Infrastructure"), Depended("Domain")));
+    assert!(!payload.Permits(Depending("Domain"), Depended("Api")), "the reverse is not declared");
+    assert!(!payload.Permits(Depending("Api"), Depended("Infrastructure")), "an undeclared pair is not permitted");
 }
 
 /// A declaration that states no self-permission gets `false` for one, which is how a
@@ -145,10 +145,10 @@ fn Test_Permits_Should_Answer_Exactly_What_The_Declaration_States()
 fn Test_Permits_Should_Follow_The_Declaration_For_A_Component_Against_Itself()
 {
     let payload = Sample();
-    assert!(!payload.Permits("Domain", "Domain"), "the sample declares no self-permission");
+    assert!(!payload.Permits(Depending("Domain"), Depended("Domain")), "the sample declares no self-permission");
 
     let permissive = Parse_Payload(b"component\tDomain\npermits\tDomain\tDomain\n").expect("a declaration may permit a component against itself");
-    assert!(permissive.Permits("Domain", "Domain"), "a declared self-permission is honoured");
+    assert!(permissive.Permits(Depending("Domain"), Depended("Domain")), "a declared self-permission is honoured");
 }
 
 #[test]
@@ -156,8 +156,11 @@ fn Test_Excepts_Should_Be_Directed()
 {
     let payload = Sample();
 
-    assert!(payload.Excepts("billing", "billing-core"));
-    assert!(!payload.Excepts("billing-core", "billing"), "an exception is one real dependency, not a pair exemption");
+    assert!(payload.Excepts(Depending("billing"), Depended("billing-core")));
+    assert!(
+        !payload.Excepts(Depending("billing-core"), Depended("billing")),
+        "an exception is one real dependency, not a pair exemption"
+    );
 }
 
 #[test]

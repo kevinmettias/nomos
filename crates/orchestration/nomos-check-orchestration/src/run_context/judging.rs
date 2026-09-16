@@ -12,7 +12,7 @@
 use nomos_analysis::Reader;
 use nomos_contracts::Finding;
 use nomos_rules::{
-    SourceFile, DESCRIPTORS,
+    SourceFile, DESCRIPTORS, RuleDescriptor,
     // The six rules of [`Judged_Sources`]' mapping. Every rule identifier this crate used to
     // name for the sake of *running* a rule is now read off `DESCRIPTORS` at run time; these
     // six are the residue `OD-RULES-027` measured and licensed.
@@ -101,12 +101,23 @@ fn Findings_For_Selected_Rules(judged: Judged<'_>, reader: &mut Reader<'_, '_>, 
             continue;
         }
 
-        let rule_findings = (descriptor.check)(Judged_Sources(descriptor.id, &judged), reader);
+        let rule_findings = Judged_By(descriptor, &judged, reader);
         cache.Record(descriptor.id, rule_findings.clone());
         findings.extend(rule_findings);
     }
 
     return findings;
+}
+
+/// One descriptor's own judgment: its rule's callable, over the sources that rule reads.
+///
+/// Named rather than inlined because the two halves are each one call and the composition
+/// is the step worth naming -- which slice a rule is judged over is this module's own
+/// decision ([`Judged_Sources`] says why), and running the rule is the table's.
+fn Judged_By(descriptor: &RuleDescriptor, judged: &Judged<'_>, reader: &mut Reader<'_, '_>) -> Vec<Finding>
+{
+    let sources = Judged_Sources(descriptor.id, judged);
+    return descriptor.check.Judges(sources, reader);
 }
 
 /// The sources `rule` is judged over: a capability family's own materialized slice for the
