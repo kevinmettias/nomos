@@ -1,6 +1,6 @@
 pub(crate) mod claimed_record;
 mod disposition;
-pub(crate) mod projection;
+pub(crate) mod record_projection;
 pub(crate) mod write;
 
 use nomos_spec_model::BlockKind;

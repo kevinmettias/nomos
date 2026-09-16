@@ -1,7 +1,7 @@
 //! One row, carrying its own table name and only natural keys.
 
 pub(crate) mod front_matter;
-pub(crate) mod relation;
+pub(crate) mod record_relation;
 
 use serde::{Deserialize, Serialize};
 
@@ -13,7 +13,7 @@ use crate::History as NodeHistory;
 use crate::NormativeStatement;
 use crate::Omission;
 use crate::FrontMatter as RecordFrontMatter;
-use crate::row::record::relation::Relation as RecordRelation;
+use crate::row::record::record_relation::RecordRelation;
 use crate::Relation;
 use crate::Type as RelationType;
 use crate::Block as SourceBlock;

@@ -1,8 +1,11 @@
 //! One line of a table, as stored.
+//!
+//! Named `TableLine` rather than `Line` because this crate publishes nine subsystems'
+//! vocabulary at one flat root, where a bare `Line` would not say whose it is.
 
 /// One line of a table, as stored.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Line
+pub struct TableLine
 {
     /// Which block of the document carries it.
     pub block_ordinal: u32,

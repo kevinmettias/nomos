@@ -1,15 +1,19 @@
 //! What ingesting the statements found.
+//!
+//! Named `StatementReport` rather than `Report` because this crate publishes its whole
+//! vocabulary at one flat root, where the statement ingest's report and the overlay
+//! reconciliation's would otherwise share a name.
 
 use crate::Divergence as StatementDivergence;
 #[derive(Debug, Default)]
-pub struct Report
+pub struct StatementReport
 {
     pub ingested: u32,
     pub divergences: Vec<StatementDivergence>,
     pub non_canonical_text: Vec<String>,
 }
 
-impl Report
+impl StatementReport
 {
     #[must_use]
     pub fn Is_Passing(&self) -> bool
@@ -31,7 +35,7 @@ mod tests
         let clean = Report_Fixture(Vec::new(), Vec::new());
         assert!(clean.Is_Passing());
 
-        let empty = Report::default();
+        let empty = StatementReport::default();
         assert!(!empty.Is_Passing(), "ingesting nothing is not a pass");
 
         let diverged = Report_Fixture(
@@ -49,9 +53,9 @@ mod tests
         assert!(!non_canonical.Is_Passing());
     }
 
-    fn Report_Fixture(divergences: Vec<StatementDivergence>, non_canonical_text: Vec<String>) -> Report
+    fn Report_Fixture(divergences: Vec<StatementDivergence>, non_canonical_text: Vec<String>) -> StatementReport
     {
-        return Report {
+        return StatementReport {
             ingested: 1,
             divergences,
             non_canonical_text,

@@ -4,14 +4,19 @@
 //! Six files at the crate root spelled this relationship in their name prefixes --
 //! `edit_`, `staged_`, `_change`, `commit_` -- and a reader had to reassemble it from
 //! those. The transaction is one subject and this is where it lives.
+//!
+//! Two members keep a prefix the folder would otherwise let them drop, and the reason is not
+//! the folder: `edit_error` and `edit_preview` are named for the types they declare --
+//! `EditError` and `EditPreview`, the names this crate publishes at its root, where a bare
+//! `Error` or `Preview` would not say whose it is.
 
 pub(crate) mod normative_movement;
 pub(crate) mod normative_outcome;
 
 pub(crate) mod block_change;
 pub(crate) mod commit_report;
-pub(crate) mod error;
-pub(crate) mod preview;
+pub(crate) mod edit_error;
+pub(crate) mod edit_preview;
 pub(crate) mod identity_change;
 pub(crate) mod staged_edit;
 

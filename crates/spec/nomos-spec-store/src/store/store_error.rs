@@ -1,7 +1,11 @@
 //! Everything that stops the specification store answering.
+//!
+//! Named `StoreError` rather than `Error` because this crate publishes nine subsystems'
+//! vocabulary at one flat root, and two of those subsystems declare an error -- this one and
+//! `edit`'s. The published name carries its subsystem, so the two sit side by side.
 
 #[derive(Debug)]
-pub enum Error
+pub enum StoreError
 {
     Sql(String),
     Migration
@@ -58,7 +62,7 @@ pub enum Error
     },
 }
 
-impl core::fmt::Display for Error
+impl core::fmt::Display for StoreError
 {
     // `fmt` is the fixed method name `std::fmt::Display` requires; it is not a style choice
     // and cannot be spelled out without ceasing to implement the trait.
@@ -104,10 +108,10 @@ impl core::fmt::Display for Error
     }
 }
 
-impl std::error::Error for Error
+impl std::error::Error for StoreError
 {}
 
-impl From<rusqlite::Error> for Error
+impl From<rusqlite::Error> for StoreError
 {
     fn from(error: rusqlite::Error) -> Self
     {

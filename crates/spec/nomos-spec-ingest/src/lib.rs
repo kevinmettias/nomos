@@ -20,9 +20,9 @@ pub use archive::{Archive, Archives_In};
 pub use archive::error::Error;
 pub use archive::error_kind::ErrorKind;
 pub use archive::artifact::Artifact;
-// `Lineage` would collide with `content::section::lineage::Lineage` if flattened bare, so
-// each keeps its longer, table-naming public name here.
-pub use content::block::lineage::Lineage as BlockLineage;
+// The two lineages keep their subsystem in their published name, because this root flattens
+// every subsystem's vocabulary and one bare `Lineage` cannot name both.
+pub use content::block::block_lineage::BlockLineage;
 pub use content::block::field::Field;
 pub use content::block::mismatch::Mismatch;
 pub use content::block::mismatch_kind::MismatchKind;
@@ -44,8 +44,8 @@ pub use reconciliation::fate::member_fate::MemberFate;
 pub use reconciliation::lineage::origin::Origin;
 pub use reconciliation::overlay::artifact::Parse_Artifact;
 pub use reconciliation::overlay::identifiers::Statements_In;
-// `Report` would collide with `content::statement::report::Report` if flattened bare, so
-// each keeps its longer, subsystem-naming public name here.
+// The two reports keep their subsystem in their published name, for the reason the two
+// lineages do above.
 pub use reconciliation::overlay::report::{Ingest_Overlay_Document, Ingest_V15_Record, Report as OverlayReport};
 pub use reconciliation::overlay::overlaid::Overlaid;
 pub use reconciliation::overlay::pair_change::PairChange;
@@ -62,14 +62,14 @@ pub use restore::{Models_In, RestorationReport, Resolve_Model_Uid, Restore_Membe
 pub use reconciliation::restored::Restored;
 pub use revisions::{Census_Kinds, DOMAIN_VOLUMES, Fingerprint_Revision, Label_Gaps, RevisionFingerprint, Revisions_In, Walk_Revisions};
 pub use reconciliation::scope::Scope;
-pub use content::section::lineage::Lineage as SectionLineage;
+pub use content::section::section_lineage::SectionLineage;
 pub use siblings::{
     COMMENTARY, Ingest_Game_Plan, Ingest_Sibling_Suite, LINEAGE_NOTES, Prepare_Commentary_View, ROOT_SUITE, Sibling,
     Statements_Sourced_Only_From_Commentary,
 };
 pub use content::statement::divergence::Divergence;
 pub use content::statement::file::File;
-pub use content::statement::report::Report as StatementReport;
+pub use content::statement::statement_report::StatementReport;
 pub use reconciliation::report::suite_report::SuiteReport;
 pub use reconciliation::report::tally::Tally;
 pub use archive::template::Template;

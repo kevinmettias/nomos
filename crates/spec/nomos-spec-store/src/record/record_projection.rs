@@ -1,8 +1,12 @@
 //! A record read back out as markdown, with both content addresses.
 
 /// A record read back out as markdown, with both content addresses.
+///
+/// Named `RecordProjection` rather than `Projection` because this crate publishes nine
+/// subsystems' vocabulary at one flat root, where a bare `Projection` would not say whose
+/// it is.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Projection
+pub struct RecordProjection
 {
     pub node_id: String,
     pub path: String,
@@ -15,7 +19,7 @@ pub struct Projection
     pub projected_hash: String,
 }
 
-impl Projection
+impl RecordProjection
 {
     /// Whether the projection is the ingested bytes.
     ///
@@ -39,9 +43,9 @@ mod tests
     #[derive(Clone, Copy)]
     struct ProjectedHash<'a>(&'a str);
 
-    fn A_Projection(source_hash: SourceHash<'_>, projected_hash: ProjectedHash<'_>) -> Projection
+    fn A_Projection(source_hash: SourceHash<'_>, projected_hash: ProjectedHash<'_>) -> RecordProjection
     {
-        return Projection {
+        return RecordProjection {
             node_id: "D-1".to_owned(),
             path: "records/D-1.md".to_owned(),
             revision: "v1".to_owned(),

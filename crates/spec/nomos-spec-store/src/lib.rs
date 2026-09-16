@@ -32,8 +32,8 @@ pub use edit::block_change::BlockChange;
 pub use record::claimed_record::ClaimedRecord;
 pub use edit::commit_report::CommitReport;
 pub use read::document_source::DocumentSource;
-pub use edit::error::Error as EditError;
-pub use edit::preview::Preview as EditPreview;
+pub use edit::edit_error::EditError;
+pub use edit::edit_preview::EditPreview;
 pub use edit::identity_change::IdentityChange;
 pub use read::node_row::NodeRow;
 pub use read::node_summary::NodeSummary;
@@ -41,7 +41,7 @@ pub use edit::normative_movement::NormativeMovement;
 pub use edit::normative_outcome::NormativeOutcome;
 pub use read::path_match::PathMatch;
 pub use record::{Disposition, Kind_Label};
-pub use record::projection::Projection as RecordProjection;
+pub use record::record_projection::RecordProjection;
 pub use record::write::Write;
 pub use table::row_census::RowCensus;
 pub use table::row_scope::RowScope;
@@ -54,8 +54,8 @@ pub use store::{
 pub use store::relation::{
     Constraint, FromNodeId, InverseRelationType, Tier, ToNodeId, TypeName,
 };
-pub use store::error::Error as StoreError;
+pub use store::store_error::StoreError;
 pub use submission::{Accept_Submission, AcceptError, Transport_Origin};
 pub use table::suite_authority::{SuiteAuthority, SuiteId, SuiteTitle};
 pub use table::Table;
-pub use table::line::Line as TableLine;
+pub use table::table_line::TableLine;

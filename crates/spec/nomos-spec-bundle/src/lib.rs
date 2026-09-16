@@ -34,8 +34,9 @@ pub use row::reference::ordinal_ref::OrdinalRef;
 pub use row::record::Record;
 pub use row::record::front_matter::FrontMatter;
 // `Relation` would collide with `row::relation::Relation` (the typed-edge row) if flattened
-// bare, so the declared-front-matter relation keeps its longer public name here.
-pub use row::record::relation::Relation as RecordRelation;
+// bare, so the declared-front-matter relation declares itself under the name this root
+// publishes.
+pub use row::record::record_relation::RecordRelation;
 pub use row::relation::Relation;
 pub use row::relation::r#type::Type;
 pub use row::source::block::Block;

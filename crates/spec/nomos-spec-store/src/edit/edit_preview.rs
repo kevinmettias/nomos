@@ -11,8 +11,11 @@ use crate::StagedEdit;
 ///
 /// Only [`StagedEdit::Preview`] can build one, and [`SpecificationStore::Commit_Edit`] takes
 /// one. That is the whole mechanism by which the mandatory preview is mandatory.
+///
+/// Named `EditPreview` rather than `Preview` because this crate publishes nine subsystems'
+/// vocabulary at one flat root, where a bare `Preview` would not say whose it is.
 #[derive(Debug)]
-pub struct Preview
+pub struct EditPreview
 {
     pub(crate) staged: StagedEdit,
     pub(crate) blocks: Vec<BlockChange>,
@@ -22,7 +25,7 @@ pub struct Preview
     pub(crate) statements: Vec<NormativeMovement>,
 }
 
-impl Preview
+impl EditPreview
 {
     #[must_use]
     pub fn Node_Id(&self) -> &str
@@ -283,7 +286,7 @@ mod tests
 
     /// A preview carrying one of every kind of change, so each accessor has something real
     /// to return. `before_path` and `after_path` let a caller isolate the rename question.
-    fn A_Preview(before_path: BeforePath<'_>, after_path: AfterPath<'_>) -> Preview
+    fn A_Preview(before_path: BeforePath<'_>, after_path: AfterPath<'_>) -> EditPreview
     {
         let staged = StagedEdit {
             claimed: A_Claimed(NodeId("D-1"), RecordPath(before_path.0), ClaimedText("# D-1\n\nOld.\n")),
@@ -295,7 +298,7 @@ mod tests
             },
         };
 
-        return Preview {
+        return EditPreview {
             staged,
             blocks: vec![BlockChange::Reworded {
                 ordinal: 1,

@@ -360,9 +360,9 @@ pub(crate) fn Record_Relations(connection: &Connection, records: &mut Vec<Record
 }
 
 /// Every declared relation row, in the order the record declared them.
-fn Record_Relation_Rows(connection: &Connection) -> Result<Vec<crate::row::record::relation::Relation>, BundleError>
+fn Record_Relation_Rows(connection: &Connection) -> Result<Vec<crate::RecordRelation>, BundleError>
 {
-    use crate::row::record::relation::Relation as RecordRelation;
+    use crate::RecordRelation;
 
     let mut statement = connection.prepare(
         "SELECT d.path, d.revision, r.ordinal, r.target, r.relation

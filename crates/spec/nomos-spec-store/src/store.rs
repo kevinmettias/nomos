@@ -7,7 +7,7 @@ mod seed_report;
 
 pub use seed_report::{GOVERNING_RECORD_IDS, Seed_Governing_Records, SeedReport};
 
-pub(crate) mod error;
+pub(crate) mod store_error;
 
 pub(crate) mod relation;
 mod specification_store;
