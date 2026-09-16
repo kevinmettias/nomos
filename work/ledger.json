@@ -80940,6 +80940,78 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-NAMING-ABBREVIATIONS-CONFIG",
+      "title": "The abbreviations check reads fmt and lsp from the words list",
+      "why": "check-abbreviations reports 24 live findings across crates/: 23 read \"function fn fmt uses abbreviation fmt (no vowels -- an abbreviation; spell it out)\" and one is the folder nomos-lsp. A further 75 fmt findings are absorbed by suppressions.json, which carries 81 entries for this one check. Every one of those 81 fingerprints an identical message, so the gate reports 72 of them as AMBIGUOUS -- its own wording is that the identity 'depends on their ORDER, so fixing one of them will move this waiver onto a different finding' -- and a naming-phase run already reports 6 as matched nothing. So the ledger here is not merely large, it is order-dependent: repairing any fmt elsewhere re-points these entries at findings nobody argued for. The check has a designed configuration surface for exactly this case. kernel/config/words/config.go merges the target's standards.json words.approved_abbreviations over default_Approved_Words, and lists.go consults the merged Approved set before the vowel rule that catches a word nobody thought to list. fmt and lsp are in neither DEFAULT_APPROVED_WORDS nor DEFAULT_BANNED_WORDS -- both are caught by is_Vowelless alone -- so they are MISSING from the ported vocabulary rather than excluded from it, which is the case OD-RULES-017 decided: a word absent from the banned list is added to standards.json words.approved_abbreviations when it names a fixed external identifier or an established narrow technical term. fmt is the method name core::fmt::Display and core::fmt::Debug mandate -- it cannot be renamed, and 78 of the 81 waivers say so in their own words -- and it is also the Rust standard library's own module name; lsp is Language Server Protocol, the acronym crates/host/nomos-lsp exists to implement and a sibling of mcp, which default_Approved_Words already approves. Adding the two words therefore REDUCES the ledger: 81 entries leave and none arrive. Measured at the revision this item was boarded on: 24 live, 75 waived, 0 reported again after expiry, 323 entries in the file.",
+      "done_when": "check-abbreviations reports zero live findings and zero waived over F:/repos/nomos/crates, so both halves of the predicate pass. The 81 fn-fmt entries are deleted from suppressions.json and no suppression entry is added by this item -- the whole point is that this one is answered by the configuration channel the check and OD-RULES-017 both name, not by a waiver. standards.json gains exactly two words, fmt and lsp, in words.approved_abbreviations, and no other key moves: the file is closed to new top-level keys (a decode with DisallowUnknownFields), and words.approved_abbreviations is a key code-standards' own Config names, so it is a designed surface and not an invented one. The naming phase's other seven checks report exactly the numbers they reported before this item: 258 live and 84 waived between them.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "standards.json",
+          "suppressions.json"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "abbreviations",
+          "-target",
+          "F:/repos/nomos/crates",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "abbreviations",
+          "-target",
+          "F:/repos/nomos/crates",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK               LIVE   WAIVED     JUDGED  VERDICT\nabbreviations          0        0  1346 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789582223,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d901820eeaa0b4bddb9624e5320b1c20e658e7d8"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
