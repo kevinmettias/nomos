@@ -96,8 +96,8 @@ pub fn Compare_Gate_Runs(
     candidate: &GateRunResult,
 ) -> Result<GateCompareResult, CollidingOccurrences>
 {
-    let before = Indexed(&baseline.findings, baseline.run)?;
-    let after = Indexed(&candidate.findings, candidate.run)?;
+    let before = Occurrences_By_Id(&baseline.findings, baseline.run)?;
+    let after = Occurrences_By_Id(&candidate.findings, candidate.run)?;
 
     let compared = GateCompareResult {
         baseline: baseline.run,
@@ -124,7 +124,7 @@ pub fn Compare_Gate_Runs(
 /// the population first means the map is built only over input already known to be injective,
 /// and there is no branch on which a displaced value could be produced and dropped. The order is
 /// the guarantee; a comment asking the next reader to preserve it would not be.
-fn Indexed(
+fn Occurrences_By_Id(
     findings: &GateFindings,
     run: RunId,
 ) -> Result<BTreeMap<FindingOccurrenceId, (FindingDisposition, Finding)>, CollidingOccurrences>
@@ -150,7 +150,7 @@ fn Indexed(
 
 /// Every finding in `findings`, paired with the bucket it fell into.
 ///
-/// Separate from [`Indexed`] because the validation below has to see the whole population
+/// Separate from [`Occurrences_By_Id`] because the validation below has to see the whole population
 /// *before* anything is keyed by identity. A finding matched by more than one bucket cannot
 /// occur, the same disjointness [`GateFindings`]'s own field docs already state.
 fn Population_Of(findings: &GateFindings) -> Vec<(FindingDisposition, &Finding)>

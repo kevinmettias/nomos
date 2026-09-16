@@ -98,9 +98,9 @@ impl GatePolicyFile
     pub(crate) fn Resolved_Over(&self, command: &GateCommand) -> Self
     {
         return Self {
-            suppressions: Preferred(&command.suppressions, &self.suppressions),
-            baseline: Preferred(&command.baseline, &self.baseline),
-            adoption: Preferred(&command.adoption, &self.adoption),
+            suppressions: Preferred_Policy(&command.suppressions, &self.suppressions),
+            baseline: Preferred_Policy(&command.baseline, &self.baseline),
+            adoption: Preferred_Policy(&command.adoption, &self.adoption),
             coverage: if command.coverage == CoveragePolicy::default() { self.coverage } else { command.coverage },
         };
     }
@@ -110,7 +110,7 @@ impl GatePolicyFile
 ///
 /// Generic over the three list-shaped policies rather than written three times, since
 /// "default means the caller said nothing" is one rule and not three.
-fn Preferred<Policy: Clone + Default + PartialEq>(stated: &Policy, from_file: &Policy) -> Policy
+fn Preferred_Policy<Policy: Clone + Default + PartialEq>(stated: &Policy, from_file: &Policy) -> Policy
 {
     return if *stated == Policy::default() { from_file.clone() } else { stated.clone() };
 }

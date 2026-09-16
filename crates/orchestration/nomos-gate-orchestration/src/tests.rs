@@ -44,7 +44,7 @@ const MIRRORED_SOURCE: &str = "/// Mirrored by `Test_Nowhere`.\npub const TABLE:
 
 /// A fixture's source path, as a type distinct from the text at it.
 ///
-/// [`Source`] takes two adjacent string positions, which this crate's own gate reported: a caller
+/// [`Source_File`] takes two adjacent string positions, which this crate's own gate reported: a caller
 /// can transpose them and the compiler will not object. Two named types make the transposition a
 /// type error, and cost one line each.
 #[derive(Clone, Copy)]
@@ -55,7 +55,7 @@ struct SourcePath<'a>(&'a str);
 struct SourceText<'a>(&'a str);
 
 /// A source at `path` carrying `text`, with the subject a real walk would give it.
-fn Source(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
+fn Source_File(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
 {
     return SourceFile::New(path.0, nomos_model::Subject_Of_Path(path.0), text.0.to_owned());
 }
@@ -63,13 +63,13 @@ fn Source(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
 /// [`CLEAN_SOURCE`], as `path`'s own file.
 fn Clean_Source(path: SourcePath<'_>) -> SourceFile
 {
-    return Source(path, SourceText(CLEAN_SOURCE));
+    return Source_File(path, SourceText(CLEAN_SOURCE));
 }
 
 /// [`MIRRORED_SOURCE`], as `path`'s own file.
 fn Mirrored_Source(path: SourcePath<'_>) -> SourceFile
 {
-    return Source(path, SourceText(MIRRORED_SOURCE));
+    return Source_File(path, SourceText(MIRRORED_SOURCE));
 }
 
 /// The build variant every fixture judges as.
@@ -250,5 +250,5 @@ fn Assert_Tolerated_Not_Blocking(result: &GateRunResult, tolerated: &[Finding])
 /// premise, not the thing under test, for every fixture that reuses this text.
 fn Coverage_Debt_Fixture() -> Vec<SourceFile>
 {
-    return vec![Clean_Source(SourcePath("a.rs")), Source(SourcePath("broken.rs"), SourceText("pub const ??? = ;"))];
+    return vec![Clean_Source(SourcePath("a.rs")), Source_File(SourcePath("broken.rs"), SourceText("pub const ??? = ;"))];
 }

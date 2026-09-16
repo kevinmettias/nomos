@@ -223,7 +223,7 @@ mod tests
     fn Test_Check_Package_Conformance_Should_Report_Nothing_When_Declared_And_Registered_Agree()
     {
         let registry = Test_Registry(&["nomos.lang.rust.syn"]);
-        let rust = Registration("nomos.lang.rust.syn");
+        let rust = Manifest_Registration("nomos.lang.rust.syn");
         let packages = [DeclaredPackage { manifest_path: "packages/nomos.lang.rust.json", providers: &[rust] }];
 
         let findings = Check_Package_Conformance(&packages, &registry);
@@ -235,8 +235,8 @@ mod tests
     fn Test_Check_Package_Conformance_Should_Report_A_Manifest_Provider_The_Registry_Never_Registers()
     {
         let registry = Test_Registry(&["nomos.lang.rust.syn"]);
-        let rust = Registration("nomos.lang.rust.syn");
-        let phantom = Registration("nomos.lang.rust.phantom");
+        let rust = Manifest_Registration("nomos.lang.rust.syn");
+        let phantom = Manifest_Registration("nomos.lang.rust.phantom");
         let packages = [DeclaredPackage { manifest_path: "packages/nomos.lang.rust.json", providers: &[rust, phantom] }];
 
         let findings = Check_Package_Conformance(&packages, &registry);
@@ -251,7 +251,7 @@ mod tests
     fn Test_Check_Package_Conformance_Should_Report_A_Registered_Language_Provider_No_Manifest_Claims()
     {
         let registry = Test_Registry(&["nomos.lang.rust.syn", "nomos.lang.rust.cargo"]);
-        let rust = Registration("nomos.lang.rust.syn");
+        let rust = Manifest_Registration("nomos.lang.rust.syn");
         let packages = [DeclaredPackage { manifest_path: "packages/nomos.lang.rust.json", providers: &[rust] }];
 
         let findings = Check_Package_Conformance(&packages, &registry);
@@ -269,7 +269,7 @@ mod tests
     fn Test_Check_Package_Conformance_Should_Not_Report_A_Registered_Provider_Outside_The_Language_Namespace()
     {
         let registry = Test_Registry(&["nomos.lang.rust.syn", "nomos.repo.naming"]);
-        let rust = Registration("nomos.lang.rust.syn");
+        let rust = Manifest_Registration("nomos.lang.rust.syn");
         let packages = [DeclaredPackage { manifest_path: "packages/nomos.lang.rust.json", providers: &[rust] }];
 
         let findings = Check_Package_Conformance(&packages, &registry);
@@ -281,7 +281,7 @@ mod tests
     fn Test_Check_Package_Conformance_Should_Report_Both_Directions_At_Once()
     {
         let registry = Test_Registry(&["nomos.lang.rust.syn", "nomos.lang.rust.cargo"]);
-        let phantom = Registration("nomos.lang.rust.phantom");
+        let phantom = Manifest_Registration("nomos.lang.rust.phantom");
         let packages = [DeclaredPackage { manifest_path: "packages/nomos.lang.rust.json", providers: &[phantom] }];
 
         let findings = Check_Package_Conformance(&packages, &registry);
@@ -379,7 +379,7 @@ mod tests
     }
 
     /// A manifest registration for `provider`, at a version none of these tests reads.
-    fn Registration(provider: &str) -> ProviderRegistration
+    fn Manifest_Registration(provider: &str) -> ProviderRegistration
     {
         return ProviderRegistration { provider: ProviderId::New(provider), tool_version: PackageVersion::New(0, 1, 0) };
     }

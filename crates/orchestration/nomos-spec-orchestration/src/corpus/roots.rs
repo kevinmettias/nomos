@@ -89,7 +89,7 @@ mod tests
     fn Test_Corpus_Root_Should_Report_An_Unnamed_Absence_When_Nothing_Was_Named()
     {
         let mut assembly = Assembly_With_Nothing_Read();
-        let request = Request(None);
+        let request = Corpus_Request(None);
 
         let root = Corpus_Root(&mut assembly, &request);
 
@@ -103,7 +103,7 @@ mod tests
     {
         let mut assembly = Assembly_With_Nothing_Read();
         let named = PathBuf::from("no/such/corpus/anywhere");
-        let request = Request(Some(named.clone()));
+        let request = Corpus_Request(Some(named.clone()));
 
         let root = Corpus_Root(&mut assembly, &request);
 
@@ -117,7 +117,7 @@ mod tests
     {
         let mut assembly = Assembly_With_Nothing_Read();
         let real = std::env::temp_dir();
-        let request = Request(Some(real.clone()));
+        let request = Corpus_Request(Some(real.clone()));
 
         let root = Corpus_Root(&mut assembly, &request);
 
@@ -156,7 +156,7 @@ mod tests
         };
     }
 
-    fn Request(root: Option<PathBuf>) -> CorpusRequest
+    fn Corpus_Request(root: Option<PathBuf>) -> CorpusRequest
     {
         return CorpusRequest { variable: VARIABLE.to_owned(), root, revision: "v14.36".to_owned() };
     }

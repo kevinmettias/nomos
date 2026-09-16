@@ -342,7 +342,7 @@ mod tests
     }
 
     #[test]
-    fn Test_Note_Unreadable_Should_Do_Nothing_When_Nothing_Was_Unreadable()
+    fn Test_Note_Unreadable_Should_Record_Nothing_When_Nothing_Was_Unreadable()
     {
         let mut assembly = Empty_Assembly();
         let directory = std::path::PathBuf::from("some/volumes/directory");

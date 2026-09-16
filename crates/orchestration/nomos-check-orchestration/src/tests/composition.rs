@@ -8,7 +8,7 @@ use nomos_rules::{Check_Completeness_Mirrors, SourceFile};
 
 use crate::{CheckOutcome, Claim, Composed_Rules, Run, RunContext};
 
-use super::{Repository_Root, Source, SourceText, Test_Variant};
+use super::{Repository_Root, Source_File, SourceText, Test_Variant};
 
 /// How many architecture rules [`Architectural_Rules`] names.
 const ARCHITECTURAL_RULE_COUNT: usize = 5;
@@ -36,7 +36,7 @@ fn Architectural_Rules() -> [RuleId; ARCHITECTURAL_RULE_COUNT]
 #[test]
 fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
 {
-    let sources = vec![Source("a.rs", SourceText("pub fn Ok() {}\n"))];
+    let sources = vec![Source_File("a.rs", SourceText("pub fn Ok() {}\n"))];
 
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &Architectural_Rules());
 
@@ -66,7 +66,7 @@ fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
 #[test]
 fn Test_A_Clean_Go_Source_Should_Be_Judged_Through_Its_Own_Real_Provider()
 {
-    let sources = vec![Source("main.go", SourceText("package main\n\nfunc One() {}\n"))];
+    let sources = vec![Source_File("main.go", SourceText("package main\n\nfunc One() {}\n"))];
     let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR), RuleId::New(nomos_rules::NAMING_CONVENTION)];
 
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &selected);
@@ -110,8 +110,8 @@ fn Corresponded_Findings(correspondence: Correspondence) -> Vec<Finding>
 fn Test_A_Genuine_Cross_Language_Field_Mismatch_Should_Be_Reported()
 {
     let findings = Corresponded_Findings(Correspondence {
-        rust: Source("wide.rs", SourceText("/// Corresponds to `Wide`.\npub struct Wide { pub A: u32, pub B: u32 }\n")),
-        go: Source("wide.go", SourceText("package main\n\ntype Wide struct {\n\tA int\n}\n")),
+        rust: Source_File("wide.rs", SourceText("/// Corresponds to `Wide`.\npub struct Wide { pub A: u32, pub B: u32 }\n")),
+        go: Source_File("wide.go", SourceText("package main\n\ntype Wide struct {\n\tA int\n}\n")),
     });
 
     assert_eq!(findings.len(), 1, "{findings:?}");
@@ -126,8 +126,8 @@ fn Test_A_Genuine_Cross_Language_Field_Mismatch_Should_Be_Reported()
 fn Test_A_Genuine_Cross_Language_Field_Match_Should_Report_Nothing()
 {
     let findings = Corresponded_Findings(Correspondence {
-        rust: Source("clean.rs", SourceText("/// Corresponds to `Clean`.\npub struct Clean { pub A: u32 }\n")),
-        go: Source("clean.go", SourceText("package main\n\ntype Clean struct {\n\tA int\n}\n")),
+        rust: Source_File("clean.rs", SourceText("/// Corresponds to `Clean`.\npub struct Clean { pub A: u32 }\n")),
+        go: Source_File("clean.go", SourceText("package main\n\ntype Clean struct {\n\tA int\n}\n")),
     });
 
     assert!(findings.is_empty(), "{findings:?}");
@@ -142,7 +142,7 @@ fn Test_A_Genuine_Cross_Language_Field_Match_Should_Report_Nothing()
 #[test]
 fn Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete()
 {
-    let sources = vec![Source(
+    let sources = vec![Source_File(
         "a.rs",
         SourceText("/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n"),
     )];
@@ -168,7 +168,7 @@ fn Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete()
 #[test]
 fn Test_A_Run_That_Materializes_No_Facts_Should_Report_NoFacts()
 {
-    let sources = vec![Source("broken.rs", SourceText("pub const ??? = ;"))];
+    let sources = vec![Source_File("broken.rs", SourceText("pub const ??? = ;"))];
 
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
@@ -185,7 +185,7 @@ fn Test_A_Run_That_Materializes_No_Facts_Should_Report_NoFacts()
 #[test]
 fn Test_Conflicting_Paths_Should_Be_Unreadable()
 {
-    let sources = vec![Source("a.rs", SourceText("pub fn one() {}\n")), Source("a.rs", SourceText("pub fn two() {}\n"))];
+    let sources = vec![Source_File("a.rs", SourceText("pub fn one() {}\n")), Source_File("a.rs", SourceText("pub fn two() {}\n"))];
 
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
@@ -198,7 +198,7 @@ fn Test_Conflicting_Paths_Should_Be_Unreadable()
 #[test]
 fn Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor()
 {
-    let sources = vec![Source("a.rs", SourceText("pub const TABLE: &[&str] = &[];\n"))];
+    let sources = vec![Source_File("a.rs", SourceText("pub const TABLE: &[&str] = &[];\n"))];
 
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
@@ -259,8 +259,8 @@ struct Mirror
 
 fn Mirror_Fixture() -> Mirror
 {
-    let declaring = Source("a.rs", SourceText("/// Mirrored by `Test_The_Real_Provider_Found_This`.\npub const T: &[&str] = &[];\n"));
-    let checking = Source("b.rs", SourceText("#[cfg(test)]\nmod tests\n{\n    #[test]\n    fn Test_The_Real_Provider_Found_This()\n    {\n    }\n}\n"));
+    let declaring = Source_File("a.rs", SourceText("/// Mirrored by `Test_The_Real_Provider_Found_This`.\npub const T: &[&str] = &[];\n"));
+    let checking = Source_File("b.rs", SourceText("#[cfg(test)]\nmod tests\n{\n    #[test]\n    fn Test_The_Real_Provider_Found_This()\n    {\n    }\n}\n"));
 
     return Mirror { declaring, checking };
 }
@@ -322,7 +322,7 @@ fn Test_A_Rule_Selected_Through_Its_Exported_Identifier_Should_Run()
         .find(|rule| return rule.As_Str() == nomos_rules::NO_TRAILING_WHITESPACE)
         .expect("the export must name a rule the run table composes");
 
-    let sources = vec![Source("a.rs", SourceText("pub fn one() {} \n"))];
+    let sources = vec![Source_File("a.rs", SourceText("pub fn one() {} \n"))];
 
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[exported.clone()]);
 
@@ -353,7 +353,7 @@ fn Test_An_Identifier_The_Export_Does_Not_Name_Should_Select_Nothing()
     let absent = RuleId::New("no-rule-by-this-name");
     assert!(!composed.contains(&absent), "this control needs an identifier the table does not carry");
 
-    let sources = vec![Source("a.rs", SourceText("pub fn one() {} \n"))];
+    let sources = vec![Source_File("a.rs", SourceText("pub fn one() {} \n"))];
 
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[absent]);
 

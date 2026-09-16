@@ -226,7 +226,7 @@ mod tests
 
         let declared: Vec<RulePackage> = composed
             .iter()
-            .map(|rule| return Declaration(rule.As_Str(), Judgment::Mechanical))
+            .map(|rule| return Rule_Declaration(rule.As_Str(), Judgment::Mechanical))
             .collect();
 
         let resolved = Resolve_Rules(&declared, &composed).expect("every declaration has an implementation");
@@ -241,7 +241,7 @@ mod tests
     /// Every other field is at the shape `OD-PACKAGE-008`'s four-rule measurement found
     /// convergent, because this function resolves identity and judgment and reads none of
     /// them.
-    fn Declaration(rule: &str, judgment: Judgment) -> RulePackage
+    fn Rule_Declaration(rule: &str, judgment: Judgment) -> RulePackage
     {
         return RulePackage {
             package_id: PackageId::New(format!("nomos.rule.{rule}")),
@@ -271,7 +271,7 @@ mod tests
     #[test]
     fn Test_A_Model_Judged_Declaration_Should_Resolve_With_No_Implementation()
     {
-        let declared = vec![Declaration("a-model-decides-this", Judgment::ModelJudged)];
+        let declared = vec![Rule_Declaration("a-model-decides-this", Judgment::ModelJudged)];
 
         let resolved = Resolve_Rules(&declared, &[]).expect("a model-judged rule needs no implementation");
 
@@ -284,7 +284,7 @@ mod tests
     #[test]
     fn Test_A_Mechanical_Declaration_With_No_Implementation_Should_Be_Refused()
     {
-        let declared = vec![Declaration("nothing-implements-this", Judgment::Mechanical)];
+        let declared = vec![Rule_Declaration("nothing-implements-this", Judgment::Mechanical)];
 
         let refusal = Resolve_Rules(&declared, &[]).expect_err("no implementation is registered");
 
@@ -303,7 +303,7 @@ mod tests
     #[test]
     fn Test_An_Implementation_Nothing_Declares_Should_Be_Refused()
     {
-        let declared = vec![Declaration("declared-and-implemented", Judgment::Mechanical)];
+        let declared = vec![Rule_Declaration("declared-and-implemented", Judgment::Mechanical)];
         let registered = vec![RuleId::New("declared-and-implemented"), RuleId::New("nobody-declared-this")];
 
         let refusal = Resolve_Rules(&declared, &registered).expect_err("one implementation is undeclared");
@@ -323,7 +323,7 @@ mod tests
     #[test]
     fn Test_A_Model_Judged_Declaration_With_An_Implementation_Should_Be_Refused()
     {
-        let declared = vec![Declaration("said-model-but-code-exists", Judgment::ModelJudged)];
+        let declared = vec![Rule_Declaration("said-model-but-code-exists", Judgment::ModelJudged)];
         let registered = vec![RuleId::New("said-model-but-code-exists")];
 
         let refusal = Resolve_Rules(&declared, &registered).expect_err("the declaration contradicts the registration");
@@ -344,8 +344,8 @@ mod tests
     fn Test_Every_Disagreement_Should_Be_Reported_Together()
     {
         let declared = vec![
-            Declaration("needs-code-that-is-missing", Judgment::Mechanical),
-            Declaration("says-model-but-code-exists", Judgment::ModelJudged),
+            Rule_Declaration("needs-code-that-is-missing", Judgment::Mechanical),
+            Rule_Declaration("says-model-but-code-exists", Judgment::ModelJudged),
         ];
         let registered = vec![RuleId::New("says-model-but-code-exists"), RuleId::New("nobody-declared-this")];
 

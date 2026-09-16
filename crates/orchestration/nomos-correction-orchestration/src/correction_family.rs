@@ -3,7 +3,7 @@
 //! this finding" both read.
 //!
 //! Before this type the membership existed twice: as a private local array inside
-//! [`crate::run`]'s own `Judged`, and again as a literal array inside `nomos-lsp`'s
+//! [`crate::run`]'s own `Judged_Findings`, and again as a literal array inside `nomos-lsp`'s
 //! `walk_outward::available_correction`, which had no export to call because this crate
 //! published only [`crate::CorrectionCommand`], [`crate::CorrectionOutcome`],
 //! [`crate::CorrectionEnvironment`] and [`crate::Run_Correction`]. Both arrays named the
@@ -14,7 +14,7 @@
 //! Enumerating the families rather than listing their rule ids is what makes that drift
 //! mechanical rather than remembered. [`crate::run`]'s `Claimed_Fix` dispatches over
 //! [`CorrectionFamily::ALL`] with an exhaustive `match`, so a variant added here does not
-//! compile until it is wired to a real claim recognizer, and its `Judged` derives the
+//! compile until it is wired to a real claim recognizer, and its `Judged_Findings` derives the
 //! rules it selects from the same list rather than repeating them. The host's own answer
 //! is [`CorrectionFamily::Of`], which is a lookup rather than a second list.
 //!

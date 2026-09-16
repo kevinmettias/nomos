@@ -9,7 +9,7 @@ use crate::{Run, SpecCommand};
 use crate::request::{FreshnessRequest, RenderRequest};
 use crate::spec_outcome::{FreshnessRefusal, RenderAnswer, RenderRefusal, SpecOutcome, Verdict};
 
-use super::{EMBEDDED_PROFILE, No_Corpus, Scratch};
+use super::{EMBEDDED_PROFILE, No_Corpus, Scratch_Root};
 
 /// How much of a rendered body's generated header a failure message quotes back. Enough to
 /// carry the `---` fence and `nomos_generated: true` in full.
@@ -39,7 +39,7 @@ fn Render_Embedded_Profile(into: &std::path::Path) -> RenderAnswer
 #[test]
 fn Test_Run_Of_Render_Should_Place_A_Projection_Built_With_No_Corpus()
 {
-    let answer = Render_Embedded_Profile(&Scratch("render"));
+    let answer = Render_Embedded_Profile(&Scratch_Root("render"));
 
     assert_eq!(answer.id, EMBEDDED_PROFILE);
     let body = std::fs::read_to_string(&answer.body).expect("the body was written");
@@ -55,7 +55,7 @@ fn Test_Run_Of_Render_Should_Place_A_Projection_Built_With_No_Corpus()
 #[test]
 fn Test_Run_Of_Render_Should_Refuse_An_Unknown_Profile()
 {
-    let into = Scratch("render-unknown");
+    let into = Scratch_Root("render-unknown");
     let request = SpecCommand::Render(RenderRequest {
         profile: "no-such-profile".to_owned(),
         into,
@@ -109,7 +109,7 @@ fn Single_Freshness_Outcome(into: PathBuf) -> Verdict
 #[test]
 fn Test_Run_Of_Freshness_Should_Report_A_Freshly_Rendered_Output_As_Current()
 {
-    let into = Scratch("freshness-current");
+    let into = Scratch_Root("freshness-current");
     let render = Run(
         &SpecCommand::Render(RenderRequest {
             profile: EMBEDDED_PROFILE.to_owned(),
@@ -131,7 +131,7 @@ fn Test_Run_Of_Freshness_Should_Report_A_Freshly_Rendered_Output_As_Current()
 #[test]
 fn Test_Run_Of_Freshness_Should_Report_An_Empty_Build_Root_As_Absent()
 {
-    let into = Scratch("freshness-absent");
+    let into = Scratch_Root("freshness-absent");
 
     let verdict = Single_Freshness_Outcome(into);
     assert!(matches!(verdict, Verdict::Absent), "{verdict:?}");
@@ -140,7 +140,7 @@ fn Test_Run_Of_Freshness_Should_Report_An_Empty_Build_Root_As_Absent()
 #[test]
 fn Test_Run_Of_Freshness_Should_Refuse_An_Unexamined_Requirement()
 {
-    let into = Scratch("freshness-unexamined");
+    let into = Scratch_Root("freshness-unexamined");
 
     let outcome = Run(
         &SpecCommand::Freshness(FreshnessRequest {

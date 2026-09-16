@@ -13,7 +13,7 @@ use crate::request::SubmitRequest;
 use crate::run::Submit_Corpus_Request;
 use crate::spec_outcome::SubmitRefusal;
 
-use super::{No_Corpus, Scratch};
+use super::{No_Corpus, Scratch_Root};
 
 /// Every universal field and every field `OD-SPEC-010` requires of `SubmissionKind::
 /// FeatureRequest`, the same set `crates/host/nomos-cli/tests/request_submit.rs` submits
@@ -56,7 +56,7 @@ fn Test_Submit_Should_Accept_A_Complete_Submission_With_Submitted_Origin()
 #[test]
 fn Test_Submit_Should_Place_Its_Subject_Dossier_Projection_When_Into_Is_Given()
 {
-    let into = Scratch("submit");
+    let into = Scratch_Root("submit");
     let mut assembly = Assemble_Corpus(&No_Corpus()).expect("assembles from the embedded records alone");
 
     let request = Complete_Feature_Request("FR-ORCH-002", Some(into));

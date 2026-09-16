@@ -24,11 +24,11 @@ use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::PathBuf;
 
-/// The text half of a [`Source`]. A distinct type from the path half, so the two adjacent
+/// The text half of a [`Source_File`]. A distinct type from the path half, so the two adjacent
 /// string positions cannot be transposed at a call site and still compile.
 struct SourceText<'a>(&'a str);
 
-fn Source(path: &str, text: SourceText<'_>) -> SourceFile
+fn Source_File(path: &str, text: SourceText<'_>) -> SourceFile
 {
     return SourceFile::New(path, Subject_Of_Path(path), text.0);
 }

@@ -44,11 +44,11 @@ fn Test_Variant() -> BuildVariant
     return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
 }
 
-/// The text half of a [`Source`]. A distinct type from the path half, so the two adjacent
+/// The text half of a [`Source_File`]. A distinct type from the path half, so the two adjacent
 /// string positions cannot be transposed at a call site and still compile.
 struct SourceText<'a>(&'a str);
 
-fn Source(path: &str, text: SourceText<'_>) -> SourceFile
+fn Source_File(path: &str, text: SourceText<'_>) -> SourceFile
 {
     return SourceFile::New(path, Subject_Of_Path(path), text.0);
 }
@@ -144,8 +144,8 @@ fn Assert_Second_Run_Cost_Nothing(first: &Answer, second: &Answer)
 fn Test_An_Unchanged_Second_Run_Should_Produce_No_New_Facts()
 {
     let sources = [
-        Source("src/lib.rs", SourceText("pub fn Judged_Thing() -> u8\n{\n    return 1;\n}\n")),
-        Source("src/other.rs", SourceText("pub fn Second_Thing() -> u8\n{\n    return 2;\n}\n")),
+        Source_File("src/lib.rs", SourceText("pub fn Judged_Thing() -> u8\n{\n    return 1;\n}\n")),
+        Source_File("src/other.rs", SourceText("pub fn Second_Thing() -> u8\n{\n    return 2;\n}\n")),
     ];
     let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR)];
     let root = Path::new(".");
@@ -168,8 +168,8 @@ fn Test_An_Unchanged_Second_Run_Should_Produce_No_New_Facts()
 #[test]
 fn Test_A_Second_Run_Over_A_Changed_Source_Should_Produce_A_Fact()
 {
-    let before = [Source("src/lib.rs", SourceText("pub fn Judged_Thing() -> u8\n{\n    return 1;\n}\n"))];
-    let after = [Source("src/lib.rs", SourceText("pub fn Judged_Thing() -> u8\n{\n    return 99;\n}\n"))];
+    let before = [Source_File("src/lib.rs", SourceText("pub fn Judged_Thing() -> u8\n{\n    return 1;\n}\n"))];
+    let after = [Source_File("src/lib.rs", SourceText("pub fn Judged_Thing() -> u8\n{\n    return 99;\n}\n"))];
     let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR)];
     let root = Path::new(".");
 

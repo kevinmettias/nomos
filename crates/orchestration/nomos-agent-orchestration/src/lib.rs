@@ -21,7 +21,7 @@
 //! this seam ever sees it -- reading a crate's `README.md` row and its committed surface
 //! snapshot stays a composition root's own concern (`OD-HOST-002`), the identical division
 //! `nomos-correction-orchestration` draws around walking a tree. Both end at the same
-//! private dispatch, [`run::Dispatched`] (not exported: neither `nomos-cli` nor `nomos-api`
+//! private dispatch, [`run::Dispatched_Task`] (not exported: neither `nomos-cli` nor `nomos-api`
 //! needs a bare `TaskEnvelope` in without one of the two shapes above building it first).
 //!
 //! [`run`]'s own module doc states the one deliberate departure from what it replaces:
@@ -38,7 +38,7 @@
 //!
 //! Does not invent a shared trait between `nomos-agent-executor-claude-code` and
 //! `nomos-model-backend-ollama`: `OD-EXECUTOR-001`/`OD-EXECUTOR-004`/`OD-EXECUTOR-005` all
-//! decline one ahead of a real second `AgentExecutor`, and [`run::Dispatched`]'s own match
+//! decline one ahead of a real second `AgentExecutor`, and [`run::Dispatched_Task`]'s own match
 //! is that restraint carried forward unchanged, not a stand-in for a trait neither crate
 //! needs yet.
 //!

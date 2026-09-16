@@ -128,7 +128,7 @@ mod tests
     fn Test_Commit_Staged_Edit_Should_Write_The_Record_And_Close_The_Round_Trip()
     {
         let mut assembly = Assembled();
-        let into = Scratch("colocated");
+        let into = Scratch_Root("colocated");
         let markdown = crate::run::Rendered_Markdown(&assembly, &crate::request::RecordRequest { id: "D-132".to_owned(), revision: None })
             .expect("D-132 is embedded")
             .markdown;
@@ -151,7 +151,7 @@ mod tests
         return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
     }
 
-    fn Scratch(name: &str) -> PathBuf
+    fn Scratch_Root(name: &str) -> PathBuf
     {
         let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-commit-{name}-{}", std::process::id()));
         let _ignored = std::fs::remove_dir_all(&root);

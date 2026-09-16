@@ -47,11 +47,11 @@ fn Repository_Root() -> PathBuf
         .expect("this crate sits three levels below the workspace root");
 }
 
-/// The text half of a [`Source`]. A distinct type from the path half, so the two adjacent
+/// The text half of a [`Source_File`]. A distinct type from the path half, so the two adjacent
 /// string positions cannot be transposed at a call site and still compile.
 struct SourceText<'a>(&'a str);
 
-fn Source(path: &str, text: SourceText<'_>) -> SourceFile
+fn Source_File(path: &str, text: SourceText<'_>) -> SourceFile
 {
     return SourceFile::New(path, Subject_Of_Path(path), text.0);
 }
@@ -63,9 +63,9 @@ const CARGO_VERSION_TIMEOUT: std::time::Duration = std::time::Duration::from_sec
 /// The happy path across the boundary: a clean, recognized source judged through the real
 /// `Run`, with every selected rule's fact materialized through a real `ProcessLauncher`.
 #[test]
-fn Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Process_Launcher()
+fn Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Subprocess_Launcher()
 {
-    let sources = vec![Source("a.rs", SourceText("pub fn Ok() {}\n"))];
+    let sources = vec![Source_File("a.rs", SourceText("pub fn Ok() {}\n"))];
 
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
@@ -89,7 +89,7 @@ fn Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List()
 #[test]
 fn Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule()
 {
-    let sources = vec![Source("a.rs", SourceText("pub fn Ok() {}\n"))];
+    let sources = vec![Source_File("a.rs", SourceText("pub fn Ok() {}\n"))];
     let selected = [RuleId::New(COMPLETENESS_MIRROR)];
 
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &selected);
@@ -110,7 +110,7 @@ fn Version_Through_Generic_Launcher<Launcher: nomos_platform::ProcessLauncher>(l
 }
 
 #[test]
-fn Test_Run_Should_Accept_A_Real_Nomos_Platform_Process_Launcher()
+fn Test_Run_Should_Accept_A_Real_Nomos_Platform_Subprocess_Launcher()
 {
     let output = Version_Through_Generic_Launcher(&StdProcessLauncher);
 

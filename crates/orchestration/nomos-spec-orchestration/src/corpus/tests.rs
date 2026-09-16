@@ -17,7 +17,7 @@ const INPUTS_A_CORPUS_ROOT_OWES: usize = 3;
 /// table with a header, a separator and exactly one body row.
 const ROWS_IN_THE_STAGED_VOLUME_TABLE: usize = 3;
 
-fn Request(root: Option<PathBuf>) -> CorpusRequest
+fn Corpus_Request(root: Option<PathBuf>) -> CorpusRequest
 {
     return CorpusRequest {
         variable: VARIABLE.to_owned(),
@@ -30,7 +30,7 @@ fn Request(root: Option<PathBuf>) -> CorpusRequest
 fn Test_Assemble_Corpus_Should_Include_Governing_Records_Even_With_No_Corpus()
 {
     let assembly =
-        Assemble_Corpus(&Request(None)).expect("assembly reads the embedded records without a corpus root");
+        Assemble_Corpus(&Corpus_Request(None)).expect("assembly reads the embedded records without a corpus root");
 
     assert!(
         assembly.store.Node_Summary("D-129").expect("the store answers a summary query for a seeded node").is_some(),
@@ -47,7 +47,7 @@ fn Test_An_Unset_Corpus_Should_Be_An_Absence_That_Names_What_Was_Expected()
     use super::roots::STATEMENTS;
 
     let assembly =
-        Assemble_Corpus(&Request(None)).expect("assembly reads the embedded records without a corpus root");
+        Assemble_Corpus(&Corpus_Request(None)).expect("assembly reads the embedded records without a corpus root");
 
     assert!(!assembly.Is_Complete());
     let described = assembly.Describe_Absences();
@@ -63,7 +63,7 @@ fn Test_A_Corpus_Pointed_At_Nothing_Should_Name_The_Path_It_Was_Pointed_At()
 {
     let root = PathBuf::from("no/such/corpus/anywhere");
 
-    let assembly = Assemble_Corpus(&Request(Some(root)))
+    let assembly = Assemble_Corpus(&Corpus_Request(Some(root)))
         .expect("assembly reports a missing corpus root as absences, not a refusal");
 
     assert!(!assembly.Is_Complete());
@@ -83,7 +83,7 @@ fn Test_An_Empty_Corpus_Root_Should_Account_For_Each_Input_Separately()
     let root = std::env::temp_dir().join("nomos-spec-orchestration-empty-corpus-root");
     std::fs::create_dir_all(&root).expect("the scratch corpus root is created under this process's temp dir");
 
-    let assembly = Assemble_Corpus(&Request(Some(root)))
+    let assembly = Assemble_Corpus(&Corpus_Request(Some(root)))
         .expect("assembly tolerates a corpus root holding none of its three inputs");
 
     assert_eq!(
@@ -98,7 +98,7 @@ fn Test_An_Empty_Corpus_Root_Should_Account_For_Each_Input_Separately()
 fn Test_A_Readable_Volume_Should_Reach_The_Store_And_Not_Be_Reported_Absent()
 {
     let root = A_Corpus_With_One_Volume();
-    let assembly = Assemble_Corpus(&Request(Some(root)))
+    let assembly = Assemble_Corpus(&Corpus_Request(Some(root)))
         .expect("assembly ingests the one readable volume this root holds");
     let (found, _) = assembly
         .store

@@ -51,7 +51,7 @@ impl nomos_platform::ProcessLauncher for Unreached
     }
 }
 
-fn Item(id: &str) -> LedgerItem
+fn Unclaimed_Item(id: &str) -> LedgerItem
 {
     return LedgerItem {
         id: ItemId::New(id),
@@ -77,7 +77,7 @@ fn Item(id: &str) -> LedgerItem
 /// Adds `item` through [`Run`], asserting the real ledger took it, so each test below starts
 /// from an item that is genuinely on the board rather than one whose add was dropped on the
 /// floor.
-fn Added(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: &LedgerItem)
+fn Added_To_Ledger(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: &LedgerItem)
 {
     let added = Run(
         &WorkCommand::Add {
@@ -98,8 +98,8 @@ fn Added(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: &L
 fn Test_Run_Should_Add_Then_Show_An_Item_Through_A_Real_Ledger()
 {
     let mut ledger = Scratch_Ledger("add-show");
-    let item = Item("SEAM-ONE");
-    Added(&mut ledger, &item);
+    let item = Unclaimed_Item("SEAM-ONE");
+    Added_To_Ledger(&mut ledger, &item);
 
     let shown = Run(&WorkCommand::Show { item: item.id.clone() }, &mut ledger, &Unreached, Territory::Empty);
     let WorkOutcome::Show(Ok(view)) = shown
@@ -116,8 +116,8 @@ fn Test_Run_Should_Add_Then_Show_An_Item_Through_A_Real_Ledger()
 fn Test_Run_Should_Surface_A_Real_Ledger_Claim_Refusal()
 {
     let mut ledger = Scratch_Ledger("claim-refusal");
-    let item = Item("SEAM-TWO");
-    Added(&mut ledger, &item);
+    let item = Unclaimed_Item("SEAM-TWO");
+    Added_To_Ledger(&mut ledger, &item);
 
     let request = ClaimRequest { item: item.id.clone(), holder: "agent-a".to_owned(), lease: Duration::from_secs(LEASE_SECONDS) };
     let first = Run(&WorkCommand::Claim(request), &mut ledger, &Unreached, Territory::Empty);
@@ -140,8 +140,8 @@ fn Test_Run_Should_Surface_A_Real_Ledger_Claim_Refusal()
 fn Test_Run_Should_Make_A_Decline_Visible_To_A_Later_Audit()
 {
     let mut ledger = Scratch_Ledger("decline-audit");
-    let item = Item("SEAM-THREE");
-    Added(&mut ledger, &item);
+    let item = Unclaimed_Item("SEAM-THREE");
+    Added_To_Ledger(&mut ledger, &item);
 
     let declined = Run(
         &WorkCommand::Decline(EndingRequest { item: item.id.clone(), holder: "nomos work decline".to_owned(), reason: "not work".to_owned() }),

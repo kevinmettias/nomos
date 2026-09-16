@@ -41,7 +41,7 @@ fn Test_Run_Id() -> RunId
     return nomos_gate_orchestration::Fresh_Run_Id(nomos_platform_std::SystemClock.Now());
 }
 
-fn Task(goal: &str) -> TaskEnvelope
+fn Task_Envelope(goal: &str) -> TaskEnvelope
 {
     return TaskEnvelope {
         goal: goal.to_owned(),
@@ -164,7 +164,7 @@ fn Failing_Response(stderr: &str) -> ProcessOutput
 /// The platform every test in this file needs is the same one — a scripted launcher, the real
 /// standard filesystem, this process's own environment, and one fixed moment — so building it
 /// in a single place is what makes a test's result depend on its plan and its script alone.
-fn Ran(plan: &[WorkflowStepPlan], answers: Vec<ProcessOutput>) -> WorkflowOutcome
+fn Ran_Outcome(plan: &[WorkflowStepPlan], answers: Vec<ProcessOutput>) -> WorkflowOutcome
 {
     let launcher = Scripted::Of(answers);
     let platform = Platform {
@@ -184,7 +184,7 @@ fn Ran(plan: &[WorkflowStepPlan], answers: Vec<ProcessOutput>) -> WorkflowOutcom
 /// rather than surfacing later as a puzzling assertion about a step.
 fn Ran_To_Completion(plan: &[WorkflowStepPlan], answers: Vec<ProcessOutput>) -> Vec<StepOutcome>
 {
-    let outcome = Ran(plan, answers);
+    let outcome = Ran_Outcome(plan, answers);
 
     let WorkflowOutcome::Completed { completed } = outcome
     else
@@ -260,7 +260,7 @@ fn Fresh_Root(name: &str) -> std::path::PathBuf
 #[test]
 fn Test_An_Empty_Plan_Completes_Vacuously()
 {
-    let outcome = Ran(&[], Vec::new());
+    let outcome = Ran_Outcome(&[], Vec::new());
 
     assert_eq!(outcome, WorkflowOutcome::Completed { completed: Vec::new() });
 }
@@ -268,7 +268,7 @@ fn Test_An_Empty_Plan_Completes_Vacuously()
 #[test]
 fn Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes()
 {
-    let step = Only_Step(Body::ClaudeCode(Task("say PONG")), vec![Clean_Claude_Code_Response("PONG")]);
+    let step = Only_Step(Body::ClaudeCode(Task_Envelope("say PONG")), vec![Clean_Claude_Code_Response("PONG")]);
 
     assert!(matches!(step, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["PONG".to_owned()]));
 }
@@ -276,7 +276,7 @@ fn Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes()
 #[test]
 fn Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes()
 {
-    let step = Only_Step(Body::Ollama(Task("say PONG")), vec![Clean_Ollama_Response("PONG")]);
+    let step = Only_Step(Body::Ollama(Task_Envelope("say PONG")), vec![Clean_Ollama_Response("PONG")]);
 
     assert!(matches!(step, StepOutcome::Ollama(answer) if answer.response == "PONG"));
 }
@@ -284,7 +284,7 @@ fn Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes()
 #[test]
 fn Test_A_Two_Step_Sequence_Completes_In_Order()
 {
-    let bodies = [Body::ClaudeCode(Task("first")), Body::Ollama(Task("second"))];
+    let bodies = [Body::ClaudeCode(Task_Envelope("first")), Body::Ollama(Task_Envelope("second"))];
     let plan: Vec<WorkflowStepPlan> = bodies.into_iter().map(|body| return WorkflowStepPlan { declaration: Coherent_Step(), body }).collect();
 
     let completed = Ran_To_Completion(&plan, vec![Clean_Claude_Code_Response("first"), Clean_Ollama_Response("second")]);
@@ -298,9 +298,9 @@ fn Test_A_Two_Step_Sequence_Completes_In_Order()
 #[test]
 fn Test_An_Incoherent_Step_Is_Refused_Before_Dispatch()
 {
-    let coherent = WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task("never runs")) };
+    let coherent = WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task_Envelope("never runs")) };
 
-    let outcome = Ran(&[coherent], Vec::new());
+    let outcome = Ran_Outcome(&[coherent], Vec::new());
 
     assert_eq!(outcome, WorkflowOutcome::Refused { completed: Vec::new(), index: 0 });
 }
@@ -309,11 +309,11 @@ fn Test_An_Incoherent_Step_Is_Refused_Before_Dispatch()
 fn Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions()
 {
     let plan = [
-        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("first")) },
-        WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task("never runs")) },
+        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task_Envelope("first")) },
+        WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task_Envelope("never runs")) },
     ];
 
-    let outcome = Ran(&plan, vec![Clean_Claude_Code_Response("first")]);
+    let outcome = Ran_Outcome(&plan, vec![Clean_Claude_Code_Response("first")]);
 
     let WorkflowOutcome::Refused { completed, index } = outcome
     else
@@ -329,9 +329,9 @@ fn Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions()
 #[test]
 fn Test_A_Failed_Dispatch_Stops_The_Run()
 {
-    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task("fails")) }];
+    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task_Envelope("fails")) }];
 
-    let outcome = Ran(&plan, vec![Failing_Response("claude exited 1")]);
+    let outcome = Ran_Outcome(&plan, vec![Failing_Response("claude exited 1")]);
 
     assert!(
         matches!(outcome, WorkflowOutcome::Failed { ref completed, index: 0, ref error }
@@ -347,10 +347,10 @@ fn Test_A_Failed_Dispatch_Stops_The_Run()
 #[test]
 fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
 {
-    let bodies = [Body::ClaudeCode(Task("fails")), Body::Ollama(Task("never runs"))];
+    let bodies = [Body::ClaudeCode(Task_Envelope("fails")), Body::Ollama(Task_Envelope("never runs"))];
     let plan: Vec<WorkflowStepPlan> = bodies.into_iter().map(|body| return WorkflowStepPlan { declaration: Coherent_Step(), body }).collect();
 
-    let outcome = Ran(&plan, vec![Failing_Response("claude exited 1")]);
+    let outcome = Ran_Outcome(&plan, vec![Failing_Response("claude exited 1")]);
 
     assert!(
         matches!(outcome, WorkflowOutcome::Failed { ref completed, index: 0, .. } if completed.is_empty()),
@@ -367,7 +367,7 @@ fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
 #[test]
 fn Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonical_Seam()
 {
-    let bodies = [Body::Check(Check_Body_Over("pub fn Ok() {}\n")), Body::Ollama(Task("second"))];
+    let bodies = [Body::Check(Check_Body_Over("pub fn Ok() {}\n")), Body::Ollama(Task_Envelope("second"))];
     let plan: Vec<WorkflowStepPlan> = bodies.into_iter().map(|body| return WorkflowStepPlan { declaration: Coherent_Step(), body }).collect();
 
     let completed = Ran_To_Completion(&plan, vec![Clean_Ollama_Response("second")]);
@@ -447,7 +447,7 @@ fn Test_A_Failing_Gate_Step_Ends_The_Workflow_Rather_Than_Completing()
     let over_limit = "pub fn Something(a: i32, b: i32, c: i32, d: i32, e: i32) {}\n";
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Gate(Gate_Body_Over(over_limit)) }];
 
-    let outcome = Ran(&plan, Vec::new());
+    let outcome = Ran_Outcome(&plan, Vec::new());
 
     assert!(
         matches!(outcome, WorkflowOutcome::Failed { ref completed, index: 0, ref error }

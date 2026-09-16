@@ -2,7 +2,7 @@
 //!
 //! Split out of `gate_compare.rs` when that file passed the workspace's own review triggers.
 
-use super::tests::{Bucketed, Comparison_Of, Result_With, BASELINE_RUN, CANDIDATE_RUN};
+use super::tests::{Bucketed_Findings, Comparison_Of, Result_With, BASELINE_RUN, CANDIDATE_RUN};
 use crate::{
     FindingDisposition, GateFindings, SuppressionDisposition, SuppressionReason, SuppressionStatus,
 };
@@ -20,10 +20,10 @@ const SUBJECT_DIGEST: Digest128 = Digest128::From_Bytes([7; Digest128::BYTE_LENG
 #[test]
 fn Test_A_Disposition_Change_Within_Suppressed_Should_Be_Reported()
 {
-    let before = (FindingDisposition::Suppressed, Some(Reason(SuppressionDisposition::FalsePositiveDisposition, SuppressionStatus::Active)));
-    let after = (FindingDisposition::Suppressed, Some(Reason(SuppressionDisposition::FormalRiskAcceptance, SuppressionStatus::Active)));
+    let before = (FindingDisposition::Suppressed, Some(Suppression_Reason(SuppressionDisposition::FalsePositiveDisposition, SuppressionStatus::Active)));
+    let after = (FindingDisposition::Suppressed, Some(Suppression_Reason(SuppressionDisposition::FormalRiskAcceptance, SuppressionStatus::Active)));
 
-    let result = Compared(before, after);
+    let result = Gate_Comparison(before, after);
     let change = result.changed.first().expect("a reason change is a change");
 
     assert_eq!(change.before, FindingDisposition::Suppressed, "the bucket did not move and must not appear to");
@@ -40,10 +40,10 @@ fn Test_A_Disposition_Change_Within_Suppressed_Should_Be_Reported()
 #[test]
 fn Test_A_Waiver_Lapsing_Should_Be_Reported_With_Its_Reason()
 {
-    let before = (FindingDisposition::Suppressed, Some(Reason(SuppressionDisposition::TemporaryWaiver, SuppressionStatus::Active)));
-    let after = (FindingDisposition::Blocking, Some(Reason(SuppressionDisposition::TemporaryWaiver, SuppressionStatus::Expired)));
+    let before = (FindingDisposition::Suppressed, Some(Suppression_Reason(SuppressionDisposition::TemporaryWaiver, SuppressionStatus::Active)));
+    let after = (FindingDisposition::Blocking, Some(Suppression_Reason(SuppressionDisposition::TemporaryWaiver, SuppressionStatus::Expired)));
 
-    let result = Compared(before, after);
+    let result = Gate_Comparison(before, after);
     let change = result.changed.first().expect("a lapsed waiver is a change");
 
     assert_eq!(change.before, FindingDisposition::Suppressed);
@@ -55,7 +55,7 @@ fn Test_A_Waiver_Lapsing_Should_Be_Reported_With_Its_Reason()
 #[test]
 fn Test_Baselined_Becoming_Blocking_Should_Be_Reported()
 {
-    let result = Compared((FindingDisposition::Baselined, None), (FindingDisposition::Blocking, None));
+    let result = Gate_Comparison((FindingDisposition::Baselined, None), (FindingDisposition::Blocking, None));
     let change = result.changed.first().expect("a bucket change is a change");
 
     assert_eq!((change.before, change.after), (FindingDisposition::Baselined, FindingDisposition::Blocking));
@@ -70,9 +70,9 @@ fn Test_Baselined_Becoming_Blocking_Should_Be_Reported()
 #[test]
 fn Test_An_Unchanged_Bucket_And_Reason_Should_Report_No_Change()
 {
-    let reason = Some(Reason(SuppressionDisposition::InlineSuppression, SuppressionStatus::Active));
+    let reason = Some(Suppression_Reason(SuppressionDisposition::InlineSuppression, SuppressionStatus::Active));
 
-    let result = Compared((FindingDisposition::Suppressed, reason), (FindingDisposition::Suppressed, reason));
+    let result = Gate_Comparison((FindingDisposition::Suppressed, reason), (FindingDisposition::Suppressed, reason));
 
     assert!(
         result.changed.is_empty(),
@@ -96,7 +96,7 @@ fn Finding_Here() -> Finding
     };
 }
 
-fn Reason(disposition: SuppressionDisposition, status: SuppressionStatus) -> SuppressionReason
+fn Suppression_Reason(disposition: SuppressionDisposition, status: SuppressionStatus) -> SuppressionReason
 {
     return SuppressionReason { disposition, status };
 }
@@ -105,7 +105,7 @@ fn Reason(disposition: SuppressionDisposition, status: SuppressionStatus) -> Sup
 fn Findings_With(bucket: FindingDisposition, reason: Option<SuppressionReason>) -> GateFindings
 {
     let finding = Finding_Here();
-    let mut findings = Bucketed(&finding, bucket);
+    let mut findings = Bucketed_Findings(&finding, bucket);
 
     if let Some(reason) = reason
     {
@@ -115,7 +115,7 @@ fn Findings_With(bucket: FindingDisposition, reason: Option<SuppressionReason>) 
     return findings;
 }
 
-fn Compared(
+fn Gate_Comparison(
     before: (FindingDisposition, Option<SuppressionReason>),
     after: (FindingDisposition, Option<SuppressionReason>),
 ) -> super::GateCompareResult

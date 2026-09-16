@@ -41,7 +41,7 @@ const FINDING_SUBJECT: Digest128 = Digest128::From_Bytes([9; Digest128::BYTE_LEN
 
 /// A fixture's source path, as a type distinct from the text at it.
 ///
-/// [`Source`] takes two adjacent string positions, which the file's own gate reported: a
+/// [`Source_File`] takes two adjacent string positions, which the file's own gate reported: a
 /// caller can transpose them and the compiler will not object. Two named types make the
 /// transposition a type error, and cost one line each.
 #[derive(Clone, Copy)]
@@ -69,7 +69,7 @@ pub(super) const fn Run_Id_Of(fill: u8) -> RunId
     return RunId::From_Digest(Digest128::From_Bytes([fill; Digest128::BYTE_LENGTH]));
 }
 
-fn Source(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
+fn Source_File(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
 {
     return SourceFile::New(path.0, nomos_model::Subject_Of_Path(path.0), text.0.to_owned());
 }
@@ -82,8 +82,8 @@ fn Source(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
 #[test]
 fn Test_Two_Runs_Differing_Only_In_Source_Should_Be_Compatible()
 {
-    let clean = vec![Source(SourcePath("a.rs"), SourceText(CLEAN_SOURCE))];
-    let dirty = vec![Source(SourcePath("a.rs"), SourceText(MIRRORED_SOURCE))];
+    let clean = vec![Source_File(SourcePath("a.rs"), SourceText(CLEAN_SOURCE))];
+    let dirty = vec![Source_File(SourcePath("a.rs"), SourceText(MIRRORED_SOURCE))];
 
     let baseline = Run_Over(clean, BASELINE_RUN);
     let candidate = Run_Over(dirty, CANDIDATE_RUN);
@@ -165,8 +165,8 @@ fn Test_Two_Runs_That_Cannot_Say_Should_Both_Be_Named()
 #[test]
 fn Test_Compare_Gate_Runs_Should_Name_A_Finding_Added_Between_Two_Real_Runs()
 {
-    let clean = vec![Source(SourcePath("a.rs"), SourceText(CLEAN_SOURCE))];
-    let with_violation = vec![Source(SourcePath("a.rs"), SourceText(MIRRORED_SOURCE))];
+    let clean = vec![Source_File(SourcePath("a.rs"), SourceText(CLEAN_SOURCE))];
+    let with_violation = vec![Source_File(SourcePath("a.rs"), SourceText(MIRRORED_SOURCE))];
 
     let baseline = Run_Over(clean, BASELINE_RUN);
     let candidate = Run_Over(with_violation, CANDIDATE_RUN);
@@ -186,8 +186,8 @@ fn Test_Compare_Gate_Runs_Should_Name_A_Finding_Added_Between_Two_Real_Runs()
 #[test]
 fn Test_Compare_Gate_Runs_Should_Name_A_Finding_Removed_Between_Two_Real_Runs()
 {
-    let with_violation = vec![Source(SourcePath("a.rs"), SourceText(MIRRORED_SOURCE))];
-    let fixed = vec![Source(SourcePath("a.rs"), SourceText(CLEAN_SOURCE))];
+    let with_violation = vec![Source_File(SourcePath("a.rs"), SourceText(MIRRORED_SOURCE))];
+    let fixed = vec![Source_File(SourcePath("a.rs"), SourceText(CLEAN_SOURCE))];
 
     let baseline = Run_Over(with_violation, BASELINE_RUN);
     let candidate = Run_Over(fixed, CANDIDATE_RUN);
@@ -204,7 +204,7 @@ fn Test_Compare_Gate_Runs_Should_Name_A_Finding_Removed_Between_Two_Real_Runs()
 #[test]
 fn Test_Compare_Gate_Runs_Should_Name_Nothing_Between_Two_Identical_Runs()
 {
-    let sources = vec![Source(SourcePath("a.rs"), SourceText(QUIET_SOURCE))];
+    let sources = vec![Source_File(SourcePath("a.rs"), SourceText(QUIET_SOURCE))];
 
     let baseline = Run_Over(sources.clone(), BASELINE_RUN);
     let candidate = Run_Over(sources, CANDIDATE_RUN);
@@ -228,8 +228,8 @@ fn Test_Compare_Gate_Runs_Should_Name_A_Disposition_Change_For_The_Same_Finding_
 {
     let moved = Moved_Finding();
 
-    let blocking = Bucketed(&moved, FindingDisposition::Blocking);
-    let suppressed = Bucketed(&moved, FindingDisposition::Suppressed);
+    let blocking = Bucketed_Findings(&moved, FindingDisposition::Blocking);
+    let suppressed = Bucketed_Findings(&moved, FindingDisposition::Suppressed);
 
     let baseline = Result_With(BASELINE_RUN, blocking);
     let candidate = Result_With(CANDIDATE_RUN, suppressed);
@@ -265,7 +265,7 @@ fn Moved_Finding() -> Finding
 ///
 /// Shared with `reason_tests`, which needs the same one-finding population and adds a recorded
 /// reason to it.
-pub(super) fn Bucketed(finding: &Finding, bucket: FindingDisposition) -> GateFindings
+pub(super) fn Bucketed_Findings(finding: &Finding, bucket: FindingDisposition) -> GateFindings
 {
     let mut findings = Empty_Findings();
 
@@ -351,7 +351,7 @@ fn Root_Declaring(name: RootName<'_>, policy: PolicyText<'_>) -> std::path::Path
 fn Run_Over_Root(root: &std::path::Path, rules: RuleSelector, run: RunId) -> GateRunResult
 {
     let command = GateCommand { root: root.to_path_buf(), rules, ..GateCommand::default() };
-    let sources = vec![Source(SourcePath("a.rs"), SourceText(CLEAN_SOURCE))];
+    let sources = vec![Source_File(SourcePath("a.rs"), SourceText(CLEAN_SOURCE))];
     let environment = GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) };
 
     return Run_Gate(Some(sources), environment, &command, run);

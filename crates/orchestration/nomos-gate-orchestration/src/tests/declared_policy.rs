@@ -1,7 +1,7 @@
 //! What a `nomos-gate.json` beside a root adds to a command that never mentioned it: the
 //! declaration `Run_Gate` resolves itself, and the three answers it can give.
 
-use super::{Command_At, Coverage_Debt_Fixture, Ran_Over, Source, SourcePath, SourceText};
+use super::{Command_At, Coverage_Debt_Fixture, Ran_Over, Source_File, SourcePath, SourceText};
 use crate::GateRunOutcome;
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::RuleId;
@@ -88,7 +88,7 @@ fn Root_Without_Policy(name: RootName<'_>) -> PathBuf
 #[test]
 fn Test_A_Declared_Policy_File_Should_Tolerate_Findings_A_Command_Never_Mentioned()
 {
-    let sources = || return vec![Source(SourcePath("b.rs"), SourceText("pub fn badName() {}\n")), Source(SourcePath("c.rs"), SourceText("// TODO fix this\npub fn Ok()\n{\n}\n"))];
+    let sources = || return vec![Source_File(SourcePath("b.rs"), SourceText("pub fn badName() {}\n")), Source_File(SourcePath("c.rs"), SourceText("// TODO fix this\npub fn Ok()\n{\n}\n"))];
     let root = Root_Declaring(RootName("tolerates"), PolicyText(TOLERATING_POLICY));
 
     let result = Ran_Over(sources(), &Command_At(root));
@@ -109,7 +109,7 @@ fn Test_A_Declared_Policy_File_Should_Tolerate_Findings_A_Command_Never_Mentione
 fn Test_A_Root_With_No_Policy_File_Should_Judge_Exactly_As_Before()
 {
     let root = Root_Without_Policy(RootName("absent"));
-    let source = Source(SourcePath("b.rs"), SourceText("pub fn badName() {}\n"));
+    let source = Source_File(SourcePath("b.rs"), SourceText("pub fn badName() {}\n"));
 
     let result = Ran_Over(vec![source], &Command_At(root));
 
@@ -139,7 +139,7 @@ fn Test_A_Declared_Coverage_Floor_Should_Reach_The_Disposition()
 fn Test_A_Malformed_Policy_File_Should_Refuse_Rather_Than_Report_A_Verdict()
 {
     let root = Root_Declaring(RootName("malformed"), PolicyText("{ not json"));
-    let source = Source(SourcePath("b.rs"), SourceText("pub fn Named() {}\n"));
+    let source = Source_File(SourcePath("b.rs"), SourceText("pub fn Named() {}\n"));
 
     let result = Ran_Over(vec![source], &Command_At(root));
 

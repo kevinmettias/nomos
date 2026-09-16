@@ -12,7 +12,7 @@ use std::cell::Cell;
 
 use crate::{CheckOutcome, Run, RunContext};
 
-use super::{Repository_Root, Source, SourceText, Test_Variant};
+use super::{Repository_Root, Source_File, SourceText, Test_Variant};
 
 /// This workspace has far more members than this, so a real materialization that returned
 /// fewer sources than this never reached the provider at all.
@@ -23,7 +23,7 @@ const REAL_WORKSPACE_MEMBER_FLOOR: usize = 10;
 /// sources judged, so one placeholder file is enough to build a real one.
 fn Ingested_Placeholder() -> nomos_analysis::Context
 {
-    let placeholder = [Source("placeholder.rs", SourceText("pub fn Placeholder() {}\n"))];
+    let placeholder = [Source_File("placeholder.rs", SourceText("pub fn Placeholder() {}\n"))];
     let registry = crate::composition::Registered().expect("fixture composition");
     return crate::facts::Ingested_Workspace(&placeholder, &registry, Test_Variant(), &mut None)
         .expect("a single real file ingests");
@@ -166,7 +166,7 @@ fn Assert_Launches_Exactly(selected: &RuleId, expected: usize)
 fn Launches_Of(selected: &[RuleId]) -> usize
 {
     let launcher = CountingLauncher::New();
-    let sources = [Source("a.rs", SourceText("pub fn Ok() {}\n"))];
+    let sources = [Source_File("a.rs", SourceText("pub fn Ok() {}\n"))];
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &launcher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, selected);
     assert!(!matches!(outcome, CheckOutcome::Unreadable), "one real, well-formed source cannot be an unreadable tree");
 

@@ -46,11 +46,11 @@ fn Test_Variant() -> BuildVariant
     return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
 }
 
-/// The text half of a [`Source`]. A distinct type from the path half, so the two adjacent
+/// The text half of a [`Source_File`]. A distinct type from the path half, so the two adjacent
 /// string positions cannot be transposed at a call site and still compile.
 struct SourceText<'a>(&'a str);
 
-fn Source(path: &str, text: SourceText<'_>) -> SourceFile
+fn Source_File(path: &str, text: SourceText<'_>) -> SourceFile
 {
     return SourceFile::New(path, Subject_Of_Path(path), text.0);
 }
@@ -251,9 +251,9 @@ fn Test_A_Source_Derived_Family_Reused_Across_An_Edit_Should_Agree_With_A_Clean_
     fixture.Write("Cargo.toml", SourceText(WORKSPACE_MANIFEST));
 
     let selected = [RuleId::New(nomos_rules::NAMING_CONVENTION)];
-    let untouched = Source("b.rs", SourceText("pub fn Untouched() {}\n"));
-    let unedited = [Source("a.rs", SourceText("pub fn Ok() {}\n")), untouched.clone()];
-    let edited = [Source("a.rs", SourceText("pub fn Ok() {}\npub fn badly_named() {}\n")), untouched];
+    let untouched = Source_File("b.rs", SourceText("pub fn Untouched() {}\n"));
+    let unedited = [Source_File("a.rs", SourceText("pub fn Ok() {}\n")), untouched.clone()];
+    let edited = [Source_File("a.rs", SourceText("pub fn Ok() {}\npub fn badly_named() {}\n")), untouched];
 
     let comparison = Compare_Across_An_Edit(&fixture, &unedited, &edited, &selected);
 
@@ -276,7 +276,7 @@ fn Test_A_Workspace_Derived_Family_Reused_Across_A_Manifest_Edit_Should_Agree_Wi
     fixture.Write("alpha/src/lib.rs", SourceText("pub fn Ok() {}\n"));
     fixture.Write("beta/Cargo.toml", SourceText(DEPENDED_MANIFEST));
     fixture.Write("beta/src/lib.rs", SourceText("pub fn Ok() {}\n"));
-    let sources = [Source("alpha/src/lib.rs", SourceText("pub fn Ok() {}\n"))];
+    let sources = [Source_File("alpha/src/lib.rs", SourceText("pub fn Ok() {}\n"))];
 
     let comparison = Compare_Across_A_Mutation(&fixture, &sources, &selected, |fixture| {
         fixture.Write("alpha/Cargo.toml", SourceText(DEPENDENT_MANIFEST_WITHOUT_EDGE));
@@ -299,7 +299,7 @@ fn Test_A_Repository_Derived_Family_Reused_Across_A_Corpus_Edit_Should_Agree_Wit
     let resolved = "verdict: Met\nrecord: OD-FIXTURE-001\nsite: src/lib.rs#Ok\n";
     let unresolved = "verdict: Met\nrecord: OD-FIXTURE-001\nsite: src/absent.rs#Gone\n";
     fixture.Write("tests/contract/requirements/CHK-001.assessment", SourceText(resolved));
-    let sources = [Source("src/lib.rs", SourceText("pub fn Ok() {}\n"))];
+    let sources = [Source_File("src/lib.rs", SourceText("pub fn Ok() {}\n"))];
 
     let comparison = Compare_Across_A_Mutation(&fixture, &sources, &selected, |fixture| {
         fixture.Write("tests/contract/requirements/CHK-001.assessment", SourceText(unresolved));

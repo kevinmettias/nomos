@@ -9,7 +9,7 @@ use std::path::Path;
 
 use crate::{CheckOutcome, Run, RunContext};
 
-use super::{Scratch_Directory, Source, SourceText, Test_Variant};
+use super::{Scratch_Directory, Source_File, SourceText, Test_Variant};
 
 /// One declared goal nothing serves and one declared part serving no goal: the two findings
 /// the goal audit returns, one per direction it checks.
@@ -123,7 +123,7 @@ fn Findings_Under(sources: &[SourceFile], root: &Path, selected: &[RuleId]) -> V
 fn Test_Run_Should_Honor_A_Real_Standards_Json_Naming_Override()
 {
     let answers = Answers_With_And_Without(
-        &[Source("a.rs", SourceText("pub fn lower_snake_name() {}\n"))],
+        &[Source_File("a.rs", SourceText("pub fn lower_snake_name() {}\n"))],
         &[RuleId::New(nomos_rules::NAMING_CONVENTION)],
         Standards { name: "naming-overridden", declaration: r#"{"naming":{"function":"lower-snake"}}"# },
     );
@@ -147,7 +147,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Naming_Override()
 fn Test_Run_Should_Honor_A_Real_Standards_Json_File_Size_Limit()
 {
     let answers = Answers_With_And_Without(
-        &[Source("a.rs", SourceText("fn one() {}\nfn two() {}\nfn three() {}\nfn four() {}\nfn five() {}\n"))],
+        &[Source_File("a.rs", SourceText("fn one() {}\nfn two() {}\nfn three() {}\nfn four() {}\nfn five() {}\n"))],
         &[RuleId::New(nomos_rules::FILE_SIZE_JUSTIFICATION_TRIGGER)],
         Standards { name: "limits-overridden", declaration: r#"{"limits":{"file-size-hard-lines":3}}"# },
     );
@@ -178,8 +178,8 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Forbidden_Script_Extension()
 {
     let answers = Answers_With_And_Without(
         &[
-            Source("a.rs", SourceText("pub fn Anything() {}\n")),
-            Source("deploy.sh", SourceText("#!/usr/bin/env bash\necho deploying\n")),
+            Source_File("a.rs", SourceText("pub fn Anything() {}\n")),
+            Source_File("deploy.sh", SourceText("#!/usr/bin/env bash\necho deploying\n")),
         ],
         &[RuleId::New(nomos_rules::DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS)],
         Standards { name: "scripting-overridden", declaration: r#"{"scripting":{"tooling_language":"rust","forbidden_extensions":[".sh"]}}"# },
@@ -207,7 +207,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Forbidden_Script_Extension()
 fn Test_Run_Should_Honor_A_Real_Standards_Json_Goal_Declaration()
 {
     let answers = Answers_With_And_Without(
-        &[Source("a.rs", SourceText("pub fn Anything() {}\n"))],
+        &[Source_File("a.rs", SourceText("pub fn Anything() {}\n"))],
         &[RuleId::New(nomos_rules::GOALS_AND_PARTS_LINE_UP)],
         Standards { name: "goals-declared", declaration: r#"{"goals":["render"],"subsystems":[{"subsystem":"utils","paths":["src/utils"]}]}"# },
     );
@@ -235,7 +235,7 @@ fn Test_Run_Should_Honor_A_Real_Standards_Json_Goal_Declaration()
 fn Test_Run_Should_Honor_A_Real_Standards_Json_Approved_Abbreviation()
 {
     let answers = Answers_With_And_Without(
-        &[Source("a.rs", SourceText("pub fn Read_Ctx() {}\n"))],
+        &[Source_File("a.rs", SourceText("pub fn Read_Ctx() {}\n"))],
         &[RuleId::New(nomos_rules::ABBREVIATIONS)],
         Standards { name: "words-approved", declaration: r#"{"words":{"approved_abbreviations":["ctx"]}}"# },
     );

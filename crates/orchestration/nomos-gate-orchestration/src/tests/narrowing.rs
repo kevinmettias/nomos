@@ -2,7 +2,7 @@
 //! the same answer to a narrowed run as to the whole walk the scope was taken from.
 
 use super::{
-    Command_At, Command_With_Suppression, Mirrored_Source, One_Real_Blocking_Finding, Ran_Over, Repository_Root, Source, SourcePath,
+    Command_At, Command_With_Suppression, Mirrored_Source, One_Real_Blocking_Finding, Ran_Over, Repository_Root, Source_File, SourcePath,
     SourceText, Suppression_Of,
 };
 use crate::{GateCommand, GateRunOutcome, ScopeSelector, Suppression, SuppressionDisposition};
@@ -41,8 +41,8 @@ fn Orphan_Findings_Of(sources: Vec<SourceFile>, command: &GateCommand) -> Vec<St
 fn Test_A_Narrowed_Run_And_A_Whole_Run_Should_Agree_About_A_Declared_Module()
 {
     let sources = || return vec![
-        Source(SourcePath("crates/example/src/lib.rs"), SourceText("mod thing;\n")),
-        Source(SourcePath("crates/example/src/thing.rs"), SourceText("pub fn Thing() {}\n")),
+        Source_File(SourcePath("crates/example/src/lib.rs"), SourceText("mod thing;\n")),
+        Source_File(SourcePath("crates/example/src/thing.rs"), SourceText("pub fn Thing() {}\n")),
     ];
     let narrowed = GateCommand {
         scope: ScopeSelector { include: vec!["crates/example/src/thing.rs".to_owned()], exclude: Vec::new() },
@@ -64,9 +64,9 @@ fn Test_A_Narrowed_Run_And_A_Whole_Run_Should_Agree_About_A_Declared_Module()
 fn Test_A_Genuinely_Orphaned_Module_Should_Still_Be_Reported_By_A_Narrowed_Run()
 {
     let sources = vec![
-        Source(SourcePath("crates/example/src/lib.rs"), SourceText("mod thing;\n")),
-        Source(SourcePath("crates/example/src/thing.rs"), SourceText("pub fn Thing() {}\n")),
-        Source(SourcePath("crates/example/src/stray.rs"), SourceText("pub fn Stray() {}\n")),
+        Source_File(SourcePath("crates/example/src/lib.rs"), SourceText("mod thing;\n")),
+        Source_File(SourcePath("crates/example/src/thing.rs"), SourceText("pub fn Thing() {}\n")),
+        Source_File(SourcePath("crates/example/src/stray.rs"), SourceText("pub fn Stray() {}\n")),
     ];
     let narrowed = GateCommand {
         scope: ScopeSelector { include: vec!["crates/example/src/stray.rs".to_owned()], exclude: Vec::new() },
@@ -94,7 +94,7 @@ fn Test_A_Declared_Entry_Matching_No_Finding_Should_Be_Reported()
         expiry: None,
     };
     let command = Command_With_Suppression(Repository_Root(), unreachable);
-    let source = Source(SourcePath("b.rs"), SourceText("pub fn Named() {}\n"));
+    let source = Source_File(SourcePath("b.rs"), SourceText("pub fn Named() {}\n"));
 
     let result = Ran_Over(vec![source], &command);
 

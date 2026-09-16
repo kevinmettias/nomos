@@ -72,7 +72,7 @@ mod tests
     /// The one guarantee this function actually makes: two calls never collide, regardless
     /// of how close together they land in wall-clock time.
     #[test]
-    fn Test_Fresh_Run_Id_Should_Never_Collide_Within_A_Process()
+    fn Test_Fresh_Run_Id_Should_Never_Collide_Within_One_Timestamp()
     {
         let now = Timestamp::From_Unix_Seconds(0);
 

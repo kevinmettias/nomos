@@ -56,7 +56,7 @@ pub fn Evaluated_Phases(phases: &[GatePhase], findings: &[Finding], approvals: &
     {
         if blocked
         {
-            outcomes.push(Skipped(phase));
+            outcomes.push(Skipped_Outcome(phase));
             continue;
         }
 
@@ -70,7 +70,7 @@ pub fn Evaluated_Phases(phases: &[GatePhase], findings: &[Finding], approvals: &
 
 /// `phase`'s own outcome when an earlier phase already failed unapproved -- never judged, so
 /// carries no findings and needs no approval.
-fn Skipped(phase: &GatePhase) -> PhaseOutcome
+fn Skipped_Outcome(phase: &GatePhase) -> PhaseOutcome
 {
     return PhaseOutcome { name: phase.name.clone(), ran: false, blocking_findings: Vec::new(), approved: false, disposition: PhaseDisposition::Skipped };
 }
@@ -138,8 +138,8 @@ mod tests
     /// [`TOLERATED_BLOCKING_FINDINGS`] by one finding.
     const THIRD_SUBJECT_SEED: u8 = 3;
 
-    /// A phase's own name, a type of its own so that `Phase`'s two string positions cannot be
-    /// transposed at a call site.
+    /// A phase's own name, a type of its own so that `Phase_Definition`'s two string positions
+    /// cannot be transposed at a call site.
     struct PhaseName<'a>(&'a str);
 
     /// A rule's identifier, a type of its own for the same reason as [`PhaseName`].
@@ -162,7 +162,7 @@ mod tests
     #[test]
     fn Test_A_Phase_With_No_Blocking_Findings_Should_Pass()
     {
-        let phases = vec![Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
+        let phases = vec![Phase_Definition(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
 
         let outcomes = Evaluated_Phases(&phases, &[], &[]);
 
@@ -179,8 +179,8 @@ mod tests
     fn Test_A_Later_Phase_Should_Not_Run_When_An_Earlier_One_Fails()
     {
         let phases = vec![
-            Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding),
-            Phase(PhaseName("second"), RuleName("dependency-direction"), PhaseThreshold::AnyBlockingFinding),
+            Phase_Definition(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding),
+            Phase_Definition(PhaseName("second"), RuleName("dependency-direction"), PhaseThreshold::AnyBlockingFinding),
         ];
         let findings = vec![Finding_For("naming-convention", 1)];
 
@@ -199,7 +199,7 @@ mod tests
     #[test]
     fn Test_A_Max_Threshold_Should_Tolerate_Findings_Up_To_And_Including_Its_Own_Max()
     {
-        let phase = Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::MaxBlockingFindings { max: TOLERATED_BLOCKING_FINDINGS });
+        let phase = Phase_Definition(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::MaxBlockingFindings { max: TOLERATED_BLOCKING_FINDINGS });
         let two_findings = vec![Finding_For("naming-convention", 1), Finding_For("naming-convention", SECOND_SUBJECT_SEED)];
 
         let outcomes = Evaluated_Phases(&[phase.clone()], &two_findings, &[]);
@@ -220,7 +220,7 @@ mod tests
         assert!(matches!(exceeded.disposition, PhaseDisposition::Failed), "three findings must exceed a max of two");
     }
 
-    fn Phase(name: PhaseName<'_>, rule: RuleName<'_>, threshold: PhaseThreshold) -> GatePhase
+    fn Phase_Definition(name: PhaseName<'_>, rule: RuleName<'_>, threshold: PhaseThreshold) -> GatePhase
     {
         return GatePhase { name: name.0.to_owned(), rules: vec![RuleId::New(rule.0)], threshold };
     }
@@ -228,7 +228,7 @@ mod tests
     #[test]
     fn Test_An_Approval_Should_Pass_A_Phase_That_Would_Otherwise_Fail()
     {
-        let phases = vec![Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
+        let phases = vec![Phase_Definition(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
         let findings = vec![Finding_For("naming-convention", 1)];
         let approvals = vec![PhaseApproval { phase: "first".to_owned(), rationale: "reviewed and accepted".to_owned() }];
 
@@ -247,7 +247,7 @@ mod tests
     #[test]
     fn Test_An_Approval_Naming_A_Different_Phase_Should_Not_Match()
     {
-        let phases = vec![Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
+        let phases = vec![Phase_Definition(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
         let findings = vec![Finding_For("naming-convention", 1)];
         let approvals = vec![PhaseApproval { phase: "second".to_owned(), rationale: "wrong phase".to_owned() }];
 
@@ -265,7 +265,7 @@ mod tests
     #[test]
     fn Test_Phased_Disposition_Should_Leave_A_Passed_Run_Untouched()
     {
-        let phases = vec![Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
+        let phases = vec![Phase_Definition(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
 
         let disposition = Phased_Disposition(GateRunOutcome::Passed, &phases, &[], &[]);
 
@@ -285,7 +285,7 @@ mod tests
     #[test]
     fn Test_Phased_Disposition_Should_Pass_A_Failed_Run_When_Every_Finding_Is_Approved()
     {
-        let phases = vec![Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
+        let phases = vec![Phase_Definition(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
         let findings = vec![Finding_For("naming-convention", 1)];
         let approvals = vec![PhaseApproval { phase: "first".to_owned(), rationale: "reviewed".to_owned() }];
         let outcomes = Evaluated_Phases(&phases, &findings, &approvals);
@@ -298,7 +298,7 @@ mod tests
     #[test]
     fn Test_Phased_Disposition_Should_Stay_Failed_When_A_Blocking_Finding_Belongs_To_No_Phase()
     {
-        let phases = vec![Phase(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
+        let phases = vec![Phase_Definition(PhaseName("first"), RuleName("naming-convention"), PhaseThreshold::AnyBlockingFinding)];
         let findings = vec![Finding_For("dependency-direction", 1)];
         let outcomes = Evaluated_Phases(&phases, &findings, &[]);
 

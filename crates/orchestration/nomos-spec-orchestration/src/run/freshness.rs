@@ -156,7 +156,7 @@ mod tests
     fn Test_Freshness_Of_Render_Should_Report_An_Empty_Build_Root_As_Absent()
     {
         let assembly = Assembled();
-        let into = Scratch("absent");
+        let into = Scratch_Root("absent");
 
         let answer = Freshness_Of_Render(&assembly, &FreshnessRequest { into, profile: Some(EMBEDDED_PROFILE.to_owned()), require: Vec::new() }, &StdFileSystem)
             .expect("a resolvable single profile does not refuse");
@@ -171,7 +171,7 @@ mod tests
     fn Test_Freshness_Of_Render_Should_Refuse_An_Unknown_Profile()
     {
         let assembly = Assembled();
-        let into = Scratch("unknown-profile");
+        let into = Scratch_Root("unknown-profile");
 
         let error = Freshness_Of_Render(&assembly, &FreshnessRequest { into, profile: Some("no-such-profile".to_owned()), require: Vec::new() }, &StdFileSystem)
             .expect_err("an unknown --profile must refuse");
@@ -185,7 +185,7 @@ mod tests
         return Assemble_Corpus(&request).expect("assembles from the embedded records alone");
     }
 
-    fn Scratch(name: &str) -> PathBuf
+    fn Scratch_Root(name: &str) -> PathBuf
     {
         let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-freshness-{name}-{}", std::process::id()));
         let _ignored = std::fs::remove_dir_all(&root);

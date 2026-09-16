@@ -29,7 +29,7 @@ fn No_Corpus() -> CorpusRequest
     return CorpusRequest { variable: "A_SEAM_TEST_CORPUS_VARIABLE".to_owned(), root: None, revision: "v14.36".to_owned() };
 }
 
-fn Scratch(name: &str) -> std::path::PathBuf
+fn Scratch_Root(name: &str) -> std::path::PathBuf
 {
     let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-seam-{name}-{}", std::process::id()));
     let _ignored = std::fs::remove_dir_all(&root);
@@ -57,7 +57,7 @@ fn Test_Assemble_Corpus_Should_Seed_A_Real_Specification_Store()
 #[test]
 fn Test_Assemble_Corpus_Should_Report_A_Refused_Corpus_File()
 {
-    let root = Scratch("malformed-catalog");
+    let root = Scratch_Root("malformed-catalog");
     let catalog_dir = root.join("02_machine/catalog");
     std::fs::create_dir_all(&catalog_dir).expect("the scratch catalogue directory is created under the root");
     std::fs::write(catalog_dir.join("catalog.json"), "not valid json")
@@ -92,7 +92,7 @@ fn Test_Run_Should_List_And_Render_A_Real_Shipped_Profile()
         .find(|profile| return profile.id == EMBEDDED_PROFILE)
         .expect("the shipped catalogue lists the domain-specification profile");
 
-    let into = Scratch("render-seam");
+    let into = Scratch_Root("render-seam");
     let render = Run(
         &SpecCommand::Render(nomos_spec_orchestration::RenderRequest { profile: profile.id.clone(), into, subject: None }),
         &No_Corpus(),
@@ -153,7 +153,7 @@ fn Round_Tripped_Through_Generic_File_System<Filesystem: nomos_platform::FileSys
 #[test]
 fn Test_Run_Should_Accept_A_Real_Nomos_Platform_File_System()
 {
-    let path = Scratch("file-system-seam").join("roundtrip.txt");
+    let path = Scratch_Root("file-system-seam").join("roundtrip.txt");
 
     let read_back = Round_Tripped_Through_Generic_File_System(&nomos_platform_std::StdFileSystem, &path, "the real seam");
 

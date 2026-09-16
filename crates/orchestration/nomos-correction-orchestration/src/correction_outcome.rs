@@ -8,7 +8,7 @@
 /// each variant to text and an exit code; a wire caller maps it to JSON. Neither renders
 /// here: this type is the seam's own answer, not either host's.
 ///
-/// `Staged`/`Committed`'s own `summary` was `claimed` before `P40-CORRECTIONS-SECOND-
+/// `Staged_Fix`/`Committed_Change`'s own `summary` was `claimed` before `P40-CORRECTIONS-SECOND-
 /// FAMILY-3` gave this crate a second correction family: phantom-mirror's own "no longer
 /// claims `{name}`" phrasing does not fit trailing-whitespace's "trailing whitespace
 /// stripped from N line(s)" one, and `Run_Correction` has exactly one shared pipeline

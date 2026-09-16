@@ -10,23 +10,23 @@
 //!
 //! `P40-CORRECTIONS-SECOND-FAMILY-3` adds [`crate::trailing_whitespace`] beside
 //! [`crate::phantom_mirror`] -- a second rule (`no-trailing-whitespace`), a second real
-//! fix, over a second real finding shape. [`Judged`] now selects both rules at once, and
-//! [`Claimed_Fix`] tries each family's own claim-recognizer against the one resulting
+//! fix, over a second real finding shape. [`Judged_Findings`] now selects both rules at once,
+//! and [`Claimed_Fix`] tries each family's own claim-recognizer against the one resulting
 //! `findings` list, in a fixed priority order, and hands whichever matches to the one
-//! `plan`/`preview`/seed/stage/validate/commit pipeline [`Staged`] runs exactly once.
+//! `plan`/`preview`/seed/stage/validate/commit pipeline [`Staged_Fix`] runs exactly once.
 //! Neither family's own module knows the other exists; both build the same [`ClaimedFix`]
-//! shape, and everything downstream of that point — the whole of [`Staged`] and
-//! [`Committed`] — is unaware which family produced it.
+//! shape, and everything downstream of that point — the whole of [`Staged_Fix`] and
+//! [`Committed_Change`] — is unaware which family produced it.
 //!
 //! # Why the pipeline is four functions rather than one
 //!
 //! This crate's own `function-size` budget is a 24-row body, and the pipeline above is
 //! longer than that read end to end. So it is split where it already has seams:
-//! [`Run_Correction`] answers the walk's own two refusals, [`Corrected`] judges and
-//! recognizes a claim, [`Staged`] plans and drives the lifecycle, and [`Committed`] writes
-//! the corrected file back. Each step keeps the ordering the single body had, and the
-//! `Result<_, CorrectionOutcome>` [`Corrected`] and [`Staged`] return is what carries an
-//! early refusal from whichever step produced it to the one caller that reports it.
+//! [`Run_Correction`] answers the walk's own two refusals, [`Correction_Pipeline`] judges and
+//! recognizes a claim, [`Staged_Fix`] plans and drives the lifecycle, and [`Committed_Change`]
+//! writes the corrected file back. Each step keeps the ordering the single body had, and the
+//! `Result<_, CorrectionOutcome>` [`Correction_Pipeline`] and [`Staged_Fix`] return is what
+//! carries an early refusal from whichever step produced it to the one caller that reports it.
 //!
 //! ## What this proves about batching
 //!
@@ -95,7 +95,7 @@ pub fn Run_Correction<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environmen
         return CorrectionOutcome::UnreadableRoot;
     };
 
-    return match Corrected(&sources, RunRequest { variant, launcher, filesystem, environment, command })
+    return match Correction_Pipeline(&sources, RunRequest { variant, launcher, filesystem, environment, command })
     {
         Ok(outcome) => outcome,
         Err(outcome) => outcome,
@@ -114,25 +114,25 @@ struct RunRequest<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environmen
 }
 
 /// The pipeline past the walk: an empty walk is refused, the tree is judged, one family's
-/// claim is recognized, and [`Staged`] carries it through the lifecycle.
+/// claim is recognized, and [`Staged_Fix`] carries it through the lifecycle.
 ///
 /// `Ok` is the run's own outcome; `Err` is the [`CorrectionOutcome`] that ended it before
-/// [`Staged`] was reached. Both halves are the same type because a refusal here is not a
+/// [`Staged_Fix`] was reached. Both halves are the same type because a refusal here is not a
 /// distinct kind of failure, it is the answer a refusal always was.
-fn Corrected<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], request: RunRequest<'_, Launcher, Fs, Env>) -> Result<CorrectionOutcome, CorrectionOutcome>
+fn Correction_Pipeline<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], request: RunRequest<'_, Launcher, Fs, Env>) -> Result<CorrectionOutcome, CorrectionOutcome>
 {
     if sources.is_empty()
     {
         return Err(CorrectionOutcome::NoSourceFound);
     }
 
-    let findings = Judged(sources, JudgeContext { launcher: request.launcher, filesystem: request.filesystem, environment: request.environment, variant: request.variant.clone(), root: &request.command.root })?;
+    let findings = Judged_Findings(sources, JudgeContext { launcher: request.launcher, filesystem: request.filesystem, environment: request.environment, variant: request.variant.clone(), root: &request.command.root })?;
     let fix = Claimed_Fix(&request.command.root, &findings, request.filesystem)?.ok_or(CorrectionOutcome::Clean)?;
 
-    return Staged(fix, request);
+    return Staged_Fix(fix, request);
 }
 
-/// What [`Judged`] judges a walked tree against, apart from the walk itself and the
+/// What [`Judged_Findings`] judges a walked tree against, apart from the walk itself and the
 /// platform used to run it -- the same grouping this crate's own callers use to stay
 /// within its parameter-count limit.
 struct JudgeContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
@@ -149,7 +149,7 @@ struct JudgeContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environm
 
 /// Runs both correction families' own rules over `sources`, or the [`CorrectionOutcome`] a
 /// non-`Judged` check outcome already decides.
-fn Judged<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], context: JudgeContext<'_, Launcher, Fs, Env>) -> Result<Vec<Finding>, CorrectionOutcome>
+fn Judged_Findings<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], context: JudgeContext<'_, Launcher, Fs, Env>) -> Result<Vec<Finding>, CorrectionOutcome>
 {
     let selected: Vec<RuleId> = CorrectionFamily::ALL.iter().map(|family| return family.Rule()).collect();
     let outcome = nomos_check_orchestration::Run(
@@ -206,7 +206,7 @@ struct ClaimedFix
 ///
 /// Matching `family` exhaustively is the mechanism the whole declaration rests on: a
 /// variant added to [`CorrectionFamily`] does not compile until it is wired to a real
-/// recognizer here, so a family cannot be selected by [`Judged`] and then be recognized
+/// recognizer here, so a family cannot be selected by [`Judged_Findings`] and then be recognized
 /// by nobody.
 fn Claimed_Fix<Fs: FileSystem>(root: &Path, findings: &[Finding], filesystem: &Fs) -> Result<Option<ClaimedFix>, CorrectionOutcome>
 {
@@ -283,11 +283,11 @@ fn Trailing_Whitespace_Fix<Fs: FileSystem>(root: &Path, claim: &TrailingWhitespa
 
 /// Plans `fix`, seeds a workspace from the prior content it read, stages and validates the
 /// plan against that workspace, and either reports the staged plan or commits it through
-/// [`Committed`].
+/// [`Committed_Change`].
 ///
-/// The `Result` is [`Corrected`]'s own: `Err` is the [`CorrectionOutcome`] one of the two
-/// checked steps refused with, carried back unchanged.
-fn Staged<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(fix: ClaimedFix, request: RunRequest<'_, Launcher, Fs, Env>) -> Result<CorrectionOutcome, CorrectionOutcome>
+/// The `Result` is [`Correction_Pipeline`]'s own: `Err` is the [`CorrectionOutcome`] one of
+/// the two checked steps refused with, carried back unchanged.
+fn Staged_Fix<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(fix: ClaimedFix, request: RunRequest<'_, Launcher, Fs, Env>) -> Result<CorrectionOutcome, CorrectionOutcome>
 {
     let mut workspace = Seeded_Workspace(request.variant, request.command, &fix);
     let plan = CorrectionPlan::New(vec![fix.candidate]).map_err(|error| return CorrectionOutcome::Refused(error.to_string()))?;
@@ -299,7 +299,7 @@ fn Staged<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(fix: Clai
         return Ok(CorrectionOutcome::Staged { path: fix.path, summary: fix.summary, preview });
     }
 
-    return Ok(Committed(Committing {
+    return Ok(Committed_Change(Committing {
         root: &request.command.root,
         path: fix.path,
         summary: fix.summary,
@@ -340,8 +340,8 @@ fn Staged_And_Validated(plan: &CorrectionPlan, workspace: &Workspace) -> Result<
     return staged.Validate(workspace).map_err(|error| return CorrectionOutcome::Refused(error.to_string()));
 }
 
-/// Everything [`Committed`] needs to commit a validated plan and write the corrected file,
-/// grouped into one value so that function stays within this crate's own parameter-count
+/// Everything [`Committed_Change`] needs to commit a validated plan and write the corrected
+/// file, grouped into one value so that function stays within this crate's own parameter-count
 /// limit.
 struct Committing<'a, Fs: FileSystem>
 {
@@ -358,7 +358,7 @@ struct Committing<'a, Fs: FileSystem>
 
 /// Commits `committing.validated` through the workspace's one door and writes the
 /// corrected file through `committing.filesystem`, or reports why either step refused.
-fn Committed<Fs: FileSystem>(committing: Committing<'_, Fs>) -> CorrectionOutcome
+fn Committed_Change<Fs: FileSystem>(committing: Committing<'_, Fs>) -> CorrectionOutcome
 {
     let Committing { root, path, summary, evidence_reference, validated, workspace, after, preview, filesystem } = committing;
     let committed = match Committed_Plan(validated, workspace, evidence_reference)

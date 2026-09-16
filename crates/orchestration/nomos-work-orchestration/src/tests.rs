@@ -52,7 +52,7 @@ fn Scratch_Ledger(name: &str) -> FileLedger<StdFileSystem, SystemClock, FileLock
 ///
 /// Reserves one file rather than [`Territory::Empty`]: an item that reserves nothing
 /// excludes nobody while looking like work, and `ledger.Add` refuses it for that reason.
-fn Item(id: &str) -> LedgerItem
+fn Unclaimed_Item(id: &str) -> LedgerItem
 {
     return LedgerItem {
         id: ItemId::New(id),
@@ -105,7 +105,7 @@ impl nomos_platform::ProcessLauncher for Unreached
 /// message instead of surfacing two steps later as a puzzling failure about something else.
 /// `Test_Add_Then_Show_Should_Find_What_Add_Wrote` proves `Add`'s own outcome and keeps
 /// checking it inline.
-fn Added(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: LedgerItem) -> LedgerItem
+fn Added_Item(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: LedgerItem) -> LedgerItem
 {
     let added = Run(
         &WorkCommand::Add {
@@ -126,7 +126,7 @@ fn Added(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: Le
 }
 
 /// Claims `item` as `holder`, through [`Run`] the way `nomos work claim` would.
-fn Claimed(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: &ItemId, holder: &str) -> WorkOutcome
+fn Claimed_Outcome(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: &ItemId, holder: &str) -> WorkOutcome
 {
     let request = ClaimRequest {
         item: item.clone(),
@@ -180,7 +180,7 @@ fn Test_List_Should_Read_An_Empty_Board()
 fn Test_Add_Then_Show_Should_Find_What_Add_Wrote()
 {
     let mut ledger = Scratch_Ledger("add-show");
-    let item = Item("T-ONE");
+    let item = Unclaimed_Item("T-ONE");
 
     let added = Run(
         &WorkCommand::Add {
@@ -206,12 +206,12 @@ fn Test_Add_Then_Show_Should_Find_What_Add_Wrote()
 fn Test_Claim_Then_Second_Claim_Should_Be_Refused_As_Held()
 {
     let mut ledger = Scratch_Ledger("claim-twice");
-    let item = Added(&mut ledger, Item("T-TWO"));
+    let item = Added_Item(&mut ledger, Unclaimed_Item("T-TWO"));
 
-    let first = Claimed(&mut ledger, &item.id, "agent-a");
+    let first = Claimed_Outcome(&mut ledger, &item.id, "agent-a");
     assert!(matches!(first, WorkOutcome::Claim(Ok(_))));
 
-    let second = Claimed(&mut ledger, &item.id, "agent-b");
+    let second = Claimed_Outcome(&mut ledger, &item.id, "agent-b");
     let WorkOutcome::Claim(Err(refusal)) = second
     else
     {
@@ -227,7 +227,7 @@ fn Test_Claim_Then_Second_Claim_Should_Be_Refused_As_Held()
 fn Test_Validate_Should_Accept_A_Board_This_Run_Wrote()
 {
     let mut ledger = Scratch_Ledger("validate");
-    Added(&mut ledger, Item("T-THREE"));
+    Added_Item(&mut ledger, Unclaimed_Item("T-THREE"));
 
     let validated = Run(&WorkCommand::Validate, &mut ledger, &Unreached, Territory::Empty);
     assert!(matches!(validated, WorkOutcome::Validate(Ok(_))));
@@ -237,7 +237,7 @@ fn Test_Validate_Should_Accept_A_Board_This_Run_Wrote()
 fn Test_Decline_Should_End_An_Unclaimed_Item()
 {
     let mut ledger = Scratch_Ledger("decline");
-    let item = Added(&mut ledger, Item("T-FOUR"));
+    let item = Added_Item(&mut ledger, Unclaimed_Item("T-FOUR"));
 
     let declined = Run(
         &WorkCommand::Decline(EndingRequest {

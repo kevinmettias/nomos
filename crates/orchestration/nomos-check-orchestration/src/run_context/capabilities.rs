@@ -4,7 +4,7 @@
 //! [`Materialize_Capabilities`] is this module's whole contract; everything below it is a
 //! step it names. The sections differ in what they read and what they write, but they share
 //! one shape -- run only when a selected rule declares the family, and record into `changed`
-//! the family that actually moved -- so each is passed through [`Tracking`] rather than
+//! the family that actually moved -- so each is passed through [`Materialization_Tracking`] rather than
 //! repeating that wrapper itself. The seven repository-declared policy families are that same
 //! shape over seven different facts, so they are driven from [`Policy_Families`] and
 //! dispatched by [`Materialize_Policy_Family`]. Spelling those seven out as seven more
@@ -60,18 +60,18 @@ pub(super) fn Materialize_Capabilities<Launcher: ProcessLauncher, Fs: FileSystem
     let demanded = Demanded_Families(selected);
     let demanded = demanded.as_slice();
 
-    let dependencies = Tracking(env, changed, RequiredFact::DependencyEdges, |env| return Materialize_Dependency_Section(env, demanded));
-    let lint = Tracking(env, changed, RequiredFact::LintDiagnostics, |env| return Materialize_Lint_Section(env, demanded));
-    let policy = Tracking(env, changed, RequiredFact::DependencyPolicy, |env| return Materialize_Policy_Section(env, demanded));
+    let dependencies = Materialization_Tracking(env, changed, RequiredFact::DependencyEdges, |env| return Materialize_Dependency_Section(env, demanded));
+    let lint = Materialization_Tracking(env, changed, RequiredFact::LintDiagnostics, |env| return Materialize_Lint_Section(env, demanded));
+    let policy = Materialization_Tracking(env, changed, RequiredFact::DependencyPolicy, |env| return Materialize_Policy_Section(env, demanded));
 
-    Tracking(env, changed, RequiredFact::Reachability, |env| Materialize_Reachability_Section(sources, env, demanded));
+    Materialization_Tracking(env, changed, RequiredFact::Reachability, |env| Materialize_Reachability_Section(sources, env, demanded));
 
     for family in Policy_Families()
     {
-        Tracking(env, changed, family, |env| Materialize_Policy_Family(env, demanded, family));
+        Materialization_Tracking(env, changed, family, |env| Materialize_Policy_Family(env, demanded, family));
     }
 
-    let review = Tracking(env, changed, RequiredFact::ReviewFindings, |_env| return Materialize_Review_Section(demanded));
+    let review = Materialization_Tracking(env, changed, RequiredFact::ReviewFindings, |_env| return Materialize_Review_Section(demanded));
 
     return Capability_Materialization_Of(dependencies, lint, policy, review);
 }
@@ -120,7 +120,7 @@ fn Demanded_Families(selected: &[RuleId]) -> Vec<RequiredFact>
 /// materialization while it ran -- the one signal available today for "did this family just
 /// change," since a skipped section (its own gating rule not selected) writes nothing and a
 /// run one writes unconditionally.
-fn Tracking<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment, Answer>(
+fn Materialization_Tracking<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment, Answer>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     changed: &mut Vec<RequiredFact>,
     family: RequiredFact,
@@ -378,7 +378,7 @@ fn Materialize_Requirement_Trace_Section<
 /// [`Materialize_Review`]'s own doc gives the reason -- this connector's one provider
 /// answers about one already-identified external review comment, and nothing in this
 /// call chain names one yet, so there is nothing here for a root, a launcher or a
-/// filesystem to be read through. [`Materialize_Capabilities`]' own `Tracking` wrapper still
+/// filesystem to be read through. [`Materialize_Capabilities`]' own `Materialization_Tracking` wrapper still
 /// calls this the identical way, through a closure that ignores the environment it is
 /// handed -- the same `|_reader|` idiom this crate's own text-only `ComposedRule` entries
 /// already use for the identical reason.

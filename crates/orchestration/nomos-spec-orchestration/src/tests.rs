@@ -29,7 +29,7 @@ fn No_Corpus() -> CorpusRequest
 /// A build root under this process's own temporary directory, unique per test, so
 /// `Render` and `Freshness` can be exercised against a real, disk-backed
 /// `nomos-platform-std::StdFileSystem` the same way `nomos-cli` runs them.
-fn Scratch(name: &str) -> PathBuf
+fn Scratch_Root(name: &str) -> PathBuf
 {
     let root = std::env::temp_dir().join(format!(
         "nomos-spec-orchestration-{name}-{}",

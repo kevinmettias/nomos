@@ -89,7 +89,7 @@ mod tests
             .expect("D-132 is embedded")
             .markdown;
         let edited = markdown.replace("## Decision", "## The decision");
-        let staged = Scratch("colocated").join("staged.md");
+        let staged = Scratch_Root("colocated").join("staged.md");
         std::fs::write(&staged, &edited).expect("writes the staged edit");
 
         let preview = Preview_Staged_Edit(&assembly, &EditRequest { id: "D-132".to_owned(), from: staged, rename: None }, &StdFileSystem)
@@ -98,7 +98,7 @@ mod tests
         assert!(preview.Is_Wording_Moved(), "a heading rename must count as wording moved");
     }
 
-    fn Scratch(name: &str) -> PathBuf
+    fn Scratch_Root(name: &str) -> PathBuf
     {
         let root = std::env::temp_dir().join(format!("nomos-spec-orchestration-preview-{name}-{}", std::process::id()));
         let _ignored = std::fs::remove_dir_all(&root);

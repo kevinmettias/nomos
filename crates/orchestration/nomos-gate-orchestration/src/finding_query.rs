@@ -190,7 +190,7 @@ mod tests
     /// The text judged as the contents of one fixture source.
     struct SourceText(&'static str);
 
-    fn Source(path: SourcePath, text: SourceText) -> SourceFile
+    fn Source_File(path: SourcePath, text: SourceText) -> SourceFile
     {
         return SourceFile::New(path.0, Subject_Of_Path(path.0), text.0);
     }
@@ -201,7 +201,7 @@ mod tests
     #[test]
     fn Test_Explain_Gate_Should_Find_A_Real_Blocking_Finding()
     {
-        let sources = vec![Source(
+        let sources = vec![Source_File(
             SourcePath("a.rs"),
             SourceText("/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n"),
         )];
@@ -320,7 +320,7 @@ mod tests
     /// decides is which policy file is resolved -- which is what these two tests are about.
     fn Explained_Collapsed_Body(command: &GateCommand) -> Explanation
     {
-        let sources = vec![Source(SourcePath("a.rs"), SourceText("pub fn A_Thing() -> i32 { return 1; }
+        let sources = vec![Source_File(SourcePath("a.rs"), SourceText("pub fn A_Thing() -> i32 { return 1; }
 "))];
         let query = FindingQuery { rule: nomos_contracts::RuleId::New(NO_SINGLE_LINE_FUNCTION_BODIES), location: "a.rs:1".to_owned() };
 

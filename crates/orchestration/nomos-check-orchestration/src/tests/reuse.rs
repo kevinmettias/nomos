@@ -9,7 +9,7 @@ use nomos_workspace::Workspace;
 
 use crate::{CheckOutcome, RuleReassessmentCache, Run, RunContext};
 
-use super::{Repository_Root, Source, SourceText, Test_Variant};
+use super::{Repository_Root, Source_File, SourceText, Test_Variant};
 
 /// How many real rule invocations `RuleReassessmentCache` records once the one source the rule
 /// reads has been edited: one for the call that recorded it, one for the call the edit forces.
@@ -111,9 +111,9 @@ fn Assert_Second_Call_Still_Judged(second: &CheckOutcome, source_count: usize)
 #[test]
 fn Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomputation()
 {
-    let unedited = Source("a.rs", SourceText("pub fn Ok() {}\n"));
-    let edited = Source("a.rs", SourceText("pub fn Ok() {}\npub fn Also_Ok() {}\n"));
-    let untouched = Source("b.rs", SourceText("pub fn Untouched() {}\n"));
+    let unedited = Source_File("a.rs", SourceText("pub fn Ok() {}\n"));
+    let edited = Source_File("a.rs", SourceText("pub fn Ok() {}\npub fn Also_Ok() {}\n"));
+    let untouched = Source_File("b.rs", SourceText("pub fn Untouched() {}\n"));
     let selected = [RuleId::New(nomos_rules::NAMING_CONVENTION)];
 
     let mut workspace = None;
@@ -144,7 +144,7 @@ fn Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomput
 #[test]
 fn Test_A_Store_And_Workspace_Reused_With_No_Change_Between_Two_Calls_Should_Still_Be_Judged()
 {
-    let sources = [Source("a.rs", SourceText("pub fn Ok() {}\n")), Source("b.rs", SourceText("pub fn Also_Ok() {}\n"))];
+    let sources = [Source_File("a.rs", SourceText("pub fn Ok() {}\n")), Source_File("b.rs", SourceText("pub fn Also_Ok() {}\n"))];
     let selected = [RuleId::New(nomos_rules::NAMING_CONVENTION)];
 
     let mut workspace = None;
@@ -247,8 +247,8 @@ fn Assert_Skip_Repeats_Its_Last_Findings(first: CheckOutcome, second: CheckOutco
 fn Test_A_Retained_Cache_Should_Skip_A_Rule_Whose_Families_Did_Not_Move()
 {
     let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR)];
-    let unedited = [Source("a.rs", SourceText("pub fn Ok() {}\n"))];
-    let edited = [Source("a.rs", SourceText("pub fn Ok() {}\npub fn Also_Ok() {}\n"))];
+    let unedited = [Source_File("a.rs", SourceText("pub fn Ok() {}\n"))];
+    let edited = [Source_File("a.rs", SourceText("pub fn Ok() {}\npub fn Also_Ok() {}\n"))];
 
     let mut fixture = ReassessmentFixture::New();
 

@@ -55,7 +55,7 @@ fn Repository_Root() -> PathBuf
         .expect("this crate sits three levels below the workspace root");
 }
 
-fn Source(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
+fn Source_File(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
 {
     return SourceFile::New(path.0, Subject_Of_Path(path.0), text.0);
 }
@@ -66,7 +66,7 @@ fn Source(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
 #[test]
 fn Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestration_Seam()
 {
-    let sources = vec![Source(SourcePath("a.rs"), SourceText("pub fn Ok()\n{\n}\n"))];
+    let sources = vec![Source_File(SourcePath("a.rs"), SourceText("pub fn Ok()\n{\n}\n"))];
     let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
     let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, Test_Run_Id());
@@ -96,7 +96,7 @@ fn Test_Run_Gate_Should_Report_An_Unreadable_Check_Outcome_As_Indeterminate()
 #[test]
 fn Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified()
 {
-    let sources = vec![Source(
+    let sources = vec![Source_File(
         SourcePath("a.rs"),
         SourceText("/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n"),
     )];
@@ -122,7 +122,7 @@ fn Version_Through_Generic_Launcher<Launcher: ProcessLauncher>(launcher: &Launch
 }
 
 #[test]
-fn Test_Run_Gate_Should_Accept_A_Real_Nomos_Platform_Process_Launcher()
+fn Test_Run_Gate_Should_Accept_A_Real_Nomos_Platform_Subprocess_Launcher()
 {
     let output = Version_Through_Generic_Launcher(&StdProcessLauncher);
 

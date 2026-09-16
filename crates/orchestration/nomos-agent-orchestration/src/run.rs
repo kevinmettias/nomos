@@ -11,7 +11,7 @@
 //!
 //! # A deliberate change from what `dispatch.rs`'s own comment used to defend
 //!
-//! The former `Dispatch_Task` this crate's [`Dispatched`] replaces was fixed to
+//! The former `Dispatch_Task` this crate's [`Dispatched_Task`] replaces was fixed to
 //! `nomos_platform_std::StdProcessLauncher` rather than generic, and that file's own doc
 //! comment defended the choice as "the same composition-root choice `check.rs` and
 //! `work.rs` make for their own subprocesses" -- correct advice for a CLI-only module with
@@ -26,7 +26,7 @@
 //! allow-untested` comments named as unavoidable there: both match arms were untestable in
 //! that file only because they were fixed to a real launcher, so exercising them meant
 //! either depending on which binaries happened to be on the running machine's `PATH` or
-//! risking a real, costly invocation. Now that [`Dispatched`] is generic, this crate's own
+//! risking a real, costly invocation. Now that [`Dispatched_Task`] is generic, this crate's own
 //! tests reach both arms with a scripted [`nomos_platform::ProcessLauncher`] instead -- the
 //! identical fake-launcher shape `nomos_agent_executor_claude_code`'s and
 //! `nomos_model_backend_ollama`'s own `address_tests` already use for the identical reason
@@ -71,7 +71,7 @@ pub fn Run_Agent_Execute<Launcher: ProcessLauncher>(goal: &str, config: Dispatch
 {
     let task = Bare_Task(goal, config.effort);
 
-    return Dispatched(&task, config.backend, environment);
+    return Dispatched_Task(&task, config.backend, environment);
 }
 
 /// A bare `TaskEnvelope` naming only `goal` and `effort`. `scope`, `prohibited_changes`
@@ -114,7 +114,7 @@ pub fn Run_Agent_Judgment<Launcher: ProcessLauncher>(
 {
     let task = Judgment_Task(pair, finding, config.effort);
 
-    return Dispatched(&task, config.backend, environment);
+    return Dispatched_Task(&task, config.backend, environment);
 }
 
 /// The judgment `role_surface.rs`'s own module doc says this rule cannot reach itself --
@@ -162,7 +162,7 @@ const NO_ROOT: &str = "";
 /// `--model-backend` replaced `--backend`: there is still only one real `AgentExecutor`, so
 /// this match is the entire dispatch, not a stand-in for a trait either flag's own
 /// vocabulary would need.
-fn Dispatched<Launcher: ProcessLauncher>(task: &TaskEnvelope, backend: Backend, environment: &AgentEnvironment<'_, Launcher>) -> AgentDispatchOutcome
+fn Dispatched_Task<Launcher: ProcessLauncher>(task: &TaskEnvelope, backend: Backend, environment: &AgentEnvironment<'_, Launcher>) -> AgentDispatchOutcome
 {
     return match backend
     {
@@ -231,7 +231,7 @@ mod tests
     {
         let launcher = Scripted { outcome: ExitOutcome::Exited { code: 0 }, stdout: Claude_Code_Success_Json() };
 
-        let outcome = Run_Agent_Execute("say PONG", Config(Backend::ClaudeCode), &AgentEnvironment { launcher: &launcher });
+        let outcome = Run_Agent_Execute("say PONG", Dispatch_Config(Backend::ClaudeCode), &AgentEnvironment { launcher: &launcher });
 
         match outcome
         {
@@ -245,7 +245,7 @@ mod tests
     {
         let launcher = Scripted { outcome: ExitOutcome::Exited { code: 0 }, stdout: "PONG\n".to_owned() };
 
-        let outcome = Run_Agent_Execute("say PONG", Config(Backend::Ollama), &AgentEnvironment { launcher: &launcher });
+        let outcome = Run_Agent_Execute("say PONG", Dispatch_Config(Backend::Ollama), &AgentEnvironment { launcher: &launcher });
 
         match outcome
         {
@@ -256,13 +256,13 @@ mod tests
 
     /// Neither backend can be started at all -- the launcher itself refuses, never a real
     /// subprocess. Exercised for both backends: `Unavailable` folds both crates' own error
-    /// type down to text, and this proves the fold holds from either arm of [`Dispatched`].
+    /// type down to text, and this proves the fold holds from either arm of [`Dispatched_Task`].
     #[test]
     fn Test_Run_Agent_Execute_Should_Report_Unavailable_When_The_Launcher_Cannot_Start_Either_Backend()
     {
         for backend in [Backend::ClaudeCode, Backend::Ollama]
         {
-            let outcome = Run_Agent_Execute("say PONG", Config(backend), &AgentEnvironment { launcher: &Unreachable });
+            let outcome = Run_Agent_Execute("say PONG", Dispatch_Config(backend), &AgentEnvironment { launcher: &Unreachable });
 
             assert!(matches!(outcome, AgentDispatchOutcome::Unavailable(_)), "{backend:?}: {outcome:?}");
         }
@@ -275,7 +275,7 @@ mod tests
         let pair = Fixture_Pair();
         let finding = Fixture_Finding();
 
-        let outcome = Run_Agent_Judgment(&pair, &finding, Config(Backend::ClaudeCode), &AgentEnvironment { launcher: &launcher });
+        let outcome = Run_Agent_Judgment(&pair, &finding, Dispatch_Config(Backend::ClaudeCode), &AgentEnvironment { launcher: &launcher });
 
         match outcome
         {
@@ -317,7 +317,7 @@ mod tests
         return r#"{"result": "PONG", "structured_output": {"assumptions": ["PONG"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#.to_owned();
     }
 
-    fn Config(backend: Backend) -> DispatchConfig
+    fn Dispatch_Config(backend: Backend) -> DispatchConfig
     {
         return DispatchConfig { effort: EffortLevel::BackendDefault, backend };
     }

@@ -43,7 +43,7 @@ use nomos_agent_contracts::TaskEnvelope;
 /// `Gate` is the fifth, and the second half of Check then Correction then Validate then
 /// Gate: `nomos_gate_orchestration::Run_Gate` is the seam both hosts already call for the
 /// judgment this whole system exists to produce. Unlike every body above it, a failing
-/// gate run does not merely complete as a `StepOutcome::Gate` -- `crate::run::Dispatch`
+/// gate run does not merely complete as a `StepOutcome::Gate` -- `crate::run::Dispatch_Body`
 /// reports it as a [`crate::DispatchError::Gate`] instead, ending the workflow the same
 /// way a real dispatch failure already does, per `P40-WORKFLOW-GATE-BODY`'s own
 /// done_when: "a failing gate ends the workflow rather than being reported as a step that

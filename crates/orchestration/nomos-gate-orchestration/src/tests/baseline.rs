@@ -1,7 +1,7 @@
 //! What a declared quantity does to a scope a baseline entry tolerates: the one place a
 //! `rule`/`subject` scope holds more than one occurrence.
 
-use super::{Command_At, Ran_Over, Repository_Root, Source, SourcePath, SourceText};
+use super::{Command_At, Ran_Over, Repository_Root, Source_File, SourcePath, SourceText};
 use crate::{BaselineAllowance, BaselineDebt, BaselinePolicy, GateCommand, GateRunOutcome, GateRunResult, RuleSelector};
 use nomos_contracts::RuleId;
 use nomos_rules::NO_SINGLE_LINE_FUNCTION_BODIES;
@@ -32,7 +32,7 @@ fn Collapsed_Bodies(count: u32) -> nomos_rules::SourceFile
 {
     let text: String = (0..count).map(|index| return format!("pub fn Thing_{index}() -> i32 {{ return {index}; }}\n")).collect();
 
-    return Source(SourcePath("collapsed.rs"), SourceText(text.as_str()));
+    return Source_File(SourcePath("collapsed.rs"), SourceText(text.as_str()));
 }
 
 /// A baseline entry for `rule` at `collapsed.rs`, accepting `allowance`.

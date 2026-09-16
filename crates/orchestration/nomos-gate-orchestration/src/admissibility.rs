@@ -97,7 +97,7 @@ impl Admissibility
 /// A crate naming itself is not an edge and is refused rather than admitted by the exception
 /// list, which names pairs of two different crates.
 #[must_use]
-pub fn Admits(architecture: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
+pub fn Admits_Edge(architecture: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
 {
     let (Some(from), Some(to)) = (architecture.Component_Of(depending.0), architecture.Component_Of(depended.0))
     else
@@ -107,7 +107,7 @@ pub fn Admits(architecture: &ArchitecturePayload, depending: DependingCrate<'_>,
 
     if from == to
     {
-        return Is_A_Declared_Peer(architecture, depending, depended);
+        return Declared_Peer_Admissibility(architecture, depending, depended);
     }
 
     if architecture.Is_Permitted(Depending(from), Depended(to))
@@ -123,7 +123,7 @@ pub fn Admits(architecture: &ArchitecturePayload, depending: DependingCrate<'_>,
 /// Directed, as the declaration is: that a composition root may name a provider does not mean
 /// the provider may name the composition root, and a list read in both directions would admit
 /// exactly the cycles a component forbidding its own members exists to prevent.
-fn Is_A_Declared_Peer(architecture: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
+fn Declared_Peer_Admissibility(architecture: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
 {
     if architecture.Is_Excepted(Depending(depending.0), Depended(depended.0))
     {
@@ -133,7 +133,7 @@ fn Is_A_Declared_Peer(architecture: &ArchitecturePayload, depending: DependingCr
     return Admissibility::Refused;
 }
 
-/// [`Admits`], over the architecture `root` declares, read through `filesystem`.
+/// [`Admits_Edge`], over the architecture `root` declares, read through `filesystem`.
 ///
 /// The entry a composition root calls, so that reading the declaration is this crate's own
 /// concern rather than every host's. It is the same port and the same shape `Run_Gate` already
@@ -149,7 +149,7 @@ pub fn Admits_Under<Fs: FileSystem>(root: &Path, filesystem: &Fs, depending: Dep
 {
     let architecture = nomos_repo_policy::architecture::Discover_Workspace(root, filesystem).unwrap_or_default();
 
-    return Admits(&architecture, depending, depended);
+    return Admits_Edge(&architecture, depending, depended);
 }
 
 #[cfg(test)]
@@ -162,7 +162,7 @@ mod tests
     /// rather than at every call site.
     fn Admits_In(declaration: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
     {
-        return Admits(declaration, depending, depended);
+        return Admits_Edge(declaration, depending, depended);
     }
 
     #[test]

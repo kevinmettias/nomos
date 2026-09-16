@@ -44,11 +44,11 @@ const DECLARED_VERSION: ContractVersion = ContractVersion::New(1, 0);
 #[must_use]
 pub fn Declared_Rules() -> Vec<RulePackage>
 {
-    return DESCRIPTORS.iter().map(Declared).collect();
+    return DESCRIPTORS.iter().map(Declared_Package).collect();
 }
 
 /// One descriptor as the declaration a resolution reads.
-fn Declared(descriptor: &RuleDescriptor) -> RulePackage
+fn Declared_Package(descriptor: &RuleDescriptor) -> RulePackage
 {
     return RulePackage {
         package_id: PackageId::New(format!("nomos.rule.{}", descriptor.id)),
@@ -56,7 +56,7 @@ fn Declared(descriptor: &RuleDescriptor) -> RulePackage
         package_version: DECLARED_AT,
         protocol_range: ProtocolRange::New(DECLARED_VERSION, DECLARED_VERSION),
         rule_id: descriptor.Rule(),
-        contract: Cited(descriptor),
+        contract: Cited_Contract(descriptor),
         judgment: Judgment::Mechanical,
         applicability: ApplicabilitySemantics::AlwaysSupported,
         required_capabilities: Required_Capabilities(descriptor),
@@ -79,7 +79,7 @@ fn Declared(descriptor: &RuleDescriptor) -> RulePackage
 /// `NO_VERSIONED_RECORD` is a sentinel, not a version zero, by `OD-GATE-020`'s own words. So a
 /// prose citation becomes absence here rather than a contract at version zero, which would be
 /// the sentinel leaking into a type that has a better way to say it.
-fn Cited(descriptor: &RuleDescriptor) -> Option<RuleContract>
+fn Cited_Contract(descriptor: &RuleDescriptor) -> Option<RuleContract>
 {
     if !descriptor.Is_Citing_A_Versioned_Record()
     {

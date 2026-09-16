@@ -9,7 +9,7 @@ use crate::{Run, SpecCommand};
 use crate::request::{CommitRequest, EditRequest, RecordRequest};
 use crate::spec_outcome::{CommitAnswer, PreviewRefusal, Reproduction, SpecOutcome};
 
-use super::{No_Corpus, Scratch};
+use super::{No_Corpus, Scratch_Root};
 
 /// A governing record, rendered from the store's own rows -- the same bytes
 /// `Run(Markdown, ..)` would answer, fetched here so a preview/commit test can stage an
@@ -63,7 +63,7 @@ fn Staged_Heading_Rename(id: &str, into: &std::path::Path) -> StagedHeading
 #[test]
 fn Test_Run_Of_Preview_Should_Describe_A_Staged_Edit_And_Write_Nothing()
 {
-    let staged = Staged_Heading_Rename("D-132", &Scratch("preview")).path;
+    let staged = Staged_Heading_Rename("D-132", &Scratch_Root("preview")).path;
 
     let outcome = Run(
         &SpecCommand::Preview(EditRequest {
@@ -110,7 +110,7 @@ fn Test_Run_Of_Preview_Should_Refuse_A_Staged_File_That_Cannot_Be_Read()
 
 /// Runs `Run(Commit, ..)` over a staged edit already written at `staged`, into `into`, and
 /// unwraps down to the [`CommitAnswer`] a clean commit produces.
-fn Committed(id: &str, staged: PathBuf, into: PathBuf) -> CommitAnswer
+fn Performed_Commit(id: &str, staged: PathBuf, into: PathBuf) -> CommitAnswer
 {
     let outcome = Run(
         &SpecCommand::Commit(CommitRequest {
@@ -137,10 +137,10 @@ fn Committed(id: &str, staged: PathBuf, into: PathBuf) -> CommitAnswer
 #[test]
 fn Test_Run_Of_Commit_Should_Write_The_Record_And_Close_The_Round_Trip()
 {
-    let into = Scratch("commit");
+    let into = Scratch_Root("commit");
     let staged = Staged_Heading_Rename("D-132", &into);
 
-    let answer = Committed("D-132", staged.path, into);
+    let answer = Performed_Commit("D-132", staged.path, into);
 
     assert_eq!(answer.report.node_id, "D-132");
     assert!(answer.vacated.is_none(), "this edit did not rename the record's path");

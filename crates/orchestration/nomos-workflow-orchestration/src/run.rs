@@ -15,7 +15,7 @@ use nomos_workspace::BuildVariant;
 use crate::{Body, DispatchError, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
 
 /// The real `ProcessLauncher` and `FileSystem` a caller chose, grouped into one value so
-/// [`Run`] and [`Dispatch`] each take a platform as one parameter rather than two -- this
+/// [`Run`] and [`Dispatch_Body`] each take a platform as one parameter rather than two -- this
 /// crate's own version of the identical grouping `nomos_check_orchestration::
 /// MaterializationEnvironment` and `nomos_gate_orchestration::GateEnvironment` already use
 /// for the same two values.
@@ -66,7 +66,7 @@ pub fn Run<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(plan: &[
             return WorkflowOutcome::Refused { completed, index };
         }
 
-        match Dispatch(&step.body, platform, variant, run)
+        match Dispatch_Body(&step.body, platform, variant, run)
         {
             Ok(outcome) => completed.push(outcome),
             Err(error) => return WorkflowOutcome::Failed { completed, index, error },
@@ -99,7 +99,7 @@ const NO_ROOT: &str = "";
 /// a `GateRunOutcome::Failed` disposition becomes `DispatchError::Gate` rather than
 /// `StepOutcome::Gate`, which is what makes a failing gate end the workflow instead of
 /// merely being reported as a step that ran.
-fn Dispatch<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(body: &Body, platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> Result<StepOutcome, DispatchError>
+fn Dispatch_Body<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(body: &Body, platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> Result<StepOutcome, DispatchError>
 {
     return match body
     {

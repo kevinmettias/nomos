@@ -23,7 +23,7 @@ const UNPHASED_RUN_SEED: u8 = 2;
 
 /// A fixture's source path, as a type distinct from the text at it.
 ///
-/// [`Source`] takes two adjacent string positions, which the file's own gate reported: a
+/// [`Source_File`] takes two adjacent string positions, which the file's own gate reported: a
 /// caller can transpose them and the compiler will not object. Two named types make the
 /// transposition a type error, and cost one line each.
 #[derive(Clone, Copy)]
@@ -41,7 +41,7 @@ struct RootName<'a>(&'a str);
 #[derive(Clone, Copy)]
 struct PolicyText<'a>(&'a str);
 
-fn Source(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
+fn Source_File(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
 {
     return SourceFile::New(path.0, Subject_Of_Path(path.0), text.0);
 }
@@ -51,7 +51,7 @@ fn Source(path: SourcePath<'_>, text: SourceText<'_>) -> SourceFile
 /// named so the phase tests below do not repeat its literal text.
 fn Blocking_Sources() -> Vec<SourceFile>
 {
-    return vec![Source(
+    return vec![Source_File(
         SourcePath("a.rs"),
         SourceText("/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n"),
     )];
@@ -236,7 +236,7 @@ fn Test_A_Changed_Source_Should_Change_The_Source_And_Nothing_Else()
     let root = Root_With_Policy(RootName("provenance-source"), PolicyText("{}"));
 
     let before = Provenance_Over(&root, Blocking_Sources(), &RuleSelector::default());
-    let after = Provenance_Over(&root, vec![Source(SourcePath("a.rs"), SourceText("pub fn Different() {}\n"))], &RuleSelector::default());
+    let after = Provenance_Over(&root, vec![Source_File(SourcePath("a.rs"), SourceText("pub fn Different() {}\n"))], &RuleSelector::default());
 
     assert_ne!(before.source, after.source);
     assert_eq!(before.policy, after.policy);
@@ -268,8 +268,8 @@ fn Test_The_Same_Inputs_Should_Record_The_Same_Provenance()
 fn Test_The_Same_Files_In_A_Different_Order_Should_Record_One_Source()
 {
     let root = Root_With_Policy(RootName("provenance-order"), PolicyText("{}"));
-    let first = Source(SourcePath("a.rs"), SourceText("pub fn One() {}\n"));
-    let second = Source(SourcePath("b.rs"), SourceText("pub fn Two() {}\n"));
+    let first = Source_File(SourcePath("a.rs"), SourceText("pub fn One() {}\n"));
+    let second = Source_File(SourcePath("b.rs"), SourceText("pub fn Two() {}\n"));
 
     let forwards = Provenance_Over(&root, vec![first.clone(), second.clone()], &RuleSelector::default());
     let backwards = Provenance_Over(&root, vec![second, first], &RuleSelector::default());
