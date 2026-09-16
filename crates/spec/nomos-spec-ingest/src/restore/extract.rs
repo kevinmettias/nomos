@@ -199,7 +199,7 @@ pub(super) fn First_Cell(row: &TableRow) -> Option<&str>
 /// It sits at module scope rather than inside either test module because both need it, and
 /// a private item here is visible to both.
 #[cfg(test)]
-fn Block(text: &str) -> SourceBlock
+fn Heading_Block_With_Text(text: &str) -> SourceBlock
 {
     return SourceBlock {
         ordinal: 1,
@@ -310,7 +310,7 @@ mod tests
     #[test]
     fn Test_From_Heading_Should_Mint_A_Member_When_The_Document_Matches_The_Family()
     {
-        let block = Block("### D.7 Profiles");
+        let block = Heading_Block_With_Text("### D.7 Profiles");
         let mut members = Vec::new();
 
         From_Heading("09-reference.md", &block, &mut members);

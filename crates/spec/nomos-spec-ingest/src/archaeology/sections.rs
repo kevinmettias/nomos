@@ -319,7 +319,7 @@ mod tests
     #[test]
     fn Test_Read_Should_Index_Headings_As_Positions_And_Judge_Repeated_Bodies()
     {
-        let documents = Documents(&[
+        let documents = Documents_By_Path(&[
             ("a.md", "# Shared\n\nRefer to the owning domain volume for this material.\n"),
             ("b.md", "# Shared\n\nRefer to the owning domain volume for this material.\n"),
             ("c.md", "# Shared\n\nRefer to the owning domain volume for this material.\n"),
@@ -344,7 +344,7 @@ mod tests
     #[test]
     fn Test_A_Repeated_Body_Below_The_Floor_Should_Read_As_Narrative()
     {
-        let documents = Documents(&[
+        let documents = Documents_By_Path(&[
             ("a.md", "# Shared\n\nShort shared line.\n"),
             ("b.md", "# Shared\n\nShort shared line.\n"),
             ("c.md", "# Shared\n\nShort shared line.\n"),
@@ -366,7 +366,7 @@ mod tests
     #[test]
     fn Test_Sections_Of_Should_Cut_Every_Document_Into_Its_Own_Sections()
     {
-        let documents = Documents(&[("a.md", "# One\n\nFirst body.\n\n# Two\n\nSecond body.\n")]);
+        let documents = Documents_By_Path(&[("a.md", "# One\n\nFirst body.\n\n# Two\n\nSecond body.\n")]);
         let mut later = Empty_Later();
 
         let sections = Sections_Of(&documents, &mut later);
@@ -476,7 +476,7 @@ mod tests
         assert_eq!(later.named_in_row.get("Widget"), Some(&"a.md".to_owned()));
     }
 
-    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
+    fn Documents_By_Path(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
     {
         return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
     }

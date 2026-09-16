@@ -122,7 +122,7 @@ mod tests
     /// one `Story`, so a count that ignored the family filter would answer three.
     const REQUIREMENT_OUTCOMES: usize = 2;
 
-    fn Outcome(id: &str, family: Family, disposition: Disposition) -> IdentifierOutcome
+    fn Identifier_Outcome_Of(id: &str, family: Family, disposition: Disposition) -> IdentifierOutcome
     {
         return IdentifierOutcome { id: id.to_owned(), family, disposition };
     }
@@ -132,8 +132,8 @@ mod tests
     {
         let report = ReconciliationReport {
             outcomes: vec![
-                Outcome("MODEL-001", Family::Requirement, Disposition::Preserved),
-                Outcome("MODEL-002", Family::Requirement, Disposition::Absent),
+                Identifier_Outcome_Of("MODEL-001", Family::Requirement, Disposition::Preserved),
+                Identifier_Outcome_Of("MODEL-002", Family::Requirement, Disposition::Absent),
             ],
         };
 
@@ -148,8 +148,8 @@ mod tests
     {
         let report = ReconciliationReport {
             outcomes: vec![
-                Outcome("MODEL-001", Family::Requirement, Disposition::Preserved),
-                Outcome(
+                Identifier_Outcome_Of("MODEL-001", Family::Requirement, Disposition::Preserved),
+                Identifier_Outcome_Of(
                     "MODEL-002",
                     Family::Requirement,
                     Disposition::Reworded {
@@ -171,8 +171,8 @@ mod tests
     {
         let report = ReconciliationReport {
             outcomes: vec![
-                Outcome("MODEL-001", Family::Requirement, Disposition::Preserved),
-                Outcome("US-A-001", Family::Story, Disposition::Preserved),
+                Identifier_Outcome_Of("MODEL-001", Family::Requirement, Disposition::Preserved),
+                Identifier_Outcome_Of("US-A-001", Family::Story, Disposition::Preserved),
             ],
         };
 
@@ -185,9 +185,9 @@ mod tests
     {
         let report = ReconciliationReport {
             outcomes: vec![
-                Outcome("MODEL-001", Family::Requirement, Disposition::Preserved),
-                Outcome("MODEL-002", Family::Requirement, Disposition::Absent),
-                Outcome("US-A-001", Family::Story, Disposition::Preserved),
+                Identifier_Outcome_Of("MODEL-001", Family::Requirement, Disposition::Preserved),
+                Identifier_Outcome_Of("MODEL-002", Family::Requirement, Disposition::Absent),
+                Identifier_Outcome_Of("US-A-001", Family::Story, Disposition::Preserved),
             ],
         };
 
@@ -200,8 +200,8 @@ mod tests
     {
         let report = ReconciliationReport {
             outcomes: vec![
-                Outcome("MODEL-001", Family::Requirement, Disposition::Absent),
-                Outcome("US-A-001", Family::Story, Disposition::Absent),
+                Identifier_Outcome_Of("MODEL-001", Family::Requirement, Disposition::Absent),
+                Identifier_Outcome_Of("US-A-001", Family::Story, Disposition::Absent),
             ],
         };
 
@@ -212,7 +212,7 @@ mod tests
     fn Test_Summary_Should_List_Every_Family_With_Its_Preserved_And_Declared_Counts()
     {
         let report = ReconciliationReport {
-            outcomes: vec![Outcome("MODEL-001", Family::Requirement, Disposition::Preserved)],
+            outcomes: vec![Identifier_Outcome_Of("MODEL-001", Family::Requirement, Disposition::Preserved)],
         };
 
         let summary = report.Summary();

@@ -86,8 +86,8 @@ mod tests
     #[test]
     fn Test_Relocations_Between_Should_Report_A_Moved_Path_As_Relocated_Not_Disappeared()
     {
-        let from = Fingerprint("v14.35", &[("old/record.md", "hash-1")]);
-        let to = Fingerprint("v14.36", &[("new/record.md", "hash-1")]);
+        let from = Revision_Fingerprint_Of_Documents("v14.35", &[("old/record.md", "hash-1")]);
+        let to = Revision_Fingerprint_Of_Documents("v14.36", &[("new/record.md", "hash-1")]);
         let pair = PairChange {
             from: "v14.35".to_owned(),
             to: "v14.36".to_owned(),
@@ -112,7 +112,7 @@ mod tests
     #[test]
     fn Test_Origins_By_Content_Should_Index_Disappeared_Paths_By_Their_Hash()
     {
-        let from = Fingerprint("v14.35", &[("old/one.md", "hash-1"), ("old/two.md", "hash-1"), ("kept.md", "hash-2")]);
+        let from = Revision_Fingerprint_Of_Documents("v14.35", &[("old/one.md", "hash-1"), ("old/two.md", "hash-1"), ("kept.md", "hash-2")]);
         let pair = PairChange {
             from: "v14.35".to_owned(),
             to: "v14.36".to_owned(),
@@ -131,7 +131,7 @@ mod tests
     #[test]
     fn Test_Place_Appeared_Should_Split_Arrivals_Into_Relocations_And_Genuine_Ones()
     {
-        let to = Fingerprint("v14.36", &[("new/record.md", "hash-1"), ("brand-new.md", "hash-3")]);
+        let to = Revision_Fingerprint_Of_Documents("v14.36", &[("new/record.md", "hash-1"), ("brand-new.md", "hash-3")]);
         let mut origins: BTreeMap<&str, Vec<String>> = BTreeMap::new();
         origins.insert("hash-1", vec!["old/record.md".to_owned()]);
         let pair = PairChange {
@@ -151,7 +151,7 @@ mod tests
         assert_eq!(fate.appeared, vec!["brand-new.md".to_owned()]);
     }
 
-    fn Fingerprint(label: &str, entries: &[(&str, &str)]) -> RevisionFingerprint
+    fn Revision_Fingerprint_Of_Documents(label: &str, entries: &[(&str, &str)]) -> RevisionFingerprint
     {
         return RevisionFingerprint {
             label: label.to_owned(),

@@ -91,7 +91,7 @@ mod tests
     {
         let to = Revision {
             label: "v15.0".to_owned(),
-            documents: Documents(&[("a.md", "# A\n\nThe WorkspaceContext is discussed.\n")]),
+            documents: Documents_By_Path(&[("a.md", "# A\n\nThe WorkspaceContext is discussed.\n")]),
         };
 
         let report = Regression_Between_Revisions(&From_Revision(), &to)
@@ -112,7 +112,7 @@ mod tests
     {
         return Revision {
             label: "v14.36".to_owned(),
-            documents: Documents(&[(format!("{DOMAIN_VOLUMES}02-core-architecture.md").as_str(), CORE)]),
+            documents: Documents_By_Path(&[(format!("{DOMAIN_VOLUMES}02-core-architecture.md").as_str(), CORE)]),
         };
     }
 
@@ -121,7 +121,7 @@ mod tests
     {
         let revision = Revision {
             label: "v14.36".to_owned(),
-            documents: Documents(&[("records/one.md", "# Record\n\nText.\n")]),
+            documents: Documents_By_Path(&[("records/one.md", "# Record\n\nText.\n")]),
         };
 
         let refusal = Volumes_Of(&revision).expect_err("must refuse");
@@ -135,7 +135,7 @@ mod tests
     {
         let mut volumes = BTreeMap::new();
         volumes.insert("02-core-architecture.md".to_owned(), CORE.to_owned());
-        let to_documents = Documents(&[("a.md", "# A\n\nThe WorkspaceContext is discussed.\n")]);
+        let to_documents = Documents_By_Path(&[("a.md", "# A\n\nThe WorkspaceContext is discussed.\n")]);
         let later = Later::Read(&to_documents);
 
         let members = Judged_Members(&volumes, &later, &to_documents)
@@ -161,7 +161,7 @@ mod tests
         assert_eq!(pair.to, "v14.36");
     }
 
-    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
+    fn Documents_By_Path(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
     {
         return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
     }

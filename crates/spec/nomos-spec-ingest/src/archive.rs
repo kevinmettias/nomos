@@ -244,7 +244,7 @@ pub(crate) mod tests
     #[test]
     fn Test_Path_Should_Return_The_Path_It_Was_Opened_From()
     {
-        let archive = Fixture("path", &[("a.md", "one")]);
+        let archive = Archive_Fixture("path", &[("a.md", "one")]);
         let expected = std::env::temp_dir().join("nomos-spec-ingest-archive-path.zip");
 
         assert_eq!(archive.Path(), expected);
@@ -253,7 +253,7 @@ pub(crate) mod tests
     #[test]
     fn Test_Listing_Should_Report_Every_Entry_The_Fixture_Wrote()
     {
-        let archive = Fixture("listing", &[("a.md", "one"), ("b.md", "two")]);
+        let archive = Archive_Fixture("listing", &[("a.md", "one"), ("b.md", "two")]);
 
         assert_eq!(archive.Listing().Paths(), ["a.md".to_owned(), "b.md".to_owned()]);
     }
@@ -261,7 +261,7 @@ pub(crate) mod tests
     #[test]
     fn Test_Read_Should_Return_The_Bytes_Of_The_Named_Entry()
     {
-        let mut archive = Fixture("read", &[("a.md", "hello")]);
+        let mut archive = Archive_Fixture("read", &[("a.md", "hello")]);
 
         let bytes = archive
             .Read("a.md")
@@ -273,7 +273,7 @@ pub(crate) mod tests
     #[test]
     fn Test_Read_Text_Should_Decode_The_Entry_As_Utf8()
     {
-        let mut archive = Fixture("read-text", &[("a.md", "caf\u{e9}")]);
+        let mut archive = Archive_Fixture("read-text", &[("a.md", "caf\u{e9}")]);
 
         let text = archive
             .Read_Text("a.md")
@@ -334,7 +334,7 @@ pub(crate) mod tests
 
     /// A zip written for one test, so no two concurrently running tests collide on the
     /// same temp path.
-    fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
+    fn Archive_Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
     {
         return Zip_Fixture(FixturePrefix("nomos-spec-ingest-archive"), name, entries);
     }

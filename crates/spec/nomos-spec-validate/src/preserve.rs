@@ -68,7 +68,7 @@ mod tests
     /// `Test_The_Registry_Should_Match_The_Manifest` (`tests/preservation_holds.rs`) performs
     /// through `Validate_Rules` starts from this being true.
     #[test]
-    fn Test_Registered_Should_Build_One_Rule_Object_Per_Declared_Identifier()
+    fn Test_Registered_Should_Build_One_Rule_Per_Declared_Identifier()
     {
         let rules = Registered();
         let ids: Vec<&str> = rules.iter().map(|rule| rule.Id()).collect();

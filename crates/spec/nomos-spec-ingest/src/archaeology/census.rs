@@ -87,7 +87,7 @@ mod tests
     #[test]
     fn Test_Census_Fillers_Should_Combine_Repeated_Templates_With_Stub_Documents()
     {
-        let documents = Documents(&[
+        let documents = Documents_By_Path(&[
             ("a.md", "# A\n\nRefer to the owning domain volume for this material.\n"),
             ("b.md", "# B\n\nRefer to the owning domain volume for this material.\n"),
             ("c.md", "# C\n\nRefer to the owning domain volume for this material.\n"),
@@ -111,7 +111,7 @@ mod tests
     #[test]
     fn Test_A_Body_Below_The_Floor_Should_Not_Surface_As_A_Shared_Template()
     {
-        let documents = Documents(&[
+        let documents = Documents_By_Path(&[
             ("a.md", "# A\n\nShort shared line.\n"),
             ("b.md", "# B\n\nShort shared line.\n"),
             ("c.md", "# C\n\nShort shared line.\n"),
@@ -129,7 +129,7 @@ mod tests
     #[test]
     fn Test_Shared_Templates_Should_Sort_By_Reach_Then_By_Text()
     {
-        let documents = Documents(&[
+        let documents = Documents_By_Path(&[
             ("a.md", "# A\n\nRefer to the owning domain volume for this material.\n"),
             ("b.md", "# B\n\nRefer to the owning domain volume for this material.\n"),
             ("c.md", "# C\n\nRefer to the owning domain volume for this material.\n"),
@@ -164,7 +164,7 @@ mod tests
     #[test]
     fn Test_Stubs_Of_Should_Only_List_Documents_Whose_Blocks_Are_All_Filler()
     {
-        let documents = Documents(&[
+        let documents = Documents_By_Path(&[
             ("stub.md", "# Stub\n\nThis section groups related specification material for X.\n"),
             (
                 "mixed.md",
@@ -177,7 +177,7 @@ mod tests
         assert_eq!(Stubs_Of(&later), vec!["stub.md".to_owned()]);
     }
 
-    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
+    fn Documents_By_Path(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
     {
         return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
     }

@@ -40,8 +40,8 @@ mod tests
     fn Test_Walk_Revisions_Should_Produce_One_Pair_Change_Per_Adjacent_Revision()
     {
         let walk = Walk_Revisions(&[
-            Revision("v14.1", &[("a.md", "sha256:01")]),
-            Revision("v14.2", &[("a.md", "sha256:02"), ("b.md", "sha256:03")]),
+            Revision_Fingerprint_Of_Documents("v14.1", &[("a.md", "sha256:01")]),
+            Revision_Fingerprint_Of_Documents("v14.2", &[("a.md", "sha256:02"), ("b.md", "sha256:03")]),
         ]);
 
         assert_eq!(walk.len(), 1);
@@ -52,7 +52,7 @@ mod tests
         assert_eq!(pair.appeared, vec!["b.md".to_owned()]);
     }
 
-    fn Revision(label: &str, documents: &[(&str, &str)]) -> RevisionFingerprint
+    fn Revision_Fingerprint_Of_Documents(label: &str, documents: &[(&str, &str)]) -> RevisionFingerprint
     {
         return RevisionFingerprint {
             label: label.to_owned(),

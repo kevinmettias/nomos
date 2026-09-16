@@ -70,9 +70,9 @@ mod tests
     fn Test_Statements_Sourced_Only_From_Commentary_Should_Report_A_Statement_Resting_Only_On_A_Commentary_Block()
     {
         let mut store = SpecificationStore::In_Memory().expect("In_Memory migrates a fresh database");
-        let commentary_node = Node(&mut store, NodeIdentity { id: "PLAN-X", authority: "commentary" });
-        let requirement_node = Node(&mut store, NodeIdentity { id: "AGT-100", authority: "canonical" });
-        let statement = Statement(&mut store, requirement_node, "AGT-100");
+        let commentary_node = Minted_Node_Id(&mut store, NodeIdentity { id: "PLAN-X", authority: "commentary" });
+        let requirement_node = Minted_Node_Id(&mut store, NodeIdentity { id: "AGT-100", authority: "canonical" });
+        let statement = Inserted_Statement_Id(&mut store, requirement_node, "AGT-100");
         let block = Block_Disposed_To(
             &mut store,
             DocumentPlace { revision: "lineage-notes", path: "plan.md" },
@@ -88,7 +88,7 @@ mod tests
         assert_eq!(reported, vec!["AGT-100".to_owned()]);
     }
 
-    fn Statement(store: &mut SpecificationStore, node: i64, statement_id: &str) -> i64
+    fn Inserted_Statement_Id(store: &mut SpecificationStore, node: i64, statement_id: &str) -> i64
     {
         store
             .Connection()
@@ -119,8 +119,8 @@ mod tests
     fn Test_Prepare_Commentary_View_Should_List_Only_Blocks_Disposed_To_A_Commentary_Node()
     {
         let mut store = SpecificationStore::In_Memory().expect("In_Memory migrates a fresh database");
-        let commentary_node = Node(&mut store, NodeIdentity { id: "PLAN-Y", authority: "commentary" });
-        let canonical_node = Node(&mut store, NodeIdentity { id: "DOC-Y", authority: "canonical" });
+        let commentary_node = Minted_Node_Id(&mut store, NodeIdentity { id: "PLAN-Y", authority: "commentary" });
+        let canonical_node = Minted_Node_Id(&mut store, NodeIdentity { id: "DOC-Y", authority: "canonical" });
         let notes = DocumentPlace { revision: "lineage-notes", path: "plan.md" };
         let doc = DocumentPlace { revision: "v14.36", path: "doc.md" };
         let commentary_block = Block_Disposed_To(&mut store, notes, commentary_node);
@@ -160,7 +160,7 @@ mod tests
     }
 
     /// Mints a node, so a test can name a real `target_node_uid` for lineage to point at.
-    fn Node(store: &mut SpecificationStore, identity: NodeIdentity<'_>) -> i64
+    fn Minted_Node_Id(store: &mut SpecificationStore, identity: NodeIdentity<'_>) -> i64
     {
         return store
             .Upsert_Node(NodeRow {

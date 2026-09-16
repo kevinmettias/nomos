@@ -312,7 +312,7 @@ mod tests
     /// compares: the title and the version.
     const CHANGED_IDENTITY_FIELDS: usize = 2;
 
-    fn Block(ordinal: u32, text: &str) -> SourceBlock
+    fn Prose_Block_Of_Text(ordinal: u32, text: &str) -> SourceBlock
     {
         return SourceBlock {
             ordinal,
@@ -338,8 +338,8 @@ mod tests
     #[test]
     fn Test_Block_Changes_Should_Report_Additions_Removals_And_Rewordings()
     {
-        let before = vec![Block(1, "kept"), Block(SECOND_ORDINAL, "old text")];
-        let after = vec![Block(1, "kept"), Block(SECOND_ORDINAL, "new text")];
+        let before = vec![Prose_Block_Of_Text(1, "kept"), Prose_Block_Of_Text(SECOND_ORDINAL, "old text")];
+        let after = vec![Prose_Block_Of_Text(1, "kept"), Prose_Block_Of_Text(SECOND_ORDINAL, "new text")];
 
         let changes = Block_Changes(&before, &after);
 
@@ -384,9 +384,9 @@ mod tests
     #[test]
     fn Test_Located_Statement_Should_Tell_Held_From_Moved_Gone_And_Unlocatable()
     {
-        let before = vec![Block(1, "the statement text")];
-        let after_held = vec![Block(1, "the statement text")];
-        let after_moved = vec![Block(SECOND_ORDINAL, "the statement text")];
+        let before = vec![Prose_Block_Of_Text(1, "the statement text")];
+        let after_held = vec![Prose_Block_Of_Text(1, "the statement text")];
+        let after_moved = vec![Prose_Block_Of_Text(SECOND_ORDINAL, "the statement text")];
         let after_gone: Vec<SourceBlock> = Vec::new();
 
         assert!(matches!(

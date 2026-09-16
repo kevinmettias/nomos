@@ -121,7 +121,7 @@ mod tests
     /// its doc comment claims is that a variant added to `Restored` and not to this arm
     /// list fails the file to *compile*, and a lookup would only fail to pass. So each arm
     /// names the position it answers instead of spelling a bare ordinal.
-    const SERVICE_POSITION: usize = 2;
+    const SYSTEMS_FAMILY_POSITION: usize = 2;
     const APPENDIX_D_POSITION: usize = 3;
     const APPENDIX_H_POSITION: usize = 4;
     const HEADLESS_INVENTORY_POSITION: usize = 5;
@@ -146,7 +146,7 @@ mod tests
             {
                 Restored::RoadmapMilestone => 0,
                 Restored::Scenario => 1,
-                Restored::Service => SERVICE_POSITION,
+                Restored::Service => SYSTEMS_FAMILY_POSITION,
                 Restored::AppendixD => APPENDIX_D_POSITION,
                 Restored::AppendixH => APPENDIX_H_POSITION,
                 Restored::HeadlessInventory => HEADLESS_INVENTORY_POSITION,

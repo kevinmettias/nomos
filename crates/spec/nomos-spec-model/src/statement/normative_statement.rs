@@ -48,7 +48,7 @@ mod tests
     #[test]
     fn Test_Canonical_Hash_Should_Hash_The_Canonical_Text()
     {
-        let statement = Sample("Nomos shall do it.");
+        let statement = Statement_Of_Text("Nomos shall do it.");
 
         assert_eq!(statement.Canonical_Hash(), ContentHash::Of("Nomos shall do it."));
     }
@@ -56,20 +56,20 @@ mod tests
     #[test]
     fn Test_Is_Text_Canonical_Should_Detect_Whitespace_That_Is_Not_Normalized()
     {
-        assert!(Sample("Nomos shall do it.").Is_Text_Canonical());
-        assert!(!Sample("Nomos  shall\ndo it.").Is_Text_Canonical());
+        assert!(Statement_Of_Text("Nomos shall do it.").Is_Text_Canonical());
+        assert!(!Statement_Of_Text("Nomos  shall\ndo it.").Is_Text_Canonical());
     }
 
     #[test]
     fn Test_Canonicalized_Should_Reach_A_Fixed_Point()
     {
-        let fixed = Sample("Nomos  shall\ndo it.").Canonicalized();
+        let fixed = Statement_Of_Text("Nomos  shall\ndo it.").Canonicalized();
 
         assert_eq!(fixed.canonical_text, "Nomos shall do it.");
         assert!(fixed.Is_Text_Canonical());
     }
 
-    fn Sample(text: &str) -> NormativeStatement
+    fn Statement_Of_Text(text: &str) -> NormativeStatement
     {
         return NormativeStatement {
             id: StatementId::Parse("AGT-001")

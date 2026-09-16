@@ -362,7 +362,7 @@ mod inline_coverage
     #[test]
     fn Test_Registrations_In_Should_Read_A_Well_Formed_Directory()
     {
-        let directory = Synthetic("well-formed");
+        let directory = Synthetic_Directory("well-formed");
         std::fs::write(
             directory.join("OD-GATE-001.record"),
             format!("path: {A_REAL_RECORD}\n"),
@@ -383,7 +383,7 @@ mod inline_coverage
             .expect("the synthetic directory this test wrote into can be removed");
     }
 
-    fn Synthetic(name: &str) -> PathBuf
+    fn Synthetic_Directory(name: &str) -> PathBuf
     {
         let mut path = std::env::temp_dir();
         path.push(format!("nomos-registration-inline-{name}-{}", std::process::id()));

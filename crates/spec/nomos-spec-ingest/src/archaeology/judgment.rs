@@ -127,7 +127,7 @@ mod tests
     fn Test_Judge_Member_Should_Combine_Identity_With_Its_Computed_Fate()
     {
         let member = A_Member("WorkspaceContext", Restored::CanonicalDomainModel);
-        let documents = Documents(&[("a.md", "# A\n\nThe WorkspaceContext is discussed.\n")]);
+        let documents = Documents_By_Path(&[("a.md", "# A\n\nThe WorkspaceContext is discussed.\n")]);
         let later = Later::Read(&documents);
 
         let judged = Judge_Member(&member, &later, &documents);
@@ -161,10 +161,10 @@ mod tests
         let mut later = Empty_Later();
         later.named_in_row.insert("WorkspaceContext".to_owned(), "a.md".to_owned());
         let model = A_Member("WorkspaceContext", Restored::CanonicalDomainModel);
-        let service = A_Member("WorkspaceContext", Restored::Service);
+        let other_family_member = A_Member("WorkspaceContext", Restored::Service);
 
         assert_eq!(Named_In_Row(&model, &later), Some(Fate::Preserved { document: "a.md".to_owned() }));
-        assert_eq!(Named_In_Row(&service, &later), None);
+        assert_eq!(Named_In_Row(&other_family_member, &later), None);
     }
 
     #[test]
@@ -197,7 +197,7 @@ mod tests
     #[test]
     fn Test_Mentions_In_Documents_Should_List_Every_Document_Containing_The_Name()
     {
-        let documents = Documents(&[
+        let documents = Documents_By_Path(&[
             ("a.md", "The WorkspaceContext is discussed.\n"),
             ("b.md", "Nothing of the kind.\n"),
             ("c.md", "WorkspaceContext appears here too.\n"),
@@ -210,7 +210,7 @@ mod tests
         assert_eq!(Mentions_In_Documents("Nowhere", &documents), Fate::Gone);
     }
 
-    fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
+    fn Documents_By_Path(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
     {
         return pairs.iter().map(|(path, text)| return ((*path).to_owned(), (*text).to_owned())).collect();
     }

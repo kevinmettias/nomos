@@ -96,7 +96,7 @@ fn Write_Article(out: &mut String, item: &Item, addressable: &BTreeSet<&str>)
         out.push_str("<dl>\n");
         for (name, value) in &item.fields
         {
-            let _ = writeln!(out, "<dt>{}</dt><dd>{}</dd>", Escape_Html(name), Resolved(value, addressable));
+            let _ = writeln!(out, "<dt>{}</dt><dd>{}</dd>", Escape_Html(name), Resolved_Identity_Markup(value, addressable));
         }
         out.push_str("</dl>\n");
     }
@@ -123,7 +123,7 @@ fn Write_Article(out: &mut String, item: &Item, addressable: &BTreeSet<&str>)
 /// The href is a slug and cannot break the attribute, but the text between the tags is the
 /// identity as authored and can. Both positions are handled here so a caller cannot get one
 /// right and the other wrong.
-fn Resolved(value: &str, addressable: &BTreeSet<&str>) -> String
+fn Resolved_Identity_Markup(value: &str, addressable: &BTreeSet<&str>) -> String
 {
     if addressable.contains(value)
     {

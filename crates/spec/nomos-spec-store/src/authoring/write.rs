@@ -236,7 +236,7 @@ mod tests
     {
         let store = Store();
 
-        let write = Written(store.Connection());
+        let write = Seeded_Record_Write(store.Connection());
 
         assert!(write.node_uid > 0);
         assert!(write.document_uid > 0);
@@ -249,7 +249,7 @@ mod tests
     {
         let store = Store();
 
-        let write = Written(store.Connection());
+        let write = Seeded_Record_Write(store.Connection());
 
         let headings: u32 = store
             .Connection()
@@ -269,7 +269,7 @@ mod tests
     {
         let store = Store();
 
-        let write = Written(store.Connection());
+        let write = Seeded_Record_Write(store.Connection());
 
         let dispositions: u32 = store
             .Connection()
@@ -288,7 +288,7 @@ mod tests
     {
         let store = Store();
 
-        let write = Written(store.Connection());
+        let write = Seeded_Record_Write(store.Connection());
 
         let (status, version): (String, u32) = store
             .Connection()
@@ -307,7 +307,7 @@ mod tests
     fn Test_Write_Declared_Relations_Should_Replace_The_Whole_List()
     {
         let store = Store();
-        let write = Written(store.Connection());
+        let write = Seeded_Record_Write(store.Connection());
 
         let replaced = Write_Declared_Relations(store.Connection(), write.document_uid, &[])
             .expect("the document row exists, so replacing its relations runs");
@@ -351,7 +351,7 @@ mod tests
         };
     }
 
-    fn Written(connection: &Connection) -> RecordWrite
+    fn Seeded_Record_Write(connection: &Connection) -> RecordWrite
     {
         let record = A_Record();
 

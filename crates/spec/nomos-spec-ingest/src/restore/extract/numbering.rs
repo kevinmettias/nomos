@@ -93,7 +93,7 @@ pub(super) fn At_Depth_4(title: &str, path: &[String]) -> Vec<Recognition>
 {
     let mut found = Numbered_Families(title, PARTS_AT_DEPTH_4, DEPTH_4);
 
-    if Has_Ancestor(path, SYSTEMS_HEADING) && Has_The_Word_Service(title)
+    if Has_Ancestor(path, SYSTEMS_HEADING) && Has_The_Family_Word(title)
     {
         found.push((Restored::Service, title.to_owned(), None));
     }
@@ -105,8 +105,8 @@ pub(super) fn At_Depth_4(title: &str, path: &[String]) -> Vec<Recognition>
     return found;
 }
 
-/// Whether a heading calls its subject a service in so many words.
-fn Has_The_Word_Service(title: &str) -> bool
+/// Whether a heading calls its subject by the family's own word, `Service`, in so many words.
+fn Has_The_Family_Word(title: &str) -> bool
 {
     return title.split_whitespace().any(|word| return word == "Service");
 }
@@ -203,17 +203,17 @@ fn Is_All_Digits(text: &str) -> bool
 mod tests
 {
     use super::super::GLOSSARY;
-    use super::super::Block;
+    use super::super::Heading_Block_With_Text;
     use super::*;
 
     #[test]
     fn Test_Recognized_In_Heading_Should_Read_The_Heading_Depth()
     {
-        let deep_enough = Block("### D.7 Profiles");
+        let deep_enough = Heading_Block_With_Text("### D.7 Profiles");
         let recognitions = Recognized_In_Heading(&deep_enough, "D.7 Profiles");
         assert_eq!(recognitions, vec![(Restored::AppendixD, "D.7".to_owned(), None)]);
 
-        let shallow = Block("## Not a member");
+        let shallow = Heading_Block_With_Text("## Not a member");
         assert!(Recognized_In_Heading(&shallow, "Not a member").is_empty());
     }
 
@@ -241,7 +241,7 @@ mod tests
     }
 
     #[test]
-    fn Test_At_Depth_4_Should_Recognize_A_Numbered_Family_A_Service_And_A_Glossary_Term()
+    fn Test_At_Depth_4_Should_Recognize_A_Numbered_Family_A_Systems_Entry_And_A_Glossary_Term()
     {
         let systems_path = vec![SYSTEMS_HEADING.to_owned()];
         let extended_path = vec![EXTENDED_TERMS.to_owned()];

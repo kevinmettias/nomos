@@ -174,7 +174,7 @@ mod tests
     /// total is this count and not either bucket's own count of one.
     const MEMBERS_TALLIED: u32 = 2;
 
-    fn Member(id: &str, family: Restored, name: &str, fate: Fate) -> MemberFate
+    fn Member_Fate_Of(id: &str, family: Restored, name: &str, fate: Fate) -> MemberFate
     {
         return MemberFate { id: id.to_owned(), family, name: name.to_owned(), was: String::new(), fate };
     }
@@ -184,8 +184,8 @@ mod tests
     {
         let report = RegressionReport {
             members: vec![
-                Member("RMAP-001", Restored::RoadmapMilestone, "Milestone One", Fate::Gone),
-                Member("SCEN-001", Restored::Scenario, "Scenario One", Fate::Gone),
+                Member_Fate_Of("RMAP-001", Restored::RoadmapMilestone, "Milestone One", Fate::Gone),
+                Member_Fate_Of("SCEN-001", Restored::Scenario, "Scenario One", Fate::Gone),
             ],
             ..RegressionReport::default()
         };
@@ -201,13 +201,13 @@ mod tests
     {
         let report = RegressionReport {
             members: vec![
-                Member(
+                Member_Fate_Of(
                     "RMAP-001",
                     Restored::RoadmapMilestone,
                     "One",
                     Fate::Preserved { document: "d.md".to_owned() },
                 ),
-                Member("RMAP-002", Restored::RoadmapMilestone, "Two", Fate::Gone),
+                Member_Fate_Of("RMAP-002", Restored::RoadmapMilestone, "Two", Fate::Gone),
             ],
             ..RegressionReport::default()
         };
@@ -223,7 +223,7 @@ mod tests
     fn Test_Named_Should_Find_A_Member_By_Name_Or_Id()
     {
         let report = RegressionReport {
-            members: vec![Member("RMAP-001", Restored::RoadmapMilestone, "Milestone One", Fate::Gone)],
+            members: vec![Member_Fate_Of("RMAP-001", Restored::RoadmapMilestone, "Milestone One", Fate::Gone)],
             ..RegressionReport::default()
         };
 
@@ -238,7 +238,7 @@ mod tests
         let report = RegressionReport {
             from: "v14.35".to_owned(),
             to: "v14.36".to_owned(),
-            members: vec![Member("RMAP-001", Restored::RoadmapMilestone, "One", Fate::Gone)],
+            members: vec![Member_Fate_Of("RMAP-001", Restored::RoadmapMilestone, "One", Fate::Gone)],
             ..RegressionReport::default()
         };
 
