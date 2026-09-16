@@ -80223,7 +80223,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -80235,7 +80235,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-repository"
+        ],
+        "exit_code": 0,
+        "output_tail": "os.cap.scripting.policy`, reaching for its contract crate in 3 of its 4 files for the reason above. Answer 3. Left declared.\r\n      dependency-placement        crates/repository/nomos-repo-policy/src/words:0\r\n            `src/words` is the provider of `nomos.cap.words.policy`, reaching for its contract crate in 3 of its 4 files for the reason above. Answer 3. Left declared.\r\n      tree-legibility             crates/repository/nomos-repo-policy/src/goals/goals_policy_fact_production.rs:0\r\n            [ROT] the file declares `pub struct GoalsPolicyFactProduction`, so the stem IS the declared type's snake_case: the repeated word is the type's own capability-derived name, which `check-file-name` requires the file to carry. Stale-instrument artifact.\r\n      tree-legibility             crates/repository/nomos-repo-policy/src/limits/limits_policy_fact_production.rs:0\r\n            [ROT] declares `pub struct LimitsPolicyFactProduction`; same reason as the goals entry above. Stale-instrument artifact.\r\n      tree-legibility             crates/repository/nomos-repo-policy/src/naming/naming_policy_fact_production.rs:0\r\n            [ROT] declares `pub struct NamingPolicyFactProduction`; same reason as the goals entry above. Stale-instrument artifact.\r\n      tree-legibility             crates/repository/nomos-repo-policy/src/scripting/scripting_policy_fact_production.rs:0\r\n            [ROT] declares `pub struct ScriptingPolicyFactProduction`; same reason as the goals entry above. Stale-instrument artifact.\r\n      tree-legibility             crates/repository/nomos-repo-policy/src/words/words_policy_fact_production.rs:0\r\n            [ROT] declares `pub struct WordsPolicyFactProduction`; same reason as the goals entry above. There is no sixth: `src/architecture.rs` declares only `provider`, `guarantee` and `reading`, and holds no `determinism` module to bind to such a file, because architecture's capability is not an `OD-RULES-011` policy family member. Stale-instrument artifact.\r\n",
+        "verified_at": 1789554508,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "63b7a2dc78a37fa855b1b2dab07086563b2c45b0"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
