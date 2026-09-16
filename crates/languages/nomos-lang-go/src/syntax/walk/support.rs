@@ -111,6 +111,14 @@ mod tests
 {
     use super::*;
 
+    /// The names `func f(a, b int, c string)` binds: `a` and `b` share one
+    /// `parameter_declaration`, `c` carries its own, and a declaration that names none
+    /// still declares one.
+    const FIXTURE_PARAMETER_NAMES: usize = 3;
+
+    /// The names the single `parameter_declaration` of `func f(a, b int)` binds.
+    const SHARED_TYPE_DECLARATION_NAMES: usize = 2;
+
     #[test]
     fn Test_Push_Item_Record_Should_Assign_Dense_Zero_Based_Ordinals()
     {
@@ -162,7 +170,7 @@ mod tests
         let tree = Parse(source);
         let list = Find_Kind(tree.root_node(), "parameter_list").expect("the fixture declares parameters");
 
-        assert_eq!(Parameter_Arity(list), 3);
+        assert_eq!(Parameter_Arity(list), FIXTURE_PARAMETER_NAMES);
     }
 
     #[test]
@@ -174,7 +182,7 @@ mod tests
 
         let names = Named_Field_Children(declaration, "name");
 
-        assert_eq!(names.len(), 2, "{names:?}");
+        assert_eq!(names.len(), SHARED_TYPE_DECLARATION_NAMES, "{names:?}");
     }
 
     fn Parse(source: &str) -> tree_sitter::Tree

@@ -259,7 +259,10 @@ mod tests
         assert_eq!(payload.unexpanded, 0);
         assert_eq!(payload.items.len(), EXPECTED_ITEM_COUNT);
 
-        let third = payload.items.get(THIRD_ITEM_INDEX).expect("three items");
+        let third = payload
+            .items
+            .get(THIRD_ITEM_INDEX)
+            .expect("the assertion above pins the item count at EXPECTED_ITEM_COUNT");
         assert_eq!(third.ordinal, THIRD_ITEM_ORDINAL);
         assert_eq!(third.kind, nomos_cap_syntax::FUNCTION);
         assert_eq!(third.qualified_name, "Inner::Two");
@@ -275,7 +278,8 @@ mod tests
     {
         let fact = Fact_From_Source("package main\n\ntype Writer interface{}\n\nvar _ Writer = nil\n\nvar Free int\n");
 
-        let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).expect("well formed");
+        let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
+            .expect("this provider writes nomos.syntax.items.v2");
 
         let blank = payload
             .items

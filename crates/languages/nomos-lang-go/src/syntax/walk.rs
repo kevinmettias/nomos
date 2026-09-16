@@ -40,18 +40,17 @@ use types::{Record_Type_Alias, Record_Type_Spec};
 /// are the parser's guess. Reading them as facts would be unsound, and this provider claims
 /// [`nomos_contracts::Assurance::Sound`]. See [`crate::Declared_Guarantee`].
 ///
-/// # Panics
-///
-/// Never, in practice: the only panic path is the compiled-in `tree-sitter-go` grammar
-/// failing its own version check against the linked `tree-sitter` runtime, which is a build
-/// configuration defect this crate's own `Cargo.toml` pins against, not a runtime input.
+/// Panics nowhere: both ways the parse itself can fail — a runtime that will not install
+/// the compiled-in grammar, and a parser that hands back no tree — reach the caller as
+/// [`Reading::Unparseable`], so a build configuration defect is reported as an unreadable
+/// file rather than as a crash this crate's own `Cargo.toml` pins against.
 #[must_use]
 pub fn Read_Source(source: &str) -> Reading
 {
-    let Some(tree) = Parsed_Tree(source)
-    else
+    let tree = match Parsed_Tree(source)
     {
-        return Reading::Unparseable(No_Tree_Failure());
+        Ok(tree) => tree,
+        Err(failure) => return Reading::Unparseable(failure),
     };
 
     let root = tree.root_node();
@@ -66,14 +65,34 @@ pub fn Read_Source(source: &str) -> Reading
     return Reading::Parsed(Facts { items, unexpanded: 0 });
 }
 
-fn Parsed_Tree(source: &str) -> Option<tree_sitter::Tree>
+/// Parses `source` with the compiled-in Go grammar.
+///
+/// Both ways this can fail are returned rather than raised: a linked `tree-sitter` runtime
+/// that will not install the compiled-in grammar, which is a build configuration defect
+/// this crate's `Cargo.toml` pins against rather than a runtime input, and a parser that
+/// hands back no tree at all. Neither is a fact about `source`, so neither gets to decide
+/// the process's fate; [`Read_Source`] turns each into [`Reading::Unparseable`] and lets
+/// the caller read the outcome.
+fn Parsed_Tree(source: &str) -> Result<tree_sitter::Tree, ParseFailure>
 {
     let mut parser = tree_sitter::Parser::new();
-    parser
-        .set_language(&tree_sitter_go::LANGUAGE.into())
-        .expect("the Go grammar is compiled into this crate");
 
-    return parser.parse(source, None);
+    if let Err(error) = parser.set_language(&tree_sitter_go::LANGUAGE.into())
+    {
+        return Err(ParseFailure {
+            line: 0,
+            column: 0,
+            message: format!("the linked tree-sitter runtime refused the compiled-in Go grammar: {error}"),
+        });
+    }
+
+    let Some(tree) = parser.parse(source, None)
+    else
+    {
+        return Err(No_Tree_Failure());
+    };
+
+    return Ok(tree);
 }
 
 fn No_Tree_Failure() -> ParseFailure

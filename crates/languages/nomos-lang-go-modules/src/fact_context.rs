@@ -130,7 +130,12 @@ mod tests
             return Self { root };
         }
 
-        fn Write(&self, relative: &str, content: &str)
+        /// Writes one fixture file into this workspace, creating the directories it needs.
+        ///
+        /// `relative` is a `&Path` and `content` a `&str`, so the two positions do not share
+        /// a type and a call site that transposed them would not compile — the parameter
+        /// names are in another file and cannot be what keeps the pair in order.
+        fn Write(&self, relative: &Path, content: &str)
         {
             let path = self.root.join(relative);
             if let Some(parent) = path.parent()
@@ -164,7 +169,7 @@ mod tests
     fn Test_Materialize_Workspace_Should_Produce_One_Fact_Per_Module()
     {
         let workspace = TemporaryWorkspace::New();
-        workspace.Write("go.mod", "module example.com/solo\n");
+        workspace.Write(Path::new("go.mod"), "module example.com/solo\n");
 
         let facts = Materialize_Workspace(&workspace.root, Context()).expect("a real workspace");
 
@@ -177,7 +182,7 @@ mod tests
     fn Test_A_Facts_Subject_Should_Match_Subject_Of_Its_Own_Path()
     {
         let workspace = TemporaryWorkspace::New();
-        workspace.Write("go.mod", "module example.com/solo\n");
+        workspace.Write(Path::new("go.mod"), "module example.com/solo\n");
 
         let facts = Materialize_Workspace(&workspace.root, Context()).expect("a real workspace");
         let fact = facts.first().expect("the solo module produced one fact");
@@ -190,7 +195,7 @@ mod tests
     fn Test_A_Fact_Should_Carry_The_Declared_Guarantee()
     {
         let workspace = TemporaryWorkspace::New();
-        workspace.Write("go.mod", "module example.com/solo\n");
+        workspace.Write(Path::new("go.mod"), "module example.com/solo\n");
 
         let facts = Materialize_Workspace(&workspace.root, Context()).expect("a real workspace");
 
@@ -206,7 +211,7 @@ mod tests
     fn Test_Two_Runs_Over_The_Same_Tree_Should_Reach_The_Same_Semantic_Inputs()
     {
         let workspace = TemporaryWorkspace::New();
-        workspace.Write("go.mod", "module example.com/solo\n");
+        workspace.Write(Path::new("go.mod"), "module example.com/solo\n");
 
         let first = Materialize_Workspace(&workspace.root, Context()).expect("a real workspace");
         let second = Materialize_Workspace(&workspace.root, Context()).expect("a real workspace");

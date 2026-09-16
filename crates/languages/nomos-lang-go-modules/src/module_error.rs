@@ -418,9 +418,14 @@ mod local_tests
         let result = Discover_Workspace(&root);
 
         // Best-effort cleanup of the temp directory this test created. The test's own
-        // outcome was already decided by `result` above; a failure here only leaves debris
-        // on disk and changes nothing this assertion checks.
-        let _ = std::fs::remove_dir_all(&root);
+        // outcome was already decided by `result` above, so a failed removal is reported
+        // rather than turned into a second assertion: it leaves debris on disk and changes
+        // nothing this assertion checks, but a silently swallowed error would hide even
+        // that much.
+        if let Err(error) = std::fs::remove_dir_all(&root)
+        {
+            eprintln!("failed to remove temporary root {}: {error}", root.display());
+        }
         assert!(result.is_err(), "an empty root names no module at all");
     }
 }

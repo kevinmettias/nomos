@@ -195,7 +195,8 @@ mod tests
             Context(),
         );
 
-        let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).expect("well formed");
+        let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
+            .expect("this provider writes nomos.syntax.items.v1");
 
         let member = payload
             .items
