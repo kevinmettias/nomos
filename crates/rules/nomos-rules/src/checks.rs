@@ -265,6 +265,17 @@ mod tests
     use nomos_analysis::{MemoryFactStore, Reader};
     use nomos_capability::Registry;
 
+    /// One finding pushed for the source whose payload thunk failed, plus one per source
+    /// whose thunk succeeded — the two the fixture below is built to produce.
+    const EXPECTED_PUSHED_PLUS_RELAYED_FINDINGS: usize = 3;
+
+    /// How many of the two sources the fixture's payload thunk yields a payload for.
+    const EXPECTED_RELAYED_FINDINGS: usize = 2;
+
+    /// The payload `Payload_Of_Two_Or_None` returns for every source except `a.rs`. Nothing
+    /// asserts the value itself; it only has to be a payload the relay can carry.
+    const PAYLOAD_OF_TWO: u32 = 2;
+
     fn Source(path: &str) -> SourceFile
     {
         use nomos_contracts::SubjectId;
@@ -324,9 +335,9 @@ mod tests
 
         let findings = Relay_Findings(&sources, &mut facts, Payload_Of_Two_Or_None, Relay_Each_Of_Two);
 
-        assert_eq!(findings.len(), 3, "one pushed error plus two relayed findings: {findings:?}");
+        assert_eq!(findings.len(), EXPECTED_PUSHED_PLUS_RELAYED_FINDINGS, "one pushed error plus two relayed findings: {findings:?}");
         assert!(findings.iter().any(|finding| return finding.summary == "no fact for a.rs"));
-        assert_eq!(findings.iter().filter(|finding| return finding.summary == "relayed").count(), 2);
+        assert_eq!(findings.iter().filter(|finding| return finding.summary == "relayed").count(), EXPECTED_RELAYED_FINDINGS);
     }
 
     /// An admitted registry and an empty store — named so a call site reads
@@ -354,7 +365,7 @@ mod tests
             return Err(No_Fact_Finding(source));
         }
 
-        return Ok(2u32);
+        return Ok(PAYLOAD_OF_TWO);
     }
 
     /// A dependency-unavailable finding naming `source`'s own path — what a rule reports when

@@ -176,7 +176,7 @@ fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &s
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
     use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
     use nomos_cap_lint::LintLevel;
     use nomos_capability::ProviderOffer;
@@ -184,6 +184,18 @@ mod tests
     use nomos_model::Content_Digest;
 
     const PROVIDER: &str = "nomos.test.lint.resolves";
+
+    /// Where in its file the fixture claims the one diagnostic sits. Nothing correlates it
+    /// with a real line; it only has to be a line a rendered finding can carry.
+    const FIRST_DIAGNOSTIC_LINE: u32 = 10;
+
+    /// The second member's diagnostic is filed lower in its own file than the first's, so
+    /// the two are distinguishable if the relay ever mixed them up.
+    const SECOND_DIAGNOSTIC_LINE: u32 = 2;
+
+    /// The two diagnostics `Two_Member_Diagnostics` carries, and therefore the two findings
+    /// a one-fact read of it must produce.
+    const EXPECTED_DIAGNOSTIC_FINDINGS: usize = 2;
 
     /// Also the [`super::Relay_Findings`] shape itself: a real fact read and its
     /// diagnostic relayed 1:1, never judged a second time.
@@ -203,7 +215,7 @@ mod tests
                     lint: Some("clippy::needless_return".to_owned()),
                     message: "unneeded `return` statement".to_owned(),
                     file: "crates/capabilities/nomos-cap-syntax/src/lib.rs".to_owned(),
-                    line: 10,
+                    line: FIRST_DIAGNOSTIC_LINE,
                 }],
             },
         );
@@ -271,7 +283,7 @@ mod tests
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Lint_Diagnostics(&[source], &mut reader);
 
-        assert_eq!(findings.len(), 2, "{findings:?}");
+        assert_eq!(findings.len(), EXPECTED_DIAGNOSTIC_FINDINGS, "{findings:?}");
     }
 
     /// One warning with a lint name and one error without one, on two different files of the
@@ -293,7 +305,7 @@ mod tests
                     lint: None,
                     message: "mismatched types".to_owned(),
                     file: "crates/rules/nomos-rules/src/lint.rs".to_owned(),
-                    line: 2,
+                    line: SECOND_DIAGNOSTIC_LINE,
                 },
             ],
         };
@@ -317,17 +329,19 @@ mod tests
     fn Offering() -> TestOffering
     {
         return test_support::Offering(
-            nomos_cap_lint::Capability_Contract(),
-            nomos_cap_lint::Capability(),
-            nomos_cap_lint::CONTRACT_VERSION,
-            PROVIDER,
-            Guarantee_At_Floor(),
-        );
+            OfferedProvider {
+                contract: nomos_cap_lint::Capability_Contract(),
+                capability: nomos_cap_lint::Capability(),
+                version: nomos_cap_lint::CONTRACT_VERSION,
+                provider: PROVIDER,
+                guarantee: Guarantee_At_Floor(),
+            },
+        ).expect("a fresh Registry holds neither this contract nor this provider");
     }
 
     fn Materialize_Diagnostics_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DiagnosticsPayload)
     {
         let bytes = nomos_cap_lint::Encode_Payload(payload);
-        test_support::Materialize(store, source.subject, offer, InputDigest::Of(&[]), nomos_cap_lint::Payload_Schema(), bytes);
+        test_support::Materialize(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_lint::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 }

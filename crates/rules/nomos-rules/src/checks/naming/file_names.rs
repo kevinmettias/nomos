@@ -286,7 +286,7 @@ fn To_Snake_Case(name: &str) -> String
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
     use nomos_model::Content_Digest;
 
     /// A fixture whose filename is part of what it fixes is not judged by either rule.
@@ -321,20 +321,24 @@ mod tests
         const ITEMS: &str = "unexpanded\t0\nitem\t0\tStruct\tPublic\tAnchor\t.\t.\n";
         let guarantee = Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
         let TestOffering { mut store, registry, offer } = test_support::Offering(
-            nomos_cap_syntax::Capability_Contract(),
-            nomos_cap_syntax::Capability(),
-            nomos_cap_syntax::CONTRACT_VERSION,
-            PARSER,
-            guarantee,
-        );
+            OfferedProvider {
+                contract: nomos_cap_syntax::Capability_Contract(),
+                capability: nomos_cap_syntax::Capability(),
+                version: nomos_cap_syntax::CONTRACT_VERSION,
+                provider: PARSER,
+                guarantee,
+            },
+        ).expect("a fresh Registry holds neither this contract nor this provider");
         test_support::Materialize(
             &mut store,
-            source.subject,
-            &offer,
-            nomos_analysis::InputDigest::Of(&[source.text.as_bytes()]),
-            nomos_cap_syntax::Payload_Schema(),
-            ITEMS.as_bytes().to_vec(),
-        );
+            FactToFile {
+                subject: source.subject,
+                offer: &offer,
+                semantic_inputs: nomos_analysis::InputDigest::Of(&[source.text.as_bytes()]),
+                schema: nomos_cap_syntax::Payload_Schema(),
+                bytes: ITEMS.as_bytes().to_vec(),
+            },
+        ).expect("the fixture's store holds no fact under this key at a newer generation");
         return TestOffering { store, registry, offer };
     }
 

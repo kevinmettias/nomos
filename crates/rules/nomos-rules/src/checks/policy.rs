@@ -182,12 +182,16 @@ fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &s
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
     use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
     use nomos_cap_dependency_policy::PolicySeverity;
     use nomos_capability::ProviderOffer;
 
     const PROVIDER: &str = "nomos.test.policy.resolves";
+
+    /// The two violations `Test_Multiple_Violations_Should_Each_Become_A_Finding` writes into
+    /// its payload, and therefore the two findings a relay of it must produce.
+    const EXPECTED_VIOLATION_FINDINGS: usize = 2;
 
     /// Also [`crate::checks::test_support::Materialize`]'s own shape: the fact this test
     /// reads back is one it filed through that same helper.
@@ -269,7 +273,7 @@ mod tests
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Dependency_Policy(&[source], &mut reader);
 
-        assert_eq!(findings.len(), 2, "{findings:?}");
+        assert_eq!(findings.len(), EXPECTED_VIOLATION_FINDINGS, "{findings:?}");
     }
 
     /// A declared-and-offered dependency-policy capability with `payload` materialized against
@@ -301,17 +305,19 @@ mod tests
     fn Offering() -> TestOffering
     {
         return test_support::Offering(
-            nomos_cap_dependency_policy::Capability_Contract(),
-            nomos_cap_dependency_policy::Capability(),
-            nomos_cap_dependency_policy::CONTRACT_VERSION,
-            PROVIDER,
-            Guarantee_At_Floor(),
-        );
+            OfferedProvider {
+                contract: nomos_cap_dependency_policy::Capability_Contract(),
+                capability: nomos_cap_dependency_policy::Capability(),
+                version: nomos_cap_dependency_policy::CONTRACT_VERSION,
+                provider: PROVIDER,
+                guarantee: Guarantee_At_Floor(),
+            },
+        ).expect("a fresh Registry holds neither this contract nor this provider");
     }
 
     fn Materialize_Policy_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &PolicyPayload)
     {
         let bytes = nomos_cap_dependency_policy::Encode_Payload(payload);
-        test_support::Materialize(store, source.subject, offer, InputDigest::Of(&[]), nomos_cap_dependency_policy::Payload_Schema(), bytes);
+        test_support::Materialize(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_dependency_policy::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 }

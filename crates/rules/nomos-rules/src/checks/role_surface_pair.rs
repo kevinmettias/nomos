@@ -112,8 +112,8 @@ mod tests
     fn Test_Check_Declared_Role_Matches_Surface_Should_Report_Every_Subject_As_Agent_Required()
     {
         let subjects = vec![
-            Role_Surface_Pair("nomos-example-a", "Reads files.", "pub fn Read() -> String"),
-            Role_Surface_Pair("nomos-example-b", "Writes files.", "pub fn Write(text: &str)"),
+            Role_Surface_Pair(RoleSurfaceSubject { crate_name: "nomos-example-a", declared_role: "Reads files.", actual_surface: "pub fn Read() -> String" }),
+            Role_Surface_Pair(RoleSurfaceSubject { crate_name: "nomos-example-b", declared_role: "Writes files.", actual_surface: "pub fn Write(text: &str)" }),
         ];
 
         let findings = Check_Declared_Role_Matches_Surface(&subjects);
@@ -134,8 +134,8 @@ mod tests
     #[test]
     fn Test_The_Rule_Never_Reaches_A_Verdict_Regardless_Of_Content()
     {
-        let agrees = Role_Surface_Pair("nomos-consistent", "Reads files.", "pub fn Read() -> String");
-        let conflicts = Role_Surface_Pair("nomos-inconsistent", "Reads files.", "pub fn Delete_Everything()");
+        let agrees = Role_Surface_Pair(RoleSurfaceSubject { crate_name: "nomos-consistent", declared_role: "Reads files.", actual_surface: "pub fn Read() -> String" });
+        let conflicts = Role_Surface_Pair(RoleSurfaceSubject { crate_name: "nomos-inconsistent", declared_role: "Reads files.", actual_surface: "pub fn Delete_Everything()" });
 
         let findings = Check_Declared_Role_Matches_Surface(&[agrees, conflicts]);
         let (first, second) = (findings.first().expect("two findings"), findings.get(1).expect("two findings"));
@@ -144,20 +144,34 @@ mod tests
         assert_eq!(first.evidence, second.evidence);
     }
 
-    fn Role_Surface_Pair(crate_name: &str, declared_role: &str, actual_surface: &str) -> RoleSurfacePair
+    /// The three strings one fixture pair is described by, grouped so a call site names which
+    /// is the crate, which is the role it declares and which is the surface it actually
+    /// exposes, rather than counting three adjacent `&str` positions a caller could transpose
+    /// without the compiler objecting.
+    struct RoleSurfaceSubject<'text>
+    {
+        crate_name: &'text str,
+        declared_role: &'text str,
+        actual_surface: &'text str,
+    }
+
+    fn Role_Surface_Pair(subject: RoleSurfaceSubject<'_>) -> RoleSurfacePair
     {
         return RoleSurfacePair {
-            crate_root: format!("crates/example/{crate_name}"),
-            crate_name: crate_name.to_owned(),
-            declared_role: declared_role.to_owned(),
-            actual_surface: actual_surface.to_owned(),
+            crate_root: format!("crates/example/{}", subject.crate_name),
+            crate_name: subject.crate_name.to_owned(),
+            declared_role: subject.declared_role.to_owned(),
+            actual_surface: subject.actual_surface.to_owned(),
         };
     }
 
     #[test]
     fn Test_Findings_Are_Sorted_By_Subject_Name()
     {
-        let subjects = vec![Role_Surface_Pair("nomos-z", "z", "z"), Role_Surface_Pair("nomos-a", "a", "a")];
+        let subjects = vec![
+            Role_Surface_Pair(RoleSurfaceSubject { crate_name: "nomos-z", declared_role: "z", actual_surface: "z" }),
+            Role_Surface_Pair(RoleSurfaceSubject { crate_name: "nomos-a", declared_role: "a", actual_surface: "a" }),
+        ];
 
         let findings = Check_Declared_Role_Matches_Surface(&subjects);
 
@@ -174,7 +188,7 @@ mod tests
     #[test]
     fn Test_The_Locations_Name_The_Readme_And_The_Surface_Snapshot()
     {
-        let subjects = vec![Role_Surface_Pair("nomos-example-a", "Reads files.", "pub fn Read() -> String")];
+        let subjects = vec![Role_Surface_Pair(RoleSurfaceSubject { crate_name: "nomos-example-a", declared_role: "Reads files.", actual_surface: "pub fn Read() -> String" })];
 
         let findings = Check_Declared_Role_Matches_Surface(&subjects);
 

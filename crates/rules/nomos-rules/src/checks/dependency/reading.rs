@@ -207,7 +207,7 @@ fn Unread_Finding(source: &SourceFile, applicability: Applicability, rule: &'sta
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
     use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
     use nomos_capability::ProviderOffer;
     use nomos_cap_dependency::DependencyPayload;
@@ -246,7 +246,7 @@ mod tests
     fn Materialize_Dependency_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DependencyPayload)
     {
         let bytes = nomos_cap_dependency::Encode_Payload(payload);
-        test_support::Materialize(store, source.subject, offer, InputDigest::Of(&[]), nomos_cap_dependency::Payload_Schema(), bytes);
+        test_support::Materialize(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_dependency::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 
     #[test]
@@ -269,11 +269,13 @@ mod tests
     fn Offering() -> TestOffering
     {
         return test_support::Offering(
-            nomos_cap_dependency::Capability_Contract(),
-            nomos_cap_dependency::Capability(),
-            nomos_cap_dependency::CONTRACT_VERSION,
-            PROVIDER,
-            Dependency_Requirement().minimum,
-        );
+            OfferedProvider {
+                contract: nomos_cap_dependency::Capability_Contract(),
+                capability: nomos_cap_dependency::Capability(),
+                version: nomos_cap_dependency::CONTRACT_VERSION,
+                provider: PROVIDER,
+                guarantee: Dependency_Requirement().minimum,
+            },
+        ).expect("a fresh Registry holds neither this contract nor this provider");
     }
 }

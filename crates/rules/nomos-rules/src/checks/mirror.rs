@@ -217,7 +217,7 @@ fn Findings_Over_Universes(index: &CheckIndex<'_>) -> Vec<Finding>
 mod address
 {
     use super::*;
-    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
     use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SubjectId};
     use nomos_model::Content_Digest;
 
@@ -265,20 +265,24 @@ mod address
     fn Offering_With_Fact(source: &SourceFile) -> TestOffering
     {
         let TestOffering { mut store, registry, offer } = test_support::Offering(
-            nomos_cap_syntax::Capability_Contract(),
-            nomos_cap_syntax::Capability(),
-            nomos_cap_syntax::CONTRACT_VERSION,
-            PARSER,
-            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
-        );
+            OfferedProvider {
+                contract: nomos_cap_syntax::Capability_Contract(),
+                capability: nomos_cap_syntax::Capability(),
+                version: nomos_cap_syntax::CONTRACT_VERSION,
+                provider: PARSER,
+                guarantee: Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
+            },
+        ).expect("a fresh Registry holds neither this contract nor this provider");
         test_support::Materialize(
             &mut store,
-            source.subject,
-            &offer,
-            nomos_analysis::InputDigest::Of(&[source.text.as_bytes()]),
-            nomos_cap_syntax::Payload_Schema(),
-            MIRROR_RESOLVING_TO_NOTHING.as_bytes().to_vec(),
-        );
+            FactToFile {
+                subject: source.subject,
+                offer: &offer,
+                semantic_inputs: nomos_analysis::InputDigest::Of(&[source.text.as_bytes()]),
+                schema: nomos_cap_syntax::Payload_Schema(),
+                bytes: MIRROR_RESOLVING_TO_NOTHING.as_bytes().to_vec(),
+            },
+        ).expect("the fixture's store holds no fact under this key at a newer generation");
 
         return TestOffering { store, registry, offer };
     }

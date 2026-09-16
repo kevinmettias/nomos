@@ -114,7 +114,7 @@ fn Sort_Findings(findings: &mut [Finding])
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
     use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
     use nomos_capability::ProviderOffer;
     use nomos_cap_syntax::{Observation, PayloadItem, PUBLIC};
@@ -259,18 +259,20 @@ mod tests
     fn Offering() -> TestOffering
     {
         return test_support::Offering(
-            nomos_cap_syntax::Capability_Contract(),
-            nomos_cap_syntax::Capability(),
-            nomos_cap_syntax::CONTRACT_VERSION,
-            PROVIDER,
-            Guarantee_At_Floor(),
-        );
+            OfferedProvider {
+                contract: nomos_cap_syntax::Capability_Contract(),
+                capability: nomos_cap_syntax::Capability(),
+                version: nomos_cap_syntax::CONTRACT_VERSION,
+                provider: PROVIDER,
+                guarantee: Guarantee_At_Floor(),
+            },
+        ).expect("a fresh Registry holds neither this contract nor this provider");
     }
 
     fn Materialize_Syntax_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &SyntaxPayload)
     {
         let bytes = nomos_cap_syntax::Render_Payload(payload);
         let inputs = InputDigest::Of(&[source.text.as_bytes()]);
-        test_support::Materialize(store, source.subject, offer, inputs, nomos_cap_syntax::Payload_Schema(), bytes);
+        test_support::Materialize(store, FactToFile { subject: source.subject, offer, semantic_inputs: inputs, schema: nomos_cap_syntax::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 }

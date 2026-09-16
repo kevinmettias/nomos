@@ -6,7 +6,10 @@
 //! source file uses the old Rust module layout, so [`Check_No_Mod_Rs_Files`] alone still
 //! takes only [`SourceFile`]s. Go carries its own, lower pair of the same two triggers — 500
 //! lines for review and 1000 lines (not 1500) for the hard trigger — under their own rule
-//! ids, scoped to `.go` sources.
+//! ids, scoped to `.go` sources. [`go_file_size`] holds that Go pair and [`mod_rs`] the
+//! path-only layout rule, split out by responsibility the same way `dependency.rs` and
+//! `naming.rs` split their own entry points; what stays here is the two Rust triggers and
+//! the threshold machinery all four share.
 //!
 //! # The thresholds are now a repository's own, resolved rather than compiled in
 //!
@@ -18,10 +21,16 @@
 //! settle that this capability is optional the same way naming's is. The thresholds named
 //! above are those defaults, still real and still what an unconfigured repository gets.
 
-use crate::{GO_LANGUAGE, SourceFile};
+mod go_file_size;
+mod mod_rs;
+
+use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_limits_policy::{PolicyRow, Scope};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
+
+pub use go_file_size::{Check_Go_File_Size_Hard_Trigger, Check_Go_File_Size_Review_Trigger};
+pub use mod_rs::Check_No_Mod_Rs_Files;
 
 /// The code-standards review-trigger rule id.
 pub const FILE_SIZE_REVIEW_TRIGGER: &str = "500-lines";
@@ -36,17 +45,17 @@ pub const ONE_THOUSAND_LINE_HARD_TRIGGER: &str = "one-thousand-line-hard-trigger
 
 const REVIEW_TRIGGER_LINES: usize = 500;
 const JUSTIFICATION_TRIGGER_LINES: usize = 1500;
-const GO_REVIEW_TRIGGER_LINES: usize = 500;
-const GO_HARD_TRIGGER_LINES: usize = 1000;
+pub(super) const GO_REVIEW_TRIGGER_LINES: usize = 500;
+pub(super) const GO_HARD_TRIGGER_LINES: usize = 1000;
 
 /// `standards.json`'s row key for the review trigger, shared by the generic and the Go
 /// rule since Go's own value equals the default and so needs no override row.
-const FILE_SIZE_REVIEW_LINES_KEY: &str = "file-size-review-lines";
+pub(super) const FILE_SIZE_REVIEW_LINES_KEY: &str = "file-size-review-lines";
 /// `standards.json`'s row key for the hard/justification trigger, where Go's own value
 /// differs from the default and so is declared as a `languages.go.limits` override.
-const FILE_SIZE_HARD_LINES_KEY: &str = "file-size-hard-lines";
+pub(super) const FILE_SIZE_HARD_LINES_KEY: &str = "file-size-hard-lines";
 
-const GO: &str = "go";
+pub(super) const GO: &str = "go";
 
 /// Reports files whose line count exceeds the review trigger.
 #[must_use]
@@ -72,81 +81,6 @@ pub fn Check_File_Size_Justification_Trigger(sources: &[SourceFile], facts: &mut
         LineThreshold { rule: FILE_SIZE_JUSTIFICATION_TRIGGER, lines: threshold, because: &because },
         |_| return true,
     );
-}
-
-/// Reports Go files whose line count exceeds Go's own, lower review trigger.
-#[must_use]
-pub fn Check_Go_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
-{
-    let threshold = Resolve_Limit(facts, Some(GO), FILE_SIZE_REVIEW_LINES_KEY, GO_REVIEW_TRIGGER_LINES);
-    let because = format!("exceeds Go's {threshold}-line review trigger for splitting");
-    return Findings_For_Threshold(
-        sources,
-        LineThreshold { rule: FIVE_HUNDRED_LINE_REVIEW_TRIGGER, lines: threshold, because: &because },
-        |source| return source.Is_Written_In(GO_LANGUAGE),
-    );
-}
-
-/// Reports Go files whose line count exceeds Go's own, lower hard trigger.
-#[must_use]
-pub fn Check_Go_File_Size_Hard_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
-{
-    let threshold = Resolve_Limit(facts, Some(GO), FILE_SIZE_HARD_LINES_KEY, GO_HARD_TRIGGER_LINES);
-    let because = format!("exceeds Go's {threshold}-line trigger and needs decomposition or a documented locality justification");
-    return Findings_For_Threshold(
-        sources,
-        LineThreshold { rule: ONE_THOUSAND_LINE_HARD_TRIGGER, lines: threshold, because: &because },
-        |source| return source.Is_Written_In(GO_LANGUAGE),
-    );
-}
-
-/// Reports `src/**/mod.rs` files, exempting shared integration-test modules under `tests/`.
-#[must_use]
-pub fn Check_No_Mod_Rs_Files(sources: &[SourceFile]) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-
-    for source in sources
-    {
-        if Is_Disallowed_Mod_Rs(&source.path)
-        {
-            let finding = Finding_For_Source(
-                source,
-                Rule(NO_MOD_RS_FILES),
-                Because("uses the old Rust module layout; use a sibling module file instead"),
-            );
-            findings.push(finding);
-        }
-    }
-
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
-}
-
-fn Is_Disallowed_Mod_Rs(path: &str) -> bool
-{
-    let normalized = path.replace('\\', "/");
-    return normalized.ends_with("/mod.rs") && normalized.starts_with("src/");
-}
-
-/// `rule` and `because` are both `&str`; without a distinct type per position, a call site
-/// like `Finding_For_Source(source, rule, because)` reads as two interchangeable strings and
-/// a swap compiles silently.
-struct Rule<'a>(&'a str);
-struct Because<'a>(&'a str);
-
-fn Finding_For_Source(source: &SourceFile, rule: Rule<'_>, because: Because<'_>) -> Finding
-{
-    return Finding {
-        rule: RuleId::New(rule.0),
-        subject: source.subject,
-        subject_name: source.path.clone(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("{} {}", source.path, because.0),
-        locations: vec![source.path.clone()],
-    };
 }
 
 /// Resolves the numeric threshold `key` must take: a repository's own declared
@@ -226,14 +160,17 @@ fn Matching_Row<'a>(payload: &'a nomos_cap_limits_policy::LimitsPolicyPayload, s
 /// and because four separate ones put this helper over the value-parameter cap it exists to
 /// help enforce. A rule reporting its own implementation is worth reading as evidence about
 /// the code rather than about the rule, and here it was right.
-struct LineThreshold<'a>
+///
+/// `pub(super)` because all four triggers construct it, the Go pair from
+/// `structure/go_file_size.rs` and the Rust pair from here.
+pub(super) struct LineThreshold<'a>
 {
-    rule: &'a str,
-    lines: usize,
-    because: &'a str,
+    pub(super) rule: &'a str,
+    pub(super) lines: usize,
+    pub(super) because: &'a str,
 }
 
-fn Findings_For_Threshold(
+pub(super) fn Findings_For_Threshold(
     sources: &[SourceFile],
     threshold: LineThreshold<'_>,
     accepts_source: impl Fn(&SourceFile) -> bool,
@@ -280,271 +217,70 @@ fn Finding_For_Source_With_Count(source: &SourceFile, rule: &str, line_count: us
 }
 
 #[cfg(test)]
-mod tests
+#[path = "structure/tests.rs"]
+mod tests;
+
+/// Narrow, file-local proofs for this file's own public and crate-visible functions, addressed
+/// by name.
+///
+/// [`tests`] above is `structure/tests.rs`, a separate physical file whose behavioural suite
+/// this does not repeat or replace. `check-test-coverage`'s Rust front end keys a test's
+/// companion unit off the literal file it is textually written in, so a test living in that
+/// separate file can never address a function declared here, however it is named — this module
+/// gives [`Check_File_Size_Review_Trigger`], [`Check_File_Size_Justification_Trigger`],
+/// [`Resolve_Limit`] and [`Findings_For_Threshold`] the one-file address the check reads.
+///
+/// The fixture is [`super::tests::Fixture_Over_Threshold`], which lives beside the rest of this
+/// module's fixtures rather than being restated here: a second, near-identical copy of it in
+/// this file and in `structure/go_file_size.rs` was itself a duplication finding.
+#[cfg(test)]
+mod self_tests
 {
+    use super::tests::Fixture_Over_Threshold;
     use super::*;
-    use crate::checks::test_support::{self, TestOffering};
     use nomos_analysis::{MemoryFactStore, Reader};
-    use nomos_cap_limits_policy::{Encode_Payload, LimitsPolicyPayload, PolicyRow};
     use nomos_capability::Registry;
-    use nomos_contracts::SubjectId;
-    use nomos_model::Content_Digest;
 
     #[test]
-    fn Test_Check_File_Size_Review_Trigger_Should_Report_A_File_Over_500_Lines()
+    fn Test_Check_File_Size_Review_Trigger_Should_Report_A_File_One_Line_Over()
     {
-        let source = Source("src/large.rs", Lines(REVIEW_TRIGGER_LINES + 1));
-        let StoreAndRegistry { store, registry } = Empty_Store_And_Registry();
-        let mut facts = Facts_Reader(&store, &registry);
-
-        let findings = Check_File_Size_Review_Trigger(&[source], &mut facts);
+        let findings = Fixture_Over_Threshold(Check_File_Size_Review_Trigger, "src/large.rs", REVIEW_TRIGGER_LINES);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
-        assert_eq!(found.rule, RuleId::New(FILE_SIZE_REVIEW_TRIGGER));
-        assert!(found.summary.contains("501 lines"), "{}", found.summary);
+        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(FILE_SIZE_REVIEW_TRIGGER));
     }
 
     #[test]
-    fn Test_Check_File_Size_Review_Trigger_Should_Accept_A_File_At_500_Lines()
+    fn Test_Check_File_Size_Justification_Trigger_Should_Report_A_File_One_Line_Over()
     {
-        let source = Source("src/medium.rs", Lines(REVIEW_TRIGGER_LINES));
-        let StoreAndRegistry { store, registry } = Empty_Store_And_Registry();
-        let mut facts = Facts_Reader(&store, &registry);
-
-        let findings = Check_File_Size_Review_Trigger(&[source], &mut facts);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_File_Size_Justification_Trigger_Should_Report_A_File_Over_1500_Lines()
-    {
-        let source = Source("src/huge.rs", Lines(JUSTIFICATION_TRIGGER_LINES + 1));
-        let StoreAndRegistry { store, registry } = Empty_Store_And_Registry();
-        let mut facts = Facts_Reader(&store, &registry);
-
-        let findings = Check_File_Size_Justification_Trigger(&[source], &mut facts);
+        let findings = Fixture_Over_Threshold(Check_File_Size_Justification_Trigger, "src/huge.rs", JUSTIFICATION_TRIGGER_LINES);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
-        assert_eq!(found.rule, RuleId::New(FILE_SIZE_JUSTIFICATION_TRIGGER));
-        assert!(found.summary.contains("1501 lines"), "{}", found.summary);
+        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(FILE_SIZE_JUSTIFICATION_TRIGGER));
+    }
+
+    /// The trigger machinery's own public address: [`Findings_For_Threshold`] is the one function
+    /// all four line-count rules call, so a boundary right at the threshold is the case that
+    /// tells whether "exceeds" is strict everywhere rather than in the four callers separately.
+    #[test]
+    fn Test_Findings_For_Threshold_Should_Report_A_File_One_Line_Over_And_Accept_It_At_The_Threshold()
+    {
+        let over = Fixture_Over_Threshold(Check_File_Size_Review_Trigger, "src/large.rs", REVIEW_TRIGGER_LINES);
+        assert_eq!(over.len(), 1, "{over:?}");
+
+        let at = Fixture_Over_Threshold(Check_File_Size_Review_Trigger, "src/large.rs", REVIEW_TRIGGER_LINES.saturating_sub(1));
+        assert!(at.is_empty(), "{at:?}");
     }
 
     #[test]
-    fn Test_Check_File_Size_Justification_Trigger_Should_Accept_A_File_At_1500_Lines()
+    fn Test_Resolve_Limit_Should_Fall_Back_To_The_Default_With_Nothing_Materialized()
     {
-        let source = Source("src/large.rs", Lines(JUSTIFICATION_TRIGGER_LINES));
-        let StoreAndRegistry { store, registry } = Empty_Store_And_Registry();
-        let mut facts = Facts_Reader(&store, &registry);
-
-        let findings = Check_File_Size_Justification_Trigger(&[source], &mut facts);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Go_File_Size_Review_Trigger_Should_Report_A_Go_File_Over_500_Lines()
-    {
-        Assert_Reports_One_Go_File_Size_Finding(Check_Go_File_Size_Review_Trigger, GO_REVIEW_TRIGGER_LINES, FIVE_HUNDRED_LINE_REVIEW_TRIGGER);
-    }
-
-    #[test]
-    fn Test_Check_Go_File_Size_Review_Trigger_Should_Ignore_Non_Go_Files()
-    {
-        let source = Source("src/large.rs", Lines(GO_REVIEW_TRIGGER_LINES + 1));
-        let StoreAndRegistry { store, registry } = Empty_Store_And_Registry();
-        let mut facts = Facts_Reader(&store, &registry);
-
-        let findings = Check_Go_File_Size_Review_Trigger(&[source], &mut facts);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Go_File_Size_Hard_Trigger_Should_Report_A_Go_File_Over_1000_Lines()
-    {
-        Assert_Reports_One_Go_File_Size_Finding(Check_Go_File_Size_Hard_Trigger, GO_HARD_TRIGGER_LINES, ONE_THOUSAND_LINE_HARD_TRIGGER);
-    }
-
-    #[test]
-    fn Test_Check_Go_File_Size_Hard_Trigger_Should_Accept_A_Go_File_At_1000_Lines()
-    {
-        let source = Source("index.go", Lines(GO_HARD_TRIGGER_LINES));
-        let StoreAndRegistry { store, registry } = Empty_Store_And_Registry();
-        let mut facts = Facts_Reader(&store, &registry);
-
-        let findings = Check_Go_File_Size_Hard_Trigger(&[source], &mut facts);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_No_Mod_Rs_Files_Should_Report_A_Mod_File_Under_Source()
-    {
-        let source = Source("src/pipeline/mod.rs", String::new());
-
-        let findings = Check_No_Mod_Rs_Files(&[source]);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
-        assert_eq!(found.rule, RuleId::New(NO_MOD_RS_FILES));
-        assert_eq!(found.gate, GateCategory::Blocking);
-    }
-
-    #[test]
-    fn Test_Check_No_Mod_Rs_Files_Should_Allow_Shared_Test_Modules()
-    {
-        let source = Source("tests/common/mod.rs", String::new());
-
-        let findings = Check_No_Mod_Rs_Files(&[source]);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Resolve_Limit_Should_Fall_Back_To_The_Default_When_No_Fact_Is_Materialized()
-    {
-        let StoreAndRegistry { store, registry } = Empty_Store_And_Registry();
-        let mut facts = Facts_Reader(&store, &registry);
+        let store = MemoryFactStore::New();
+        let registry = Registry::New();
+        let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
 
         let resolved = Resolve_Limit(&mut facts, None, FILE_SIZE_HARD_LINES_KEY, JUSTIFICATION_TRIGGER_LINES);
 
         assert_eq!(resolved, JUSTIFICATION_TRIGGER_LINES);
-    }
-
-    #[test]
-    fn Test_Resolve_Limit_Should_Prefer_The_Repository_Wide_Row_Over_The_Default()
-    {
-        const REPOSITORY_OVERRIDE_LINES: u32 = 900;
-
-        let TestOffering { mut store, registry, offer } = Limits_Offering();
-        Materialize_Limits_Fact(
-            &mut store,
-            &offer,
-            vec![PolicyRow { scope: Scope::Repository, key: FILE_SIZE_HARD_LINES_KEY.to_owned(), value: REPOSITORY_OVERRIDE_LINES }],
-        );
-        let mut facts = Facts_Reader(&store, &registry);
-
-        let resolved = Resolve_Limit(&mut facts, None, FILE_SIZE_HARD_LINES_KEY, JUSTIFICATION_TRIGGER_LINES);
-
-        assert_eq!(resolved, usize::try_from(REPOSITORY_OVERRIDE_LINES).expect("test literal fits in usize"));
-    }
-
-    #[test]
-    fn Test_Resolve_Limit_Should_Prefer_The_Language_Row_Over_The_Repository_Wide_Row()
-    {
-        const REPOSITORY_ROW_LINES: u32 = 1500;
-        const LANGUAGE_ROW_LINES: u32 = 1000;
-
-        let TestOffering { mut store, registry, offer } = Limits_Offering();
-        Materialize_Limits_Fact(
-            &mut store,
-            &offer,
-            vec![
-                PolicyRow { scope: Scope::Repository, key: FILE_SIZE_HARD_LINES_KEY.to_owned(), value: REPOSITORY_ROW_LINES },
-                PolicyRow { scope: Scope::Language(GO.to_owned()), key: FILE_SIZE_HARD_LINES_KEY.to_owned(), value: LANGUAGE_ROW_LINES },
-            ],
-        );
-        let mut facts = Facts_Reader(&store, &registry);
-
-        let resolved = Resolve_Limit(&mut facts, Some(GO), FILE_SIZE_HARD_LINES_KEY, JUSTIFICATION_TRIGGER_LINES);
-
-        assert_eq!(resolved, usize::try_from(LANGUAGE_ROW_LINES).expect("test literal fits in usize"));
-    }
-
-    #[test]
-    fn Test_Check_File_Size_Review_Trigger_Should_Honor_A_Real_Materialized_Override()
-    {
-        const OVERRIDE_CEILING_LINES: u32 = 10;
-
-        let TestOffering { mut store, registry, offer } = Limits_Offering();
-        Materialize_Limits_Fact(
-            &mut store,
-            &offer,
-            vec![PolicyRow { scope: Scope::Repository, key: FILE_SIZE_REVIEW_LINES_KEY.to_owned(), value: OVERRIDE_CEILING_LINES }],
-        );
-        let mut facts = Facts_Reader(&store, &registry);
-        let source = Source("src/small.rs", Lines(usize::try_from(OVERRIDE_CEILING_LINES).expect("test literal fits in usize") + 1));
-
-        let findings = Check_File_Size_Review_Trigger(&[source], &mut facts);
-
-        assert_eq!(findings.len(), 1, "a repository declaring a 10-line ceiling must judge an 11-line file against it: {findings:?}");
-    }
-
-    /// The shape [`Test_Check_Go_File_Size_Review_Trigger_Should_Report_A_Go_File_Over_500_Lines`]
-    /// and [`Test_Check_Go_File_Size_Hard_Trigger_Should_Report_A_Go_File_Over_1000_Lines`] both
-    /// need: a `.go` file one line over `threshold`, judged by `check`, reporting exactly one
-    /// finding under `rule`.
-    fn Assert_Reports_One_Go_File_Size_Finding(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, threshold: usize, rule: &'static str)
-    {
-        let source = Source("index.go", Lines(threshold.saturating_add(1)));
-        let StoreAndRegistry { store, registry } = Empty_Store_And_Registry();
-        let mut facts = Facts_Reader(&store, &registry);
-
-        let findings = check(&[source], &mut facts);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(rule));
-    }
-
-    /// An empty fact store paired with an empty capability registry, named so the pair
-    /// cannot be swapped the way an unnamed tuple invites.
-    struct StoreAndRegistry
-    {
-        store: MemoryFactStore,
-        registry: Registry,
-    }
-
-    /// The setup every test in this file needs and no test cares about: an empty fact
-    /// store paired with an empty capability registry, read through a fresh [`Reader`].
-    fn Empty_Store_And_Registry() -> StoreAndRegistry
-    {
-        return StoreAndRegistry { store: MemoryFactStore::New(), registry: Registry::New() };
-    }
-
-    /// Every test in this file builds its [`Reader`] the same one way, whether `store` and
-    /// `registry` came from [`Empty_Store_And_Registry`] or from a materialized
-    /// [`TestOffering`] — one place to say what "reading" means in this file's tests.
-    fn Facts_Reader<'store, 'registry>(store: &'store MemoryFactStore, registry: &'registry Registry) -> Reader<'store, 'registry>
-    {
-        return Reader::On(store, registry, test_support::Test_Context());
-    }
-
-    fn Limits_Offering() -> TestOffering
-    {
-        return test_support::Offering(
-            nomos_cap_limits_policy::Capability_Contract(),
-            nomos_cap_limits_policy::Capability(),
-            nomos_cap_limits_policy::CONTRACT_VERSION,
-            "nomos.test.limits.provides",
-            nomos_cap_limits_policy::Ceiling(),
-        );
-    }
-
-    fn Materialize_Limits_Fact(store: &mut MemoryFactStore, offer: &nomos_capability::ProviderOffer, rows: Vec<PolicyRow>)
-    {
-        let payload = LimitsPolicyPayload { rows };
-        test_support::Materialize(
-            store,
-            nomos_model::Subject_Of_Path(""),
-            offer,
-            nomos_analysis::InputDigest::Of(&[]),
-            nomos_cap_limits_policy::Payload_Schema(),
-            Encode_Payload(&payload),
-        );
-    }
-
-    fn Lines(count: usize) -> String
-    {
-        return (0..count).map(|_| return "line").collect::<Vec<_>>().join("\n");
-    }
-
-    fn Source(path: &str, text: String) -> SourceFile
-    {
-        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
-        source.language = crate::Recognized_Language_In_Tests(path);
-        return source;
     }
 }

@@ -254,6 +254,10 @@ mod tests
     {
         use super::{ArmShape, Applicability, GateCategory, Reachability_Site, ReachabilityPayload, Source_File, Violations_In};
 
+        /// The three sites the fixture declares below, one per arm shape, and therefore the
+        /// three findings a relay of it must produce.
+        const EXPECTED_SITE_FINDINGS: usize = 3;
+
         #[test]
         fn Test_A_Payload_With_No_Sites_Should_Produce_No_Finding()
         {
@@ -293,7 +297,7 @@ mod tests
 
             let findings = Violations_In(&payload, &Source_File("a.rs"));
 
-            assert_eq!(findings.len(), 3, "{findings:?}");
+            assert_eq!(findings.len(), EXPECTED_SITE_FINDINGS, "{findings:?}");
         }
     }
 
@@ -305,7 +309,7 @@ mod tests
             ArmShape, Assurance, Check_Unread_Reaches_A_Finding, FactVariant, Guarantee, IncrementalGranularity, Reachability_Site,
             ReachabilityPayload, Source_File, SourceFile,
         };
-        use crate::checks::test_support::{self, Test_Context, TestOffering};
+        use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
         use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
         use nomos_capability::ProviderOffer;
 
@@ -362,19 +366,21 @@ mod tests
         fn Offering() -> TestOffering
         {
             return test_support::Offering(
-                nomos_cap_controlflow::Capability_Contract(),
-                nomos_cap_controlflow::Capability(),
-                nomos_cap_controlflow::CONTRACT_VERSION,
-                PROVIDER,
-                Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unsound, IncrementalGranularity::File),
-            );
+                OfferedProvider {
+                    contract: nomos_cap_controlflow::Capability_Contract(),
+                    capability: nomos_cap_controlflow::Capability(),
+                    version: nomos_cap_controlflow::CONTRACT_VERSION,
+                    provider: PROVIDER,
+                    guarantee: Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unsound, IncrementalGranularity::File),
+                },
+            ).expect("a fresh Registry holds neither this contract nor this provider");
         }
 
         fn Materialize_Reachability_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &ReachabilityPayload)
         {
             let bytes = nomos_cap_controlflow::Encode_Payload(payload);
             let inputs = InputDigest::Of(&[source.text.as_bytes()]);
-            test_support::Materialize(store, source.subject, offer, inputs, nomos_cap_controlflow::Payload_Schema(), bytes);
+            test_support::Materialize(store, FactToFile { subject: source.subject, offer, semantic_inputs: inputs, schema: nomos_cap_controlflow::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
         }
     }
 }

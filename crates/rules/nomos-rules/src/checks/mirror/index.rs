@@ -199,7 +199,7 @@ pub(super) fn Check_Index_Of<'source>(
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::Test_Context;
+    use crate::checks::test_support::{FactToFile, Test_Context};
     use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest};
     use nomos_contracts::{Assurance, EvidenceClass, FactVariant, Guarantee, IncrementalGranularity, ProviderId, SchemaId};
 
@@ -289,7 +289,9 @@ mod tests
             }],
         };
 
-        let shortfall = index.Shortfall_For("Test_Something").expect("a missing-capability subject always shortfalls");
+        let shortfall = index
+            .Shortfall_For("Test_Something")
+            .expect("the one unread subject above carries MissingCapability, which Shortfall_For answers with NoIndex");
 
         assert!(matches!(shortfall, Shortfall::NoIndex));
     }
@@ -435,12 +437,14 @@ mod tests
         let AdmittedOffer { registry, mut store, offer } = Admitted_Reader();
         crate::checks::test_support::Materialize(
             &mut store,
-            source.subject,
-            &offer,
-            InputDigest::Of(&[source.text.as_bytes()]),
-            nomos_cap_syntax::Payload_Schema(),
-            b"unexpanded\t0\nitem\t0\tFunction\tPrivate\ttests::Test_Something_Should_Hold\t.\t+fn/0\n".to_vec(),
-        );
+            FactToFile {
+                subject: source.subject,
+                offer: &offer,
+                semantic_inputs: InputDigest::Of(&[source.text.as_bytes()]),
+                schema: nomos_cap_syntax::Payload_Schema(),
+                bytes: b"unexpanded\t0\nitem\t0\tFunction\tPrivate\ttests::Test_Something_Should_Hold\t.\t+fn/0\n".to_vec(),
+            },
+        ).expect("the fixture's store holds no fact under this key at a newer generation");
 
         return MaterializedReader { registry, store };
     }

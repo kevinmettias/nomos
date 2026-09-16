@@ -391,7 +391,7 @@ mod tests
     #[test]
     fn Test_Check_Domain_Values_Are_Distinct_Types_Should_Report_A_Rust_Primitive_Alias()
     {
-        let source = Source("src/entity.rs", "type EntityId = u64;\n");
+        let source = Source(SourceText { path: "src/entity.rs", text: "type EntityId = u64;\n" });
         let findings = Check_Domain_Values_Are_Distinct_Types(&[source]);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
@@ -401,7 +401,7 @@ mod tests
     #[test]
     fn Test_Check_Domain_Values_Are_Distinct_Types_Should_Ignore_A_Generic_Alias()
     {
-        let source = Source("src/entity.rs", "type Result<T> = std::result::Result<T, Error>;\n");
+        let source = Source(SourceText { path: "src/entity.rs", text: "type Result<T> = std::result::Result<T, Error>;\n" });
         let findings = Check_Domain_Values_Are_Distinct_Types(&[source]);
 
         assert!(findings.is_empty(), "a generic alias abbreviates a shape, not a scalar: {findings:?}");
@@ -410,7 +410,7 @@ mod tests
     #[test]
     fn Test_Check_Domain_Values_Are_Distinct_Types_Should_Ignore_A_Compound_Alias()
     {
-        let source = Source("src/entity.rs", "type Handler = fn(i32);\n");
+        let source = Source(SourceText { path: "src/entity.rs", text: "type Handler = fn(i32);\n" });
         let findings = Check_Domain_Values_Are_Distinct_Types(&[source]);
 
         assert!(findings.is_empty(), "{findings:?}");
@@ -420,8 +420,7 @@ mod tests
     fn Test_Check_Domain_Values_Are_Distinct_Types_Should_Ignore_An_Associated_Type_With_An_Allman_Brace()
     {
         let source = Source(
-            "src/codec.rs",
-            "impl Encode for Packet\n{\n    type Error = u8;\n}\n",
+            SourceText { path: "src/codec.rs", text: "impl Encode for Packet\n{\n type Error = u8;\n}\n" },
         );
         let findings = Check_Domain_Values_Are_Distinct_Types(&[source]);
 
@@ -432,8 +431,7 @@ mod tests
     fn Test_Check_Domain_Values_Are_Distinct_Types_Should_Still_Judge_An_Alias_After_The_Impl_Closes()
     {
         let source = Source(
-            "src/codec.rs",
-            "impl Encode for Packet\n{\n    type Error = u8;\n}\n\ntype Ticket = u64;\n",
+            SourceText { path: "src/codec.rs", text: "impl Encode for Packet\n{\n type Error = u8;\n}\n\ntype Ticket = u64;\n" },
         );
         let findings = Check_Domain_Values_Are_Distinct_Types(&[source]);
 
@@ -443,7 +441,7 @@ mod tests
     #[test]
     fn Test_Check_Domain_Values_Are_Distinct_Types_Should_Report_A_Go_Primitive_Alias()
     {
-        let source = Source("entity.go", "type EntityId = uint64\n");
+        let source = Source(SourceText { path: "entity.go", text: "type EntityId = uint64\n" });
         let findings = Check_Domain_Values_Are_Distinct_Types(&[source]);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
@@ -452,14 +450,24 @@ mod tests
     #[test]
     fn Test_Check_Domain_Values_Are_Distinct_Types_Should_Ignore_A_Go_Defined_Type()
     {
-        let source = Source("entity.go", "type EntityId uint64\n");
+        let source = Source(SourceText { path: "entity.go", text: "type EntityId uint64\n" });
         let findings = Check_Domain_Values_Are_Distinct_Types(&[source]);
 
         assert!(findings.is_empty(), "no equals sign means this is the remedy, not the defect: {findings:?}");
     }
 
-    fn Source(path: &str, text: &str) -> SourceFile
+        /// A fixture source's two halves, grouped so a call site names which string is the path
+    /// and which is the text, rather than counting two adjacent `&str` positions a caller
+    /// could transpose without the compiler objecting.
+    struct SourceText<'text>
     {
+        path: &'text str,
+        text: &'text str,
+    }
+
+    fn Source(source: SourceText<'_>) -> SourceFile
+    {
+        let SourceText { path, text } = source;
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
         source.language = crate::Recognized_Language_In_Tests(path);
         return source;

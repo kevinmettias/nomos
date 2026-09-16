@@ -1,5 +1,5 @@
 use super::*;
-use crate::checks::test_support;
+use crate::checks::test_support::{self, FactToFile, OfferedProvider};
 use nomos_analysis::{MemoryFactStore, Reader};
 use nomos_capability::Registry;
 use nomos_contracts::SubjectId;
@@ -168,12 +168,14 @@ fn Test_Check_Nesting_Depth_Should_Resolve_A_Declared_Limit()
 fn Offering_With_Declared_Limit(value: u32) -> test_support::TestOffering
 {
     let test_support::TestOffering { mut store, registry, offer } = test_support::Offering(
-        nomos_cap_limits_policy::Capability_Contract(),
-        nomos_cap_limits_policy::Capability(),
-        nomos_cap_limits_policy::CONTRACT_VERSION,
-        "nomos.test.limits.provides",
-        nomos_cap_limits_policy::Ceiling(),
-    );
+        OfferedProvider {
+            contract: nomos_cap_limits_policy::Capability_Contract(),
+            capability: nomos_cap_limits_policy::Capability(),
+            version: nomos_cap_limits_policy::CONTRACT_VERSION,
+            provider: "nomos.test.limits.provides",
+            guarantee: nomos_cap_limits_policy::Ceiling(),
+        },
+    ).expect("a fresh Registry holds neither this contract nor this provider");
     let payload = nomos_cap_limits_policy::LimitsPolicyPayload {
         rows: vec![nomos_cap_limits_policy::PolicyRow {
             scope: nomos_cap_limits_policy::Scope::Repository,
@@ -183,12 +185,14 @@ fn Offering_With_Declared_Limit(value: u32) -> test_support::TestOffering
     };
     test_support::Materialize(
         &mut store,
-        nomos_model::Subject_Of_Path(""),
-        &offer,
-        nomos_analysis::InputDigest::Of(&[]),
-        nomos_cap_limits_policy::Payload_Schema(),
-        nomos_cap_limits_policy::Encode_Payload(&payload),
-    );
+        FactToFile {
+            subject: nomos_model::Subject_Of_Path(""),
+            offer: &offer,
+            semantic_inputs: nomos_analysis::InputDigest::Of(&[]),
+            schema: nomos_cap_limits_policy::Payload_Schema(),
+            bytes: nomos_cap_limits_policy::Encode_Payload(&payload),
+        },
+    ).expect("the fixture's store holds no fact under this key at a newer generation");
 
     return test_support::TestOffering { store, registry, offer };
 }

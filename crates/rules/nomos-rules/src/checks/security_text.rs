@@ -11,8 +11,12 @@
 //! semantic URL analysis and runtime-value tracking are named out of scope by the
 //! standards themselves and owned by a dedicated tool instead.
 
+mod certificate_verification;
+
 use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
+
+pub use certificate_verification::Check_Certificate_Verification_Is_Not_Disabled;
 
 /// The code-standards hardcoded-credential rule id.
 pub const A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE: &str = "a-credential-is-not-hardcoded-in-source";
@@ -210,102 +214,6 @@ fn Has_Secret_In_Url(line: &str) -> bool
     return false;
 }
 
-/// Reports a TLS/SSL client or server told, by a literal value, to skip verifying the
-/// peer's certificate: `InsecureSkipVerify` set to the literal `true`, `.danger_accept_
-/// invalid_certs(true)`, `SslVerifyMode::NONE`, or `verify` set to the literal `False`.
-/// Does not flag a value set from a variable or config flag — the standard is explicit
-/// that whether that path disables verification is not a fact the source states — and
-/// accepts either an adjacent explanatory comment (a reasoned, recorded exception) or a
-/// test/fixture source, both of which the standard names as exempt.
-#[must_use]
-pub fn Check_Certificate_Verification_Is_Not_Disabled(sources: &[SourceFile]) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-    for source in sources
-    {
-        if !Is_Test_Or_Fixture_Source(source) && !Is_Own_Implementation_File(source)
-        {
-            findings.extend(Tls_Verification_Findings_In(source));
-        }
-    }
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
-}
-
-fn Tls_Verification_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let lines: Vec<&str> = source.text.lines().collect();
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        if Has_Disabled_Certificate_Verification(line) && !Has_Adjacent_Explanation(&lines, index)
-        {
-            let finding = Finding_For_Line(
-                source,
-                CERTIFICATE_VERIFICATION_IS_NOT_DISABLED,
-                Line_Number(index),
-                "disables TLS peer-certificate verification with no adjacent comment recording why",
-            );
-            findings.push(finding);
-        }
-    }
-
-    return findings;
-}
-
-fn Has_Disabled_Certificate_Verification(line: &str) -> bool
-{
-    let compact: String = line.chars().filter(|character| return !character.is_whitespace()).collect();
-
-    return compact.contains("InsecureSkipVerify:true")
-        || compact.contains("InsecureSkipVerify=true")
-        || line.contains(".danger_accept_invalid_certs(true)")
-        || line.contains("SslVerifyMode::NONE")
-        || compact.contains("verify=False")
-        || compact.contains("verify:False");
-}
-
-/// A trailing same-line comment with non-empty text, or a non-empty comment on the line
-/// immediately above — "the reasoned exception is recorded rather than hidden," the same
-/// adjacent-explanation shape `rust_text.rs`/`go_text.rs` already use, generalized to a
-/// third consumer.
-fn Has_Adjacent_Explanation(lines: &[&str], index: usize) -> bool
-{
-    if let Some(reason) = lines
-        .get(index)
-        .and_then(|line| return line.split_once("//").or_else(|| return line.split_once('#')).map(|(_, rest)| return rest))
-    {
-        if !reason.trim().is_empty()
-        {
-            return true;
-        }
-    }
-
-    if let Some(previous) = index.checked_sub(1)
-    {
-        if lines.get(previous).is_some_and(|line| return Comment_Text_Of(line).is_some_and(|c| return !c.trim().is_empty()))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-fn Comment_Text_Of(line: &str) -> Option<&str>
-{
-    let trimmed = line.trim_start();
-    for marker in ["//", "#"]
-    {
-        if let Some(comment) = trimmed.strip_prefix(marker)
-        {
-            return Some(comment.trim_start());
-        }
-    }
-    return None;
-}
-
 /// A path segment any of `tests/`, `/test/`, `testdata/`, `fixtures/`, `examples/`
 /// contains, or a `_test.`/`_tests.` file-name suffix — the standard's own "example
 /// values, fixtures, and keys that live in test files" exemption, read broadly enough to
@@ -324,22 +232,29 @@ fn Is_Test_Or_Fixture_Source(source: &SourceFile) -> bool
         || normalized.ends_with("_test.go");
 }
 
-/// This file's own path. Every rule in this file exempts its own implementing file, the
-/// same self-exemption `rust_text.rs`'s syntax-shaped rules carry: its own
-/// test fixtures and each rule's own detection-pattern constants (`CREDENTIAL_PREFIXES`,
-/// the PEM-block markers, `SENSITIVE_URL_PARAMETERS`, the disabled-verification literals)
-/// necessarily spell out the exact values each rule looks for. Unlike `rust_text.rs`'s
-/// syntax-shaped rules, these three are content-shaped -- the violation *is* a string's
-/// text, so a general string-literal-stripping fix would defeat every one of these rules
-/// everywhere, not just here; a self-file exemption is the only correct fix for this file.
-/// Checked safe today: this file's own doc comments and detection code contain no genuine
-/// live credential, sensitive-parameter URL, or disabled-verification literal outside its
-/// own patterns and fixtures.
-const OWN_IMPLEMENTATION_FILE: &str = "crates/rules/nomos-rules/src/checks/security_text.rs";
+/// Every file this module is written in. Every rule here exempts its own implementing
+/// files, the same self-exemption `rust_text.rs`'s syntax-shaped rules carry: each file
+/// holds its own test fixtures and each rule's own detection-pattern constants
+/// (`CREDENTIAL_PREFIXES`, the PEM-block markers, `SENSITIVE_URL_PARAMETERS`, the
+/// disabled-verification literals), which necessarily spell out the exact values the rule
+/// in that file looks for. Unlike `rust_text.rs`'s syntax-shaped rules, these three are
+/// content-shaped -- the violation *is* a string's text, so a general
+/// string-literal-stripping fix would defeat every one of these rules everywhere, not just
+/// here; a self-file exemption is the only correct fix for this module. A LIST rather than
+/// one path, because the split into `certificate_verification.rs` moved one rule's literals
+/// into a file of its own, and a rule that only recognised the parent would flag its own
+/// detector. Checked safe today: these files' own doc comments and detection code contain no
+/// genuine live credential, sensitive-parameter URL, or disabled-verification literal outside
+/// their own patterns and fixtures.
+const OWN_IMPLEMENTATION_FILES: &[&str] = &[
+    "crates/rules/nomos-rules/src/checks/security_text.rs",
+    "crates/rules/nomos-rules/src/checks/security_text/certificate_verification.rs",
+];
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return source.path.replace('\\', "/") == OWN_IMPLEMENTATION_FILE;
+    let normalized = source.path.replace('\\', "/");
+    return OWN_IMPLEMENTATION_FILES.contains(&normalized.as_str());
 }
 
 fn Line_Number(index: usize) -> usize
@@ -362,148 +277,70 @@ fn Finding_For_Line(source: &SourceFile, rule: &str, line_number: usize, because
 }
 
 #[cfg(test)]
-mod tests
+#[path = "security_text/tests.rs"]
+mod tests;
+
+/// Narrow, file-local proofs for this file's own public functions, addressed by name.
+///
+/// [`tests`] above is `security_text/tests.rs`, a separate physical file whose behavioural
+/// suite this does not repeat or replace. `check-test-coverage`'s Rust front end keys a test's
+/// companion unit off the literal file it is textually written in, so a test living in that
+/// separate file can never address a function declared here, however it is named — this module
+/// gives [`Check_A_Credential_Is_Not_Hardcoded_In_Source`] and
+/// [`Check_A_Secret_Does_Not_Travel_In_A_Url`] the one-file address the check reads.
+///
+/// Each fixture is assembled rather than written out, for the same reason
+/// `security_text/tests.rs` records in full: this file must not itself carry a secret-shaped
+/// literal while the detector is still handed exactly the text it always was.
+#[cfg(test)]
+mod self_tests
 {
     use super::*;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
     #[test]
-    fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Report_An_Aws_Access_Key()
+    fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Report_A_Prefixed_Credential()
     {
-        let source = Source("src/config.rs", "const KEY: &str = \"AKIAABCDEFGHIJKLMNOP\";\n");
-        let findings = Check_A_Credential_Is_Not_Hardcoded_In_Source(&[source]);
+        let secret = format!("AKIA{}", "ABCDEFGHIJKLMNOP");
+        let text = format!("const KEY: &str = \"{secret}\";\n");
+
+        let findings = Check_A_Credential_Is_Not_Hardcoded_In_Source(&[Source_For(Path("src/config.rs"), Text(&text))]);
+
         assert_eq!(findings.len(), 1, "{findings:?}");
-        assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE));
-    }
-
-    #[test]
-    fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Ignore_The_Documented_Example_Key()
-    {
-        let source = Source("src/config.rs", "const EXAMPLE: &str = \"AKIAIOSFODNN7EXAMPLE\";\n");
-        let findings = Check_A_Credential_Is_Not_Hardcoded_In_Source(&[source]);
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Ignore_A_Stripe_Test_Key()
-    {
-        let source = Source("src/config.rs", "const KEY: &str = \"sk_test_ABCDEFGHIJKLMNOPQRST\";\n");
-        let findings = Check_A_Credential_Is_Not_Hardcoded_In_Source(&[source]);
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Report_A_Stripe_Live_Key()
-    {
-        let source = Source("src/config.rs", "const KEY: &str = \"sk_live_ABCDEFGHIJKLMNOPQRST\";\n");
-        let findings = Check_A_Credential_Is_Not_Hardcoded_In_Source(&[source]);
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Report_A_Pem_Private_Key_Header()
-    {
-        let source = Source("src/config.rs", "-----BEGIN RSA PRIVATE KEY-----\n");
-        let findings = Check_A_Credential_Is_Not_Hardcoded_In_Source(&[source]);
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Ignore_A_Resource_Id()
-    {
-        let source = Source("src/config.rs", "const RESOURCE_ID: &str = \"a1b2c3d4-e5f6-7890\";\n");
-        let findings = Check_A_Credential_Is_Not_Hardcoded_In_Source(&[source]);
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Ignore_Test_Files()
-    {
-        let source = Source("tests/fixtures.rs", "const KEY: &str = \"sk_live_ABCDEFGHIJKLMNOPQRST\";\n");
-        let findings = Check_A_Credential_Is_Not_Hardcoded_In_Source(&[source]);
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_A_Secret_Does_Not_Travel_In_A_Url_Should_Report_An_Api_Key_Query_Parameter()
-    {
-        let source = Source("src/client.rs", "let url = format!(\"https://api.example.com/data?api_key={key}\");\n");
-        let findings = Check_A_Secret_Does_Not_Travel_In_A_Url(&[source]);
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_A_Secret_Does_Not_Travel_In_A_Url_Should_Report_A_Second_Position_Token_Parameter()
-    {
-        let source = Source("src/client.rs", "let url = format!(\"https://api.example.com/data?page=2&token={t}\");\n");
-        let findings = Check_A_Secret_Does_Not_Travel_In_A_Url(&[source]);
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_A_Secret_Does_Not_Travel_In_A_Url_Should_Ignore_A_Non_Secret_Parameter()
-    {
-        let source = Source("src/client.rs", "let url = format!(\"https://api.example.com/data?page={n}&limit=20\");\n");
-        let findings = Check_A_Secret_Does_Not_Travel_In_A_Url(&[source]);
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Certificate_Verification_Is_Not_Disabled_Should_Report_Insecure_Skip_Verify_True()
-    {
-        let source = Source("src/client.go", "tls.Config{InsecureSkipVerify: true}\n");
-        let findings = Check_Certificate_Verification_Is_Not_Disabled(&[source]);
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Certificate_Verification_Is_Not_Disabled_Should_Report_Danger_Accept_Invalid_Certs()
-    {
-        let source = Source("src/client.rs", "let client = Client::builder().danger_accept_invalid_certs(true).build()?;\n");
-        let findings = Check_Certificate_Verification_Is_Not_Disabled(&[source]);
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Certificate_Verification_Is_Not_Disabled_Should_Ignore_A_Variable_Value()
-    {
-        let source = Source("src/client.go", "tls.Config{InsecureSkipVerify: cfg.SkipVerify}\n");
-        let findings = Check_Certificate_Verification_Is_Not_Disabled(&[source]);
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Certificate_Verification_Is_Not_Disabled_Should_Accept_An_Adjacent_Reason()
-    {
-        let source = Source(
-            "src/client.rs",
-            "// pinned by public-key hash below; certificate authentication is not needed\nlet client = Client::builder().danger_accept_invalid_certs(true).build()?;\n",
+        assert_eq!(
+            findings.first().expect("asserted len 1 above").rule,
+            RuleId::New(A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE)
         );
-        let findings = Check_Certificate_Verification_Is_Not_Disabled(&[source]);
-        assert!(findings.is_empty(), "{findings:?}");
     }
 
     #[test]
-    fn Test_Check_Certificate_Verification_Is_Not_Disabled_Should_Ignore_Test_Files()
+    fn Test_Check_A_Secret_Does_Not_Travel_In_A_Url_Should_Report_A_Named_Secret_Parameter()
     {
-        let source = Source("tests/tls_helper.go", "tls.Config{InsecureSkipVerify: true}\n");
-        let findings = Check_Certificate_Verification_Is_Not_Disabled(&[source]);
-        assert!(findings.is_empty(), "{findings:?}");
+        let text = format!("let url = format!(\"https://api.example.com/data?{}={{key}}\");\n", "api_key");
+
+        let findings = Check_A_Secret_Does_Not_Travel_In_A_Url(&[Source_For(Path("src/client.rs"), Text(&text))]);
+
+        assert_eq!(findings.len(), 1, "{findings:?}");
+        assert_eq!(
+            findings.first().expect("asserted len 1 above").rule,
+            RuleId::New(A_SECRET_DOES_NOT_TRAVEL_IN_A_URL)
+        );
     }
 
-    #[test]
-    fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Not_Judge_Its_Own_Implementation_File()
+    /// `path` and `text` are both `&str`; without a distinct type per position a call site like
+    /// `Source_For("src/config.rs", "…")` reads as two interchangeable strings and a swap
+    /// compiles silently. These wrappers give each position a type the other cannot satisfy.
+    #[derive(Clone, Copy)]
+    struct Path<'a>(&'a str);
+
+    #[derive(Clone, Copy)]
+    struct Text<'a>(&'a str);
+
+    fn Source_For(path: Path<'_>, text: Text<'_>) -> SourceFile
     {
-        let source = Source("crates/rules/nomos-rules/src/checks/security_text.rs", "let key = \"AKIAABCDEFGHIJKLMNOP\";\n");
-
-        let findings = Check_A_Credential_Is_Not_Hardcoded_In_Source(&[source]);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    fn Source(path: &str, text: &str) -> SourceFile
-    {
-        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
+        let mut source = SourceFile::New(path.0, SubjectId::From_Digest(Content_Digest(path.0.as_bytes())), text.0);
+        source.language = crate::Recognized_Language_In_Tests(path.0);
+        return source;
     }
 }

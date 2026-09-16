@@ -147,7 +147,7 @@ const fn Rank(kind: ProblemKind) -> u8
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
     use nomos_analysis::{MemoryFactStore, Reader};
     use nomos_cap_requirement_trace::{Encode_Payload, Payload_Schema};
 
@@ -256,17 +256,19 @@ mod tests
     fn Offering() -> TestOffering
     {
         return test_support::Offering(
-            nomos_cap_requirement_trace::Capability_Contract(),
-            nomos_cap_requirement_trace::Capability(),
-            nomos_cap_requirement_trace::CONTRACT_VERSION,
-            PROVIDER,
-            nomos_cap_requirement_trace::Ceiling(),
-        );
+            OfferedProvider {
+                contract: nomos_cap_requirement_trace::Capability_Contract(),
+                capability: nomos_cap_requirement_trace::Capability(),
+                version: nomos_cap_requirement_trace::CONTRACT_VERSION,
+                provider: PROVIDER,
+                guarantee: nomos_cap_requirement_trace::Ceiling(),
+            },
+        ).expect("a fresh Registry holds neither this contract nor this provider");
     }
 
     fn Materialize(store: &mut MemoryFactStore, offer: &nomos_capability::ProviderOffer, payload: &RequirementTracePayload)
     {
         let bytes = Encode_Payload(payload);
-        test_support::Materialize(store, nomos_model::Subject_Of_Path(""), offer, InputDigest::Of(&[]), Payload_Schema(), bytes);
+        test_support::Materialize(store, FactToFile { subject: nomos_model::Subject_Of_Path(""), offer, semantic_inputs: InputDigest::Of(&[]), schema: Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 }

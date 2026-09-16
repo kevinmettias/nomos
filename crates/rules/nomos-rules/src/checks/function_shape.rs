@@ -25,7 +25,7 @@
 //! shared across `structure.rs`, matching this crate's own per-file convention (`Is_Go_File`
 //! already has three independent copies) until a real need for one shared copy shows up.
 
-use crate::{GO_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_limits_policy::Scope;
 use nomos_cap_syntax::{FUNCTION, Function_Arity, PayloadItem, SyntaxPayload};
@@ -33,10 +33,12 @@ use nomos_contracts::{Applicability, EvidenceClass, Finding, RuleId, SubjectId};
 
 mod function_arity_policy;
 mod function_arity_source;
+mod go_helpers_package_five_inputs;
 mod receiver_allowance;
 
 pub use function_arity_policy::FunctionArityPolicy;
 pub use function_arity_source::FunctionAritySource;
+pub use go_helpers_package_five_inputs::Check_Go_Helpers_Package_Five_Inputs;
 pub use receiver_allowance::ReceiverAllowance;
 
 /// The code-standards parameter-count rule id.
@@ -69,24 +71,64 @@ pub fn Check_Parameter_Count(
     );
 }
 
-/// Reports Go functions and methods that definitely exceed the value-parameter cap — a
-/// repository's own declared `nomos.cap.limits.policy` when it declares `go`'s own
-/// `parameter-count-max`, the repository-wide value or the prior hardcoded default
-/// otherwise.
-#[must_use]
-pub fn Check_Go_Helpers_Package_Five_Inputs(
-    sources: &[SourceFile],
-    facts: &mut dyn FactReader,
-) -> Vec<Finding>
+/// Resolves the numeric ceiling `key` must take: a repository's own declared `nomos.cap.
+/// limits.policy`, most-specific key first (`language`'s own override, then the
+/// repository-wide default), falling back to `default` when neither is declared.
+///
+/// `OD-CAPABILITY-004` and `OD-RULES-011` settle how an absent read is treated here,
+/// mirroring `checks::structure::Resolve_Limit` exactly: this capability is optional,
+/// every caller already has a complete answer without it, so `facts.Require` failing for
+/// any reason is exactly "no override" — never a `Finding`, never this capability's own
+/// `Applicability` surfacing anywhere.
+fn Resolve_Limit(facts: &mut dyn FactReader, language: Option<&str>, key: &str, default: u32) -> u32
 {
-    let max = Resolve_Limit(facts, Some(GO), PARAMETER_COUNT_MAX_KEY, MAX_VALUE_PARAMETERS);
-    return Check_Function_Arity_Policy(
-        sources,
-        facts,
-        FunctionArityPolicy::New(GO_HELPERS_PACKAGE_FIVE_INPUTS, max)
-            .For_Language(GO_LANGUAGE)
-            .Allow_One_Receiver_For_Qualified_Functions(),
+    let Some(payload) = Limits_Policy_Payload(facts)
+    else
+    {
+        return default;
+    };
+
+    if let Some(language) = language
+    {
+        let scope = Scope::Language(language.to_owned());
+        if let Some(value) = Scoped_Row_Value(&payload, &scope, key)
+        {
+            return value;
+        }
+    }
+
+    return Scoped_Row_Value(&payload, &Scope::Repository, key).unwrap_or(default);
+}
+
+/// Reads and parses this crate's own `nomos.cap.limits.policy` fact, collapsing every
+/// failure reason (the capability is unread, or its payload does not parse) into `None` —
+/// the caller's fallback-to-default is identical either way.
+fn Limits_Policy_Payload(facts: &mut dyn FactReader) -> Option<nomos_cap_limits_policy::LimitsPolicyPayload>
+{
+    let subject = nomos_model::Subject_Of_Path("");
+    let fact = facts
+        .Require(&nomos_cap_limits_policy::Capability(), &subject, InputDigest::Of(&[]), &Limits_Policy_Requirement())
+        .ok()?;
+    return nomos_cap_limits_policy::Parse_Payload(&fact.payload.bytes).ok();
+}
+
+/// This crate's own floor for `nomos.cap.limits.policy` — stated at the capability's own
+/// ceiling since there is only one real provider today and no weaker answer this crate
+/// could honestly still act on. Mirrors `checks::naming::Naming_Policy_Requirement` and
+/// `checks::structure::Limits_Policy_Requirement` exactly, for the identical capability.
+fn Limits_Policy_Requirement() -> nomos_capability::Requirement
+{
+    return nomos_capability::Requirement::New(
+        nomos_cap_limits_policy::Capability(),
+        nomos_cap_limits_policy::CONTRACT_VERSION,
+        nomos_cap_limits_policy::Ceiling(),
     );
+}
+
+/// The value of the first row in `payload` matching both `scope` and `key`, if one exists.
+fn Scoped_Row_Value(payload: &nomos_cap_limits_policy::LimitsPolicyPayload, scope: &Scope, key: &str) -> Option<u32>
+{
+    return payload.rows.iter().find(|row| return row.scope == *scope && row.key == key).map(|row| return row.value);
 }
 
 /// Reports functions that violate a caller-supplied arity policy.
@@ -201,66 +243,6 @@ fn Unread_As_Rule(mut finding: Finding, rule: &'static str) -> Finding
         .summary
         .replace("this file's naming could not be judged", "this file's parameter counts could not be judged");
     return finding;
-}
-
-/// This crate's own floor for `nomos.cap.limits.policy` — stated at the capability's own
-/// ceiling since there is only one real provider today and no weaker answer this crate
-/// could honestly still act on. Mirrors `checks::naming::Naming_Policy_Requirement` and
-/// `checks::structure::Limits_Policy_Requirement` exactly, for the identical capability.
-fn Limits_Policy_Requirement() -> nomos_capability::Requirement
-{
-    return nomos_capability::Requirement::New(
-        nomos_cap_limits_policy::Capability(),
-        nomos_cap_limits_policy::CONTRACT_VERSION,
-        nomos_cap_limits_policy::Ceiling(),
-    );
-}
-
-/// Resolves the numeric ceiling `key` must take: a repository's own declared `nomos.cap.
-/// limits.policy`, most-specific key first (`language`'s own override, then the
-/// repository-wide default), falling back to `default` when neither is declared.
-///
-/// `OD-CAPABILITY-004` and `OD-RULES-011` settle how an absent read is treated here,
-/// mirroring `checks::structure::Resolve_Limit` exactly: this capability is optional,
-/// every caller already has a complete answer without it, so `facts.Require` failing for
-/// any reason is exactly "no override" — never a `Finding`, never this capability's own
-/// `Applicability` surfacing anywhere.
-fn Resolve_Limit(facts: &mut dyn FactReader, language: Option<&str>, key: &str, default: u32) -> u32
-{
-    let Some(payload) = Limits_Policy_Payload(facts)
-    else
-    {
-        return default;
-    };
-
-    if let Some(language) = language
-    {
-        let scope = Scope::Language(language.to_owned());
-        if let Some(value) = Scoped_Row_Value(&payload, &scope, key)
-        {
-            return value;
-        }
-    }
-
-    return Scoped_Row_Value(&payload, &Scope::Repository, key).unwrap_or(default);
-}
-
-/// Reads and parses this crate's own `nomos.cap.limits.policy` fact, collapsing every
-/// failure reason (the capability is unread, or its payload does not parse) into `None` —
-/// the caller's fallback-to-default is identical either way.
-fn Limits_Policy_Payload(facts: &mut dyn FactReader) -> Option<nomos_cap_limits_policy::LimitsPolicyPayload>
-{
-    let subject = nomos_model::Subject_Of_Path("");
-    let fact = facts
-        .Require(&nomos_cap_limits_policy::Capability(), &subject, InputDigest::Of(&[]), &Limits_Policy_Requirement())
-        .ok()?;
-    return nomos_cap_limits_policy::Parse_Payload(&fact.payload.bytes).ok();
-}
-
-/// The value of the first row in `payload` matching both `scope` and `key`, if one exists.
-fn Scoped_Row_Value(payload: &nomos_cap_limits_policy::LimitsPolicyPayload, scope: &Scope, key: &str) -> Option<u32>
-{
-    return payload.rows.iter().find(|row| return row.scope == *scope && row.key == key).map(|row| return row.value);
 }
 
 #[cfg(test)]

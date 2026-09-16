@@ -183,7 +183,7 @@ fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &s
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
     use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
     use nomos_capability::ProviderOffer;
     use nomos_connector_coderabbit::ReviewFindingId;
@@ -222,7 +222,7 @@ mod tests
     fn Materialize_Review_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &FindingPayload)
     {
         let bytes = nomos_connector_coderabbit::Encode_Payload(payload);
-        test_support::Materialize(store, source.subject, offer, InputDigest::Of(&[]), nomos_connector_coderabbit::Payload_Schema(), bytes);
+        test_support::Materialize(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_connector_coderabbit::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 
     fn Sample_Payload() -> FindingPayload
@@ -274,7 +274,7 @@ mod tests
     {
         let source = Source_File("workspace");
         let TestOffering { mut store, registry, offer } = Offering();
-        test_support::Materialize(&mut store, source.subject, &offer, InputDigest::Of(&[]), nomos_contracts::SchemaId::New("nomos.wrong.schema.v1"), b"garbage".to_vec());
+        test_support::Materialize(&mut store, FactToFile { subject: source.subject, offer: &offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_contracts::SchemaId::New("nomos.wrong.schema.v1"), bytes: b"garbage".to_vec() }).expect("the fixture's store holds no fact under this key at a newer generation");
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Review_Findings(&[source], &mut reader);
@@ -301,11 +301,13 @@ mod tests
     fn Offering() -> TestOffering
     {
         return test_support::Offering(
-            nomos_connector_coderabbit::Capability_Contract(),
-            nomos_connector_coderabbit::Capability(),
-            nomos_connector_coderabbit::CONTRACT_VERSION,
-            PROVIDER,
-            Guarantee_At_Floor(),
-        );
+            OfferedProvider {
+                contract: nomos_connector_coderabbit::Capability_Contract(),
+                capability: nomos_connector_coderabbit::Capability(),
+                version: nomos_connector_coderabbit::CONTRACT_VERSION,
+                provider: PROVIDER,
+                guarantee: Guarantee_At_Floor(),
+            },
+        ).expect("a fresh Registry holds neither this contract nor this provider");
     }
 }

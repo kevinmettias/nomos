@@ -1,5 +1,6 @@
 use super::*;
-use crate::checks::test_support::{self, Test_Context, TestOffering};
+use crate::GO_LANGUAGE;
+use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
 use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
 use nomos_capability::ProviderOffer;
 use nomos_contracts::{Assurance, FactVariant, GateCategory, Guarantee, IncrementalGranularity};
@@ -214,12 +215,14 @@ fn Repository_And_Go_Rows(repository_max: u32, go_max: u32) -> Vec<nomos_cap_lim
 fn Limits_Offering() -> TestOffering
 {
     return test_support::Offering(
-        nomos_cap_limits_policy::Capability_Contract(),
-        nomos_cap_limits_policy::Capability(),
-        nomos_cap_limits_policy::CONTRACT_VERSION,
-        "nomos.test.function-shape.limits.provides",
-        nomos_cap_limits_policy::Ceiling(),
-    );
+        OfferedProvider {
+            contract: nomos_cap_limits_policy::Capability_Contract(),
+            capability: nomos_cap_limits_policy::Capability(),
+            version: nomos_cap_limits_policy::CONTRACT_VERSION,
+            provider: "nomos.test.function-shape.limits.provides",
+            guarantee: nomos_cap_limits_policy::Ceiling(),
+        },
+    ).expect("a fresh Registry holds neither this contract nor this provider");
 }
 
 fn Materialize_Limits_Fact(store: &mut MemoryFactStore, offer: &ProviderOffer, rows: Vec<nomos_cap_limits_policy::PolicyRow>)
@@ -227,12 +230,14 @@ fn Materialize_Limits_Fact(store: &mut MemoryFactStore, offer: &ProviderOffer, r
     let payload = nomos_cap_limits_policy::LimitsPolicyPayload { rows };
     test_support::Materialize(
         store,
-        nomos_model::Subject_Of_Path(""),
-        offer,
-        InputDigest::Of(&[]),
-        nomos_cap_limits_policy::Payload_Schema(),
-        nomos_cap_limits_policy::Encode_Payload(&payload),
-    );
+        FactToFile {
+            subject: nomos_model::Subject_Of_Path(""),
+            offer,
+            semantic_inputs: InputDigest::Of(&[]),
+            schema: nomos_cap_limits_policy::Payload_Schema(),
+            bytes: nomos_cap_limits_policy::Encode_Payload(&payload),
+        },
+    ).expect("the fixture's store holds no fact under this key at a newer generation");
 }
 
 fn Payload_From_Text(text: &str) -> SyntaxPayload
@@ -254,12 +259,14 @@ fn Offering_With_A_Five_Parameter_Build(source: &SourceFile) -> TestOffering
     let inputs = InputDigest::Of(&[source.text.as_bytes()]);
     test_support::Materialize(
         &mut store,
-        source.subject,
-        &offer,
-        inputs,
-        nomos_cap_syntax::Payload_Schema(),
-        FIVE_PARAMETER_BUILD_FACT.as_bytes().to_vec(),
-    );
+        FactToFile {
+            subject: source.subject,
+            offer: &offer,
+            semantic_inputs: inputs,
+            schema: nomos_cap_syntax::Payload_Schema(),
+            bytes: FIVE_PARAMETER_BUILD_FACT.as_bytes().to_vec(),
+        },
+    ).expect("the fixture's store holds no fact under this key at a newer generation");
 
     return TestOffering { store, registry, offer };
 }
@@ -288,12 +295,14 @@ fn Offering() -> TestOffering
 {
     let guarantee = Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
     return test_support::Offering(
-        nomos_cap_syntax::Capability_Contract(),
-        nomos_cap_syntax::Capability(),
-        nomos_cap_syntax::CONTRACT_VERSION,
-        "nomos.test.parameter-count.parses",
-        guarantee,
-    );
+        OfferedProvider {
+            contract: nomos_cap_syntax::Capability_Contract(),
+            capability: nomos_cap_syntax::Capability(),
+            version: nomos_cap_syntax::CONTRACT_VERSION,
+            provider: "nomos.test.parameter-count.parses",
+            guarantee,
+        },
+    ).expect("a fresh Registry holds neither this contract nor this provider");
 }
 
 fn Parameter_Count_Policy() -> FunctionArityPolicy

@@ -9,7 +9,16 @@
 //! Deliberately not a capability: nothing about whether these markers need a reason is a
 //! value a repository would configure -- it is always true, so the generalization is
 //! shared code, not shared configuration, the same distinction `OD-RULES-011`'s own
-//! naming/limits capabilities do not apply here.
+//! naming/limits capabilities do not apply here. All five rules share `Lines_Of`,
+//! `Comment_Text_Of`, `Has_Adjacent_Explanation` and `Finding_For_Line` below; two of them
+//! whose subject is a bare comment directive have been split into [`exclusion`] and
+//! [`markers`], each carrying the tests for its own rules.
+
+mod exclusion;
+mod markers;
+
+pub use exclusion::Check_An_Excluded_File_Says_Why;
+pub use markers::{Check_Suppression_Directives_Carry_A_Reason, Check_Workspace_Markers_Carry_A_Reason};
 
 use super::code_prefix::Code_Prefix;
 use crate::{GO_LANGUAGE, SourceFile};
@@ -155,186 +164,6 @@ fn Has_Empty_Skip_Call(code: CodeText<'_>, call: CallName<'_>) -> bool
     let after = &code[start.saturating_add(call.len())..];
     let close = after.find(')').unwrap_or(after.len());
     return after[..close].trim().is_empty();
-}
-
-/// Reports `//go:build ignore` with no adjacent comment explaining the exclusion.
-#[must_use]
-pub fn Check_An_Excluded_File_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-    for source in sources
-    {
-        if source.Is_Written_In(GO_LANGUAGE)
-        {
-            findings.extend(Build_Ignore_Findings_In(source));
-        }
-    }
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
-}
-
-fn Build_Ignore_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let lines = Lines_Of(source);
-    let mut findings = Vec::new();
-
-    for (index, line) in lines.iter().enumerate()
-    {
-        if line.trim() == "//go:build ignore" && !Has_Build_Ignore_Explanation(&lines, index)
-        {
-            let finding = Finding_For_Line(
-                source,
-                AN_EXCLUDED_FILE_SAYS_WHY,
-                Line_Number(index),
-                "excludes the file with `//go:build ignore` and no adjacent comment explaining why",
-            );
-            findings.push(finding);
-        }
-    }
-
-    return findings;
-}
-
-fn Has_Build_Ignore_Explanation(lines: &[&str], index: usize) -> bool
-{
-    let Is_Non_Empty_Comment = |maybe_index: Option<usize>| -> bool {
-        let Some(candidate) = maybe_index
-        else
-        {
-            return false;
-        };
-        return lines.get(candidate).is_some_and(|line| return Comment_Text_Of(line).is_some_and(|c| return !c.trim().is_empty()));
-    };
-
-    return Is_Non_Empty_Comment(index.checked_sub(1)) || Is_Non_Empty_Comment(index.checked_add(1));
-}
-
-/// Reports a bare `//nolint` or `//nolint:linter` with no trailing text after it.
-#[must_use]
-pub fn Check_Suppression_Directives_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-    for source in sources
-    {
-        if source.Is_Written_In(GO_LANGUAGE)
-        {
-            findings.extend(Nolint_Findings_In(source));
-        }
-    }
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
-}
-
-fn Nolint_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-
-    for (index, line) in source.text.lines().enumerate()
-    {
-        if Has_Nolint_Directive(line) && !Nolint_Has_Reason(line)
-        {
-            let finding = Finding_For_Line(
-                source,
-                SUPPRESSION_DIRECTIVES_CARRY_A_REASON,
-                Line_Number(index),
-                "carries `//nolint` with no trailing text explaining why",
-            );
-            findings.push(finding);
-        }
-    }
-
-    return findings;
-}
-
-fn Has_Nolint_Directive(line: &str) -> bool
-{
-    return line.contains("//nolint");
-}
-
-fn Nolint_Has_Reason(line: &str) -> bool
-{
-    let Some(start) = line.find("//nolint")
-    else
-    {
-        return false;
-    };
-
-    let mut rest = &line[start.saturating_add("//nolint".len())..];
-    if let Some(after_colon) = rest.strip_prefix(':')
-    {
-        let end = after_colon
-            .find(|character: char| return !(character.is_ascii_alphanumeric() || character == ',' || character == '_' || character == '-'))
-            .unwrap_or(after_colon.len());
-        rest = &after_colon[end..];
-    }
-
-    return !rest.trim().is_empty();
-}
-
-/// Reports a `// <marker>: allow[-<word>]` comment with no trailing reason.
-#[must_use]
-pub fn Check_Workspace_Markers_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-    for source in sources
-    {
-        if source.Is_Written_In(GO_LANGUAGE)
-        {
-            findings.extend(Workspace_Marker_Findings_In(source));
-        }
-    }
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
-}
-
-fn Workspace_Marker_Findings_In(source: &SourceFile) -> Vec<Finding>
-{
-    let mut findings = Vec::new();
-
-    for (index, line) in source.text.lines().enumerate()
-    {
-        if let Some(finding) = Workspace_Marker_Finding_For(source, index, line)
-        {
-            findings.push(finding);
-        }
-    }
-
-    return findings;
-}
-
-fn Workspace_Marker_Finding_For(source: &SourceFile, index: usize, line: &str) -> Option<Finding>
-{
-    let comment = Comment_Text_Of(line)?;
-    if !Is_Bare_Workspace_Marker(comment)
-    {
-        return None;
-    }
-
-    let finding = Finding_For_Line(
-        source,
-        WORKSPACE_MARKERS_CARRY_A_REASON,
-        Line_Number(index),
-        "carries a workspace opt-out marker with no trailing reason",
-    );
-    return Some(finding);
-}
-
-/// `// <marker>: allow` or `// <marker>: allow-<word>`, matched only as real comment
-/// syntax on the annotated line — a marker inside a string literal or elsewhere in the
-/// file is not this function's concern, since it is only ever handed real comment text.
-fn Is_Bare_Workspace_Marker(comment: &str) -> bool
-{
-    let Some((_marker, after_colon)) = comment.split_once(": allow")
-    else
-    {
-        return false;
-    };
-
-    let after_suffix = after_colon.strip_prefix('-').map_or(after_colon, |rest| {
-        return rest.find(char::is_whitespace).map_or("", |end| return &rest[end..]);
-    });
-
-    return after_suffix.trim().is_empty();
 }
 
 fn Lines_Of(source: &SourceFile) -> Vec<&str>

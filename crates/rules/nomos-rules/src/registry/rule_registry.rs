@@ -57,11 +57,18 @@ mod tests
 {
     use super::*;
 
+    /// The contract-record revision every offer in these tests is written against — the
+    /// fixture's own declaration, named so the reader is not left wondering whether the
+    /// `2` is meant to match something elsewhere.
+    const FIXTURE_CONTRACT_RECORD_VERSION: u32 = 2;
+
     #[test]
     fn Test_New_Should_Produce_A_Registry_Whose_Offered_Rule_Is_Findable_By_Its_Id()
     {
         let mut registry = RuleRegistry::New();
-        registry.Offer(Rule_Offer("completeness-mirror")).expect("first offer");
+        registry
+            .Offer(Rule_Offer("completeness-mirror"))
+            .expect("RuleRegistry::New returns an empty registry, so this id is not yet in it");
 
         let found = registry.Offered(&RuleId::New("completeness-mirror"));
 
@@ -72,7 +79,9 @@ mod tests
     fn Test_A_Second_Offer_For_One_Rule_Should_Be_Refused()
     {
         let mut registry = RuleRegistry::New();
-        registry.Offer(Rule_Offer("completeness-mirror")).expect("first offer");
+        registry
+            .Offer(Rule_Offer("completeness-mirror"))
+            .expect("RuleRegistry::New returns an empty registry, so this id is not yet in it");
 
         let refused = registry.Offer(Rule_Offer("completeness-mirror"));
 
@@ -95,8 +104,12 @@ mod tests
     fn Test_Offers_Should_List_Every_Registered_Rule()
     {
         let mut registry = RuleRegistry::New();
-        registry.Offer(Rule_Offer("completeness-mirror")).expect("first offer");
-        registry.Offer(Rule_Offer("dependency-direction")).expect("second offer");
+        registry
+            .Offer(Rule_Offer("completeness-mirror"))
+            .expect("RuleRegistry::New returns an empty registry, so this id is not yet in it");
+        registry
+            .Offer(Rule_Offer("dependency-direction"))
+            .expect("only completeness-mirror has been offered so far, not this id");
 
         let listed: Vec<RuleOffer> = registry.Offers().cloned().collect();
 
@@ -108,7 +121,7 @@ mod tests
         return RuleOffer {
             rule: RuleId::New(id),
             contract_record: "D-134".to_owned(),
-            contract_record_version: 2,
+            contract_record_version: FIXTURE_CONTRACT_RECORD_VERSION,
         };
     }
 }

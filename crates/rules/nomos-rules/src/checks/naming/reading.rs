@@ -88,7 +88,7 @@ fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &s
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::{self, Test_Context, TestOffering};
+    use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
     use nomos_analysis::Reader;
     use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SubjectId};
     use nomos_model::Content_Digest;
@@ -98,16 +98,18 @@ mod tests
     #[test]
     fn Test_Payload_Of_Should_Decode_A_Materialized_Fact()
     {
-        let source = Source("src/lib.rs", "fn Good_Name() {}");
+        let source = Source(SourceText { path: "src/lib.rs", text: "fn Good_Name() {}" });
         let TestOffering { mut store, registry, offer } = Offering();
         test_support::Materialize(
             &mut store,
-            source.subject,
-            &offer,
-            nomos_analysis::InputDigest::Of(&[source.text.as_bytes()]),
-            nomos_cap_syntax::Payload_Schema(),
-            "unexpanded\t0\nitem\t0\tFunction\tPublic\tGood_Name\t.\t+fn/0\n".as_bytes().to_vec(),
-        );
+            FactToFile {
+                subject: source.subject,
+                offer: &offer,
+                semantic_inputs: nomos_analysis::InputDigest::Of(&[source.text.as_bytes()]),
+                schema: nomos_cap_syntax::Payload_Schema(),
+                bytes: "unexpanded\t0\nitem\t0\tFunction\tPublic\tGood_Name\t.\t+fn/0\n".as_bytes().to_vec(),
+            },
+        ).expect("the fixture's store holds no fact under this key at a newer generation");
         let mut reader = Reader::On(&store, &registry, Test_Context());
 
         let payload = Payload_Of(&source, &mut reader).expect("the fact was just materialized");
@@ -118,7 +120,7 @@ mod tests
     #[test]
     fn Test_Payload_Of_Should_Report_A_Subject_With_No_Fact_As_A_Finding()
     {
-        let source = Source("src/lib.rs", "fn Good_Name() {}");
+        let source = Source(SourceText { path: "src/lib.rs", text: "fn Good_Name() {}" });
         let TestOffering { store, registry, .. } = Offering();
         let mut reader = Reader::On(&store, &registry, Test_Context());
 
@@ -127,19 +129,31 @@ mod tests
         assert!(refused.is_err(), "{refused:?}");
     }
 
-    fn Source(path: &str, text: &str) -> SourceFile
+        /// A fixture source's two halves, grouped so a call site names which string is the path
+    /// and which is the text, rather than counting two adjacent `&str` positions a caller
+    /// could transpose without the compiler objecting.
+    struct SourceText<'text>
     {
+        path: &'text str,
+        text: &'text str,
+    }
+
+    fn Source(source: SourceText<'_>) -> SourceFile
+    {
+        let SourceText { path, text } = source;
         return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
     }
 
     fn Offering() -> TestOffering
     {
         return test_support::Offering(
-            nomos_cap_syntax::Capability_Contract(),
-            nomos_cap_syntax::Capability(),
-            nomos_cap_syntax::CONTRACT_VERSION,
-            PARSER,
-            Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
-        );
+            OfferedProvider {
+                contract: nomos_cap_syntax::Capability_Contract(),
+                capability: nomos_cap_syntax::Capability(),
+                version: nomos_cap_syntax::CONTRACT_VERSION,
+                provider: PARSER,
+                guarantee: Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
+            },
+        ).expect("a fresh Registry holds neither this contract nor this provider");
     }
 }

@@ -456,128 +456,34 @@ fn Marker_Reason_In(line: &str) -> Option<&str>
 }
 
 #[cfg(test)]
-mod tests
+#[path = "enum_shape/tests.rs"]
+mod tests;
+
+/// Narrow, file-local proof for this file's own public function, addressed by name.
+///
+/// [`tests`] above is `enum_shape/tests.rs`, a separate physical file whose behavioural suite
+/// this does not repeat or replace. `check-test-coverage`'s Rust front end keys a test's
+/// companion unit off the literal file it is textually written in, so a test living in that
+/// separate file can never address a function declared here, however it is named — this module
+/// gives [`Check_Named_Fields_Over_Positional_Variant_Payloads`] the one-file address the check
+/// reads.
+#[cfg(test)]
+mod self_tests
 {
     use super::*;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
     #[test]
-    fn Test_Check_Named_Fields_Over_Positional_Variant_Payloads_Should_Report_A_Two_Member_Tuple_Variant()
+    fn Test_Check_Named_Fields_Over_Positional_Variant_Payloads_Should_Report_Its_Own_Rule()
     {
-        let source = Source("src/shape.rs", "enum Shape {\n    Point(f32, f32),\n}\n");
+        let path = "src/shape.rs";
+        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), "enum Shape {\n Point(f32, f32),\n}\n");
+        source.language = crate::Recognized_Language_In_Tests(path);
+
         let findings = Check_Named_Fields_Over_Positional_Variant_Payloads(&[source]);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS));
-    }
-
-    #[test]
-    fn Test_Check_Named_Fields_Over_Positional_Variant_Payloads_Should_Ignore_A_Single_Member_Newtype_Variant()
-    {
-        let source = Source("src/shape.rs", "enum Maybe {\n    Some(u32),\n}\n");
-        let findings = Check_Named_Fields_Over_Positional_Variant_Payloads(&[source]);
-
-        assert!(findings.is_empty(), "a single member has no ordering to get wrong: {findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Named_Fields_Over_Positional_Variant_Payloads_Should_Ignore_A_Struct_Form_Variant()
-    {
-        let source = Source("src/shape.rs", "enum Shape {\n    Point { x: f32, y: f32 },\n}\n");
-        let findings = Check_Named_Fields_Over_Positional_Variant_Payloads(&[source]);
-
-        assert!(findings.is_empty(), "the fields are already named: {findings:?}");
-    }
-
-    /// K&R style: the opening brace shares the header's own line, the body on separate
-    /// lines below it — distinct from the Allman case right below, where the brace itself
-    /// is on its own, later line.
-    #[test]
-    fn Test_Check_Named_Fields_Over_Positional_Variant_Payloads_Should_Report_Under_A_K_And_R_Brace_Enum()
-    {
-        let source = Source("src/shape.rs", "enum Shape {\n    Point(f32, f32),\n}\n");
-        let findings = Check_Named_Fields_Over_Positional_Variant_Payloads(&[source]);
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-    }
-
-    /// The corpus lesson itself: `rustVariantScan`'s own doc comment records a first cut
-    /// that assumed the brace sits on the header's own line, and silently found zero
-    /// across a real Allman-brace corpus.
-    #[test]
-    fn Test_Check_Named_Fields_Over_Positional_Variant_Payloads_Should_Report_Under_An_Allman_Brace_Enum()
-    {
-        let source = Source("src/shape.rs", "enum Shape\n{\n    Point(f32, f32),\n}\n");
-        let findings = Check_Named_Fields_Over_Positional_Variant_Payloads(&[source]);
-
-        assert_eq!(findings.len(), 1, "an Allman-style opening brace must still open the enum: {findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Named_Fields_Over_Positional_Variant_Payloads_Should_Split_A_Generic_Member_As_One()
-    {
-        let source = Source("src/shape.rs", "enum Cache {\n    Load(HashMap<K, V>, u32),\n}\n");
-        let findings = Check_Named_Fields_Over_Positional_Variant_Payloads(&[source]);
-
-        assert_eq!(findings.len(), 1, "a two-parameter generic plus one more member is a pair, not a phantom triple: {findings:?}");
-    }
-
-    #[test]
-    fn Test_Check_Named_Fields_Over_Positional_Variant_Payloads_Should_Name_A_Repeated_Type()
-    {
-        let source = Source("src/shape.rs", "enum Shape {\n    Point(f32, f32),\n}\n");
-        let findings = Check_Named_Fields_Over_Positional_Variant_Payloads(&[source]);
-
-        let summary = &findings.first().expect("asserted by an earlier test").summary;
-        assert!(summary.contains("repeated type"), "{summary}");
-    }
-
-    #[test]
-    fn Test_Check_Named_Fields_Over_Positional_Variant_Payloads_Should_Not_Name_A_Repeated_Type_For_Distinct_Members()
-    {
-        let source = Source("src/shape.rs", "enum Error {\n    Bad(u32, String),\n}\n");
-        let findings = Check_Named_Fields_Over_Positional_Variant_Payloads(&[source]);
-
-        let summary = &findings.first().expect("distinct-typed members still fire").summary;
-        assert!(!summary.contains("repeated type"), "{summary}");
-    }
-
-    #[test]
-    fn Test_Check_Named_Fields_Over_Positional_Variant_Payloads_Should_Accept_A_Marker_Reason_Above()
-    {
-        let source = Source(
-            "src/shape.rs",
-            "enum Shape {\n    // tuple-variant: allow: kept positional for a stable FFI layout\n    Point(f32, f32),\n}\n",
-        );
-        let findings = Check_Named_Fields_Over_Positional_Variant_Payloads(&[source]);
-
-        assert!(findings.is_empty(), "{findings:?}");
-    }
-
-    #[test]
-    fn Test_Enum_Header_Name_Should_Require_A_Word_Boundary()
-    {
-        assert_eq!(Enum_Header_Name("enum Shape"), Some("Shape"));
-        assert_eq!(Enum_Header_Name("frozenum Shape"), None, "enum must be a whole word");
-    }
-
-    #[test]
-    fn Test_Tuple_Variant_Match_Should_Reject_A_Payload_With_A_Nested_Unbalanced_Paren()
-    {
-        assert_eq!(Tuple_Variant_Match("Bad((u32, String))"), None);
-    }
-
-    #[test]
-    fn Test_Variant_Members_Should_Return_Nothing_For_An_Empty_Payload()
-    {
-        assert_eq!(Variant_Members(""), Vec::<String>::new());
-    }
-
-    fn Source(path: &str, text: &str) -> SourceFile
-    {
-        let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
-        source.language = crate::Recognized_Language_In_Tests(path);
-        return source;
     }
 }

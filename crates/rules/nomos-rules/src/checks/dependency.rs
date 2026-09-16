@@ -151,7 +151,7 @@ fn Judged(
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::{self, Test_Context};
+    use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context};
     use nomos_cap_architecture::ArchitecturePayload;
     use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
     use nomos_capability::{ProviderOffer, Registry};
@@ -289,12 +289,14 @@ mod tests
             let bytes = nomos_cap_architecture::Encode_Payload(declared);
             test_support::Materialize(
                 &mut self.store,
-                nomos_model::Subject_Of_Path(""),
-                &self.architecture.clone(),
-                InputDigest::Of(&[]),
-                nomos_cap_architecture::Payload_Schema(),
-                bytes,
-            );
+                FactToFile {
+                    subject: nomos_model::Subject_Of_Path(""),
+                    offer: &self.architecture.clone(),
+                    semantic_inputs: InputDigest::Of(&[]),
+                    schema: nomos_cap_architecture::Payload_Schema(),
+                    bytes,
+                },
+            ).expect("the fixture's store holds no fact under this key at a newer generation");
         }
 
         /// Files one member's own dependency edges.
@@ -303,24 +305,28 @@ mod tests
             let bytes = nomos_cap_dependency::Encode_Payload(payload);
             test_support::Materialize(
                 &mut self.store,
-                source.subject,
-                &self.dependency.clone(),
-                InputDigest::Of(&[]),
-                nomos_cap_dependency::Payload_Schema(),
-                bytes,
-            );
+                FactToFile {
+                    subject: source.subject,
+                    offer: &self.dependency.clone(),
+                    semantic_inputs: InputDigest::Of(&[]),
+                    schema: nomos_cap_dependency::Payload_Schema(),
+                    bytes,
+                },
+            ).expect("the fixture's store holds no fact under this key at a newer generation");
         }
     }
 
     fn Fixture() -> Fixture
     {
         let mut offering = test_support::Offering(
-            nomos_cap_dependency::Capability_Contract(),
-            nomos_cap_dependency::Capability(),
-            nomos_cap_dependency::CONTRACT_VERSION,
-            DEPENDENCY_PROVIDER,
-            reading::Dependency_Requirement().minimum,
-        );
+            OfferedProvider {
+                contract: nomos_cap_dependency::Capability_Contract(),
+                capability: nomos_cap_dependency::Capability(),
+                version: nomos_cap_dependency::CONTRACT_VERSION,
+                provider: DEPENDENCY_PROVIDER,
+                guarantee: reading::Dependency_Requirement().minimum,
+            },
+        ).expect("a fresh Registry holds neither this contract nor this provider");
         let architecture = ProviderOffer {
             provider: ProviderId::New(ARCHITECTURE_PROVIDER),
             capability: nomos_cap_architecture::Capability(),
