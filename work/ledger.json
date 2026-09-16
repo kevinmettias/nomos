@@ -80505,7 +80505,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -80517,7 +80517,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "idden by this item's done_when, so this line carries that reason instead.\r\n      facade-surface              crates/orchestration/nomos-spec-orchestration/src/spec_outcome/commit_answer/commit_refusal.rs:5\r\n            `pub use error::Error as CommitRefusalError;`. Same shape, same reason and same correction as corpus.rs:39 above: the declaration site is spec_outcome/commit_answer/commit_refusal/error.rs, inside this territory, so the first remedy is blocked by the naming rules rather than by a consumer. Committing the declaration to CommitRefusalError would leave error.rs declaring a public type it is not named after (file-name-matches-declared-type), and renaming the file to commit_refusal_error.rs to match would repeat its parent folder commit_refusal/, which is check-tree-legibility. The alias is what lets error.rs keep the name its file gives it while the boundary hands out the qualified name, which the crate root re-exports at lib.rs:110. The marker remedy is forbidden by this item's done_when. Waived by @claude-p20-campaign; declared because waived counts as outstanding.\r\n      facade-surface              crates/orchestration/nomos-spec-orchestration/src/spec_outcome/commit_answer/commit_refusal.rs:7\r\n            `pub use kind::Kind as CommitRefusalKind;`. The identical case as the line above, one module over, and resolved the same way: the declaration is spec_outcome/commit_answer/commit_refusal/kind.rs, inside this territory, so the first remedy is not blocked by a consumer but by the pair of naming rules -- CommitRefusalKind in kind.rs would break file-name-matches-declared-type, and kind.rs renamed to commit_refusal_kind.rs would repeat the folder commit_refusal/ and break tree-legibility. Kind is the right name inside the module; CommitRefusalKind is the right name at the boundary and is what lib.rs:110 re-exports. Waived by @claude-p20-campaign; declared because waived counts as outstanding, and the marker remedy is forbidden by this item's done_when.\r\n",
+        "verified_at": 1789558949,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a825c5128a36227a196c1f3204c6b4af176f5353"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
