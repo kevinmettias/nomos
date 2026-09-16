@@ -165,7 +165,7 @@ mod tests
                      (node_id, kind, authority, representation, title, deleted_at, suite_uid)
                      VALUES ('N1', 'requirement', 'canonical', 'record', 'Node One', NULL, NULL);",
             )
-            .expect("the node this test then collides with is inserted");
+            .expect("the store's schema accepts the node row this test then collides with");
         let bundle = Bundle::New(1, vec![A_Node()])
             .expect("a record of strings, integers and enums serialises");
 

@@ -120,7 +120,7 @@ mod tests
         let mut records = Vec::new();
 
         Collect_Submissions(store.Connection(), &mut records)
-            .expect("the Fixture seeds every table this collector reads");
+            .expect("the store's schema carries every table and column this collector's SQL names");
 
         assert_eq!(
             records,
@@ -144,7 +144,7 @@ mod tests
         let mut records = Vec::new();
 
         Submission_Values(store.Connection(), &mut records)
-            .expect("the Fixture seeds every table this collector reads");
+            .expect("the store's schema carries every table and column this collector's SQL names");
 
         assert_eq!(
             records,
@@ -169,7 +169,8 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Submission_Gaps(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
+        Submission_Gaps(store.Connection(), &mut records)
+            .expect("the store's schema carries every table and column this collector's SQL names");
 
         assert_eq!(
             records,

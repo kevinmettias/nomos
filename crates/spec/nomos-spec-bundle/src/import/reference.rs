@@ -259,10 +259,10 @@ mod tests
 
         let found = store
             .In_Transaction(|transaction| Optional_Suite_Uid(transaction, Some("nomos")))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("the Fixture seeds the suite nomos");
         let absent = store
             .In_Transaction(|transaction| Optional_Suite_Uid(transaction, None))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("a transaction over the in-memory store opens and commits");
 
         assert_eq!(found, Some(1));
         assert_eq!(absent, None);
@@ -301,7 +301,7 @@ mod tests
 
         let uid = store
             .In_Transaction(|transaction| Blob_Uid(transaction, "sha256:aa"))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("the Fixture seeds the blob sha256:aa");
 
         assert_eq!(uid, 1);
     }
@@ -313,7 +313,7 @@ mod tests
 
         let uid = store
             .In_Transaction(|transaction| Document_Uid(transaction, &A_Document_Ref()))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("the Fixture seeds doc.md at revision v1");
 
         assert_eq!(uid, 1);
     }
@@ -325,7 +325,7 @@ mod tests
 
         let uid = store
             .In_Transaction(|transaction| Node_Uid(transaction, "N1"))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("the Fixture seeds the node N1");
 
         assert_eq!(uid, 1);
     }
@@ -337,10 +337,10 @@ mod tests
 
         let found = store
             .In_Transaction(|transaction| Optional_Node_Uid(transaction, Some("N1")))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("the Fixture seeds the node N1");
         let absent = store
             .In_Transaction(|transaction| Optional_Node_Uid(transaction, None))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("a transaction over the in-memory store opens and commits");
 
         assert_eq!(found, Some(1));
         assert_eq!(absent, None);
@@ -353,10 +353,10 @@ mod tests
 
         let found = store
             .In_Transaction(|transaction| Optional_Statement_Uid(transaction, Some("STMT-1")))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("the Fixture seeds the statement STMT-1");
         let absent = store
             .In_Transaction(|transaction| Optional_Statement_Uid(transaction, None))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("a transaction over the in-memory store opens and commits");
 
         assert_eq!(found, Some(1));
         assert_eq!(absent, None);
@@ -369,7 +369,7 @@ mod tests
 
         let uid = store
             .In_Transaction(|transaction| Block_Uid(transaction, &An_Ordinal_Ref()))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("the Fixture seeds the block at ordinal 1 in doc.md");
 
         assert_eq!(uid, 1);
     }
@@ -382,10 +382,10 @@ mod tests
 
         let found = store
             .In_Transaction(|transaction| Optional_Table_Row_Uid(transaction, Some(&row)))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("the Fixture seeds the table row at ordinal 1 in doc.md's first block");
         let absent = store
             .In_Transaction(|transaction| Optional_Table_Row_Uid(transaction, None))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("a transaction over the in-memory store opens and commits");
 
         assert_eq!(found, Some(1));
         assert_eq!(absent, None);
@@ -410,7 +410,7 @@ mod tests
 
         let uid = store
             .In_Transaction(|transaction| Submission_Uid(transaction, "N1"))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("the Fixture files a submission under the node N1");
 
         assert_eq!(uid, 1);
     }
@@ -426,10 +426,10 @@ mod tests
 
         let found = store
             .In_Transaction(|transaction| lookup(transaction, Some(&reference)))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("the Fixture seeds both the heading and the block at ordinal 1 in doc.md");
         let absent = store
             .In_Transaction(|transaction| lookup(transaction, None))
-            .expect("the Fixture holds the row this lookup names");
+            .expect("a transaction over the in-memory store opens and commits");
 
         assert_eq!(found, Some(1));
         assert_eq!(absent, None);

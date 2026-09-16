@@ -47,14 +47,14 @@ mod tests
     {
         let mut projection = One_Section_Projection();
         let markdown = Render_Projection(&projection)
-            .expect("the projection's section holds the one item the renderer walks");
+            .expect("the markdown writer builds its string without a fallible step");
 
         assert!(markdown.contains("# One"), "{markdown}");
         assert!(markdown.contains("## Nodes"), "{markdown}");
 
         projection.format = Format::Json;
         let json = Render_Projection(&projection)
-            .expect("the projection's section holds the one item the renderer walks");
+            .expect("the section's names and values serialise as JSON");
 
         assert!(json.contains("\"title\": \"One\""), "{json}");
     }

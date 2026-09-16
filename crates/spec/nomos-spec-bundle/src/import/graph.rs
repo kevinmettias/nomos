@@ -45,14 +45,14 @@ mod tests
         .expect("a record of strings, integers and enums serialises");
 
         store.In_Transaction(|transaction| Insert_Suites(transaction, &bundle))
-            .expect("the Fixture holds every row these references name");
+            .expect("the store's schema accepts the suite row this bundle carries");
 
         let row: (String, String, i64) = store
             .Connection()
             .query_row("SELECT suite_id, title, authority_root FROM suites", [], |row| {
                 return Ok((row.get(0)?, row.get(1)?, row.get(AUTHORITY_ROOT_COLUMN)?));
             })
-            .expect("the table holds only the rows this test placed");
+            .expect("the insert placed the one suite row this query reads");
         assert_eq!(row, ("nomos".to_owned(), "The Nomos Specification".to_owned(), 1));
     }
 
@@ -74,12 +74,12 @@ mod tests
         )
         .expect("a record of strings, integers and enums serialises");
 
-        store.In_Transaction(|transaction| Insert_Nodes(transaction, &bundle)).expect("the Fixture holds every row these references name");
+        store.In_Transaction(|transaction| Insert_Nodes(transaction, &bundle)).expect("the bundle's node names no suite, so the insert resolves nothing");
 
         let kind: String = store
             .Connection()
             .query_row("SELECT kind FROM nodes WHERE node_id = 'N3'", [], |row| row.get(0))
-            .expect("the table holds only the rows this test placed");
+            .expect("the insert placed the node row this query names");
         assert_eq!(kind, "requirement");
     }
 
@@ -96,7 +96,7 @@ mod tests
         )
         .expect("a record of strings, integers and enums serialises");
 
-        store.In_Transaction(|transaction| Insert_Node_Aliases(transaction, &bundle)).expect("the Fixture holds every row these references name");
+        store.In_Transaction(|transaction| Insert_Node_Aliases(transaction, &bundle)).expect("the Fixture seeds the node N1 this alias names");
 
         let node_id: String = store
             .Connection()
@@ -106,7 +106,7 @@ mod tests
                 [],
                 |row| row.get(0),
             )
-            .expect("the table holds only the rows this test placed");
+            .expect("the insert placed the alias row and the Fixture seeded the node it joins");
         assert_eq!(node_id, "N1");
     }
 

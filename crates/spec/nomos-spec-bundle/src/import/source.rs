@@ -224,14 +224,14 @@ mod tests
 
         store
             .In_Transaction(|transaction| Insert_Blobs(transaction, &bundle))
-            .expect("the Fixture holds every row these references name");
+            .expect("the blob's content matches the digest and length it declares");
 
         let byte_length: i64 = store
             .Connection()
             .query_row("SELECT byte_length FROM blobs WHERE sha256 = ?1", [&digest], |row| {
                 row.get(0)
             })
-            .expect("the table holds only the rows this test placed");
+            .expect("the insert placed the blob row this query names");
         assert_eq!(byte_length, FIXTURE_BLOB_BYTE_LENGTH);
     }
 
@@ -267,14 +267,14 @@ mod tests
 
         store
             .In_Transaction(|transaction| Insert_Source_Documents(transaction, &bundle))
-            .expect("the Fixture holds every row these references name");
+            .expect("the Fixture seeds the blob this document declares");
 
         let revision: String = store
             .Connection()
             .query_row("SELECT revision FROM source_documents WHERE path = 'other.md'", [], |row| {
                 row.get(0)
             })
-            .expect("the table holds only the rows this test placed");
+            .expect("the insert placed the document row this query names");
         assert_eq!(revision, "v2");
     }
 

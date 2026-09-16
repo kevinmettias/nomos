@@ -37,7 +37,7 @@ mod tests
         );
 
         let items = Gather_Suites(store.Connection(), &Filter::default())
-            .expect("the store holds only the rows this test seeded");
+            .expect("the store's schema carries every table and column this reader's SQL names");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -59,7 +59,7 @@ mod tests
             .expect("the store accepts the document this test gives it");
 
         let items = Gather_Documents(store.Connection(), &Filter::default())
-            .expect("the store holds only the rows this test seeded");
+            .expect("the store's schema carries every table and column this reader's SQL names");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -88,7 +88,7 @@ mod tests
             .expect("the batch is the SQL literal this test declares");
 
         let items = Gather_Headings(store.Connection(), &Filter::default())
-            .expect("the store holds only the rows this test seeded");
+            .expect("the store's schema carries every table and column this reader's SQL names");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -109,7 +109,7 @@ mod tests
             .expect("the store accepts the block this test gives it");
 
         let items = Gather_Blocks(store.Connection(), &Filter::default())
-            .expect("the store holds only the rows this test seeded");
+            .expect("the store's schema carries every table and column this reader's SQL names");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -139,7 +139,7 @@ mod tests
             ..Filter::default()
         };
         let items = Gather_Rows(store.Connection(), &filter)
-            .expect("the store holds only the rows this test seeded");
+            .expect("the store's schema carries every table and column this reader's SQL names");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -159,7 +159,7 @@ mod tests
         );
 
         let items = Gather_Nodes(store.Connection(), &Filter::default())
-            .expect("the store holds only the rows this test seeded");
+            .expect("the store's schema carries every table and column this reader's SQL names");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -181,7 +181,7 @@ mod tests
         );
 
         let items = Gather_Statements(store.Connection(), &Filter::default())
-            .expect("the store holds only the rows this test seeded");
+            .expect("the store's schema carries every table and column this reader's SQL names");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -210,7 +210,7 @@ mod tests
         );
 
         let items = Gather_Relations(store.Connection(), &Filter::default())
-            .expect("the store holds only the rows this test seeded");
+            .expect("the store's schema carries every table and column this reader's SQL names");
         let relation = The_One_Item(&items);
 
         assert_eq!(relation.Field("from"), Some("CDM-ONE"));
@@ -229,7 +229,7 @@ mod tests
         );
 
         let items = Gather_Lineage(store.Connection(), &Filter::default())
-            .expect("the store holds only the rows this test seeded");
+            .expect("the store's schema carries every table and column this reader's SQL names");
         let lineage = The_One_Item(&items);
 
         assert_eq!(lineage.Field("disposition"), Some("preserved-verbatim"));
@@ -253,7 +253,7 @@ mod tests
                 let mut columns = Columns::Of(row);
                 return Cited_Source(&mut columns);
             })
-            .expect("the table holds only the row the batch inserted");
+            .expect("the batch inserted the one row this query reads");
 
         assert_eq!(cited, "volumes/one.md#3:2");
     }
@@ -267,7 +267,7 @@ mod tests
         );
 
         let items = Gather_Omissions(store.Connection(), &Filter::default())
-            .expect("the store holds only the rows this test seeded");
+            .expect("the store's schema carries every table and column this reader's SQL names");
         let omission = The_One_Item(&items);
 
         assert_eq!(omission.Field("reason"), Some("superseded"));

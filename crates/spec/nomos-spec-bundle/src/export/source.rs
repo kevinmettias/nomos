@@ -217,7 +217,8 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Collect_Blobs(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
+        Collect_Blobs(store.Connection(), &mut records)
+            .expect("the store's schema carries every table and column this collector's SQL names");
 
         assert_eq!(
             records,
@@ -236,7 +237,8 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Source_Documents(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
+        Source_Documents(store.Connection(), &mut records)
+            .expect("the store's schema carries every table and column this collector's SQL names");
 
         assert_eq!(
             records,
@@ -254,7 +256,8 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Source_Headings(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
+        Source_Headings(store.Connection(), &mut records)
+            .expect("the store's schema carries every table and column this collector's SQL names");
 
         assert_eq!(
             records,
@@ -276,7 +279,8 @@ mod tests
         let store = Fixture();
         let mut records = Vec::new();
 
-        Source_Blocks(store.Connection(), &mut records).expect("the Fixture seeds every table this collector reads");
+        Source_Blocks(store.Connection(), &mut records)
+            .expect("the store's schema carries every table and column this collector's SQL names");
 
         assert_eq!(
             records,

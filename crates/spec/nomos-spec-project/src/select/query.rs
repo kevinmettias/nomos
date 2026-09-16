@@ -308,7 +308,7 @@ mod tests
                 let text: String = row.get(0)?;
                 return Ok(Item::Of(&text));
             })
-            .expect("the table holds only the rows the batch inserted");
+            .expect("the batch created the table this query prepares against");
 
         assert_eq!(items.len(), ROWS_THE_BATCH_INSERTS);
     }
@@ -327,7 +327,7 @@ mod tests
             .expect("the batch is the SQL literal this test declares");
 
         let items = Gather_Items(store.Connection(), Content::Suites, &Filter::default())
-            .expect("the store holds only the row this test inserted");
+            .expect("the store's schema carries every table and column this reader's SQL names");
 
         assert_eq!(items.len(), 1);
         assert_eq!(
@@ -349,7 +349,7 @@ mod tests
             .query_row("SELECT a, b FROM t", [], |row| {
                 return Columns::Of(row).Text();
             })
-            .expect("the table holds only the rows the batch inserted");
+            .expect("the batch inserted the one row this query reads");
 
         assert_eq!(first, "first");
     }
@@ -367,7 +367,7 @@ mod tests
             .query_row("SELECT a FROM t", [], |row| {
                 return Columns::Of(row).Text();
             })
-            .expect("the table holds only the rows the batch inserted");
+            .expect("the batch inserted the one row this query reads");
 
         assert_eq!(text, "");
     }
@@ -388,7 +388,7 @@ mod tests
                 let second: i64 = columns.Next()?;
                 return Ok((first, second));
             })
-            .expect("the table holds only the rows the batch inserted");
+            .expect("the batch inserted the one row this query reads");
 
         assert_eq!((first, second), (VALUE_IN_COLUMN_A, VALUE_IN_COLUMN_B));
     }

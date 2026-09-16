@@ -222,7 +222,7 @@ mod tests
         let profile = One_Section_Profile();
 
         let freshness = Check_Freshness(&store, &profile, None, None)
-            .expect("the freshness check reads only what the store holds");
+            .expect("with no body or sidecar the check has nothing to compare");
 
         assert!(freshness.absent);
     }
@@ -238,7 +238,7 @@ mod tests
             output.Sidecar().expect("a stamp of strings, integers and enums serialises");
 
         let freshness = Check_Freshness(&store, &profile, Some(&output.body), Some(&sidecar))
-            .expect("the freshness check reads only what the store holds");
+            .expect("the sidecar is this build's stamp and the store fills each named section");
 
         assert!(!freshness.absent);
         assert!(freshness.stale.is_none());
