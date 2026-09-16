@@ -80865,7 +80865,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -80877,7 +80877,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-crates-held-by-p111"
+        ],
+        "exit_code": 0,
+        "output_tail": "ness.\r\n      tree-legibility             crates/substrate/nomos-ledger/src/item/item_kind.rs:0\r\n            `item_kind.rs` repeats `item/` because it declares `pub enum ItemKind`, which is the shape xvpe's `type-name-wins-over-folder-stutter` (MUST, committed 2026-09-09) rules correct and calls this finding non-actionable noise for. Dropping the prefix reopens the mismatch check-file-name binds and restores the facade alias this item removed. Header records the instrument's staleness.\r\n      tree-legibility             crates/substrate/nomos-ledger/src/item/item_origin.rs:0\r\n            `item_origin.rs` repeats `item/` because it declares `pub enum ItemOrigin`, which is the shape xvpe's `type-name-wins-over-folder-stutter` (MUST, committed 2026-09-09) rules correct and calls this finding non-actionable noise for. Dropping the prefix reopens the mismatch check-file-name binds and restores the facade alias this item removed. Header records the instrument's staleness.\r\n      tree-legibility             crates/substrate/nomos-ledger/src/item/item_state.rs:0\r\n            `item_state.rs` repeats `item/` because it declares `pub enum ItemState`, which is the shape xvpe's `type-name-wins-over-folder-stutter` (MUST, committed 2026-09-09) rules correct and calls this finding non-actionable noise for. Dropping the prefix reopens the mismatch check-file-name binds and restores the facade alias this item removed. Header records the instrument's staleness.\r\n      tree-legibility             crates/substrate/nomos-ledger/src/verification/verification_record.rs:0\r\n            `verification_record.rs` repeats `verification/` because it declares `pub struct VerificationRecord`, which is the shape xvpe's `type-name-wins-over-folder-stutter` (MUST, committed 2026-09-09) rules correct and calls this finding non-actionable noise for. Dropping the prefix reopens the mismatch check-file-name binds and restores the facade alias this item removed. Header records the instrument's staleness.\r\n",
+        "verified_at": 1789561512,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b180fb334ce90691a072d172d9b3a679d0aada0a"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
