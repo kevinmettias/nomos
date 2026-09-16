@@ -4,12 +4,13 @@
 //! syntax payload already carries Go type declarations, their visibility, and their names,
 //! so this check is exact for source files recognized as Go by path.
 
+use crate::checks::finding_shape::Own_Name_Finding;
 use crate::checks::naming::Resolve_Case;
 use crate::{GO_LANGUAGE, SourceFile};
 use nomos_analysis::FactReader;
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload};
-use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+use nomos_contracts::{Finding, RuleId};
 
 /// This rule's own identifier, matching the code-standards rule id.
 pub const TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE: &str = "types-use-upper-camel-case-lower-camel-case";
@@ -50,7 +51,7 @@ fn Judged_Go_Type_Sources(
             continue;
         }
 
-        match super::reading::Payload_Of(source, facts)
+        match super::super::reading::Payload_Of(source, facts)
         {
             Ok(payload) =>
             {
@@ -93,24 +94,18 @@ fn Has_Go_Type_Case(item: &PayloadItem, exported_case: Case, unexported_case: Ca
     return unexported_case.Conforms(name);
 }
 
+/// One Go type whose name does not carry the case its visibility requires.
 fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
 {
-    use nomos_model::Content_Digest;
-
     let name = item.Own_Name();
     let expected = Expected_Case_Label(item);
-    let qualified = format!("{path}::{}", item.qualified_name);
 
-    return Finding {
-        rule: RuleId::New(TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: name.to_owned(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("Go type `{name}` is not {expected}"),
-        locations: vec![path.to_owned()],
-    };
+    return Own_Name_Finding(
+        TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
+        path,
+        item,
+        format!("Go type `{name}` is not {expected}"),
+    );
 }
 
 fn Expected_Case_Label(item: &PayloadItem) -> &'static str

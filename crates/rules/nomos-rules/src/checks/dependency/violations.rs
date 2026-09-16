@@ -154,6 +154,7 @@ fn Violation_Finding(source: &SourceFile, violation: &EdgeViolation<'_>) -> Find
 mod tests
 {
     use super::*;
+    use super::super::test_support;
     use nomos_cap_architecture::{Exception, Membership, Permission};
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
@@ -192,12 +193,8 @@ mod tests
     #[test]
     fn Test_Violations_In_Should_Produce_One_Finding_For_An_Edge_The_Declaration_Does_Not_Admit()
     {
-        let payload = DependencyPayload { package: "billing".to_owned(), edges: vec![Dependency_Edge("http")] };
+        let found = test_support::Sole_Violation(Violations_In, &Declaration(), "billing", "http");
 
-        let findings = Violations_In(&Declaration(), &payload, &Source_File("billing"));
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
         assert_eq!(found.subject_name, "billing");
         assert_eq!(found.gate, GateCategory::Advisory);
     }

@@ -24,6 +24,56 @@ pub(in crate::checks) fn Payload_Of(source: &SourceFile, facts: &mut dyn FactRea
     return Parse_Fact(source, fact);
 }
 
+/// Every source's own violations, read and judged the one way a rule that judges each whole
+/// file does it.
+///
+/// The walk -- decode this source's payload, hand it to `judge`, and fold either a real
+/// reading failure or the violations that came back into one list sorted by subject -- was
+/// written out by hand in [`super::boolean_predicates`], [`super::single_letter_names`] and
+/// [`super::test_names`] before it lived here, and `check-interfile-duplication` reported all
+/// three. Only two things ever varied between them: how a decoded payload becomes findings,
+/// and which words an unread file's finding replaces. Both are parameters.
+///
+/// `unread` is the second one because it is not decoration: [`Unread_Finding`] above reports
+/// every read failure under [`super::NAMING_CONVENTION`]'s own identifier and summary, so a
+/// rule that passed the finding through unchanged would report another rule's finding as its
+/// own. Each caller passes its own relabelling, and one that had none to do would pass
+/// `|finding| return finding`.
+///
+/// `judge` is handed the path as well as the payload rather than the payload alone, because a
+/// violation names the file it was found in and a payload does not carry its own path. Every
+/// caller's `Violations_In` is already this parameter's exact signature.
+///
+/// The test-and-example skip [`super::file_names`]'s own copy applies is deliberately *not*
+/// here: none of this walk's callers has decided to exempt those sources, and a walk that
+/// silently dropped them would answer a question nobody asked it rather than the one it was
+/// given.
+pub(in crate::checks) fn Judged_Sources(
+    sources: &[SourceFile],
+    facts: &mut dyn FactReader,
+    judge: fn(&SyntaxPayload, &str) -> Vec<Finding>,
+    unread: fn(Finding) -> Finding,
+) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        match Payload_Of(source, facts)
+        {
+            Ok(payload) =>
+            {
+                let violations = judge(&payload, &source.path);
+                findings.extend(violations);
+            }
+            Err(finding) => findings.push(unread(finding)),
+        }
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
 /// Requires this file's syntax fact, turning an inadmissible answer into an [`Unread`]
 /// finding.
 fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Result<&'a MaterializedFact, Finding>
@@ -88,7 +138,7 @@ fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &s
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
+    use crate::checks::test_support::{self, OfferedProvider, Test_Context, TestOffering};
     use nomos_analysis::Reader;
     use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SubjectId};
     use nomos_model::Content_Digest;
@@ -99,18 +149,12 @@ mod tests
     fn Test_Payload_Of_Should_Decode_A_Materialized_Fact()
     {
         let source = Source(SourceText { path: "src/lib.rs", text: "fn Good_Name() {}" });
-        let TestOffering { mut store, registry, offer } = Offering();
-        test_support::Materialize(
-            &mut store,
-            FactToFile {
-                subject: source.subject,
-                offer: &offer,
-                semantic_inputs: nomos_analysis::InputDigest::Of(&[source.text.as_bytes()]),
-                schema: nomos_cap_syntax::Payload_Schema(),
-                bytes: "unexpanded\t0\nitem\t0\tFunction\tPublic\tGood_Name\t.\t+fn/0\n".as_bytes().to_vec(),
-            },
+        let mut offering = Offering();
+        let mut reader = test_support::Reader_Over_A_Syntax_Fact(
+            &mut offering,
+            &source,
+            "unexpanded\t0\nitem\t0\tFunction\tPublic\tGood_Name\t.\t+fn/0\n",
         ).expect("the fixture's store holds no fact under this key at a newer generation");
-        let mut reader = Reader::On(&store, &registry, Test_Context());
 
         let payload = Payload_Of(&source, &mut reader).expect("the fact was just materialized");
 

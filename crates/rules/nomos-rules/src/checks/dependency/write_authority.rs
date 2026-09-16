@@ -107,6 +107,7 @@ fn Violation_Finding(source: &SourceFile, declaring: DeclaringPackage<'_>, autho
 mod tests
 {
     use super::*;
+    use super::super::test_support;
     use nomos_cap_architecture::Authority;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
@@ -134,14 +135,11 @@ mod tests
     #[test]
     fn Test_An_Undeclared_Door_Should_Produce_One_Finding()
     {
-        let payload = DependencyPayload { package: "http".to_owned(), edges: vec![Dependency_Edge("ledger-store")] };
+        let found = test_support::Sole_Violation(Violations_In, &Declaration(), "http", "ledger-store");
 
-        let findings = Violations_In(&Declaration(), &payload, &Source_File("http"));
-
-        assert_eq!(findings.len(), 1, "{findings:?}");
-        let found = findings.first().expect("asserted len 1 above");
-        assert_eq!(found.subject_name, "http");
+        assert_eq!(found.rule, RuleId::New(super::super::WRITE_AUTHORITY));
         assert_eq!(found.gate, GateCategory::Advisory);
+        assert!(found.summary.contains("ledger-store"), "the finding must name the authority it refuses: {}", found.summary);
     }
 
     /// An authority the repository declares with no doors at all is reachable by nobody, which

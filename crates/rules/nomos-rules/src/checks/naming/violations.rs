@@ -4,9 +4,10 @@
 //! testable against hand-written fixture text the way [`crate::facts::Check_Names_In`]
 //! is — no registry, no store, no reader.
 
+use crate::checks::finding_shape::Qualified_Name_Finding;
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload, FUNCTION, IMPLEMENTATION, Impl_Serves_A_Trait};
-use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+use nomos_contracts::{Finding, GateCategory};
 
 /// The one literal exemption: every binary's entry point is spelled `main`, fixed by the
 /// language rather than by this workspace's naming choice.
@@ -61,26 +62,19 @@ fn Is_Trait_Method(payload: &SyntaxPayload, ordinal: usize) -> bool
 /// A finding for one function whose name does not conform.
 fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
 {
-    use nomos_model::Content_Digest;
-
-    let qualified = format!("{path}::{}", item.qualified_name);
-
-    return Finding {
-        rule: RuleId::New(super::NAMING_CONVENTION),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: item.qualified_name.clone(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Advisory,
-        summary: format!(
+    return Qualified_Name_Finding(
+        super::NAMING_CONVENTION,
+        path,
+        item,
+        GateCategory::Advisory,
+        format!(
             "`{}` is not Pascal_Snake_Case: README.md's Conventions section requires \
              function names to be Pascal_Snake_Case, and Cargo.toml disables rustc's own \
              non_snake_case lint specifically because this workspace uses a different \
              convention — nothing else was checking it.",
             item.Own_Name()
         ),
-        locations: vec![path.to_owned()],
-    };
+    );
 }
 
 /// Whether `name` conforms to `case`.

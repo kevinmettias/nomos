@@ -48,6 +48,7 @@
 //! clarity.rs`'s sibling marker could not be ported for exactly the opposite reason: that
 //! rule reads `nomos_cap_syntax::PayloadItem`, which carries no line number at all.
 
+use crate::checks::declaration_scan::{DeclarationBlock, Is_Ident_Char, Line_Number, Name_After_Keyword};
 use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -115,21 +116,13 @@ fn Variant_Findings_In(source: &SourceFile) -> Vec<Finding>
     return findings;
 }
 
-/// Threaded across [`Tuple_Variants_In`]'s one-pass scan. `enum_open` carries
-/// `(depth_at_open, name)` once a `{` has actually arrived for a pending header; `pending`
-/// carries a header seen with no `{` yet.
-struct EnumScan
-{
-    depth: usize,
-    enum_open: Option<(usize, String)>,
-    pending: Option<String>,
-}
-
-/// The whole-file brace-depth scan, ported from `rustVariantScan.consume`.
+/// The whole-file brace-depth scan, ported from `rustVariantScan.consume`. The block being
+/// tracked is [`DeclarationBlock`]'s, which is where the pending enum name and the depth its
+/// own `{` opened at are carried; this rule tracks nothing else alongside them.
 fn Tuple_Variants_In(lines: &[&str]) -> Vec<Variant>
 {
     let mut found = Vec::new();
-    let mut scan = EnumScan { depth: 0, enum_open: None, pending: None };
+    let mut scan = DeclarationBlock::New();
 
     for (index, line) in lines.iter().enumerate()
     {
@@ -145,7 +138,7 @@ fn Tuple_Variants_In(lines: &[&str]) -> Vec<Variant>
 /// Judges one line against the accumulated `scan` state, then advances that state past it —
 /// a comment or attribute line is judged and skipped without advancing the brace depth at
 /// all.
-fn Tuple_Variant_At_Line(line: &str, index: usize, scan: &mut EnumScan) -> Option<Variant>
+fn Tuple_Variant_At_Line(line: &str, index: usize, scan: &mut DeclarationBlock) -> Option<Variant>
 {
     let trimmed = line.trim();
     if trimmed.starts_with("//") || trimmed.starts_with("#[")
@@ -155,7 +148,7 @@ fn Tuple_Variant_At_Line(line: &str, index: usize, scan: &mut EnumScan) -> Optio
 
     let variant = Variant_At_Line(line, index, scan);
 
-    Advance_Enum_Scan(line, scan);
+    scan.Advance(line);
 
     return variant;
 }
@@ -163,15 +156,15 @@ fn Tuple_Variant_At_Line(line: &str, index: usize, scan: &mut EnumScan) -> Optio
 /// Either a new pending enum header is looked for (none is open or pending yet), or -- once
 /// one is open -- this line is tried as one of its direct-child tuple variants. Exactly one
 /// of the two applies to a given line, matching the real tool's own `if`/`else if`.
-fn Variant_At_Line(line: &str, index: usize, scan: &mut EnumScan) -> Option<Variant>
+fn Variant_At_Line(line: &str, index: usize, scan: &mut DeclarationBlock) -> Option<Variant>
 {
-    if scan.enum_open.is_none() && scan.pending.is_none()
+    if scan.open.is_none() && scan.pending.is_none()
     {
         scan.pending = Enum_Header_Name(line).map(str::to_owned);
         return None;
     }
 
-    let (open_depth, enum_name) = scan.enum_open.as_ref()?;
+    let (open_depth, enum_name) = scan.open.as_ref()?;
     if scan.depth != open_depth.saturating_add(1)
     {
         return None;
@@ -199,7 +192,7 @@ fn Enum_Header_Name(line: &str) -> Option<&str>
         let start = search_from.saturating_add(offset);
         let end = start.saturating_add("enum".len());
 
-        if let Some(name) = Enum_Name_After(line, bytes, start, end)
+        if let Some(name) = Name_After_Keyword(line, bytes, start, end)
         {
             return Some(name);
         }
@@ -208,42 +201,6 @@ fn Enum_Header_Name(line: &str) -> Option<&str>
     }
 
     return None;
-}
-
-/// The identifier right after a candidate `enum` occurrence at `[start, end)`, if `start`
-/// sits at a word boundary and at least one whitespace character separates the keyword from
-/// a non-empty run of identifier characters.
-fn Enum_Name_After<'a>(line: &'a str, bytes: &[u8], start: usize, end: usize) -> Option<&'a str>
-{
-    if !Has_Left_Boundary(bytes, start)
-    {
-        return None;
-    }
-
-    let after = line.get(end..)?;
-    if !after.starts_with(char::is_whitespace)
-    {
-        return None;
-    }
-
-    let trimmed = after.trim_start();
-    let name_len = trimmed.find(|character: char| return !(character.is_alphanumeric() || character == '_')).unwrap_or(trimmed.len());
-    if name_len == 0
-    {
-        return None;
-    }
-
-    return trimmed.get(..name_len);
-}
-
-fn Has_Left_Boundary(bytes: &[u8], start: usize) -> bool
-{
-    return start.checked_sub(1).and_then(|previous| return bytes.get(previous)).is_none_or(|&byte| return !Is_Ident_Byte(byte));
-}
-
-fn Is_Ident_Byte(byte: u8) -> bool
-{
-    return byte.is_ascii_alphanumeric() || byte == b'_';
 }
 
 /// `^\s*(\w+)\s*\(([^)]*)\)\s*,?\s*$` ported as a hand match over an already-trimmed line:
@@ -317,25 +274,6 @@ fn Split_At_Top_Level_Commas(payload: &str) -> Vec<String>
     return members;
 }
 
-fn Advance_Enum_Scan(line: &str, scan: &mut EnumScan)
-{
-    let opened = line.matches('{').count();
-    let closed = line.matches('}').count();
-
-    if let Some(name) = scan.pending.take_if(|_| return opened > 0)
-    {
-        scan.enum_open = Some((scan.depth, name));
-    }
-
-    scan.depth = scan.depth.saturating_add(opened);
-    scan.depth = scan.depth.saturating_sub(closed);
-
-    if scan.enum_open.as_ref().is_some_and(|(open_depth, _)| return scan.depth <= *open_depth)
-    {
-        scan.enum_open = None;
-    }
-}
-
 fn Variant_Finding(source: &SourceFile, lines: &[&str], variant: &Variant) -> Option<Finding>
 {
     if variant.members.len() < SMALLEST_AMBIGUOUS_PAYLOAD || Has_Marker_Reason(lines, variant.line_index)
@@ -404,11 +342,6 @@ fn Is_Skippable_Above(line: &str) -> bool
     return trimmed.is_empty() || trimmed.starts_with("//") || trimmed.starts_with("/*") || trimmed.starts_with('*') || trimmed.starts_with("#[");
 }
 
-fn Line_Number(index: usize) -> usize
-{
-    return index.saturating_add(1);
-}
-
 fn Variant_Summary(source: &SourceFile, variant: &Variant, line_number: usize) -> String
 {
     let site = format!("{}::{}", variant.enum_name, variant.variant_name);
@@ -440,11 +373,6 @@ fn Has_Repeated_Type(members: &[String]) -> bool
     }
 
     return false;
-}
-
-fn Is_Ident_Char(character: char) -> bool
-{
-    return character.is_alphanumeric() || character == '_';
 }
 
 fn Marker_Reason_In(line: &str) -> Option<&str>

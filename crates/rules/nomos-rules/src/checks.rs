@@ -13,11 +13,13 @@
 //! this file only gathers them so the crate root is not itself the ninth thing that
 //! grows one module per rule forever.
 //!
-//! [`Relay_Findings`] and [`test_support`] are the two pieces of shared plumbing more than
-//! one rule needed by hand before this file existed: [`lint`], [`policy`] and [`review`]
-//! each relay a tool's own verdict 1:1 rather than judging it a second time, and every
-//! rule's test module was separately rebuilding the registry/store/fact scaffolding
-//! [`test_support`] now states once. `review` holds the sixty-eighth rule,
+//! [`Relay_Findings`], [`test_support`], [`finding_shape`] and [`declaration_scan`] are the
+//! pieces of shared plumbing more than one rule needed by hand before they existed:
+//! [`lint`], [`policy`] and [`review`] each relay a tool's own verdict 1:1 rather than
+//! judging it a second time, every rule's test module was separately rebuilding the
+//! registry/store/fact scaffolding [`test_support`] now states once, and the shape a rule's
+//! own verdict takes and the line predicates a brace-delimited declaration scan is driven
+//! with were each written out once per rule that needed them. `review` holds the sixty-eighth rule,
 //! [`Check_Review_Findings`], the identical relay shape extended from a same-process
 //! `ToolProvider` (`lint`, `policy`) to a connector under `ARC-CONNECTOR-001`.
 
@@ -27,11 +29,13 @@ mod code_prefix;
 mod concurrency_text;
 mod constant_scope;
 mod crosslang;
+mod declaration_scan;
 mod dependency;
 mod domain_type_alias;
 mod enum_shape;
 mod error_text;
 mod facade;
+mod finding_shape;
 mod flakiness_text;
 mod formatting;
 mod goals;

@@ -78,8 +78,7 @@ fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<SyntaxP
 mod tests
 {
     use super::*;
-    use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
-    use nomos_analysis::Reader;
+    use crate::checks::test_support::{self, OfferedProvider, TestOffering};
     use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SubjectId};
     use nomos_model::Content_Digest;
 
@@ -90,18 +89,9 @@ mod tests
     {
         let readable = Source("readable.rs");
         let unread = Source("unread.rs");
-        let TestOffering { mut store, registry, offer } = Offering();
-        test_support::Materialize(
-            &mut store,
-            FactToFile {
-                subject: readable.subject,
-                offer: &offer,
-                semantic_inputs: nomos_analysis::InputDigest::Of(&[readable.text.as_bytes()]),
-                schema: nomos_cap_syntax::Payload_Schema(),
-                bytes: "unexpanded\t0\n".as_bytes().to_vec(),
-            },
-        ).expect("the fixture's store holds no fact under this key at a newer generation");
-        let mut reader = Reader::On(&store, &registry, Test_Context());
+        let mut offering = Offering();
+        let mut reader = test_support::Reader_Over_A_Syntax_Fact(&mut offering, &readable, "unexpanded\t0\n")
+            .expect("the fixture's store holds no fact under this key at a newer generation");
 
         let sources = [readable.clone(), unread.clone()];
         let index = Struct_Index(&sources, &mut reader);

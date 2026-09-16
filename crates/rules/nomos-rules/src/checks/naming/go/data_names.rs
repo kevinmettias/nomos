@@ -2,7 +2,7 @@
 //!
 //! code-standards' `constants-split-by-export` gives a Go constant `SCREAMING_SNAKE_CASE`
 //! when exported and `lower_snake_case` when not — the same visibility-carries-in-the-name
-//! split [`super::go_function_names`] already judges for functions, applied to Go's own
+//! split [`super::function_names`] already judges for functions, applied to Go's own
 //! constant casing because Go's own convention does not shout its constants.
 //! `variables-use-lower-snake-case` is narrower here: the syntax payload exposes only
 //! top-level Go `var` declarations as `Variable` items — locals and parameters never reach
@@ -10,6 +10,7 @@
 //! — so this rule judges that one visible slice against `lower_snake_case` without a split
 //! by export status, the same way the standard itself does not split it.
 
+use crate::checks::finding_shape::Own_Name_Finding;
 use crate::{GO_LANGUAGE, SourceFile};
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload};
@@ -102,23 +103,17 @@ fn Variable_Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
         .collect();
 }
 
+/// One Go variable that is not lower_snake_case.
 fn Variable_Violation_Finding(path: &str, item: &PayloadItem) -> Finding
 {
-    use nomos_model::Content_Digest;
-
     let name = item.Own_Name();
-    let qualified = format!("{path}::{}", item.qualified_name);
 
-    return Finding {
-        rule: RuleId::New(GO_VARIABLES_USE_LOWER_SNAKE_CASE),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: name.to_owned(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("Go variable `{name}` is not lower_snake_case"),
-        locations: vec![path.to_owned()],
-    };
+    return Own_Name_Finding(
+        GO_VARIABLES_USE_LOWER_SNAKE_CASE,
+        path,
+        item,
+        format!("Go variable `{name}` is not lower_snake_case"),
+    );
 }
 
 fn Unread_As_Constant_Rule(mut finding: Finding) -> Finding
@@ -158,7 +153,7 @@ fn Judged_Go_Sources(
             continue;
         }
 
-        match super::reading::Payload_Of(source, facts)
+        match super::super::reading::Payload_Of(source, facts)
         {
             Ok(payload) =>
             {

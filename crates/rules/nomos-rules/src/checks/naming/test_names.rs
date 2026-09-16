@@ -6,9 +6,10 @@
 //! `_Should_Not_` so the failing test report names the expectation that broke.
 
 use crate::SourceFile;
+use crate::checks::finding_shape::Qualified_Name_Finding;
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload, FUNCTION};
-use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+use nomos_contracts::{Finding, GateCategory, RuleId};
 
 /// This rule's own identifier, matching the code-standards rule id.
 pub const TEST_NAME_DESCRIBES_BEHAVIOR: &str = "test-functions-use-test-subject-should-behavior";
@@ -24,23 +25,7 @@ pub fn Check_Test_Names_Describe_Behavior(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    let mut findings = Vec::new();
-
-    for source in sources
-    {
-        match super::reading::Payload_Of(source, facts)
-        {
-            Ok(payload) =>
-            {
-                let violations = Violations_In(&payload, &source.path);
-                findings.extend(violations);
-            }
-            Err(finding) => findings.push(Unread_As_This_Rule(finding)),
-        }
-    }
-
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
+    return super::reading::Judged_Sources(sources, facts, Violations_In, Unread_As_This_Rule);
 }
 
 fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
@@ -74,26 +59,20 @@ fn Names_Behavior(name: &str) -> bool
     return name.contains(POSITIVE_EXPECTATION) || name.contains(NEGATIVE_EXPECTATION);
 }
 
+/// One test function whose name states no expectation.
 fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
 {
-    use nomos_model::Content_Digest;
-
-    let qualified = format!("{path}::{}", item.qualified_name);
-
-    return Finding {
-        rule: RuleId::New(TEST_NAME_DESCRIBES_BEHAVIOR),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: item.qualified_name.clone(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!(
+    return Qualified_Name_Finding(
+        TEST_NAME_DESCRIBES_BEHAVIOR,
+        path,
+        item,
+        GateCategory::Blocking,
+        format!(
             "`{}` is a test function whose name does not state a `_Should_` or \
              `_Should_Not_` expectation",
             item.Own_Name()
         ),
-        locations: vec![path.to_owned()],
-    };
+    );
 }
 
 fn Unread_As_This_Rule(mut finding: Finding) -> Finding
@@ -109,6 +88,7 @@ fn Unread_As_This_Rule(mut finding: Finding) -> Finding
 mod tests
 {
     use super::*;
+    use nomos_contracts::{Applicability, EvidenceClass, SubjectId};
 
     #[test]
     fn Test_Violations_In_Should_Report_A_Test_Name_With_No_Should_Phrase()

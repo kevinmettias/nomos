@@ -57,6 +57,9 @@ mod reading;
 mod violations;
 mod write_authority;
 
+#[cfg(test)]
+mod test_support;
+
 pub use completeness::Check_Every_Member_Declares_A_Band;
 pub use violations::Check_Dependency_Direction;
 pub use write_authority::Check_Write_Authority;

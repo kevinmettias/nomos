@@ -47,12 +47,10 @@
 
 mod abbreviations;
 mod boolean_predicates;
+mod clarity;
 mod data_names;
 mod file_names;
-mod go_data_names;
-mod go_function_names;
-mod go_type_names;
-mod naming_clarity;
+mod go;
 pub(super) mod reading;
 mod single_letter_names;
 mod test_names;
@@ -65,21 +63,21 @@ use nomos_contracts::Finding;
 
 pub use abbreviations::{Check_Abbreviations, ABBREVIATIONS};
 pub use boolean_predicates::{Check_Boolean_Predicates, BOOLEAN_PREDICATES};
+pub use clarity::{Check_Naming_Clarity, NAMING_CLARITY};
 pub use data_names::{Check_Data_Names_Stay_Lower_Snake, DATA_NAMES_STAY_LOWER_SNAKE};
 pub use file_names::{
     Check_File_Name_Matches_Declared_Type, Check_One_Public_Type_Per_File, FILE_NAME_MATCHES_DECLARED_TYPE,
     ONE_PUBLIC_TYPE_PER_FILE,
 };
-pub use go_data_names::{
+pub use go::data_names::{
     Check_Go_Constants_Split_By_Export, Check_Go_Variables_Use_Lower_Snake_Case, CONSTANTS_SPLIT_BY_EXPORT,
     GO_VARIABLES_USE_LOWER_SNAKE_CASE,
 };
-pub use go_function_names::{
+pub use go::function_names::{
     Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter,
     EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
 };
-pub use go_type_names::{Check_Go_Type_Names_Use_Camel_Case, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE};
-pub use naming_clarity::{Check_Naming_Clarity, NAMING_CLARITY};
+pub use go::type_names::{Check_Go_Type_Names_Use_Camel_Case, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE};
 pub use single_letter_names::{Check_Single_Letter_Names, SINGLE_LETTER_NAMES};
 pub use test_names::{Check_Test_Names_Describe_Behavior, TEST_NAME_DESCRIBES_BEHAVIOR};
 

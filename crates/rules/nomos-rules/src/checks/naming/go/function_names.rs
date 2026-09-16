@@ -182,7 +182,7 @@ fn Judged_Go_Function_Sources(sources: &[SourceFile], facts: &mut dyn FactReader
             continue;
         }
 
-        match super::reading::Payload_Of(source, facts)
+        match super::super::reading::Payload_Of(source, facts)
         {
             Ok(payload) =>
             {

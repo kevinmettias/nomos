@@ -22,9 +22,10 @@
 //! same answer for a whole file whose name carries no such claim either.
 
 use crate::SourceFile;
+use crate::checks::finding_shape::Own_Name_Finding;
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{FUNCTION, PayloadItem, SyntaxPayload};
-use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+use nomos_contracts::{Finding, RuleId};
 
 /// This rule's own identifier, matching the code-standards rule id.
 pub const FILE_NAME_MATCHES_DECLARED_TYPE: &str = "file-name-matches-declared-type";
@@ -132,24 +133,18 @@ fn Declares_A_Public_Operation(payload: &SyntaxPayload) -> bool
         .any(|item| return item.Is_Public() && item.kind == FUNCTION && Is_Top_Level(item));
 }
 
+/// One public type whose file stem is not its own snake-case name.
 fn Violation_Finding(path: &str, item: &PayloadItem, stem: &str) -> Finding
 {
-    use nomos_model::Content_Digest;
-
     let type_name = item.Own_Name();
     let expected = To_Snake_Case(type_name);
-    let qualified = format!("{path}::{}", item.qualified_name);
 
-    return Finding {
-        rule: RuleId::New(FILE_NAME_MATCHES_DECLARED_TYPE),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: type_name.to_owned(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("`{type_name}` is public but {path} has stem `{stem}` instead of `{expected}`"),
-        locations: vec![path.to_owned()],
-    };
+    return Own_Name_Finding(
+        FILE_NAME_MATCHES_DECLARED_TYPE,
+        path,
+        item,
+        format!("`{type_name}` is public but {path} has stem `{stem}` instead of `{expected}`"),
+    );
 }
 
 fn One_Public_Type_Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
@@ -171,23 +166,17 @@ fn One_Public_Type_Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Fin
         .collect();
 }
 
+/// The second and later public types in one file.
 fn One_Public_Type_Finding(path: &str, item: &PayloadItem) -> Finding
 {
-    use nomos_model::Content_Digest;
-
     let type_name = item.Own_Name();
-    let qualified = format!("{path}::{}", item.qualified_name);
 
-    return Finding {
-        rule: RuleId::New(ONE_PUBLIC_TYPE_PER_FILE),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: type_name.to_owned(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("{path} declares more than one top-level public type; `{type_name}` needs its own file"),
-        locations: vec![path.to_owned()],
-    };
+    return Own_Name_Finding(
+        ONE_PUBLIC_TYPE_PER_FILE,
+        path,
+        item,
+        format!("{path} declares more than one top-level public type; `{type_name}` needs its own file"),
+    );
 }
 
 fn Unread_As_This_Rule(mut finding: Finding) -> Finding
@@ -287,6 +276,7 @@ mod tests
 {
     use super::*;
     use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
+    use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
     /// A fixture whose filename is part of what it fixes is not judged by either rule.

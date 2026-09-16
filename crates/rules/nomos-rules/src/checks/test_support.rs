@@ -1,16 +1,19 @@
 //! Test-only scaffolding every rule's own test module was hand-rebuilding: a fresh
 //! [`Registry`] and [`MemoryFactStore`] with one [`ProviderOffer`] declared and offered
 //! against one capability contract, the fixed [`Context`] every fixture materializes a
-//! fact under, and the one [`FactKey`]-then-`Materialize` shape every fixture reached a
-//! fact store through, whatever the payload.
+//! fact under, the one [`FactKey`]-then-`Materialize` shape every fixture reached a
+//! fact store through, whatever the payload, and the materialize-then-read pairing a
+//! syntax rule's own test module rebuilt to get from the payload it had just filed back
+//! to a [`Reader`].
 //!
 //! Declared behind `#[cfg(test)]` at its `mod test_support;` site in `checks.rs` rather
 //! than gated again here: nothing in this file has a reason to exist outside a test
 //! binary, and a module that compiled in production for no consumer would be exactly the
 //! dead code `check-dead-code` exists to find.
 
+use crate::SourceFile;
 use nomos_analysis::{
-    Context, FactError, FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact, MemoryFactStore,
+    Context, FactError, FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact, MemoryFactStore, Reader,
 };
 use nomos_capability::{CapabilityContract, ProviderOffer, Registry, RegistryError};
 use nomos_contracts::{
@@ -154,6 +157,41 @@ fn Key_Of(fact: &FactToFile<'_>, context: &Context) -> FactKey
         variant: context.variant,
         configuration: context.configuration,
     };
+}
+
+/// Files `source`'s own syntax payload into `offering`'s store and answers a [`Reader`] over
+/// the result: one fact, keyed by `source`'s subject with `source`'s own text as its semantic
+/// input, carrying `payload_text` encoded against [`nomos_cap_syntax::Payload_Schema`].
+///
+/// The materialize-then-read pairing two syntax-reading rules' own test modules rebuilt key by
+/// key before this existed — `crosslang`'s and `naming`'s — which differed only in which source
+/// and which payload text they filed. What the caller does with the reader is the caller's
+/// business, and the only thing the two ever did differently.
+///
+/// # Errors
+///
+/// Returns [`FactError::Backdated`] if `offering`'s store already held a fact under this
+/// identity at a newer generation. Every call site hands it a store built for the case at hand,
+/// so this is not reachable here; the error is in the signature because
+/// [`MemoryFactStore::Materialize`] is fallible, not because the fixture anticipates a failure.
+pub(crate) fn Reader_Over_A_Syntax_Fact<'offering>(
+    offering: &'offering mut TestOffering,
+    source: &SourceFile,
+    payload_text: &str,
+) -> Result<Reader<'offering, 'offering>, FactError>
+{
+    Materialize(
+        &mut offering.store,
+        FactToFile {
+            subject: source.subject,
+            offer: &offering.offer,
+            semantic_inputs: InputDigest::Of(&[source.text.as_bytes()]),
+            schema: nomos_cap_syntax::Payload_Schema(),
+            bytes: payload_text.as_bytes().to_vec(),
+        },
+    )?;
+
+    return Ok(Reader::On(&offering.store, &offering.registry, Test_Context()));
 }
 
 #[cfg(test)]

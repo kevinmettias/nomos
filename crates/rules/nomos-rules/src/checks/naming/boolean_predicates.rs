@@ -5,9 +5,10 @@
 //! judges boolean fields and leaves the other boolean-name sites to a richer provider.
 
 use crate::SourceFile;
+use crate::checks::finding_shape::Member_Finding;
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{PayloadItem, Struct_Fields, SyntaxPayload};
-use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+use nomos_contracts::{Finding, RuleId};
 
 /// This rule's own identifier, matching the code-standards rule id.
 pub const BOOLEAN_PREDICATES: &str = "boolean-predicates";
@@ -21,23 +22,7 @@ pub fn Check_Boolean_Predicates(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    let mut findings = Vec::new();
-
-    for source in sources
-    {
-        match super::reading::Payload_Of(source, facts)
-        {
-            Ok(payload) =>
-            {
-                let violations = Violations_In(&payload, &source.path);
-                findings.extend(violations);
-            }
-            Err(finding) => findings.push(Unread_As_This_Rule(finding)),
-        }
-    }
-
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
+    return super::reading::Judged_Sources(sources, facts, Violations_In, Unread_As_This_Rule);
 }
 
 fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
@@ -71,6 +56,18 @@ fn Field_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
         .collect();
 }
 
+/// One boolean field that is not named as a predicate.
+fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
+{
+    return Member_Finding(
+        BOOLEAN_PREDICATES,
+        path,
+        item,
+        name,
+        format!("boolean field `{name}` does not start with `is_`, `has_`, `can_`, or `should_`"),
+    );
+}
+
 fn Is_Bool_Type(type_name: &str) -> bool
 {
     return matches!(type_name.trim(), "bool" | "Bool" | "boolean" | "Boolean" | "System.Boolean");
@@ -81,24 +78,6 @@ fn Has_Predicate_Prefix(name: &str) -> bool
     return ["is_", "has_", "can_", "should_"]
         .iter()
         .any(|prefix| return name.starts_with(prefix));
-}
-
-fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
-{
-    use nomos_model::Content_Digest;
-
-    let qualified = format!("{path}::{}::{name}", item.qualified_name);
-
-    return Finding {
-        rule: RuleId::New(BOOLEAN_PREDICATES),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: name.to_owned(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("boolean field `{name}` does not start with `is_`, `has_`, `can_`, or `should_`"),
-        locations: vec![path.to_owned()],
-    };
 }
 
 fn Unread_As_This_Rule(mut finding: Finding) -> Finding

@@ -5,12 +5,13 @@
 //! module declarations and named struct fields, so this rule judges that precise subset and
 //! leaves the rest for a richer provider.
 
-use crate::checks::naming::Resolve_Case;
 use crate::SourceFile;
+use crate::checks::finding_shape::Member_Finding;
+use crate::checks::naming::Resolve_Case;
 use nomos_analysis::FactReader;
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{PayloadItem, Struct_Fields, SyntaxPayload};
-use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+use nomos_contracts::{Finding, RuleId};
 
 /// This rule's own identifier, matching the code-standards rule id.
 pub const DATA_NAMES_STAY_LOWER_SNAKE: &str = "data-names-stay-lower-snake";
@@ -113,22 +114,16 @@ fn Unescaped(name: &str) -> &str
     return name.strip_prefix("r#").unwrap_or(name);
 }
 
+/// One data name that is not lower snake case.
 fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
 {
-    use nomos_model::Content_Digest;
-
-    let qualified = format!("{path}::{}::{name}", item.qualified_name);
-
-    return Finding {
-        rule: RuleId::New(DATA_NAMES_STAY_LOWER_SNAKE),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: name.to_owned(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("`{name}` is a data name that is not lower snake case"),
-        locations: vec![path.to_owned()],
-    };
+    return Member_Finding(
+        DATA_NAMES_STAY_LOWER_SNAKE,
+        path,
+        item,
+        name,
+        format!("`{name}` is a data name that is not lower snake case"),
+    );
 }
 
 #[cfg(test)]

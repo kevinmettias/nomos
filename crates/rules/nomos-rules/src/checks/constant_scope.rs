@@ -39,6 +39,9 @@
 //! depth zero — the same restriction `go_Over_Function_Bodies` gets for free by walking
 //! only `parsed.Decls`, the file's own top level.
 
+use crate::checks::declaration_scan::{
+    Brace_Delta, DeclarationBlock, Is_Ident_Char, Line_Number, Name_After_Keyword,
+};
 use crate::{GO_LANGUAGE, RUST_LANGUAGE, SourceFile};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -212,8 +215,7 @@ fn Strip_Rust_Visibility(code: &str) -> &str
 
 fn Advance_Rust_Constant_Scan(line: &str, scan: &mut RustConstantScan)
 {
-    let opened = line.matches('{').count();
-    let closed = line.matches('}').count();
+    let (opened, closed) = Brace_Delta(line);
 
     if let Some(name) = scan.pending.take_if(|_| return opened > 0)
     {
@@ -230,18 +232,20 @@ fn Advance_Rust_Constant_Scan(line: &str, scan: &mut RustConstantScan)
 }
 
 /// Threaded across [`Go_Function_Constants_In`]'s one-pass scan.
+///
+/// The block tracking is [`DeclarationBlock`]'s; `in_const_block` is the one thing this
+/// scan carries that the enum scan next door does not, and it is why the block is a field
+/// here rather than the whole struct being replaced.
 struct GoConstantScan
 {
-    depth: usize,
-    open: Option<(usize, String)>,
-    pending: Option<String>,
+    block: DeclarationBlock,
     in_const_block: bool,
 }
 
 fn Go_Function_Constants_In(lines: &[&str]) -> Vec<Constant>
 {
     let mut found = Vec::new();
-    let mut scan = GoConstantScan { depth: 0, open: None, pending: None, in_const_block: false };
+    let mut scan = GoConstantScan { block: DeclarationBlock::New(), in_const_block: false };
 
     for (index, line) in lines.iter().enumerate()
     {
@@ -265,12 +269,15 @@ fn Go_Constant_At_Line(line: &str, index: usize, scan: &mut GoConstantScan) -> O
 
     if Ready_For_A_New_Go_Function(scan)
     {
-        scan.pending = Go_Func_Header_Name(line);
+        scan.block.pending = Go_Func_Header_Name(line);
     }
 
     let constant = Go_Constant_In_Open_Function(trimmed, index, scan);
 
-    Advance_Go_Constant_Scan(line, scan);
+    if scan.block.Advance(line)
+    {
+        scan.in_const_block = false;
+    }
 
     return constant;
 }
@@ -279,7 +286,7 @@ fn Go_Constant_At_Line(line: &str, index: usize, scan: &mut GoConstantScan) -> O
 /// level — the only place a new Go function header is looked for.
 fn Ready_For_A_New_Go_Function(scan: &GoConstantScan) -> bool
 {
-    return scan.open.is_none() && scan.pending.is_none() && scan.depth == 0;
+    return scan.block.open.is_none() && scan.block.pending.is_none() && scan.block.depth == 0;
 }
 
 /// `\bfunc\s+(\w+)` — Go's own function keyword is spelled differently but the shape is
@@ -295,7 +302,7 @@ fn Go_Func_Header_Name(line: &str) -> Option<String>
 /// refinement of the one before it.
 fn Go_Constant_In_Open_Function(trimmed: &str, index: usize, scan: &mut GoConstantScan) -> Option<Constant>
 {
-    let (_, function) = scan.open.as_ref()?;
+    let (_, function) = scan.block.open.as_ref()?;
     let function = function.clone();
 
     if scan.in_const_block
@@ -357,26 +364,6 @@ fn Go_Const_Name(trimmed: &str) -> Option<String>
     return Some(name.to_owned());
 }
 
-fn Advance_Go_Constant_Scan(line: &str, scan: &mut GoConstantScan)
-{
-    let opened = line.matches('{').count();
-    let closed = line.matches('}').count();
-
-    if let Some(name) = scan.pending.take_if(|_| return opened > 0)
-    {
-        scan.open = Some((scan.depth, name));
-    }
-
-    scan.depth = scan.depth.saturating_add(opened);
-    scan.depth = scan.depth.saturating_sub(closed);
-
-    if scan.open.as_ref().is_some_and(|(open_depth, _)| return scan.depth <= *open_depth)
-    {
-        scan.open = None;
-        scan.in_const_block = false;
-    }
-}
-
 fn Constant_Finding(source: &SourceFile, constant: &Constant) -> Finding
 {
     let line_number = Line_Number(constant.line_index);
@@ -395,11 +382,6 @@ fn Constant_Finding(source: &SourceFile, constant: &Constant) -> Finding
     };
 }
 
-fn Line_Number(index: usize) -> usize
-{
-    return index.saturating_add(1);
-}
-
 /// The literal keyword [`Keyword_Header_Name`] searches for, wrapped so its parameter
 /// position cannot be transposed with `line` — the text being searched — with nothing to
 /// catch it.
@@ -415,56 +397,15 @@ fn Keyword_Header_Name(line: &str, keyword: Keyword<'_>) -> Option<String>
         let start = search_from.saturating_add(offset);
         let end = start.saturating_add(keyword.0.len());
 
-        if let Some(name) = Header_Name_After(line, bytes, start, end)
+        if let Some(name) = Name_After_Keyword(line, bytes, start, end)
         {
-            return Some(name);
+            return Some(name.to_owned());
         }
 
         search_from = start.saturating_add(1);
     }
 
     return None;
-}
-
-/// The identifier right after a candidate keyword occurrence at `[start, end)`, if `start`
-/// sits at a word boundary and at least one whitespace character separates the keyword from
-/// a non-empty run of identifier characters.
-fn Header_Name_After(line: &str, bytes: &[u8], start: usize, end: usize) -> Option<String>
-{
-    if !Has_Left_Boundary(bytes, start)
-    {
-        return None;
-    }
-
-    let after = line.get(end..)?;
-    if !after.starts_with(char::is_whitespace)
-    {
-        return None;
-    }
-
-    let trimmed = after.trim_start();
-    let name_len = trimmed.find(|character: char| return !(character.is_alphanumeric() || character == '_')).unwrap_or(trimmed.len());
-    if name_len == 0
-    {
-        return None;
-    }
-
-    return trimmed.get(..name_len).map(str::to_owned);
-}
-
-fn Has_Left_Boundary(bytes: &[u8], start: usize) -> bool
-{
-    return start.checked_sub(1).and_then(|previous| return bytes.get(previous)).is_none_or(|&byte| return !Is_Ident_Byte(byte));
-}
-
-fn Is_Ident_Byte(byte: u8) -> bool
-{
-    return byte.is_ascii_alphanumeric() || byte == b'_';
-}
-
-fn Is_Ident_Char(character: char) -> bool
-{
-    return character.is_alphanumeric() || character == '_';
 }
 
 #[cfg(test)]

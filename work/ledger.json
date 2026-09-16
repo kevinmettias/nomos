@@ -80255,10 +80255,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-a5",
+        "acquired_at": 1789545080,
+        "lease_expires_at": 1789552280
+      },
       "verification": {
         "argv": [
           "C:\\Python314\\python.exe",

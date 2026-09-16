@@ -31,9 +31,10 @@
 //! what [`super::abbreviations::Check_Abbreviations`] already judges.
 
 use crate::SourceFile;
+use crate::checks::finding_shape::Member_Finding;
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_syntax::{IMPLEMENTATION, Impl_Serves_A_Trait, PayloadItem, Struct_Fields, SyntaxPayload};
-use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+use nomos_contracts::{Finding, RuleId};
 
 /// This rule's own identifier, matching the code-standards rule id.
 pub const NAMING_CLARITY: &str = "naming-clarity";
@@ -295,22 +296,16 @@ fn Is_All_Digits(field: &str) -> bool
     return !field.is_empty() && field.chars().all(|character| return character.is_ascii_digit());
 }
 
+/// One name carrying a word this rule reads as vague.
 fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, word: String) -> Finding
 {
-    use nomos_model::Content_Digest;
-
-    let qualified = format!("{path}::{}::{name}", item.qualified_name);
-
-    return Finding {
-        rule: RuleId::New(NAMING_CLARITY),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: name.to_owned(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("`{name}` contains vague word `{word}`; use a concrete responsibility name"),
-        locations: vec![path.to_owned()],
-    };
+    return Member_Finding(
+        NAMING_CLARITY,
+        path,
+        item,
+        name,
+        format!("`{name}` contains vague word `{word}`; use a concrete responsibility name"),
+    );
 }
 
 #[cfg(test)]

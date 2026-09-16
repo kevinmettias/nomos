@@ -22,9 +22,10 @@
 //! discard token a wildcard-adjacent `use` binding can also carry.
 
 use crate::SourceFile;
+use crate::checks::finding_shape::Member_Finding;
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{IMPLEMENTATION, Impl_Generics, PayloadItem, Struct_Fields, SyntaxPayload};
-use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+use nomos_contracts::{Finding, RuleId};
 
 /// This rule's own identifier, matching the code-standards rule id.
 pub const SINGLE_LETTER_NAMES: &str = "single-letter-names";
@@ -51,23 +52,7 @@ pub fn Check_Single_Letter_Names(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    let mut findings = Vec::new();
-
-    for source in sources
-    {
-        match super::reading::Payload_Of(source, facts)
-        {
-            Ok(payload) =>
-            {
-                let violations = Violations_In(&payload, &source.path);
-                findings.extend(violations);
-            }
-            Err(finding) => findings.push(Unread_As_This_Rule(finding)),
-        }
-    }
-
-    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
-    return findings;
+    return super::reading::Judged_Sources(sources, facts, Violations_In, Unread_As_This_Rule);
 }
 
 fn Violations_In(payload: &SyntaxPayload, path: &str) -> Vec<Finding>
@@ -164,22 +149,16 @@ fn Is_Single_Letter(name: &str) -> bool
     return name != "_" && name.chars().count() == 1;
 }
 
+/// One single-letter name outside the exception this payload can judge.
 fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
 {
-    use nomos_model::Content_Digest;
-
-    let qualified = format!("{path}::{}::{name}", item.qualified_name);
-
-    return Finding {
-        rule: RuleId::New(SINGLE_LETTER_NAMES),
-        subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
-        subject_name: name.to_owned(),
-        applicability: Applicability::Supported,
-        evidence: EvidenceClass::Derived,
-        gate: GateCategory::Blocking,
-        summary: format!("`{name}` is a single-letter name outside the local-variable exception this payload can judge"),
-        locations: vec![path.to_owned()],
-    };
+    return Member_Finding(
+        SINGLE_LETTER_NAMES,
+        path,
+        item,
+        name,
+        format!("`{name}` is a single-letter name outside the local-variable exception this payload can judge"),
+    );
 }
 
 #[cfg(test)]
