@@ -131,13 +131,13 @@ pub(super) fn Wrap_Sql_Result<Value>(result: rusqlite::Result<Value>) -> Result<
 pub(super) mod tests
 {
     use super::*;
-    use crate::archive::tests::Zip_Fixture;
+    use crate::archive::tests::{FixturePrefix, Zip_Fixture};
     use nomos_spec_store::{NodeRow, SuiteAuthority};
 
     #[test]
     fn Test_Claim_Node_Id_Should_Assign_A_Fresh_Identifier_And_Refuse_A_Different_Suites_Claim()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory migrates a fresh database");
         let suite = Suite_In(&mut store, Sibling::Xvpe);
         let node = store
             .Upsert_Node(NodeRow {
@@ -147,27 +147,30 @@ pub(super) mod tests
                 representation: "document",
                 title: "A",
             })
-            .expect("mints");
+            .expect("no node carries that identifier in this fresh store, so the upsert inserts");
 
-        let claimed = Claim_Node_Id(&mut store, "xvpe-spec-seed:a.md", node, suite).expect("claims");
+        let claimed = Claim_Node_Id(&mut store, "xvpe-spec-seed:a.md", node, suite)
+            .expect("suite owns the identifier the node was minted under, so the claim is recorded");
         assert!(claimed);
 
         let other_suite = Suite_In(&mut store, Sibling::Kwb);
-        let contested = Claim_Node_Id(&mut store, "xvpe-spec-seed:a.md", node, other_suite).expect("checks");
+        let contested = Claim_Node_Id(&mut store, "xvpe-spec-seed:a.md", node, other_suite)
+            .expect("a contested claim is answered rather than refused, so the call returns its flag");
         assert!(!contested);
     }
 
     #[test]
     fn Test_Ingest_Document_Should_Store_Its_Blocks_And_Dispose_Every_One()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory migrates a fresh database");
         let suite = Suite_In(&mut store, Sibling::Xvpe);
         let node = Document_Node(&mut store);
 
         let text = "# A\n\nFirst.\n\nSecond.\n";
         let sourced = Sourced { entry: "suite/a.md", text };
 
-        let blocks = Ingest_Document(&mut store, suite, &sourced, node).expect("ingests");
+        let blocks = Ingest_Document(&mut store, suite, &sourced, node)
+            .expect("sourced.text is a well-formed document and node names a row here, so ingestion stores it");
 
         assert!(blocks > 0);
         let undisposed: u32 = store
@@ -178,7 +181,7 @@ pub(super) mod tests
                 [],
                 |row| return row.get(0),
             )
-            .expect("queries");
+            .expect("the count query is valid against the migrated schema, so it returns its row");
         assert_eq!(undisposed, 0);
     }
 
@@ -192,7 +195,7 @@ pub(super) mod tests
                 representation: "document",
                 title: "A",
             })
-            .expect("mints");
+            .expect("no node carries that identifier in this fresh store, so the upsert inserts");
 
         return node;
     }
@@ -200,7 +203,7 @@ pub(super) mod tests
     #[test]
     fn Test_Dispose_Block_Should_Record_Lineage_From_The_Block_To_The_Node()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory migrates a fresh database");
         let node = Disposed_Node(&mut store);
         let text = "# A\n\nBody.\n";
         let document = store.Put_Source_Document("a.md", "v14.36", text).expect("puts the document");
@@ -209,7 +212,8 @@ pub(super) mod tests
 
         for block in &blocks
         {
-            Dispose_Block(&mut store, document, block.ordinal, node).expect("disposes");
+            Dispose_Block(&mut store, document, block.ordinal, node)
+                .expect("document and block.ordinal name a stored block, so the lineage row is written");
         }
 
         let disposed: u32 = store
@@ -219,7 +223,7 @@ pub(super) mod tests
                 rusqlite::params![node],
                 |row| return row.get(0),
             )
-            .expect("queries");
+            .expect("the count query is valid against the migrated schema, so it returns its row");
         assert_eq!(disposed, u32::try_from(blocks.len()).unwrap_or(u32::MAX));
     }
 
@@ -233,7 +237,7 @@ pub(super) mod tests
                 representation: "document",
                 title: "n",
             })
-            .expect("mints");
+            .expect("no node carries that identifier in this fresh store, so the upsert inserts");
 
         return node;
     }
@@ -241,9 +245,10 @@ pub(super) mod tests
     #[test]
     fn Test_Read_Text_Should_Read_An_Entrys_Bytes_As_A_String()
     {
-        let mut archive = Zip_Fixture("nomos-spec-ingest-document", "read-text", &[("suite/a.md", "# A\n\nBody.\n")]);
+        let mut archive = Zip_Fixture(FixturePrefix("nomos-spec-ingest-document"), "read-text", &[("suite/a.md", "# A\n\nBody.\n")]);
 
-        let text = Read_Text(&mut archive, "suite/a.md").expect("reads");
+        let text = Read_Text(&mut archive, "suite/a.md")
+            .expect("the fixture wrote suite/a.md into this zip, so Read_Text finds its entry");
 
         assert_eq!(text, "# A\n\nBody.\n");
     }

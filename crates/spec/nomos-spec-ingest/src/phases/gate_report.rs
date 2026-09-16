@@ -345,7 +345,8 @@ mod tests
 
     fn Parsed_Manifest(yaml: &str) -> BlockLineage
     {
-        return Parse_Block_Lineage(yaml).expect("valid");
+        return Parse_Block_Lineage(yaml)
+            .expect("Recorded() writes a well-formed block lineage, so the parser accepts it");
     }
 
     fn Documents() -> BTreeMap<String, String>

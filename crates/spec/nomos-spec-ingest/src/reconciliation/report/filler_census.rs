@@ -33,11 +33,16 @@ mod tests
 {
     use super::*;
 
+    /// The reach every template this module's fixtures build carries. No assertion here reads
+    /// it — these tests are about `declared`, not about reach — so it is the fixture's own
+    /// choice of a count, held in one place rather than repeated per fixture.
+    const SECTIONS_IN_A_FIXTURE_TEMPLATE: u32 = 4;
+
     fn Template_Named(text: &str, declared: Option<&'static str>) -> Template
     {
         return Template {
             text: text.to_owned(),
-            sections: 4,
+            sections: SECTIONS_IN_A_FIXTURE_TEMPLATE,
             documents: vec!["a.md".to_owned()],
             declared,
         };

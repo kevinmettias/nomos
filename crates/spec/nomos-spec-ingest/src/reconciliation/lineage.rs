@@ -219,9 +219,11 @@ mod tests
     fn Test_Ingest_Section_Lineage_Should_Turn_Sections_Into_Headings_With_Lineage_Rows()
     {
         let mut store = Prepared();
-        let lineage = Parse_Section_Lineage(SECTIONS).expect("parses");
+        let lineage = Parse_Section_Lineage(SECTIONS)
+            .expect("SECTIONS is a well-formed section lineage, so the parser yields its sections");
 
-        let report = Ingest_Section_Lineage(&mut store, &lineage, "v14.36").expect("ingests");
+        let report = Ingest_Section_Lineage(&mut store, &lineage, "v14.36")
+            .expect("SECTIONS names a.md, which Prepared ingested, so every section links to a heading");
 
         assert!(report.Is_Passed());
         assert_eq!(report.headings, 1);
@@ -238,9 +240,10 @@ mod tests
             "sections:\n- source_document: missing.md\n  source_heading: X\n  \
              heading_level: 1\n  disposition: preserved-or-referenced\n",
         )
-        .expect("parses");
+        .expect("the inline yaml is one well-formed section, so the parser yields it as a lineage");
 
-        let report = Ingest_Section_Lineage(&mut store, &lineage, "v14.36").expect("ingests");
+        let report = Ingest_Section_Lineage(&mut store, &lineage, "v14.36")
+            .expect("an unknown document is reported rather than refused, so ingestion returns a report");
 
         assert!(!report.Is_Passed());
         assert_eq!(report.unknown_documents.len(), 1);
@@ -250,10 +253,13 @@ mod tests
     fn Test_Parse_Section_Lineage_Should_Feed_An_Idempotent_Ingest()
     {
         let mut store = Prepared();
-        let lineage = Parse_Section_Lineage(SECTIONS).expect("parses");
+        let lineage = Parse_Section_Lineage(SECTIONS)
+            .expect("SECTIONS is a well-formed section lineage, so the parser yields its sections");
 
-        Ingest_Section_Lineage(&mut store, &lineage, "v14.36").expect("first");
-        Ingest_Section_Lineage(&mut store, &lineage, "v14.36").expect("second");
+        Ingest_Section_Lineage(&mut store, &lineage, "v14.36")
+            .expect("the first ingest writes the heading and lineage rows the fixture names");
+        Ingest_Section_Lineage(&mut store, &lineage, "v14.36")
+            .expect("the second ingest of that same lineage replaces those rows rather than failing");
 
         assert_eq!(
             store.Count(nomos_spec_store::Table::SourceHeadings).expect("counts"),
@@ -269,7 +275,7 @@ mod tests
 
         let written =
             Ingest_Block_Dispositions(&mut store, "a.md", "v14.36", &[(0, "preserved".to_owned())])
-                .expect("ingests");
+                .expect("ordinal 0 has no recorded block, so the call skips it and returns its count");
 
         assert_eq!(written, 0);
     }
@@ -294,8 +300,10 @@ mod tests
 
     fn Prepared() -> SpecificationStore
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        Ingest_Source_Document(&mut store, "a.md", "v14.36", "# Title\n\nOne.\n").expect("ingests");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
+        Ingest_Source_Document(&mut store, "a.md", "v14.36", "# Title\n\nOne.\n")
+            .expect("a heading and a prose block are a well-formed document, so ingestion accepts it");
         return store;
     }
 }

@@ -118,6 +118,10 @@ mod tests
     use super::*;
     use nomos_spec_model::ContentHash;
 
+    /// How many `Requirement` outcomes the `Declared_In` fixture below carries — two, against
+    /// one `Story`, so a count that ignored the family filter would answer three.
+    const REQUIREMENT_OUTCOMES: usize = 2;
+
     fn Outcome(id: &str, family: Family, disposition: Disposition) -> IdentifierOutcome
     {
         return IdentifierOutcome { id: id.to_owned(), family, disposition };
@@ -187,7 +191,7 @@ mod tests
             ],
         };
 
-        assert_eq!(report.Declared_In(Family::Requirement), 2);
+        assert_eq!(report.Declared_In(Family::Requirement), REQUIREMENT_OUTCOMES);
         assert_eq!(report.Declared_In(Family::Story), 1);
     }
 

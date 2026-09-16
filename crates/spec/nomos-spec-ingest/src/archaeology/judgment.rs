@@ -118,6 +118,11 @@ mod tests
     use crate::Origin;
     use std::collections::BTreeSet;
 
+    /// The reach the template fixture below is built with. It is the fixture's own choice of
+    /// a shared-body count, and the assertion reads the same constant so the two agree on
+    /// which number the `Hollow::Template` evidence is expected to carry through.
+    const SECTIONS_SHARING_THE_TEMPLATE_BODY: u32 = 3;
+
     #[test]
     fn Test_Judge_Member_Should_Combine_Identity_With_Its_Computed_Fate()
     {
@@ -176,11 +181,11 @@ mod tests
         assert_eq!(
             Fate_Of_Position(&Position::Heading {
                 document: "a.md".to_owned(),
-                body: Some(Body::Template { shared_with: 3, declared: None }),
+                body: Some(Body::Template { shared_with: SECTIONS_SHARING_THE_TEMPLATE_BODY, declared: None }),
             }),
             Fate::Hollowed {
                 document: "a.md".to_owned(),
-                evidence: Hollow::Template { shared_with: 3, declared: None },
+                evidence: Hollow::Template { shared_with: SECTIONS_SHARING_THE_TEMPLATE_BODY, declared: None },
             }
         );
         assert_eq!(

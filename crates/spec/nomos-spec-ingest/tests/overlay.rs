@@ -125,7 +125,8 @@ fn Artifact_At(path: &std::path::Path, family: Family) -> Option<nomos_spec_inge
     );
 }
 
-fn V15_Statements(archive: &mut Archive) -> BTreeMap<String, String> {
+fn V15_Statements(archive: &mut Archive) -> BTreeMap<String, String>
+{
     let mut found = BTreeMap::new();
     for entry in archive.Listing().Ending_With(".md")
     {
@@ -360,7 +361,8 @@ fn Assert_Governing_Records_Are_Present(store: &SpecificationStore)
     }
 }
 
-fn V14_Headings(corpus: &std::path::Path) -> BTreeMap<String, i64> {
+fn V14_Headings(corpus: &std::path::Path) -> BTreeMap<String, i64>
+{
     let directory = corpus.join("01_authoring/domain_volumes");
     let entries = std::fs::read_dir(&directory)
         // The assertion at the end of this function catches an empty heading set, but it would

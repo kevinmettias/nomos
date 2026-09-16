@@ -61,21 +61,27 @@ impl Revision
 mod tests
 {
     use super::*;
-    use crate::archive::tests::Zip_Fixture;
+    use crate::archive::tests::{FixturePrefix, Zip_Fixture};
+
+    /// The fixture below writes exactly two `.md` entries under `v15.0` — one at the root and
+    /// one nested — beside a `.txt` that `Read` does not collect, so a revision read out of
+    /// it holds these and no others.
+    const MARKDOWN_ENTRIES_UNDER_THE_REVISION: usize = 2;
 
     #[test]
     fn Test_Read_Should_Collect_Every_Markdown_Entry_Under_Its_Revision_Local_Path()
     {
         let mut archive = Zip_Fixture(
-            "nomos-spec-ingest-archaeology-revision",
+            FixturePrefix("nomos-spec-ingest-archaeology-revision"),
             "read-collects-markdown",
             &[("v15.0/a.md", "# A\n"), ("v15.0/nested/b.md", "# B\n"), ("v15.0/skip.txt", "not markdown")],
         );
 
-        let revision = Revision::Read(&mut archive, "v15.0").expect("reads");
+        let revision = Revision::Read(&mut archive, "v15.0")
+            .expect("the fixture wrote two v15.0 markdown entries, so Read collects them");
 
         assert_eq!(revision.label, "v15.0");
-        assert_eq!(revision.documents.len(), 2);
+        assert_eq!(revision.documents.len(), MARKDOWN_ENTRIES_UNDER_THE_REVISION);
         assert_eq!(revision.documents.get("a.md"), Some(&"# A\n".to_owned()));
         assert_eq!(revision.documents.get("nested/b.md"), Some(&"# B\n".to_owned()));
     }
@@ -83,10 +89,15 @@ mod tests
     #[test]
     fn Test_Read_Should_Refuse_An_Archive_With_No_Markdown()
     {
-        let mut archive =
-            Zip_Fixture("nomos-spec-ingest-archaeology-revision", "read-refuses-empty", &[("v15.0/notes.txt", "text")]);
+        let mut archive = Zip_Fixture(
+            FixturePrefix("nomos-spec-ingest-archaeology-revision"),
+            "read-refuses-empty",
+            &[("v15.0/notes.txt", "text")],
+        );
 
-        let refusal = Revision::Read(&mut archive, "v15.0").err().expect("must refuse");
+        let refusal = Revision::Read(&mut archive, "v15.0")
+            .err()
+            .expect("the fixture's only entry is notes.txt, which Read does not collect as markdown");
 
         assert!(matches!(refusal, IngestError::Parse(_)));
         assert!(format!("{refusal}").contains("holds no markdown"));

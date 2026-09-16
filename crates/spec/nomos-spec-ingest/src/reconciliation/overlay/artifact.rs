@@ -92,6 +92,9 @@ mod tests
 {
     use super::*;
 
+    /// How many criteria `ACCEPTANCE` declares below — one per `- id:` entry in its list.
+    const CRITERIA_IN_THE_ACCEPTANCE_ARTIFACT: usize = 2;
+
     const ARTIFACT: &str = "\u{feff}---\nid: MODEL-001\nkind: requirement\n\
                             statement: MODEL-001 Artifact represents persisted objects.\n\
                             ---\n\n# MODEL-001 - Artifact\n";
@@ -99,7 +102,8 @@ mod tests
     #[test]
     fn Test_Parse_Artifact_Should_Read_Through_A_Byte_Order_Mark()
     {
-        let artifact = Parse_Artifact(ARTIFACT, Family::Requirement).expect("reads");
+        let artifact = Parse_Artifact(ARTIFACT, Family::Requirement)
+            .expect("ARTIFACT carries front matter, an id and a statement, so parsing succeeds");
 
         assert_eq!(artifact.id, "MODEL-001");
         assert_eq!(artifact.statement, "MODEL-001 Artifact represents persisted objects.");
@@ -154,13 +158,15 @@ mod tests
     #[test]
     fn Test_An_Acceptance_Artifact_Should_Reconcile_Through_Its_Criteria()
     {
-        let artifact = Parse_Artifact(ACCEPTANCE, Family::Acceptance).expect("reads");
+        let artifact = Parse_Artifact(ACCEPTANCE, Family::Acceptance)
+            .expect("ACCEPTANCE declares an id, a kind and a criteria list, so parsing succeeds");
         let dropped = ACCEPTANCE.replace("- id: US-A-001-AC-02
   statement: Two holds
 ", "");
-        let shorter = Parse_Artifact(&dropped, Family::Acceptance).expect("reads");
+        let shorter = Parse_Artifact(&dropped, Family::Acceptance)
+            .expect("dropped still carries front matter, and dropping a criterion is not a refusal");
 
-        assert_eq!(artifact.criteria, 2);
+        assert_eq!(artifact.criteria, CRITERIA_IN_THE_ACCEPTANCE_ARTIFACT);
         assert!(artifact.statement.contains("US-A-001-AC-01 One holds"));
         assert!(artifact.statement.contains("US-A-001-AC-02 Two holds"));
         assert_ne!(

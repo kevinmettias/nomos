@@ -69,15 +69,21 @@ mod tests
     #[test]
     fn Test_Statements_Sourced_Only_From_Commentary_Should_Report_A_Statement_Resting_Only_On_A_Commentary_Block()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let commentary_node = Node(&mut store, "PLAN-X", "commentary");
-        let requirement_node = Node(&mut store, "AGT-100", "canonical");
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory migrates a fresh database");
+        let commentary_node = Node(&mut store, NodeIdentity { id: "PLAN-X", authority: "commentary" });
+        let requirement_node = Node(&mut store, NodeIdentity { id: "AGT-100", authority: "canonical" });
         let statement = Statement(&mut store, requirement_node, "AGT-100");
-        let block = Block_Disposed_To(&mut store, "lineage-notes", "plan.md", commentary_node);
+        let block = Block_Disposed_To(
+            &mut store,
+            DocumentPlace { revision: "lineage-notes", path: "plan.md" },
+            commentary_node,
+        );
         Trace_Statement_To(&mut store, block, statement);
-        Prepare_Commentary_View(&store).expect("prepares");
+        Prepare_Commentary_View(&store)
+            .expect("COMMENTARY_BLOCKS is valid DDL against the migrated schema, so the batch applies");
 
-        let reported = Statements_Sourced_Only_From_Commentary(&store).expect("queries");
+        let reported = Statements_Sourced_Only_From_Commentary(&store)
+            .expect("the prepared view is valid SQL, so the query returns the reported identifiers");
 
         assert_eq!(reported, vec!["AGT-100".to_owned()]);
     }
@@ -112,46 +118,66 @@ mod tests
     #[test]
     fn Test_Prepare_Commentary_View_Should_List_Only_Blocks_Disposed_To_A_Commentary_Node()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let commentary_node = Node(&mut store, "PLAN-Y", "commentary");
-        let canonical_node = Node(&mut store, "DOC-Y", "canonical");
-        let commentary_block = Block_Disposed_To(&mut store, "lineage-notes", "plan.md", commentary_node);
-        let canonical_block = Block_Disposed_To(&mut store, "v14.36", "doc.md", canonical_node);
+        let mut store = SpecificationStore::In_Memory().expect("In_Memory migrates a fresh database");
+        let commentary_node = Node(&mut store, NodeIdentity { id: "PLAN-Y", authority: "commentary" });
+        let canonical_node = Node(&mut store, NodeIdentity { id: "DOC-Y", authority: "canonical" });
+        let notes = DocumentPlace { revision: "lineage-notes", path: "plan.md" };
+        let doc = DocumentPlace { revision: "v14.36", path: "doc.md" };
+        let commentary_block = Block_Disposed_To(&mut store, notes, commentary_node);
+        let canonical_block = Block_Disposed_To(&mut store, doc, canonical_node);
 
-        Prepare_Commentary_View(&store).expect("prepares");
+        Prepare_Commentary_View(&store).expect("COMMENTARY_BLOCKS is valid DDL for the migrated schema");
 
         let blocks: Vec<i64> = store
             .Connection()
             .prepare("SELECT block FROM commentary_blocks ORDER BY block")
-            .expect("prepares the read")
+            .expect("the SELECT is valid against the view just prepared, so it compiles")
             .query_map([], |row| return row.get(0))
-            .expect("queries")
+            .expect("the SELECT binds no parameters, so mapping with an empty list returns its rows")
             .collect::<rusqlite::Result<Vec<i64>>>()
-            .expect("collects");
+            .expect("the block column is an i64, so every row of the mapping converts");
 
         assert_eq!(blocks, vec![commentary_block]);
         assert!(!blocks.contains(&canonical_block));
     }
 
+    /// A node the fixtures mint: the identifier it is called by, and the authority behind it.
+    ///
+    /// One named struct rather than two adjacent `&str` parameters, so a call site cannot hand
+    /// the authority where the identifier belongs — the two would compile just as well swapped.
+    struct NodeIdentity<'a>
+    {
+        id: &'a str,
+        authority: &'a str,
+    }
+
+    /// Which revision of which document a fixture block sits in, for the same reason as
+    /// [`NodeIdentity`]: both fields are `&str`, so position alone would keep them apart.
+    struct DocumentPlace<'a>
+    {
+        revision: &'a str,
+        path: &'a str,
+    }
+
     /// Mints a node, so a test can name a real `target_node_uid` for lineage to point at.
-    fn Node(store: &mut SpecificationStore, node_id: &str, authority: &str) -> i64
+    fn Node(store: &mut SpecificationStore, identity: NodeIdentity<'_>) -> i64
     {
         return store
             .Upsert_Node(NodeRow {
-                node_id,
+                node_id: identity.id,
                 kind: "document",
-                authority,
+                authority: identity.authority,
                 representation: "document",
-                title: node_id,
+                title: identity.id,
             })
             .expect("mints a node");
     }
 
     /// A real source block, disposed to `node` by a lineage row of its own — separate from
     /// whatever lineage a test then adds from the same block to a statement.
-    fn Block_Disposed_To(store: &mut SpecificationStore, revision: &str, path: &str, node: i64) -> i64
+    fn Block_Disposed_To(store: &mut SpecificationStore, place: DocumentPlace<'_>, node: i64) -> i64
     {
-        let block = First_Block_Of(store, path, revision);
+        let block = First_Block_Of(store, place);
 
         Dispose_Block_To_Node(store, block, node);
 
@@ -159,10 +185,12 @@ mod tests
     }
 
     /// A one-block document, stored and segmented, answered by its one block's uid.
-    fn First_Block_Of(store: &mut SpecificationStore, path: &str, revision: &str) -> i64
+    fn First_Block_Of(store: &mut SpecificationStore, place: DocumentPlace<'_>) -> i64
     {
         let text = "# T\n\nBody text.\n";
-        let document = store.Put_Source_Document(path, revision, text).expect("puts the document");
+        let document = store
+            .Put_Source_Document(place.path, place.revision, text)
+            .expect("puts the document");
         let blocks = nomos_spec_model::Segment(text);
         store.Put_Source_Blocks(document, &blocks).expect("puts the blocks");
 

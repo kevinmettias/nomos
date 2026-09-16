@@ -51,6 +51,18 @@ mod tests
 {
     use super::*;
 
+    /// Where `Family::Acceptance` sits in `Family::All()`, counted from zero — its ordinal.
+    ///
+    /// The match below stays a match rather than becoming an index lookup: the property its
+    /// doc comment claims is that a variant added to `Family` and not to this arm list fails
+    /// the file to *compile*, and a lookup would only fail to pass. So the arm names the
+    /// position it answers instead of spelling a bare ordinal.
+    const ACCEPTANCE_POSITION: usize = 2;
+
+    /// The variants `Family::All()` lists, asserted beside the uniqueness check below so that
+    /// a duplicate plus a dropped variant — which leaves the length alone — still fails.
+    const FAMILIES_IN_ALL: usize = 3;
+
     /// `Family::All()`'s own mirror, named in the doc comment above it.
     ///
     /// The match has no wildcard arm. A variant added to `Family` without a matching arm
@@ -65,7 +77,7 @@ mod tests
             {
                 Family::Requirement => 0,
                 Family::Story => 1,
-                Family::Acceptance => 2,
+                Family::Acceptance => ACCEPTANCE_POSITION,
             };
         }
 
@@ -102,7 +114,7 @@ mod tests
     {
         let all = Family::All();
 
-        assert_eq!(all.len(), 3);
+        assert_eq!(all.len(), FAMILIES_IN_ALL);
         for family in all
         {
             assert_eq!(

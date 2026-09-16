@@ -303,6 +303,19 @@ mod tests
     /// the heading they share must be indexed under.
     const SHARED_DOCUMENTS: usize = 3;
 
+    /// The same three documents where `Body::Template` carries the count: `shared_with` is a
+    /// `u32`, so a match pattern over it cannot compare against the `usize` above, and the
+    /// one count is therefore named once in each width rather than written twice as a bare 3.
+    const SHARED_WITH_TEMPLATE: u32 = SHARED_DOCUMENTS as u32;
+
+    /// The sections the one document below cuts into: it carries two `#` headings, and front
+    /// matter would be a third only if `Cut_At_Headings` opened a section for it.
+    const SECTIONS_IN_THE_TWO_HEADING_DOCUMENT: usize = 2;
+
+    /// The sections `Repetitions_In` folds under a single key when two documents carry the
+    /// same title and the same body.
+    const SECTIONS_UNDER_ONE_KEY: u32 = 2;
+
     #[test]
     fn Test_Read_Should_Index_Headings_As_Positions_And_Judge_Repeated_Bodies()
     {
@@ -315,10 +328,10 @@ mod tests
         let later = Later::Read(&documents);
 
         let positions = later.authored.get("Shared").expect("the heading is indexed");
-        assert_eq!(positions.len(), 3);
+        assert_eq!(positions.len(), SHARED_DOCUMENTS);
         assert!(positions.iter().all(|position| return matches!(
             position,
-            Position::Heading { body: Some(Body::Template { shared_with: 3, declared: None }), .. }
+            Position::Heading { body: Some(Body::Template { shared_with: SHARED_WITH_TEMPLATE, declared: None }), .. }
         )));
     }
 
@@ -358,7 +371,7 @@ mod tests
 
         let sections = Sections_Of(&documents, &mut later);
 
-        assert_eq!(sections.len(), 2);
+        assert_eq!(sections.len(), SECTIONS_IN_THE_TWO_HEADING_DOCUMENT);
         assert_eq!(sections.first().expect("the document cuts into two sections").0, "a.md");
         assert_eq!(sections.first().expect("the document cuts into two sections").1, "One");
         assert_eq!(sections.get(1).expect("the document cuts into two sections").1, "Two");
@@ -397,12 +410,13 @@ mod tests
         Close_Section("a.md", Some("Title".to_owned()), &mut body, &mut sections);
 
         assert_eq!(sections.len(), 1);
-        assert_eq!(sections.first().expect("the assertion above confirms exactly one section").0, "a.md");
-        assert_eq!(sections.first().expect("the assertion above confirms exactly one section").1, "Title");
-        assert_eq!(
-            sections.first().expect("the assertion above confirms exactly one section").2,
-            vec![Test_Block("Text.")]
-        );
+
+        let (path, title, blocks) =
+            sections.first().expect("the assertion above confirms exactly one section");
+
+        assert_eq!(path, "a.md");
+        assert_eq!(title, "Title");
+        assert_eq!(blocks, &vec![Test_Block("Text.")]);
         assert!(body.is_empty());
     }
 
@@ -418,7 +432,7 @@ mod tests
 
         let key = Template_Key(SectionText("Shared body."), SectionTitle("Title"));
         let repetition = templates.get(&key).expect("the shared block is keyed");
-        assert_eq!(repetition.sections, 2);
+        assert_eq!(repetition.sections, SECTIONS_UNDER_ONE_KEY);
         assert_eq!(repetition.documents, BTreeSet::from(["a.md".to_owned(), "b.md".to_owned()]));
     }
 

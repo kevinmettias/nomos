@@ -64,12 +64,12 @@ pub(crate) fn Within_Revision(entry: &str) -> String
 mod tests
 {
     use super::*;
-    use crate::archive::tests::Zip_Fixture;
+    use crate::archive::tests::{FixturePrefix, Zip_Fixture};
 
     #[test]
     fn Test_Fingerprint_Revision_Should_Hash_Every_Markdown_Entry_Under_The_Label()
     {
-        let mut archive = Zip_Fixture("nomos-spec-ingest-fingerprint", "basic", &[("suite/a.md", "# A\n\nText.\n")]);
+        let mut archive = Zip_Fixture(FixturePrefix("nomos-spec-ingest-fingerprint"), "basic", &[("suite/a.md", "# A\n\nText.\n")]);
 
         let fingerprint = Fingerprint_Revision(&mut archive, "v14.1").expect("fingerprints");
 

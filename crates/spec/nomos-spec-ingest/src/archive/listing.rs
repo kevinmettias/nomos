@@ -52,6 +52,10 @@ mod tests
 {
     use super::*;
 
+    /// The entries `Sample` below is built from, two of them markdown and one not, so
+    /// `Ending_With` has something to drop as well as something to keep.
+    const ENTRIES_IN_THE_SAMPLE: usize = 3;
+
     #[test]
     fn Test_Of_Should_Wrap_The_Given_Entries_Without_Reordering_Them()
     {
@@ -68,7 +72,7 @@ mod tests
     {
         let listing = Sample();
 
-        assert_eq!(listing.Paths().len(), 3);
+        assert_eq!(listing.Paths().len(), ENTRIES_IN_THE_SAMPLE);
     }
 
     #[test]

@@ -147,6 +147,24 @@ mod tests
     use super::*;
     use std::collections::BTreeSet;
 
+    /// The suite's own latest minor at this revision, written once because three tests below
+    /// name it: as a label `Version_Of` parses, as the lower bound of an across-major gap,
+    /// and as the version the archive directory is built around.
+    const V14_36: Numbered = Numbered { major: 14, minor: 36 };
+
+    /// The first version of the next major. `Missing_Between` answers nothing across a major
+    /// bump, so this is the upper bound that keeps its result empty.
+    const V15_0: Numbered = Numbered { major: 15, minor: 0 };
+
+    /// Two versions three minors apart, inside one major, so the minors skipped between them
+    /// — two of them — are what the assertion is about rather than a distance of one.
+    const V14_25: Numbered = Numbered { major: 14, minor: 25 };
+    const V14_28: Numbered = Numbered { major: 14, minor: 28 };
+
+    /// The directory below names two revision archives and one readme, so two labels come
+    /// back and the readme contributes none.
+    const LABELLED_ARCHIVES: usize = 2;
+
     #[test]
     fn Test_Revisions_In_Should_Sort_By_Numeric_Label_Order()
     {
@@ -179,7 +197,7 @@ mod tests
         let found = Labelled_Archives(&directory).expect("reads the directory");
         let labels: BTreeSet<&str> = found.iter().map(|(label, _)| return label.as_str()).collect();
 
-        assert_eq!(labels.len(), 2);
+        assert_eq!(labels.len(), LABELLED_ARCHIVES);
         assert!(labels.contains("v14.36"));
         assert!(labels.contains("v14.37"));
     }
@@ -194,7 +212,7 @@ mod tests
     #[test]
     fn Test_Version_Of_Should_Parse_Major_And_Minor_As_Numbers()
     {
-        assert_eq!(Version_Of("v14.36"), Some(Numbered { major: 14, minor: 36 }));
+        assert_eq!(Version_Of("v14.36"), Some(V14_36));
         assert_eq!(Version_Of("not-a-version"), None);
     }
 
@@ -216,12 +234,12 @@ mod tests
     #[test]
     fn Test_Missing_Between_Should_List_Skipped_Minor_Numbers_Within_One_Major()
     {
-        let before = Numbered { major: 14, minor: 25 };
-        let after = Numbered { major: 14, minor: 28 };
+        let before = V14_25;
+        let after = V14_28;
 
         assert_eq!(Missing_Between(before, after), vec!["v14.26".to_owned(), "v14.27".to_owned()]);
 
-        let across_major = Missing_Between(Numbered { major: 14, minor: 36 }, Numbered { major: 15, minor: 0 });
+        let across_major = Missing_Between(V14_36, V15_0);
         assert!(across_major.is_empty());
     }
 

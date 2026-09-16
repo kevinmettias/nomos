@@ -94,7 +94,8 @@ mod tests
             documents: Documents(&[("a.md", "# A\n\nThe WorkspaceContext is discussed.\n")]),
         };
 
-        let report = Regression_Between_Revisions(&From_Revision(), &to).expect("reports");
+        let report = Regression_Between_Revisions(&From_Revision(), &to)
+            .expect("From_Revision carries a domain volume, so Volumes_Of does not refuse it");
 
         assert_eq!(report.from, "v14.36");
         assert_eq!(report.to, "v15.0");
@@ -137,7 +138,8 @@ mod tests
         let to_documents = Documents(&[("a.md", "# A\n\nThe WorkspaceContext is discussed.\n")]);
         let later = Later::Read(&to_documents);
 
-        let members = Judged_Members(&volumes, &later, &to_documents).expect("judges");
+        let members = Judged_Members(&volumes, &later, &to_documents)
+            .expect("CORE holds the well-formed domain-model table Extract_Members reads");
 
         assert_eq!(members.len(), 1);
         assert_eq!(members.first().expect("the assertion above confirms exactly one member").name, "WorkspaceContext");

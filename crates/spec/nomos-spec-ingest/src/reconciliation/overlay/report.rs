@@ -158,9 +158,11 @@ mod tests
     #[test]
     fn Test_Ingest_V15_Record_Should_Upsert_The_Declared_Node()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
 
-        let id = Ingest_V15_Record(&mut store, "docs/records/d-900.md", RECORD).expect("ingests");
+        let id = Ingest_V15_Record(&mut store, "docs/records/d-900.md", RECORD)
+            .expect("RECORD carries front matter with an id and a title, so the record is ingested");
 
         assert_eq!(id, "D-900");
     }
@@ -168,11 +170,13 @@ mod tests
     #[test]
     fn Test_Ingest_Overlay_Document_Should_Count_Blocks_And_Judge_No_Filler_In_Real_Prose()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
         let document = Overlaid { path: "09-reference/a.md", markdown: "# A\n\nSome real prose.\n" };
         let mut report = Report::default();
 
-        Ingest_Overlay_Document(&mut store, &document, &BTreeMap::new(), &mut report).expect("ingests");
+        Ingest_Overlay_Document(&mut store, &document, &BTreeMap::new(), &mut report)
+            .expect("document carries an empty overlay map and well-formed markdown, so it is ingested");
 
         assert_eq!(report.documents, 1);
         assert!(report.blocks > 0);

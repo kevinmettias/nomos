@@ -58,18 +58,23 @@ mod tests
 {
     use super::*;
 
+    /// How many blocks the `markdown` fixture below segments into — one heading and one prose
+    /// block — which is both what ingestion reports written and what the store then counts.
+    const BLOCKS_IN_THE_FIXTURE: u32 = 2;
+
     #[test]
     fn Test_Ingest_Source_Document_Should_Store_The_Document_And_Its_Blocks()
     {
         let mut store = Store();
         let markdown = "# Title\n\nOne.\n";
 
-        let written = Ingest_Source_Document(&mut store, "a.md", "v14.36", markdown).expect("ingests");
+        let written = Ingest_Source_Document(&mut store, "a.md", "v14.36", markdown)
+            .expect("a heading and a prose block are a well-formed document, so ingestion accepts it");
 
-        assert_eq!(written, 2, "a heading and a prose block");
+        assert_eq!(written, BLOCKS_IN_THE_FIXTURE, "a heading and a prose block");
         assert_eq!(
             store.Count(nomos_spec_store::Table::SourceBlocks).expect("counts"),
-            2
+            BLOCKS_IN_THE_FIXTURE
         );
     }
 
@@ -109,18 +114,20 @@ mod tests
                 representation: "record",
                 title: "a requirement",
             })
-            .expect("upserts");
+            .expect("AGT-001 is not in this fresh store, so the upsert inserts rather than updates");
 
         return node_uid;
     }
 
     fn Store_The_Statement(mut store: &mut SpecificationStore, statement: &RecordedStatement, node_uid: i64)
     {
-        Store_Text(&mut store, &statement, "requirement", node_uid).expect("stores");
+        Store_Text(&mut store, &statement, "requirement", node_uid)
+            .expect("the node_uid above names a row in this store, so the insert satisfies its foreign key");
     }
 
     fn Store() -> SpecificationStore
     {
-        return SpecificationStore::In_Memory().expect("opens");
+        return SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
     }
 }

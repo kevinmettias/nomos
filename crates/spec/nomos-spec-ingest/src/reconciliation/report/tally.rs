@@ -27,12 +27,28 @@ mod tests
 {
     use super::*;
 
+    /// One block in each fate bucket below, each count distinct so a `Total` that dropped a
+    /// bucket, added one twice, or swapped two of them lands on a different number than the
+    /// sum of all four.
+    const PRESERVED_BLOCKS: u32 = 3;
+    const HOLLOWED_BLOCKS: u32 = 1;
+    const MENTIONED_BLOCKS: u32 = 2;
+    const GONE_BLOCKS: u32 = 4;
+
     #[test]
     fn Test_Total_Should_Sum_Every_Fate_Bucket()
     {
-        let tally = Tally { preserved: 3, hollowed: 1, mentioned: 2, gone: 4 };
+        let tally = Tally {
+            preserved: PRESERVED_BLOCKS,
+            hollowed: HOLLOWED_BLOCKS,
+            mentioned: MENTIONED_BLOCKS,
+            gone: GONE_BLOCKS,
+        };
 
-        assert_eq!(tally.Total(), 10);
+        assert_eq!(
+            tally.Total(),
+            PRESERVED_BLOCKS + HOLLOWED_BLOCKS + MENTIONED_BLOCKS + GONE_BLOCKS
+        );
         assert_eq!(Tally::default().Total(), 0);
     }
 }

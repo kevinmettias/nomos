@@ -53,6 +53,16 @@ mod tests
 {
     use super::*;
 
+    /// The manifest's count in the fixture below, which disagrees with — and is larger than —
+    /// `RECOMPUTED_BLOCKS`, so a `Describe` that read them the wrong way round would say so.
+    const RECORDED_BLOCKS: usize = 3;
+
+    /// The source tree's count for the same document, recomputed from the markdown.
+    const RECOMPUTED_BLOCKS: usize = 2;
+
+    /// The ordinal of the one block the two trees disagree about, in the document at `c.md`.
+    const DISAGREEING_ORDINAL: u32 = 4;
+
     #[test]
     fn Test_Describe_Should_Name_The_Document_For_Every_Kind_Of_Disagreement()
     {
@@ -63,14 +73,14 @@ mod tests
         let count_differs = Mismatch {
             document: "b.md".to_owned(),
             kind: BlockMismatchKind::CountDiffers {
-                recorded: 3,
-                recomputed: 2,
+                recorded: RECORDED_BLOCKS,
+                recomputed: RECOMPUTED_BLOCKS,
             },
         };
         let block = Mismatch {
             document: "c.md".to_owned(),
             kind: BlockMismatchKind::Block {
-                ordinal: 4,
+                ordinal: DISAGREEING_ORDINAL,
                 field: crate::Field::Kind,
                 recorded: "heading".to_owned(),
                 recomputed: "prose".to_owned(),

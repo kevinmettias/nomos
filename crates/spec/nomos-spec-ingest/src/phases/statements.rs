@@ -104,7 +104,8 @@ mod tests
                      canonical_text: Nomos shall do the thing.\n  \
                      canonical_hash: sha256:deadbeef\n  source_document: a.md\n";
 
-        let file = Parse_Statements(yaml).expect("parses");
+        let file = Parse_Statements(yaml)
+            .expect("yaml is a well-formed statement file, so the parser yields its statements");
 
         assert_eq!(file.statements.len(), 1);
         assert_eq!(file.statements.first().expect("the assertion above confirms exactly one statement").id, "AGT-001");
@@ -115,10 +116,15 @@ mod tests
     {
         let text = "Nomos shall do the thing.";
         let file = StatementFile {
-            statements: vec![One_Statement("Requirement", text, ContentHash::Of(text).As_String_Slice())],
+            statements: vec![One_Statement(StatementText {
+                kind: "Requirement",
+                text,
+                hash: ContentHash::Of(text).As_String_Slice(),
+            })],
         };
 
-        let report = Ingest_Statements(&mut Store(), &file).expect("ingests");
+        let report = Ingest_Statements(&mut Store(), &file)
+            .expect("the file holds one statement whose kind names a node kind, so ingestion records it");
 
         assert_eq!(report.ingested, 1);
         assert!(report.Is_Passing());
@@ -127,7 +133,11 @@ mod tests
     #[test]
     fn Test_Note_Divergence_Should_Flag_A_Recorded_Hash_That_Disagrees()
     {
-        let statement = One_Statement("Requirement", "Nomos shall do the thing.", "sha256:0000");
+        let statement = One_Statement(StatementText {
+            kind: "Requirement",
+            text: "Nomos shall do the thing.",
+            hash: "sha256:0000",
+        });
         let mut report = StatementReport::default();
 
         Note_Divergence(&statement, &mut report);
@@ -140,26 +150,46 @@ mod tests
     fn Test_Store_Statement_Should_Write_A_Node_Under_The_Catalogs_Lowercase_Kind()
     {
         let mut store = Store();
-        let statement = One_Statement("User Story", "Nomos shall do the thing.", "sha256:deadbeef");
+        let statement = One_Statement(StatementText {
+            kind: "User Story",
+            text: "Nomos shall do the thing.",
+            hash: "sha256:deadbeef",
+        });
 
-        Store_Statement(&mut store, &statement).expect("stores");
+        Store_Statement(&mut store, &statement)
+            .expect("the statement's kind spells a node kind, so the store accepts the row");
 
-        let summary = store.Node_Summary("AGT-001").expect("reads").expect("node exists");
+        let summary = store
+            .Node_Summary("AGT-001")
+            .expect("the summary query is well-formed, so the store answers with a row rather than an error")
+            .expect("Store_Statement above wrote AGT-001, so a row for it is present");
         assert_eq!(summary.kind, "user_story");
     }
 
     fn Store() -> SpecificationStore
     {
-        return SpecificationStore::In_Memory().expect("opens");
+        return SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
     }
 
-    fn One_Statement(kind: &str, text: &str, hash: &str) -> RecordedStatement
+    /// The three text pieces a fixture statement is built from.
+    ///
+    /// Named rather than positional: all three are `&str`, so a call site's order would
+    /// otherwise be the only thing keeping the hash out of the kind.
+    struct StatementText<'a>
+    {
+        kind: &'a str,
+        text: &'a str,
+        hash: &'a str,
+    }
+
+    fn One_Statement(parts: StatementText<'_>) -> RecordedStatement
     {
         return RecordedStatement {
             id: "AGT-001".to_owned(),
-            kind: kind.to_owned(),
-            canonical_text: text.to_owned(),
-            canonical_hash: hash.to_owned(),
+            kind: parts.kind.to_owned(),
+            canonical_text: parts.text.to_owned(),
+            canonical_hash: parts.hash.to_owned(),
             source_document: "a.md".to_owned(),
         };
     }

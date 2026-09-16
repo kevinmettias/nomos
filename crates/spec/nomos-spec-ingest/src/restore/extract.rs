@@ -214,6 +214,37 @@ mod tests
 {
     use super::*;
 
+    /// The ordinals the fixtures below give the blocks and rows they build.
+    ///
+    /// A fixture that builds one block and then a second beside it needs the second to carry
+    /// a different ordinal, or the two read as the same position. Each is named for the role
+    /// its own fixture gives it, so it is clear which block is the domain-model one and
+    /// which is the one that names no family at all.
+
+    /// The row `Colliding_Members` gives its second member, so the two colliding members are
+    /// recorded as coming from two different rows rather than from one row twice.
+    const SECOND_MEMBERS_ROW: u32 = 2;
+
+    /// The ordinal of the one table block `Test_From_Rows` mints from.
+    const THE_TABLE_BLOCK: u32 = 5;
+
+    /// The block `Test_Tabled_Family` puts the glossary heading on, beside the domain-model
+    /// block's first.
+    const THE_GLOSSARY_BLOCK: u32 = 2;
+
+    /// And the block carrying a heading that names neither tabled family.
+    const THE_UNRELATED_BLOCK: u32 = 3;
+
+    /// The block `Test_Tabled_Member` builds its origin from, and the row within it.
+    const THE_ORIGIN_BLOCK: u32 = 2;
+    const THE_ORIGIN_ROW: u32 = 3;
+
+    /// The ordinal of the whole-name row in `Test_Named_By`, beside the split row's first.
+    const THE_WHOLE_NAME_ROW: u32 = 2;
+
+    /// The ordinal of the empty row in `Test_First_Cell`, beside the content row's first.
+    const THE_EMPTY_ROW: u32 = 2;
+
     #[test]
     fn Test_Extract_Members_Should_Collect_Heading_And_Row_Members()
     {
@@ -224,7 +255,8 @@ mod tests
                         ### 6.1 Change reasoning\n\n\
                         #### Counterfactual Analysis Service\n\nEvaluates proposals.\n";
 
-        let members = Extract_Members(DocumentPath("02-core.md"), markdown).expect("extracts");
+        let members = Extract_Members(DocumentPath("02-core.md"), markdown)
+            .expect("the fixture markdown is a whole document, so segmenting it finds members");
 
         assert_eq!(
             members.iter().filter(|member| return member.family == Restored::CanonicalDomainModel).count(),
@@ -267,7 +299,7 @@ mod tests
             name: "applicability".to_owned(),
             origin: Origin::Row {
                 block_ordinal: 1,
-                row_ordinal: 2,
+                row_ordinal: SECOND_MEMBERS_ROW,
             },
             ..first.clone()
         };
@@ -296,7 +328,7 @@ mod tests
     fn Test_From_Rows_Should_Mint_A_Member_Per_Content_Row_In_Its_Volume()
     {
         let block = SourceBlock {
-            ordinal: 5,
+            ordinal: THE_TABLE_BLOCK,
             kind: BlockKind::Prose,
             heading_path: vec!["Reference".to_owned(), GLOSSARY.to_owned()],
             text: "| Term | Definition |\n| --- | --- |\n| Applicability | Whether a rule can run. |\n".to_owned(),
@@ -323,13 +355,13 @@ mod tests
             text: String::new(),
         };
         let glossary = SourceBlock {
-            ordinal: 2,
+            ordinal: THE_GLOSSARY_BLOCK,
             kind: BlockKind::Prose,
             heading_path: vec![GLOSSARY.to_owned()],
             text: String::new(),
         };
         let neither = SourceBlock {
-            ordinal: 3,
+            ordinal: THE_UNRELATED_BLOCK,
             kind: BlockKind::Prose,
             heading_path: vec!["Something else".to_owned()],
             text: String::new(),
@@ -344,8 +376,8 @@ mod tests
     fn Test_Tabled_Member_Should_Carry_The_Rows_Name_As_Its_Alias()
     {
         let origin = Origin::Row {
-            block_ordinal: 2,
-            row_ordinal: 3,
+            block_ordinal: THE_ORIGIN_BLOCK,
+            row_ordinal: THE_ORIGIN_ROW,
         };
 
         let member = Tabled_Member("09-reference.md", Restored::GlossaryTerm, "Applicability", origin);
@@ -371,7 +403,7 @@ mod tests
             text: String::new(),
         };
         let whole_row = TableRow {
-            ordinal: 2,
+            ordinal: THE_WHOLE_NAME_ROW,
             table_ordinal: 1,
             kind: RowKind::Content,
             cells: vec!["Applicability".to_owned(), "One term.".to_owned()],
@@ -409,7 +441,7 @@ mod tests
         assert_eq!(First_Cell(&row), Some("Applicability"));
 
         let empty = TableRow {
-            ordinal: 2,
+            ordinal: THE_EMPTY_ROW,
             table_ordinal: 1,
             kind: RowKind::Content,
             cells: vec![String::new(), "  ".to_owned()],

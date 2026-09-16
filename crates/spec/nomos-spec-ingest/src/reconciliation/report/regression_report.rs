@@ -170,6 +170,10 @@ mod tests
 {
     use super::*;
 
+    /// The members the `Tally` fixture below lists. One is preserved and one is gone, so the
+    /// total is this count and not either bucket's own count of one.
+    const MEMBERS_TALLIED: u32 = 2;
+
     fn Member(id: &str, family: Restored, name: &str, fate: Fate) -> MemberFate
     {
         return MemberFate { id: id.to_owned(), family, name: name.to_owned(), was: String::new(), fate };
@@ -212,7 +216,7 @@ mod tests
 
         assert_eq!(tally.preserved, 1);
         assert_eq!(tally.gone, 1);
-        assert_eq!(tally.Total(), 2);
+        assert_eq!(tally.Total(), MEMBERS_TALLIED);
     }
 
     #[test]

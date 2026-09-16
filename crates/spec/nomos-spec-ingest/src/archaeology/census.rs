@@ -75,6 +75,15 @@ mod tests
     use super::*;
     use std::collections::{BTreeMap, BTreeSet};
 
+    /// The corpus each fixture here builds repeats one body across three documents, so a
+    /// template counted out of `Later::Read` reaches three sections. It is above
+    /// `SHARED_BY`, which is what makes the body a template rather than a collision.
+    const SECTIONS_CARRYING_THE_SHARED_BODY: u32 = 3;
+
+    /// The reach of the hand-built `Repetition` below, which no corpus derives and no floor
+    /// constrains. It is this fixture's own choice of what a repetition's `sections` means.
+    const SECTIONS_IN_A_HAND_BUILT_REPETITION: u32 = 2;
+
     #[test]
     fn Test_Census_Fillers_Should_Combine_Repeated_Templates_With_Stub_Documents()
     {
@@ -88,7 +97,7 @@ mod tests
         let census = Census_Fillers(&later);
 
         assert_eq!(census.templates.len(), 1);
-        assert_eq!(census.templates.first().expect("the assertion above confirms exactly one template").sections, 3);
+        assert_eq!(census.templates.first().expect("the assertion above confirms exactly one template").sections, SECTIONS_CARRYING_THE_SHARED_BODY);
         assert_eq!(census.stubs, vec!["a.md".to_owned(), "b.md".to_owned(), "c.md".to_owned()]);
     }
 
@@ -132,7 +141,7 @@ mod tests
 
         assert_eq!(templates.len(), 1, "a block repeated only once must not surface as a template");
         assert_eq!(templates.first().expect("the assertion above confirms exactly one template").text, "Refer to the owning domain volume for this material.");
-        assert_eq!(templates.first().expect("the assertion above confirms exactly one template").sections, 3);
+        assert_eq!(templates.first().expect("the assertion above confirms exactly one template").sections, SECTIONS_CARRYING_THE_SHARED_BODY);
     }
 
     #[test]
@@ -140,14 +149,14 @@ mod tests
     {
         let repetition = Repetition
         {
-            sections: 2,
+            sections: SECTIONS_IN_A_HAND_BUILT_REPETITION,
             documents: BTreeSet::from(["b.md".to_owned(), "a.md".to_owned()]),
         };
 
         let template = Described_Template("This section groups related specification material for X.", &repetition);
 
         assert_eq!(template.text, "This section groups related specification material for X.");
-        assert_eq!(template.sections, 2);
+        assert_eq!(template.sections, SECTIONS_IN_A_HAND_BUILT_REPETITION);
         assert_eq!(template.documents, vec!["a.md".to_owned(), "b.md".to_owned()]);
         assert_eq!(template.declared, Some("This section groups related specification material"));
     }

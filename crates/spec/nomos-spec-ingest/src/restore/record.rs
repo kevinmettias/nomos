@@ -177,12 +177,17 @@ mod tests
 {
     use super::*;
 
+    /// The value the `Sql_Result` fixture hands the wrapper and then reads back untouched:
+    /// any other number would still pass, and this one is chosen only to be recognisable.
+    const A_VALUE_TO_PASS_THROUGH: i64 = 42;
+
     #[test]
     fn Test_Restore_Members_Should_Produce_A_Report_Naming_Every_Member()
     {
         let Core { mut store, documents } = Store_With_Core();
 
-        let report = Restore_Members(&mut store, "v14.36", &documents).expect("restores");
+        let report = Restore_Members(&mut store, "v14.36", &documents)
+            .expect("Store_With_Core ingested CORE_MARKDOWN, so restoring finds its members");
 
         assert_eq!(report.members.len(), 1);
         assert_eq!(
@@ -198,7 +203,8 @@ mod tests
     {
         let Core { mut store, documents } = Store_With_Core();
 
-        let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
+        let located = Located_Members(&mut store, "v14.36", &documents)
+            .expect("Store_With_Core ingested CORE_MARKDOWN, so its members are located here");
 
         assert_eq!(located.len(), 1);
         let (document_uid, member) = located.first().expect("the assertion above confirms exactly one located member");
@@ -210,11 +216,16 @@ mod tests
     fn Test_Record_Member_Should_Upsert_A_Node_Trace_It_And_Append_It_To_The_Report()
     {
         let Core { mut store, documents } = Store_With_Core();
-        let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
-        let (document_uid, member) = located.into_iter().next().expect("one member");
+        let located = Located_Members(&mut store, "v14.36", &documents)
+            .expect("Store_With_Core ingested CORE_MARKDOWN, so its members are located here");
+        let (document_uid, member) = located
+            .into_iter()
+            .next()
+            .expect("CORE_MARKDOWN's one table declares one domain model, so one member is located");
         let mut report = RestorationReport::default();
 
-        Record_Member(&mut store, document_uid, member.clone(), &mut report).expect("records");
+        Record_Member(&mut store, document_uid, member.clone(), &mut report)
+            .expect("the member came from this store, so recording its node writes rather than conflicts");
 
         assert_eq!(report.members, vec![member]);
         assert!(store.Node_Uid("CDM-WORKSPACECONTEXT").expect("looks up").is_some());
@@ -225,7 +236,8 @@ mod tests
     {
         let Core { store, documents: _documents } = Store_With_Core();
 
-        let uid = Document_Uid(&store, DocumentRevision("v14.36"), DocumentPath("02-core.md")).expect("finds");
+        let uid = Document_Uid(&store, DocumentRevision("v14.36"), DocumentPath("02-core.md"))
+            .expect("Store_With_Core ingested 02-core.md at v14.36, so that row is in the store");
         assert!(uid > 0);
 
         let refusal =
@@ -237,7 +249,8 @@ mod tests
     fn Test_Resolve_Model_Uid_Should_Answer_By_Identifier_Or_By_The_Corpus_Name()
     {
         let Core { mut store, documents } = Store_With_Core();
-        Restore_Members(&mut store, "v14.36", &documents).expect("restores");
+        Restore_Members(&mut store, "v14.36", &documents)
+            .expect("Store_With_Core ingested CORE_MARKDOWN, so restoring finds its members");
 
         assert!(Resolve_Model_Uid(&store, "CDM-WORKSPACECONTEXT").expect("resolves").is_some());
         assert!(Resolve_Model_Uid(&store, "WorkspaceContext").expect("resolves").is_some());
@@ -247,15 +260,16 @@ mod tests
     #[test]
     fn Test_Sql_Result_Should_Wrap_A_Failure_As_A_Store_Error()
     {
-        let store = SpecificationStore::In_Memory().expect("opens");
+        let store = SpecificationStore::In_Memory()
+            .expect("the schema migration applies to a fresh in-memory database");
         let failure: rusqlite::Result<i64> =
             store.Connection().query_row("SELECT * FROM no_such_table", [], |row| row.get(0));
 
         let wrapped = Sql_Result(failure).expect_err("must wrap the failure");
         assert!(matches!(wrapped, IngestError::Store(StoreError::Sql(_))));
 
-        let ok = Sql_Result(Ok::<i64, rusqlite::Error>(42)).expect("passes through Ok");
-        assert_eq!(ok, 42);
+        let ok = Sql_Result(Ok::<i64, rusqlite::Error>(A_VALUE_TO_PASS_THROUGH)).expect("passes through Ok");
+        assert_eq!(ok, A_VALUE_TO_PASS_THROUGH);
     }
 }
 
@@ -295,8 +309,12 @@ struct LocatedMemberWithNode
 fn A_Located_Member_With_Its_Node() -> LocatedMemberWithNode
 {
     let Core { mut store, documents } = Store_With_Core();
-    let located = Located_Members(&mut store, "v14.36", &documents).expect("locates");
-    let (document_uid, member) = located.into_iter().next().expect("one member");
+    let located = Located_Members(&mut store, "v14.36", &documents)
+        .expect("Store_With_Core ingested CORE_MARKDOWN, so its members are located here");
+    let (document_uid, member) = located
+        .into_iter()
+        .next()
+        .expect("CORE_MARKDOWN's one table declares one domain model, so one member is located");
     let node_uid = store
         .Upsert_Node(NodeRow {
             node_id: &member.id,
@@ -316,8 +334,10 @@ fn Store_With_Core() -> Core
 {
     use crate::Ingest_Source_Document;
 
-    let mut store = SpecificationStore::In_Memory().expect("opens");
-    Ingest_Source_Document(&mut store, "02-core.md", "v14.36", CORE_MARKDOWN).expect("ingests");
+    let mut store = SpecificationStore::In_Memory()
+        .expect("the schema migration applies to a fresh in-memory database");
+    Ingest_Source_Document(&mut store, "02-core.md", "v14.36", CORE_MARKDOWN)
+        .expect("CORE_MARKDOWN is a well-formed document with one table, so ingestion accepts it");
 
     let mut documents = BTreeMap::new();
     documents.insert("02-core.md".to_owned(), CORE_MARKDOWN.to_owned());

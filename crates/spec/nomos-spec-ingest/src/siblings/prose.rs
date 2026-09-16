@@ -114,22 +114,25 @@ pub(super) fn Take_Node(
 mod tests
 {
     use super::*;
-    use crate::archive::tests::Zip_Fixture;
+    use crate::archive::tests::{FixturePrefix, Zip_Fixture};
     use crate::siblings::document::tests::Suite_In;
     use nomos_spec_store::SuiteAuthority;
 
     #[test]
     fn Test_Ingest_Prose_Should_Ingest_Every_Markdown_Entry_In_The_Suite()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let suite_uid =
-            store.Put_Suite(Sibling::Xvpe.Suite_Id(), Sibling::Xvpe.Title(), SuiteAuthority::Sibling).expect("puts suite");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
+        let suite_uid = store
+            .Put_Suite(Sibling::Xvpe.Suite_Id(), Sibling::Xvpe.Title(), SuiteAuthority::Sibling)
+            .expect("the fresh store holds no suite yet, so the xvpe suite is inserted");
         let suite = Suite { sibling: Sibling::Xvpe, uid: suite_uid };
         let mut archive =
-            Zip_Fixture("nomos-spec-ingest-prose", "ingest-prose", &[("suite/00-index.md", "# Index\n\nSome prose.\n")]);
+            Zip_Fixture(FixturePrefix("nomos-spec-ingest-prose"), "ingest-prose", &[("suite/00-index.md", "# Index\n\nSome prose.\n")]);
         let mut report = SuiteReport::default();
 
-        Ingest_Prose(&mut store, &mut archive, suite, &mut report).expect("ingests");
+        Ingest_Prose(&mut store, &mut archive, suite, &mut report)
+            .expect("the fixture zip holds one markdown entry, so the walk reaches and ingests it");
 
         assert_eq!(report.documents, 1);
         assert!(report.blocks > 0);
@@ -140,7 +143,7 @@ mod tests
     fn Test_Declared_By_Should_Qualify_A_Plain_Document_By_Its_Suite()
     {
         let declared = Declared_By(Sibling::Xvpe, EntryAt("suite/00-index.md"), EntryText("# Index\n\nText.\n"))
-            .expect("declares");
+            .expect("the entry carries no front matter, so its heading is read as the declaration");
 
         assert_eq!(declared.id, "xvpe-spec-seed:00-index.md");
         assert_eq!(declared.kind, "document");
@@ -154,7 +157,7 @@ mod tests
                             # A title\n\nBody.\n";
 
         let declared = Declared_By(Sibling::Xvpe, EntryAt("suite/records/d-900.md"), EntryText(record_text))
-            .expect("declares");
+            .expect("record_text opens with front matter carrying an id, so the record declares itself");
 
         assert_eq!(declared.id, "D-900");
     }
@@ -162,7 +165,8 @@ mod tests
     #[test]
     fn Test_Take_Node_Should_Report_A_Contested_Identifier_Rather_Than_A_Fresh_Claim()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
         let first_suite = Suite_In(&mut store, Sibling::Xvpe);
         let second_suite = Suite_In(&mut store, Sibling::Kwb);
 
@@ -193,7 +197,7 @@ mod tests
             first_suite,
             &mut first_report,
         )
-        .expect("takes");
+        .expect("first_suite is the first suite to claim shared-id, so the node is minted rather than contested");
     }
 
     fn Take_Shared_For_Second(
@@ -213,6 +217,6 @@ mod tests
             second_suite,
             &mut second_report,
         )
-        .expect("takes");
+        .expect("a contested identifier is reported rather than refused, so the call still returns");
     }
 }

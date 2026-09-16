@@ -102,25 +102,28 @@ pub(super) fn Is_Schema(entry: &str) -> bool
 mod tests
 {
     use super::*;
-    use crate::archive::tests::Zip_Fixture;
+    use crate::archive::tests::{FixturePrefix, Zip_Fixture};
     use crate::siblings::document::tests::Suite_In;
     use nomos_spec_store::SuiteAuthority;
 
     #[test]
     fn Test_Ingest_Machine_Should_Record_A_Schema_File_As_A_Schema_Node()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let suite_uid =
-            store.Put_Suite(Sibling::Xvpe.Suite_Id(), Sibling::Xvpe.Title(), SuiteAuthority::Sibling).expect("puts suite");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
+        let suite_uid = store
+            .Put_Suite(Sibling::Xvpe.Suite_Id(), Sibling::Xvpe.Title(), SuiteAuthority::Sibling)
+            .expect("the fresh store holds no suite yet, so the xvpe suite is inserted");
         let suite = Suite { sibling: Sibling::Xvpe, uid: suite_uid };
         let mut archive = Zip_Fixture(
-            "nomos-spec-ingest-machine",
+            FixturePrefix("nomos-spec-ingest-machine"),
             "ingest-machine",
             &[("suite/machine/target-adapter.schema.json", r#"{"$id":"target-adapter","title":"Target adapter"}"#)],
         );
         let mut report = SuiteReport::default();
 
-        Ingest_Machine(&mut store, &mut archive, suite, &mut report).expect("ingests");
+        Ingest_Machine(&mut store, &mut archive, suite, &mut report)
+            .expect("the fixture zip holds one machine schema, so the walk reaches and records it");
 
         assert_eq!(report.schemas, vec!["xvpe-spec-seed:target-adapter.schema.json".to_owned()]);
         assert!(report.machine_documents.is_empty());
@@ -129,7 +132,8 @@ mod tests
     #[test]
     fn Test_Record_Machine_Should_File_A_Node_It_Cannot_Claim_As_Contested()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
         let xvpe = Suite_In(&mut store, Sibling::Xvpe);
         let kwb = Suite_In(&mut store, Sibling::Kwb);
 
@@ -160,7 +164,7 @@ mod tests
             xvpe,
             &mut first_report,
         )
-        .expect("records");
+        .expect("xvpe is the first suite to claim shared-id, so the node is minted rather than contested");
     }
 
     fn Record_Shared_For_Kwb(
@@ -180,7 +184,7 @@ mod tests
             kwb,
             &mut second_report,
         )
-        .expect("records");
+        .expect("a contested node is recorded as contested rather than refused, so the call returns");
     }
 
     #[test]

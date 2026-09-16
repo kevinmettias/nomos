@@ -115,16 +115,18 @@ pub fn Ingest_Game_Plan<'a>(
 mod hub_tests
 {
     use super::*;
-    use crate::archive::tests::Zip_Fixture;
+    use crate::archive::tests::{FixturePrefix, Zip_Fixture};
 
     #[test]
     fn Test_Ingest_Sibling_Suite_Should_Ingest_Its_Prose_Documents()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
         let mut archive =
-            Zip_Fixture("nomos-spec-ingest-siblings-hub", "prose-only", &[("suite/00-index.md", "# Index\n\nSome prose.\n")]);
+            Zip_Fixture(FixturePrefix("nomos-spec-ingest-siblings-hub"), "prose-only", &[("suite/00-index.md", "# Index\n\nSome prose.\n")]);
 
-        let report = Ingest_Sibling_Suite(&mut store, &mut archive, Sibling::Xvpe).expect("ingests");
+        let report = Ingest_Sibling_Suite(&mut store, &mut archive, Sibling::Xvpe)
+            .expect("the fixture archive holds the xvpe seed's index, so the suite is ingested");
 
         assert_eq!(report.suite, "xvpe-spec-seed");
         assert_eq!(report.documents, 1);
@@ -134,11 +136,14 @@ mod hub_tests
     #[test]
     fn Test_Ingest_Game_Plan_Should_Store_Its_Blocks_Under_The_Commentary_Authority()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
-        let suite_uid = store.Put_Suite(ROOT_SUITE, "nomos", SuiteAuthority::Sibling).expect("puts suite");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
+        let suite_uid = store
+            .Put_Suite(ROOT_SUITE, "nomos", SuiteAuthority::Sibling)
+            .expect("the fresh store holds no suite yet, so the root suite is inserted");
 
         let node_id = Ingest_Game_Plan(&mut store, suite_uid, "plans/next.md", "# Next\n\nDo the thing.\n")
-            .expect("ingests");
+            .expect("suite_uid names the suite just inserted, so the game plan hangs off it");
 
         assert!(node_id.starts_with("PLAN-"));
     }

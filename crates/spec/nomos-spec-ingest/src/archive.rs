@@ -263,7 +263,9 @@ pub(crate) mod tests
     {
         let mut archive = Fixture("read", &[("a.md", "hello")]);
 
-        let bytes = archive.Read("a.md").expect("reads");
+        let bytes = archive
+            .Read("a.md")
+            .expect("the fixture wrote a.md, so the archive carries that entry");
 
         assert_eq!(bytes, b"hello");
     }
@@ -273,32 +275,46 @@ pub(crate) mod tests
     {
         let mut archive = Fixture("read-text", &[("a.md", "caf\u{e9}")]);
 
-        let text = archive.Read_Text("a.md").expect("reads");
+        let text = archive
+            .Read_Text("a.md")
+            .expect("the fixture wrote a.md as UTF-8, so Read_Text decodes rather than refuses");
 
         assert_eq!(text, "caf\u{e9}");
     }
+
+    /// A fixture archive's temp-file prefix, kept a distinct type from the fixture's own
+    /// `&str` name directly beside it in `Zip_Fixture`.
+    ///
+    /// Both are strings and adjacent, so with one shared type a caller could swap them and
+    /// get a zip at a temp path no other test in the suite expects, with the compiler
+    /// raising nothing. The prefix names the suite; the name names the fixture within it.
+    pub(crate) struct FixturePrefix<'a>(pub(crate) &'a str);
 
     /// A zip built for one test, prefixed so two files' test suites never collide on the
     /// same temp path when they run concurrently. Shared here because `Archive` is this
     /// file's own type, and every other file that needs to build one for a test needs
     /// exactly this and nothing more.
-    pub(crate) fn Zip_Fixture(prefix: &str, name: &str, entries: &[(&str, &str)]) -> Archive
+    pub(crate) fn Zip_Fixture(prefix: FixturePrefix<'_>, name: &str, entries: &[(&str, &str)]) -> Archive
     {
         use std::io::Write as _;
 
-        let path = std::env::temp_dir().join(format!("{prefix}-{name}.zip"));
+        let path = std::env::temp_dir().join(format!("{}-{name}.zip", prefix.0));
         let file = std::fs::File::create(&path).expect("creates the fixture");
         let mut writer = zip::ZipWriter::new(file);
         let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
 
         for (entry, text) in entries
         {
-            writer.start_file(*entry, options).expect("starts");
-            writer.write_all(text.as_bytes()).expect("writes");
+            writer
+                .start_file(*entry, options)
+                .expect("the fixture opened this writer and has not finished it yet");
+            writer
+                .write_all(text.as_bytes())
+                .expect("start_file accepted this entry, so the writer is mid-archive on it");
         }
-        writer.finish().expect("finishes");
+        writer.finish().expect("every entry was written before the archive was finished");
 
-        return Archive::Open(&path).expect("opens");
+        return Archive::Open(&path).expect("the fixture finished writing this zip at that path");
     }
 
     /// Discards the archive so a refusal can be asserted on. `Archive` is not `Debug`,
@@ -320,6 +336,6 @@ pub(crate) mod tests
     /// same temp path.
     fn Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
     {
-        return Zip_Fixture("nomos-spec-ingest-archive", name, entries);
+        return Zip_Fixture(FixturePrefix("nomos-spec-ingest-archive"), name, entries);
     }
 }

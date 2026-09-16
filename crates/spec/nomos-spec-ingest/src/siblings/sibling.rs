@@ -60,6 +60,11 @@ mod tests
 {
     use super::*;
 
+    /// The variants `Sibling::All()` lists. The assertion below is that the universe holds
+    /// this many *and* that each appears once, so a duplicate plus a dropped variant — which
+    /// leaves the length alone — still fails the uniqueness check beside it.
+    const SIBLINGS_IN_ALL: usize = 3;
+
     #[test]
     fn Test_Suite_Id_Should_Give_Each_Sibling_Its_Own_Suite_Identifier()
     {
@@ -89,7 +94,7 @@ mod tests
     {
         let all = Sibling::All();
 
-        assert_eq!(all.len(), 3);
+        assert_eq!(all.len(), SIBLINGS_IN_ALL);
         let unique: std::collections::BTreeSet<_> = all.iter().collect();
         assert_eq!(unique.len(), all.len());
     }

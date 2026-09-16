@@ -94,7 +94,8 @@ mod tests
         let json = r#"[{"id":"AGT-001","kind":"requirement","title":"a requirement",
             "authority":"canonical","representation":"record","aliases":["AGT-010"]}]"#;
 
-        let entities = Parse_Catalog(json).expect("parses");
+        let entities = Parse_Catalog(json)
+            .expect("json is one well-formed catalog array, so the parser yields its entities");
 
         assert_eq!(entities.len(), 1);
         assert_eq!(entities.first().expect("the assertion above confirms exactly one entity").id, "AGT-001");
@@ -107,7 +108,8 @@ mod tests
     #[test]
     fn Test_Record_Aliases_Should_Point_Every_Alias_At_The_Node()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
         let node_uid = store
             .Upsert_Node(NodeRow {
                 node_id: "AGT-001",
@@ -116,11 +118,12 @@ mod tests
                 representation: "record",
                 title: "a requirement",
             })
-            .expect("upserts");
+            .expect("AGT-001 is not in this fresh store, so the upsert inserts rather than updates");
         let entity = Entity();
         let mut report = CatalogReport::default();
 
-        Record_Aliases(&mut store, &entity, node_uid, &mut report).expect("records");
+        Record_Aliases(&mut store, &entity, node_uid, &mut report)
+            .expect("entity carries one alias and node_uid names a row in this store, so the alias is written");
 
         assert_eq!(report.aliases, 1);
     }
@@ -140,10 +143,12 @@ mod tests
     #[test]
     fn Test_Ingest_Catalog_Should_Create_A_Node_Per_Entity()
     {
-        let mut store = SpecificationStore::In_Memory().expect("opens");
+        let mut store = SpecificationStore::In_Memory()
+            .expect("In_Memory migrates a fresh database, so no file or prior schema is involved");
         let entities = vec![Entity()];
 
-        let report = Ingest_Catalog(&mut store, &entities).expect("ingests");
+        let report = Ingest_Catalog(&mut store, &entities)
+            .expect("Entity carries an id, a kind and a title, so ingestion mints its node and alias");
 
         assert_eq!(report.nodes, 1);
         assert_eq!(report.aliases, 1);

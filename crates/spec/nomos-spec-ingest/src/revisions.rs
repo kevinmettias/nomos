@@ -200,13 +200,26 @@ fn Absent_From(from: &RevisionFingerprint, to: &RevisionFingerprint) -> Vec<Stri
 mod census_kinds_tests
 {
     use super::*;
-    use crate::archive::tests::Zip_Fixture;
+    use crate::archive::tests::{FixturePrefix, Zip_Fixture};
+
+    /// The fixture markdown below opens and closes one code fence, so it carries two lines
+    /// that are a fence delimiter and nothing else.
+    const FENCE_LINES_IN_THE_FIXTURE: u32 = 2;
+
+    /// And three lines that begin with a pipe: the header row, the separator row, and the one
+    /// data row. A table is counted from its pipe lines, not from its columns.
+    const PIPE_LINES_IN_THE_FIXTURE: u32 = 3;
+
+    /// Two of those three are rows a reader would call content — the header and the data row.
+    /// The separator row is the third pipe line and is not one of these, which is what makes
+    /// the two counts differ by one rather than being the same number written twice.
+    const NON_SEPARATOR_ROWS_IN_THE_FIXTURE: u32 = 2;
 
     #[test]
     fn Test_Census_Kinds_Should_Count_Fences_And_Tables_Within_Scope()
     {
         let mut archive = Zip_Fixture(
-            "nomos-spec-ingest-census-kinds",
+            FixturePrefix("nomos-spec-ingest-census-kinds"),
             "in-scope",
             &[(
                 "01_authoring/domain_volumes/02-core/a.md",
@@ -214,13 +227,14 @@ mod census_kinds_tests
             )],
         );
 
-        let census = Census_Kinds(&mut archive, Scope::DomainVolumes).expect("counts");
+        let census = Census_Kinds(&mut archive, Scope::DomainVolumes)
+            .expect("the fixture's a.md sits under a domain volume, so the scope matches it");
 
         assert_eq!(census.documents, 1);
-        assert_eq!(census.fence_lines, 2);
+        assert_eq!(census.fence_lines, FENCE_LINES_IN_THE_FIXTURE);
         assert_eq!(census.documents_with_tables, 1);
-        assert_eq!(census.pipe_lines, 3);
-        assert_eq!(census.non_separator_rows, 2);
+        assert_eq!(census.pipe_lines, PIPE_LINES_IN_THE_FIXTURE);
+        assert_eq!(census.non_separator_rows, NON_SEPARATOR_ROWS_IN_THE_FIXTURE);
         assert_eq!(census.content_rows, 1);
     }
 
@@ -228,7 +242,7 @@ mod census_kinds_tests
     fn Test_Census_Kinds_Should_Refuse_A_Scope_That_Matches_No_Document()
     {
         let mut archive =
-            Zip_Fixture("nomos-spec-ingest-census-kinds", "out-of-scope", &[("09-reference/glossary.md", "# G\n\nText.\n")]);
+            Zip_Fixture(FixturePrefix("nomos-spec-ingest-census-kinds"), "out-of-scope", &[("09-reference/glossary.md", "# G\n\nText.\n")]);
 
         let refusal = Census_Kinds(&mut archive, Scope::DomainVolumes).expect_err("must refuse");
 

@@ -115,6 +115,23 @@ mod tests
     use super::*;
     use std::collections::BTreeSet;
 
+    /// Where each variant sits in `Restored::All()`, counted from zero — its ordinal.
+    ///
+    /// The match below stays a match rather than becoming an index lookup: the property
+    /// its doc comment claims is that a variant added to `Restored` and not to this arm
+    /// list fails the file to *compile*, and a lookup would only fail to pass. So each arm
+    /// names the position it answers instead of spelling a bare ordinal.
+    const SERVICE_POSITION: usize = 2;
+    const APPENDIX_D_POSITION: usize = 3;
+    const APPENDIX_H_POSITION: usize = 4;
+    const HEADLESS_INVENTORY_POSITION: usize = 5;
+    const IDE_PROFILE_POSITION: usize = 6;
+    const GLOSSARY_TERM_POSITION: usize = 7;
+    const CANONICAL_DOMAIN_MODEL_POSITION: usize = 8;
+
+    /// The size of the universe the match above mirrors, so the two are read together.
+    const RESTORED_FAMILIES: usize = 9;
+
     /// `Restored::All()`'s own mirror, named in the doc comment above it.
     ///
     /// The match has no wildcard arm. A variant added to `Restored` without a matching arm
@@ -129,13 +146,13 @@ mod tests
             {
                 Restored::RoadmapMilestone => 0,
                 Restored::Scenario => 1,
-                Restored::Service => 2,
-                Restored::AppendixD => 3,
-                Restored::AppendixH => 4,
-                Restored::HeadlessInventory => 5,
-                Restored::IdeProfile => 6,
-                Restored::GlossaryTerm => 7,
-                Restored::CanonicalDomainModel => 8,
+                Restored::Service => SERVICE_POSITION,
+                Restored::AppendixD => APPENDIX_D_POSITION,
+                Restored::AppendixH => APPENDIX_H_POSITION,
+                Restored::HeadlessInventory => HEADLESS_INVENTORY_POSITION,
+                Restored::IdeProfile => IDE_PROFILE_POSITION,
+                Restored::GlossaryTerm => GLOSSARY_TERM_POSITION,
+                Restored::CanonicalDomainModel => CANONICAL_DOMAIN_MODEL_POSITION,
             };
         }
 
@@ -190,7 +207,7 @@ mod tests
     {
         let all = Restored::All();
 
-        assert_eq!(all.len(), 9);
+        assert_eq!(all.len(), RESTORED_FAMILIES);
 
         let unique: BTreeSet<_> = all.iter().collect();
         assert_eq!(unique.len(), all.len());
