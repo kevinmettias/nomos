@@ -81247,6 +81247,41 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-SURFACE-SNAPSHOT-DRIFT",
+      "title": "Two public-surface snapshots are stale from commits that re-blessed nothing",
+      "why": "The public-surface contract test asserts every crate in the workspace at once, and two of its snapshots are stale at HEAD, from two different causes, neither of them this item's to judge and both of them somebody's to bless. nomos-connector-coderabbit's snapshot still spells Fetch_Review_Comment and Materialize_Review_Comment with a generic parameter named P, where the crate now declares Launcher. That moved in 879d52e1, when the generic parameter was given the role it plays, under P114 naming/identifiers, and that commit re-blessed no snapshot. nomos-lang-rust-compiler's snapshot still lists fifteen nested-lock items as declarations at the crate root -- Check_Nested_Locks, Discover_Nested_Locks, Materialize_Nested_Locks, the five contract accessors, NESTED_LOCKS with its three sibling constants, the two guarantees, and NestedLockFactProduction with its impl and its three constants -- where the crate now re-exports them from the nested_lock modules. That is P112's facade hoist, committed as b180fb33, which pushed facade re-exports down and re-blessed nothing. Whether the hoist is the right shape is a question that commit already answered and this item does not reopen; a snapshot records the surface the tree has, so blessing records the decision rather than making one. Both drifts are invisible because no gate step has run since 2026-09-07: real CI is dark on a GitHub billing failure, so a derived artifact can sit stale behind a green check that would have caught it in the commit that caused it. nomos-ledger's snapshot is also stale and is not this item's. It is held by the live claim P111-EIGHT-PHASE-SUBSTRATE-LEDGER, whose owner is mid-refactor on FinishRefusal and VerificationRecord, and it is left alone rather than absorbed here. Nothing about either stale snapshot is a rule finding: the workspace self-check does not read the snapshot files, and no suppression is involved on either side.",
+      "done_when": "The public-surface suite names no crate outside nomos-ledger as disagreeing with its snapshot, and the diff of the two blessed files contains only the two moves named in why: the parameter rename in the coderabbit connector, and the facade re-exports in nomos-lang-rust-compiler. No third snapshot moves. The predicate is nomos-surface-scope, which runs the suite and judges which crates it named against -expect nomos-ledger; it exits 0 when every crate the suite names is one this item allows, 1 when it named one nobody allowed, and 3 when the suite could not be judged at all, so a build error or a missing workspace is never read as a clean scope. Its judgement is one-directional on purpose: nomos-ledger going green when its owner finishes is an improvement, not a failure, and a predicate that went red for that would be red for good news. Each snapshot is rewritten by the suite's own bless mechanism with NOMOS_SURFACE_BLESS naming exactly one crate, so that blessing one cannot rewrite another, and the suite is then run without it, because the bless run rewrites and compares nothing.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-connector-coderabbit.txt",
+          "tests/contract/surface/nomos-lang-rust-compiler.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-surface-scope\\nomos-surface-scope.exe",
+          "-cwd",
+          "F:/repos/nomos",
+          "-expect",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
