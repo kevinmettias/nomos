@@ -264,7 +264,7 @@ mod address
     /// materialized against `source` — the reader the addressing test is built over.
     fn Offering_With_Fact(source: &SourceFile) -> TestOffering
     {
-        let TestOffering { mut store, registry, offer } = test_support::Offering(
+        let TestOffering { mut store, registry, offer } = test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_cap_syntax::Capability_Contract(),
                 capability: nomos_cap_syntax::Capability(),
@@ -273,7 +273,7 @@ mod address
                 guarantee: Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File),
             },
         ).expect("a fresh Registry holds neither this contract nor this provider");
-        test_support::Materialize(
+        test_support::Materialize_Fact(
             &mut store,
             FactToFile {
                 subject: source.subject,

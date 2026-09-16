@@ -152,7 +152,7 @@ mod tests
 
     fn Scripting_Offering() -> TestOffering
     {
-        return test_support::Offering(
+        return test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_cap_scripting_policy::Capability_Contract(),
                 capability: nomos_cap_scripting_policy::Capability(),
@@ -171,7 +171,7 @@ mod tests
     )
     {
         let payload = ScriptingPolicyPayload { tooling_language, forbidden_extensions };
-        test_support::Materialize(
+        test_support::Materialize_Fact(
             store,
             FactToFile {
                 subject: nomos_model::Subject_Of_Path(""),

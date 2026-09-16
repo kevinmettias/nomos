@@ -148,7 +148,7 @@ mod tests
     #[test]
     fn Test_Payload_Of_Should_Decode_A_Materialized_Fact()
     {
-        let source = Source(SourceText { path: "src/lib.rs", text: "fn Good_Name() {}" });
+        let source = Source_File(SourceText { path: "src/lib.rs", text: "fn Good_Name() {}" });
         let mut offering = Offering();
         let mut reader = test_support::Reader_Over_A_Syntax_Fact(
             &mut offering,
@@ -164,7 +164,7 @@ mod tests
     #[test]
     fn Test_Payload_Of_Should_Report_A_Subject_With_No_Fact_As_A_Finding()
     {
-        let source = Source(SourceText { path: "src/lib.rs", text: "fn Good_Name() {}" });
+        let source = Source_File(SourceText { path: "src/lib.rs", text: "fn Good_Name() {}" });
         let TestOffering { store, registry, .. } = Offering();
         let mut reader = Reader::On(&store, &registry, Test_Context());
 
@@ -182,7 +182,7 @@ mod tests
         text: &'text str,
     }
 
-    fn Source(source: SourceText<'_>) -> SourceFile
+    fn Source_File(source: SourceText<'_>) -> SourceFile
     {
         let SourceText { path, text } = source;
         return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
@@ -190,7 +190,7 @@ mod tests
 
     fn Offering() -> TestOffering
     {
-        return test_support::Offering(
+        return test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_cap_syntax::Capability_Contract(),
                 capability: nomos_cap_syntax::Capability(),

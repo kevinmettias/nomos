@@ -251,7 +251,7 @@ fn Findings_From(
 fn Materialize_Syntax_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &str)
 {
     let inputs = InputDigest::Of(&[source.text.as_bytes()]);
-    test_support::Materialize(store, FactToFile { subject: source.subject, offer, semantic_inputs: inputs, schema: nomos_cap_syntax::Payload_Schema(), bytes: payload.as_bytes().to_vec() }).expect("the fixture's store holds no fact under this key at a newer generation");
+    test_support::Materialize_Fact(store, FactToFile { subject: source.subject, offer, semantic_inputs: inputs, schema: nomos_cap_syntax::Payload_Schema(), bytes: payload.as_bytes().to_vec() }).expect("the fixture's store holds no fact under this key at a newer generation");
 }
 
 fn Guarantee_At_Floor() -> Guarantee
@@ -273,7 +273,7 @@ fn Source_File(path: Path<'_>, text: Text<'_>) -> SourceFile
 
 fn Offering() -> TestOffering
 {
-    return test_support::Offering(
+    return test_support::Offered_Registry(
         OfferedProvider {
             contract: nomos_cap_syntax::Capability_Contract(),
             capability: nomos_cap_syntax::Capability(),

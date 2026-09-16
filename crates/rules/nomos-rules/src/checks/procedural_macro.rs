@@ -163,7 +163,7 @@ mod tests
     #[test]
     fn Test_Check_Prefer_Macro_Rules_Over_Procedural_Macros_Should_Report_A_Bare_Attribute()
     {
-        let sources = vec![Source("demo/src/a.rs", Attribute(""))];
+        let sources = vec![Source_File("demo/src/a.rs", Attribute_Text(""))];
 
         let findings = Check_Prefer_Macro_Rules_Over_Procedural_Macros(&sources);
 
@@ -179,8 +179,8 @@ mod tests
     fn Test_Check_Prefer_Macro_Rules_Over_Procedural_Macros_Should_Accept_The_Derive_And_Attribute_Forms()
     {
         let sources = vec![
-            Source("demo/src/a.rs", Attribute("_derive(Thing)")),
-            Source("demo/src/b.rs", Attribute("_attribute")),
+            Source_File("demo/src/a.rs", Attribute_Text("_derive(Thing)")),
+            Source_File("demo/src/b.rs", Attribute_Text("_attribute")),
         ];
 
         let findings = Check_Prefer_Macro_Rules_Over_Procedural_Macros(&sources);
@@ -193,9 +193,9 @@ mod tests
     {
         let text = format!(
             "// The pattern reads the caller's own token stream and rewrites it, which no\n// declarative macro can express.\n{}",
-            Attribute("")
+            Attribute_Text("")
         );
-        let sources = vec![Source("demo/src/a.rs", text.to_owned())];
+        let sources = vec![Source_File("demo/src/a.rs", text.to_owned())];
 
         let findings = Check_Prefer_Macro_Rules_Over_Procedural_Macros(&sources);
 
@@ -205,8 +205,8 @@ mod tests
     #[test]
     fn Test_Check_Prefer_Macro_Rules_Over_Procedural_Macros_Should_Not_Accept_A_Wordless_Comment()
     {
-        let text = format!("// ----\n{}", Attribute(""));
-        let sources = vec![Source("demo/src/a.rs", text.to_owned())];
+        let text = format!("// ----\n{}", Attribute_Text(""));
+        let sources = vec![Source_File("demo/src/a.rs", text.to_owned())];
 
         let findings = Check_Prefer_Macro_Rules_Over_Procedural_Macros(&sources);
 
@@ -216,8 +216,8 @@ mod tests
     #[test]
     fn Test_Check_Prefer_Macro_Rules_Over_Procedural_Macros_Should_Ignore_A_Commented_Attribute()
     {
-        let text = format!("// {}", Attribute(""));
-        let sources = vec![Source("demo/src/a.rs", text.to_owned())];
+        let text = format!("// {}", Attribute_Text(""));
+        let sources = vec![Source_File("demo/src/a.rs", text.to_owned())];
 
         let findings = Check_Prefer_Macro_Rules_Over_Procedural_Macros(&sources);
 
@@ -227,7 +227,7 @@ mod tests
     #[test]
     fn Test_Check_Prefer_Macro_Rules_Over_Procedural_Macros_Should_Ignore_A_Language_It_Does_Not_Judge()
     {
-        let sources = vec![Source("demo/src/a.go", Attribute(""))];
+        let sources = vec![Source_File("demo/src/a.go", Attribute_Text(""))];
 
         let findings = Check_Prefer_Macro_Rules_Over_Procedural_Macros(&sources);
 
@@ -237,12 +237,12 @@ mod tests
     /// Built rather than spelled, so this file's own text never carries the attribute it
     /// judges — the self-match nine modules in this crate answer with a path-suffix
     /// exemption `P45-CODE-PREFIX-KNOWS-STRINGS` is retiring.
-    fn Attribute(suffix: &str) -> String
+    fn Attribute_Text(suffix: &str) -> String
     {
         return format!("#[{PROCEDURAL_MACRO_ATTRIBUTE}{suffix}]");
     }
 
-    fn Source(path: &str, text: String) -> SourceFile
+    fn Source_File(path: &str, text: String) -> SourceFile
     {
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
         source.language = crate::Recognized_Language_In_Tests(path);

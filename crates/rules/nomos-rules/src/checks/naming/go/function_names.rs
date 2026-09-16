@@ -45,7 +45,11 @@ pub fn Check_Exported_Go_Functions_Use_Upper_Snake_Case(
     return Judged_Go_Function_Sources(
         sources,
         facts,
-        Judgment { case, judge: ViolationConstructor(Violations_In), unread: UnreadWrapper(Unread_As_This_Rule) },
+        Judgment {
+            case,
+            judge: ViolationConstructor(Violations_In),
+            unread: UnreadFindingConstructor(Unread_As_This_Rule),
+        },
     );
 }
 
@@ -62,7 +66,11 @@ pub fn Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(
     return Judged_Go_Function_Sources(
         sources,
         facts,
-        Judgment { case, judge: ViolationConstructor(Unexported_Violations_In), unread: UnreadWrapper(Unread_As_Unexported_Rule) },
+        Judgment {
+            case,
+            judge: ViolationConstructor(Unexported_Violations_In),
+            unread: UnreadFindingConstructor(Unread_As_Unexported_Rule),
+        },
     );
 }
 
@@ -150,9 +158,9 @@ impl ViolationConstructor
 
 /// Wraps a reading failure into this rule's own finding, named for the same reason as
 /// [`ViolationConstructor`].
-struct UnreadWrapper(fn(Finding) -> Finding);
+struct UnreadFindingConstructor(fn(Finding) -> Finding);
 
-impl UnreadWrapper
+impl UnreadFindingConstructor
 {
     fn Wrap(&self, finding: Finding) -> Finding
     {
@@ -168,7 +176,7 @@ struct Judgment
 {
     case: Case,
     judge: ViolationConstructor,
-    unread: UnreadWrapper,
+    unread: UnreadFindingConstructor,
 }
 
 fn Judged_Go_Function_Sources(sources: &[SourceFile], facts: &mut dyn FactReader, judgment: Judgment) -> Vec<Finding>

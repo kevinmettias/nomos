@@ -181,10 +181,10 @@ fn Item_Findings(path: &str, item: &PayloadItem, tests: &BTreeSet<String>) -> Ve
 
     return match Claimed_Exerciser(item.documentation.Value())
     {
-        Claim::Absent => vec![Violation(path, item, &format!("names no exerciser: add `{EXERCISER_MARKER}` followed by a backticked test name, or by `{NOTHING}` and the reason no test can exhibit its axes"))],
+        Claim::Absent => vec![Violation_Finding(path, item, &format!("names no exerciser: add `{EXERCISER_MARKER}` followed by a backticked test name, or by `{NOTHING}` and the reason no test can exhibit its axes"))],
         Claim::NoneStated => Vec::new(),
         Claim::Named(name) if tests.contains(&name) => Vec::new(),
-        Claim::Named(name) => vec![Violation(path, item, &format!("names `{name}`, which resolves to no test function this run read"))],
+        Claim::Named(name) => vec![Violation_Finding(path, item, &format!("names `{name}`, which resolves to no test function this run read"))],
     };
 }
 
@@ -247,7 +247,7 @@ fn Claimed_On(line: &str) -> Option<Claim>
     return None;
 }
 
-fn Violation(path: &str, item: &PayloadItem, detail: &str) -> Finding
+fn Violation_Finding(path: &str, item: &PayloadItem, detail: &str) -> Finding
 {
     return Finding {
         rule: RuleId::New(GUARANTEE_DECLARES_ITS_EXERCISER),
@@ -296,7 +296,7 @@ mod tests
     #[test]
     fn Test_A_Declaration_Naming_A_Test_That_Exists_Should_Not_Be_Reported()
     {
-        let findings = Findings_In(&[Payload(
+        let findings = Findings_In(&[Payload_From_Text(
             "src/guarantee.rs",
             "unexpanded\t0\n\
              item\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by `Test_It_Holds`.\t+fn/0\n\
@@ -310,7 +310,7 @@ mod tests
     #[test]
     fn Test_A_Declaration_Naming_A_Test_That_Does_Not_Exist_Should_Be_Reported()
     {
-        let findings = Findings_In(&[Payload(
+        let findings = Findings_In(&[Payload_From_Text(
             "src/guarantee.rs",
             "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by `Test_Nowhere`.\t+fn/0\n".to_owned(),
         )]);
@@ -325,7 +325,7 @@ mod tests
     #[test]
     fn Test_A_Declaration_Naming_Nothing_Should_Be_Reported()
     {
-        let findings = Findings_In(&[Payload(
+        let findings = Findings_In(&[Payload_From_Text(
             "src/guarantee.rs",
             "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+What this provider promises.\t+fn/0\n".to_owned(),
         )]);
@@ -339,7 +339,7 @@ mod tests
     #[test]
     fn Test_A_Declaration_Stating_It_Has_No_Exerciser_Should_Not_Be_Reported()
     {
-        let findings = Findings_In(&[Payload(
+        let findings = Findings_In(&[Payload_From_Text(
             "src/guarantee.rs",
             "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by nothing: it reports a declared file verbatim.\t+fn/0\n".to_owned(),
         )]);
@@ -352,7 +352,7 @@ mod tests
     #[test]
     fn Test_A_Marker_Followed_By_Prose_Should_Not_Count_As_A_Claim()
     {
-        let findings = Findings_In(&[Payload(
+        let findings = Findings_In(&[Payload_From_Text(
             "src/guarantee.rs",
             "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by the tests below.\t+fn/0\n".to_owned(),
         )]);
@@ -368,11 +368,11 @@ mod tests
     fn Test_A_Name_Should_Resolve_Against_Another_File()
     {
         let findings = Findings_In(&[
-            Payload(
+            Payload_From_Text(
                 "src/guarantee.rs",
                 "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t+Exercised by `Test_Elsewhere`.\t+fn/0\n".to_owned(),
             ),
-            Payload("tests/guarantee.rs", "unexpanded\t0\nitem\t0\tFunction\tPrivate\tTest_Elsewhere\t.\t+fn/0\n".to_owned()),
+            Payload_From_Text("tests/guarantee.rs", "unexpanded\t0\nitem\t0\tFunction\tPrivate\tTest_Elsewhere\t.\t+fn/0\n".to_owned()),
         ]);
 
         assert!(findings.is_empty(), "{findings:?}");
@@ -383,7 +383,7 @@ mod tests
     #[test]
     fn Test_Another_Function_Should_Not_Be_Judged()
     {
-        let findings = Findings_In(&[Payload(
+        let findings = Findings_In(&[Payload_From_Text(
             "src/guarantee.rs",
             "unexpanded\t0\nitem\t0\tFunction\tPublic\tProvider_Offer\t+What this provider offers.\t+fn/0\n".to_owned(),
         )]);
@@ -396,7 +396,7 @@ mod tests
     #[test]
     fn Test_An_Unobserved_Documentation_Field_Should_Not_Read_As_Naming_Nothing()
     {
-        let findings = Findings_In(&[Payload(
+        let findings = Findings_In(&[Payload_From_Text(
             "src/guarantee.rs",
             "unexpanded\t0\nitem\t0\tFunction\tPublic\tDeclared_Guarantee\t-\t+fn/0\n".to_owned(),
         )]);
@@ -407,7 +407,7 @@ mod tests
         assert!(finding.summary.contains("could not be judged"), "{findings:?}");
     }
 
-    fn Payload(path: &str, text: String) -> JudgedFile
+    fn Payload_From_Text(path: &str, text: String) -> JudgedFile
     {
         let payload = nomos_cap_syntax::Parse_Payload(text.as_bytes()).expect("this fixture payload is well formed");
         return JudgedFile { path: path.to_owned(), payload };

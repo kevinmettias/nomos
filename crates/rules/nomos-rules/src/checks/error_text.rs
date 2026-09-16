@@ -345,7 +345,7 @@ mod tests
     #[test]
     fn Test_Check_Error_Message_Starts_Lowercase_Should_Report_A_Capitalized_Message()
     {
-        let source = Source(SourceText { path: "src/error.rs", text: "#[error(\"Failed to read scene file\")]\n" });
+        let source = Source_File(SourceText { path: "src/error.rs", text: "#[error(\"Failed to read scene file\")]\n" });
         let findings = Check_Error_Message_Starts_Lowercase(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(LOWERCASE_FIRST_LETTER));
@@ -354,7 +354,7 @@ mod tests
     #[test]
     fn Test_Check_Error_Message_Starts_Lowercase_Should_Accept_A_Lowercase_Message()
     {
-        let source = Source(SourceText { path: "src/error.rs", text: "#[error(\"failed to read scene file\")]\n" });
+        let source = Source_File(SourceText { path: "src/error.rs", text: "#[error(\"failed to read scene file\")]\n" });
         let findings = Check_Error_Message_Starts_Lowercase(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -362,7 +362,7 @@ mod tests
     #[test]
     fn Test_Check_Error_Message_Starts_Lowercase_Should_Exempt_An_Acronym_First_Word()
     {
-        let source = Source(SourceText { path: "src/error.rs", text: "#[error(\"HTTP request failed\")]\n" });
+        let source = Source_File(SourceText { path: "src/error.rs", text: "#[error(\"HTTP request failed\")]\n" });
         let findings = Check_Error_Message_Starts_Lowercase(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -370,7 +370,7 @@ mod tests
     #[test]
     fn Test_Check_Error_Message_Starts_Lowercase_Should_Exempt_A_Placeholder_Opener()
     {
-        let source = Source(SourceText { path: "src/error.rs", text: "#[error(\"{0}: could not be opened\")]\n" });
+        let source = Source_File(SourceText { path: "src/error.rs", text: "#[error(\"{0}: could not be opened\")]\n" });
         let findings = Check_Error_Message_Starts_Lowercase(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -378,7 +378,7 @@ mod tests
     #[test]
     fn Test_Check_Error_Message_Starts_Lowercase_Should_Accept_A_Marker_Reason()
     {
-        let source = Source(SourceText { path: "src/error.rs", text: "#[error(\"Failed to read scene file\")] // error-message: allow: matches an external API's own error text verbatim\n" });
+        let source = Source_File(SourceText { path: "src/error.rs", text: "#[error(\"Failed to read scene file\")] // error-message: allow: matches an external API's own error text verbatim\n" });
         let findings = Check_Error_Message_Starts_Lowercase(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -386,7 +386,7 @@ mod tests
     #[test]
     fn Test_Check_Error_Message_Has_No_Trailing_Punctuation_Should_Report_A_Trailing_Period()
     {
-        let source = Source(SourceText { path: "src/error.rs", text: "#[error(\"failed to read scene file.\")]\n" });
+        let source = Source_File(SourceText { path: "src/error.rs", text: "#[error(\"failed to read scene file.\")]\n" });
         let findings = Check_Error_Message_Has_No_Trailing_Punctuation(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(NO_TRAILING_PUNCTUATION));
@@ -395,7 +395,7 @@ mod tests
     #[test]
     fn Test_Check_Error_Message_Has_No_Trailing_Punctuation_Should_Accept_A_Clean_Message()
     {
-        let source = Source(SourceText { path: "src/error.rs", text: "#[error(\"failed to read scene file\")]\n" });
+        let source = Source_File(SourceText { path: "src/error.rs", text: "#[error(\"failed to read scene file\")]\n" });
         let findings = Check_Error_Message_Has_No_Trailing_Punctuation(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -403,7 +403,7 @@ mod tests
     #[test]
     fn Test_Check_Error_Message_Has_No_Trailing_Punctuation_Should_Report_A_Trailing_Question_Mark()
     {
-        let source = Source(SourceText { path: "src/error.rs", text: "#[error(\"is the file missing?\")]\n" });
+        let source = Source_File(SourceText { path: "src/error.rs", text: "#[error(\"is the file missing?\")]\n" });
         let findings = Check_Error_Message_Has_No_Trailing_Punctuation(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -411,7 +411,7 @@ mod tests
     #[test]
     fn Test_Check_Eager_Vs_Lazy_Context_Should_Report_A_Format_Macro_Argument()
     {
-        let source = Source(SourceText { path: "src/read.rs", text: "Operation().With_Context(format!(\"processing entity {}\", entity_id))?;\n" });
+        let source = Source_File(SourceText { path: "src/read.rs", text: "Operation().With_Context(format!(\"processing entity {}\", entity_id))?;\n" });
         let findings = Check_Eager_Vs_Lazy_Context(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(EAGER_VS_LAZY_CONTEXT));
@@ -420,7 +420,7 @@ mod tests
     #[test]
     fn Test_Check_Eager_Vs_Lazy_Context_Should_Accept_The_Lazy_Form()
     {
-        let source = Source(SourceText { path: "src/read.rs", text: "Operation().With_Context_Lazy(|| format!(\"processing entity {}\", entity_id))?;\n" });
+        let source = Source_File(SourceText { path: "src/read.rs", text: "Operation().With_Context_Lazy(|| format!(\"processing entity {}\", entity_id))?;\n" });
         let findings = Check_Eager_Vs_Lazy_Context(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -428,7 +428,7 @@ mod tests
     #[test]
     fn Test_Check_Eager_Vs_Lazy_Context_Should_Accept_A_Cheap_Static_Argument()
     {
-        let source = Source(SourceText { path: "src/read.rs", text: "Operation().With_Context(\"reading the scene file\")?;\n" });
+        let source = Source_File(SourceText { path: "src/read.rs", text: "Operation().With_Context(\"reading the scene file\")?;\n" });
         let findings = Check_Eager_Vs_Lazy_Context(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -436,7 +436,7 @@ mod tests
     #[test]
     fn Test_Check_Eager_Vs_Lazy_Context_Should_Report_A_Clone_Call()
     {
-        let source = Source(SourceText { path: "src/read.rs", text: "Operation().With_Context(context.clone())?;\n" });
+        let source = Source_File(SourceText { path: "src/read.rs", text: "Operation().With_Context(context.clone())?;\n" });
         let findings = Check_Eager_Vs_Lazy_Context(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -444,7 +444,7 @@ mod tests
     #[test]
     fn Test_Check_Eager_Vs_Lazy_Context_Should_Accept_A_Marker_Reason()
     {
-        let source = Source(
+        let source = Source_File(
             SourceText { path: "src/read.rs", text: "Operation().With_Context(format!(\"processing entity {}\", entity_id))?; // context-laziness: allow: measured, allocation cost is negligible next to the I/O this wraps\n" },
         );
         let findings = Check_Eager_Vs_Lazy_Context(&[source]);
@@ -454,7 +454,7 @@ mod tests
     #[test]
     fn Test_Check_Error_Message_Starts_Lowercase_Should_Not_Judge_Its_Own_Implementation_File()
     {
-        let source = Source(
+        let source = Source_File(
             SourceText { path: "crates/rules/nomos-rules/src/checks/error_text.rs", text: "#[error(\"Failed to read the file\")]\nstruct ReadError;\n" },
         );
 
@@ -472,7 +472,7 @@ mod tests
         text: &'text str,
     }
 
-    fn Source(source: SourceText<'_>) -> SourceFile
+    fn Source_File(source: SourceText<'_>) -> SourceFile
     {
         let SourceText { path, text } = source;
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);

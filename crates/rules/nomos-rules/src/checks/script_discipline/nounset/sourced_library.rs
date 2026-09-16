@@ -74,7 +74,7 @@ fn Quote_State_After(line: &str, opening: QuoteState) -> QuoteState
 
     while let Some(&character) = bytes.get(index)
     {
-        match Step(line, character, index, state)
+        match Step_In_State(line, character, index, state)
         {
             StepOutcome::Continue { state: next_state, next_index } =>
             {
@@ -88,7 +88,7 @@ fn Quote_State_After(line: &str, opening: QuoteState) -> QuoteState
     return state;
 }
 
-fn Step(line: &str, character: u8, index: usize, state: QuoteState) -> StepOutcome
+fn Step_In_State(line: &str, character: u8, index: usize, state: QuoteState) -> StepOutcome
 {
     return match state
     {

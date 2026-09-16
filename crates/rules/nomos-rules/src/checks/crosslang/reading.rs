@@ -87,8 +87,8 @@ mod tests
     #[test]
     fn Test_Struct_Index_Should_Include_Only_The_Sources_Whose_Fact_Could_Be_Read()
     {
-        let readable = Source("readable.rs");
-        let unread = Source("unread.rs");
+        let readable = Source_File("readable.rs");
+        let unread = Source_File("unread.rs");
         let mut offering = Offering();
         let mut reader = test_support::Reader_Over_A_Syntax_Fact(&mut offering, &readable, "unexpanded\t0\n")
             .expect("the fixture's store holds no fact under this key at a newer generation");
@@ -100,14 +100,14 @@ mod tests
         assert_eq!(index.first().map(|(source, _)| source.path.clone()), Some(readable.path));
     }
 
-    fn Source(path: &str) -> SourceFile
+    fn Source_File(path: &str) -> SourceFile
     {
         return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
     }
 
     fn Offering() -> TestOffering
     {
-        return test_support::Offering(
+        return test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_cap_syntax::Capability_Contract(),
                 capability: nomos_cap_syntax::Capability(),

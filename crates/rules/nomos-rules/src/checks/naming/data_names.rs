@@ -55,7 +55,7 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, module_case: Case, field_c
 
     for item in &payload.items
     {
-        if item.kind == MODULE && !module_case.Is_The_Shape_Of(Unescaped(item.Own_Name()))
+        if item.kind == MODULE && !module_case.Is_The_Shape_Of(Unescaped_Name(item.Own_Name()))
         {
             let finding = Violation_Finding(path, item, item.Own_Name());
             findings.push(finding);
@@ -81,7 +81,7 @@ fn Field_Violations_In(path: &str, item: &PayloadItem, field_case: Case) -> Vec<
 
     return fields
         .iter()
-        .filter(|(name, _type_name)| return !field_case.Is_The_Shape_Of(Unescaped(name)))
+        .filter(|(name, _type_name)| return !field_case.Is_The_Shape_Of(Unescaped_Name(name)))
         .map(|(name, _type_name)| return Violation_Finding(path, item, name))
         .collect();
 }
@@ -109,7 +109,7 @@ fn Unread_As_This_Rule(mut finding: Finding) -> Finding
 /// rather than copied a third time unremarked -- but it is left in place, because folding
 /// three inline `strip_prefix`es into shared plumbing is the deduplication `OD-RULES-014`
 /// measured before it moved anything, and this item is not that measurement.
-fn Unescaped(name: &str) -> &str
+fn Unescaped_Name(name: &str) -> &str
 {
     return name.strip_prefix("r#").unwrap_or(name);
 }

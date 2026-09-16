@@ -219,7 +219,7 @@ mod tests
     #[test]
     fn Test_Judgment_For_Universe_Should_Produce_No_Finding_When_The_Reach_Is_Enforced()
     {
-        let universe = Universe(Some("Test_Every_Row"));
+        let universe = Declared_Universe(Some("Test_Every_Row"));
         let mut names = std::collections::BTreeSet::new();
         names.insert("Test_Every_Row".to_owned());
         let index = Empty_Index_With_Names(names);
@@ -232,7 +232,7 @@ mod tests
     #[test]
     fn Test_Judgment_For_Universe_Should_Produce_A_Finding_When_The_Reach_Is_Not_Enforced()
     {
-        let universe = Universe(None);
+        let universe = Declared_Universe(None);
         let index = Empty_Index_With_Names(std::collections::BTreeSet::new());
 
         let judgment = Judgment_For_Universe(&universe, &index).expect("an admitted gap is still reported");
@@ -244,7 +244,7 @@ mod tests
     #[test]
     fn Test_Shortcoming_Finding_Should_Carry_The_Judgments_Applicability_Gate_And_Summary()
     {
-        let universe = Universe(None);
+        let universe = Declared_Universe(None);
         let judgment = Admitted_Gap(&universe);
         let expected_summary = judgment.summary.clone();
 
@@ -259,7 +259,7 @@ mod tests
     #[test]
     fn Test_Verdict_For_Reach_Should_Admit_A_Gap_When_The_Reach_Has_No_Breach()
     {
-        let universe = Universe(None);
+        let universe = Declared_Universe(None);
         let reach = EnforcementReach {
             rule: RuleId::New(COMPLETENESS_MIRROR),
             declared: vec![nomos_contracts::EnforcerRef::Review],
@@ -278,7 +278,7 @@ mod tests
     #[test]
     fn Test_Verdict_For_Reach_Should_Resolve_The_Claim_When_The_Reach_Has_A_Breach()
     {
-        let universe = Universe(Some("Test_Nowhere"));
+        let universe = Declared_Universe(Some("Test_Nowhere"));
         let reach = EnforcementReach {
             rule: RuleId::New(COMPLETENESS_MIRROR),
             declared: vec![nomos_contracts::EnforcerRef::Check { name: "Test_Nowhere".to_owned() }],
@@ -355,7 +355,7 @@ mod tests
         return CheckIndex { names, universes: Vec::new(), unobserved: Vec::new(), unread: Vec::new() };
     }
 
-    fn Universe(claimed_mirror: Option<&str>) -> DeclaredUniverse
+    fn Declared_Universe(claimed_mirror: Option<&str>) -> DeclaredUniverse
     {
         return DeclaredUniverse {
             path: "a.rs".to_owned(),

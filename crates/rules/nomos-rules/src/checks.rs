@@ -280,7 +280,7 @@ mod tests
     /// asserts the value itself; it only has to be a payload the relay can carry.
     const PAYLOAD_OF_TWO: u32 = 2;
 
-    fn Source(path: &str) -> SourceFile
+    fn Source_File(path: &str) -> SourceFile
     {
         use nomos_contracts::SubjectId;
         use nomos_model::Content_Digest;
@@ -322,18 +322,18 @@ mod tests
 
         for path in inside
         {
-            assert!(Is_Test_Or_Example_Source(&Source(path)), "should be exempt: {path}");
+            assert!(Is_Test_Or_Example_Source(&Source_File(path)), "should be exempt: {path}");
         }
         for path in outside
         {
-            assert!(!Is_Test_Or_Example_Source(&Source(path)), "should be judged: {path}");
+            assert!(!Is_Test_Or_Example_Source(&Source_File(path)), "should be judged: {path}");
         }
     }
 
     #[test]
     fn Test_Relay_Findings_Should_Push_The_Payload_Error_And_Extend_The_Findings_Of_Success()
     {
-        let sources = vec![Source("a.rs"), Source("b.rs")];
+        let sources = vec![Source_File("a.rs"), Source_File("b.rs")];
         let IdleReader { registry, store } = Idle_Reader();
         let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
 

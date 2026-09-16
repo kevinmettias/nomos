@@ -66,7 +66,7 @@ mod tests
     #[test]
     fn Test_Check_An_Excluded_File_Says_Why_Should_Report_An_Unexplained_Build_Ignore()
     {
-        let source = Source("scratch.go", "//go:build ignore\n\npackage main\n".to_owned());
+        let source = Source_File("scratch.go", "//go:build ignore\n\npackage main\n".to_owned());
         let findings = Check_An_Excluded_File_Says_Why(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -74,7 +74,7 @@ mod tests
     #[test]
     fn Test_Check_An_Excluded_File_Says_Why_Should_Accept_A_Following_Explanation()
     {
-        let source = Source(
+        let source = Source_File(
             "scratch.go",
             "//go:build ignore\n// this file is a manual repro script, not part of the build\n\npackage main\n".to_owned(),
         );
@@ -82,7 +82,7 @@ mod tests
         assert!(findings.is_empty(), "{findings:?}");
     }
 
-    fn Source(path: &str, text: String) -> SourceFile
+    fn Source_File(path: &str, text: String) -> SourceFile
     {
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
         source.language = crate::Recognized_Language_In_Tests(path);

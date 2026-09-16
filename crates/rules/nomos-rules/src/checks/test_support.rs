@@ -1,7 +1,7 @@
 //! Test-only scaffolding every rule's own test module was hand-rebuilding: a fresh
 //! [`Registry`] and [`MemoryFactStore`] with one [`ProviderOffer`] declared and offered
 //! against one capability contract, the fixed [`Context`] every fixture materializes a
-//! fact under, the one [`FactKey`]-then-`Materialize` shape every fixture reached a
+//! fact under, the one [`FactKey`]-then-`Materialize_Fact` shape every fixture reached a
 //! fact store through, whatever the payload, and the materialize-then-read pairing a
 //! syntax rule's own test module rebuilt to get from the payload it had just filed back
 //! to a [`Reader`].
@@ -65,7 +65,7 @@ pub(crate) struct OfferedProvider<'text>
 /// built empty on the line above and nothing else is offered into it, so neither is
 /// reachable here; the error is in the signature because the operation this wraps is
 /// fallible, not because the fixture anticipates a failure.
-pub(crate) fn Offering(offered: OfferedProvider<'_>) -> Result<TestOffering, RegistryError>
+pub(crate) fn Offered_Registry(offered: OfferedProvider<'_>) -> Result<TestOffering, RegistryError>
 {
     let mut registry = Registry::New();
     let offer = ProviderOffer {
@@ -121,7 +121,7 @@ pub(crate) struct FactToFile<'text>
 /// purpose, so this is not reachable here; the error is in the signature because
 /// [`MemoryFactStore::Materialize`] is fallible, not because the fixture anticipates a
 /// failure.
-pub(crate) fn Materialize(store: &mut MemoryFactStore, fact: FactToFile<'_>) -> Result<(), FactError>
+pub(crate) fn Materialize_Fact(store: &mut MemoryFactStore, fact: FactToFile<'_>) -> Result<(), FactError>
 {
     let context = Test_Context();
 
@@ -180,7 +180,7 @@ pub(crate) fn Reader_Over_A_Syntax_Fact<'offering>(
     payload_text: &str,
 ) -> Result<Reader<'offering, 'offering>, FactError>
 {
-    Materialize(
+    Materialize_Fact(
         &mut offering.store,
         FactToFile {
             subject: source.subject,
@@ -203,7 +203,7 @@ mod tests
     #[test]
     fn Test_Offering_Should_Declare_The_Contract_And_Admit_The_One_Named_Provider()
     {
-        let offering = Offering(OfferedProvider { contract: nomos_cap_syntax::Capability_Contract(), capability: nomos_cap_syntax::Capability(), version: nomos_cap_syntax::CONTRACT_VERSION, provider: "nomos.test.test_support.offers", guarantee: Floor() }).expect("a fresh Registry holds neither this contract nor this provider");
+        let offering = Offered_Registry(OfferedProvider { contract: nomos_cap_syntax::Capability_Contract(), capability: nomos_cap_syntax::Capability(), version: nomos_cap_syntax::CONTRACT_VERSION, provider: "nomos.test.test_support.offers", guarantee: Floor() }).expect("a fresh Registry holds neither this contract nor this provider");
 
         assert_eq!(offering.offer.provider, ProviderId::New("nomos.test.test_support.offers"));
         let registered: Vec<&ProviderId> = offering.registry.Offers(&nomos_cap_syntax::Capability()).iter().map(|offer| &offer.provider).collect();
@@ -219,10 +219,10 @@ mod tests
     #[test]
     fn Test_Materialize_Should_File_A_Fact_A_Real_Reader_Can_Read_Back()
     {
-        let offering = Offering(OfferedProvider { contract: nomos_cap_syntax::Capability_Contract(), capability: nomos_cap_syntax::Capability(), version: nomos_cap_syntax::CONTRACT_VERSION, provider: "nomos.test.test_support.materializes", guarantee: Floor() }).expect("a fresh Registry holds neither this contract nor this provider");
+        let offering = Offered_Registry(OfferedProvider { contract: nomos_cap_syntax::Capability_Contract(), capability: nomos_cap_syntax::Capability(), version: nomos_cap_syntax::CONTRACT_VERSION, provider: "nomos.test.test_support.materializes", guarantee: Floor() }).expect("a fresh Registry holds neither this contract nor this provider");
         let mut store = offering.store;
         let subject = SubjectId::From_Digest(Digest128::From_Bytes([SUBJECT_SEED; Digest128::BYTE_LENGTH]));
-        Materialize(&mut store, FactToFile { subject, offer: &offering.offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_syntax::Payload_Schema(), bytes: b"unexpanded\t0\n".to_vec() }).expect("the fixture's store holds no fact under this key at a newer generation");
+        Materialize_Fact(&mut store, FactToFile { subject, offer: &offering.offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_syntax::Payload_Schema(), bytes: b"unexpanded\t0\n".to_vec() }).expect("the fixture's store holds no fact under this key at a newer generation");
 
         let mut reader = nomos_analysis::Reader::On(&store, &offering.registry, Test_Context());
         let need = nomos_capability::Requirement::New(nomos_cap_syntax::Capability(), nomos_cap_syntax::CONTRACT_VERSION, Floor());

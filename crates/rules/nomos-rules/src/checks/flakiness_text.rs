@@ -380,7 +380,7 @@ mod tests
     #[test]
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Report_A_Qualified_Sleep_In_An_Integration_Test()
     {
-        let source = Source(SourceText { path: "tests/lock.rs", text: "thread::sleep(Duration::from_millis(50));\n" });
+        let source = Source_File(SourceText { path: "tests/lock.rs", text: "thread::sleep(Duration::from_millis(50));\n" });
         let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(SLEEP_BASED_SYNCHRONIZATION));
@@ -389,7 +389,7 @@ mod tests
     #[test]
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Report_A_Sleep_Inside_An_Inline_Cfg_Test_Module()
     {
-        let source = Source(
+        let source = Source_File(
             SourceText { path: "src/latch.rs", text: "pub fn is_open(&self) -> bool { true }\n\n#[cfg(test)]\nmod tests {\n #[test]\n fn opens() {\n thread::sleep(Duration::from_millis(50));\n }\n}\n" },
         );
         let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
@@ -399,7 +399,7 @@ mod tests
     #[test]
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Ignore_A_Sleep_In_Production_Code()
     {
-        let source = Source(SourceText { path: "src/rate_limiter.rs", text: "thread::sleep(backoff);\n" });
+        let source = Source_File(SourceText { path: "src/rate_limiter.rs", text: "thread::sleep(backoff);\n" });
         let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -407,7 +407,7 @@ mod tests
     #[test]
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Ignore_A_Path_That_Merely_Ends_In_The_Same_Letters()
     {
-        let source = Source(SourceText { path: "tests/worker.rs", text: "worker_thread::sleep(backoff);\n" });
+        let source = Source_File(SourceText { path: "tests/worker.rs", text: "worker_thread::sleep(backoff);\n" });
         let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -415,7 +415,7 @@ mod tests
     #[test]
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Accept_A_Same_Line_Allow_Marker()
     {
-        let source = Source(SourceText { path: "tests/lock.rs", text: "thread::sleep(debounce); // flakiness: allow this waits on the debounce window under test\n" });
+        let source = Source_File(SourceText { path: "tests/lock.rs", text: "thread::sleep(debounce); // flakiness: allow this waits on the debounce window under test\n" });
         let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -423,7 +423,7 @@ mod tests
     #[test]
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Report_A_Qualified_Time_Sleep_In_A_Go_Test_File()
     {
-        let source = Source(SourceText { path: "worker_test.go", text: "func TestReady(t *testing.T) {\n\ttime.Sleep(50 * time.Millisecond)\n}\n" });
+        let source = Source_File(SourceText { path: "worker_test.go", text: "func TestReady(t *testing.T) {\n\ttime.Sleep(50 * time.Millisecond)\n}\n" });
         let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -431,7 +431,7 @@ mod tests
     #[test]
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Ignore_Go_Sleep_Outside_A_Test_File()
     {
-        let source = Source(SourceText { path: "worker.go", text: "func Ready() {\n\ttime.Sleep(50 * time.Millisecond)\n}\n" });
+        let source = Source_File(SourceText { path: "worker.go", text: "func Ready() {\n\ttime.Sleep(50 * time.Millisecond)\n}\n" });
         let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -439,7 +439,7 @@ mod tests
     #[test]
     fn Test_Check_A_Test_Does_Not_Retry_Until_Green_Should_Report_A_Retry_Attribute()
     {
-        let source = Source(SourceText { path: "src/counter.rs", text: "#[cfg(test)]\nmod tests {\n #[retry(3)]\n #[test]\n fn test_it() {\n assert!(true);\n }\n}\n" });
+        let source = Source_File(SourceText { path: "src/counter.rs", text: "#[cfg(test)]\nmod tests {\n #[retry(3)]\n #[test]\n fn test_it() {\n assert!(true);\n }\n}\n" });
         let findings = Check_A_Test_Does_Not_Retry_Until_Green(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(ZERO_FLAKE_POLICY));
@@ -448,7 +448,7 @@ mod tests
     #[test]
     fn Test_Check_A_Test_Does_Not_Retry_Until_Green_Should_Report_The_Bare_Flaky_Attribute()
     {
-        let source = Source(SourceText { path: "src/counter.rs", text: "#[flaky]\nfn test_it() {\n assert!(true);\n}\n" });
+        let source = Source_File(SourceText { path: "src/counter.rs", text: "#[flaky]\nfn test_it() {\n assert!(true);\n}\n" });
         let findings = Check_A_Test_Does_Not_Retry_Until_Green(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -456,7 +456,7 @@ mod tests
     #[test]
     fn Test_Check_A_Test_Does_Not_Retry_Until_Green_Should_Ignore_An_Unrelated_Attribute()
     {
-        let source = Source(SourceText { path: "src/counter.rs", text: "#[derive(Debug)]\nstruct Counter;\n" });
+        let source = Source_File(SourceText { path: "src/counter.rs", text: "#[derive(Debug)]\nstruct Counter;\n" });
         let findings = Check_A_Test_Does_Not_Retry_Until_Green(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -464,7 +464,7 @@ mod tests
     #[test]
     fn Test_Check_A_Test_Does_Not_Retry_Until_Green_Should_Ignore_A_Retry_Named_Attribute_On_A_Non_Function()
     {
-        let source = Source(SourceText { path: "src/counter.rs", text: "#[retry]\nstruct RetryPolicy;\n" });
+        let source = Source_File(SourceText { path: "src/counter.rs", text: "#[retry]\nstruct RetryPolicy;\n" });
         let findings = Check_A_Test_Does_Not_Retry_Until_Green(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -472,7 +472,7 @@ mod tests
     #[test]
     fn Test_Check_A_Test_Does_Not_Retry_Until_Green_Should_Accept_A_Same_Line_Allow_Marker()
     {
-        let source = Source(
+        let source = Source_File(
             SourceText { path: "src/counter.rs", text: "#[retry(3)] // flakiness: allow this test hits a real external endpoint\nfn test_it() {\n assert!(true);\n}\n" },
         );
         let findings = Check_A_Test_Does_Not_Retry_Until_Green(&[source]);
@@ -488,7 +488,7 @@ mod tests
         text: &'text str,
     }
 
-    fn Source(source: SourceText<'_>) -> SourceFile
+    fn Source_File(source: SourceText<'_>) -> SourceFile
     {
         let SourceText { path, text } = source;
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);

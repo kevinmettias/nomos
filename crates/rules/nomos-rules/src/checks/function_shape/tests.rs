@@ -214,7 +214,7 @@ fn Repository_And_Go_Rows(repository_max: u32, go_max: u32) -> Vec<nomos_cap_lim
 
 fn Limits_Offering() -> TestOffering
 {
-    return test_support::Offering(
+    return test_support::Offered_Registry(
         OfferedProvider {
             contract: nomos_cap_limits_policy::Capability_Contract(),
             capability: nomos_cap_limits_policy::Capability(),
@@ -228,7 +228,7 @@ fn Limits_Offering() -> TestOffering
 fn Materialize_Limits_Fact(store: &mut MemoryFactStore, offer: &ProviderOffer, rows: Vec<nomos_cap_limits_policy::PolicyRow>)
 {
     let payload = nomos_cap_limits_policy::LimitsPolicyPayload { rows };
-    test_support::Materialize(
+    test_support::Materialize_Fact(
         store,
         FactToFile {
             subject: nomos_model::Subject_Of_Path(""),
@@ -257,7 +257,7 @@ fn Offering_With_A_Five_Parameter_Build(source: &SourceFile) -> TestOffering
 {
     let TestOffering { mut store, registry, offer } = Offering();
     let inputs = InputDigest::Of(&[source.text.as_bytes()]);
-    test_support::Materialize(
+    test_support::Materialize_Fact(
         &mut store,
         FactToFile {
             subject: source.subject,
@@ -294,7 +294,7 @@ fn Source(path: Path<'_>, text: Text<'_>) -> SourceFile
 fn Offering() -> TestOffering
 {
     let guarantee = Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
-    return test_support::Offering(
+    return test_support::Offered_Registry(
         OfferedProvider {
             contract: nomos_cap_syntax::Capability_Contract(),
             capability: nomos_cap_syntax::Capability(),

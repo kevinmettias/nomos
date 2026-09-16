@@ -266,7 +266,7 @@ mod self_tests
 
     fn Offering() -> TestOffering
     {
-        return test_support::Offering(
+        return test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_cap_syntax::Capability_Contract(),
                 capability: nomos_cap_syntax::Capability(),

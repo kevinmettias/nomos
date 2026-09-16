@@ -247,7 +247,7 @@ fn Facts_Reader<'store, 'registry>(store: &'store MemoryFactStore, registry: &'r
 
 fn Limits_Offering() -> TestOffering
 {
-    return test_support::Offering(
+    return test_support::Offered_Registry(
         OfferedProvider {
             contract: nomos_cap_limits_policy::Capability_Contract(),
             capability: nomos_cap_limits_policy::Capability(),
@@ -261,7 +261,7 @@ fn Limits_Offering() -> TestOffering
 fn Materialize_Limits_Fact(store: &mut MemoryFactStore, offer: &nomos_capability::ProviderOffer, rows: Vec<PolicyRow>)
 {
     let payload = LimitsPolicyPayload { rows };
-    test_support::Materialize(
+    test_support::Materialize_Fact(
         store,
         FactToFile {
             subject: nomos_model::Subject_Of_Path(""),

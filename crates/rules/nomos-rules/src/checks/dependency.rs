@@ -116,7 +116,7 @@ pub const WRITE_AUTHORITY_CONTRACT_RECORD_VERSION: u32 = 1;
 
 /// Every member's own dependency payload, judged by `judge`, with an unread one reported under
 /// `rule` — the shape all three rules above share once the declaration is in hand.
-fn Judged(
+fn Judged_Members(
     sources: &[SourceFile],
     facts: &mut dyn FactReader,
     rule: &'static str,
@@ -166,7 +166,7 @@ mod tests
     const DEPENDENCY_PROVIDER: &str = "nomos.test.dependency.resolves";
     const ARCHITECTURE_PROVIDER: &str = "nomos.test.architecture.declares";
 
-    fn Edge(target: &str) -> DependencyEdge
+    fn Dependency_Edge(target: &str) -> DependencyEdge
     {
         return DependencyEdge { target: target.to_owned(), kind: DependencyKind::Normal, optional: false };
     }
@@ -174,7 +174,8 @@ mod tests
     #[test]
     fn Test_Check_Dependency_Direction_Should_Read_Both_Real_Facts_And_Judge_An_Inadmissible_Edge()
     {
-        let findings = Judged_By(Check_Dependency_Direction, "billing", Some(vec![Edge("http")]), Some(&Declaration()));
+        let findings = Judged_By(
+            Check_Dependency_Direction, "billing", Some(vec![Dependency_Edge("http")]), Some(&Declaration()));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "billing");
@@ -183,7 +184,8 @@ mod tests
     #[test]
     fn Test_Check_Dependency_Direction_Should_Produce_No_Finding_For_An_Edge_The_Declaration_Admits()
     {
-        let findings = Judged_By(Check_Dependency_Direction, "http", Some(vec![Edge("billing")]), Some(&Declaration()));
+        let findings = Judged_By(
+            Check_Dependency_Direction, "http", Some(vec![Dependency_Edge("billing")]), Some(&Declaration()));
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -199,7 +201,8 @@ mod tests
             ..Declaration()
         };
 
-        let findings = Judged_By(Check_Dependency_Direction, "http", Some(vec![Edge("billing")]), Some(&reversed));
+        let findings = Judged_By(
+            Check_Dependency_Direction, "http", Some(vec![Dependency_Edge("billing")]), Some(&reversed));
 
         assert_eq!(findings.len(), 1, "the edge the previous declaration admitted is refused by this one: {findings:?}");
     }
@@ -209,7 +212,7 @@ mod tests
     #[test]
     fn Test_An_Unreadable_Declaration_Should_Report_One_Finding_Rather_Than_Judge_Nothing()
     {
-        let findings = Judged_By(Check_Dependency_Direction, "billing", Some(vec![Edge("http")]), None);
+        let findings = Judged_By(Check_Dependency_Direction, "billing", Some(vec![Dependency_Edge("http")]), None);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         let found = findings.first().expect("asserted len 1 above");
@@ -251,7 +254,8 @@ mod tests
     #[test]
     fn Test_Check_Write_Authority_Should_Produce_No_Finding_For_A_Named_Door()
     {
-        let findings = Judged_By(Check_Write_Authority, "billing", Some(vec![Edge("ledger-store")]), Some(&Declaration()));
+        let findings = Judged_By(
+            Check_Write_Authority, "billing", Some(vec![Dependency_Edge("ledger-store")]), Some(&Declaration()));
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -259,7 +263,8 @@ mod tests
     #[test]
     fn Test_Check_Write_Authority_Should_Produce_One_Finding_For_An_Undeclared_Door()
     {
-        let findings = Judged_By(Check_Write_Authority, "http", Some(vec![Edge("ledger-store")]), Some(&Declaration()));
+        let findings = Judged_By(
+            Check_Write_Authority, "http", Some(vec![Dependency_Edge("ledger-store")]), Some(&Declaration()));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(WRITE_AUTHORITY));
@@ -273,7 +278,7 @@ mod tests
 
     /// A registry declaring both capabilities these rules read, and a store to materialize into.
     ///
-    /// `test_support::Offering` declares one contract and offers one provider against it; these
+    /// `test_support::Offered_Registry` declares one contract and offers one provider against it; these
     /// rules read two capabilities, so the second is declared onto that offering's own registry
     /// rather than the helper widened for a single caller.
     struct Fixture
@@ -290,7 +295,7 @@ mod tests
         fn Declaring(&mut self, declared: &ArchitecturePayload)
         {
             let bytes = nomos_cap_architecture::Encode_Payload(declared);
-            test_support::Materialize(
+            test_support::Materialize_Fact(
                 &mut self.store,
                 FactToFile {
                     subject: nomos_model::Subject_Of_Path(""),
@@ -306,7 +311,7 @@ mod tests
         fn Depending(&mut self, source: &SourceFile, payload: &DependencyPayload)
         {
             let bytes = nomos_cap_dependency::Encode_Payload(payload);
-            test_support::Materialize(
+            test_support::Materialize_Fact(
                 &mut self.store,
                 FactToFile {
                     subject: source.subject,
@@ -321,7 +326,7 @@ mod tests
 
     fn Fixture() -> Fixture
     {
-        let mut offering = test_support::Offering(
+        let mut offering = test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_cap_dependency::Capability_Contract(),
                 capability: nomos_cap_dependency::Capability(),

@@ -46,25 +46,28 @@ fn Has_Shared_RefCell_Construct(code: &str) -> bool
         .filter(|character| return !character.is_whitespace())
         .collect::<String>();
 
-    return Is_Shared_Type_Containing_RefCell(CompactTypeText(&compact), WrapperName("Rc"))
-        || Is_Shared_Type_Containing_RefCell(CompactTypeText(&compact), WrapperName("Arc"))
+    return Is_Shared_Type_Containing_RefCell(CompactTypeText(&compact), SmartPointerName("Rc"))
+        || Is_Shared_Type_Containing_RefCell(CompactTypeText(&compact), SmartPointerName("Arc"))
         || compact.contains("Rc::new(RefCell::new(")
         || compact.contains("Arc::new(RefCell::new(")
         || compact.contains("Rc::<RefCell<")
         || compact.contains("Arc::<RefCell<");
 }
 
-/// `compact` and `wrapper` are both `&str`; without a distinct type per position, a call
-/// site like `Is_Shared_Type_Containing_RefCell(compact, wrapper)` reads as two interchangeable
-/// strings and a swap compiles silently.
+/// `compact` and `smart_pointer` are both `&str`; without a distinct type per position, a
+/// call site like `Is_Shared_Type_Containing_RefCell(compact, smart_pointer)` reads as two
+/// interchangeable strings and a swap compiles silently.
 struct CompactTypeText<'a>(&'a str);
 
-struct WrapperName<'a>(&'a str);
+struct SmartPointerName<'a>(&'a str);
 
-fn Is_Shared_Type_Containing_RefCell(compact: CompactTypeText<'_>, wrapper: WrapperName<'_>) -> bool
+fn Is_Shared_Type_Containing_RefCell(
+    compact: CompactTypeText<'_>,
+    smart_pointer: SmartPointerName<'_>,
+) -> bool
 {
     let compact = compact.0;
-    let pattern = format!("{}<", wrapper.0);
+    let pattern = format!("{}<", smart_pointer.0);
     let Some(start) = compact.find(&pattern)
     else
     {

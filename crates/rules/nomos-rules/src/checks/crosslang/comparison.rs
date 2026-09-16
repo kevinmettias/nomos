@@ -188,9 +188,9 @@ mod tests
     #[test]
     fn Test_Judged_Correspondence_Should_Report_Nothing_When_Both_Sides_Name_The_Same_Fields()
     {
-        let source = Source("counter.rs");
+        let source = Source_File("counter.rs");
         let item = Struct_Item("Counter", &[("n", "u32")]);
-        let target_source = Source("counter.go");
+        let target_source = Source_File("counter.go");
         let index = vec![(&target_source, SyntaxPayload { unexpanded: 0, items: vec![Struct_Item("Counter", &[("n", "int")])] })];
 
         let judged = Judged_Correspondence(&source, &item, "Counter", &index);
@@ -201,9 +201,9 @@ mod tests
     #[test]
     fn Test_Judged_Correspondence_Should_Report_A_Missing_Field_On_One_Side()
     {
-        let source = Source("wide.rs");
+        let source = Source_File("wide.rs");
         let item = Struct_Item("Wide", &[("a", "u32"), ("b", "u32")]);
-        let target_source = Source("wide.go");
+        let target_source = Source_File("wide.go");
         let index = vec![(&target_source, SyntaxPayload { unexpanded: 0, items: vec![Struct_Item("Wide", &[("a", "int")])] })];
 
         let judged = Judged_Correspondence(&source, &item, "Wide", &index).expect("the sides disagree on fields");
@@ -227,7 +227,7 @@ mod tests
         };
     }
 
-    fn Source(path: &str) -> SourceFile
+    fn Source_File(path: &str) -> SourceFile
     {
         return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
     }

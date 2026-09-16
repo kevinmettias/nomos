@@ -258,7 +258,7 @@ mod tests
 
     fn Offering() -> TestOffering
     {
-        return test_support::Offering(
+        return test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_cap_syntax::Capability_Contract(),
                 capability: nomos_cap_syntax::Capability(),
@@ -273,6 +273,6 @@ mod tests
     {
         let bytes = nomos_cap_syntax::Render_Payload(payload);
         let inputs = InputDigest::Of(&[source.text.as_bytes()]);
-        test_support::Materialize(store, FactToFile { subject: source.subject, offer, semantic_inputs: inputs, schema: nomos_cap_syntax::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
+        test_support::Materialize_Fact(store, FactToFile { subject: source.subject, offer, semantic_inputs: inputs, schema: nomos_cap_syntax::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 }

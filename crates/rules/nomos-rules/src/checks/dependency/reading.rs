@@ -228,7 +228,7 @@ mod tests
     #[test]
     fn Test_Payload_Of_Should_Decode_A_Materialized_Fact_Under_The_Asking_Rule()
     {
-        let source = Source("nomos-cap-syntax");
+        let source = Source_File("nomos-cap-syntax");
         let TestOffering { mut store, registry, offer } = Offering();
         Materialize_Dependency_Fact(
             &mut store,
@@ -246,13 +246,13 @@ mod tests
     fn Materialize_Dependency_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DependencyPayload)
     {
         let bytes = nomos_cap_dependency::Encode_Payload(payload);
-        test_support::Materialize(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_dependency::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
+        test_support::Materialize_Fact(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_dependency::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 
     #[test]
     fn Test_Payload_Of_Should_Report_An_Unread_Subject_Under_Whichever_Rule_Asked()
     {
-        let source = Source("nomos-cap-syntax");
+        let source = Source_File("nomos-cap-syntax");
         let TestOffering { store, registry, .. } = Offering();
         let mut reader = Reader::On(&store, &registry, Test_Context());
 
@@ -261,14 +261,14 @@ mod tests
         assert_eq!(refused.rule, RuleId::New("example-rule"));
     }
 
-    fn Source(package: &str) -> SourceFile
+    fn Source_File(package: &str) -> SourceFile
     {
         return SourceFile::New(package, SubjectId::From_Digest(Content_Digest(package.as_bytes())), String::new());
     }
 
     fn Offering() -> TestOffering
     {
-        return test_support::Offering(
+        return test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_cap_dependency::Capability_Contract(),
                 capability: nomos_cap_dependency::Capability(),

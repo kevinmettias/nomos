@@ -40,7 +40,7 @@ pub fn Check_Write_Authority(sources: &[SourceFile], facts: &mut dyn FactReader)
         Err(unread) => return unread,
     };
 
-    return super::Judged(sources, facts, super::WRITE_AUTHORITY, &|payload, source| {
+    return super::Judged_Members(sources, facts, super::WRITE_AUTHORITY, &|payload, source| {
         return Violations_In(&architecture, payload, source);
     });
 }

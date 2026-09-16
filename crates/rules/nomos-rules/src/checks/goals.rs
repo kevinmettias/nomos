@@ -283,7 +283,7 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Report_A_Subsystem_Serving_An_Undeclared_Goal()
     {
-        let policy = Policy(&["render"], 0, &[("experimental", &["teleport"])]);
+        let policy = Goals_Policy(&["render"], 0, &[("experimental", &["teleport"])]);
         let findings = Findings_For(&policy);
 
         const EXPECTED_FINDINGS: usize = 2;
@@ -297,7 +297,7 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Report_A_Goal_Nothing_Serves()
     {
-        let policy = Policy(&["render", "unbuilt"], 0, &[("graphics", &["render"])]);
+        let policy = Goals_Policy(&["render", "unbuilt"], 0, &[("graphics", &["render"])]);
         let findings = Findings_For(&policy);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
@@ -310,7 +310,7 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Report_A_Part_Serving_No_Goal()
     {
-        let policy = Policy(&["render"], 0, &[("graphics", &["render"]), ("utils", &[])]);
+        let policy = Goals_Policy(&["render"], 0, &[("graphics", &["render"]), ("utils", &[])]);
         let findings = Findings_For(&policy);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
@@ -323,7 +323,7 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Report_A_Goal_Spread_Past_Its_Ceiling()
     {
-        let policy = Policy(&["simulate"], 1, &[("physics", &["simulate"]), ("audio", &["simulate"])]);
+        let policy = Goals_Policy(&["simulate"], 1, &[("physics", &["simulate"]), ("audio", &["simulate"])]);
         let findings = Findings_For(&policy);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
@@ -334,7 +334,7 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Report_All_Four_Disagreements_At_Once()
     {
-        let policy = Policy(
+        let policy = Goals_Policy(
             &["render", "simulate", "unbuilt"],
             1,
             &[
@@ -364,7 +364,7 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Judge_Nothing_When_No_Goal_Is_Declared()
     {
-        let policy = Policy(&[], 1, &[("utils", &[]), ("experimental", &["teleport"])]);
+        let policy = Goals_Policy(&[], 1, &[("utils", &[]), ("experimental", &["teleport"])]);
         let findings = Findings_For(&policy);
 
         assert!(findings.is_empty(), "a repository that declared no goals has not opted in: {findings:?}");
@@ -373,7 +373,7 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Not_Judge_Spread_With_No_Ceiling()
     {
-        let policy = Policy(&["render"], 0, &[("a", &["render"]), ("b", &["render"]), ("c", &["render"])]);
+        let policy = Goals_Policy(&["render"], 0, &[("a", &["render"]), ("b", &["render"]), ("c", &["render"])]);
         let findings = Findings_For(&policy);
 
         assert!(findings.is_empty(), "a ceiling of zero drops only the spread bound: {findings:?}");
@@ -382,7 +382,7 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Accept_A_Policy_That_Lines_Up()
     {
-        let policy = Policy(&["render", "simulate"], 1, &[("graphics", &["render"]), ("physics", &["simulate"])]);
+        let policy = Goals_Policy(&["render", "simulate"], 1, &[("graphics", &["render"]), ("physics", &["simulate"])]);
         let findings = Findings_For(&policy);
 
         assert!(findings.is_empty(), "{findings:?}");
@@ -391,7 +391,7 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Count_A_Part_Serving_Two_Goals_Against_Both()
     {
-        let policy = Policy(&["render", "simulate"], 0, &[("engine", &["render", "simulate"])]);
+        let policy = Goals_Policy(&["render", "simulate"], 0, &[("engine", &["render", "simulate"])]);
         let findings = Findings_For(&policy);
 
         assert!(findings.is_empty(), "one part may serve two purposes: {findings:?}");
@@ -400,14 +400,14 @@ mod tests
     #[test]
     fn Test_Check_Goals_And_Parts_Line_Up_Should_Point_Every_Finding_At_The_Declaration()
     {
-        let policy = Policy(&["unbuilt"], 0, &[]);
+        let policy = Goals_Policy(&["unbuilt"], 0, &[]);
         let findings = Findings_For(&policy);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").locations, vec![DECLARATION_FILE.to_owned()]);
     }
 
-    fn Policy(goals: &[&str], ceiling: u32, subsystems: &[(&str, &[&str])]) -> GoalsPolicyPayload
+    fn Goals_Policy(goals: &[&str], ceiling: u32, subsystems: &[(&str, &[&str])]) -> GoalsPolicyPayload
     {
         return GoalsPolicyPayload {
             goals: goals.iter().map(|goal| return (*goal).to_owned()).collect(),

@@ -310,7 +310,7 @@ mod tests
         const PARSER: &str = "nomos.test.file.names.parses";
         const ITEMS: &str = "unexpanded\t0\nitem\t0\tStruct\tPublic\tAnchor\t.\t.\n";
         let guarantee = Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
-        let TestOffering { mut store, registry, offer } = test_support::Offering(
+        let TestOffering { mut store, registry, offer } = test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_cap_syntax::Capability_Contract(),
                 capability: nomos_cap_syntax::Capability(),
@@ -319,7 +319,7 @@ mod tests
                 guarantee,
             },
         ).expect("a fresh Registry holds neither this contract nor this provider");
-        test_support::Materialize(
+        test_support::Materialize_Fact(
             &mut store,
             FactToFile {
                 subject: source.subject,
@@ -455,7 +455,7 @@ mod tests
     }
 
     #[test]
-    fn Test_One_Public_Type_Violations_In_Should_Accept_One_Public_Type_With_Private_Helpers()
+    fn Test_One_Public_Type_Violations_In_Should_Ignore_A_Private_Second_Type()
     {
         let payload = Payload_From_Text(
             "unexpanded\t0\n\

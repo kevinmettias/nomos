@@ -222,7 +222,7 @@ mod tests
     fn Materialize_Review_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &FindingPayload)
     {
         let bytes = nomos_connector_coderabbit::Encode_Payload(payload);
-        test_support::Materialize(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_connector_coderabbit::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
+        test_support::Materialize_Fact(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_connector_coderabbit::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 
     fn Sample_Payload() -> FindingPayload
@@ -274,7 +274,7 @@ mod tests
     {
         let source = Source_File("workspace");
         let TestOffering { mut store, registry, offer } = Offering();
-        test_support::Materialize(&mut store, FactToFile { subject: source.subject, offer: &offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_contracts::SchemaId::New("nomos.wrong.schema.v1"), bytes: b"garbage".to_vec() }).expect("the fixture's store holds no fact under this key at a newer generation");
+        test_support::Materialize_Fact(&mut store, FactToFile { subject: source.subject, offer: &offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_contracts::SchemaId::New("nomos.wrong.schema.v1"), bytes: b"garbage".to_vec() }).expect("the fixture's store holds no fact under this key at a newer generation");
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Review_Findings(&[source], &mut reader);
@@ -300,7 +300,7 @@ mod tests
 
     fn Offering() -> TestOffering
     {
-        return test_support::Offering(
+        return test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_connector_coderabbit::Capability_Contract(),
                 capability: nomos_connector_coderabbit::Capability(),

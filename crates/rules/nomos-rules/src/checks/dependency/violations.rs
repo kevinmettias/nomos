@@ -32,7 +32,7 @@ pub fn Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactRe
         Err(unread) => return unread,
     };
 
-    return super::Judged(sources, facts, super::DEPENDENCY_DIRECTION, &|payload, source| {
+    return super::Judged_Members(sources, facts, super::DEPENDENCY_DIRECTION, &|payload, source| {
         return Violations_In(&architecture, payload, source);
     });
 }

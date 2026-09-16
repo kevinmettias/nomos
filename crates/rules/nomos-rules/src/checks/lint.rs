@@ -328,7 +328,7 @@ mod tests
 
     fn Offering() -> TestOffering
     {
-        return test_support::Offering(
+        return test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_cap_lint::Capability_Contract(),
                 capability: nomos_cap_lint::Capability(),
@@ -342,6 +342,6 @@ mod tests
     fn Materialize_Diagnostics_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &DiagnosticsPayload)
     {
         let bytes = nomos_cap_lint::Encode_Payload(payload);
-        test_support::Materialize(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_lint::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
+        test_support::Materialize_Fact(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_lint::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 }

@@ -167,7 +167,7 @@ fn Test_Check_Nesting_Depth_Should_Resolve_A_Declared_Limit()
 /// [`NESTING_DEPTH_MAX_KEY`] to `value` — the policy source the declared-limit test reads.
 fn Offering_With_Declared_Limit(value: u32) -> test_support::TestOffering
 {
-    let test_support::TestOffering { mut store, registry, offer } = test_support::Offering(
+    let test_support::TestOffering { mut store, registry, offer } = test_support::Offered_Registry(
         OfferedProvider {
             contract: nomos_cap_limits_policy::Capability_Contract(),
             capability: nomos_cap_limits_policy::Capability(),
@@ -183,7 +183,7 @@ fn Offering_With_Declared_Limit(value: u32) -> test_support::TestOffering
             value,
         }],
     };
-    test_support::Materialize(
+    test_support::Materialize_Fact(
         &mut store,
         FactToFile {
             subject: nomos_model::Subject_Of_Path(""),

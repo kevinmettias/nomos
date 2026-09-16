@@ -193,7 +193,7 @@ mod tests
     /// its payload, and therefore the two findings a relay of it must produce.
     const EXPECTED_VIOLATION_FINDINGS: usize = 2;
 
-    /// Also [`crate::checks::test_support::Materialize`]'s own shape: the fact this test
+    /// Also [`crate::checks::test_support::Materialize_Fact`]'s own shape: the fact this test
     /// reads back is one it filed through that same helper.
     #[test]
     fn Test_Materialize_Should_Let_A_Real_Fact_With_A_Violation_Be_Read_And_Relayed()
@@ -232,7 +232,7 @@ mod tests
         assert!(findings.is_empty(), "a clean report must not manufacture a finding: {findings:?}");
     }
 
-    /// Also [`crate::checks::test_support::Offering`]'s own shape: a registry and store built
+    /// Also [`crate::checks::test_support::Offered_Registry`]'s own shape: a registry and store built
     /// through it are enough to judge an empty source list.
     #[test]
     fn Test_Offering_Should_Support_Judging_An_Empty_Source_List()
@@ -304,7 +304,7 @@ mod tests
 
     fn Offering() -> TestOffering
     {
-        return test_support::Offering(
+        return test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_cap_dependency_policy::Capability_Contract(),
                 capability: nomos_cap_dependency_policy::Capability(),
@@ -318,6 +318,6 @@ mod tests
     fn Materialize_Policy_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &PolicyPayload)
     {
         let bytes = nomos_cap_dependency_policy::Encode_Payload(payload);
-        test_support::Materialize(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_dependency_policy::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
+        test_support::Materialize_Fact(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_dependency_policy::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 }

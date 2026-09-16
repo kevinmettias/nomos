@@ -277,7 +277,7 @@ mod tests
     #[test]
     fn Test_Check_A_Package_Is_Named_After_Its_Directory_Should_Report_A_Mismatch()
     {
-        let source = Source(SourceText { path: "check/tool.go", text: "package badname\n" });
+        let source = Source_File(SourceText { path: "check/tool.go", text: "package badname\n" });
 
         let findings = Check_A_Package_Is_Named_After_Its_Directory(&[source]);
 
@@ -288,7 +288,7 @@ mod tests
     #[test]
     fn Test_Check_A_Package_Is_Named_After_Its_Directory_Should_Accept_A_Match()
     {
-        let source = Source(SourceText { path: "checktooldocs/reader.go", text: "package checktooldocs\n" });
+        let source = Source_File(SourceText { path: "checktooldocs/reader.go", text: "package checktooldocs\n" });
 
         let findings = Check_A_Package_Is_Named_After_Its_Directory(&[source]);
 
@@ -298,7 +298,7 @@ mod tests
     #[test]
     fn Test_Check_A_Package_Is_Named_After_Its_Directory_Should_Ignore_Hyphens_And_Underscores()
     {
-        let source = Source(SourceText { path: "check-tool_docs/reader.go", text: "package checktooldocs\n" });
+        let source = Source_File(SourceText { path: "check-tool_docs/reader.go", text: "package checktooldocs\n" });
 
         let findings = Check_A_Package_Is_Named_After_Its_Directory(&[source]);
 
@@ -308,7 +308,7 @@ mod tests
     #[test]
     fn Test_Check_A_Package_Is_Named_After_Its_Directory_Should_Exempt_Package_Main()
     {
-        let source = Source(SourceText { path: "cmd/tool/main.go", text: "package main\n" });
+        let source = Source_File(SourceText { path: "cmd/tool/main.go", text: "package main\n" });
 
         let findings = Check_A_Package_Is_Named_After_Its_Directory(&[source]);
 
@@ -318,7 +318,7 @@ mod tests
     #[test]
     fn Test_Check_A_Package_Is_Named_After_Its_Directory_Should_Exempt_An_External_Test_Package()
     {
-        let source = Source(SourceText { path: "widget/widget_ext_test.go", text: "package widget_test\n" });
+        let source = Source_File(SourceText { path: "widget/widget_ext_test.go", text: "package widget_test\n" });
 
         let findings = Check_A_Package_Is_Named_After_Its_Directory(&[source]);
 
@@ -328,7 +328,7 @@ mod tests
     #[test]
     fn Test_Check_No_Wildcard_Imports_Should_Report_A_Rust_Wildcard()
     {
-        let source = Source(SourceText { path: "src/lib.rs", text: "use acme_math::signals::filters::*;\n" });
+        let source = Source_File(SourceText { path: "src/lib.rs", text: "use acme_math::signals::filters::*;\n" });
 
         let findings = Check_No_Wildcard_Imports(&[source]);
 
@@ -339,7 +339,7 @@ mod tests
     #[test]
     fn Test_Check_No_Wildcard_Imports_Should_Accept_A_Named_Import()
     {
-        let source = Source(SourceText { path: "src/lib.rs", text: "use acme_math::signals::filters::Biquad;\n" });
+        let source = Source_File(SourceText { path: "src/lib.rs", text: "use acme_math::signals::filters::Biquad;\n" });
 
         let findings = Check_No_Wildcard_Imports(&[source]);
 
@@ -349,7 +349,7 @@ mod tests
     #[test]
     fn Test_Check_No_Wildcard_Imports_Should_Exempt_Use_Super_Star_Inside_A_Test_Module()
     {
-        let source = Source(
+        let source = Source_File(
             SourceText { path: "src/lib.rs", text: "pub fn Compute() {}\n\n#[cfg(test)]\nmod tests\n{\n use super::*;\n}\n" },
         );
 
@@ -364,7 +364,7 @@ mod tests
     #[test]
     fn Test_Check_No_Wildcard_Imports_Should_Exempt_Use_Super_Star_In_A_Standalone_Tests_File()
     {
-        let source = Source(SourceText { path: "src/module/tests.rs", text: "use super::*;\n\n#[test]\nfn Test_Compute() {}\n" });
+        let source = Source_File(SourceText { path: "src/module/tests.rs", text: "use super::*;\n\n#[test]\nfn Test_Compute() {}\n" });
 
         let findings = Check_No_Wildcard_Imports(&[source]);
 
@@ -379,7 +379,7 @@ mod tests
     #[test]
     fn Test_Check_No_Wildcard_Imports_Should_Exempt_A_Named_Wildcard_In_A_Test_File()
     {
-        let source = Source(SourceText { path: "tests/suite/claiming.rs", text: "use crate::board::*;\n\n#[test]\nfn Test_Claim() {}\n" });
+        let source = Source_File(SourceText { path: "tests/suite/claiming.rs", text: "use crate::board::*;\n\n#[test]\nfn Test_Claim() {}\n" });
 
         let findings = Check_No_Wildcard_Imports(&[source]);
 
@@ -389,7 +389,7 @@ mod tests
     #[test]
     fn Test_Check_No_Wildcard_Imports_Should_Report_Use_Super_Star_In_Production_Code()
     {
-        let source = Source(SourceText { path: "src/mod.rs", text: "use super::*;\n" });
+        let source = Source_File(SourceText { path: "src/mod.rs", text: "use super::*;\n" });
 
         let findings = Check_No_Wildcard_Imports(&[source]);
 
@@ -399,7 +399,7 @@ mod tests
     #[test]
     fn Test_Check_No_Wildcard_Imports_Should_Report_A_Go_Dot_Import()
     {
-        let source = Source(SourceText { path: "main.go", text: "import . \"acme/widget\"\n" });
+        let source = Source_File(SourceText { path: "main.go", text: "import . \"acme/widget\"\n" });
 
         let findings = Check_No_Wildcard_Imports(&[source]);
 
@@ -409,7 +409,7 @@ mod tests
     #[test]
     fn Test_Check_No_Wildcard_Imports_Should_Report_A_Go_Dot_Import_In_A_Grouped_Block()
     {
-        let source = Source(SourceText { path: "main.go", text: "import (\n\t\"fmt\"\n\t. \"acme/widget\"\n)\n" });
+        let source = Source_File(SourceText { path: "main.go", text: "import (\n\t\"fmt\"\n\t. \"acme/widget\"\n)\n" });
 
         let findings = Check_No_Wildcard_Imports(&[source]);
 
@@ -419,7 +419,7 @@ mod tests
     #[test]
     fn Test_Check_No_Wildcard_Imports_Should_Exempt_A_Go_External_Test_Package_Dot_Importing_Its_Own_Subject()
     {
-        let source = Source(SourceText { path: "widget/widget_test.go", text: "package widget_test\n\nimport . \"acme/widget\"\n" });
+        let source = Source_File(SourceText { path: "widget/widget_test.go", text: "package widget_test\n\nimport . \"acme/widget\"\n" });
 
         let findings = Check_No_Wildcard_Imports(&[source]);
 
@@ -429,7 +429,7 @@ mod tests
     #[test]
     fn Test_Check_No_Wildcard_Imports_Should_Report_A_Go_External_Test_Package_Dot_Importing_Something_Else()
     {
-        let source = Source(SourceText { path: "widget/widget_test.go", text: "package widget_test\n\nimport . \"acme/other\"\n" });
+        let source = Source_File(SourceText { path: "widget/widget_test.go", text: "package widget_test\n\nimport . \"acme/other\"\n" });
 
         let findings = Check_No_Wildcard_Imports(&[source]);
 
@@ -445,7 +445,7 @@ mod tests
         text: &'text str,
     }
 
-    fn Source(source: SourceText<'_>) -> SourceFile
+    fn Source_File(source: SourceText<'_>) -> SourceFile
     {
         let SourceText { path, text } = source;
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);

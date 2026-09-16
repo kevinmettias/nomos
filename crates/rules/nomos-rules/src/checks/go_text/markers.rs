@@ -142,7 +142,7 @@ mod tests
     #[test]
     fn Test_Check_Suppression_Directives_Carry_A_Reason_Should_Report_A_Bare_Nolint()
     {
-        let source = Source("main.go", "result, _ := risky() //nolint\n".to_owned());
+        let source = Source_File("main.go", "result, _ := risky() //nolint\n".to_owned());
         let findings = Check_Suppression_Directives_Carry_A_Reason(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -150,7 +150,7 @@ mod tests
     #[test]
     fn Test_Check_Suppression_Directives_Carry_A_Reason_Should_Report_A_Bare_Linter_Named_Nolint()
     {
-        let source = Source("main.go", "result, _ := risky() //nolint:errcheck\n".to_owned());
+        let source = Source_File("main.go", "result, _ := risky() //nolint:errcheck\n".to_owned());
         let findings = Check_Suppression_Directives_Carry_A_Reason(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -158,7 +158,7 @@ mod tests
     #[test]
     fn Test_Check_Suppression_Directives_Carry_A_Reason_Should_Accept_A_Nolint_With_A_Reason()
     {
-        let source = Source("main.go", "result, _ := risky() //nolint:errcheck // the caller retries on failure\n".to_owned());
+        let source = Source_File("main.go", "result, _ := risky() //nolint:errcheck // the caller retries on failure\n".to_owned());
         let findings = Check_Suppression_Directives_Carry_A_Reason(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -166,7 +166,7 @@ mod tests
     #[test]
     fn Test_Check_Workspace_Markers_Carry_A_Reason_Should_Report_A_Bare_Marker()
     {
-        let source = Source("main.go", "// literals: allow\n".to_owned());
+        let source = Source_File("main.go", "// literals: allow\n".to_owned());
         let findings = Check_Workspace_Markers_Carry_A_Reason(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -174,7 +174,7 @@ mod tests
     #[test]
     fn Test_Check_Workspace_Markers_Carry_A_Reason_Should_Report_A_Bare_Suffixed_Marker()
     {
-        let source = Source("main.go", "// tool-tests: allow-untested\n".to_owned());
+        let source = Source_File("main.go", "// tool-tests: allow-untested\n".to_owned());
         let findings = Check_Workspace_Markers_Carry_A_Reason(&[source]);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -182,7 +182,7 @@ mod tests
     #[test]
     fn Test_Check_Workspace_Markers_Carry_A_Reason_Should_Accept_A_Marker_With_A_Reason()
     {
-        let source = Source("main.go", "// literals: allow -- this magic number is the protocol version, not a policy violation\n".to_owned());
+        let source = Source_File("main.go", "// literals: allow -- this magic number is the protocol version, not a policy violation\n".to_owned());
         let findings = Check_Workspace_Markers_Carry_A_Reason(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -190,12 +190,12 @@ mod tests
     #[test]
     fn Test_Check_Workspace_Markers_Carry_A_Reason_Should_Ignore_A_String_Literal()
     {
-        let source = Source("main.go", "message := \"// literals: allow\"\n".to_owned());
+        let source = Source_File("main.go", "message := \"// literals: allow\"\n".to_owned());
         let findings = Check_Workspace_Markers_Carry_A_Reason(&[source]);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
-    fn Source(path: &str, text: String) -> SourceFile
+    fn Source_File(path: &str, text: String) -> SourceFile
     {
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
         source.language = crate::Recognized_Language_In_Tests(path);

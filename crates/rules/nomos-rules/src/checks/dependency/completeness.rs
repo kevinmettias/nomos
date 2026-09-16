@@ -30,7 +30,7 @@ pub fn Check_Every_Member_Declares_A_Band(sources: &[SourceFile], facts: &mut dy
         Err(unread) => return unread,
     };
 
-    return super::Judged(sources, facts, super::DEPENDENCY_COMPLETENESS, &|payload, source| {
+    return super::Judged_Members(sources, facts, super::DEPENDENCY_COMPLETENESS, &|payload, source| {
         return Violations_In(&architecture, payload, source);
     });
 }

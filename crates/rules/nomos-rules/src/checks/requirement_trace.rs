@@ -100,7 +100,7 @@ fn Finding_For_Problem(problem: &Problem) -> Finding
     return Finding {
         rule: RuleId::New(REQUIREMENT_TRACE_STALENESS),
         subject: nomos_model::Subject_Of_Path(""),
-        subject_name: format!("{}:{}", Rank(problem.kind), problem.requirement),
+        subject_name: format!("{}:{}", Problem_Rank(problem.kind), problem.requirement),
         applicability: Applicability::Supported,
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Blocking,
@@ -131,7 +131,7 @@ const UNRESOLVED_RECORD_RANK: u8 = 2;
 const DIVERGENCE_WITH_NO_RECORD_RANK: u8 = 3;
 const PARTIAL_WITH_NO_GAP_RANK: u8 = 4;
 
-const fn Rank(kind: ProblemKind) -> u8
+const fn Problem_Rank(kind: ProblemKind) -> u8
 {
     return match kind
     {
@@ -167,7 +167,7 @@ mod tests
     fn Test_Check_Requirement_Trace_Staleness_Should_Judge_Nothing_Over_An_Empty_Payload()
     {
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize(&mut store, &offer, &RequirementTracePayload::default());
+        Materialize_Requirement_Trace_Fact(&mut store, &offer, &RequirementTracePayload::default());
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         let findings = Check_Requirement_Trace_Staleness(&mut reader);
@@ -245,7 +245,8 @@ mod tests
     fn Findings_For_Problems(problems: &[Problem]) -> Vec<Finding>
     {
         let TestOffering { mut store, registry, offer } = Offering();
-        Materialize(&mut store, &offer, &RequirementTracePayload { problems: problems.to_vec() });
+        Materialize_Requirement_Trace_Fact(
+            &mut store, &offer, &RequirementTracePayload { problems: problems.to_vec() });
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         return Check_Requirement_Trace_Staleness(&mut reader);
@@ -255,7 +256,7 @@ mod tests
 
     fn Offering() -> TestOffering
     {
-        return test_support::Offering(
+        return test_support::Offered_Registry(
             OfferedProvider {
                 contract: nomos_cap_requirement_trace::Capability_Contract(),
                 capability: nomos_cap_requirement_trace::Capability(),
@@ -266,9 +267,13 @@ mod tests
         ).expect("a fresh Registry holds neither this contract nor this provider");
     }
 
-    fn Materialize(store: &mut MemoryFactStore, offer: &nomos_capability::ProviderOffer, payload: &RequirementTracePayload)
+    fn Materialize_Requirement_Trace_Fact(
+        store: &mut MemoryFactStore,
+        offer: &nomos_capability::ProviderOffer,
+        payload: &RequirementTracePayload,
+    )
     {
         let bytes = Encode_Payload(payload);
-        test_support::Materialize(store, FactToFile { subject: nomos_model::Subject_Of_Path(""), offer, semantic_inputs: InputDigest::Of(&[]), schema: Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
+        test_support::Materialize_Fact(store, FactToFile { subject: nomos_model::Subject_Of_Path(""), offer, semantic_inputs: InputDigest::Of(&[]), schema: Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 }

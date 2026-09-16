@@ -367,7 +367,7 @@ mod tests
         return Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
     }
 
-    /// A fact carrying `schema`/`bytes`, addressed the way `test_support::Materialize`
+    /// A fact carrying `schema`/`bytes`, addressed the way `test_support::Materialize_Fact`
     /// files one — the identity fields are plumbing [`Decoded_Syntax_Payload`] never reads,
     /// so a fixed floor-guarantee key serves every case here.
     fn Fact_With(schema: SchemaId, bytes: Vec<u8>) -> nomos_analysis::MaterializedFact
@@ -435,7 +435,7 @@ mod tests
     fn Reader_With_Materialized(source: &SourceFile) -> MaterializedReader
     {
         let AdmittedOffer { registry, mut store, offer } = Admitted_Reader();
-        crate::checks::test_support::Materialize(
+        crate::checks::test_support::Materialize_Fact(
             &mut store,
             FactToFile {
                 subject: source.subject,
