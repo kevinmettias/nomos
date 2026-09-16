@@ -68,7 +68,7 @@ pub fn Fact_Of(payload: &FindingPayload, context: FactContext) -> ReviewFindingF
     let subject = nomos_model::Subject_Of_Path("");
     let guarantee = Declared_Guarantee();
     let payload_bytes = Encode_Payload(payload);
-    let key = Keyed(subject, &payload.external_id, guarantee, context);
+    let key = Finding_Fact_Key(subject, &payload.external_id, guarantee, context);
     let fact = MaterializedFact {
         identity: key.At(context.generation),
         snapshot: context.snapshot,
@@ -85,7 +85,7 @@ pub fn Fact_Of(payload: &FindingPayload, context: FactContext) -> ReviewFindingF
 /// `semantic_inputs` digests the finding's own external identity: two different findings
 /// must file under two different keys even though both share the constant placeholder
 /// subject every connector fact carries today.
-fn Keyed(subject: SubjectId, external_id: &crate::identity::ReviewFindingId, guarantee: Guarantee, context: FactContext) -> FactKey
+fn Finding_Fact_Key(subject: SubjectId, external_id: &crate::identity::ReviewFindingId, guarantee: Guarantee, context: FactContext) -> FactKey
 {
     return FactKey {
         contract: Capability(),
@@ -164,8 +164,8 @@ mod tests
         let one = crate::identity::ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", COMMENT_ID);
         let other = crate::identity::ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", OTHER_COMMENT_ID);
 
-        let first_key = Keyed(subject, &one, guarantee, Context());
-        let second_key = Keyed(subject, &other, guarantee, Context());
+        let first_key = Finding_Fact_Key(subject, &one, guarantee, Context());
+        let second_key = Finding_Fact_Key(subject, &other, guarantee, Context());
 
         assert_ne!(first_key.Digest(), second_key.Digest(), "two different findings must file apart");
     }

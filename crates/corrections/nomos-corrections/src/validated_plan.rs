@@ -71,7 +71,7 @@ impl ValidatedPlan
 #[cfg(test)]
 mod tests
 {
-    use crate::test_support::{Agent_Judged, Base, Plan_Changing_A, Rewrite};
+    use crate::test_support::{Agent_Judged, Workspace_With_One_File, Plan_Changing_A, Rewrite};
     use crate::{CorrectionError, ValidatedPlan};
     use nomos_contracts::MutationClass;
     use nomos_model::Content_Digest;
@@ -82,7 +82,7 @@ mod tests
     #[test]
     fn Test_Commit_Should_Change_The_Workspace()
     {
-        let mut base = Base(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let mut base = Workspace_With_One_File(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
         let plan = Plan_Changing_A(Rewrite { from: "old", to: "new" }).expect("one candidate touching one path is a valid plan");
         let before = base.Id();
         let validated = plan
@@ -101,7 +101,7 @@ mod tests
     #[test]
     fn Test_Commit_Should_Be_Refused_After_The_Workspace_Moved()
     {
-        let mut base = Base(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let mut base = Workspace_With_One_File(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
         let plan = Plan_Changing_A(Rewrite { from: "old", to: "new" }).expect("one candidate touching one path is a valid plan");
         let validated = plan
             .Stage(&base)
@@ -129,7 +129,7 @@ mod tests
     #[test]
     fn Test_Of_Should_Carry_The_Given_Snapshot_Into_The_Committed_Plan()
     {
-        let mut base = Base(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let mut base = Workspace_With_One_File(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
         let starting = base.Id();
         let forward = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "new");
         let reverse = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("a.rs", "old");

@@ -56,9 +56,9 @@ mod tests
     #[test]
     fn Test_Is_Unresolved_Should_Be_True_When_Role_Or_Authority_Scope_Is_Missing()
     {
-        let missing_role = Item(None, Some("repository"));
-        let missing_authority = Item(Some(KnowledgeSourceRole::CodeOrTestEvidence), None);
-        let resolved = Item(Some(KnowledgeSourceRole::CodeOrTestEvidence), Some("repository"));
+        let missing_role = Knowledge_Item(None, Some("repository"));
+        let missing_authority = Knowledge_Item(Some(KnowledgeSourceRole::CodeOrTestEvidence), None);
+        let resolved = Knowledge_Item(Some(KnowledgeSourceRole::CodeOrTestEvidence), Some("repository"));
 
         assert!(missing_role.Is_Unresolved(), "a missing role is unresolved");
         assert!(missing_authority.Is_Unresolved(), "a missing authority scope is unresolved");
@@ -66,7 +66,7 @@ mod tests
     }
 
     /// One knowledge item, carrying everything but the two fields this test varies.
-    fn Item(role: Option<KnowledgeSourceRole>, authority_scope: Option<&str>) -> KnowledgeContextItem
+    fn Knowledge_Item(role: Option<KnowledgeSourceRole>, authority_scope: Option<&str>) -> KnowledgeContextItem
     {
         return KnowledgeContextItem {
             source: None,

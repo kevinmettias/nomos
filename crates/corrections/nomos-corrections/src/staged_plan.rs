@@ -120,7 +120,7 @@ pub(crate) fn Assert_Not_Moved(expected: SnapshotId, live: &Workspace) -> Result
 #[cfg(test)]
 mod tests
 {
-    use crate::test_support::{Base, Plan_Changing_A, Rewrite};
+    use crate::test_support::{Workspace_With_One_File, Plan_Changing_A, Rewrite};
     use crate::{CorrectionError, StagedPlan};
     use nomos_contracts::MutationClass;
     use nomos_workspace::{ChangeSource, WorkspaceChangeSet};
@@ -136,7 +136,7 @@ mod tests
     #[test]
     fn Test_Of_Should_Succeed_When_Every_Candidates_Prior_Content_Matches_The_Workspace()
     {
-        let base = Base(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let base = Workspace_With_One_File(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
         let plan = Plan_Changing_A(Rewrite { from: "old", to: "new" }).expect("one candidate touching one path is a valid plan");
 
         let staged = plan.Stage(&base).expect("the candidate's prior content matches");
@@ -147,7 +147,7 @@ mod tests
     #[test]
     fn Test_Staging_Against_Stale_Content_Should_Be_Refused()
     {
-        let base = Base(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let base = Workspace_With_One_File(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
         let plan = Plan_Changing_A(Rewrite { from: "not what is there", to: "new" }).expect("one candidate touching one path is a valid plan");
 
         let refusal = plan.Stage(&base).expect_err("the candidate's prior content is wrong");
@@ -158,7 +158,7 @@ mod tests
     #[test]
     fn Test_Validate_Should_Accept_A_Workspace_That_Has_Not_Moved()
     {
-        let base = Base(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let base = Workspace_With_One_File(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
         let plan = Plan_Changing_A(Rewrite { from: "old", to: "new" }).expect("one candidate touching one path is a valid plan");
         let staged = plan.Stage(&base).expect("stages cleanly");
 
@@ -168,7 +168,7 @@ mod tests
     #[test]
     fn Test_Validate_Should_Refuse_A_Workspace_That_Has_Moved_Since_Staging()
     {
-        let mut base = Base(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let mut base = Workspace_With_One_File(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
         let plan = Plan_Changing_A(Rewrite { from: "old", to: "new" }).expect("one candidate touching one path is a valid plan");
         let staged = plan.Stage(&base).expect("stages cleanly");
 
@@ -190,7 +190,7 @@ mod tests
     #[test]
     fn Test_Base_Should_Report_The_Snapshot_The_Plan_Was_Staged_Over()
     {
-        let base = Base(STAGED_OVER_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let base = Workspace_With_One_File(STAGED_OVER_SEED_BYTE).expect("one Present applies to an empty workspace");
         let plan = Plan_Changing_A(Rewrite { from: "old", to: "new" }).expect("one candidate touching one path is a valid plan");
 
         let staged = plan.Stage(&base).expect("stages cleanly");
@@ -201,7 +201,7 @@ mod tests
     #[test]
     fn Test_Assert_Not_Moved_Should_Refuse_When_The_Live_Snapshot_Differs_From_Expected()
     {
-        let mut workspace = Base(MOVED_WORKSPACE_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let mut workspace = Workspace_With_One_File(MOVED_WORKSPACE_SEED_BYTE).expect("one Present applies to an empty workspace");
         let expected = workspace.Id();
 
         let advance = WorkspaceChangeSet::From(ChangeSource::GitCheckout).Present("b.rs", "other");

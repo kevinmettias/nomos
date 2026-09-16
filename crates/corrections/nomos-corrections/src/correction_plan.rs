@@ -133,7 +133,7 @@ mod tests
     fn Test_Stage_Should_Check_Prior_Content_Against_The_Base_Workspace()
     {
         let workspace =
-            crate::test_support::Base(STAGED_WORKSPACE_SEED_BYTE).expect("one Present applies to an empty workspace");
+            crate::test_support::Workspace_With_One_File(STAGED_WORKSPACE_SEED_BYTE).expect("one Present applies to an empty workspace");
         let edit = Edit::New("a.rs", Some("old".to_owned()), Some("new".to_owned()));
         let plan = CorrectionPlan::New(vec![CorrectionCandidate::New("fix a", ChangeSet::Empty().With(edit), CorrectionClass::Mechanical, vec![])])
             .expect("one candidate is a valid plan");

@@ -108,7 +108,7 @@ pub fn Execute_Task<Launcher: ProcessLauncher>(
     root: &Path,
 ) -> Result<AgentExecutionOutcome, AgentExecutionError>
 {
-    return Dispatch(task, launcher, Capability(), root);
+    return Dispatch_Task(task, launcher, Capability(), root);
 }
 
 /// [`Execute_Task`], over a caller-chosen directory rather than a freshly
@@ -132,7 +132,7 @@ pub fn Execute_In<Launcher: ProcessLauncher>(
 {
     let mut capability = Capability();
     capability.workspace = AgentWorkspace::Existing(working_directory.to_path_buf());
-    return Dispatch(task, launcher, capability, root);
+    return Dispatch_Task(task, launcher, capability, root);
 }
 
 /// The envelope, as the engine's own task.
@@ -200,7 +200,7 @@ pub(crate) fn Effort_For(effort: EffortLevel) -> Option<EngineEffort>
 
 /// The one call into the engine, over a boundary already decided on, between the
 /// two envelope constraints this crate enforces itself.
-fn Dispatch<Launcher: ProcessLauncher>(
+fn Dispatch_Task<Launcher: ProcessLauncher>(
     task: &TaskEnvelope,
     launcher: &Launcher,
     capability: AgentCapability,

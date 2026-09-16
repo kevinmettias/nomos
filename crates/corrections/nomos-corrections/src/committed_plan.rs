@@ -104,7 +104,7 @@ impl CommittedPlan
 #[cfg(test)]
 mod tests
 {
-    use crate::test_support::{Agent_Judged, Base, Plan_Changing_A, Rewrite};
+    use crate::test_support::{Agent_Judged, Workspace_With_One_File, Plan_Changing_A, Rewrite};
     use crate::{CommittedPlan, CorrectionPlan};
     use nomos_contracts::MutationClass;
     use nomos_model::Content_Digest;
@@ -117,7 +117,7 @@ mod tests
     #[test]
     fn Test_Committing_Then_Rolling_Back_Should_Return_To_The_Base_Snapshot()
     {
-        let mut base = Base(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let mut base = Workspace_With_One_File(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
         let starting = base.Id();
         let plan = Plan_Changing_A(Rewrite { from: "old", to: "new" }).expect("one candidate touching one path is a valid plan");
         let committed = Commit_Plan(&plan, &mut base);
@@ -136,7 +136,7 @@ mod tests
     #[test]
     fn Test_A_Committed_Plan_Should_Carry_Its_Evidence()
     {
-        let mut base = Base(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let mut base = Workspace_With_One_File(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
         let plan = Plan_Changing_A(Rewrite { from: "old", to: "new" }).expect("one candidate touching one path is a valid plan");
         let committed = Commit_Plan(&plan, &mut base);
 
@@ -146,7 +146,7 @@ mod tests
     #[test]
     fn Test_Rollback_After_The_Workspace_Moved_Should_Be_Refused()
     {
-        let mut base = Base(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let mut base = Workspace_With_One_File(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
         let plan = Plan_Changing_A(Rewrite { from: "old", to: "new" }).expect("one candidate touching one path is a valid plan");
         let committed = Commit_Plan(&plan, &mut base);
 
@@ -177,7 +177,7 @@ mod tests
     #[test]
     fn Test_Of_Should_Assemble_A_Committed_Plan_From_Its_Parts()
     {
-        let mut base = Base(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let mut base = Workspace_With_One_File(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
         let starting = base.Id();
         let plan = Plan_Changing_A(Rewrite { from: "old", to: "new" }).expect("one candidate touching one path is a valid plan");
 
@@ -189,7 +189,7 @@ mod tests
     #[test]
     fn Test_After_Should_Report_The_Snapshot_Once_The_Change_Was_Applied()
     {
-        let mut base = Base(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
+        let mut base = Workspace_With_One_File(CONFIGURATION_SEED_BYTE).expect("one Present applies to an empty workspace");
         let plan = Plan_Changing_A(Rewrite { from: "old", to: "new" }).expect("one candidate touching one path is a valid plan");
 
         let committed = Commit_Plan(&plan, &mut base);

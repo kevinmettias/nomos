@@ -17,7 +17,7 @@ use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet,
 /// Returns whatever [`Workspace::Apply`] refuses. Applying one `Present` to an empty
 /// workspace is not expected to be refused; the error is in the signature because the
 /// operation it wraps is fallible, not because this fixture anticipates a failure.
-pub(crate) fn Base(configuration_seed_byte: u8) -> Result<Workspace, WorkspaceError>
+pub(crate) fn Workspace_With_One_File(configuration_seed_byte: u8) -> Result<Workspace, WorkspaceError>
 {
     let variant = BuildVariant::New("x86_64-unknown-none", "test", "fixed", Vec::<String>::new());
     let configuration =
@@ -79,7 +79,7 @@ mod tests
     #[test]
     fn Test_Base_Should_Start_With_The_Configured_File_Present()
     {
-        let workspace = Base(0x01).expect("one Present applies to an empty workspace");
+        let workspace = Workspace_With_One_File(0x01).expect("one Present applies to an empty workspace");
 
         assert_eq!(workspace.Content_Of("a.rs"), Some(nomos_model::Content_Digest(b"old")));
     }
