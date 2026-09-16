@@ -207,7 +207,7 @@ mod tests
     #[test]
     fn Test_Derive_Should_Reach_Every_Recorded_Document()
     {
-        let commit = Taken(1);
+        let commit = Taken_Commit(1);
         let documents = Documents_From(&commit);
 
         let index = Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads");
@@ -222,7 +222,7 @@ mod tests
     #[test]
     fn Test_Of_Kind_Should_Group_Documents_By_Kind()
     {
-        let documents = Documents_From(&Taken(1));
+        let documents = Documents_From(&Taken_Commit(1));
         let index = Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads");
 
         assert_eq!(index.Of_Kind(DocumentKind::Fact).len(), 1);
@@ -232,7 +232,7 @@ mod tests
     #[test]
     fn Test_Of_Schema_Should_Group_Documents_By_Schema()
     {
-        let documents = Documents_From(&Taken(1));
+        let documents = Documents_From(&Taken_Commit(1));
         let index = Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads");
 
         assert_eq!(index.Of_Schema("nomos.syntax.v1").len(), 1);
@@ -242,8 +242,8 @@ mod tests
     #[test]
     fn Test_In_Snapshot_Should_Not_Return_Members_Of_A_Different_Snapshot()
     {
-        let first = Taken(1);
-        let second = Taken(OTHER_SNAPSHOT_SEED);
+        let first = Taken_Commit(1);
+        let second = Taken_Commit(OTHER_SNAPSHOT_SEED);
         let second_documents = Documents_From(&second);
         let mut documents = Documents_From(&first);
         documents.extend(second_documents.clone());
@@ -260,7 +260,7 @@ mod tests
     #[test]
     fn Test_Commits_Under_Should_List_Every_Commit_Made_Against_A_Snapshot()
     {
-        let commit = Taken(1);
+        let commit = Taken_Commit(1);
         let documents = Documents_From(&commit);
         let index = Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads");
 
@@ -270,7 +270,7 @@ mod tests
     #[test]
     fn Test_Snapshots_Should_List_Every_Workspace_State_With_A_Commit()
     {
-        let commit = Taken(1);
+        let commit = Taken_Commit(1);
         let documents = Documents_From(&commit);
         let index = Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads");
 
@@ -282,7 +282,7 @@ mod tests
     {
         assert!(Index::default().Is_Empty());
 
-        let documents = Documents_From(&Taken(1));
+        let documents = Documents_From(&Taken_Commit(1));
 
         assert!(!Index::Derive(&documents).expect("every Commit-kind document here is a manifest Commit::Decode reads").Is_Empty());
     }
@@ -290,8 +290,8 @@ mod tests
     #[test]
     fn Test_Digest_Should_Change_When_The_Indexed_Documents_Change()
     {
-        let first = Index::Derive(&Documents_From(&Taken(1))).expect("every Commit-kind document here is a manifest Commit::Decode reads");
-        let second = Index::Derive(&Documents_From(&Taken(OTHER_SNAPSHOT_SEED))).expect("every Commit-kind document here is a manifest Commit::Decode reads");
+        let first = Index::Derive(&Documents_From(&Taken_Commit(1))).expect("every Commit-kind document here is a manifest Commit::Decode reads");
+        let second = Index::Derive(&Documents_From(&Taken_Commit(OTHER_SNAPSHOT_SEED))).expect("every Commit-kind document here is a manifest Commit::Decode reads");
 
         assert_ne!(first.Digest(), second.Digest());
     }
@@ -301,7 +301,7 @@ mod tests
         return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
     }
 
-    fn Fact(payload: &str) -> Recorded
+    fn Fact_Record(payload: &str) -> Recorded
     {
         return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), payload.as_bytes().to_vec());
     }
@@ -310,7 +310,7 @@ mod tests
     /// itself derived from `seed` -- so two different seeds never share a document by
     /// content-addressing coincidence, which would make them look reachable from each
     /// other's snapshot for a reason that has nothing to do with `In_Snapshot` itself.
-    fn Taken(seed: u8) -> Commit
+    fn Taken_Commit(seed: u8) -> Commit
     {
         return Commit::Under(
             SnapshotId::From_Digest(Seeded_Digest(seed)),
@@ -318,7 +318,7 @@ mod tests
             ConfigurationId::From_Digest(Seeded_Digest(CONFIGURATION_SEED)),
             GenerationId::INITIAL,
         )
-        .Recording(Fact(&format!("fn seed_{seed}() {{}}")));
+        .Recording(Fact_Record(&format!("fn seed_{seed}() {{}}")));
     }
 
     /// The documents a commit's own write would insert: one per record, plus its manifest.

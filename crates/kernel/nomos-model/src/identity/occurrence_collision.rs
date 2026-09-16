@@ -52,7 +52,7 @@ pub fn Occurrence_Collisions_In(findings: &[&Finding]) -> Vec<OccurrenceCollisio
 
     for finding in findings
     {
-        Absorb(&mut seen, &mut collisions, finding);
+        Absorb_Finding(&mut seen, &mut collisions, finding);
     }
 
     return collisions;
@@ -64,7 +64,7 @@ pub fn Occurrence_Collisions_In(findings: &[&Finding]) -> Vec<OccurrenceCollisio
 /// first; any other is recorded so that a later finding can be reported against it. This is the
 /// loop body of [`Occurrence_Collisions_In`], named so that the policy it encodes — report, do not
 /// absorb — is readable without the iteration around it.
-fn Absorb<'a>(
+fn Absorb_Finding<'a>(
     seen: &mut BTreeMap<FindingOccurrenceId, &'a Finding>,
     collisions: &mut Vec<OccurrenceCollision>,
     finding: &'a Finding,

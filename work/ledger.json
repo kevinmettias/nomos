@@ -81637,6 +81637,124 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-KERNEL",
+      "title": "The naming-clarity check reads zero, live and waived, over the kernel territory",
+      "why": "One live finding and seven waivers, all eight fixable by naming. The live one is Absorb, the loop body of Occurrence_Collisions_In in nomos-model, which folds one finding into a population and says nothing about what it absorbs; it becomes Absorb_Finding. The seven waivers are the same three fixture helpers repeated across nomos-store's three test modules: Digest in commit.rs and document_store.rs becomes Seeded_Digest, which is the name index.rs already gives its own copy of the same function, so the rename follows the crate's own precedent rather than inventing one; Fact in all three becomes Fact_Record, and Taken in document_store.rs and index.rs becomes Taken_Commit. Renaming them keeps the count at zero without a suppression, which is the trade OD-RULES-018 settled for the abbreviations case when it renamed five sites instead of adding three words to the repository's words policy.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/kernel, and cargo check --workspace --all-targets reports no error.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/kernel",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/kernel",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    47 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789585728,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1a74407f22cd53e93a37cc13d1e744d9e1d535ed"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P114-CLARITY-CAPABILITIES",
+      "title": "The naming-clarity check reads zero, live and waived, over the capabilities territory",
+      "why": "Five live findings and two waivers, and three of the seven are public functions, so this item carries the consequences a public rename has rather than only the rename. nomos-cap-requirement-trace: Entries becomes Assessments_In and Parse becomes Parse_Assessment, both of which appear in tests/contract/surface/nomos-cap-requirement-trace.txt and must be re-blessed in this commit; Entries is also called from tests/contract/tests/requirement_trace. nomos-cap-syntax: the waived pub fn Escape becomes Escape_Text, which is re-blessed in its own snapshot and whose callers in nomos-lang-go and nomos-lang-rust are reserved here too. The two private helpers in nomos-cap-requirement-trace's unresolved module become Unregistered_Record and Unresolved_Site, matching the Unresolved_Sites, Unresolved_Gaps and Unresolved_Records siblings the same file already declares; nomos-cap-architecture's private Pair becomes Parse_Pair; and the waived fixture in nomos-cap-syntax's syntax_payload test module becomes Payload_Item. Renaming rather than suppressing is OD-RULES-018's trade, taken for the same reason after it measured the same decision for the abbreviations case.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/capabilities; the public-surface suite is green with both snapshots re-blessed by a bless that named exactly nomos-cap-requirement-trace and nomos-cap-syntax; and cargo check --workspace --all-targets reports no error.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities",
+          "tests/contract/tests/requirement_trace",
+          "tests/contract/surface/nomos-cap-requirement-trace.txt",
+          "tests/contract/surface/nomos-cap-syntax.txt",
+          "crates/languages/nomos-lang-go/src/fact_context.rs",
+          "crates/languages/nomos-lang-rust/src/fact_context.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/capabilities",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

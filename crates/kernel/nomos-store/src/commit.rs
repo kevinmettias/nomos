@@ -119,13 +119,13 @@ mod tests
         let commit = Empty_Commit();
 
         assert!(commit.records.is_empty());
-        assert_eq!(commit.snapshot, SnapshotId::From_Digest(Digest(1)));
+        assert_eq!(commit.snapshot, SnapshotId::From_Digest(Seeded_Digest(1)));
     }
 
     #[test]
     fn Test_Recording_Should_Append_A_Document_To_The_Commit()
     {
-        let commit = Empty_Commit().Recording(Fact("fn main() {}"));
+        let commit = Empty_Commit().Recording(Fact_Record("fn main() {}"));
 
         assert_eq!(commit.records.len(), 1);
     }
@@ -133,7 +133,7 @@ mod tests
     #[test]
     fn Test_Encode_Should_Produce_Bytes_That_Reconstruct_The_Same_Manifest()
     {
-        let commit = Empty_Commit().Recording(Fact("fn main() {}"));
+        let commit = Empty_Commit().Recording(Fact_Record("fn main() {}"));
 
         let encoded = commit.Encode().expect("Manifest holds only schema strings and digest fields, which serde_json encodes");
         let manifest = Commit::Decode(&encoded).expect("reconstructs");
@@ -151,12 +151,12 @@ mod tests
         assert!(matches!(refusal, StoreError::Malformed(_)));
     }
 
-    fn Digest(seed: u8) -> Digest128
+    fn Seeded_Digest(seed: u8) -> Digest128
     {
         return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
     }
 
-    fn Fact(payload: &str) -> Recorded
+    fn Fact_Record(payload: &str) -> Recorded
     {
         return Recorded::New(DocumentKind::Fact, SchemaId::New("nomos.syntax.v1"), payload.as_bytes().to_vec());
     }
@@ -164,9 +164,9 @@ mod tests
     fn Empty_Commit() -> Commit
     {
         return Commit::Under(
-            SnapshotId::From_Digest(Digest(1)),
-            BuildVariantId::From_Digest(Digest(BUILD_VARIANT_SEED)),
-            ConfigurationId::From_Digest(Digest(CONFIGURATION_SEED)),
+            SnapshotId::From_Digest(Seeded_Digest(1)),
+            BuildVariantId::From_Digest(Seeded_Digest(BUILD_VARIANT_SEED)),
+            ConfigurationId::From_Digest(Seeded_Digest(CONFIGURATION_SEED)),
             GenerationId::INITIAL,
         );
     }
