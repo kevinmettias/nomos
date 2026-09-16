@@ -1,35 +1,19 @@
 pub const fn nomos_lang_rust_compiler::Ceiling() -> Guarantee
 pub const fn nomos_lang_rust_compiler::Declared_Guarantee() -> Guarantee
-pub const fn nomos_lang_rust_compiler::Nested_Locks_Ceiling() -> Guarantee
-pub const fn nomos_lang_rust_compiler::Nested_Locks_Declared_Guarantee() -> Guarantee
 pub const nomos_lang_rust_compiler::CAPABILITY: &str
 pub const nomos_lang_rust_compiler::CONTRACT_VERSION: ContractVersion
 pub const nomos_lang_rust_compiler::COPY_CLONES: &str
 pub const nomos_lang_rust_compiler::CloneOnCopyFactProduction::SCOPE: ReproducibilityScope
 pub const nomos_lang_rust_compiler::CloneOnCopyFactProduction::STRENGTH: DeterminismStrength
 pub const nomos_lang_rust_compiler::CloneOnCopyFactProduction::TRACE: TraceEquivalence
-pub const nomos_lang_rust_compiler::NESTED_LOCKS: &str
-pub const nomos_lang_rust_compiler::NESTED_LOCKS_CAPABILITY: &str
-pub const nomos_lang_rust_compiler::NESTED_LOCKS_CONTRACT_VERSION: ContractVersion
-pub const nomos_lang_rust_compiler::NESTED_LOCKS_SCHEMA: &str
-pub const nomos_lang_rust_compiler::NestedLockFactProduction::SCOPE: ReproducibilityScope
-pub const nomos_lang_rust_compiler::NestedLockFactProduction::STRENGTH: DeterminismStrength
-pub const nomos_lang_rust_compiler::NestedLockFactProduction::TRACE: TraceEquivalence
 pub const nomos_lang_rust_compiler::PROVIDER: &str
 pub const nomos_lang_rust_compiler::SCHEMA: &str
 pub fn nomos_lang_rust_compiler::Capability() -> CapabilityId
 pub fn nomos_lang_rust_compiler::Capability_Contract() -> CapabilityContract
 pub fn nomos_lang_rust_compiler::Check_Copy_Clones(subject: SubjectId, subject_name: &str, facts: &mut dyn FactReader) -> Vec<Finding>
-pub fn nomos_lang_rust_compiler::Check_Nested_Locks(subject: SubjectId, subject_name: &str, facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_lang_rust_compiler::CompilerError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub fn nomos_lang_rust_compiler::Discover_Nested_Locks<Env: Environment>(root: &Path, environment: &Env) -> Result<Vec<NestedLockFinding>, CompilerError>
 pub fn nomos_lang_rust_compiler::Encode_Nested_Lock_Payload(payload: &NestedLockPayload) -> Vec<u8>
 pub fn nomos_lang_rust_compiler::Encode_Payload(payload: &CloneOnCopyPayload) -> Vec<u8>
-pub fn nomos_lang_rust_compiler::Materialize_Nested_Locks<Env: Environment>(root: &Path, context: FactContext, environment: &Env) -> Result<NestedLockFact, CompilerError>
-pub fn nomos_lang_rust_compiler::Nested_Locks_Capability() -> CapabilityId
-pub fn nomos_lang_rust_compiler::Nested_Locks_Capability_Contract() -> CapabilityContract
-pub fn nomos_lang_rust_compiler::Nested_Locks_Payload_Schema() -> SchemaId
-pub fn nomos_lang_rust_compiler::Nested_Locks_Provider_Offer() -> ProviderOffer
 pub fn nomos_lang_rust_compiler::Parse_Nested_Lock_Payload(bytes: &[u8]) -> Result<NestedLockPayload, Refusal>
 pub fn nomos_lang_rust_compiler::Parse_Payload(bytes: &[u8]) -> Result<CloneOnCopyPayload, Refusal>
 pub fn nomos_lang_rust_compiler::Payload_Schema() -> SchemaId
@@ -37,13 +21,10 @@ pub fn nomos_lang_rust_compiler::Provider_Offer() -> ProviderOffer
 pub fn nomos_lang_rust_compiler::Refusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub impl nomos_lang_rust_compiler::CloneOnCopyFactProduction implements Strategy
 pub impl nomos_lang_rust_compiler::CompilerError implements core::fmt::Display
-pub impl nomos_lang_rust_compiler::NestedLockFactProduction implements Strategy
 pub impl nomos_lang_rust_compiler::Refusal implements core::fmt::Display
 pub struct field nomos_lang_rust_compiler::CloneOnCopyPayload::findings: Vec<ClonedCopyType>
 pub struct field nomos_lang_rust_compiler::ClonedCopyType::location: String
 pub struct field nomos_lang_rust_compiler::CompilerError::reason: String
-pub struct field nomos_lang_rust_compiler::NestedLockFact::fact: MaterializedFact
-pub struct field nomos_lang_rust_compiler::NestedLockFact::subject: SubjectId
 pub struct field nomos_lang_rust_compiler::NestedLockFinding::location: String
 pub struct field nomos_lang_rust_compiler::NestedLockPayload::findings: Vec<NestedLockFinding>
 pub struct field nomos_lang_rust_compiler::Refusal::reason: String
@@ -51,13 +32,26 @@ pub struct nomos_lang_rust_compiler::CloneOnCopyFactProduction
 pub struct nomos_lang_rust_compiler::CloneOnCopyPayload
 pub struct nomos_lang_rust_compiler::ClonedCopyType
 pub struct nomos_lang_rust_compiler::CompilerError
-pub struct nomos_lang_rust_compiler::NestedLockFact
-pub struct nomos_lang_rust_compiler::NestedLockFactProduction
 pub struct nomos_lang_rust_compiler::NestedLockFinding
 pub struct nomos_lang_rust_compiler::NestedLockPayload
 pub struct nomos_lang_rust_compiler::Refusal
 
 # re-exports of items declared outside this crate
+pub use nested_lock_check::Check_Nested_Locks
+pub use nested_lock_check::NESTED_LOCKS
+pub use nested_lock_contract::CAPABILITY as NESTED_LOCKS_CAPABILITY
+pub use nested_lock_contract::CONTRACT_VERSION as NESTED_LOCKS_CONTRACT_VERSION
+pub use nested_lock_contract::Capability as Nested_Locks_Capability
+pub use nested_lock_contract::Capability_Contract as Nested_Locks_Capability_Contract
+pub use nested_lock_contract::Ceiling as Nested_Locks_Ceiling
+pub use nested_lock_contract::Payload_Schema as Nested_Locks_Payload_Schema
+pub use nested_lock_contract::SCHEMA as NESTED_LOCKS_SCHEMA
+pub use nested_lock_fact_context::Materialize_Nested_Locks
+pub use nested_lock_fact_context::NestedLockFact
+pub use nested_lock_fact_production::NestedLockFactProduction
+pub use nested_lock_guarantee::Declared_Guarantee as Nested_Locks_Declared_Guarantee
+pub use nested_lock_guarantee::Provider_Offer as Nested_Locks_Provider_Offer
+pub use nested_lock_reading::Discover_Nested_Locks
 pub use provider::CloneOnCopyFact
 pub use provider::FactContext
 pub use provider::Materialize_Crate

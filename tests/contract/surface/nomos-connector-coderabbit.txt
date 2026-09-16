@@ -15,8 +15,8 @@ pub fn nomos_connector_coderabbit::ConnectorError::from(error: TranslationError)
 pub fn nomos_connector_coderabbit::Encode_Payload(payload: &FindingPayload) -> Vec<u8>
 pub fn nomos_connector_coderabbit::Fact_Of(payload: &FindingPayload, context: FactContext) -> ReviewFindingFact
 pub fn nomos_connector_coderabbit::FetchError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub fn nomos_connector_coderabbit::Fetch_Review_Comment<P: ProcessLauncher>(repository: &str, comment_id: u64, launcher: &P) -> Result<Vec<u8>, FetchError>
-pub fn nomos_connector_coderabbit::Materialize_Review_Comment<P: ProcessLauncher>( repository: &str, comment_id: u64, context: FactContext, launcher: &P, ) -> Result<ReviewFindingFact, ConnectorError>
+pub fn nomos_connector_coderabbit::Fetch_Review_Comment<Launcher: ProcessLauncher>(repository: &str, comment_id: u64, launcher: &Launcher) -> Result<Vec<u8>, FetchError>
+pub fn nomos_connector_coderabbit::Materialize_Review_Comment<Launcher: ProcessLauncher>( repository: &str, comment_id: u64, context: FactContext, launcher: &Launcher, ) -> Result<ReviewFindingFact, ConnectorError>
 pub fn nomos_connector_coderabbit::Parse_Payload(bytes: &[u8]) -> Result<FindingPayload, PayloadRefusal>
 pub fn nomos_connector_coderabbit::PayloadRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_connector_coderabbit::Payload_Schema() -> SchemaId

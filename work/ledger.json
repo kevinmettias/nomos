@@ -81263,7 +81263,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -81277,7 +81277,28 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-surface-scope\\nomos-surface-scope.exe",
+          "-cwd",
+          "F:/repos/nomos",
+          "-expect",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "nomos-surface-scope: 1 snapshot(s) disagree, all of them allowed: (nomos-ledger)\n",
+        "verified_at": 1789586014,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "61f5f8d81fedc38a06c01d4d3f777e1f8f550c99"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -81728,10 +81749,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-p114-naming-clarity",
+        "acquired_at": 1789585766,
+        "lease_expires_at": 1789600166
+      },
       "verification": {
         "argv": [
           "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
