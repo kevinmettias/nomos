@@ -154,6 +154,9 @@ mod tests
 {
     use super::*;
 
+    /// An arity both this crate's shape writer and the shared vocabulary are asked for.
+    const ARITY: usize = 2;
+
     #[test]
     fn Test_Impl_Shape_Should_Distinguish_A_Trait_Impl_From_An_Inherent_One()
     {
@@ -241,7 +244,7 @@ mod tests
     #[test]
     fn Test_Function_Shape_Should_Delegate_To_The_Shared_Vocabulary()
     {
-        assert_eq!(Function_Shape(2), nomos_cap_syntax::Function_Shape(2));
+        assert_eq!(Function_Shape(ARITY), nomos_cap_syntax::Function_Shape(ARITY));
     }
 
     #[test]

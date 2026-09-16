@@ -231,6 +231,19 @@ mod tests
     use super::*;
     use crate::Observation;
 
+    /// The ordinal the fixture text `"3"` parses to.
+    const PARSED_ORDINAL: u32 = 3;
+    /// The field count the fixture item record carries, and what the matching call expects.
+    const FIXTURE_FIELD_COUNT: usize = 2;
+    /// A field count the fixture item record does not carry, so the call is refused.
+    const UNMATCHED_FIELD_COUNT: usize = 7;
+    /// The line the `Expect_Fields` fixture record sits at.
+    const EXPECT_FIELDS_LINE: usize = 3;
+    /// The `unexpanded` value the header fixture carries, and the count a second header repeats.
+    const HEADER_VALUE: u32 = 2;
+    /// The line the header and unknown-record fixtures sit at.
+    const RECORD_LINE: usize = 2;
+
     #[test]
     fn Test_Parse_Payload_Should_Read_A_Header_With_No_Items()
     {
@@ -243,7 +256,7 @@ mod tests
     #[test]
     fn Test_Parsed_Number_Should_Refuse_A_Value_That_Is_Not_A_Number()
     {
-        assert_eq!(Parsed_Number("3", "ordinal", 1), Ok(3));
+        assert_eq!(Parsed_Number("3", "ordinal", 1), Ok(PARSED_ORDINAL));
 
         let refused = Parsed_Number("many", "ordinal", 1).expect_err("not a number");
         assert!(
@@ -261,15 +274,20 @@ mod tests
     #[test]
     fn Test_Expect_Fields_Should_Refuse_A_Record_Of_The_Wrong_Length()
     {
-        assert_eq!(Expect_Fields("item", &["item", "0"], 2, 3), Ok(()));
+        assert_eq!(Expect_Fields("item", &["item", "0"], FIXTURE_FIELD_COUNT, EXPECT_FIELDS_LINE), Ok(()));
 
-        let refused = Expect_Fields("item", &["item", "0"], 7, 3).expect_err("two fields where seven are expected");
+        let refused = Expect_Fields("item", &["item", "0"], UNMATCHED_FIELD_COUNT, EXPECT_FIELDS_LINE)
+            .expect_err("two fields where seven are expected");
         assert!(
             matches!(
                 refused,
                 PayloadRefusal {
-                    kind: PayloadRefusalKind::WrongFieldCount { ref tag, expected: 7, found: 2 },
-                    line: Some(3),
+                    kind: PayloadRefusalKind::WrongFieldCount {
+                        ref tag,
+                        expected: UNMATCHED_FIELD_COUNT,
+                        found: FIXTURE_FIELD_COUNT,
+                    },
+                    line: Some(EXPECT_FIELDS_LINE),
                 } if tag == "item"
             ),
             "{refused:?}"
@@ -280,15 +298,16 @@ mod tests
     fn Test_Header_Count_Should_Refuse_A_Second_Header()
     {
         let fields: Vec<&str> = "unexpanded\t2".split('\t').collect();
-        assert_eq!(Header_Count(&fields, 1, None), Ok(2));
+        assert_eq!(Header_Count(&fields, 1, None), Ok(HEADER_VALUE));
 
-        let refused = Header_Count(&fields, 2, Some(2)).expect_err("a header already arrived");
+        let refused = Header_Count(&fields, RECORD_LINE, Some(HEADER_VALUE))
+            .expect_err("a header already arrived");
         assert!(
             matches!(
                 refused,
                 PayloadRefusal {
                     kind: PayloadRefusalKind::RepeatedHeader,
-                    line: Some(2),
+                    line: Some(RECORD_LINE),
                 }
             ),
             "{refused:?}"
@@ -328,14 +347,14 @@ mod tests
             unexpanded: Some(0),
             items: Vec::new(),
         };
-        let refused = Read_Record("region\t0\t3", 2, &mut read).expect_err("this build does not know `region`");
+        let refused = Read_Record("region\t0\t3", RECORD_LINE, &mut read).expect_err("this build does not know `region`");
 
         assert!(
             matches!(
                 refused,
                 PayloadRefusal {
                     kind: PayloadRefusalKind::UnknownRecord { ref tag },
-                    line: Some(2),
+                    line: Some(RECORD_LINE),
                 } if tag == "region"
             ),
             "{refused:?}"

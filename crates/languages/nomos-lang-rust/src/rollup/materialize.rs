@@ -247,6 +247,18 @@ mod tests
     use nomos_capability::Registry;
     use nomos_contracts::{Assurance, BuildVariantId, ConfigurationId, FactVariant, GenerationId, Guarantee, IncrementalGranularity, SnapshotId};
 
+    /// The position the item below holds in its declaring member.
+    const ITEM_ORDINAL: u32 = 3;
+    /// How many distinct subjects the fixture's three members fold to: `a.rs` arrives twice.
+    const DISTINCT_SUBJECTS: usize = 2;
+    /// The byte this fixture's snapshot identity seeds, unique among the three so a context
+    /// that swapped two of them could not compare equal to a sibling's.
+    const SNAPSHOT_SEED: u8 = 1;
+    /// The byte this fixture's build variant identity seeds. See [`SNAPSHOT_SEED`].
+    const BUILD_VARIANT_SEED: u8 = 2;
+    /// The byte this fixture's configuration identity seeds. See [`SNAPSHOT_SEED`].
+    const CONFIGURATION_SEED: u8 = 3;
+
     #[test]
     fn Test_Index_Key_Should_Not_Depend_On_The_Members_Own_Order()
     {
@@ -269,7 +281,7 @@ mod tests
 
         let ordered = Canonical_Members(&[b, a, a_again]);
 
-        assert_eq!(ordered.len(), 2, "the repeated subject must collapse to one member");
+        assert_eq!(ordered.len(), DISTINCT_SUBJECTS, "the repeated subject must collapse to one member");
         assert_eq!(ordered.first().expect("two members").subject, a.subject);
     }
 
@@ -303,7 +315,7 @@ mod tests
     {
         let member = Subject("alpha.rs");
         let item = nomos_cap_syntax::PayloadItem {
-            ordinal: 3,
+            ordinal: ITEM_ORDINAL,
             kind: "Function".to_owned(),
             visibility: "Public".to_owned(),
             qualified_name: "Alpha".to_owned(),
@@ -314,7 +326,7 @@ mod tests
         let entry = Entry_Of(member, item);
 
         assert_eq!(entry.member, member);
-        assert_eq!(entry.ordinal, 3);
+        assert_eq!(entry.ordinal, ITEM_ORDINAL);
         assert_eq!(entry.qualified_name, "Alpha");
     }
 
@@ -421,9 +433,9 @@ mod tests
     fn Test_Context() -> FactContext
     {
         return FactContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; Digest128::BYTE_LENGTH])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; Digest128::BYTE_LENGTH])),
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([SNAPSHOT_SEED; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([BUILD_VARIANT_SEED; Digest128::BYTE_LENGTH])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_SEED; Digest128::BYTE_LENGTH])),
             generation: GenerationId::INITIAL,
         };
     }

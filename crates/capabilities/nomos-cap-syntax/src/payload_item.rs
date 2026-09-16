@@ -62,13 +62,22 @@ mod tests
     use super::*;
     use crate::{NOT_APPLICABLE, Observation, PUBLIC};
 
-    fn Item_With(visibility: &str, qualified_name: &str) -> PayloadItem
+    /// A fixture item's visibility label, given its own type so a call site cannot hand the
+    /// visibility where the qualified name belongs.
+    #[derive(Clone, Copy)]
+    struct Visibility<'a>(&'a str);
+
+    /// A fixture item's qualified name, given its own type for the same reason.
+    #[derive(Clone, Copy)]
+    struct QualifiedName<'a>(&'a str);
+
+    fn Item_With(visibility: Visibility<'_>, qualified_name: QualifiedName<'_>) -> PayloadItem
     {
         return PayloadItem {
             ordinal: 0,
             kind: "Function".to_owned(),
-            visibility: visibility.to_owned(),
-            qualified_name: qualified_name.to_owned(),
+            visibility: visibility.0.to_owned(),
+            qualified_name: qualified_name.0.to_owned(),
             documentation: Observation::Absent,
             shape: Observation::Absent,
         };
@@ -77,23 +86,23 @@ mod tests
     #[test]
     fn Test_Own_Name_Should_Be_The_Last_Segment_Of_A_Qualified_Name()
     {
-        assert_eq!(Item_With(PUBLIC, "Table::All").Own_Name(), "All");
-        assert_eq!(Item_With(PUBLIC, "All").Own_Name(), "All");
+        assert_eq!(Item_With(Visibility(PUBLIC), QualifiedName("Table::All")).Own_Name(), "All");
+        assert_eq!(Item_With(Visibility(PUBLIC), QualifiedName("All")).Own_Name(), "All");
     }
 
     #[test]
     fn Test_Is_Public_Should_Be_True_Only_For_The_Public_Label()
     {
-        assert!(Item_With(PUBLIC, "All").Is_Public());
-        assert!(!Item_With("Private", "All").Is_Public());
-        assert!(!Item_With(NOT_APPLICABLE, "All").Is_Public());
+        assert!(Item_With(Visibility(PUBLIC), QualifiedName("All")).Is_Public());
+        assert!(!Item_With(Visibility("Private"), QualifiedName("All")).Is_Public());
+        assert!(!Item_With(Visibility(NOT_APPLICABLE), QualifiedName("All")).Is_Public());
     }
 
     #[test]
     fn Test_Declares_No_Visibility_Should_Be_True_Only_For_The_Not_Applicable_Label()
     {
-        assert!(Item_With(NOT_APPLICABLE, "All").Declares_No_Visibility());
-        assert!(!Item_With(PUBLIC, "All").Declares_No_Visibility());
-        assert!(!Item_With("Private", "All").Declares_No_Visibility());
+        assert!(Item_With(Visibility(NOT_APPLICABLE), QualifiedName("All")).Declares_No_Visibility());
+        assert!(!Item_With(Visibility(PUBLIC), QualifiedName("All")).Declares_No_Visibility());
+        assert!(!Item_With(Visibility("Private"), QualifiedName("All")).Declares_No_Visibility());
     }
 }

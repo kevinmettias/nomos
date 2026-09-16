@@ -58,6 +58,9 @@ mod tests
 {
     use super::*;
 
+    /// The line each refusal below is attributed to, so the tests agree on one record's line.
+    const RECORD_LINE: usize = 4;
+
     #[test]
     fn Test_Whole_Should_Refuse_With_No_Line()
     {
@@ -70,9 +73,9 @@ mod tests
     #[test]
     fn Test_At_Should_Refuse_The_Record_At_That_Line()
     {
-        let refusal = PayloadRefusal::At(4, PayloadRefusalKind::RepeatedHeader);
+        let refusal = PayloadRefusal::At(RECORD_LINE, PayloadRefusalKind::RepeatedHeader);
 
-        assert_eq!(refusal.line, Some(4));
+        assert_eq!(refusal.line, Some(RECORD_LINE));
         assert_eq!(refusal.kind, PayloadRefusalKind::RepeatedHeader);
     }
 
@@ -82,7 +85,7 @@ mod tests
         let whole = PayloadRefusal::Whole(PayloadRefusalKind::NotUtf8);
         assert_eq!(whole.Describe(), PayloadRefusalKind::NotUtf8.Describe());
 
-        let at_line = PayloadRefusal::At(4, PayloadRefusalKind::RepeatedHeader);
+        let at_line = PayloadRefusal::At(RECORD_LINE, PayloadRefusalKind::RepeatedHeader);
         assert_eq!(
             at_line.Describe(),
             format!("line 4 {}", PayloadRefusalKind::RepeatedHeader.Describe())

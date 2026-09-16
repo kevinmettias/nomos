@@ -256,6 +256,19 @@ mod tests
 {
     use super::*;
 
+    /// The line the unknown-tag record below is read from.
+    const UNKNOWN_TAG_LINE: usize = 5;
+    /// The line the second module record in that test is read from.
+    const SECOND_MODULE_LINE: usize = 3;
+    /// The line each of the two refused fixture records below is read from.
+    const FIXTURE_RECORD_LINE: usize = 2;
+    /// The field count a module record carries: its own tag beside one subject.
+    const MODULE_FIELD_COUNT: usize = 2;
+    /// The fill byte of the digest the round-trip subject is built from.
+    const ROUND_TRIP_SUBJECT_BYTE: u8 = 9;
+    /// The fill byte of the digest `A_Subject_Hex` renders, which no other fixture seeds.
+    const A_SUBJECT_BYTE: u8 = 7;
+
     #[test]
     fn Test_Parse_Index_Should_Read_A_Module_Record_With_No_Members()
     {
@@ -300,7 +313,7 @@ mod tests
             items: Vec::new(),
         };
 
-        let error = Read_Record(&mut index, "surface\t1", 5).expect_err("an unknown tag must be refused");
+        let error = Read_Record(&mut index, "surface\t1", UNKNOWN_TAG_LINE).expect_err("an unknown tag must be refused");
 
         assert!(error.contains('5'), "{error}");
     }
@@ -308,8 +321,8 @@ mod tests
     #[test]
     fn Test_Unreadable_Record_Should_Name_A_Second_Module_Record_Specifically()
     {
-        assert!(Unreadable_Record("module", 3).contains("second"));
-        assert!(Unreadable_Record("surface", 3).contains("surface"));
+        assert!(Unreadable_Record("module", SECOND_MODULE_LINE).contains("second"));
+        assert!(Unreadable_Record("surface", SECOND_MODULE_LINE).contains("surface"));
     }
 
     #[test]
@@ -318,7 +331,7 @@ mod tests
         let hex = A_Subject_Hex();
         let fields: Vec<&str> = vec!["member", hex.as_str(), "maybe"];
 
-        let error = Member_Record(&fields, 2).expect_err("`maybe` is not a known outcome");
+        let error = Member_Record(&fields, FIXTURE_RECORD_LINE).expect_err("`maybe` is not a known outcome");
 
         assert!(error.contains("maybe"), "{error}");
         assert!(error.contains("outcome"), "{error}");
@@ -330,7 +343,7 @@ mod tests
         let hex = A_Subject_Hex();
         let fields: Vec<&str> = vec!["item", hex.as_str(), "not-a-number", "Function", "Public", "One"];
 
-        let error = Item_Record(&fields, 2).expect_err("`not-a-number` does not parse as an ordinal");
+        let error = Item_Record(&fields, FIXTURE_RECORD_LINE).expect_err("`not-a-number` does not parse as an ordinal");
 
         assert!(error.contains("not-a-number"), "{error}");
         assert!(error.contains("ordinal"), "{error}");
@@ -339,8 +352,8 @@ mod tests
     #[test]
     fn Test_Expect_Fields_Should_Refuse_A_Field_Count_Other_Than_Expected()
     {
-        assert!(Expect_Fields("module", &["module", "a"], 2, 1).is_ok());
-        assert!(Expect_Fields("module", &["module", "a", "extra"], 2, 1).is_err());
+        assert!(Expect_Fields("module", &["module", "a"], MODULE_FIELD_COUNT, 1).is_ok());
+        assert!(Expect_Fields("module", &["module", "a", "extra"], MODULE_FIELD_COUNT, 1).is_err());
     }
 
     #[test]
@@ -355,7 +368,7 @@ mod tests
     #[test]
     fn Test_Subject_From_Should_Round_Trip_A_Digest_Written_As_Hexadecimal()
     {
-        let subject = SubjectId::From_Digest(Digest128::From_Bytes([9; Digest128::BYTE_LENGTH]));
+        let subject = SubjectId::From_Digest(Digest128::From_Bytes([ROUND_TRIP_SUBJECT_BYTE; Digest128::BYTE_LENGTH]));
         let hex = subject.Digest().to_string();
 
         assert_eq!(Subject_From(&hex, 1), Ok(subject));
@@ -371,6 +384,6 @@ mod tests
 
     fn A_Subject_Hex() -> String
     {
-        return SubjectId::From_Digest(Digest128::From_Bytes([7; Digest128::BYTE_LENGTH])).Digest().to_string();
+        return SubjectId::From_Digest(Digest128::From_Bytes([A_SUBJECT_BYTE; Digest128::BYTE_LENGTH])).Digest().to_string();
     }
 }

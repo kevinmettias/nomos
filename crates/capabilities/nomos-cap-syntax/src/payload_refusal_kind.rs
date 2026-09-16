@@ -90,6 +90,11 @@ mod tests
 {
     use super::*;
 
+    /// The field count the refused record carried, which is not the one this build expects.
+    const FOUND_FIELD_COUNT: usize = 5;
+    /// The field count this build expects of the `item` record the fixture names.
+    const EXPECTED_FIELD_COUNT: usize = 7;
+
     #[test]
     fn Test_Describe_Should_Name_What_Went_Wrong_For_Every_Kind()
     {
@@ -102,8 +107,8 @@ mod tests
 
         let wrong_count = PayloadRefusalKind::WrongFieldCount {
             tag: "item".to_owned(),
-            expected: 7,
-            found: 5,
+            expected: EXPECTED_FIELD_COUNT,
+            found: FOUND_FIELD_COUNT,
         };
         assert!(wrong_count.Describe().contains("item"));
         assert!(wrong_count.Describe().contains('7'));

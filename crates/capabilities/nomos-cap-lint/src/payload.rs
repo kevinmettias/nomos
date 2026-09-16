@@ -332,6 +332,11 @@ mod tests
         assert_eq!(decoded, payload);
     }
 
+    /// The line the sample's warning-level `clippy::needless_return` diagnostic points at.
+    const LINT_DIAGNOSTIC_LINE: u32 = 42;
+    /// The line the sample's error-level `mismatched types` diagnostic points at.
+    const ERROR_DIAGNOSTIC_LINE: u32 = 7;
+
     fn Sample() -> DiagnosticsPayload
     {
         return DiagnosticsPayload {
@@ -342,14 +347,14 @@ mod tests
                     lint: Some("clippy::needless_return".to_owned()),
                     message: "unneeded `return` statement".to_owned(),
                     file: "crates/rules/nomos-rules/src/lib.rs".to_owned(),
-                    line: 42,
+                    line: LINT_DIAGNOSTIC_LINE,
                 },
                 LintDiagnostic {
                     level: LintLevel::Error,
                     lint: None,
                     message: "mismatched types".to_owned(),
                     file: "crates/rules/nomos-rules/src/lint.rs".to_owned(),
-                    line: 7,
+                    line: ERROR_DIAGNOSTIC_LINE,
                 },
             ],
         };

@@ -40,6 +40,9 @@ mod tests
     use super::*;
     use crate::Observation;
 
+    /// The position of the `Other` fixture item, the one whose name carries no `::`.
+    const OTHER_ITEM_INDEX: usize = 2;
+
     fn Item(qualified_name: &str) -> PayloadItem
     {
         return PayloadItem {
@@ -65,6 +68,6 @@ mod tests
             Some("Table")
         );
         assert!(payload.Enclosing(0).is_none(), "a top-level item encloses nothing");
-        assert!(payload.Enclosing(2).is_none(), "`Other` has no `::` to look up an owner from");
+        assert!(payload.Enclosing(OTHER_ITEM_INDEX).is_none(), "`Other` has no `::` to look up an owner from");
     }
 }

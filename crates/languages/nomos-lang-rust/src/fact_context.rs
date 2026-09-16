@@ -351,7 +351,10 @@ mod tests
         assert_eq!(payload.unexpanded, 0);
         assert_eq!(payload.items.len(), EXPECTED_ITEM_COUNT);
 
-        let second = payload.items.get(THIRD_ITEM_INDEX).expect("three items");
+        let second = payload
+            .items
+            .get(THIRD_ITEM_INDEX)
+            .expect("the source declares three items, so index two is inside the list");
         assert_eq!(second.ordinal, THIRD_ITEM_ORDINAL);
         assert_eq!(second.kind, nomos_cap_syntax::FUNCTION);
         assert_eq!(second.qualified_name, "inner::two");
@@ -370,7 +373,8 @@ mod tests
     {
         let fact = Fact_From_Source("pub trait Judged { fn Check(&self); }\npub fn Free() {}\n");
 
-        let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes).expect("well formed");
+        let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
+            .expect("the bytes are this provider's own encoding in the schema's item format");
 
         let member = payload
             .items

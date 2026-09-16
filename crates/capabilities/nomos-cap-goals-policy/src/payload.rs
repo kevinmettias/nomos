@@ -261,7 +261,8 @@ mod tests
     #[test]
     fn Test_A_Subsystem_Serving_Nothing_Should_Survive_The_Round_Trip()
     {
-        let decoded = Parse_Payload(b"goal\trender\nsubsystem\tutils\n").expect("well-formed");
+        let decoded = Parse_Payload(b"goal\trender\nsubsystem\tutils\n")
+            .expect("the literal carries a `goal` row and a `subsystem` row, each with the one field its tag takes");
 
         assert_eq!(decoded.subsystems.len(), 1, "{decoded:?}");
         let declared = decoded.subsystems.first().expect("asserted len 1 above");
@@ -272,7 +273,8 @@ mod tests
     #[test]
     fn Test_An_Unset_Ceiling_Should_Decode_As_Unbounded()
     {
-        let decoded = Parse_Payload(b"goal\trender\n").expect("well-formed");
+        let decoded = Parse_Payload(b"goal\trender\n")
+            .expect("the literal carries one `goal` row, the tag `Apply_Line` takes with a single field");
 
         assert_eq!(decoded.max_subsystems_per_goal, 0, "zero is this payload's spelling of unbounded");
     }

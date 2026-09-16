@@ -73,10 +73,14 @@ mod tests
         return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
     }
 
+    /// How many of the fixture's three members carry an answer: the read one and the
+    /// approximate one, leaving the unreachable member out.
+    const ANSWERED_MEMBERS: usize = 2;
+
     #[test]
     fn Test_Answered_Should_Count_Both_Read_And_Approximate_Members()
     {
-        assert_eq!(An_Index().Answered(), 2);
+        assert_eq!(An_Index().Answered(), ANSWERED_MEMBERS);
     }
 
     #[test]

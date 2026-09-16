@@ -89,6 +89,9 @@ mod tests
     use super::*;
     use nomos_contracts::SubjectId;
 
+    /// The position the single item below holds in its module, which the record must carry.
+    const ITEM_ORDINAL: u32 = 2;
+
     #[test]
     fn Test_Encode_Index_Should_Write_The_Module_Record_First()
     {
@@ -114,7 +117,7 @@ mod tests
 
         let item = IndexEntry {
             member: SubjectId::From_Digest(Content_Digest(b"alpha.rs")),
-            ordinal: 2,
+            ordinal: ITEM_ORDINAL,
             kind: "Function".to_owned(),
             visibility: "Public".to_owned(),
             qualified_name: "inner::Deep".to_owned(),

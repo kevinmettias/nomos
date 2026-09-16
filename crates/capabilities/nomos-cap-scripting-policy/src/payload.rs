@@ -170,7 +170,8 @@ mod tests
     #[test]
     fn Test_A_Payload_With_No_Language_Line_Should_Decode_To_An_Unconfigured_Language()
     {
-        let decoded = Parse_Payload(b"forbidden\t.sh\n").expect("well-formed");
+        let decoded = Parse_Payload(b"forbidden\t.sh\n")
+            .expect("the row carries the `forbidden` tag with the non-empty value it takes");
 
         assert_eq!(decoded.tooling_language, None);
         assert_eq!(decoded.forbidden_extensions, vec![".sh".to_owned()]);

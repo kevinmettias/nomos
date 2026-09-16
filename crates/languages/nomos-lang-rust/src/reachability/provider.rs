@@ -147,12 +147,20 @@ mod tests
         return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
     }
 
+    /// The byte this fixture's snapshot identity seeds, unique among the three so a context
+    /// that swapped two of them could not compare equal to a sibling's.
+    const SNAPSHOT_SEED: u8 = 1;
+    /// The byte this fixture's build variant identity seeds. See [`SNAPSHOT_SEED`].
+    const BUILD_VARIANT_SEED: u8 = 2;
+    /// The byte this fixture's configuration identity seeds. See [`SNAPSHOT_SEED`].
+    const CONFIGURATION_SEED: u8 = 3;
+
     fn Context() -> FactContext
     {
         return FactContext {
-            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; 16])),
-            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([2; 16])),
-            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([3; 16])),
+            snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([SNAPSHOT_SEED; Digest128::BYTE_LENGTH])),
+            variant: BuildVariantId::From_Digest(Digest128::From_Bytes([BUILD_VARIANT_SEED; Digest128::BYTE_LENGTH])),
+            configuration: ConfigurationId::From_Digest(Digest128::From_Bytes([CONFIGURATION_SEED; Digest128::BYTE_LENGTH])),
             generation: GenerationId::INITIAL,
         };
     }

@@ -194,6 +194,15 @@ mod tests
 {
     use super::*;
 
+    /// The arity the round trip below writes into a shape, as the index `Function_Shape` takes.
+    const FUNCTION_ARITY: usize = 3;
+    /// That same arity as the reader hands it back, which is a count rather than an index.
+    const FUNCTION_ARITY_READ_BACK: u32 = 3;
+    /// The source line every `Observed_Field` call below attributes its refusal to.
+    const SOURCE_LINE: usize = 2;
+    /// An arity other than zero, so the prefix assertion cannot pass on the identity case.
+    const ARITY_OTHER_THAN_ZERO: usize = 5;
+
     #[test]
     fn Test_Value_Should_Return_The_Text_Only_When_Present()
     {
@@ -221,7 +230,10 @@ mod tests
     #[test]
     fn Test_Function_Arity_Should_Read_The_Number_Behind_The_Function_Prefix()
     {
-        assert_eq!(Function_Arity(&Observation::Present(Function_Shape(3))), Some(3));
+        assert_eq!(
+            Function_Arity(&Observation::Present(Function_Shape(FUNCTION_ARITY))),
+            Some(FUNCTION_ARITY_READ_BACK)
+        );
         assert_eq!(Function_Arity(&Observation::Present(SLICE.to_owned())), None);
         assert_eq!(Function_Arity(&Observation::NotObserved), None);
     }
@@ -230,7 +242,7 @@ mod tests
     fn Test_Function_Shape_Should_Prefix_The_Arity()
     {
         assert_eq!(Function_Shape(0), "fn/0");
-        assert_eq!(Function_Shape(5), "fn/5");
+        assert_eq!(Function_Shape(ARITY_OTHER_THAN_ZERO), "fn/5");
     }
 
     #[test]
@@ -253,15 +265,15 @@ mod tests
     #[test]
     fn Test_Observed_Field_Should_Refuse_A_Value_That_Is_Not_One_Of_The_Three_Marks()
     {
-        assert_eq!(Observed_Field("-", "documentation", 2), Ok(Observation::NotObserved));
-        assert_eq!(Observed_Field(".", "documentation", 2), Ok(Observation::Absent));
-        assert_eq!(Observed_Field("+ok", "documentation", 2), Ok(Observation::Present("ok".to_owned())));
+        assert_eq!(Observed_Field("-", "documentation", SOURCE_LINE), Ok(Observation::NotObserved));
+        assert_eq!(Observed_Field(".", "documentation", SOURCE_LINE), Ok(Observation::Absent));
+        assert_eq!(Observed_Field("+ok", "documentation", SOURCE_LINE), Ok(Observation::Present("ok".to_owned())));
 
-        let refused = Observed_Field("none", "documentation", 2).expect_err("not one of the three marks");
+        let refused = Observed_Field("none", "documentation", SOURCE_LINE).expect_err("not one of the three marks");
         assert_eq!(
             refused,
             PayloadRefusal::At(
-                2,
+                SOURCE_LINE,
                 PayloadRefusalKind::UnreadableObservation {
                     field: "documentation",
                     value: "none".to_owned(),
