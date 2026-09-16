@@ -80901,6 +80901,45 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P113-RULE-REGISTRY-SUBSYSTEM-TAXONOMY",
+      "title": "Every rule is one module at one level and nothing decides which subsystem it belongs to",
+      "why": "The code-standards placement phase reports exactly one finding over crates/rules/nomos-rules: check-folder-organization at crates/rules/nomos-rules/src/checks:0, measured again on 2026-09-16 as level has 21 facade/directory module pairs (signal: >8), fingerprint 1189ab2c36051a4e. Every other placement finding this crate was boarded with is resolved and its predicate exits 0, so this is the one claim the P112 rules item left standing, and placement-rules.floor.txt says why: the remedy in the message is not a move of one misplaced file but a re-grouping of the whole registry into at most 8 subsystems that are each at most 10 modules wide, and which rule belongs to which subsystem is a decision about how the rules of this crate are organized -- taken once, in a record, moving every internal path in the crate with it. The level was measured directly at the same time: 21 subdirectories, each with a module root of the same name beside it, forming the 21 pairs the check counts, plus 17 loose modules at the level (borrowed_container, declaration_scan, domain_type_alias, error_text, finding_shape, flakiness_text, goals, guarantee_exerciser, lint, placement, policy, procedural_macro, reachability, requirement_trace, review, role_surface_pair and test_support), 38 .rs files in all. Nothing in this repository decides what the subsystems are. No record, doc or declaration says whether the flat level is the answer for this crate, or which of the 21 pairs a ceiling would land on, so a worker cannot apply a taxonomy without inventing one, and inventing one to move a counter is the gaming this campaign forbids. Both routes the check itself offers are closed: the marker route is refused by the fixed message set of the check for the facade/directory-pair signal, which names no marker escape, and by the standing rule of this campaign that no new in-code marker is added; and hoisting a rule one level up does not apply, because the level holding the registry is already the root of the rule tree. Three sibling levels carry the same declared shape in their own territories and are NOT decided here: crates/substrate/nomos-analysis/src (17 source files against a ceiling of 10, placement-substrate.floor.txt), crates/spec/nomos-spec-store/src (9 facade/directory pairs, placement-spec.floor.txt) and crates/corrections/nomos-corrections/src (20 counted files, placement-crates-held-by-p111.floor.txt). The substrate floor records its own finding as the same grouping decision this level leaves reported. If the decision recorded here generalizes, those territories cite it; if it does not, each is its own claim and this item does not decide for them. Boarded at the direction of the owner on 2026-09-16, after the twelve placement items finished, because four floors independently name this decision as the missing one. The finding is not required to be cleared: either outcome is admissible, and a record deciding that the flat level is the answer for this crate leaves the finding standing with a citable reason behind it rather than an open question. The predicate runs nomos-rules and nomos-spec-store only, because nomos-contract-tests is red at HEAD on a clean tree in four targets (corpus_gates, determinism_declarations, public_surface and requirement_trace) for reasons this item does not own and does not fix; that red state is a separate claim.",
+      "done_when": "A governing record is authored by the procedure in .claude/skills/nomos-spec-change/SKILL.md, registered under crates/spec/nomos-spec-store/records/ and rendered into docs/records/, that decides how crates/rules/nomos-rules/src/checks is organized into subsystems: either naming, for each of the 21 module roots and the 17 loose modules at that level, the subsystem it belongs to, or deciding with its reasons that the flat level is the answer for this crate and stating what makes it so. If it decides a subsystem tree, the tree is applied in the same change, the level is under both ceilings, and the check-folder-organization entry for crates/rules/nomos-rules/src/checks:0 is struck from placement-rules.floor.txt. If it decides the flat level is the answer, that entry stays and the record is the reason it cites. Either way the names that crates/rules/nomos-rules/src/lib.rs re-exports stay reachable; if the applied change alters a published name it also re-blesses tests/contract/surface/nomos-rules.txt with NOMOS_SURFACE_BLESS, a path outside the territory of this item, which the widen verb adds rather than a write outside it; and both derived projections are re-rendered from the record set the commit of this item publishes. No entry is added to suppressions.json and no in-code allow marker is added. Verified by the predicate of this item.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "docs/records/OD-RULES-033",
+          "crates/spec/nomos-spec-store/records/OD-RULES-033.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
