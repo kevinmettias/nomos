@@ -1,14 +1,14 @@
 //! Turning a real `ra_ap_hir` analysis into this crate's second fact.
 
+use crate::CompilerError;
+use crate::Discover_Nested_Locks;
 use crate::guarantee::PROVIDER;
 use crate::nested_lock_contract::{Capability, Payload_Schema, CONTRACT_VERSION};
 use crate::nested_lock_guarantee::Declared_Guarantee;
-use crate::nested_lock_reading::Discover_Nested_Locks;
 use nomos_platform::Environment;
 use crate::payload::Encode_Nested_Lock_Payload;
 use crate::payload::nested_lock_payload::NestedLockPayload;
 use crate::provider::FactContext;
-use crate::reading::CompilerError;
 use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_contracts::{EvidenceClass, Guarantee, ProviderId, SubjectId};
 use std::path::Path;

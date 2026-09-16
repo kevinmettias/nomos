@@ -27,8 +27,9 @@
 //! `Copy`/`Sized`, not library structs): walk the standard library's own module tree by
 //! name and compare the resolved item's identity, not its spelling.
 
+use crate::CompilerError;
 use crate::payload::nested_lock_finding::NestedLockFinding;
-use crate::reading::{CompilerError, Load_Crate};
+use crate::reading::Load_Crate;
 use nomos_platform::Environment;
 use line_index::LineIndex;
 use ra_ap_hir::{Adt, EditionedFileId, ModuleDef, ScopeDef, Semantics, Struct};

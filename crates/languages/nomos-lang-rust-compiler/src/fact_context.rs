@@ -1,10 +1,11 @@
 //! Turning a real `ra_ap_hir` analysis into the one fact this capability answers.
 
+use crate::CompilerError;
 use crate::contract::{Capability, Payload_Schema, CONTRACT_VERSION};
 use crate::guarantee::{Declared_Guarantee, PROVIDER};
 use crate::payload::clone_on_copy_payload::CloneOnCopyPayload;
 use crate::payload::Encode_Payload;
-use crate::reading::{CompilerError, Discover_Crate};
+use crate::reading::Discover_Crate;
 use nomos_platform::Environment;
 use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_contracts::{

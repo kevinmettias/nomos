@@ -58,11 +58,17 @@ mod contract;
 #[path = "fact_context.rs"]
 mod provider;
 mod guarantee;
+#[path = "nested_lock/check.rs"]
 mod nested_lock_check;
+#[path = "nested_lock/contract.rs"]
 mod nested_lock_contract;
+#[path = "nested_lock/fact_context.rs"]
 mod nested_lock_fact_context;
+#[path = "nested_lock/fact_production.rs"]
 mod nested_lock_fact_production;
+#[path = "nested_lock/guarantee.rs"]
 mod nested_lock_guarantee;
+#[path = "nested_lock/reading.rs"]
 mod nested_lock_reading;
 mod payload;
 mod reading;
