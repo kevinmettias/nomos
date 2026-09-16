@@ -11,7 +11,7 @@ use crate::payload::{Encode_Payload, RequirementTracePayload};
 use crate::predicates::{
     Divergences_With_No_Record, Partials_With_No_Gap, Unresolved_Gaps, Unresolved_Records, Unresolved_Sites,
 };
-use crate::registry::Entries;
+use crate::registry::Assessments_In;
 use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_contracts::{
     BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, Guarantee, ProviderId, SnapshotId,
@@ -102,7 +102,7 @@ fn Compute_Fact_Key(subject: SubjectId, guarantee: Guarantee, context: FactConte
 #[must_use]
 pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> RequirementTracePayload
 {
-    let Ok(assessments) = Entries(&root.join(REGISTRY), filesystem)
+    let Ok(assessments) = Assessments_In(&root.join(REGISTRY), filesystem)
     else
     {
         return RequirementTracePayload::default();

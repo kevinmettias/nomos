@@ -81749,14 +81749,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-p114-naming-clarity",
-        "acquired_at": 1789585766,
-        "lease_expires_at": 1789600166
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
@@ -81774,6 +81770,74 @@
           "0"
         ],
         "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/capabilities",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    90 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789586478,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a6bdfb3b7158f6a3a9c40736480e6c1dbe11d485"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P114-TRACE-STALE-SITES-FROM-P112-PLACEMENT",
+      "title": "Two requirement assessments cite site files that P112 placement moved, and both trace tests are red for it",
+      "why": "Measured while finishing P114-CLARITY-CAPABILITIES, whose own predicate is green over crates/capabilities: two of this repository's own committed assessments cite a site file that is not in the workspace, and the two tests that read that corpus fail. Neither failure is the naming campaign's -- the check it runs is a text reader over the tree, and the renames it made touch no assessment, no site path and no registry file -- so they are recorded here rather than absorbed there. AGT-014 cites crates/spec/nomos-spec-ingest/src/content/statement/report.rs#StatementDivergence; commit 43242047, P112 placement over the spec territory, moved that path, and the type is now declared as crate::Divergence and reached in that module through the alias StatementDivergence in content/statement/statement_report.rs. AGT-EXEC-001 cites crates/contracts/nomos-contracts/src/authority/class.rs#Is_Explicit_Grant_Required; commit b180fb33, P112 placement over the crates P111 held, split that file so the enum is declared in authority/authority_class.rs, where the method is at line 66 today. Both citations were honest when written and became stale by a move, which is exactly the class OD-LEDGER-STALE-REQUIREMENT-TRACE-ASSESSMENTS closed once before; these two came back because the two commits that moved the files re-blessed and re-cited nothing. The same two commits left one further artifact stale that is not this item's: a check-interfile-duplication waiver in suppressions.json still names crates/contracts/nomos-contracts/src/authority/class.rs, a path that no longer exists. It is a different check from this item's, so this item does not reserve it; the naming campaign's closing phase item, which owns suppressions.json, is where the two are reconciled.",
+      "done_when": "Both assessments cite sites that exist: AGT-014.assessment names the file that declares the divergence type today, and AGT-EXEC-001.assessment names crates/contracts/nomos-contracts/src/authority/authority_class.rs, so that the predicate, cargo test -p nomos-contract-tests -p nomos-cap-requirement-trace --lib --test requirement_trace, reports no failure -- the committed-corpus contract test and the provider's own corpus test both green. No citation is deleted to make a test pass: a site whose file moved is repointed, and a verdict is re-authored only if what the verdict was about is gone.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/requirements/AGT-014.assessment",
+          "tests/contract/requirements/AGT-EXEC-001.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-cap-requirement-trace",
+          "--lib",
+          "--test",
+          "requirement_trace"
+        ],
+        "timeout_seconds": 3600
       },
       "verified": null,
       "abandoned": [],

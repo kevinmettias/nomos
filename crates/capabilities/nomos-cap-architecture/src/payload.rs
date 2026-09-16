@@ -244,14 +244,14 @@ fn Read_Line(line: &str, payload: &mut ArchitecturePayload) -> Result<(), Refusa
     }
     if let Some(rest) = line.strip_prefix("member\t")
     {
-        let [package, component] = Pair(line, rest, MEMBER_FIELDS)?;
+        let [package, component] = Parse_Pair(line, rest, MEMBER_FIELDS)?;
         payload.membership.push(Membership { package: package.to_owned(), component: component.to_owned() });
 
         return Ok(());
     }
     if let Some(rest) = line.strip_prefix("permits\t")
     {
-        let [from, to] = Pair(line, rest, PERMITS_FIELDS)?;
+        let [from, to] = Parse_Pair(line, rest, PERMITS_FIELDS)?;
         payload.permissions.push(Permission { from: from.to_owned(), to: to.to_owned() });
 
         return Ok(());
@@ -266,7 +266,7 @@ fn Read_Exception_Or_Authority(line: &str, payload: &mut ArchitecturePayload) ->
 {
     if let Some(rest) = line.strip_prefix("exception\t")
     {
-        let [from, to] = Pair(line, rest, EXCEPTION_FIELDS)?;
+        let [from, to] = Parse_Pair(line, rest, EXCEPTION_FIELDS)?;
         payload.exceptions.push(Exception { from: from.to_owned(), to: to.to_owned() });
 
         return Ok(());
@@ -279,7 +279,7 @@ fn Read_Exception_Or_Authority(line: &str, payload: &mut ArchitecturePayload) ->
     }
     if let Some(rest) = line.strip_prefix("door\t")
     {
-        let [package, door] = Pair(line, rest, DOOR_FIELDS)?;
+        let [package, door] = Parse_Pair(line, rest, DOOR_FIELDS)?;
 
         return Add_Door(payload, package, Door(door));
     }
@@ -374,7 +374,7 @@ fn Push_Row(encoded: &mut String, fields: &[&str])
 }
 
 /// A two-field line's own fields, or a refusal naming the line that did not have two.
-fn Pair<'a>(line: &str, rest: &'a str, fields: usize) -> Result<[&'a str; PAIR_FIELDS], Refusal>
+fn Parse_Pair<'a>(line: &str, rest: &'a str, fields: usize) -> Result<[&'a str; PAIR_FIELDS], Refusal>
 {
     let split: Vec<&str> = rest.splitn(fields, '\t').collect();
     let [left, right] = split.as_slice()

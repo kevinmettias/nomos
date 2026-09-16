@@ -182,7 +182,7 @@ fn Encode_Observed_Field(value: Option<&str>) -> String
 {
     return match value
     {
-        Some(seen) => format!("+{}", nomos_cap_syntax::Escape(seen)),
+        Some(seen) => format!("+{}", nomos_cap_syntax::Escape_Text(seen)),
         None => ".".to_owned(),
     };
 }

@@ -29,7 +29,7 @@ pub enum variant nomos_cap_syntax::PayloadRefusalKind::UnreadableObservation { f
 pub enum variant nomos_cap_syntax::PayloadRefusalKind::WrongFieldCount { tag: String, expected: usize, found: usize, }
 pub fn nomos_cap_syntax::Capability() -> CapabilityId
 pub fn nomos_cap_syntax::Capability_Contract() -> CapabilityContract
-pub fn nomos_cap_syntax::Escape(value: &str) -> String
+pub fn nomos_cap_syntax::Escape_Text(value: &str) -> String
 pub fn nomos_cap_syntax::Function_Arity(shape: &Observation) -> Option<u32>
 pub fn nomos_cap_syntax::Function_Shape(arity: usize) -> String
 pub fn nomos_cap_syntax::ImplLabel::Label(self) -> &'static str

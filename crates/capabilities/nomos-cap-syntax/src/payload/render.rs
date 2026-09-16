@@ -42,7 +42,7 @@ pub fn Render_Payload(payload: &SyntaxPayload) -> Vec<u8>
 /// them keeps a multi-line doc comment one field and one record, so the grammar stays
 /// line-oriented and a consumer still reads the text the author wrote.
 #[must_use]
-pub fn Escape(value: &str) -> String
+pub fn Escape_Text(value: &str) -> String
 {
     let mut escaped = String::with_capacity(value.len());
 
@@ -134,15 +134,15 @@ mod tests
     #[test]
     fn Test_Escape_Should_Backslash_Every_Reserved_Character()
     {
-        assert_eq!(Escape("a\\b\tc\nd\re"), "a\\\\b\\tc\\nd\\re");
-        assert_eq!(Escape("plain"), "plain");
+        assert_eq!(Escape_Text("a\\b\tc\nd\re"), "a\\\\b\\tc\\nd\\re");
+        assert_eq!(Escape_Text("plain"), "plain");
     }
 
     #[test]
     fn Test_Unescape_Field_Should_Read_Back_What_Escape_Wrote()
     {
         let original = "a\\b\tc\nd\re";
-        assert_eq!(Unescape_Field(&Escape(original)), original);
+        assert_eq!(Unescape_Field(&Escape_Text(original)), original);
     }
 
     #[test]

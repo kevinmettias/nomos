@@ -13,7 +13,7 @@
 //! the one shape the extension exists for. Both spellings of the label, and the header the list
 //! is written behind, are what this file owns.
 
-use super::{Escape, INHERENT, Observation, TRAIT, Unescape_Field};
+use super::{Escape_Text, INHERENT, Observation, TRAIT, Unescape_Field};
 
 /// The `shape` header an implementation block's own generic parameter list is written behind.
 const IMPL_GENERICS_HEADER: &str = "generics";
@@ -118,7 +118,7 @@ pub fn Impl_Shape(label: ImplLabel, generics: &[String]) -> String
 
     let body = generics
         .iter()
-        .map(|name| return Escape(name))
+        .map(|name| return Escape_Text(name))
         .collect::<Vec<_>>()
         .join("\n");
 

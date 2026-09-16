@@ -30,13 +30,13 @@ pub(crate) fn Committed(root: &Path) -> Vec<Assessment>
 /// Takes the directory rather than finding it, so a control can hand it one.
 pub(crate) fn Entries(directory: &Path) -> Result<Vec<Assessment>, String>
 {
-    return nomos_cap_requirement_trace::Entries(directory, &StdFileSystem);
+    return nomos_cap_requirement_trace::Assessments_In(directory, &StdFileSystem);
 }
 
 /// One entry, or the reason it is not one.
 pub(crate) fn Parse(source: nomos_cap_requirement_trace::EntrySource<'_>) -> Result<Assessment, String>
 {
-    return nomos_cap_requirement_trace::Parse(source);
+    return nomos_cap_requirement_trace::Parse_Assessment(source);
 }
 
 /// Whether a string is a corpus requirement identifier: a family, then three digits.

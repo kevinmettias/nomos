@@ -30,7 +30,7 @@ const NUMBER_DIGITS: usize = 3;
 /// A `String` naming what is wrong, when the directory cannot be enumerated or any entry in
 /// it fails to parse. This function does not skip a bad entry and continue — a typo that
 /// silently stopped being counted is exactly the defect `OD-TRACE-001` exists to end.
-pub fn Entries<Fs: FileSystem>(directory: &Path, filesystem: &Fs) -> Result<Vec<Assessment>, String>
+pub fn Assessments_In<Fs: FileSystem>(directory: &Path, filesystem: &Fs) -> Result<Vec<Assessment>, String>
 {
     let listing = filesystem
         .Read_Directory(directory)
@@ -65,7 +65,7 @@ fn Read_Entry<Fs: FileSystem>(path: &Path, filesystem: &Fs) -> Result<Option<Ass
         .Read_To_String(path)
         .map_err(|error| return format!("{} cannot be read: {error}", path.display()))?;
 
-    return Parse(EntrySource { stem, text: &text })
+    return Parse_Assessment(EntrySource { stem, text: &text })
         .map(Some)
         .map_err(|refusal| return format!("{}: {refusal}", path.display()));
 }
@@ -73,7 +73,7 @@ fn Read_Entry<Fs: FileSystem>(path: &Path, filesystem: &Fs) -> Result<Option<Ass
 /// One entry before it has been read: the requirement its file is named for, and the text
 /// that file holds.
 ///
-/// Named rather than passed as two adjacent `&str`. A call site that read `Parse(text, stem)`
+/// Named rather than passed as two adjacent `&str`. A call site that read `Parse_Assessment(text, stem)`
 /// would compile, and the transposition would be caught only because [`Is_Requirement_Id`]
 /// refuses a file body -- a run-time refusal where a named field lets the compiler make one.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -95,7 +95,7 @@ pub struct EntrySource<'a>
 ///
 /// A `String` describing the first way the source's own text fails to be a well-formed entry
 /// for its stem.
-pub fn Parse(source: EntrySource<'_>) -> Result<Assessment, String>
+pub fn Parse_Assessment(source: EntrySource<'_>) -> Result<Assessment, String>
 {
     let EntrySource { stem, text } = source;
     Assert_Requirement_Id(stem)?;

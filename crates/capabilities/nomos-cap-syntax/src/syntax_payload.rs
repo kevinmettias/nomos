@@ -43,7 +43,7 @@ mod tests
     /// The position of the `Other` fixture item, the one whose name carries no `::`.
     const OTHER_ITEM_INDEX: usize = 2;
 
-    fn Item(qualified_name: &str) -> PayloadItem
+    fn Payload_Item(qualified_name: &str) -> PayloadItem
     {
         return PayloadItem {
             ordinal: 0,
@@ -60,7 +60,7 @@ mod tests
     {
         let payload = SyntaxPayload {
             unexpanded: 0,
-            items: vec![Item("Table"), Item("Table::All"), Item("Other")],
+            items: vec![Payload_Item("Table"), Payload_Item("Table::All"), Payload_Item("Other")],
         };
 
         assert_eq!(

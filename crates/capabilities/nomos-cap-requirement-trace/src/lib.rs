@@ -77,5 +77,5 @@ pub use predicates::{
     Divergences_With_No_Record, Partials_With_No_Gap, Unresolved_Gaps, Unresolved_Records, Unresolved_Sites,
 };
 pub use provider::{Discover_Workspace, FactContext, Materialize_Workspace, TraceFact};
-pub use registry::{Entries, EntrySource, Is_Requirement_Id, Parse};
+pub use registry::{Assessments_In, EntrySource, Is_Requirement_Id, Parse_Assessment};
 pub use requirement_trace_fact_production::RequirementTraceFactProduction;

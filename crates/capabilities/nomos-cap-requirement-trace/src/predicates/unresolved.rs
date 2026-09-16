@@ -53,7 +53,7 @@ pub fn Unresolved_Sites<Fs: FileSystem>(root: &Path, assessments: &[Assessment],
         for site in &assessment.sites
         {
             let shape = ProblemShape { kind: ProblemKind::UnresolvedSite, label: "site" };
-            let unresolved = Unresolved(&workspace, &assessment.requirement, site, shape);
+            let unresolved = Unresolved_Site(&workspace, &assessment.requirement, site, shape);
             missing.extend(unresolved);
         }
     }
@@ -76,7 +76,7 @@ pub fn Unresolved_Gaps<Fs: FileSystem>(root: &Path, assessments: &[Assessment], 
         for gap in &assessment.gaps
         {
             let shape = ProblemShape { kind: ProblemKind::UnresolvedGap, label: "gap" };
-            let unresolved = Unresolved(&workspace, &assessment.requirement, gap, shape);
+            let unresolved = Unresolved_Site(&workspace, &assessment.requirement, gap, shape);
             missing.extend(unresolved);
         }
     }
@@ -97,7 +97,7 @@ pub fn Unresolved_Records<Fs: FileSystem>(root: &Path, assessments: &[Assessment
             continue;
         };
 
-        let missing = Unregistered(root, assessment, record, filesystem);
+        let missing = Unregistered_Record(root, assessment, record, filesystem);
         unresolved.extend(missing);
     }
 
@@ -105,7 +105,7 @@ pub fn Unresolved_Records<Fs: FileSystem>(root: &Path, assessments: &[Assessment
 }
 
 /// Why one named record does not resolve to a registered governing record, if it does not.
-fn Unregistered<Fs: FileSystem>(root: &Path, assessment: &Assessment, record: &str, filesystem: &Fs) -> Option<Problem>
+fn Unregistered_Record<Fs: FileSystem>(root: &Path, assessment: &Assessment, record: &str, filesystem: &Fs) -> Option<Problem>
 {
     if !Has_A_Registration(root, record, filesystem)
     {
@@ -170,7 +170,7 @@ fn Has_A_Document<Fs: FileSystem>(root: &Path, record: &str, filesystem: &Fs) ->
 
 /// Why one site (or gap) is not where its entry says it is, if it is not. `shape.label`
 /// names which field `site` came from ("site" or "gap"), so the message stands on its own.
-fn Unresolved<Fs: FileSystem>(workspace: &Workspace<'_, Fs>, requirement: &str, site: &Site, shape: ProblemShape<'_>) -> Option<Problem>
+fn Unresolved_Site<Fs: FileSystem>(workspace: &Workspace<'_, Fs>, requirement: &str, site: &Site, shape: ProblemShape<'_>) -> Option<Problem>
 {
     let path = workspace.root.join(&site.path);
     let Ok(text) = workspace.filesystem.Read_To_String(&path)

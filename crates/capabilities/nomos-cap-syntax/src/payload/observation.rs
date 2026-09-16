@@ -1,6 +1,6 @@
 //! What a provider observed about one declaration, and the words it says it in.
 
-use super::{Escape, PayloadRefusal, PayloadRefusalKind, Unescape_Field};
+use super::{Escape_Text, PayloadRefusal, PayloadRefusalKind, Unescape_Field};
 
 /// The `kind` label every provider writes for a function form.
 pub const FUNCTION: &str = "Function";
@@ -82,7 +82,7 @@ impl Observation
         {
             Self::NotObserved => "-".to_owned(),
             Self::Absent => ".".to_owned(),
-            Self::Present(value) => format!("+{}", Escape(value)),
+            Self::Present(value) => format!("+{}", Escape_Text(value)),
         };
     }
 
@@ -168,7 +168,7 @@ pub fn Struct_Shape(fields: &[(String, String)]) -> Option<String>
 
     let body = fields
         .iter()
-        .map(|(name, kind)| return format!("{}\t{}", Escape(name), Escape(kind)))
+        .map(|(name, kind)| return format!("{}\t{}", Escape_Text(name), Escape_Text(kind)))
         .collect::<Vec<_>>()
         .join("\n");
 

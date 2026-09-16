@@ -141,7 +141,7 @@ pub use observation::{
 };
 use observation::Observed_Field;
 pub use parse::Parse_Payload;
-pub use render::Escape;
+pub use render::Escape_Text;
 pub(crate) use render::Unescape_Field;
 pub use render::Render_Payload;
 
