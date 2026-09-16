@@ -102,9 +102,9 @@ pub fn Compare_Gate_Runs(
     let compared = GateCompareResult {
         baseline: baseline.run,
         candidate: candidate.run,
-        added: added_between(&before, &after),
-        removed: removed_between(&before, &after),
-        changed: changed_between(baseline, candidate, &before, &after),
+        added: Added_Between(&before, &after),
+        removed: Removed_Between(&before, &after),
+        changed: Changed_Between(baseline, candidate, &before, &after),
         comparability: Comparability_Of(baseline, candidate),
     };
 
@@ -175,7 +175,7 @@ fn Population_Of(findings: &GateFindings) -> Vec<(FindingDisposition, &Finding)>
 }
 
 /// Every finding in `after` that no identity in `before` answers to.
-fn added_between(
+fn Added_Between(
     before: &BTreeMap<FindingOccurrenceId, (FindingDisposition, Finding)>,
     after: &BTreeMap<FindingOccurrenceId, (FindingDisposition, Finding)>,
 ) -> Vec<Finding>
@@ -188,7 +188,7 @@ fn added_between(
 }
 
 /// Every finding in `before` that no identity in `after` answers to.
-fn removed_between(
+fn Removed_Between(
     before: &BTreeMap<FindingOccurrenceId, (FindingDisposition, Finding)>,
     after: &BTreeMap<FindingOccurrenceId, (FindingDisposition, Finding)>,
 ) -> Vec<Finding>
@@ -201,7 +201,7 @@ fn removed_between(
 }
 
 /// Every occurrence present in both runs whose bucket or recorded reason moved.
-fn changed_between(
+fn Changed_Between(
     baseline: &GateRunResult,
     candidate: &GateRunResult,
     before: &BTreeMap<FindingOccurrenceId, (FindingDisposition, Finding)>,

@@ -81,7 +81,7 @@ fn Has_Adjacent_Explanation(lines: &[&str], index: usize) -> bool
 
     if let Some(previous) = index.checked_sub(1)
     {
-        if lines.get(previous).is_some_and(|line| return Comment_Text_Of(line).is_some_and(|c| return !c.trim().is_empty()))
+        if lines.get(previous).is_some_and(|line| return Comment_Text_Of(line).is_some_and(|comment| return !comment.trim().is_empty()))
         {
             return true;
         }

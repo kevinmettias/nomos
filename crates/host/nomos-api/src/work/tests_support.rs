@@ -228,7 +228,7 @@ const OTHER_HOLDER: &str = "someone-else";
 /// `Scratch_Board_With_A_Held_Territory_Conflict` writes: an ending verb must refuse because
 /// another holder *has* the item, not because a lease happened to lapse under it.
 #[must_use]
-pub(crate) fn With_A_Board_Somebody_Else_Holds<R>(reason: &str, handler: impl FnOnce(&std::path::Path, &EndingRequest) -> R) -> R
+pub(crate) fn With_A_Board_Somebody_Else_Holds<Outcome>(reason: &str, handler: impl FnOnce(&std::path::Path, &EndingRequest) -> Outcome) -> Outcome
 {
     let BoardWithAClaimedItem { directory, id } = Scratch_Board_With_A_Claimed_Item(OTHER_HOLDER, i64::from(u32::MAX))
         .expect("the temp directory is writable and the scratch ledger is writable");

@@ -132,7 +132,7 @@ mod tests
     #[test]
     fn Test_A_Location_Naming_No_Line_Should_Carry_None_Rather_Than_A_Guess()
     {
-        let only = Only_Diagnostic(Mirror_Finding { subject_name: "a-package", location: "crates/spec/nomos-spec-store" });
+        let only = Only_Diagnostic(MirrorFinding { subject_name: "a-package", location: "crates/spec/nomos-spec-store" });
 
         assert_eq!(only.line, None, "a location with no line must not be given one");
         assert_eq!(only.path, "crates/spec/nomos-spec-store");
@@ -141,7 +141,7 @@ mod tests
     #[test]
     fn Test_Diagnostic_Should_Carry_The_Rule_As_Its_Code_And_The_Summary_As_Its_Message()
     {
-        let only = Only_Diagnostic(Mirror_Finding {
+        let only = Only_Diagnostic(MirrorFinding {
             subject_name: "Table::All",
             location: "crates/spec/nomos-spec-store/src/store.rs:12",
         });
@@ -161,7 +161,7 @@ mod tests
 
     /// The two free-form facts a fixture `COMPLETENESS_MIRROR` finding carries: what the rule
     /// called its subject, and the one location it reported it at.
-    struct Mirror_Finding<'a>
+    struct MirrorFinding<'a>
     {
         subject_name: &'a str,
         location: &'a str,
@@ -184,7 +184,7 @@ mod tests
     /// The one diagnostic the fixture finding `fixture` describes produces over [`Declaring`].
     /// Every fixture here locates itself exactly once, so anything else is the fixture having
     /// regressed rather than a state a caller should read.
-    fn Only_Diagnostic(fixture: Mirror_Finding<'_>) -> SourceDiagnostic
+    fn Only_Diagnostic(fixture: MirrorFinding<'_>) -> SourceDiagnostic
     {
         let finding = Finding {
             rule: RuleId::New(nomos_rules::COMPLETENESS_MIRROR),

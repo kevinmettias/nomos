@@ -8,7 +8,7 @@
 
 mod heavy;
 
-pub use heavy::{Heavy, duplicate_heavy};
+pub use heavy::{Heavy, Duplicate_Heavy};
 
 #[derive(Clone, Copy)]
 pub struct Point
@@ -18,7 +18,7 @@ pub struct Point
 }
 
 #[must_use]
-pub fn duplicate_point(point: &Point) -> Point
+pub fn Duplicate_Point(point: &Point) -> Point
 {
     return point.clone();
 }

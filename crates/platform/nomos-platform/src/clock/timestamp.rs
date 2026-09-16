@@ -51,7 +51,7 @@ pub mod timestamp_serde
     /// # Errors
     ///
     /// Whatever the serializer reports for writing an `i64`.
-    pub fn serialize<S: Serializer>(timestamp: &Timestamp, serializer: S) -> Result<S::Ok, S::Error>
+    pub fn serialize<Format: Serializer>(timestamp: &Timestamp, serializer: Format) -> Result<Format::Ok, Format::Error>
     {
         return serializer.serialize_i64(timestamp.Unix_Seconds());
     }
@@ -61,7 +61,7 @@ pub mod timestamp_serde
     /// # Errors
     ///
     /// Whatever the deserializer reports for a value that is not an `i64`.
-    pub fn deserialize<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Timestamp, D::Error>
+    pub fn deserialize<'de, Format: Deserializer<'de>>(deserializer: Format) -> Result<Timestamp, Format::Error>
     {
         let seconds = i64::deserialize(deserializer)?;
 

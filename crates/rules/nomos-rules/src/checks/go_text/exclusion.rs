@@ -44,16 +44,16 @@ fn Build_Ignore_Findings_In(source: &SourceFile) -> Vec<Finding>
 
 fn Has_Build_Ignore_Explanation(lines: &[&str], index: usize) -> bool
 {
-    let Is_Non_Empty_Comment = |maybe_index: Option<usize>| -> bool {
+    let is_non_empty_comment = |maybe_index: Option<usize>| -> bool {
         let Some(candidate) = maybe_index
         else
         {
             return false;
         };
-        return lines.get(candidate).is_some_and(|line| return super::Comment_Text_Of(line).is_some_and(|c| return !c.trim().is_empty()));
+        return lines.get(candidate).is_some_and(|line| return super::Comment_Text_Of(line).is_some_and(|comment| return !comment.trim().is_empty()));
     };
 
-    return Is_Non_Empty_Comment(index.checked_sub(1)) || Is_Non_Empty_Comment(index.checked_add(1));
+    return is_non_empty_comment(index.checked_sub(1)) || is_non_empty_comment(index.checked_add(1));
 }
 
 #[cfg(test)]

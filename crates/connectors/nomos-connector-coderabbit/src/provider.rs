@@ -45,11 +45,11 @@ pub struct FactContext
 /// # Errors
 ///
 /// Whatever [`Fetch_Review_Comment`] or [`Translate_Review_Comment`] returns.
-pub fn Materialize_Review_Comment<P: ProcessLauncher>(
+pub fn Materialize_Review_Comment<Launcher: ProcessLauncher>(
     repository: &str,
     comment_id: u64,
     context: FactContext,
-    launcher: &P,
+    launcher: &Launcher,
 ) -> Result<ReviewFindingFact, ConnectorError>
 {
     let vendor_bytes = Fetch_Review_Comment(repository, comment_id, launcher)?;

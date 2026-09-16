@@ -49,7 +49,7 @@ impl core::fmt::Display for FetchError
 /// is a genuine verdict on whether the fetch succeeded (comment deleted, repository
 /// private, token missing every scope `gh auth status` would have reported), not a report
 /// this reader must relay as data.
-pub fn Fetch_Review_Comment<P: ProcessLauncher>(repository: &str, comment_id: u64, launcher: &P) -> Result<Vec<u8>, FetchError>
+pub fn Fetch_Review_Comment<Launcher: ProcessLauncher>(repository: &str, comment_id: u64, launcher: &Launcher) -> Result<Vec<u8>, FetchError>
 {
     let command = Github_Api_Review_Comment_Command(repository, comment_id);
     let output = launcher.Run(&command).map_err(|error| FetchError {

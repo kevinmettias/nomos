@@ -1,6 +1,6 @@
 //! The fixture's `Clone`-but-not-`Copy` half: a `.clone()` call whose receiver resolves
 //! to a type that is `Clone` and not `Copy`, which a real `ra_ap_hir` analysis must leave
-//! unreported -- the negative control for the positive case `lib.rs`'s `duplicate_point`
+//! unreported -- the negative control for the positive case `lib.rs`'s `Duplicate_Point`
 //! supplies.
 
 #[derive(Clone)]
@@ -10,7 +10,7 @@ pub struct Heavy
 }
 
 #[must_use]
-pub fn duplicate_heavy(heavy: &Heavy) -> Heavy
+pub fn Duplicate_Heavy(heavy: &Heavy) -> Heavy
 {
     return heavy.clone();
 }

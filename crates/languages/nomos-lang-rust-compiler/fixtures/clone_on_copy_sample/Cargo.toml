@@ -11,3 +11,10 @@ name = "clone-on-copy-sample"
 version = "0.1.0"
 edition = "2021"
 publish = false
+
+# The real workspace's `[workspace.lints.rust]` carries `non_snake_case = "allow"` because
+# project-owned function names use `Pascal_Snake_Case` rather than Rust's lower-snake
+# convention. Being its own workspace root, this crate is not reached by that table, so it
+# restates the one entry the two functions in `src/` need.
+[lints.rust]
+non_snake_case = "allow"

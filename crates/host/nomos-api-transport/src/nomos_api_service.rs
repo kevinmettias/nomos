@@ -140,14 +140,14 @@ fn Ran_Correction(parameters: &str) -> RemoteCallOutcome
 /// The engine hands an operation that carried no arguments an empty object, so
 /// an operation whose arguments are all optional is callable with none and no
 /// parameter type here has to spell that case itself.
-fn Parsed<T: serde::de::DeserializeOwned>(parameters: &str) -> Result<T, RemoteCallRefusal>
+fn Parsed<Parameters: serde::de::DeserializeOwned>(parameters: &str) -> Result<Parameters, RemoteCallRefusal>
 {
     return serde_json::from_str(parameters)
         .map_err(|error| return RemoteCallRefusal::Bad_Arguments(error.to_string()));
 }
 
 /// An operation's own response, as the document the answer carries.
-fn Serialized<T: Serialize>(response: &T) -> RemoteCallOutcome
+fn Serialized<Response: Serialize>(response: &Response) -> RemoteCallOutcome
 {
     return match serde_json::to_string(response)
     {

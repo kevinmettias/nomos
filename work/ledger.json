@@ -81012,6 +81012,100 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-NAMING-IDENTIFIER-RENAMES",
+      "title": "The four identifier conformance checks read zero over the whole tree",
+      "why": "Four naming checks in this phase declare case or word-count conventions that this workspace's own code violates in twenty-one places between them. Measured: check-naming 9 live findings, check-generic-parameter-name 8, check-single-letter-name 3, check-reference-parameter 1, the last of those already carrying seven waivers for one structural shape. Eighteen of the twenty-one are defects, not disagreements: check-generic-parameter-name's eight are all single-letter type parameters on functions that take a real role (P: ProcessLauncher twice, T as a request document and as a response twice, T as the payload a round-trip assertion is handed, R as the value a caller's handler returns); check-single-letter-name's three are one closure parameter c naming comment text in three copies of one idiom; check-naming's seven others are a local binding written Upper_Snake where the check's own convention for a binding is lower_snake, three private free functions in gate_compare.rs written lower_snake where this repository writes free functions Upper_Snake, a type in a test module written Mixed_Snake, and two functions in a fixture sample that the ra_ap_hir provider compiles as ordinary Rust. Renaming a generic parameter is invisible to every caller -- a caller never spells one -- so those eight touch one file each. Three findings are not defects and are not renamed: nomos_platform::timestamp_serde::serialize and ::deserialize are a serde with-module, and the serde with attribute that names that module at five sites in nomos-api requires exactly those two names, which the check cannot see because its foreign-trait exemption is scoped to an impl-Trait-for block; and the &String on the From-impl for FileName in nomos-cli's shared test support is reached through the Into bound on Tree::With, where the check's suggested &str is not merely narrower but unusable -- a trait bound resolves &String to From<&'a String> with no deref coercion, and two seam tests pass &format!(...) through it. Those three join the ledger as four entries with their own reasons.",
+      "done_when": "All four checks report zero live findings over F:/repos/nomos/crates and the ledger waives exactly ten findings among them: two new check-naming entries for the serde with-module pair, one new check-reference-parameter entry for the From<&String> impl, and the seven check-reference-parameter entries that were already there and whose reason is the same structural shape. Nothing is waived for check-generic-parameter-name or check-single-letter-name, and no waiver is replaced or deleted. Eighteen identifiers change name and every one of them compiles: the eight generic parameters, the three closure parameters c -> comment, Is_Non_Empty_Comment -> is_non_empty_comment, added_between/removed_between/changed_between -> Added_Between/Removed_Between/Changed_Between, duplicate_point/duplicate_heavy -> Duplicate_Point/Duplicate_Heavy in the clone_on_copy_sample fixture and its re-export in that fixture's lib.rs, and Mirror_Finding -> MirrorFinding. The rename reaches only definitions: no generic parameter, and none of the three private gate_compare functions, the fixture-local pair, or the test-module type, is named by any file outside its own. cargo clippy --workspace --all-targets exits zero, and the public surface snapshots do not move.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/go_text.rs",
+          "crates/rules/nomos-rules/src/checks/go_text/exclusion.rs",
+          "crates/rules/nomos-rules/src/checks/security_text/certificate_verification.rs",
+          "crates/platform/nomos-platform/src/clock/timestamp.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/languages/nomos-lang-rust-compiler/fixtures/clone_on_copy_sample/src/lib.rs",
+          "crates/languages/nomos-lang-rust-compiler/fixtures/clone_on_copy_sample/src/heavy.rs",
+          "crates/host/nomos-lsp/src/file_diagnostic.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/fetching.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/provider.rs",
+          "crates/host/nomos-api-transport/src/nomos_api_service.rs",
+          "crates/host/nomos-api/src/test_support.rs",
+          "crates/host/nomos-api/src/work/tests_support.rs",
+          "crates/host/nomos-cli/tests/support/mod.rs",
+          "suppressions.json",
+          "crates/languages/nomos-lang-rust-compiler/fixtures/clone_on_copy_sample/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming,generic-parameter-name,single-letter-name,reference-parameter",
+          "-target",
+          "F:/repos/nomos/crates",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "10"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming,generic-parameter-name,single-letter-name,reference-parameter",
+          "-target",
+          "F:/repos/nomos/crates",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "10"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                        LIVE   WAIVED     JUDGED  VERDICT\nnaming                          0        2  1260 file  OK\ngeneric-parameter-name          0        0  1260 file  OK\nsingle-letter-name              0        0  1260 file  OK\nreference-parameter             0        8  1594 file  OK\n\n4 check(s): 0 live finding(s), 10 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789582830,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b0f4e2ec93798cf9816f9b976dfb36030b508a43"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "@claude-p114-naming",
+          "added": [
+            "crates/languages/nomos-lang-rust-compiler/fixtures/clone_on_copy_sample/Cargo.toml"
+          ],
+          "widened_at": 1789582678
+        }
+      ]
     }
   ]
 }

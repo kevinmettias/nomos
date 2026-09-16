@@ -1911,6 +1911,30 @@
       "reason": "checker false positive: nomos_rules is named only in a Cargo.toml comment explaining why nomos-cap-dependency (the actual dependency) is listed instead, and inside a doc comment in provider/package_fact.rs -- confirmed no nomos-rules line in [dependencies] and no use/path reference in src/",
       "owner": "@claude-p25-integration",
       "expires": "2026-11-29"
+    },
+    {
+      "check": "check-naming",
+      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
+      "fingerprint": "43036e9f5dc5b7f3",
+      "reason": "nomos_platform::timestamp_serde is a serde with-module: five sites in nomos-api apply the serde with attribute naming it, and serde resolves that attribute to exactly the module functions serialize and deserialize. Those two names are the foreign contract rather than this repository's choice, and renaming either stops every ledger timestamp field from deserializing. check-naming does exempt a name a foreign trait mandates, but that exemption is scoped to an impl-Trait-for block and so does not reach a free function in a with-module. The only remedy left is a newtype with hand-written Serialize and Deserialize impls, which is architecture invented to satisfy a naming rule.",
+      "owner": "@claude-p114-naming",
+      "expires": "2027-03-15"
+    },
+    {
+      "check": "check-naming",
+      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
+      "fingerprint": "cc6699c3dc9c8318",
+      "reason": "nomos_platform::timestamp_serde is a serde with-module: five sites in nomos-api apply the serde with attribute naming it, and serde resolves that attribute to exactly the module functions serialize and deserialize. Those two names are the foreign contract rather than this repository's choice, and renaming either stops every ledger timestamp field from deserializing. check-naming does exempt a name a foreign trait mandates, but that exemption is scoped to an impl-Trait-for block and so does not reach a free function in a with-module. The only remedy left is a newtype with hand-written Serialize and Deserialize impls, which is architecture invented to satisfy a naming rule.",
+      "owner": "@claude-p114-naming",
+      "expires": "2027-03-15"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/host/nomos-cli/tests/support/mod.rs",
+      "fingerprint": "eb8b5a47fdcebe4a",
+      "reason": "impl From for FileName exists for the value a format! produces, and it is reached through Tree::With, whose parameter is an Into bound rather than a concrete reference type. A trait bound resolves a String reference to this impl exactly; the deref coercion this check reasons from applies only where the parameter type is already known, so replacing the type argument would not widen what callers may pass, it would stop two seam tests compiling. The seven entries already in the ledger for this check have the same shape.",
+      "owner": "@claude-p114-naming",
+      "expires": "2027-03-15"
     }
   ]
 }

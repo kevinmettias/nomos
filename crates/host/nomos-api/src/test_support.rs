@@ -90,8 +90,8 @@ pub(crate) fn Probe_Tree(area: Area, name: TreeName, policy: &str) -> Result<Pat
 /// Returns whatever [`serde_json`] refuses while serializing `response` or parsing that text
 /// back. A mismatched outcome is an assertion rather than an error, because a wrong tag is
 /// precisely what this function was called to report.
-pub(crate) fn Assert_Round_Trips_As_Json<T: Serialize>(
-    response: &T,
+pub(crate) fn Assert_Round_Trips_As_Json<Response: Serialize>(
+    response: &Response,
     expected_outcome: &str,
 ) -> Result<(), serde_json::Error>
 {
