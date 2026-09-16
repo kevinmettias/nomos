@@ -80702,7 +80702,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -80714,7 +80714,26 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Python314\\python.exe",
+          "C:\\Users\\kmett\\AppData\\Local\\Temp\\nomos-gate\\placement_check.py",
+          "placement-kernel"
+        ],
+        "exit_code": 0,
+        "output_tail": " `pub use set::Set as SubjectSet;`. Leaf: subject/set.rs declares `Set`. Same deadlock. The qualified name is doing real work: `Set` at a crate root reads as a collection type rather than as the set of subjects a rule reaches, which is what this type is. 2 consumers in 2 crates outside the territory. Waived by @claude-p19-campaign; declared because waived counts as outstanding.\r\n      facade-surface              crates/kernel/nomos-model/src/subject.rs:20\r\n            `pub use target::Target as SubjectTarget;`. Leaf: subject/target.rs declares `Target`. Same deadlock and same forbidden marker. SubjectTarget has no consumer outside crates/kernel today (measured), so it is one of the four the header records as renaming-reachable and refuses for the consistency reason. Waived by @claude-p19-campaign; declared because waived counts as outstanding.\r\n      facade-surface              crates/kernel/nomos-store/src/document.rs:7\r\n            `pub use id::Id as DocumentId;`. Leaf: document/id.rs declares `Id`. Also one of the instrument's off-by-one rows: the statement is at line 8 and the check reports 7. The alias is the only thing distinguishing this crate's document identity from nomos-model's entity identity when both reach a caller, which is the same reason nomos-model aliases its own Id to EntityId. DocumentId has no consumer outside crates/kernel today (measured), another of the four, refused for the consistency reason. Waived by @claude-p19-campaign; declared because waived counts as outstanding.\r\n      facade-surface              crates/kernel/nomos-store/src/document.rs:9\r\n            `pub use kind::Kind as DocumentKind;`. Leaf: document/kind.rs declares `Kind`. Same deadlock, and the same generic-word argument subject.rs:17 carries: `Kind` unqualified at a crate root would not say whose. 3 consumers in 2 crates outside the territory, so dropping the alias is not in reach here either. Waived by @claude-p19-campaign; declared because waived counts as outstanding.\r\n",
+        "verified_at": 1789559219,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d2a82c811064041dfc17a69646f5c628ff2088f6"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
