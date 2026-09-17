@@ -83937,6 +83937,81 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-HOST-MCP-STDIO-TESTS",
+      "title": "P114 naming/clarity: the mcp stdio conversation test, two helpers",
+      "why": "check-naming-clarity reads a name word by word and reports a function that takes parameters whose\nname splits into one word. Two helpers in tests/stdio.rs are that: the JSON-pointer reader every\nassertion in the file goes through, and the one that writes a request to the child's stdin and\nreturns the answer it wrote back.\n\nThe first is a duplicate of a helper the library already has. `src/test_support.rs` names its own\ncopy `Field_At` and this file's doc comment says so -- \"Duplicated from src/test_support.rs rather\nthan shared\" -- so the finding is cleared by giving the copy the name it was copied from rather\nthan by inventing a third name for the same function. The second is named for what it returns and\nwhat it returns it from, in the shape the file's own `Next_Answer` already uses.\n\nBoth words are whole tokens in this crate with no other sense and no qualified call, so nothing but\nthe two declarations and their own sites is in reach.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over\ncrates/host/nomos-mcp, verified by this item's predicate -- the sweep pointed at that crate, whose\nonly findings are the two this item owns -- and cargo check --workspace --all-targets reports no\nerror, since the check is a text reader over the tree and cannot see a build.\n\nThe two one-word declarations At and Asked in tests/stdio.rs are renamed: At becomes the name its\nown duplicate in src/test_support.rs already carries, so the copy stops disagreeing with the copy,\nand Asked becomes a name that states what it returns and what it returns it from. Each still passes\ncheck-naming, check-abbreviations and check-single-letter-name. Every site that resolved to a\ndeclaration moves with it, the call-site set being the one the compiler enumerated when the\ndeclarations moved rather than a count predicted in advance.\n\nThe integration binary still builds and its test still passes against a really spawned server\nsubprocess, no edited line exceeds the 120 columns rustfmt.toml records, no waiver and no in-code\nmarker is added, and no path outside crates/host/nomos-mcp and work/ledger.json is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-mcp"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/host/nomos-mcp",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/host/nomos-mcp",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0     7 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789614941,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "cc00d0c7ba780a698598ee88fce0fca29b02fa77"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
