@@ -83712,6 +83712,81 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-SUBSTRATE-LEDGER-TESTS",
+      "title": "The naming-clarity check reads zero over the substrate ledger territory at the phase own flags",
+      "why": "The naming-clarity check reads 45 live findings over crates/substrate/nomos-ledger at the\nphase's own flags (`naming.json`: `check-naming-clarity --include-tests`), 0 waived, over 13\nfiles. This is the largest single cluster left in the substrate band, and unlike the analysis\nand capability crates it is not one message shape. Four rules of the same check fire here:\n\n- 41 findings, `function `X` takes parameters but has only one name word; include the operation\n  target, resource, or source of input`. These are the test-fixture vocabulary helpers: `At`,\n  `Item`, `Document`, `Take`, `Refused`, `Territory`, `Patterned`, `Finished`, `Declined`,\n  `Abandonments`, `Abandon`, `Named`, `Holder`, `Interleaved`, `Contended`, `Written`, `Probed`,\n  `Published`, `Amending`, `Tree`, `Saved`, `Claimed`, `Contested`, `Widened`, `Reserving`,\n  `Broader`, `Paths`, `Depending`, `Decline`.\n- 2 findings, `function `X` contains vague word `object``: `Object_Pointers` and\n  `Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key`. The word is on the vocabulary's\n  default vague list (`kernel/config/words/defaults.go`), which nomos's `standards.json` extends\n  only with approved abbreviations.\n- 1 finding, `constant `X` contains vague word `object``: `OBJECT_NODES_IN_A_POPULATED_DOCUMENT`.\n- 1 finding, `function `Item_Verified_By` accepts raw string/command-line arguments`. The\n  parameter is `argv: Vec<String>`, so the name must carry one of the words that rule accepts\n  (`argument(s)`, `argv`, `args`, `string(s)`, `command`, `line`).\n\n**The mechanic is not the whole-token plan, and the reason is measured.** These names are\nshared with other senses inside the same crate, and the guard cannot tell the senses apart\nbecause it reads spelling while the name's meaning is decided by resolution. Counted over the\ncrate, guard-visible: `Territory` 133 occurrences over 34 files, of which the fixture is 4 (one\ndeclaration and three calls) — the rest are the type `nomos_ledger::Territory`; `Item` 125 over\n16; `Holder` 82 over 15, most of them the `Holder` type and its `Holder::from(..)`; `At` 71 over\n15, of which five are fixture declarations and the rest are calls to `FileLedger::At(..)` — a\n*different* constructor, reached through a path the guard deliberately does not match; `Take` 65\nover 13; `Claimed` 21 over 11, mostly the `ItemState::Claimed` variant reached through a glob\nimport; `Decline` 14 over 6, mostly the store's `Decline` verb; `Declined`, `Finished`,\n`Abandon`, `Refused` the same way. A whole-token plan over a listed file renames every\noccurrence of the token in it, which here would rewrite the type, the variants and the prose\nalong with the helper.\n\nThe plan-tool mechanic has a second failure already paid for once in this campaign: it cannot\nsee a path-qualified call, because the lookbehind that protects `Type::Variant` equally protects\n`path::function`, and a rename that misses those sites does not fail loudly — it fails in a\nlater build. So this item renames the 45 declarations and then lets the compiler name every site\nthat resolved to them; resolution, not spelling, decides which `Territory` moves, a\n`board::At(..)` call is a compile error the moment the declaration moves, and the guard's blind\nspot is closed by construction rather than by a scan that shares its blind spot. That is also\nwhy the item does not carry a predicted occurrence count: the call-site set is whatever the\ncompiler enumerates, and it is reported after the fact rather than asserted in advance.\n\n**The names**, 45 declarations over 13 files. Where a fixture is duplicated in two test binaries\nit takes the same new name in both, as the two `Digest_From_Seed` helpers do in the analysis\ncrate; each is private to its own binary and cannot collide.\n\n- `src/claim/refusal/tests.rs`: `At(seconds)` -> `Timestamp_From_Seconds` — the target and the\n  source of input, and the same name in the three other files that declare the same helper.\n- `src/item/tests.rs`: `Item(id)` -> `Item_With_Id`; `At` -> `Timestamp_From_Seconds`.\n- `src/store/validation/tests.rs`: `Document(items)` -> `Document_Holding_Items`;\n  `Depending(id, dependencies)` -> `Item_Depending_On`.\n- `tests/declining_ends_an_item/fixtures.rs`: `At` -> `Timestamp_From_Seconds`; `Item(id, files)`\n  -> `Item_Reserving_Files`; `Document` -> `Document_Holding_Items`; `Take(ledger, item, holder)`\n  -> `Claim_For_Holder`; `Refused(..)` -> `Refusal_From_Claim` (it returns the refusal);\n  `Decline(ledger, item, holder)` -> `Decline_Item_For_Reason` (the fixture's standard reason).\n- `tests/exclusion_holds/board.rs`: `At` -> `Timestamp_From_Seconds`; `Territory(files)` ->\n  `Territory_Of_Files`; `Item(id, files)` -> `Item_Reserving_Files`; `Document` ->\n  `Document_Holding_Items`; `Take` -> `Claim_For_Holder`; `Patterned(id, files, pattern)` ->\n  `Item_With_Pattern`; `Finished(id, files)` -> `Item_Finished_With_Evidence`;\n  `Declined(id, files, reason)` -> `Item_Declined_With_Reason`; `Abandonments(item)` ->\n  `Abandonments_Of_Item`; `Abandon(ledger, item, holder, reason)` ->\n  `Abandon_Claim_With_Reason`; `Refused` -> `Refusal_From_Claim`; `Named(id, ledger)` ->\n  `Item_Named_In_File`; `Holder(item)` -> `Holder_Of_Item`; `Item_Verified_By(id, files, argv)`\n  -> `Item_Verified_By_String_Arguments`, which is the raw-arguments rule's own wording.\n- `tests/exclusion_holds/interleaving.rs`: `Interleaved(over, first, second)` ->\n  `Interleave_Two_Writers`; `Contended(name, items)` -> `Contended_Board_On_Disk`;\n  `Written(directory)` -> `Document_On_Disk`.\n- `tests/exclusion_holds/persistence.rs`: `OBJECT_NODES_IN_A_POPULATED_DOCUMENT` ->\n  `JSON_NODES_IN_A_POPULATED_DOCUMENT` and `Object_Pointers(value, at, found)` ->\n  `Json_Node_Pointers`; both keep the concrete sense the vague word was hiding — a JSON object\n  node — and `node` is on the approved list where `object` is on the vague one.\n  `Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key` ->\n  `Test_Every_Node_In_A_Ledger_Should_Refuse_An_Undeclared_Key`; `Probed(whole, pointer)` ->\n  `Document_Probed_At_Pointer`.\n- `tests/exclusion_holds/records.rs`: `Published(files)` -> `Territory_Of_Published_Records`;\n  `Amending(files)` -> `Territory_Of_Amended_Records`. The second is deliberately a different\n  name for the same shape, and its own doc says why: the two arguments are both record files and\n  mean opposite things.\n- `tests/gate_covers_finish/launcher.rs`: `Tree(name, workflow)` -> `Workflow_Tree_On_Disk`.\n- `tests/records_do_not_serialize/board.rs`: `Saved(name, document)` -> `Board_Saved_In_Scratch`;\n  `Claimed(ledger, writer, agent, blame)` -> `Claim_Item_For_Writer`;\n  `Contested(name, document, first, second)` -> `Board_Contested_By_Two_Agents`.\n- `tests/records_do_not_serialize/serializers.rs`: `Widened(item, path)` ->\n  `Territory_Widened_By_Path`; `Reserving(writers, declared)` -> `Writers_Reserving_Path`.\n- `tests/records_do_not_serialize/serializers/census.rs`: `Broader(mine, theirs)` ->\n  `Broader_Of_Two_Paths`.\n- `tests/widening_is_recorded/fixtures.rs`: `Item(id, files)` -> `Item_Reserving_Files`; `Take` ->\n  `Claim_For_Holder`; `Paths(paths)` -> `Strings_From_Paths`; `Named(ledger, id)` ->\n  `Item_Named_In_File`.\n\nNo new name collides with anything in the crate — measured by scanning the crate for a\nwhole-token occurrence of each one before choosing it — and none is a single word, so none\nre-earns the finding.\n\n**What deliberately does not move.** The type `nomos_ledger::Territory`, the `ItemState`\nvariants `Claimed`, `Declined` and `Finished`, the `ReleaseOutcome::Finished` variant, the store\nverbs `Decline` and `Abandon`, the `FileLedger::At(..)` constructor and the prose in doc\ncomments that uses these words are all outside this item: they are not findings, they are not\nthe helper, and the compiler leaves them alone because nothing about them changes. One leak the\ncompiler cannot report and this item therefore handles by hand: `board.rs` carries the\nintra-doc link `[`Broader`]: super::serializers::census::Broader`, whose *link target* is the\nrenamed helper. A broken intra-doc link is a warning, not an error, and no check in the rust\nphases reads it, so it is fixed explicitly rather than left to rot.\n\n**Measured, before and after.** Measured at the tree this item was authored against\n(ed1e1c86), over the crate at the phase's own flags: 45 live, 0 waived, 87 files judged. After:\n0 live, 0 waived, 87 files judged.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over\n`crates/substrate/nomos-ledger` at the phase's own flags, verified by this item's predicate (the\nsweep over `-target F:/repos/nomos/crates/substrate/nomos-ledger` with `-checks naming-clarity\n-flag --include-tests -max-waived 0`), and `cargo check --workspace --all-targets` reports no\nerror -- the check is a text reader over the tree and cannot see a build, so a green check is\nnot evidence the rename compiles.\n\nAll 45 findings are cleared, in each of the four shapes the check reports them in: the 41\nparameterised single-word functions, the two functions and one constant carrying the vague word\n`object`, and the one function whose name did not disclose that its input is raw command-line\narguments. The 45 declarations are renamed and every call site that resolved to them is renamed\nwith them; the call-site set is the one the compiler enumerated when the declarations moved, not\na count predicted in advance.\n\nThe names that share a word with a renamed helper are left exactly as they are, because they are\na different symbol and no finding: the type `nomos_ledger::Territory`, the `ItemState` variants\n`Claimed`, `Declined` and `Finished`, the `ReleaseOutcome::Finished` variant, the store verbs\n`Decline` and `Abandon`, the `FileLedger::At(..)` constructor, and the prose that uses these\nwords in doc comments. The intra-doc link whose target was a renamed helper is updated with it.\n\n`cargo test -p nomos-ledger --no-fail-fast` passes, and the eight naming checks and the nine\nformatting checks of the rust phases report zero live and zero waived findings over the crate.\nNo waiver is added and no in-code marker is written: the crate reads 0 waived before and 0\nwaived after. Every file edited is inside `crates/substrate/nomos-ledger`; no path outside the\ncrate, plus `work/ledger.json`, is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/substrate/nomos-ledger",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/substrate/nomos-ledger",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    87 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789613570,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ed1e1c864090aedc96266f38de1b27f3368859ce"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

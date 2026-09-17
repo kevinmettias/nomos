@@ -139,7 +139,7 @@ fn Temporary_Directory(name: &str) -> PathBuf
 
 /// A tree with a claimed item whose predicate is a scoped `cargo test`, exactly as every
 /// item on the real ledger carries.
-fn Tree(name: &str, workflow: Option<&str>) -> PathBuf
+fn Workflow_Tree_On_Disk(name: &str, workflow: Option<&str>) -> PathBuf
 {
     let directory = Temporary_Directory(name);
     if let Some(text) = workflow
@@ -259,7 +259,7 @@ static AT_NOW: FixedClock = FixedClock(NOW);
 /// A repository with a board, and a launcher scripted to answer the gate and the predicate.
 pub(crate) fn Bench_At(name: &str, workflow: Option<&str>, launcher: Scripted) -> Bench
 {
-    let directory = Tree(name, workflow);
+    let directory = Workflow_Tree_On_Disk(name, workflow);
     let ledger = Ledger_At(&directory, &AT_NOW);
 
     return Bench {

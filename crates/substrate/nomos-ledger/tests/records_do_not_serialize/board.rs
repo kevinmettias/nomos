@@ -159,7 +159,7 @@ pub(crate) struct SavedBoard
 }
 
 /// Writes a doctored board into a fresh scratch directory and opens a ledger over it.
-pub(crate) fn Saved(name: &str, document: &LedgerDocument) -> SavedBoard
+pub(crate) fn Board_Saved_In_Scratch(name: &str, document: &LedgerDocument) -> SavedBoard
 {
     let directory = Temporary_Directory(name);
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
@@ -190,7 +190,7 @@ pub(crate) fn Saved(name: &str, document: &LedgerDocument) -> SavedBoard
 /// The agent is a [`Holder`] rather than a `&str` so the two cannot be swapped at a call
 /// site: one is who is claiming and the other is the prose a refusal is reported with, and
 /// a bare `&str` in both positions says only that both are text.
-pub(crate) fn Claimed(ledger: &mut Board, writer: &ItemId, agent: Holder<'_>, blame: &str)
+pub(crate) fn Claim_Item_For_Writer(ledger: &mut Board, writer: &ItemId, agent: Holder<'_>, blame: &str)
 {
     ledger
         .Claim(writer, agent.As_Text(), LEASE)
@@ -294,7 +294,7 @@ pub(crate) struct Contest
 }
 
 /// Puts a doctored board on disk and lets two agents contest it, first come first served.
-pub(crate) fn Contested(
+pub(crate) fn Board_Contested_By_Two_Agents(
     name: &str,
     document: &LedgerDocument,
     first: &ItemId,
@@ -304,7 +304,7 @@ pub(crate) fn Contested(
     let SavedBoard {
         scratch,
         mut ledger,
-    } = Saved(name, document);
+    } = Board_Saved_In_Scratch(name, document);
 
     ledger
         .Claim(first, "agent-a", LEASE)
@@ -398,12 +398,12 @@ pub(crate) fn Project_Onto_Records(document: &mut LedgerDocument, writers: &[Ite
 
 /// A path as this ledger's own rule reads one.
 ///
-/// Both positions of [`Is_Colliding`] and [`Broader`] carry this type, and the same one on
+/// Both positions of [`Is_Colliding`] and [`Broader_Of_Two_Paths`] carry this type, and the same one on
 /// purpose: exclusion is symmetric, so there is no order at a call site for a reader to get
 /// wrong and no wrong answer for a swap to reach. A bare `&str` in both positions would say
 /// there was one.
 ///
-/// [`Broader`]: super::serializers::census::Broader
+/// [`Broader_Of_Two_Paths`]: super::serializers::census::Broader_Of_Two_Paths
 pub(crate) struct PathText<'a>(pub(crate) &'a str);
 
 /// Whether two paths exclude each other, decided by the ledger's own rule.

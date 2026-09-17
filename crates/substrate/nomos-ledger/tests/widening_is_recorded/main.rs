@@ -19,9 +19,9 @@ mod fixtures;
 mod watching_lock;
 
 use crate::fixtures::{
-    Board, Board_After_The_Lease_Lapsed, Board_At, BoardOnDisk, ClaimRefusal, Holder, Item,
-    ItemId, LedgerDocument, Ledger_At, Named, Only_Item, Path, Paths, SCHEMA_VERSION, Take,
-    Temporary_Directory, Timestamp, AT_NOW, NOW,
+    Board, Board_After_The_Lease_Lapsed, Board_At, BoardOnDisk, ClaimRefusal, Holder, Item_Reserving_Files, ItemId,
+    LedgerDocument, Ledger_At, Item_Named_In_File, Only_Item, Path, Strings_From_Paths, SCHEMA_VERSION,
+    Claim_For_Holder, Temporary_Directory, Timestamp, AT_NOW, NOW,
 };
 use crate::watching_lock::{Assert_One_Lock_Acquisition, WatchedBoard, Watched_Board_At};
 
@@ -46,13 +46,14 @@ const WIDENINGS: usize = 2;
 #[test]
 fn Test_A_Holder_Should_Widen_Their_Own_Territory_And_The_Widening_Should_Be_Kept()
 {
-    let BoardOnDisk { directory: _directory, mut ledger } = Board_At("kept", vec![Item("T-1", &["a.rs"])]);
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("kept", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs", "c.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs", "c.rs"]))
         .expect("the holder may widen their own item");
-    assert_eq!(added, Paths(&["b.rs", "c.rs"]), "the verb reports what it added");
+    assert_eq!(added, Strings_From_Paths(&["b.rs", "c.rs"]), "the verb reports what it added");
     Assert_The_Widening_Was_Kept(&ledger, &["b.rs", "c.rs"]);
 }
 
@@ -62,13 +63,13 @@ fn Assert_The_Widening_Was_Kept(ledger: &Board, added: &[&str])
     let item = Only_Item(ledger);
     assert_eq!(
         item.territory.paths,
-        Paths(&["a.rs", "b.rs", "c.rs"]),
+        Strings_From_Paths(&["a.rs", "b.rs", "c.rs"]),
         "the reserved paths must be the original ones plus the added ones, in that order"
     );
     assert_eq!(item.widened.len(), 1, "one widening happened, so one is recorded");
     let recorded = item.widened.first().expect("the length was just asserted");
     assert_eq!(recorded.holder, "agent-a", "who found the reservation short");
-    assert_eq!(recorded.added, Paths(added), "and exactly what they added");
+    assert_eq!(recorded.added, Strings_From_Paths(added), "and exactly what they added");
     assert_eq!(
         recorded.widened_at,
         Timestamp::From_Unix_Seconds(NOW),
@@ -86,14 +87,14 @@ fn Assert_The_Widening_Was_Kept(ledger: &Board, added: &[&str])
 fn Test_Two_Widenings_Should_Be_Two_Rows_Rather_Than_One_Coalesced_One()
 {
     let BoardOnDisk { directory: _directory, mut ledger } =
-        Board_At("multiplicity", vec![Item("T-1", &["a.rs"])]);
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+        Board_At("multiplicity", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
         .expect("the first widening is granted");
     ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["c.rs", "d.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["c.rs", "d.rs"]))
         .expect("the second widening is granted");
     Assert_The_Widenings_Are_Two_Rows(&ledger);
 }
@@ -108,11 +109,11 @@ fn Assert_The_Widenings_Are_Two_Rows(ledger: &Board)
     {
         panic!("the length was just asserted");
     };
-    assert_eq!(first.added, Paths(&["b.rs"]), "oldest first");
-    assert_eq!(second.added, Paths(&["c.rs", "d.rs"]), "and the later one after it");
+    assert_eq!(first.added, Strings_From_Paths(&["b.rs"]), "oldest first");
+    assert_eq!(second.added, Strings_From_Paths(&["c.rs", "d.rs"]), "and the later one after it");
     assert_eq!(
         item.territory.paths,
-        Paths(&["a.rs", "b.rs", "c.rs", "d.rs"]),
+        Strings_From_Paths(&["a.rs", "b.rs", "c.rs", "d.rs"]),
         "and the territory carries every path either of them added"
     );
 }
@@ -127,17 +128,17 @@ fn Assert_The_Widenings_Are_Two_Rows(ledger: &Board)
 fn Test_A_Path_Already_Reserved_Should_Add_Nothing_And_Record_Nothing()
 {
     let BoardOnDisk { directory: _directory, mut ledger } =
-        Board_At("already", vec![Item("T-1", &["a.rs", "dir/b.rs"])]);
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+        Board_At("already", vec![Item_Reserving_Files("T-1", &["a.rs", "dir/b.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["a.rs", "./dir/b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["a.rs", "./dir/b.rs"]))
         .expect("asking for what you already hold is not an error");
 
     assert!(added.is_empty(), "nothing was added, so nothing is reported as added: {added:?}");
 
     let item = Only_Item(&ledger);
-    assert_eq!(item.territory.paths, Paths(&["a.rs", "dir/b.rs"]), "the territory is untouched");
+    assert_eq!(item.territory.paths, Strings_From_Paths(&["a.rs", "dir/b.rs"]), "the territory is untouched");
     assert!(
         item.widened.is_empty(),
         "a widening that added nothing must not be recorded as one: {:?}",
@@ -149,15 +150,16 @@ fn Test_A_Path_Already_Reserved_Should_Add_Nothing_And_Record_Nothing()
 #[test]
 fn Test_A_Path_Named_Twice_In_One_Widening_Should_Be_Added_Once()
 {
-    let BoardOnDisk { directory: _directory, mut ledger } = Board_At("twice", vec![Item("T-1", &["a.rs"])]);
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("twice", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs", "b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs", "b.rs"]))
         .expect("the holder may widen their own item");
 
-    assert_eq!(added, Paths(&["b.rs"]), "one path was added, however many times it was named");
-    assert_eq!(Only_Item(&ledger).territory.paths, Paths(&["a.rs", "b.rs"]));
+    assert_eq!(added, Strings_From_Paths(&["b.rs"]), "one path was added, however many times it was named");
+    assert_eq!(Only_Item(&ledger).territory.paths, Strings_From_Paths(&["a.rs", "b.rs"]));
 }
 
 /// Widening only ever adds, so every path reserved before one is still reserved after it.
@@ -170,12 +172,12 @@ fn Test_A_Path_Named_Twice_In_One_Widening_Should_Be_Added_Once()
 fn Test_Widening_Should_Never_Remove_A_Path()
 {
     let BoardOnDisk { directory: _directory, mut ledger } =
-        Board_At("superset", vec![Item("T-1", &["a.rs", "b.rs"])]);
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+        Board_At("superset", vec![Item_Reserving_Files("T-1", &["a.rs", "b.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let before = Only_Item(&ledger).territory.paths;
     ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["c.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["c.rs"]))
         .expect("the holder may widen their own item");
     let after = Only_Item(&ledger).territory.paths;
 
@@ -199,13 +201,13 @@ fn Test_A_Widening_Onto_Ground_A_Peer_Holds_Should_Be_Refused()
 {
     let BoardOnDisk { directory: _directory, mut ledger } = Board_At(
         "contested",
-        vec![Item("T-1", &["a.rs"]), Item("T-2", &["b.rs"])],
+        vec![Item_Reserving_Files("T-1", &["a.rs"]), Item_Reserving_Files("T-2", &["b.rs"])],
     );
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
-    Take(&mut ledger, "T-2", &Holder::from("agent-b"));
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-2", &Holder::from("agent-b"));
 
     let refusal = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
         .expect_err("b.rs is held by agent-b through T-2");
 
     assert!(
@@ -214,8 +216,8 @@ fn Test_A_Widening_Onto_Ground_A_Peer_Holds_Should_Be_Refused()
         refusal.Describe()
     );
 
-    let item = Named(&ledger, "T-1");
-    assert_eq!(item.territory.paths, Paths(&["a.rs"]), "a refused widening writes no path");
+    let item = Item_Named_In_File(&ledger, "T-1");
+    assert_eq!(item.territory.paths, Strings_From_Paths(&["a.rs"]), "a refused widening writes no path");
     assert!(item.widened.is_empty(), "and records no widening: {:?}", item.widened);
 }
 
@@ -229,26 +231,27 @@ fn Test_The_Same_Widening_Should_Be_Granted_When_No_Peer_Holds_The_Ground()
 {
     let BoardOnDisk { directory: _directory, mut ledger } = Board_At(
         "uncontested",
-        vec![Item("T-1", &["a.rs"]), Item("T-2", &["b.rs"])],
+        vec![Item_Reserving_Files("T-1", &["a.rs"]), Item_Reserving_Files("T-2", &["b.rs"])],
     );
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
         .expect("T-2 reserves b.rs but nobody is holding T-2");
 
-    assert_eq!(added, Paths(&["b.rs"]), "an unclaimed peer's territory excludes nobody");
+    assert_eq!(added, Strings_From_Paths(&["b.rs"]), "an unclaimed peer's territory excludes nobody");
 }
 
 /// Somebody who is not the holder may not widen, even onto free ground.
 #[test]
 fn Test_A_Widening_By_Somebody_Who_Is_Not_The_Holder_Should_Be_Refused()
 {
-    let BoardOnDisk { directory: _directory, mut ledger } = Board_At("notholder", vec![Item("T-1", &["a.rs"])]);
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("notholder", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let refusal = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-b"), &Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-b"), &Strings_From_Paths(&["b.rs"]))
         .expect_err("agent-b does not hold T-1");
 
     assert!(
@@ -256,7 +259,7 @@ fn Test_A_Widening_By_Somebody_Who_Is_Not_The_Holder_Should_Be_Refused()
         "the refusal must say who does hold it: {}",
         refusal.Describe()
     );
-    assert_eq!(Only_Item(&ledger).territory.paths, Paths(&["a.rs"]), "and write nothing");
+    assert_eq!(Only_Item(&ledger).territory.paths, Strings_From_Paths(&["a.rs"]), "and write nothing");
 }
 
 /// An item nobody holds may not be widened.
@@ -267,10 +270,11 @@ fn Test_A_Widening_By_Somebody_Who_Is_Not_The_Holder_Should_Be_Refused()
 #[test]
 fn Test_A_Widening_Of_An_Item_Nobody_Holds_Should_Be_Refused()
 {
-    let BoardOnDisk { directory: _directory, mut ledger } = Board_At("unclaimed", vec![Item("T-1", &["a.rs"])]);
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("unclaimed", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
 
     let refusal = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
         .expect_err("nobody holds T-1");
 
     assert!(
@@ -294,7 +298,7 @@ fn Test_A_Widening_By_A_Holder_Whose_Lease_Has_Run_Out_Should_Be_Refused()
     let BoardOnDisk { directory: _directory, mut ledger } = Board_After_The_Lease_Lapsed("lapsed");
 
     let refusal = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
         .expect_err("agent-a's lease ran out an hour ago");
     Assert_A_Lapse_Refuses(&refusal);
     Assert_No_Widening_Was_Written(&ledger);
@@ -319,7 +323,7 @@ fn Assert_A_Lapse_Refuses(refusal: &ClaimRefusal)
 fn Assert_No_Widening_Was_Written(ledger: &Board)
 {
     let item = Only_Item(ledger);
-    assert_eq!(item.territory.paths, Paths(&["a.rs"]), "a refused widening writes no path");
+    assert_eq!(item.territory.paths, Strings_From_Paths(&["a.rs"]), "a refused widening writes no path");
     assert!(item.widened.is_empty(), "and records no widening");
 }
 
@@ -328,14 +332,15 @@ fn Assert_No_Widening_Was_Written(ledger: &Board)
 #[test]
 fn Test_The_Same_Holder_Should_Widen_While_The_Lease_Is_Still_Live()
 {
-    let BoardOnDisk { directory: _directory, mut ledger } = Board_At("live", vec![Item("T-1", &["a.rs"])]);
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("live", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
         .expect("the lease has not run out");
 
-    assert_eq!(added, Paths(&["b.rs"]), "a live lease is what the refusal above turns on");
+    assert_eq!(added, Strings_From_Paths(&["b.rs"]), "a live lease is what the refusal above turns on");
 }
 
 
@@ -351,7 +356,7 @@ fn Test_A_Widening_Should_Decide_And_Write_Inside_One_Lock_Acquisition()
     let taken_before = log.lock().expect("the log is not poisoned").acquisitions;
 
     ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
         .expect("the holder may widen their own item");
     Assert_One_Lock_Acquisition(&log, taken_before);
 }
@@ -377,7 +382,7 @@ fn Test_An_Item_Written_Without_The_Widened_Field_Should_Be_Refused()
     let directory = Temporary_Directory("unmigrated");
     let ledger = Ledger_At(&directory, &AT_NOW);
     ledger
-        .Save(&LedgerDocument { schema_version: SCHEMA_VERSION, items: vec![Item("T-1", &["a.rs"])] })
+        .Save(&LedgerDocument { schema_version: SCHEMA_VERSION, items: vec![Item_Reserving_Files("T-1", &["a.rs"])] })
         .expect("a fresh ledger is valid");
 
     let path = directory.join("ledger.json");

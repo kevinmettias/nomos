@@ -5,9 +5,10 @@
 //! refusal is a different one from the item that is merely unusable.
 
 use crate::board::{
-    At, AT_LATER_SECONDS, AT_NOW, After_The_Lapse, Board, Board_At, ClaimRefusal, Claimant, Document, Finished,
-    Held_By, Item, ItemState, LEASE_SECONDS, Ledger_At, Ledger_When, NOW, Named, Only_Item, Path, PathBuf, Refused,
-    SCHEMA_VERSION, Standing, Standing_Of, Take, Take_Over_In, Temporary_Directory, Validate_Document,
+    Timestamp_From_Seconds, AT_LATER_SECONDS, AT_NOW, After_The_Lapse, Board, Board_At, ClaimRefusal, Claimant,
+    Document_Holding_Items, Item_Finished_With_Evidence, Held_By, Item_Reserving_Files, ItemState, LEASE_SECONDS,
+    Ledger_At, Ledger_When, NOW, Item_Named_In_File, Only_Item, Path, PathBuf, Refusal_From_Claim, SCHEMA_VERSION,
+    Standing, Standing_Of, Claim_For_Holder, Take_Over_In, Temporary_Directory, Validate_Document,
 };
 
 /// A moment a minute after the claim was taken, and so well inside its lease: the holder is
@@ -28,8 +29,9 @@ const AFTER_THE_SECOND_LEASE: i64 = AT_LATER_SECONDS + LEASE_SECONDS + LEASE_SEC
 #[test]
 fn Test_An_Item_With_A_Live_Claim_Should_Not_Be_Taken_Over()
 {
-    let Board { directory, mut ledger } = Board_At("takeover-refuses-live", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
+    let Board { directory, mut ledger } =
+        Board_At("takeover-refuses-live", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
 
     let mut during = Ledger_When(directory.As_Path(), STILL_WITHIN_THE_LEASE);
 
@@ -73,8 +75,8 @@ fn Items_A_Takeover_Must_Refuse() -> [(&'static str, &'static str); WRONG_VERB_C
 fn Test_Taking_Over_An_Item_Nobody_Holds_Should_Be_Refused()
 {
     let Board { directory: _directory, mut ledger } = Board_At("takeover-wrong-verb", vec![
-        Item("T-1", &["src/a.rs"]),
-        Finished("T-2", &["src/b.rs"]),
+        Item_Reserving_Files("T-1", &["src/a.rs"]),
+        Item_Finished_With_Evidence("T-2", &["src/b.rs"]),
     ]);
     for (item, what) in Items_A_Takeover_Must_Refuse()
     {
@@ -115,14 +117,14 @@ fn Test_A_Takeover_Should_Refuse_Territory_Somebody_Has_Since_Claimed()
 {
     // Two items over the same file. Concurrently claimable only while one of them is not.
     let Board { directory, mut ledger } = Board_At("takeover-refuses-taken-ground", vec![
-        Item("T-1", &["src/a.rs"]),
-        Item("T-2", &["src/a.rs"]),
+        Item_Reserving_Files("T-1", &["src/a.rs"]),
+        Item_Reserving_Files("T-2", &["src/a.rs"]),
     ]);
-    Take(&mut ledger, "T-1", Claimant("dead-agent"));
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("dead-agent"));
     // The second claim succeeds precisely because T-1's lapsed claim no longer excludes. That
     // is the state the takeover then has to notice.
     let mut after = After_The_Lapse(directory.As_Path());
-    Take(&mut after, "T-2", Claimant("agent-b"));
+    Claim_For_Holder(&mut after, "T-2", Claimant("agent-b"));
 
     let refusal = Take_Over_In(&mut after, "T-1", Claimant("agent-c"))
         .expect_err("the ground T-1 reserves is held by a live claim on T-2");
@@ -133,7 +135,7 @@ fn Test_A_Takeover_Should_Refuse_Territory_Somebody_Has_Since_Claimed()
         refusal.Describe()
     );
     assert_eq!(
-        Standing_Of(&Named("T-1", &after)),
+        Standing_Of(&Item_Named_In_File("T-1", &after)),
         Standing {
             held_by: Some("dead-agent"),
             displaced: Vec::new(),
@@ -151,8 +153,8 @@ fn Test_A_Takeover_Should_Refuse_Territory_Somebody_Has_Since_Claimed()
 #[test]
 fn Test_An_Item_Taken_Over_Twice_Should_Name_Both_Predecessors()
 {
-    let Board { directory, mut ledger } = Board_At("takeover-twice", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", Claimant("dead-agent"));
+    let Board { directory, mut ledger } = Board_At("takeover-twice", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("dead-agent"));
 
     let mut takes = Ledger_When(directory.As_Path(), AT_LATER_SECONDS);
     Take_Over_In(&mut takes, "T-1", Claimant("agent-b")).expect("the first holder's lease ran out");
@@ -233,8 +235,9 @@ fn Write_A_Claimed_Item_With_No_Claim(directory: &Path) -> PathBuf
 #[test]
 fn Test_An_Item_With_A_Displaced_Claim_Should_Round_Trip_Losslessly()
 {
-    let Board { directory, mut ledger } = Board_At("takeover-round-trip", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", Claimant("dead-agent"));
+    let Board { directory, mut ledger } =
+        Board_At("takeover-round-trip", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("dead-agent"));
 
     let mut after = After_The_Lapse(directory.As_Path());
     Take_Over_In(&mut after, "T-1", Claimant("agent-b")).expect("a lapsed item is takeable");
@@ -263,11 +266,11 @@ fn Test_An_Item_With_A_Displaced_Claim_Should_Round_Trip_Losslessly()
 #[test]
 fn Test_A_Claimed_Item_Recording_No_Claim_Should_Still_Be_Invalid()
 {
-    let mut item = Item("T-1", &["src/a.rs"]);
+    let mut item = Item_Reserving_Files("T-1", &["src/a.rs"]);
     item.state = ItemState::Claimed;
     item.claim = None;
 
-    let violations = Validate_Document(&Document(vec![item]), At(NOW));
+    let violations = Validate_Document(&Document_Holding_Items(vec![item]), Timestamp_From_Seconds(NOW));
 
     assert!(
         violations
@@ -282,10 +285,11 @@ fn Test_A_Claimed_Item_Recording_No_Claim_Should_Still_Be_Invalid()
 #[test]
 fn Test_A_Lapsed_Claim_Should_Not_Be_Reported_As_A_Violation()
 {
-    let document = Document(vec![Held_By(Item("T-1", &["src/a.rs"]), "agent-a", NOW - 1)]);
+    let document =
+        Document_Holding_Items(vec![Held_By(Item_Reserving_Files("T-1", &["src/a.rs"]), "agent-a", NOW - 1)]);
 
     assert_eq!(
-        Validate_Document(&document, At(NOW)),
+        Validate_Document(&document, Timestamp_From_Seconds(NOW)),
         Vec::<String>::new(),
         "a lease that ran out is the normal end of an agent that died, not a broken file"
     );
@@ -306,13 +310,13 @@ fn Test_An_Unusable_Ledger_Should_Not_Be_Reported_As_A_Missing_Item()
 {
     // A genuinely missing item over a ledger that is fine, and then the same call over a file
     // that is not a ledger at all.
-    let Board { directory, mut ledger } = Board_At("unusable-ledger", vec![Item("T-1", &["src/a.rs"])]);
-    let missing = Refused(&mut ledger, "T-NOPE", Claimant("agent-a"));
+    let Board { directory, mut ledger } = Board_At("unusable-ledger", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    let missing = Refusal_From_Claim(&mut ledger, "T-NOPE", Claimant("agent-a"));
 
     std::fs::write(directory.As_Path().join("ledger.json"), "{ not json")
         .expect("the corruption has to reach the disk");
     let mut broken = Ledger_At(directory.As_Path(), &AT_NOW);
-    let unusable = Refused(&mut broken, "T-1", Claimant("agent-a"));
+    let unusable = Refusal_From_Claim(&mut broken, "T-1", Claimant("agent-a"));
     Told_Apart(&missing, &unusable);
 }
 

@@ -1,8 +1,8 @@
 //! The second acceptance criterion: the snapshot is an artefact, not a directory.
 
 use crate::board::{
-    Claimed, Contest, Contested, Is_Covering, DeclaredPath, Record_Writers, ReservedPath, Saved,
-    SavedBoard, Unclaimed_Copy,
+    Claim_Item_For_Writer, Contest, Board_Contested_By_Two_Agents, Is_Covering, DeclaredPath, Record_Writers,
+    ReservedPath, Board_Saved_In_Scratch, SavedBoard, Unclaimed_Copy,
 };
 use nomos_ledger::{Holder, ItemId, LedgerDocument, LedgerItem, Normalize_Path, Territory};
 use std::collections::BTreeSet;
@@ -131,14 +131,14 @@ fn Test_Two_Items_Widening_Different_Crates_Should_Be_Held_At_Once()
     let SavedBoard {
         scratch: _scratch,
         mut ledger,
-    } = Saved("snapshot-grain", &document);
+    } = Board_Saved_In_Scratch("snapshot-grain", &document);
 
     for (writer, agent) in Claimants_Widening_Each_Crate(&first, &second)
     {
         let blame = format!(
             "{first} and {second} widen different crates' APIs and {writer} was still refused"
         );
-        Claimed(&mut ledger, writer, Holder::from(agent), &blame);
+        Claim_Item_For_Writer(&mut ledger, writer, Holder::from(agent), &blame);
     }
     ledger
         .Validate_Current()
@@ -170,7 +170,7 @@ fn Test_Restoring_The_Snapshot_Directory_Should_Refuse_The_Pair()
     let Contest {
         scratch: _scratch,
         refusal,
-    } = Contested("snapshot-directory-restored", &document, &first, &second);
+    } = Board_Contested_By_Two_Agents("snapshot-directory-restored", &document, &first, &second);
 
     assert!(
         refusal.Describe().contains("agent-a"),

@@ -5,9 +5,10 @@
 //! reason at all — nobody was there to give one.
 
 use crate::board::{
-    At, AT_LATER_SECONDS, Abandon, Abandonments, After_The_Lapse, Board, Board_At, ClaimRefusal, Claimant, Duration,
-    ExclusionLedger, Exits_With, Finish_In, FinishRefusal, Item, ItemId, ItemState, Item_Verified_By, LEASE, NOW,
-    Only_Item, REASON, Release_As_Finished, Take,
+    Timestamp_From_Seconds, AT_LATER_SECONDS, Abandon_Claim_With_Reason, Abandonments_Of_Item, After_The_Lapse, Board,
+    Board_At, ClaimRefusal, Claimant, Duration, ExclusionLedger, Exits_With, Finish_In, FinishRefusal,
+    Item_Reserving_Files, ItemId, ItemState, Item_Verified_By_String_Arguments, LEASE, NOW, Only_Item, REASON,
+    Release_As_Finished, Claim_For_Holder,
 };
 
 /// The Phase 0 acceptance criterion: a completion whose predicate exits non-zero is
@@ -15,12 +16,12 @@ use crate::board::{
 #[test]
 fn Test_Finishing_Should_Be_Refused_When_The_Predicate_Fails()
 {
-    let Board { directory, mut ledger } = Board_At("finish-fails", vec![Item_Verified_By(
+    let Board { directory, mut ledger } = Board_At("finish-fails", vec![Item_Verified_By_String_Arguments(
         "T-1",
         &["src/a.rs"],
         Exits_With(1),
     )]);
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
 
     let refusal = Finish_In(&mut ledger, directory.As_Path(), "T-1", Claimant("agent-a"))
     .expect_err("a predicate that exits non-zero must refuse the completion");
@@ -41,18 +42,18 @@ fn Test_Finishing_Should_Be_Refused_When_The_Predicate_Fails()
 #[test]
 fn Test_Finishing_Should_Succeed_When_The_Predicate_Passes()
 {
-    let Board { directory, mut ledger } = Board_At("finish-passes", vec![Item_Verified_By(
+    let Board { directory, mut ledger } = Board_At("finish-passes", vec![Item_Verified_By_String_Arguments(
         "T-1",
         &["src/a.rs"],
         Exits_With(0),
     )]);
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
 
     let record = Finish_In(&mut ledger, directory.As_Path(), "T-1", Claimant("agent-a"))
     .expect("a passing predicate must finish the item");
 
     assert_eq!(record.exit_code, 0);
-    assert_eq!(record.verified_at, At(NOW));
+    assert_eq!(record.verified_at, Timestamp_From_Seconds(NOW));
 
     let finished = Only_Item(&ledger);
     assert_eq!(finished.state, ItemState::Done);
@@ -70,8 +71,9 @@ fn Test_Finishing_Should_Succeed_When_The_Predicate_Passes()
 #[test]
 fn Test_Finishing_Should_Be_Refused_Without_A_Predicate()
 {
-    let Board { directory, mut ledger } = Board_At("finish-no-predicate", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
+    let Board { directory, mut ledger } =
+        Board_At("finish-no-predicate", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
 
     let refusal = Finish_In(&mut ledger, directory.As_Path(), "T-1", Claimant("agent-a"))
     .expect_err("an item with no predicate cannot be finished");
@@ -88,12 +90,12 @@ fn Test_Finishing_Should_Be_Refused_Without_A_Predicate()
 #[test]
 fn Test_An_Unstartable_Predicate_Should_Not_Judge_The_Work()
 {
-    let Board { directory, mut ledger } = Board_At("finish-unstartable", vec![Item_Verified_By(
+    let Board { directory, mut ledger } = Board_At("finish-unstartable", vec![Item_Verified_By_String_Arguments(
         "T-1",
         &["src/a.rs"],
         vec!["nomos-no-such-program-exists".to_owned()],
     )]);
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
 
     let refusal = Finish_In(&mut ledger, directory.As_Path(), "T-1", Claimant("agent-a"))
     .expect_err("a missing program is not a verdict");
@@ -108,8 +110,8 @@ fn Test_An_Unstartable_Predicate_Should_Not_Judge_The_Work()
 fn Test_Releasing_As_Finished_Should_Record_The_Verification()
 {
     let Board { directory: _directory, mut ledger } =
-        Board_At("finish-records", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
+        Board_At("finish-records", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
 
     Release_As_Finished(&mut ledger, "T-1", Claimant("agent-a"));
 
@@ -132,10 +134,10 @@ fn Test_Releasing_As_Finished_Should_Record_The_Verification()
 fn Test_Releasing_As_Abandoned_Should_Record_Who_Stopped_And_Why()
 {
     let Board { directory: _directory, mut ledger } =
-        Board_At("abandon-records", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
+        Board_At("abandon-records", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
 
-    Abandon(&mut ledger, "T-1", Claimant("agent-a"), REASON);
+    Abandon_Claim_With_Reason(&mut ledger, "T-1", Claimant("agent-a"), REASON);
 
     let item = Only_Item(&ledger);
     let abandonment = item
@@ -145,7 +147,7 @@ fn Test_Releasing_As_Abandoned_Should_Record_Who_Stopped_And_Why()
 
     assert_eq!(abandonment.reason, REASON, "the reason the holder gave was not kept");
     assert_eq!(abandonment.holder, "agent-a", "the record does not say who stopped");
-    assert_eq!(abandonment.abandoned_at, At(NOW), "the record does not say when");
+    assert_eq!(abandonment.abandoned_at, Timestamp_From_Seconds(NOW), "the record does not say when");
 }
 
 /// The second control, holding a line the crate already drew.
@@ -158,15 +160,15 @@ fn Test_Releasing_As_Abandoned_Should_Record_Who_Stopped_And_Why()
 fn Test_An_Abandoned_Item_Should_Return_To_Ready_And_Stop_Excluding()
 {
     let Board { directory: _directory, mut ledger } =
-        Board_At("abandon-releases", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
-    Abandon(&mut ledger, "T-1", Claimant("agent-a"), REASON);
+        Board_At("abandon-releases", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
+    Abandon_Claim_With_Reason(&mut ledger, "T-1", Claimant("agent-a"), REASON);
 
     let item = Only_Item(&ledger);
     assert_eq!(item.state, ItemState::Ready);
     assert!(item.claim.is_none(), "a claim that survives an abandonment goes on excluding");
 
-    Take(&mut ledger, "T-1", Claimant("agent-b"));
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-b"));
 
     let again = Only_Item(&ledger);
     assert_eq!(
@@ -195,19 +197,19 @@ fn Two_Abandonments() -> [(&'static str, &'static str); ABANDONMENTS_ON_THE_ITEM
 fn Test_An_Item_Abandoned_Twice_Should_Keep_Both_Reasons()
 {
     let Board { directory: _directory, mut ledger } =
-        Board_At("abandon-twice", vec![Item("T-1", &["src/a.rs"])]);
+        Board_At("abandon-twice", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
 
     for (holder, reason) in Two_Abandonments()
     {
         ledger
             .Claim(&ItemId::New("T-1"), holder, LEASE)
             .expect("an abandoned item is claimable again");
-        Abandon(&mut ledger, "T-1", Claimant(holder), reason);
+        Abandon_Claim_With_Reason(&mut ledger, "T-1", Claimant(holder), reason);
     }
 
     let item = Only_Item(&ledger);
     assert_eq!(
-        Abandonments(&item),
+        Abandonments_Of_Item(&item),
         vec![("agent-a", "ran out of lease"), ("agent-b", REASON)],
         "both abandonments must survive, oldest first"
     );
@@ -230,8 +232,8 @@ fn Test_An_Item_Abandoned_Twice_Should_Keep_Both_Reasons()
 #[test]
 fn Test_A_Lapsed_Claim_Should_Stay_Visible_And_Invent_No_Reason()
 {
-    let Board { directory, mut ledger } = Board_At("abandon-lapse", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
+    let Board { directory, mut ledger } = Board_At("abandon-lapse", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
 
     let lapsed = After_The_Lapse(directory.As_Path());
     let item = Only_Item(&lapsed);
@@ -246,7 +248,7 @@ fn Test_A_Lapsed_Claim_Should_Stay_Visible_And_Invent_No_Reason()
         "the lapsed claim was removed, so nothing says the work was ever started"
     );
     assert!(
-        !item.Has_Active_Claim(At(AT_LATER_SECONDS)),
+        !item.Has_Active_Claim(Timestamp_From_Seconds(AT_LATER_SECONDS)),
         "a lapsed claim must stop counting as an active claim"
     );
 }
@@ -255,7 +257,7 @@ fn Test_A_Lapsed_Claim_Should_Stay_Visible_And_Invent_No_Reason()
 fn Test_A_Lease_Beyond_The_Ceiling_Should_Be_Refused()
 {
     let Board { directory: _directory, mut ledger } =
-        Board_At("claim-lease", vec![Item("T-1", &["src/a.rs"])]);
+        Board_At("claim-lease", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
 
     let refusal = ledger
         .Claim(
@@ -272,8 +274,8 @@ fn Test_A_Lease_Beyond_The_Ceiling_Should_Be_Refused()
 fn Test_Renewing_Someone_Elses_Claim_Should_Be_Refused()
 {
     let Board { directory: _directory, mut ledger } =
-        Board_At("renew-foreign", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
+        Board_At("renew-foreign", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
 
     let refusal = ledger
         .Renew(&ItemId::New("T-1"), "agent-b", LEASE)

@@ -39,12 +39,12 @@ impl Clock for &FixedClock
     }
 }
 
-pub(crate) fn At(seconds: i64) -> Timestamp
+pub(crate) fn Timestamp_From_Seconds(seconds: i64) -> Timestamp
 {
     return Timestamp::From_Unix_Seconds(seconds);
 }
 
-pub(crate) fn Item(id: &str, files: &[&str]) -> LedgerItem
+pub(crate) fn Item_Reserving_Files(id: &str, files: &[&str]) -> LedgerItem
 {
     use nomos_ledger::Territory as ItemTerritory;
 
@@ -76,20 +76,20 @@ pub(crate) fn Item(id: &str, files: &[&str]) -> LedgerItem
 /// which needs the verification record store validation requires beside that state.
 pub(crate) fn Finished_Item(id: &str, files: &[&str]) -> LedgerItem
 {
-    let mut item = Item(id, files);
+    let mut item = Item_Reserving_Files(id, files);
     item.state = ItemState::Done;
     item.verified = Some(VerificationRecord {
         argv: vec!["cargo".to_owned(), "--version".to_owned()],
         exit_code: 0,
         output_tail: String::new(),
-        verified_at: At(NOW),
+        verified_at: Timestamp_From_Seconds(NOW),
         gate: None,
         revision: None,
     });
     return item;
 }
 
-fn Document(items: Vec<LedgerItem>) -> LedgerDocument
+fn Document_Holding_Items(items: Vec<LedgerItem>) -> LedgerDocument
 {
     return LedgerDocument {
         schema_version: SCHEMA_VERSION,
@@ -143,13 +143,13 @@ pub(crate) fn Board_At(name: &str, items: Vec<LedgerItem>) -> BoardOnDisk
 {
     let directory = Temporary_Directory(name);
     let ledger = Ledger_At(&directory, &AT_NOW);
-    ledger.Save(&Document(items)).expect("a fresh ledger is valid");
+    ledger.Save(&Document_Holding_Items(items)).expect("a fresh ledger is valid");
 
     return BoardOnDisk { directory, ledger };
 }
 
 /// One agent claims one item for the standard lease, and it is expected to succeed.
-pub(crate) fn Take<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &Holder<'_>)
+pub(crate) fn Claim_For_Holder<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &Holder<'_>)
 {
     ledger
         .Claim(&ItemId::New(item), holder.As_Text(), LEASE)
@@ -160,7 +160,7 @@ pub(crate) fn Take<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, hol
 
 /// A claim that is expected to be refused, with the refusal handed back as the value the
 /// test is about.
-pub(crate) fn Refused(ledger: &mut Board, item: &str, holder: &Holder<'_>) -> ClaimRefusal
+pub(crate) fn Refusal_From_Claim(ledger: &mut Board, item: &str, holder: &Holder<'_>) -> ClaimRefusal
 {
     return ledger
         .Claim(&ItemId::New(item), holder.As_Text(), LEASE)
@@ -168,7 +168,7 @@ pub(crate) fn Refused(ledger: &mut Board, item: &str, holder: &Holder<'_>) -> Cl
 }
 
 /// An item ended with the standard reason, which is expected to succeed.
-pub(crate) fn Decline(ledger: &mut Board, item: &str, holder: &Holder<'_>)
+pub(crate) fn Decline_Item_For_Reason(ledger: &mut Board, item: &str, holder: &Holder<'_>)
 {
     ledger
         .Decline(&ItemId::New(item), holder.As_Text(), REASON)

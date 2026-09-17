@@ -12,8 +12,9 @@
 mod fixtures;
 
 use crate::fixtures::{
-    At, Board, BoardOnDisk, Board_At, ClaimRefusal, Decline, Decline_Refused, Finished_Item, Give_Up,
-    Holder, Item, ItemId, ItemState, Only_Item, Refused, Remove_Scratch, Take, NOW, REASON,
+    Timestamp_From_Seconds, Board, BoardOnDisk, Board_At, ClaimRefusal, Decline_Item_For_Reason, Decline_Refused,
+    Finished_Item, Give_Up, Holder, Item_Reserving_Files, ItemId, ItemState, Only_Item, Refusal_From_Claim,
+    Remove_Scratch, Claim_For_Holder, NOW, REASON,
 };
 
 /// The whole point, on the shape that motivated it: an unclaimed `Ready` item.
@@ -23,9 +24,9 @@ use crate::fixtures::{
 #[test]
 fn Test_Declining_An_Unclaimed_Item_Should_End_It_And_Say_Who_Ended_It()
 {
-    let BoardOnDisk { directory, mut ledger } = Board_At("ends-it", vec![Item("T-1", &["src/a.rs"])]);
+    let BoardOnDisk { directory, mut ledger } = Board_At("ends-it", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
 
-    Decline(&mut ledger, "T-1", &Holder::from("agent-a"));
+    Decline_Item_For_Reason(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let item = Only_Item(&ledger);
     let declination = item
@@ -41,7 +42,7 @@ fn Test_Declining_An_Unclaimed_Item_Should_End_It_And_Say_Who_Ended_It()
         "the reason must be in the state, which is what makes it unreachable reasonlessly"
     );
     assert_eq!(declination.holder, "agent-a", "the item does not say who declined it");
-    assert_eq!(declination.declined_at, At(NOW), "the item does not say when");
+    assert_eq!(declination.declined_at, Timestamp_From_Seconds(NOW), "the item does not say when");
 
     Remove_Scratch(&directory);
 }
@@ -54,8 +55,8 @@ fn Test_Declining_An_Unclaimed_Item_Should_End_It_And_Say_Who_Ended_It()
 #[test]
 fn Test_A_Declination_Should_Not_Carry_A_Second_Copy_Of_The_Reason()
 {
-    let BoardOnDisk { directory, mut ledger } = Board_At("one-copy", vec![Item("T-1", &["src/a.rs"])]);
-    Decline(&mut ledger, "T-1", &Holder::from("agent-a"));
+    let BoardOnDisk { directory, mut ledger } = Board_At("one-copy", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    Decline_Item_For_Reason(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let raw = std::fs::read_to_string(directory.join("ledger.json"))
         .expect("Board_At saved this file and Decline saved it again");
@@ -73,15 +74,16 @@ fn Test_A_Declination_Should_Not_Carry_A_Second_Copy_Of_The_Reason()
 #[test]
 fn Test_A_Declined_Item_Should_Not_Be_Claimable()
 {
-    let BoardOnDisk { directory, mut ledger } = Board_At("not-claimable", vec![Item("T-1", &["src/a.rs"])]);
+    let BoardOnDisk { directory, mut ledger } =
+        Board_At("not-claimable", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
 
     // The control: it is claimable right up until it is declined, so the refusal below is
     // the decline's doing and not the fixture's.
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
     Give_Up(&mut ledger, "T-1", &Holder::from("agent-a"), "stopped to check whether the successor landed it");
-    Decline(&mut ledger, "T-1", &Holder::from("agent-a"));
+    Decline_Item_For_Reason(&mut ledger, "T-1", &Holder::from("agent-a"));
 
-    let refusal = Refused(&mut ledger, "T-1", &Holder::from("agent-b"));
+    let refusal = Refusal_From_Claim(&mut ledger, "T-1", &Holder::from("agent-b"));
 
     assert!(
         matches!(refusal, ClaimRefusal::NotClaimable { .. }),
@@ -105,18 +107,18 @@ fn Test_A_Declined_Item_Should_Not_Be_Claimable()
 fn Test_A_Declined_Item_Should_Stop_Excluding()
 {
     let BoardOnDisk { directory, mut ledger } = Board_At("stops-excluding", vec![
-        Item("T-1", &["src/shared.rs"]),
-        Item("T-2", &["src/shared.rs"]),
+        Item_Reserving_Files("T-1", &["src/shared.rs"]),
+        Item_Reserving_Files("T-2", &["src/shared.rs"]),
     ]);
 
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     // The control: while T-1 is held, the overlapping item is refused.
-    let _refused = Refused(&mut ledger, "T-2", &Holder::from("agent-b"));
+    let _refused = Refusal_From_Claim(&mut ledger, "T-2", &Holder::from("agent-b"));
 
     Give_Up(&mut ledger, "T-1", &Holder::from("agent-a"), "the successor reserves this ground correctly");
-    Decline(&mut ledger, "T-1", &Holder::from("agent-a"));
-    Take(&mut ledger, "T-2", &Holder::from("agent-b"));
+    Decline_Item_For_Reason(&mut ledger, "T-1", &Holder::from("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-2", &Holder::from("agent-b"));
 
     Assert_The_Decline_Left_No_Claim(&ledger);
 
@@ -155,8 +157,8 @@ fn Assert_The_Decline_Left_No_Claim(ledger: &Board)
 #[test]
 fn Test_Declining_A_Held_Item_Should_Be_Refused_Retryably()
 {
-    let BoardOnDisk { directory, mut ledger } = Board_At("held", vec![Item("T-1", &["src/a.rs"])]);
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+    let BoardOnDisk { directory, mut ledger } = Board_At("held", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let refusal = Decline_Refused(&mut ledger, "T-1", &Holder::from("agent-b"), REASON);
 
@@ -173,7 +175,7 @@ fn Test_Declining_A_Held_Item_Should_Be_Refused_Retryably()
 
     // The remedy the refusal names, run in full: the holder releases, and then it declines.
     Give_Up(&mut ledger, "T-1", &Holder::from("agent-a"), "there is nothing here to do");
-    Decline(&mut ledger, "T-1", &Holder::from("agent-b"));
+    Decline_Item_For_Reason(&mut ledger, "T-1", &Holder::from("agent-b"));
 
     Remove_Scratch(&directory);
 }
@@ -213,8 +215,8 @@ fn Test_Declining_A_Done_Item_Should_Be_A_Conflict()
 #[test]
 fn Test_Declining_A_Declined_Item_Should_Keep_The_First_Reason()
 {
-    let BoardOnDisk { directory, mut ledger } = Board_At("twice", vec![Item("T-1", &["src/a.rs"])]);
-    Decline(&mut ledger, "T-1", &Holder::from("agent-a"));
+    let BoardOnDisk { directory, mut ledger } = Board_At("twice", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
+    Decline_Item_For_Reason(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let refusal = Decline_Refused(&mut ledger, "T-1", &Holder::from("agent-b"), "a different reading entirely");
 
@@ -272,7 +274,7 @@ fn Assert_The_First_Reason_Survived(ledger: &Board)
 #[test]
 fn Test_A_Declined_Item_Should_Survive_Validation()
 {
-    let BoardOnDisk { directory, mut ledger } = Board_At("valid", vec![Item("T-1", &["src/a.rs"])]);
+    let BoardOnDisk { directory, mut ledger } = Board_At("valid", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
     ledger
         .Decline(&ItemId::New("T-1"), "agent-a", REASON)
         .expect("an unclaimed item may be declined");
@@ -288,7 +290,7 @@ fn Test_A_Declined_Item_Should_Survive_Validation()
 #[test]
 fn Test_Declining_An_Unknown_Item_Should_Name_The_Identifier()
 {
-    let BoardOnDisk { directory, mut ledger } = Board_At("unknown", vec![Item("T-1", &["src/a.rs"])]);
+    let BoardOnDisk { directory, mut ledger } = Board_At("unknown", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
 
     let refusal = ledger
         .Decline(&ItemId::New("T-2"), "agent-a", REASON)
@@ -309,7 +311,7 @@ fn Test_Declining_An_Unknown_Item_Should_Name_The_Identifier()
 #[test]
 fn Test_Declined_Should_Be_Reachable_Through_A_Verb()
 {
-    let BoardOnDisk { directory, mut ledger } = Board_At("reachable", vec![Item("T-1", &["src/a.rs"])]);
+    let BoardOnDisk { directory, mut ledger } = Board_At("reachable", vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
     ledger
         .Decline(&ItemId::New("T-1"), "agent-a", REASON)
         .expect("the verb is the only thing that may produce this state");

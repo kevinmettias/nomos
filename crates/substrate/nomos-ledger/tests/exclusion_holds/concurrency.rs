@@ -4,8 +4,9 @@
 //! the defect and not the machine.
 
 use crate::board::{
-    Abandon, AddRefusal, At, Claimant, ExclusionLedger, Held_By, Item, ItemId, ItemTerritory, LEASE, LEASE_ENDS_AT,
-    Mutex, NOW, REASON, Take, Validate_Document,
+    Abandon_Claim_With_Reason, AddRefusal, Timestamp_From_Seconds, Claimant, ExclusionLedger, Held_By,
+    Item_Reserving_Files, ItemId, ItemTerritory, LEASE, LEASE_ENDS_AT, Mutex, NOW, REASON, Claim_For_Holder,
+    Validate_Document,
 };
 use crate::interleaving::{Holder_Of, InterleavedLedger, Two_Writers};
 
@@ -31,14 +32,14 @@ fn Test_Two_Concurrent_Claims_Should_Both_Survive()
     let after = Two_Writers(
         "concurrent-claims",
         vec![
-        Item("T-1", &["src/a.rs"]),
-        Item("T-2", &["src/b.rs"]),
+        Item_Reserving_Files("T-1", &["src/a.rs"]),
+        Item_Reserving_Files("T-2", &["src/b.rs"]),
     ],
         |ledger| {
-            Take(ledger, "T-1", Claimant("agent-a"));
+            Claim_For_Holder(ledger, "T-1", Claimant("agent-a"));
         },
         |ledger| {
-            Take(ledger, "T-2", Claimant("agent-b"));
+            Claim_For_Holder(ledger, "T-2", Claimant("agent-b"));
         },
     );
 
@@ -67,14 +68,14 @@ fn Test_A_Release_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
     let after = Two_Writers(
         "concurrent-release",
         vec![
-        Held_By(Item("T-1", &["src/a.rs"]), "agent-a", LEASE_ENDS_AT),
-        Item("T-2", &["src/b.rs"]),
+        Held_By(Item_Reserving_Files("T-1", &["src/a.rs"]), "agent-a", LEASE_ENDS_AT),
+        Item_Reserving_Files("T-2", &["src/b.rs"]),
     ],
         |ledger| {
-            Abandon(ledger, "T-1", Claimant("agent-a"), REASON);
+            Abandon_Claim_With_Reason(ledger, "T-1", Claimant("agent-a"), REASON);
         },
         |ledger| {
-            Take(ledger, "T-2", Claimant("agent-b"));
+            Claim_For_Holder(ledger, "T-2", Claimant("agent-b"));
         },
     );
 
@@ -105,8 +106,8 @@ fn Test_A_Renewal_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
     let after = Two_Writers(
         "concurrent-renew",
         vec![
-        Held_By(Item("T-1", &["src/a.rs"]), "agent-a", LEASE_ABOUT_TO_RUN_OUT),
-        Item("T-2", &["src/b.rs"]),
+        Held_By(Item_Reserving_Files("T-1", &["src/a.rs"]), "agent-a", LEASE_ABOUT_TO_RUN_OUT),
+        Item_Reserving_Files("T-2", &["src/b.rs"]),
     ],
         |ledger| {
             ledger
@@ -114,7 +115,7 @@ fn Test_A_Renewal_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
                 .expect("a holder may renew its own claim");
         },
         |ledger| {
-            Take(ledger, "T-2", Claimant("agent-b"));
+            Claim_For_Holder(ledger, "T-2", Claimant("agent-b"));
         },
     );
 
@@ -131,7 +132,7 @@ fn Test_A_Renewal_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
             .find(|item| return item.id == ItemId::New("T-1"))
             .and_then(|item| return item.claim.as_ref())
             .map(|claim| return claim.lease_expires_at),
-        Some(At(LEASE_ENDS_AT)),
+        Some(Timestamp_From_Seconds(LEASE_ENDS_AT)),
         "the renewal the first writer was told had been recorded is not in the ledger"
     );
 }
@@ -152,15 +153,15 @@ fn Test_An_Add_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
 {
     let after = Two_Writers(
         "concurrent-add",
-        vec![Item("T-2", &["src/b.rs"])],
+        vec![Item_Reserving_Files("T-2", &["src/b.rs"])],
         |ledger| {
-            let item = Item("T-1", &["src/a.rs"]);
+            let item = Item_Reserving_Files("T-1", &["src/a.rs"]);
             ledger
                 .Add(&item, "agent-a", &ItemTerritory::Empty(), &ItemTerritory::Empty())
                 .expect("T-1 is not on the board yet");
         },
         |ledger| {
-            Take(ledger, "T-2", Claimant("agent-b"));
+            Claim_For_Holder(ledger, "T-2", Claimant("agent-b"));
         },
     );
 
@@ -227,7 +228,7 @@ fn Test_Two_Concurrent_Adds_Of_One_Identifier_Should_Not_Both_Be_Accepted()
         "one identifier is on the board twice, so the board no longer loads for anybody"
     );
     assert!(
-        Validate_Document(&after, At(NOW)).is_empty(),
+        Validate_Document(&after, Timestamp_From_Seconds(NOW)).is_empty(),
         "the board two accepted adds left behind is one the ledger itself calls invalid"
     );
 }
@@ -240,7 +241,7 @@ fn Adds_T_1(
     holder: Claimant<'_>,
 ) -> Result<(), AddRefusal>
 {
-    let item = Item("T-1", &[file]);
+    let item = Item_Reserving_Files("T-1", &[file]);
 
     return ledger.Add(&item, holder.0, &ItemTerritory::Empty(), &ItemTerritory::Empty());
 }

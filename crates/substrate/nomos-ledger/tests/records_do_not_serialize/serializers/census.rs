@@ -96,7 +96,7 @@ fn Broader_Of(mine: &str, right: &LedgerItem) -> Vec<String>
         .iter()
         .filter(|theirs| return !Normalize_Path(theirs).starts_with(RECORD_DIRECTORY))
         .filter(|theirs| return Is_Colliding(PathText(mine), PathText(theirs)))
-        .map(|theirs| return Broader(PathText(mine), PathText(theirs)))
+        .map(|theirs| return Broader_Of_Two_Paths(PathText(mine), PathText(theirs)))
         .collect();
 }
 
@@ -109,7 +109,7 @@ fn Broader_Of(mine: &str, right: &LedgerItem) -> Vec<String>
 /// Both positions are a [`PathText`] rather than a `&str`, and the same one, because this
 /// asks a symmetric question: the answer is whichever of the two is broader, so a caller
 /// that swaps them is asking the same question and cannot be given a different answer.
-fn Broader(mine: PathText<'_>, theirs: PathText<'_>) -> String
+fn Broader_Of_Two_Paths(mine: PathText<'_>, theirs: PathText<'_>) -> String
 {
     if Normalize_Path(mine.0).len() <= Normalize_Path(theirs.0).len()
     {

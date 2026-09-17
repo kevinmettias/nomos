@@ -39,7 +39,7 @@ const ABSURDLY_LONG_LEASE_SECONDS: u64 = 9_999_999;
 /// One hour, in seconds — the ceiling the absurd request above is measured against.
 const ONE_HOUR_SECONDS: u64 = 3_600;
 
-fn At(seconds: i64) -> Timestamp
+fn Timestamp_From_Seconds(seconds: i64) -> Timestamp
 {
     return Timestamp::From_Unix_Seconds(seconds);
 }
@@ -68,7 +68,7 @@ fn Dispatch_Universe() -> [Refusal; DISPATCH_REFUSAL_COUNT]
     return [
         Refusal::HeldBy {
             holder: "agent-a".to_owned(),
-            until: At(NOW_SECONDS),
+            until: Timestamp_From_Seconds(NOW_SECONDS),
             item: ItemId::New("T-1"),
         },
         Refusal::UnknownIndependence {
@@ -82,12 +82,12 @@ fn Dispatch_Universe() -> [Refusal; DISPATCH_REFUSAL_COUNT]
         Refusal::Lapsed {
             item: ItemId::New("T-3"),
             holder: "dead-agent".to_owned(),
-            since: At(NOW_SECONDS),
+            since: Timestamp_From_Seconds(NOW_SECONDS),
         },
         Refusal::StillHeld {
             item: ItemId::New("T-4"),
             holder: "agent-b".to_owned(),
-            until: At(NOW_SECONDS),
+            until: Timestamp_From_Seconds(NOW_SECONDS),
         },
         Refusal::LedgerUnusable {
             cause: "disk full".to_owned(),
@@ -225,7 +225,7 @@ fn Test_Layer_And_Retryability_Are_Independent_Axes()
 {
     let held_by = Refusal::HeldBy {
         holder: "agent-a".to_owned(),
-        until: At(NOW_SECONDS),
+        until: Timestamp_From_Seconds(NOW_SECONDS),
         item: ItemId::New("T-1"),
     };
     let dependency_unmet = Refusal::DependencyUnmet {

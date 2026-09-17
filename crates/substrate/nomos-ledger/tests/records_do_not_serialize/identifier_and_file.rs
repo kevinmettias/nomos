@@ -1,7 +1,7 @@
 //! OD-LEDGER-016: the identifier and the file it names are one record.
 
 use crate::board::{
-    Contest, Contested, PathText, Is_Colliding, RECORD_DIRECTORY, Repository_Root,
+    Contest, Board_Contested_By_Two_Agents, PathText, Is_Colliding, RECORD_DIRECTORY, Repository_Root,
     Two_Record_Writers, TwoWriters,
 };
 use nomos_ledger::{ClaimRefusal, Territory};
@@ -57,7 +57,7 @@ fn Test_An_Item_Naming_A_Records_File_Should_Be_Refused_By_Its_Identifiers_Holde
     let Contest {
         scratch: _scratch,
         refusal,
-    } = Contested("record-stem", &document, &first, &second);
+    } = Board_Contested_By_Two_Agents("record-stem", &document, &first, &second);
 
     assert!(
         matches!(refusal, ClaimRefusal::HeldBy { .. }),

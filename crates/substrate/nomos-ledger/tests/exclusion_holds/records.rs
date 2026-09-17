@@ -6,8 +6,9 @@
 //! what it is holding.
 
 use crate::board::{
-    AddRefusal, At, AT_NOW, Board, Board_At, Declination, Document, FileLedger, FileLock, FixedClock, Item, ItemId,
-    ItemState, ItemTerritory, Ledger_At, LedgerItem, NOW, StdFileSystem, Temporary_Directory, VerificationRecord,
+    AddRefusal, Timestamp_From_Seconds, AT_NOW, Board, Board_At, Declination, Document_Holding_Items, FileLedger,
+    FileLock, FixedClock, Item_Reserving_Files, ItemId, ItemState, ItemTerritory, Ledger_At, LedgerItem, NOW,
+    StdFileSystem, Temporary_Directory, VerificationRecord,
 };
 
 /// An item the board cannot hold is the caller's to correct, not a broken store.
@@ -25,7 +26,7 @@ fn Test_An_Item_That_Would_Not_Validate_Should_Refuse_As_The_Authors_Mistake()
 {
     let Board { directory: _directory, mut ledger } = Board_At("add-would-not-validate", Vec::new());
 
-    let item = Item("T-1", &[]);
+    let item = Item_Reserving_Files("T-1", &[]);
     let refused =
         ledger.Add(&item, "agent-a", &ItemTerritory::Empty(), &ItemTerritory::Empty());
 
@@ -60,11 +61,11 @@ const RESERVED_RECORD: &str = "docs/records/OD-LEDGER-020";
 /// positions to each other and get an item that reads correctly while reserving something else.
 fn Reserving_Record(id: &ItemId, identifier: &str) -> LedgerItem
 {
-    return Item(id.As_Text(), &["crates/a/src/lib.rs", identifier]);
+    return Item_Reserving_Files(id.As_Text(), &["crates/a/src/lib.rs", identifier]);
 }
 
 /// A published record, spelled as the file it actually is rather than as its identifier.
-fn Published(files: &[&str]) -> ItemTerritory
+fn Territory_Of_Published_Records(files: &[&str]) -> ItemTerritory
 {
     return ItemTerritory::Of_Files(files.iter().map(|file| return (*file).to_owned()));
 }
@@ -89,7 +90,7 @@ fn Test_A_Record_Identifier_Already_Published_Should_Be_Refused_By_Its_File()
     let refused = ledger.Add(
         &item,
         "agent-a",
-        &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Territory_Of_Published_Records(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
         &ItemTerritory::Empty(),
     );
 
@@ -119,7 +120,7 @@ fn Test_An_Unspent_Record_Identifier_Should_Still_Be_Accepted()
     let added = ledger.Add(
         &item,
         "agent-a",
-        &Published(&[
+        &Territory_Of_Published_Records(&[
             "docs/records/OD-LEDGER-006-a-reason-does-not-survive.md",
             // The ordinal is compared as a whole component, so this must not make `007`
             // look taken. `0071` is not `007`, and a prefix rule would say it is.
@@ -137,7 +138,7 @@ fn Test_An_Unspent_Record_Identifier_Should_Still_Be_Accepted()
 /// The same shape as [`Published`] and deliberately a different name at the call site: the
 /// two arguments are both record files and mean opposite things, and a reader who sees
 /// `Published` twice has to work out which one is the claim and which is the repository.
-fn Amending(files: &[&str]) -> ItemTerritory
+fn Territory_Of_Amended_Records(files: &[&str]) -> ItemTerritory
 {
     return ItemTerritory::Of_Files(files.iter().map(|file| return (*file).to_owned()));
 }
@@ -177,8 +178,8 @@ fn Test_A_Published_Record_Declared_As_An_Amendment_Should_Be_Accepted()
             ledger.Add(
                 &item,
                 "agent-a",
-                &Published(&[PUBLISHED_RECORD_FILE]),
-                &Amending(&[spelled])
+                &Territory_Of_Published_Records(&[PUBLISHED_RECORD_FILE]),
+                &Territory_Of_Amended_Records(&[spelled])
             ),
             Ok(()),
             "an amendment declared by {described} was refused as an allocation"
@@ -205,8 +206,8 @@ fn Test_An_Amendment_Should_Not_Exempt_A_Record_Another_Open_Item_Reserves()
     let refused = ledger.Add(
         &item,
         "agent-b",
-        &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
-        &Amending(&["docs/records/OD-LEDGER-006"]),
+        &Territory_Of_Published_Records(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Territory_Of_Amended_Records(&["docs/records/OD-LEDGER-006"]),
     );
 
     let Err(AddRefusal::RecordReserved { identifier, item }) = refused
@@ -233,8 +234,8 @@ fn Test_A_Declared_Amendment_Of_An_Unpublished_Record_Should_Be_Refused()
     let refused = ledger.Add(
         &item,
         "agent-a",
-        &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
-        &Amending(&["docs/records/OD-LEDGER-099"]),
+        &Territory_Of_Published_Records(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Territory_Of_Amended_Records(&["docs/records/OD-LEDGER-099"]),
     );
 
     let Err(AddRefusal::AmendmentNotPublished { identifier }) = refused
@@ -286,8 +287,8 @@ fn Amend_With_A_Slug_Nobody_Published(
         .Add(
             &item,
             "agent-a",
-            &Published(&[published]),
-            &Amending(&["docs/records/OD-LEDGER-006-a-slug-nobody-published.md"]),
+            &Territory_Of_Published_Records(&[published]),
+            &Territory_Of_Amended_Records(&["docs/records/OD-LEDGER-006-a-slug-nobody-published.md"]),
         )
         .expect_err("the misspelled amendment must not be accepted as an allocation");
 }
@@ -329,8 +330,8 @@ fn Test_A_Declared_Amendment_Spelled_As_A_Bare_Identifier_Should_Still_Be_Accept
     let added = ledger.Add(
         &item,
         "agent-a",
-        &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
-        &Amending(&["docs/records/OD-LEDGER-006"]),
+        &Territory_Of_Published_Records(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Territory_Of_Amended_Records(&["docs/records/OD-LEDGER-006"]),
     );
 
     assert!(added.is_ok(), "the bare spelling is one of the two the fold admits: {added:?}");
@@ -384,7 +385,7 @@ fn Test_A_Published_Identifier_And_A_Reserved_One_Should_Be_Different_Refusals()
     let published = ledger.Add(
         &publishing,
         "agent-b",
-        &Published(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Territory_Of_Published_Records(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
         &ItemTerritory::Empty(),
     );
 
@@ -429,7 +430,7 @@ fn Test_A_Closed_Items_Record_Reservation_Should_Not_Reserve_Anything()
     {
         let described = format!("{state:?}");
         ledger
-            .Save(&Document(vec![Closed_Reserving(RESERVED_RECORD, state)]))
+            .Save(&Document_Holding_Items(vec![Closed_Reserving(RESERVED_RECORD, state)]))
             .expect("the closed item the fixture built is a valid document");
 
         let item = Reserving_Record(&ItemId::New("T-2"), RESERVED_RECORD);
@@ -453,7 +454,7 @@ fn Closed_Reserving(record: &str, state: ItemState) -> LedgerItem
     {
         closed.declined = Some(Declination {
             holder: "agent-a".to_owned(),
-            declined_at: At(NOW),
+            declined_at: Timestamp_From_Seconds(NOW),
         });
     }
     else
@@ -462,7 +463,7 @@ fn Closed_Reserving(record: &str, state: ItemState) -> LedgerItem
             argv: vec!["cargo".to_owned(), "test".to_owned()],
             exit_code: 0,
             output_tail: "test result: ok".to_owned(),
-            verified_at: At(NOW),
+            verified_at: Timestamp_From_Seconds(NOW),
             gate: None,
             revision: None,
         });
@@ -482,9 +483,9 @@ fn Closed_Reserving(record: &str, state: ItemState) -> LedgerItem
 fn Test_Ordinary_Shared_Territory_Should_Still_Be_Accepted()
 {
     let Board { directory: _directory, mut ledger } =
-        Board_At("add-shared-territory", vec![Item("T-1", &["crates/a/src/lib.rs"])]);
+        Board_At("add-shared-territory", vec![Item_Reserving_Files("T-1", &["crates/a/src/lib.rs"])]);
 
-    let item = Item("T-2", &["crates/a/src/lib.rs"]);
+    let item = Item_Reserving_Files("T-2", &["crates/a/src/lib.rs"]);
     let added =
         ledger.Add(&item, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty());
 

@@ -56,7 +56,7 @@ pub(crate) struct BoardOnDisk
     pub(crate) ledger: Board,
 }
 
-pub(crate) fn Item(id: &str, files: &[&str]) -> LedgerItem
+pub(crate) fn Item_Reserving_Files(id: &str, files: &[&str]) -> LedgerItem
 {
     return LedgerItem {
         id: ItemId::New(id),
@@ -133,8 +133,8 @@ pub(crate) fn Board_At(name: &str, items: Vec<LedgerItem>) -> BoardOnDisk
 /// which is the only shape in which a lapse can be observed at all.
 pub(crate) fn Board_After_The_Lease_Lapsed(name: &str) -> BoardOnDisk
 {
-    let BoardOnDisk { directory, mut ledger } = Board_At(name, vec![Item("T-1", &["a.rs"])]);
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+    let BoardOnDisk { directory, mut ledger } = Board_At(name, vec![Item_Reserving_Files("T-1", &["a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
     drop(ledger);
 
     let ledger = Ledger_At(&directory, &AT_LATER);
@@ -142,14 +142,14 @@ pub(crate) fn Board_After_The_Lease_Lapsed(name: &str) -> BoardOnDisk
 }
 
 /// One agent claims one item for the standard lease, and it is expected to succeed.
-pub(crate) fn Take<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &Holder<'_>)
+pub(crate) fn Claim_For_Holder<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: &Holder<'_>)
 {
     ledger
         .Claim(&ItemId::New(item), holder.As_Text(), LEASE)
         .unwrap_or_else(|refusal| panic!("the fixture claim was refused: {}", refusal.Describe()));
 }
 
-pub(crate) fn Paths(paths: &[&str]) -> Vec<String>
+pub(crate) fn Strings_From_Paths(paths: &[&str]) -> Vec<String>
 {
     return paths.iter().map(|path| return (*path).to_owned()).collect();
 }
@@ -171,7 +171,7 @@ where
 }
 
 /// One item off a board, by id, read back off disk.
-pub(crate) fn Named<Files, TimeSource, Lock>(
+pub(crate) fn Item_Named_In_File<Files, TimeSource, Lock>(
     ledger: &FileLedger<Files, TimeSource, Lock>,
     id: &str,
 ) -> LedgerItem

@@ -5,7 +5,8 @@
 // ---------------------------------------------------------------------------------------
 
 use crate::fixtures::{
-    FixedClock, Holder, Item, LedgerDocument, SCHEMA_VERSION, Take, Temporary_Directory, AT_NOW,
+    FixedClock, Holder, Item_Reserving_Files, LedgerDocument, SCHEMA_VERSION, Claim_For_Holder, Temporary_Directory,
+    AT_NOW,
 };
 use nomos_ledger::FileLedger;
 use nomos_platform::{
@@ -145,9 +146,9 @@ pub(crate) fn Watched_Board_At(name: &str) -> WatchedBoard
         },
     );
     ledger
-        .Save(&LedgerDocument { schema_version: SCHEMA_VERSION, items: vec![Item("T-1", &["a.rs"])] })
+        .Save(&LedgerDocument { schema_version: SCHEMA_VERSION, items: vec![Item_Reserving_Files("T-1", &["a.rs"])] })
         .expect("a fresh ledger is valid");
-    Take(&mut ledger, "T-1", &Holder::from("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
     log.lock().expect("the log is not poisoned").at_release.clear();
 
     return WatchedBoard { directory, log, ledger };

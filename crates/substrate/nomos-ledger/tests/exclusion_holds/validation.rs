@@ -4,19 +4,19 @@
 //! the list, and a validator that stops at the first fault turns one edit into several.
 
 use crate::board::{
-    At, Document, Held_By, Item, ItemId, ItemState, LEASE_ENDS_AT, NOW, Patterned, SetResolution, Validate_Document,
-    VerificationPredicate, VerificationRecord,
+    Timestamp_From_Seconds, Document_Holding_Items, Held_By, Item_Reserving_Files, ItemId, ItemState, LEASE_ENDS_AT,
+    NOW, Item_With_Pattern, SetResolution, Validate_Document, VerificationPredicate, VerificationRecord,
 };
 
 #[test]
 fn Test_Validate_Should_Refuse_Two_Active_Claims_On_Overlapping_Territory()
 {
-    let document = Document(vec![
-        Held_By(Item("T-1", &["src/a.rs", "src/b.rs"]), "agent-a", LEASE_ENDS_AT),
-        Held_By(Item("T-2", &["src/b.rs", "src/c.rs"]), "agent-b", LEASE_ENDS_AT),
+    let document = Document_Holding_Items(vec![
+        Held_By(Item_Reserving_Files("T-1", &["src/a.rs", "src/b.rs"]), "agent-a", LEASE_ENDS_AT),
+        Held_By(Item_Reserving_Files("T-2", &["src/b.rs", "src/c.rs"]), "agent-b", LEASE_ENDS_AT),
     ]);
 
-    let violations = Validate_Document(&document, At(NOW));
+    let violations = Validate_Document(&document, Timestamp_From_Seconds(NOW));
 
     assert!(
         violations.iter().any(|violation| violation.contains("overlapping")),
@@ -29,13 +29,13 @@ fn Test_Validate_Should_Refuse_Two_Active_Claims_On_Overlapping_Territory()
 #[test]
 fn Test_Validate_Should_Accept_Two_Active_Claims_On_Disjoint_Territory()
 {
-    let document = Document(vec![
-        Held_By(Item("T-1", &["src/a.rs"]), "agent-a", LEASE_ENDS_AT),
-        Held_By(Item("T-2", &["src/c.rs"]), "agent-b", LEASE_ENDS_AT),
+    let document = Document_Holding_Items(vec![
+        Held_By(Item_Reserving_Files("T-1", &["src/a.rs"]), "agent-a", LEASE_ENDS_AT),
+        Held_By(Item_Reserving_Files("T-2", &["src/c.rs"]), "agent-b", LEASE_ENDS_AT),
     ]);
 
     assert_eq!(
-        Validate_Document(&document, At(NOW)),
+        Validate_Document(&document, Timestamp_From_Seconds(NOW)),
         Vec::<String>::new(),
         "disjoint territory must not be reported as a conflict"
     );
@@ -46,12 +46,12 @@ fn Test_Validate_Should_Accept_Two_Active_Claims_On_Disjoint_Territory()
 #[test]
 fn Test_A_Lapsed_Claim_Should_Not_Conflict()
 {
-    let document = Document(vec![
-        Held_By(Item("T-1", &["src/b.rs"]), "agent-a", NOW - 1),
-        Held_By(Item("T-2", &["src/b.rs"]), "agent-b", LEASE_ENDS_AT),
+    let document = Document_Holding_Items(vec![
+        Held_By(Item_Reserving_Files("T-1", &["src/b.rs"]), "agent-a", NOW - 1),
+        Held_By(Item_Reserving_Files("T-2", &["src/b.rs"]), "agent-b", LEASE_ENDS_AT),
     ]);
 
-    let violations = Validate_Document(&document, At(NOW));
+    let violations = Validate_Document(&document, Timestamp_From_Seconds(NOW));
 
     assert!(
         !violations.iter().any(|violation| violation.contains("overlapping")),
@@ -64,15 +64,15 @@ fn Test_A_Lapsed_Claim_Should_Not_Conflict()
 #[test]
 fn Test_Incomparable_Territory_Should_Be_Reported_Not_Ignored()
 {
-    let mut second = Item("T-2", &["src/b.rs"]);
+    let mut second = Item_Reserving_Files("T-2", &["src/b.rs"]);
     second.territory.resolution = SetResolution::Symbol;
 
-    let document = Document(vec![
-        Held_By(Item("T-1", &["src/b.rs"]), "agent-a", LEASE_ENDS_AT),
+    let document = Document_Holding_Items(vec![
+        Held_By(Item_Reserving_Files("T-1", &["src/b.rs"]), "agent-a", LEASE_ENDS_AT),
         Held_By(second, "agent-b", LEASE_ENDS_AT),
     ]);
 
-    let violations = Validate_Document(&document, At(NOW));
+    let violations = Validate_Document(&document, Timestamp_From_Seconds(NOW));
 
     assert!(
         violations
@@ -89,9 +89,9 @@ fn Test_Incomparable_Territory_Should_Be_Reported_Not_Ignored()
 #[test]
 fn Test_Validate_Should_Refuse_A_Territory_Carrying_A_Pattern()
 {
-    let document = Document(vec![Patterned("T-1", &["src/a.rs"], "crates/spec/**")]);
+    let document = Document_Holding_Items(vec![Item_With_Pattern("T-1", &["src/a.rs"], "crates/spec/**")]);
 
-    let violations = Validate_Document(&document, At(NOW));
+    let violations = Validate_Document(&document, Timestamp_From_Seconds(NOW));
 
     assert!(
         violations
@@ -106,9 +106,9 @@ fn Test_Validate_Should_Refuse_A_Territory_Carrying_A_Pattern()
 #[test]
 fn Test_Validate_Should_Accept_A_Territory_With_No_Pattern()
 {
-    let document = Document(vec![Item("T-1", &["src/a.rs"])]);
+    let document = Document_Holding_Items(vec![Item_Reserving_Files("T-1", &["src/a.rs"])]);
 
-    let violations = Validate_Document(&document, At(NOW));
+    let violations = Validate_Document(&document, Timestamp_From_Seconds(NOW));
 
     assert!(
         !violations.iter().any(|violation| violation.contains("pattern")),
@@ -123,10 +123,10 @@ fn Test_Validate_Should_Accept_A_Territory_With_No_Pattern()
 #[test]
 fn Test_A_Done_Item_Should_Require_Recorded_Verification()
 {
-    let mut finished = Item("T-1", &["src/a.rs"]);
+    let mut finished = Item_Reserving_Files("T-1", &["src/a.rs"]);
     finished.state = ItemState::Done;
 
-    let violations = Validate_Document(&Document(vec![finished]), At(NOW));
+    let violations = Validate_Document(&Document_Holding_Items(vec![finished]), Timestamp_From_Seconds(NOW));
 
     assert!(
         violations
@@ -140,27 +140,30 @@ fn Test_A_Done_Item_Should_Require_Recorded_Verification()
 #[test]
 fn Test_A_Verified_Done_Item_Should_Be_Accepted()
 {
-    let mut finished = Item("T-1", &["src/a.rs"]);
+    let mut finished = Item_Reserving_Files("T-1", &["src/a.rs"]);
     finished.state = ItemState::Done;
     finished.verified = Some(VerificationRecord {
         argv: vec!["cargo".to_owned(), "test".to_owned()],
         exit_code: 0,
         output_tail: "test result: ok".to_owned(),
-        verified_at: At(NOW),
+        verified_at: Timestamp_From_Seconds(NOW),
         gate: None,
         revision: None,
     });
 
-    assert_eq!(Validate_Document(&Document(vec![finished]), At(NOW)), Vec::<String>::new());
+    assert_eq!(
+        Validate_Document(&Document_Holding_Items(vec![finished]), Timestamp_From_Seconds(NOW)),
+        Vec::<String>::new()
+    );
 }
 
 #[test]
 fn Test_An_Unrunnable_Predicate_Should_Be_Refused()
 {
-    let mut item = Item("T-1", &["src/a.rs"]);
+    let mut item = Item_Reserving_Files("T-1", &["src/a.rs"]);
     item.verification = Some(VerificationPredicate::From_String_Arguments(Vec::new()));
 
-    let violations = Validate_Document(&Document(vec![item]), At(NOW));
+    let violations = Validate_Document(&Document_Holding_Items(vec![item]), Timestamp_From_Seconds(NOW));
 
     assert!(
         violations
@@ -173,10 +176,10 @@ fn Test_An_Unrunnable_Predicate_Should_Be_Refused()
 #[test]
 fn Test_A_Blocked_Item_Should_Say_Why()
 {
-    let mut item = Item("T-1", &["src/a.rs"]);
+    let mut item = Item_Reserving_Files("T-1", &["src/a.rs"]);
     item.state = ItemState::Blocked;
 
-    let violations = Validate_Document(&Document(vec![item]), At(NOW));
+    let violations = Validate_Document(&Document_Holding_Items(vec![item]), Timestamp_From_Seconds(NOW));
 
     assert!(
         violations
@@ -197,14 +200,15 @@ const FAULTS_PLANTED_IN_THE_DOCUMENT: usize = 3;
 #[test]
 fn Test_Validation_Should_Report_Every_Violation_At_Once()
 {
-    let mut blocked = Item("T-1", &["src/a.rs"]);
+    let mut blocked = Item_Reserving_Files("T-1", &["src/a.rs"]);
     blocked.state = ItemState::Blocked;
-    let mut done = Item("T-2", &["src/b.rs"]);
+    let mut done = Item_Reserving_Files("T-2", &["src/b.rs"]);
     done.state = ItemState::Done;
-    let mut dangling = Item("T-3", &["src/c.rs"]);
+    let mut dangling = Item_Reserving_Files("T-3", &["src/c.rs"]);
     dangling.depends_on = vec![ItemId::New("T-99")];
 
-    let violations = Validate_Document(&Document(vec![blocked, done, dangling]), At(NOW));
+    let violations =
+        Validate_Document(&Document_Holding_Items(vec![blocked, done, dangling]), Timestamp_From_Seconds(NOW));
 
     assert!(
         violations.len() >= FAULTS_PLANTED_IN_THE_DOCUMENT,

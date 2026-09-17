@@ -5,21 +5,21 @@
 //! it — because a board is shared and a refusal is not an accusation.
 
 use crate::board::{
-    At, Board, Board_At, Board_Written_By_Hand, ClaimRefusal, Claimant, FileLedger, FileLock, Item, ItemId,
-    LEASE_ENDS_AT, Patterned, Refused, StdFileSystem, Take,
+    Timestamp_From_Seconds, Board, Board_At, Board_Written_By_Hand, ClaimRefusal, Claimant, FileLedger, FileLock,
+    Item_Reserving_Files, ItemId, LEASE_ENDS_AT, Item_With_Pattern, Refusal_From_Claim, StdFileSystem, Claim_For_Holder,
 };
 
 #[test]
 fn Test_Claiming_Overlapping_Territory_Should_Be_Refused()
 {
     let Board { directory: _directory, mut ledger } = Board_At("claim-overlap", vec![
-        Item("T-1", &["src/a.rs", "src/shared.rs"]),
-        Item("T-2", &["src/shared.rs", "src/b.rs"]),
+        Item_Reserving_Files("T-1", &["src/a.rs", "src/shared.rs"]),
+        Item_Reserving_Files("T-2", &["src/shared.rs", "src/b.rs"]),
     ]);
 
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
 
-    let refusal = Refused(&mut ledger, "T-2", Claimant("agent-b"));
+    let refusal = Refusal_From_Claim(&mut ledger, "T-2", Claimant("agent-b"));
 
     assert!(matches!(refusal, ClaimRefusal::HeldBy { .. }));
     assert!(refusal.Is_Retryable(), "a held item is a queue, not a wall");
@@ -32,12 +32,12 @@ fn Test_Claiming_Overlapping_Territory_Should_Be_Refused()
 fn Test_Claiming_Disjoint_Territory_Should_Succeed_Concurrently()
 {
     let Board { directory: _directory, mut ledger } = Board_At("claim-disjoint", vec![
-        Item("T-1", &["src/a.rs"]),
-        Item("T-2", &["src/b.rs"]),
+        Item_Reserving_Files("T-1", &["src/a.rs"]),
+        Item_Reserving_Files("T-2", &["src/b.rs"]),
     ]);
 
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
-    Take(&mut ledger, "T-2", Claimant("agent-b"));
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-2", Claimant("agent-b"));
 
     ledger.Validate_Current().expect("both claims are legitimate");
 }
@@ -73,9 +73,9 @@ fn Claimants_Of_The_Pattern_Bricked_Board() -> [(&'static str, &'static str); PA
 fn Test_A_Pattern_Anywhere_On_The_Board_Should_Refuse_Every_Claim_As_Ledger_Unusable()
 {
     let Board { directory: _directory, mut ledger } = Board_Written_By_Hand("pattern-brick", vec![
-        Patterned("T-1", &["src/a.rs"], "crates/spec/**"),
-        Item("T-2", &["docs/unrelated.md"]),
-        Item("T-3", &["tests/also-unrelated.rs"]),
+        Item_With_Pattern("T-1", &["src/a.rs"], "crates/spec/**"),
+        Item_Reserving_Files("T-2", &["docs/unrelated.md"]),
+        Item_Reserving_Files("T-3", &["tests/also-unrelated.rs"]),
     ]);
 
     // Every item is refused the same way, including the pattern item itself and territory
@@ -85,7 +85,7 @@ fn Test_A_Pattern_Anywhere_On_The_Board_Should_Refuse_Every_Claim_As_Ledger_Unus
     // wait.
     for (item, holder) in Claimants_Of_The_Pattern_Bricked_Board()
     {
-        let refusal = Refused(&mut ledger, item, Claimant(holder));
+        let refusal = Refusal_From_Claim(&mut ledger, item, Claimant(holder));
         assert!(
             matches!(refusal, ClaimRefusal::LedgerUnusable { .. }),
             "{item}: {refusal:?}"
@@ -100,11 +100,11 @@ fn Test_A_Pattern_Anywhere_On_The_Board_Should_Refuse_Every_Claim_As_Ledger_Unus
 fn Test_A_Pattern_Item_Should_Refuse_Every_Claim_Wherever_It_Sits()
 {
     let Board { directory: _directory, mut ledger } = Board_Written_By_Hand("pattern-brick-reverse", vec![
-        Item("T-1", &["docs/unrelated.md"]),
-        Patterned("T-2", &["src/b.rs"], "crates/spec/**"),
+        Item_Reserving_Files("T-1", &["docs/unrelated.md"]),
+        Item_With_Pattern("T-2", &["src/b.rs"], "crates/spec/**"),
     ]);
 
-    let refused = Refused(&mut ledger, "T-1", Claimant("agent-a"));
+    let refused = Refusal_From_Claim(&mut ledger, "T-1", Claimant("agent-a"));
 
     assert!(matches!(refused, ClaimRefusal::LedgerUnusable { .. }), "{refused:?}");
     assert!(
@@ -129,13 +129,13 @@ fn Test_A_Pattern_Item_Should_Refuse_Every_Claim_Wherever_It_Sits()
 fn Test_A_Refusal_Should_Not_Open_With_The_Blockers_Name()
 {
     let Board { directory: _directory, mut ledger } = Board_At("refusal-subject", vec![
-        Item("T-BLOCKER", &["src/shared.rs"]),
-        Item("T-REFUSED", &["src/shared.rs"]),
+        Item_Reserving_Files("T-BLOCKER", &["src/shared.rs"]),
+        Item_Reserving_Files("T-REFUSED", &["src/shared.rs"]),
     ]);
 
-    Take(&mut ledger, "T-BLOCKER", Claimant("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-BLOCKER", Claimant("agent-a"));
 
-    let sentence = Refused(&mut ledger, "T-REFUSED", Claimant("agent-b")).Describe();
+    let sentence = Refusal_From_Claim(&mut ledger, "T-REFUSED", Claimant("agent-b")).Describe();
 
     // The whole defect in one assertion: the blocker's name must not be the first thing the
     // sentence says. Restoring `{item} overlaps territory held by {holder} …` makes this red
@@ -174,7 +174,7 @@ fn Test_The_Held_Arm_Should_Have_Exactly_One_Rendering()
 {
     let refusal = ClaimRefusal::HeldBy {
         holder: "agent-a".to_owned(),
-        until: At(LEASE_ENDS_AT),
+        until: Timestamp_From_Seconds(LEASE_ENDS_AT),
         item: ItemId::New("T-BLOCKER"),
     };
 
@@ -193,12 +193,12 @@ fn Test_The_Held_Arm_Should_Have_Exactly_One_Rendering()
 fn Test_The_Same_Board_Without_The_Pattern_Should_Claim_Freely()
 {
     let Board { directory: _directory, mut ledger } = Board_At("pattern-brick-control", vec![
-        Item("T-1", &["src/a.rs"]),
-        Item("T-2", &["docs/unrelated.md"]),
+        Item_Reserving_Files("T-1", &["src/a.rs"]),
+        Item_Reserving_Files("T-2", &["docs/unrelated.md"]),
     ]);
 
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
-    Take(&mut ledger, "T-2", Claimant("agent-b"));
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-2", Claimant("agent-b"));
 
     ledger
         .Validate_Current()
@@ -236,13 +236,13 @@ fn Both_Claims_Are_Recorded<Clock: nomos_platform::Clock>(
 fn Test_A_Directory_Should_Reserve_Its_Subtree_Without_A_Pattern()
 {
     let Board { directory: _directory, mut ledger } = Board_At("subtree-without-pattern", vec![
-        Item("T-1", &["crates/spec"]),
-        Item("T-2", &["crates/spec/nomos-spec-model/src/lib.rs"]),
-        Item("T-3", &["crates/host/nomos-cli/src/work.rs"]),
+        Item_Reserving_Files("T-1", &["crates/spec"]),
+        Item_Reserving_Files("T-2", &["crates/spec/nomos-spec-model/src/lib.rs"]),
+        Item_Reserving_Files("T-3", &["crates/host/nomos-cli/src/work.rs"]),
     ]);
-    Take(&mut ledger, "T-1", Claimant("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-1", Claimant("agent-a"));
 
-    let refusal = Refused(&mut ledger, "T-2", Claimant("agent-b"));
+    let refusal = Refusal_From_Claim(&mut ledger, "T-2", Claimant("agent-b"));
     assert!(
         matches!(refusal, ClaimRefusal::HeldBy { .. }),
         "the subtree is *held*, not unanswerable — the distinction is the whole record: \
@@ -254,7 +254,7 @@ fn Test_A_Directory_Should_Reserve_Its_Subtree_Without_A_Pattern()
     );
     // While genuinely unrelated territory is still free, so the directory entry reserves a
     // subtree rather than the repository.
-    Take(&mut ledger, "T-3", Claimant("agent-c"));
+    Claim_For_Holder(&mut ledger, "T-3", Claimant("agent-c"));
 }
 
 // ---------------------------------------------------------------------------

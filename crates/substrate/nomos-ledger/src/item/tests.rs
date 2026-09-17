@@ -8,7 +8,7 @@ use crate::Territory;
 use crate::VerificationPredicate;
 use nomos_platform::Timestamp;
 
-fn Item(id: &str) -> LedgerItem
+fn Item_With_Id(id: &str) -> LedgerItem
 {
     return LedgerItem {
         id: ItemId::New(id),
@@ -31,7 +31,7 @@ fn Item(id: &str) -> LedgerItem
     };
 }
 
-fn At(seconds: i64) -> Timestamp
+fn Timestamp_From_Seconds(seconds: i64) -> Timestamp
 {
     return Timestamp::From_Unix_Seconds(seconds);
 }
@@ -258,15 +258,15 @@ fn Test_Only_Ready_Items_Should_Be_Claimable()
 #[test]
 fn Test_A_Lapsed_Claim_Should_Stop_Excluding()
 {
-    let mut item = Item("T-1");
+    let mut item = Item_With_Id("T-1");
     item.claim = Some(Claim {
         holder: "agent-a".to_owned(),
-        acquired_at: At(CLAIM_ACQUIRED_AT),
-        lease_expires_at: At(LEASE_LAPSE_INSTANT),
+        acquired_at: Timestamp_From_Seconds(CLAIM_ACQUIRED_AT),
+        lease_expires_at: Timestamp_From_Seconds(LEASE_LAPSE_INSTANT),
     });
 
-    assert!(item.Has_Active_Claim(At(LAST_ACTIVE_INSTANT)));
-    assert!(!item.Has_Active_Claim(At(FIRST_LAPSED_INSTANT)));
+    assert!(item.Has_Active_Claim(Timestamp_From_Seconds(LAST_ACTIVE_INSTANT)));
+    assert!(!item.Has_Active_Claim(Timestamp_From_Seconds(FIRST_LAPSED_INSTANT)));
 }
 
 /// The boundary. A lease expiring exactly now has not yet lapsed — otherwise a
@@ -276,20 +276,20 @@ fn Test_A_Claim_Should_Not_Lapse_On_Its_Expiry_Second()
 {
     let claim = Claim {
         holder: "agent-a".to_owned(),
-        acquired_at: At(CLAIM_ACQUIRED_AT),
-        lease_expires_at: At(LEASE_LAPSE_INSTANT),
+        acquired_at: Timestamp_From_Seconds(CLAIM_ACQUIRED_AT),
+        lease_expires_at: Timestamp_From_Seconds(LEASE_LAPSE_INSTANT),
     };
 
-    assert!(!claim.Has_Lapsed(At(LEASE_LAPSE_INSTANT)));
-    assert!(claim.Has_Lapsed(At(FIRST_LAPSED_INSTANT)));
+    assert!(!claim.Has_Lapsed(Timestamp_From_Seconds(LEASE_LAPSE_INSTANT)));
+    assert!(claim.Has_Lapsed(Timestamp_From_Seconds(FIRST_LAPSED_INSTANT)));
 }
 
 fn Claimed_By(holder: &str, expires: i64) -> Claim
 {
     return Claim {
         holder: holder.to_owned(),
-        acquired_at: At(CLAIM_ACQUIRED_AT),
-        lease_expires_at: At(expires),
+        acquired_at: Timestamp_From_Seconds(CLAIM_ACQUIRED_AT),
+        lease_expires_at: Timestamp_From_Seconds(expires),
     };
 }
 
@@ -302,11 +302,14 @@ fn Claimed_By(holder: &str, expires: i64) -> Claim
 #[test]
 fn Test_Replacing_A_Lapsed_Claim_Should_Keep_The_Claim_It_Replaced()
 {
-    let mut item = Item("T-1");
+    let mut item = Item_With_Id("T-1");
     item.state = ItemState::Claimed;
     item.claim = Some(Claimed_By("dead-agent", LEASE_LAPSE_INSTANT));
 
-    assert!(item.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", TAKEOVER_EXPIRES_AT), At(FIRST_LAPSED_INSTANT)));
+    assert!(item.Try_Replace_Lapsed_Claim(
+        Claimed_By("agent-b", TAKEOVER_EXPIRES_AT),
+        Timestamp_From_Seconds(FIRST_LAPSED_INSTANT)
+    ));
 
     assert_eq!(
         item.claim.as_ref().map(|claim| return claim.holder.clone()),
@@ -331,11 +334,14 @@ fn Test_Replacing_A_Lapsed_Claim_Should_Keep_The_Claim_It_Replaced()
 #[test]
 fn Test_Replacing_Should_Refuse_A_Live_Claim_And_An_Absent_One()
 {
-    let mut live = Item("T-1");
+    let mut live = Item_With_Id("T-1");
     live.state = ItemState::Claimed;
     live.claim = Some(Claimed_By("agent-a", LEASE_LAPSE_INSTANT));
 
-    assert!(!live.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", TAKEOVER_EXPIRES_AT), At(LAST_ACTIVE_INSTANT)));
+    assert!(!live.Try_Replace_Lapsed_Claim(
+        Claimed_By("agent-b", TAKEOVER_EXPIRES_AT),
+        Timestamp_From_Seconds(LAST_ACTIVE_INSTANT)
+    ));
     assert_eq!(
         live.claim.as_ref().map(|claim| return claim.holder.clone()),
         Some("agent-a".to_owned()),
@@ -343,10 +349,13 @@ fn Test_Replacing_Should_Refuse_A_Live_Claim_And_An_Absent_One()
     );
     assert!(live.displaced.is_empty());
 
-    let mut hollow = Item("T-2");
+    let mut hollow = Item_With_Id("T-2");
     hollow.state = ItemState::Claimed;
 
-    assert!(!hollow.Try_Replace_Lapsed_Claim(Claimed_By("agent-b", TAKEOVER_EXPIRES_AT), At(FIRST_LAPSED_INSTANT)));
+    assert!(!hollow.Try_Replace_Lapsed_Claim(
+        Claimed_By("agent-b", TAKEOVER_EXPIRES_AT),
+        Timestamp_From_Seconds(FIRST_LAPSED_INSTANT)
+    ));
     assert!(
         hollow.claim.is_none(),
         "a claim was written over an item that recorded none"
@@ -394,7 +403,7 @@ const LEDGER_ITEM_FIELD_COUNT: usize = 17;
 #[test]
 fn Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version()
 {
-    let serialized = serde_json::to_value(Item("T-1")).expect("an item serializes");
+    let serialized = serde_json::to_value(Item_With_Id("T-1")).expect("an item serializes");
     let fields = serialized
         .as_object()
         .expect("an item serializes as an object");

@@ -1,7 +1,8 @@
 //! An item that cannot start until another finishes.
 
 use crate::board::{
-    AT_NOW, Board, ClaimRefusal, Claimant, Declined, Document, Finished, Item, ItemId, Ledger_At, Refused, Take,
+    AT_NOW, Board, ClaimRefusal, Claimant, Item_Declined_With_Reason, Document_Holding_Items,
+    Item_Finished_With_Evidence, Item_Reserving_Files, ItemId, Ledger_At, Refusal_From_Claim, Claim_For_Holder,
     Temporary_Directory,
 };
 
@@ -13,14 +14,14 @@ fn Test_Claiming_An_Item_With_An_Unfinished_Dependency_Should_Be_Refused()
     let directory = Temporary_Directory("claim-dependency");
     let mut ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
-    let mut dependent = Item("T-2", &["src/b.rs"]);
+    let mut dependent = Item_Reserving_Files("T-2", &["src/b.rs"]);
     dependent.depends_on = vec![ItemId::New("T-1")];
 
     ledger
-        .Save(&Document(vec![Item("T-1", &["src/a.rs"]), dependent]))
+        .Save(&Document_Holding_Items(vec![Item_Reserving_Files("T-1", &["src/a.rs"]), dependent]))
         .expect("a fresh ledger is valid");
 
-    let refusal = Refused(&mut ledger, "T-2", Claimant("agent-a"));
+    let refusal = Refusal_From_Claim(&mut ledger, "T-2", Claimant("agent-a"));
 
     assert!(matches!(refusal, ClaimRefusal::DependencyUnmet { .. }), "{}", refusal.Describe());
     assert!(refusal.Is_Retryable(), "finishing T-1 is what resolves this");
@@ -35,12 +36,12 @@ fn Declined_Dependency_Board() -> Board
     let directory = Temporary_Directory("claim-dependency-declined");
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
-    let mut dependent = Item("T-2", &["src/b.rs"]);
+    let mut dependent = Item_Reserving_Files("T-2", &["src/b.rs"]);
     dependent.depends_on = vec![ItemId::New("T-1")];
 
     ledger
-        .Save(&Document(vec![
-            Declined("T-1", &["src/a.rs"], "superseded by T-3"),
+        .Save(&Document_Holding_Items(vec![
+            Item_Declined_With_Reason("T-1", &["src/a.rs"], "superseded by T-3"),
             dependent,
         ]))
         .expect("a fresh ledger is valid");
@@ -56,7 +57,7 @@ fn Test_Claiming_An_Item_With_A_Declined_Dependency_Should_Be_Refused_Non_Retrya
 {
     let Board { directory: _directory, mut ledger } = Declined_Dependency_Board();
 
-    let refusal = Refused(&mut ledger, "T-2", Claimant("agent-a"));
+    let refusal = Refusal_From_Claim(&mut ledger, "T-2", Claimant("agent-a"));
 
     assert!(
         matches!(refusal, ClaimRefusal::DependencyDeclined { .. }),
@@ -84,15 +85,15 @@ fn Test_A_Finished_Dependency_Should_Not_Block_A_Claim()
     let directory = Temporary_Directory("claim-dependency-met");
     let mut ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
-    let finished = Finished("T-1", &["src/a.rs"]);
-    let mut dependent = Item("T-2", &["src/b.rs"]);
+    let finished = Item_Finished_With_Evidence("T-1", &["src/a.rs"]);
+    let mut dependent = Item_Reserving_Files("T-2", &["src/b.rs"]);
     dependent.depends_on = vec![ItemId::New("T-1")];
 
     ledger
-        .Save(&Document(vec![finished, dependent]))
+        .Save(&Document_Holding_Items(vec![finished, dependent]))
         .expect("a fresh ledger is valid");
 
-    Take(&mut ledger, "T-2", Claimant("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-2", Claimant("agent-a"));
 }
 
 // ---------------------------------------------------------------------------

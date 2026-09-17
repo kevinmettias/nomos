@@ -1,7 +1,7 @@
 //! The acceptance criterion: a record excludes nobody but its own writer.
 
 use crate::board::{
-    Claimed, Project_Onto_Records, Saved, SavedBoard, Unclaimed_Copy, Writer_Ids,
+    Claim_Item_For_Writer, Project_Onto_Records, Board_Saved_In_Scratch, SavedBoard, Unclaimed_Copy, Writer_Ids,
 };
 use nomos_ledger::Holder;
 
@@ -43,14 +43,14 @@ fn Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer()
     let SavedBoard {
         scratch: _scratch,
         mut ledger,
-    } = Saved("records-only", &document);
+    } = Board_Saved_In_Scratch("records-only", &document);
     for (ordinal, writer) in writers.iter().enumerate()
     {
         let agent = format!("agent-{ordinal}");
         let blame = format!(
             "{writer} was refused on its record alone, so two records still exclude each other"
         );
-        Claimed(&mut ledger, writer, Holder::from(&agent), &blame);
+        Claim_Item_For_Writer(&mut ledger, writer, Holder::from(&agent), &blame);
     }
     ledger
         .Validate_Current()

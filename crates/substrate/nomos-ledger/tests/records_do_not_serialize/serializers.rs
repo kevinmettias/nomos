@@ -71,7 +71,7 @@ fn Declared() -> Vec<&'static str>
 }
 
 /// An item's territory with one more path on it.
-fn Widened(item: &LedgerItem, path: &str) -> Territory
+fn Territory_Widened_By_Path(item: &LedgerItem, path: &str) -> Territory
 {
     let mut paths = item.territory.paths.clone();
     paths.push(path.to_owned());
@@ -155,7 +155,7 @@ fn Test_Every_Declared_Serializer_Should_Still_Serialize()
 
     let stale: Vec<&str> = Declared()
         .into_iter()
-        .filter(|declared| return Reserving(&writers, declared) < WRITERS_MAKING_A_SERIALIZER)
+        .filter(|declared| return Writers_Reserving_Path(&writers, declared) < WRITERS_MAKING_A_SERIALIZER)
         .collect();
 
     assert!(
@@ -168,7 +168,7 @@ fn Test_Every_Declared_Serializer_Should_Still_Serialize()
 }
 
 /// How many of these items reserve a path coarsely enough to still be serializing on it.
-fn Reserving(writers: &[&LedgerItem], declared: &str) -> usize
+fn Writers_Reserving_Path(writers: &[&LedgerItem], declared: &str) -> usize
 {
     return writers
         .iter()
@@ -203,7 +203,7 @@ fn Test_An_Undeclared_Serializer_Should_Be_Found()
     {
         if writers.contains(&item.id)
         {
-            item.territory = Widened(item, invented);
+            item.territory = Territory_Widened_By_Path(item, invented);
         }
     }
     let found = Undeclared_Serializers(&document);

@@ -42,7 +42,7 @@ fn Test_Validate_Document_Should_Collect_Every_Violation_Not_Just_The_First()
 #[test]
 fn Test_Two_Items_Depending_On_Each_Other_Should_Be_One_Violation()
 {
-    let document = Document(vec![Depending("A-1", &["B-1"]), Depending("B-1", &["A-1"])]);
+    let document = Document_Holding_Items(vec![Item_Depending_On("A-1", &["B-1"]), Item_Depending_On("B-1", &["A-1"])]);
 
     let cycles = Cycles_Among(&document);
 
@@ -55,10 +55,10 @@ fn Test_Two_Items_Depending_On_Each_Other_Should_Be_One_Violation()
 #[test]
 fn Test_A_Longer_Ring_Should_Be_One_Violation_Naming_Every_Member()
 {
-    let document = Document(vec![
-        Depending("C-1", &["D-1"]),
-        Depending("D-1", &["E-1"]),
-        Depending("E-1", &["C-1"]),
+    let document = Document_Holding_Items(vec![
+        Item_Depending_On("C-1", &["D-1"]),
+        Item_Depending_On("D-1", &["E-1"]),
+        Item_Depending_On("E-1", &["C-1"]),
     ]);
 
     let cycles = Cycles_Among(&document);
@@ -79,7 +79,7 @@ fn Test_A_Longer_Ring_Should_Be_One_Violation_Naming_Every_Member()
 #[test]
 fn Test_An_Item_Depending_On_Itself_Should_Be_Reported_As_A_Ring_Of_One()
 {
-    let document = Document(vec![Depending("F-1", &["F-1"])]);
+    let document = Document_Holding_Items(vec![Item_Depending_On("F-1", &["F-1"])]);
 
     let cycles = Cycles_Among(&document);
 
@@ -96,11 +96,11 @@ fn Test_An_Item_Depending_On_Itself_Should_Be_Reported_As_A_Ring_Of_One()
 #[test]
 fn Test_An_Acyclic_Diamond_Should_Not_Be_Reported()
 {
-    let document = Document(vec![
-        Depending("G-1", &["H-1", "I-1"]),
-        Depending("H-1", &["J-1"]),
-        Depending("I-1", &["J-1"]),
-        Depending("J-1", &[]),
+    let document = Document_Holding_Items(vec![
+        Item_Depending_On("G-1", &["H-1", "I-1"]),
+        Item_Depending_On("H-1", &["J-1"]),
+        Item_Depending_On("I-1", &["J-1"]),
+        Item_Depending_On("J-1", &[]),
     ]);
 
     let cycles = Cycles_Among(&document);
@@ -126,7 +126,7 @@ fn Test_A_Widening_Naming_A_Path_The_Territory_Lost_Should_Be_Reported()
         widened_at: Timestamp::From_Unix_Seconds(NOW_SECONDS),
     });
 
-    let violations = Validate_Document(&Document(vec![item]), Timestamp::From_Unix_Seconds(NOW_SECONDS));
+    let violations = Validate_Document(&Document_Holding_Items(vec![item]), Timestamp::From_Unix_Seconds(NOW_SECONDS));
 
     assert!(
         violations.iter().any(|line| return line.contains("src/b.rs") && line.contains("come apart")),
@@ -149,7 +149,7 @@ fn Test_A_Widening_Whose_Paths_The_Territory_Reserves_Should_Be_Accepted()
         widened_at: Timestamp::From_Unix_Seconds(NOW_SECONDS),
     });
 
-    let violations = Validate_Document(&Document(vec![item]), Timestamp::From_Unix_Seconds(NOW_SECONDS));
+    let violations = Validate_Document(&Document_Holding_Items(vec![item]), Timestamp::From_Unix_Seconds(NOW_SECONDS));
 
     assert!(
         violations.is_empty(),
@@ -168,13 +168,13 @@ fn Cycles_Among(document: &LedgerDocument) -> Vec<String>
         .collect();
 }
 
-fn Document(items: Vec<LedgerItem>) -> LedgerDocument
+fn Document_Holding_Items(items: Vec<LedgerItem>) -> LedgerDocument
 {
     return LedgerDocument { schema_version: crate::SCHEMA_VERSION, items };
 }
 
 /// A workable item that depends on the identifiers named.
-fn Depending(id: &str, dependencies: &[&str]) -> LedgerItem
+fn Item_Depending_On(id: &str, dependencies: &[&str]) -> LedgerItem
 {
     let mut item = Workable_Item(ItemId::New(id));
     item.depends_on = dependencies.iter().map(|named| return ItemId::New(*named)).collect();

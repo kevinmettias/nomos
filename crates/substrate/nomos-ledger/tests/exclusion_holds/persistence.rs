@@ -5,9 +5,9 @@
 //! board whose contents were lost.
 
 use crate::board::{
-    Abandonment, At, AT_NOW, Blocker, Claim, Document, GateOutcome, Held_By, Item, ItemId, ItemState, ItemTerritory,
-    LEASE_ENDS_AT, Ledger_At, LedgerDocument, LedgerError, LedgerItem, NOW, SCHEMA_VERSION, Temporary_Directory,
-    VerificationPredicate, VerificationRecord,
+    Abandonment, Timestamp_From_Seconds, AT_NOW, Blocker, Claim, Document_Holding_Items, GateOutcome, Held_By,
+    Item_Reserving_Files, ItemId, ItemState, ItemTerritory, LEASE_ENDS_AT, Ledger_At, LedgerDocument, LedgerError,
+    LedgerItem, NOW, SCHEMA_VERSION, Temporary_Directory, VerificationPredicate, VerificationRecord,
 };
 
 /// A schema version from a build later than this one, which the reader has to tell apart from
@@ -20,7 +20,7 @@ const NEWER_SCHEMA_VERSION: u32 = 9_999;
 /// The count is what makes the walk below say something: an item with an empty list
 /// serializes as `[]`, contributes no node, and leaves whatever type lives inside it
 /// unprobed. If this number falls, the fixture stopped populating something.
-const OBJECT_NODES_IN_A_POPULATED_DOCUMENT: usize = 11;
+const JSON_NODES_IN_A_POPULATED_DOCUMENT: usize = 11;
 
 /// When the displaced claim's lease ran out: a minute after it was taken, so the fixture's
 /// two claims do not share one expiry and a reader can tell which is which.
@@ -63,11 +63,11 @@ fn Test_Saving_An_Invalid_Ledger_Should_Be_Refused_Before_The_Write()
     let directory = Temporary_Directory("refuse-invalid");
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
-    let mut blocked = Item("T-1", &["src/a.rs"]);
+    let mut blocked = Item_Reserving_Files("T-1", &["src/a.rs"]);
     blocked.state = ItemState::Blocked;
 
     let error = ledger
-        .Save(&Document(vec![blocked]))
+        .Save(&Document_Holding_Items(vec![blocked]))
         .expect_err("an invalid ledger must not be persisted");
 
     assert!(matches!(error, LedgerError::Invalid { .. }));
@@ -85,9 +85,9 @@ fn Test_The_Ledger_Should_Round_Trip_Losslessly()
     let directory = Temporary_Directory("round-trip");
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
-    let original = Document(vec![
-        Held_By(Item("T-1", &["src/a.rs", "src/b.rs"]), "agent-a", LEASE_ENDS_AT),
-        Item("T-2", &["src/c.rs"]),
+    let original = Document_Holding_Items(vec![
+        Held_By(Item_Reserving_Files("T-1", &["src/a.rs", "src/b.rs"]), "agent-a", LEASE_ENDS_AT),
+        Item_Reserving_Files("T-2", &["src/c.rs"]),
     ]);
 
     ledger.Save(&original).expect("the fixture document is one the board accepts");
@@ -163,24 +163,24 @@ fn Test_A_Ledger_Carrying_An_Undeclared_Key_Should_Not_Load()
 /// This is what covers a type that does not exist yet. A field added to [`LedgerItem`] whose
 /// own container forgot the attribute fails here without anybody extending this test.
 #[test]
-fn Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key()
+fn Test_Every_Node_In_A_Ledger_Should_Refuse_An_Undeclared_Key()
 {
     let whole =
-        serde_json::to_value(Document(vec![Fully_Populated()])).expect("the document serializes");
+        serde_json::to_value(Document_Holding_Items(vec![Fully_Populated()])).expect("the document serializes");
 
     let mut pointers = Vec::new();
-    Object_Pointers(&whole, "", &mut pointers);
+    Json_Node_Pointers(&whole, "", &mut pointers);
     for pointer in &pointers
     {
         assert!(
-            Probed(&whole, pointer).is_err(),
+            Document_Probed_At_Pointer(&whole, pointer).is_err(),
             "an undeclared key was accepted at `{pointer}`, so a build that predates a field \
              there would drop it and write the document back"
         );
     }
 
     assert!(
-        pointers.len() >= OBJECT_NODES_IN_A_POPULATED_DOCUMENT,
+        pointers.len() >= JSON_NODES_IN_A_POPULATED_DOCUMENT,
         "only {} object(s) were probed, so the fixture below has stopped being fully \
          populated — the guard did not shrink, the universe did",
         pointers.len()
@@ -188,7 +188,7 @@ fn Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key()
 }
 
 /// The same document with one undeclared key inserted at `pointer`, read back strictly.
-fn Probed(whole: &serde_json::Value, pointer: &str) -> Result<LedgerDocument, serde_json::Error>
+fn Document_Probed_At_Pointer(whole: &serde_json::Value, pointer: &str) -> Result<LedgerDocument, serde_json::Error>
 {
     let mut probed = whole.clone();
     probed
@@ -209,7 +209,7 @@ fn Probed(whole: &serde_json::Value, pointer: &str) -> Result<LedgerDocument, se
 /// something.
 fn Fully_Populated() -> LedgerItem
 {
-    let held = Item("T-1", &["src/a.rs"]);
+    let held = Item_Reserving_Files("T-1", &["src/a.rs"]);
     let mut item = Held_By(held, "agent-a", LEASE_ENDS_AT);
     item.state = ItemState::Blocked;
     item.blocked = Some(Blocker::Dependency {
@@ -222,7 +222,7 @@ fn Fully_Populated() -> LedgerItem
         argv: vec!["cargo".to_owned()],
         exit_code: 0,
         output_tail: "ok".to_owned(),
-        verified_at: At(NOW),
+        verified_at: Timestamp_From_Seconds(NOW),
         gate: Some(GateOutcome {
             argv: vec!["cargo".to_owned(), "--version".to_owned()],
             exit_code: 0,
@@ -232,13 +232,13 @@ fn Fully_Populated() -> LedgerItem
     item.abandoned = vec![Abandonment {
         holder: "agent-b".to_owned(),
         reason: "went to look at something else".to_owned(),
-        abandoned_at: At(NOW),
+        abandoned_at: Timestamp_From_Seconds(NOW),
     }];
     // The nested type `OD-LEDGER-012` added.
     item.displaced = vec![Claim {
         holder: "dead-agent".to_owned(),
-        acquired_at: At(NOW),
-        lease_expires_at: At(DISPLACED_LEASE_ENDS_AT),
+        acquired_at: Timestamp_From_Seconds(NOW),
+        lease_expires_at: Timestamp_From_Seconds(DISPLACED_LEASE_ENDS_AT),
     }];
 
     return item;
@@ -247,7 +247,7 @@ fn Fully_Populated() -> LedgerItem
 /// Every object node in a value, as JSON pointers.
 ///
 /// The document's shape rather than a list of types, which is the point of the test above.
-fn Object_Pointers(value: &serde_json::Value, at: &str, found: &mut Vec<String>)
+fn Json_Node_Pointers(value: &serde_json::Value, at: &str, found: &mut Vec<String>)
 {
     match value
     {
@@ -256,14 +256,14 @@ fn Object_Pointers(value: &serde_json::Value, at: &str, found: &mut Vec<String>)
             found.push(at.to_owned());
             for (key, nested) in fields
             {
-                Object_Pointers(nested, &format!("{at}/{key}"), found);
+                Json_Node_Pointers(nested, &format!("{at}/{key}"), found);
             }
         }
         serde_json::Value::Array(elements) =>
         {
             for (index, nested) in elements.iter().enumerate()
             {
-                Object_Pointers(nested, &format!("{at}/{index}"), found);
+                Json_Node_Pointers(nested, &format!("{at}/{index}"), found);
             }
         }
         _ =>
@@ -384,7 +384,7 @@ fn Test_Saving_Should_Stamp_The_Version_This_Build_Understands()
     ledger
         .Save(&LedgerDocument {
             schema_version: NEWER_SCHEMA_VERSION,
-            items: vec![Item("T-1", &["src/a.rs"])],
+            items: vec![Item_Reserving_Files("T-1", &["src/a.rs"])],
         })
         .expect("saving stamps this build's version rather than refusing the file");
 

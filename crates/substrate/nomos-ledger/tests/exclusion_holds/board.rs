@@ -58,17 +58,17 @@ impl Clock for &FixedClock
 
 pub(crate) const NOW: i64 = 1_000_000;
 
-pub(crate) fn At(seconds: i64) -> Timestamp
+pub(crate) fn Timestamp_From_Seconds(seconds: i64) -> Timestamp
 {
     return Timestamp::From_Unix_Seconds(seconds);
 }
 
-pub(crate) fn Territory(files: &[&str]) -> ItemTerritory
+pub(crate) fn Territory_Of_Files(files: &[&str]) -> ItemTerritory
 {
     return ItemTerritory::Of_Files(files.iter().copied());
 }
 
-pub(crate) fn Item(id: &str, files: &[&str]) -> LedgerItem
+pub(crate) fn Item_Reserving_Files(id: &str, files: &[&str]) -> LedgerItem
 {
     return LedgerItem {
         id: ItemId::New(id),
@@ -77,7 +77,7 @@ pub(crate) fn Item(id: &str, files: &[&str]) -> LedgerItem
         done_when: "the tests pass".to_owned(),
         kind: ItemKind::Correction,
         origin: ItemOrigin::Proposed,
-        territory: Territory(files),
+        territory: Territory_Of_Files(files),
         state: ItemState::Ready,
         depends_on: Vec::new(),
         blocked: None,
@@ -96,8 +96,8 @@ pub(crate) fn Held_By(mut item: LedgerItem, holder: &str, expires: i64) -> Ledge
     item.state = ItemState::Claimed;
     item.claim = Some(Claim {
         holder: holder.to_owned(),
-        acquired_at: At(NOW),
-        lease_expires_at: At(expires),
+        acquired_at: Timestamp_From_Seconds(NOW),
+        lease_expires_at: Timestamp_From_Seconds(expires),
     });
     return item;
 }
@@ -108,7 +108,7 @@ pub(crate) fn Held_By(mut item: LedgerItem, holder: &str, expires: i64) -> Ledge
 /// literal would stop equalling its own reload the moment the constant moves — and
 /// `Test_The_Ledger_Should_Round_Trip_Losslessly` would then fail for a reason that has nothing
 /// to do with round-tripping.
-pub(crate) fn Document(items: Vec<LedgerItem>) -> LedgerDocument
+pub(crate) fn Document_Holding_Items(items: Vec<LedgerItem>) -> LedgerDocument
 {
     return LedgerDocument {
         schema_version: SCHEMA_VERSION,
@@ -144,7 +144,7 @@ pub(crate) struct Claimant<'a>(pub(crate) &'a str);
 ///
 /// A refusal here is the fixture failing rather than the assertion under test, so it panics
 /// with the refusal's own words instead of returning it.
-pub(crate) fn Take<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: Claimant<'_>)
+pub(crate) fn Claim_For_Holder<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: Claimant<'_>)
 {
     ledger
         .Claim(&ItemId::New(item), holder.0, LEASE)
@@ -154,9 +154,9 @@ pub(crate) fn Take<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, hol
 /// An item whose territory carries a pattern, which nothing on the command line can build
 /// any more — `OD-LEDGER-013` withdrew `--territory-pattern` — and which these two tests
 /// still construct by hand, because the state stays reachable by editing the document.
-pub(crate) fn Patterned(id: &str, files: &[&str], pattern: &str) -> LedgerItem
+pub(crate) fn Item_With_Pattern(id: &str, files: &[&str], pattern: &str) -> LedgerItem
 {
-    let mut item = Item(id, files);
+    let mut item = Item_Reserving_Files(id, files);
     item.territory = item.territory.With_Pattern(pattern);
 
     return item;
@@ -166,15 +166,15 @@ pub(crate) fn Patterned(id: &str, files: &[&str], pattern: &str) -> LedgerItem
 ///
 /// A `Done` item without a verification record is not a valid ledger, so the two are built
 /// together or not at all.
-pub(crate) fn Finished(id: &str, files: &[&str]) -> LedgerItem
+pub(crate) fn Item_Finished_With_Evidence(id: &str, files: &[&str]) -> LedgerItem
 {
-    let mut item = Item(id, files);
+    let mut item = Item_Reserving_Files(id, files);
     item.state = ItemState::Done;
     item.verified = Some(VerificationRecord {
         argv: vec!["cargo".to_owned(), "test".to_owned()],
         exit_code: 0,
         output_tail: "ok".to_owned(),
-        verified_at: At(NOW),
+        verified_at: Timestamp_From_Seconds(NOW),
         gate: None,
         revision: None,
     });
@@ -183,9 +183,9 @@ pub(crate) fn Finished(id: &str, files: &[&str]) -> LedgerItem
 }
 
 /// An item that will never be done — declined, with the reason it carries.
-pub(crate) fn Declined(id: &str, files: &[&str], reason: &str) -> LedgerItem
+pub(crate) fn Item_Declined_With_Reason(id: &str, files: &[&str], reason: &str) -> LedgerItem
 {
-    let mut item = Item(id, files);
+    let mut item = Item_Reserving_Files(id, files);
     item.state = ItemState::Declined {
         reason: reason.to_owned(),
     };
@@ -207,7 +207,7 @@ pub(crate) fn Release_As_Finished<Ledger: ExclusionLedger>(ledger: &mut Ledger, 
                 argv: vec!["cargo".to_owned(), "test".to_owned()],
                 exit_code: 0,
                 output_tail: "ok".to_owned(),
-                verified_at: At(NOW),
+                verified_at: Timestamp_From_Seconds(NOW),
                 gate: None,
                 revision: None,
             }),
@@ -216,7 +216,7 @@ pub(crate) fn Release_As_Finished<Ledger: ExclusionLedger>(ledger: &mut Ledger, 
 }
 
 /// Every abandonment the item kept, as who stopped and what they said, oldest first.
-pub(crate) fn Abandonments(item: &LedgerItem) -> Vec<(&str, &str)>
+pub(crate) fn Abandonments_Of_Item(item: &LedgerItem) -> Vec<(&str, &str)>
 {
     return item
         .abandoned
@@ -226,7 +226,7 @@ pub(crate) fn Abandonments(item: &LedgerItem) -> Vec<(&str, &str)>
 }
 
 /// A holder gives up its own claim, with the words it gave for stopping.
-pub(crate) fn Abandon<Ledger: ExclusionLedger>(
+pub(crate) fn Abandon_Claim_With_Reason<Ledger: ExclusionLedger>(
     ledger: &mut Ledger,
     item: &str,
     holder: Claimant<'_>,
@@ -246,7 +246,7 @@ pub(crate) fn Abandon<Ledger: ExclusionLedger>(
 
 /// A claim that is expected to be refused, with the refusal handed back as the value the
 /// test is about.
-pub(crate) fn Refused<Ledger: ExclusionLedger>(
+pub(crate) fn Refusal_From_Claim<Ledger: ExclusionLedger>(
     ledger: &mut Ledger,
     item: &str,
     holder: Claimant<'_>,
@@ -300,7 +300,7 @@ pub(crate) fn Only_Item<Clock: nomos_platform::Clock>(
 /// The multi-item boards assert about one of their items and use the others as the context
 /// that makes the assertion mean something, so reaching the subject by name rather than by
 /// position keeps the test honest when the board is reordered.
-pub(crate) fn Named<Clock: nomos_platform::Clock>(
+pub(crate) fn Item_Named_In_File<Clock: nomos_platform::Clock>(
     id: &str,
     ledger: &FileLedger<StdFileSystem, Clock, FileLock>,
 ) -> LedgerItem
@@ -318,7 +318,7 @@ pub(crate) fn Named<Clock: nomos_platform::Clock>(
 ///
 /// The tests compare holders, and `claim.as_ref().map(|claim| claim.holder.clone())` is four
 /// tokens of plumbing in front of one word. This says the word.
-pub(crate) fn Holder(item: &LedgerItem) -> Option<&str>
+pub(crate) fn Holder_Of_Item(item: &LedgerItem) -> Option<&str>
 {
     return item.claim.as_ref().map(|claim| return claim.holder.as_str());
 }
@@ -345,7 +345,7 @@ pub(crate) struct Standing<'a>
 pub(crate) fn Standing_Of(item: &LedgerItem) -> Standing<'_>
 {
     return Standing {
-        held_by: Holder(item),
+        held_by: Holder_Of_Item(item),
         displaced: item
             .displaced
             .iter()
@@ -412,7 +412,7 @@ pub(crate) fn Board_At(name: &str, items: Vec<LedgerItem>) -> Board
 {
     let directory = Temporary_Directory(name);
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
-    ledger.Save(&Document(items)).expect("a fresh ledger is valid");
+    ledger.Save(&Document_Holding_Items(items)).expect("a fresh ledger is valid");
 
     return Board { directory, ledger };
 }
@@ -431,7 +431,7 @@ pub(crate) fn Board_At(name: &str, items: Vec<LedgerItem>) -> Board
 pub(crate) fn Board_Written_By_Hand(name: &str, items: Vec<LedgerItem>) -> Board
 {
     let directory = Temporary_Directory(name);
-    let text = serde_json::to_string_pretty(&Document(items)).expect("a document serializes");
+    let text = serde_json::to_string_pretty(&Document_Holding_Items(items)).expect("a document serializes");
     std::fs::write(directory.As_Path().join("ledger.json"), text).expect("test needs to write the ledger");
     let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
 
@@ -480,9 +480,9 @@ pub(crate) fn Exits_With(code: i32) -> Vec<String>
     };
 }
 
-pub(crate) fn Item_Verified_By(id: &str, files: &[&str], argv: Vec<String>) -> LedgerItem
+pub(crate) fn Item_Verified_By_String_Arguments(id: &str, files: &[&str], argv: Vec<String>) -> LedgerItem
 {
-    let mut item = Item(id, files);
+    let mut item = Item_Reserving_Files(id, files);
     item.verification = Some(VerificationPredicate::From_String_Arguments(argv));
     return item;
 }

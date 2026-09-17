@@ -8,8 +8,8 @@
 //! The harness is read by `concurrency.rs`, which is where the claims it supports are made.
 
 use crate::board::{
-    AT_NOW, AtomicBool, Condvar, Document, Duration, FileLedger, FileLock, FileSystem, FileSystemError, FixedClock,
-    ItemId, Ledger_At, LedgerDocument, LedgerItem, Mutex, Ordering, Path, PathBuf, Scratch, StdFileSystem,
+    AT_NOW, AtomicBool, Condvar, Document_Holding_Items, Duration, FileLedger, FileLock, FileSystem, FileSystemError,
+    FixedClock, ItemId, Ledger_At, LedgerDocument, LedgerItem, Mutex, Ordering, Path, PathBuf, Scratch, StdFileSystem,
     Temporary_Directory, ThreadId,
 };
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
@@ -213,7 +213,7 @@ pub(crate) fn Two_Writers(
     second: impl FnOnce(&mut InterleavedLedger<'_>) + Send,
 ) -> LedgerDocument
 {
-    let directory = Contended(name, items);
+    let directory = Contended_Board_On_Disk(name, items);
     let filesystem = Interleaving::Over(directory.As_Path().join("ledger.json"));
 
     let over = Harness {
@@ -222,13 +222,13 @@ pub(crate) fn Two_Writers(
         directory: directory.As_Path(),
     };
 
-    Interleaved(over, first, second);
+    Interleave_Two_Writers(over, first, second);
     assert!(
         filesystem.Has_Stopped(),
         "the seam never fired, so nothing was interleaved and this run proves nothing"
     );
 
-    return Written(directory.As_Path());
+    return Document_On_Disk(directory.As_Path());
 }
 
 /// The apparatus both writers share: the filesystem carrying the seam, the gate the second
@@ -246,7 +246,7 @@ pub(crate) struct Harness<'a>
 // `Send` on both closures is required by `std::thread::scope(..).spawn(..)` below (waived in
 // suppressions.json, since check-closure-bounds is not one of the safety-critical checks an
 // in-code marker still argues under this repository's safety-only policy).
-pub(crate) fn Interleaved(
+pub(crate) fn Interleave_Two_Writers(
     over: Harness<'_>,
     // Send: std::thread::scope(..).spawn(..) below moves this closure onto its own thread.
     first: impl FnOnce(&mut InterleavedLedger<'_>) + Send,
@@ -275,11 +275,11 @@ pub(crate) fn Interleaved(
 }
 
 /// A board for the interleaving tests, saved once before either writer starts.
-pub(crate) fn Contended(name: &str, items: Vec<LedgerItem>) -> Scratch
+pub(crate) fn Contended_Board_On_Disk(name: &str, items: Vec<LedgerItem>) -> Scratch
 {
     let directory = Temporary_Directory(name);
     Ledger_At(directory.As_Path(), &AT_NOW)
-        .Save(&Document(items))
+        .Save(&Document_Holding_Items(items))
         .expect("a fresh ledger is valid");
 
     return directory;
@@ -287,7 +287,7 @@ pub(crate) fn Contended(name: &str, items: Vec<LedgerItem>) -> Scratch
 
 /// What is actually on disk once both writers have finished — the only thing that settles
 /// whether a write was lost, since each writer was told its own succeeded.
-pub(crate) fn Written(directory: &Path) -> LedgerDocument
+pub(crate) fn Document_On_Disk(directory: &Path) -> LedgerDocument
 {
     return Ledger_At(directory, &AT_NOW)
         .Load()

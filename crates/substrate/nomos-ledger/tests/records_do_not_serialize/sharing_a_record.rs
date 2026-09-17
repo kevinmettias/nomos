@@ -1,6 +1,6 @@
 //! The negative control: sharing a record still excludes.
 
-use crate::board::{Contest, Contested, RECORD_DIRECTORY, Two_Record_Writers, TwoWriters};
+use crate::board::{Contest, Board_Contested_By_Two_Agents, RECORD_DIRECTORY, Two_Record_Writers, TwoWriters};
 use nomos_ledger::{ClaimRefusal, Territory};
 
 /// The control that keeps the repair from being a blanket exemption.
@@ -31,7 +31,7 @@ fn Test_Two_Items_Writing_One_Record_Should_Still_Be_Refused()
     let Contest {
         scratch: _scratch,
         refusal,
-    } = Contested("contested-record", &document, &first, &second);
+    } = Board_Contested_By_Two_Agents("contested-record", &document, &first, &second);
 
     assert!(
         matches!(refusal, ClaimRefusal::HeldBy { .. }),
