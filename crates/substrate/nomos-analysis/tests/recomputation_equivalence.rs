@@ -60,14 +60,14 @@ struct FixtureFacts
     downstream: MaterializedFact,
 }
 
-fn Digest(seed: u8) -> Digest128
+fn Digest_From_Seed(seed: u8) -> Digest128
 {
     return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
 }
 
-fn Subject(seed: u8) -> SubjectId
+fn Subject_Id_From_Seed(seed: u8) -> SubjectId
 {
-    return SubjectId::From_Digest(Digest(seed));
+    return SubjectId::From_Digest(Digest_From_Seed(seed));
 }
 
 fn Fixture_Guarantee() -> Guarantee
@@ -86,13 +86,13 @@ fn Upstream_Key() -> FactKey
     return FactKey {
         contract: CapabilityId::New("nomos.cap.fixture.leaf"),
         contract_version: ContractVersion::New(1, 0),
-        subject: Subject(1),
+        subject: Subject_Id_From_Seed(1),
         semantic_inputs: InputDigest::Of(&[b"fixture"]),
         provider: ProviderId::New("nomos.provider.fixture.leaf"),
         provider_version: ContractVersion::New(1, 0),
         guarantee: GuaranteeDigest::Of(&Fixture_Guarantee()),
-        variant: BuildVariantId::From_Digest(Digest(FIXTURE_VARIANT_SEED)),
-        configuration: ConfigurationId::From_Digest(Digest(FIXTURE_CONFIGURATION_SEED)),
+        variant: BuildVariantId::From_Digest(Digest_From_Seed(FIXTURE_VARIANT_SEED)),
+        configuration: ConfigurationId::From_Digest(Digest_From_Seed(FIXTURE_CONFIGURATION_SEED)),
     };
 }
 
@@ -104,20 +104,20 @@ fn Downstream_Key() -> FactKey
     return FactKey {
         contract: CapabilityId::New("nomos.cap.fixture.rollup"),
         contract_version: ContractVersion::New(1, 0),
-        subject: Subject(DOWNSTREAM_SUBJECT_SEED),
+        subject: Subject_Id_From_Seed(DOWNSTREAM_SUBJECT_SEED),
         semantic_inputs: InputDigest::Of(&[b"fixture-rollup"]),
         provider: ProviderId::New("nomos.provider.fixture.rollup"),
         provider_version: ContractVersion::New(1, 0),
         guarantee: GuaranteeDigest::Of(&Fixture_Guarantee()),
-        variant: BuildVariantId::From_Digest(Digest(FIXTURE_VARIANT_SEED)),
-        configuration: ConfigurationId::From_Digest(Digest(FIXTURE_CONFIGURATION_SEED)),
+        variant: BuildVariantId::From_Digest(Digest_From_Seed(FIXTURE_VARIANT_SEED)),
+        configuration: ConfigurationId::From_Digest(Digest_From_Seed(FIXTURE_CONFIGURATION_SEED)),
     };
 }
 
 /// A real recomputation, not a stand-in: the derived fact's payload is the upstream bytes
 /// reversed. Changing the upstream bytes changes this output, which is what makes a stale
 /// downstream value observably different from a fresh one.
-fn Rollup(upstream_payload: &[u8]) -> Vec<u8>
+fn Rollup_Of_Upstream_Payload(upstream_payload: &[u8]) -> Vec<u8>
 {
     let mut reversed = upstream_payload.to_vec();
     reversed.reverse();
@@ -129,7 +129,7 @@ fn Upstream_Fact(payload: &[u8], generation: GenerationId) -> MaterializedFact
 {
     return MaterializedFact {
         identity: Upstream_Key().At(generation),
-        snapshot: SnapshotId::From_Digest(Digest(FIXTURE_SNAPSHOT_SEED)),
+        snapshot: SnapshotId::From_Digest(Digest_From_Seed(FIXTURE_SNAPSHOT_SEED)),
         evidence: EvidenceClass::Verified,
         guarantee: Fixture_Guarantee(),
         payload: FactPayload::New(SchemaId::New("nomos.fixture.leaf.v1"), payload.to_vec()),
@@ -140,12 +140,12 @@ fn Downstream_Fact(upstream_payload: &[u8], generation: GenerationId) -> Materia
 {
     return MaterializedFact {
         identity: Downstream_Key().At(generation),
-        snapshot: SnapshotId::From_Digest(Digest(FIXTURE_SNAPSHOT_SEED)),
+        snapshot: SnapshotId::From_Digest(Digest_From_Seed(FIXTURE_SNAPSHOT_SEED)),
         evidence: EvidenceClass::Derived,
         guarantee: Fixture_Guarantee(),
         payload: FactPayload::New(
             SchemaId::New("nomos.fixture.rollup.v1"),
-            Rollup(upstream_payload),
+            Rollup_Of_Upstream_Payload(upstream_payload),
         ),
     };
 }
@@ -297,8 +297,8 @@ fn Test_Incremental_Recomputation_After_A_Change_Agrees_With_A_Clean_Rebuild()
     let initial = b"alpha".to_vec();
     let changed = b"omega-longer".to_vec();
     assert_ne!(
-        Rollup(&initial),
-        Rollup(&changed),
+        Rollup_Of_Upstream_Payload(&initial),
+        Rollup_Of_Upstream_Payload(&changed),
         "fixture does not exercise an observable stale-vs-fresh difference in the derived fact"
     );
 

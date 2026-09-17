@@ -40,14 +40,14 @@ const INDEX_BYTES: usize = 4;
 /// A chain is materialized one adjacent (dependent, dependency) pair at a time.
 const CHAIN_PAIR: usize = 2;
 
-fn Digest(seed: u8) -> Digest128
+fn Digest_From_Seed(seed: u8) -> Digest128
 {
     return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
 }
 
-fn Subject(seed: u8) -> SubjectId
+fn Subject_Id_From_Seed(seed: u8) -> SubjectId
 {
-    return SubjectId::From_Digest(Digest(seed));
+    return SubjectId::From_Digest(Digest_From_Seed(seed));
 }
 
 fn Fixture_Guarantee() -> Guarantee
@@ -67,13 +67,13 @@ fn Key_For(subject: u8) -> FactKey
     return FactKey {
         contract: CapabilityId::New("nomos.cap.syntax.tree"),
         contract_version: ContractVersion::New(1, 0),
-        subject: Subject(subject),
+        subject: Subject_Id_From_Seed(subject),
         semantic_inputs: InputDigest::Of(&[b"fixture"]),
         provider: ProviderId::New("nomos.provider.fixture"),
         provider_version: ContractVersion::New(1, 0),
         guarantee: GuaranteeDigest::Of(&Fixture_Guarantee()),
-        variant: BuildVariantId::From_Digest(Digest(FIXTURE_VARIANT_SEED)),
-        configuration: ConfigurationId::From_Digest(Digest(FIXTURE_CONFIGURATION_SEED)),
+        variant: BuildVariantId::From_Digest(Digest_From_Seed(FIXTURE_VARIANT_SEED)),
+        configuration: ConfigurationId::From_Digest(Digest_From_Seed(FIXTURE_CONFIGURATION_SEED)),
     };
 }
 
@@ -81,7 +81,7 @@ fn Fact_For(key: &FactKey) -> MaterializedFact
 {
     return MaterializedFact {
         identity: key.clone().At(GenerationId::INITIAL),
-        snapshot: SnapshotId::From_Digest(Digest(FIXTURE_SNAPSHOT_SEED)),
+        snapshot: SnapshotId::From_Digest(Digest_From_Seed(FIXTURE_SNAPSHOT_SEED)),
         evidence: EvidenceClass::Derived,
         guarantee: Fixture_Guarantee(),
         payload: FactPayload::New(SchemaId::New("nomos.syntax.v1"), b"tree".to_vec()),
@@ -367,8 +367,8 @@ fn Deep_Chain_Keys(depth: u32) -> Vec<FactKey>
             provider: ProviderId::New("nomos.provider.fixture"),
             provider_version: ContractVersion::New(1, 0),
             guarantee: GuaranteeDigest::Of(&Fixture_Guarantee()),
-            variant: BuildVariantId::From_Digest(Digest(FIXTURE_VARIANT_SEED)),
-            configuration: ConfigurationId::From_Digest(Digest(FIXTURE_CONFIGURATION_SEED)),
+            variant: BuildVariantId::From_Digest(Digest_From_Seed(FIXTURE_VARIANT_SEED)),
+            configuration: ConfigurationId::From_Digest(Digest_From_Seed(FIXTURE_CONFIGURATION_SEED)),
         };
     }
 

@@ -1,6 +1,6 @@
 //! What the store will answer, what it refuses to overwrite, and what it keeps as history.
 
-use crate::key::{Base, Fact, Stored};
+use crate::key::{Base, Materialized_Fact_From_Key, Memory_Store_For_Key};
 use nomos_analysis::{FactStore, GenerationCause, MemoryFactStore};
 use nomos_contracts::GenerationId;
 
@@ -8,7 +8,7 @@ use nomos_contracts::GenerationId;
 fn Test_A_Fact_Should_Answer_Its_Own_Key()
 {
     let key = Base();
-    let store = Stored(&key);
+    let store = Memory_Store_For_Key(&key);
 
     assert!(
         store
@@ -22,7 +22,7 @@ fn Test_A_Fact_Should_Answer_Its_Own_Key()
 fn Test_A_Later_Generation_Should_Still_Answer_The_Same_Key()
 {
     let key = Base();
-    let store = Stored(&key);
+    let store = Memory_Store_For_Key(&key);
 
     assert!(
         store
@@ -36,13 +36,13 @@ fn Test_A_Later_Generation_Should_Still_Answer_The_Same_Key()
 fn Test_The_Same_Question_Twice_Should_Materialize_Once()
 {
     let key = Base();
-    let mut store = Stored(&key);
+    let mut store = Memory_Store_For_Key(&key);
     let materializations = store.Materializations();
 
     let already = store.Current(&key.clone().At(GenerationId::INITIAL), GenerationId::INITIAL);
     if already.is_none()
     {
-        let fact = Fact(&key, GenerationId::INITIAL);
+        let fact = Materialized_Fact_From_Key(&key, GenerationId::INITIAL);
         store.Materialize(fact, &[]).expect("materializes");
     }
 
@@ -58,8 +58,8 @@ fn Test_A_Backdated_Materialization_Should_Be_Refused()
 {
     let key = Base();
     let mut store = MemoryFactStore::New();
-    let ahead = Fact(&key, GenerationId::INITIAL.Next());
-    let behind = Fact(&key, GenerationId::INITIAL);
+    let ahead = Materialized_Fact_From_Key(&key, GenerationId::INITIAL.Next());
+    let behind = Materialized_Fact_From_Key(&key, GenerationId::INITIAL);
     store.Materialize(ahead, &[]).expect("materializes");
 
     let refusal = store.Materialize(behind, &[]).expect_err("must refuse");
@@ -71,7 +71,7 @@ fn Test_A_Backdated_Materialization_Should_Be_Refused()
 fn Test_An_Invalidated_Fact_Should_Stay_Readable_As_History()
 {
     let key = Base();
-    let mut store = Stored(&key);
+    let mut store = Memory_Store_For_Key(&key);
     let next = GenerationId::INITIAL.Next();
     store.Invalidate(
         &GenerationCause::ConfigurationChanged {
@@ -82,7 +82,7 @@ fn Test_An_Invalidated_Fact_Should_Stay_Readable_As_History()
 
     let (fact, supersession) = store
         .Historical(&key)
-        .expect("the invalidation above superseded the fact Stored materialized");
+        .expect("the invalidation above superseded the fact Memory_Store_For_Key materialized");
 
     assert_eq!(fact.Generation(), GenerationId::INITIAL);
     assert_eq!(supersession.invalidated_at, next);
@@ -93,7 +93,7 @@ fn Test_An_Invalidated_Fact_Should_Stay_Readable_As_History()
 fn Test_A_Live_Fact_Should_Have_No_History()
 {
     assert!(
-        Stored(&Base()).Historical(&Base()).is_none(),
+        Memory_Store_For_Key(&Base()).Historical(&Base()).is_none(),
         "a current fact was reported as superseded"
     );
 }
@@ -102,7 +102,7 @@ fn Test_A_Live_Fact_Should_Have_No_History()
 fn Test_The_Store_Trait_Should_Be_Sealed()
 {
     let key = Base();
-    let store = Stored(&key);
+    let store = Memory_Store_For_Key(&key);
     let sealed: &dyn FactStore = &store;
 
     assert!(

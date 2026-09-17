@@ -22,36 +22,36 @@ const BASE_SNAPSHOT_SEED: u8 = 2;
 const BASE_VARIANT_SEED: u8 = 3;
 const BASE_CONFIGURATION_SEED: u8 = 4;
 
-/// The seed [`Varied`] sets a component to: one value, so a changed component can be
+/// The seed [`Key_With_Varied_Component`] sets a component to: one value, so a changed component can be
 /// compared against the same alternative whichever component it is.
 const VARIED_SEED: u8 = 9;
 
-/// The contract version [`Varied`] substitutes for the base key's major 1.
+/// The contract version [`Key_With_Varied_Component`] substitutes for the base key's major 1.
 const VARIED_CONTRACT_MAJOR: u16 = 2;
 
-fn Digest(seed: u8) -> Digest128
+fn Digest_From_Seed(seed: u8) -> Digest128
 {
     return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
 }
 
-pub(crate) fn Subject(seed: u8) -> SubjectId
+pub(crate) fn Subject_Id_From_Seed(seed: u8) -> SubjectId
 {
-    return SubjectId::From_Digest(Digest(seed));
+    return SubjectId::From_Digest(Digest_From_Seed(seed));
 }
 
-pub(crate) fn Snapshot(seed: u8) -> SnapshotId
+pub(crate) fn Snapshot_Id_From_Seed(seed: u8) -> SnapshotId
 {
-    return SnapshotId::From_Digest(Digest(seed));
+    return SnapshotId::From_Digest(Digest_From_Seed(seed));
 }
 
-fn Variant(seed: u8) -> BuildVariantId
+fn Build_Variant_Id_From_Seed(seed: u8) -> BuildVariantId
 {
-    return BuildVariantId::From_Digest(Digest(seed));
+    return BuildVariantId::From_Digest(Digest_From_Seed(seed));
 }
 
-pub(crate) fn Configuration(seed: u8) -> ConfigurationId
+pub(crate) fn Configuration_Id_From_Seed(seed: u8) -> ConfigurationId
 {
-    return ConfigurationId::From_Digest(Digest(seed));
+    return ConfigurationId::From_Digest(Digest_From_Seed(seed));
 }
 
 pub(crate) fn Syntactic() -> Guarantee
@@ -79,50 +79,50 @@ pub(crate) fn Base() -> FactKey
     return FactKey {
         contract: CapabilityId::New(SYNTAX),
         contract_version: ContractVersion::New(1, 0),
-        subject: Subject(1),
+        subject: Subject_Id_From_Seed(1),
         semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
         provider: ProviderId::New("nomos.provider.rust-syntax"),
         provider_version: ContractVersion::New(1, 0),
         guarantee: GuaranteeDigest::Of(&Syntactic()),
-        variant: Variant(BASE_VARIANT_SEED),
-        configuration: Configuration(BASE_CONFIGURATION_SEED),
+        variant: Build_Variant_Id_From_Seed(BASE_VARIANT_SEED),
+        configuration: Configuration_Id_From_Seed(BASE_CONFIGURATION_SEED),
     };
 }
 
-pub(crate) fn Varied(component: Component) -> FactKey
+pub(crate) fn Key_With_Varied_Component(component: Component) -> FactKey
 {
     let mut key = Base();
     match component
     {
         Component::Contract => key.contract = CapabilityId::New(SEMANTIC),
         Component::ContractVersion => key.contract_version = ContractVersion::New(VARIED_CONTRACT_MAJOR, 0),
-        Component::Subject => key.subject = Subject(VARIED_SEED),
+        Component::Subject => key.subject = Subject_Id_From_Seed(VARIED_SEED),
         Component::SemanticInputs => key.semantic_inputs = InputDigest::Of(&[b"fn main() { x }"]),
         Component::Provider => key.provider = ProviderId::New("nomos.provider.other"),
         Component::ProviderVersion => key.provider_version = ContractVersion::New(1, 1),
         Component::Guarantee => key.guarantee = GuaranteeDigest::Of(&Coarse()),
-        Component::Variant => key.variant = Variant(VARIED_SEED),
-        Component::Configuration => key.configuration = Configuration(VARIED_SEED),
+        Component::Variant => key.variant = Build_Variant_Id_From_Seed(VARIED_SEED),
+        Component::Configuration => key.configuration = Configuration_Id_From_Seed(VARIED_SEED),
     }
 
     return key;
 }
 
-pub(crate) fn Fact(key: &FactKey, generation: GenerationId) -> MaterializedFact
+pub(crate) fn Materialized_Fact_From_Key(key: &FactKey, generation: GenerationId) -> MaterializedFact
 {
     return MaterializedFact {
         identity: key.clone().At(generation),
-        snapshot: Snapshot(BASE_SNAPSHOT_SEED),
+        snapshot: Snapshot_Id_From_Seed(BASE_SNAPSHOT_SEED),
         evidence: EvidenceClass::Derived,
         guarantee: Syntactic(),
         payload: FactPayload::New(SchemaId::New("nomos.syntax.v1"), b"tree".to_vec()),
     };
 }
 
-pub(crate) fn Stored(key: &FactKey) -> MemoryFactStore
+pub(crate) fn Memory_Store_For_Key(key: &FactKey) -> MemoryFactStore
 {
     let mut store = MemoryFactStore::New();
-    let fact = Fact(key, GenerationId::INITIAL);
+    let fact = Materialized_Fact_From_Key(key, GenerationId::INITIAL);
     store.Materialize(fact, &[]).expect("materializes");
 
     return store;
@@ -131,14 +131,14 @@ pub(crate) fn Stored(key: &FactKey) -> MemoryFactStore
 pub(crate) fn Context_At(generation: GenerationId) -> Context
 {
     return Context {
-        snapshot: Snapshot(BASE_SNAPSHOT_SEED),
-        variant: Variant(BASE_VARIANT_SEED),
-        configuration: Configuration(BASE_CONFIGURATION_SEED),
+        snapshot: Snapshot_Id_From_Seed(BASE_SNAPSHOT_SEED),
+        variant: Build_Variant_Id_From_Seed(BASE_VARIANT_SEED),
+        configuration: Configuration_Id_From_Seed(BASE_CONFIGURATION_SEED),
         generation,
     };
 }
 
-pub(crate) fn Offering(guarantee: Guarantee) -> Registry
+pub(crate) fn Registry_For_Guarantee(guarantee: Guarantee) -> Registry
 {
     let mut registry = Registry::New();
     registry
@@ -166,7 +166,7 @@ pub(crate) fn Offering(guarantee: Guarantee) -> Registry
     return registry;
 }
 
-pub(crate) fn Needing(guarantee: Guarantee) -> Requirement
+pub(crate) fn Requirement_For_Guarantee(guarantee: Guarantee) -> Requirement
 {
     let capability = CapabilityId::New(SYNTAX);
     let version = ContractVersion::New(1, 0);

@@ -1,6 +1,6 @@
 //! A provider that cannot refresh at the grain the cause names, and one that can.
 
-use crate::key::{Base, Coarse, Fact, Stored};
+use crate::key::{Base, Coarse, Materialized_Fact_From_Key, Memory_Store_For_Key};
 use nomos_analysis::{FactStore, GenerationCause, MemoryFactStore};
 use nomos_contracts::{GenerationId, IncrementalGranularity};
 
@@ -9,7 +9,7 @@ fn Test_A_Coarse_Provider_Should_Have_Its_Broadening_Reported()
 {
     let key = Base();
     let mut store = MemoryFactStore::New();
-    let mut fact = Fact(&key, GenerationId::INITIAL);
+    let mut fact = Materialized_Fact_From_Key(&key, GenerationId::INITIAL);
     fact.guarantee = Coarse();
     store.Materialize(fact, &[]).expect("materializes");
     let next = GenerationId::INITIAL.Next();
@@ -34,7 +34,7 @@ fn Test_A_Coarse_Provider_Should_Have_Its_Broadening_Reported()
 fn Test_A_Provider_At_The_Requested_Granularity_Should_Not_Report_Broadening()
 {
     let key = Base();
-    let mut store = Stored(&key);
+    let mut store = Memory_Store_For_Key(&key);
 
     let report = store.Invalidate(
         &GenerationCause::SubjectChanged {

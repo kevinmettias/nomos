@@ -1,6 +1,9 @@
 //! What a change discards, what it keeps, and how far along the edges it travels.
 
-use crate::key::{Base, Fact, SEMANTIC, Snapshot, Stored, Subject};
+use crate::key::{
+    Base, Materialized_Fact_From_Key, Memory_Store_For_Key, SEMANTIC, Snapshot_Id_From_Seed,
+    Subject_Id_From_Seed,
+};
 use nomos_analysis::{
     Dependency, FactKey, FactStore, GenerationCause, InvalidationReport, MemoryFactStore,
     ReadOutcome,
@@ -38,7 +41,7 @@ fn Materialize_Reading(
     outcome: ReadOutcome,
 )
 {
-    let fact = Fact(key, GenerationId::INITIAL);
+    let fact = Materialized_Fact_From_Key(key, GenerationId::INITIAL);
     let edge = Dependency {
         key: upstream.clone(),
         outcome,
@@ -69,8 +72,8 @@ fn Snapshot_Replaced(
 {
     return store.Invalidate(
         &GenerationCause::SnapshotReplaced {
-            from: Snapshot(FROM_SNAPSHOT_SEED),
-            to: Snapshot(TO_SNAPSHOT_SEED),
+            from: Snapshot_Id_From_Seed(FROM_SNAPSHOT_SEED),
+            to: Snapshot_Id_From_Seed(TO_SNAPSHOT_SEED),
             differing,
         },
         next,
@@ -88,9 +91,9 @@ fn Test_Replacing_A_Snapshot_Should_Invalidate_Exactly_The_Members_That_Differ()
 {
     let changed = Base();
     let mut untouched = Base();
-    untouched.subject = Subject(OTHER_SUBJECT_SEED);
-    let mut store = Stored(&changed);
-    let fact = Fact(&untouched, GenerationId::INITIAL);
+    untouched.subject = Subject_Id_From_Seed(OTHER_SUBJECT_SEED);
+    let mut store = Memory_Store_For_Key(&changed);
+    let fact = Materialized_Fact_From_Key(&untouched, GenerationId::INITIAL);
     store.Materialize(fact, &[]).expect("materializes");
     let next = GenerationId::INITIAL.Next();
 
@@ -118,7 +121,7 @@ fn Test_Replacing_A_Snapshot_Should_Invalidate_Exactly_The_Members_That_Differ()
 fn Test_A_Replacement_That_Differs_In_Nothing_Should_Say_So()
 {
     let key = Base();
-    let mut store = Stored(&key);
+    let mut store = Memory_Store_For_Key(&key);
     let next = GenerationId::INITIAL.Next();
 
     let report = Snapshot_Replaced(&mut store, BTreeSet::new(), next);
@@ -139,7 +142,7 @@ fn Test_A_Replacement_That_Differs_In_Nothing_Should_Say_So()
 fn Test_A_Changed_Subject_Should_Invalidate_Its_Facts()
 {
     let key = Base();
-    let mut store = Stored(&key);
+    let mut store = Memory_Store_For_Key(&key);
     let next = GenerationId::INITIAL.Next();
 
     let report = Subject_Changed(&mut store, key.subject, next);
@@ -153,9 +156,9 @@ fn Test_An_Unrelated_Fact_Should_Be_Retained()
 {
     let key = Base();
     let mut elsewhere = Base();
-    elsewhere.subject = Subject(OTHER_SUBJECT_SEED);
-    let mut store = Stored(&key);
-    let fact = Fact(&elsewhere, GenerationId::INITIAL);
+    elsewhere.subject = Subject_Id_From_Seed(OTHER_SUBJECT_SEED);
+    let mut store = Memory_Store_For_Key(&key);
+    let fact = Materialized_Fact_From_Key(&elsewhere, GenerationId::INITIAL);
     store.Materialize(fact, &[]).expect("materializes");
     let next = GenerationId::INITIAL.Next();
 
@@ -175,8 +178,8 @@ fn Test_Invalidation_Should_Follow_Dependency_Edges()
     let read = Base();
     let mut derived = Base();
     derived.contract = CapabilityId::New(SEMANTIC);
-    derived.subject = Subject(CONSUMER_SUBJECT_SEED);
-    let mut store = Stored(&read);
+    derived.subject = Subject_Id_From_Seed(CONSUMER_SUBJECT_SEED);
+    let mut store = Memory_Store_For_Key(&read);
     Materialize_Reading(&mut store, &derived, &read, ReadOutcome::Materialized);
     let next = GenerationId::INITIAL.Next();
 
@@ -201,7 +204,8 @@ fn Chain_Edges() -> [(usize, usize); CHAIN_EDGE_COUNT]
 /// A store holding `read`, its consumer, and the fact that consumes the consumer.
 fn Chained_Store(chain: &[&FactKey]) -> MemoryFactStore
 {
-    let mut store = Stored(*chain.first().expect("every caller hands a chain holding the read key first"));
+    let mut store = Memory_Store_For_Key(
+        *chain.first().expect("every caller hands a chain holding the read key first"));
     for (downstream, upstream) in Chain_Edges()
     {
         Materialize_Reading(
@@ -220,9 +224,9 @@ fn Test_Invalidation_Should_Follow_Edges_Transitively()
 {
     let read = Base();
     let mut middle = Base();
-    middle.subject = Subject(CONSUMER_SUBJECT_SEED);
+    middle.subject = Subject_Id_From_Seed(CONSUMER_SUBJECT_SEED);
     let mut outer = Base();
-    outer.subject = Subject(OUTERMOST_SUBJECT_SEED);
+    outer.subject = Subject_Id_From_Seed(OUTERMOST_SUBJECT_SEED);
     let chain = [&read, &middle, &outer];
 
     let mut store = Chained_Store(&chain);
@@ -240,10 +244,10 @@ fn Test_An_Edge_Recorded_By_A_Missed_Read_Should_Still_Carry_Invalidation()
 {
     let absent = Base();
     let mut consumer = Base();
-    consumer.subject = Subject(CONSUMER_SUBJECT_SEED);
+    consumer.subject = Subject_Id_From_Seed(CONSUMER_SUBJECT_SEED);
 
     let mut store = MemoryFactStore::New();
-    let appearing = Fact(&absent, GenerationId::INITIAL);
+    let appearing = Materialized_Fact_From_Key(&absent, GenerationId::INITIAL);
     Materialize_Reading(&mut store, &consumer, &absent, ReadOutcome::Absent);
     store.Materialize(appearing, &[]).expect("materializes");
     let next = GenerationId::INITIAL.Next();

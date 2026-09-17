@@ -1,7 +1,8 @@
 //! Every read leaves an edge behind, including the reads that found nothing.
 
 use crate::key::{
-    Base, Context_At, Needing, Offering, SYNTAX, Stored, Subject, Syntactic, Varied,
+    Base, Context_At, Key_With_Varied_Component, Memory_Store_For_Key, Requirement_For_Guarantee,
+    Registry_For_Guarantee, SYNTAX, Subject_Id_From_Seed, Syntactic,
 };
 use nomos_analysis::{
     Component, FactReader, FactStore, GenerationCause, InputDigest, MemoryFactStore, ReadOutcome,
@@ -20,19 +21,19 @@ const DERIVED_SUBJECT_SEED: u8 = 7;
 fn Test_Every_Read_Should_Record_An_Edge()
 {
     let key = Base();
-    let store = Stored(&key);
-    let registry = Offering(Syntactic());
+    let store = Memory_Store_For_Key(&key);
+    let registry = Registry_For_Guarantee(Syntactic());
     let mut reader = Reader::On(&store, &registry, Context_At(GenerationId::INITIAL));
 
     assert!(reader.Get(&key.clone().At(GenerationId::INITIAL)).is_ok());
-    assert!(reader.Get(&Varied(Component::Subject).At(GenerationId::INITIAL)).is_err());
+    assert!(reader.Get(&Key_With_Varied_Component(Component::Subject).At(GenerationId::INITIAL)).is_err());
     assert!(
         reader
             .Require(
                 &CapabilityId::New(SYNTAX),
-                &Subject(1),
+                &Subject_Id_From_Seed(1),
                 InputDigest::Of(&[b"fn main() {}"]),
-                &Needing(Syntactic()),
+                &Requirement_For_Guarantee(Syntactic()),
             )
             .is_ok(),
         "the registry offers SYNTAX at this subject's guarantee, so the requirement resolves"
@@ -45,7 +46,7 @@ fn Test_Every_Read_Should_Record_An_Edge()
 fn Test_A_Read_That_Misses_Should_Record_Its_Miss()
 {
     let store = MemoryFactStore::New();
-    let registry = Offering(Syntactic());
+    let registry = Registry_For_Guarantee(Syntactic());
     let mut reader = Reader::On(&store, &registry, Context_At(GenerationId::INITIAL));
 
     assert!(reader.Get(&Base().At(GenerationId::INITIAL)).is_err());
@@ -62,7 +63,7 @@ fn Test_A_Read_That_Misses_Should_Record_Its_Miss()
 fn Test_A_Superseded_Read_Should_Record_Its_Supersession()
 {
     let key = Base();
-    let mut store = Stored(&key);
+    let mut store = Memory_Store_For_Key(&key);
     let next = GenerationId::INITIAL.Next();
     store.Invalidate(
         &GenerationCause::SubjectChanged {
@@ -71,7 +72,7 @@ fn Test_A_Superseded_Read_Should_Record_Its_Supersession()
         },
         next,
     );
-    let registry = Offering(Syntactic());
+    let registry = Registry_For_Guarantee(Syntactic());
     let mut reader = Reader::On(&store, &registry, Context_At(next));
 
     let refusal = reader.Get(&key.At(next)).expect_err("must refuse");
@@ -88,11 +89,11 @@ fn Test_The_Recorded_Edges_Should_Become_The_Stored_Dependencies()
 {
     let read = Base();
     let mut derived = Base();
-    derived.subject = Subject(DERIVED_SUBJECT_SEED);
-    let mut store = Stored(&read);
+    derived.subject = Subject_Id_From_Seed(DERIVED_SUBJECT_SEED);
+    let mut store = Memory_Store_For_Key(&read);
 
     let dependencies = {
-        let registry = Offering(Syntactic());
+        let registry = Registry_For_Guarantee(Syntactic());
         let mut reader = Reader::On(&store, &registry, Context_At(GenerationId::INITIAL));
         assert!(
             reader.Get(&read.clone().At(GenerationId::INITIAL)).is_ok(),
@@ -100,7 +101,7 @@ fn Test_The_Recorded_Edges_Should_Become_The_Stored_Dependencies()
         );
         reader.Into_Dependencies()
     };
-    let fact = crate::key::Fact(&derived, GenerationId::INITIAL);
+    let fact = crate::key::Materialized_Fact_From_Key(&derived, GenerationId::INITIAL);
     store.Materialize(fact, &dependencies).expect("materializes");
 
     assert_eq!(store.Dependencies_Of(&derived).len(), 1);

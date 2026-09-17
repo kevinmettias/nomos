@@ -83551,6 +83551,91 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-SUBSTRATE-ANALYSIS-TESTS",
+      "title": "The naming-clarity check reads zero over the substrate analysis territory at the phase own flags",
+      "why": "The naming-clarity check reads 17 live findings over crates/substrate/nomos-analysis at the\nphase's own flags (`naming.json`: `check-naming-clarity --include-tests`), and all 17 are the\nsame shape — `function `X` takes parameters but has only one name word; include the operation\ntarget, resource, or source of input`. They sit in five files, every one of them a test\nsurface: nine of this item's eleven territory paths are integration test files under `tests/`,\n`src/fact/memory_store/tests.rs` is a `#[cfg(test)]` module inside the crate, and the\neleventh, `src/store/rematerialization_group.rs`, carries no finding at all — it is in the\nterritory only because it holds a word this item must NOT rename.\n\n**Territory is the census plus its callers, not the crate.** The predicate is crate-scoped\nbecause the sweep takes one `-target` and a file-scoped predicate over eleven files would be\neleven invocations; the territory is the eleven files the change touches, which is the shape\nevery other item in this campaign's `-TESTS` slice uses. Measured, the two sets differ in both\ndirections, and the difference is stated here rather than left for a reader to find: the crate\nholds 39 `.rs` files and the predicate judges every one of them, while the item reserves 11;\nthe 17 findings occupy 5 of those 11, and the other 6 are callers. The 28 files the predicate\njudges and this item does not reserve are clean at this commit; if one of them reads red at\nclaim time for a peer's reason, the answer is to report it, not to edit it, because it is not\nthis item's to write.\n\n**The five files that carry a finding, and the name each takes.** The new name is a whole\ntoken, every occurrence is counted before anything is written, and the count is asserted\nagainst the tree — a count that no longer matches is a refusal that sends the plan back to be\nrebuilt from the text that is there, never a reason to rename fewer occurrences than the file\nholds.\n\n- `tests/fact_identity/key.rs` — ten findings, the whole fixture vocabulary of the\n  `fact_identity` test binary. `Digest` at 32 → `Digest_From_Seed` (with its calls at 39, 44,\n  49 and 54); `Subject` at 37 → `Subject_Id_From_Seed` (82, 99); `Snapshot` at 42 →\n  `Snapshot_Id_From_Seed` (115, 134); `Variant` at 47 → `Build_Variant_Id_From_Seed` (87, 104,\n  135); `Configuration` at 52 → `Configuration_Id_From_Seed` (88, 105, 136); `Varied` at 92 →\n  `Key_With_Varied_Component` (its own two doc references at 25 and 29, `[`Varied`]`, move with\n  it); `Fact` at 111 → `Materialized_Fact_From_Key` (125); `Stored` at 122 →\n  `Memory_Store_For_Key` (1 occurrence, the declaration — the body calls `Fact(key,\n  GenerationId::INITIAL)` at 125); `Offering` at 141 → `Registry_For_Guarantee` (declaration\n  only); `Needing` at 169 → `Requirement_For_Guarantee` (declaration only). Each name names\n  what the helper reads or returns: a `Digest128` from a seed, a `SubjectId`/`SnapshotId` from\n  a seed, a `BuildVariantId` from a seed, a `ConfigurationId` from a seed, a `FactKey` whose\n  one component is varied, a `MaterializedFact` from a key, a `MemoryFactStore` for a key, a\n  `Registry` for a guarantee, a `Requirement` for a guarantee. The two constructors that build\n  an enum variant keep the variant's own word so the reader can see which variant they build.\n- `src/fact/memory_store/tests.rs` — one finding: `Seeded` at 32 → `Digest_From_Seed`, calls at\n  52, 57, 58 and 66. This is the same helper as `key.rs`'s `Digest` — both return a `Digest128`\n  derived from one seed byte — and the two deliberately take the same name: they live in\n  different test binaries (`key.rs` is in the `fact_identity` integration test, this one is a\n  `#[cfg(test)]` module of the crate) and cannot collide, and a reader meeting the second one\n  should not have to learn a second word for the same thing.\n- `tests/fact_identity/key_identity.rs` — one finding: `Ordinal` at 46 → `Ordinal_Of_Component`,\n  the comparison at 65. It is nested inside `Test_Every_Component_Should_Be_Matched_\n  Exhaustively` and returns the position `Component::All()` gives a variant, so the name says\n  the component is the input and the ordinal is the answer.\n- `tests/invalidation_order.rs` — two findings: `Digest` at 43 → `Digest_From_Seed` (75, 76, 84\n  and the two at 370, 371) and `Subject` at 48 → `Subject_Id_From_Seed` (70). Both are the\n  local copies this test binary declares for itself rather than shared fixtures.\n- `tests/recomputation_equivalence.rs` — three findings: `Digest` at 63 → `Digest_From_Seed`\n  (70, 94, 95, 112, 113, 132 and 143), `Subject` at 68 → `Subject_Id_From_Seed` (89, 107), and\n  `Rollup` at 120 → `Rollup_Of_Upstream_Payload` (148, 300, 301). The last one's own doc says\n  \"the derived fact's payload is the upstream bytes reversed\", so the name says what it reads:\n  the upstream payload, rolled up into the derived one.\n\n**The six caller files, and the one word that must not move.** The remaining six paths hold no\nfinding; they are reserved because the guard renames a token everywhere the file carries it,\nand a caller left behind is a build error rather than an unchecked line. `tests/fact_identity/\ninvalidation.rs` (7 `Subject`, 3 `Snapshot`, 5 `Fact`, 7 `Stored`), `key_identity.rs` (2\n`Subject`, 4 `Snapshot`, 2 `Configuration`, 6 `Varied`, 2 `Stored`), `reader.rs` (3 `Subject`,\n2 `Varied`, 4 `Stored`, 5 `Offering`, 2 `Needing`), `require.rs` (6 `Subject`, 5 `Stored`, 5\n`Offering`, 6 `Needing`), `broadening.rs` (2 `Fact`, 2 `Stored`) and `store.rs` (4 `Fact`, 8\n`Stored`) — and `store.rs:85` is the one occurrence that is not code: the sentence `.expect(\"the\ninvalidation above superseded the fact Stored materialized\")` names the function it is about,\nso the string moves with the name and reads \"the fact Memory_Store_For_Key materialized\"\nafterwards. Four of these lists are `use crate::key::{...}` entries, which is exactly the case\na guard armed only against call sites misses: a use path sits behind a colon, so a\n`(?<![\\w:.$])` lookbehind on the *name* is required and a `(?![:\\w])` after it is not.\n\n`src/store/rematerialization_group.rs` is the exception that must not be renamed, and the plan\ndeclares it rather than relying on the guard: it lists the file with `expect: 0` and a skip at\nline 358, `/// The variant the invalidation report blames. Seeded apart from [`VARIANT_SEED`]\nso a` — English prose, not a call. The tool refuses if a declared skip line no longer carries\nthe word, so this declaration cannot rot silently, and a file whose staged text is identical to\nwhat is on disk is not written at all, so this file keeps its bytes. Measured alongside it, the\nother crate-wide collisions are outside the territory and untouched: `src/fact/guarantee_digest\n.rs:24`, `src/fact/identity.rs:26`, `src/fact/key.rs:51`, `src/fact/payload.rs:32` and\n`src/input_digest.rs:23` are all `pub fn Digest(&self) -> Digest128` — methods with a receiver,\nwhich the check does not report and this item does not rename; `src/component.rs:28, 33 and 34`\nare the `Subject`, `Variant` and `Configuration` arms of the `Component` enum; and\n`src/propagation.rs:132` is the prose `/// Fact-identity and invalidation-policy vocabulary`.\nOne measured consequence worth recording for whoever writes the next plan from a scan: the\nwhole-token guard matches a bare enum-variant line such as `    Variant,`, so a crate-wide\nrename is not safe here and the file list has to be enumerated — which is what this plan does.\n\n**Five lines reflow, four of them `use` lists.** The rename lengthens names, and four lines\nwould cross `rustfmt.toml`'s `max_width = 120` — measured before touching anything:\n`tests/fact_identity/reader.rs:4` to 162 columns, `require.rs:3` to 149, `key_identity.rs:3` to\n145, `invalidation.rs:3` to 128, and `invalidation.rs:204` to 121. The four `use` lists are\nwrapped into the file's own two-line shape (four-space continuation, one trailing comma on the\nlast entry, ≤120 columns); `invalidation.rs:3` fits sorted on one line at 114 columns and is\nonly reordered; `invalidation.rs:204` wraps at its own argument, `let mut store =\nMemory_Store_For_Key(`. Nothing else is reflowed, and no line over 120 that the rename does not\nrewrite is touched: `rematerialization_group.rs:441` is 127 columns today and stays exactly as\nit is, because no check in any rust phase enforces width (measured over `gates/phases/rust/\n*.json`) and this item removes findings rather than sweeping the crate's style. The four lists\nare also restored to the ASCII order the whole tree uses them in — `Base, Context_At,\nKey_With_Varied_Component, Memory_Store_For_Key, Requirement_For_Guarantee,\nRegistry_For_Guarantee, SYNTAX, Subject_Id_From_Seed, Syntactic` — because the rename alone\nwould sort `Requirement_For_Guarantee` behind `Offering` and `Memory_Store_For_Key` behind\n`Stored`. A `use`-list order is not semantics and no check reads it; the lines are being\nrewritten regardless, and leaving them unsorted would be the one thing in the tree that the\nrename disturbed without need.\n\n**What the reflow must not break.** `check-trailing-comma` is in the formatting phase and does\nread these lines, so the wrapped form keeps the trailing comma on its last entry before `};`,\nand the item's own predicate is not the only thing that runs: this item runs the formatting\nphase over the eleven files, plus `cargo check --workspace --all-targets`, plus\n`cargo test -p nomos-analysis --no-fail-fast`, because the check is a text reader over the tree\nand cannot see a build.\n\n**No waiver, no marker.** Nothing is added to `suppressions.json`, no in-code suppression marker\nis written, and the crate reads 0 waived before and after — there is nothing here to waive,\nbecause every finding is a name a rename answers.\n\n**Measured, before and after.** Measured at the tree this item was authored against, over the\ncrate at the phase's own flags: 17 live, 0 waived, 39 files judged, and the item's plan covers\nall 17 (the 17 findings are the 13 names above, and the plan holds one rule per name). The plan\nasserts 150 occurrences over 11 files before it writes anything, and re-reads each file\nafterwards to confirm the new name occurs exactly as many times as the old one did and the old\ntoken is gone from every line that was not skipped. Expected after: 0 live, 0 waived, 39 files\njudged — the crate's 13 one-word declarations are the only names the check reports over it, and\neach one takes a name that names its input or its result.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over\ncrates/substrate/nomos-analysis, verified by this item's predicate -- the sweep pointed at the\ncrate root, which is the scope the check judges, while the territory is the eleven files the\nchange touches, and the two sets are compared in both directions in the why rather than left\nto be assumed -- and cargo check --workspace --all-targets reports no error, since the check is\na text reader over the tree and cannot see a build. The 17 findings are cleared by naming what\neach helper reads or returns: a digest, a subject id, a snapshot id, a build variant id, a\nconfiguration id, a key with one varied component, a materialized fact from a key, a memory\nstore for a key, a registry for a guarantee, a requirement for a guarantee, the ordinal of a\ncomponent, and the rollup of an upstream payload. Every rename is a whole token whose\noccurrence count is asserted in every file it touches before anything is written -- 150\noccurrences over 11 files, including the four `use` entries and the three doc references a\nguard armed only against call sites would miss -- and the one word that must not move is\ndeclared as a skip (`src/store/rematerialization_group.rs:358`, English prose) rather than\nleft to the guard, so that file keeps its bytes. Five lines reflow and four of them are `use`\nlists the rename rewrote: every line the item touches is at or under rustfmt.toml's 120\ncolumns, no line the rename does not rewrite is reflowed, and no line over 120 that the item\ndoes not touch is changed. cargo test -p nomos-analysis --no-fail-fast passes, and the\nformatting phase's nine checks read zero over the eleven files, because `check-trailing-comma`\ndoes read the wrapped lists the item leaves behind. No waiver and no in-code marker is added,\nand no path outside the item's territory is edited. Every count above was measured at the tree\nthat holds 79042136, before any of this item's renames; the holder re-runs the sweep at claim\ntime and re-counts each token in the text it finds, and a count that no longer matches is a\nrefusal that rebuilds the plan, never a reason to rename fewer occurrences than the file holds.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/src/fact/memory_store/tests.rs",
+          "crates/substrate/nomos-analysis/src/store/rematerialization_group.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/key.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/invalidation.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/key_identity.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/reader.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/require.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/broadening.rs",
+          "crates/substrate/nomos-analysis/tests/fact_identity/store.rs",
+          "crates/substrate/nomos-analysis/tests/invalidation_order.rs",
+          "crates/substrate/nomos-analysis/tests/recomputation_equivalence.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/substrate/nomos-analysis",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/substrate/nomos-analysis",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    39 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789611960,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "79042136812e0a706f7ffcbe8098351819f92b0d"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

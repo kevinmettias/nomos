@@ -1,6 +1,9 @@
 //! What a fact is addressed by: every component reaches the digest, and nothing else does.
 
-use crate::key::{Base, Configuration, Snapshot, Stored, Subject, Varied};
+use crate::key::{
+    Base, Configuration_Id_From_Seed, Key_With_Varied_Component, Memory_Store_For_Key,
+    Snapshot_Id_From_Seed, Subject_Id_From_Seed,
+};
 use nomos_analysis::{Component, FactKey, FactStore, MaterializedFact, MemoryFactStore};
 use nomos_contracts::{GenerationId, SnapshotId};
 
@@ -17,7 +20,7 @@ const GUARANTEE_ORDINAL: usize = 6;
 const VARIANT_ORDINAL: usize = 7;
 const CONFIGURATION_ORDINAL: usize = 8;
 
-/// The seed the two differing components are set to, matching [`Varied`]'s own substitution
+/// The seed the two differing components are set to, matching [`Key_With_Varied_Component`]'s own substitution
 /// so a two-component key can be compared against the one-component keys.
 const VARIED_SEED: u8 = 9;
 
@@ -29,7 +32,7 @@ const ASKING_TREE_SEED: u8 = 9;
 /// The same fact, read from a named tree.
 fn Fact_From(key: &FactKey, snapshot: SnapshotId) -> MaterializedFact
 {
-    let mut fact = crate::key::Fact(key, GenerationId::INITIAL);
+    let mut fact = crate::key::Materialized_Fact_From_Key(key, GenerationId::INITIAL);
     fact.snapshot = snapshot;
 
     return fact;
@@ -43,7 +46,7 @@ fn Fact_From(key: &FactKey, snapshot: SnapshotId) -> MaterializedFact
 #[test]
 fn Test_Every_Component_Should_Be_Matched_Exhaustively()
 {
-    fn Ordinal(component: Component) -> usize
+    fn Ordinal_Of_Component(component: Component) -> usize
     {
         return match component
         {
@@ -62,7 +65,7 @@ fn Test_Every_Component_Should_Be_Matched_Exhaustively()
     for (index, component) in Component::All().iter().enumerate()
     {
         assert_eq!(
-            Ordinal(*component),
+            Ordinal_Of_Component(*component),
             index,
             "{} is not matched at the position Component::All() puts it, so the exhaustive \
              match and the universe have drifted apart",
@@ -89,7 +92,7 @@ fn Test_Every_Component_Should_Reach_The_Key_Digest()
     for component in Component::All()
     {
         assert_ne!(
-            Varied(*component).Digest(),
+            Key_With_Varied_Component(*component).Digest(),
             base,
             "{} does not reach the digest, so a fact would be reused under a key that does \
              not describe it",
@@ -101,11 +104,11 @@ fn Test_Every_Component_Should_Reach_The_Key_Digest()
 #[test]
 fn Test_A_Change_In_Any_One_Component_Should_Miss_The_Cache()
 {
-    let store = Stored(&Base());
+    let store = Memory_Store_For_Key(&Base());
 
     for component in Component::All()
     {
-        let varied = Varied(*component);
+        let varied = Key_With_Varied_Component(*component);
 
         assert!(
             store
@@ -122,12 +125,12 @@ fn Test_A_Change_In_Any_One_Component_Should_Miss_The_Cache()
 fn Test_Two_Components_Should_Not_Cancel_Each_Other_Out()
 {
     let mut both = Base();
-    both.subject = Subject(VARIED_SEED);
-    both.configuration = Configuration(VARIED_SEED);
+    both.subject = Subject_Id_From_Seed(VARIED_SEED);
+    both.configuration = Configuration_Id_From_Seed(VARIED_SEED);
 
     assert_ne!(both.Digest(), Base().Digest());
-    assert_ne!(both.Digest(), Varied(Component::Subject).Digest());
-    assert_ne!(both.Digest(), Varied(Component::Configuration).Digest());
+    assert_ne!(both.Digest(), Key_With_Varied_Component(Component::Subject).Digest());
+    assert_ne!(both.Digest(), Key_With_Varied_Component(Component::Configuration).Digest());
 }
 
 /// The property that closed OD-ANALYSIS-001.
@@ -142,8 +145,8 @@ fn Test_Two_Workspace_States_Should_Not_Produce_Two_Facts()
 {
     let key = Base();
     let mut store = MemoryFactStore::New();
-    let measured = Fact_From(&key, Snapshot(MEASURED_TREE_SEED));
-    let asked_again = Fact_From(&key, Snapshot(ASKING_TREE_SEED));
+    let measured = Fact_From(&key, Snapshot_Id_From_Seed(MEASURED_TREE_SEED));
+    let asked_again = Fact_From(&key, Snapshot_Id_From_Seed(ASKING_TREE_SEED));
 
     assert_eq!(
         measured.Key().Digest(),
@@ -158,7 +161,7 @@ fn Test_Two_Workspace_States_Should_Not_Produce_Two_Facts()
 
     assert_eq!(
         served.snapshot,
-        Snapshot(MEASURED_TREE_SEED),
+        Snapshot_Id_From_Seed(MEASURED_TREE_SEED),
         "and what it serves still names the tree it was read from. A reused fact is not a \
          repeated observation, so its provenance must not be restamped"
     );

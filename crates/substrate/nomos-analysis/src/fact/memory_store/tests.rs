@@ -29,7 +29,7 @@ const CONFIGURATION_SEED: u8 = 4;
 /// reaches this fact is the dependency edge below, which is the walk these tests drive.
 const DERIVED_SUBJECT_SEED: u8 = 7;
 
-fn Seeded(seed: u8) -> Digest128
+fn Digest_From_Seed(seed: u8) -> Digest128
 {
     return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
 }
@@ -49,13 +49,13 @@ fn Key_For(subject_seed: u8) -> FactKey
     return FactKey {
         contract: CapabilityId::New("nomos.cap.syntax.tree"),
         contract_version: ContractVersion::New(1, 0),
-        subject: SubjectId::From_Digest(Seeded(subject_seed)),
+        subject: SubjectId::From_Digest(Digest_From_Seed(subject_seed)),
         semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
         provider: ProviderId::New("nomos.provider.test"),
         provider_version: ContractVersion::New(1, 0),
         guarantee: GuaranteeDigest::Of(&File_Guarantee()),
-        variant: BuildVariantId::From_Digest(Seeded(VARIANT_SEED)),
-        configuration: ConfigurationId::From_Digest(Seeded(CONFIGURATION_SEED)),
+        variant: BuildVariantId::From_Digest(Digest_From_Seed(VARIANT_SEED)),
+        configuration: ConfigurationId::From_Digest(Digest_From_Seed(CONFIGURATION_SEED)),
     };
 }
 
@@ -63,7 +63,7 @@ fn Fact_For(key: &FactKey, generation: GenerationId) -> MaterializedFact
 {
     return MaterializedFact {
         identity: key.clone().At(generation),
-        snapshot: SnapshotId::From_Digest(Seeded(SNAPSHOT_SEED)),
+        snapshot: SnapshotId::From_Digest(Digest_From_Seed(SNAPSHOT_SEED)),
         evidence: EvidenceClass::Derived,
         guarantee: File_Guarantee(),
         payload: FactPayload::New(SchemaId::New("nomos.syntax.v1"), b"tree".to_vec()),
