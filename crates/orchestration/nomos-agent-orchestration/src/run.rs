@@ -37,24 +37,13 @@
 
 use std::path::Path;
 
-use crate::{AgentDispatchOutcome, Backend, DispatchConfig};
+use crate::{AgentDispatchOutcome, AgentEnvironment, Backend, DispatchConfig};
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_contracts::{Finding, SchemaId};
 use nomos_model_package::EffortLevel;
 use nomos_platform::ProgramLauncher;
 use nomos_rules::RoleSurfacePair;
 use nomos_scope_verification::Territory;
-
-/// The process launcher [`Run_Agent_Execute`] and [`Run_Agent_Judgment`] need but do not
-/// choose -- grouped into its own value the same way `nomos_correction_orchestration::
-/// CorrectionEnvironment` groups the platform ports its own seam needs, for the identical
-/// reason: neither chooses a platform, only accepts the one its caller already did. One
-/// field rather than that type's three: dispatching a `TaskEnvelope` to a backend touches
-/// no build variant and no filesystem, only a process launcher.
-pub struct AgentEnvironment<'a, Launcher: ProgramLauncher>
-{
-    pub launcher: &'a Launcher,
-}
 
 /// Assembles a bare `TaskEnvelope` naming only `goal` and `config.effort`, and dispatches
 /// it to `config.backend`.

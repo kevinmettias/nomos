@@ -54,13 +54,17 @@
 #![forbid(unsafe_code)]
 
 mod agent_dispatch_outcome;
+mod agent_environment;
 mod backend;
 mod dispatch_config;
 mod run;
 mod validated_correction;
+mod validated_correction_outcome;
 
 pub use agent_dispatch_outcome::AgentDispatchOutcome;
+pub use agent_environment::AgentEnvironment;
 pub use backend::Backend;
 pub use dispatch_config::DispatchConfig;
-pub use run::{AgentEnvironment, Run_Agent_Execute, Run_Agent_Judgment};
-pub use validated_correction::{Run_Validated_Correction, ValidatedCorrectionOutcome};
+pub use run::{Run_Agent_Execute, Run_Agent_Judgment};
+pub use validated_correction::Run_Validated_Correction;
+pub use validated_correction_outcome::ValidatedCorrectionOutcome;

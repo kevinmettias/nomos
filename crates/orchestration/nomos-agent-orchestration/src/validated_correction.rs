@@ -18,26 +18,11 @@
 //! [`ValidatedCorrectionOutcome::NoPlan`] says so, distinctly from a plan that was proposed
 //! and then refused.
 
+use crate::ValidatedCorrectionOutcome;
 use nomos_agent_contracts::WorkResult;
-use nomos_corrections::{CommittedPlan, CorrectionError, Preview};
+use nomos_corrections::CorrectionError;
 use nomos_model::Evidence;
 use nomos_workspace::Workspace;
-
-/// What driving a [`WorkResult`]'s plan through the correction lifecycle produced.
-#[derive(Clone, Debug, PartialEq)]
-pub enum ValidatedCorrectionOutcome
-{
-    /// `result.plan` was `None` -- a judgment-only response, `OD-CONTRACTS-003`'s case.
-    /// Not a refusal: nothing was proposed, so nothing was refused.
-    NoPlan,
-    /// The plan staged, validated and committed against `workspace`, carrying the preview
-    /// rendered before either check ran.
-    Committed
-    {
-        preview: Preview,
-        committed: CommittedPlan,
-    },
-}
 
 /// Drives `result.plan`, if there is one, through `Preview -> Stage -> Validate -> Commit`
 /// against `workspace`, submitting under `evidence`.

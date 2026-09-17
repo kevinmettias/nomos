@@ -84826,6 +84826,85 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-FILENAME-AGENT-ORCHESTRATION",
+      "title": "P114 file-name: the agent-orchestration crate's two types, in files named for them",
+      "why": "check-file-name asks a module file to be named after the public type it declares, and two files in this crate are not: src/run.rs declares AgentEnvironment and src/validated_correction.rs declares ValidatedCorrectionOutcome. Measured, `check.exe file-name --include-tests` over this crate reads exactly these two findings, one per file, each file declaring exactly one public type whose snake_case is not the file stem. The naming phase over crates/ reads 137 live findings and 17 waived, with 2 of its 8 checks not clean; file-name is 19 of those 137 over 8 crates, and these two are this crate's.\n\nThe crate already spells the answer in its own layout: every other public type it owns lives in a flat file under src/ named for it -- agent_dispatch_outcome.rs declares AgentDispatchOutcome, backend.rs declares Backend, dispatch_config.rs declares DispatchConfig -- and lib.rs declares each one with `mod` and re-exports it by name. src/run.rs and src/validated_correction.rs are named for what they do, a verb family and a lifecycle, rather than for what they declare, so the type is the straggler in a file that keeps its own name.\n\nSo each type moves verbatim into the flat file named for it -- src/agent_environment.rs and src/validated_correction_outcome.rs -- and lib.rs declares both modules and re-exports both types, while run.rs's and validated_correction.rs's own re-export lines shrink to the items each keeps. Every module file keeps its name and keeps its functions, and no #[path] attribute appears in the crate.\n\nNothing has to move with these two types, and that is checked rather than assumed: neither has an impl anywhere in the crate -- measured, grep finds no `impl` naming either type, and the crate's only impl blocks are the tests' own Strategy and ProgramLauncher fakes for Scripted and Unreachable -- AgentEnvironment is a one-field struct its callers build literally, and ValidatedCorrectionOutcome is an enum with two variants. The rule this avoids was measured a crate over: an impl left behind whose self type is the moved type files a method named Type::member, tests/contract/src/reading/routes.rs's Declared_As matches a name by prefix, and the re-export chain is abandoned, so the type and its fields vanish from the rendered surface while the method line stays. Measured on nomos-connector-coderabbit at commit ee512dd1: four snapshot lines dropped, cargo test -p nomos-contract-tests --test public_surface 7 passed and 1 failed, exit 101, and the same move with the impls carried along is byte-identical and green.\n\nNo name changes, because both types are in the crate's published surface and tests/contract/surface/nomos-agent-orchestration.txt records crate::Type::member with no module path. Every call site names the crate root rather than a module -- nomos-api/src/agent.rs, nomos-cli/src/agent/dispatch.rs and nomos-cli/src/agent/judge_role.rs each import AgentEnvironment from nomos_agent_orchestration -- and no path spelling run::AgentEnvironment exists anywhere in the workspace, so lib.rs's re-export is the only path either type needs.",
+      "done_when": "The two file-name findings this crate reports are gone: this item's predicate -- nomos-check-sweep over the file-name check alone, at the phase's own --include-tests flag and bounded at zero findings waived by the ledger -- reads zero live findings and zero waived and judges every file it is pointed at, and cargo check --workspace --all-targets reports no error and no warning this change introduced, because the check is a text reader over the tree and cannot see a build.\n\nEach type moves verbatim and every name is unchanged: AgentEnvironment to src/agent_environment.rs and ValidatedCorrectionOutcome to src/validated_correction_outcome.rs, each declared by lib.rs with `mod` and re-exported from lib.rs by name, the way this crate's other four type files already are. src/run.rs and src/validated_correction.rs keep their names and their functions and their re-export lines shrink to the items they still own; neither type has an impl anywhere, before or after, so nothing is left behind whose self type is a moved type, and no #[path] attribute appears anywhere in the crate.\n\nEvery reference still resolves: lib.rs's pub use lines still export the same names, nomos-api/src/agent.rs and nomos-cli/src/agent/dispatch.rs and nomos-cli/src/agent/judge_role.rs still import AgentEnvironment from the crate root and compile, the crate's own tests still build an AgentEnvironment literally, and each moved type carries the imports its own declaration needs -- ProgramLauncher for AgentEnvironment's bound, Preview and CommittedPlan for ValidatedCorrectionOutcome's variants -- out of the module file it came from.\n\nThe crate exports exactly what it exported before: tests/contract/surface/nomos-agent-orchestration.txt is byte-identical, sha256 f58e0b62f5249fc66788858c56803d66d01d68b2d32e4403d8cd86fc89c824df before this change, and cargo test -p nomos-contract-tests --test public_surface is green.\n\nThe crate reports no finding under any check that it did not report before this change -- measured by running the same 157-check sweep over the crate before and after and comparing the two finding sets as multisets of check and message -- the baseline being the 41 live findings it reports before this change, with the two file-name findings the only difference.\n\nNo waiver and no in-code marker is added, no line this change writes exceeds the 120 columns rustfmt.toml records, and no path outside the five paths this item's territory names and work/ledger.json is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-agent-orchestration/src/agent_environment.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/run.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/validated_correction.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/validated_correction_outcome.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/orchestration/nomos-agent-orchestration",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/orchestration/nomos-agent-orchestration",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK           LIVE   WAIVED     JUDGED  VERDICT\nfile-name          0        0     8 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789628319,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ee512dd15c9cc5b24fcf665f64a4073e1a9b0d75"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
