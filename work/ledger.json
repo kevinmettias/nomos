@@ -83225,6 +83225,83 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-SPEC-MODEL-TESTS",
+      "title": "The naming-clarity check reads zero over the spec model territory at the phase own flags",
+      "why": "check-naming-clarity reads 211 live findings and 1 waived over the whole crates/ tree at the phase own flags, over 1594 judged files -- measured after the store slice this campaign committed last cleared its 24 -- and by crate they are host 80, rules 37, spec 20 and substrate 74. The spec band is that 20 over 11 files, measured over crates/spec, 346 files judged, and nine of the twenty are this item's: the findings the check reads over crates/spec/nomos-spec-model, in three files. Eight are the check's one-word shape, which fires on a parameterised free function whose name splits into one word, and one is its vague-word shape. The rest of the spec band stays with two sibling items: 15 findings over 8 files in crates/spec/nomos-spec-project's four projection-test files and crates/spec/nomos-spec-bundle/tests/round_trip/fixpoint.rs, and the 5 over the three files two live P103 claims already hold by exact path -- nomos-spec-bundle/src/columns/tests.rs and nomos-spec-bundle/tests/round_trip/populated.rs under P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2, and nomos-spec-validate/tests/preservation_holds.rs under P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE-4 -- so none of the three is claimed or edited here.\n\nEvery one of the nine names is a fixture builder or a fixture reader, not a subject under test: what the check reports is a declaration with one word in its name, and in these three files the declarations with one word are the helpers a test reaches for rather than the tests themselves. Eight are cleared by naming what the helper builds or reads. The ninth is the only vocabulary decision this item takes, and it is the vague-word shape rather than the one-word shape: the check's default vague list holds twenty words -- data, do, helper, helpers, manager, managers, object, objects, process, processor, service, services, stuff, thing, things, util, utils, utility, handler, wrapper -- and crates/spec/nomos-spec-model/src/submission/tests.rs:290 declares fn Test_Do_Nothing_Should_Be_An_Admissible_Alternative(), whose second word is `do`. The test asserts that a design whose single alternative reads \"do nothing\" is admissible, which is the fixture's own text at 268 and 292; the name says the same thing without the vague word as Test_An_Inaction_Alternative_Should_Be_Admissible. Nothing here renames a domain word: a name in this list is a helper's, and the corpus's words -- the fixture strings, the rule ids, the field names -- are data the check does not judge.\n\ncrates/spec/nomos-spec-model/src/submission/tests.rs carries five, and this file is the twin of crates/spec/nomos-spec-store/src/submission/tests.rs, which the store slice this campaign committed last renamed; four of the five take the name that file already gave the same helper, so the two submission modules read alike. Line 8 declares fn First(failures: &[Failure]) -> &Failure, the first failure of a refusal, named rather than indexed; it becomes First_Failure, as it did in the store, with six calls at 139, 140, 184, 285, 331 and 350. Line 24 declares fn Value(declared: Declared<'_>, origin: Origin) -> FieldValue, one field's name and the text it carries, with the origin that says where the value came from; it becomes Field_Value_With_Origin, with the struct declaration and its doc paragraph left as they are, twenty-one calls at 50 through 54, 80, 96, 97, 129, 147, 237 through 242, 301 through 304 and 308, and the doc line at 16 that shows the call transposed. Line 33 declares fn Request(state: SubmissionState, values: Vec<FieldValue>) -> Submission, a feature request carrying the five values every request in this file files; it becomes Submission_Request, with twelve calls at 61, 69, 81, 100, 101, 119, 132, 133, 150, 175, 190 and 204. Line 227 declares fn Design(answers: DesignAnswers<'_>) -> Submission, the design-specification sibling of the request; it becomes Submission_Design, with calls at 281 and 293. Line 290 is the vague-word finding above.\n\ncrates/spec/nomos-spec-model/tests/byte_order_mark.rs carries one, at line 212: fn Collect(directory: &Path, into: &mut Vec<PathBuf>), which walks a directory tree and appends every markdown path it holds to the vector it is handed. It becomes Collect_Document_Paths, with calls at 121 and 225 -- the second of which is the helper's own recursion -- and the comment at 160 that says when the enumeration happened, which names the function and therefore moves with it.\n\ncrates/spec/nomos-spec-model/tests/normalizer_gate.rs carries three, and they are the chain that reads one fixture: Corpus resolves a name under tests/corpus, Read reads that file, Load parses it. Line 53 declares fn Corpus(name: &str) -> PathBuf; it becomes Corpus_Path_For, with a call at 60. Line 58 declares fn Read(name: &str) -> String, the fixture's text, with the paragraph above its read explaining what a missing fixture would do to the assertions below; it becomes Read_Corpus_Text, with calls at 71 and 89. Line 69 declares fn Load<Record: serde::de::DeserializeOwned>(name: &str) -> Vec<Record>, the fixture's records; it becomes Parse_Fixture_Records, with calls at 88, 130, 173, 197 and 217, and the comment at 63 that names it. The name keeps the verb and names the operand: what it parses and what it hands back are the fixture's records, and the generic parameter still says which record type.\n\nThe rename is 63 occurrences over three files, applied by one script that substitutes a whole token -- the name not preceded by a word character, `:`, `.` or `$` and not followed by a word character -- and refuses to write anything unless every per-file count matches this item's why: 47 in src/submission/tests.rs, 4 in tests/byte_order_mark.rs and 12 in tests/normalizer_gate.rs. The guard is a whole token rather than a call because a `use` list entry stands alone before a comma, which a call-armed pattern cannot see; no file in these three imports one of the nine names, so nothing in this item crosses a module boundary, and the crate has no path-qualified reference to any of them either. The guard found two collisions that this item does not touch. crates/spec/nomos-spec-model/src/render_error.rs declares its own struct Value at 121, used at 102, 110 and 123 and named in prose at 116, which is a different declaration with the same word and outside this item's file scope; and src/table/tests.rs holds the word Value inside a markdown fixture at 169 and Request inside a table fixture at 307 through 311, which are document content the check does not judge. Both are left exactly as they are.\n\nNineteen lines grow past the width their file already kept, and each is re-wrapped or broken rather than left wide, with no word changed. Sixteen are calls of Field_Value_With_Origin whose argument is a Declared struct literal holding a fixture sentence, which the longer name pushes from at most 108 columns to as much as 126; each is broken at the argument list in the shape the same file already uses for assert_eq! and assert!, with the receiver on the first line and one argument per line. Three are comments that name a renamed function: the doc line at src/submission/tests.rs:16, the comment at tests/byte_order_mark.rs:160 and the comment at tests/normalizer_gate.rs:63, each of which is re-wrapped around the same words. Two lines stay over 100 columns because they already were and the rename does not touch them -- tests/normalizer_gate.rs:8, a use list, and src/submission/tests.rs's three-variant array, which the reflows below move from line 361 to line 413 -- and nothing else reflows, so the diff is names, line breaks and nothing else.\n\nMeasured, before and after. The census this item came from -- the naming-clarity sweep over crates/spec at the phase own flags, 346 files judged -- reads 20 live findings over 11 files, 9 of them in this crate's three files. Implementation moved all 63 occurrences over the three files and broke or re-wrapped the nineteen over-wide lines, no word changed. After it, this item's predicate -- the same sweep pointed at crates/spec/nomos-spec-model -- reads 0 live findings, 0 waived, 31 files judged, verdict OK, exit 0. cargo check --workspace --all-targets exits 0, so every caller of the nine names moved with them and the rename compiles; the warnings it prints are the ones nomos-analysis already carried. cargo test -p nomos-spec-model --no-fail-fast exits 0 with 111 tests passing and none failing -- 102 in the lib, 3 in tests/byte_order_mark.rs and 6 in tests/normalizer_gate.rs, plus an empty doc-test run. NOMOS_V14_CORPUS is unset in this shell, so the byte_order_mark case that walks the authored tree returned early rather than passing on evidence: what that binary proves here is that the file compiles and that its two other cases pass. The two lines that were over 100 columns before the rename are still the only ones over it. No waiver and no in-code marker is added, and no path outside the item's three files is edited.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/spec/nomos-spec-model, verified by this item's predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. Both shapes the check has are cleared: the eight one-word declarations by naming what each helper builds, collects or reads, and the one vague-word name by saying the same thing without the vague word. The rename is a whole token over three files with every per-file count asserted before anything is written, and the two collisions the guard found -- the struct Value in src/render_error.rs and the fixture strings in src/table/tests.rs -- are left exactly as they are. No waiver and no in-code marker is added, and no path outside the item's three files is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-model/src/submission/tests.rs",
+          "crates/spec/nomos-spec-model/tests/byte_order_mark.rs",
+          "crates/spec/nomos-spec-model/tests/normalizer_gate.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/spec/nomos-spec-model",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/spec/nomos-spec-model",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    31 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789610237,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a2f71e07f4983c88aa619ebeafe98a2299d5bee7"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

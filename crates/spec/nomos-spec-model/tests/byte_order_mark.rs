@@ -118,7 +118,7 @@ fn Test_Every_Authored_Document_Should_Segment_Past_Its_Front_Matter()
         return;
     };
     let mut documents = Vec::new();
-    Collect(&root.join("01_authoring"), &mut documents);
+    Collect_Document_Paths(&root.join("01_authoring"), &mut documents);
     let mut marked = 0_u32;
     for path in &documents
     {
@@ -157,10 +157,10 @@ fn Corpus_Root() -> Option<PathBuf>
 fn Assert_One_Document(path: &Path) -> u32
 {
     let text = std::fs::read_to_string(path)
-        // `Collect` enumerated this path moments ago, so a read failure is the corpus changing
-        // underneath the run rather than a machine that has none. Skipping the document would
-        // lower both floors the caller asserts — 2000 documents and 1600 marked ones — while
-        // leaving them reading as though the whole tree had been walked.
+        // `Collect_Document_Paths` enumerated this path moments ago, so a read failure is the
+        // corpus changing underneath the run rather than a machine that has none. Skipping the
+        // document would lower both floors the caller asserts — 2000 documents and 1600 marked
+        // ones — while leaving them reading as though the whole tree had been walked.
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
     let blocks = Segment(&text);
 
@@ -209,7 +209,7 @@ fn Assert_The_Mark_Changed_Nothing(text: &str, blocks: &[SourceBlock], path: &Pa
     return 1;
 }
 
-fn Collect(directory: &Path, into: &mut Vec<PathBuf>)
+fn Collect_Document_Paths(directory: &Path, into: &mut Vec<PathBuf>)
 {
     let entries = std::fs::read_dir(directory)
         // This walk recurses, so a directory it cannot open is a whole subtree dropped from
@@ -222,7 +222,7 @@ fn Collect(directory: &Path, into: &mut Vec<PathBuf>)
         let path = entry.path();
         if path.is_dir()
         {
-            Collect(&path, into);
+            Collect_Document_Paths(&path, into);
         }
         else if path.extension().and_then(std::ffi::OsStr::to_str) == Some("md")
         {

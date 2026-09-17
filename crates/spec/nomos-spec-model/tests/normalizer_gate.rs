@@ -50,25 +50,25 @@ const NON_ASCII_STATEMENT_FLOOR: usize = 10;
 /// `01_authoring/domain_volumes`.
 const VOLUME_FLOOR: u32 = 10;
 
-fn Corpus(name: &str) -> PathBuf
+fn Corpus_Path_For(name: &str) -> PathBuf
 {
     return Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/corpus").join(name);
 }
 
-fn Read(name: &str) -> String
+fn Read_Corpus_Text(name: &str) -> String
 {
-    let path = Corpus(name);
+    let path = Corpus_Path_For(name);
     return std::fs::read_to_string(&path)
         // These fixtures are committed under `tests/corpus` and carry the recorded hashes this
-        // gate reproduces. A missing one leaves nothing to reproduce against, and `Load` would
-        // otherwise have to hand back an empty vector — over which every assertion in this
-        // file iterates and therefore passes.
+        // gate reproduces. A missing one leaves nothing to reproduce against, and
+        // `Parse_Fixture_Records` would otherwise have to hand back an empty vector — over
+        // which every assertion in this file iterates and therefore passes.
         .unwrap_or_else(|error| panic!("the gate needs {}: {error}", path.display()));
 }
 
-fn Load<Record: serde::de::DeserializeOwned>(name: &str) -> Vec<Record>
+fn Parse_Fixture_Records<Record: serde::de::DeserializeOwned>(name: &str) -> Vec<Record>
 {
-    return serde_json::from_str(&Read(name)).expect("fixture is valid json");
+    return serde_json::from_str(&Read_Corpus_Text(name)).expect("fixture is valid json");
 }
 
 fn Kind_Label(kind: BlockKind) -> &'static str
@@ -85,8 +85,8 @@ fn Kind_Label(kind: BlockKind) -> &'static str
 #[test]
 fn Test_Every_Block_Of_A_Real_Document_Should_Reproduce_Its_Hashes()
 {
-    let expected: Vec<BlockRecord> = Load("suite-index-blocks.json");
-    let blocks = Segment(&Read("suite-index.md"));
+    let expected: Vec<BlockRecord> = Parse_Fixture_Records("suite-index-blocks.json");
+    let blocks = Segment(&Read_Corpus_Text("suite-index.md"));
 
     assert!(!expected.is_empty(), "the fixture must not be empty");
     assert_eq!(
@@ -127,7 +127,7 @@ fn Assert_The_Block_Matches(block: &SourceBlock, want: &BlockRecord)
 #[test]
 fn Test_The_Normalizer_Should_Reproduce_The_Discriminating_Hashes()
 {
-    let blocks: Vec<DiscriminatingBlock> = Load("discriminating-blocks.json");
+    let blocks: Vec<DiscriminatingBlock> = Parse_Fixture_Records("discriminating-blocks.json");
 
     assert_eq!(
         blocks.len(),
@@ -170,7 +170,7 @@ fn Assert_It_Discriminates(block: &DiscriminatingBlock)
 #[test]
 fn Test_Sampled_Statements_Should_Reproduce_Their_Canonical_Hash()
 {
-    let statements: Vec<StatementRecord> = Load("statements.json");
+    let statements: Vec<StatementRecord> = Parse_Fixture_Records("statements.json");
 
     assert!(
         statements.len() >= SAMPLED_STATEMENT_FLOOR,
@@ -194,7 +194,7 @@ fn Test_Sampled_Statements_Should_Reproduce_Their_Canonical_Hash()
 #[test]
 fn Test_The_Sample_Should_Contain_Non_Ascii_Statements()
 {
-    let statements: Vec<StatementRecord> = Load("statements.json");
+    let statements: Vec<StatementRecord> = Parse_Fixture_Records("statements.json");
     let non_ascii = statements
         .iter()
         .filter(|statement| !statement.canonical_text.is_ascii())
@@ -214,7 +214,7 @@ fn Test_The_Sample_Should_Contain_Non_Ascii_Statements()
 #[test]
 fn Test_Every_Canonical_Text_Should_Be_A_Fixed_Point()
 {
-    let statements: Vec<StatementRecord> = Load("statements.json");
+    let statements: Vec<StatementRecord> = Parse_Fixture_Records("statements.json");
 
     for statement in &statements
     {

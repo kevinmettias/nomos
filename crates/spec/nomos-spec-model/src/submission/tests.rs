@@ -5,7 +5,7 @@ use crate::Origin;
 use crate::Severity;
 
 /// The first failure, named rather than indexed.
-fn First(failures: &[Failure]) -> &Failure
+fn First_Failure(failures: &[Failure]) -> &Failure
 {
     return failures.first().expect("at least one failure");
 }
@@ -13,15 +13,16 @@ fn First(failures: &[Failure]) -> &Failure
 /// One field's name and the text it carries, grouped so a call site writes both by name.
 ///
 /// As two bare `&str` parameters the pair is transposable and nothing would object:
-/// `Value("something", "title", origin)` compiles and means the opposite of what it reads
-/// as. Naming each position is what makes that a compile error instead.
+/// `Field_Value_With_Origin("something", "title", origin)` compiles and means the
+/// opposite of what it reads as. Naming each position is what makes that a compile
+/// error instead.
 struct Declared<'a>
 {
     field: &'a str,
     value: &'a str,
 }
 
-fn Value(declared: Declared<'_>, origin: Origin) -> FieldValue
+fn Field_Value_With_Origin(declared: Declared<'_>, origin: Origin) -> FieldValue
 {
     return FieldValue {
         field: declared.field.to_owned(),
@@ -30,7 +31,7 @@ fn Value(declared: Declared<'_>, origin: Origin) -> FieldValue
     };
 }
 
-fn Request(state: SubmissionState, values: Vec<FieldValue>) -> Submission
+fn Submission_Request(state: SubmissionState, values: Vec<FieldValue>) -> Submission
 {
     return Submission {
         id: "FR-001".to_owned(),
@@ -47,18 +48,30 @@ fn Request(state: SubmissionState, values: Vec<FieldValue>) -> Submission
 fn Complete_Request_Values() -> Vec<FieldValue>
 {
     return vec![
-        Value(Declared { field: "title", value: "Ledger items can be declined" }, Origin::Submitted),
-        Value(Declared { field: "goal", value: "close superseded work" }, Origin::Submitted),
-        Value(Declared { field: "behaviour", value: "a verb writes Declined" }, Origin::Submitted),
-        Value(Declared { field: "acceptance", value: "the item stops being claimable" }, Origin::Submitted),
-        Value(Declared { field: "invariants", value: "none" }, Origin::Submitted),
+        Field_Value_With_Origin(
+            Declared { field: "title", value: "Ledger items can be declined" },
+            Origin::Submitted,
+        ),
+        Field_Value_With_Origin(
+            Declared { field: "goal", value: "close superseded work" },
+            Origin::Submitted,
+        ),
+        Field_Value_With_Origin(
+            Declared { field: "behaviour", value: "a verb writes Declined" },
+            Origin::Submitted,
+        ),
+        Field_Value_With_Origin(
+            Declared { field: "acceptance", value: "the item stops being claimable" },
+            Origin::Submitted,
+        ),
+        Field_Value_With_Origin(Declared { field: "invariants", value: "none" }, Origin::Submitted),
     ];
 }
 
 #[test]
 fn Test_Validate_Submission_Should_Pass_A_Complete_Request()
 {
-    let submission = Request(SubmissionState::Accepted, Complete_Request_Values());
+    let submission = Submission_Request(SubmissionState::Accepted, Complete_Request_Values());
 
     assert_eq!(Validate_Submission(&submission), Vec::new());
 }
@@ -66,7 +79,7 @@ fn Test_Validate_Submission_Should_Pass_A_Complete_Request()
 #[test]
 fn Test_Required_Fields_Should_Include_Title_And_The_Kinds_Own_Fields()
 {
-    let submission = Request(SubmissionState::Draft, Vec::new());
+    let submission = Submission_Request(SubmissionState::Draft, Vec::new());
 
     assert_eq!(
         submission.Required_Fields(),
@@ -77,8 +90,11 @@ fn Test_Required_Fields_Should_Include_Title_And_The_Kinds_Own_Fields()
 #[test]
 fn Test_A_Refusal_Should_Name_Every_Missing_Field_Rather_Than_The_First()
 {
-    let declared = Value(Declared { field: "title", value: "something" }, Origin::Submitted);
-    let submission = Request(SubmissionState::Draft, vec![declared]);
+    let declared = Field_Value_With_Origin(
+        Declared { field: "title", value: "something" },
+        Origin::Submitted,
+    );
+    let submission = Submission_Request(SubmissionState::Draft, vec![declared]);
 
     let failures = Validate_Submission(&submission);
     let fields: Vec<&str> = failures
@@ -93,12 +109,12 @@ fn Test_A_Refusal_Should_Name_Every_Missing_Field_Rather_Than_The_First()
 fn Test_A_Draft_Should_Be_Refused_For_Incompleteness_Exactly_As_An_Accepted_One_Is()
 {
     let missing = vec![
-        Value(Declared { field: "title", value: "something" }, Origin::Submitted),
-        Value(Declared { field: "goal", value: "a goal" }, Origin::Submitted),
+        Field_Value_With_Origin(Declared { field: "title", value: "something" }, Origin::Submitted),
+        Field_Value_With_Origin(Declared { field: "goal", value: "a goal" }, Origin::Submitted),
     ];
 
-    let as_draft = Request(SubmissionState::Draft, missing.clone());
-    let as_accepted = Request(SubmissionState::Accepted, missing);
+    let as_draft = Submission_Request(SubmissionState::Draft, missing.clone());
+    let as_accepted = Submission_Request(SubmissionState::Accepted, missing);
     let draft = Validate_Submission(&as_draft);
     let accepted = Validate_Submission(&as_accepted);
 
@@ -116,7 +132,7 @@ fn Test_A_Draft_Should_Be_Refused_For_Incompleteness_Exactly_As_An_Accepted_One_
 #[test]
 fn Test_A_Stated_Absence_Should_Satisfy_A_Required_Field()
 {
-    let submission = Request(SubmissionState::Accepted, Complete_Request_Values());
+    let submission = Submission_Request(SubmissionState::Accepted, Complete_Request_Values());
 
     assert_eq!(submission.Current("invariants").map(|v| return v.value.as_str()), Some("none"));
     assert_eq!(Validate_Submission(&submission), Vec::new());
@@ -126,28 +142,34 @@ fn Test_A_Stated_Absence_Should_Satisfy_A_Required_Field()
 fn Test_An_Inferred_Value_Should_Be_Readable_And_Never_Sufficient()
 {
     let mut values = Complete_Request_Values();
-    let inferred = Value(Declared { field: "goal", value: "guessed from the title" }, Origin::Inferred);
+    let inferred = Field_Value_With_Origin(
+        Declared { field: "goal", value: "guessed from the title" },
+        Origin::Inferred,
+    );
     values.push(inferred);
 
-    let as_draft = Request(SubmissionState::Draft, values.clone());
-    let as_accepted = Request(SubmissionState::Accepted, values);
+    let as_draft = Submission_Request(SubmissionState::Draft, values.clone());
+    let as_accepted = Submission_Request(SubmissionState::Accepted, values);
     let draft = Validate_Submission(&as_draft);
     let accepted = Validate_Submission(&as_accepted);
 
     assert_eq!(draft, Vec::new(), "a draft may carry an inferred value");
     assert_eq!(accepted.len(), 1);
-    assert_eq!(First(&accepted).rule, "accepted-values-are-not-inferred");
-    assert_eq!(First(&accepted).field, "goal");
+    assert_eq!(First_Failure(&accepted).rule, "accepted-values-are-not-inferred");
+    assert_eq!(First_Failure(&accepted).field, "goal");
 }
 
 #[test]
 fn Test_Current_Should_Read_The_Latest_Value_Not_An_Earlier_One()
 {
     let mut values = Complete_Request_Values();
-    let clarified = Value(Declared { field: "goal", value: "what it became" }, Origin::Clarified);
+    let clarified = Field_Value_With_Origin(
+        Declared { field: "goal", value: "what it became" },
+        Origin::Clarified,
+    );
     values.push(clarified);
 
-    let submission = Request(SubmissionState::Accepted, values);
+    let submission = Submission_Request(SubmissionState::Accepted, values);
 
     assert_eq!(
         submission.Current("goal").map(|v| return v.value.as_str()),
@@ -172,7 +194,7 @@ fn Test_An_Open_Blocking_Gap_Should_Refuse_Acceptance_And_Allow_A_Draft()
         closed_by: None,
     };
 
-    let mut submission = Request(SubmissionState::Draft, Complete_Request_Values());
+    let mut submission = Submission_Request(SubmissionState::Draft, Complete_Request_Values());
     submission.gaps = vec![gap];
 
     assert_eq!(Validate_Submission(&submission), Vec::new());
@@ -181,13 +203,13 @@ fn Test_An_Open_Blocking_Gap_Should_Refuse_Acceptance_And_Allow_A_Draft()
     let failures = Validate_Submission(&submission);
 
     assert_eq!(failures.len(), 1);
-    assert_eq!(First(&failures).rule, "no-open-blocking-gap");
+    assert_eq!(First_Failure(&failures).rule, "no-open-blocking-gap");
 }
 
 #[test]
 fn Test_A_Gap_Closed_By_A_Citation_Should_Stop_Blocking()
 {
-    let mut submission = Request(SubmissionState::Accepted, Complete_Request_Values());
+    let mut submission = Submission_Request(SubmissionState::Accepted, Complete_Request_Values());
     submission.gaps = vec![DecisionGap {
         question: "which substrate is canonical".to_owned(),
         blocks: vec!["behaviour".to_owned()],
@@ -201,7 +223,7 @@ fn Test_A_Gap_Closed_By_A_Citation_Should_Stop_Blocking()
 #[test]
 fn Test_A_Non_Blocking_Gap_Should_Survive_Acceptance()
 {
-    let mut submission = Request(SubmissionState::Accepted, Complete_Request_Values());
+    let mut submission = Submission_Request(SubmissionState::Accepted, Complete_Request_Values());
     submission.gaps = vec![DecisionGap {
         question: "what the fifth surface is".to_owned(),
         blocks: Vec::new(),
@@ -224,7 +246,7 @@ struct DesignAnswers<'a>
     selected: &'a str,
 }
 
-fn Design(answers: DesignAnswers<'_>) -> Submission
+fn Submission_Design(answers: DesignAnswers<'_>) -> Submission
 {
     return Submission {
         id: "DS-001".to_owned(),
@@ -234,12 +256,30 @@ fn Design(answers: DesignAnswers<'_>) -> Submission
         submitted_by: "kevin".to_owned(),
         submitted_through: "cli".to_owned(),
         values: vec![
-            Value(Declared { field: "title", value: "a title" }, Origin::Submitted),
-            Value(Declared { field: "answers", value: "FR-001" }, Origin::Submitted),
-            Value(Declared { field: "alternatives", value: answers.alternatives }, Origin::Submitted),
-            Value(Declared { field: "selected", value: answers.selected }, Origin::Submitted),
-            Value(Declared { field: "architecture_delta", value: "none" }, Origin::Submitted),
-            Value(Declared { field: "acceptance", value: "the tests pass" }, Origin::Submitted),
+            Field_Value_With_Origin(
+                Declared { field: "title", value: "a title" },
+                Origin::Submitted,
+            ),
+            Field_Value_With_Origin(
+                Declared { field: "answers", value: "FR-001" },
+                Origin::Submitted,
+            ),
+            Field_Value_With_Origin(
+                Declared { field: "alternatives", value: answers.alternatives },
+                Origin::Submitted,
+            ),
+            Field_Value_With_Origin(
+                Declared { field: "selected", value: answers.selected },
+                Origin::Submitted,
+            ),
+            Field_Value_With_Origin(
+                Declared { field: "architecture_delta", value: "none" },
+                Origin::Submitted,
+            ),
+            Field_Value_With_Origin(
+                Declared { field: "acceptance", value: "the tests pass" },
+                Origin::Submitted,
+            ),
         ],
         gaps: Vec::new(),
     };
@@ -278,19 +318,19 @@ fn Test_A_Malformed_Design_Should_Be_Refused_By_Its_Own_Rule()
     for case in Designs_That_Should_Be_Refused()
     {
         let answers = DesignAnswers { alternatives: case.alternatives, selected: case.selected };
-        let design = Design(answers);
+        let design = Submission_Design(answers);
         let failures = Validate_Submission(&design);
 
         assert_eq!(failures.len(), 1, "{}", case.rule);
-        assert_eq!(First(&failures).rule, case.rule);
+        assert_eq!(First_Failure(&failures).rule, case.rule);
     }
 }
 
 #[test]
-fn Test_Do_Nothing_Should_Be_An_Admissible_Alternative()
+fn Test_An_Inaction_Alternative_Should_Be_Admissible()
 {
     let answers = DesignAnswers { alternatives: "a new verb\ndo nothing", selected: "a new verb" };
-    let design = Design(answers);
+    let design = Submission_Design(answers);
 
     assert_eq!(Validate_Submission(&design), Vec::new());
 }
@@ -298,14 +338,26 @@ fn Test_Do_Nothing_Should_Be_An_Admissible_Alternative()
 fn Result_Submission(deviations: &str, evidence: Option<&str>) -> Submission
 {
     let mut values = vec![
-        Value(Declared { field: "title", value: "a title" }, Origin::Submitted),
-        Value(Declared { field: "implements", value: "DS-001" }, Origin::Submitted),
-        Value(Declared { field: "deviations", value: deviations }, Origin::Submitted),
-        Value(Declared { field: "owed", value: "none" }, Origin::Submitted),
+        Field_Value_With_Origin(
+            Declared { field: "title", value: "a title" },
+            Origin::Submitted,
+        ),
+        Field_Value_With_Origin(
+            Declared { field: "implements", value: "DS-001" },
+            Origin::Submitted,
+        ),
+        Field_Value_With_Origin(
+            Declared { field: "deviations", value: deviations },
+            Origin::Submitted,
+        ),
+        Field_Value_With_Origin(Declared { field: "owed", value: "none" }, Origin::Submitted),
     ];
     if let Some(evidence) = evidence
     {
-        let value = Value(Declared { field: "evidence", value: evidence }, Origin::Submitted);
+        let value = Field_Value_With_Origin(
+            Declared { field: "evidence", value: evidence },
+            Origin::Submitted,
+        );
         values.push(value);
     }
 
@@ -328,7 +380,7 @@ fn Test_A_Deviation_Naming_No_Clause_Should_Be_Refused()
     let failures = Validate_Submission(&submission);
 
     assert_eq!(failures.len(), 1);
-    assert_eq!(First(&failures).rule, "deviation-names-its-clause");
+    assert_eq!(First_Failure(&failures).rule, "deviation-names-its-clause");
 }
 
 #[test]
@@ -347,7 +399,7 @@ fn Test_Evidence_Should_Be_Required_For_An_Accepted_Result_And_Not_For_A_Draft()
 
     let accepted = Validate_Submission(&submission);
     assert_eq!(accepted.len(), 1);
-    assert_eq!(First(&accepted).rule, "accepted-result-carries-evidence");
+    assert_eq!(First_Failure(&accepted).rule, "accepted-result-carries-evidence");
 
     submission.state = SubmissionState::Draft;
     assert_eq!(Validate_Submission(&submission), Vec::new());
