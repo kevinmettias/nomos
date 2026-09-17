@@ -66,8 +66,8 @@ fn Test_Two_Stores_Of_The_Same_Corpus_Should_Export_Identically()
     let backward = Populated_In_Reverse(true);
 
     assert_ne!(
-        Surrogates(&forward),
-        Surrogates(&backward),
+        Source_Document_Surrogates(&forward),
+        Source_Document_Surrogates(&backward),
         "both stores assigned the same surrogates, so this test proved nothing"
     );
 
@@ -90,7 +90,7 @@ fn Bundle_Of(store: &SpecificationStore) -> String
         .expect("Write serializes the records the bundle carries");
 }
 
-fn Surrogates(store: &SpecificationStore) -> Vec<i64>
+fn Source_Document_Surrogates(store: &SpecificationStore) -> Vec<i64>
 {
     return store
         .Connection()

@@ -83382,6 +83382,81 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-SPEC-BUNDLE-FIXPOINT",
+      "title": "The naming-clarity check reads zero over the bundle fixpoint test at the phase own flags",
+      "why": "check-naming-clarity reads 197 live findings and 1 waived over the whole crates/ tree at the phase own flags, over 1594 judged files -- measured after the project slice this campaign committed last cleared its 5, which had been 202 -- and by crate they are host 80, substrate 74, rules 37 and spec 6. The spec band is that 6 over 5 files, measured over crates/spec, 346 files judged, and one of the six is this item's: the finding the check reads over crates/spec/nomos-spec-bundle/tests/round_trip/fixpoint.rs. It is the check's one-word shape, which fires on a parameterised free function whose name splits into one word; it is not the vague-word shape, so no vocabulary decision is needed here. The other five stay with two live P103 claims that hold their files by exact path -- 3 findings over nomos-spec-bundle/src/columns/tests.rs and nomos-spec-bundle/tests/round_trip/populated.rs under P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2, and 2 over nomos-spec-validate/tests/preservation_holds.rs under P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE-4 -- so none of those is claimed or edited here, and they are reserved rather than forgotten.\n\nThis item's predicate is the file, not the crate, and that is deliberate. The crate reads 4 live findings over 58 judged files: this one plus the 3 in the two files P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2 holds. A predicate naming the crate could not go green until another item's work landed, so it would be a predicate that is not a predicate -- the scope of the check run has to be the scope of the obligation this item claims. The sweep accepts a file as a target and judges one file, and that is what this item's done_when names.\n\nThe finding is at fixpoint.rs:93: fn Surrogates(store: &SpecificationStore) -> Vec<i64>, which prepares `SELECT uid FROM source_documents ORDER BY path` and collects the column into a vector. It is the whole of the second fixpoint test's premise: the test around it populates two stores with the same corpus in opposite orders and asserts their surrogate columns differ, because if both stores assigned the same uids the comparison that follows would prove nothing -- the comment above the test says so, and says why the first fixpoint test cannot see this, since exporting in surrogate order and importing in that same order is a fixpoint too. It becomes Source_Document_Surrogates, with the two calls at 69 and 70, both of them arguments to the assert_ne! that keeps the second test honest. The name says which rows' surrogates it reads, which is the third thing the check's message asks a one-word name to state and the thing `Surrogates` left to the reader.\n\nThe rename is 3 occurrences over one file, applied by one script that substitutes a whole token -- the name not preceded by a word character, `:`, `.` or `$` and not followed by a word character -- and refuses to write anything unless the count matches 3. All 3 matched, and the guard found no other occurrence of the word in the crate: none in a `use` list, none in prose, none in a fixture string, so nothing here is a skip and nothing is left behind. The file already carries five lines over 100 columns -- 42, 44, 113, 143 and 175 -- and the rename does not touch any of them: the declaration line goes from 53 to 69 columns and the two calls from 29 and 30 to 45 and 46, so no line reflows and the diff is the three names and nothing else.\n\nMeasured, before and after. The census this item came from -- the naming-clarity sweep over crates/spec at the phase own flags, 346 files judged -- reads 6 live findings over 5 files, 1 of them in this file; and the same sweep pointed at crates/spec/nomos-spec-bundle reads 4 live over 58 judged files, which is what makes the file a target rather than the crate. Implementation substituted all 3 occurrences and changed no line's width. After it, this item's predicate -- the same sweep pointed at fixpoint.rs alone -- reads 0 live findings, 0 waived, 1 file judged, verdict OK, exit 0, and the same sweep pointed at crates/spec/nomos-spec-bundle still reads 3 live, in the two files P103 holds, which is the number this item neither claims nor touches. cargo check --workspace --all-targets exits 0, so the rename compiles and no caller was left behind; the warnings it prints are the ones nomos-analysis and nomos-platform-std already carried. cargo test -p nomos-spec-bundle --no-fail-fast exits 0 with 97 tests passing and none failing -- 78 in the lib, 2 in tests/determinism_contract.rs, 4 in tests/durable_load.rs and 13 in the round_trip binary that holds this file -- so the renamed helper is exercised by the test that reads it, and that test's assert_ne! still separates the two stores rather than passing vacuously. No waiver and no in-code marker is added, and no path outside the item's one file is edited.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/spec/nomos-spec-bundle/tests/round_trip/fixpoint.rs, verified by this item's predicate -- the sweep pointed at that one file, which is the scope of this item's obligation rather than the crate, because the crate's other three findings sit in two files a live P103 claim holds -- and cargo check --workspace --all-targets reports no error, since the check is a text reader over the tree and cannot see a build. The one finding is the check's one-word shape and is cleared by naming what the helper reads: the surrogate ids of every source document, in path order. The rename is a whole token with its count asserted before anything is written, all 3 occurrences are the name itself, and no line reflows. No waiver and no in-code marker is added, no P103-held file is touched, and no path outside the item's one file is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-bundle/tests/round_trip/fixpoint.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/spec/nomos-spec-bundle/tests/round_trip/fixpoint.rs",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/spec/nomos-spec-bundle/tests/round_trip/fixpoint.rs",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0     1 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789610824,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "78df55b84dc31e59e42abdb99271def2f874c2ec"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
