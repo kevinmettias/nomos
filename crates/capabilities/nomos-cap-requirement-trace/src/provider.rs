@@ -1,8 +1,10 @@
 //! Turning this repository's own committed requirement assessments into the one fact this
 //! capability answers.
 
+mod fact_context;
 mod trace_fact;
 
+pub use fact_context::FactContext;
 pub use trace_fact::TraceFact;
 
 use crate::assessment::REGISTRY;
@@ -13,24 +15,9 @@ use crate::predicates::{
 };
 use crate::registry::Assessments_In;
 use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
-use nomos_contracts::{
-    BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, Guarantee, ProviderId, SnapshotId,
-    SubjectId,
-};
+use nomos_contracts::{EvidenceClass, Guarantee, ProviderId, SubjectId};
 use nomos_platform::FileSystem;
 use std::path::Path;
-
-/// Where in the workspace's history a fact is being produced — the same four-field shape
-/// every other real provider's own `FactContext` carries, for the identical reason: these
-/// four always travel together.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct FactContext
-{
-    pub snapshot: SnapshotId,
-    pub variant: BuildVariantId,
-    pub configuration: ConfigurationId,
-    pub generation: GenerationId,
-}
 
 /// Reads `root`'s own `tests/contract/requirements/` and materializes the one fact this
 /// capability answers for the workspace as a whole.
@@ -127,7 +114,7 @@ mod tests
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use crate::payload::{Parse_Payload, Problem, ProblemKind};
-    use nomos_contracts::Digest128;
+    use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
     use nomos_platform::FileSystemError;
     use nomos_platform_std::StdFileSystem;
 

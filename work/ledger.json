@@ -84537,6 +84537,54 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-FILENAME-CAP-REQUIREMENT-TRACE",
+      "title": "P114 file-name: the cap-requirement-trace modules, named for their types",
+      "why": "check-file-name asks a module file to be named after the public type it declares, and three files\nin nomos-cap-requirement-trace are not: src/payload.rs declares ProblemKind while being named for\nthe payload, src/provider.rs declares FactContext while being named for the provider, and\nsrc/registry.rs declares EntrySource while being named for the registry.\n\nThe crate already says how this is spelled. src/provider.rs opens with `mod trace_fact;` and\n`pub use trace_fact::TraceFact;`, and src/payload.rs opens with `mod problem;` and\n`pub use problem::Problem;` -- in each case a type has a module named after it and the role-named\nmodule re-exports it. FactContext, ProblemKind and EntrySource are the three declarations that\nstayed inline, which is exactly why they are the three the check reports. src/payload.rs's own doc\nstates the convention for its subject in as many words: the kind of problem, the payload itself and\nthe refusal each carry their own module -- and ProblemKind, the kind, is the one of the three\nwithout one.\n\nThe rule's own doc rules out the other reading. It says a file that declares no public type -- an\ninternal helper, an entrypoint, a procedural module -- is out of scope, so the role-named module\nkeeps its name and its procedural contents, and the type moves out to the module named after it.\nRenaming src/payload.rs to src/problem_kind.rs instead would leave this crate's canonical reader of\nRequirementTracePayload living in a module named for an enum, which is the navigation failure the\nrule exists to prevent, and it would drag src/payload/ along with it.\n\nNor is it fixed by the idiom ten crates of the languages family use for this same FactContext\nfinding, `#[path = \"fact_context.rs\"] mod provider;`. That keeps the module named for its role at\nthe price of a resolution hole: the code-standards Rust front end derives a module's path from its\nfile path alone and ignores #[path], so every reference through that module resolves to nothing,\nand nomos's own surface resolver reads the #[path] value as the route, finds no such module, and\nreports the re-export as unresolved rather than expanding it. nomos-workspace's check-crate-split\nfinding of 2026-09-16 was this and was fixed by naming the module after its file. This crate takes\nthat fix directly: each moved module is named after the file that holds it, and no #[path] attribute\nis introduced.\n\nNo type is renamed. All three names are in this crate's published surface and in\ntests/contract/surface/nomos-cap-requirement-trace.txt, which a module move does not touch, because\nthat snapshot records crate::Type::member and no module path. This crate also already proves the\nresolver expands a type reached through two hops, since Site and Verdict are declared in\nassessment/site.rs and assessment/verdict.rs and appear fully expanded through assessment.rs.",
+      "done_when": "The file-name check reports zero live findings and zero waived findings over\ncrates/capabilities/nomos-cap-requirement-trace, verified by this item's predicate, and cargo\ncheck --workspace --all-targets reports no error -- the check is a text reader over the tree and\ncannot see a build, so a green check is not evidence the move compiles.\n\nThe three findings are cleared by giving each declared type the module the crate's own idiom gives\nit: ProblemKind moves to src/payload/problem_kind.rs beside problem.rs, FactContext to\nsrc/provider/fact_context.rs beside trace_fact.rs, and EntrySource to src/registry/entry_source.rs.\nEach role-named module keeps its name and its procedural contents and re-exports the type, and no\n#[path] attribute appears anywhere in the crate.\n\nEvery reference to the three types follows them. lib.rs's three pub use lines name the same three\ntypes and need no edit. The crate's own callers keep reaching them through the role-named modules\nas before. The private helpers that the other module calls -- ProblemKind's Tag, read by\nEncode_Payload in src/payload.rs, and ProblemKind's Of_Tag, read by Read_Kind there -- are widened to\npub(crate), the least visibility that keeps them reachable and still short of the published surface.\n\nThe type names are unchanged: ProblemKind, FactContext and EntrySource still stand, and\ntests/contract/surface/nomos-cap-requirement-trace.txt is byte-identical before and after, because\nthe snapshot records crate::Type::member and no module path.\n\nEvery name that moves keeps passing the other seven naming checks and the nine formatting checks,\nand the crate reports no finding under any check that it did not report before this change --\nmeasured by running the full 157-check sweep over the crate before and after and comparing the two\nfinding sets as multisets of check and message, with the only differences being the three file-name\nfindings that are gone and the doc-placement finding on EntrySource, whose message embeds the home\npath derived from the item's module and so now names docs/api/registry/entry_source.md rather than\ndocs/api/registry.md. No edited line exceeds the 120 columns rustfmt.toml records, no waiver and no\nin-code marker is added, and no path outside crates/capabilities/nomos-cap-requirement-trace and\nwork/ledger.json is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-requirement-trace"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-a5",
+        "acquired_at": 1789618319,
+        "lease_expires_at": 1789625519
+      },
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "F:\\repos\\nomos",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/capabilities/nomos-cap-requirement-trace",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

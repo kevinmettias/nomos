@@ -13,68 +13,14 @@
 //! two lines hand the fields to the code that reads them.
 
 mod problem;
+mod problem_kind;
 mod refusal;
 mod requirement_trace_payload;
 
 pub use problem::Problem;
+pub use problem_kind::ProblemKind;
 pub use refusal::Refusal;
 pub use requirement_trace_payload::RequirementTracePayload;
-
-/// One of the five ways `crate::predicates` already reports a stale or incomplete
-/// assessment — kept as five variants, not collapsed to one "stale" tag, because a rule
-/// reading this payload reconstructs one `Finding` per [`Problem`] and a reader comparing
-/// two runs needs to tell which of the five kinds moved.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum ProblemKind
-{
-    /// A `site` line names a path or symbol that no longer resolves in this workspace.
-    UnresolvedSite,
-    /// A `gap` line (a `Partial` entry's own unsatisfied part) no longer resolves.
-    UnresolvedGap,
-    /// A `record` line names a governing record with no registration, or a registration
-    /// with no document.
-    UnresolvedRecord,
-    /// A `Diverges` or `NotBinding` entry names no governing record at all.
-    DivergenceWithNoRecord,
-    /// A `Partial` entry names no gap at all.
-    PartialWithNoGap,
-}
-
-impl ProblemKind
-{
-    const SITE_TAG: &'static str = "site";
-    const GAP_TAG: &'static str = "gap";
-    const RECORD_TAG: &'static str = "record";
-    const DIVERGES_TAG: &'static str = "diverges";
-    const PARTIAL_TAG: &'static str = "partial";
-
-    /// The tag this kind is written with in [`Encode_Payload`]'s own tab-separated lines.
-    const fn Tag(self) -> &'static str
-    {
-        return match self
-        {
-            Self::UnresolvedSite => Self::SITE_TAG,
-            Self::UnresolvedGap => Self::GAP_TAG,
-            Self::UnresolvedRecord => Self::RECORD_TAG,
-            Self::DivergenceWithNoRecord => Self::DIVERGES_TAG,
-            Self::PartialWithNoGap => Self::PARTIAL_TAG,
-        };
-    }
-
-    /// The kind a tag names, or `None` if it names none of the five.
-    fn Of_Tag(tag: &str) -> Option<Self>
-    {
-        return match tag
-        {
-            Self::SITE_TAG => Some(Self::UnresolvedSite),
-            Self::GAP_TAG => Some(Self::UnresolvedGap),
-            Self::RECORD_TAG => Some(Self::UnresolvedRecord),
-            Self::DIVERGES_TAG => Some(Self::DivergenceWithNoRecord),
-            Self::PARTIAL_TAG => Some(Self::PartialWithNoGap),
-            _ => None,
-        };
-    }
-}
 
 /// The word every line of this encoding opens with.
 const PROBLEM_TAG: &str = "problem";

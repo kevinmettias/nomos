@@ -10,6 +10,10 @@
 //! *missing* registry directory is `crate::provider`'s decision, made one layer up, not
 //! this one's.
 
+mod entry_source;
+
+pub use entry_source::EntrySource;
+
 use crate::assessment::{Assessment, Site, Verdict};
 use nomos_platform::FileSystem;
 use std::path::Path;
@@ -68,21 +72,6 @@ fn Read_Entry<Fs: FileSystem>(path: &Path, filesystem: &Fs) -> Result<Option<Ass
     return Parse_Assessment(EntrySource { stem, text: &text })
         .map(Some)
         .map_err(|refusal| return format!("{}: {refusal}", path.display()));
-}
-
-/// One entry before it has been read: the requirement its file is named for, and the text
-/// that file holds.
-///
-/// Named rather than passed as two adjacent `&str`. A call site that read `Parse_Assessment(text, stem)`
-/// would compile, and the transposition would be caught only because [`Is_Requirement_Id`]
-/// refuses a file body -- a run-time refusal where a named field lets the compiler make one.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct EntrySource<'a>
-{
-    /// The requirement identifier the entry's own file is named for.
-    pub stem: &'a str,
-    /// The entry's own text, exactly as its file holds it.
-    pub text: &'a str,
 }
 
 /// One entry, or the reason it is not one.
