@@ -50,7 +50,7 @@ fn Rewrite_Plan(prior: &str) -> CorrectionPlan
 /// Stage, validate and commit `plan` against `workspace`, asserting at each seam that the
 /// staged plan was built against `starting` and that the mutation class it declares is the one
 /// the stage carries.
-fn Advance(plan: &CorrectionPlan, workspace: &mut Workspace, starting: SnapshotId) -> CommittedPlan
+fn Advance_Plan_Through_The_Seams(plan: &CorrectionPlan, workspace: &mut Workspace, starting: SnapshotId) -> CommittedPlan
 {
     let staged = plan.Stage(workspace).expect("the candidate's declared prior content matches the real workspace");
     assert_eq!(staged.Base(), starting, "a plan stages against the state it was previewed on");
@@ -89,7 +89,7 @@ fn Test_The_Full_Lifecycle_Round_Trips_A_Real_Workspace_Through_The_Public_Api()
 
     assert!(!plan.Preview().Rendered().is_empty(), "a real preview renders something for a real edit");
 
-    let committed = Advance(&plan, &mut workspace, starting);
+    let committed = Advance_Plan_Through_The_Seams(&plan, &mut workspace, starting);
     assert_ne!(committed.After(), starting, "a real commit must have actually advanced the workspace");
     assert_eq!(
         workspace.Content_Of("a.rs"),

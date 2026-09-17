@@ -82651,6 +82651,81 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-CORRECTIONS-TESTS",
+      "title": "The naming-clarity check reads zero over the corrections territory at the phase own flags",
+      "why": "check-naming-clarity reads 301 live findings over the whole crates/ tree at the phase own flags, and 297 of them are in test positions. The per-band items this campaign finished each held the narrower bar, without --include-tests, so production code reached zero band by band while test material kept every one of these; the phase runner honours the flag, judging 1594 files per check instead of 1260, so the bar the user asked for is the check at the phase own flags. This item is the corrections slice: one finding, and it is the band whole remainder. crates/corrections/nomos-corrections/tests/integration_seams.rs:53 declares fn Advance, the test-local helper that stages a CorrectionPlan, validates it and commits it through the real workspace, asserting at each seam that the staging is against the state it was previewed on. It takes three parameters and its name says only that something advances; it becomes Advance_Plan_Through_The_Seams, which names the plan it advances and the seams it crosses. Its one caller is line 92 of the same file. The file is an integration-test binary, a crate of its own compiled outside src/, so nothing under tests/contract/surface/ can move from a name inside it, and no name in this band is reached from outside the band. Measured at unix 1789605097.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/corrections at the phase own flags, verified by this item predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. No suppression entry is added for this band and no in-code marker is used. The rename reaches every call site in the file that declares the helper and no file outside this item territory, because a name inside an integration-test binary is reached by nothing else; if the build proves otherwise, the item that owns the reached path is named in the same commit and its territory is widened here rather than edited without a claim.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/corrections/nomos-corrections/tests/integration_seams.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards/check.exe",
+          "-cwd",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/corrections",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards/check.exe",
+          "-cwd",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/corrections",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    26 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789605214,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c7ca7b4d73342184016aa4838db73a7a8bc5baaa"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
