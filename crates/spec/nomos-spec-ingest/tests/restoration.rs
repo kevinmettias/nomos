@@ -66,7 +66,7 @@ struct Entry
     measured: u32,
 }
 
-fn Declared(id: &str) -> u32
+fn Registered_Count_For_Id(id: &str) -> u32
 {
     let entries: Vec<Entry> = serde_json::from_str(REGISTER).expect("the register parses");
 
@@ -86,7 +86,7 @@ fn Corpus() -> Option<PathBuf>
     return Some(root);
 }
 
-fn Read(root: &Path, relative: &str) -> String
+fn Read_Text_From_Relative(root: &Path, relative: &str) -> String
 {
     let path = root.join(relative);
     return std::fs::read_to_string(&path)
@@ -95,7 +95,7 @@ fn Read(root: &Path, relative: &str) -> String
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 }
 
-fn Volumes(root: &Path) -> BTreeMap<String, String>
+fn Volume_Texts_Of_Corpus(root: &Path) -> BTreeMap<String, String>
 {
     let directory = root.join("01_authoring/domain_volumes");
     let entries = std::fs::read_dir(&directory)
@@ -111,7 +111,7 @@ fn Volumes(root: &Path) -> BTreeMap<String, String>
         {
             continue;
         };
-        let text = Read(&directory, &name);
+        let text = Read_Text_From_Relative(&directory, &name);
 
         documents.insert(name, text);
     }
@@ -149,7 +149,7 @@ fn Restored_Store(root: &Path) -> RestoredStore
 {
     let mut store = SpecificationStore::In_Memory()
         .expect("an in-memory store opens over no file, so this construction has no failure path");
-    let documents = Volumes(root);
+    let documents = Volume_Texts_Of_Corpus(root);
 
     for (name, markdown) in &documents
     {
@@ -213,10 +213,10 @@ fn Test_Every_Family_Should_Restore_The_Count_The_Register_Declares()
         let restored = u32::try_from(report.In(*family).len()).unwrap_or(u32::MAX);
         assert_eq!(
             restored,
-            Declared(id),
+            Registered_Count_For_Id(id),
             "{}: the register's {id} declares {} and the restoration produced {restored}\n{}",
             family.Label(),
-            Declared(id),
+            Registered_Count_For_Id(id),
             report.Summary()
         );
     }
@@ -408,11 +408,11 @@ fn Test_The_Reconciled_Store_Should_Report_No_Preservation_Errors()
 /// The section lineage and the block dispositions, on top of a restored store.
 fn Ingest_The_Lineage(store: &mut SpecificationStore, root: &Path)
 {
-    let section_lineage = Read(root, "01_authoring/source_lineage/section-lineage.yaml");
+    let section_lineage = Read_Text_From_Relative(root, "01_authoring/source_lineage/section-lineage.yaml");
     let sections = Parse_Section_Lineage(&section_lineage).expect("the section lineage parses");
     let headings = Ingest_Section_Lineage(store, &sections, REVISION)
         .expect("the section lineage is well formed, so ingestion reports rather than refuses");
-    let block_lineage = Read(root, "01_authoring/source_lineage/source-block-lineage.yaml");
+    let block_lineage = Read_Text_From_Relative(root, "01_authoring/source_lineage/source-block-lineage.yaml");
     let manifest = Parse_Block_Lineage(&block_lineage).expect("the block manifest parses");
 
     assert!(headings.Is_Passed(), "{:?}", headings.unknown_documents);
@@ -475,22 +475,22 @@ fn Test_Restoring_The_Whole_Corpus_Twice_Should_Change_Nothing()
         mut store,
         report: first,
     } = Restored_Store(&root);
-    let nodes = Count(&store, Table::Nodes);
-    let lineage = Count(&store, Table::Lineage);
-    let aliases = Count(&store, Table::NodeAliases);
+    let nodes = Count_Of_Table(&store, Table::Nodes);
+    let lineage = Count_Of_Table(&store, Table::Lineage);
+    let aliases = Count_Of_Table(&store, Table::NodeAliases);
 
-    let again = Restore_Members(&mut store, REVISION, &Volumes(&root)).expect("restores again");
+    let again = Restore_Members(&mut store, REVISION, &Volume_Texts_Of_Corpus(&root)).expect("restores again");
     assert!(again.contested_aliases.is_empty(), "{:?}", again.contested_aliases);
 
     assert!(nodes > 0 && lineage > 0 && aliases > 0, "the first run wrote nothing");
-    assert_eq!(Count(&store, Table::Nodes), nodes);
-    assert_eq!(Count(&store, Table::Lineage), lineage);
-    assert_eq!(Count(&store, Table::NodeAliases), aliases);
+    assert_eq!(Count_Of_Table(&store, Table::Nodes), nodes);
+    assert_eq!(Count_Of_Table(&store, Table::Lineage), lineage);
+    assert_eq!(Count_Of_Table(&store, Table::NodeAliases), aliases);
     assert_eq!(first.members.len(), Restored_Store(&root).report.members.len());
 }
 
 /// The store's own count of one table, so two runs compare as two counts rather than two reads.
-fn Count(store: &SpecificationStore, table: Table) -> u32
+fn Count_Of_Table(store: &SpecificationStore, table: Table) -> u32
 {
     return store
         .Count(table)

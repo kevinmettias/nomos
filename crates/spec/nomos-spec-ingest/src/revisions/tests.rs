@@ -6,7 +6,7 @@ use super::labels::{Label_Of, Order_Of};
 /// Three fingerprinted revisions make two adjacent pairs.
 const PAIRS_IN_THREE_REVISIONS: usize = 2;
 
-fn Revision(label: &str, documents: &[(&str, &str)]) -> RevisionFingerprint
+fn Fingerprint_Of_Labelled_Documents(label: &str, documents: &[(&str, &str)]) -> RevisionFingerprint
 {
     return RevisionFingerprint {
         label: label.to_owned(),
@@ -23,9 +23,9 @@ fn Revision(label: &str, documents: &[(&str, &str)]) -> RevisionFingerprint
 fn Test_A_Path_That_Comes_Back_Should_Be_Reappeared_Not_Appeared()
 {
     let walk = Walk_Revisions(&[
-        Revision("v14.1", &[("a.md", "sha256:01")]),
-        Revision("v14.2", &[]),
-        Revision("v14.3", &[("a.md", "sha256:01")]),
+        Fingerprint_Of_Labelled_Documents("v14.1", &[("a.md", "sha256:01")]),
+        Fingerprint_Of_Labelled_Documents("v14.2", &[]),
+        Fingerprint_Of_Labelled_Documents("v14.3", &[("a.md", "sha256:01")]),
     ]);
 
     assert_eq!(walk.len(), PAIRS_IN_THREE_REVISIONS);
@@ -37,7 +37,7 @@ fn Test_A_Path_That_Comes_Back_Should_Be_Reappeared_Not_Appeared()
 #[test]
 fn Test_A_Path_Seen_For_The_First_Time_Should_Be_Appeared()
 {
-    let walk = Walk_Revisions(&[Revision("v14.1", &[]), Revision("v14.2", &[("a.md", "sha256:01")])]);
+    let walk = Walk_Revisions(&[Fingerprint_Of_Labelled_Documents("v14.1", &[]), Fingerprint_Of_Labelled_Documents("v14.2", &[("a.md", "sha256:01")])]);
 
     assert_eq!(walk.first().map(|pair| pair.appeared.clone()), Some(vec!["a.md".to_owned()]));
     assert_eq!(walk.first().map(|pair| pair.reappeared.clone()), Some(Vec::new()));
@@ -47,8 +47,8 @@ fn Test_A_Path_Seen_For_The_First_Time_Should_Be_Appeared()
 fn Test_A_Changed_Hash_Should_Be_Changed_In_Place()
 {
     let walk = Walk_Revisions(&[
-        Revision("v14.1", &[("a.md", "sha256:01")]),
-        Revision("v14.2", &[("a.md", "sha256:02")]),
+        Fingerprint_Of_Labelled_Documents("v14.1", &[("a.md", "sha256:01")]),
+        Fingerprint_Of_Labelled_Documents("v14.2", &[("a.md", "sha256:02")]),
     ]);
 
     assert_eq!(walk.first().map(|pair| pair.changed.clone()), Some(vec!["a.md".to_owned()]));
@@ -60,8 +60,8 @@ fn Test_A_Changed_Hash_Should_Be_Changed_In_Place()
 fn Test_An_Unchanged_Path_Should_Be_In_No_Set()
 {
     let walk = Walk_Revisions(&[
-        Revision("v14.1", &[("a.md", "sha256:01")]),
-        Revision("v14.2", &[("a.md", "sha256:01")]),
+        Fingerprint_Of_Labelled_Documents("v14.1", &[("a.md", "sha256:01")]),
+        Fingerprint_Of_Labelled_Documents("v14.2", &[("a.md", "sha256:01")]),
     ]);
     let Some(pair) = walk.first()
     else

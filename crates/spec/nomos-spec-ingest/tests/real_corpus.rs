@@ -50,7 +50,7 @@ fn Corpus() -> Option<PathBuf>
     return Some(root);
 }
 
-fn Read(root: &Path, relative: &str) -> String
+fn Read_Text_From_Relative(root: &Path, relative: &str) -> String
 {
     let path = root.join(relative);
     return std::fs::read_to_string(&path)
@@ -115,7 +115,7 @@ fn Test_I1_Should_Reproduce_Every_Recorded_Block()
     {
         return;
     };
-    let manifest = Read(&root, "01_authoring/source_lineage/source-block-lineage.yaml");
+    let manifest = Read_Text_From_Relative(&root, "01_authoring/source_lineage/source-block-lineage.yaml");
     let lineage = Parse_Block_Lineage(&manifest).expect("the manifest parses");
     let documents = Domain_Volumes(&root);
     let report = Check_Against_Manifest(&lineage, &documents);
@@ -172,7 +172,7 @@ fn Test_I2_Should_Ingest_Every_Statement_Without_Divergence()
     {
         return;
     };
-    let source = Read(&root, "01_authoring/source_lineage/normative-source-statements.yaml");
+    let source = Read_Text_From_Relative(&root, "01_authoring/source_lineage/normative-source-statements.yaml");
     let file = Parse_Statements(&source).expect("the statement file parses");
     let mut store = SpecificationStore::In_Memory().expect("an in-memory store needs no file to open");
     let report = Ingest_Statements(&mut store, &file).expect("the statement file came from the parser above");
@@ -207,10 +207,10 @@ fn Test_The_Whole_Corpus_Should_Ingest_Into_One_Store()
     };
     let mut store = SpecificationStore::In_Memory().expect("an in-memory store needs no file to open");
     let blocks = Ingest_The_Volumes(&mut store, &root);
-    let source = Read(&root, "01_authoring/source_lineage/normative-source-statements.yaml");
+    let source = Read_Text_From_Relative(&root, "01_authoring/source_lineage/normative-source-statements.yaml");
     let statements = Parse_Statements(&source).expect("the statement file is the corpus artifact this test read");
     Ingest_Statements(&mut store, &statements).expect("the statements came from the parser above");
-    let catalog_json = Read(&root, "02_machine/catalog/catalog.json");
+    let catalog_json = Read_Text_From_Relative(&root, "02_machine/catalog/catalog.json");
     let catalog = Parse_Catalog(&catalog_json).expect("the catalog is the corpus artifact this test read");
     let report = Ingest_Catalog(&mut store, &catalog).expect("the catalog came from the parser above");
     // Every statement resolves to a node, so nothing was ingested orphaned.
@@ -358,7 +358,7 @@ fn Loaded_Corpus() -> Option<(BlockLineage, BTreeMap<String, String>)>
     {
         return None;
     };
-    let manifest = Read(&root, "01_authoring/source_lineage/source-block-lineage.yaml");
+    let manifest = Read_Text_From_Relative(&root, "01_authoring/source_lineage/source-block-lineage.yaml");
     let lineage = Parse_Block_Lineage(&manifest).expect("the manifest parses");
     let documents = Domain_Volumes(&root);
     return Some((lineage, documents));

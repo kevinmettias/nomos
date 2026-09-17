@@ -64,7 +64,7 @@ fn Archives() -> Option<PathBuf>
 ///
 /// Named per caller: these tests run concurrently, and one shared path would have them
 /// reading a file another was still writing.
-fn Fixture(name: &str) -> PathBuf
+fn Fixture_Path_From_Name(name: &str) -> PathBuf
 {
     use std::io::Write as _;
 
@@ -89,7 +89,7 @@ fn Fixture(name: &str) -> PathBuf
 #[test]
 fn Test_An_Archive_Should_List_Its_Files_Sorted()
 {
-    let mut archive = Archive::Open(&Fixture(LISTING_FIXTURE))
+    let mut archive = Archive::Open(&Fixture_Path_From_Name(LISTING_FIXTURE))
         .expect("the fixture is a zip this reader wrote, so it opens");
 
     assert_eq!(
@@ -113,7 +113,7 @@ fn Test_An_Archive_Should_List_Its_Files_Sorted()
 #[test]
 fn Test_An_Entry_Should_Be_Addressable_By_Its_Path()
 {
-    let mut archive = Archive::Open(&Fixture(ADDRESSING_FIXTURE))
+    let mut archive = Archive::Open(&Fixture_Path_From_Name(ADDRESSING_FIXTURE))
         .expect("the fixture is a zip this reader wrote, so it opens");
 
     let text = archive.Read_Text("suite/nested/01-core.md").expect("the fixture wrote this entry");
@@ -125,7 +125,7 @@ fn Test_An_Entry_Should_Be_Addressable_By_Its_Path()
 #[test]
 fn Test_A_Missing_Entry_Should_Name_The_Archive_And_The_Entry()
 {
-    let mut archive = Archive::Open(&Fixture(MISSING_ENTRY_FIXTURE))
+    let mut archive = Archive::Open(&Fixture_Path_From_Name(MISSING_ENTRY_FIXTURE))
         .expect("the fixture is a zip this reader wrote, so it opens");
 
     let refusal = archive.Read("suite/absent.md").expect_err("must refuse");
@@ -140,7 +140,7 @@ fn Test_A_Missing_Entry_Should_Name_The_Archive_And_The_Entry()
 #[test]
 fn Test_A_Binary_Entry_Should_Refuse_To_Be_Read_As_Text()
 {
-    let mut archive = Archive::Open(&Fixture(BINARY_FIXTURE))
+    let mut archive = Archive::Open(&Fixture_Path_From_Name(BINARY_FIXTURE))
         .expect("the fixture is a zip this reader wrote, so it opens");
 
     assert_eq!(
@@ -307,7 +307,7 @@ fn Test_Reading_Should_Not_Unpack()
     {
         return;
     };
-    let before = Listing(&root);
+    let before = Listing_Of_Directory(&root);
     let path = root.join("nomos-spec-v15.0.zip");
     // An open that failed quietly would leave the two listings identical because nothing was ever
     // read, and the assertion below would report "reading did not unpack" having never read.
@@ -319,10 +319,10 @@ fn Test_Reading_Should_Not_Unpack()
         archive.Read(entry).unwrap_or_else(|error| panic!("{error}"));
     }
 
-    assert_eq!(before, Listing(&root), "reading the archive changed the directory");
+    assert_eq!(before, Listing_Of_Directory(&root), "reading the archive changed the directory");
 }
 
-fn Listing(directory: &std::path::Path) -> Vec<String>
+fn Listing_Of_Directory(directory: &std::path::Path) -> Vec<String>
 {
     let mut names: Vec<String> = std::fs::read_dir(directory)
         .expect("the caller established this directory exists")

@@ -6,8 +6,8 @@
 //! sibling module would be counted by nobody and the declared size of the hole would drop
 //! without an assertion being removed.
 
-use crate::rows::{Entry, Family, Fates, Register, V14_LAST, V14_PREVIOUS, V15};
-use crate::measure::{Is_Record, Measure};
+use crate::rows::{Entry, Fates, Register, Restored_Family_For_Label, V14_LAST, V14_PREVIOUS, V15};
+use crate::measure::{Figure_For_Register_Key, Is_Record};
 use nomos_spec_ingest::{
     Archive, Fate, Regression_Between_Revisions, RegressionReport, Restored, Revision, Revisions_In, Tally,
 };
@@ -49,7 +49,7 @@ fn Archives() -> Option<PathBuf>
     return Some(root);
 }
 
-fn Read(root: &Path, label: &str) -> Revision
+fn Revision_From_Label(root: &Path, label: &str) -> Revision
 {
     // NOMOS_SPEC_ARCHIVES was asserted to be a directory, so a root that yields no revisions
     // at all is the wrong directory rather than an empty one. Every test below asks for two
@@ -72,10 +72,10 @@ fn Read(root: &Path, label: &str) -> Revision
     return Revision::Read(&mut archive, label).unwrap_or_else(|error| panic!("{error}"));
 }
 
-fn Headline(root: &Path) -> RegressionReport
+fn Headline_Report(root: &Path) -> RegressionReport
 {
-    let before = Read(root, V14_LAST);
-    let after = Read(root, V15);
+    let before = Revision_From_Label(root, V14_LAST);
+    let after = Revision_From_Label(root, V15);
 
     // `Regression_Between_Revisions` refuses a pair whose earlier revision carries no domain volumes, and
     // `Test_A_Revision_Without_The_Volumes_Should_Be_Refused` asserts that refusal on
@@ -92,7 +92,7 @@ fn Test_The_Headline_Should_Reproduce_From_The_Archives()
     {
         return;
     };
-    let report = Headline(&root);
+    let report = Headline_Report(&root);
     let mut checked = 0_u32;
 
     assert_eq!(report.from, V14_LAST);
@@ -105,7 +105,7 @@ fn Test_The_Headline_Should_Reproduce_From_The_Archives()
             continue;
         };
 
-        Assert_The_Archives_Agree(&report, &entry, Family(label), fates);
+        Assert_The_Archives_Agree(&report, &entry, Restored_Family_For_Label(label), fates);
         checked = checked.saturating_add(1);
     }
     assert_eq!(checked, REGISTERED_FAMILIES, "a family went unmeasured");
@@ -119,18 +119,18 @@ fn Test_Every_Measured_Figure_Should_Reproduce()
     {
         return;
     };
-    let report = Headline(&root);
+    let report = Headline_Report(&root);
     let mut checked = 0_u32;
     for entry in Register()
     {
         for (key, stated) in &entry.measured
         {
             assert_eq!(
-                Measure(key, &report),
+                Figure_For_Register_Key(key, &report),
                 *stated,
                 "{}: {key} is registered as {stated} and measures {}",
                 entry.id,
-                Measure(key, &report)
+                Figure_For_Register_Key(key, &report)
             );
             checked = checked.saturating_add(1);
         }
@@ -162,7 +162,7 @@ fn Test_The_Families_The_Plan_Calls_Gone_Should_Be_Hollowed_Rather_Than_Absent()
     {
         return;
     };
-    let report = Headline(&root);
+    let report = Headline_Report(&root);
     let mut hollowed = 0_u32;
 
     for family in Heading_Shaped_Families()
@@ -199,7 +199,7 @@ fn Test_The_Content_That_Really_Went_Should_Be_Named()
     {
         return;
     };
-    let report = Headline(&root);
+    let report = Headline_Report(&root);
     let gone: Vec<&str> = report
         .members
         .iter()
@@ -233,7 +233,7 @@ fn Test_The_Records_The_Plan_Calls_New_Should_Be_Relocations()
     {
         return;
     };
-    let report = Headline(&root);
+    let report = Headline_Report(&root);
     let moved: Vec<&str> = report
         .documents
         .relocated
@@ -271,7 +271,7 @@ fn Test_The_Filler_The_Blocklist_Does_Not_See_Should_Be_Named()
     {
         return;
     };
-    let report = Headline(&root);
+    let report = Headline_Report(&root);
     let Some(widest) = report.filler.Widest_Undeclared()
     else
     {
@@ -307,7 +307,7 @@ fn Test_The_Summary_Should_Name_What_It_Counted()
     {
         return;
     };
-    let summary = Headline(&root).Summary();
+    let summary = Headline_Report(&root).Summary();
 
     assert!(summary.contains(V14_LAST) && summary.contains(V15), "{summary}");
     assert!(summary.contains("hollowed"), "{summary}");
@@ -325,8 +325,8 @@ fn Test_An_Ordinary_Pair_Should_Preserve_Every_Member()
     {
         return;
     };
-    let before = Read(&root, V14_PREVIOUS);
-    let after = Read(&root, V14_LAST);
+    let before = Revision_From_Label(&root, V14_PREVIOUS);
+    let after = Revision_From_Label(&root, V14_LAST);
     let report = Regression_Between_Revisions(&before, &after)
         .expect("an ordinary pair carries both revisions' volumes, so it reports");
     for family in Restored::All()
@@ -356,8 +356,8 @@ fn Test_A_Revision_Without_The_Volumes_Should_Be_Refused()
     {
         return;
     };
-    let before = Read(&root, V15);
-    let after = Read(&root, V14_LAST);
+    let before = Revision_From_Label(&root, V15);
+    let after = Revision_From_Label(&root, V14_LAST);
     let refusal = Regression_Between_Revisions(&before, &after)
         .expect_err("v15.0 has no domain volumes and must not report every family gone");
 

@@ -12,10 +12,12 @@
 use crate::catalog::{Catalog_Entities, V15_Records};
 use crate::register::{Register, VOLUMES};
 use crate::headings::{
-    Appendix, End_To_End, Headings_Matching, Lettered, Prefixed, Section_Six, Under_Path,
+    Appendix, End_To_End, Headings_Matching, Count_Of_Lettered_Sections,
+    Count_Of_Prefixed_Sections, Section_Six, Under_Path,
 };
 use crate::volumes::{
-    Code_Blocks, Fence_Lines, Named_Models, TableHeading, Table_Under, Tables, Volume_Census,
+    Code_Blocks, Fence_Lines, Named_Models, TableHeading, Table_Under, Table_Count_Of_Volumes,
+    Volume_Census,
 };
 use std::path::{Path, PathBuf};
 
@@ -118,7 +120,7 @@ fn Re_Measure(corpus: &Path, archives: &Path) -> ReMeasurement
 
     for entry in Register()
     {
-        let measured = Measure(&entry.id, corpus, archives);
+        let measured = Figure_For_Entry_Id(&entry.id, corpus, archives);
 
         if measured != entry.measured
         {
@@ -138,7 +140,7 @@ fn Re_Measure(corpus: &Path, archives: &Path) -> ReMeasurement
 
 /// The extractor for one entry. An unknown identifier panics: a register entry nothing
 /// measures is the shape this whole item exists to remove.
-fn Measure(id: &str, corpus: &Path, archives: &Path) -> u32
+fn Figure_For_Entry_Id(id: &str, corpus: &Path, archives: &Path) -> u32
 {
     let measured = Table_Figure(id, corpus)
         .or_else(|| return Volume_Figure(id, corpus))
@@ -169,7 +171,7 @@ fn Table_Figure(id: &str, corpus: &Path) -> Option<u32>
         // One delimiter per table is an invariant the store enforces on write, so the
         // delimiter count is the table count. Stated as its own definition rather than
         // read off the separator row, because the two mean different things.
-        "table.tables" => Some(Tables(&volumes)),
+        "table.tables" => Some(Table_Count_Of_Volumes(&volumes)),
         "code.fence_lines" => Some(Fence_Lines(&volumes)),
         "code.blocks" => Some(Code_Blocks(&volumes)),
         _ => None,
@@ -198,7 +200,7 @@ fn Volume_Figure(id: &str, corpus: &Path) -> Option<u32>
         "scenario.end_to_end" => Some(End_To_End(corpus)),
         "service.section_6_headings" => Some(Section_Six(corpus).all),
         "service.leaf_headings" => Some(Section_Six(corpus).leaves),
-        "service.service_headings" => Some(Section_Six(corpus).services),
+        "service.service_headings" => Some(Section_Six(corpus).systems),
         "service.subsystem_table_rows" =>
         {
             Some(Table_Under(corpus, "02-core", TableHeading("6. Systems and subsystem responsibilities")).content)
@@ -223,23 +225,23 @@ fn Appendix_Figure(id: &str, corpus: &Path) -> Option<u32>
     {
         "scenario.appendix_g_sections" =>
         {
-            Some(Lettered(corpus, "09-reference", LETTERED_DEPTH, Appendix { letter: 'G', parts: 1 }))
+            Some(Count_Of_Lettered_Sections(corpus, "09-reference", LETTERED_DEPTH, Appendix { letter: 'G', parts: 1 }))
         }
-        "appendix_d.sections" => Some(Lettered(corpus, "09-reference", LETTERED_DEPTH, sections)),
-        "appendix_d.report_profiles" => Some(Lettered(corpus, "09-reference", SUBSECTION_DEPTH, profiles)),
+        "appendix_d.sections" => Some(Count_Of_Lettered_Sections(corpus, "09-reference", LETTERED_DEPTH, sections)),
+        "appendix_d.report_profiles" => Some(Count_Of_Lettered_Sections(corpus, "09-reference", SUBSECTION_DEPTH, profiles)),
         "appendix_d.members" =>
         {
-            let under = Lettered(corpus, "09-reference", LETTERED_DEPTH, sections);
-            let reports = Lettered(corpus, "09-reference", SUBSECTION_DEPTH, profiles);
+            let under = Count_Of_Lettered_Sections(corpus, "09-reference", LETTERED_DEPTH, sections);
+            let reports = Count_Of_Lettered_Sections(corpus, "09-reference", SUBSECTION_DEPTH, profiles);
 
             Some(under.saturating_add(reports))
         }
         "appendix_h.sections" =>
         {
-            Some(Lettered(corpus, "06-agents", LETTERED_DEPTH, Appendix { letter: 'H', parts: 1 }))
+            Some(Count_Of_Lettered_Sections(corpus, "06-agents", LETTERED_DEPTH, Appendix { letter: 'H', parts: 1 }))
         }
-        "headless_inventory.sections" => Some(Prefixed(corpus, "07-clients", SUBSECTION_DEPTH, "E.1.")),
-        "ide_profiles.sections" => Some(Prefixed(corpus, "07-clients", SUBSECTION_DEPTH, "F.1.")),
+        "headless_inventory.sections" => Some(Count_Of_Prefixed_Sections(corpus, "07-clients", SUBSECTION_DEPTH, "E.1.")),
+        "ide_profiles.sections" => Some(Count_Of_Prefixed_Sections(corpus, "07-clients", SUBSECTION_DEPTH, "F.1.")),
         _ => None,
     };
 }

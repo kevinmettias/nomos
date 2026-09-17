@@ -76,7 +76,7 @@ fn Test_A_Statement_Sourced_Only_From_A_Game_Plan_Should_Be_Reported()
     let RootedStore { mut store, root } = Rooted();
     Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN)
         .expect("the game plan is markdown the ingester parses, so it reports");
-    Statement(&mut store, "AGT-001");
+    Record_Statement(&mut store, "AGT-001");
     Trace_To_Plan(&store, "AGT-001");
     Prepare_Commentary_View(&store).expect("the commentary view is prepared over a loaded store");
 
@@ -96,7 +96,7 @@ fn Test_A_Statement_With_A_Real_Source_Too_Should_Not_Be_Reported()
         .expect("the game plan is markdown the ingester parses, so it reports");
     crate::phases::Ingest_Source_Document(&mut store, "v.md", "v14.36", "# T\n\nReal.\n")
         .expect("the document is markdown the ingester parses, so it reports");
-    Statement(&mut store, "AGT-001");
+    Record_Statement(&mut store, "AGT-001");
     Trace_To_Plan(&store, "AGT-001");
     store
         .Connection()
@@ -125,7 +125,7 @@ fn Test_A_Statement_With_No_Lineage_Should_Not_Be_Reported_Here()
     let RootedStore { mut store, root } = Rooted();
     Ingest_Game_Plan(&mut store, root, "plan.txt", PLAN)
         .expect("the game plan is markdown the ingester parses, so it reports");
-    Statement(&mut store, "AGT-002");
+    Record_Statement(&mut store, "AGT-002");
     Prepare_Commentary_View(&store).expect("the commentary view is prepared over a loaded store");
 
     assert!(
@@ -135,7 +135,7 @@ fn Test_A_Statement_With_No_Lineage_Should_Not_Be_Reported_Here()
     );
 }
 
-fn Statement(store: &mut SpecificationStore, id: &str)
+fn Record_Statement(store: &mut SpecificationStore, id: &str)
 {
     let node = store
         .Upsert_Node(NodeRow {
@@ -203,7 +203,7 @@ const ECOSYSTEM_POSITION: usize = 2;
 #[test]
 fn Test_Every_Sibling_Should_Be_Matched_Exhaustively()
 {
-    fn Ordinal(sibling: Sibling) -> usize
+    fn Ordinal_Of_Sibling(sibling: Sibling) -> usize
     {
         return match sibling
         {
@@ -216,7 +216,7 @@ fn Test_Every_Sibling_Should_Be_Matched_Exhaustively()
     for (index, sibling) in Sibling::All().iter().enumerate()
     {
         assert_eq!(
-            Ordinal(*sibling),
+            Ordinal_Of_Sibling(*sibling),
             index,
             "{} is not matched at the position Sibling::All() puts it, so the exhaustive \
              match and the universe have drifted apart",

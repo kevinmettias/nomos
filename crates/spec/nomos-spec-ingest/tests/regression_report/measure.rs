@@ -8,7 +8,7 @@
 
 use nomos_spec_ingest::{Fate, Hollow, RegressionReport, DOMAIN_VOLUMES};
 
-pub(crate) fn Measure(key: &str, report: &RegressionReport) -> u32
+pub(crate) fn Figure_For_Register_Key(key: &str, report: &RegressionReport) -> u32
 {
     let measured = Documents_Figure(key, report)
         .or_else(|| return Records_Figure(key, report))
@@ -28,7 +28,7 @@ fn Documents_Figure(key: &str, report: &RegressionReport) -> Option<u32>
 {
     return match key
     {
-        "volumes.absent" => Some(Count(
+        "volumes.absent" => Some(Count_As_U32(
             report
                 .documents
                 .disappeared
@@ -36,10 +36,10 @@ fn Documents_Figure(key: &str, report: &RegressionReport) -> Option<u32>
                 .filter(|path| return path.contains(DOMAIN_VOLUMES))
                 .count(),
         )),
-        "documents.appeared" => Some(Count(report.documents.appeared.len())),
-        "documents.disappeared" => Some(Count(report.documents.disappeared.len())),
-        "documents.changed" => Some(Count(report.documents.changed.len())),
-        "documents.relocated" => Some(Count(report.documents.relocated.len())),
+        "documents.appeared" => Some(Count_As_U32(report.documents.appeared.len())),
+        "documents.disappeared" => Some(Count_As_U32(report.documents.disappeared.len())),
+        "documents.changed" => Some(Count_As_U32(report.documents.changed.len())),
+        "documents.relocated" => Some(Count_As_U32(report.documents.relocated.len())),
         _ => None,
     };
 }
@@ -62,7 +62,7 @@ fn Records_Figure(key: &str, report: &RegressionReport) -> Option<u32>
 /// How many of these paths are records.
 fn Records_Among<'a>(paths: impl Iterator<Item = &'a str>) -> u32
 {
-    return Count(paths.filter(|path| return Is_Record(path)).count());
+    return Count_As_U32(paths.filter(|path| return Is_Record(path)).count());
 }
 
 /// What the blocklist declares, and what it does not see.
@@ -80,10 +80,10 @@ fn Filler_Figure(key: &str, report: &RegressionReport) -> Option<u32>
 
     return match key
     {
-        "filler.declared_documents" => Some(Count(report.filler.declared.len())),
-        "filler.stub_documents" => Some(Count(report.filler.stubs.len())),
+        "filler.declared_documents" => Some(Count_As_U32(report.filler.declared.len())),
+        "filler.stub_documents" => Some(Count_As_U32(report.filler.stubs.len())),
         "filler.widest_undeclared_sections" => Some(widest().sections),
-        "filler.widest_undeclared_documents" => Some(Count(widest().documents.len())),
+        "filler.widest_undeclared_documents" => Some(Count_As_U32(widest().documents.len())),
         _ => None,
     };
 }
@@ -111,7 +111,7 @@ fn Members_Whose_Fate(report: &RegressionReport, wanted: impl Fn(&Fate) -> bool)
 {
     let matched = report.members.iter().filter(|member| return wanted(&member.fate));
 
-    return Count(matched.count());
+    return Count_As_U32(matched.count());
 }
 
 fn Is_Hollowed_By_A_Declared_Pattern(fate: &Fate) -> bool
@@ -143,7 +143,7 @@ pub(crate) fn Is_Record(path: &str) -> bool
     return path.starts_with("records/") || path.starts_with("spec-governance/records/");
 }
 
-fn Count(value: usize) -> u32
+fn Count_As_U32(value: usize) -> u32
 {
     return u32::try_from(value).unwrap_or(u32::MAX);
 }

@@ -21,7 +21,7 @@ const SLICE_STATEMENTS: u32 = 16;
 /// pins the encoding rather than merely showing one of them.
 const NON_ASCII_FLOOR: usize = 5;
 
-fn Fixture(name: &str) -> String
+fn Fixture_Text_From_Name(name: &str) -> String
 {
     use std::path::Path;
 
@@ -35,13 +35,13 @@ fn Fixture(name: &str) -> String
 
 fn Documents() -> BTreeMap<String, String>
 {
-    return BTreeMap::from([("00-suite-index.md".to_owned(), Fixture("00-suite-index.md"))]);
+    return BTreeMap::from([("00-suite-index.md".to_owned(), Fixture_Text_From_Name("00-suite-index.md"))]);
 }
 
 #[test]
 fn Test_The_Gate_Should_Pass_Against_Real_Recorded_Blocks()
 {
-    let lineage = Parse_Block_Lineage(&Fixture("block-lineage-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
+    let lineage = Parse_Block_Lineage(&Fixture_Text_From_Name("block-lineage-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
 
     let report = Check_Against_Manifest(&lineage, &Documents());
 
@@ -68,7 +68,7 @@ fn Test_The_Gate_Should_Pass_Against_Real_Recorded_Blocks()
 #[test]
 fn Test_This_Slice_Should_Not_Claim_To_Exercise_The_Normalizer()
 {
-    let lineage = Parse_Block_Lineage(&Fixture("block-lineage-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
+    let lineage = Parse_Block_Lineage(&Fixture_Text_From_Name("block-lineage-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
 
     let report = Check_Against_Manifest(&lineage, &Documents());
 
@@ -84,8 +84,8 @@ fn Test_This_Slice_Should_Not_Claim_To_Exercise_The_Normalizer()
 #[test]
 fn Test_An_Altered_Source_Should_Fail_The_Gate()
 {
-    let lineage = Parse_Block_Lineage(&Fixture("block-lineage-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
-    let source = Fixture("00-suite-index.md");
+    let lineage = Parse_Block_Lineage(&Fixture_Text_From_Name("block-lineage-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
+    let source = Fixture_Text_From_Name("00-suite-index.md");
     let altered = source.replacen("Focused", "Focussed", 1);
     assert_ne!(altered, source, "the control must actually alter the document");
 
@@ -114,8 +114,8 @@ fn Test_An_Altered_Source_Should_Fail_The_Gate()
 #[test]
 fn Test_Front_Matter_Should_Be_Outside_The_Gate()
 {
-    let lineage = Parse_Block_Lineage(&Fixture("block-lineage-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
-    let source = Fixture("00-suite-index.md");
+    let lineage = Parse_Block_Lineage(&Fixture_Text_From_Name("block-lineage-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
+    let source = Fixture_Text_From_Name("00-suite-index.md");
     let altered = source.replacen("status: accepted", "status: withdrawn", 1);
     assert_ne!(altered, source, "the fixture must contain the front-matter key");
 
@@ -135,7 +135,7 @@ fn Test_Real_Statements_Should_Ingest_Without_Divergence()
 {
     use nomos_spec_store::SpecificationStore;
 
-    let file = Parse_Statements(&Fixture("statements-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
+    let file = Parse_Statements(&Fixture_Text_From_Name("statements-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
     let mut store = SpecificationStore::In_Memory()
         .expect("an in-memory store opens over no file, so this construction has no failure path");
 
@@ -150,7 +150,7 @@ fn Test_Real_Statements_Should_Ingest_Without_Divergence()
 #[test]
 fn Test_The_Statement_Slice_Should_Contain_Non_Ascii()
 {
-    let file = Parse_Statements(&Fixture("statements-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
+    let file = Parse_Statements(&Fixture_Text_From_Name("statements-slice.yaml")).expect("the vendored slice is the YAML v14 wrote, so the parser reads it");
 
     let non_ascii = file
         .statements

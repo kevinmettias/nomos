@@ -12,7 +12,7 @@ fn Store() -> SpecificationStore
         .expect("an in-memory store opens against no file, so this construction has no failure");
 }
 
-fn Statements(text: &str, hash: RecordedHash<'_>) -> StatementFile
+fn Statement_File_From_Text(text: &str, hash: RecordedHash<'_>) -> StatementFile
 {
     return StatementFile {
         statements: vec![RecordedStatement {
@@ -29,7 +29,7 @@ fn Statements(text: &str, hash: RecordedHash<'_>) -> StatementFile
 fn Test_A_Matching_Statement_Should_Ingest_Cleanly()
 {
     let text = "Nomos shall do the thing.";
-    let file = Statements(text, RecordedHash(ContentHash::Of(text).As_String_Slice()));
+    let file = Statement_File_From_Text(text, RecordedHash(ContentHash::Of(text).As_String_Slice()));
 
     let report = Ingest_Statements(&mut Store(), &file)
         .expect("the fixture's statement is well formed, so ingestion reports rather than refuses");
@@ -43,7 +43,7 @@ fn Test_A_Matching_Statement_Should_Ingest_Cleanly()
 #[test]
 fn Test_A_Divergent_Hash_Should_Be_Reported_By_Id()
 {
-    let file = Statements("Nomos shall do the thing.", RecordedHash("sha256:0000"));
+    let file = Statement_File_From_Text("Nomos shall do the thing.", RecordedHash("sha256:0000"));
 
     let report = Ingest_Statements(&mut Store(), &file)
         .expect("a hash that disagrees with its text is reported in the report, never refused");
@@ -61,7 +61,7 @@ fn Test_A_Divergent_Hash_Should_Be_Reported_By_Id()
 fn Test_Non_Canonical_Text_Should_Be_Reported()
 {
     let text = "Nomos  shall\ndo the thing.";
-    let file = Statements(text, RecordedHash(ContentHash::Of(text).As_String_Slice()));
+    let file = Statement_File_From_Text(text, RecordedHash(ContentHash::Of(text).As_String_Slice()));
 
     let report = Ingest_Statements(&mut Store(), &file)
         .expect("non-canonical text is reported in the report, so ingestion itself still succeeds");
@@ -108,7 +108,7 @@ fn Test_A_Statements_Node_Kind_Should_Match_The_Catalogs_Vocabulary()
 {
     let mut store = Store();
     let text = "Nomos shall do the thing.";
-    let file = Statements(text, RecordedHash(ContentHash::Of(text).As_String_Slice()));
+    let file = Statement_File_From_Text(text, RecordedHash(ContentHash::Of(text).As_String_Slice()));
 
     Ingest_Statements(&mut store, &file)
         .expect("the fixture's statement is well formed, so ingestion reports rather than refuses");

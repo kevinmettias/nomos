@@ -41,7 +41,7 @@ const MACHINE_DOCUMENTS: u32 = 5;
 struct Sql(&'static str);
 
 /// One counted answer, for a query that binds nothing.
-fn Counted(store: &SpecificationStore, sql: Sql) -> u32
+fn Counted_Of_Sql(store: &SpecificationStore, sql: Sql) -> u32
 {
     return store
         .Connection()
@@ -399,7 +399,7 @@ fn Mint_D_130(store: &mut SpecificationStore, root_uid: i64)
 /// How many relations cross from the root suite into a sibling's.
 fn Cross_Suite_Relation_Count(store: &SpecificationStore) -> u32
 {
-    return Counted(
+    return Counted_Of_Sql(
         store,
         Sql(
             "SELECT count(*) FROM relations r

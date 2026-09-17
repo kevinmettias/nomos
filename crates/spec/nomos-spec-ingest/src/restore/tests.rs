@@ -43,7 +43,7 @@ struct Built
     documents: BTreeMap<String, String>,
 }
 
-fn Corpus(documents: &[(&str, &str)]) -> Built
+fn Corpus_From_Documents(documents: &[(&str, &str)]) -> Built
 {
     use crate::Ingest_Source_Document;
 
@@ -66,7 +66,7 @@ fn Corpus(documents: &[(&str, &str)]) -> Built
 
 fn Core() -> Built
 {
-    return Corpus(&[("02-core.md", CORE)]);
+    return Corpus_From_Documents(&[("02-core.md", CORE)]);
 }
 
 #[test]
@@ -104,17 +104,17 @@ fn Test_The_Column_Titles_Should_Not_Become_A_Concept()
 }
 
 #[test]
-fn Test_Only_A_Leaf_Naming_A_Service_Should_Become_One()
+fn Test_Only_A_Leaf_Naming_A_System_Should_Become_One()
 {
     let members = Extract_Members(DocumentPath("02-core.md"), CORE)
         .expect("CORE is shaped like a core volume, so extraction reports its members");
-    let services: Vec<&str> = members
+    let systems: Vec<&str> = members
         .iter()
         .filter(|member| return member.family == Restored::Service)
         .map(|member| return member.name.as_str())
         .collect();
 
-    assert_eq!(services, vec!["Counterfactual Analysis Service"]);
+    assert_eq!(systems, vec!["Counterfactual Analysis Service"]);
 }
 
 /// A section that catalogs the scenarios is not a scenario.
@@ -247,7 +247,7 @@ fn Test_A_Name_Two_Members_Carry_Should_Resolve_To_Neither()
     let Built {
         mut store,
         documents,
-    } = Corpus(&[("02-core.md", CORE), ("09-reference.md", SHARED)]);
+    } = Corpus_From_Documents(&[("02-core.md", CORE), ("09-reference.md", SHARED)]);
 
     let report = Restore_Members(&mut store, "v14.36", &documents)
         .expect("every document was ingested above, so restoration reports its members");

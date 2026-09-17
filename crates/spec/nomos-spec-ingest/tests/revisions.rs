@@ -62,7 +62,7 @@ fn Archives() -> Option<PathBuf>
     return Some(root);
 }
 
-fn Fingerprints(root: &Path) -> Vec<RevisionFingerprint>
+fn Fingerprints_Of_Revisions(root: &Path) -> Vec<RevisionFingerprint>
 {
     // The whole walk is built from this list, and an empty one makes every per-pair assertion in
     // this file pass over nothing — the silent no-op the coverage test at the bottom exists to
@@ -82,7 +82,7 @@ fn Fingerprints(root: &Path) -> Vec<RevisionFingerprint>
         .collect();
 }
 
-fn Opened(root: &Path, label: &str) -> Archive
+fn Archive_For_Label(root: &Path, label: &str) -> Archive
 {
     // A listing that refused here would surface below as "v15.0 is not among the revision
     // archives", sending the reader to look for a missing zip rather than for the directory that
@@ -131,7 +131,7 @@ fn Test_Every_Adjacent_Pair_Should_Yield_The_Four_Sets()
     {
         return;
     };
-    let fingerprints = Fingerprints(&root);
+    let fingerprints = Fingerprints_Of_Revisions(&root);
     let walk = Walk_Revisions(&fingerprints);
 
     assert_eq!(walk.len(), fingerprints.len().saturating_sub(1), "one pair per adjacency");
@@ -166,7 +166,7 @@ fn Test_No_Document_Should_Have_Disappeared_And_Come_Back()
     {
         return;
     };
-    let walk = Walk_Revisions(&Fingerprints(&root));
+    let walk = Walk_Revisions(&Fingerprints_Of_Revisions(&root));
 
     let returned: Vec<&String> = walk.iter().flat_map(|pair| return &pair.reappeared).collect();
     assert!(
@@ -192,7 +192,7 @@ fn Test_The_Last_Pair_Should_Carry_Its_Measured_Sizes()
     {
         return;
     };
-    let walk = Walk_Revisions(&Fingerprints(&root));
+    let walk = Walk_Revisions(&Fingerprints_Of_Revisions(&root));
     let Some(pair) = walk.last()
     else
     {
@@ -214,7 +214,7 @@ fn Test_The_Last_Pair_Should_Show_The_Whole_Narrative_Tree_Disappearing()
     {
         return;
     };
-    let walk = Walk_Revisions(&Fingerprints(&root));
+    let walk = Walk_Revisions(&Fingerprints_Of_Revisions(&root));
     let Some(pair) = walk.last()
     else
     {
@@ -253,7 +253,7 @@ fn Test_The_Headline_Counts_Should_Name_Their_Unit_And_Their_Scope()
     {
         return;
     };
-    let mut archive = Opened(&root, V14_LAST);
+    let mut archive = Archive_For_Label(&root, V14_LAST);
     let v14 = Census_Kinds(&mut archive, Scope::DomainVolumes).expect("counts v14.36");
 
     assert_eq!(v14.documents, V14_DOCUMENTS, "domain volumes");
@@ -280,7 +280,7 @@ fn Test_A_Scope_The_Revision_Does_Not_Have_Should_Be_Refused()
     {
         return;
     };
-    let mut archive = Opened(&root, V15);
+    let mut archive = Archive_For_Label(&root, V15);
     let refusal = Census_Kinds(&mut archive, Scope::DomainVolumes)
         .expect_err("v15.0 has no domain volumes and must not report zero");
 
@@ -296,9 +296,9 @@ fn Test_V15_Should_Retain_Almost_No_Table_And_No_Code_At_All()
     {
         return;
     };
-    let mut v15_archive = Opened(&root, V15);
+    let mut v15_archive = Archive_For_Label(&root, V15);
     let v15 = Census_Kinds(&mut v15_archive, Scope::EveryMarkdown).expect("counts v15.0");
-    let mut v14_archive = Opened(&root, V14_LAST);
+    let mut v14_archive = Archive_For_Label(&root, V14_LAST);
     let v14 = Census_Kinds(&mut v14_archive, Scope::EveryMarkdown).expect("counts v14.36");
 
     assert!(v15.documents > 0, "v15.0 has no markdown at all, so this measured nothing");
@@ -328,8 +328,8 @@ fn Test_Fingerprinting_Should_Be_Stable()
     {
         return;
     };
-    let mut first = Opened(&root, V15);
-    let mut second = Opened(&root, V15);
+    let mut first = Archive_For_Label(&root, V15);
+    let mut second = Archive_For_Label(&root, V15);
 
     assert_eq!(
         Fingerprint_Revision(&mut first, V15).expect("fingerprints"),
@@ -347,7 +347,7 @@ fn Test_A_Pair_Summary_Should_Name_What_It_Counted()
     {
         return;
     };
-    let walk = Walk_Revisions(&Fingerprints(&root));
+    let walk = Walk_Revisions(&Fingerprints_Of_Revisions(&root));
     let Some(pair) = walk.last()
     else
     {
@@ -375,7 +375,7 @@ fn Test_The_Archaeology_Should_Cover_Every_Revision_Exactly_Once()
     {
         return;
     };
-    let fingerprints = Fingerprints(&root);
+    let fingerprints = Fingerprints_Of_Revisions(&root);
     let walk = Walk_Revisions(&fingerprints);
     let mut visited: Vec<&str> = Vec::new();
 
@@ -410,7 +410,7 @@ fn Test_Dropping_A_Revision_Should_Change_The_Walk()
     {
         return;
     };
-    let full = Fingerprints(&root);
+    let full = Fingerprints_Of_Revisions(&root);
     assert!(full.len() > REVISIONS_NEEDED_TO_DROP, "too few revisions to drop one");
 
     let thinned: Vec<RevisionFingerprint> = full
@@ -424,10 +424,10 @@ fn Test_Dropping_A_Revision_Should_Change_The_Walk()
     let after = Walk_Revisions(&thinned);
 
     assert_ne!(before.len(), after.len());
-    assert_ne!(Shape(&before), Shape(&after), "dropping a revision changed nothing");
+    assert_ne!(Shape_Of_The_Walk(&before), Shape_Of_The_Walk(&after), "dropping a revision changed nothing");
 }
 
-fn Shape(walk: &[PairChange]) -> Vec<(String, String, usize, usize, usize, usize)>
+fn Shape_Of_The_Walk(walk: &[PairChange]) -> Vec<(String, String, usize, usize, usize, usize)>
 {
     return walk
         .iter()

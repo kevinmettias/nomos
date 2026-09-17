@@ -10,7 +10,7 @@ use nomos_spec_model::{BlockKind, Segment, SourceBlock};
 use nomos_spec_store::{RowScope, SpecificationStore};
 use std::path::{Path, PathBuf};
 
-pub(crate) fn Volume(corpus: &Path, stem: &str) -> String
+pub(crate) fn Volume_Markdown_For_Stem(corpus: &Path, stem: &str) -> String
 {
     use crate::register::VOLUMES;
 
@@ -91,7 +91,7 @@ pub(crate) fn Volume_Census(volumes: &Path) -> nomos_spec_store::RowCensus
     return store.Row_Census(RowScope::Everything).expect("takes a census");
 }
 
-pub(crate) fn Tables(volumes: &Path) -> u32
+pub(crate) fn Table_Count_Of_Volumes(volumes: &Path) -> u32
 {
     let mut tables = 0_u32;
 
@@ -181,7 +181,7 @@ fn Has_Table_Rows(block: &SourceBlock) -> bool
 pub(crate) fn Table_Under(corpus: &Path, stem: &str, heading: TableHeading<'_>) -> TableCounts
 {
     let TableHeading(heading) = heading;
-    let markdown = Volume(corpus, stem);
+    let markdown = Volume_Markdown_For_Stem(corpus, stem);
     let mut found: Vec<SourceBlock> = Vec::new();
     for block in Segment(&markdown)
     {
@@ -219,7 +219,7 @@ pub(crate) struct TableCounts
 /// how many models the corpus has.
 pub(crate) fn Named_Models(corpus: &Path) -> u32
 {
-    let markdown = Volume(corpus, "02-core");
+    let markdown = Volume_Markdown_For_Stem(corpus, "02-core");
     let mut models = 0_u32;
 
     for block in Segment(&markdown)

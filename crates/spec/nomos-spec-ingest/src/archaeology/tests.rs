@@ -22,7 +22,7 @@ const DECLARED_FILLERS: usize = 3;
 /// How many sections carry one template body, as a `Repetition` counts them.
 const SECTIONS_PER_TEMPLATE: u32 = 3;
 
-fn Documents(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
+fn Documents_From_Pairs(pairs: &[(&str, &str)]) -> BTreeMap<String, String>
 {
     return pairs
         .iter()
@@ -34,7 +34,7 @@ fn Earlier() -> Revision
 {
     return Revision {
         label: "v14.36".to_owned(),
-        documents: Documents(&[("01_authoring/domain_volumes/02-core-architecture.md", CORE)]),
+        documents: Documents_From_Pairs(&[("01_authoring/domain_volumes/02-core-architecture.md", CORE)]),
     };
 }
 
@@ -54,7 +54,7 @@ fn Later_Than(documents: &[(&str, &str)]) -> Revision
 {
     return Revision {
         label: "v15.0".to_owned(),
-        documents: Documents(documents),
+        documents: Documents_From_Pairs(documents),
     };
 }
 
@@ -70,7 +70,7 @@ fn Fate_Of(report: &RegressionReport, name: &str) -> Fate
         .clone();
 }
 
-fn Reported(later: &[(&str, &str)]) -> RegressionReport
+fn Report_From_Later_Documents(later: &[(&str, &str)]) -> RegressionReport
 {
     return Regression_Between_Revisions(&Earlier(), &Later_Than(later))
         .expect("both revisions carry the volumes a regression report reads, so it reports");
@@ -79,7 +79,7 @@ fn Reported(later: &[(&str, &str)]) -> RegressionReport
 #[test]
 fn Test_A_Heading_Over_A_Repeated_Paragraph_Should_Be_Hollowed()
 {
-    let report = Reported(&[
+    let report = Report_From_Later_Documents(&[
         ("a.md", "# Counterfactual Analysis Service\n\nRefer to the owning domain volume for this material.\n"),
         ("b.md", "# Something else\n\nRefer to the owning domain volume for this material.\n"),
         ("c.md", "# A third\n\nRefer to the owning domain volume for this material.\n"),
@@ -100,7 +100,7 @@ fn Test_A_Heading_Over_A_Repeated_Paragraph_Should_Be_Hollowed()
 #[test]
 fn Test_A_Paragraph_Two_Sections_Share_Should_Not_Be_A_Template()
 {
-    let report = Reported(&[
+    let report = Report_From_Later_Documents(&[
         ("a.md", "# Counterfactual Analysis Service\n\nRefer to the owning domain volume for this material.\n"),
         ("b.md", "# Something else\n\nRefer to the owning domain volume for this material.\n"),
     ]);
@@ -116,7 +116,7 @@ fn Test_A_Paragraph_Two_Sections_Share_Should_Not_Be_A_Template()
 #[test]
 fn Test_A_Heading_Over_Nothing_Should_Be_Hollowed_With_No_Body()
 {
-    let report = Reported(&[("a.md", "# Counterfactual Analysis Service\n")]);
+    let report = Report_From_Later_Documents(&[("a.md", "# Counterfactual Analysis Service\n")]);
 
     assert_eq!(
         Fate_Of(&report, "Counterfactual Analysis Service"),
@@ -130,7 +130,7 @@ fn Test_A_Heading_Over_Nothing_Should_Be_Hollowed_With_No_Body()
 #[test]
 fn Test_A_Heading_Over_Its_Own_Link_List_Should_Not_Count_As_A_Body()
 {
-    let report = Reported(&[(
+    let report = Report_From_Later_Documents(&[(
         "a.md",
         "# Counterfactual Analysis Service\n\n- [One](one.md)\n- [Two](two.md)\n",
     )]);
@@ -147,7 +147,7 @@ fn Test_A_Heading_Over_Its_Own_Link_List_Should_Not_Count_As_A_Body()
 #[test]
 fn Test_A_Name_In_Prose_Should_Be_Mentioned_Rather_Than_Preserved()
 {
-    let report = Reported(&[("a.md", "# Elsewhere\n\nThe WorkspaceContext is discussed.\n")]);
+    let report = Report_From_Later_Documents(&[("a.md", "# Elsewhere\n\nThe WorkspaceContext is discussed.\n")]);
 
     assert_eq!(
         Fate_Of(&report, "WorkspaceContext"),
@@ -160,7 +160,7 @@ fn Test_A_Name_In_Prose_Should_Be_Mentioned_Rather_Than_Preserved()
 #[test]
 fn Test_A_Name_Occurring_Nowhere_Should_Be_Gone()
 {
-    let report = Reported(&[("a.md", "# Elsewhere\n\nNothing of the kind.\n")]);
+    let report = Report_From_Later_Documents(&[("a.md", "# Elsewhere\n\nNothing of the kind.\n")]);
 
     assert_eq!(Fate_Of(&report, "WorkspaceContext"), Fate::Gone);
     assert_eq!(report.Tally(Restored::CanonicalDomainModel).gone, MODELS_IN_CORE);
@@ -169,7 +169,7 @@ fn Test_A_Name_Occurring_Nowhere_Should_Be_Gone()
 #[test]
 fn Test_A_Model_Sharing_A_Row_Should_Be_Found_In_That_Row()
 {
-    let report = Reported(&[(
+    let report = Report_From_Later_Documents(&[(
         "a.md",
         "# Models\n\n| Model | Responsibility |\n| --- | --- |\n\
          | ModelUsageObservation and CostObservation | Tokens against money. |\n",
@@ -243,7 +243,7 @@ fn Test_A_Revision_Without_The_Volumes_Should_Be_Refused()
 {
     let earlier = Revision {
         label: "v15.0".to_owned(),
-        documents: Documents(&[("records/one.md", "# Record\n\nA decision.\n")]),
+        documents: Documents_From_Pairs(&[("records/one.md", "# Record\n\nA decision.\n")]),
     };
 
     let refusal = Regression_Between_Revisions(&earlier, &Later_Than(&[("a.md", "# A\n\nText.\n")]))
@@ -269,7 +269,7 @@ fn Test_Declared_Filler_Should_Be_Named_As_Declared()
     let first = format!("# Counterfactual Analysis Service\n\n{DECLARED}\n");
     let second = format!("# Something else\n\n{DECLARED}\n");
     let third = format!("# A third\n\n{DECLARED}\n");
-    let report = Reported(&[("a.md", &first), ("b.md", &second), ("c.md", &third)]);
+    let report = Report_From_Later_Documents(&[("a.md", &first), ("b.md", &second), ("c.md", &third)]);
 
     assert!(
         matches!(
@@ -293,7 +293,7 @@ fn Test_Declared_Filler_Should_Be_Named_As_Declared()
 fn Test_Declared_Filler_Should_Not_Need_The_Threshold()
 {
     let only = format!("# Counterfactual Analysis Service\n\n{DECLARED}\n");
-    let report = Reported(&[("a.md", &only)]);
+    let report = Report_From_Later_Documents(&[("a.md", &only)]);
 
     assert!(matches!(
         Fate_Of(&report, "Counterfactual Analysis Service"),
@@ -304,7 +304,7 @@ fn Test_Declared_Filler_Should_Not_Need_The_Threshold()
 #[test]
 fn Test_A_Template_Naming_Its_Own_Section_Should_Read_As_One_Template()
 {
-    let report = Reported(&[
+    let report = Report_From_Later_Documents(&[
         (
             "a.md",
             "# Counterfactual Analysis Service\n\nRead Counterfactual Analysis Service \
@@ -327,7 +327,7 @@ fn Test_A_Template_Naming_Its_Own_Section_Should_Read_As_One_Template()
 #[test]
 fn Test_The_Summary_Should_Name_Members_Rather_Than_Only_Count_Them()
 {
-    let report = Reported(&[("a.md", "# A\n\nText.\n")]);
+    let report = Report_From_Later_Documents(&[("a.md", "# A\n\nText.\n")]);
 
     assert!(report.Summary().contains("WorkspaceContext"), "{}", report.Summary());
 }

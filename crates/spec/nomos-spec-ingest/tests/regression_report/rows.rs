@@ -73,7 +73,7 @@ pub(crate) fn Counts() -> Vec<Count>
     return serde_json::from_str(COUNTS).expect("the counts register does not parse");
 }
 
-pub(crate) fn Family(label: &str) -> nomos_spec_ingest::Restored
+pub(crate) fn Restored_Family_For_Label(label: &str) -> nomos_spec_ingest::Restored
 {
     return nomos_spec_ingest::Restored::All()
         .iter()

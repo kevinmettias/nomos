@@ -6,7 +6,7 @@
 //! machine with no corpus. A register that contradicted itself would make the archive half
 //! agree with the wrong numbers.
 
-use crate::rows::{Count, Counts, Entry, Family, Register};
+use crate::rows::{Count, Counts, Entry, Register, Restored_Family_For_Label};
 
 const PLAN_HEADLINE: &[&str] = &[
     "282 table_row",
@@ -65,7 +65,7 @@ fn Assert_Every_Named_Family_Resolves(named: &[&str])
 {
     for label in named
     {
-        Family(label);
+        Restored_Family_For_Label(label);
     }
 }
 

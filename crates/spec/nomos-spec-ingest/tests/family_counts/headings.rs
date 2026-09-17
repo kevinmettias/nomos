@@ -7,7 +7,7 @@
 
 #![allow(dead_code)]
 
-use crate::volumes::Volume;
+use crate::volumes::Volume_Markdown_For_Stem;
 use nomos_spec_model::{BlockKind, Segment};
 use std::path::Path;
 
@@ -33,7 +33,7 @@ pub(crate) struct Heading
 
 /// Headings as the segmenter sees them, which is what keeps a `###` inside a fenced block
 /// from being counted as a section.
-fn Headings(markdown: &str) -> Vec<Heading>
+fn Headings_Of_Markdown(markdown: &str) -> Vec<Heading>
 {
     return Segment(markdown)
         .into_iter()
@@ -50,8 +50,8 @@ fn Headings(markdown: &str) -> Vec<Heading>
 
 pub(crate) fn Headings_Matching(corpus: &Path, stem: &str, depth: usize, prefixes: &[&str]) -> u32
 {
-    let markdown = Volume(corpus, stem);
-    let matched = Headings(&markdown)
+    let markdown = Volume_Markdown_For_Stem(corpus, stem);
+    let matched = Headings_Of_Markdown(&markdown)
         .iter()
         .filter(|heading| return heading.depth == depth)
         .filter(|heading| {
@@ -77,11 +77,11 @@ pub(crate) struct Appendix
 
 /// Appendix sections, addressed the way the documents number them: a letter, then
 /// `parts` dotted numbers, then a space.
-pub(crate) fn Lettered(corpus: &Path, stem: &str, depth: usize, address: Appendix) -> u32
+pub(crate) fn Count_Of_Lettered_Sections(corpus: &Path, stem: &str, depth: usize, address: Appendix) -> u32
 {
     let Appendix { letter, parts } = address;
-    let markdown = Volume(corpus, stem);
-    let matched = Headings(&markdown)
+    let markdown = Volume_Markdown_For_Stem(corpus, stem);
+    let matched = Headings_Of_Markdown(&markdown)
         .iter()
         .filter(|heading| return heading.depth == depth)
         .filter(|heading| return Is_Lettered(&heading.title, letter, parts))
@@ -116,10 +116,10 @@ fn Is_Lettered(title: &str, letter: char, parts: usize) -> bool
             .all(|segment| return !segment.is_empty() && segment.chars().all(|character| return character.is_ascii_digit()));
 }
 
-pub(crate) fn Prefixed(corpus: &Path, stem: &str, depth: usize, prefix: &str) -> u32
+pub(crate) fn Count_Of_Prefixed_Sections(corpus: &Path, stem: &str, depth: usize, prefix: &str) -> u32
 {
-    let markdown = Volume(corpus, stem);
-    let matched = Headings(&markdown)
+    let markdown = Volume_Markdown_For_Stem(corpus, stem);
+    let matched = Headings_Of_Markdown(&markdown)
         .iter()
         .filter(|heading| return heading.depth == depth)
         .filter(|heading| {
@@ -135,8 +135,8 @@ pub(crate) fn Prefixed(corpus: &Path, stem: &str, depth: usize, prefix: &str) ->
 
 pub(crate) fn Under_Path(corpus: &Path, stem: &str, depth: usize, ancestor: &str) -> u32
 {
-    let markdown = Volume(corpus, stem);
-    let matched = Headings(&markdown)
+    let markdown = Volume_Markdown_For_Stem(corpus, stem);
+    let matched = Headings_Of_Markdown(&markdown)
         .iter()
         .filter(|heading| return heading.depth == depth)
         .filter(|heading| return heading.path.iter().any(|step| return step == ancestor))
@@ -147,8 +147,8 @@ pub(crate) fn Under_Path(corpus: &Path, stem: &str, depth: usize, ancestor: &str
 
 pub(crate) fn End_To_End(corpus: &Path) -> u32
 {
-    let markdown = Volume(corpus, "09-reference");
-    let matched = Headings(&markdown)
+    let markdown = Volume_Markdown_For_Stem(corpus, "09-reference");
+    let matched = Headings_Of_Markdown(&markdown)
         .iter()
         .filter(|heading| return heading.depth == APPENDIX_DEPTH)
         .filter(|heading| {
@@ -163,8 +163,8 @@ pub(crate) fn End_To_End(corpus: &Path) -> u32
 /// Every heading of section 6, its leaves, and the leaves naming a service.
 pub(crate) fn Section_Six(corpus: &Path) -> SectionCounts
 {
-    let markdown = Volume(corpus, "02-core");
-    let headings = Headings(&markdown);
+    let markdown = Volume_Markdown_For_Stem(corpus, "02-core");
+    let headings = Headings_Of_Markdown(&markdown);
     let counted = Counted_Under_Section_Six(&headings);
 
     assert!(counted.all > 0, "section 6 is no longer in volume 02 under that title");
@@ -177,7 +177,7 @@ pub(crate) fn Section_Six(corpus: &Path) -> SectionCounts
 fn Counted_Under_Section_Six(headings: &[Heading]) -> SectionCounts
 {
     let mut inside = false;
-    let (mut all, mut leaves, mut services) = (0_u32, 0_u32, 0_u32);
+    let (mut all, mut leaves, mut systems) = (0_u32, 0_u32, 0_u32);
     for heading in headings
     {
         if heading.title == SECTION_SIX
@@ -192,19 +192,19 @@ fn Counted_Under_Section_Six(headings: &[Heading]) -> SectionCounts
         {
             all = all.saturating_add(1);
             leaves = leaves.saturating_add(u32::from(heading.depth == LEAF_DEPTH));
-            services = services.saturating_add(u32::from(Is_A_Service_Leaf(heading)));
+            systems = systems.saturating_add(u32::from(Is_A_System_Leaf(heading)));
         }
     }
 
     return SectionCounts {
         all,
         leaves,
-        services,
+        systems,
     };
 }
 
 /// Whether a leaf heading names a service, which is the count the register quotes.
-fn Is_A_Service_Leaf(heading: &Heading) -> bool
+fn Is_A_System_Leaf(heading: &Heading) -> bool
 {
     if heading.depth != LEAF_DEPTH
     {
@@ -222,5 +222,5 @@ pub(crate) struct SectionCounts
 {
     pub(crate) all: u32,
     pub(crate) leaves: u32,
-    pub(crate) services: u32,
+    pub(crate) systems: u32,
 }
