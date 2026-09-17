@@ -13,7 +13,7 @@ const CONFIGURATION_SEED: u8 = 3;
 /// A second workspace state, distinct from the initial-state seed the other fixtures use.
 const SECOND_STATE_SEED: u8 = 4;
 
-/// What `Taken` records: two syntax facts under one schema, and one finding.
+/// What `Commit_Under_Seed` records: two syntax facts under one schema, and one finding.
 const FACTS_IN_ONE_SNAPSHOT: usize = 2;
 
 /// Two commits of three records each. Four documents is the fewest that make "no document
@@ -24,12 +24,12 @@ const DOCUMENTS_IN_TWO_SNAPSHOTS: usize = 4;
 /// writes against one state. That the count exceeds one is the whole point of the test.
 const COMMITS_UNDER_ONE_STATE: usize = 2;
 
-fn Digest(seed: u8) -> Digest128
+fn Digest_For_Seed(seed: u8) -> Digest128
 {
     return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
 }
 
-fn Fact(payload: &str) -> Recorded
+fn Recorded_Fact(payload: &str) -> Recorded
 {
     return Recorded::New(
         DocumentKind::Fact,
@@ -38,7 +38,7 @@ fn Fact(payload: &str) -> Recorded
     );
 }
 
-fn Finding(payload: &str) -> Recorded
+fn Recorded_Finding(payload: &str) -> Recorded
 {
     return Recorded::New(
         DocumentKind::Finding,
@@ -47,17 +47,17 @@ fn Finding(payload: &str) -> Recorded
     );
 }
 
-fn Taken(seed: u8) -> Commit
+fn Commit_Under_Seed(seed: u8) -> Commit
 {
     return Commit::Under(
-        SnapshotId::From_Digest(Digest(seed)),
-        BuildVariantId::From_Digest(Digest(BUILD_VARIANT_SEED)),
-        ConfigurationId::From_Digest(Digest(CONFIGURATION_SEED)),
+        SnapshotId::From_Digest(Digest_For_Seed(seed)),
+        BuildVariantId::From_Digest(Digest_For_Seed(BUILD_VARIANT_SEED)),
+        ConfigurationId::From_Digest(Digest_For_Seed(CONFIGURATION_SEED)),
         GenerationId::INITIAL,
     )
-    .Recording(Fact("fn main() {}"))
-    .Recording(Fact("struct Workspace;"))
-    .Recording(Finding("unused import at nomos.rs"));
+    .Recording(Recorded_Fact("fn main() {}"))
+    .Recording(Recorded_Fact("struct Workspace;"))
+    .Recording(Recorded_Finding("unused import at nomos.rs"));
 }
 
 fn Observed() -> DocumentStore
@@ -68,7 +68,7 @@ fn Observed() -> DocumentStore
 #[test]
 fn Test_A_Snapshot_Written_And_Reread_Should_Be_Byte_Identical()
 {
-    let snapshot = Taken(1);
+    let snapshot = Commit_Under_Seed(1);
     let mut store = Observed();
 
     let id = store.Commit(&snapshot).expect("Authority::Observed admits every kind recorded here");
@@ -85,7 +85,7 @@ fn Test_A_Snapshot_Written_And_Reread_Should_Be_Byte_Identical()
 #[test]
 fn Test_A_Reread_Snapshot_Should_Decode_To_What_Was_Committed()
 {
-    let snapshot = Taken(1);
+    let snapshot = Commit_Under_Seed(1);
     let mut store = Observed();
     let id = store.Commit(&snapshot).expect("Authority::Observed admits every kind recorded here");
 
@@ -112,9 +112,9 @@ fn Test_Committing_The_Same_Snapshot_Twice_Should_Address_The_Same_Document()
 {
     let mut store = Observed();
 
-    let first = store.Commit(&Taken(1)).expect("Authority::Observed admits every kind recorded here");
+    let first = store.Commit(&Commit_Under_Seed(1)).expect("Authority::Observed admits every kind recorded here");
     let documents = store.Length();
-    let second = store.Commit(&Taken(1)).expect("Authority::Observed admits every kind recorded here");
+    let second = store.Commit(&Commit_Under_Seed(1)).expect("Authority::Observed admits every kind recorded here");
 
     assert_eq!(first, second, "content addressing produced two addresses for one content");
     assert_eq!(store.Length(), documents, "a re-commit duplicated every document");
@@ -125,14 +125,14 @@ fn Test_A_Changed_Record_Should_Address_A_Different_Snapshot()
 {
     let mut store = Observed();
     let edited = Commit::Under(
-        SnapshotId::From_Digest(Digest(1)),
-        BuildVariantId::From_Digest(Digest(BUILD_VARIANT_SEED)),
-        ConfigurationId::From_Digest(Digest(CONFIGURATION_SEED)),
+        SnapshotId::From_Digest(Digest_For_Seed(1)),
+        BuildVariantId::From_Digest(Digest_For_Seed(BUILD_VARIANT_SEED)),
+        ConfigurationId::From_Digest(Digest_For_Seed(CONFIGURATION_SEED)),
         GenerationId::INITIAL,
     )
-    .Recording(Fact("fn main() { edited }"));
+    .Recording(Recorded_Fact("fn main() { edited }"));
 
-    let first = store.Commit(&Taken(1)).expect("Authority::Observed admits every kind recorded here");
+    let first = store.Commit(&Commit_Under_Seed(1)).expect("Authority::Observed admits every kind recorded here");
     let second = store.Commit(&edited).expect("Authority::Observed admits every kind recorded here");
 
     assert_ne!(first, second);
@@ -142,8 +142,8 @@ fn Test_A_Changed_Record_Should_Address_A_Different_Snapshot()
 fn Test_The_Index_Should_Be_Rebuildable_From_The_Documents_Alone()
 {
     let mut store = Observed();
-    store.Commit(&Taken(1)).expect("Authority::Observed admits every kind recorded here");
-    store.Commit(&Taken(SECOND_STATE_SEED)).expect("Authority::Observed admits every kind recorded here");
+    store.Commit(&Commit_Under_Seed(1)).expect("Authority::Observed admits every kind recorded here");
+    store.Commit(&Commit_Under_Seed(SECOND_STATE_SEED)).expect("Authority::Observed admits every kind recorded here");
 
     let before = store.Index().expect("the index derives from these documents").clone();
     store.Drop_Index();
@@ -158,7 +158,7 @@ fn Test_The_Index_Should_Be_Rebuildable_From_The_Documents_Alone()
 #[test]
 fn Test_The_Index_Should_Reach_Every_Recorded_Document()
 {
-    let snapshot = Taken(1);
+    let snapshot = Commit_Under_Seed(1);
     let mut store = Observed();
     let id = store.Commit(&snapshot).expect("Authority::Observed admits every kind recorded here");
 
@@ -180,7 +180,7 @@ fn Test_The_Index_Should_Reach_Every_Recorded_Document()
 fn Test_The_Index_Should_Group_By_Kind_And_Schema()
 {
     let mut store = Observed();
-    store.Commit(&Taken(1)).expect("Authority::Observed admits every kind recorded here");
+    store.Commit(&Commit_Under_Seed(1)).expect("Authority::Observed admits every kind recorded here");
 
     let index = store.Index().expect("the index derives from these documents");
 
@@ -208,9 +208,9 @@ fn Test_The_Index_Should_Group_By_Kind_And_Schema()
 #[test]
 fn Test_Two_Commits_Under_One_Workspace_State_Should_Both_Be_Reachable()
 {
-    let state = SnapshotId::From_Digest(Digest(1));
-    let first = Under(state, Fact("fn main() {}"));
-    let second = Under(state, Finding("unused import at nomos.rs"));
+    let state = SnapshotId::From_Digest(Digest_For_Seed(1));
+    let first = Commit_Under_State(state, Recorded_Fact("fn main() {}"));
+    let second = Commit_Under_State(state, Recorded_Finding("unused import at nomos.rs"));
     let mut store = Observed();
     let one = store.Commit(&first).expect("Authority::Observed admits every kind recorded here");
     let other = store.Commit(&second).expect("Authority::Observed admits every kind recorded here");
@@ -233,12 +233,12 @@ fn Test_Two_Commits_Under_One_Workspace_State_Should_Both_Be_Reachable()
 }
 
 /// One commit under a named workspace state, recording one document.
-fn Under(state: SnapshotId, recorded: Recorded) -> Commit
+fn Commit_Under_State(state: SnapshotId, recorded: Recorded) -> Commit
 {
     return Commit::Under(
         state,
-        BuildVariantId::From_Digest(Digest(BUILD_VARIANT_SEED)),
-        ConfigurationId::From_Digest(Digest(CONFIGURATION_SEED)),
+        BuildVariantId::From_Digest(Digest_For_Seed(BUILD_VARIANT_SEED)),
+        ConfigurationId::From_Digest(Digest_For_Seed(CONFIGURATION_SEED)),
         GenerationId::INITIAL,
     )
     .Recording(recorded);
@@ -248,12 +248,12 @@ fn Under(state: SnapshotId, recorded: Recorded) -> Commit
 fn Test_Two_Stores_Given_The_Same_Snapshots_In_Any_Order_Should_Index_Identically()
 {
     let mut forwards = Observed();
-    forwards.Commit(&Taken(1)).expect("Authority::Observed admits every kind recorded here");
-    forwards.Commit(&Taken(SECOND_STATE_SEED)).expect("Authority::Observed admits every kind recorded here");
+    forwards.Commit(&Commit_Under_Seed(1)).expect("Authority::Observed admits every kind recorded here");
+    forwards.Commit(&Commit_Under_Seed(SECOND_STATE_SEED)).expect("Authority::Observed admits every kind recorded here");
 
     let mut backwards = Observed();
-    backwards.Commit(&Taken(SECOND_STATE_SEED)).expect("Authority::Observed admits every kind recorded here");
-    backwards.Commit(&Taken(1)).expect("Authority::Observed admits every kind recorded here");
+    backwards.Commit(&Commit_Under_Seed(SECOND_STATE_SEED)).expect("Authority::Observed admits every kind recorded here");
+    backwards.Commit(&Commit_Under_Seed(1)).expect("Authority::Observed admits every kind recorded here");
 
     assert_eq!(
         forwards.Index().expect("the index derives from these documents").Digest(),
@@ -266,8 +266,8 @@ fn Test_Two_Stores_Given_The_Same_Snapshots_In_Any_Order_Should_Index_Identicall
 fn Test_Every_Document_Should_Be_Reachable_From_A_Snapshot()
 {
     let mut store = Observed();
-    store.Commit(&Taken(1)).expect("Authority::Observed admits every kind recorded here");
-    store.Commit(&Taken(SECOND_STATE_SEED)).expect("Authority::Observed admits every kind recorded here");
+    store.Commit(&Commit_Under_Seed(1)).expect("Authority::Observed admits every kind recorded here");
+    store.Commit(&Commit_Under_Seed(SECOND_STATE_SEED)).expect("Authority::Observed admits every kind recorded here");
 
     assert!(
         store.Unreachable().expect("the index derives from these documents").is_empty(),
@@ -289,7 +289,7 @@ fn Test_An_Authored_Document_Should_Not_Enter_An_Observed_Store()
         SchemaId::New("nomos.record.v1"),
         b"D-129".to_vec(),
     );
-    let authored = Under(SnapshotId::From_Digest(Digest(1)), recorded);
+    let authored = Commit_Under_State(SnapshotId::From_Digest(Digest_For_Seed(1)), recorded);
 
     let refusal = store.Commit(&authored).expect_err("must refuse");
 
@@ -306,7 +306,7 @@ fn Test_An_Observed_Document_Should_Not_Enter_An_Authored_Store()
 {
     let mut store = DocumentStore::For(Authority::Authored);
 
-    let refusal = store.Commit(&Taken(1)).expect_err("must refuse");
+    let refusal = store.Commit(&Commit_Under_Seed(1)).expect_err("must refuse");
 
     assert!(matches!(refusal, StoreError::WrongAuthority { .. }), "{refusal}");
 }
@@ -335,9 +335,9 @@ fn Test_A_Snapshot_That_Records_Nothing_Should_Be_Refused()
 {
     let mut store = Observed();
     let empty = Commit::Under(
-        SnapshotId::From_Digest(Digest(1)),
-        BuildVariantId::From_Digest(Digest(BUILD_VARIANT_SEED)),
-        ConfigurationId::From_Digest(Digest(CONFIGURATION_SEED)),
+        SnapshotId::From_Digest(Digest_For_Seed(1)),
+        BuildVariantId::From_Digest(Digest_For_Seed(BUILD_VARIANT_SEED)),
+        ConfigurationId::From_Digest(Digest_For_Seed(CONFIGURATION_SEED)),
         GenerationId::INITIAL,
     );
 
@@ -353,7 +353,7 @@ fn Test_An_Absent_Document_Should_Be_Refused_Rather_Than_Empty()
     let store = Observed();
 
     let refusal = store
-        .Read(Fact("never committed").Document().Id())
+        .Read(Recorded_Fact("never committed").Document().Id())
         .expect_err("must refuse");
 
     assert!(matches!(refusal, StoreError::NoSuchDocument { .. }), "{refusal}");
@@ -362,12 +362,12 @@ fn Test_An_Absent_Document_Should_Be_Refused_Rather_Than_Empty()
 #[test]
 fn Test_A_Committed_Document_Should_Not_Change_When_Another_Snapshot_Arrives()
 {
-    let snapshot = Taken(1);
+    let snapshot = Commit_Under_Seed(1);
     let mut store = Observed();
     let id = store.Commit(&snapshot).expect("Authority::Observed admits every kind recorded here");
     let before = store.Read(id).expect("this store holds what it committed").clone();
 
-    store.Commit(&Taken(SECOND_STATE_SEED)).expect("Authority::Observed admits every kind recorded here");
+    store.Commit(&Commit_Under_Seed(SECOND_STATE_SEED)).expect("Authority::Observed admits every kind recorded here");
 
     assert_eq!(&before, store.Read(id).expect("this store holds what it committed"));
 }

@@ -82726,6 +82726,81 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-KERNEL-TESTS",
+      "title": "The naming-clarity check reads zero over the kernel territory at the phase own flags",
+      "why": "check-naming-clarity reads 301 live findings over the whole crates/ tree at the phase own flags, 297 of them in test positions, and this item is the kernel slice: five, all in one file. crates/kernel/nomos-store/tests/one_door.rs declares five fixture builders, each taking parameters and each named with a single word that says only what kind of value comes back. fn Digest(seed) becomes Digest_For_Seed, naming the source of input it builds the digest from. fn Fact(payload) and fn Finding(payload) both return a Recorded of their kind and become Recorded_Fact and Recorded_Finding, naming what they build rather than the kind alone. fn Taken(seed) builds the three-record commit the file fixtures every snapshot from and becomes Commit_Under_Seed. fn Under(state, recorded) builds one commit under a named state and becomes Commit_Under_State. The last two are deliberately parallel: the file has two shapes of fixture commit, one keyed by a seed and one by a state it is handed. None of the five is public, all five are private to an integration-test binary that is a crate of its own compiled outside src/, so nothing under tests/contract/surface/ can move, and no name here is reached from outside the file. The file doc line 16 names Taken in prose and is corrected in the same commit. Two things a word-boundary sweep would break and this item does not touch: the src type associated function Commit::Under, which four call sites spell Commit::Under(, and the methods Digest() and Commits_Under() on the index and snapshot types. Measured at unix 1789605493.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/kernel at the phase own flags, verified by this item predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. No suppression entry is added for this band and no in-code marker is used. Every call site of the five helpers in the file that declares them is renamed with them, and no call site of Commit::Under, Digest() or Commits_Under() is touched -- the build is what proves that, since a sweep cannot tell the helpers from the type methods that share their spelling. No file outside this item territory is edited; if the build proves one must be, the item that owns it is named in the same commit and its territory is widened here rather than edited without a claim.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel/nomos-store/tests/one_door.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards/check.exe",
+          "-cwd",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/kernel",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards/check.exe",
+          "-cwd",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/kernel",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    50 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789605356,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "d384d06fb136a6fafe3115455bf01e534170fc49"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
