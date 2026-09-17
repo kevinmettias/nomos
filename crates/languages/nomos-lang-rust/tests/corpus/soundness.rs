@@ -22,7 +22,7 @@ const NAMELESS: &[&str] = &["*", "_"];
 /// reader. The corpus is what surfaced this: `xvpe-collections` declares `mod r#match;`,
 /// and a tokenizer that split on `#` reported the provider unsound for saying exactly
 /// what the file says.
-fn Identifiers(source: &str) -> BTreeSet<&str>
+fn Identifiers_In_Source(source: &str) -> BTreeSet<&str>
 {
     return source
         .split(|character: char| {
@@ -48,7 +48,7 @@ pub(crate) fn Names_Checked(path: &Path) -> Option<u64>
     {
         return None;
     };
-    let identifiers = Identifiers(&source);
+    let identifiers = Identifiers_In_Source(&source);
     let mut checked = 0_u64;
 
     for item in &facts.items

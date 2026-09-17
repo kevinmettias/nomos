@@ -21,7 +21,7 @@ pub(crate) struct Walked
     pub(crate) declaring_nothing: usize,
 }
 
-pub(crate) fn Walk(corpus: &Corpus) -> Walked
+pub(crate) fn Walk_Corpus(corpus: &Corpus) -> Walked
 {
     let mut walked = Walked::default();
 

@@ -38,20 +38,20 @@ const LIVE_FACT_COUNT: u32 = 3;
 /// which is what makes this count worth asserting rather than counting the entries instead.
 const FIXTURE_PUBLIC_ENTRY_COUNT: usize = 4;
 
-fn Subject(path: &str) -> SubjectId
+fn Subject_Id_For_Path(path: &str) -> SubjectId
 {
     use nomos_model::Content_Digest;
 
     return SubjectId::From_Digest(Content_Digest(path.as_bytes()));
 }
 
-/// Fill bytes distinct enough that the three identities [`Context`] mints differ from one
+/// Fill bytes distinct enough that the three identities [`Context_At_Generation`] mints differ from one
 /// another; each value carries no meaning beyond "not equal to the others".
 const SNAPSHOT_DIGEST_FILL: u8 = 1;
 const VARIANT_DIGEST_FILL: u8 = 2;
 const CONFIGURATION_DIGEST_FILL: u8 = 3;
 
-fn Context(generation: GenerationId) -> FactContext
+fn Context_At_Generation(generation: GenerationId) -> FactContext
 {
     return FactContext {
         snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([SNAPSHOT_DIGEST_FILL; Digest128::BYTE_LENGTH])),
@@ -144,17 +144,17 @@ fn Roll_Up_Two_Files() -> RolledModule
     let mut store = MemoryFactStore::New();
     let registry = Registry_With_Both();
     let need = Need();
-    let context = Context(GenerationId::INITIAL);
-    let alpha = Materialize_Leaf(&mut store, Subject("alpha.rs"), ALPHA, context);
-    let beta = Materialize_Leaf(&mut store, Subject("beta.rs"), BETA, context);
+    let context = Context_At_Generation(GenerationId::INITIAL);
+    let alpha = Materialize_Leaf(&mut store, Subject_Id_For_Path("alpha.rs"), ALPHA, context);
+    let beta = Materialize_Leaf(&mut store, Subject_Id_For_Path("beta.rs"), BETA, context);
     let module = Module {
         // A subject of its own. Sharing one with a member would put the rollup in the
         // direct set of any change to that member, which is the property under test
         // vanishing into the one that was already proven.
-        subject: Subject("the/module"),
+        subject: Subject_Id_For_Path("the/module"),
         members: vec![
-            Member::Of(Subject("alpha.rs"), ALPHA),
-            Member::Of(Subject("beta.rs"), BETA),
+            Member::Of(Subject_Id_For_Path("alpha.rs"), ALPHA),
+            Member::Of(Subject_Id_For_Path("beta.rs"), BETA),
         ],
     };
     let against = Against {
@@ -183,7 +183,7 @@ fn Test_Editing_A_Member_Should_Reach_The_Rollup_Through_A_Dependency_Edge()
     let next = GenerationId::INITIAL.Next();
     let report = rolled.store.Invalidate(
         &GenerationCause::SubjectChanged {
-            subject: Subject("alpha.rs"),
+            subject: Subject_Id_For_Path("alpha.rs"),
             granularity: IncrementalGranularity::File,
         },
         next,
@@ -221,7 +221,7 @@ fn Test_A_Change_To_Nothing_In_The_Module_Should_Reach_Neither()
 
     let report = rolled.store.Invalidate(
         &GenerationCause::SubjectChanged {
-            subject: Subject("elsewhere.rs"),
+            subject: Subject_Id_For_Path("elsewhere.rs"),
             granularity: IncrementalGranularity::File,
         },
         GenerationId::INITIAL.Next(),
@@ -274,20 +274,20 @@ fn Test_A_Member_With_No_Fact_Should_Still_Be_An_Edge()
     let mut store = MemoryFactStore::New();
     let registry = Registry_With_Both();
     let need = Need();
-    let context = Context(GenerationId::INITIAL);
+    let context = Context_At_Generation(GenerationId::INITIAL);
     let module = A_Module_With_One_Missing_Member();
     let against = Against {
         registry: &registry,
         need: &need,
         context,
     };
-    Materialize_Leaf(&mut store, Subject("alpha.rs"), ALPHA, context);
+    Materialize_Leaf(&mut store, Subject_Id_For_Path("alpha.rs"), ALPHA, context);
     let rolled =
         rollup::Materialize_Index(&mut store, &against, &module).expect("materializes");
     let missed = rolled
         .dependencies
         .iter()
-        .find(|dependency| return dependency.key.subject == Subject("missing.rs"))
+        .find(|dependency| return dependency.key.subject == Subject_Id_For_Path("missing.rs"))
         .expect("the read that found nothing was recorded");
 
     assert_eq!(rolled.index.Unreachable(), 1, "{:#?}", rolled.index.members);
@@ -312,10 +312,10 @@ fn Test_A_Member_With_No_Fact_Should_Still_Be_An_Edge()
 fn A_Module_With_One_Missing_Member() -> Module
 {
     return Module {
-        subject: Subject("the/module"),
+        subject: Subject_Id_For_Path("the/module"),
         members: vec![
-            Member::Of(Subject("alpha.rs"), ALPHA),
-            Member::Of(Subject("missing.rs"), "pub fn Absent() {}\n"),
+            Member::Of(Subject_Id_For_Path("alpha.rs"), ALPHA),
+            Member::Of(Subject_Id_For_Path("missing.rs"), "pub fn Absent() {}\n"),
         ],
     };
 }
@@ -354,7 +354,7 @@ fn Names_Declared_By<'a>(index: &'a rollup::Index, member: &str) -> Vec<&'a str>
     return index
         .items
         .iter()
-        .filter(|entry| return entry.member == Subject(member))
+        .filter(|entry| return entry.member == Subject_Id_For_Path(member))
         .map(|entry| return entry.qualified_name.as_str())
         .collect();
 }
@@ -401,7 +401,7 @@ fn Test_The_Rollup_Should_Broaden_A_File_Granular_Cause()
     let mut rolled = Roll_Up_Two_Files();
     let report = rolled.store.Invalidate(
         &GenerationCause::SubjectChanged {
-            subject: Subject("alpha.rs"),
+            subject: Subject_Id_For_Path("alpha.rs"),
             granularity: IncrementalGranularity::File,
         },
         GenerationId::INITIAL.Next(),
@@ -426,13 +426,13 @@ fn Test_The_Rollup_Should_Broaden_A_File_Granular_Cause()
 #[test]
 fn Test_The_Member_Order_Should_Not_Change_The_Fact()
 {
-    let context = Context(GenerationId::INITIAL);
-    let alpha = Member::Of(Subject("alpha.rs"), ALPHA);
-    let beta = Member::Of(Subject("beta.rs"), BETA);
+    let context = Context_At_Generation(GenerationId::INITIAL);
+    let alpha = Member::Of(Subject_Id_For_Path("alpha.rs"), ALPHA);
+    let beta = Member::Of(Subject_Id_For_Path("beta.rs"), BETA);
 
-    let forwards = rollup::Index_Key(Subject("the/module"), &[alpha, beta], context);
-    let backwards = rollup::Index_Key(Subject("the/module"), &[beta, alpha], context);
-    let doubled = rollup::Index_Key(Subject("the/module"), &[alpha, beta, alpha], context);
+    let forwards = rollup::Index_Key(Subject_Id_For_Path("the/module"), &[alpha, beta], context);
+    let backwards = rollup::Index_Key(Subject_Id_For_Path("the/module"), &[beta, alpha], context);
+    let doubled = rollup::Index_Key(Subject_Id_For_Path("the/module"), &[alpha, beta, alpha], context);
 
     assert_eq!(forwards.Digest(), backwards.Digest());
     assert_eq!(
@@ -447,27 +447,27 @@ fn Test_The_Member_Order_Should_Not_Change_The_Fact()
 #[test]
 fn Test_A_Module_Whose_Members_Changed_Should_Not_Keep_Its_Key()
 {
-    let context = Context(GenerationId::INITIAL);
-    let alpha = Member::Of(Subject("alpha.rs"), ALPHA);
-    let beta = Member::Of(Subject("beta.rs"), BETA);
-    let edited = Member::Of(Subject("alpha.rs"), "pub fn Alpha() {}\npub fn Added() {}\n");
+    let context = Context_At_Generation(GenerationId::INITIAL);
+    let alpha = Member::Of(Subject_Id_For_Path("alpha.rs"), ALPHA);
+    let beta = Member::Of(Subject_Id_For_Path("beta.rs"), BETA);
+    let edited = Member::Of(Subject_Id_For_Path("alpha.rs"), "pub fn Alpha() {}\npub fn Added() {}\n");
     // Same bytes as beta, different file.
-    let renamed = Member::Of(Subject("gamma.rs"), BETA);
-    let original = rollup::Index_Key(Subject("the/module"), &[alpha, beta], context).Digest();
+    let renamed = Member::Of(Subject_Id_For_Path("gamma.rs"), BETA);
+    let original = rollup::Index_Key(Subject_Id_For_Path("the/module"), &[alpha, beta], context).Digest();
 
     assert_ne!(
         original,
-        rollup::Index_Key(Subject("the/module"), &[edited, beta], context).Digest(),
+        rollup::Index_Key(Subject_Id_For_Path("the/module"), &[edited, beta], context).Digest(),
         "editing a member must re-address the rollup"
     );
     assert_ne!(
         original,
-        rollup::Index_Key(Subject("the/module"), &[alpha], context).Digest(),
+        rollup::Index_Key(Subject_Id_For_Path("the/module"), &[alpha], context).Digest(),
         "dropping a member must re-address the rollup"
     );
     assert_ne!(
         original,
-        rollup::Index_Key(Subject("the/module"), &[alpha, renamed], context).Digest(),
+        rollup::Index_Key(Subject_Id_For_Path("the/module"), &[alpha, renamed], context).Digest(),
         "a module is which files it has, not only what they contain"
     );
 }
@@ -489,7 +489,7 @@ fn Test_The_Payload_Should_Decode_Under_This_Schemas_Own_Reader()
     let decoded = rollup::Parse_Index(&held.payload.bytes).expect("this provider writes its schema");
 
     assert_eq!(decoded, rolled.rolled.index);
-    assert_eq!(decoded.module, Subject("the/module"));
+    assert_eq!(decoded.module, Subject_Id_For_Path("the/module"));
     assert!(
         decoded
             .members

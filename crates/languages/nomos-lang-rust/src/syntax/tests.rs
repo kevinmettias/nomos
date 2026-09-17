@@ -3,7 +3,7 @@
 use super::*;
 use crate::Reading;
 
-fn Parsed(source: &str) -> Facts
+fn Facts_From_Source(source: &str) -> Facts
 {
     return match Read_Source(source)
     {
@@ -17,11 +17,11 @@ fn Parsed(source: &str) -> Facts
     };
 }
 
-fn Names(source: &str) -> Vec<String>
+fn Qualified_Names_From_Source(source: &str) -> Vec<String>
 {
     use crate::Item;
 
-    return Parsed(source)
+    return Facts_From_Source(source)
         .items
         .iter()
         .map(Item::Qualified_Name)
@@ -31,7 +31,7 @@ fn Names(source: &str) -> Vec<String>
 #[test]
 fn Test_Qualified_Name_Should_Include_Every_Items_Syntactic_Nesting()
 {
-    let names = Names(
+    let names = Qualified_Names_From_Source(
         "mod outer { pub mod inner { pub fn deep() {} } }\n\
          struct Top;\n\
          impl Top { fn method(&self) {} }\n",
@@ -53,7 +53,7 @@ fn Test_Qualified_Name_Should_Include_Every_Items_Syntactic_Nesting()
 #[test]
 fn Test_Ordinals_Should_Be_Dense_And_Zero_Based()
 {
-    let facts = Parsed("fn a() {}\nfn b() {}\nfn c() {}\n");
+    let facts = Facts_From_Source("fn a() {}\nfn b() {}\nfn c() {}\n");
 
     let ordinals: Vec<u32> = facts.items.iter().map(|item| return item.ordinal).collect();
 
@@ -71,7 +71,7 @@ const DENSE_ORDINALS_OF_THREE_DECLARATIONS: [u32; 3] = [0, 1, 2];
 #[test]
 fn Test_A_Named_Field_Structs_Fields_Should_Be_Recorded()
 {
-    let facts = Parsed("pub struct Counter { pub n: u32, label: String }\n");
+    let facts = Facts_From_Source("pub struct Counter { pub n: u32, label: String }\n");
     let item = facts.items.first().expect("the fixture is one struct declaration, so its first item is that struct");
 
     let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
@@ -89,7 +89,7 @@ fn Test_A_Named_Field_Structs_Fields_Should_Be_Recorded()
 #[test]
 fn Test_A_Tuple_Or_Unit_Struct_Should_Record_No_Fields()
 {
-    let facts = Parsed("struct Pair(u32, u32);\nstruct Marker;\n");
+    let facts = Facts_From_Source("struct Pair(u32, u32);\nstruct Marker;\n");
 
     assert_eq!(facts.items.len(), FIXTURE_STRUCT_COUNT, "{facts:?}");
     for item in &facts.items
@@ -108,7 +108,7 @@ const FIXTURE_STRUCT_COUNT: usize = 2;
 #[test]
 fn Test_A_Generic_Fields_Type_Should_Record_Its_Head_Only()
 {
-    let facts = Parsed("pub struct Wrapper { pub inner: Vec<String> }\n");
+    let facts = Facts_From_Source("pub struct Wrapper { pub inner: Vec<String> }\n");
     let item = facts.items.first().expect("the fixture is one struct declaration, so its first item is that struct");
 
     let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
@@ -120,7 +120,7 @@ fn Test_A_Generic_Fields_Type_Should_Record_Its_Head_Only()
 #[test]
 fn Test_Visibility_Should_Be_Recorded_As_Declared()
 {
-    let facts = Parsed(
+    let facts = Facts_From_Source(
         "pub fn exported() {}\n\
          fn hidden() {}\n\
          pub(crate) fn within() {}\n\
@@ -154,19 +154,19 @@ fn Test_Visibility_Should_Be_Recorded_As_Declared()
 fn Test_A_Use_Should_Record_The_Binding_It_Introduces()
 {
     assert_eq!(
-        Names("use std::collections::HashMap;\n"),
+        Qualified_Names_From_Source("use std::collections::HashMap;\n"),
         vec!["HashMap".to_owned()]
     );
     assert_eq!(
-        Names("use std::collections::HashMap as Map;\n"),
+        Qualified_Names_From_Source("use std::collections::HashMap as Map;\n"),
         vec!["Map".to_owned()],
         "the file now has `Map`; what `Map` refers to is a resolution away"
     );
     assert_eq!(
-        Names("use std::collections::{HashMap, BTreeSet as Ordered};\n"),
+        Qualified_Names_From_Source("use std::collections::{HashMap, BTreeSet as Ordered};\n"),
         vec!["HashMap".to_owned(), "Ordered".to_owned()]
     );
-    assert_eq!(Names("use std::fmt::*;\n"), vec!["*".to_owned()]);
+    assert_eq!(Qualified_Names_From_Source("use std::fmt::*;\n"), vec!["*".to_owned()]);
 }
 
 /// Sources that declare nothing at all: empty, blank, or only a comment.
@@ -179,7 +179,7 @@ fn Test_Has_No_Declarations_Should_Be_True_For_A_File_That_Declares_Nothing()
 {
     for source in EMPTY_SOURCES
     {
-        let facts = Parsed(source);
+        let facts = Facts_From_Source(source);
 
         assert!(facts.Has_No_Declarations(), "`{source:?}` declares nothing");
         assert_eq!(facts.unexpanded, 0);
@@ -244,7 +244,7 @@ fn Test_A_Byte_Order_Mark_Should_Be_Leading_Or_Refused()
 
 fn Assert_Leading_Mark_Is_Ordinary_Rust()
 {
-    let facts = Parsed("\u{feff}pub fn after_the_mark() {}\n");
+    let facts = Facts_From_Source("\u{feff}pub fn after_the_mark() {}\n");
 
     assert_eq!(
         facts.items.first().map(|item| return item.name.clone()),
@@ -286,7 +286,7 @@ const STRAY_MARK_LINE: usize = 3;
 #[test]
 fn Test_New_Should_Produce_A_Walk_That_Counts_Unexpanded_Regions_Wherever_They_Are()
 {
-    let facts = Parsed(
+    let facts = Facts_From_Source(
         "#[derive(Clone, Debug)]\n\
          pub struct Held;\n\
          fn body() { println!(\"one\"); vec![1, 2]; }\n\

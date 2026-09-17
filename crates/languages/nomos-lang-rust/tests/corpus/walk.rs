@@ -32,13 +32,13 @@ pub(crate) fn Each_File(root: &Path, mut visit: impl FnMut(&Path, &str))
 
         for entry in entries.flatten()
         {
-            Visit(&entry, &mut pending, &mut visit);
+            Visit_Entry(&entry, &mut pending, &mut visit);
         }
     }
 }
 
 /// One directory entry: a source directory is queued, and a file is handed to the caller.
-fn Visit(
+fn Visit_Entry(
     entry: &std::fs::DirEntry,
     pending: &mut Vec<PathBuf>,
     visit: &mut impl FnMut(&Path, &str),

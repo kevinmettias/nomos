@@ -129,7 +129,7 @@ fn Single_Member_Clippy_Output() -> String
     return format!("{artifact}\n{message}\n");
 }
 
-fn Context(generation: GenerationId) -> FactContext
+fn Context_At_Generation(generation: GenerationId) -> FactContext
 {
     return FactContext {
         snapshot: SnapshotId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
@@ -145,7 +145,7 @@ fn Context(generation: GenerationId) -> FactContext
 fn Test_Materialize_Workspace_Should_Produce_A_Fact_Nomos_Analysis_And_Nomos_Model_Both_Recognize()
 {
     let launcher = FakeLauncher::Reporting(Single_Member_Clippy_Output());
-    let context = Context(GenerationId::INITIAL);
+    let context = Context_At_Generation(GenerationId::INITIAL);
 
     let facts = Materialize_Workspace(&Root(), context, &launcher, &StdEnvironment).expect("the fake launcher reports one clean member");
 
@@ -182,7 +182,7 @@ fn Test_Materialize_Workspace_Should_Produce_A_Fact_Nomos_Analysis_And_Nomos_Mod
 fn Test_The_Facts_Key_Should_Depend_On_The_Build_Variant_But_Not_On_The_Generation()
 {
     let launcher = FakeLauncher::Reporting(Single_Member_Clippy_Output());
-    let base = Context(GenerationId::INITIAL);
+    let base = Context_At_Generation(GenerationId::INITIAL);
 
     let at_base = Materialize_Workspace(&Root(), base, &launcher, &StdEnvironment).expect("base context");
     let at_later_generation = Materialize_Workspace(&Root(), Later_Generation(base), &launcher, &StdEnvironment).expect("later generation");
@@ -246,7 +246,7 @@ fn Test_A_Non_Zero_Exit_Should_Refuse_Rather_Than_Report_A_Clean_Result()
     };
 
     let error =
-        Materialize_Workspace(&Root(), Context(GenerationId::INITIAL), &launcher, &StdEnvironment).expect_err("a non-zero exit must refuse");
+        Materialize_Workspace(&Root(), Context_At_Generation(GenerationId::INITIAL), &launcher, &StdEnvironment).expect_err("a non-zero exit must refuse");
 
     assert!(error.reason.contains("exit 101"), "{}", error.reason);
     assert!(error.reason.contains("mismatched types"), "{}", error.reason);

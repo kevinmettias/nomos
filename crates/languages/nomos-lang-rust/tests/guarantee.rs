@@ -18,7 +18,7 @@ use nomos_lang_rust::{
     Declared_Guarantee, ItemKind, Read_Source, Reading, Facts, Item,
 };
 
-fn Parsed(source: &str) -> Facts
+fn Facts_From_Source(source: &str) -> Facts
 {
     return match Read_Source(source)
     {
@@ -32,7 +32,7 @@ fn Parsed(source: &str) -> Facts
     };
 }
 
-fn Names(facts: &Facts) -> Vec<String>
+fn Qualified_Names_Of_Facts(facts: &Facts) -> Vec<String>
 {
     return facts.items.iter().map(Item::Qualified_Name).collect();
 }
@@ -52,7 +52,7 @@ fn Names(facts: &Facts) -> Vec<String>
 #[test]
 fn Test_The_Variant_Should_Be_Syntactic_Because_No_Name_Is_Resolved()
 {
-    let facts = Parsed(
+    let facts = Facts_From_Source(
         "use std::fmt::Display;\n\
          use std::collections::HashMap as Map;\n\
          pub struct Foo;\n\
@@ -60,7 +60,7 @@ fn Test_The_Variant_Should_Be_Syntactic_Because_No_Name_Is_Resolved()
              fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { Ok(()) }\n\
          }\n",
     );
-    let names = Names(&facts);
+    let names = Qualified_Names_Of_Facts(&facts);
 
     assert_eq!(Declared_Guarantee().variant, FactVariant::Syntactic);
     assert_eq!(
@@ -134,7 +134,7 @@ fn Test_Soundness_Should_Hold_Every_Reported_Name_Occurs_In_The_Source()
                   }\n\
                   pub type Alias = u32;\n\
                   static COUNT: u8 = 0;\n";
-    let facts = Parsed(source);
+    let facts = Facts_From_Source(source);
 
     assert_eq!(Declared_Guarantee().soundness, Assurance::Sound);
     assert!(!facts.items.is_empty(), "the sample declares items");
@@ -153,16 +153,16 @@ fn Test_Soundness_Should_Hold_Every_Reported_Name_Occurs_In_The_Source()
 /// for a provider that reported every substring of the file, so the sample also has to
 /// show that things which are *not* items are not reported as items.
 #[test]
-fn Test_Soundness_Should_Not_Report_Things_That_Are_Not_Items()
+fn Test_Soundness_Should_Not_Report_A_Local_Binding_As_An_Item()
 {
-    let facts = Parsed(
+    let facts = Facts_From_Source(
         "fn holder() {\n\
              let local_binding = 1;\n\
              struct NotHoisted;\n\
          }\n",
     );
 
-    let names = Names(&facts);
+    let names = Qualified_Names_Of_Facts(&facts);
 
     assert!(
         !names.iter().any(|name| return name.contains("local_binding")),
@@ -190,8 +190,8 @@ fn Test_Completeness_Should_Be_Unknown_Because_Macros_Hide_Items()
 {
     assert_eq!(Declared_Guarantee().completeness, Assurance::Unknown);
 
-    let facts = Parsed(SOURCE_WITH_A_MACRO_HIDDEN_ITEM);
-    let names = Names(&facts);
+    let facts = Facts_From_Source(SOURCE_WITH_A_MACRO_HIDDEN_ITEM);
+    let names = Qualified_Names_Of_Facts(&facts);
 
     Assert_Macro_Item_Is_Hidden(&names);
 }
@@ -224,8 +224,8 @@ fn Assert_Macro_Item_Is_Hidden(names: &[String])
 #[test]
 fn Test_The_Unexpanded_Count_Should_Expose_How_Much_Was_Out_Of_Reach()
 {
-    let reachable = Parsed("pub fn one() {}\npub fn two() {}\n");
-    let mostly_hidden = Parsed(
+    let reachable = Facts_From_Source("pub fn one() {}\npub fn two() {}\n");
+    let mostly_hidden = Facts_From_Source(
         "#[derive(Clone)]\n\
          pub struct One;\n\
          pub fn two() { assert!(true); format!(\"x\"); }\n",
@@ -254,7 +254,7 @@ const FIXTURE_VISIBLE_UNEXPANDED_REGIONS: u32 = 3;
 #[test]
 fn Test_The_Unexpanded_Count_Should_Be_A_Lower_Bound()
 {
-    let indistinguishable = Parsed(
+    let indistinguishable = Facts_From_Source(
         "#[allow(dead_code)]\n\
          pub fn inert() {}\n",
     );
@@ -344,7 +344,7 @@ fn Test_The_Granularity_Should_Not_Be_Symbol_Because_A_Failure_Costs_The_Whole_F
         Reading::Parsed(facts) => panic!(
             "a symbol-granular provider would have kept `fine` and `also_fine`; this one \
              cannot, which is why it declares File: {:?}",
-            Names(&facts)
+            Qualified_Names_Of_Facts(&facts)
         ),
     }
 }
@@ -445,7 +445,7 @@ const BROKEN_FUNCTION_LINE: usize = 3;
 #[test]
 fn Test_Every_Item_Form_Should_Reach_Its_Own_Kind()
 {
-    let facts = Parsed(ONE_OF_EVERY_FORM);
+    let facts = Facts_From_Source(ONE_OF_EVERY_FORM);
     let kinds: std::collections::BTreeSet<ItemKind> =
         facts.items.iter().map(|item| return item.kind).collect();
 

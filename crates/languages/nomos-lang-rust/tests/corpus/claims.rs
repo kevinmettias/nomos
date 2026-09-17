@@ -6,7 +6,7 @@
 //! sibling module would leave it gated in fact and counted by nobody.
 
 use crate::walk::{Each_File, Rust_Files};
-use crate::walked::{Report_The_Walk, Walk};
+use crate::walked::{Report_The_Walk, Walk_Corpus};
 use nomos_lang_rust::{Read_Source, Recognition};
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
@@ -86,7 +86,7 @@ fn Test_The_Corpus_Should_Yield_Syntax_Facts()
     {
         return;
     };
-    let walked = Walk(&corpus);
+    let walked = Walk_Corpus(&corpus);
     let total = corpus.files.len();
 
     Report_The_Walk(&corpus, &walked);
@@ -150,7 +150,7 @@ fn Test_Every_Refusal_Should_Be_Named_And_Explained()
     {
         return;
     };
-    let walked = Walk(&corpus);
+    let walked = Walk_Corpus(&corpus);
     let total = corpus.files.len();
     let mut unexplained = Vec::new();
 
@@ -161,7 +161,7 @@ fn Test_Every_Refusal_Should_Be_Named_And_Explained()
     );
     for (path, failure) in &walked.refused
     {
-        let unaccounted = Unexplained(path, failure);
+        let unaccounted = Unexplained_Refusal(path, failure);
 
         unexplained.extend(unaccounted);
     }
@@ -188,7 +188,7 @@ fn Test_Every_Refusal_Should_Be_Named_And_Explained()
 /// this corpus is known to carry, so both are reported and excused. Anything else is either
 /// new damage or a provider that has fallen behind the language, and the two need different
 /// responses — which is why the count alone was never going to be enough.
-fn Unexplained(path: &Path, failure: &str) -> Option<PathBuf>
+fn Unexplained_Refusal(path: &Path, failure: &str) -> Option<PathBuf>
 {
     Assert_Refusal_Names_Position(path, failure);
 
@@ -417,7 +417,7 @@ fn Test_The_Corpus_Should_Show_Why_Completeness_Is_Unknown()
     {
         return;
     };
-    let walked = Walk(&corpus);
+    let walked = Walk_Corpus(&corpus);
     let per_file = walked
         .unexpanded
         .checked_div(u64::try_from(walked.read).unwrap_or(1))

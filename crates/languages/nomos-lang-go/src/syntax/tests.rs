@@ -3,7 +3,7 @@
 use super::*;
 use crate::Reading;
 
-fn Parsed(source: &str) -> Facts
+fn Facts_From_Source(source: &str) -> Facts
 {
     return match Read_Source(source)
     {
@@ -12,15 +12,15 @@ fn Parsed(source: &str) -> Facts
     };
 }
 
-fn Names(source: &str) -> Vec<String>
+fn Qualified_Names_From_Source(source: &str) -> Vec<String>
 {
-    return Parsed(source).items.iter().map(Item::Qualified_Name).collect();
+    return Facts_From_Source(source).items.iter().map(Item::Qualified_Name).collect();
 }
 
 #[test]
 fn Test_Qualified_Name_Should_Include_A_Methods_Receiver_Type()
 {
-    let names = Names(
+    let names = Qualified_Names_From_Source(
         "package main\n\n\
          type Counter struct { n int }\n\n\
          func (c *Counter) Increment() {}\n\n\
@@ -49,7 +49,7 @@ fn Test_A_Structs_Fields_Should_Be_Recorded()
 {
     for (source, expected) in One_Field_Per_Line_Cases()
     {
-        let facts = Parsed(source);
+        let facts = Facts_From_Source(source);
         let item = facts.items.first().expect("each case source declares exactly one struct");
 
         let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
@@ -77,7 +77,7 @@ fn Test_Named_Field_Children_Should_Record_Each_Name_In_A_Multi_Name_Field_Decla
 {
     for (source, expected) in Shared_Type_Field_Cases()
     {
-        let facts = Parsed(source);
+        let facts = Facts_From_Source(source);
         let item = facts.items.first().expect("each case source declares exactly one struct");
 
         let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
@@ -93,7 +93,7 @@ fn Test_Named_Field_Children_Should_Record_Each_Name_In_A_Multi_Name_Field_Decla
 #[test]
 fn Test_A_Fields_Type_Should_Be_Recorded_Verbatim()
 {
-    let facts = Parsed("package main\n\ntype Wide struct {\n\tPtr *Foo\n\tItems []string\n\tM map[string]int\n}\n");
+    let facts = Facts_From_Source("package main\n\ntype Wide struct {\n\tPtr *Foo\n\tItems []string\n\tM map[string]int\n}\n");
     let item = facts.items.first().expect("the fixture source declares exactly one struct");
 
     let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
@@ -115,7 +115,7 @@ fn Test_A_Fields_Type_Should_Be_Recorded_Verbatim()
 #[test]
 fn Test_An_Embedded_Field_Should_Not_Be_Recorded()
 {
-    let facts = Parsed("package main\n\ntype Wrapper struct {\n\tEmbedded\n\tName string\n}\n");
+    let facts = Facts_From_Source("package main\n\ntype Wrapper struct {\n\tEmbedded\n\tName string\n}\n");
     let item = facts.items.first().expect("the fixture source declares exactly one struct");
 
     let shape = item.shape.clone().map_or(nomos_cap_syntax::Observation::Absent, nomos_cap_syntax::Observation::Present);
@@ -129,7 +129,7 @@ fn Test_An_Embedded_Field_Should_Not_Be_Recorded()
 #[test]
 fn Test_A_Struct_With_No_Named_Fields_Should_Record_Absence()
 {
-    let facts = Parsed("package main\n\ntype Marker struct{}\n");
+    let facts = Facts_From_Source("package main\n\ntype Marker struct{}\n");
     let item = facts.items.first().expect("the fixture source declares exactly one struct");
 
     assert_eq!(item.shape, None);
@@ -141,7 +141,7 @@ const LAST_OF_THREE_ORDINALS: u32 = 2;
 #[test]
 fn Test_Ordinals_Should_Be_Dense_And_Zero_Based()
 {
-    let facts = Parsed("package main\n\nfunc a() {}\nfunc b() {}\nfunc c() {}\n");
+    let facts = Facts_From_Source("package main\n\nfunc a() {}\nfunc b() {}\nfunc c() {}\n");
 
     let ordinals: Vec<u32> = facts.items.iter().map(|item| return item.ordinal).collect();
 
@@ -151,7 +151,7 @@ fn Test_Ordinals_Should_Be_Dense_And_Zero_Based()
 #[test]
 fn Test_Visibility_Should_Be_Recorded_From_The_Names_Own_Case()
 {
-    let facts = Parsed(
+    let facts = Facts_From_Source(
         "package main\n\n\
          func Exported() {}\n\
          func hidden() {}\n\
@@ -173,7 +173,7 @@ fn Test_Visibility_Should_Be_Recorded_From_The_Names_Own_Case()
 #[test]
 fn Test_An_Interfaces_Method_Set_Should_Be_Recorded_Under_Its_Name()
 {
-    let facts = Parsed(
+    let facts = Facts_From_Source(
         "package main\n\n\
          type Writer interface {\n\
          \tWrite(p []byte) (n int, err error)\n\
@@ -196,7 +196,7 @@ fn Test_An_Interfaces_Method_Set_Should_Be_Recorded_Under_Its_Name()
 #[test]
 fn Test_A_Generic_Declaration_Should_Be_Read_Like_Any_Other()
 {
-    let facts = Parsed(
+    let facts = Facts_From_Source(
         "package main\n\n\
          type Container[T any] struct { items []T }\n\n\
          func (c *Container[T]) Add(item T) {}\n\n\
@@ -215,7 +215,7 @@ fn Test_A_Generic_Declaration_Should_Be_Read_Like_Any_Other()
 #[test]
 fn Test_Shared_Type_Parameters_Should_Each_Count_Toward_Arity()
 {
-    let facts = Parsed("package main\n\nfunc f(a, b int, c string) {}\n");
+    let facts = Facts_From_Source("package main\n\nfunc f(a, b int, c string) {}\n");
 
     let shape = facts.items.first().and_then(|item| return item.shape.clone());
     assert_eq!(shape.as_deref(), Some("fn/3"), "a, b and c are three declared parameters");
@@ -227,12 +227,12 @@ fn Test_Shared_Type_Parameters_Should_Each_Count_Toward_Arity()
 fn Test_Grouped_And_Single_Declarations_Should_Read_The_Same_Way()
 {
     assert_eq!(
-        Names("package main\n\nconst (\n\tA = 1\n\tB = 2\n)\n"),
+        Qualified_Names_From_Source("package main\n\nconst (\n\tA = 1\n\tB = 2\n)\n"),
         vec!["A".to_owned(), "B".to_owned()]
     );
-    assert_eq!(Names("package main\n\nconst Solo = 1\n"), vec!["Solo".to_owned()]);
+    assert_eq!(Qualified_Names_From_Source("package main\n\nconst Solo = 1\n"), vec!["Solo".to_owned()]);
     assert_eq!(
-        Names("package main\n\nconst A, B = 1, 2\n"),
+        Qualified_Names_From_Source("package main\n\nconst A, B = 1, 2\n"),
         vec!["A".to_owned(), "B".to_owned()],
         "one spec, two names, sharing one value list"
     );
@@ -245,16 +245,16 @@ fn Test_Grouped_And_Single_Declarations_Should_Read_The_Same_Way()
 fn Test_An_Import_Should_Record_The_Name_It_Binds()
 {
     assert_eq!(
-        Names("package main\n\nimport \"fmt\"\n"),
+        Qualified_Names_From_Source("package main\n\nimport \"fmt\"\n"),
         vec!["fmt".to_owned()]
     );
     assert_eq!(
-        Names("package main\n\nimport str \"strings\"\n"),
+        Qualified_Names_From_Source("package main\n\nimport str \"strings\"\n"),
         vec!["str".to_owned()],
         "an alias is what this file now has"
     );
     assert_eq!(
-        Names("package main\n\nimport \"path/filepath\"\n"),
+        Qualified_Names_From_Source("package main\n\nimport \"path/filepath\"\n"),
         vec!["filepath".to_owned()],
         "unaliased, a package binds its path's final segment"
     );
@@ -265,7 +265,7 @@ fn Test_An_Import_Should_Record_The_Name_It_Binds()
 #[test]
 fn Test_A_Type_Alias_Should_Be_Distinguished_From_A_Defined_Type()
 {
-    let facts = Parsed("package main\n\ntype Meters float64\n\ntype Alias = string\n");
+    let facts = Facts_From_Source("package main\n\ntype Meters float64\n\ntype Alias = string\n");
 
     let kinds: Vec<ItemKind> = facts.items.iter().map(|item| return item.kind).collect();
     assert_eq!(kinds, vec![ItemKind::TypeDefinition, ItemKind::TypeAlias]);
@@ -277,7 +277,7 @@ fn Test_A_Type_Alias_Should_Be_Distinguished_From_A_Defined_Type()
 #[test]
 fn Test_Documentation_Should_Be_Found_At_Either_Attachment_Point()
 {
-    let grouped = Parsed(
+    let grouped = Facts_From_Source(
         "package main\n\n\
          const (\n\
          \tA = 1\n\
@@ -288,7 +288,7 @@ fn Test_Documentation_Should_Be_Found_At_Either_Attachment_Point()
     let b = grouped.items.get(1).expect("the grouped const declares both A and B");
     assert_eq!(b.documentation.as_deref(), Some("B is two."));
 
-    let single = Parsed(
+    let single = Facts_From_Source(
         "package main\n\n\
          // Tables lists every table.\n\
          var Tables []string\n",
@@ -302,7 +302,7 @@ fn Test_Documentation_Should_Be_Found_At_Either_Attachment_Point()
 #[test]
 fn Test_A_Blank_Line_Should_End_The_Documentation_Run()
 {
-    let facts = Parsed(
+    let facts = Facts_From_Source(
         "package main\n\n\
          // Unrelated.\n\n\
          func NoDoc() {}\n",
@@ -322,7 +322,7 @@ fn Test_Has_No_Declarations_Should_Be_True_For_A_File_That_Declares_Nothing()
 {
     for source in EMPTY_SOURCES
     {
-        let facts = Parsed(source);
+        let facts = Facts_From_Source(source);
 
         assert!(facts.Has_No_Declarations(), "`{source:?}` declares nothing");
         assert_eq!(facts.unexpanded, 0);
@@ -358,7 +358,7 @@ fn Test_Broken_Source_Should_Be_Unparseable_Rather_Than_Empty()
 #[test]
 fn Test_A_Build_Tag_Should_Not_Hide_The_Declaration_Below_It()
 {
-    let facts = Parsed("package main\n\n//go:build linux\n\nfunc OnLinux() {}\n");
+    let facts = Facts_From_Source("package main\n\n//go:build linux\n\nfunc OnLinux() {}\n");
 
     assert_eq!(facts.items.len(), 1);
     assert_eq!(facts.unexpanded, 0);

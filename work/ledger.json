@@ -82952,6 +82952,93 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-LANGUAGES-TESTS",
+      "title": "The naming-clarity check reads zero over the languages territory at the phase own flags",
+      "why": "check-naming-clarity reads 287 live findings and 1 waived over the whole crates/ tree at the phase own flags, over 1594 judged files, measured this session rather than carried forward; 283 of them are in test positions and the other four are in src. This item is the languages slice: eighteen findings over thirteen files. The remaining 269 are host 80, spec 78, substrate 74 and rules 37, and the four src-position findings are all inside the rules band, where P114-CLARITY-RULE-IDENTITY is Ready and unwritten. All eighteen here are one shape of defect -- a helper or a fixture name built from a single word, saying what kind of value comes back rather than what it reads or operates on -- and eight distinct names account for them, because three of the eight were copied into more than one crate's test file. Where a name is copied with the same parameter list it takes the same replacement; where the parameter list differs the new name follows the parameter, because the input is the part the old name was failing to say.\n\ncrates/languages/nomos-lang-go/src/syntax/tests.rs:6 declares fn Parsed(source: &str) -> Facts, which parses and panics rather than handing back an empty reading, and becomes Facts_From_Source, with seventeen call sites: 17, 52, 80, 96, 118, 132, 144, 154, 176, 199, 218, 268, 280, 291, 305, 325, 361. The match arm at line 10 that reads Reading::Parsed(facts) is the enum variant and is not touched. The same file line 15 declares fn Names(source: &str) -> Vec<String>, mapping Item::Qualified_Name over the facts of a parsed source; it becomes Qualified_Names_From_Source, with seven call sites: 23, 230, 233, 235, 248, 252, 257.\n\ncrates/languages/nomos-lang-rust/src/syntax/tests.rs repeats both with the same parameter lists, so both take the same names: Parsed at 6 with nine call sites (24, 56, 74, 92, 111, 123, 182, 247, 289), Names at 20 with five (34, 157, 161, 166, 169). crates/languages/nomos-lang-rust/tests/guarantee.rs declares Parsed at 21 with eight call sites (55, 137, 158, 193, 227, 228, 257, 448) and Names at 35 with four (63, 165, 194, 347) -- and Names here takes the facts rather than the source, which is exactly what its replacement says: Qualified_Names_Of_Facts. The prose at line 361 that reads returned Parsed(empty) names the Reading variant rather than this helper and stays as written.\n\nfn Subject(path: &str) -> SubjectId is one helper in four files: crates/languages/nomos-lang-go/tests/integration_seams.rs:11, crates/languages/nomos-lang-rust-scan/tests/integration_seams.rs:14, crates/languages/nomos-lang-rust/src/rollup/tests.rs:7 and crates/languages/nomos-lang-rust/tests/rollup.rs:41. Each builds a subject id from a path's content digest, and all four become Subject_Id_For_Path -- which is not nomos-model's Subject_Of_Path, a different function in a different crate, and this one is private to its own test binary. Their call sites are counted in occurrences, because two of the assertion lines call the helper on both sides: seven over five lines in nomos-lang-go (35, 75, 164 twice on its line, and 165 twice on its line), nine over six lines in nomos-lang-rust-scan (48, 71, 73, 96, 173 twice on its line, and 174 twice on its line), twelve in nomos-lang-rust/src/rollup/tests.rs (17, 20, 24, 28, 33, 80, 82, 151, 164, 171, 188, 189) and twenty-eight in nomos-lang-rust/tests/rollup.rs (148, 149, 154, 156, 157, 186, 224, 284, 290, 315, 317, 318, 357, 404, 430, 431, 433, 434, 435, 451, 452, 453, 455, 456, 460, 465, 470, 492).\n\nfn Context(generation: GenerationId) -> FactContext is one helper in three files: crates/languages/nomos-lang-rust-cargo/tests/invalidation.rs:26, crates/languages/nomos-lang-rust-clippy/tests/materialize_workspace_seam.rs:132 and crates/languages/nomos-lang-rust/tests/rollup.rs:54. Each mints a FactContext at a named generation, and all three become Context_At_Generation, which names the axis the parameter is: call sites 135 and 220, then 148, 185 and 249, then 147, 277, 429 and 450. The doc sentence at crates/languages/nomos-lang-rust/tests/rollup.rs:48 that links to it by name is corrected in the same commit, because a doc link to a name that is no longer there is a sentence that stopped being true.\n\nFour more names stand alone, one file each. crates/languages/nomos-lang-rust/tests/corpus/walked.rs:24 declares pub(crate) fn Walk(corpus: &Corpus) -> Walked, which walks every file the corpus lists and returns the aggregate; it becomes Walk_Corpus, and its three call sites are all in crates/languages/nomos-lang-rust/tests/corpus/claims.rs at 89, 153 and 420. crates/languages/nomos-lang-rust/tests/corpus/walk.rs:41 declares fn Visit(entry, pending, visit), one directory entry -- queued if it is a source directory, handed to the caller if it is a file; it becomes Visit_Entry, one call site at line 35 of the same file. crates/languages/nomos-lang-rust/tests/corpus/soundness.rs:25 declares fn Identifiers(source: &str) -> BTreeSet<&str>, the identifier-shaped tokens of one source file, gathered once per file rather than scanned per item; it becomes Identifiers_In_Source, one call site at line 51. crates/languages/nomos-lang-rust/tests/corpus/claims.rs:191 declares fn Unexplained(path: &Path, failure: &str) -> Option<PathBuf>, which asserts the refusal named a position, prints it with the damage reason or the word UNEXPLAINED, and returns the path when the damage is neither of the two kinds this corpus is known to carry; it becomes Unexplained_Refusal, one call site at line 164.\n\nThe last finding is a test name rather than a helper: crates/languages/nomos-lang-rust/tests/guarantee.rs:156 declares Test_Soundness_Should_Not_Report_Things_That_Are_Not_Items, the negative control for soundness, and the vague word is things. Its fixture shows one concrete claim -- a let binding inside a function is not an item -- so it becomes Test_Soundness_Should_Not_Report_A_Local_Binding_As_An_Item.\n\nThis item does not claim the band is clear at the phase own flags: the same sweep reads five file-name findings in crates/languages/nomos-lang-rust-compiler -- two of them a lib.rs inside a fixture crate under fixtures/, three in src -- and those are file renames rather than identifier renames, with their own snapshots and module declarations, belonging to the file-name item nobody has written yet. They are named here so a later reader does not read this item's band as finished. Measured before the claim, with the naming-clarity sweep over crates/languages: 18 live, 0 waived, 138 files. Every path in this item's territory is free of live claims, checked against the board rather than assumed.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/languages at the phase own flags, verified by this item predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. No suppression entry is added for this band and no in-code marker is used. Every call site carried in this item's why is renamed with its declaration, and no file outside this item territory is edited; if the build proves otherwise, the item that owns the reached path is named in the same commit and its territory is widened here rather than edited without a claim. The Reading variants Parsed and Unparseable are not touched, the five file-name findings in nomos-lang-rust-compiler are not touched, and the names P114-CLARITY-LANGUAGES left in this band are left exactly as it left them.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go/src/syntax/tests.rs",
+          "crates/languages/nomos-lang-go/tests/integration_seams.rs",
+          "crates/languages/nomos-lang-rust-cargo/tests/invalidation.rs",
+          "crates/languages/nomos-lang-rust-clippy/tests/materialize_workspace_seam.rs",
+          "crates/languages/nomos-lang-rust-scan/tests/integration_seams.rs",
+          "crates/languages/nomos-lang-rust/src/rollup/tests.rs",
+          "crates/languages/nomos-lang-rust/src/syntax/tests.rs",
+          "crates/languages/nomos-lang-rust/tests/corpus/claims.rs",
+          "crates/languages/nomos-lang-rust/tests/corpus/soundness.rs",
+          "crates/languages/nomos-lang-rust/tests/corpus/walk.rs",
+          "crates/languages/nomos-lang-rust/tests/corpus/walked.rs",
+          "crates/languages/nomos-lang-rust/tests/guarantee.rs",
+          "crates/languages/nomos-lang-rust/tests/rollup.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/languages",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/languages",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0   138 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789607120,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5f3b20299ef154c3d1d07102f0575455211e05de"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

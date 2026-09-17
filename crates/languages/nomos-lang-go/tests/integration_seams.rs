@@ -8,7 +8,7 @@
 use nomos_lang_go::{Declared_Guarantee, FactContext, Materialization, Materialize_Syntax_Fact, Provider_Offer};
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
 
-fn Subject(path: &str) -> nomos_contracts::SubjectId
+fn Subject_Id_For_Path(path: &str) -> nomos_contracts::SubjectId
 {
     use nomos_model::Content_Digest;
 
@@ -32,7 +32,7 @@ fn Context() -> FactContext
 
 fn A_Materialized_Fact() -> nomos_analysis::MaterializedFact
 {
-    return match Materialize_Syntax_Fact(Subject("main.go"), "package main\n\nfunc One() {}\n", Context())
+    return match Materialize_Syntax_Fact(Subject_Id_For_Path("main.go"), "package main\n\nfunc One() {}\n", Context())
     {
         Materialization::Materialized(fact) => *fact,
         Materialization::Unparseable(failure) => panic!("expected a fact: {failure}"),
@@ -72,7 +72,7 @@ fn Test_Two_Different_Subjects_Should_Be_Two_Independent_Entries_In_Nomos_Analys
     let mut store = MemoryFactStore::New();
     let one = A_Materialized_Fact();
     let one_key = one.Key().clone();
-    let two = match Materialize_Syntax_Fact(Subject("other.go"), "package main\n\nfunc Two() {}\n", Context())
+    let two = match Materialize_Syntax_Fact(Subject_Id_For_Path("other.go"), "package main\n\nfunc Two() {}\n", Context())
     {
         Materialization::Materialized(fact) => *fact,
         Materialization::Unparseable(failure) => panic!("expected a fact: {failure}"),
@@ -161,6 +161,6 @@ fn Test_The_Declared_Guarantee_Should_Satisfy_Nomos_Cap_Syntaxs_Own_Ceiling_Via_
 #[test]
 fn Test_Two_Subjects_Built_Over_The_Same_Path_Should_Be_The_Same_Subject()
 {
-    assert_eq!(Subject("main.go"), Subject("main.go"));
-    assert_ne!(Subject("main.go"), Subject("other.go"));
+    assert_eq!(Subject_Id_For_Path("main.go"), Subject_Id_For_Path("main.go"));
+    assert_ne!(Subject_Id_For_Path("main.go"), Subject_Id_For_Path("other.go"));
 }

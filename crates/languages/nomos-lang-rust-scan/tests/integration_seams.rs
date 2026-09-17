@@ -11,7 +11,7 @@
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
 use nomos_lang_rust_scan::{Declared_Guarantee, FactContext, Materialize_Syntax_Fact, Provider_Offer};
 
-fn Subject(path: &str) -> nomos_contracts::SubjectId
+fn Subject_Id_For_Path(path: &str) -> nomos_contracts::SubjectId
 {
     use nomos_model::Content_Digest;
 
@@ -45,7 +45,7 @@ fn Test_A_Materialized_Fact_Should_Be_Accepted_And_Read_Back_By_Nomos_Analysiss_
 {
     use nomos_analysis::{FactStore, MemoryFactStore};
 
-    let fact = Materialize_Syntax_Fact(Subject("a.rs"), "pub fn one() {}\n", Context());
+    let fact = Materialize_Syntax_Fact(Subject_Id_For_Path("a.rs"), "pub fn one() {}\n", Context());
     let key = fact.Key().clone();
     let mut store = MemoryFactStore::New();
 
@@ -68,9 +68,9 @@ fn Test_Two_Different_Subjects_Should_Be_Two_Independent_Entries_In_Nomos_Analys
     use nomos_analysis::{FactStore, MemoryFactStore};
 
     let mut store = MemoryFactStore::New();
-    let one = Materialize_Syntax_Fact(Subject("a.rs"), "pub fn one() {}\n", Context());
+    let one = Materialize_Syntax_Fact(Subject_Id_For_Path("a.rs"), "pub fn one() {}\n", Context());
     let one_key = one.Key().clone();
-    let two = Materialize_Syntax_Fact(Subject("b.rs"), "pub fn two() {}\n", Context());
+    let two = Materialize_Syntax_Fact(Subject_Id_For_Path("b.rs"), "pub fn two() {}\n", Context());
     let two_key = two.Key().clone();
 
     store.Materialize(one, &[]).expect("the first subject's fact is written");
@@ -93,7 +93,7 @@ const TWO_DECLARED_ITEMS: usize = 2;
 #[test]
 fn Test_This_Crates_Payload_Should_Decode_Under_Nomos_Cap_Syntaxs_Own_Reader()
 {
-    let fact = Materialize_Syntax_Fact(Subject("a.rs"), "pub fn one() {}\nfn two() {}\n", Context());
+    let fact = Materialize_Syntax_Fact(Subject_Id_For_Path("a.rs"), "pub fn one() {}\nfn two() {}\n", Context());
 
     let payload = nomos_cap_syntax::Parse_Payload(&fact.payload.bytes)
         .expect("this crate writes the schema nomos_cap_syntax's own reader expects");
@@ -170,6 +170,6 @@ fn Test_The_Declared_Guarantee_Should_Satisfy_Nomos_Cap_Syntaxs_Own_Ceiling_Via_
 #[test]
 fn Test_Two_Subjects_Built_Over_The_Same_Path_Should_Be_The_Same_Subject()
 {
-    assert_eq!(Subject("a.rs"), Subject("a.rs"));
-    assert_ne!(Subject("a.rs"), Subject("b.rs"));
+    assert_eq!(Subject_Id_For_Path("a.rs"), Subject_Id_For_Path("a.rs"));
+    assert_ne!(Subject_Id_For_Path("a.rs"), Subject_Id_For_Path("b.rs"));
 }

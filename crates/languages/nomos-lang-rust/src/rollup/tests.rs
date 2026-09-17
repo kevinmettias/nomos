@@ -4,7 +4,7 @@ use super::*;
 use nomos_capability::Registry;
 use nomos_capability::{Requirement, Resolution, Unmet};
 
-fn Subject(path: &str) -> SubjectId
+fn Subject_Id_For_Path(path: &str) -> SubjectId
 {
     use nomos_model::Content_Digest;
 
@@ -14,23 +14,23 @@ fn Subject(path: &str) -> SubjectId
 fn An_Index() -> Index
 {
     return Index {
-        module: Subject("the/module"),
+        module: Subject_Id_For_Path("the/module"),
         members: vec![
             MemberReading {
-                subject: Subject("alpha.rs"),
+                subject: Subject_Id_For_Path("alpha.rs"),
                 outcome: Outcome::Read,
             },
             MemberReading {
-                subject: Subject("beta.rs"),
+                subject: Subject_Id_For_Path("beta.rs"),
                 outcome: Outcome::Approximate,
             },
             MemberReading {
-                subject: Subject("gamma.rs"),
+                subject: Subject_Id_For_Path("gamma.rs"),
                 outcome: Outcome::Unreachable,
             },
         ],
         items: vec![IndexEntry {
-            member: Subject("alpha.rs"),
+            member: Subject_Id_For_Path("alpha.rs"),
             ordinal: 0,
             kind: "Function".to_owned(),
             visibility: "Public".to_owned(),
@@ -77,9 +77,9 @@ const AN_INDEX_RECORD_COUNT: usize = 5;
 fn One_Member(outcome: Outcome) -> Index
 {
     return Index {
-        module: Subject("the/module"),
+        module: Subject_Id_For_Path("the/module"),
         members: vec![MemberReading {
-            subject: Subject("alpha.rs"),
+            subject: Subject_Id_For_Path("alpha.rs"),
             outcome,
         }],
         items: Vec::new(),
@@ -148,7 +148,7 @@ fn Assert_No_Header_Is_Not_An_Index()
 /// A well-formed header followed by a record this build cannot read whole.
 fn Assert_A_Malformed_Body_Is_Not_An_Index()
 {
-    let module = format!("module\t{}\n", Subject("the/module").Digest());
+    let module = format!("module\t{}\n", Subject_Id_For_Path("the/module").Digest());
 
     assert!(
         Parse_Index(format!("{module}{module}").as_bytes()).is_err(),
@@ -161,14 +161,14 @@ fn Assert_A_Malformed_Body_Is_Not_An_Index()
     );
     assert!(
         Parse_Index(
-            format!("{module}member\t{}\tmaybe\n", Subject("alpha.rs").Digest()).as_bytes()
+            format!("{module}member\t{}\tmaybe\n", Subject_Id_For_Path("alpha.rs").Digest()).as_bytes()
         )
         .is_err(),
         "an outcome this build does not know is not `read`"
     );
     assert!(
         Parse_Index(
-            format!("{module}item\t{}\t0\tFunction\n", Subject("alpha.rs").Digest()).as_bytes()
+            format!("{module}item\t{}\t0\tFunction\n", Subject_Id_For_Path("alpha.rs").Digest()).as_bytes()
         )
         .is_err(),
         "an item record missing its name is not an item with no name"
@@ -185,8 +185,8 @@ fn Assert_A_Malformed_Body_Is_Not_An_Index()
 #[test]
 fn Test_A_Record_With_A_Field_This_Build_Does_Not_Know_Should_Be_Refused()
 {
-    let module = format!("module\t{}\n", Subject("the/module").Digest());
-    let alpha = Subject("alpha.rs").Digest();
+    let module = format!("module\t{}\n", Subject_Id_For_Path("the/module").Digest());
+    let alpha = Subject_Id_For_Path("alpha.rs").Digest();
 
     assert!(
         Parse_Index(format!("module\t{alpha}\tv2\n").as_bytes()).is_err(),
