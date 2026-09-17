@@ -28,12 +28,12 @@
 //! # What is here
 //!
 //! The capability's identity, contract version, ceiling and summary ([`contract`]); and
-//! the payload shape and its canonical reader ([`payload`]) — scope-qualified numeric
+//! the payload shape and its canonical reader ([`limits_policy_payload`]) — scope-qualified numeric
 //! rows rather than `nomos-cap-naming-policy`'s closed `Case` vocabulary, because a
 //! threshold is a bare number a repository states, not a value drawn from a fixed style
 //! set. The same division `nomos-cap-naming-policy`, `nomos-cap-lint`, `nomos-cap-
 //! dependency` and `nomos-cap-dependency-policy` each draw between their own `contract`
-//! and `payload` modules.
+//! and payload modules.
 //!
 //! What is not here: a provider that actually reads `standards.json`, and a rule that
 //! reads this capability. Both are this decision's own next increments, per `OD-RULES-
@@ -42,11 +42,11 @@
 #![forbid(unsafe_code)]
 
 mod contract;
-mod payload;
+mod limits_policy_payload;
 
 pub use contract::{Capability, Capability_Contract, Ceiling, CAPABILITY, CONTRACT_VERSION, Payload_Schema, SCHEMA};
-pub use payload::policy_row::PolicyRow;
-pub use payload::scope::Scope;
-pub use payload::LimitsPolicyPayload;
-pub use payload::{Encode_Payload, Parse_Payload};
-pub use payload::refusal::Refusal;
+pub use limits_policy_payload::policy_row::PolicyRow;
+pub use limits_policy_payload::scope::Scope;
+pub use limits_policy_payload::LimitsPolicyPayload;
+pub use limits_policy_payload::{Encode_Payload, Parse_Payload};
+pub use limits_policy_payload::refusal::Refusal;
