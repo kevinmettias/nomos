@@ -84905,6 +84905,140 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-FILENAME-WORKFLOW-ORCHESTRATION",
+      "title": "P114 file-name: the workflow-orchestration crate's Platform, in the file named for it",
+      "why": "The file-name check reports one finding over this crate's src: run.rs declares two public\ntypes, Run and Platform, and the second's snake_case is not the file stem. Run matches the\nfile it sits in; Platform does not, so it is the one finding -- 1 live, 0 waived, 12 files\njudged, exit 1.\n\nCleared by giving Platform the file this crate's own layout already gives a type it does\nnot declare beside a function: a child file under the module that declared it, the shape\nbody.rs and workflow_outcome.rs already use\n(body/{check_body,commit_intent,correction_body,gate_body}.rs,\nworkflow_outcome/{dispatch_error,step_outcome}.rs). Platform moves to src/run/platform.rs;\nrun.rs declares `mod platform;` and re-exports it, keeps its own name and its own Run, and\nlib.rs is untouched -- its `pub use run::{Platform, Run};` resolves through run.rs exactly\nas its `pub use body::{Body, CheckBody, ...}` already resolves CheckBody through body.rs's\nown `pub use check_body::CheckBody;`. That two-hop chain is in the snapshot at crate-root\npath: nomos_workflow_orchestration::CheckBody, lines 24 and 30 through 32.\n\nNo name changes and no path changes: Platform is in the published surface at\nnomos_workflow_orchestration::Platform, with its four field lines and its appearance in\nRun's own signature, and every reference to it in this workspace spells that root path --\nnomos-api/src/workflow.rs:45 imports it from nomos_workflow_orchestration, this crate's own\ntests.rs:17 imports it from crate, and no `run::Platform` spelling exists anywhere. So\ntests/contract/surface/nomos-workflow-orchestration.txt must come out byte-identical,\nsha256 c975841b49e0b66038bc532dddb0765195aa74c5ff6d5132e7f559b44c841769, or this item was\nimplemented wrongly.\n\nThis move is type-only, and that was measured rather than assumed: this crate declares no\nimpl of Platform at all. Its only impl blocks are the four inherent ones on its own body\ntypes -- CheckBody, CommitIntent, CorrectionBody, GateBody -- and the tests' Scripted\nlauncher. Nothing is left behind whose self type is a moved type, which is the failure this\ncampaign has already paid for once: an impl left behind files a method named Type::member,\ntests/contract/src/reading/routes.rs's Declared_As matches a name by prefix, the re-export\nchain is abandoned, and the type and its fields vanish from the rendered surface while the\nmethod line stays. Measured a crate over at commit ee512dd1: four snapshot lines dropped,\nand cargo test -p nomos-contract-tests --test public_surface 7 passed, 1 failed, exit 101,\nagainst 8 passed, 0 failed once the impls were carried along. That is why the measurement\nabove belongs to this item rather than to a comment.\n\nTimestamp leaves run.rs's nomos_platform import with the field that named it. The three\ntrait bounds stay: Run and the four Dispatched_* functions below it each still bound\nProgramLauncher, FileSystem and Environment. The moved struct's own doc links are the only\ntext rewritten -- [`Run`] to [`crate::Run`] and [`Dispatched_Gate`] to\n[`super::Dispatched_Gate`], since a child module sees neither without a path; no snapshot\nline carries doc text.\n\nBaseline over this crate before the change: a 157-check sweep reports 47 live findings, 0\nwaived, 23 checks not clean, of which file-name is 1. This crate's other 46 live findings\nunder six other checks are somebody else's work and are not touched here.",
+      "done_when": "1. check.exe file-name --include-tests over\n   crates/orchestration/nomos-workflow-orchestration reports 0 live findings and 0 waived\n   across 12 files judged, exit 0, run through nomos-check-sweep.exe with -max-waived 0.\n\n2. tests/contract/surface/nomos-workflow-orchestration.txt is byte-identical, sha256\n   c975841b49e0b66038bc532dddb0765195aa74c5ff6d5132e7f559b44c841769, and\n   cargo test -p nomos-contract-tests --test public_surface is green at 8 passed, 0 failed.\n\n3. A full 157-check sweep over the crate before and after differs by exactly the one\n   file-name finding: the two finding sets compared as multisets of check and message\n   report no finding the crate did not report before, 47 live before this change.\n\n4. No impl of Platform is added, moved or left behind anywhere in this crate: it declares\n   none before or after the change, so no method named Platform::member can exist to\n   shadow the re-export chain in tests/contract/src/reading/routes.rs.\n\n5. cargo check --workspace --all-targets reports no error and no warning this crate did\n   not already carry, and cargo test -p nomos-workflow-orchestration --no-fail-fast is\n   green with 0 failed.\n\n6. No waiver and no in-code marker is added, no line this change writes exceeds the 120\n   columns rustfmt.toml records, and no path outside this item's territory and\n   work/ledger.json is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run/platform.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Declined rather than finished: this item's own done_when cannot all be true at once. Its\nfirst clause says the predicate reports `0 live findings and 0 waived across 12 files\njudged`; the predicate reports 13 files judged. Giving Platform the file named for it --\nthe item's own second clause -- adds a file, and `file-name` states its population per\nfile, so a clause fixing that count at 12 and a clause requiring a new file contradict each\nother. 12 is the count this crate had before the change and is recorded as such in the why,\nwhich is where it was a true measurement rather than a clause.\n\nNothing about the change itself is wrong, and the clause was falsified by arithmetic rather\nthan by the code. Measured with the change in the tree, on the two paths this item\nreserves:\n\n  predicate    nomos-check-sweep.exe -checks file-name -flag --include-tests -max-waived 0\n               over the crate: 0 live findings, 0 waived, 13 files judged, exit 0.\n  surface      tests/contract/surface/nomos-workflow-orchestration.txt byte-identical,\n               sha256 c975841b49e0b66038bc532dddb0765195aa74c5ff6d5132e7f559b44c841769,\n               with cargo test -p nomos-contract-tests --test public_surface 8 passed, 0\n               failed, exit 0 -- the two-hop chain lib.rs -> run.rs -> platform.rs resolves\n               Platform, its four field lines and its place in Run's signature unchanged.\n  sweep        a 157-check sweep over the crate before and after: 47 live findings before,\n               46 after, 0 waived, and the single (check, message) pair that moved is the\n               file-name finding this item exists to clear. No new finding under any check.\n  crate        cargo test -p nomos-workflow-orchestration --no-fail-fast: 21 passed, 0\n               failed, exit 0.\n  workspace    cargo check --workspace --all-targets: exit 0, 31 warnings, none of them\n               from this crate.\n\nRe-authored as P114-FILENAME-WORKFLOW-ORCHESTRATION-2 with the judged count corrected to\nthe 13 actually observed and the rest of the item unchanged -- same territory, same\npredicate, same clauses 2 through 6. The code carries over; only the item id and one number\nchange."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/orchestration/nomos-workflow-orchestration",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "nomos-a5",
+          "reason": "Re-authored as P114-FILENAME-WORKFLOW-ORCHESTRATION-2; the item itself is being declined with the measurement.",
+          "abandoned_at": 1789628693
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-a5",
+        "declined_at": 1789628693
+      },
+      "widened": []
+    },
+    {
+      "id": "P114-FILENAME-WORKFLOW-ORCHESTRATION-2",
+      "title": "P114 file-name: the workflow-orchestration crate's Platform, in the file named for it",
+      "why": "The file-name check reports one finding over this crate's src: run.rs declares two public\ntypes, Run and Platform, and the second's snake_case is not the file stem. Run matches the\nfile it sits in; Platform does not, so it is the one finding -- 1 live, 0 waived, 12 files\njudged, exit 1.\n\nCleared by giving Platform the file this crate's own layout already gives a type it does\nnot declare beside a function: a child file under the module that declared it, the shape\nbody.rs and workflow_outcome.rs already use\n(body/{check_body,commit_intent,correction_body,gate_body}.rs,\nworkflow_outcome/{dispatch_error,step_outcome}.rs). Platform moves to src/run/platform.rs;\nrun.rs declares `mod platform;` and re-exports it, keeps its own name and its own Run, and\nlib.rs is untouched -- its `pub use run::{Platform, Run};` resolves through run.rs exactly\nas its `pub use body::{Body, CheckBody, ...}` already resolves CheckBody through body.rs's\nown `pub use check_body::CheckBody;`. That two-hop chain is in the snapshot at crate-root\npath: nomos_workflow_orchestration::CheckBody, lines 24 and 30 through 32.\n\nNo name changes and no path changes: Platform is in the published surface at\nnomos_workflow_orchestration::Platform, with its four field lines and its appearance in\nRun's own signature, and every reference to it in this workspace spells that root path --\nnomos-api/src/workflow.rs:45 imports it from nomos_workflow_orchestration, this crate's own\ntests.rs:17 imports it from crate, and no `run::Platform` spelling exists anywhere. So\ntests/contract/surface/nomos-workflow-orchestration.txt must come out byte-identical,\nsha256 c975841b49e0b66038bc532dddb0765195aa74c5ff6d5132e7f559b44c841769, or this item was\nimplemented wrongly.\n\nThis move is type-only, and that was measured rather than assumed: this crate declares no\nimpl of Platform at all. Its only impl blocks are the four inherent ones on its own body\ntypes -- CheckBody, CommitIntent, CorrectionBody, GateBody -- and the tests' Scripted\nlauncher. Nothing is left behind whose self type is a moved type, which is the failure this\ncampaign has already paid for once: an impl left behind files a method named Type::member,\ntests/contract/src/reading/routes.rs's Declared_As matches a name by prefix, the re-export\nchain is abandoned, and the type and its fields vanish from the rendered surface while the\nmethod line stays. Measured a crate over at commit ee512dd1: four snapshot lines dropped,\nand cargo test -p nomos-contract-tests --test public_surface 7 passed, 1 failed, exit 101,\nagainst 8 passed, 0 failed once the impls were carried along. That is why the measurement\nabove belongs to this item rather than to a comment.\n\nTimestamp leaves run.rs's nomos_platform import with the field that named it. The three\ntrait bounds stay: Run and the four Dispatched_* functions below it each still bound\nProgramLauncher, FileSystem and Environment. The moved struct's own doc links are the only\ntext rewritten -- [`Run`] to [`crate::Run`] and [`Dispatched_Gate`] to\n[`super::Dispatched_Gate`], since a child module sees neither without a path; no snapshot\nline carries doc text.\n\nBaseline over this crate before the change: a 157-check sweep reports 47 live findings, 0\nwaived, 23 checks not clean, of which file-name is 1. This crate's other 46 live findings\nunder six other checks are somebody else's work and are not touched here.\n\nRe-authored from P114-FILENAME-WORKFLOW-ORCHESTRATION, declined because its own done_when\nfixed the predicate's judged count at 12 while its second clause required a new file and\n`file-name` states its population per file. The code already exists and already passes;\nwhat changed here is the number, from the guessed 12 to the measured 13. Measured with the\nchange in the tree: predicate 0 live, 0 waived, 13 files judged, exit 0; snapshot\nbyte-identical at the sha256 above with public_surface 8 passed, 0 failed; the 157-check\nsweep 47 live before and 46 after with exactly the one file-name pair moved; the crate's\nown tests 21 passed, 0 failed; cargo check --workspace --all-targets exit 0 with 31\nwarnings, none of them this crate's.",
+      "done_when": "1. check.exe file-name --include-tests over\n   crates/orchestration/nomos-workflow-orchestration reports 0 live findings and 0 waived\n   across 13 files judged, exit 0, run through nomos-check-sweep.exe with -max-waived 0.\n   (13, not the 12 the predecessor clause guessed: Platform's own file is the file the\n   check then judges, and the check states its population per file.)\n\n2. tests/contract/surface/nomos-workflow-orchestration.txt is byte-identical, sha256\n   c975841b49e0b66038bc532dddb0765195aa74c5ff6d5132e7f559b44c841769, and\n   cargo test -p nomos-contract-tests --test public_surface is green at 8 passed, 0 failed.\n\n3. A full 157-check sweep over the crate before and after differs by exactly the one\n   file-name finding: the two finding sets compared as multisets of check and message\n   report no finding the crate did not report before, 47 live before this change and 46\n   after.\n\n4. No impl of Platform is added, moved or left behind anywhere in this crate: it declares\n   none before or after the change, so no method named Platform::member can exist to\n   shadow the re-export chain in tests/contract/src/reading/routes.rs.\n\n5. cargo check --workspace --all-targets reports no error and no warning this crate did\n   not already carry, and cargo test -p nomos-workflow-orchestration --no-fail-fast is\n   green with 0 failed.\n\n6. No waiver and no in-code marker is added, no line this change writes exceeds the 120\n   columns rustfmt.toml records, and no path outside this item's territory and\n   work/ledger.json is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run/platform.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/orchestration/nomos-workflow-orchestration",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/orchestration/nomos-workflow-orchestration",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK           LIVE   WAIVED     JUDGED  VERDICT\nfile-name          0        0    13 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789628712,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e0bbd53bbb583d2500ffe117a6b53bf4f5bb3a90"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

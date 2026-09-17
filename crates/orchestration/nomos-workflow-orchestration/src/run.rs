@@ -2,6 +2,10 @@
 //! `AgentExecutor`, `ModelBackend`, `nomos-check-orchestration::Run`,
 //! `nomos-correction-orchestration::Run_Correction`, or `nomos-gate-orchestration::Run_Gate`.
 
+mod platform;
+
+pub use platform::Platform;
+
 use std::path::Path;
 
 use nomos_analysis::MemoryFactStore;
@@ -9,31 +13,10 @@ use nomos_check_orchestration::RunContext;
 use nomos_contracts::RunId;
 use nomos_correction_orchestration::{CorrectionCommand, CorrectionEnvironment, Run_Correction};
 use nomos_gate_orchestration::{GateEnvironment, GateRunOutcome, Run_Gate};
-use nomos_platform::{Environment, FileSystem, ProgramLauncher, Timestamp};
+use nomos_platform::{Environment, FileSystem, ProgramLauncher};
 use nomos_workspace::BuildVariant;
 
 use crate::{Body, DispatchError, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
-
-/// The real `ProgramLauncher` and `FileSystem` a caller chose, grouped into one value so
-/// [`Run`] and [`Dispatch_Body`] each take a platform as one parameter rather than two -- this
-/// crate's own version of the identical grouping `nomos_check_orchestration::
-/// MaterializationEnvironment` and `nomos_gate_orchestration::GateEnvironment` already use
-/// for the same two values.
-pub struct Platform<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
-{
-    pub launcher: &'a Launcher,
-    pub filesystem: &'a Fs,
-    /// Where a provider reads `CARGO` and the working directory from, rather than from this
-    /// process's own ambient state. `OD-HOST-001`: the composition root chooses it.
-    pub environment: &'a Env,
-    /// The moment a step is judged against.
-    ///
-    /// The same execution fact `GateEnvironment::now` carries, riding here for the same
-    /// reason: [`Dispatched_Gate`] is already at this workspace's four-parameter limit, and a
-    /// workflow's gate step must judge a waiver's expiry against the run's own moment rather
-    /// than a clock read inside policy logic.
-    pub now: Timestamp,
-}
 
 /// Dispatches `plan` in order through `platform`.
 ///
