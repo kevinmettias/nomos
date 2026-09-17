@@ -27,9 +27,9 @@
 //! The capability's identity, contract version, ceiling and summary ([`contract`]); the
 //! closed eight-style case vocabulary this policy's values are drawn from, ported from
 //! code-standards' own `case.go`/`case_validation.go` rather than reinvented
-//! ([`Case`]); and the payload shape and its canonical reader ([`payload`]), the same
-//! division `nomos-cap-lint`, `nomos-cap-dependency` and `nomos-cap-dependency-policy`
-//! each draw between their own `contract` and `payload` modules.
+//! ([`Case`]); and the payload shape and its canonical reader ([`naming_policy_payload`]), the
+//! same division `nomos-cap-lint`, `nomos-cap-dependency` and `nomos-cap-dependency-policy`
+//! each draw between their own `contract` and payload modules.
 //!
 //! What is not here: a provider that actually reads `standards.json`, and a rule that
 //! reads this capability. Both are this decision's own next increments, per `OD-RULES-
@@ -39,12 +39,12 @@
 
 mod case;
 mod contract;
-mod payload;
+mod naming_policy_payload;
 
 pub use case::Case;
 pub use contract::{Capability, Capability_Contract, Ceiling, CAPABILITY, CONTRACT_VERSION, Payload_Schema, SCHEMA};
-pub use payload::policy_row::PolicyRow;
-pub use payload::scope::Scope;
-pub use payload::NamingPolicyPayload;
-pub use payload::{Encode_Payload, Parse_Payload};
-pub use payload::refusal::Refusal;
+pub use naming_policy_payload::policy_row::PolicyRow;
+pub use naming_policy_payload::scope::Scope;
+pub use naming_policy_payload::NamingPolicyPayload;
+pub use naming_policy_payload::{Encode_Payload, Parse_Payload};
+pub use naming_policy_payload::refusal::Refusal;
