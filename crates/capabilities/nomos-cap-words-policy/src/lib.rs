@@ -26,7 +26,7 @@
 //! # What is here
 //!
 //! The capability's identity, contract version, ceiling and summary ([`contract`]); and
-//! the payload shape and its canonical reader ([`payload`]).
+//! the payload shape and its canonical reader ([`words_policy_payload`]).
 //!
 //! What is not here: the default approved/banned vocabulary and the abbreviation
 //! judgment itself, which belong to the rule that reads this capability, not to the
@@ -37,7 +37,7 @@
 #![forbid(unsafe_code)]
 
 mod contract;
-mod payload;
+mod words_policy_payload;
 
 pub use contract::{Capability, Capability_Contract, Ceiling, CAPABILITY, CONTRACT_VERSION, Payload_Schema, SCHEMA};
-pub use payload::{Encode_Payload, Parse_Payload, Refusal, WordsPolicyPayload};
+pub use words_policy_payload::{Encode_Payload, Parse_Payload, Refusal, WordsPolicyPayload};
