@@ -1,6 +1,6 @@
 //! D-129 supersedes ADR-DOC-001, and the placeholder that stands for it stays visible.
 
-use crate::queries::{Column, Counted, NodeId, Seeded, Title};
+use crate::queries::{Column_For_Node, Count_From_Sql, NodeId, Seeded, Title_For_Node};
 use nomos_spec_store::{EXTERNAL, NodeRow};
 
 /// D-129 supersedes ADR-DOC-001. The edge has to be in the store, not only in the prose,
@@ -9,7 +9,7 @@ use nomos_spec_store::{EXTERNAL, NodeRow};
 fn Test_The_Superseded_Record_Should_Carry_An_Explicit_Supersession_Edge()
 {
     let store = Seeded();
-    let forward = Counted(
+    let forward = Count_From_Sql(
         &store,
         "SELECT count(*) FROM relations r
          JOIN nodes f ON f.uid = r.from_node_uid
@@ -17,7 +17,7 @@ fn Test_The_Superseded_Record_Should_Carry_An_Explicit_Supersession_Edge()
          WHERE f.node_id = 'D-129' AND r.relation_type = 'supersedes'
            AND t.node_id = 'ADR-DOC-001'",
     );
-    let inverse = Counted(
+    let inverse = Count_From_Sql(
         &store,
         "SELECT count(*) FROM relations r
          JOIN nodes f ON f.uid = r.from_node_uid
@@ -41,8 +41,8 @@ fn Test_The_Superseded_Record_Should_Carry_An_Explicit_Supersession_Edge()
 fn Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder()
 {
     let store = Seeded();
-    let authority = Column(&store, "SELECT authority FROM nodes WHERE node_id = ?1", NodeId("ADR-DOC-001"));
-    let bodies = Counted(
+    let authority = Column_For_Node(&store, "SELECT authority FROM nodes WHERE node_id = ?1", NodeId("ADR-DOC-001"));
+    let bodies = Count_From_Sql(
         &store,
         "SELECT count(*) FROM source_documents WHERE path LIKE '%ADR-DOC-001%'",
     );
@@ -79,11 +79,11 @@ fn Test_A_Real_Record_Should_Replace_A_Placeholder_But_Not_A_Real_One()
         .expect("attempts to restate");
 
     assert_eq!(
-        Title(&store, "ADR-DOC-001").as_deref(),
+        Title_For_Node(&store, "ADR-DOC-001").as_deref(),
         Some("Markdown is the canonical authored documentation format")
     );
     assert_ne!(
-        Title(&store, "D-129").as_deref(),
+        Title_For_Node(&store, "D-129").as_deref(),
         Some("Something else"),
         "a later pass overwrote a record its author already wrote"
     );

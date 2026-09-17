@@ -3,14 +3,14 @@
 //! Typing a row must not become a way out of NSV-PRESERVE-002's view that does not involve
 //! leaving the table, so a table without a delimiter is refused rather than stored as prose.
 
-use crate::stored::{AUTHORED, Segment, SpecificationStore, StoreError, Stored};
+use crate::stored::{AUTHORED, Segment, SpecificationStore, StoreError, Store_Holding_Markdown};
 use nomos_spec_store::Table;
 
 /// Discards the store so a refusal can be asserted on: the store is not `Debug`, and
 /// making it so purely to write `expect_err` would widen a public API for a test.
-fn Refusal(markdown: &str) -> StoreError
+fn Refusal_Of_Store(markdown: &str) -> StoreError
 {
-    return match Stored(markdown)
+    return match Store_Holding_Markdown(markdown)
     {
         // Unreachable while the store refuses a malformed table: every caller hands this
         // markdown whose delimiter row is missing or doubled on purpose. An `Ok` is the store
@@ -35,7 +35,7 @@ fn Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused()
 {
     for (markdown, why) in Tables_With_A_Malformed_Delimiter()
     {
-        let refusal = Refusal(markdown);
+        let refusal = Refusal_Of_Store(markdown);
 
         assert!(matches!(refusal, StoreError::Table { .. }), "{why}: {refusal}");
     }

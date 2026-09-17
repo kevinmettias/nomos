@@ -2,12 +2,12 @@
 //!
 //! One place to say what a stored table is, so that a test reads as the claim it makes
 //! rather than as the setup it needs. A helper reached from one module only stays in that
-//! module — `Refusal` with the refusals, `One` with the lineage — because a shared helper
-//! is a coupling and four lines of it is not worth one.
+//! module — `Refusal_Of_Store` with the refusals, `One_Column_Of_Row` with the lineage —
+//! because a shared helper is a coupling and four lines of it is not worth one.
 
 // Scoped to this module, not to the whole test binary — an inner attribute on a `mod` file
 // reaches no sibling. Whether a fixture here is live is a property of which siblings happen to
-// call it, and `main.rs` decides that: `Two` is reached from three modules, `TABLE` from two,
+// call it, and `main.rs` decides that: `Two_Columns_Of_Row` is reached from three modules, `TABLE` from two,
 // and dropping a test would make an untouched helper here fail the build in a file nobody
 // edited. The repair for that failure is to delete the fixture, which is how a shared fixture
 // erodes back into one setup per test — the arrangement this module exists to replace.
@@ -22,7 +22,7 @@ pub(crate) const TABLE: &str = "# Canonical domain model\n\n\
                                 | WorkspaceContext | Repository, branch, configuration. |\n\
                                 | MetricTradeoffProjection | Cost against benefit. |\n";
 
-pub(crate) fn Stored(markdown: &str) -> Result<SpecificationStore, StoreError>
+pub(crate) fn Store_Holding_Markdown(markdown: &str) -> Result<SpecificationStore, StoreError>
 {
     let mut store = SpecificationStore::In_Memory()?;
     let document = store.Put_Source_Document("doc.md", AUTHORED, markdown)?;
@@ -30,7 +30,7 @@ pub(crate) fn Stored(markdown: &str) -> Result<SpecificationStore, StoreError>
     return Ok(store);
 }
 
-pub(crate) fn Census(store: &SpecificationStore, scope: RowScope) -> RowCensus
+pub(crate) fn Row_Census_For_Scope(store: &SpecificationStore, scope: RowScope) -> RowCensus
 {
     return store.Row_Census(scope).expect("takes a census");
 }
@@ -44,7 +44,7 @@ pub(crate) fn Census(store: &SpecificationStore, scope: RowScope) -> RowCensus
 pub(crate) struct Blame<'a>(pub(crate) &'a str);
 
 /// Two columns of one row, which is what it takes to address a table row.
-pub(crate) fn Two<First: rusqlite::types::FromSql, Second: rusqlite::types::FromSql>(
+pub(crate) fn Two_Columns_Of_Row<First: rusqlite::types::FromSql, Second: rusqlite::types::FromSql>(
     store: &SpecificationStore,
     sql: &str,
     blame: Blame<'_>,

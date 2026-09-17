@@ -1,6 +1,6 @@
 //! What the door refuses, and the transaction that leaves nothing behind when it does.
 
-use crate::seeded::{Previewed, SYNTHETIC, SYNTHETIC_PATH, With_Synthetic};
+use crate::seeded::{Preview_For_Markdown, SYNTHETIC, SYNTHETIC_PATH, With_Synthetic};
 use nomos_spec_store::{EditError, Table};
 
 #[test]
@@ -69,7 +69,7 @@ fn Test_An_Edit_Should_Not_Delete_A_Block_A_Justified_Omission_Points_At()
         .expect("records an omission");
 
     let edited = SYNTHETIC.replace("\n## Rationale\n\nSecond paragraph.\n", "");
-    let preview = Previewed(&store, &edited);
+    let preview = Preview_For_Markdown(&store, &edited);
     let refusal = store.Commit_Edit(&preview).expect_err("must refuse");
 
     assert!(refusal.to_string().contains("justification"), "{refusal}");

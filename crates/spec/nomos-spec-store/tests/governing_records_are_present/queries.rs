@@ -4,12 +4,12 @@ use nomos_spec_store::{Seed_Governing_Records, SpecificationStore};
 
 /// The node identifier a query is scoped to.
 ///
-/// Named rather than left a second `&str`, because it sits beside the SQL at every `Column`
+/// Named rather than left a second `&str`, because it sits beside the SQL at every `Column_For_Node`
 /// call site and a transposed pair would query the wrong node while still building.
 pub(crate) struct NodeId<'a>(pub(crate) &'a str);
 
 /// One counted answer, for a query that binds nothing.
-pub(crate) fn Counted(store: &SpecificationStore, sql: &str) -> u32
+pub(crate) fn Count_From_Sql(store: &SpecificationStore, sql: &str) -> u32
 {
     return store
         .Connection()
@@ -18,7 +18,7 @@ pub(crate) fn Counted(store: &SpecificationStore, sql: &str) -> u32
 }
 
 /// One text answer, for a query naming one node as `?1`.
-pub(crate) fn Column(store: &SpecificationStore, sql: &str, node_id: NodeId<'_>) -> String
+pub(crate) fn Column_For_Node(store: &SpecificationStore, sql: &str, node_id: NodeId<'_>) -> String
 {
     return store
         .Connection()
@@ -35,7 +35,7 @@ pub(crate) fn Seeded() -> SpecificationStore
     return store;
 }
 
-pub(crate) fn Title(store: &SpecificationStore, node_id: &str) -> Option<String>
+pub(crate) fn Title_For_Node(store: &SpecificationStore, node_id: &str) -> Option<String>
 {
     return store
         .Connection()

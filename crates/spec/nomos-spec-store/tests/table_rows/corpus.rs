@@ -8,7 +8,9 @@
 //! hole it is cited for, and leave the table in `tests/contract/tests/corpus_gates.rs`
 //! agreeing with itself.
 
-use crate::stored::{Blame, Census, RowCensus, RowScope, SpecificationStore, Two};
+use crate::stored::{
+    Blame, RowCensus, RowScope, Row_Census_For_Scope, SpecificationStore, Two_Columns_Of_Row,
+};
 use nomos_spec_model::{Segment, Table_Rows};
 use std::path::{Path, PathBuf};
 
@@ -67,7 +69,7 @@ fn Test_The_Domain_Volumes_Should_Answer_282_258_And_234()
     let mut store =
         SpecificationStore::In_Memory().expect("In_Memory applies the schema in process");
     let measured = Store_Volumes(&mut store, &root.join("01_authoring/domain_volumes"));
-    let census = Census(&store, RowScope::Everything);
+    let census = Row_Census_For_Scope(&store, RowScope::Everything);
 
     assert_eq!(
         measured.volumes, DOMAIN_VOLUMES,
@@ -97,7 +99,7 @@ fn Store_Volumes(store: &mut SpecificationStore, directory: &Path) -> VolumesSto
     let mut volumes = 0_u32;
     let mut with_tables = 0_u32;
 
-    for path in Volumes(directory)
+    for path in Volume_Paths_In(directory)
     {
         let carries = Is_A_Volume_With_Tables(store, &path);
 
@@ -115,7 +117,7 @@ fn Store_Volumes(store: &mut SpecificationStore, directory: &Path) -> VolumesSto
 fn Is_A_Volume_With_Tables(store: &mut SpecificationStore, path: &Path) -> bool
 {
     let markdown = std::fs::read_to_string(path)
-        // `Volumes` enumerated this path moments ago, so a read failure is the corpus changing
+        // `Volume_Paths_In` enumerated this path moments ago, so a read failure is the corpus changing
         // underneath the run rather than a machine without one — `Corpus_Root` already
         // answered that by returning `None`. Skipping the volume would leave 282, 258 and 234
         // measured over nine volumes and blame the counts.
@@ -201,13 +203,13 @@ fn Test_The_Canonical_Domain_Model_Should_Answer_30_And_28()
     let mut store =
         SpecificationStore::In_Memory().expect("In_Memory is this measurement's own store");
     Is_A_Volume_With_Tables(&mut store, &path);
-    let (block_uid, table_ordinal): (i64, u32) = Two(
+    let (block_uid, table_ordinal): (i64, u32) = Two_Columns_Of_Row(
         &store,
         "SELECT source_block_uid, table_ordinal FROM source_table_rows
          WHERE kind = 'content' AND cells_json LIKE '%WorkspaceContext%'",
         Blame("the canonical domain model is no longer in this volume"),
     );
-    let census = Census(
+    let census = Row_Census_For_Scope(
         &store,
         RowScope::Table {
             block_uid,
@@ -224,7 +226,7 @@ fn Test_The_Canonical_Domain_Model_Should_Answer_30_And_28()
     assert_eq!(census.separator, 1);
 }
 
-fn Volumes(directory: &Path) -> Vec<PathBuf>
+fn Volume_Paths_In(directory: &Path) -> Vec<PathBuf>
 {
     let entries = std::fs::read_dir(directory)
         // A `domain_volumes` that cannot be opened would otherwise yield no paths, and the

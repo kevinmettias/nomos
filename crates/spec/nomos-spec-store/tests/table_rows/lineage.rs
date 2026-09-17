@@ -4,11 +4,14 @@
 //! That only holds if a row's `uid` survives re-ingestion, so the renumbering test belongs
 //! beside the lineage it would silently break.
 
-use crate::stored::{AUTHORED, Blame, Segment, SpecificationStore, Stored, TABLE, Two};
+use crate::stored::{
+    AUTHORED, Blame, Segment, SpecificationStore, Store_Holding_Markdown, TABLE,
+    Two_Columns_Of_Row,
+};
 use nomos_spec_store::{NodeRow, Table};
 
 /// One column of one row, from a query that binds nothing.
-fn One<Value: rusqlite::types::FromSql>(
+fn One_Column_Of_Row<Value: rusqlite::types::FromSql>(
     store: &SpecificationStore,
     sql: &str,
     blame: Blame<'_>,
@@ -59,7 +62,7 @@ fn Row_Uids(store: &SpecificationStore) -> Vec<i64>
 fn Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row()
 {
     let store = With_A_Concept_Minted_From_A_Row();
-    let traced: String = One(
+    let traced: String = One_Column_Of_Row(
         &store,
         "SELECT r.text FROM lineage l
          JOIN source_table_rows r ON r.uid = l.source_table_row_uid
@@ -82,13 +85,13 @@ fn Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row()
 fn With_A_Concept_Minted_From_A_Row() -> SpecificationStore
 {
     let mut store =
-        Stored(TABLE).expect("the fixture body is a well-formed table the store takes");
-    let document: i64 = One(
+        Store_Holding_Markdown(TABLE).expect("the fixture body is a well-formed table the store takes");
+    let document: i64 = One_Column_Of_Row(
         &store,
         "SELECT uid FROM source_documents LIMIT 1",
         Blame("the fixture wrote exactly one source document"),
     );
-    let (block_ordinal, row_ordinal): (u32, u32) = Two(
+    let (block_ordinal, row_ordinal): (u32, u32) = Two_Columns_Of_Row(
         &store,
         "SELECT b.ordinal, r.ordinal FROM source_blocks b
          JOIN source_table_rows r ON r.source_block_uid = b.uid
@@ -121,8 +124,8 @@ fn With_A_Concept_Minted_From_A_Row() -> SpecificationStore
 fn Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row()
 {
     let mut store =
-        Stored(TABLE).expect("the fixture body stores, which is what gives this test rows");
-    let row_uid: i64 = One(
+        Store_Holding_Markdown(TABLE).expect("the fixture body stores, which is what gives this test rows");
+    let row_uid: i64 = One_Column_Of_Row(
         &store,
         "SELECT uid FROM source_table_rows WHERE kind = 'content' LIMIT 1",
         Blame("the fixture table's first content row"),

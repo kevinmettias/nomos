@@ -186,7 +186,7 @@ fn Test_Upsert_Node_Should_Insert_A_New_Node()
     let mut store = SpecificationStore::In_Memory()
         .expect("In_Memory gives the node test an empty store");
 
-    let decision = Node("D-1", "decision");
+    let decision = Node_Row_From_Id_And_Kind("D-1", "decision");
     let uid = store.Upsert_Node(decision).expect("Upsert_Node mints a uid for an unseen node id");
 
     assert!(uid > 0);
@@ -215,7 +215,7 @@ fn Test_Assign_Suite_Should_Place_A_Node_In_A_Suite()
 {
     let mut store = SpecificationStore::In_Memory()
         .expect("In_Memory gives the assignment test an empty store");
-    let decision = Node("D-1", "decision");
+    let decision = Node_Row_From_Id_And_Kind("D-1", "decision");
     let node_uid =
         store.Upsert_Node(decision).expect("Upsert_Node mints the node this suite will hold");
     let suite_uid = store
@@ -238,7 +238,7 @@ fn Test_Suite_Of_Should_Report_The_Suite_A_Node_Belongs_To()
 {
     let mut store = SpecificationStore::In_Memory()
         .expect("In_Memory gives the lookup test an empty store");
-    let decision = Node("D-1", "decision");
+    let decision = Node_Row_From_Id_And_Kind("D-1", "decision");
     let node_uid =
         store.Upsert_Node(decision).expect("Upsert_Node mints the node the lookup asks about");
     let unassigned = store.Suite_Of("D-1").expect("Suite_Of answers for an unassigned node");
@@ -282,7 +282,7 @@ fn Test_Node_Uid_Should_Look_Up_A_Node_By_Its_Identifier()
 {
     let mut store = SpecificationStore::In_Memory()
         .expect("In_Memory gives the uid test an empty store");
-    let decision = Node("D-1", "decision");
+    let decision = Node_Row_From_Id_And_Kind("D-1", "decision");
     store
         .Upsert_Node(decision)
         .expect("Upsert_Node mints the node whose identifier is looked up");
@@ -332,8 +332,8 @@ fn Test_Put_Relation_Should_Record_An_Edge_Between_Two_Nodes()
 {
     let mut store = SpecificationStore::In_Memory()
         .expect("In_Memory gives the edge test an empty store");
-    let source = Node("A", "widget");
-    let target = Node("B", "widget");
+    let source = Node_Row_From_Id_And_Kind("A", "widget");
+    let target = Node_Row_From_Id_And_Kind("B", "widget");
     store.Upsert_Node(source).expect("Upsert_Node mints the edge's source node");
     store.Upsert_Node(target).expect("Upsert_Node mints the edge's target node");
     Register_A_Widget_Relation_Type(&mut store, "relates-to");
@@ -449,7 +449,7 @@ fn The_Registered_Inverse(store: &SpecificationStore) -> Option<String>
     return inverse;
 }
 
-fn Node<'a>(id: &'a str, kind: &'a str) -> NodeRow<'a>
+fn Node_Row_From_Id_And_Kind<'a>(id: &'a str, kind: &'a str) -> NodeRow<'a>
 {
     return NodeRow {
         node_id: id,

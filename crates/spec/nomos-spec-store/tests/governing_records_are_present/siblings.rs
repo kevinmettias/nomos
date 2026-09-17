@@ -1,6 +1,6 @@
 //! An edge across the seam arrives as a reported placeholder, and the sibling suite claims it.
 
-use crate::queries::{Column, Counted, NodeId, Seeded, Title};
+use crate::queries::{Column_For_Node, Count_From_Sql, NodeId, Seeded, Title_For_Node};
 use nomos_spec_store::{EXTERNAL, NodeRow, SeedReport, Seed_Governing_Records, SpecificationStore, SuiteAuthority};
 
 /// The sibling records `ARC-ECOSYSTEM-001` cites, named here rather than counted.
@@ -42,7 +42,7 @@ fn Assert_Arrived_As_A_Placeholder(store: &SpecificationStore, report: &SeedRepo
          into a sibling suite is indistinguishable from an edge into nothing"
     );
 
-    let authority = Column(store, "SELECT authority FROM nodes WHERE node_id = ?1", NodeId(record));
+    let authority = Column_For_Node(store, "SELECT authority FROM nodes WHERE node_id = ?1", NodeId(record));
 
     assert_eq!(authority, EXTERNAL, "{record}");
     assert_eq!(
@@ -67,7 +67,7 @@ fn Assert_Arrived_As_A_Placeholder(store: &SpecificationStore, report: &SeedRepo
 fn Test_A_Placeholder_Should_Become_The_Node_Of_The_Suite_That_Claims_It()
 {
     let store = Claimed_By_The_Sibling_Suite();
-    let edges = Counted(
+    let edges = Count_From_Sql(
         &store,
         "SELECT count(*) FROM relations r
          JOIN nodes f ON f.uid = r.from_node_uid
@@ -84,7 +84,7 @@ fn Test_A_Placeholder_Should_Become_The_Node_Of_The_Suite_That_Claims_It()
          decision it is"
     );
     assert_eq!(
-        Title(&store, "D-090").as_deref(),
+        Title_For_Node(&store, "D-090").as_deref(),
         Some("Reuse alone does not justify platform ownership"),
         "the placeholder kept its own name, so the sibling's record never arrived"
     );

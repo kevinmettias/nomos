@@ -1,6 +1,6 @@
 //! The mandatory sentence: whether normative wording moved, and what the answer rests on.
 
-use crate::seeded::{Previewed, SYNTHETIC, Swapped, With_Synthetic};
+use crate::seeded::{Preview_For_Markdown, SYNTHETIC, Swapped, With_Synthetic};
 use nomos_spec_store::{BlockChange, EditPreview, NormativeOutcome};
 
 /// Whether the mandatory question is expected to have been answered for the edit under test: the
@@ -38,7 +38,7 @@ fn Test_The_Preview_Should_Say_Whether_Normative_Is_Wording_Moved()
 
     for (markdown, answer, why) in Wording_Cases()
     {
-        let preview = Previewed(&store, &markdown);
+        let preview = Preview_For_Markdown(&store, &markdown);
 
         assert_ne!(markdown, SYNTHETIC, "the {why} case changed nothing");
         Assert_Answers_The_Mandatory_Question(&preview, answer, why);
@@ -97,7 +97,7 @@ fn Test_A_Moved_Block_Should_Report_As_Moved()
 {
     let store = With_Synthetic();
     let swapped = Swapped();
-    let preview = Previewed(&store, &swapped);
+    let preview = Preview_For_Markdown(&store, &swapped);
 
     assert_ne!(swapped, SYNTHETIC, "the negative control changed nothing");
     assert!(
@@ -129,7 +129,7 @@ fn Test_A_Recorded_Statement_Should_Be_Followed_Through_The_Edit()
         )
         .expect("records a statement");
     let swapped = Swapped();
-    let preview = Previewed(&store, &swapped);
+    let preview = Preview_For_Markdown(&store, &swapped);
     let movement = preview.Statements().first().expect("the statement is recorded");
 
     assert_eq!(movement.statement_id, "AGT-001");

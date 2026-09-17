@@ -5,7 +5,10 @@
 //! separator cannot show `lines` and `non_separator` apart, and a suite whose fixtures
 //! cannot separate two numbers is asserting they are equal.
 
-use crate::stored::{Blame, Census, RowScope, SpecificationStore, Stored, TABLE, Two};
+use crate::stored::{
+    Blame, RowScope, Row_Census_For_Scope, SpecificationStore, Store_Holding_Markdown, TABLE,
+    Two_Columns_Of_Row,
+};
 use nomos_spec_store::Table;
 
 /// The pipe lines the fixture table holds: one header, one delimiter and two data rows.
@@ -29,8 +32,8 @@ const SECOND_TABLE_LINES: u32 = 4;
 #[test]
 fn Test_A_Table_Block_Should_Store_Every_Pipe_Line()
 {
-    let store = Stored(TABLE).expect("TABLE is a well-formed table, so the store takes it");
-    let census = Census(&store, RowScope::Everything);
+    let store = Store_Holding_Markdown(TABLE).expect("TABLE is a well-formed table, so the store takes it");
+    let census = Row_Census_For_Scope(&store, RowScope::Everything);
 
     assert_eq!(census.lines, TABLE_LINES, "one line of the table did not land");
     assert_eq!(census.header, 1, "the column titles");
@@ -46,8 +49,8 @@ fn Test_A_Table_Block_Should_Store_Every_Pipe_Line()
 fn Test_The_Store_Should_Answer_Every_Count_Separately()
 {
     let store =
-        Stored(TABLE).expect("the same fixture body stores again for a second reading");
-    let census = Census(&store, RowScope::Everything);
+        Store_Holding_Markdown(TABLE).expect("the same fixture body stores again for a second reading");
+    let census = Row_Census_For_Scope(&store, RowScope::Everything);
 
     assert_ne!(
         census.lines, census.non_separator,
@@ -77,11 +80,11 @@ fn Test_The_Store_Should_Answer_Every_Count_Separately()
 fn Test_A_Census_Should_Narrow_To_One_Table()
 {
     let markdown = "| a |\n| --- |\n| 1 |\n\nbetween\n\n| b |\n| --- |\n| 2 |\n| 3 |\n";
-    let store = Stored(markdown).expect("the two-table body is well formed, so both tables land");
+    let store = Store_Holding_Markdown(markdown).expect("the two-table body is well formed, so both tables land");
 
-    let everything = Census(&store, RowScope::Everything);
+    let everything = Row_Census_For_Scope(&store, RowScope::Everything);
     let second = The_Second_Table(&store);
-    let scoped = Census(&store, second);
+    let scoped = Row_Census_For_Scope(&store, second);
 
     assert_eq!(everything.content, TWO_TABLES_CONTENT_LINES);
     assert_eq!(
@@ -95,7 +98,7 @@ fn Test_A_Census_Should_Narrow_To_One_Table()
 /// The second of the fixture's two tables, addressed by the only row that holds a `3`.
 fn The_Second_Table(store: &SpecificationStore) -> RowScope
 {
-    let (block_uid, table_ordinal): (i64, u32) = Two(
+    let (block_uid, table_ordinal): (i64, u32) = Two_Columns_Of_Row(
         store,
         "SELECT source_block_uid, table_ordinal FROM source_table_rows
          WHERE cells_json LIKE '%\"3\"%' LIMIT 1",
@@ -112,7 +115,7 @@ fn The_Second_Table(store: &SpecificationStore) -> RowScope
 #[test]
 fn Test_A_Row_Should_Be_Findable_By_Its_Content()
 {
-    let store = Stored(TABLE).expect("the fixture table is stored, so its rows can be searched");
+    let store = Store_Holding_Markdown(TABLE).expect("the fixture table is stored, so its rows can be searched");
 
     let found: u32 = store
         .Connection()
@@ -131,8 +134,8 @@ fn Test_A_Row_Should_Be_Findable_By_Its_Content()
 fn Test_A_Block_With_No_Table_Should_Store_No_Rows()
 {
     let store =
-        Stored("# Title\n\nJust prose.\n").expect("prose is a document the store accepts");
+        Store_Holding_Markdown("# Title\n\nJust prose.\n").expect("prose is a document the store accepts");
 
-    assert_eq!(Census(&store, RowScope::Everything).lines, 0);
+    assert_eq!(Row_Census_For_Scope(&store, RowScope::Everything).lines, 0);
     assert!(store.Count(Table::SourceBlocks).expect("counts") > 0, "nothing was stored at all");
 }

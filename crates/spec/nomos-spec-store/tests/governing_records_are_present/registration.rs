@@ -119,7 +119,7 @@ struct Disagreement
 ///
 /// Extracted so that a control claiming the guard would have caught something is exercising
 /// **the guard** rather than a second implementation of it written beside the first.
-fn Disagreements(canonical: &[String], governing: &[&str]) -> Disagreement
+fn Disagreements_Between(canonical: &[String], governing: &[&str]) -> Disagreement
 {
     let unseeded: Vec<String> = canonical
         .iter()
@@ -195,7 +195,7 @@ fn Test_Every_Canonical_Record_On_Disk_Should_Be_Governing()
          set, so an empty one passes having checked nothing",
         Record_Directory().display()
     );
-    let Disagreement { unseeded, phantom } = Disagreements(&canonical, GOVERNING_RECORD_IDS);
+    let Disagreement { unseeded, phantom } = Disagreements_Between(&canonical, GOVERNING_RECORD_IDS);
 
     assert!(
         unseeded.is_empty(),
@@ -231,7 +231,7 @@ fn Test_A_Record_Whose_Registration_Is_Missing_Should_Be_Unseeded()
     let dropped = Any_Governing_Id();
     let governing = Governing_Ids_Without(dropped);
 
-    let Disagreement { unseeded, phantom } = Disagreements(&canonical, &governing);
+    let Disagreement { unseeded, phantom } = Disagreements_Between(&canonical, &governing);
 
     assert_eq!(
         unseeded,
@@ -275,7 +275,7 @@ fn Test_A_Registration_With_No_Record_Should_Be_A_Phantom()
     let mut governing: Vec<&str> = GOVERNING_RECORD_IDS.to_vec();
     governing.push(invented);
 
-    let Disagreement { unseeded, phantom } = Disagreements(&canonical, &governing);
+    let Disagreement { unseeded, phantom } = Disagreements_Between(&canonical, &governing);
 
     assert_eq!(phantom, vec![invented.to_owned()]);
     assert!(unseeded.is_empty(), "inventing a registration unseeded a record: {unseeded:?}");
@@ -306,7 +306,7 @@ fn Test_The_Governing_List_Should_Be_The_Registration_Directory()
     let Disagreement {
         unseeded: unregistered,
         phantom: undeclared,
-    } = Disagreements(&stems, GOVERNING_RECORD_IDS);
+    } = Disagreements_Between(&stems, GOVERNING_RECORD_IDS);
 
     assert!(
         unregistered.is_empty() && undeclared.is_empty(),
@@ -377,7 +377,7 @@ fn Test_Comparing_The_Directory_Against_Itself_Would_Check_Nothing()
     let Disagreement {
         unseeded: would_be_unseeded,
         phantom: would_be_phantom,
-    } = Disagreements(&would_be_canonical, &would_be_governing);
+    } = Disagreements_Between(&would_be_canonical, &would_be_governing);
 
     assert!(
         would_be_unseeded.is_empty() && would_be_phantom.is_empty(),

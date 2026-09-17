@@ -193,7 +193,7 @@ fn Three_Rows(store: &mut SpecificationStore, reason: &str) -> Result<(), StoreE
 /// Together because the claim is about all three at once: a rollback that reached the last
 /// statement and not the two before it is the defect, and three separate assertions report
 /// it as one table being wrong rather than as the rollback being partial.
-fn Written(store: &SpecificationStore) -> [u32; WRITTEN_TABLE_COUNT]
+fn Counts_Of_Written_Tables(store: &SpecificationStore) -> [u32; WRITTEN_TABLE_COUNT]
 {
     return [
         store.Count(Table::Blobs).expect("Count runs a SELECT over a table the schema declares"),
@@ -219,7 +219,7 @@ fn Test_A_Failed_Transaction_Should_Roll_Back_Every_Table()
     let outcome = Three_Rows(&mut store, "   ");
 
     assert!(outcome.is_err(), "a blank reason must not be accepted");
-    assert_eq!(Written(&store), [0, 0, 0], "the rollback did not reach every table");
+    assert_eq!(Counts_Of_Written_Tables(&store), [0, 0, 0], "the rollback did not reach every table");
 }
 
 /// The negative control for the test above. Without it, an `In_Transaction` that always
@@ -233,7 +233,7 @@ fn Test_A_Successful_Transaction_Should_Commit_Every_Table()
     let outcome = Three_Rows(&mut store, "ingested from v14.36");
 
     assert!(outcome.is_ok(), "a well-formed transaction must commit");
-    assert_eq!(Written(&store), [1, 1, 1], "the commit did not reach every table");
+    assert_eq!(Counts_Of_Written_Tables(&store), [1, 1, 1], "the commit did not reach every table");
 }
 
 /// Content addressing: the same bytes stored twice are one blob.

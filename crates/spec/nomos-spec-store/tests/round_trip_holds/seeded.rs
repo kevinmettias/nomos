@@ -54,7 +54,7 @@ pub(crate) fn Edge_Count<'a>(
 }
 
 /// What committing this edit to the synthetic record would change.
-pub(crate) fn Previewed(store: &SpecificationStore, markdown: &str) -> EditPreview
+pub(crate) fn Preview_For_Markdown(store: &SpecificationStore, markdown: &str) -> EditPreview
 {
     return store
         .Claim_For_Edit("D-900", None)
@@ -104,18 +104,20 @@ pub(crate) fn With_Synthetic() -> SpecificationStore
 }
 
 /// Commits an edit through all four steps, so no test spells the sequence out twice.
-pub(crate) fn Commit(store: &mut SpecificationStore, markdown: &str, rename: Option<&str>) -> String
+pub(crate) fn Commit_Staged_Edit(store: &mut SpecificationStore, markdown: &str, rename: Option<&str>) -> String
 {
     let preview = store
         .Claim_For_Edit("D-900", None)
-        .expect("Commit is only called with D-900, which With_Synthetic wrote before this")
+        .expect("Commit_Staged_Edit is only called with D-900, which With_Synthetic wrote before this")
         .Stage(markdown, rename)
         .expect("the claim above is editable, so the replacement body this caller passed is staged")
         .Preview(store)
         .expect("the stage above built an edit over the open store, so there is one to describe");
     let described = preview.Describe();
 
-    store.Commit_Edit(&preview).expect("every caller of Commit stages a canonical edit, so the transaction writes");
+    store
+        .Commit_Edit(&preview)
+        .expect("every caller of Commit_Staged_Edit stages a canonical edit, so the transaction writes");
 
     return described;
 }

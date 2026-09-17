@@ -1,6 +1,6 @@
 //! Seeding twice is seeding once, and what it seeds is content rather than identity alone.
 
-use crate::queries::{Counted, Seeded};
+use crate::queries::{Count_From_Sql, Seeded};
 use nomos_spec_store::{
     AUTHORED, GOVERNING_RECORD_IDS, Seed_Governing_Records, SpecificationStore, Table,
 };
@@ -89,12 +89,12 @@ fn Table_Counts(store: &SpecificationStore) -> Vec<u32>
 fn Test_The_Records_Should_Be_Present_As_Disposed_Content()
 {
     let store = Seeded();
-    let empty = Counted(
+    let empty = Count_From_Sql(
         &store,
         "SELECT count(*) FROM source_documents d
          WHERE NOT EXISTS (SELECT 1 FROM source_blocks b WHERE b.document_uid = d.uid)",
     );
-    let undisposed = Counted(
+    let undisposed = Count_From_Sql(
         &store,
         "SELECT count(*) FROM source_blocks b
          WHERE NOT EXISTS (SELECT 1 FROM lineage l WHERE l.source_block_uid = b.uid)",
@@ -116,7 +116,7 @@ fn Test_The_Records_Should_Be_Present_As_Disposed_Content()
 fn Test_Authored_Content_Should_Be_Distinguishable_From_An_Ingested_Revision()
 {
     let store = Seeded();
-    let revisions = Counted(
+    let revisions = Count_From_Sql(
         &store,
         &format!("SELECT count(*) FROM source_documents WHERE revision <> '{AUTHORED}'"),
     );

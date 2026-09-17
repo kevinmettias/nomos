@@ -1,7 +1,7 @@
 //! An edit goes in as markdown and comes back out as the same bytes, and identity survives.
 
 use crate::seeded::{
-    Block_Uids, Commit, Only_Document, SYNTHETIC, SYNTHETIC_PATH, With_Synthetic,
+    Block_Uids, Commit_Staged_Edit, Only_Document, SYNTHETIC, SYNTHETIC_PATH, With_Synthetic,
 };
 
 /// The blocks the shortening edit drops along with the section it deletes: the `## Rationale`
@@ -17,11 +17,11 @@ fn Test_An_Edit_Should_Be_Readable_Back_Out_As_What_Was_Committed()
     let edited = SYNTHETIC.replace("First paragraph.", "First paragraph, revised.");
     assert_ne!(edited, SYNTHETIC, "the negative control changed nothing");
 
-    Commit(&mut store, &edited, None);
+    Commit_Staged_Edit(&mut store, &edited, None);
 
     let projection = store
         .Record_Markdown("D-900", None)
-        .expect("Commit just wrote D-900's bytes into the rows, so they render markdown back");
+        .expect("Commit_Staged_Edit just wrote D-900's bytes into the rows, so they render markdown back");
     assert_eq!(projection.markdown, edited);
     assert!(projection.Is_Matching_Source(), "the stored bytes and the rows disagree");
 }
@@ -42,7 +42,7 @@ fn Test_Identity_Should_Survive_An_Edit()
 
     let revised = SYNTHETIC.replace("Second paragraph.", "Second paragraph, revised.");
 
-    Commit(&mut store, &revised, None);
+    Commit_Staged_Edit(&mut store, &revised, None);
 
     let document = Only_Document(&store, "D-900");
 
@@ -65,7 +65,7 @@ fn Test_A_Rename_Should_Be_An_Ordinary_Edit()
     let blocks_before = Block_Uids(&store, SYNTHETIC_PATH);
     let moved = "docs/records/D-900-renamed.md";
 
-    let described = Commit(&mut store, SYNTHETIC, Some(moved));
+    let described = Commit_Staged_Edit(&mut store, SYNTHETIC, Some(moved));
 
     assert!(described.contains("renamed"), "{described}");
     assert_eq!(store.Node_Uid("D-900").expect("queries"), node_before);
@@ -112,7 +112,7 @@ fn Test_A_Shortening_Edit_Should_Prune_The_Blocks_It_Dropped()
     let shortened = SYNTHETIC.replace("\n## Rationale\n\nSecond paragraph.\n", "");
     assert_ne!(shortened, SYNTHETIC, "the negative control changed nothing");
 
-    Commit(&mut store, &shortened, None);
+    Commit_Staged_Edit(&mut store, &shortened, None);
 
     let after = Block_Uids(&store, SYNTHETIC_PATH);
     assert_eq!(after.len(), before.len().saturating_sub(DROPPED_BLOCKS));

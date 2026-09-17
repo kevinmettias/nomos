@@ -26,12 +26,12 @@ fn Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers()
         .execute_batch(A_VERSION_TWO_TABLE)
         .expect("the fixture above is written in the statements version 2 accepted");
 
-    let before = Kinds(&connection);
+    let before = Table_Row_Kinds(&connection);
 
     assert_eq!(before, vec!["content", "separator", "content"], "the fixture is not version 2");
     Apply_Migrations(&connection, RE_DERIVE_HEADERS..=RE_DERIVE_HEADERS);
     assert_eq!(
-        Kinds(&connection),
+        Table_Row_Kinds(&connection),
         vec!["header", "separator", "content"],
         "the header still reads as a datum after the migration"
     );
@@ -81,7 +81,7 @@ const A_VERSION_TWO_TABLE: &str =
      SELECT uid, 3, 1, 'content', '[\"A\"]', '| A |', 'sha256:03', 'sha256:03'
      FROM source_blocks;";
 
-fn Kinds(connection: &rusqlite::Connection) -> Vec<String>
+fn Table_Row_Kinds(connection: &rusqlite::Connection) -> Vec<String>
 {
     return connection
         .prepare("SELECT kind FROM source_table_rows ORDER BY ordinal")
