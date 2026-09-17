@@ -83636,6 +83636,82 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-SUBSTRATE-CAPABILITY-TESTS",
+      "title": "The naming-clarity check reads zero over the substrate capability territory at the phase own flags",
+      "why": "The naming-clarity check reads 6 live findings over crates/substrate/nomos-capability at the\nphase's own flags (`naming.json`: `check-naming-clarity --include-tests`), and all 6 are the\none-word shape — `function `X` takes parameters but has only one name word; include the\noperation target, resource, or source of input`. They sit in two files, both of them\nintegration tests, and the crate's other 20 files are clean. Six names over two files:\n\n- `tests/resolution_never_says_no.rs` — three findings, all in this binary's own fixture\n  vocabulary. `Contract(ceiling: FactVariant) -> CapabilityContract` at 37 →\n  `Contract_With_Ceiling`, called at 115, 137, 156, 181, 209, 248, 251, 262 and 287; the name\n  says which input the contract is built around, and the ceiling is the one field the argument\n  reaches. `Offer(provider: &str, variant: FactVariant) -> ProviderOffer` at 47 →\n  `Offer_From_Provider`, called at 138, 157, 182, 211, 230, 288 and 289; the provider is the\n  source of the offer. `Needing(variant: FactVariant) -> Requirement` at 57 →\n  `Requirement_For_Variant`, called at 68, 117, 141, 160, 186, 188, 266 and 293; the result is\n  a requirement and the input is the variant it is for.\n- `tests/selection_is_decided.rs` — three findings. `Offer(provider: &str, guarantee:\n  Guarantee) -> ProviderOffer` at 79 → `Offer_From_Provider`, called at 138, 156, 157, 184,\n  185, 186, 210, 233, 264, 274, 288 and 294 (twenty occurrences over thirteen lines, because\n  several lines build two offers). `Registered(offers: &[ProviderOffer]) -> Registry` at 103 →\n  `Registry_Of_Offers`, called at 138, 156, 157, 183, 210, 233, 264 and 288; it returns a\n  registry holding exactly the offers it is handed. `Selected(registry: &Registry, requirement:\n  &Requirement) -> Selection` at 116 → `Selection_For_Requirement`, called at 140, 159, 160,\n  189, 213, 252, 266 and 290; it resolves the requirement and insists the resolution is\n  satisfied, so the selection it returns is the one for that requirement.\n\nThe two `Offer` helpers are the same helper in two test binaries — a `ProviderOffer` from a\nprovider name and a guarantee — and deliberately take the same name, as the two `Digest_From_\nSeed` helpers did in the analysis crate. They cannot collide: each is private to its own\nintegration test binary.\n\n**The same word means other things in this crate, and none of them moves.** `Offer` is also a\nmethod, `pub fn Offer(&mut self, offer: ProviderOffer) -> Result<(), RegistryError>` on\n`Registry` (`src/registry.rs:58`), and a method on the resolution,\n`pub const fn Offer(&self) -> Option<&ProviderOffer>` (`src/resolution.rs:60`), and a variant,\n`RegistryErrorKind::Offer` (`src/registry_error_kind.rs:27`). None of them is a finding — the\ncheck reports free functions with parameters — and all of them are outside this item's two\nfiles. What keeps them safe inside the files is the guard's own shape: a token preceded by `.`\nor `:` is not matched, which is what leaves `registry.Offer(offer.clone())` at\n`selection_is_decided.rs:110` exactly as it is. That protector is the same one that hides a\npath-qualified call and broke the analysis crate's plan; measured here, it costs nothing,\nbecause none of these six names is called through a path: the only `::Name(` sites anywhere in\nthe repository are `Registered()` calls in the orchestration crate's fixture modules and in\n`tests/integration/src/slice.rs`, all no-argument functions of a different crate that this\nchange does not touch.\n\nTwelve same-named helpers stay as they are, and the reason is measurable rather than\nstylistic: the check reports a function that \"takes parameters\", so the seven\n`fn Contract() -> CapabilityContract` and five `fn Offer() -> ProviderOffer` helpers that take\nnone — `src/contract_testing.rs:75`, `src/contract_testing/assertions.rs:166`,\n`src/registry/declaring.rs:90` and `:130`, `src/registry/resolving.rs:261`,\n`src/registry/tests.rs:38` and `:54`, `src/registry.rs:287` and `:297`, `src/resolution.rs:98`\nand `selection_is_decided.rs:64` — are not findings today, are not renamed here, and would take\nthis item's territory from two files to eleven for no finding. If a later item wants one name\nfor the fixture across the crate, it is a different item with a different territory and a\npublic-surface question attached.\n\n**Two lines reflow.** The rename pushes exactly two lines past `rustfmt.toml`'s\n`max_width = 120`, measured before touching anything: `selection_is_decided.rs:138` from 86 to\n122 columns and `:264` from 94 to 130, both `let registry = Registered(&[Offer(..),\nOffer(..)]);` lines. Each is wrapped one offer per line in the shape the same file already uses\nfor its three-offer case at 183-187, and no other line is reflowed. Nine lines in these two\nfiles were already over 120 before the rename — long `.expect(\"...\")` messages — and are left\nexactly as they are, because no check in any rust phase enforces width (measured over\n`gates/phases/rust/*.json`) and this item removes findings rather than sweeping style.\n\n**Measured, before and after.** Measured at the tree this item was authored against\n(bec56227), over the crate at the phase's own flags: 6 live, 0 waived, 22 files judged, and the\nplan covers all 6. The plan asserts 65 occurrences over 2 files — `Contract` 10, `Needing` 9,\n`Offer` 8 in one file and 20 in the other, `Registered` 9, `Selected` 9 — before it writes\nanything, and re-reads each file afterwards to confirm the new name occurs exactly as many\ntimes as the old one did and the old token is gone. Expected after: 0 live, 0 waived, 22 files\njudged.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over\n`crates/substrate/nomos-capability` at the phase's own flags, verified by this item's predicate\n(the sweep over `-target F:/repos/nomos/crates/substrate/nomos-capability` with\n`-checks naming-clarity -flag --include-tests -max-waived 0`), and `cargo check --workspace\n--all-targets` reports no error -- the check is a text reader over the tree and cannot see a\nbuild, so a green check is not evidence the rename compiles.\n\nThe 6 findings this item clears are the one-word shape over two files: `Contract`,\n`Offer` and `Needing` in `tests/resolution_never_says_no.rs`, and `Offer`, `Registered` and\n`Selected` in `tests/selection_is_decided.rs`. They are renamed `Contract_With_Ceiling`,\n`Offer_From_Provider`, `Requirement_For_Variant`, `Registry_Of_Offers` and\n`Selection_For_Requirement` -- 65 occurrences over the two files, each count asserted against\nthe plan before any byte is written and re-read afterwards to confirm the new name occurs\nexactly as often as the old one did and the old token is gone from every line that was not\nskipped.\n\nThe twelve no-parameter `Contract()` and `Offer()` fixture helpers the crate also holds are not\nfindings and are not renamed, and the method and variant meanings of `Offer` -- `Registry::Offer`,\n`Resolution::Offer`, `RegistryErrorKind::Offer` -- are neither findings nor in territory and are\nuntouched; `registry.Offer(offer.clone())` at `selection_is_decided.rs:110` still reads exactly\nthat way.\n\nTwo lines are reflowed, and only because the rename pushes them past `rustfmt.toml`'s 120\ncolumns: `selection_is_decided.rs:138` (86 to 122 columns) and `:264` (94 to 130), each wrapped\none offer per line in the form the same file already uses at 183-187. The nine lines in these\ntwo files that were already over 120 columns before the rename are left exactly as they are, as\nis every line the rename does not rewrite.\n\n`cargo test -p nomos-capability --no-fail-fast` passes, and the formatting phase's checks over\nthe crate report zero live and zero waived findings, so the reflowed lines satisfy\ncheck-trailing-comma and its siblings. No waiver is added and no in-code marker is written: the\ncrate reads 0 waived before and 0 waived after. No path outside the two test files, plus the\nledger, is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-capability/tests/resolution_never_says_no.rs",
+          "crates/substrate/nomos-capability/tests/selection_is_decided.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/substrate/nomos-capability",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/substrate/nomos-capability",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    22 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789612367,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bec562270524f9b5e8bc026621496ba9c817fb3c"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

@@ -76,7 +76,7 @@ fn Contract() -> CapabilityContract
     };
 }
 
-fn Offer(provider: &str, guarantee: Guarantee) -> ProviderOffer
+fn Offer_From_Provider(provider: &str, guarantee: Guarantee) -> ProviderOffer
 {
     return ProviderOffer {
         provider: ProviderId::New(provider),
@@ -100,7 +100,7 @@ fn Admitting_Everything() -> Requirement
     return Requirement::New(Capability(), V1, guarantee);
 }
 
-fn Registered(offers: &[ProviderOffer]) -> Registry
+fn Registry_Of_Offers(offers: &[ProviderOffer]) -> Registry
 {
     let mut registry = Registry::New();
     registry.Declare(Contract()).expect("one contract, declared once");
@@ -113,7 +113,7 @@ fn Registered(offers: &[ProviderOffer]) -> Registry
     return registry;
 }
 
-fn Selected(registry: &Registry, requirement: &Requirement) -> Selection
+fn Selection_For_Requirement(registry: &Registry, requirement: &Requirement) -> Selection
 {
     let resolution = registry.Resolve(requirement);
 
@@ -135,9 +135,12 @@ fn Selected(registry: &Registry, requirement: &Requirement) -> Selection
 #[test]
 fn Test_The_Strongest_Usable_Offer_Should_Answer()
 {
-    let registry = Registered(&[Offer("a.scan", Weak()), Offer("z.parse", Strong())]);
+    let registry = Registry_Of_Offers(&[
+        Offer_From_Provider("a.scan", Weak()),
+        Offer_From_Provider("z.parse", Strong()),
+    ]);
 
-    let selection = Selected(&registry, &Admitting_Everything());
+    let selection = Selection_For_Requirement(&registry, &Admitting_Everything());
 
     assert_eq!(selection.chosen.provider, ProviderId::New("z.parse"));
     assert!(!selection.Has_Passed_Over_Stronger());
@@ -153,11 +156,11 @@ fn Test_The_Strongest_Usable_Offer_Should_Answer()
 #[test]
 fn Test_Renaming_A_Provider_Should_Not_Change_Which_Offer_Answers()
 {
-    let one = Registered(&[Offer("a.scan", Weak()), Offer("z.parse", Strong())]);
-    let other = Registered(&[Offer("a.parse", Strong()), Offer("z.scan", Weak())]);
+    let one = Registry_Of_Offers(&[Offer_From_Provider("a.scan", Weak()), Offer_From_Provider("z.parse", Strong())]);
+    let other = Registry_Of_Offers(&[Offer_From_Provider("a.parse", Strong()), Offer_From_Provider("z.scan", Weak())]);
 
-    let chosen = Selected(&one, &Admitting_Everything()).chosen;
-    let renamed = Selected(&other, &Admitting_Everything()).chosen;
+    let chosen = Selection_For_Requirement(&one, &Admitting_Everything()).chosen;
+    let renamed = Selection_For_Requirement(&other, &Admitting_Everything()).chosen;
 
     assert_eq!(
         chosen.guarantee, renamed.guarantee,
@@ -180,13 +183,13 @@ fn Test_Renaming_A_Provider_Should_Not_Change_Which_Offer_Answers()
 #[test]
 fn Test_Every_Usable_Offer_Should_Be_Reachable_From_The_Selection()
 {
-    let registry = Registered(&[
-        Offer("scan", Weak()),
-        Offer("parse", Strong()),
-        Offer("compiler", Sideways()),
+    let registry = Registry_Of_Offers(&[
+        Offer_From_Provider("scan", Weak()),
+        Offer_From_Provider("parse", Strong()),
+        Offer_From_Provider("compiler", Sideways()),
     ]);
 
-    let selection = Selected(&registry, &Admitting_Everything());
+    let selection = Selection_For_Requirement(&registry, &Admitting_Everything());
 
     let mut named: Vec<String> = selection
         .alternatives
@@ -207,10 +210,10 @@ fn Test_Every_Usable_Offer_Should_Be_Reachable_From_The_Selection()
 #[test]
 fn Test_An_Offer_Below_The_Floor_Should_Not_Appear_As_An_Alternative()
 {
-    let registry = Registered(&[Offer("scan", Weak()), Offer("parse", Strong())]);
+    let registry = Registry_Of_Offers(&[Offer_From_Provider("scan", Weak()), Offer_From_Provider("parse", Strong())]);
 
     let needs_a_parse = Requirement::New(Capability(), V1, Strong());
-    let selection = Selected(&registry, &needs_a_parse);
+    let selection = Selection_For_Requirement(&registry, &needs_a_parse);
 
     assert_eq!(selection.chosen.provider, ProviderId::New("parse"));
     assert!(
@@ -230,7 +233,7 @@ fn Test_An_Offer_Below_The_Floor_Should_Not_Appear_As_An_Alternative()
 #[test]
 fn Test_An_Honoured_Preference_Should_Report_What_It_Passed_Over()
 {
-    let registry = Registered(&[Offer("scan", Weak()), Offer("parse", Strong())]);
+    let registry = Registry_Of_Offers(&[Offer_From_Provider("scan", Weak()), Offer_From_Provider("parse", Strong())]);
 
     let resolution =
         registry.Resolve(&Admitting_Everything().Preferring(ProviderId::New("scan")));
@@ -249,7 +252,7 @@ fn Test_An_Honoured_Preference_Should_Report_What_It_Passed_Over()
 
     // The control. Without a preference the rule chooses, and then nothing stronger can
     // have been passed over — if this reads true, the rule is not choosing a maximal offer.
-    assert!(!Selected(&registry, &Admitting_Everything()).Has_Passed_Over_Stronger());
+    assert!(!Selection_For_Requirement(&registry, &Admitting_Everything()).Has_Passed_Over_Stronger());
 }
 
 /// Where the guarantee ranks nothing, the registry says so rather than implying it decided.
@@ -261,9 +264,12 @@ fn Test_An_Honoured_Preference_Should_Report_What_It_Passed_Over()
 #[test]
 fn Test_Offers_The_Guarantee_Cannot_Rank_Should_Be_Reported_As_Undecided()
 {
-    let registry = Registered(&[Offer("a.compiler", Sideways()), Offer("z.parse", Strong())]);
+    let registry = Registry_Of_Offers(&[
+        Offer_From_Provider("a.compiler", Sideways()),
+        Offer_From_Provider("z.parse", Strong()),
+    ]);
 
-    let selection = Selected(&registry, &Admitting_Everything());
+    let selection = Selection_For_Requirement(&registry, &Admitting_Everything());
 
     assert_eq!(
         selection.Unranked().len(),
@@ -271,7 +277,7 @@ fn Test_Offers_The_Guarantee_Cannot_Rank_Should_Be_Reported_As_Undecided()
         "these two are incomparable and the selection must not pretend otherwise"
     );
     assert_eq!(
-        selection.Standing_Of(&Offer("z.parse", Strong())),
+        selection.Standing_Of(&Offer_From_Provider("z.parse", Strong())),
         Standing::Incomparable
     );
     assert!(
@@ -285,13 +291,13 @@ fn Test_Offers_The_Guarantee_Cannot_Rank_Should_Be_Reported_As_Undecided()
 #[test]
 fn Test_Two_Equal_Offers_Should_Be_Equivalent_Rather_Than_Incomparable()
 {
-    let registry = Registered(&[Offer("one", Strong()), Offer("two", Strong())]);
+    let registry = Registry_Of_Offers(&[Offer_From_Provider("one", Strong()), Offer_From_Provider("two", Strong())]);
 
-    let selection = Selected(&registry, &Admitting_Everything());
+    let selection = Selection_For_Requirement(&registry, &Admitting_Everything());
 
     assert_eq!(selection.Unranked().len(), 1);
     assert_eq!(
-        selection.Standing_Of(&Offer("two", Strong())),
+        selection.Standing_Of(&Offer_From_Provider("two", Strong())),
         Standing::Equivalent,
         "each reaches everything the other does; nobody has to look for a tiebreak that \
          would tell them apart, because there is nothing to tell apart"

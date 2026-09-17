@@ -34,7 +34,7 @@ fn Guarantee_At(variant: FactVariant) -> Guarantee
     );
 }
 
-fn Contract(ceiling: FactVariant) -> CapabilityContract
+fn Contract_With_Ceiling(ceiling: FactVariant) -> CapabilityContract
 {
     return CapabilityContract {
         id: Capability(),
@@ -44,7 +44,7 @@ fn Contract(ceiling: FactVariant) -> CapabilityContract
     };
 }
 
-fn Offer(provider: &str, variant: FactVariant) -> ProviderOffer
+fn Offer_From_Provider(provider: &str, variant: FactVariant) -> ProviderOffer
 {
     return ProviderOffer {
         provider: ProviderId::New(provider),
@@ -54,7 +54,7 @@ fn Offer(provider: &str, variant: FactVariant) -> ProviderOffer
     };
 }
 
-fn Needing(variant: FactVariant) -> Requirement
+fn Requirement_For_Variant(variant: FactVariant) -> Requirement
 {
     return Requirement::New(Capability(), V1, Guarantee_At(variant));
 }
@@ -65,7 +65,7 @@ fn Test_An_Undeclared_Capability_Should_Be_Coverage_Debt_And_Not_Not_Applicable(
 {
     let registry = Registry::New();
 
-    let resolution = registry.Resolve(&Needing(FactVariant::Syntactic));
+    let resolution = registry.Resolve(&Requirement_For_Variant(FactVariant::Syntactic));
 
     assert_eq!(resolution.Applicability(), Applicability::MissingCapability);
     assert_ne!(
@@ -112,9 +112,9 @@ fn Test_No_Unmet_Reason_Should_Ever_Map_To_A_Judgment()
 fn Test_A_Declared_Capability_With_No_Provider_Should_Say_So()
 {
     let mut registry = Registry::New();
-    registry.Declare(Contract(FactVariant::SemanticallyResolved)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
+    registry.Declare(Contract_With_Ceiling(FactVariant::SemanticallyResolved)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
 
-    let resolution = registry.Resolve(&Needing(FactVariant::Syntactic));
+    let resolution = registry.Resolve(&Requirement_For_Variant(FactVariant::Syntactic));
 
     assert!(
         matches!(
@@ -134,11 +134,11 @@ fn Test_A_Declared_Capability_With_No_Provider_Should_Say_So()
 fn Test_A_Provider_That_Meets_The_Requirement_Should_Satisfy_It()
 {
     let mut registry = Registry::New();
-    registry.Declare(Contract(FactVariant::SemanticallyResolved)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
-    let offer = Offer("syn", FactVariant::Syntactic);
+    registry.Declare(Contract_With_Ceiling(FactVariant::SemanticallyResolved)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
+    let offer = Offer_From_Provider("syn", FactVariant::Syntactic);
     registry.Offer(offer).expect("the declaration above put this capability in the registry, which the offer names");
 
-    let resolution = registry.Resolve(&Needing(FactVariant::Syntactic));
+    let resolution = registry.Resolve(&Requirement_For_Variant(FactVariant::Syntactic));
 
     assert_eq!(resolution.Applicability(), Applicability::Supported);
     assert!(resolution.Applicability().Is_Evaluated());
@@ -153,11 +153,11 @@ fn Test_A_Provider_That_Meets_The_Requirement_Should_Satisfy_It()
 fn Test_A_Provider_Below_The_Requirement_Should_Not_Satisfy_It()
 {
     let mut registry = Registry::New();
-    registry.Declare(Contract(FactVariant::SemanticallyResolved)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
-    let offer = Offer("syn", FactVariant::Syntactic);
+    registry.Declare(Contract_With_Ceiling(FactVariant::SemanticallyResolved)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
+    let offer = Offer_From_Provider("syn", FactVariant::Syntactic);
     registry.Offer(offer).expect("the declaration above put this capability in the registry, which the offer names");
 
-    let resolution = registry.Resolve(&Needing(FactVariant::SemanticallyResolved));
+    let resolution = registry.Resolve(&Requirement_For_Variant(FactVariant::SemanticallyResolved));
 
     assert!(
         matches!(
@@ -178,14 +178,14 @@ fn Test_A_Provider_Below_The_Requirement_Should_Not_Satisfy_It()
 fn Test_An_Unhonoured_Preference_Should_Read_As_Fallback()
 {
     let mut registry = Registry::New();
-    registry.Declare(Contract(FactVariant::SemanticallyResolved)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
-    let offer = Offer("syn", FactVariant::Syntactic);
+    registry.Declare(Contract_With_Ceiling(FactVariant::SemanticallyResolved)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
+    let offer = Offer_From_Provider("syn", FactVariant::Syntactic);
     registry.Offer(offer).expect("the declaration above put this capability in the registry, which the offer names");
 
     let honoured = registry
-        .Resolve(&Needing(FactVariant::Syntactic).Preferring(ProviderId::New("syn")));
+        .Resolve(&Requirement_For_Variant(FactVariant::Syntactic).Preferring(ProviderId::New("syn")));
     let unhonoured = registry
-        .Resolve(&Needing(FactVariant::Syntactic).Preferring(ProviderId::New("rust-analyzer")));
+        .Resolve(&Requirement_For_Variant(FactVariant::Syntactic).Preferring(ProviderId::New("rust-analyzer")));
 
     assert_eq!(honoured.Applicability(), Applicability::Supported);
     assert_eq!(unhonoured.Applicability(), Applicability::SupportedWithFallback);
@@ -206,9 +206,9 @@ fn Test_An_Unhonoured_Preference_Should_Read_As_Fallback()
 fn Test_An_Offer_Above_The_Contract_Ceiling_Should_Be_Refused()
 {
     let mut registry = Registry::New();
-    registry.Declare(Contract(FactVariant::Syntactic)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
+    registry.Declare(Contract_With_Ceiling(FactVariant::Syntactic)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
 
-    let optimistic = Offer("optimistic", FactVariant::SemanticallyResolved);
+    let optimistic = Offer_From_Provider("optimistic", FactVariant::SemanticallyResolved);
     let refusal = registry
         .Offer(optimistic)
         .expect_err("a claim above the ceiling must be refused");
@@ -227,7 +227,7 @@ fn Test_An_Offer_Against_No_Contract_Should_Be_Refused()
 {
     let mut registry = Registry::New();
 
-    let offer = Offer("syn", FactVariant::Syntactic);
+    let offer = Offer_From_Provider("syn", FactVariant::Syntactic);
     let refusal = registry
         .Offer(offer)
         .expect_err("an offer against nothing must be refused");
@@ -245,10 +245,10 @@ fn Test_An_Offer_Against_No_Contract_Should_Be_Refused()
 fn Test_Two_Contracts_For_One_Capability_Should_Be_Refused()
 {
     let mut registry = Registry::New();
-    registry.Declare(Contract(FactVariant::Syntactic)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
+    registry.Declare(Contract_With_Ceiling(FactVariant::Syntactic)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
 
     let refusal = registry
-        .Declare(Contract(FactVariant::SemanticallyResolved))
+        .Declare(Contract_With_Ceiling(FactVariant::SemanticallyResolved))
         .expect_err("one name, one meaning");
 
     assert!(matches!(refusal.kind, RegistryErrorKind::AlreadyDeclared), "{refusal}");
@@ -259,11 +259,11 @@ fn Test_Two_Contracts_For_One_Capability_Should_Be_Refused()
 fn Test_An_Unreadable_Contract_Version_Should_Be_Refused()
 {
     let mut registry = Registry::New();
-    let mut newer = Contract(FactVariant::Syntactic);
+    let mut newer = Contract_With_Ceiling(FactVariant::Syntactic);
     newer.version = ContractVersion::New(UNREADABLE_CONTRACT_MAJOR, 0);
     registry.Declare(newer).expect("the registry is empty before this call, so the declaration conflicts with nothing");
 
-    let resolution = registry.Resolve(&Needing(FactVariant::Syntactic));
+    let resolution = registry.Resolve(&Requirement_For_Variant(FactVariant::Syntactic));
 
     assert!(
         matches!(
@@ -284,13 +284,13 @@ fn Test_Provider_Selection_Should_Not_Depend_On_Registration_Order()
 {
     let build = |first: &str, second: &str| {
         let mut registry = Registry::New();
-        registry.Declare(Contract(FactVariant::SemanticallyResolved)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
-        let earlier = Offer(first, FactVariant::Syntactic);
-        let later = Offer(second, FactVariant::Syntactic);
+        registry.Declare(Contract_With_Ceiling(FactVariant::SemanticallyResolved)).expect("the registry is empty before this call, so the declaration conflicts with nothing");
+        let earlier = Offer_From_Provider(first, FactVariant::Syntactic);
+        let later = Offer_From_Provider(second, FactVariant::Syntactic);
         registry.Offer(earlier).expect("the declaration above put this capability in the registry, which the offer names");
         registry.Offer(later).expect("the declaration above put this capability in the registry, which the offer names");
         return registry
-            .Resolve(&Needing(FactVariant::Syntactic))
+            .Resolve(&Requirement_For_Variant(FactVariant::Syntactic))
             .Offer()
             .map(|offer| offer.provider.clone());
     };
