@@ -83862,6 +83862,81 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-HOST-API-TRANSPORT-TESTS",
+      "title": "P114 naming/clarity: the api-transport dispatch tests, two helpers",
+      "why": "check-naming-clarity reads a name word by word and reports a function that takes parameters whose\nname splits into one word. Two helpers in src/nomos_api_dispatch/tests.rs are that: the one that\nsends a served method and its parameters through the dispatch and hands back the outcome, and the\none that parses the document an answered outcome carries.\n\nBoth words are whole tokens and neither is called through a path. The one other occurrence of\nAnswered in the file is RemoteCallOutcome::Answered, an enum variant in a pattern, which is a\ndifferent symbol: the compiler's own enumeration will not report it as a call site once the\ndeclaration moves, and a whole-token sweep guarded at a word boundary would leave it alone anyway.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over\ncrates/host/nomos-api-transport, verified by this item's predicate -- the sweep pointed at that\ncrate, whose only findings are the two this item owns -- and cargo check --workspace --all-targets\nreports no error, since the check is a text reader over the tree and cannot see a build.\n\nThe two one-word declarations Answered and Document in src/nomos_api_dispatch/tests.rs are renamed\nto names that state what each one gives back and what it takes it from, and each still passes\ncheck-naming, check-abbreviations and check-single-letter-name. Every site that resolved to a\ndeclaration moves with it, the call-site set being the one the compiler enumerated when the\ndeclarations moved rather than a count predicted in advance. The RemoteCallOutcome::Answered\nvariant in the same file is a different symbol and is not touched, and no path outside this crate\nis in reach.\n\ncargo test -p nomos-api-transport --no-fail-fast passes, no edited line exceeds the 120 columns\nrustfmt.toml records, no waiver and no in-code marker is added, and no path outside\ncrates/host/nomos-api-transport and work/ledger.json is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api-transport"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/host/nomos-api-transport",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/host/nomos-api-transport",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0     9 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789614709,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "acad842c57a4b51f803e9674bd309477bf480583"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

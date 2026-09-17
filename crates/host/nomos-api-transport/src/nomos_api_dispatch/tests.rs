@@ -21,13 +21,13 @@ use serde_json::Value;
 /// Reached through the strategy surface rather than through a wire line: the
 /// line is the engine's now, and a test that built one here would be exercising
 /// the engine's parser to reach this crate's dispatch.
-fn Answered(method: ServedMethod, parameters: &str) -> RemoteCallOutcome
+fn Answer_From_Dispatch(method: ServedMethod, parameters: &str) -> RemoteCallOutcome
 {
     return NomosApiDispatch.Answer(method.Name(), parameters);
 }
 
 /// The document an answered outcome carries.
-fn Document(outcome: &RemoteCallOutcome) -> Value
+fn Document_From_Outcome(outcome: &RemoteCallOutcome) -> Value
 {
     let RemoteCallOutcome::Answered(ref result) = *outcome
     else
@@ -92,7 +92,7 @@ fn Test_No_Repo_Tooling_Operation_Should_Be_In_The_Registry()
 #[test]
 fn Test_Arguments_Of_The_Wrong_Shape_Should_Be_Invalid_Parameters()
 {
-    let outcome = Answered(ServedMethod::GateRun, r#"{"root":[]}"#);
+    let outcome = Answer_From_Dispatch(ServedMethod::GateRun, r#"{"root":[]}"#);
 
     assert_eq!(Refusal_Code(&outcome), RemoteCallRefusal::INVALID_PARAMETERS);
 }
@@ -102,7 +102,7 @@ fn Test_Arguments_Of_The_Wrong_Shape_Should_Be_Invalid_Parameters()
 #[test]
 fn Test_An_Explain_Naming_No_Finding_Should_Be_Invalid_Parameters()
 {
-    let outcome = Answered(ServedMethod::GateExplain, "{}");
+    let outcome = Answer_From_Dispatch(ServedMethod::GateExplain, "{}");
 
     assert_eq!(Refusal_Code(&outcome), RemoteCallRefusal::INVALID_PARAMETERS);
 }
@@ -113,9 +113,9 @@ fn Test_An_Explain_Naming_No_Finding_Should_Be_Invalid_Parameters()
 #[test]
 fn Test_A_Plan_With_No_Arguments_Should_Reach_A_Real_Registry()
 {
-    let outcome = Answered(ServedMethod::GatePlan, "{}");
+    let outcome = Answer_From_Dispatch(ServedMethod::GatePlan, "{}");
 
-    let result = Document(&outcome);
+    let result = Document_From_Outcome(&outcome);
     assert_eq!(Field_At(&result, "/outcome"), "planned", "{result}");
     assert!(Count_At(&result, "/rules") > 0, "{result}");
 }
@@ -133,9 +133,9 @@ fn Test_A_Correction_Run_Over_A_Clean_Tree_Should_Reach_A_Real_Clean_Answer()
         .expect("create_dir_all above made this directory on an empty path");
 
     let parameters = serde_json::json!({ "root": root.display().to_string() }).to_string();
-    let outcome = Answered(ServedMethod::Correction, &parameters);
+    let outcome = Answer_From_Dispatch(ServedMethod::Correction, &parameters);
 
     let _ignored = std::fs::remove_dir_all(&root);
-    let result = Document(&outcome);
+    let result = Document_From_Outcome(&outcome);
     assert_eq!(Field_At(&result, "/outcome"), "clean", "{result}");
 }
