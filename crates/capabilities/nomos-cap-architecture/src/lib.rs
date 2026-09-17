@@ -38,8 +38,8 @@
 //!
 //! The capability's identity, contract version, ceiling and summary ([`contract`]); and the
 //! declaration's shape, its canonical encoding, and the generic relation queries every party
-//! asks of it ([`payload`]). The queries are here rather than in a rule because they are
-//! lookups over a declaration and not judgments — see [`payload`]'s own doc.
+//! asks of it ([`architecture_payload`]). The queries are here rather than in a rule because they
+//! are lookups over a declaration and not judgments — see [`architecture_payload`]'s own doc.
 //!
 //! What is not here: a provider that reads any particular configuration surface, and any
 //! rule. `nomos-repo-policy`'s `architecture` module is the first provider and `nomos-rules`'
@@ -48,15 +48,15 @@
 #![forbid(unsafe_code)]
 
 mod contract;
-mod payload;
+mod architecture_payload;
 
 pub use contract::{Capability, Capability_Contract, Ceiling, CAPABILITY, CONTRACT_VERSION, Payload_Schema, SCHEMA};
-pub use payload::authority::Authority;
-pub use payload::depended::Depended;
-pub use payload::depending::Depending;
-pub use payload::exception::Exception;
-pub use payload::membership::Membership;
-pub use payload::permission::Permission;
-pub use payload::refusal::Refusal;
-pub use payload::ArchitecturePayload;
-pub use payload::{Encode_Payload, Parse_Payload};
+pub use architecture_payload::authority::Authority;
+pub use architecture_payload::depended::Depended;
+pub use architecture_payload::depending::Depending;
+pub use architecture_payload::exception::Exception;
+pub use architecture_payload::membership::Membership;
+pub use architecture_payload::permission::Permission;
+pub use architecture_payload::refusal::Refusal;
+pub use architecture_payload::ArchitecturePayload;
+pub use architecture_payload::{Encode_Payload, Parse_Payload};

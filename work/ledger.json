@@ -84012,6 +84012,81 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-FILENAME-CAP-ARCHITECTURE",
+      "title": "P114 file-name: the cap-architecture payload module is named for a role, not its type",
+      "why": "check-file-name asks a module file to be named after the public type it declares, and\nsrc/payload.rs is not: it declares ArchitecturePayload, the crate's whole subject, in a file named\nfor a role rather than for the type.\n\nThe crate already says how this is spelled, twice over in three siblings. nomos-cap-controlflow\nhas src/arm_shape.rs declaring ArmShape and holding Encode_Payload and Parse_Payload, with\nsrc/arm_shape/ holding the type-named children payload_refusal.rs, reachability_payload.rs and\nreachability_site.rs. nomos-cap-dependency has the identical shape over DependencyKind and\nDependencyPayload. nomos-cap-lint is the same crate layout as this one -- a payload.rs beside a\npayload/ -- and passes the check only because its payload.rs declares no public type at all,\nleaving the payload to payload/diagnostics_payload.rs.\n\nSo the finding is cleared by moving the module to the name of the type it declares, not by\nrenaming the type. The type name is load-bearing: ArchitecturePayload is in the crate's published\nsurface and in tests/contract/surface/nomos-cap-architecture.txt, which a file rename does not\ntouch, because that snapshot records crate::Type::member and no module path.\n\nThe module is private -- lib.rs says mod payload; and re-exports its contents -- so no path\noutside this crate names it, and no surface snapshot moves.",
+      "done_when": "The file-name check reports zero live findings and zero waived findings over\ncrates/capabilities/nomos-cap-architecture, verified by this item's predicate, and cargo check\n--workspace --all-targets reports no error -- the check is a text reader over the tree and cannot\nsee a build, so a green check is not evidence the rename compiles.\n\nThe finding at src/payload.rs is cleared by moving the module to the name of the public type it\ndeclares: src/payload.rs becomes src/architecture_payload.rs and the directory src/payload/\nbecomes src/architecture_payload/, so the facade is named after ArchitecturePayload exactly as\nnomos-cap-controlflow names arm_shape.rs after ArmShape. Every path that reached the old module\nname follows it, and a path sweep of the crate finds none left behind. The type name itself is\nunchanged: ArchitecturePayload still stands, and tests/contract/surface/nomos-cap-architecture.txt\nis byte-identical before and after, because the snapshot records crate::Type::member and no module\npath.\n\nEvery name that moves keeps passing the other seven naming checks and the nine formatting checks,\nno edited line exceeds the 120 columns rustfmt.toml records, no waiver and no in-code marker is\nadded, and no path outside crates/capabilities/nomos-cap-architecture and work/ledger.json is\nedited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-architecture"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "F:\\repos\\nomos",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/capabilities/nomos-cap-architecture",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "F:\\repos\\nomos",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/capabilities/nomos-cap-architecture",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK           LIVE   WAIVED     JUDGED  VERDICT\nfile-name          0        0    11 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789616409,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5c96913960b1302f7f94b63a69c51c74098bf292"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
