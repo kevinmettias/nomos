@@ -82526,6 +82526,73 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-SURFACE-PATH-DECLARED-MODULES-STAY-UNRESOLVED",
+      "title": "An in-crate module declared with a path attribute is reported unresolved, so everything under it is missing from its crate surface snapshot",
+      "why": "Measured while finishing P114-CLARITY-PLATFORM, whose re-bless of tests/contract/surface/nomos-ledger.txt had to explain 20 lines it did not cause.\n\nThe resolver in tests/contract/src/reading/routes.rs resolves a re-export by looking its route up in the module tree Load_Module builds from src/lib.rs. A module declared with #[path = \"...\"] is registered under what the attribute names, so the route a caller writes -- the Rust mod name -- finds no module, and the re-export is reported in the surface unresolved section: the name appears there and nothing under it does.\n\nFinishRefusal and VerificationRecord in nomos-ledger are the instance. finish.rs:26 declares #[path = \"finish/finish_refusal.rs\"] mod refusal; and verification.rs:13 the same shape, so the re-export of FinishRefusal is one line with no variants, no public fields and no methods, while Abandonment and Declination -- items of a plain mod finish -- expand fully. ExclusionLedger and Reservation, reached through lib.rs line 57 #[path = \"exclusion_ledger.rs\"] mod exclusion;, have been in that state since an earlier split.\n\nThe radius is not a corner. Measured over tests/contract/surface: 27 snapshots have an unresolved section and they hold 182 entries between them, of which 117 name a module their own crate declares with a path attribute. For 13 of the 14 crates affected that is every unresolved entry the crate has -- nomos-lang-rust-compiler 18 of 18, nomos-analysis 12 of 12, nomos-repo-policy 8 of 8, nomos-lang-rust-cargo and nomos-lang-rust-clippy and nomos-lang-go-modules 7 of 7 each, nomos-lang-rust-scan and nomos-lang-rust-deny 6 of 6 each, nomos-lang-rust and nomos-lang-go 4 of 4 each, nomos-connector-coderabbit 2 of 2, nomos-capability and nomos-workspace 1 of 1 -- and only nomos-ledger is partial at 34 of 39. Seventeen crates declare such modules at all, across 126 sites, so the pattern is deliberate here rather than accidental.\n\nThis is not the documented cross-crate concession. docs/records/OD-GATE-002 lists what the source-level derivation gives up, and a module declared with a path attribute is not on that list -- a list the record says is exhaustive so that the next person does not have to find out. Its final paragraph claims as NOT given up that adding a method to a public type, adding a field or changing a signature all change a committed file. For a type reached that way the claim is false in the way version 2 found the cross-crate claim false: the name is reported, so adding a name still fails the test, but adding a variant, a field or a method changes nothing and nobody hears. P22-REACHABILITY-PATH-ATTR fixed the same blind spot in a different reader, Declared_Modules, and is the precedent that this is a defect rather than a concession.",
+      "done_when": "An in-crate module declared with a path attribute resolves in the surface reader, so a re-export through it appears in the snapshot with everything hanging off it -- variants, public fields, methods -- rather than as a bare name in the unresolved section. The snapshots the repair makes resolvable are re-blessed in the commit that repairs the reader, because a snapshot records the surface the tree has and a later bless would read as an unexplained widening.\n\nThe repair must not report less than it did. A re-export that genuinely cannot be followed -- a glob, or a target in another crate, the two entries OD-GATE-002 records -- is still reported as an unresolved re-export. A test covers the case with that negative control, because a reader that resolved everything it could not find would satisfy the first clause and destroy the check.\n\nOD-GATE-002 goes to version 3. It records that a same-crate module declared with a path attribute is resolved, that its version 1 list is complete without that entry because the case was a defect rather than a concession, and it corrects the standing of its own final claim: adding a variant, a field, a method or a signature to a public type reached that way did not change a committed file, and now does. Registered under crates/spec/nomos-spec-store/records or it is not governing, and both required projections are re-rendered from a tree whose registered records are exactly the ones the commit publishes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/src",
+          "tests/contract/tests/public_surface",
+          "tests/contract/surface/nomos-ledger.txt",
+          "tests/contract/surface/nomos-lang-rust-compiler.txt",
+          "tests/contract/surface/nomos-analysis.txt",
+          "tests/contract/surface/nomos-repo-policy.txt",
+          "tests/contract/surface/nomos-lang-go-modules.txt",
+          "tests/contract/surface/nomos-lang-rust-cargo.txt",
+          "tests/contract/surface/nomos-lang-rust-clippy.txt",
+          "tests/contract/surface/nomos-lang-rust-deny.txt",
+          "tests/contract/surface/nomos-lang-rust-scan.txt",
+          "tests/contract/surface/nomos-lang-go.txt",
+          "tests/contract/surface/nomos-lang-rust.txt",
+          "tests/contract/surface/nomos-connector-coderabbit.txt",
+          "tests/contract/surface/nomos-capability.txt",
+          "tests/contract/surface/nomos-workspace.txt",
+          "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-002.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "nomos-d2",
+          "reason": "Claim opened only to widen the reservation and released at once: this item was authored without the record registration path, so the OD-GATE-002 amendment it declares had nowhere to be written. No file was read or written under the claim.",
+          "abandoned_at": 1789604429
+        }
+      ],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "nomos-d2",
+          "added": [
+            "crates/spec/nomos-spec-store/records/OD-GATE-002.record"
+          ],
+          "widened_at": 1789604428
+        }
+      ]
     }
   ]
 }
