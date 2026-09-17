@@ -133,7 +133,7 @@ const LOUD_EXIT: i32 = 7;
 ///
 /// Returns the text it should produce, so that a test can ask whether the transcript
 /// is the program's own output rather than whatever fitted.
-fn Loud(name: &str) -> LoudFixture
+fn Write_Loud_Fixture(name: &str) -> LoudFixture
 {
     let mut path = std::env::temp_dir();
     path.push(format!("nomos-launcher-loud-{name}-{}.txt", std::process::id()));
@@ -145,7 +145,7 @@ fn Loud(name: &str) -> LoudFixture
     }
     std::fs::write(&path, &text).expect("writes the fixture");
 
-    let argv = Shout(&path.display().to_string());
+    let argv = Print_And_Exit_Argv(&path.display().to_string());
 
     return LoudFixture {
         command: Command::From_String_Arguments(argv, LOUD_BOUND),
@@ -160,7 +160,7 @@ fn Loud(name: &str) -> LoudFixture
 /// Anything else is said out loud rather than discarded: these fixtures are several
 /// hundred kilobytes each, and a teardown that quietly cannot delete leaves one per run
 /// in the temporary directory with nothing anywhere saying so.
-fn Cleared(path: &Path)
+fn Remove_Fixture_File(path: &Path)
 {
     if let Err(cause) = std::fs::remove_file(path)
         && cause.kind() != std::io::ErrorKind::NotFound
@@ -182,7 +182,7 @@ struct LoudFixture
 }
 
 /// An argv that prints a file and then exits loudly, in the shell of the host.
-fn Shout(shown: &str) -> Vec<String>
+fn Print_And_Exit_Argv(shown: &str) -> Vec<String>
 {
     if cfg!(windows)
     {
@@ -209,10 +209,10 @@ fn Shout(shown: &str) -> Vec<String>
 #[test]
 fn Test_A_Loud_Program_Should_Be_Judged_On_Its_Result_Not_Its_Volume()
 {
-    let LoudFixture { command, path, .. } = Loud("result");
+    let LoudFixture { command, path, .. } = Write_Loud_Fixture("result");
 
     let output = StdProgramLauncher.Run(&command).expect("the loud fixture is a shell command this host runs");
-    Cleared(&path);
+    Remove_Fixture_File(&path);
 
     assert_eq!(
         output.outcome,
@@ -236,10 +236,10 @@ fn Test_A_Loud_Programs_Output_Should_Arrive_Whole()
         command,
         path,
         text: expected,
-    } = Loud("whole");
+    } = Write_Loud_Fixture("whole");
 
     let output = StdProgramLauncher.Run(&command).expect("the loud fixture is a shell command this host runs");
-    Cleared(&path);
+    Remove_Fixture_File(&path);
 
     assert_eq!(
         output.stdout.len(),

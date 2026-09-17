@@ -48,7 +48,7 @@ const ORPHANING_BOUND: Duration = Duration::from_secs(20);
 /// without `taskkill` would need a mechanism this item's territory does not build; see
 /// `docs/records/OD-PLATFORM-001` for the scope this leaves open.
 #[test]
-fn Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child()
+fn Test_A_Kill_Should_Reach_Every_Descendant_Not_Only_The_Direct_Child()
 {
     if !cfg!(windows)
     {
@@ -62,7 +62,7 @@ fn Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child()
     Assert_Killed_Before_Completion(&output);
 
     let growth = Bytes_Written_Before_And_After_Settling(&marker);
-    Cleared(&marker);
+    Remove_Fixture_File(&marker);
 
     Assert_Marker_Stopped_Growing(growth);
 }
@@ -73,7 +73,7 @@ fn Fresh_Marker_Path(name: &str) -> PathBuf
 {
     let mut marker = std::env::temp_dir();
     marker.push(format!("nomos-launcher-{name}-{}.txt", std::process::id()));
-    Cleared(&marker);
+    Remove_Fixture_File(&marker);
 
     return marker;
 }

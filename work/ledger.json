@@ -82801,6 +82801,82 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-PLATFORM-TESTS",
+      "title": "The naming-clarity check reads zero over the platform territory at the phase own flags",
+      "why": "check-naming-clarity reads 301 live findings over the whole crates/ tree at the phase own flags, 297 of them in test positions, and this item is the platform slice: four. These are exactly the four P114-CLARITY-PLATFORM left behind, and its commit says so -- it renamed the eight production names, took the band from 4 live and 5 waived to 4 live and 0 waived, and recorded that the four that remained are Loud, Cleared and Shout in launcher/tests.rs and the process-tree test name in launcher/tests/process_tree.rs, for the unwritten test-half item. This is that item. fn Loud(name) writes a several-hundred-kilobyte fixture file whose command prints it and exits with LOUD_EXIT, and returns the file, the command and the text; it becomes Write_Loud_Fixture, naming the operation and what it writes, and it is the fixture vocabulary the file already uses -- LOUD_EXIT, LOUD_LINES, LoudFixture -- with the target added rather than a different vocabulary. fn Shout(shown) builds the host shell argv that prints a file and exits loudly and becomes Print_And_Exit_Argv, naming the operation and the resource it returns. fn Cleared(path) is the teardown that removes a fixture file and tolerates NotFound; it becomes Remove_Fixture_File. Loud calls Shout once, at tests.rs:148; Loud and Cleared are called from tests.rs at 212, 215, 239, 242, and Cleared again from process_tree.rs at 65 and 76, which is the whole call set and all inside the band. The fourth finding is on the vague-word dimension rather than the word count: Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child names the thing it kills with the word process, and becomes Test_A_Kill_Should_Reach_Every_Descendant_Not_Only_The_Direct_Child, which says the same thing about the shape the test actually builds -- a child that started something of its own. The word process is the one P114-CLARITY-PLATFORM spent eight renames replacing in production names, and none of those eight reached a test name. All four are inside #[cfg(test)] modules compiled into the crate, so no snapshot under tests/contract/surface/ can move, and no name here is reached from outside the band. Measured at unix 1789605693.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/platform at the phase own flags, verified by this item predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. No suppression entry is added for this band and no in-code marker is used. The six call sites carried here -- Shout at one site, Loud at two, Cleared at four across two files -- are renamed with their declarations, and no file outside this item territory is edited; if the build proves otherwise, the item that owns the reached path is named in the same commit and its territory is widened here rather than edited without a claim. The production names P114-CLARITY-PLATFORM renamed are left exactly as it left them, and no name it introduced is renamed again by this item.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform-std/src/launcher/tests.rs",
+          "crates/platform/nomos-platform-std/src/launcher/tests/process_tree.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards/check.exe",
+          "-cwd",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/platform",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards/check.exe",
+          "-cwd",
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/platform",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    31 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789605619,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f5c142d62252e0b04661fd3c202686d718ba0f79"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
