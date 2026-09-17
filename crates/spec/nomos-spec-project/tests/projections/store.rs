@@ -251,7 +251,7 @@ pub(crate) fn Profile_Named(id: &str) -> Profile
         .clone();
 }
 
-pub(crate) fn Rendered(store: &SpecificationStore, id: &str) -> String
+pub(crate) fn Rendered_Profile_Body(store: &SpecificationStore, id: &str) -> String
 {
     return Build(store, &For_Building(&Profile_Named(id)))
         // Callers take the body and run `contains` over it, several of them negated — and a

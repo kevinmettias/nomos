@@ -70,7 +70,7 @@ fn Is_Reaching_Only_Seeded_Content(profile: &Profile) -> bool
 ///
 /// `may_be_empty` is set so the question comes back as a count rather than as a refusal — the
 /// refusal is what production wants and is the wrong instrument for a census.
-fn Probe(content: Content) -> Profile
+fn One_Section_Probe_Profile(content: Content) -> Profile
 {
     return Profile {
         id: format!("probe-{}", content.Label()),
@@ -97,7 +97,7 @@ fn Seeded() -> SpecificationStore
 }
 
 /// A set of profile identifiers, so the assertions below compare sets rather than counts.
-fn Named(ids: &[&str]) -> BTreeSet<String>
+fn Profile_Identifier_Set(ids: &[&str]) -> BTreeSet<String>
 {
     return ids.iter().map(|id| return (*id).to_owned()).collect();
 }
@@ -105,7 +105,7 @@ fn Named(ids: &[&str]) -> BTreeSet<String>
 /// How many items a `may_be_empty` probe for one content kind came back with.
 fn Answered_Items(store: &SpecificationStore, content: Content) -> usize
 {
-    let probe = Probe(content);
+    let probe = One_Section_Probe_Profile(content);
     let projection = Select_Projection(store, &probe).expect("a may_be_empty probe never refuses");
 
     return projection
@@ -234,7 +234,7 @@ fn Assert_The_Rendering_Profiles_Are_The_Pinned_Set(screened: &Outcomes)
         // projection is required for being a re-render obligation and this is a reading aid
         // nobody compares against the store. That it *could* be required is what this set
         // says; what the gate asks for is `Test_The_Required_Projections_Should_Render`.
-        Named(&[
+        Profile_Identifier_Set(&[
             "diagram-set",
             "domain-specification",
             "html-site",
@@ -253,7 +253,7 @@ fn Assert_The_Witnesses_Are_The_Pinned_Pair(screened: &Outcomes)
 {
     assert_eq!(
         screened.screened_but_refuses,
-        Named(&["feature-design", "release-specification"]),
+        Profile_Identifier_Set(&["feature-design", "release-specification"]),
         "the witnesses to Is_Reaching_Only_Seeded_Content being insufficient moved. Each reaches \
          only seeded kinds and still refuses, because it filters nodes on a kind only a corpus \
          has. An empty set here would mean the screen had silently become the answer."
@@ -271,7 +271,7 @@ fn Assert_The_Skipped_Profiles_Are_The_Pinned_Set(screened: &Outcomes)
         // so it is screened out here for the same reason they are rather than for one of its
         // own. `Test_The_Required_Projections_Should_Render` is where a subject-scoped profile
         // is really exercised.
-        Named(&[
+        Profile_Identifier_Set(&[
             "implementation-context-pack",
             "subject-contract",
             "subject-dossier",

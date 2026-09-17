@@ -27,12 +27,12 @@ fn Test_The_Sidecar_Should_Round_Trip()
 
 /// The stamp text that sits beside a body, wrapped so a caller cannot transpose it with the body.
 ///
-/// `Checked` hands both to `Check` in a fixed order, and as two bare `&str` the compiler would
-/// accept either arrangement.
+/// `Check_Body_And_Sidecar` hands both to `Check` in a fixed order, and as two bare `&str` the
+/// compiler would accept either arrangement.
 struct SidecarText<'a>(&'a str);
 
 /// The freshness of a body and the stamp beside it, against the store they came from.
-fn Checked(
+fn Check_Body_And_Sidecar(
     store: &SpecificationStore,
     profile: &Profile,
     body: &str,
@@ -50,7 +50,7 @@ fn Test_An_Unchanged_Store_Should_Be_Fresh()
     let profile = Profile_Named("mcp-resource");
     let built = Build(&store, &profile).expect("the fixture renders this shipped profile");
 
-    let freshness = Checked(
+    let freshness = Check_Body_And_Sidecar(
         &store,
         &profile,
         &built.body,
@@ -69,7 +69,7 @@ fn Test_A_Changed_Store_Should_Be_Stale()
     let stamp = built.Sidecar().expect("every built output carries a rendered stamp");
 
     Rename_The_Fixtures_Node(&store);
-    let freshness = Checked(&store, &profile, &built.body, SidecarText(&stamp));
+    let freshness = Check_Body_And_Sidecar(&store, &profile, &built.body, SidecarText(&stamp));
 
     assert!(freshness.stale.is_some(), "a changed store reads as current");
     assert!(freshness.Report(&built.path).contains("stale"));
@@ -102,7 +102,7 @@ fn Test_A_Changed_Profile_Should_Be_Stale()
     let mut retitled = profile.clone();
     retitled.title = "Renamed resource".to_owned();
 
-    let freshness = Checked(
+    let freshness = Check_Body_And_Sidecar(
         &store,
         &retitled,
         &built.body,
@@ -120,7 +120,7 @@ fn Test_An_Edited_Output_Should_Be_Reported_As_Edited()
     let built = Build(&store, &profile).expect("the fixture renders this shipped profile");
     let tampered = format!("{}\nhand written\n", built.body);
 
-    let freshness = Checked(
+    let freshness = Check_Body_And_Sidecar(
         &store,
         &profile,
         &tampered,
@@ -154,7 +154,7 @@ fn Test_A_Stamp_Rewritten_To_Agree_With_An_Edited_Body_Should_Still_Be_Refused()
     let built = Build(&store, &profile).expect("the fixture renders this shipped profile");
     let tampered = format!("{}\nhand written\n", built.body);
     let agreeing = Stamp_Agreeing_With(&built, &tampered);
-    let freshness = Checked(&store, &profile, &tampered, SidecarText(&agreeing));
+    let freshness = Check_Body_And_Sidecar(&store, &profile, &tampered, SidecarText(&agreeing));
 
     assert!(
         !freshness.Is_Fresh(),

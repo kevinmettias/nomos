@@ -4,7 +4,7 @@
 //! YAML have to parse as themselves, and HTML has to escape what it is handed. None of these
 //! is visible from the selection — they are all properties of the writing.
 
-use crate::store::{For_Building, Populated, Profile_Named, Rendered};
+use crate::store::{For_Building, Populated, Profile_Named, Rendered_Profile_Body};
 use nomos_spec_project::Build;
 
 /// The two pipes that close off the left and right edges of a markdown table row. The interior
@@ -17,7 +17,7 @@ fn Test_A_Markdown_Table_Cell_Should_Not_Break_The_Table()
 {
     let store = Populated();
 
-    let rendered = Rendered(&store, "traceability-matrix");
+    let rendered = Rendered_Profile_Body(&store, "traceability-matrix");
 
     for line in rendered.lines().filter(|line| return line.starts_with("| "))
     {
@@ -35,7 +35,7 @@ fn Test_A_Diagram_Should_Name_Every_Relation_It_Draws()
 {
     let store = Populated();
 
-    let rendered = Rendered(&store, "diagram-set");
+    let rendered = Rendered_Profile_Body(&store, "diagram-set");
 
     assert!(rendered.starts_with("%% nomos_generated: true"), "{rendered}");
     assert!(rendered.contains("graph LR"), "{rendered}");
@@ -95,7 +95,7 @@ fn Test_An_Html_Projection_Should_Escape_What_It_Renders()
         .Put_Source_Blocks(document, &Segment("# Escapes\n\n<script>x</script>\n"))
         .expect("stores blocks");
 
-    let rendered = Rendered(&store, "html-site");
+    let rendered = Rendered_Profile_Body(&store, "html-site");
 
     assert!(rendered.contains("&lt;script&gt;"), "the renderer emitted raw markup");
     assert!(!rendered.contains("<script>"), "the renderer emitted raw markup");

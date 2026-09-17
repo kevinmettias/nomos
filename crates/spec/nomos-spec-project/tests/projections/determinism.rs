@@ -43,7 +43,7 @@ fn Test_A_Rebuild_Should_Be_Byte_Identical()
 fn Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original()
 {
     let source = Populated();
-    let rebuilt = Reimported(&source);
+    let rebuilt = Reimport_Through_A_Bundle(&source);
 
     for profile in Shipped().Profiles()
     {
@@ -64,7 +64,7 @@ fn Test_Building_From_A_Fresh_Import_Should_Equal_Building_From_The_Original()
 ///
 /// This is the store a second machine holds, which is the whole point of the comparison: the
 /// import has no uid from the original's insertion order to inherit.
-fn Reimported(source: &SpecificationStore) -> SpecificationStore
+fn Reimport_Through_A_Bundle(source: &SpecificationStore) -> SpecificationStore
 {
     let bundle = Export(source)
         .expect("the fixture store is exportable as a bundle")

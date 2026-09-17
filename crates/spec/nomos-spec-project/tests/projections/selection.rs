@@ -4,7 +4,7 @@
 //! projection that says nothing while looking like an answer, so emptiness is a refusal
 //! unless a profile declares it expected.
 
-use crate::store::{Populated, Profile_Named, Rendered};
+use crate::store::{Populated, Profile_Named, Rendered_Profile_Body};
 use nomos_spec_project::{Build, Catalogue, Profile, Select_Projection};
 
 /// The `relates-to` edges `OD-SPEC-015` declares, which is therefore the smallest neighbourhood
@@ -20,7 +20,7 @@ fn Test_A_Soft_Deleted_Node_Should_Not_Be_Projected()
 {
     let store = Populated();
 
-    let rendered = Rendered(&store, "mcp-resource");
+    let rendered = Rendered_Profile_Body(&store, "mcp-resource");
 
     assert!(rendered.contains("AGT-EXEC-001"), "the fixture projected no node at all");
     assert!(

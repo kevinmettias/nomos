@@ -83302,6 +83302,86 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-SPEC-PROJECT-TESTS",
+      "title": "The naming-clarity check reads zero over the spec project territory at the phase own flags",
+      "why": "check-naming-clarity reads 202 live findings and 1 waived over the whole crates/ tree at the phase own flags, over 1594 judged files -- measured after the model slice this campaign committed last cleared its 9, which had been 211 -- and by crate they are host 80, substrate 74, rules 37 and spec 11. The spec band is that 11 over 8 files, measured over crates/spec, 346 files judged, and five of the eleven are this item's: the findings the check reads over crates/spec/nomos-spec-project, in four files. All five are the check's one-word shape, which fires on a parameterised free function whose name splits into one word; none is its vague-word shape, so no vocabulary decision is needed here. The other six stay with two sibling items: the 1 finding in crates/spec/nomos-spec-bundle/tests/round_trip/fixpoint.rs, and the 5 over the three files two live P103 claims already hold by exact path -- nomos-spec-bundle/src/columns/tests.rs and nomos-spec-bundle/tests/round_trip/populated.rs under P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2, and nomos-spec-validate/tests/preservation_holds.rs under P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE-4 -- so none of those is claimed or edited here. Every path in this item's six files is free of live claims, checked against the board rather than assumed.\n\nFive declarations take a new name, each naming what it reads or builds rather than the word it was given:\n\ncrates/spec/nomos-spec-project/tests/projections/determinism.rs carries one, at line 67: fn Reimported(source: &SpecificationStore) -> SpecificationStore, which the doc above it at 63 through 66 describes as the fixture's store exported and imported back into a fresh in-memory one -- the store a second machine holds, which is the point of the comparison, because the import has no uid from the original insertion order to inherit. It becomes Reimport_Through_A_Bundle, with the call at 46. The name says the source of input, which is the bundle the export writes and the import parses, and that is the third thing the check's message asks a one-word name to state.\n\ncrates/spec/nomos-spec-project/tests/projections/freshness.rs carries one, at line 35: fn Checked(store: &SpecificationStore, profile: &Profile, body: &str, sidecar: SidecarText<'_>) -> Freshness, the wrapper that hands all four to Check in a fixed order with both options spelled Some. It becomes Check_Body_And_Sidecar, with the doc line at 30 that names it in backticks, the declaration at 35 and five calls at 53, 72, 105, 123 and 157 -- 7 occurrences. The word Checked says a verdict was reached and nothing about what was checked; the new name says the two things the wrapper exists to pair, and keeps Check itself, the library function it delegates to, readable as the different thing it is.\n\ncrates/spec/nomos-spec-project/tests/projections/rebuildability.rs carries two. Line 73 declares fn Probe(content: Content) -> Profile, whose doc at 69 through 72 calls it a one-section profile used to ask a store whether it can answer for one content kind, with may_be_empty set so the question comes back as a count rather than as a refusal. It becomes One_Section_Probe_Profile, with the call at 108 -- 2 occurrences. Line 100 declares fn Named(ids: &[&str]) -> BTreeSet<String>, whose doc at 99 says a set of profile identifiers, so the assertions below compare sets rather than counts. It becomes Profile_Identifier_Set, with three call sites, all of them profile-id sets: 237 is the set of profiles that render over a seeded store, 256 the pinned witness pair the screen passes and the build still refuses, and 274 the subject-scoped five this comparison says nothing about -- 4 occurrences.\n\ncrates/spec/nomos-spec-project/tests/projections/store.rs carries one, at line 254: pub(crate) fn Rendered(store: &SpecificationStore, id: &str) -> String, which builds the shipped profile named by id and returns its body, holding the refusal-to-empty-body case that a negated contains would otherwise pass over. It becomes Rendered_Profile_Body, which says what it hands back and stays parallel with Profile_Named directly above it. Its callers live in two other files, and both reach it through a use list rather than through a path: renderers.rs imports it at 7 and calls it at 20, 38 and 98, and selection.rs imports it at 7 and calls it at 23 -- so that rule is 7 occurrences over three files, and the two files that only call it are in this item's territory because no file may be left naming a function that no longer exists.\n\nWord matches that are not this name are left exactly as they are, and there are three kinds. First, Named is also a method name three times inside src/: catalogue.rs:147 declares pub fn Named(&self, id: &str) -> Option<&Profile>, profile.rs:149 declares fn Named(&self) -> Result<(), ProjectError> and select.rs:26 declares pub fn Named(&self) -> Vec<(&'static str, &String)>. Each takes &self as its first parameter, which is why the check does not flag any of them -- it judges free functions -- and every call to one is written as a qualified `receiver.Named(...)` or a bare `self.Named()`, which the guard's `:` and `.` lookbehind leaves alone. They are a different declaration with the same word, this item's rules are applied per file, and no rule reaches a file under src/. Second, Probe is fixture text as well as a helper: subjects.rs:53 and selection.rs:239 hold \"title\": \"Probe\" inside JSON, renderers.rs:287 holds title: \"Probe\".to_owned(), and rebuildability.rs:77 holds format!(\"Probe {}\", content.Label()), which is the probe profile's own title. The first three are in files no rule of this item names; the fourth is declared as a skip, and the script refuses if a skipped line does not match, so the exclusion cannot decay into a line that no longer needs it. Third, English prose that coincides with a renamed word and stays: renderers.rs:161 opens \"Rendered rather than selected\" about where a status is read, store.rs:21 \"Named rather than a bool\" about a parameter, src/lib.rs:23 \"Named for the boundary rather than for its module\" about a file, src/projection/content.rs:77 \"Named rather than written into the mirror below as bare numbers\" about a variant, and determinism_contract.rs:26 \"Checked here through `nomos_contracts`'s own coherence rule\" about the cross-axis rule. None of them names a declaration this item renames -- only freshness.rs:30 does, and that one moves with the name. Two of the five are outside this item's territory in any case. Profile_Named contains the word too, in this crate and in every sibling that hosts the suite; the guard's word-character lookbehind leaves every one of them alone, and the dry run confirms it by counting them out.\n\nThe rename is 22 occurrences over six files, applied by one script that substitutes a whole token -- the name not preceded by a word character, `:`, `.` or `$` and not followed by a word character -- line by line, so a line the plan declares a skip is left exactly as it is, and refuses to write anything unless every per-file count matches this item's why: 2 in determinism.rs, 7 in freshness.rs, 6 in rebuildability.rs over its two rules, 1 in store.rs, 4 in renderers.rs and 2 in selection.rs. All 22 matched. The guard is a whole token rather than a call because a use list entry stands alone before a comma, which a call-armed pattern cannot see, and here that is not hypothetical: Rendered reaches two of its three files through a use list, so a pattern reading only the finding's own file would have left both import lists naming a function that no longer exists -- the same undercount that cost this campaign a compiler-found repair in an earlier band.\n\nOne line grows past 100 columns: the doc line at freshness.rs:30, which the longer name pushes from 95 to 110, is re-wrapped around the same words with no word changed. Nine further lines in these files are already over 100 columns and the rename does not touch them -- renderers.rs:61, 137, 187, 200 and 205, and selection.rs:246, 248, 366 and 370 -- so nothing else reflows and the diff is names, line breaks and nothing else.\n\nMeasured, before and after. The census this item came from -- the naming-clarity sweep over crates/spec at the phase own flags, 346 files judged -- reads 11 live findings over 8 files, 5 of them in this crate's four. Implementation moved all 22 occurrences over the six files and re-wrapped the one over-wide doc line, no word changed. After it, this item's predicate -- the same sweep pointed at crates/spec/nomos-spec-project, 44 files judged -- reads 0 live findings, 0 waived, verdict OK, exit 0. cargo check --workspace --all-targets exits 0, so the three files that call Rendered and the five that call the rest all moved with their names and the rename compiles; the warnings it prints are the ones nomos-analysis and nomos-platform-std already carried. cargo test -p nomos-spec-project --no-fail-fast exits 0 with 118 tests passing and none failing -- 59 in the lib, 2 in tests/determinism_contract.rs and 57 in the projections binary, plus an empty doc-test run -- and that binary is the one every renamed helper is reached from, so the five names are exercised rather than merely compiled. The nine lines that were over 100 columns before the rename are still the only ones over it. No waiver and no in-code marker is added, and no path outside the item's six files is edited.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/spec/nomos-spec-project, verified by this item's predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build, so a green check is not evidence the rename compiles. All five findings are the one-word shape and each is cleared by naming the operation target, resource or source of input: the store reimported through a bundle, the test wrapper that hands a body and its sidecar to Check, the one-section probe profile, the profile identifier set, and the rendered profile body. The rename is a whole token over six files, with every per-file count asserted before anything is written and both skips declared and checked, and the lines that hold the same word as fixture text or as English prose -- the probe profile's own title, the JSON fixtures naming Probe, and the prose that reads \"Rendered rather than selected\" -- are left exactly as they are. The three &self methods named Named in src/ and their qualified call sites are untouched, because no rule reaches a file outside the six. No waiver and no in-code marker is added, and no path outside the item's six files is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-project/tests/projections/determinism.rs",
+          "crates/spec/nomos-spec-project/tests/projections/freshness.rs",
+          "crates/spec/nomos-spec-project/tests/projections/rebuildability.rs",
+          "crates/spec/nomos-spec-project/tests/projections/store.rs",
+          "crates/spec/nomos-spec-project/tests/projections/renderers.rs",
+          "crates/spec/nomos-spec-project/tests/projections/selection.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/spec/nomos-spec-project",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/spec/nomos-spec-project",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    44 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789610614,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "69e64b08a2b0cc05aab1056f5ea64e949d4478a3"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
