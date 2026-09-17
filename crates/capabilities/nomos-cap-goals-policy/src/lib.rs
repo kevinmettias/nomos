@@ -26,14 +26,14 @@
 //! `nomos_cap_scripting_policy` is a scalar plus a list; `nomos_cap_words_policy` is a bare
 //! list. This one is a small graph — a set of goals, a set of parts, and the edges between
 //! them — because the rule's whole question is whether the two sets line up across those
-//! edges. That is also why [`payload::SubsystemDeclaration`] gets a line of its own in the
-//! encoding rather than being implied by the edges: a part that serves nothing is the
-//! defect the rule is looking for, and an encoding that could not say it would hide it.
+//! edges. That is also why [`goals_policy_payload::SubsystemDeclaration`] gets a line of its
+//! own in the encoding rather than being implied by the edges: a part that serves nothing is
+//! the defect the rule is looking for, and an encoding that could not say it would hide it.
 //!
 //! # What is here
 //!
 //! The capability's identity, contract version, ceiling and summary ([`contract`]); and the
-//! payload shape and its canonical reader ([`payload`]).
+//! payload shape and its canonical reader ([`goals_policy_payload`]).
 //!
 //! What is not here: a provider that actually reads `standards.json`, and a rule that reads
 //! this capability. Both are this decision's own next increments.
@@ -41,7 +41,7 @@
 #![forbid(unsafe_code)]
 
 mod contract;
-mod payload;
+mod goals_policy_payload;
 
 pub use contract::{Capability, Capability_Contract, Ceiling, CAPABILITY, CONTRACT_VERSION, Payload_Schema, SCHEMA};
-pub use payload::{Encode_Payload, GoalsPolicyPayload, Parse_Payload, Refusal, SubsystemDeclaration};
+pub use goals_policy_payload::{Encode_Payload, GoalsPolicyPayload, Parse_Payload, Refusal, SubsystemDeclaration};
