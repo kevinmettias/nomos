@@ -84312,6 +84312,81 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-FILENAME-CAP-SCRIPTING-POLICY",
+      "title": "P114 file-name: the cap-scripting-policy payload module, named for its type",
+      "why": "check-file-name asks a module file to be named after the public type it declares, and src/payload.rs\nin nomos-cap-scripting-policy is not: it declares ScriptingPolicyPayload, the crate's whole subject, in a file named for a role rather\nthan for the type.\n\nThe crate already says how this is spelled. nomos-cap-scripting-policy's own siblings in this family are the same\nlayout -- a payload.rs facade beside a payload/ directory -- and the ones that pass do so by naming\nthe facade after the type it declares: nomos-cap-controlflow has src/arm_shape.rs declaring ArmShape\nwith src/arm_shape/ beside it, nomos-cap-dependency has the identical shape over DependencyKind, and\nnomos-cap-lint passes only because its payload.rs declares no public type at all, leaving the\npayload to payload/diagnostics_payload.rs. nomos-cap-architecture was the first of this family\nrepaired and landed as exactly this move.\n\nSo the finding is cleared by moving the module to the name of the type it declares, not by renaming\nthe type. The type name is load-bearing: ScriptingPolicyPayload is in the crate's published surface and in\ntests/contract/surface/nomos-cap-scripting-policy.txt, which a file rename does not touch, because that snapshot records\ncrate::Type::member and no module path.\n\nThe module is private -- lib.rs says mod payload; and re-exports its contents -- so no path outside\nthis crate names it, and no surface snapshot moves.",
+      "done_when": "The file-name check reports zero live findings and zero waived findings over crates/capabilities/nomos-cap-scripting-policy, verified by\nthis item's predicate, and cargo check --workspace --all-targets reports no error -- the check is a\ntext reader over the tree and cannot see a build, so a green check is not evidence the rename\ncompiles.\n\nThe finding at src/payload.rs is cleared by moving the module to the name of the public type it\ndeclares: src/payload.rs becomes src/scripting_policy_payload.rs and the directory src/payload/ becomes\nsrc/scripting_policy_payload/, so the facade is named after ScriptingPolicyPayload exactly as nomos-cap-controlflow names arm_shape.rs\nafter ArmShape. Every path that reached the old module name follows it -- the mod line, every pub\nuse line, every intra-doc link that names the module, and no path sweep of the crate finds a\nreference left behind. The type name itself is unchanged: ScriptingPolicyPayload still stands, and\ntests/contract/surface/nomos-cap-scripting-policy.txt is byte-identical before and after, because the snapshot records\ncrate::Type::member and no module path.\n\nEvery name that moves keeps passing the other seven naming checks and the nine formatting checks,\nno edited line exceeds the 120 columns rustfmt.toml records, no waiver and no in-code marker is\nadded, and no path outside crates/capabilities/nomos-cap-scripting-policy and work/ledger.json is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-scripting-policy"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "F:\\repos\\nomos",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/capabilities/nomos-cap-scripting-policy",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "F:\\repos\\nomos",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/capabilities/nomos-cap-scripting-policy",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK           LIVE   WAIVED     JUDGED  VERDICT\nfile-name          0        0     5 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789617232,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "db468260ca62cc35890b4c26ee630a1f361e1773"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
