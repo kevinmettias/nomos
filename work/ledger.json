@@ -84462,6 +84462,81 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-FILENAME-CAP-SYNTAX",
+      "title": "P114 file-name: the cap-syntax impls module, named for its type",
+      "why": "check-file-name asks a module file to be named after the public type it declares, and\nsrc/payload/impls.rs is not: it declares the public enum ImplLabel, in a file named for the\nimpl-shaped helpers that surround it rather than for the type.\n\nThis is the same defect the five capability payload facades had, one level down. In\nnomos-cap-architecture and its four siblings the facade itself was named for its role; here the\nfacade is clean -- src/payload.rs declares no public type of its own, which is why\nnomos-cap-lint passes the check with the same payload.rs beside a payload/ -- and the offending\nfile is a child. The fix is the same move at that level: the file takes the name of the type it\ndeclares, exactly as its siblings payload/observation.rs takes Observation.\n\nThe type name is the thing to keep. ImplLabel is in the published surface and in\ntests/contract/surface/nomos-cap-syntax.txt, which a file rename does not touch, because that\nsnapshot records crate::Type::member and no module path. The three functions the file also holds --\nImpl_Serves_A_Trait, Impl_Generics and Impl_Shape -- are not what the check judges and are not\nrenamed; they stay with the type they work over.",
+      "done_when": "The file-name check reports zero live findings and zero waived findings over\ncrates/capabilities/nomos-cap-syntax, verified by this item's predicate, and cargo check\n--workspace --all-targets reports no error -- the check is a text reader over the tree and cannot\nsee a build, so a green check is not evidence the rename compiles.\n\nThe finding at src/payload/impls.rs is cleared by moving the module to the name of the public type\nit declares: src/payload/impls.rs becomes src/payload/impl_label.rs, so the file is named after\nImplLabel exactly as its sibling payload/observation.rs is named after Observation. Every path that\nreached the old module name follows it -- the mod declaration and the pub use in src/payload.rs, and\nnothing else names it, confirmed by a post-edit scan of the crate for the old name as a module\nsegment rather than as a word. The type name itself is unchanged: ImplLabel still stands, and\ntests/contract/surface/nomos-cap-syntax.txt is byte-identical before and after, because the snapshot\nrecords crate::Type::member and no module path.\n\nEvery name that moves keeps passing the other seven naming checks and the nine formatting checks,\nno edited line exceeds the 120 columns rustfmt.toml records, no waiver and no in-code marker is\nadded, and no path outside crates/capabilities/nomos-cap-syntax and work/ledger.json is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-syntax"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "F:\\repos\\nomos",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/capabilities/nomos-cap-syntax",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-check-sweep/nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "F:\\repos\\nomos",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/capabilities/nomos-cap-syntax",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK           LIVE   WAIVED     JUDGED  VERDICT\nfile-name          0        0    14 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789617780,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "517d9c58f9f8db53fdca6a2a99e3caeffaa49d02"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
