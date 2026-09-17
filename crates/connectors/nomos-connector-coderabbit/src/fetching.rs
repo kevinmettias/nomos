@@ -13,28 +13,16 @@
 //! entirely, so that this layer stays the one that knows nothing about a vendor field name
 //! at all -- not even enough to ask for one by name.
 
+mod fetch_error;
+
+pub use fetch_error::FetchError;
+
 use nomos_platform::{Command, ExitOutcome, ProgramLauncher};
 use std::time::Duration;
 
 /// `gh api` against one comment id is one HTTPS round trip to the GitHub API; warm, it
 /// returns in a second or two. This bound is headroom, not the expected case.
 const TIMEOUT: Duration = Duration::from_secs(30);
-
-/// The vendor could not be reached, or answered with something other than a fetched review
-/// comment.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct FetchError
-{
-    pub reason: String,
-}
-
-impl core::fmt::Display for FetchError
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return write!(formatter, "{}", self.reason);
-    }
-}
 
 /// Fetches one pull-request review comment live and returns GitHub's own JSON response,
 /// unparsed.

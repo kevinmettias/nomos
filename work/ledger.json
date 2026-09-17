@@ -84684,6 +84684,148 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-FILENAME-CODERABBIT",
+      "title": "P114 file-name: the coderabbit connector's own three types, in files named for them",
+      "why": "check-file-name asks a module file to be named after the public type it declares, and three files in this crate are not: src/fetching.rs declares FetchError, src/provider.rs declares FactContext, and src/translation.rs declares TranslationError. Measured now, `check.exe file-name --include-tests` over this crate judges 14 files and reads exactly these three findings, one per file -- each file declaring exactly one public type, whose snake_case is not the file stem. The naming phase over crates/ reads 140 live findings and 17 waived, with 2 of its 8 checks not clean; file-name is 22 of those 140, over 9 crates, and these three are this crate's.\n\nThe crate already says how this is spelled, in its own layout: src/provider.rs declares `mod connector_error; mod review_finding_fact;` beside a provider/ directory and re-exports both types, so a public type this crate gives a module of its own lives in a file named for it, inside that module's directory. The three flagged files are the stragglers where the type still shares a file with the work that produces it.\n\nSo each type moves into the file named for it beside its module: src/fetching/fetch_error.rs, src/provider/fact_context.rs and src/translation/translation_error.rs, and each module file declares the new submodule and re-exports the type. Every existing path to a type still resolves, lib.rs's own pub use lines included, and no #[path] attribute appears in the crate.\n\nTHE MOVE IS TYPE-ONLY, deliberately, the choice P114-FILENAME-NOMOS-API made a crate over: each type's own impl -- FetchError's and TranslationError's `Display` -- stays in the module file that owns it, and the four nomos_contracts names FactContext's fields need (SnapshotId, BuildVariantId, ConfigurationId, GenerationId) stay imported by provider.rs, which names all four again in its own tests. Nothing private is forced onto a judged rung, no visibility is widened, and no test is added or changed.\n\nThe finding is cleared from the module file's side rather than the type's: not one of the three names changes, because all three are in the crate's published surface -- ConnectorError::Fetch(FetchError) and ConnectorError::Translation(TranslationError) are variants of it -- and tests/contract/surface/nomos-connector-coderabbit.txt records crate::Type::member with no module path, so a type that keeps its name keeps its snapshot.",
+      "done_when": "The three file-name findings this crate reports are gone: this item's predicate -- nomos-check-sweep over the file-name check alone, at the phase's own --include-tests flag and bounded at zero findings waived by the ledger -- reads zero live findings and zero waived and judges every file it is pointed at, and cargo check --workspace --all-targets reports no error, because the check is a text reader over the tree and cannot see a build.\n\nEach type moves verbatim and every name is unchanged: FetchError to src/fetching/fetch_error.rs, FactContext to src/provider/fact_context.rs, and TranslationError to src/translation/translation_error.rs. Each module file keeps its name, declares the new submodule and re-exports the type, every impl stays in the module file that owns it, and no #[path] attribute appears anywhere in the crate.\n\nEvery reference still resolves: lib.rs's pub use lines are unchanged, provider/connector_error.rs's own From<FetchError> and From<TranslationError> still resolve through their modules' re-exports, translation.rs's private readers still name TranslationError, and provider.rs's tests still build a FactContext.\n\nThe crate exports exactly what it exported before: tests/contract/surface/nomos-connector-coderabbit.txt is byte-identical, sha256 27a41f504498e6468ce892e0b635031ab0c138226b623c5921a050e3d8b9bca5 before this change, and cargo test -p nomos-contract-tests --test public_surface is green.\n\nThe crate reports no finding under any check that it did not report before this change -- measured by running the same 157-check sweep over the crate before and after and comparing the two finding sets as multisets of check and message -- the baseline being the 104 live findings it reports before this change, with the three file-name findings the only difference.\n\nNo waiver and no in-code marker is added, no edited line exceeds the 120 columns rustfmt.toml records, and no path outside the six paths this item's territory names and work/ledger.json is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/connectors/nomos-connector-coderabbit/src/fetching.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/fetching/fetch_error.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/provider.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/provider/fact_context.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/translation.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/translation/translation_error.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Re-authored as P114-FILENAME-CODERABBIT-2, whose why carries the measurement. Two clauses of this item's done_when cannot both be true: that each type's own impl -- FetchError's and TranslationError's `Display` -- stays in the module file that owns it, and that tests/contract/surface/nomos-connector-coderabbit.txt is byte-identical with cargo test -p nomos-contract-tests --test public_surface green.\n\nMeasured, the type-only move deletes the two moved types from the rendered surface. tests/contract/src/reading/routes.rs's Answered_By asks Declared_As(module, name) first and returns whatever it finds without walking that module's own re-exports; Declared_As matches a name by prefix -- item.name == name || item.name.starts_with(\"{name}::\") -- so an `impl core::fmt::Display for FetchError` left in fetching.rs files a method named FetchError::fmt, that answer is non-empty, and the chain to `pub use fetch_error::FetchError` is never followed. The surface test on that variant: 7 passed, 1 failed, exit 101, with four lines the rendering no longer carries -- pub struct nomos_connector_coderabbit::FetchError, its `reason` field, and the same pair for TranslationError -- while FactContext, which has no impl written in provider.rs, keeps every line.\n\nMoving each type's impl with it gives 8 passed, 0 failed, exit 0 and a snapshot byte-identical at sha256 27a41f504498e6468ce892e0b635031ab0c138226b623c5921a050e3d8b9bca5. The tree already carries that shape, so the code carries over and only the item id changes."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/connectors/nomos-connector-coderabbit",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "nomos-a5",
+          "reason": "Re-authored as P114-FILENAME-CODERABBIT-2; the item itself is being declined with the measurement.",
+          "abandoned_at": 1789627968
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-a5",
+        "declined_at": 1789627973
+      },
+      "widened": []
+    },
+    {
+      "id": "P114-FILENAME-CODERABBIT-2",
+      "title": "P114 file-name: the coderabbit connector's own three types, in files named for them",
+      "why": "check-file-name asks a module file to be named after the public type it declares, and three files in this crate are not: src/fetching.rs declares FetchError, src/provider.rs declares FactContext, and src/translation.rs declares TranslationError. Measured before this change, `check.exe file-name --include-tests` over this crate judges 14 files and reads exactly these three findings, one per file -- each file declaring exactly one public type, whose snake_case is not the file stem; the predicate over the finished tree judges 17 files and reads none. The naming phase over crates/ reads 140 live findings and 17 waived, with 2 of its 8 checks not clean; file-name is 22 of those 140, over 9 crates, and these three are this crate's.\n\nThe crate already says how this is spelled, in its own layout: src/provider.rs declares `mod connector_error; mod review_finding_fact;` beside a provider/ directory and re-exports both types, so a public type this crate gives a module of its own lives in a file named for it, inside that module's directory. The three flagged files are the stragglers where the type still shares a file with the work that produces it.\n\nSo each type moves into the file named for it beside its module: src/fetching/fetch_error.rs, src/provider/fact_context.rs and src/translation/translation_error.rs, and each module file declares the new submodule and re-exports the type. Every existing path to a type still resolves, lib.rs's own pub use lines included, and no #[path] attribute appears in the crate.\n\nTHE MOVE IS NOT QUITE TYPE-ONLY, and the difference is measured rather than chosen -- recorded here because this item's predecessor, P114-FILENAME-CODERABBIT, was declined for predicting the opposite. Each moved type's own impl moves with it: FetchError's and TranslationError's `Display`, into the files that now declare them. An impl of a moved type left behind in the module it came from is not merely untidy, it deletes the type from the surface snapshot. tests/contract/src/reading/routes.rs resolves a crate root's `pub use fetching::{Fetch_Review_Comment, FetchError}` by asking Answered_By for the name, which asks Declared_As(module, name) first and returns whatever it finds without walking that module's own re-exports. Declared_As matches a name by prefix -- item.name == name || item.name.starts_with(\"{name}::\") -- so an `impl core::fmt::Display for FetchError` written in fetching.rs files a method named FetchError::fmt, that answer is non-empty, and the re-export chain to `pub use fetch_error::FetchError` is never followed. Measured on the type-only variant, the surface test reports 7 passed and 1 failed, naming four lines the rendering no longer carries: pub struct nomos_connector_coderabbit::FetchError, its `reason` field, and the same pair for TranslationError -- while FactContext, which has no impl written in provider.rs, keeps every one of its lines. Moving the two impls is what makes the surface byte-identical; no name, field or visibility changes.\n\nThe four nomos_contracts names FactContext's fields need (SnapshotId, BuildVariantId, ConfigurationId, GenerationId) are imported by the file that now declares those fields, and provider.rs's root import is narrowed to the four names its own non-test code still writes (EvidenceClass, Guarantee, ProviderId, SubjectId) while its tests import the digests they build, so the tree compiles with no new warning. Nothing private is forced onto a judged rung, no visibility is widened, and no test is added or changed.\n\nThe finding is cleared from the module file's side rather than the type's: not one of the three names changes, because all three are in the crate's published surface -- ConnectorError::Fetch(FetchError) and ConnectorError::Translation(TranslationError) are variants of it -- and tests/contract/surface/nomos-connector-coderabbit.txt records crate::Type::member with no module path, so a type that keeps its name keeps its snapshot.",
+      "done_when": "The three file-name findings this crate reports are gone: this item's predicate -- nomos-check-sweep over the file-name check alone, at the phase's own --include-tests flag and bounded at zero findings waived by the ledger -- reads zero live findings and zero waived and judges every file it is pointed at, 17 of them, and cargo check --workspace --all-targets reports no error and no warning this change introduced, because the check is a text reader over the tree and cannot see a build.\n\nEach type moves verbatim and every name is unchanged: FetchError to src/fetching/fetch_error.rs, FactContext to src/provider/fact_context.rs, and TranslationError to src/translation/translation_error.rs. Each module file keeps its name, declares the new submodule and re-exports the type, each moved type's own impl moves with it -- FetchError's and TranslationError's `Display` -- so that no impl whose self type is a moved type is left behind in the module that moved it, and no #[path] attribute appears anywhere in the crate.\n\nEvery reference still resolves: lib.rs's pub use lines are unchanged, provider/connector_error.rs's own From<FetchError> and From<TranslationError> still resolve through their modules' re-exports, translation.rs's private readers still name TranslationError, provider.rs's tests still build a FactContext and import the digests they name, and the file that now declares FactContext imports the four nomos_contracts names its fields need.\n\nThe crate exports exactly what it exported before: tests/contract/surface/nomos-connector-coderabbit.txt is byte-identical, sha256 27a41f504498e6468ce892e0b635031ab0c138226b623c5921a050e3d8b9bca5 before this change, and cargo test -p nomos-contract-tests --test public_surface is green -- 8 passed, 0 failed.\n\nThe crate reports no finding under any check that it did not report before this change -- measured by running the same 157-check sweep over the crate before and after and comparing the two finding sets as multisets of check and message -- the baseline being the 104 live findings it reports before this change, with the three file-name findings the only difference.\n\nNo waiver and no in-code marker is added, no line this change writes exceeds the 120 columns rustfmt.toml records (the crate's four pre-existing over-long lines are byte-identical to HEAD and only renumbered), and no path outside the six paths this item's territory names and work/ledger.json is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/connectors/nomos-connector-coderabbit/src/fetching.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/fetching/fetch_error.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/provider.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/provider/fact_context.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/translation.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/translation/translation_error.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/connectors/nomos-connector-coderabbit",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "file-name",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/connectors/nomos-connector-coderabbit",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK           LIVE   WAIVED     JUDGED  VERDICT\nfile-name          0        0    17 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789628008,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0c0393c8f9ea666583c749660efda14b6eacb79a"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

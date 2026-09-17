@@ -31,6 +31,10 @@
 //! read. This connector's ceiling is not pinned to a complete mapping of `CodeRabbit`'s own
 //! comment vocabulary -- a curated subset, not the full schema.
 
+mod translation_error;
+
+pub use translation_error::TranslationError;
+
 use crate::ReviewFindingId;
 use crate::payload::finding_payload::FindingPayload;
 
@@ -40,21 +44,6 @@ const CODERABBIT_BOT_LOGIN: &str = "coderabbitai[bot]";
 /// The version marker `CodeRabbit`'s own comment body carries, naming the comment-body
 /// convention this reader is written against.
 const RECOGNIZED_COMMENT_VERSION_MARKER: &str = "<!-- cr-comment:v1:";
-
-/// GitHub's own response could not be read as this reader expects.
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct TranslationError
-{
-    pub reason: String,
-}
-
-impl core::fmt::Display for TranslationError
-{
-    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-    {
-        return write!(formatter, "{}", self.reason);
-    }
-}
 
 /// Translates one `gh api repos/{repository}/pulls/comments/{id}` response into this
 /// connector's canonical fields.

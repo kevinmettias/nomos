@@ -2,9 +2,11 @@
 //! answers.
 
 mod connector_error;
+mod fact_context;
 mod review_finding_fact;
 
 pub use connector_error::ConnectorError;
+pub use fact_context::FactContext;
 pub use review_finding_fact::ReviewFindingFact;
 
 use crate::contract::{Capability, Payload_Schema, CONTRACT_VERSION};
@@ -13,22 +15,8 @@ use crate::guarantee::{Declared_Guarantee, PROVIDER};
 use crate::payload::{finding_payload::FindingPayload, Encode_Payload};
 use crate::translation::Translate_Review_Comment;
 use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
-use nomos_contracts::{
-    BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, Guarantee, ProviderId, SnapshotId,
-    SubjectId,
-};
+use nomos_contracts::{EvidenceClass, Guarantee, ProviderId, SubjectId};
 use nomos_platform::ProgramLauncher;
-
-/// Where in the workspace's history a fact is being produced -- the same four-field shape
-/// every other real provider's own `FactContext` carries, for the identical reason.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct FactContext
-{
-    pub snapshot: SnapshotId,
-    pub variant: BuildVariantId,
-    pub configuration: ConfigurationId,
-    pub generation: GenerationId,
-}
 
 /// Fetches one review comment live and materializes the one fact this capability answers
 /// for it -- a leaf: nothing here reads another fact this or any other provider produced.
@@ -104,7 +92,7 @@ fn Finding_Fact_Key(subject: SubjectId, external_id: &crate::identity::ReviewFin
 mod tests
 {
     use super::*;
-    use nomos_contracts::Digest128;
+    use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
 
     /// The width of one `Digest128`, in bytes.
     const DIGEST_BYTES: usize = 16;
