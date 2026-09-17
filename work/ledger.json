@@ -83457,6 +83457,100 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-SPEC-BUNDLE-HELD-FILES",
+      "title": "The naming-clarity check reads zero over the bundle crate, whose three findings sit in files a P103 item holds",
+      "why": "check-naming-clarity reads 197 live findings and 1 waived over the whole crates/ tree at the phase own flags, over 1594 judged files -- measured after the project slice this campaign committed last cleared its 5, which had been 202 -- and by crate they are host 80, substrate 74, rules 37 and spec 6. The spec band is that 6 over 5 files, measured over crates/spec, 346 files judged, and three of the six are this item's: the three the check reads over crates/spec/nomos-spec-bundle. All three are the check's one-word shape -- a parameterised free function whose name splits into one word -- and none is its vague-word shape, so no vocabulary decision is needed here. The crate's fourth finding was in tests/round_trip/fixpoint.rs and is already cleared, by this campaign's commit a1e238b0.\n\nTwo of the three sit in files a live item holds by exact path, and that is why this is an item of its own rather than an edit made now. P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2 is Ready, and its territory names crates/spec/nomos-spec-bundle/src/columns/tests.rs and crates/spec/nomos-spec-bundle/tests/round_trip/populated.rs -- the two files the Schema finding and the Value and Reimported findings are in. That item is a capability change: it gives a corpus a way to declare canonical text its own layout repeats, adds the declaration table to the store schema, threads it through the bundle's columns and transport, and requires its round-trip fixture to be able to fail if a declaration's multiplicity does not survive export and import. Both held files are files it rewrites. Renaming a helper inside a file another item is about to rewrite is not work that item authorized and not work that can safely go first, so this item declares the edge instead of competing for the file: --depends-on names that item, and the ledger holds this one waiting until it is Done.\n\nThe three renames name what each helper reads or returns, which is the third thing the check's message asks a one-word name to state:\n\n  Schema     -> Schema_Column_Names        src/columns/tests.rs:5, called at 15, 24 and 39\n  Value      -> Answered_Value             tests/round_trip/populated.rs:158, called at 135, 136, 138, 139, 140 and 141\n  Reimported -> Rebuilt_From_Bundle_Text   tests/round_trip/populated.rs:188, called at tests/round_trip/governing_records.rs:55 through the `use` at 43\n\nSchema builds the Vec<String> a declaration is compared against, so Schema_Column_Names says which names it holds and reads at its call sites as the argument to Compare_Schema_To_Declaration(...) that it is; `Schema` named the artifact the comparison is about rather than the list this function returns, and the comparison already says Schema. Answered_Value is one attributed field value built from what a field was answered with and the origin that answer has, so the name carries the source of the input -- the answer -- rather than only the type it produces. The sibling suite in nomos-spec-model names the same shape Field_Value_With_Origin, and this name is shorter for a measured reason rather than a preference: the six call sites at 135 to 141 are already the widest lines in that file -- 109, 103, 111, 108 columns at 135, 138, 139, 140 -- and rustfmt.toml records max_width = 120, so 111 columns at 139 becomes 130 with the longer name and exactly 120 with this one; the longer name would have forced a reflow of the fixture list to gain no meaning it does not already carry. Rebuilt_From_Bundle_Text pairs with the neighbouring Rebuilt_From(bundle: &Bundle) in the same file and says what its input is -- written bundle text and nothing else -- which is what its own doc comment already says.\n\nThe third file is in this item's territory as a caller and not as a finding. crates/spec/nomos-spec-bundle/tests/round_trip/governing_records.rs is held by nobody, and the check reads nothing over it. It holds two occurrences of the third name: a `use crate::populated::Reimported;` at 43, which the whole-token rename guard deliberately does not match when armed against call sites because a use path sits behind a `:`, and the call at 55. Both have to move with the declaration or the round_trip test binary stops compiling, which is the whole reason the file is reserved here. Its other 71 lines are not edited.\n\nThe predicate is the crate, and that is a deliberate difference from the file-scoped predicates this campaign's spec slices declared. A file-scoped target was used there because a live claim held findings a crate-scoped predicate would still see; here there is no such finding, because the crate's fourth was cleared by a1e238b0 and the three that remain are exactly the three this item owns, so crate scope and this item's obligation are one scope and a crate predicate can go green. Measured now: the sweep pointed at crates/spec/nomos-spec-bundle at the phase own flags reads 3 live findings and 0 waived over 58 judged files, all three in the two files P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2 holds, and the same sweep pointed at the crate after both items' work reads 0.\n\nEvery measurement in this why was taken at the tree that holds a1e238b0, before P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2 implemented anything, and that item rewrites two of the three files. The holder must therefore not treat the occurrence counts above as facts about the text it finds: re-run the sweep over the crate at claim time, confirm which three functions the check then reads, and re-count each token in the post-P103 text before applying a rename. A count that no longer matches is a refusal that sends the plan back to be rebuilt from what is there, never a reason to rename fewer occurrences than the file holds.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/spec/nomos-spec-bundle, verified by this item's predicate -- the sweep pointed at that crate, which is the scope of this item's obligation because the crate's only remaining findings are the three this item owns -- and cargo check --workspace --all-targets reports no error, since the check is a text reader over the tree and cannot see a build. The three findings are the check's one-word shape and are cleared by naming what each helper reads or returns: the column names a declaration is compared against, one attributed field value built from an answer and its origin, and a store rebuilt from written bundle text. Each rename is a whole token whose occurrence count is asserted per file before anything is written -- 4 in src/columns/tests.rs, 7 and 1 in tests/round_trip/populated.rs, and 2 in tests/round_trip/governing_records.rs, where the count includes the `use` at 43 that a guard armed only against call sites would miss -- all three files are re-read after P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2 is Done and every count re-measured against the text found there, no edited line exceeds the 120 columns rustfmt.toml records and no line is reflowed, and the round_trip test binary still builds and passes, because a renamed helper that no longer compiles would satisfy a text reader and nothing else. No waiver and no in-code marker is added, the two files that item holds are edited only after it is Done, and no path outside the item's territory is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-bundle/src/columns/tests.rs",
+          "crates/spec/nomos-spec-bundle/tests/round_trip/populated.rs",
+          "crates/spec/nomos-spec-bundle/tests/round_trip/governing_records.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/spec/nomos-spec-bundle",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P114-CLARITY-SPEC-VALIDATE-HELD-FILES",
+      "title": "The naming-clarity check reads zero over the validate crate, whose two findings sit in a file a P103 item holds",
+      "why": "check-naming-clarity reads 197 live findings and 1 waived over the whole crates/ tree at the phase own flags over 1594 judged files -- measured after the project slice this campaign committed last cleared its 5, which had been 202 -- and by crate they are host 80, substrate 74, rules 37 and spec 6. The spec band is that 6 over 5 files, measured over crates/spec, 346 files judged, and two of the six are this item's: the two the check reads over crates/spec/nomos-spec-validate/tests/preservation_holds.rs. The crate reads exactly those 2 live findings and 0 waived over 14 judged files, so no other file in it is implicated and the crate is the right scope for this item's predicate.\n\nBoth sit in a file a live item holds by exact path. P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE-4 is Ready, its territory names that file and src/rule/no_undeclared_filler_template.rs, and its done_when requires both of its acceptance conditions -- the admitted repetition and the undeclared fourth occurrence that is still reported -- to be proved from an in-repo fixture, which means it adds tests to this file. A rename landing first would be a rename into a file that is about to change underneath it, and a rename landing after is the same edit against text that has settled, so this item declares the edge rather than competing for the file: --depends-on names that item, which itself waits on P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2, so this item becomes claimable only once both have landed.\n\nThe two findings are one of each shape the check has, and they are cleared differently.\n\nThe first is the vague-word shape:\n\n  Test_Registered_Should_Build_One_Rule_Object_Per_Declared_Identifier\n    -> Test_Registered_Should_Build_One_Rule_Per_Declared_Identifier        tests/preservation_holds.rs:68\n\nThe vague word is `object`. The test already says what it checks -- that Registered() builds exactly one rule for each identifier DECLARED_RULES names, with nothing missing and nothing extra -- and `rule object` is that same subject said twice, which is what the check's message refuses: a word standing where a responsibility should be. Dropping it loses nothing, because a rule is the concrete thing Registered() builds and returns, and the doc comment above the test says the same thing in the same words once the doc at 65 changes `one rule object per identifier` to `one rule per identifier` in the same edit. The name is a test name with no call site: the whole-token count over the file is 1, at the declaration, so nothing else moves. It is also recorded, in the test-runner output four Done items kept as their verification tail -- P23-PRESERVATION-ACCEPTED-TEMPLATE-3, P41-UNDECLARED-STATUS-TEMPLATE, P77-STALE-BINARY-RENDERS-A-TRUNCATED-PROJECTION and P103-A-REPEATED-FRAGMENT-BELOW-A-LENGTH-FLOOR-IS-NOT-A-TEMPLATE-3 -- and those tails are transcripts of runs that happened under the old name, so they are history and are not edited. This why names the old name so that searching the ledger for it still lands on the item that renamed it.\n\nThe second is the one-word shape:\n\n  Repeating -> Document_With_Repeated_Body        tests/preservation_holds.rs:365, called at 406 and 431\n\nIt returns a whole document whose body is repeated across a named number of sections, and what it returns is the input to the two measured populations the length floor separates: one body below the floor carried by more sections than the threshold needs, so that length and not the count is what dismisses it, and one at or above the floor carried by exactly the threshold, so that length is what admits it. `Repeating` named the adjective alone and left the reader to discover what repeats and what contains it. Document_With_Repeated_Body states the target (a document) and the resource (a body repeated in it), and both call sites become `let repeated = Document_With_Repeated_Body(...)`, which reads as the fixture it is. The count over the file is 3, all of them the name.\n\nThe predicate is the crate, and its scope is this item's obligation: the crate's only findings are these two, so a crate-scoped sweep reads 2 live and 0 waived over 14 judged files today and 0 with the renames applied, with no live claim holding a finding the predicate would still see.\n\nEvery measurement in this why was taken at the tree that holds a1e238b0 and before P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE-4 implemented anything, and that item adds tests to the file this item edits. The holder must therefore re-run the sweep at claim time and re-count the three occurrences of the second name in the text it finds rather than trusting the counts above; a count that no longer matches is a refusal that rebuilds the plan from what is there, not a reason to rename fewer occurrences than the file holds. If that item's fixtures bring a new one-word-named helper into the file, the sweep will say so and the rename set is rebuilt to include it, because the predicate is the crate and the crate is the obligation.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over crates/spec/nomos-spec-validate, verified by this item's predicate -- the sweep pointed at that crate, which is the scope of this item's obligation because the crate's only remaining findings are the two this item owns -- and cargo check --workspace --all-targets reports no error, since the check is a text reader over the tree and cannot see a build. The two findings are the two shapes the check has. The vague-word shape is cleared by dropping `Object` from the test name so the name says the rule Registered() builds rather than the same subject twice, with the doc comment above it changed to the same words in the same edit. The one-word shape is cleared by naming the document the helper returns and the body repeated inside it. The test name is read in one place and has no call site; the other name's three occurrences are a whole token whose count is asserted before anything is written, all three re-counted in the text found after P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE-4 is Done, because that item adds to this file. No edited line exceeds the 120 columns rustfmt.toml records, no line is reflowed, the preservation_holds test binary still builds and passes, no waiver and no in-code marker is added, and no path outside the item's one file is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-validate/tests/preservation_holds.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE-4"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/spec/nomos-spec-validate",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
