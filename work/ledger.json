@@ -82558,7 +82558,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Re-authored as P114-SURFACE-PATH-DECLARED-MODULES-STAY-UNRESOLVED-2 with two snapshots removed from territory. This version reserved tests/contract/surface/nomos-ledger.txt and tests/contract/surface/nomos-repo-policy.txt, and each is reserved by a live Ready item -- P103-A-RESERVATION-THAT-DECAYED-UNDER-A-PEERS-REFACTOR-IS-REPORTED-BY-NOTHING and P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-8, the board next item -- so holding this one would have made that one unclaimable for as long as it was held. The defect, the census and the OD-GATE-002 version 3 amendment are unchanged in the re-author, which also carries spec/domain-specification.md, the projection the record amendment moves."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -82583,7 +82587,10 @@
         }
       ],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "nomos-d2",
+        "declined_at": 1789604846
+      },
       "widened": [
         {
           "holder": "nomos-d2",
@@ -82593,6 +82600,57 @@
           "widened_at": 1789604428
         }
       ]
+    },
+    {
+      "id": "P114-SURFACE-PATH-DECLARED-MODULES-STAY-UNRESOLVED-2",
+      "title": "An in-crate module declared with a path attribute is reported unresolved, so everything under it is missing from its crate surface snapshot",
+      "why": "tests/contract/src/reading/routes.rs resolves a re-export route against a module tree built from src/lib.rs. A module declared with a path attribute is registered under what the attribute names, so the route a caller writes, which is the Rust mod name, finds no module and the re-export is reported unresolved: the name in the snapshot with nothing under it. For a type reached that way the snapshot cannot see a variant, a field, a method or a signature change, which is the property OD-GATE-002 final paragraph claims is not given up, and which version 2 of that record restored for the cross-crate case by fixing this same reader. Measured: 27 snapshots carry an unresolved section holding 182 entries between them, 117 of those name a module their own crate declares with a path attribute, 17 crates declare such modules across 126 sites, and for 13 of the 14 crates affected it accounts for every unresolved entry the crate has -- nomos-lang-rust-compiler 18 of 18, nomos-analysis 12 of 12, nomos-repo-policy 8 of 8, nomos-lang-rust-cargo and nomos-lang-rust-clippy and nomos-lang-go-modules 7 of 7 each, nomos-lang-rust-scan and nomos-lang-rust-deny 6 of 6 each, nomos-lang-rust and nomos-lang-go 4 of 4 each, nomos-connector-coderabbit 2 of 2, nomos-capability and nomos-workspace 1 of 1; only nomos-ledger is partial, 34 of 39. P22-REACHABILITY-PATH-ATTR fixed the same blind spot in a different reader and is the precedent that this is a defect rather than a concession. Two of the fourteen snapshots the repair moves are reserved by live Ready items, so they are outside this item territory and stay stale until their owners re-bless them: tests/contract/surface/nomos-ledger.txt is held by P103-A-RESERVATION-THAT-DECAYED-UNDER-A-PEERS-REFACTOR-IS-REPORTED-BY-NOTHING and tests/contract/surface/nomos-repo-policy.txt by P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-8. The predicate tolerates exactly those two crates by naming them rather than by ignoring them, so this item cannot pass by hiding a third. This is a re-author: the first version reserved those two paths as well, which would have made the board next item unclaimable for as long as this one was held.",
+      "done_when": "A reader repair in tests/contract/src resolves a re-export whose route crosses a module declared with a path attribute, proven in the direction that matters by the twelve snapshots this item reserves gaining the declarations their entries were hiding and by the suite naming no crate other than the two it is told to tolerate; the twelve are re-blessed in the same commit as the repair, because a repair that lands without them reddens the suite and a bless that lands without the repair blesses the defect; OD-GATE-002 gains a version 3 section stating what the blind spot hid and that this repair closes it, with both projections re-rendered from a tree whose registered records are exactly the ones the commit publishes; cargo check --workspace --all-targets reports no error; and read the other way, this item does not re-bless tests/contract/surface/nomos-ledger.txt or tests/contract/surface/nomos-repo-policy.txt, which remain with P103-A-RESERVATION-THAT-DECAYED-UNDER-A-PEERS-REFACTOR-IS-REPORTED-BY-NOTHING and P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-8 and are named in the predicate as the only tolerated red.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/src",
+          "tests/contract/tests/public_surface",
+          "tests/contract/surface/nomos-lang-rust-compiler.txt",
+          "tests/contract/surface/nomos-analysis.txt",
+          "tests/contract/surface/nomos-lang-go-modules.txt",
+          "tests/contract/surface/nomos-lang-rust-cargo.txt",
+          "tests/contract/surface/nomos-lang-rust-clippy.txt",
+          "tests/contract/surface/nomos-lang-rust-deny.txt",
+          "tests/contract/surface/nomos-lang-rust-scan.txt",
+          "tests/contract/surface/nomos-lang-go.txt",
+          "tests/contract/surface/nomos-lang-rust.txt",
+          "tests/contract/surface/nomos-connector-coderabbit.txt",
+          "tests/contract/surface/nomos-capability.txt",
+          "tests/contract/surface/nomos-workspace.txt",
+          "crates/spec/nomos-spec-store/records/OD-GATE-002.record",
+          "spec/domain-specification.md",
+          "diagrams/relations.mmd",
+          "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-surface-scope/nomos-surface-scope.exe",
+          "-cwd",
+          "F:/repos/nomos",
+          "-expect",
+          "nomos-ledger,nomos-repo-policy"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
