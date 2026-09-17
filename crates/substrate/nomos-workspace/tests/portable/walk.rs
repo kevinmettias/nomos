@@ -17,7 +17,7 @@ pub(crate) const CORPUS_MEMBER_FLOOR: usize = 5_000;
 ///
 /// Sorted, so a failure names the same file on two machines and the permutation test has a
 /// stable baseline to permute away from.
-pub(crate) fn Corpus(root: &Path) -> Vec<(String, String)>
+pub(crate) fn Corpus_Members_Under(root: &Path) -> Vec<(String, String)>
 {
     let mut paths = Rust_Files_Under(root);
     paths.sort();
@@ -54,7 +54,7 @@ fn Rust_Files_Under(root: &Path) -> Vec<PathBuf>
         };
         for entry in entries.flatten()
         {
-            Visit(&entry.path(), &mut pending, &mut paths);
+            Visit_Path_During_Walk(&entry.path(), &mut pending, &mut paths);
         }
     }
 
@@ -62,7 +62,7 @@ fn Rust_Files_Under(root: &Path) -> Vec<PathBuf>
 }
 
 /// One entry: a source directory to descend into later, a Rust file to keep, or neither.
-fn Visit(path: &Path, pending: &mut Vec<PathBuf>, paths: &mut Vec<PathBuf>)
+fn Visit_Path_During_Walk(path: &Path, pending: &mut Vec<PathBuf>, paths: &mut Vec<PathBuf>)
 {
     let Some(name) = path.file_name()
     else

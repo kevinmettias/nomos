@@ -7,8 +7,8 @@
 //! would stop being counted, and the declared size of the hole in
 //! `tests/contract/tests/corpus_gates.rs` would drop without any assertion being removed.
 
-use crate::arrival::{Configuration, Fresh, Ingest, Variant, Workspace};
-use crate::walk::{Assert_This_Is_That_Corpus, Corpus, CORPUS_MEMBER_FLOOR};
+use crate::arrival::{Configuration, Fresh, Ingest_Corpus_In_Batches, Variant, Workspace};
+use crate::walk::{Assert_This_Is_That_Corpus, Corpus_Members_Under, CORPUS_MEMBER_FLOOR};
 use nomos_store::{Authority, DocumentKind, DocumentStore};
 use nomos_workspace::{Applied, WorkspaceSnapshot};
 use std::ffi::OsStr;
@@ -33,7 +33,7 @@ fn Scale_Corpus_Or_Skip() -> Option<(PathBuf, Vec<(String, String)>)>
 
         return None;
     }
-    let members = Corpus(&root);
+    let members = Corpus_Members_Under(&root);
 
     Assert_This_Is_That_Corpus(&members, &root);
 
@@ -77,7 +77,7 @@ fn Test_A_Snapshot_Of_The_Real_Corpus_Should_Name_Nothing_Outside_Itself()
         return;
     };
     let mut workspace = Fresh();
-    Ingest(&mut workspace, &members, CORPUS_BATCH);
+    Ingest_Corpus_In_Batches(&mut workspace, &members, CORPUS_BATCH);
     let encoded = workspace.Snapshot().Encode();
 
     eprintln!(
@@ -136,7 +136,7 @@ fn Test_A_Snapshot_Should_Be_Interpretable_Without_The_Tree()
     };
 
     let mut workspace = Fresh();
-    Ingest(&mut workspace, &members, CORPUS_BATCH);
+    Ingest_Corpus_In_Batches(&mut workspace, &members, CORPUS_BATCH);
     let encoded = workspace.Snapshot().Encode();
     let elsewhere = WorkspaceSnapshot::Decode(&encoded).expect("bytes are all it needs");
 
@@ -192,7 +192,7 @@ fn Test_A_Recorded_Snapshot_Should_Be_Readable_From_The_Store_Alone()
     };
 
     let mut workspace = Fresh();
-    Ingest(&mut workspace, &members, CORPUS_BATCH);
+    Ingest_Corpus_In_Batches(&mut workspace, &members, CORPUS_BATCH);
     let mut store = DocumentStore::For(Workspace::Authority());
     workspace.Record(&mut store).expect("the store admits an observed measurement");
 
@@ -361,7 +361,7 @@ struct ReIngestion
 fn Ingested_Twice(members: &[(String, String)]) -> ReIngestion
 {
     let mut workspace = Fresh();
-    Ingest(&mut workspace, members, CORPUS_BATCH);
+    Ingest_Corpus_In_Batches(&mut workspace, members, CORPUS_BATCH);
 
     let after_first = workspace.Generation();
     let identity = workspace.Id();

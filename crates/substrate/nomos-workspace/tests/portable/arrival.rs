@@ -39,7 +39,7 @@ pub(crate) fn Fresh() -> Workspace
 /// Batched rather than one set per file, because that is what a real source does: a
 /// checkout arrives as one event covering hundreds of paths. It also means the permutation
 /// test permutes across change-set boundaries rather than only within one.
-pub(crate) fn Ingest(workspace: &mut Workspace, members: &[(String, String)], stride: usize)
+pub(crate) fn Ingest_Corpus_In_Batches(workspace: &mut Workspace, members: &[(String, String)], stride: usize)
 {
     for batch in members.chunks(stride.max(1))
     {

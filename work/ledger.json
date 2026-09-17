@@ -83787,6 +83787,81 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-CLARITY-SUBSTRATE-WORKSPACE-TESTS",
+      "title": "P114 naming/clarity: the substrate workspace crate, six test helpers",
+      "why": "check-naming-clarity reads a name word by word and reports a function that takes parameters whose\nname splits into one word. Six helpers in this crate are that: two fixture builders in\nsrc/workspace/tests.rs that differ only in which ChangeSource they carry, and four helpers the\nportable suite shares -- an ingester that delivers a corpus in batches, a seeded reordering, the\ncorpus walk itself, and the per-entry step of that walk. Each is renamed to say what it takes and\nwhat it gives back.\n\nThe declarations move first and the compiler then names every site that resolved to them. That is\nthe mechanic this campaign has used throughout and it is not optional here: a rename that follows\nspelling rather than resolution rewrites whatever else carries the word and reports nothing while\nit does. Measured before choosing: all six are whole tokens that occur nowhere else in this crate,\nwith no qualified call of any of them, so nothing but the six declarations and their own sites is\nin reach. The word Edit in src/lib.rs is prose inside a doc comment and is not a callable; it is\nnot a call site and does not move.",
+      "done_when": "The naming-clarity check reports zero live findings and zero waived findings over\ncrates/substrate/nomos-workspace, verified by this item's predicate -- the sweep pointed at that\ncrate, which is the scope of this item's obligation because the crate's only findings are the six\nthis item owns -- and cargo check --workspace --all-targets reports no error, since the check is a\ntext reader over the tree and cannot see a build.\n\nThe six one-word declarations move: Edit and Removal in src/workspace/tests.rs, Ingest in\ntests/portable/arrival.rs, Permuted in tests/portable/permutation.rs, Corpus and Visit in\ntests/portable/walk.rs. Each new name states the operation with its target or the value it\nreturns, and each still passes check-naming, check-abbreviations, check-single-letter-name and\ncheck-generic-parameter-name. Every site that resolved to a declaration moves with it, and the\ncall-site set is the one the compiler enumerated when the declarations moved rather than a count\npredicted in advance.\n\ncargo test -p nomos-workspace --no-fail-fast passes, no edited line exceeds the 120 columns\nrustfmt.toml records, no waiver and no in-code marker is added, and no path outside\ncrates/substrate/nomos-workspace and work/ledger.json is edited.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-workspace"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/substrate/nomos-workspace",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/substrate/nomos-workspace",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    22 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1789614432,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6927e8d0714859197f3fbd345f0e0531ca6198da"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

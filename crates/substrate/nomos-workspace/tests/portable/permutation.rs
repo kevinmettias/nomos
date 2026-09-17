@@ -4,7 +4,7 @@
 //! corpus — it builds five hundred synthetic members, because the claim is about the walk
 //! rather than about any particular tree. It lives beside the walk it checks.
 
-use crate::arrival::{Fresh, Ingest, Workspace};
+use crate::arrival::{Fresh, Ingest_Corpus_In_Batches, Workspace};
 
 /// How many arrival orders this suite produces, and therefore how many seeds it tries. The
 /// hundred permutations are a hundred distinct orders, so the count is one quantity.
@@ -46,7 +46,7 @@ pub(crate) struct Taken
 /// editor arriving in either order actually needs.
 pub(crate) fn Snapshot_Of_One_Order(members: &[(String, String)], permutation: u32) -> Taken
 {
-    let ordered = Permuted(members, permutation);
+    let ordered = Members_Permuted_By_Seed(members, permutation);
     let stride = 1_usize.saturating_add(
         usize::try_from(permutation)
             .unwrap_or(0)
@@ -56,7 +56,7 @@ pub(crate) fn Snapshot_Of_One_Order(members: &[(String, String)], permutation: u
     );
     let mut workspace: Workspace = Fresh();
 
-    Ingest(&mut workspace, &ordered, stride);
+    Ingest_Corpus_In_Batches(&mut workspace, &ordered, stride);
 
     return Taken {
         bytes: workspace.Snapshot().Encode(),
@@ -103,7 +103,7 @@ const STRIDE: usize = 7_919;
 /// the seeds used, the walk visits every element exactly once — a shuffle that dropped or
 /// repeated elements would make the test compare snapshots of different corpora and pass
 /// only by accident.
-pub(crate) fn Permuted(members: &[(String, String)], seed: u32) -> Vec<(String, String)>
+pub(crate) fn Members_Permuted_By_Seed(members: &[(String, String)], seed: u32) -> Vec<(String, String)>
 {
     let Some(offset) = usize::try_from(seed)
         .unwrap_or(0)
@@ -154,7 +154,7 @@ fn Test_The_Permutation_Should_Reorder_Without_Losing_Anything()
     let mut orders = std::collections::BTreeSet::new();
     for seed in 0..PERMUTATION_COUNT
     {
-        let permuted = Permuted(&members, seed);
+        let permuted = Members_Permuted_By_Seed(&members, seed);
         let order = Path_Order(&permuted);
 
         Assert_Holds_Every_Member(&permuted, &members, seed);
