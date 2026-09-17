@@ -1,6 +1,6 @@
-//! [`Handle_Correction_Run`] and its own [`CorrectionResponse`], paired in one file: the
-//! response type exists only for this one handler, the same "handler beside its own
-//! response" locality [`crate::response::gate_run_response`] keeps.
+//! [`Handle_Correction_Run`] and its own [`CorrectionResponse`], the response type in the
+//! file named after it beside this one: the same "handler beside its own response"
+//! locality [`crate::response::gate_run_response`] keeps.
 //!
 //! `P40-CORRECTIONS-CANONICAL-SEAM` gives this crate its first correction verb: a deliberate
 //! twin of `nomos-cli`'s own `correct.rs`, calling the identical
@@ -12,7 +12,10 @@
 use crate::{composition, sources};
 use nomos_correction_orchestration::{CorrectionCommand, CorrectionEnvironment, CorrectionOutcome, Run_Correction};
 use nomos_composer_std::{ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
-use serde::Serialize;
+
+mod correction_response;
+
+pub use correction_response::CorrectionResponse;
 
 /// Walks `command.root` and runs the correction exactly as `nomos correct phantom-mirrors`
 /// would, and hands back a JSON-serializable [`CorrectionResponse`].
@@ -27,45 +30,6 @@ pub fn Handle_Correction_Run(command: &CorrectionCommand) -> CorrectionResponse
     );
 
     return CorrectionResponse::From(outcome);
-}
-
-/// A serializable twin of [`nomos_correction_orchestration::CorrectionOutcome`].
-///
-/// A twin rather than a re-export because the type it mirrors does not derive
-/// `Serialize`, for the reason `crate::response`'s own doc gives for `Disposition`; kept
-/// to the same variants, in the same order, so a mismatch between the two is a compile
-/// error in [`CorrectionResponse::From`] rather than a silent divergence. `preview` is
-/// rendered lossily to a `String` rather than carried as `Vec<u8>`: every real preview
-/// this seam produces is `nomos_corrections::Preview`'s own UTF-8 rendering, and a wire
-/// caller reading JSON has no use for a byte array it would only decode back to text.
-#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
-#[serde(rename_all = "snake_case", tag = "outcome")]
-pub enum CorrectionResponse
-{
-    UnreadableRoot,
-    NoSourceFound,
-    UnreadableWorkspaceState,
-    ContradictoryRegistry
-    {
-        reason: String,
-    },
-    NoFactsMaterialized
-    {
-        files: usize,
-    },
-    Clean,
-    Refused
-    {
-        reason: String,
-    },
-    Staged
-    {
-        path: String, summary: String, preview: String,
-    },
-    Committed
-    {
-        path: String, summary: String, preview: String, base: String, after: String,
-    },
 }
 
 impl CorrectionResponse

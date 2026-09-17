@@ -1,7 +1,7 @@
 //! [`Handle_Agent_Execute`] and [`Handle_Agent_Judge_Role`], and their own
-//! [`AgentDispatchResponse`]/[`AgentJudgeRoleResponse`], paired in one file: the response
-//! types exist only for these two handlers, the same "handler beside its own response"
-//! locality [`crate::correction`] and [`crate::check`] both keep.
+//! [`AgentDispatchResponse`]/[`AgentJudgeRoleResponse`], each in the file named for it: the
+//! response types exist only for these two handlers, the same "handler beside its own
+//! response" locality [`crate::correction`] and [`crate::check`] both keep.
 //!
 //! `P43-AGENT-CANONICAL-SEAM-2` gives this crate its first Agent verbs: deliberate twins of
 //! `nomos-cli`'s own `agent execute`/`agent judge-role`, calling the identical
@@ -38,12 +38,13 @@ use nomos_agent_orchestration::{AgentDispatchOutcome, AgentEnvironment, Dispatch
 use nomos_agent_executor_claude_code::MicroDollars;
 use nomos_composer_std::LAUNCHER;
 use nomos_rules::RoleSurfacePair;
-use serde::Serialize;
 use std::path::Path;
 
-mod judge_role_response;
+mod agent_dispatch_response;
+mod agent_judge_role_response;
 
-pub use judge_role_response::AgentJudgeRoleResponse;
+pub use agent_dispatch_response::AgentDispatchResponse;
+pub use agent_judge_role_response::AgentJudgeRoleResponse;
 
 /// Dispatches `goal` to `config.backend` exactly as `nomos agent execute --goal <goal>
 /// --effort <effort>` would, and hands back a JSON-serializable [`AgentDispatchResponse`].
@@ -138,31 +139,6 @@ fn Crate_Root(root: &Path, crate_name: &str) -> String
         .map(str::trim)
         .find(|line| return line.trim_matches(['"', ',']).ends_with(crate_name))
         .map_or_else(|| return crate_name.to_owned(), |line| return line.trim_matches([' ', '"', ',']).to_owned());
-}
-
-/// A serializable twin of [`AgentDispatchOutcome`].
-///
-/// `ClaudeCode`'s `assumptions`/`unresolved_questions` are
-/// [`nomos_agent_contracts::WorkResult`]'s own two fields this executor can honestly
-/// populate -- `OD-EXECUTOR-008`'s decision. `plan`, `claims`, `tests` and
-/// `requested_verification` are not projected here because they are always structurally
-/// absent for this executor, never because a wire caller could not use them if they existed.
-#[derive(Clone, Debug, PartialEq, Serialize)]
-#[serde(rename_all = "snake_case", tag = "backend")]
-pub enum AgentDispatchResponse
-{
-    ClaudeCode
-    {
-        assumptions: Vec<String>, unresolved_questions: Vec<String>, denied_tool_uses: Vec<String>, is_error: bool, cost_usd: f64, duration_ms: u64
-    },
-    Ollama
-    {
-        response: String
-    },
-    Unavailable
-    {
-        reason: String
-    },
 }
 
 /// `cost` as the dollar figure the wire publishes.

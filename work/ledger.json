@@ -84612,6 +84612,78 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P114-FILENAME-NOMOS-API",
+      "title": "P114 file-name: the nomos-api response types, in files named for them",
+      "why": "The naming phase over crates/ reads 144 live findings and 17 waived, with 2 of its 8 checks not clean; file-name is 26 of those 144, over 9 crates. Four of the 26 are this crate's, and every one is one file declaring exactly one public type whose snake_case does not equal the file stem: src/agent.rs:152 `AgentDispatchResponse`, src/agent/judge_role_response.rs:14 `AgentJudgeRoleResponse`, src/correction.rs:43 `CorrectionResponse`, and src/workflow.rs:142 `WorkflowRunResponse`. Measured now, `check.exe file-name --include-tests` over those four files reads 4 findings and judges 4 files, one finding each.",
+      "done_when": "The four file-name findings this crate reports are gone: `check.exe file-name --include-tests` over the seven paths this item leaves behind reads no finding and judges every one of them, verified by this item's predicate, and cargo check --workspace --all-targets reports no error -- the check is a text reader over the tree and cannot see a build.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/agent.rs",
+          "crates/host/nomos-api/src/agent/judge_role_response.rs",
+          "crates/host/nomos-api/src/agent/agent_dispatch_response.rs",
+          "crates/host/nomos-api/src/agent/agent_judge_role_response.rs",
+          "crates/host/nomos-api/src/correction.rs",
+          "crates/host/nomos-api/src/correction/correction_response.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "crates/host/nomos-api/src/workflow/workflow_run_response.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards/check.exe",
+          "file-name",
+          "--include-tests",
+          "F:/repos/nomos/crates/host/nomos-api/src/agent.rs",
+          "F:/repos/nomos/crates/host/nomos-api/src/agent/agent_dispatch_response.rs",
+          "F:/repos/nomos/crates/host/nomos-api/src/agent/agent_judge_role_response.rs",
+          "F:/repos/nomos/crates/host/nomos-api/src/correction.rs",
+          "F:/repos/nomos/crates/host/nomos-api/src/correction/correction_response.rs",
+          "F:/repos/nomos/crates/host/nomos-api/src/workflow.rs",
+          "F:/repos/nomos/crates/host/nomos-api/src/workflow/workflow_run_response.rs"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "C:/Users/kmett/source/repos/kevinmettias/code-standards/check.exe",
+          "file-name",
+          "--include-tests",
+          "F:/repos/nomos/crates/host/nomos-api/src/agent.rs",
+          "F:/repos/nomos/crates/host/nomos-api/src/agent/agent_dispatch_response.rs",
+          "F:/repos/nomos/crates/host/nomos-api/src/agent/agent_judge_role_response.rs",
+          "F:/repos/nomos/crates/host/nomos-api/src/correction.rs",
+          "F:/repos/nomos/crates/host/nomos-api/src/correction/correction_response.rs",
+          "F:/repos/nomos/crates/host/nomos-api/src/workflow.rs",
+          "F:/repos/nomos/crates/host/nomos-api/src/workflow/workflow_run_response.rs"
+        ],
+        "exit_code": 0,
+        "output_tail": "check-file-name: no findings.\ncheck-file-name: 7 file(s) judged.\n",
+        "verified_at": 1789626915,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4aaaa4a7fe456f768249d0a44fc0e5444f6e7c7c"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

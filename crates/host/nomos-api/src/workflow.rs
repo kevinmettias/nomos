@@ -43,7 +43,6 @@ use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use nomos_gate_orchestration::Fresh_Run_Id;
 use nomos_platform::Clock;
 use nomos_workflow_orchestration::{Body, CheckBody, CommitIntent, CorrectionBody, GateBody, Platform, Run, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
-use serde::Serialize;
 
 mod agent_execution_error_response;
 mod agent_execution_outcome_response;
@@ -51,6 +50,7 @@ mod dispatch_error_response;
 mod ollama_execution_error_response;
 mod ollama_execution_outcome_response;
 mod step_outcome_response;
+mod workflow_run_response;
 
 pub use agent_execution_error_response::AgentExecutionErrorResponse;
 pub use agent_execution_outcome_response::AgentExecutionOutcomeResponse;
@@ -58,6 +58,7 @@ pub use dispatch_error_response::DispatchErrorResponse;
 pub use ollama_execution_error_response::OllamaExecutionErrorResponse;
 pub use ollama_execution_outcome_response::OllamaExecutionOutcomeResponse;
 pub use step_outcome_response::StepOutcomeResponse;
+pub use workflow_run_response::WorkflowRunResponse;
 
 /// Walks whichever of `plan.body`'s root(s) needs walking, dispatches the one step through
 /// `nomos_workflow_orchestration::Run`, and hands back a JSON-serializable
@@ -128,37 +129,6 @@ fn Walked_Body(body: Body) -> Result<Body, WorkflowRunResponse>
     };
 }
 
-/// A serializable twin of [`nomos_workflow_orchestration::WorkflowOutcome`].
-///
-/// A twin rather than a re-export because the type it mirrors does not derive `Serialize`,
-/// for the reason [`crate::response`]'s own doc gives. `UnreadableRoot` is not one of
-/// [`WorkflowOutcome`]'s own three variants: it is this handler's own composition-root
-/// answer for a named root that is not a directory, the identical case `nomos-cli`'s own
-/// `workflow.rs` reports as a bare exit code, outside `Rendered`'s own match, rather than
-/// inventing a fourth case inside `WorkflowOutcome` itself for a question that function
-/// never asks.
-#[derive(Debug, Serialize)]
-#[serde(rename_all = "snake_case", tag = "outcome")]
-pub enum WorkflowRunResponse
-{
-    UnreadableRoot
-    {
-        reason: String,
-    },
-    Completed
-    {
-        completed: Vec<StepOutcomeResponse>,
-    },
-    Refused
-    {
-        completed: Vec<StepOutcomeResponse>, index: usize,
-    },
-    Failed
-    {
-        completed: Vec<StepOutcomeResponse>, index: usize, error: DispatchErrorResponse,
-    },
-}
-
 impl WorkflowRunResponse
 {
     fn From(outcome: WorkflowOutcome) -> Self
@@ -169,7 +139,7 @@ impl WorkflowRunResponse
             WorkflowOutcome::Refused { completed, index } => Self::Refused { completed: Completed_Response(completed), index },
             WorkflowOutcome::Failed { completed, index, error } =>
             {
-                Self::Failed { completed: Completed_Response(completed), index, error: DispatchErrorResponse::From(error) }
+                Self::Failed { completed: Completed_Response(completed), index, error: Error_Response(error) }
             }
         };
     }
@@ -178,6 +148,13 @@ impl WorkflowRunResponse
 fn Completed_Response(completed: Vec<StepOutcome>) -> Vec<StepOutcomeResponse>
 {
     return completed.into_iter().map(StepOutcomeResponse::From).collect();
+}
+
+/// The `Failed` arm's own `error` field, converted for the wire -- the peer of
+/// [`Completed_Response`], which converts that same arm's `completed` field.
+fn Error_Response(error: nomos_workflow_orchestration::DispatchError) -> DispatchErrorResponse
+{
+    return DispatchErrorResponse::From(error);
 }
 
 #[cfg(test)]
