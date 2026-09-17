@@ -47,7 +47,7 @@ impl FileSystem for FakeFileSystem
     }
 }
 
-fn Declaring(block: serde_json::Value) -> FakeFileSystem
+fn Declaring_Filesystem(block: serde_json::Value) -> FakeFileSystem
 {
     return FakeFileSystem { text: block.to_string() };
 }
@@ -76,7 +76,7 @@ fn Test_Discover_Workspace_Should_Declare_Nothing_For_A_File_With_None_Of_The_Ke
 #[test]
 fn Test_Discover_Workspace_Should_Read_A_Whole_Declaration()
 {
-    let filesystem = Declaring(serde_json::json!({
+    let filesystem = Declaring_Filesystem(serde_json::json!({
         "components": ["Domain", "Api"],
         "members": { "billing": "Domain", "http": "Api" },
         "permits": { "Api": ["Domain"] },
@@ -100,13 +100,13 @@ fn Test_Discover_Workspace_Should_Read_A_Whole_Declaration()
 /// same file, which is the drift `crate::naming::reading::Canonical_Order` sorts against for
 /// the same reason.
 #[test]
-fn Test_Discover_Workspace_Should_Order_Rows_Independently_Of_The_Objects_Own_Order()
+fn Test_Discover_Workspace_Should_Order_Rows_Independently_Of_The_Declared_Key_Order()
 {
-    let forwards = Declaring(serde_json::json!({
+    let forwards = Declaring_Filesystem(serde_json::json!({
         "components": ["Domain", "Api"],
         "members": { "alpha": "Domain", "zulu": "Api" }
     }));
-    let backwards = Declaring(serde_json::json!({
+    let backwards = Declaring_Filesystem(serde_json::json!({
         "components": ["Domain", "Api"],
         "members": { "zulu": "Api", "alpha": "Domain" }
     }));
@@ -123,7 +123,7 @@ fn Test_Discover_Workspace_Should_Order_Rows_Independently_Of_The_Objects_Own_Or
 #[test]
 fn Test_Components_Should_Keep_The_Order_They_Were_Declared_In()
 {
-    let filesystem = Declaring(serde_json::json!({ "components": ["Zulu", "Alpha", "Mike"] }));
+    let filesystem = Declaring_Filesystem(serde_json::json!({ "components": ["Zulu", "Alpha", "Mike"] }));
 
     let payload = Discover_Workspace(Path::new("."), &filesystem).expect("well-formed JSON");
 
@@ -143,7 +143,7 @@ fn Test_Discover_Workspace_Should_Refuse_Invalid_Json()
 #[test]
 fn Test_Discover_Workspace_Should_Refuse_A_Components_Value_That_Is_Not_An_Array()
 {
-    let filesystem = Declaring(serde_json::json!({ "components": "Domain" }));
+    let filesystem = Declaring_Filesystem(serde_json::json!({ "components": "Domain" }));
 
     let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a non-array components must be refused");
 
@@ -151,16 +151,16 @@ fn Test_Discover_Workspace_Should_Refuse_A_Components_Value_That_Is_Not_An_Array
 }
 
 #[test]
-fn Test_Discover_Workspace_Should_Refuse_A_Lookup_That_Is_Not_An_Object()
+fn Test_Discover_Workspace_Should_Refuse_A_Non_Mapping_Lookup()
 {
-    for (key, block) in Non_Object_Lookups()
+    for (key, block) in Non_Mapping_Lookups()
     {
-        let error = Discover_Workspace(Path::new("."), &Declaring(block)).expect_err("a non-object lookup must be refused");
+        let error = Discover_Workspace(Path::new("."), &Declaring_Filesystem(block)).expect_err("a non-object lookup must be refused");
         assert!(error.reason.contains(&format!("{key} is not an object")), "{key}: {}", error.reason);
     }
 }
 
-fn Non_Object_Lookups() -> Vec<(&'static str, serde_json::Value)>
+fn Non_Mapping_Lookups() -> Vec<(&'static str, serde_json::Value)>
 {
     return vec![
         ("members", serde_json::json!({ "members": ["billing"] })),
@@ -173,7 +173,7 @@ fn Non_Object_Lookups() -> Vec<(&'static str, serde_json::Value)>
 #[test]
 fn Test_Discover_Workspace_Should_Refuse_A_Member_Whose_Component_Is_Not_A_Name()
 {
-    let filesystem = Declaring(serde_json::json!({ "components": ["Domain"], "members": { "billing": NOT_A_NAME } }));
+    let filesystem = Declaring_Filesystem(serde_json::json!({ "components": ["Domain"], "members": { "billing": NOT_A_NAME } }));
 
     let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a non-string component must be refused");
 
@@ -183,7 +183,7 @@ fn Test_Discover_Workspace_Should_Refuse_A_Member_Whose_Component_Is_Not_A_Name(
 #[test]
 fn Test_Discover_Workspace_Should_Refuse_A_Permits_Target_List_That_Is_Not_An_Array()
 {
-    let filesystem = Declaring(serde_json::json!({ "components": ["Domain", "Api"], "permits": { "Api": "Domain" } }));
+    let filesystem = Declaring_Filesystem(serde_json::json!({ "components": ["Domain", "Api"], "permits": { "Api": "Domain" } }));
 
     let error = Discover_Workspace(Path::new("."), &filesystem).expect_err("a non-array target list must be refused");
 
