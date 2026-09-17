@@ -13,7 +13,7 @@
 //! entirely, so that this layer stays the one that knows nothing about a vendor field name
 //! at all -- not even enough to ask for one by name.
 
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
+use nomos_platform::{Command, ExitOutcome, ProgramLauncher};
 use std::time::Duration;
 
 /// `gh api` against one comment id is one HTTPS round trip to the GitHub API; warm, it
@@ -49,7 +49,7 @@ impl core::fmt::Display for FetchError
 /// is a genuine verdict on whether the fetch succeeded (comment deleted, repository
 /// private, token missing every scope `gh auth status` would have reported), not a report
 /// this reader must relay as data.
-pub fn Fetch_Review_Comment<Launcher: ProcessLauncher>(repository: &str, comment_id: u64, launcher: &Launcher) -> Result<Vec<u8>, FetchError>
+pub fn Fetch_Review_Comment<Launcher: ProgramLauncher>(repository: &str, comment_id: u64, launcher: &Launcher) -> Result<Vec<u8>, FetchError>
 {
     let command = Github_Api_Review_Comment_Command(repository, comment_id);
     let output = launcher.Run(&command).map_err(|error| FetchError {
@@ -63,7 +63,7 @@ pub fn Fetch_Review_Comment<Launcher: ProcessLauncher>(repository: &str, comment
 
 fn Github_Api_Review_Comment_Command(repository: &str, comment_id: u64) -> Command
 {
-    return Command::New(
+    return Command::From_String_Arguments(
         vec![
             "gh".to_owned(),
             "api".to_owned(),

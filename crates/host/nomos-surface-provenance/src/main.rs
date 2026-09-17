@@ -61,7 +61,7 @@ mod exit_code;
 
 use exit_code::ExitCode;
 use machine::Machine;
-use nomos_platform::{Environment, ProcessLauncher};
+use nomos_platform::{Environment, ProgramLauncher};
 
 fn main() -> std::process::ExitCode
 {
@@ -80,14 +80,14 @@ fn main() -> std::process::ExitCode
 /// Parses the command line, runs every query it names through `launcher`, and renders
 /// what came back.
 ///
-/// Generic over [`ProcessLauncher`], over [`Environment`] and over `impl Write` for the
+/// Generic over [`ProgramLauncher`], over [`Environment`] and over `impl Write` for the
 /// same reason: [`main`] is the only caller that needs a real `git`, a real working
 /// directory and a real `stdout`, and a test that wants any of them replaced should not
 /// have to reach through a process boundary to do it — the same shape
 /// `nomos-cli::check::Run` already uses for the `Write` half.
 fn Run_From_String_Arguments(
     arguments: &[String],
-    machine: &Machine<'_, impl ProcessLauncher, impl Environment>,
+    machine: &Machine<'_, impl ProgramLauncher, impl Environment>,
     stdout: &mut impl std::io::Write,
     stderr: &mut impl std::io::Write,
 ) -> ExitCode
@@ -107,7 +107,7 @@ fn Run_From_String_Arguments(
 /// answer: parse, select, query, render.
 fn Report_Text_From_String_Arguments(
     arguments: &[String],
-    machine: &Machine<'_, impl ProcessLauncher, impl Environment>,
+    machine: &Machine<'_, impl ProgramLauncher, impl Environment>,
     stderr: &mut impl std::io::Write,
 ) -> Result<String, ExitCode>
 {
@@ -170,7 +170,7 @@ fn Known_Names(wanted: &[String], known: &[String], stderr: &mut impl std::io::W
 /// Whether `docs/records/` was touched in this range, then the finding for every selected
 /// crate given that answer.
 fn Findings_For_Selected_Crates(
-    launcher: &impl ProcessLauncher,
+    launcher: &impl ProgramLauncher,
     parsed: &self::arguments::Parsed,
     selected: &[String],
     stderr: &mut impl std::io::Write,
@@ -196,7 +196,7 @@ fn Findings_For_Selected_Crates(
 
 /// The finding for every selected crate, stopping at the first query that could not run.
 fn Findings_For_Every(
-    launcher: &impl ProcessLauncher,
+    launcher: &impl ProgramLauncher,
     query: &evaluate::Query<'_>,
     selected: &[String],
     stderr: &mut impl std::io::Write,

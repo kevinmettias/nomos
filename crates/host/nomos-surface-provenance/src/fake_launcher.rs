@@ -9,7 +9,7 @@
 //! silent stub.
 
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_platform::{Command, ExitOutcome, ProgramLauncher, ProgramOutput};
 
 /// The stdout a scripted answer hands back. A distinct type from [`Stderr`] only so the
 /// two adjacent `&str` positions in [`Scripted::Answer`] cannot be swapped without the
@@ -66,9 +66,9 @@ impl Strategy for Scripted
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for Scripted
+impl ProgramLauncher for Scripted
 {
-    fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, command: &Command) -> Result<ProgramOutput, String>
     {
         let joined = command.argv.join(" ");
         let answer = self
@@ -77,7 +77,7 @@ impl ProcessLauncher for Scripted
             .find(|answer| joined.contains(answer.matching.as_str()))
             .ok_or_else(|| format!("no scripted answer matches: {joined}"))?;
 
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome: ExitOutcome::Exited { code: answer.code },
             stdout: answer.stdout.clone(),
             stderr: answer.stderr.clone(),
@@ -98,7 +98,7 @@ mod tests
     fn Test_New_Should_Start_With_No_Scripted_Answers()
     {
         let launcher = Scripted::New();
-        let command = Command::New(vec!["git".to_owned(), "diff".to_owned()], Duration::from_secs(1));
+        let command = Command::From_String_Arguments(vec!["git".to_owned(), "diff".to_owned()], Duration::from_secs(1));
 
         let result = launcher.Run(&command);
 
@@ -117,7 +117,7 @@ mod tests
         let launcher = Scripted::New()
             .Answer("log", 1, Stdout(""), Stderr("boom"))
             .Answer("diff", 0, Stdout("clean\n"), Stderr(""));
-        let command = Command::New(
+        let command = Command::From_String_Arguments(
             vec!["git".to_owned(), "diff".to_owned(), "a".to_owned(), "b".to_owned()],
             Duration::from_secs(1),
         );

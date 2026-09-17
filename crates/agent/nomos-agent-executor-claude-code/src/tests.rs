@@ -18,7 +18,7 @@ use std::path::PathBuf;
 
 use nomos_contracts::{CapabilityId, RuleId, SchemaId};
 use nomos_ledger::Territory;
-use nomos_platform::{Command, ExitOutcome, ProcessOutput};
+use nomos_platform::{Command, ExitOutcome, ProgramOutput};
 use xvpe_agent_execution::{AgentWorkspace, ToolGrant};
 
 use super::*;
@@ -91,12 +91,12 @@ impl Strategy for Scripted
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for Scripted
+impl ProgramLauncher for Scripted
 {
-    fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, command: &Command) -> Result<ProgramOutput, String>
     {
         self.seen.borrow_mut().push(command.clone());
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome: ExitOutcome::Exited { code: 0 },
             stdout: self.stdout.clone(),
             stderr: String::new(),
@@ -119,12 +119,12 @@ impl Strategy for Meddling
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for Meddling
+impl ProgramLauncher for Meddling
 {
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
     {
         std::fs::write(&self.writes_to, b"changed by the dispatch").expect("the fixture file");
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome: ExitOutcome::Exited { code: 0 },
             stdout: A_VALID_RESPONSE.to_owned(),
             stderr: String::new(),

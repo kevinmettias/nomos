@@ -54,7 +54,7 @@ pub enum AuditResponse
         /// Every `Ready` item something stands between and an agent that would take it.
         blocked: Vec<BlockedItem>,
         /// The moment the board was read.
-        #[serde(with = "nomos_platform::timestamp_serde")]
+        #[serde(serialize_with = "nomos_platform::timestamp_serde::Write_Unix_Seconds")]
         now: Timestamp,
     },
     /// The ledger file could not be read at all.

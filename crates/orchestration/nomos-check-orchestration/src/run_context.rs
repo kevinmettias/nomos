@@ -17,7 +17,7 @@
 use nomos_analysis::{Context, MemoryFactStore};
 use nomos_capability::Registry;
 use nomos_contracts::{Finding, RuleId};
-use nomos_platform::{Environment, FileSystem, ProcessLauncher};
+use nomos_platform::{Environment, FileSystem, ProgramLauncher};
 use nomos_rules::{RequiredFact, SourceFile, DESCRIPTORS};
 use nomos_workspace::{BuildVariant, Workspace};
 use std::path::Path;
@@ -38,7 +38,7 @@ pub use rule_reassessment_cache::RuleReassessmentCache;
 /// and writes -- grouped into one value so [`Run`] stays within this crate's own
 /// parameter-count limit. See [`Run`]'s own documentation for why each is a composition-root
 /// value this crate cannot compute for itself.
-pub struct RunContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
+pub struct RunContext<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 {
     pub variant: BuildVariant,
     pub root: &'a Path,
@@ -107,7 +107,7 @@ pub struct RunContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Enviro
 /// [`RuleReassessmentCache`] existed. A caller wanting the skip keeps its own cache across
 /// calls and calls [`Run_Reassessing`] directly instead.
 #[must_use]
-pub fn Run<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+pub fn Run<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     sources: &[SourceFile],
     context: RunContext<'_, Launcher, Fs, Env>,
     selected: &[RuleId],
@@ -129,7 +129,7 @@ pub fn Run<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
 /// either function. What only this function adds is skipping the *rule* on top of that,
 /// for a rule the syntax family is the only thing it reads.
 #[must_use]
-pub fn Run_Reassessing<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+pub fn Run_Reassessing<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     sources: &[SourceFile],
     context: RunContext<'_, Launcher, Fs, Env>,
     selected: &[RuleId],
@@ -229,7 +229,7 @@ fn Materialized_Syntax_Facts(sources: &[SourceFile], context: &Context, store: &
 /// selection -- everything [`Judged_Over`] needs beside the sources and mutable state it is
 /// handed separately, grouped so that function's parameter list names one environment
 /// instead of six loose values.
-struct RunEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
+struct RunEnvironment<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 {
     root: &'a Path,
     launcher: &'a Launcher,
@@ -256,7 +256,7 @@ struct RunState<'a>
 
 /// Every capability [`Run`] can materialize, judged -- the two steps [`Run`] itself used to
 /// inline, composed here so its own body names one step instead of four.
-fn Judged_Over<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], environment: RunEnvironment<'_, Launcher, Fs, Env>, state: &mut RunState<'_>) -> Vec<Finding>
+fn Judged_Over<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], environment: RunEnvironment<'_, Launcher, Fs, Env>, state: &mut RunState<'_>) -> Vec<Finding>
 {
     let mut materialization_environment = MaterializationEnvironment {
         root: environment.root,
@@ -300,7 +300,7 @@ struct MaterializedCapability
 /// The `root`, `context`, `store`, `launcher`, `filesystem` and `environment` every section
 /// of `capabilities::Materialize_Capabilities` reads or writes through -- grouped into one
 /// value so that function takes those six as one parameter rather than six.
-struct MaterializationEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
+struct MaterializationEnvironment<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 {
     root: &'a Path,
     context: &'a Context,

@@ -4,7 +4,7 @@
 use nomos_platform_std::StdEnvironment;
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use super::*;
-use nomos_platform::ProcessOutput;
+use nomos_platform::ProgramOutput;
 use std::cell::RefCell;
 
 /// A launcher that hands `Discover_Workspace` a fixed stderr stream instead of running
@@ -23,11 +23,11 @@ impl Strategy for FakeLauncher
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for FakeLauncher
+impl ProgramLauncher for FakeLauncher
 {
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
     {
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome: ExitOutcome::Exited { code: 0 },
             stdout: String::new(),
             stderr: self.stderr.clone(),
@@ -39,7 +39,7 @@ impl ProcessLauncher for FakeLauncher
 /// actually running one — what [`Test_Discover_Workspace_Should_Pin_Cargo_Denys_Own_
 /// Config_Discovery_To_Roots_Own_Deny_Toml`] asserts the exact argv of, and what
 /// [`Test_Discover_Workspace_Should_Refuse_Before_Launching_When_Root_Has_No_Deny_
-/// Toml`] asserts is never invoked at all. `ProcessLauncher::Run` takes `&self`, so
+/// Toml`] asserts is never invoked at all. `ProgramLauncher::Run` takes `&self`, so
 /// recording needs interior mutability rather than a `&mut self` this trait does not
 /// offer.
 struct RecordingLauncher
@@ -63,13 +63,13 @@ impl Strategy for RecordingLauncher
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for RecordingLauncher
+impl ProgramLauncher for RecordingLauncher
 {
-    fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, command: &Command) -> Result<ProgramOutput, String>
     {
         self.received.borrow_mut().push(command.clone());
 
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome: ExitOutcome::Exited { code: 0 },
             stdout: String::new(),
             stderr: Completed_Summary(),

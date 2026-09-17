@@ -1,6 +1,6 @@
 //! The two ports this binary reaches the machine through, as one value.
 
-use nomos_platform::{Environment, ProcessLauncher};
+use nomos_platform::{Environment, ProgramLauncher};
 
 /// A process launcher for running `git`, and the environment `--root` defaults from.
 ///
@@ -14,7 +14,7 @@ use nomos_platform::{Environment, ProcessLauncher};
 /// took [`crate::Run_From_String_Arguments`] to five parameters against a cap of four. The
 /// answer that rule pushed toward is the better one: a third port added later joins this
 /// struct instead of widening every signature between here and the composition root again.
-pub(crate) struct Machine<'a, Launcher: ProcessLauncher, Surroundings: Environment>
+pub(crate) struct Machine<'a, Launcher: ProgramLauncher, Surroundings: Environment>
 {
     pub(crate) launcher: &'a Launcher,
     pub(crate) environment: &'a Surroundings,

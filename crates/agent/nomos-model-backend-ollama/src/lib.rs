@@ -50,7 +50,7 @@ pub use agent_execution_outcome::AgentExecutionOutcome;
 use std::path::Path;
 
 use nomos_agent_contracts::TaskEnvelope;
-use nomos_platform::ProcessLauncher;
+use nomos_platform::ProgramLauncher;
 use nomos_platform_xvpe::XvpeLauncher;
 use xvpe_agent_backend_ollama::{DEFAULT_TIMEOUT, OllamaDispatch};
 use xvpe_agent_execution::{
@@ -67,7 +67,7 @@ use xvpe_agent_execution::{
 /// [`AgentExecutionError::Unavailable`] if the isolated directory could not be
 /// created, the process could not be started, it exited non-zero — including
 /// when the daemon this backend requires is unreachable — or a bound killed it.
-pub fn Execute_Task<Launcher: ProcessLauncher>(
+pub fn Execute_Task<Launcher: ProgramLauncher>(
     task: &TaskEnvelope,
     launcher: &Launcher,
 ) -> Result<AgentExecutionOutcome, AgentExecutionError>
@@ -85,7 +85,7 @@ pub fn Execute_Task<Launcher: ProcessLauncher>(
 /// # Errors
 ///
 /// The same as [`Execute_Task`].
-pub fn Execute_In<Launcher: ProcessLauncher>(
+pub fn Execute_In<Launcher: ProgramLauncher>(
     task: &TaskEnvelope,
     launcher: &Launcher,
     working_directory: &Path,
@@ -117,7 +117,7 @@ pub(crate) fn Capability() -> AgentCapability
 
 /// The one call into the engine, over a boundary already decided on, after the one
 /// envelope constraint this backend can answer.
-fn Dispatch_Task<Launcher: ProcessLauncher>(
+fn Dispatch_Task<Launcher: ProgramLauncher>(
     task: &TaskEnvelope,
     launcher: &Launcher,
     capability: AgentCapability,

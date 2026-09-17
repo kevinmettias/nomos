@@ -2,7 +2,7 @@
 
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use super::*;
-use nomos_platform::ProcessOutput;
+use nomos_platform::ProgramOutput;
 
 /// A limit wider than the text it is asked to keep, so the short-output case is kept whole
 /// rather than truncated.
@@ -231,9 +231,9 @@ impl Strategy for Simulated
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for &Simulated
+impl ProgramLauncher for &Simulated
 {
-    fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, command: &Command) -> Result<ProgramOutput, String>
     {
         let outcome = if self.keeps_producing
         {
@@ -257,7 +257,7 @@ impl ProcessLauncher for &Simulated
             ExitOutcome::TimedOut
         };
 
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome,
             stdout: String::new(),
             stderr: String::new(),
@@ -334,11 +334,11 @@ impl Strategy for ExitsPromptly
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for &ExitsPromptly
+impl ProgramLauncher for &ExitsPromptly
 {
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
     {
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome: ExitOutcome::Exited { code: 0 },
             stdout: "all good".to_owned(),
             stderr: String::new(),

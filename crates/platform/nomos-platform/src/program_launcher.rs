@@ -4,11 +4,11 @@ use nomos_contracts::Strategy;
 
 mod command;
 mod exit_outcome;
-mod process_output;
+mod program_output;
 
 pub use command::Command;
 pub use exit_outcome::ExitOutcome;
-pub use process_output::ProcessOutput;
+pub use program_output::ProgramOutput;
 
 /// Runs a program directly, without shell mediation.
 /// # What an implementor promises
@@ -21,7 +21,7 @@ pub use process_output::ProcessOutput;
 /// declared nothing. The real one promises nothing and says so; a double built from fixed
 /// data reproduces and says that. A caller reading `S::STRENGTH` can tell them apart
 /// without knowing either type.
-pub trait ProcessLauncher: Strategy
+pub trait ProgramLauncher: Strategy
 {
     /// Runs the command to completion and captures its output.
     ///
@@ -31,6 +31,6 @@ pub trait ProcessLauncher: Strategy
     /// process that started and then failed is not an error here — that is an
     /// [`ExitOutcome`], and the distinction is between "we could not ask" and "we asked
     /// and the answer was no".
-    fn Run(&self, command: &Command) -> Result<ProcessOutput, String>;
+    fn Run(&self, command: &Command) -> Result<ProgramOutput, String>;
 }
 

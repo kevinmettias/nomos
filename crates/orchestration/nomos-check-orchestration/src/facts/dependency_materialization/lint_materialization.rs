@@ -2,7 +2,7 @@
 
 use nomos_analysis::{Context, MemoryFactStore};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
-use nomos_platform::{Environment, ProcessLauncher};
+use nomos_platform::{Environment, ProgramLauncher};
 use nomos_rules::SourceFile;
 
 use std::path::Path;
@@ -29,7 +29,7 @@ pub struct LintMaterialization
 /// `NoFacts`-shaped vacuity [`super::Materialize_Syntax`]'s own case exists to catch one
 /// layer over. So a failed materialization returns no lint sources and one synthetic
 /// finding reporting why, rather than nothing at all.
-pub fn Materialize_Lint<Launcher: ProcessLauncher, Env: Environment>(
+pub fn Materialize_Lint<Launcher: ProgramLauncher, Env: Environment>(
     root: &Path,
     context: &Context,
     store: &mut MemoryFactStore,

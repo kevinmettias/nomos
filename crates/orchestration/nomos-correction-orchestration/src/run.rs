@@ -58,7 +58,7 @@ use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{ConfigurationId, EvidenceClass, Finding, ProviderId, RuleId};
 use nomos_corrections::{CommittedPlan, CorrectionCandidate, CorrectionPlan, ValidatedPlan};
 use nomos_model::{Content_Digest, Evidence, EvidenceRef};
-use nomos_platform::{Environment, FileSystem, ProcessLauncher};
+use nomos_platform::{Environment, FileSystem, ProgramLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
 use std::path::Path;
@@ -67,7 +67,7 @@ use std::path::Path;
 /// compute -- grouped into one value the same way `nomos_gate_orchestration::
 /// GateEnvironment` groups its own three, for the identical reason: neither computes a
 /// build variant, chooses a platform, or is the caller that gets to decide either.
-pub struct CorrectionEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
+pub struct CorrectionEnvironment<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 {
     pub variant: BuildVariant,
     pub launcher: &'a Launcher,
@@ -85,7 +85,7 @@ pub struct CorrectionEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem, 
 /// `walked` is the walk, already done and already decided by the composition root, the
 /// same reason `nomos_gate_orchestration::Run_Gate` takes it rather than a root to read.
 #[must_use]
-pub fn Run_Correction<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(walked: Option<Vec<SourceFile>>, environment: CorrectionEnvironment<'_, Launcher, Fs, Env>, command: &CorrectionCommand) -> CorrectionOutcome
+pub fn Run_Correction<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(walked: Option<Vec<SourceFile>>, environment: CorrectionEnvironment<'_, Launcher, Fs, Env>, command: &CorrectionCommand) -> CorrectionOutcome
 {
     let CorrectionEnvironment { variant, launcher, filesystem, environment } = environment;
 
@@ -104,7 +104,7 @@ pub fn Run_Correction<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environmen
 
 /// Everything the rest of the pipeline needs once the walk is known to have carried no
 /// refusal: the platform the composition root chose, and the command naming the root.
-struct RunRequest<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
+struct RunRequest<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 {
     variant: BuildVariant,
     launcher: &'a Launcher,
@@ -119,7 +119,7 @@ struct RunRequest<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environmen
 /// `Ok` is the run's own outcome; `Err` is the [`CorrectionOutcome`] that ended it before
 /// [`Staged_Fix`] was reached. Both halves are the same type because a refusal here is not a
 /// distinct kind of failure, it is the answer a refusal always was.
-fn Correction_Pipeline<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], request: RunRequest<'_, Launcher, Fs, Env>) -> Result<CorrectionOutcome, CorrectionOutcome>
+fn Correction_Pipeline<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], request: RunRequest<'_, Launcher, Fs, Env>) -> Result<CorrectionOutcome, CorrectionOutcome>
 {
     if sources.is_empty()
     {
@@ -135,7 +135,7 @@ fn Correction_Pipeline<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environme
 /// What [`Judged_Findings`] judges a walked tree against, apart from the walk itself and the
 /// platform used to run it -- the same grouping this crate's own callers use to stay
 /// within its parameter-count limit.
-struct JudgeContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
+struct JudgeContext<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 {
     /// The process launcher a provider's subprocess runs through.
     launcher: &'a Launcher,
@@ -149,7 +149,7 @@ struct JudgeContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environm
 
 /// Runs both correction families' own rules over `sources`, or the [`CorrectionOutcome`] a
 /// non-`Judged` check outcome already decides.
-fn Judged_Findings<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], context: JudgeContext<'_, Launcher, Fs, Env>) -> Result<Vec<Finding>, CorrectionOutcome>
+fn Judged_Findings<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], context: JudgeContext<'_, Launcher, Fs, Env>) -> Result<Vec<Finding>, CorrectionOutcome>
 {
     let selected: Vec<RuleId> = CorrectionFamily::ALL.iter().map(|family| return family.Rule()).collect();
     let outcome = nomos_check_orchestration::Run(
@@ -287,7 +287,7 @@ fn Trailing_Whitespace_Fix<Fs: FileSystem>(root: &Path, claim: &TrailingWhitespa
 ///
 /// The `Result` is [`Correction_Pipeline`]'s own: `Err` is the [`CorrectionOutcome`] one of
 /// the two checked steps refused with, carried back unchanged.
-fn Staged_Fix<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(fix: ClaimedFix, request: RunRequest<'_, Launcher, Fs, Env>) -> Result<CorrectionOutcome, CorrectionOutcome>
+fn Staged_Fix<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(fix: ClaimedFix, request: RunRequest<'_, Launcher, Fs, Env>) -> Result<CorrectionOutcome, CorrectionOutcome>
 {
     let mut workspace = Seeded_Workspace(request.variant, request.command, &fix);
     let plan = CorrectionPlan::New(vec![fix.candidate]).map_err(|error| return CorrectionOutcome::Refused(error.to_string()))?;

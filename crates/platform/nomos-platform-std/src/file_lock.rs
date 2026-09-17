@@ -4,7 +4,7 @@
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use crate::FileLockGuard;
 
-use nomos_platform::{CrossProcessLock, LockAcquisition, LockError, StaleTakeover};
+use nomos_platform::{FilesystemLock, LockAcquisition, LockError, StaleTakeover};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
@@ -215,7 +215,7 @@ impl Strategy for FileLock
     const TRACE: TraceEquivalence = TraceEquivalence::NotApplicable;
 }
 
-impl CrossProcessLock for FileLock
+impl FilesystemLock for FileLock
 {
     type Guard = FileLockGuard;
 

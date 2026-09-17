@@ -1,6 +1,6 @@
 //! Running a command to a verdict, and refusing one that did not reach one.
 
-use super::{ItemId, FinishRefusal, Path, LedgerDocument, VerificationPredicate, ClaimRefusal, ProcessLauncher, Command, Tail_Of, ExitOutcome};
+use super::{ItemId, FinishRefusal, Path, LedgerDocument, VerificationPredicate, ClaimRefusal, ProgramLauncher, Command, Tail_Of, ExitOutcome};
 
 /// A predicate that ran and said no.
 ///
@@ -93,7 +93,7 @@ pub(super) struct Ran
 /// without a code, it ended with one — and answering them once is what keeps the gate step
 /// and the predicate from drifting apart in how they treat a process nobody could ask.
 pub(super) fn Ran_To_Completion(
-    launcher: &impl ProcessLauncher,
+    launcher: &impl ProgramLauncher,
     command: &Command,
     item: &ItemId,
 ) -> Result<Ran, FinishRefusal>
@@ -123,7 +123,7 @@ pub(super) fn Ran_To_Completion(
 /// A command as this module builds them: what to run, where, and how long to wait.
 ///
 /// Every command this module hands to a launcher gets an idle bound half its wall bound,
-/// rather than the two coinciding as [`Command::New`] alone would leave them. Left alone,
+/// rather than the two coinciding as [`Command::From_String_Arguments`] alone would leave them. Left alone,
 /// `nomos-ledger` was exactly the caller `OD-PLATFORM-001` named as still open: the one
 /// place a real predicate runs, asking for no idle bound of its own, so a hung reader or a
 /// deadlocked test case was indistinguishable from honest work all the way out to the wall
@@ -142,7 +142,7 @@ pub(super) fn Ran_To_Completion(
 /// actually finishes.
 pub(super) fn Command_From_Argv(argv: Vec<String>, runner: Runner<'_>) -> Command
 {
-    let mut command = Command::New(argv, runner.timeout).With_Idle_Timeout(Idle_Timeout(runner.timeout));
+    let mut command = Command::From_String_Arguments(argv, runner.timeout).With_Idle_Timeout(Idle_Timeout(runner.timeout));
     command.working_directory = runner.working_directory.map(std::path::Path::to_path_buf);
 
     return command;
@@ -171,7 +171,7 @@ mod tests
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use crate::{ItemKind, ItemOrigin, ItemState, LedgerItem, Territory};
-    use nomos_platform::ProcessOutput;
+    use nomos_platform::ProgramOutput;
 
     /// A nonzero exit code, which is all [`Refuse_Nonzero`] asks about. The case reads the
     /// number back out of the refusal.
@@ -245,11 +245,11 @@ mod tests
         const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
-    impl ProcessLauncher for &Scripted
+    impl ProgramLauncher for &Scripted
     {
-        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
         {
-            return Ok(ProcessOutput {
+            return Ok(ProgramOutput {
                 outcome: ExitOutcome::Exited { code: self.code },
                 stdout: self.stdout.clone(),
                 stderr: self.stderr.clone(),
@@ -261,7 +261,7 @@ mod tests
     fn Test_Ran_To_Completion_Should_Combine_Standard_Out_And_Error_Into_One_Tail()
     {
         let item = ItemId::New("T-4");
-        let command = Command::New(vec!["a-predicate".to_owned()], std::time::Duration::from_secs(A_PREDICATE_TIMEOUT_SECONDS));
+        let command = Command::From_String_Arguments(vec!["a-predicate".to_owned()], std::time::Duration::from_secs(A_PREDICATE_TIMEOUT_SECONDS));
         let launcher = Scripted { code: 0, stdout: "out-".to_owned(), stderr: "err".to_owned() };
 
         let ran = Ran_To_Completion(&&launcher, &command, &item).expect("a zero exit is a verdict");

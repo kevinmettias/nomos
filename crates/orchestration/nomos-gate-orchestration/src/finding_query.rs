@@ -9,7 +9,7 @@ pub use gate_explain_result::GateExplainResult;
 
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{Finding, RuleId};
-use nomos_platform::{Environment, FileSystem, ProcessLauncher, Timestamp};
+use nomos_platform::{Environment, FileSystem, ProgramLauncher, Timestamp};
 use nomos_rules::SourceFile;
 
 use crate::gate_environment::{GateEnvironment, JudgeContext, Judged_Sources};
@@ -53,7 +53,7 @@ pub struct FindingQuery
 /// [`nomos_check_orchestration::Run`] computes at all, and a query about a rule
 /// `command.rules` excludes must still be answerable.
 #[must_use]
-pub fn Explain_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+pub fn Explain_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     walked: Option<Vec<SourceFile>>,
     environment: GateEnvironment<'_, Launcher, Fs, Env>,
     command: &GateCommand,
@@ -170,7 +170,7 @@ mod tests
     use super::{Explain_Gate, FindingQuery};
     use crate::{BaselineAllowance, BaselineDebt, Explanation, GateCommand, GateEnvironment};
     use nomos_model::Subject_Of_Path;
-    use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+    use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
     use nomos_rules::{SourceFile, COMPLETENESS_MIRROR, NO_SINGLE_LINE_FUNCTION_BODIES};
     use nomos_workspace::BuildVariant;
     use std::path::PathBuf;
@@ -208,7 +208,7 @@ mod tests
         let query = FindingQuery { rule: nomos_contracts::RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
         let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
-        let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, &query);
+        let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, &query);
 
         let Explanation::Found { would_block, .. } = result.explanation
         else
@@ -324,7 +324,7 @@ mod tests
 "))];
         let query = FindingQuery { rule: nomos_contracts::RuleId::New(NO_SINGLE_LINE_FUNCTION_BODIES), location: "a.rs:1".to_owned() };
 
-        let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, command, &query);
+        let result = Explain_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, command, &query);
 
         return result.explanation;
     }

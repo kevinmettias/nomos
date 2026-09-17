@@ -81,7 +81,7 @@ mod tests
 
         let (mut child, stdout, stderr) = Spawned_With_Streams(&command, program).expect("starts the program");
         child.wait().expect("the child runs to completion");
-        Awaited(stdout.as_ref());
+        Waited_Until_Settled(stdout.as_ref());
 
         let text = stdout.as_ref().map(Drain::Text).unwrap_or_default();
         assert!(
@@ -102,15 +102,15 @@ mod tests
             vec!["sh".to_owned(), "-c".to_owned(), format!("echo {word}")]
         };
 
-        return Command::New(argv, Duration::from_secs(ECHO_BOUND_SECONDS));
+        return Command::From_String_Arguments(argv, Duration::from_secs(ECHO_BOUND_SECONDS));
     }
 
     /// How often this test's own wait loop re-checks a drain, distinct from
-    /// `std_process_launcher`'s real `POLL_INTERVAL`, which this module does not depend on.
+    /// `std_program_launcher`'s real `POLL_INTERVAL`, which this module does not depend on.
     const TEST_POLL_INTERVAL: Duration = Duration::from_millis(10);
 
     /// Waits until a drain has finished, or panics -- the reader thread is asynchronous.
-    fn Awaited(drain: Option<&Drain>)
+    fn Waited_Until_Settled(drain: Option<&Drain>)
     {
         let started = std::time::Instant::now();
         while drain.is_some_and(|drain| return !drain.Is_Finished())

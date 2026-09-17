@@ -1,4 +1,4 @@
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
+use nomos_platform::{Command, ExitOutcome, ProgramLauncher};
 use xvpe_primitives::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use xvpe_subprocess_execution::{
     ExitOutcome as XvpeExitOutcome, ProcessCommand, ProcessLauncherStrategy,
@@ -18,12 +18,12 @@ use xvpe_subprocess_execution::{
 ///
 /// One adapter costs none of that. Everything in this workspace keeps naming its
 /// own port; anything reaching into XVPE wraps its launcher once, here.
-pub struct XvpeLauncher<'launcher, Launcher: ProcessLauncher>
+pub struct XvpeLauncher<'launcher, Launcher: ProgramLauncher>
 {
     launcher: &'launcher Launcher,
 }
 
-impl<'launcher, Launcher: ProcessLauncher> XvpeLauncher<'launcher, Launcher>
+impl<'launcher, Launcher: ProgramLauncher> XvpeLauncher<'launcher, Launcher>
 {
     /// See this launcher as XVPE's.
     #[must_use]
@@ -33,7 +33,7 @@ impl<'launcher, Launcher: ProcessLauncher> XvpeLauncher<'launcher, Launcher>
     }
 }
 
-impl<Launcher: ProcessLauncher> Strategy for XvpeLauncher<'_, Launcher>
+impl<Launcher: ProgramLauncher> Strategy for XvpeLauncher<'_, Launcher>
 {
     // Whatever the wrapped launcher promises, this adapter adds nothing and
     // claims nothing: it translates two structurally identical descriptions of
@@ -43,7 +43,7 @@ impl<Launcher: ProcessLauncher> Strategy for XvpeLauncher<'_, Launcher>
     const TRACE: TraceEquivalence = TraceEquivalence::NotApplicable;
 }
 
-impl<Launcher: ProcessLauncher> ProcessLauncherStrategy for XvpeLauncher<'_, Launcher>
+impl<Launcher: ProgramLauncher> ProcessLauncherStrategy for XvpeLauncher<'_, Launcher>
 {
     fn Run(&self, command: &ProcessCommand) -> Result<XvpeProcessOutput, String>
     {
@@ -87,7 +87,7 @@ mod tests
     use std::cell::RefCell;
     use std::time::Duration;
 
-    use nomos_platform::ProcessOutput;
+    use nomos_platform::ProgramOutput;
 
     use super::*;
 
@@ -132,12 +132,12 @@ mod tests
         const TRACE: nomos_platform::TraceEquivalence = nomos_platform::TraceEquivalence::BitIdentical;
     }
 
-    impl ProcessLauncher for Recording
+    impl ProgramLauncher for Recording
     {
-        fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
+        fn Run(&self, command: &Command) -> Result<ProgramOutput, String>
         {
             self.seen.borrow_mut().push(command.clone());
-            return Ok(ProcessOutput {
+            return Ok(ProgramOutput {
                 outcome: self.outcome,
                 stdout: SAID.to_owned(),
                 stderr: String::new(),

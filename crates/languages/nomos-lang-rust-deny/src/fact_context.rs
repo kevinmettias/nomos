@@ -8,7 +8,7 @@ use nomos_contracts::{
     BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, Guarantee, ProviderId, SnapshotId,
     SubjectId,
 };
-use nomos_platform::{Environment, ProcessLauncher};
+use nomos_platform::{Environment, ProgramLauncher};
 use std::path::Path;
 
 #[path = "provider/policy_fact.rs"]
@@ -40,7 +40,7 @@ pub struct FactContext
 /// # Errors
 ///
 /// Whatever [`Discover_Workspace`] returns.
-pub fn Materialize_Workspace<Launcher: ProcessLauncher, Env: Environment>(root: &Path, context: FactContext, launcher: &Launcher, environment: &Env) -> Result<PolicyFact, DenyError>
+pub fn Materialize_Workspace<Launcher: ProgramLauncher, Env: Environment>(root: &Path, context: FactContext, launcher: &Launcher, environment: &Env) -> Result<PolicyFact, DenyError>
 {
     let violations = Discover_Workspace(root, launcher, environment)?;
     let payload = PolicyPayload { violations };
@@ -85,7 +85,7 @@ mod tests
 {
     use super::*;
     use nomos_contracts::Digest128;
-    use nomos_platform_std::{StdEnvironment, StdProcessLauncher};
+    use nomos_platform_std::{StdEnvironment, StdProgramLauncher};
 
     /// One real, whole-workspace `cargo deny` invocation, checked for every property this
     /// crate promises at once -- not split across several `#[test]`s the way
@@ -96,7 +96,7 @@ mod tests
     fn Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Policy_Violation()
     {
         let PolicyFact { subject, fact } =
-            Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher, &StdEnvironment).expect("this repository is a real workspace under cargo deny's own deny.toml");
+            Materialize_Workspace(&Repository_Root(), Context(), &StdProgramLauncher, &StdEnvironment).expect("this repository is a real workspace under cargo deny's own deny.toml");
 
         assert_eq!(subject, nomos_model::Subject_Of_Path(""));
         assert_eq!(fact.guarantee, Declared_Guarantee());

@@ -10,7 +10,7 @@ use nomos_contracts::{
 use nomos_gate_orchestration::{GateCommand, GateRunOutcome, RuleSelector};
 use nomos_ledger::Territory;
 use nomos_model_package::EffortLevel;
-use nomos_platform::{Clock, Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_platform::{Clock, Command, ExitOutcome, ProgramLauncher, ProgramOutput};
 use nomos_platform_std::StdFileSystem;
 use nomos_workspace::BuildVariant;
 
@@ -102,12 +102,12 @@ fn Incoherent_Step() -> WorkflowStep
 /// silently-repeated answer.
 struct Scripted
 {
-    answers: RefCell<VecDeque<ProcessOutput>>,
+    answers: RefCell<VecDeque<ProgramOutput>>,
 }
 
 impl Scripted
 {
-    fn Of(answers: Vec<ProcessOutput>) -> Self
+    fn Of(answers: Vec<ProgramOutput>) -> Self
     {
         return Self { answers: RefCell::new(answers.into_iter().collect()) };
     }
@@ -121,9 +121,9 @@ impl Strategy for Scripted
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for Scripted
+impl ProgramLauncher for Scripted
 {
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
     {
         return self
             .answers
@@ -137,9 +137,9 @@ impl ProcessLauncher for Scripted
 /// which scripted answer a step received by checking `answer.result.assumptions` --
 /// `OD-EXECUTOR-008`'s decision means `result` itself is no longer read into
 /// `AgentExecutionOutcome` at all.
-fn Clean_Claude_Code_Response(result: &str) -> ProcessOutput
+fn Clean_Claude_Code_Response(result: &str) -> ProgramOutput
 {
-    return ProcessOutput {
+    return ProgramOutput {
         outcome: ExitOutcome::Exited { code: 0 },
         stdout: format!(
             r#"{{"result": "{result}", "structured_output": {{"assumptions": ["{result}"], "unresolved_questions": []}}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 10, "permission_denials": []}}"#
@@ -148,14 +148,14 @@ fn Clean_Claude_Code_Response(result: &str) -> ProcessOutput
     };
 }
 
-fn Clean_Ollama_Response(response: &str) -> ProcessOutput
+fn Clean_Ollama_Response(response: &str) -> ProgramOutput
 {
-    return ProcessOutput { outcome: ExitOutcome::Exited { code: 0 }, stdout: response.to_owned(), stderr: String::new() };
+    return ProgramOutput { outcome: ExitOutcome::Exited { code: 0 }, stdout: response.to_owned(), stderr: String::new() };
 }
 
-fn Failing_Response(stderr: &str) -> ProcessOutput
+fn Failing_Response(stderr: &str) -> ProgramOutput
 {
-    return ProcessOutput { outcome: ExitOutcome::Exited { code: 1 }, stdout: String::new(), stderr: stderr.to_owned() };
+    return ProgramOutput { outcome: ExitOutcome::Exited { code: 1 }, stdout: String::new(), stderr: stderr.to_owned() };
 }
 
 /// Runs `plan` through [`Run`] with a launcher scripted to answer its steps in the order
@@ -164,7 +164,7 @@ fn Failing_Response(stderr: &str) -> ProcessOutput
 /// The platform every test in this file needs is the same one — a scripted launcher, the real
 /// standard filesystem, this process's own environment, and one fixed moment — so building it
 /// in a single place is what makes a test's result depend on its plan and its script alone.
-fn Ran_Outcome(plan: &[WorkflowStepPlan], answers: Vec<ProcessOutput>) -> WorkflowOutcome
+fn Ran_Outcome(plan: &[WorkflowStepPlan], answers: Vec<ProgramOutput>) -> WorkflowOutcome
 {
     let launcher = Scripted::Of(answers);
     let platform = Platform {
@@ -182,7 +182,7 @@ fn Ran_Outcome(plan: &[WorkflowStepPlan], answers: Vec<ProcessOutput>) -> Workfl
 /// Asserts rather than reports the `Completed` outcome: the tests reusing this are proving what
 /// a completed run carries, so a refusal or a failure has to stop here with its own message
 /// rather than surfacing later as a puzzling assertion about a step.
-fn Ran_To_Completion(plan: &[WorkflowStepPlan], answers: Vec<ProcessOutput>) -> Vec<StepOutcome>
+fn Ran_To_Completion(plan: &[WorkflowStepPlan], answers: Vec<ProgramOutput>) -> Vec<StepOutcome>
 {
     let outcome = Ran_Outcome(plan, answers);
 
@@ -198,7 +198,7 @@ fn Ran_To_Completion(plan: &[WorkflowStepPlan], answers: Vec<ProcessOutput>) -> 
 
 /// The single step a one-body plan completed through [`Run`] — the one-step shape most of the
 /// tests below are about.
-fn Only_Step(body: Body, answers: Vec<ProcessOutput>) -> StepOutcome
+fn Only_Step(body: Body, answers: Vec<ProgramOutput>) -> StepOutcome
 {
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body }];
     let completed = Ran_To_Completion(&plan, answers);

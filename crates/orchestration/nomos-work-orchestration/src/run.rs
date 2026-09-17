@@ -5,7 +5,7 @@ use nomos_ledger::{
     ExclusionLedger, FileLedger, Finish_Item, Finishing, ItemId, LedgerDocument, LedgerError,
     LedgerItem, ReleaseOutcome, Territory, Validate_Document,
 };
-use nomos_platform::{Clock, CrossProcessLock, FileSystem, ProcessLauncher};
+use nomos_platform::{Clock, FilesystemLock, FileSystem, ProgramLauncher};
 
 use crate::board_view::{BoardView, ShowView, WorkOutcome};
 use crate::{ClaimRequest, EndingRequest, WorkCommand};
@@ -43,8 +43,8 @@ pub fn Run<Filesystem, ClockSource, Lock, Launcher>(
 where
     Filesystem: FileSystem,
     ClockSource: Clock,
-    Lock: CrossProcessLock,
-    Launcher: ProcessLauncher,
+    Lock: FilesystemLock,
+    Launcher: ProgramLauncher,
 {
     return match command
     {
@@ -64,7 +64,7 @@ where
 }
 
 /// The board and the moment it was read, for `list` and `audit` alike.
-fn Board_View<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+fn Board_View<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
     ledger: &FileLedger<Filesystem, ClockSource, Lock>,
 ) -> Result<BoardView, LedgerError>
 {
@@ -75,7 +75,7 @@ fn Board_View<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock
 }
 
 /// The board, the moment, and this tree's revision, for `show`.
-fn Show_View<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+fn Show_View<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
     ledger: &FileLedger<Filesystem, ClockSource, Lock>,
 ) -> Result<ShowView, LedgerError>
 {
@@ -100,7 +100,7 @@ fn Show_View<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>
 /// `None` on any failure — no `.git` here, a packed ref this build does not chase, or any
 /// other read error. `show`'s staleness line treats that as its own case rather than as
 /// agreement with a recorded revision.
-fn Current_Revision<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+fn Current_Revision<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
     ledger: &FileLedger<Filesystem, ClockSource, Lock>,
 ) -> Option<String>
 {
@@ -121,7 +121,7 @@ fn Current_Revision<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProce
 }
 
 /// The outcome of adding `item` to the board under `amending`, for [`WorkCommand::Add`].
-fn Add_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+fn Add_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     item: &LedgerItem,
     amending: &Territory,
@@ -138,8 +138,8 @@ fn Add_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLoc
 fn Finish_Outcome<
     Filesystem: FileSystem,
     ClockSource: Clock,
-    Lock: CrossProcessLock,
-    Launcher: ProcessLauncher,
+    Lock: FilesystemLock,
+    Launcher: ProgramLauncher,
 >(
     ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     launcher: &Launcher,
@@ -155,7 +155,7 @@ fn Finish_Outcome<
 }
 
 /// The outcome of granting `request`, for [`WorkCommand::Claim`].
-fn Claim_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+fn Claim_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     request: &ClaimRequest,
 ) -> WorkOutcome
@@ -166,7 +166,7 @@ fn Claim_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessL
 }
 
 /// The outcome of extending `request`'s lease, for [`WorkCommand::Renew`].
-fn Renew_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+fn Renew_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     request: &ClaimRequest,
 ) -> WorkOutcome
@@ -177,7 +177,7 @@ fn Renew_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessL
 }
 
 /// The outcome of taking over `request`'s lapsed claim, for [`WorkCommand::TakeOver`].
-fn TakeOver_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+fn TakeOver_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     request: &ClaimRequest,
 ) -> WorkOutcome
@@ -189,7 +189,7 @@ fn TakeOver_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProce
 
 /// The outcome of giving up `request`'s claim without finishing it, for
 /// [`WorkCommand::Abandon`].
-fn Abandon_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+fn Abandon_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     request: &EndingRequest,
 ) -> WorkOutcome
@@ -203,7 +203,7 @@ fn Abandon_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProces
 }
 
 /// The outcome of ending `request`'s item as not being work, for [`WorkCommand::Decline`].
-fn Decline_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+fn Decline_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     request: &EndingRequest,
 ) -> WorkOutcome
@@ -215,7 +215,7 @@ fn Decline_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProces
 }
 
 /// `widen`: enlarge a held territory, and say what the enlargement added.
-fn Widen_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+fn Widen_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     item: &ItemId,
     holder: &str,
@@ -228,7 +228,7 @@ fn Widen_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessL
 }
 
 /// The board, once it is known to satisfy its own invariants.
-fn Validated_Board<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock>(
+fn Validated_Board<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
     ledger: &FileLedger<Filesystem, ClockSource, Lock>,
 ) -> Result<LedgerDocument, LedgerError>
 {
@@ -258,7 +258,7 @@ fn Validated_Board<Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProces
 fn Board_After<
     Filesystem: FileSystem,
     ClockSource: Clock,
-    Lock: CrossProcessLock,
+    Lock: FilesystemLock,
     Attempt,
     Refusal,
 >(
@@ -295,9 +295,9 @@ mod tests
         const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
-    impl nomos_platform::ProcessLauncher for Unreached
+    impl nomos_platform::ProgramLauncher for Unreached
     {
-        fn Run(&self, _command: &nomos_platform::Command) -> Result<nomos_platform::ProcessOutput, String>
+        fn Run(&self, _command: &nomos_platform::Command) -> Result<nomos_platform::ProgramOutput, String>
         {
             // this test never dispatches a command, so this must never run; reaching it is
             // a bug in the code under test, not a condition this fixture needs to handle.

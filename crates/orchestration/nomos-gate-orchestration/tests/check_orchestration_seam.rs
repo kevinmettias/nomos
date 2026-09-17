@@ -13,9 +13,9 @@
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{Digest128, GateCategory, RunId};
 use nomos_gate_orchestration::{GateCommand, GateEnvironment, GateRunOutcome, Run_Gate};
-use nomos_platform::ProcessLauncher;
+use nomos_platform::ProgramLauncher;
 use nomos_model::Subject_Of_Path;
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::PathBuf;
@@ -69,7 +69,7 @@ fn Test_Run_Gate_Should_Judge_A_Clean_Source_Through_The_Real_Check_Orchestratio
     let sources = vec![Source_File(SourcePath("a.rs"), SourceText("pub fn Ok()\n{\n}\n"))];
     let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
-    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::Judged { .. }), "a source every provider can materialize a fact for must be judged");
     assert_eq!(result.disposition, GateRunOutcome::Passed);
@@ -84,7 +84,7 @@ fn Test_Run_Gate_Should_Report_An_Unreadable_Check_Outcome_As_Indeterminate()
 {
     let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
-    let result = Run_Gate(None, GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, Test_Run_Id());
+    let result = Run_Gate(None, GateEnvironment { variant: Test_Variant(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, Test_Run_Id());
 
     assert!(matches!(result.check_outcome, CheckOutcome::Unreadable));
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate);
@@ -102,29 +102,29 @@ fn Test_Run_Gate_Should_Carry_A_Real_Blocking_Finding_Through_Unmodified()
     )];
     let command = GateCommand { root: Repository_Root(), ..Default::default() };
 
-    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, Test_Run_Id());
+    let result = Run_Gate(Some(sources), GateEnvironment { variant: Test_Variant(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) }, &command, Test_Run_Id());
 
     assert_eq!(result.disposition, GateRunOutcome::Failed);
     assert!(!result.findings.blocking_findings.is_empty());
     assert!(result.findings.blocking_findings.iter().all(|finding| return finding.gate == GateCategory::Blocking));
 }
 
-/// `GateEnvironment` is generic over `nomos_platform::ProcessLauncher` rather than any concrete
+/// `GateEnvironment` is generic over `nomos_platform::ProgramLauncher` rather than any concrete
 /// implementation, so a second adapter can hand `Run_Gate` its own launcher without this crate
 /// depending on `nomos-platform-std`. Runs a real process through the generic bound (rather
-/// than the concrete `StdProcessLauncher` type) and reads its real output back, so this test
+/// than the concrete `StdProgramLauncher` type) and reads its real output back, so this test
 /// crosses a real implementation of the trait every test above hands `Run_Gate`, not a type
 /// that merely happens to match its shape.
-fn Version_Through_Generic_Launcher<Launcher: ProcessLauncher>(launcher: &Launcher) -> nomos_platform::ProcessOutput
+fn Version_Through_Generic_Launcher<Launcher: ProgramLauncher>(launcher: &Launcher) -> nomos_platform::ProgramOutput
 {
-    let command = nomos_platform::Command::New(vec!["cargo".to_owned(), "--version".to_owned()], std::time::Duration::from_secs(LAUNCH_TIMEOUT_SECONDS));
+    let command = nomos_platform::Command::From_String_Arguments(vec!["cargo".to_owned(), "--version".to_owned()], std::time::Duration::from_secs(LAUNCH_TIMEOUT_SECONDS));
     return launcher.Run(&command).expect("cargo --version must be a real, launchable process");
 }
 
 #[test]
 fn Test_Run_Gate_Should_Accept_A_Real_Nomos_Platform_Subprocess_Launcher()
 {
-    let output = Version_Through_Generic_Launcher(&StdProcessLauncher);
+    let output = Version_Through_Generic_Launcher(&StdProgramLauncher);
 
     assert!(output.stdout.contains("cargo"), "{}", output.stdout);
 }

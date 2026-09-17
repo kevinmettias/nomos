@@ -17,10 +17,12 @@ pub struct Claim
     /// Who holds it.
     pub holder: String,
     /// When they took it.
-    #[serde(with = "nomos_platform::timestamp_serde")]
+    #[serde(serialize_with = "nomos_platform::timestamp_serde::Write_Unix_Seconds")]
+    #[serde(deserialize_with = "nomos_platform::timestamp_serde::Read_Unix_Seconds")]
     pub acquired_at: Timestamp,
     /// When it lapses if not renewed.
-    #[serde(with = "nomos_platform::timestamp_serde")]
+    #[serde(serialize_with = "nomos_platform::timestamp_serde::Write_Unix_Seconds")]
+    #[serde(deserialize_with = "nomos_platform::timestamp_serde::Read_Unix_Seconds")]
     pub lease_expires_at: Timestamp,
 }
 

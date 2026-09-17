@@ -26,6 +26,7 @@ pub struct Declination
     /// Who ended it.
     pub holder: String,
     /// When they ended it.
-    #[serde(with = "nomos_platform::timestamp_serde")]
+    #[serde(serialize_with = "nomos_platform::timestamp_serde::Write_Unix_Seconds")]
+    #[serde(deserialize_with = "nomos_platform::timestamp_serde::Read_Unix_Seconds")]
     pub declined_at: Timestamp,
 }

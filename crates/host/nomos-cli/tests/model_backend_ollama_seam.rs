@@ -4,7 +4,7 @@
 //! `agent/dispatch.rs::Dispatch_Task` calling `nomos_model_backend_ollama::
 //! Execute_Task(task, &LAUNCHER)` directly for `--model-backend ollama` -- into
 //! `nomos-agent-orchestration`'s own `Run_Agent_Execute`/`Run_Agent_Judgment`, generic over
-//! `ProcessLauncher` rather than fixed here. `nomos-cli` no longer names this crate in its
+//! `ProgramLauncher` rather than fixed here. `nomos-cli` no longer names this crate in its
 //! own production dependencies; it reaches it only transitively, through the shared seam.
 //! This suite is kept anyway, as a test-only dependency (see `Cargo.toml`'s own comment),
 //! rather than deleted -- see `tests/agent_executor_claude_code_seam.rs`'s own doc for the
@@ -12,8 +12,8 @@
 //!
 //! It never spawns a real `ollama` subprocess.
 //!
-//! Instead it calls the exact same public `Execute_Task<Launcher: ProcessLauncher>` the
-//! shared seam calls, with a scripted, in-process `ProcessLauncher` -- the identical
+//! Instead it calls the exact same public `Execute_Task<Launcher: ProgramLauncher>` the
+//! shared seam calls, with a scripted, in-process `ProgramLauncher` -- the identical
 //! pattern `nomos-model-backend-ollama::address_tests` and `nomos-agent-orchestration::
 //! run`'s own tests already use. This proves the real contract the shared seam depends on
 //! for this backend: a `TaskEnvelope` shaped the way `nomos_agent_orchestration::run`'s own
@@ -25,7 +25,7 @@
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_model_backend_ollama::{AgentExecutionError, Execute_Task};
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_platform::{Command, ExitOutcome, ProgramLauncher, ProgramOutput};
 
 #[path = "support/mod.rs"]
 mod support;
@@ -36,7 +36,7 @@ use support::Run;
 /// own value, the same code both this backend's sibling seam and `nomos agent`'s own suite pin.
 const USAGE_EXIT_CODE: i32 = 2;
 
-/// A `ProcessLauncher` that never spawns a process, the same shape
+/// A `ProgramLauncher` that never spawns a process, the same shape
 /// `tests/agent_executor_claude_code_seam.rs` uses for the sibling backend.
 struct Scripted
 {
@@ -52,11 +52,11 @@ impl Strategy for Scripted
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for Scripted
+impl ProgramLauncher for Scripted
 {
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
     {
-        return Ok(ProcessOutput { outcome: self.outcome, stdout: self.stdout.clone(), stderr: String::new() });
+        return Ok(ProgramOutput { outcome: self.outcome, stdout: self.stdout.clone(), stderr: String::new() });
     }
 }
 

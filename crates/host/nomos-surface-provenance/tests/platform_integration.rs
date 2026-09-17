@@ -112,7 +112,7 @@ struct Ran
 }
 
 /// Runs the real binary -- and through it, the real `nomos_composer_std::LAUNCHER` this crate wires
-/// into the real `nomos_platform::ProcessLauncher` contract -- against `repository`.
+/// into the real `nomos_platform::ProgramLauncher` contract -- against `repository`.
 fn Run(repository: &Repository, arguments: &[&str]) -> Ran
 {
     let mut full = vec!["--root".to_owned(), repository.root.display().to_string()];

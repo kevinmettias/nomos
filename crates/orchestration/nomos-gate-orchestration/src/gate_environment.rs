@@ -11,7 +11,7 @@ mod tests;
 
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::{RuleId, RunId};
-use nomos_platform::{Environment, FileSystem, ProcessLauncher, Timestamp};
+use nomos_platform::{Environment, FileSystem, ProgramLauncher, Timestamp};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::Path;
@@ -39,7 +39,7 @@ use reduction::{DispositionPolicies, Reduction, Reduced_Findings, Scoped_Finding
 /// at all -- empty for every rule, the same default `RuleSelector::include` already has. A
 /// caller that must see every rule's findings regardless of `command.rules` (`Explain_Gate`)
 /// passes an empty slice here rather than `command.rules.include`.
-pub(crate) fn Judged_Sources<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+pub(crate) fn Judged_Sources<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     walked: Option<Vec<SourceFile>>,
     context: JudgeContext<'_, Launcher, Fs, Env>,
 ) -> CheckOutcome
@@ -68,7 +68,7 @@ pub(crate) fn Judged_Sources<Launcher: ProcessLauncher, Fs: FileSystem, Env: Env
 /// both need but neither computes -- grouped into one value so each stays within this crate's
 /// own parameter-count limit. `command` and `walked`/`query`/`run` stay separate parameters:
 /// this groups only the three values every gate entry point shares.
-pub struct GateEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
+pub struct GateEnvironment<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 {
     pub variant: BuildVariant,
     pub launcher: &'a Launcher,
@@ -89,7 +89,7 @@ pub struct GateEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: E
 /// What [`Judged_Sources`] judges a walked tree against, apart from the walk itself and the
 /// platform used to run it -- grouped into one value so [`Judged_Sources`] stays within this
 /// crate's own parameter-count limit.
-pub(crate) struct JudgeContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
+pub(crate) struct JudgeContext<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 {
     /// The process launcher a provider's subprocess runs through.
     pub(crate) launcher: &'a Launcher,
@@ -119,7 +119,7 @@ pub(crate) struct JudgeContext<'a, Launcher: ProcessLauncher, Fs: FileSystem, En
 /// The composition root supplies one, typically [`crate::Fresh_Run_Id`] over a real clock
 /// reading.
 #[must_use]
-pub fn Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+pub fn Run_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     walked: Option<Vec<SourceFile>>,
     environment: GateEnvironment<'_, Launcher, Fs, Env>,
     command: &GateCommand,
@@ -185,7 +185,7 @@ fn Effective_Policy(from_file: Option<&GatePolicyFile>, command: &GateCommand) -
 /// the scope moved. The judging happened and is simply discarded: what a caller is told is that
 /// nothing it asked about was there, and a mistyped `--include` must not read as a repository
 /// with nothing to say.
-fn Scoped_Judgment<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+fn Scoped_Judgment<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     walked: Option<Vec<SourceFile>>,
     command: &GateCommand,
     context: JudgeContext<'_, Launcher, Fs, Env>,

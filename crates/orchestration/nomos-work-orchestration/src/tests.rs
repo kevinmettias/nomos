@@ -76,7 +76,7 @@ fn Unclaimed_Item(id: &str) -> LedgerItem
 }
 
 /// No process is ever actually launched by the commands this file dispatches, so any
-/// [`nomos_platform::ProcessLauncher`] would do; a launcher that panics if called is the one
+/// [`nomos_platform::ProgramLauncher`] would do; a launcher that panics if called is the one
 /// that also proves it.
 struct Unreached;
 
@@ -88,9 +88,9 @@ impl Strategy for Unreached
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl nomos_platform::ProcessLauncher for Unreached
+impl nomos_platform::ProgramLauncher for Unreached
 {
-    fn Run(&self, _command: &nomos_platform::Command) -> Result<nomos_platform::ProcessOutput, String>
+    fn Run(&self, _command: &nomos_platform::Command) -> Result<nomos_platform::ProgramOutput, String>
     {
         panic!("no command dispatched by this suite should run a process");
     }

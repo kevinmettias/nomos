@@ -18,7 +18,7 @@ use nomos_analysis::GuaranteeDigest;
 use nomos_cap_lint::{Parse_Payload, Payload_Schema};
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
 use nomos_lang_rust_clippy::{Declared_Guarantee, DiagnosticsFact, FactContext, Materialize_Workspace};
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_platform::{Command, ExitOutcome, ProgramLauncher, ProgramOutput};
 use std::path::{Path, PathBuf};
 use nomos_platform_std::StdEnvironment;
 
@@ -90,11 +90,11 @@ impl Strategy for FakeLauncher
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for FakeLauncher
+impl ProgramLauncher for FakeLauncher
 {
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
     {
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome: self.outcome,
             stdout: self.stdout.clone(),
             stderr: self.stderr.clone(),

@@ -4,9 +4,9 @@
 
 use nomos_analysis::MemoryFactStore;
 use nomos_contracts::{Finding, RuleId};
-use nomos_platform::{Command, DeterminismStrength, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_platform::{Command, DeterminismStrength, ExitOutcome, ProgramLauncher, ProgramOutput};
 use nomos_platform::{ReproducibilityScope, Strategy, TraceEquivalence};
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use nomos_rules::SourceFile;
 use std::cell::Cell;
 
@@ -72,7 +72,7 @@ fn Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members()
 {
     let sources = Materialized_Over_This_Repository(|store| {
         let crate::facts::DependencyMaterialization { sources, findings } =
-            crate::facts::Materialize_Dependencies(&Repository_Root(), &Ingested_Placeholder(), store, crate::facts::Subprocess { launcher: &StdProcessLauncher, environment: &StdEnvironment });
+            crate::facts::Materialize_Dependencies(&Repository_Root(), &Ingested_Placeholder(), store, crate::facts::Subprocess { launcher: &StdProgramLauncher, environment: &StdEnvironment });
         return (sources, findings);
     });
 
@@ -87,7 +87,7 @@ fn Test_Materialize_Lint_Should_Return_Real_Workspace_Members()
 {
     let sources = Materialized_Over_This_Repository(|store| {
         let crate::facts::LintMaterialization { sources, findings } =
-            crate::facts::Materialize_Lint(&Repository_Root(), &Ingested_Placeholder(), store, crate::facts::Subprocess { launcher: &StdProcessLauncher, environment: &StdEnvironment });
+            crate::facts::Materialize_Lint(&Repository_Root(), &Ingested_Placeholder(), store, crate::facts::Subprocess { launcher: &StdProgramLauncher, environment: &StdEnvironment });
         return (sources, findings);
     });
 
@@ -106,7 +106,7 @@ fn Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact()
 {
     let sources = Materialized_Over_This_Repository(|store| {
         let crate::facts::PolicyMaterialization { sources, findings } =
-            crate::facts::Materialize_Policy(&Repository_Root(), &Ingested_Placeholder(), store, crate::facts::Subprocess { launcher: &StdProcessLauncher, environment: &StdEnvironment });
+            crate::facts::Materialize_Policy(&Repository_Root(), &Ingested_Placeholder(), store, crate::facts::Subprocess { launcher: &StdProgramLauncher, environment: &StdEnvironment });
         return (sources, findings);
     });
 
@@ -144,12 +144,12 @@ impl Strategy for CountingLauncher
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for CountingLauncher
+impl ProgramLauncher for CountingLauncher
 {
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
     {
         self.calls.set(self.calls.get().saturating_add(1));
-        return Ok(ProcessOutput { outcome: ExitOutcome::Exited { code: 1 }, stdout: String::new(), stderr: String::new() });
+        return Ok(ProgramOutput { outcome: ExitOutcome::Exited { code: 1 }, stdout: String::new(), stderr: String::new() });
     }
 }
 

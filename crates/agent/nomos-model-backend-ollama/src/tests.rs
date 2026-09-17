@@ -16,7 +16,7 @@ use std::cell::RefCell;
 use nomos_contracts::{CapabilityId, SchemaId};
 use nomos_ledger::Territory;
 use nomos_model_package::EffortLevel;
-use nomos_platform::{Command, ExitOutcome, ProcessOutput};
+use nomos_platform::{Command, ExitOutcome, ProgramOutput};
 use xvpe_agent_execution::{AgentWorkspace, ToolGrant};
 
 use super::*;
@@ -67,12 +67,12 @@ impl Strategy for Scripted
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for Scripted
+impl ProgramLauncher for Scripted
 {
-    fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, command: &Command) -> Result<ProgramOutput, String>
     {
         self.seen.borrow_mut().push(command.clone());
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome: ExitOutcome::Exited { code: 0 },
             stdout: A_RESPONSE.to_owned(),
             stderr: String::new(),

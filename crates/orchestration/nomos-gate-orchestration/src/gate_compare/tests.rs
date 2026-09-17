@@ -9,7 +9,7 @@
 use super::*;
 use crate::{GateCommand, GateEnvironment, RuleSelector, Run_Gate};
 use nomos_contracts::{Digest128, GateCategory, SubjectId};
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 
@@ -330,7 +330,7 @@ fn Run_Over(sources: Vec<SourceFile>, run: RunId) -> GateRunResult
         ..GateCommand::default()
     };
 
-    let environment = GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) };
+    let environment = GateEnvironment { variant: Test_Variant(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) };
 
     return Run_Gate(Some(sources), environment, &command, run);
 }
@@ -352,7 +352,7 @@ fn Run_Over_Root(root: &std::path::Path, rules: RuleSelector, run: RunId) -> Gat
 {
     let command = GateCommand { root: root.to_path_buf(), rules, ..GateCommand::default() };
     let sources = vec![Source_File(SourcePath("a.rs"), SourceText(CLEAN_SOURCE))];
-    let environment = GateEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) };
+    let environment = GateEnvironment { variant: Test_Variant(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, now: nomos_platform::Timestamp::From_Unix_Seconds(0) };
 
     return Run_Gate(Some(sources), environment, &command, run);
 }

@@ -21,7 +21,7 @@ use nomos_ledger::{
     ExclusionLedger, FileLedger, Finish_Item, Finishing, FinishRefusal, ItemId, ItemKind,
     ItemOrigin, ItemState, LedgerDocument, LedgerItem, ClaimRefusal, AddRefusal, SCHEMA_VERSION,
 };
-use nomos_platform::{Clock, Command, ExitOutcome, ProcessLauncher, ProcessOutput, Timestamp};
+use nomos_platform::{Clock, Command, ExitOutcome, ProgramLauncher, ProgramOutput, Timestamp};
 use nomos_platform_std::{FileLock, StdFileSystem};
 use nomos_scope_verification::{Territory, VerificationPredicate};
 use std::path::{Path, PathBuf};
@@ -236,11 +236,11 @@ impl Strategy for AlwaysZero
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for &AlwaysZero
+impl ProgramLauncher for &AlwaysZero
 {
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
     {
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome: ExitOutcome::Exited { code: 0 },
             stdout: "all good".to_owned(),
             stderr: String::new(),

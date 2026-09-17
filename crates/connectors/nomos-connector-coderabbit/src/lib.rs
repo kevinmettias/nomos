@@ -18,7 +18,7 @@
 //!
 //! [`fetching::Fetch_Review_Comment`] is the generic-connector-substrate side: it runs `gh
 //! api repos/{repository}/pulls/comments/{id}` through a caller-supplied
-//! [`nomos_platform::ProcessLauncher`] and hands back GitHub's own bytes, unread.
+//! [`nomos_platform::ProgramLauncher`] and hands back GitHub's own bytes, unread.
 //! [`translation::Translate_Review_Comment`] is the vendor-to-canonical side: a pure
 //! function from those bytes to this crate's own [`payload::finding_payload::
 //! FindingPayload`], naming no vendor type in its return shape and refusing rather than

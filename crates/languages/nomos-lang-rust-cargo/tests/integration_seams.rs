@@ -8,7 +8,7 @@
 //! here, thin and unchanged in what they prove. `nomos_capability` and `nomos_platform`
 //! had no test anywhere reaching them; both get one here.
 //!
-//! `nomos_platform` is exercised through a fake [`ProcessLauncher`] rather than a real
+//! `nomos_platform` is exercised through a fake [`ProgramLauncher`] rather than a real
 //! `cargo metadata` subprocess (`tests/invalidation.rs` and this crate's own remaining
 //! inline tests already pay for that real invocation): a fake is what makes this the real
 //! trait boundary check rather than a second slow copy of an existing one, and it lets the
@@ -18,11 +18,11 @@
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
 use nomos_lang_rust_cargo::{Declared_Guarantee, Discover_Workspace, FactContext, Materialize_Workspace, Provider_Offer};
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_platform::{Command, ExitOutcome, ProgramLauncher, ProgramOutput};
 use std::path::{Path, PathBuf};
 use nomos_platform_std::StdEnvironment;
 
-/// A [`ProcessLauncher`] that never runs anything -- it returns a canned answer regardless
+/// A [`ProgramLauncher`] that never runs anything -- it returns a canned answer regardless
 /// of what `command` names, which is what makes the boundary check here cheap and
 /// deterministic instead of a second real `cargo metadata` subprocess.
 struct FakeLauncher
@@ -61,11 +61,11 @@ impl Strategy for FakeLauncher
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for FakeLauncher
+impl ProgramLauncher for FakeLauncher
 {
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
     {
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome: self.outcome,
             stdout: self.stdout.clone(),
             stderr: self.stderr.clone(),
@@ -185,7 +185,7 @@ fn Context() -> FactContext
 
 // -- nomos_platform ------------------------------------------------------------------
 
-/// `nomos_platform`: `Discover_Workspace` reads a real `nomos_platform::ProcessLauncher`
+/// `nomos_platform`: `Discover_Workspace` reads a real `nomos_platform::ProgramLauncher`
 /// implementation's output through the real trait boundary -- the happy path, over a
 /// fake but well-formed `cargo metadata` document.
 #[test]

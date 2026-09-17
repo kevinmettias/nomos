@@ -26,7 +26,7 @@ pub fn nomos_workflow_orchestration::CommitIntent::From_Flag(flag: bool) -> Self
 pub fn nomos_workflow_orchestration::CommitIntent::Is_A_Commit(self) -> bool
 pub fn nomos_workflow_orchestration::CorrectionBody::New(root: PathBuf, sources: Vec<SourceFile>, commit: CommitIntent) -> Self
 pub fn nomos_workflow_orchestration::GateBody::New(sources: Vec<SourceFile>, command: GateCommand) -> Self
-pub fn nomos_workflow_orchestration::Run<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> WorkflowOutcome
+pub fn nomos_workflow_orchestration::Run<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> WorkflowOutcome
 pub struct field nomos_workflow_orchestration::CheckBody::root: PathBuf
 pub struct field nomos_workflow_orchestration::CheckBody::selected: Vec<RuleId>
 pub struct field nomos_workflow_orchestration::CheckBody::sources: Vec<SourceFile>
@@ -44,5 +44,5 @@ pub struct field nomos_workflow_orchestration::WorkflowStepPlan::declaration: Wo
 pub struct nomos_workflow_orchestration::CheckBody
 pub struct nomos_workflow_orchestration::CorrectionBody
 pub struct nomos_workflow_orchestration::GateBody
-pub struct nomos_workflow_orchestration::Platform<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
+pub struct nomos_workflow_orchestration::Platform<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 pub struct nomos_workflow_orchestration::WorkflowStepPlan

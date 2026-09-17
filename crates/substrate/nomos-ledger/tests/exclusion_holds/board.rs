@@ -17,7 +17,7 @@ pub(crate) use nomos_ledger::{
 };
 pub(crate) use nomos_model::SetResolution;
 pub(crate) use nomos_platform::{Clock, FileSystem, FileSystemError, Timestamp};
-pub(crate) use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher};
+pub(crate) use nomos_platform_std::{FileLock, StdFileSystem, StdProgramLauncher};
 pub(crate) use scratch::{Scratch, Temporary_Directory};
 pub(crate) use std::path::{Path, PathBuf};
 pub(crate) use std::sync::atomic::{AtomicBool, Ordering};
@@ -267,7 +267,7 @@ pub(crate) fn Finish_In(
 {
     return Finish_Item(
         ledger,
-        &StdProcessLauncher,
+        &StdProgramLauncher,
         &Finishing {
             item: &ItemId::New(item),
             holder: holder.0,

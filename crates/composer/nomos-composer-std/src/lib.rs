@@ -62,9 +62,9 @@ pub use lock_type::LockType;
 // The authority is still `nomos-platform`; this is a re-export and not a second
 // declaration, the same thing `nomos-platform` itself already does for the determinism
 // vocabulary that `nomos-contracts` declares.
-pub use nomos_platform::{Clock, CrossProcessLock, Environment, FileSystem, ProcessLauncher};
+pub use nomos_platform::{Clock, FilesystemLock, Environment, FileSystem, ProgramLauncher};
 pub use nomos_platform::{EnvironmentError, FileSystemError, LockError};
-pub use nomos_platform::{Command, ExitOutcome, ProcessOutput};
+pub use nomos_platform::{Command, ExitOutcome, ProgramOutput};
 pub use nomos_platform::{LockAcquisition, StaleTakeover, Timestamp, timestamp_serde};
 
 // The determinism vocabulary, for the same reason and by the same authority chain: a host
@@ -79,7 +79,7 @@ pub const FILE_SYSTEM: FileSystemType = nomos_platform_std::StdFileSystem;
 pub const CLOCK: ClockType = nomos_platform_std::SystemClock;
 
 /// The launcher this platform runs subprocesses through.
-pub const LAUNCHER: LauncherType = nomos_platform_std::StdProcessLauncher;
+pub const LAUNCHER: LauncherType = nomos_platform_std::StdProgramLauncher;
 
 /// The environment this platform reads variables and the working directory from.
 pub const ENVIRONMENT: EnvironmentType = nomos_platform_std::StdEnvironment;
@@ -120,7 +120,7 @@ mod tests
         {
             return Strength_Of(selected);
         }
-        fn As_Launcher<Selected: ProcessLauncher>(selected: &Selected) -> DeterminismStrength
+        fn As_Launcher<Selected: ProgramLauncher>(selected: &Selected) -> DeterminismStrength
         {
             return Strength_Of(selected);
         }

@@ -4,7 +4,7 @@
 
 use super::*;
 use nomos_contracts::ProviderId;
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 // Named here rather than beside the module's own imports: production code no longer
 // names either rule, and putting them back up there to satisfy a test would undo exactly
 // what `OD-RULES-027` and `P102` each removed -- the second of them by deriving the
@@ -131,12 +131,12 @@ fn Test_Reassessing_Fixture() -> ReassessingFixture
 /// filesystem and environment, a fresh store, and the test build variant. Extracted rather
 /// than written at each call site because a real one is eleven lines, which is more than
 /// the assertion it feeds.
-fn Test_Context<'a>(root: &'a Path, workspace: &'a mut Option<Workspace>, store: &'a mut MemoryFactStore) -> RunContext<'a, StdProcessLauncher, StdFileSystem, StdEnvironment>
+fn Test_Context<'a>(root: &'a Path, workspace: &'a mut Option<Workspace>, store: &'a mut MemoryFactStore) -> RunContext<'a, StdProgramLauncher, StdFileSystem, StdEnvironment>
 {
     return RunContext {
         variant: Test_Variant(),
         root,
-        launcher: &StdProcessLauncher,
+        launcher: &StdProgramLauncher,
         filesystem: &StdFileSystem,
         environment: &StdEnvironment,
         workspace,

@@ -34,7 +34,7 @@ use nomos_analysis::MemoryFactStore;
 use nomos_check_orchestration::{CheckOutcome, Claim, Run, RunContext};
 use nomos_contracts::{Finding, RuleId};
 use nomos_model::Subject_Of_Path;
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::{BuildVariant, Workspace};
 use std::path::Path;
@@ -85,7 +85,7 @@ impl Carried
 
         let outcome = Run(
             sources,
-            RunContext { variant: Test_Variant(), root, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut self.workspace, store: &mut self.store },
+            RunContext { variant: Test_Variant(), root, launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut self.workspace, store: &mut self.store },
             selected,
         );
 

@@ -1,6 +1,6 @@
 //! The three git invocations the report needs, and nothing about running them.
 //!
-//! Every `Command` here is built and handed to a [`nomos_platform::ProcessLauncher`] by
+//! Every `Command` here is built and handed to a [`nomos_platform::ProgramLauncher`] by
 //! the caller. Kept as plain construction rather than a method on the launcher so the
 //! argv itself — the thing a reviewer actually wants to check — is visible without
 //! stepping into a mock.
@@ -89,7 +89,7 @@ pub(crate) fn Records_Touched_In_Range(root: &Path, since: Since<'_>, until: Unt
 
 fn Command_From_Arguments_In(root: &Path, argv: Vec<String>) -> Command
 {
-    let mut command = Command::New(argv, TIMEOUT);
+    let mut command = Command::From_String_Arguments(argv, TIMEOUT);
     command.working_directory = Some(root.to_path_buf());
 
     return command;

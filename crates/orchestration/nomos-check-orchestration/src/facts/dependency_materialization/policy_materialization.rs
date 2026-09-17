@@ -3,7 +3,7 @@
 
 use nomos_analysis::{Context, MemoryFactStore};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
-use nomos_platform::{Environment, ProcessLauncher};
+use nomos_platform::{Environment, ProgramLauncher};
 use nomos_rules::SourceFile;
 
 use std::path::Path;
@@ -29,7 +29,7 @@ pub struct PolicyMaterialization
 /// [`super::Materialize_Lint`]'s own doc gives one layer up: a failed materialization
 /// returns no policy sources and one synthetic finding reporting why, rather than nothing
 /// at all.
-pub fn Materialize_Policy<Launcher: ProcessLauncher, Env: Environment>(
+pub fn Materialize_Policy<Launcher: ProgramLauncher, Env: Environment>(
     root: &Path,
     context: &Context,
     store: &mut MemoryFactStore,

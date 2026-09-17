@@ -47,7 +47,7 @@ use crate::VerificationRecord;
 use crate::FileLedger;
 use crate::LedgerDocument;
 use nomos_platform::{
-    Clock, Command, CrossProcessLock, ExitOutcome, FileSystem, ProcessLauncher, Timestamp,
+    Clock, Command, FilesystemLock, ExitOutcome, FileSystem, ProgramLauncher, Timestamp,
 };
 use std::path::Path;
 
@@ -61,9 +61,9 @@ use std::path::Path;
 ///
 /// Returns a [`FinishRefusal`] naming what stopped it, and in particular distinguishing
 /// a failing predicate from one that could not be asked.
-pub fn Finish_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub fn Finish_Item<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Files, TimeSource, Lock>,
-    launcher: &impl ProcessLauncher,
+    launcher: &impl ProgramLauncher,
     finishing: &Finishing<'_>,
     working_directory: Option<&Path>,
 ) -> Result<VerificationRecord, FinishRefusal>
@@ -103,7 +103,7 @@ struct PredicateRun<'a>
 /// A ledger that will not load is `NotRecorded` rather than `NotHeld`: nothing was found
 /// out about the claim, and reporting it as unheld would send the author to re-claim an
 /// item they may well still hold.
-fn Loaded_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+fn Loaded_Document<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &FileLedger<Files, TimeSource, Lock>,
 ) -> Result<LedgerDocument, FinishRefusal>
 {
@@ -118,9 +118,9 @@ fn Loaded_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>
 ///
 /// The gate's own step runs first and short-circuits: an author told "your tests passed"
 /// and "you cannot land" in one breath reads only the first sentence.
-fn Verify_Predicate<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+fn Verify_Predicate<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Files, TimeSource, Lock>,
-    launcher: &impl ProcessLauncher,
+    launcher: &impl ProgramLauncher,
     item: &ItemId,
     run: PredicateRun<'_>,
 ) -> Result<(GateOutcome, Ran), FinishRefusal>
@@ -149,7 +149,7 @@ struct RecordContext
 /// [`FileLedger::Read_File`], and follows one loose ref if `HEAD` names one rather than
 /// naming a commit directly. `None` on any failure along the way -- see
 /// [`VerificationRecord::revision`] for why that is not distinguished further.
-fn Current_Revision<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+fn Current_Revision<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &FileLedger<Files, TimeSource, Lock>,
     working_directory: Option<&Path>,
 ) -> Option<String>
@@ -197,7 +197,7 @@ mod local_tests
     // disturbing that broader suite.
     use super::*;
     use crate::{Claim, ItemKind, ItemOrigin, ItemState, Territory};
-    use nomos_platform::ProcessOutput;
+    use nomos_platform::ProgramOutput;
     use nomos_platform_std::{FileLock, StdFileSystem};
     use std::path::PathBuf;
 
@@ -249,11 +249,11 @@ mod local_tests
         const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
-    impl ProcessLauncher for &AlwaysZero
+    impl ProgramLauncher for &AlwaysZero
     {
-        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
         {
-            return Ok(ProcessOutput {
+            return Ok(ProgramOutput {
                 outcome: ExitOutcome::Exited { code: 0 },
                 stdout: "all good".to_owned(),
                 stderr: String::new(),

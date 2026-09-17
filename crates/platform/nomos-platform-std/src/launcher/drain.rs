@@ -144,7 +144,7 @@ mod tests
     {
         let source = std::io::Cursor::new(b"hello, drain".to_vec());
 
-        let drain = Awaited(Drain::Reading(source));
+        let drain = Waited_Until_Settled(Drain::Reading(source));
 
         assert_eq!(drain.Text(), "hello, drain");
     }
@@ -154,7 +154,7 @@ mod tests
     {
         let source = std::io::Cursor::new(b"short".to_vec());
 
-        let drain = Awaited(Drain::Reading(source));
+        let drain = Waited_Until_Settled(Drain::Reading(source));
 
         assert!(drain.Is_Finished(), "a source that has yielded end of file must be reported finished");
     }
@@ -164,7 +164,7 @@ mod tests
     {
         let source = std::io::Cursor::new(COUNTED_BYTES.to_vec());
 
-        let drain = Awaited(Drain::Reading(source));
+        let drain = Waited_Until_Settled(Drain::Reading(source));
 
         assert_eq!(drain.Length(), COUNTED_BYTES.len());
     }
@@ -176,20 +176,20 @@ mod tests
         // and lose everything else the process wrote alongside it.
         let source = std::io::Cursor::new(vec![b'o', b'k', NOT_UTF8_BYTE, b'!']);
 
-        let drain = Awaited(Drain::Reading(source));
+        let drain = Waited_Until_Settled(Drain::Reading(source));
 
         assert!(drain.Text().contains("ok"), "valid bytes around the invalid one must still survive");
     }
 
     /// How often this test's own wait loop re-checks `Is_Finished` -- a test-local polling
-    /// cadence, distinct from `std_process_launcher`'s real `POLL_INTERVAL`, which this
+    /// cadence, distinct from `std_program_launcher`'s real `POLL_INTERVAL`, which this
     /// module does not depend on.
     const TEST_POLL_INTERVAL: Duration = Duration::from_millis(10);
 
     /// Waits until `Is_Finished` reports true, or panics -- the reader thread `Reading`
     /// starts is asynchronous, so a test that read `Length`/`Text` immediately after
     /// starting it would be racing the very thread it means to observe.
-    fn Awaited(drain: Drain) -> Drain
+    fn Waited_Until_Settled(drain: Drain) -> Drain
     {
         let started = Instant::now();
         while !drain.Is_Finished()

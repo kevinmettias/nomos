@@ -12,7 +12,7 @@ use nomos_contracts::{
 use nomos_corrections::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionPlan, Edit};
 use nomos_lang_rust::rollup;
 use nomos_model::{Content_Digest, Evidence};
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
 
 /// The source every producing domain is measured over.
@@ -386,7 +386,7 @@ fn Discovered_Workspace_Facts(
 ) -> Vec<nomos_lang_rust_cargo::PackageFact>
 {
     let facts =
-        nomos_lang_rust_cargo::Materialize_Workspace(&Repository_Root(), context, &StdProcessLauncher, &StdEnvironment)
+        nomos_lang_rust_cargo::Materialize_Workspace(&Repository_Root(), context, &StdProgramLauncher, &StdEnvironment)
             .expect("this repository is a real cargo workspace; a provider that cannot see it \
                      verifies nothing");
 
@@ -446,7 +446,7 @@ fn Lint_Context() -> nomos_lang_rust_clippy::FactContext
 /// of it to have measured something.
 fn Discovered_Lint_Facts(context: nomos_lang_rust_clippy::FactContext) -> Vec<nomos_lang_rust_clippy::DiagnosticsFact>
 {
-    let facts = nomos_lang_rust_clippy::Materialize_Workspace(&Repository_Root(), context, &StdProcessLauncher, &StdEnvironment)
+    let facts = nomos_lang_rust_clippy::Materialize_Workspace(&Repository_Root(), context, &StdProgramLauncher, &StdEnvironment)
         .expect("this repository is a real cargo workspace under clippy; a provider that cannot see it verifies nothing");
 
     assert!(
@@ -506,7 +506,7 @@ fn Dependency_Policy_Context() -> nomos_lang_rust_deny::FactContext
 /// actually reads `cargo deny`'s own verdict through.
 fn Discovered_Dependency_Policy_Fact(context: nomos_lang_rust_deny::FactContext) -> nomos_lang_rust_deny::PolicyFact
 {
-    return nomos_lang_rust_deny::Materialize_Workspace(&Repository_Root(), context, &StdProcessLauncher, &StdEnvironment)
+    return nomos_lang_rust_deny::Materialize_Workspace(&Repository_Root(), context, &StdProgramLauncher, &StdEnvironment)
         .expect("this repository is a real cargo workspace under this repository's own deny.toml; a provider that cannot see it verifies nothing");
 }
 

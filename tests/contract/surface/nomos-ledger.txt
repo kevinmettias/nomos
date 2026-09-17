@@ -2,9 +2,7 @@ pub const fn nomos_ledger::ClaimRefusal::Is_Dispatch(&self) -> bool
 pub const fn nomos_ledger::ClaimRefusal::Is_Readiness(&self) -> bool
 pub const fn nomos_ledger::ClaimRefusal::Is_Retryable(&self) -> bool
 pub const fn nomos_ledger::ClaimRefusal::Layer(&self) -> Layer
-pub const fn nomos_ledger::FinishRefusal::Has_Judged_The_Work(&self) -> bool
 pub enum nomos_ledger::ClaimRefusal
-pub enum nomos_ledger::FinishRefusal
 pub enum nomos_ledger::LedgerError
 pub enum nomos_ledger::RefusalLayer
 pub enum nomos_ledger::ReleaseOutcome
@@ -18,14 +16,6 @@ pub enum variant nomos_ledger::ClaimRefusal::NoSuchItem { item: ItemId, }
 pub enum variant nomos_ledger::ClaimRefusal::NotClaimable { item: ItemId, state: String, }
 pub enum variant nomos_ledger::ClaimRefusal::StillHeld { item: ItemId, holder: String, until: Timestamp, }
 pub enum variant nomos_ledger::ClaimRefusal::UnknownIndependence { against: ItemId, reason: UnknownReason, }
-pub enum variant nomos_ledger::FinishRefusal::CouldNotRun { item: ItemId, cause: String, }
-pub enum variant nomos_ledger::FinishRefusal::GateFailed { item: ItemId, argv: Vec<String>, exit_code: i32, output_tail: String, }
-pub enum variant nomos_ledger::FinishRefusal::GateUndetermined { item: ItemId, cause: GateUnknown, }
-pub enum variant nomos_ledger::FinishRefusal::NoPredicate { item: ItemId, done_when: String, }
-pub enum variant nomos_ledger::FinishRefusal::NoVerdict { item: ItemId, outcome: ExitOutcome, }
-pub enum variant nomos_ledger::FinishRefusal::NotHeld { refusal: ClaimRefusal, }
-pub enum variant nomos_ledger::FinishRefusal::NotRecorded { cause: String, }
-pub enum variant nomos_ledger::FinishRefusal::PredicateFailed { item: ItemId, exit_code: i32, output_tail: String, }
 pub enum variant nomos_ledger::LedgerError::Invalid { violations: Vec<String>, }
 pub enum variant nomos_ledger::LedgerError::Locked { cause: String, }
 pub enum variant nomos_ledger::LedgerError::Malformed { cause: String, }
@@ -37,8 +27,7 @@ pub enum variant nomos_ledger::ReleaseOutcome::Abandoned { reason: String, }
 pub enum variant nomos_ledger::ReleaseOutcome::Finished(VerificationRecord)
 pub fn nomos_ledger::Claim::Has_Lapsed(&self, now: Timestamp) -> bool
 pub fn nomos_ledger::ClaimRefusal::Describe(&self) -> String
-pub fn nomos_ledger::FinishRefusal::Describe(&self) -> String
-pub fn nomos_ledger::Finish_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>( ledger: &mut FileLedger<Files, TimeSource, Lock>, launcher: &impl ProcessLauncher, finishing: &Finishing<'_>, working_directory: Option<&Path>, ) -> Result<VerificationRecord, FinishRefusal>
+pub fn nomos_ledger::Finish_Item<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>( ledger: &mut FileLedger<Files, TimeSource, Lock>, launcher: &impl ProgramLauncher, finishing: &Finishing<'_>, working_directory: Option<&Path>, ) -> Result<VerificationRecord, FinishRefusal>
 pub fn nomos_ledger::LedgerError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_ledger::ReleaseOutcome::Record_On(&self, item: &mut LedgerItem, holder: &str, at: Timestamp)
 pub impl nomos_ledger::LedgerError implements core::fmt::Display
@@ -53,22 +42,16 @@ pub struct field nomos_ledger::Declination::declined_at: Timestamp
 pub struct field nomos_ledger::Declination::holder: String
 pub struct field nomos_ledger::Finishing::holder: &'a str
 pub struct field nomos_ledger::Finishing::item: &'a ItemId
-pub struct field nomos_ledger::VerificationRecord::argv: Vec<String>
-pub struct field nomos_ledger::VerificationRecord::exit_code: i32
-pub struct field nomos_ledger::VerificationRecord::gate: Option<GateOutcome>
-pub struct field nomos_ledger::VerificationRecord::output_tail: String
-pub struct field nomos_ledger::VerificationRecord::revision: Option<String>
-pub struct field nomos_ledger::VerificationRecord::verified_at: Timestamp
 pub struct nomos_ledger::Abandonment
 pub struct nomos_ledger::Claim
 pub struct nomos_ledger::Declination
 pub struct nomos_ledger::Finishing<'a>
-pub struct nomos_ledger::VerificationRecord
 
 # re-exports of items declared outside this crate
 pub use exclusion::Blocker
 pub use exclusion::ExclusionLedger
 pub use exclusion::Reservation
+pub use finish::FinishRefusal
 pub use gate::Derive_Step
 pub use gate::GATE_WORKFLOW
 pub use gate::GateOutcome
@@ -103,3 +86,4 @@ pub use store::LedgerDocument
 pub use store::SCHEMA_VERSION
 pub use store::Validate_Document
 pub use verification::VerificationPredicate
+pub use verification::VerificationRecord

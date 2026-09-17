@@ -27,7 +27,7 @@ pub struct Command
     /// How long the process may go without producing any new output before it is judged
     /// to have stalled, rather than to be doing legitimately slow work.
     ///
-    /// Defaults to [`Command::timeout`] by [`Command::New`], so a caller that never asks
+    /// Defaults to [`Command::timeout`] by [`Command::From_String_Arguments`], so a caller that never asks
     /// for the distinction gets exactly the wait it asked for before: the two bounds
     /// coincide and the process is judged only once, at the wall bound. Setting this
     /// shorter than `timeout` is what makes the idle bound able to fire first.
@@ -41,7 +41,7 @@ impl Command
     /// The idle bound starts equal to the wall bound. See
     /// [`Command::With_Idle_Timeout`] to give it one of its own.
     #[must_use]
-    pub fn New(argv: Vec<String>, timeout: std::time::Duration) -> Self
+    pub fn From_String_Arguments(argv: Vec<String>, timeout: std::time::Duration) -> Self
     {
         return Self {
             argv,
@@ -92,15 +92,15 @@ mod tests
     #[test]
     fn Test_An_Empty_Argv_Should_Have_No_Program()
     {
-        let empty = Command::New(Vec::new(), Duration::from_secs(1));
+        let empty = Command::From_String_Arguments(Vec::new(), Duration::from_secs(1));
 
         assert_eq!(empty.Program(), None);
     }
 
     #[test]
-    fn Test_New_Should_Start_The_Idle_Bound_Equal_To_The_Wall_Bound()
+    fn Test_From_String_Arguments_Should_Start_The_Idle_Bound_Equal_To_The_Wall_Bound()
     {
-        let command = Command::New(vec!["prog".to_owned()], Duration::from_secs(A_WALL_BOUND_SECONDS));
+        let command = Command::From_String_Arguments(vec!["prog".to_owned()], Duration::from_secs(A_WALL_BOUND_SECONDS));
 
         assert_eq!(
             command.idle_timeout, command.timeout,
@@ -111,7 +111,7 @@ mod tests
     #[test]
     fn Test_With_Idle_Timeout_Should_Set_The_Idle_Bound_Independently_Of_The_Wall_Bound()
     {
-        let command = Command::New(vec!["prog".to_owned()], Duration::from_secs(A_LONG_WALL_BOUND_SECONDS))
+        let command = Command::From_String_Arguments(vec!["prog".to_owned()], Duration::from_secs(A_LONG_WALL_BOUND_SECONDS))
             .With_Idle_Timeout(Duration::from_secs(A_SHORT_IDLE_BOUND_SECONDS));
 
         assert_eq!(command.timeout, Duration::from_secs(A_LONG_WALL_BOUND_SECONDS));

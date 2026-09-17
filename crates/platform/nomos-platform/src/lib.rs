@@ -11,7 +11,7 @@
 //! every caller. That is what happened, twice, and the seam is why neither move
 //! touched a caller:
 //!
-//! - [`ProcessLauncher`]'s design went *down* into `xvpe-subprocess-execution` on
+//! - [`ProgramLauncher`]'s design went *down* into `xvpe-subprocess-execution` on
 //!   2026-09-10, with `nomos-platform-xvpe` bridging this workspace's launchers onto
 //!   it. This trait is unchanged and its 33 implementors never learned.
 //! - [`Timestamp`] went down on 2026-09-11 and this crate now re-exports XVPE's. Its
@@ -29,13 +29,13 @@
 //! # Scope
 //!
 //! This crate declares what has a consumer today: [`Clock`], [`FileSystem`],
-//! [`CrossProcessLock`], [`ProcessLauncher`] and [`Environment`]. Blob storage, task
+//! [`FilesystemLock`], [`ProgramLauncher`] and [`Environment`]. Blob storage, task
 //! hosting and capability discovery are named in the architecture and are deliberately
 //! absent until something needs them — a trait nothing implements and nothing calls is a
 //! claim about the future, and this workspace has a rule against those.
 //!
 //! [`Environment`] is the one added by that rule rather than despite it. Three providers
-//! were injecting a [`ProcessLauncher`] and then reading `std::env` past it to decide what
+//! were injecting a [`ProgramLauncher`] and then reading `std::env` past it to decide what
 //! the launched command was called, so the seam existed and was being stepped around;
 //! `P86` measured the three identical reads. Its two operations are the two that had
 //! callers, and `std::env::args` is not among them for the same reason the absent ports
@@ -71,8 +71,8 @@
 mod clock;
 mod file_system;
 mod file_system_error;
-mod process_launcher;
-mod cross_process_lock;
+mod program_launcher;
+mod filesystem_lock;
 mod environment;
 mod environment_error;
 
@@ -87,7 +87,7 @@ pub use nomos_contracts::{DeterminismStrength, ReproducibilityScope, Strategy, T
 pub use clock::{Clock, Timestamp, timestamp_serde};
 pub use file_system::FileSystem;
 pub use file_system_error::FileSystemError;
-pub use process_launcher::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
-pub use cross_process_lock::{CrossProcessLock, LockAcquisition, LockError, StaleTakeover};
+pub use program_launcher::{Command, ExitOutcome, ProgramLauncher, ProgramOutput};
+pub use filesystem_lock::{FilesystemLock, LockAcquisition, LockError, StaleTakeover};
 pub use environment::Environment;
 pub use environment_error::EnvironmentError;

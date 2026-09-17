@@ -8,7 +8,7 @@ use nomos_contracts::{
     BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, Guarantee, ProviderId, SnapshotId,
     SubjectId,
 };
-use nomos_platform::{Environment, ProcessLauncher};
+use nomos_platform::{Environment, ProgramLauncher};
 use std::path::Path;
 
 #[path = "provider/package_fact.rs"]
@@ -47,7 +47,7 @@ pub struct FactContext
 /// # Errors
 ///
 /// Whatever [`Discover_Workspace`] returns.
-pub fn Materialize_Workspace<Launcher: ProcessLauncher, Env: Environment>(
+pub fn Materialize_Workspace<Launcher: ProgramLauncher, Env: Environment>(
     root: &Path,
     context: FactContext,
     launcher: &Launcher,
@@ -113,7 +113,7 @@ mod tests
 {
     use super::*;
     use nomos_contracts::Digest128;
-    use nomos_platform_std::{StdEnvironment, StdProcessLauncher};
+    use nomos_platform_std::{StdEnvironment, StdProgramLauncher};
 
     /// Fill bytes distinct enough that `Context()`'s three digests differ from one
     /// another; each value carries no meaning beyond "not equal to the others".
@@ -123,7 +123,7 @@ mod tests
     #[test]
     fn Test_Materialize_Workspace_Should_Produce_One_Fact_Per_Workspace_Member()
     {
-        let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher, &StdEnvironment).expect("a real workspace");
+        let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProgramLauncher, &StdEnvironment).expect("a real workspace");
 
         assert!(
             facts.iter().any(|fact| fact.fact.payload.bytes.starts_with(b"package\tnomos-rules\n")),
@@ -140,7 +140,7 @@ mod tests
     #[test]
     fn Test_A_Facts_Path_Should_Be_What_Its_Subject_Was_Addressed_By()
     {
-        let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher, &StdEnvironment).expect("a real workspace");
+        let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProgramLauncher, &StdEnvironment).expect("a real workspace");
 
         let rules = facts
             .iter()
@@ -154,7 +154,7 @@ mod tests
     #[test]
     fn Test_A_Fact_Should_Carry_The_Declared_Guarantee()
     {
-        let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher, &StdEnvironment).expect("a real workspace");
+        let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProgramLauncher, &StdEnvironment).expect("a real workspace");
 
         for fact in &facts
         {
@@ -167,8 +167,8 @@ mod tests
     #[test]
     fn Test_Two_Runs_Over_The_Same_Tree_Should_Reach_The_Same_Semantic_Inputs()
     {
-        let first = Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher, &StdEnvironment).expect("a real workspace");
-        let second = Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher, &StdEnvironment).expect("a real workspace");
+        let first = Materialize_Workspace(&Repository_Root(), Context(), &StdProgramLauncher, &StdEnvironment).expect("a real workspace");
+        let second = Materialize_Workspace(&Repository_Root(), Context(), &StdProgramLauncher, &StdEnvironment).expect("a real workspace");
 
         assert_eq!(first.len(), second.len());
         for (left, right) in first.iter().zip(second.iter())

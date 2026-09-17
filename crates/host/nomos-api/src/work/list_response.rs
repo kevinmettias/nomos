@@ -49,7 +49,7 @@ pub enum ListResponse
         /// Every item, as the ledger holds them.
         document: LedgerDocument,
         /// The moment the board was read.
-        #[serde(with = "nomos_platform::timestamp_serde")]
+        #[serde(serialize_with = "nomos_platform::timestamp_serde::Write_Unix_Seconds")]
         now: Timestamp,
     },
     /// The ledger file could not be read at all.

@@ -1,13 +1,13 @@
 //! Running the shared gate step the predicate does not cover.
 
-use super::{FileSystem, Clock, CrossProcessLock, FileLedger, ItemId, Path, FinishRefusal, Workflow_Path, GateUnknown, Derive_Step, LINT_STEP, ProcessLauncher, Runner, GateOutcome, Command_From_Argv, Ran_To_Completion};
+use super::{FileSystem, Clock, FilesystemLock, FileLedger, ItemId, Path, FinishRefusal, Workflow_Path, GateUnknown, Derive_Step, LINT_STEP, ProgramLauncher, Runner, GateOutcome, Command_From_Argv, Ran_To_Completion};
 
 /// The gate's lint step, read out of the workflow rather than written here.
 ///
 /// Both failures are `GateUndetermined` rather than a licence to run the predicate alone:
 /// a workflow nobody could read and a workflow with no such step both leave the question
 /// "would this land" unanswered, and that is not the same as answering it yes.
-pub(super) fn Gate_Argv<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub(super) fn Gate_Argv<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &FileLedger<Files, TimeSource, Lock>,
     item: &ItemId,
     working_directory: Option<&Path>,
@@ -43,9 +43,9 @@ pub(super) fn Gate_Argv<Files: FileSystem, TimeSource: Clock, Lock: CrossProcess
 /// Returns [`FinishRefusal::GateUndetermined`] when what the gate checks cannot be
 /// established — which is a refusal, not a licence to run the predicate alone — and
 /// [`FinishRefusal::GateFailed`] when the step ran and the answer was no.
-pub(super) fn Run_Gate_Step<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub(super) fn Run_Gate_Step<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &FileLedger<Files, TimeSource, Lock>,
-    launcher: &impl ProcessLauncher,
+    launcher: &impl ProgramLauncher,
     item: &ItemId,
     runner: Runner<'_>,
 ) -> Result<GateOutcome, FinishRefusal>
@@ -75,7 +75,7 @@ mod tests
 {
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
-    use nomos_platform::{Command, ExitOutcome, ProcessOutput, Timestamp};
+    use nomos_platform::{Command, ExitOutcome, ProgramOutput, Timestamp};
     use nomos_platform_std::{FileLock, StdFileSystem};
 
     struct FixedClock(i64);
@@ -131,11 +131,11 @@ mod tests
         const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
-    impl ProcessLauncher for &AlwaysFails
+    impl ProgramLauncher for &AlwaysFails
     {
-        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
         {
-            return Ok(ProcessOutput {
+            return Ok(ProgramOutput {
                 outcome: ExitOutcome::Exited { code: LINT_EXIT_CODE },
                 stdout: String::new(),
                 stderr: "clippy found problems".to_owned(),

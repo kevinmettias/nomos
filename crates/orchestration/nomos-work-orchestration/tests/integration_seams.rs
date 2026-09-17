@@ -43,9 +43,9 @@ impl Strategy for Unreached
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl nomos_platform::ProcessLauncher for Unreached
+impl nomos_platform::ProgramLauncher for Unreached
 {
-    fn Run(&self, _command: &nomos_platform::Command) -> Result<nomos_platform::ProcessOutput, String>
+    fn Run(&self, _command: &nomos_platform::Command) -> Result<nomos_platform::ProgramOutput, String>
     {
         panic!("no command dispatched by this suite should run a process");
     }

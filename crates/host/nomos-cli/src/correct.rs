@@ -11,7 +11,7 @@
 //! which `check`, `gate`, `workflow` and this module now all call rather than each carrying
 //! its own), reading what this binary was compiled as
 //! ([`Correction_Variant`]), choosing a
-//! [`nomos_platform::ProcessLauncher`]/[`nomos_platform::FileSystem`]
+//! [`nomos_platform::ProgramLauncher`]/[`nomos_platform::FileSystem`]
 //! ([`nomos_composer_std::LAUNCHER`]/[`nomos_composer_std::FILE_SYSTEM`]) for
 //! the seam's own two platform ports, and rendering a
 //! [`nomos_correction_orchestration::CorrectionOutcome`] into the exact text and

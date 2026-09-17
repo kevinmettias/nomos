@@ -24,7 +24,7 @@ pub enum variant nomos_work_orchestration::WorkOutcome::Show(Result<ShowView, Le
 pub enum variant nomos_work_orchestration::WorkOutcome::TakeOver(Result<Reservation, ClaimRefusal>)
 pub enum variant nomos_work_orchestration::WorkOutcome::Validate(Result<LedgerDocument, LedgerError>)
 pub enum variant nomos_work_orchestration::WorkOutcome::Widen(Result<Vec<String>, ClaimRefusal>)
-pub fn nomos_work_orchestration::Run<Filesystem, ClockSource, Lock, Launcher>( command: &WorkCommand, ledger: &mut FileLedger<Filesystem, ClockSource, Lock>, launcher: &Launcher, published: impl FnOnce() -> Territory, ) -> WorkOutcome where Filesystem: FileSystem, ClockSource: Clock, Lock: CrossProcessLock, Launcher: ProcessLauncher,
+pub fn nomos_work_orchestration::Run<Filesystem, ClockSource, Lock, Launcher>( command: &WorkCommand, ledger: &mut FileLedger<Filesystem, ClockSource, Lock>, launcher: &Launcher, published: impl FnOnce() -> Territory, ) -> WorkOutcome where Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock, Launcher: ProgramLauncher,
 pub struct field nomos_work_orchestration::BoardView::document: LedgerDocument
 pub struct field nomos_work_orchestration::BoardView::now: Timestamp
 pub struct field nomos_work_orchestration::ClaimRequest::holder: String

@@ -1,7 +1,7 @@
 //! Running a program directly, with a timeout that actually terminates it.
 
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
-use nomos_platform::{Command, ProcessLauncher, ProcessOutput};
+use nomos_platform::{Command, ProgramLauncher, ProgramOutput};
 
 // Kept under `launcher/` rather than `std_process_launcher/`: the directory name is not
 // itself subject to check-file-name (which judges files against the types they declare),
@@ -40,19 +40,19 @@ const DRAIN_GRACE: std::time::Duration = std::time::Duration::from_secs(5);
 /// nothing to quote, nothing to expand, and no way for a string written into a shared
 /// file to become a command somebody else's process runs.
 #[derive(Clone, Copy, Debug, Default)]
-pub struct StdProcessLauncher;
+pub struct StdProgramLauncher;
 
 /// Reaches the real machine, so it reproduces nothing and says so.
-impl Strategy for StdProcessLauncher
+impl Strategy for StdProgramLauncher
 {
     const STRENGTH: DeterminismStrength = DeterminismStrength::None;
     const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
     const TRACE: TraceEquivalence = TraceEquivalence::NotApplicable;
 }
 
-impl ProcessLauncher for StdProcessLauncher
+impl ProgramLauncher for StdProgramLauncher
 {
-    fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, command: &Command) -> Result<ProgramOutput, String>
     {
         use wait::Waited_For_Child;
 
@@ -68,7 +68,7 @@ impl ProcessLauncher for StdProcessLauncher
         let outcome = Waited_For_Child(&mut child, program, command, &streams)?;
         Settle_Output_Streams(streams.stdout, streams.stderr);
 
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome,
             stdout: stdout.as_ref().map_or_else(String::new, Drain::Text),
             stderr: stderr.as_ref().map_or_else(String::new, Drain::Text),

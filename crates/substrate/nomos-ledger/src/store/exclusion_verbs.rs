@@ -12,7 +12,7 @@
 
 use std::time::Duration;
 
-use nomos_platform::{Clock, CrossProcessLock, FileSystem, Timestamp};
+use nomos_platform::{Clock, FilesystemLock, FileSystem, Timestamp};
 
 use crate::ClaimRefusal;
 use crate::ItemId;
@@ -26,7 +26,7 @@ use super::file::Decide_Under_Lock;
 use super::FileLedger;
 
 /// The body of [`ExclusionLedger::Claim`], which keeps the documentation and the signature.
-pub(super) fn Claim_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub(super) fn Claim_Item<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Files, TimeSource, Lock>,
     item: &ItemId,
     holder: &str,
@@ -88,7 +88,7 @@ fn Grant_Claim(
 }
 
 /// The body of [`ExclusionLedger::Renew`], which keeps the documentation and the signature.
-pub(super) fn Renew_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub(super) fn Renew_Item<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Files, TimeSource, Lock>,
     item: &ItemId,
     holder: &str,
@@ -119,7 +119,7 @@ pub(super) fn Renew_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProces
 }
 
 /// The body of [`ExclusionLedger::Release`], which keeps the documentation and the signature.
-pub(super) fn Release_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub(super) fn Release_Item<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Files, TimeSource, Lock>,
     item: &ItemId,
     holder: &str,

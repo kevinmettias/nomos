@@ -106,7 +106,7 @@
 use nomos_analysis::MemoryFactStore;
 use nomos_check_orchestration::{CheckOutcome, Run, RunContext};
 use nomos_contracts::Finding;
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::collections::{BTreeMap, BTreeSet};
@@ -158,7 +158,7 @@ fn Findings_By_Rule() -> BTreeMap<String, Vec<Finding>>
         RunContext {
             variant: Test_Variant(),
             root: &root,
-            launcher: &StdProcessLauncher,
+            launcher: &StdProgramLauncher,
             filesystem: &StdFileSystem,
             environment: &StdEnvironment,
             workspace: &mut None,

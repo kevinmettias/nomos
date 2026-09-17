@@ -9,7 +9,7 @@ use crate::fixtures::{
 };
 use nomos_ledger::FileLedger;
 use nomos_platform::{
-    CrossProcessLock, DeterminismStrength, LockAcquisition, LockError, ReproducibilityScope,
+    FilesystemLock, DeterminismStrength, LockAcquisition, LockError, ReproducibilityScope,
     Strategy, TraceEquivalence,
 };
 use nomos_platform_std::{FileLock, FileLockGuard, StdFileSystem};
@@ -89,7 +89,7 @@ impl Drop for WatchingGuard
     }
 }
 
-impl CrossProcessLock for WatchingLock
+impl FilesystemLock for WatchingLock
 {
     type Guard = WatchingGuard;
 

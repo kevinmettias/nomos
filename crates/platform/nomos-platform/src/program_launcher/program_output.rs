@@ -4,7 +4,7 @@ use crate::ExitOutcome;
 
 /// What a process produced.
 #[derive(Clone, Debug, PartialEq, Eq)]
-pub struct ProcessOutput
+pub struct ProgramOutput
 {
     /// How it ended.
     pub outcome: ExitOutcome,

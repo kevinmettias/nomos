@@ -3,7 +3,7 @@
 
 use nomos_analysis::MemoryFactStore;
 use nomos_contracts::{Finding, RuleId};
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use nomos_rules::SourceFile;
 use std::path::Path;
 
@@ -102,7 +102,7 @@ fn Findings_Under(sources: &[SourceFile], root: &Path, selected: &[RuleId]) -> V
 {
     let outcome = Run(
         sources,
-        RunContext { variant: Test_Variant(), root, launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
+        RunContext { variant: Test_Variant(), root, launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() },
         selected,
     );
 

@@ -23,7 +23,7 @@ use crate::{
     GateExplainResult, GateRunOutcome, GateRunResult, RuleCalibration, Run_Gate, Suppression, SuppressionDisposition, SuppressionPolicy,
 };
 use nomos_contracts::{Digest128, Finding, RunId};
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::PathBuf;
@@ -91,11 +91,11 @@ fn Test_Run_Id() -> RunId
 /// filesystem are the platform a run is judged *through* rather than a fixture's own choice, so a
 /// fixture that spelled them out again would be restating a composition-root decision and would be
 /// the one place a test could silently judge under a different one than the test beside it.
-fn Gate_Platform() -> GateEnvironment<'static, StdProcessLauncher, StdFileSystem, StdEnvironment>
+fn Gate_Platform() -> GateEnvironment<'static, StdProgramLauncher, StdFileSystem, StdEnvironment>
 {
     return GateEnvironment {
         variant: Test_Variant(),
-        launcher: &StdProcessLauncher,
+        launcher: &StdProgramLauncher,
         filesystem: &StdFileSystem,
         environment: &StdEnvironment,
         now: nomos_platform::Timestamp::From_Unix_Seconds(0),

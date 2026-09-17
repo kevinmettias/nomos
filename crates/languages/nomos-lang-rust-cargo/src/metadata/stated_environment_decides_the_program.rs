@@ -2,7 +2,7 @@
 //! from the `Environment` a caller supplied, not from this process's own ambient state.
 
 use super::Discover_Workspace;
-use nomos_platform::{Command, DeterminismStrength, Environment, EnvironmentError, ProcessLauncher, ReproducibilityScope, Strategy, TraceEquivalence};
+use nomos_platform::{Command, DeterminismStrength, Environment, EnvironmentError, ProgramLauncher, ReproducibilityScope, Strategy, TraceEquivalence};
 use std::cell::RefCell;
 use std::ffi::OsString;
 use std::path::{Path, PathBuf};
@@ -54,9 +54,9 @@ impl Strategy for Recording
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for Recording
+impl ProgramLauncher for Recording
 {
-    fn Run(&self, command: &Command) -> Result<nomos_platform::ProcessOutput, String>
+    fn Run(&self, command: &Command) -> Result<nomos_platform::ProgramOutput, String>
     {
         self.seen.borrow_mut().push(command.clone());
 

@@ -1,13 +1,13 @@
 //! `nomos-platform-std` exists to do exactly one thing: satisfy `nomos_platform`'s ports
-//! (`ProcessLauncher`, `FileSystem`, `Clock`, `CrossProcessLock`) with ordinary operating-
+//! (`ProgramLauncher`, `FileSystem`, `Clock`, `FilesystemLock`) with ordinary operating-
 //! system facilities. Every internal `#[cfg(test)]` module in this crate already proves its
 //! own file's behavior, but only with private-item access; this file proves the same seam
 //! through the public API a real caller has — construct a `nomos-platform-std` type, drive
 //! it through `nomos_platform`'s own trait, and read the result back as `nomos_platform`'s
 //! own types.
 
-use nomos_platform::{Clock, Command, CrossProcessLock, FileSystem, FileSystemError, LockError, ProcessLauncher};
-use nomos_platform_std::{FileLock, StdFileSystem, StdProcessLauncher, SystemClock};
+use nomos_platform::{Clock, Command, FilesystemLock, FileSystem, FileSystemError, LockError, ProgramLauncher};
+use nomos_platform_std::{FileLock, StdFileSystem, StdProgramLauncher, SystemClock};
 use std::path::Path;
 use std::time::Duration;
 
@@ -33,10 +33,10 @@ fn Clear_Leftover(path: &Path)
     }
 }
 
-/// `StdProcessLauncher` against the real `ProcessLauncher` contract: a real child process,
+/// `StdProgramLauncher` against the real `ProgramLauncher` contract: a real child process,
 /// judged through `nomos_platform::ExitOutcome`'s own `Is_Successful`/`Has_A_Verdict`.
 #[test]
-fn Test_Std_Process_Launcher_Should_Report_A_Real_Exit_Through_The_Real_Trait()
+fn Test_Std_Program_Launcher_Should_Report_A_Real_Exit_Through_The_Real_Trait()
 {
     let argv = if cfg!(windows)
     {
@@ -46,9 +46,9 @@ fn Test_Std_Process_Launcher_Should_Report_A_Real_Exit_Through_The_Real_Trait()
     {
         vec!["sh".to_owned(), "-c".to_owned(), "exit 0".to_owned()]
     };
-    let command = Command::New(argv, LAUNCH_TIMEOUT);
+    let command = Command::From_String_Arguments(argv, LAUNCH_TIMEOUT);
 
-    let output = StdProcessLauncher.Run(&command).expect("a real, short-lived child process starts and exits");
+    let output = StdProgramLauncher.Run(&command).expect("a real, short-lived child process starts and exits");
 
     assert!(output.outcome.Is_Successful(), "a zero exit must satisfy nomos_platform's own success predicate");
     assert!(output.outcome.Has_A_Verdict(), "a zero exit is a real verdict, not a non-answer");
@@ -94,7 +94,7 @@ fn Test_System_Clock_Should_Produce_Real_Timestamps_The_Real_Trait_Can_Order()
     assert_eq!(first.Since(second), Duration::ZERO, "asking how long ago a later (or equal) reading was must never go negative");
 }
 
-/// `FileLock` against the real `CrossProcessLock` contract: a lock acquired, then refused
+/// `FileLock` against the real `FilesystemLock` contract: a lock acquired, then refused
 /// to a second holder with `nomos_platform`'s own `LockError::Held`.
 #[test]
 fn Test_File_Lock_Should_Exclude_A_Second_Holder_Through_The_Real_Trait()

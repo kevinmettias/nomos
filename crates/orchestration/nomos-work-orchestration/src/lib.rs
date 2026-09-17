@@ -2,7 +2,7 @@
 //! answer.
 //!
 //! `OD-HOST-001` names the defect this crate answers: `nomos-cli`'s `work.rs` imported
-//! `FileLock`, `StdFileSystem`, `StdProcessLauncher` and `SystemClock` from
+//! `FileLock`, `StdFileSystem`, `StdProgramLauncher` and `SystemClock` from
 //! `nomos-platform-std` directly, so choosing a platform, running a verb and rendering its
 //! outcome were one body of code with no seam a second adapter could depend on without
 //! taking all three.

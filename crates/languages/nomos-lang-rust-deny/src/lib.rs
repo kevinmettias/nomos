@@ -7,7 +7,7 @@
 //! analysis over the fully resolved dependency graph, not a fact this workspace's own text
 //! already holds, so answering it means running `cargo deny` and reading its own JSON
 //! stream. The process itself runs through a caller-supplied
-//! [`nomos_platform::ProcessLauncher`], the same port every subprocess-backed provider in
+//! [`nomos_platform::ProgramLauncher`], the same port every subprocess-backed provider in
 //! this workspace runs through — so this crate depends on `nomos-platform` and not on any
 //! concrete implementation of it; the composition root chooses that.
 //!

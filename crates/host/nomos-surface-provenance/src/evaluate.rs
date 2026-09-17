@@ -6,7 +6,7 @@
 //! `main.rs`).
 
 use crate::git;
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher};
+use nomos_platform::{Command, ExitOutcome, ProgramLauncher};
 use std::path::Path;
 
 /// One commit that touched a crate's surface snapshot, for a reader to judge — not for
@@ -49,7 +49,7 @@ impl CrateFinding
 /// Returns a message when `git` could not be run, or ran and refused (a bad revision,
 /// most commonly).
 pub(crate) fn Records_Touched(
-    launcher: &impl ProcessLauncher,
+    launcher: &impl ProgramLauncher,
     root: &Path,
     since: git::Since<'_>,
     until: git::Until<'_>,
@@ -88,7 +88,7 @@ pub(crate) struct Query<'a>
 /// # Errors
 ///
 /// Returns a message when either `git` call could not be run or refused.
-pub(crate) fn Finding_For(launcher: &impl ProcessLauncher, query: &Query<'_>, krate: &str) -> Result<CrateFinding, String>
+pub(crate) fn Finding_For(launcher: &impl ProgramLauncher, query: &Query<'_>, krate: &str) -> Result<CrateFinding, String>
 {
     let path = crate::discovery::Snapshot_Path(krate);
     let range = &query.range;
@@ -129,7 +129,7 @@ impl From<bool> for SurfaceChanged
 /// skipping the second `git log` call entirely rather than running it just to discard the
 /// answer.
 fn Surface_Commits(
-    launcher: &impl ProcessLauncher,
+    launcher: &impl ProgramLauncher,
     range: &CommitRange<'_>,
     path: &str,
     surface_changed: SurfaceChanged,
@@ -172,7 +172,7 @@ fn Parse_Commits(text: &str) -> Vec<CommitRef>
 /// A non-zero exit and a timeout are both "no answer" here — the same distinction
 /// `nomos_platform::ExitOutcome` draws generally: this report can state a finding only
 /// from a query that actually completed and said yes or no.
-fn Ran_Command(launcher: &impl ProcessLauncher, command: &Command) -> Result<String, String>
+fn Ran_Command(launcher: &impl ProgramLauncher, command: &Command) -> Result<String, String>
 {
     let output = launcher.Run(command)?;
 

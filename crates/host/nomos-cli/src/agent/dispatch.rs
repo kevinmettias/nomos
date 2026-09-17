@@ -18,7 +18,7 @@
 //! subprocesses -- correct advice for a CLI-only module with exactly one caller. It stopped
 //! being correct the moment this dispatch moved into a crate two hosts call:
 //! `nomos_agent_orchestration::Run_Agent_Execute`/`Run_Agent_Judgment` are generic over
-//! `nomos_platform::ProcessLauncher`, the identical reason
+//! `nomos_platform::ProgramLauncher`, the identical reason
 //! `nomos_correction_orchestration::Run_Correction` already is, so `nomos-api` supplies its
 //! own launcher, through `nomos-composer-std`, at its own call site rather than depending
 //! on this crate's

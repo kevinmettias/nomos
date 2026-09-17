@@ -3,7 +3,7 @@
 
 use nomos_analysis::{MemoryFactStore, Reader};
 use nomos_contracts::{Applicability, Finding, GateCategory, RuleId};
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use nomos_rules::{Check_Completeness_Mirrors, SourceFile};
 
 use crate::{CheckOutcome, Claim, Composed_Rules, Run, RunContext};
@@ -38,7 +38,7 @@ fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
 {
     let sources = vec![Source_File("a.rs", SourceText("pub fn Ok() {}\n"))];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &Architectural_Rules());
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &Architectural_Rules());
 
     let CheckOutcome::Judged { findings, examined, claim } = outcome
     else
@@ -69,7 +69,7 @@ fn Test_A_Clean_Go_Source_Should_Be_Judged_Through_Its_Own_Real_Provider()
     let sources = vec![Source_File("main.go", SourceText("package main\n\nfunc One() {}\n"))];
     let selected = [RuleId::New(nomos_rules::COMPLETENESS_MIRROR), RuleId::New(nomos_rules::NAMING_CONVENTION)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &selected);
 
     let CheckOutcome::Judged { findings, examined, claim } = outcome
     else
@@ -95,7 +95,7 @@ fn Corresponded_Findings(correspondence: Correspondence) -> Vec<Finding>
 {
     let sources = vec![correspondence.rust, correspondence.go];
     let selected = [RuleId::New(nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE)];
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &selected);
 
     let CheckOutcome::Judged { findings, .. } = outcome else { panic!("a tree the provider can read must be judged") };
 
@@ -147,7 +147,7 @@ fn Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete()
         SourceText("/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n"),
     )];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
     let CheckOutcome::Judged { findings, claim, .. } = outcome
     else
@@ -170,7 +170,7 @@ fn Test_A_Run_That_Materializes_No_Facts_Should_Report_NoFacts()
 {
     let sources = vec![Source_File("broken.rs", SourceText("pub const ??? = ;"))];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
     assert!(
         matches!(outcome, CheckOutcome::NoFacts { files: 1 }),
@@ -187,7 +187,7 @@ fn Test_Conflicting_Paths_Should_Be_Unreadable()
 {
     let sources = vec![Source_File("a.rs", SourceText("pub fn one() {}\n")), Source_File("a.rs", SourceText("pub fn two() {}\n"))];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
     assert!(matches!(outcome, CheckOutcome::Unreadable), "duplicate paths must not be ingested");
 }
@@ -200,7 +200,7 @@ fn Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor()
 {
     let sources = vec![Source_File("a.rs", SourceText("pub const TABLE: &[&str] = &[];\n"))];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
     let CheckOutcome::Judged { findings, .. } = outcome
     else
@@ -324,7 +324,7 @@ fn Test_A_Rule_Selected_Through_Its_Exported_Identifier_Should_Run()
 
     let sources = vec![Source_File("a.rs", SourceText("pub fn one() {} \n"))];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[exported.clone()]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[exported.clone()]);
 
     let CheckOutcome::Judged { findings, .. } = outcome
     else
@@ -355,7 +355,7 @@ fn Test_An_Identifier_The_Export_Does_Not_Name_Should_Select_Nothing()
 
     let sources = vec![Source_File("a.rs", SourceText("pub fn one() {} \n"))];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[absent]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[absent]);
 
     let CheckOutcome::Judged { findings, .. } = outcome
     else

@@ -8,7 +8,7 @@
 
 use std::time::Duration;
 
-use nomos_platform::{Clock, CrossProcessLock, FileSystem, Timestamp};
+use nomos_platform::{Clock, FilesystemLock, FileSystem, Timestamp};
 
 use crate::AddRefusal;
 use crate::ClaimRefusal;
@@ -26,7 +26,7 @@ use super::reservation::{RecordDeclaration, Refuse_A_Spent_Record};
 use super::FileLedger;
 
 /// The body of [`FileLedger::Validate_Current`], which keeps the documentation and the signature.
-pub(super) fn Validate_Current<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub(super) fn Validate_Current<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &FileLedger<Files, TimeSource, Lock>,
 ) -> Result<(), LedgerError>
 {
@@ -45,7 +45,7 @@ pub(super) fn Validate_Current<Files: FileSystem, TimeSource: Clock, Lock: Cross
 }
 
 /// The body of [`FileLedger::Add`], which keeps the documentation and the signature.
-pub(super) fn Add_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub(super) fn Add_Item<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Files, TimeSource, Lock>,
     item: &LedgerItem,
     holder: &str,
@@ -83,7 +83,7 @@ pub(super) fn Add_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessL
 ///
 /// Returns the paths actually added, so a caller can report what happened rather than echoing
 /// what was asked for. They differ whenever a path was already reserved.
-pub(super) fn Widen_Territory<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub(super) fn Widen_Territory<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Files, TimeSource, Lock>,
     item: &ItemId,
     holder: Holder<'_>,
@@ -116,7 +116,7 @@ pub(super) fn Widen_Territory<Files: FileSystem, TimeSource: Clock, Lock: CrossP
 }
 
 /// The body of [`FileLedger::Decline`], which keeps the documentation and the signature.
-pub(super) fn Decline_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub(super) fn Decline_Item<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Files, TimeSource, Lock>,
     item: &ItemId,
     holder: Holder<'_>,
@@ -146,7 +146,7 @@ pub(super) fn Decline_Item<Files: FileSystem, TimeSource: Clock, Lock: CrossProc
 }
 
 /// The body of [`FileLedger::Take_Over`], which keeps the documentation and the signature.
-pub(super) fn Take_Over<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub(super) fn Take_Over<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Files, TimeSource, Lock>,
     item: &ItemId,
     holder: &str,

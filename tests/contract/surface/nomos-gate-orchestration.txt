@@ -69,7 +69,7 @@ pub fn nomos_gate_orchestration::BaselinePolicy::Tolerating<'a>(&'a self, findin
 pub fn nomos_gate_orchestration::Compare_Gate_Runs( baseline: &GateRunResult, candidate: &GateRunResult, ) -> Result<GateCompareResult, CollidingOccurrences>
 pub fn nomos_gate_orchestration::Disposition_Of_Findings(findings: &[Finding]) -> GateRunOutcome
 pub fn nomos_gate_orchestration::Evaluated_Phases(phases: &[GatePhase], findings: &[Finding], approvals: &[PhaseApproval]) -> Vec<PhaseOutcome>
-pub fn nomos_gate_orchestration::Explain_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs, Env>, command: &GateCommand, query: &FindingQuery, ) -> GateExplainResult
+pub fn nomos_gate_orchestration::Explain_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs, Env>, command: &GateCommand, query: &FindingQuery, ) -> GateExplainResult
 pub fn nomos_gate_orchestration::Fresh_Run_Id(now: Timestamp) -> RunId
 pub fn nomos_gate_orchestration::Phased_Disposition(disposition: crate::GateRunOutcome, phases: &[GatePhase], outcomes: &[PhaseOutcome], blocking: &[Finding]) -> crate::GateRunOutcome
 pub fn nomos_gate_orchestration::Registered() -> Result<RuleRegistry, RuleCompositionError>
@@ -78,7 +78,7 @@ pub fn nomos_gate_orchestration::RuleCompositionError::from(error: RuleRegistryE
 pub fn nomos_gate_orchestration::RuleCompositionError::from(error: RuleResolutionError) -> Self
 pub fn nomos_gate_orchestration::RuleSelector::Is_Included(&self, rule: &RuleId) -> bool
 pub fn nomos_gate_orchestration::Run(command: &GateCommand) -> GateOutcome
-pub fn nomos_gate_orchestration::Run_Gate<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs, Env>, command: &GateCommand, run: RunId, ) -> GateRunResult
+pub fn nomos_gate_orchestration::Run_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs, Env>, command: &GateCommand, run: RunId, ) -> GateRunResult
 pub fn nomos_gate_orchestration::ScopeSelector::Is_In_Scope(&self, path: &str) -> bool
 pub fn nomos_gate_orchestration::Suppression::Is_Applicable_To(&self, finding: &Finding) -> bool
 pub fn nomos_gate_orchestration::Suppression::Status_At(&self, now: Timestamp) -> SuppressionStatus
@@ -190,7 +190,7 @@ pub struct nomos_gate_orchestration::DispositionChange
 pub struct nomos_gate_orchestration::FindingQuery
 pub struct nomos_gate_orchestration::GateCommand
 pub struct nomos_gate_orchestration::GateCompareResult
-pub struct nomos_gate_orchestration::GateEnvironment<'a, Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>
+pub struct nomos_gate_orchestration::GateEnvironment<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 pub struct nomos_gate_orchestration::GateExplainResult
 pub struct nomos_gate_orchestration::GateFindings
 pub struct nomos_gate_orchestration::GatePhase

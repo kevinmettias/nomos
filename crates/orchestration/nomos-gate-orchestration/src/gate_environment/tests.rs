@@ -9,7 +9,7 @@ use crate::{
 use nomos_check_orchestration::{CheckOutcome, Claim};
 use nomos_contracts::{Digest128, RuleId, RunId};
 use nomos_model::Subject_Of_Path;
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::{Path, PathBuf};
@@ -82,7 +82,7 @@ fn Ran_Over(root: &Path, sources: Vec<SourceFile>, command: GateCommand, seed: u
     let run = RunId::From_Digest(Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]));
     let environment = super::GateEnvironment {
         variant: Test_Variant(),
-        launcher: &StdProcessLauncher,
+        launcher: &StdProgramLauncher,
         filesystem: &StdFileSystem,
         environment: &StdEnvironment,
         now: nomos_platform::Timestamp::From_Unix_Seconds(0),
@@ -298,7 +298,7 @@ fn Test_A_Reordered_Selection_Should_Not_Read_As_A_Different_One()
 fn Test_Judged_Sources_Should_Report_Unreadable_For_An_Unwalked_Root()
 {
     let root = Repository_Root();
-    let outcome = Judged_Sources(None, JudgeContext { launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, variant: Test_Variant(), root: &root, selected: &[] });
+    let outcome = Judged_Sources(None, JudgeContext { launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, variant: Test_Variant(), root: &root, selected: &[] });
 
     assert!(matches!(outcome, CheckOutcome::Unreadable));
 }
@@ -307,7 +307,7 @@ fn Test_Judged_Sources_Should_Report_Unreadable_For_An_Unwalked_Root()
 fn Test_Judged_Sources_Should_Report_No_Source_For_An_Empty_Walk()
 {
     let root = Repository_Root();
-    let outcome = Judged_Sources(Some(Vec::new()), JudgeContext { launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, variant: Test_Variant(), root: &root, selected: &[] });
+    let outcome = Judged_Sources(Some(Vec::new()), JudgeContext { launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, variant: Test_Variant(), root: &root, selected: &[] });
 
     assert!(matches!(outcome, CheckOutcome::NoSource));
 }

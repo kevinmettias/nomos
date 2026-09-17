@@ -2,7 +2,7 @@
 //! [`Execute_Task`] -- everything else (`Execute_In`, `Command_For`, the crate's own
 //! `Isolated_Working_Directory` wrapper) is `pub(crate)` or private, by design, so a test
 //! compiled outside `src/` can only reach this crate's real seams the way a real consumer
-//! does: build a real [`TaskEnvelope`], hand it a real [`ProcessLauncher`], and read back
+//! does: build a real [`TaskEnvelope`], hand it a real [`ProgramLauncher`], and read back
 //! a real [`AgentExecutionOutcome`] or [`AgentExecutionError`].
 
 use std::path::PathBuf;
@@ -14,14 +14,14 @@ use nomos_agent_executor_claude_code::{AgentExecutionError, Execute_Task};
 use nomos_contracts::{CapabilityId, KnowledgeReferenceId, RuleId, SchemaId};
 use nomos_ledger::{LedgerItem, Territory};
 use nomos_model_package::EffortLevel;
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_platform::{Command, ExitOutcome, ProgramLauncher, ProgramOutput};
 
 /// The claim lease the ledger seam test below asks for: comfortably longer than the test
 /// takes, so a claim that lapsed mid-test could not be mistaken for the seam failing.
 const CLAIM_LEASE: Duration = Duration::from_secs(60);
 
 /// A launcher whose one answer was written down by the test that built it, exercising
-/// `nomos_platform::ProcessLauncher` -- the trait boundary `Execute_Task` is generic
+/// `nomos_platform::ProgramLauncher` -- the trait boundary `Execute_Task` is generic
 /// over -- from outside this crate.
 struct Scripted
 {
@@ -38,11 +38,11 @@ impl Strategy for Scripted
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for Scripted
+impl ProgramLauncher for Scripted
 {
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
     {
-        return Ok(ProcessOutput { outcome: self.outcome, stdout: self.stdout.clone(), stderr: self.stderr.clone() });
+        return Ok(ProgramOutput { outcome: self.outcome, stdout: self.stdout.clone(), stderr: self.stderr.clone() });
     }
 }
 
@@ -83,7 +83,7 @@ fn A_Real_Root() -> PathBuf
 /// The happy path across the whole boundary: a real `TaskEnvelope` (`nomos_agent_contracts`
 /// and, through its `scope`/`prohibited_changes` fields, `nomos_ledger`'s re-exported
 /// `Territory`), driven through `Execute_Task` by a launcher satisfying the real
-/// `nomos_platform::ProcessLauncher` contract.
+/// `nomos_platform::ProgramLauncher` contract.
 #[test]
 fn Test_Execute_Task_Should_Read_A_Clean_Response_From_A_Real_Task_Envelope()
 {
@@ -100,7 +100,7 @@ fn Test_Execute_Task_Should_Read_A_Clean_Response_From_A_Real_Task_Envelope()
     assert!(outcome.denied_tool_uses.is_empty());
 }
 
-/// The error nomos_platform's own `ProcessLauncher::Run` reports (`Result::Err`, "we
+/// The error nomos_platform's own `ProgramLauncher::Run` reports (`Result::Err`, "we
 /// could not ask") must cross the boundary as `AgentExecutionError::Unavailable`, never
 /// as a panic or a silently swallowed failure.
 #[test]
@@ -115,9 +115,9 @@ fn Test_Execute_Task_Should_Report_A_Launcher_Failure_As_Unavailable()
         const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
-    impl ProcessLauncher for Unavailable
+    impl ProgramLauncher for Unavailable
     {
-        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
         {
             return Err("nomos-platform could not start the process at all".to_owned());
         }

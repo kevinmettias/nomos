@@ -3,7 +3,7 @@
 //! `P43-AGENT-CANONICAL-SEAM-2` moved the call this file once documented --
 //! `agent/dispatch.rs::Dispatch_Task` calling `nomos_agent_executor_claude_code::
 //! Execute_Task(task, &LAUNCHER)` directly -- into `nomos-agent-orchestration`'s
-//! own `Run_Agent_Execute`/`Run_Agent_Judgment`, generic over `ProcessLauncher` rather than
+//! own `Run_Agent_Execute`/`Run_Agent_Judgment`, generic over `ProgramLauncher` rather than
 //! fixed here. `nomos-cli` no longer names this crate in its own production dependencies;
 //! it reaches it only transitively, through the shared seam. This suite is kept anyway,
 //! as a test-only dependency (see `Cargo.toml`'s own comment), rather than deleted: it
@@ -16,7 +16,7 @@
 //! agent invocation.
 //!
 //! Instead it drives the exact same public function the shared seam calls --
-//! `Execute_Task<Launcher: ProcessLauncher>` -- with a scripted, in-process `ProcessLauncher`
+//! `Execute_Task<Launcher: ProgramLauncher>` -- with a scripted, in-process `ProgramLauncher`
 //! that never spawns anything, the identical pattern
 //! `nomos-agent-executor-claude-code::address_tests` and `nomos-agent-orchestration::run`'s
 //! own tests already use. This proves the real contract the shared seam depends on: a
@@ -29,7 +29,7 @@
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_agent_executor_claude_code::{AgentExecutionError, Execute_Task};
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_platform::{Command, ExitOutcome, ProgramLauncher, ProgramOutput};
 use nomos_agent_executor_claude_code::MicroDollars;
 
 #[path = "support/mod.rs"]
@@ -37,7 +37,7 @@ mod support;
 
 use support::Run;
 
-/// A `ProcessLauncher` that never spawns a process -- it hands back exactly what it was
+/// A `ProgramLauncher` that never spawns a process -- it hands back exactly what it was
 /// built with, so this suite can drive `Execute_Task` deterministically and with zero risk
 /// of touching a real `claude` binary that may exist on this machine's `PATH`.
 struct Scripted
@@ -54,11 +54,11 @@ impl Strategy for Scripted
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for Scripted
+impl ProgramLauncher for Scripted
 {
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
     {
-        return Ok(ProcessOutput { outcome: self.outcome, stdout: self.stdout.clone(), stderr: String::new() });
+        return Ok(ProgramOutput { outcome: self.outcome, stdout: self.stdout.clone(), stderr: String::new() });
     }
 }
 

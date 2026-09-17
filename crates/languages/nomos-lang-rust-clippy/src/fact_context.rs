@@ -8,7 +8,7 @@ use nomos_contracts::{
     BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, Guarantee, ProviderId, SnapshotId,
     SubjectId,
 };
-use nomos_platform::{Environment, ProcessLauncher};
+use nomos_platform::{Environment, ProgramLauncher};
 use std::path::Path;
 
 #[path = "provider/diagnostics_fact.rs"]
@@ -40,7 +40,7 @@ pub struct FactContext
 /// # Errors
 ///
 /// Whatever [`Discover_Workspace`] returns.
-pub fn Materialize_Workspace<Launcher: ProcessLauncher, Env: Environment>(
+pub fn Materialize_Workspace<Launcher: ProgramLauncher, Env: Environment>(
     root: &Path,
     context: FactContext,
     launcher: &Launcher,
@@ -98,7 +98,7 @@ mod tests
 {
     use super::*;
     use nomos_contracts::Digest128;
-    use nomos_platform_std::{StdEnvironment, StdProcessLauncher};
+    use nomos_platform_std::{StdEnvironment, StdProgramLauncher};
 
     const MANY_WORKSPACE_MEMBERS: usize = 10;
 
@@ -110,7 +110,7 @@ mod tests
     #[test]
     fn Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Workspace_Member()
     {
-        let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProcessLauncher, &StdEnvironment).expect("this repository is a real cargo workspace under clippy");
+        let facts = Materialize_Workspace(&Repository_Root(), Context(), &StdProgramLauncher, &StdEnvironment).expect("this repository is a real cargo workspace under clippy");
 
         assert!(
             facts.len() > MANY_WORKSPACE_MEMBERS,

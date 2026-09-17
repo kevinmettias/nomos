@@ -23,7 +23,7 @@
 /// would silently break that call site, which is not this crate's territory to fix.
 /// `idle_elapsed` on [`ExitOutcome::Stalled`] is therefore a [`std::time::Duration`]
 /// rather than a snapshot of the output itself. The output itself is not discarded: it
-/// is still on [`super::ProcessOutput`], captured up to the moment of the kill exactly as
+/// is still on [`super::ProgramOutput`], captured up to the moment of the kill exactly as
 /// it is for every other outcome.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ExitOutcome

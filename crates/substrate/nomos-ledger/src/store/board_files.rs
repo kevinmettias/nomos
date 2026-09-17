@@ -22,7 +22,7 @@
 //! # Why this crate does not open either file
 //!
 //! [`BoardFiles`] is paths and nothing else. [`crate::FileLedger`] is generic over
-//! `nomos_platform::CrossProcessLock`, and the concrete `FileLock` belongs to
+//! `nomos_platform::FilesystemLock`, and the concrete `FileLock` belongs to
 //! `nomos-platform-std` — `Zone::Backend` since `OD-RULES-028`, which `Substrate` may reach
 //! but this crate has no reason to. Naming the files is this crate's job; opening them is
 //! the composition root's, which is the same division `FileLedger::At` already draws by
@@ -57,7 +57,7 @@ pub struct BoardFiles
 /// The board kept in `directory`.
 ///
 /// Names two paths and touches neither. A caller composing a [`crate::FileLedger`] hands
-/// `document` to `FileLedger::At` and `lock` to whichever `CrossProcessLock` its own
+/// `document` to `FileLedger::At` and `lock` to whichever `FilesystemLock` its own
 /// platform provides, which is the only shape in which the two can be told apart at all.
 #[must_use]
 pub fn Board_In(directory: &Path) -> BoardFiles

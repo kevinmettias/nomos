@@ -10,7 +10,7 @@
 //!
 //! # What this crate is, and is not
 //!
-//! It is **one adapter**: any of this workspace's `ProcessLauncher`s, seen as the
+//! It is **one adapter**: any of this workspace's `ProgramLauncher`s, seen as the
 //! launcher surface XVPE's own adapters take.
 //!
 //! It is **not** a replacement for `nomos-platform`'s port. The two are the same

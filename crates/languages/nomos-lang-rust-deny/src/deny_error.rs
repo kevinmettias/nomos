@@ -5,7 +5,7 @@
 //! alone.
 
 use nomos_cap_dependency_policy::{PolicySeverity, PolicyViolation};
-use nomos_platform::{Command, Environment, ExitOutcome, ProcessLauncher};
+use nomos_platform::{Command, Environment, ExitOutcome, ProgramLauncher};
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
@@ -62,7 +62,7 @@ impl core::fmt::Display for DenyError
 /// or going idle for that long, is terminated before finishing, or produces no stderr at
 /// all — the one signal this reader treats as a genuine failure to answer rather than an
 /// answer it does not like.
-pub fn Discover_Workspace<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<Vec<PolicyViolation>, DenyError>
+pub fn Discover_Workspace<Launcher: ProgramLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<Vec<PolicyViolation>, DenyError>
 {
     let config = Required_Deny_Config(root)?;
     let stream = Run_Cargo_Deny(root, &config, launcher, environment)?;
@@ -95,7 +95,7 @@ fn Required_Deny_Config(root: &Path) -> Result<PathBuf, DenyError>
     return Ok(config);
 }
 
-fn Run_Cargo_Deny<Launcher: ProcessLauncher, Env: Environment>(root: &Path, config: &Path, launcher: &Launcher, environment: &Env) -> Result<String, DenyError>
+fn Run_Cargo_Deny<Launcher: ProgramLauncher, Env: Environment>(root: &Path, config: &Path, launcher: &Launcher, environment: &Env) -> Result<String, DenyError>
 {
     let command = Cargo_Deny_Command(root, config, environment);
     let output = launcher.Run(&command).map_err(|error| DenyError {
@@ -122,7 +122,7 @@ fn Run_Cargo_Deny<Launcher: ProcessLauncher, Env: Environment>(root: &Path, conf
 fn Cargo_Deny_Command<Env: Environment>(root: &Path, config: &Path, environment: &Env) -> Command
 {
     let cargo = Cargo_Program(environment);
-    let mut command = Command::New(
+    let mut command = Command::From_String_Arguments(
         vec![
             cargo,
             "deny".to_owned(),

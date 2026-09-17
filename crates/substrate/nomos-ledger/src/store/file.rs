@@ -5,7 +5,7 @@
 //! `pub use store::FileLedger` against one module, so a `pub fn` written on the type
 //! anywhere else is public and unrecorded.
 
-use nomos_platform::{Clock, CrossProcessLock, FileSystem, StaleTakeover};
+use nomos_platform::{Clock, FilesystemLock, FileSystem, StaleTakeover};
 
 use nomos_platform::Timestamp;
 
@@ -15,7 +15,7 @@ use crate::LedgerError;
 use super::{FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, SCHEMA_VERSION};
 
 /// The body of [`FileLedger::Save`], which keeps the documentation and the signature.
-pub(super) fn Save_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub(super) fn Save_Document<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &FileLedger<Files, TimeSource, Lock>,
     document: &LedgerDocument,
 ) -> Result<(), LedgerError>
@@ -72,7 +72,7 @@ pub(super) fn Save_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossPro
 pub(super) fn Decide_Under_Lock<
     Files: FileSystem,
     TimeSource: Clock,
-    Lock: CrossProcessLock,
+    Lock: FilesystemLock,
     Outcome,
     Error,
 >(
@@ -101,7 +101,7 @@ where
 }
 
 /// The body of [`FileLedger::Load`], which keeps the documentation and the signature.
-pub(super) fn Load_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>(
+pub(super) fn Load_Document<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &FileLedger<Files, TimeSource, Lock>,
 ) -> Result<LedgerDocument, LedgerError>
 {
@@ -135,7 +135,7 @@ pub(super) fn Load_Document<Files: FileSystem, TimeSource: Clock, Lock: CrossPro
 pub(super) fn With_Lock_Run<
     Files: FileSystem,
     TimeSource: Clock,
-    Lock: CrossProcessLock,
+    Lock: FilesystemLock,
     Outcome,
 >(
     ledger: &FileLedger<Files, TimeSource, Lock>,

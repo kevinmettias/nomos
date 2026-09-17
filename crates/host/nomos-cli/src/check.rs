@@ -19,7 +19,7 @@
 //! 2. read what this binary was compiled as — [`composition::Host_Variant`] — because
 //!    `env!` resolves against the crate that calls it and cannot be read correctly from
 //!    inside the orchestration crate;
-//! 3. choose a [`nomos_platform::ProcessLauncher`] — [`nomos_composer_std::LAUNCHER`]
+//! 3. choose a [`nomos_platform::ProgramLauncher`] — [`nomos_composer_std::LAUNCHER`]
 //!    — for the one provider in that composition that runs a process, the same choice
 //!    `work.rs` already makes for `nomos work`.
 //!

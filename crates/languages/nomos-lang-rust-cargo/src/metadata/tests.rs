@@ -2,12 +2,12 @@
 //! workspace, read back through the same reader the composition root calls.
 
 use super::*;
-use nomos_platform_std::{StdEnvironment, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdProgramLauncher};
 
 #[test]
 fn Test_Discover_Workspace_Should_Find_This_Crates_Real_Dependency_On_Nomos_Contracts()
 {
-    let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher, &StdEnvironment).expect("a real cargo workspace");
+    let discovered = Discover_Workspace(&Repository_Root(), &StdProgramLauncher, &StdEnvironment).expect("a real cargo workspace");
 
     let this_crate = discovered
         .iter()
@@ -28,7 +28,7 @@ fn Test_Discover_Workspace_Should_Find_This_Crates_Real_Dependency_On_Nomos_Cont
 #[test]
 fn Test_Nomos_Contracts_Should_Have_No_First_Party_Edges()
 {
-    let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher, &StdEnvironment).expect("a real cargo workspace");
+    let discovered = Discover_Workspace(&Repository_Root(), &StdProgramLauncher, &StdEnvironment).expect("a real cargo workspace");
 
     let contracts = discovered
         .iter()
@@ -45,7 +45,7 @@ fn Test_Nomos_Contracts_Should_Have_No_First_Party_Edges()
 #[test]
 fn Test_Every_Discovered_Package_Should_Carry_A_Manifest_Relative_Root()
 {
-    let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher, &StdEnvironment).expect("a real cargo workspace");
+    let discovered = Discover_Workspace(&Repository_Root(), &StdProgramLauncher, &StdEnvironment).expect("a real cargo workspace");
 
     let this_crate = discovered
         .iter()
@@ -61,7 +61,7 @@ fn Test_Every_Discovered_Package_Should_Carry_A_Manifest_Relative_Root()
 #[test]
 fn Test_Edges_Should_Be_In_Canonical_Order()
 {
-    let discovered = Discover_Workspace(&Repository_Root(), &StdProcessLauncher, &StdEnvironment).expect("a real cargo workspace");
+    let discovered = Discover_Workspace(&Repository_Root(), &StdProgramLauncher, &StdEnvironment).expect("a real cargo workspace");
 
     for package in &discovered
     {

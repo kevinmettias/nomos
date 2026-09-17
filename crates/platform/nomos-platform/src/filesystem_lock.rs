@@ -42,7 +42,7 @@ use std::time::Duration;
 /// declared nothing. The real one promises nothing and says so; a double built from fixed
 /// data reproduces and says that. A caller reading `S::STRENGTH` can tell them apart
 /// without knowing either type.
-pub trait CrossProcessLock: Strategy
+pub trait FilesystemLock: Strategy
 {
     /// The guard type released on drop.
     type Guard;

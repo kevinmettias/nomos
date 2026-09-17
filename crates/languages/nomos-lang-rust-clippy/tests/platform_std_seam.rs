@@ -4,10 +4,10 @@
 //!
 //! `src/fact_context.rs`'s own inline
 //! `Test_Discover_Workspace_And_Materialize_Workspace_Should_Find_Every_Real_Workspace_Member`
-//! already drives `StdProcessLauncher` for real, over this whole repository — deliberately
+//! already drives `StdProgramLauncher` for real, over this whole repository — deliberately
 //! left in place rather than moved or duplicated here: a whole-workspace `cargo clippy` pass
 //! is expensive, and this crate already pays that cost once. This file proves the identical
-//! wiring (`StdProcessLauncher` really implements `nomos_platform::ProcessLauncher`, and
+//! wiring (`StdProgramLauncher` really implements `nomos_platform::ProgramLauncher`, and
 //! `Materialize_Workspace` really drives a real subprocess through it end to end) over a
 //! single trivial crate instead, the same scratch-fixture pattern
 //! `nomos-lang-rust-cargo/tests/invalidation.rs` already uses for the identical reason: fast,
@@ -15,7 +15,7 @@
 
 use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, SnapshotId};
 use nomos_lang_rust_clippy::{FactContext, Materialize_Workspace};
-use nomos_platform_std::{StdEnvironment, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdProgramLauncher};
 use std::path::{Path, PathBuf};
 
 /// A one-member scratch workspace with no dependencies of its own, removed when the test
@@ -82,14 +82,14 @@ fn Context() -> FactContext
 }
 
 /// The happy path: a real `cargo clippy` pass, launched through the real
-/// `nomos_platform_std::StdProcessLauncher`, over a scratch crate with nothing for clippy to
+/// `nomos_platform_std::StdProgramLauncher`, over a scratch crate with nothing for clippy to
 /// report.
 #[test]
-fn Test_Materialize_Workspace_Should_Run_A_Real_Clippy_Pass_Through_The_Real_Std_Process_Launcher()
+fn Test_Materialize_Workspace_Should_Run_A_Real_Clippy_Pass_Through_The_Real_Std_Program_Launcher()
 {
     let fixture = Fixture::New("clippy-std-launcher");
 
-    let facts = Materialize_Workspace(fixture.Path(), Context(), &StdProcessLauncher, &StdEnvironment)
+    let facts = Materialize_Workspace(fixture.Path(), Context(), &StdProgramLauncher, &StdEnvironment)
         .expect("a real, trivial one-crate workspace under a real cargo clippy pass");
 
     assert_eq!(facts.len(), 1, "{facts:?}");

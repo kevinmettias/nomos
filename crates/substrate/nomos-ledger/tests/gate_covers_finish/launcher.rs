@@ -8,7 +8,7 @@ use nomos_ledger::{
     LedgerDocument, LedgerItem, Territory, VerificationPredicate, VerificationRecord,
 };
 use nomos_platform::{
-    Clock, Command, ExitOutcome, ProcessLauncher, ProcessOutput, Timestamp,
+    Clock, Command, ExitOutcome, ProgramLauncher, ProgramOutput, Timestamp,
 };
 use nomos_platform_std::{FileLock, StdFileSystem};
 use std::cell::RefCell;
@@ -98,16 +98,16 @@ impl Strategy for Scripted
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for &Scripted
+impl ProgramLauncher for &Scripted
 {
-    fn Run(&self, command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, command: &Command) -> Result<ProgramOutput, String>
     {
         self.calls.borrow_mut().push(command.argv.clone());
 
         let is_lint = command.argv.iter().any(|argument| return argument == "clippy");
         let code = if is_lint { self.lint_exit } else { self.predicate_exit };
 
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome: ExitOutcome::Exited { code },
             stdout: String::new(),
             stderr: "captured output".to_owned(),

@@ -3,7 +3,7 @@
 
 use nomos_analysis::MemoryFactStore;
 use nomos_contracts::{GenerationId, RuleId};
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::Workspace;
 
@@ -26,7 +26,7 @@ fn Run_Carrying(
         RunContext {
             variant: Test_Variant(),
             root: &Repository_Root(),
-            launcher: &StdProcessLauncher,
+            launcher: &StdProgramLauncher,
             filesystem: &StdFileSystem,
             environment: &StdEnvironment,
             workspace,
@@ -186,7 +186,7 @@ impl ReassessmentFixture
             RunContext {
                 variant: Test_Variant(),
                 root: &Repository_Root(),
-                launcher: &StdProcessLauncher,
+                launcher: &StdProgramLauncher,
                 filesystem: &StdFileSystem,
                 environment: &StdEnvironment,
                 workspace: &mut self.workspace,

@@ -55,7 +55,7 @@ use std::path::{Path, PathBuf};
 
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_model_package::EffortLevel;
-use nomos_platform::ProcessLauncher;
+use nomos_platform::ProgramLauncher;
 use nomos_platform_xvpe::XvpeLauncher;
 use xvpe_agent_backend_claude_code::{ClaudeCodeDispatch, DEFAULT_TIMEOUT};
 use xvpe_agent_execution::{
@@ -102,7 +102,7 @@ pub const MAXIMUM_SPEND: MicroDollars = MicroDollars::From_Micros(1_000_000);
 /// be read.
 /// [`AgentExecutionError::ProhibitedChange`] if a path `task.prohibited_changes`
 /// names differs after the dispatch from before it.
-pub fn Execute_Task<Launcher: ProcessLauncher>(
+pub fn Execute_Task<Launcher: ProgramLauncher>(
     task: &TaskEnvelope,
     launcher: &Launcher,
     root: &Path,
@@ -123,7 +123,7 @@ pub fn Execute_Task<Launcher: ProcessLauncher>(
 /// # Errors
 ///
 /// The same as [`Execute_Task`].
-pub fn Execute_In<Launcher: ProcessLauncher>(
+pub fn Execute_In<Launcher: ProgramLauncher>(
     task: &TaskEnvelope,
     launcher: &Launcher,
     working_directory: &Path,
@@ -200,7 +200,7 @@ pub(crate) fn Effort_For(effort: EffortLevel) -> Option<EngineEffort>
 
 /// The one call into the engine, over a boundary already decided on, between the
 /// two envelope constraints this crate enforces itself.
-fn Dispatch_Task<Launcher: ProcessLauncher>(
+fn Dispatch_Task<Launcher: ProgramLauncher>(
     task: &TaskEnvelope,
     launcher: &Launcher,
     capability: AgentCapability,

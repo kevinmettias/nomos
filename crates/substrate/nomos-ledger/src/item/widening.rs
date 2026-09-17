@@ -39,6 +39,7 @@ pub struct Widening
     /// which is the one number these rows exist to carry honestly.
     pub added: Vec<String>,
     /// When it happened.
-    #[serde(with = "nomos_platform::timestamp_serde")]
+    #[serde(serialize_with = "nomos_platform::timestamp_serde::Write_Unix_Seconds")]
+    #[serde(deserialize_with = "nomos_platform::timestamp_serde::Read_Unix_Seconds")]
     pub widened_at: Timestamp,
 }

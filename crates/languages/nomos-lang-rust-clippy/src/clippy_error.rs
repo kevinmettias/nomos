@@ -5,7 +5,7 @@
 //! this reader was written, not assumed from the format's name alone.
 
 use nomos_cap_lint::{DiagnosticsPayload, LintDiagnostic, LintLevel};
-use nomos_platform::{Command, Environment, ExitOutcome, ProcessLauncher};
+use nomos_platform::{Command, Environment, ExitOutcome, ProgramLauncher};
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
@@ -53,7 +53,7 @@ impl core::fmt::Display for ClippyError
 /// [`ClippyError`] if the `cargo` binary cannot be run, exits non-zero, is killed for
 /// exceeding [`TIMEOUT`] or going idle for that long, or its stdout could not be read as
 /// the newline-delimited JSON stream `--message-format json` promises.
-pub fn Discover_Workspace<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<Vec<DiscoveredDiagnostics>, ClippyError>
+pub fn Discover_Workspace<Launcher: ProgramLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<Vec<DiscoveredDiagnostics>, ClippyError>
 {
     let stdout = Run_Cargo_Clippy(root, launcher, environment)?;
     let absolute_root = Absolute_Path_Of(root, environment)?;
@@ -62,7 +62,7 @@ pub fn Discover_Workspace<Launcher: ProcessLauncher, Env: Environment>(root: &Pa
     return Require_Nonempty(discovered);
 }
 
-fn Run_Cargo_Clippy<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<String, ClippyError>
+fn Run_Cargo_Clippy<Launcher: ProgramLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<String, ClippyError>
 {
     let command = Cargo_Clippy_Command(root, environment);
     let output = launcher.Run(&command).map_err(|error| ClippyError {
@@ -81,7 +81,7 @@ fn Run_Cargo_Clippy<Launcher: ProcessLauncher, Env: Environment>(root: &Path, la
 fn Cargo_Clippy_Command<Env: Environment>(root: &Path, environment: &Env) -> Command
 {
     let cargo = Cargo_Program(environment);
-    let mut command = Command::New(
+    let mut command = Command::From_String_Arguments(
         vec![
             cargo,
             "clippy".to_owned(),
@@ -349,7 +349,7 @@ mod local_tests
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use nomos_platform_std::StdEnvironment;
     use super::*;
-    use nomos_platform::ProcessOutput;
+    use nomos_platform::ProgramOutput;
 
     /// A launcher that hands `Discover_Workspace` a fixed JSON-lines stream instead of
     /// running a real `cargo clippy` — the boundary this crate's own module doc names as
@@ -367,11 +367,11 @@ mod local_tests
         const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
-    impl ProcessLauncher for FakeLauncher
+    impl ProgramLauncher for FakeLauncher
     {
-        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
         {
-            return Ok(ProcessOutput {
+            return Ok(ProgramOutput {
                 outcome: ExitOutcome::Exited { code: 0 },
                 stdout: self.stdout.clone(),
                 stderr: String::new(),

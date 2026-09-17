@@ -22,7 +22,7 @@ use nomos_analysis::MemoryFactStore;
 use nomos_check_orchestration::{Run, RunContext};
 use nomos_contracts::RuleId;
 use nomos_model::Subject_Of_Path;
-use nomos_platform_std::{StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdFileSystem, StdProgramLauncher};
 use nomos_rules::{SourceFile, COMPLETENESS_MIRROR};
 use nomos_workspace::BuildVariant;
 use std::path::PathBuf;
@@ -61,13 +61,13 @@ fn Source_File(path: &str, text: SourceText<'_>) -> SourceFile
 const CARGO_VERSION_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(30);
 
 /// The happy path across the boundary: a clean, recognized source judged through the real
-/// `Run`, with every selected rule's fact materialized through a real `ProcessLauncher`.
+/// `Run`, with every selected rule's fact materialized through a real `ProgramLauncher`.
 #[test]
 fn Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Subprocess_Launcher()
 {
     let sources = vec![Source_File("a.rs", SourceText("pub fn Ok() {}\n"))];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
     assert!(matches!(outcome, nomos_check_orchestration::CheckOutcome::Judged { .. }));
 }
@@ -78,7 +78,7 @@ fn Test_Run_Should_Judge_A_Clean_Source_Through_A_Real_Subprocess_Launcher()
 #[test]
 fn Test_Run_Should_Report_Unreadable_For_An_Empty_Source_List()
 {
-    let outcome: nomos_check_orchestration::CheckOutcome = Run(&[], RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
+    let outcome: nomos_check_orchestration::CheckOutcome = Run(&[], RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &[]);
 
     assert!(matches!(outcome, nomos_check_orchestration::CheckOutcome::Unreadable));
 }
@@ -92,27 +92,27 @@ fn Test_Run_Should_Judge_A_Source_When_Narrowed_To_One_Real_Rule()
     let sources = vec![Source_File("a.rs", SourceText("pub fn Ok() {}\n"))];
     let selected = [RuleId::New(COMPLETENESS_MIRROR)];
 
-    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &selected);
+    let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &selected);
 
     assert!(matches!(outcome, nomos_check_orchestration::CheckOutcome::Judged { .. }));
 }
 
-/// `RunContext` is generic over `nomos_platform::ProcessLauncher` rather than any concrete
+/// `RunContext` is generic over `nomos_platform::ProgramLauncher` rather than any concrete
 /// implementation, so a second adapter can call `Run` with its own launcher without this crate
 /// depending on `nomos-platform-std`. Runs a real process through the generic bound (rather
-/// than the concrete `StdProcessLauncher` type) and reads its real output back, so this test
+/// than the concrete `StdProgramLauncher` type) and reads its real output back, so this test
 /// crosses a real implementation of the trait every test above hands `Run`, not a type that
 /// merely happens to match its shape.
-fn Version_Through_Generic_Launcher<Launcher: nomos_platform::ProcessLauncher>(launcher: &Launcher) -> nomos_platform::ProcessOutput
+fn Version_Through_Generic_Launcher<Launcher: nomos_platform::ProgramLauncher>(launcher: &Launcher) -> nomos_platform::ProgramOutput
 {
-    let command = nomos_platform::Command::New(vec!["cargo".to_owned(), "--version".to_owned()], CARGO_VERSION_TIMEOUT);
+    let command = nomos_platform::Command::From_String_Arguments(vec!["cargo".to_owned(), "--version".to_owned()], CARGO_VERSION_TIMEOUT);
     return launcher.Run(&command).expect("cargo --version must be a real, launchable process");
 }
 
 #[test]
 fn Test_Run_Should_Accept_A_Real_Nomos_Platform_Subprocess_Launcher()
 {
-    let output = Version_Through_Generic_Launcher(&StdProcessLauncher);
+    let output = Version_Through_Generic_Launcher(&StdProgramLauncher);
 
     assert!(output.stdout.contains("cargo"), "{}", output.stdout);
 }

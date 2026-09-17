@@ -58,7 +58,7 @@ fn Test_A_Kill_Should_Reach_The_Whole_Process_Tree_Not_Only_The_Direct_Child()
     let marker = Fresh_Marker_Path("tree");
     let nested = Nested_Ping_Command(&marker);
 
-    let output = StdProcessLauncher.Run(&nested).expect("cmd runs on this host, and this test returns early elsewhere");
+    let output = StdProgramLauncher.Run(&nested).expect("cmd runs on this host, and this test returns early elsewhere");
     Assert_Killed_Before_Completion(&output);
 
     let growth = Bytes_Written_Before_And_After_Settling(&marker);
@@ -83,7 +83,7 @@ fn Fresh_Marker_Path(name: &str) -> PathBuf
 /// take, at a short enough bound that the test does not have to wait it out.
 fn Nested_Ping_Command(marker: &Path) -> Command
 {
-    return Command::New(
+    return Command::From_String_Arguments(
         vec![
             "cmd".to_owned(),
             "/C".to_owned(),
@@ -96,7 +96,7 @@ fn Nested_Ping_Command(marker: &Path) -> Command
 /// Verifies the wait ended because the launcher's bound expired, not because `ping`
 /// itself finished — the distinction that makes the marker file's later behavior mean
 /// anything.
-fn Assert_Killed_Before_Completion(output: &ProcessOutput)
+fn Assert_Killed_Before_Completion(output: &ProgramOutput)
 {
     assert!(
         !output.outcome.Has_A_Verdict(),
@@ -152,9 +152,9 @@ fn Bytes_Written(path: &Path) -> u64
 #[test]
 fn Test_A_Grandchild_Holding_The_Pipe_Should_Not_Hold_The_Launcher()
 {
-    let orphaning = Command::New(A_Program_That_Orphans(), ORPHANING_BOUND);
+    let orphaning = Command::From_String_Arguments(A_Program_That_Orphans(), ORPHANING_BOUND);
     let started = Instant::now();
-    let output = StdProcessLauncher.Run(&orphaning).expect("the orphaning fixture is a shell command this host runs");
+    let output = StdProgramLauncher.Run(&orphaning).expect("the orphaning fixture is a shell command this host runs");
     let waited = started.elapsed();
 
     assert_eq!(

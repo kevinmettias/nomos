@@ -3,7 +3,7 @@ name = "nomos-platform-xvpe"
 version = "0.1.0"
 edition = "2024"
 publish = false
-description = "The platform port, bridged onto XVPE. Wraps any nomos ProcessLauncher as the launcher surface XVPE's own adapters take, so this workspace's agent dispatch is XVPE's engine code rather than a second copy of it -- without moving the 559 use-sites and 33 implementors that already depend on this workspace's own port."
+description = "The platform port, bridged onto XVPE. Wraps any nomos ProgramLauncher as the launcher surface XVPE's own adapters take, so this workspace's agent dispatch is XVPE's engine code rather than a second copy of it -- without moving the 559 use-sites and 33 implementors that already depend on this workspace's own port."
 
 # Zone: Substrate -- the XVPE implementation of the platform port, anticipated in
 # the workspace manifest since the port was written. Substrate rather than Backend

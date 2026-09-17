@@ -16,7 +16,7 @@ use super::spawn::Streams;
 /// process which produced nothing at all is reported as [`ExitOutcome::Stalled`] rather
 /// than [`ExitOutcome::TimedOut`] even in the case where both bounds are about to expire
 /// together — which is exactly what happens when a caller never asked for a shorter idle
-/// bound, since [`Command::New`] starts the two equal. A caller that wants the two
+/// bound, since [`Command::From_String_Arguments`] starts the two equal. A caller that wants the two
 /// distinguished for a genuinely silent-from-the-start process gets that distinction
 /// for free; a caller that wants to catch a stall *before* the wall bound would otherwise
 /// expire has to ask for a shorter idle bound with [`Command::With_Idle_Timeout`].
@@ -216,7 +216,7 @@ mod tests
     fn Test_Waited_For_Child_Should_Report_A_Clean_Exit()
     {
         let mut child = Spawned_Exiting_With(0);
-        let command = Command::New(Vec::new(), Duration::from_secs(WALL_BOUND_SECONDS));
+        let command = Command::From_String_Arguments(Vec::new(), Duration::from_secs(WALL_BOUND_SECONDS));
         let streams = Streams { stdout: None, stderr: None };
 
         let outcome = Waited_For_Child(&mut child, "nomos-platform-std-wait-test", &command, &streams)

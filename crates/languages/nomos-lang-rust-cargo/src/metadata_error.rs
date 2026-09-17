@@ -4,7 +4,7 @@
 //! The only process this crate ever runs, and the only provider this workspace ships whose
 //! `Materialize` needs more than bytes a caller already supplied — `nomos-lang-rust` and
 //! `nomos-lang-rust-scan` are both pure functions over text. That process runs through a
-//! caller-supplied [`ProcessLauncher`] rather than `std::process::Command` directly, the
+//! caller-supplied [`ProgramLauncher`] rather than `std::process::Command` directly, the
 //! same [`nomos_platform`] port `nomos-ledger` and `nomos-work-orchestration` already run
 //! their own subprocesses through, so this crate depends on `nomos-platform` and not on any
 //! concrete implementation of it — the composition root chooses that, same as it chooses a
@@ -19,7 +19,7 @@
 //! reader keeps the `kind`/`optional` fields that one discards.
 
 use nomos_cap_dependency::{DependencyEdge, DependencyKind, DependencyPayload};
-use nomos_platform::{Command, Environment, ExitOutcome, ProcessLauncher};
+use nomos_platform::{Command, Environment, ExitOutcome, ProgramLauncher};
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
@@ -71,7 +71,7 @@ impl core::fmt::Display for MetadataError
 /// [`MetadataError`] if the `cargo` binary cannot be run, exits non-zero, is killed for
 /// exceeding [`TIMEOUT`] or going idle for that long, or its stdout is not the JSON
 /// document `--format-version 1` promises.
-pub fn Discover_Workspace<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<Vec<DiscoveredPackage>, MetadataError>
+pub fn Discover_Workspace<Launcher: ProgramLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<Vec<DiscoveredPackage>, MetadataError>
 {
     let document = Run_Cargo_Metadata(root, launcher, environment)?;
     Require_Workspace_Root_Is(&document, root)?;
@@ -83,7 +83,7 @@ pub fn Discover_Workspace<Launcher: ProcessLauncher, Env: Environment>(root: &Pa
     return Require_Nonempty(discovered);
 }
 
-fn Run_Cargo_Metadata<Launcher: ProcessLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<serde_json::Value, MetadataError>
+fn Run_Cargo_Metadata<Launcher: ProgramLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<serde_json::Value, MetadataError>
 {
     let command = Cargo_Metadata_Command(root, environment);
     let output = launcher.Run(&command).map_err(|error| MetadataError {
@@ -100,7 +100,7 @@ fn Run_Cargo_Metadata<Launcher: ProcessLauncher, Env: Environment>(root: &Path, 
 fn Cargo_Metadata_Command<Env: Environment>(root: &Path, environment: &Env) -> Command
 {
     let cargo = Cargo_Program(environment);
-    let mut command = Command::New(
+    let mut command = Command::From_String_Arguments(
         vec![
             cargo,
             "metadata".to_owned(),

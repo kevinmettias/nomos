@@ -5,4 +5,4 @@ pub const nomos_platform_xvpe::XvpeLauncher::TRACE: TraceEquivalence
 pub fn nomos_platform_xvpe::XvpeLauncher::Run(&self, command: &ProcessCommand) -> Result<XvpeProcessOutput, String>
 pub impl nomos_platform_xvpe::XvpeLauncher implements ProcessLauncherStrategy
 pub impl nomos_platform_xvpe::XvpeLauncher implements Strategy
-pub struct nomos_platform_xvpe::XvpeLauncher<'launcher, Launcher: ProcessLauncher>
+pub struct nomos_platform_xvpe::XvpeLauncher<'launcher, Launcher: ProgramLauncher>

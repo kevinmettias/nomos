@@ -4,7 +4,7 @@
 //! `nomos-lang-rust-deny` depends on six crates in its own source -- `nomos_contracts`,
 //! `nomos_model`, `nomos_capability`, `nomos_analysis`, `nomos_cap_dependency_policy` and
 //! `nomos_platform` -- plus `nomos_platform_std` as the real launcher a composition root
-//! supplies through the `nomos_platform::ProcessLauncher` port. Each test below exercises
+//! supplies through the `nomos_platform::ProgramLauncher` port. Each test below exercises
 //! the actual call this crate makes into one of them.
 
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
@@ -12,7 +12,7 @@ use nomos_contracts::{BuildVariantId, ConfigurationId, Digest128, GenerationId, 
 use nomos_lang_rust_deny::{
     Declared_Guarantee, Discover_Workspace, FactContext, Materialize_Workspace, PolicyFact, Provider_Offer,
 };
-use nomos_platform::{Command, ExitOutcome, ProcessLauncher, ProcessOutput};
+use nomos_platform::{Command, ExitOutcome, ProgramLauncher, ProgramOutput};
 use nomos_platform_std::StdEnvironment;
 use std::path::{Path, PathBuf};
 
@@ -33,11 +33,11 @@ impl Strategy for FakeLauncher
     const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
 }
 
-impl ProcessLauncher for FakeLauncher
+impl ProgramLauncher for FakeLauncher
 {
-    fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+    fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
     {
-        return Ok(ProcessOutput {
+        return Ok(ProgramOutput {
             outcome: ExitOutcome::Exited { code: 0 },
             stdout: String::new(),
             stderr: self.stderr.clone(),
@@ -137,11 +137,11 @@ fn Materialize_With(cases: &[(&str, &str, &str)], name: &str) -> PolicyFact
         .expect("the fake launcher writes a real stderr stream Discover_Workspace can read");
 }
 
-/// `nomos_platform`: `Discover_Workspace` is generic over `nomos_platform::ProcessLauncher`
+/// `nomos_platform`: `Discover_Workspace` is generic over `nomos_platform::ProgramLauncher`
 /// -- a caller-supplied implementation of that port is exactly what this reads a real
 /// diagnostic shape through, previously exercised nowhere in this crate's own `tests/`.
 #[test]
-fn Test_Discover_Workspace_Should_Read_A_Real_Diagnostic_Shape_Through_The_Process_Launcher_Port()
+fn Test_Discover_Workspace_Should_Read_A_Real_Diagnostic_Shape_Through_The_Program_Launcher_Port()
 {
     let scratch = ScratchDirectory::New("read-diagnostic-shape");
     let cases = Sample_Violation_Cases();
@@ -270,7 +270,7 @@ impl Drop for ScratchDirectory
 }
 
 /// `nomos_platform_std`: `Discover_Workspace` runs a real process through this crate's real
-/// `StdProcessLauncher`, proportionately -- a real `cargo deny` invocation outside any
+/// `StdProgramLauncher`, proportionately -- a real `cargo deny` invocation outside any
 /// cargo workspace, which returns in well under a second because it fails to find a
 /// manifest before resolving anything, rather than duplicating `fact_context::tests`'s own
 /// real, whole-repository invocation.
@@ -291,11 +291,11 @@ impl Drop for ScratchDirectory
 #[test]
 fn Test_A_Real_Run_That_Resolved_No_Workspace_Should_Be_Refused_Rather_Than_Reported_Clean()
 {
-    use nomos_platform_std::{StdEnvironment, StdProcessLauncher};
+    use nomos_platform_std::{StdEnvironment, StdProgramLauncher};
 
     let scratch = ScratchDirectory::New("no-manifest");
 
-    let error = Discover_Workspace(scratch.Path(), &StdProcessLauncher, &StdEnvironment).expect_err(
+    let error = Discover_Workspace(scratch.Path(), &StdProgramLauncher, &StdEnvironment).expect_err(
         "a real cargo deny that could not resolve a workspace at all has not judged this \
          directory's dependencies, and must be refused rather than reported clean",
     );

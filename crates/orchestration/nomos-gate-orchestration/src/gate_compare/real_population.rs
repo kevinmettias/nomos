@@ -9,7 +9,7 @@ use super::tests::Run_Id_Of;
 use crate::{GateCommand, GateEnvironment, GateRunResult, Run_Gate};
 use nomos_contracts::{Finding, RunId};
 use nomos_model::{FindingOccurrenceId, Occurrence_Collisions_In};
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::collections::BTreeSet;
@@ -62,7 +62,7 @@ fn Real_Findings() -> Vec<Finding>
     let command = GateCommand { root: root.clone(), ..GateCommand::default() };
     let environment = GateEnvironment {
         variant: BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>()),
-        launcher: &StdProcessLauncher,
+        launcher: &StdProgramLauncher,
         filesystem: &StdFileSystem,
         environment: &StdEnvironment,
         now: nomos_platform::Timestamp::From_Unix_Seconds(0),

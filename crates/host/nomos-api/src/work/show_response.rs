@@ -52,7 +52,7 @@ pub enum ShowResponse
         /// This tree's revision right now, or `None` if it could not be read.
         current_revision: Option<String>,
         /// The moment the board was read.
-        #[serde(with = "nomos_platform::timestamp_serde")]
+        #[serde(serialize_with = "nomos_platform::timestamp_serde::Write_Unix_Seconds")]
         now: Timestamp,
     },
     /// The board read cleanly, but no item on it carries this id.

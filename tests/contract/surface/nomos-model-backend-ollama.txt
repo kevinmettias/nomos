@@ -3,8 +3,8 @@ pub enum variant nomos_model_backend_ollama::AgentExecutionError::Unavailable(St
 pub enum variant nomos_model_backend_ollama::AgentExecutionError::UnsupportedTools(String)
 pub fn nomos_model_backend_ollama::AgentExecutionError::From_Engine(error: xvpe_agent_execution::AgentExecutionError) -> Self
 pub fn nomos_model_backend_ollama::AgentExecutionError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub fn nomos_model_backend_ollama::Execute_In<Launcher: ProcessLauncher>( task: &TaskEnvelope, launcher: &Launcher, working_directory: &Path, ) -> Result<AgentExecutionOutcome, AgentExecutionError>
-pub fn nomos_model_backend_ollama::Execute_Task<Launcher: ProcessLauncher>( task: &TaskEnvelope, launcher: &Launcher, ) -> Result<AgentExecutionOutcome, AgentExecutionError>
+pub fn nomos_model_backend_ollama::Execute_In<Launcher: ProgramLauncher>( task: &TaskEnvelope, launcher: &Launcher, working_directory: &Path, ) -> Result<AgentExecutionOutcome, AgentExecutionError>
+pub fn nomos_model_backend_ollama::Execute_Task<Launcher: ProgramLauncher>( task: &TaskEnvelope, launcher: &Launcher, ) -> Result<AgentExecutionOutcome, AgentExecutionError>
 pub impl nomos_model_backend_ollama::AgentExecutionError implements core::fmt::Display
 pub struct field nomos_model_backend_ollama::AgentExecutionOutcome::response: String
 pub struct nomos_model_backend_ollama::AgentExecutionOutcome

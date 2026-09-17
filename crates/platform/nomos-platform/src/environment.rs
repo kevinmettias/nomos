@@ -10,7 +10,7 @@ use std::path::PathBuf;
 /// A dependency rather than a call to [`std::env`], for a reason this workspace measured
 /// rather than anticipated. Three providers — `nomos-lang-rust-cargo`,
 /// `nomos-lang-rust-clippy` and `nomos-lang-rust-deny` — each build a [`crate::Command`]
-/// for an injected [`crate::ProcessLauncher`] and then decide that command's *name* with a
+/// for an injected [`crate::ProgramLauncher`] and then decide that command's *name* with a
 /// bare `std::env::var("CARGO")`, byte-identical in all three. `clippy_error.rs` does both
 /// within twenty lines: one function takes a launcher parameter, the next reads
 /// `std::env::current_dir()` directly.

@@ -12,14 +12,14 @@
 //! # A deliberate change from what `dispatch.rs`'s own comment used to defend
 //!
 //! The former `Dispatch_Task` this crate's [`Dispatched_Task`] replaces was fixed to
-//! `nomos_platform_std::StdProcessLauncher` rather than generic, and that file's own doc
+//! `nomos_platform_std::StdProgramLauncher` rather than generic, and that file's own doc
 //! comment defended the choice as "the same composition-root choice `check.rs` and
 //! `work.rs` make for their own subprocesses" -- correct advice for a CLI-only module with
 //! exactly one caller. It stopped being correct the moment this dispatch needed a second
 //! caller: [`Run_Agent_Execute`] and [`Run_Agent_Judgment`] are generic over
-//! [`nomos_platform::ProcessLauncher`], the identical reason
+//! [`nomos_platform::ProgramLauncher`], the identical reason
 //! `nomos_correction_orchestration::Run_Correction` already is, so `nomos-api` can supply
-//! its own `StdProcessLauncher` at its own call site instead of depending on `nomos-cli`'s
+//! its own `StdProgramLauncher` at its own call site instead of depending on `nomos-cli`'s
 //! choice, or on `nomos-cli` at all.
 //!
 //! Genericizing also retires a gap `dispatch.rs`'s own `// check-test-coverage:
@@ -27,7 +27,7 @@
 //! that file only because they were fixed to a real launcher, so exercising them meant
 //! either depending on which binaries happened to be on the running machine's `PATH` or
 //! risking a real, costly invocation. Now that [`Dispatched_Task`] is generic, this crate's own
-//! tests reach both arms with a scripted [`nomos_platform::ProcessLauncher`] instead -- the
+//! tests reach both arms with a scripted [`nomos_platform::ProgramLauncher`] instead -- the
 //! identical fake-launcher shape `nomos_agent_executor_claude_code`'s and
 //! `nomos_model_backend_ollama`'s own `address_tests` already use for the identical reason
 //! -- so no exclusion marker survives the move. What is still never invoked in a test is
@@ -41,7 +41,7 @@ use crate::{AgentDispatchOutcome, Backend, DispatchConfig};
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_contracts::{Finding, SchemaId};
 use nomos_model_package::EffortLevel;
-use nomos_platform::ProcessLauncher;
+use nomos_platform::ProgramLauncher;
 use nomos_rules::RoleSurfacePair;
 use nomos_scope_verification::Territory;
 
@@ -51,7 +51,7 @@ use nomos_scope_verification::Territory;
 /// reason: neither chooses a platform, only accepts the one its caller already did. One
 /// field rather than that type's three: dispatching a `TaskEnvelope` to a backend touches
 /// no build variant and no filesystem, only a process launcher.
-pub struct AgentEnvironment<'a, Launcher: ProcessLauncher>
+pub struct AgentEnvironment<'a, Launcher: ProgramLauncher>
 {
     pub launcher: &'a Launcher,
 }
@@ -67,7 +67,7 @@ pub struct AgentEnvironment<'a, Launcher: ProcessLauncher>
 /// carries no `RuleId` or `SubjectId` to give a `Finding` either, since nothing dispatched
 /// it as a rule's judgment; it is a person, asking a question directly.
 #[must_use]
-pub fn Run_Agent_Execute<Launcher: ProcessLauncher>(goal: &str, config: DispatchConfig, environment: &AgentEnvironment<'_, Launcher>) -> AgentDispatchOutcome
+pub fn Run_Agent_Execute<Launcher: ProgramLauncher>(goal: &str, config: DispatchConfig, environment: &AgentEnvironment<'_, Launcher>) -> AgentDispatchOutcome
 {
     let task = Bare_Task(goal, config.effort);
 
@@ -108,7 +108,7 @@ fn Bare_Task(goal: &str, effort: EffortLevel) -> TaskEnvelope
 /// running the rule over them, is a composition root's own file-reading concern
 /// (`OD-HOST-002`), not this seam's.
 #[must_use]
-pub fn Run_Agent_Judgment<Launcher: ProcessLauncher>(
+pub fn Run_Agent_Judgment<Launcher: ProgramLauncher>(
     pair: &RoleSurfacePair, finding: &Finding, config: DispatchConfig, environment: &AgentEnvironment<'_, Launcher>,
 ) -> AgentDispatchOutcome
 {
@@ -162,7 +162,7 @@ const NO_ROOT: &str = "";
 /// `--model-backend` replaced `--backend`: there is still only one real `AgentExecutor`, so
 /// this match is the entire dispatch, not a stand-in for a trait either flag's own
 /// vocabulary would need.
-fn Dispatched_Task<Launcher: ProcessLauncher>(task: &TaskEnvelope, backend: Backend, environment: &AgentEnvironment<'_, Launcher>) -> AgentDispatchOutcome
+fn Dispatched_Task<Launcher: ProgramLauncher>(task: &TaskEnvelope, backend: Backend, environment: &AgentEnvironment<'_, Launcher>) -> AgentDispatchOutcome
 {
     return match backend
     {
@@ -184,7 +184,7 @@ mod tests
 {
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
-    use nomos_platform::{Command, ExitOutcome, ProcessOutput};
+    use nomos_platform::{Command, ExitOutcome, ProgramOutput};
 
     struct Scripted
     {
@@ -200,11 +200,11 @@ mod tests
         const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
-    impl ProcessLauncher for Scripted
+    impl ProgramLauncher for Scripted
     {
-        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
         {
-            return Ok(ProcessOutput { outcome: self.outcome, stdout: self.stdout.clone(), stderr: String::new() });
+            return Ok(ProgramOutput { outcome: self.outcome, stdout: self.stdout.clone(), stderr: String::new() });
         }
     }
 
@@ -218,9 +218,9 @@ mod tests
         const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
-    impl ProcessLauncher for Unreachable
+    impl ProgramLauncher for Unreachable
     {
-        fn Run(&self, _command: &Command) -> Result<ProcessOutput, String>
+        fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
         {
             return Err("no such program".to_owned());
         }

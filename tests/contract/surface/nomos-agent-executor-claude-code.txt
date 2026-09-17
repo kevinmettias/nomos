@@ -8,8 +8,8 @@ pub enum variant nomos_agent_executor_claude_code::AgentExecutionError::Unresolv
 pub enum variant nomos_agent_executor_claude_code::AgentExecutionError::UnsupportedTools(String)
 pub fn nomos_agent_executor_claude_code::AgentExecutionError::From_Engine(error: xvpe_agent_execution::AgentExecutionError) -> Self
 pub fn nomos_agent_executor_claude_code::AgentExecutionError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub fn nomos_agent_executor_claude_code::Execute_In<Launcher: ProcessLauncher>( task: &TaskEnvelope, launcher: &Launcher, working_directory: &Path, root: &Path, ) -> Result<AgentExecutionOutcome, AgentExecutionError>
-pub fn nomos_agent_executor_claude_code::Execute_Task<Launcher: ProcessLauncher>( task: &TaskEnvelope, launcher: &Launcher, root: &Path, ) -> Result<AgentExecutionOutcome, AgentExecutionError>
+pub fn nomos_agent_executor_claude_code::Execute_In<Launcher: ProgramLauncher>( task: &TaskEnvelope, launcher: &Launcher, working_directory: &Path, root: &Path, ) -> Result<AgentExecutionOutcome, AgentExecutionError>
+pub fn nomos_agent_executor_claude_code::Execute_Task<Launcher: ProgramLauncher>( task: &TaskEnvelope, launcher: &Launcher, root: &Path, ) -> Result<AgentExecutionOutcome, AgentExecutionError>
 pub impl nomos_agent_executor_claude_code::AgentExecutionError implements core::fmt::Display
 pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::cost: MicroDollars
 pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::denied_tool_uses: Vec<String>

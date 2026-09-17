@@ -59,7 +59,7 @@ pub use board_files::{BoardFiles, Board_In, DOCUMENT_FILENAME, LOCK_FILENAME};
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use nomos_platform::{Clock, CrossProcessLock, FileSystem, StaleTakeover, Timestamp};
+use nomos_platform::{Clock, FilesystemLock, FileSystem, StaleTakeover, Timestamp};
 
 use crate::ClaimRefusal;
 use crate::DeclineReason;
@@ -88,7 +88,7 @@ pub struct FileLedger<Files, TimeSource, Lock>
     lock: Lock,
 }
 
-impl<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock>
+impl<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>
 FileLedger<Files, TimeSource, Lock>
 {
     /// A ledger at the given path.
@@ -443,7 +443,7 @@ FileLedger<Files, TimeSource, Lock>
     }
 }
 
-impl<Files: FileSystem, TimeSource: Clock, Lock: CrossProcessLock> ExclusionLedger
+impl<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock> ExclusionLedger
 for FileLedger<Files, TimeSource, Lock>
 {
     fn Claim(

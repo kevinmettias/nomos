@@ -6,7 +6,7 @@ use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant};
 
-// This file is itself reached through a `#[path]` attribute in `std_process_launcher.rs`, and a
+// This file is itself reached through a `#[path]` attribute in `std_program_launcher.rs`, and a
 // module loaded that way does not own a directory: a bare `mod process_tree;` here would be
 // looked for beside `drain.rs`, not under `tests/`. The attribute says where the file is.
 #[path = "tests/process_tree.rs"]
@@ -22,7 +22,7 @@ const UNREACHED_WALL_BOUND: Duration = Duration::from_secs(30);
 const A_FAILING_EXIT_CODE: i32 = 3;
 
 /// A bound for a command the launcher refuses before it spawns anything. The bound is never
-/// reached; it is here because `Command::New` takes one.
+/// reached; it is here because `Command::From_String_Arguments` takes one.
 const REFUSAL_BOUND: Duration = Duration::from_secs(5);
 
 /// The bound the loud fixture is given. Generous, because the point of that fixture is that
@@ -59,13 +59,13 @@ fn Exit_With(code: i32) -> Command
         vec!["sh".to_owned(), "-c".to_owned(), format!("exit {code}")]
     };
 
-    return Command::New(argv, UNREACHED_WALL_BOUND);
+    return Command::From_String_Arguments(argv, UNREACHED_WALL_BOUND);
 }
 
 #[test]
 fn Test_A_Successful_Program_Should_Report_A_Zero_Exit()
 {
-    let output = StdProcessLauncher.Run(&Exit_With(0)).expect("exit 0 is a program the host shell runs to completion");
+    let output = StdProgramLauncher.Run(&Exit_With(0)).expect("exit 0 is a program the host shell runs to completion");
 
     assert_eq!(output.outcome, ExitOutcome::Exited { code: 0 });
     assert!(output.outcome.Is_Successful());
@@ -75,7 +75,7 @@ fn Test_A_Successful_Program_Should_Report_A_Zero_Exit()
 #[test]
 fn Test_A_Failing_Program_Should_Report_Its_Exit_Code()
 {
-    let output = StdProcessLauncher.Run(&Exit_With(A_FAILING_EXIT_CODE))
+    let output = StdProgramLauncher.Run(&Exit_With(A_FAILING_EXIT_CODE))
         .expect("exit 3 is a program the host shell runs to completion");
 
     assert_eq!(output.outcome, ExitOutcome::Exited { code: A_FAILING_EXIT_CODE });
@@ -92,12 +92,12 @@ fn Test_A_Failing_Program_Should_Report_Its_Exit_Code()
 #[test]
 fn Test_A_Missing_Program_Should_Be_An_Error_Not_A_Failed_Check()
 {
-    let missing = Command::New(
+    let missing = Command::From_String_Arguments(
         vec!["nomos-no-such-program-exists".to_owned()],
         REFUSAL_BOUND,
     );
 
-    let result = StdProcessLauncher.Run(&missing);
+    let result = StdProgramLauncher.Run(&missing);
 
     assert!(result.is_err(), "a missing program is not a verdict");
 }
@@ -105,9 +105,9 @@ fn Test_A_Missing_Program_Should_Be_An_Error_Not_A_Failed_Check()
 #[test]
 fn Test_An_Empty_Command_Should_Be_Refused()
 {
-    let empty = Command::New(Vec::new(), REFUSAL_BOUND);
+    let empty = Command::From_String_Arguments(Vec::new(), REFUSAL_BOUND);
 
-    let error = StdProcessLauncher.Run(&empty).expect_err("an empty argv names no program to run");
+    let error = StdProgramLauncher.Run(&empty).expect_err("an empty argv names no program to run");
 
     assert_eq!(
         error, "a command needs a program to run",
@@ -148,7 +148,7 @@ fn Loud(name: &str) -> LoudFixture
     let argv = Shout(&path.display().to_string());
 
     return LoudFixture {
-        command: Command::New(argv, LOUD_BOUND),
+        command: Command::From_String_Arguments(argv, LOUD_BOUND),
         path,
         text,
     };
@@ -211,7 +211,7 @@ fn Test_A_Loud_Program_Should_Be_Judged_On_Its_Result_Not_Its_Volume()
 {
     let LoudFixture { command, path, .. } = Loud("result");
 
-    let output = StdProcessLauncher.Run(&command).expect("the loud fixture is a shell command this host runs");
+    let output = StdProgramLauncher.Run(&command).expect("the loud fixture is a shell command this host runs");
     Cleared(&path);
 
     assert_eq!(
@@ -238,7 +238,7 @@ fn Test_A_Loud_Programs_Output_Should_Arrive_Whole()
         text: expected,
     } = Loud("whole");
 
-    let output = StdProcessLauncher.Run(&command).expect("the loud fixture is a shell command this host runs");
+    let output = StdProgramLauncher.Run(&command).expect("the loud fixture is a shell command this host runs");
     Cleared(&path);
 
     assert_eq!(
@@ -255,11 +255,11 @@ fn Test_A_Loud_Programs_Output_Should_Arrive_Whole()
 ///
 /// Every assertion above is satisfied by a launcher that simply waits forever, which
 /// is the one remedy this must not be. What this holds is that a program outstaying the
-/// bounds it was given is *ended*, under the bounds [`Command::New`] hands out by default.
+/// bounds it was given is *ended*, under the bounds [`Command::From_String_Arguments`] hands out by default.
 ///
 /// # Why the outcome is not asserted to be `TimedOut` specifically
 ///
-/// `Command::New` starts the idle and wall bounds equal, and `wait`'s own doc states that
+/// `Command::From_String_Arguments` starts the idle and wall bounds equal, and `wait`'s own doc states that
 /// the idle bound is deliberately checked first, so a process which produced nothing at all
 /// reports [`ExitOutcome::Stalled`] rather than [`ExitOutcome::TimedOut`] when the two
 /// expire together. Whether this program produces anything is a property of the program,
@@ -285,9 +285,9 @@ fn Test_A_Loud_Programs_Output_Should_Arrive_Whole()
 #[test]
 fn Test_A_Program_That_Exceeds_Its_Timeout_Should_Still_Time_Out()
 {
-    let slow = Command::New(A_Slow_Program(), Duration::from_secs(1));
+    let slow = Command::From_String_Arguments(A_Slow_Program(), Duration::from_secs(1));
     let started = Instant::now();
-    let output = StdProcessLauncher.Run(&slow).expect("ping is present on every host this suite runs on");
+    let output = StdProgramLauncher.Run(&slow).expect("ping is present on every host this suite runs on");
 
     assert!(
         matches!(output.outcome, ExitOutcome::TimedOut | ExitOutcome::Stalled { .. }),
@@ -335,10 +335,10 @@ fn A_Slow_Program() -> Vec<String>
 #[test]
 fn Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out()
 {
-    let silent = Command::New(A_Silent_Program(), UNREACHED_WALL_BOUND)
+    let silent = Command::From_String_Arguments(A_Silent_Program(), UNREACHED_WALL_BOUND)
         .With_Idle_Timeout(Duration::from_secs(1));
     let started = Instant::now();
-    let output = StdProcessLauncher.Run(&silent).expect("the silent fixture is a shell command this host runs");
+    let output = StdProgramLauncher.Run(&silent).expect("the silent fixture is a shell command this host runs");
 
     assert!(
         matches!(output.outcome, ExitOutcome::Stalled { .. }),
@@ -370,10 +370,10 @@ fn Test_A_Silent_Program_Should_Report_Stalled_Rather_Than_Timed_Out()
 fn Test_A_Progressing_Program_Should_Report_Timed_Out_Rather_Than_Stalled()
 {
     let progressing =
-        Command::New(A_Slow_Program(), Duration::from_secs(1))
+        Command::From_String_Arguments(A_Slow_Program(), Duration::from_secs(1))
             .With_Idle_Timeout(IDLE_BOUND_LONGER_THAN_WALL);
     let started = Instant::now();
-    let output = StdProcessLauncher.Run(&progressing).expect("ping is present on every host this suite runs on");
+    let output = StdProgramLauncher.Run(&progressing).expect("ping is present on every host this suite runs on");
 
     assert!(
         !output.stdout.is_empty(),

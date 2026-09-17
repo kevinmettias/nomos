@@ -13,7 +13,7 @@
 //! ten times -- which it was.
 
 use nomos_contracts::RuleId;
-use nomos_platform::{Environment, FileSystem, ProcessLauncher};
+use nomos_platform::{Environment, FileSystem, ProgramLauncher};
 use nomos_rules::{RequiredFact, SourceFile};
 
 use crate::facts::{
@@ -50,7 +50,7 @@ use super::{CapabilityMaterialization, Is_Rule_Selected, MaterializationEnvironm
 /// forgot to report it would let a stale rule's prior findings stand in for a real one, which
 /// is why every section below is wrapped rather than only the ones a caller might expect to
 /// benefit.
-pub(super) fn Materialize_Capabilities<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+pub(super) fn Materialize_Capabilities<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     sources: &[SourceFile],
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     selected: &[RuleId],
@@ -120,7 +120,7 @@ fn Demanded_Families(selected: &[RuleId]) -> Vec<RequiredFact>
 /// materialization while it ran -- the one signal available today for "did this family just
 /// change," since a skipped section (its own gating rule not selected) writes nothing and a
 /// run one writes unconditionally.
-fn Materialization_Tracking<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment, Answer>(
+fn Materialization_Tracking<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment, Answer>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     changed: &mut Vec<RequiredFact>,
     family: RequiredFact,
@@ -139,7 +139,7 @@ fn Materialization_Tracking<Launcher: ProcessLauncher, Fs: FileSystem, Env: Envi
 
 /// The dependency-edges section: [`Materialize_Dependencies`] when `selected` feeds on it,
 /// an empty result otherwise.
-fn Materialize_Dependency_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+fn Materialize_Dependency_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
 ) -> DependencyMaterialization
@@ -154,7 +154,7 @@ fn Materialize_Dependency_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env
 
 /// The lint-diagnostics section: [`Materialize_Lint`] when `selected` feeds on it, an empty
 /// result otherwise.
-fn Materialize_Lint_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+fn Materialize_Lint_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
 ) -> LintMaterialization
@@ -169,7 +169,7 @@ fn Materialize_Lint_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Envi
 
 /// The dependency-policy section: [`Materialize_Policy`] when `selected` feeds on it, an
 /// empty result otherwise.
-fn Materialize_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+fn Materialize_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
 ) -> PolicyMaterialization
@@ -185,7 +185,7 @@ fn Materialize_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: En
 /// The reachability section: [`Materialize_Reachability`] when `selected` feeds on it --
 /// writes into `env.store` directly and produces no return value of its own, the same shape
 /// the call it wraps already has.
-fn Materialize_Reachability_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+fn Materialize_Reachability_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     sources: &[SourceFile],
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
@@ -220,7 +220,7 @@ fn Policy_Families() -> Vec<RequiredFact>
 /// deliberately: `Reachability` is its own section one function up (it reads `sources`,
 /// which the other sections do not), and the remaining five belong to the three sections that
 /// return a value, which [`Materialize_Capabilities`] calls directly.
-fn Materialize_Policy_Family<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+fn Materialize_Policy_Family<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
     family: RequiredFact,
@@ -254,7 +254,7 @@ fn Materialize_Policy_Family<Launcher: ProcessLauncher, Fs: FileSystem, Env: Env
 /// SNAKE_CASE` reads the identical capability but is not itself composed into
 /// `crate::run_context::judging::Findings_For_Selected_Rules` yet, so gating on it here would
 /// materialize a fact for a rule that never runs.
-fn Materialize_Naming_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+fn Materialize_Naming_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
 )
@@ -272,7 +272,7 @@ fn Materialize_Naming_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, 
 /// them already has a hardcoded fallback equal to what this repository declares, so
 /// materializing the fact changes no finding here; it changes which repositories the
 /// thresholds belong to.
-fn Materialize_Limits_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+fn Materialize_Limits_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
 )
@@ -289,7 +289,7 @@ fn Materialize_Limits_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, 
 /// default. The three dependency rules have no default an architecture could have, so skipping
 /// this makes them report a declaration they could not read rather than judge against an
 /// assumption -- which is the honest answer and the one `OD-RULES-003` asks for.
-fn Materialize_Architecture_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+fn Materialize_Architecture_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
 )
@@ -307,7 +307,7 @@ fn Materialize_Architecture_Section<Launcher: ProcessLauncher, Fs: FileSystem, E
 /// absence is not a fallback: `Check_Declared_Tooling_Language_For_Scripts` reports nothing
 /// at all without the fact, so before this call existed the rule ran in every check and could
 /// never fire.
-fn Materialize_Scripting_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+fn Materialize_Scripting_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
 )
@@ -323,7 +323,7 @@ fn Materialize_Scripting_Policy_Section<Launcher: ProcessLauncher, Fs: FileSyste
 /// The narrowest gate of the four policy sections, because exactly one rule reads this
 /// capability -- and the first one whose rule takes no sources at all, so there is nothing
 /// here to gate on but the rule's own selection.
-fn Materialize_Goals_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+fn Materialize_Goals_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
 )
@@ -338,7 +338,7 @@ fn Materialize_Goals_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, E
 ///
 /// One rule reads this capability, so the gate is that rule's own selection -- the same
 /// shape [`Materialize_Goals_Policy_Section`] has one function above.
-fn Materialize_Words_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, Env: Environment>(
+fn Materialize_Words_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
 )
@@ -356,7 +356,7 @@ fn Materialize_Words_Policy_Section<Launcher: ProcessLauncher, Fs: FileSystem, E
 /// shape [`Materialize_Goals_Policy_Section`] and [`Materialize_Words_Policy_Section`] each
 /// have one function above.
 fn Materialize_Requirement_Trace_Section<
-    Launcher: ProcessLauncher,
+    Launcher: ProgramLauncher,
     Fs: FileSystem,
     Env: Environment,
 >(

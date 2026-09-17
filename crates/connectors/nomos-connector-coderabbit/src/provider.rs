@@ -17,7 +17,7 @@ use nomos_contracts::{
     BuildVariantId, ConfigurationId, EvidenceClass, GenerationId, Guarantee, ProviderId, SnapshotId,
     SubjectId,
 };
-use nomos_platform::ProcessLauncher;
+use nomos_platform::ProgramLauncher;
 
 /// Where in the workspace's history a fact is being produced -- the same four-field shape
 /// every other real provider's own `FactContext` carries, for the identical reason.
@@ -45,7 +45,7 @@ pub struct FactContext
 /// # Errors
 ///
 /// Whatever [`Fetch_Review_Comment`] or [`Translate_Review_Comment`] returns.
-pub fn Materialize_Review_Comment<Launcher: ProcessLauncher>(
+pub fn Materialize_Review_Comment<Launcher: ProgramLauncher>(
     repository: &str,
     comment_id: u64,
     context: FactContext,
@@ -186,7 +186,7 @@ mod tests
             "coderabbitai/rabbits-playground",
             COMMENT_ID,
             Context(),
-            &nomos_platform_std::StdProcessLauncher,
+            &nomos_platform_std::StdProgramLauncher,
         )
         .expect("gh must be reachable and the comment must still exist");
 

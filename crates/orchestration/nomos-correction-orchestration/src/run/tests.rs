@@ -1,6 +1,6 @@
 use super::*;
 use nomos_model::Subject_Of_Path;
-use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProcessLauncher};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 
 /// A file carrying no claim at all: neither a phantom mirror to strike, nor a line of
 /// trailing whitespace to strip.
@@ -34,7 +34,7 @@ const TRAILING_WHITESPACE_CORRECTED: &str = "pub fn Something() -> u32\n{\n    r
 fn Test_An_Unwalked_Root_Should_Be_Unreadable()
 {
     let command = CorrectionCommand { root: "does/not/exist".into(), commit: false };
-    let outcome = Run_Correction(None, CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
+    let outcome = Run_Correction(None, CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
 
     assert_eq!(outcome, CorrectionOutcome::UnreadableRoot);
 }
@@ -43,7 +43,7 @@ fn Test_An_Unwalked_Root_Should_Be_Unreadable()
 fn Test_An_Empty_Walk_Should_Report_No_Source_Found()
 {
     let command = CorrectionCommand { root: "irrelevant".into(), commit: false };
-    let outcome = Run_Correction(Some(Vec::new()), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
+    let outcome = Run_Correction(Some(Vec::new()), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &command);
 
     assert_eq!(outcome, CorrectionOutcome::NoSourceFound);
 }
@@ -141,7 +141,7 @@ impl Fixture
     /// hands it over: the walk already done, and the outcome already decided.
     fn Ran(&self) -> CorrectionOutcome
     {
-        return Run_Correction(self.Walk(), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProcessLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &self.command);
+        return Run_Correction(self.Walk(), CorrectionEnvironment { variant: Test_Variant(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment }, &self.command);
     }
 
     /// The walk a composition root would have handed [`Run_Correction`] for this fixture's

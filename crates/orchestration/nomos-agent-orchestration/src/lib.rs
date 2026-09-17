@@ -26,9 +26,9 @@
 //!
 //! [`run`]'s own module doc states the one deliberate departure from what it replaces:
 //! `nomos-cli`'s former `Dispatch_Task` was fixed to `nomos_platform_std::
-//! StdProcessLauncher` rather than generic, correct advice while this dispatch had exactly
+//! StdProgramLauncher` rather than generic, correct advice while this dispatch had exactly
 //! one caller. [`Run_Agent_Execute`] and [`Run_Agent_Judgment`] are generic over
-//! [`nomos_platform::ProcessLauncher`] instead, the identical reason
+//! [`nomos_platform::ProgramLauncher`] instead, the identical reason
 //! `nomos_correction_orchestration::Run_Correction` already is -- so `nomos-api` supplies
 //! its own launcher at its own call site rather than depending on `nomos-cli`'s choice, or
 //! on `nomos-cli` at all -- and, as a direct consequence, this crate's own tests reach both

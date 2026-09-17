@@ -32,10 +32,16 @@ pub use xvpe_clock::Timestamp;
 /// identically after it, which this module's own cases assert directly rather than
 /// leaving to this comment.
 ///
-/// Applied at each field with `#[serde(with = "nomos_platform::timestamp_serde")]`.
-/// Nine fields across eight types name it, all of them a bare `Timestamp` — there is
-/// no `Option` or collection shape to serve, which is why this module has one pair of
-/// functions and not a family.
+/// Applied at each field as a pair of attributes naming one function below by its full
+/// path — `#[serde(serialize_with = "nomos_platform::timestamp_serde::Write_Unix_Seconds")]`
+/// and `#[serde(deserialize_with = "nomos_platform::timestamp_serde::Read_Unix_Seconds")]`.
+/// Serde documents that pair as equivalent to its `with = "module"` form, and it is spelled
+/// out here because `with` requires exactly the names `serialize` and `deserialize`, which
+/// say nothing about what is written or read. Ten fields across nine types name them, all of
+/// them a bare `Timestamp` — there is no `Option` or collection shape to serve, which is why
+/// this module has one pair of functions and not a family. Four of the nine are the
+/// `nomos-api` response types, which derive `Serialize` alone and carry only the writing
+/// half.
 ///
 /// The module is named for the path it is reached by, rather than `serialization` and
 /// re-exported under a shorter name: an alias is a second public name for one item, and
@@ -51,7 +57,7 @@ pub mod timestamp_serde
     /// # Errors
     ///
     /// Whatever the serializer reports for writing an `i64`.
-    pub fn serialize<Format: Serializer>(timestamp: &Timestamp, serializer: Format) -> Result<Format::Ok, Format::Error>
+    pub fn Write_Unix_Seconds<Format: Serializer>(timestamp: &Timestamp, serializer: Format) -> Result<Format::Ok, Format::Error>
     {
         return serializer.serialize_i64(timestamp.Unix_Seconds());
     }
@@ -61,7 +67,7 @@ pub mod timestamp_serde
     /// # Errors
     ///
     /// Whatever the deserializer reports for a value that is not an `i64`.
-    pub fn deserialize<'de, Format: Deserializer<'de>>(deserializer: Format) -> Result<Timestamp, Format::Error>
+    pub fn Read_Unix_Seconds<'de, Format: Deserializer<'de>>(deserializer: Format) -> Result<Timestamp, Format::Error>
     {
         let seconds = i64::deserialize(deserializer)?;
 
@@ -86,7 +92,8 @@ mod tests
     #[derive(serde::Serialize, serde::Deserialize, PartialEq, Eq, Debug)]
     struct Record
     {
-        #[serde(with = "super::timestamp_serde")]
+        #[serde(serialize_with = "super::timestamp_serde::Write_Unix_Seconds")]
+        #[serde(deserialize_with = "super::timestamp_serde::Read_Unix_Seconds")]
         acquired_at: Timestamp,
     }
 

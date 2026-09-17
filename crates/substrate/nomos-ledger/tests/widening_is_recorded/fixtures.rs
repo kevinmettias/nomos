@@ -9,7 +9,7 @@ pub(crate) use nomos_ledger::{
     LedgerDocument, LedgerItem, SCHEMA_VERSION, Territory,
 };
 pub(crate) use nomos_platform::{
-    Clock, CrossProcessLock, DeterminismStrength, ReproducibilityScope, Strategy, Timestamp,
+    Clock, FilesystemLock, DeterminismStrength, ReproducibilityScope, Strategy, Timestamp,
     TraceEquivalence,
 };
 pub(crate) use nomos_platform_std::{FileLock, StdFileSystem};
@@ -159,7 +159,7 @@ pub(crate) fn Only_Item<Files, TimeSource, Lock>(ledger: &FileLedger<Files, Time
 where
     Files: nomos_platform::FileSystem,
     TimeSource: Clock,
-    Lock: CrossProcessLock,
+    Lock: FilesystemLock,
 {
     return ledger
         .Load()
@@ -178,7 +178,7 @@ pub(crate) fn Named<Files, TimeSource, Lock>(
 where
     Files: nomos_platform::FileSystem,
     TimeSource: Clock,
-    Lock: CrossProcessLock,
+    Lock: FilesystemLock,
 {
     return ledger
         .Load()

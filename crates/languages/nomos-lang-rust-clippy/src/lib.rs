@@ -19,7 +19,7 @@
 //! that reads what it materializes, are `nomos-check-orchestration` and `nomos-rules`'
 //! own territory, not this crate's.
 //!
-//! The process itself runs through a caller-supplied [`nomos_platform::ProcessLauncher`],
+//! The process itself runs through a caller-supplied [`nomos_platform::ProgramLauncher`],
 //! not `std::process::Command` directly, the same port `nomos-lang-rust-cargo` already
 //! runs its own subprocess through — so this crate depends on `nomos-platform` and not on
 //! any concrete implementation of it; the composition root chooses that.

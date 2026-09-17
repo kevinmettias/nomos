@@ -237,9 +237,9 @@ mod tests
         const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
     }
 
-    impl nomos_platform::ProcessLauncher for RefusingLauncher
+    impl nomos_platform::ProgramLauncher for RefusingLauncher
     {
-        fn Run(&self, _command: &Command) -> Result<nomos_platform::ProcessOutput, String>
+        fn Run(&self, _command: &Command) -> Result<nomos_platform::ProgramOutput, String>
         {
             return Err("refused for this test".to_owned());
         }
