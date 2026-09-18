@@ -85174,6 +85174,81 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P115-DETERMINISM-DECLARATIONS-COUNTS-TEST-ONLY-STRATEGIES-AS-PRODUCTION",
+      "title": "A cfg(test) module behind a path attribute is not excluded, so five test doubles read as declared reproducibility domains",
+      "why": "cargo test -p nomos-contract-tests --test determinism_declarations is red at HEAD on a clean tree in two tests. Test_Every_Declaration_Should_Be_Held_To_It_By_The_Harness panics at tests/contract/tests/determinism_declarations.rs:128: these strategies are declared and nothing holds them to it: [FakeLauncher, FixedClock, Recording, RecordingLauncher, Stated]. Test_Every_Declaration_Should_Occupy_A_Row_Of_The_Table panics at tests/contract/tests/determinism_declarations.rs:305: these declarations match no row of the contracts domain table, naming the same five as nomos-lang-rust-cargo::Recording and ::Stated declaring State/SingleRun/BitIdentical, nomos-lang-rust-deny::FakeLauncher and ::RecordingLauncher declaring the same, and nomos-ledger::FixedClock declaring StateTemporal/SingleRun/BitIdentical. Both failures are one defect and it is in the observer, not in any of the five crates. Measured 2026-09-17 at de6a73c4. All five are test doubles whose strategies are compiled only under cfg(test), and tests/contract/src/reading/source_files.rs is meant to exclude exactly those: its Test_Only_In reads a module declaration as test-only when the immediately preceding line is the cfg(test) attribute, because it sets gated = line equals the attribute text and then tests gated against the very next line. The three declarations that carry all five strategies put a path attribute between the two, so the mod line is read with gated already false and the module home is never excluded: crates/languages/nomos-lang-rust-cargo/src/metadata_error.rs:423 declares metadata/stated_environment_decides_the_program.rs and carries Stated and Recording, crates/languages/nomos-lang-rust-deny/src/deny_error.rs:361 declares reading/tests.rs and carries FakeLauncher and RecordingLauncher, and crates/substrate/nomos-ledger/src/file_ledger.rs:482 declares store/tests/file_ledger.rs and carries FixedClock. Sixteen path attributes appear in this workspace and the other thirteen carry no strategy, which is why the hole is exactly five names wide. The intended behaviour is not a judgment call and is already written beside the code: the comment on Domain_Of says a strategy declared inside a unit-test module is an example of the trait rather than a domain occupying a row of the table, and the doc on Module_Homes records a first instance of this identical bug class, where reading only one of the two Rust module spellings stopped excluding a single test file and nomos-rules was reported as constructing facts and promising nothing about them, a claim assembled entirely out of its own unit tests. This is the second instance of one bug, and the fix direction is therefore fixed rather than open: the observer must stop reading a module reachable only through a cfg(test) declaration, and the repair must not be to write table rows or harness registrations for test doubles, which would publish five fake domains into the vocabulary every peer reads. This failure is already present at HEAD and blocks every ledger item whose verification predicate runs the whole nomos-contract-tests package. Filing it makes a known shared-red condition attributable rather than leaving future workers to interpret it as somebody else transient work, which is only a safe reading for a failure that a live claim explains.",
+      "done_when": "cargo test -p nomos-contract-tests --test determinism_declarations --no-fail-fast exits 0, both failing tests green, without any row being added to the contracts domain table and without any harness registration being added for FakeLauncher, FixedClock, Recording, RecordingLauncher or Stated. The exclusion in tests/contract/src/reading/source_files.rs tolerates an attribute between the cfg(test) attribute and the module declaration rather than only the immediately preceding line, and it does so for both Rust module spellings that Module_Homes already knows. A test holds the repair: injecting a path attribute between a cfg(test) marker and a mod declaration in a file the scan reads must make that module excluded, and the test fails against the current single-line rule. The whole nomos-contract-tests package is re-measured afterwards and every other target is reported, because narrowing the census can flip a crate that was counted as producing facts only through its own test file, and that is a change to the declared universe rather than to these five names.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/src/reading/source_files.rs",
+          "tests/contract/src/reading.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "determinism_declarations",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P115-RECORD-CITATION-TWO-RECORDS-NAME-A-TEST-THAT-WAS-RENAMED-ON-2026-09-16",
+      "title": "Two governing records cite a test that 6927e8d0 renamed, because the compiler names a site in Rust and not a site in a record",
+      "why": "cargo test -p nomos-contract-tests --test record_citation is red at HEAD on a clean tree in one test. Test_Every_Test_A_Record_Names_Should_Resolve_Or_Be_Declared panics at tests/contract/tests/record_citation.rs:206 reporting two citations, both of Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key, from OD-LEDGER-008 and OD-LEDGER-024. Measured 2026-09-17 at de6a73c4 and the cause is a commit rather than a suspicion. Commit 6927e8d0, P114 naming/clarity: the substrate ledger crate, forty-five names over thirteen files, dated 2026-09-16, renamed fn Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key to fn Test_Every_Node_In_A_Ledger_Should_Refuse_An_Undeclared_Key in crates/substrate/nomos-ledger/tests/exclusion_holds/persistence.rs. That commit message states the mechanism and its own limit in one sentence: the declarations moved first and the compiler named every site that resolved to them. The compiler names a site written in Rust. It cannot name a site written inside a Markdown record and nothing else does either, so both records kept a name that had stopped existing. Two things follow. This is the guard working rather than the guard failing. OD-SPEC-017, version 3, measured 2026-09-13 over all 229 record files, found 14 real dead citations, decided that a test name in a record is a live coverage claim while a path citation is dated history that is not to be filed as a defect, and filed the guard as the item that followed. These two citations were created three days after that census by a rename that swept the Rust sites and not the prose, and the guard caught them exactly as designed. What let them stand is the outage: no gate step has executed since 2026-09-07, so a rename on 2026-09-16 reddened a target nobody ran. Second, OD-SPEC-017 fixes the remedy and fixes it per record rather than as one sweep, in its own words, because the assertion has to be checked to still hold. A record whose sentence makes a present-tense coverage claim names the successor. A record whose sentence reports a measurement performed at the time is noting its own history, and OD-SPEC-017 is explicit that a record retiring a name has to be able to write the name it is retiring, so that one declares the name instead by writing it followed by exactly the phrase does not resolve, which is the single closed form that record chose and used for all twelve names it quotes. Reading which kind each sentence makes is the work. OD-LEDGER-008 states six controls confirmed red one at a time with each reverted, which is past tense and therefore history. OD-LEDGER-024 is a verification-evidence list naming the file the test lives in, which is a coverage claim. They do not take the same edit. A third site carries the identical dead name and is held by nothing: crates/substrate/nomos-ledger/src/holder.rs:32 says in a module doc comment, present tense, that what holds the document attributes in place is the same dead name, in a module that declares no universe, so checks/mirror.rs has nothing to resolve there and record_citation reads records rather than source. It is the same rename in the same crate the naming pass swept, and that pass's own rule was that object became node or json throughout, so it is repaired by the same commit. This failure is already present at HEAD and blocks every ledger item whose verification predicate runs the whole nomos-contract-tests package. Filing it makes a known shared-red condition attributable rather than leaving future workers to interpret it as somebody else transient work, which is only a safe reading for a failure that a live claim explains.",
+      "done_when": "cargo test -p nomos-contract-tests --test record_citation --no-fail-fast exits 0 with no row added to NOT_YET_DECLARED, because a row there is the excuse for a citation the repository has not declared rather than the repair of one. Each of the two records is repaired according to the kind of claim its own sentence makes, and the commit says which it judged each to be and why. Where a record names the successor, the assertion it attributes to that test is confirmed to still hold rather than assumed from the similarity of the two names, which is OD-SPEC-017's own requirement and the reason this is work per record. Where a record declares the name rather than naming a successor, it writes the name followed by exactly OD-SPEC-017's closed form, with a sentence after it saying why, and it does not invent a second form. Any record amended is bumped in version and carries an Amendment section, as OD-SPEC-017 did to itself, because the record's history is not to be edited away. Both projections are re-rendered from a tree publishing exactly the records this commit publishes, by nomos spec render --profile diagram-set --into . and nomos spec render --profile domain-specification --into ., and freshness --require passes for both, because a record body is republished by spec/domain-specification.md and OD-SPEC-017 measured that the committed projection republishes every dead citation. The third site in crates/substrate/nomos-ledger/src/holder.rs is repaired or accounted for in the commit message; the predicate does not read source, so nothing else will hold it. The whole nomos-contract-tests package is then re-measured and every target reported, because two other targets remain red for owners this item does not take.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/holder.rs",
+          "docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md",
+          "docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "record_citation",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
