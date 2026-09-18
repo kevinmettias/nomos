@@ -1,18 +1,32 @@
+pub const fn nomos_agent_orchestration::Backend::Label(self) -> &'static str
 pub enum nomos_agent_orchestration::AgentDispatchOutcome
 pub enum nomos_agent_orchestration::Backend
+pub enum nomos_agent_orchestration::ProfileAbsence
+pub enum nomos_agent_orchestration::ProfileResolution
 pub enum nomos_agent_orchestration::ValidatedCorrectionOutcome
 pub enum variant nomos_agent_orchestration::AgentDispatchOutcome::ClaudeCode(nomos_agent_executor_claude_code::AgentExecutionOutcome)
 pub enum variant nomos_agent_orchestration::AgentDispatchOutcome::Ollama(nomos_model_backend_ollama::AgentExecutionOutcome)
 pub enum variant nomos_agent_orchestration::AgentDispatchOutcome::Unavailable(String)
 pub enum variant nomos_agent_orchestration::Backend::ClaudeCode
 pub enum variant nomos_agent_orchestration::Backend::Ollama
+pub enum variant nomos_agent_orchestration::ProfileAbsence::NoDeclaredTargetOfThatFamily
+pub enum variant nomos_agent_orchestration::ProfileAbsence::NoModelIdentityVocabulary
+pub enum variant nomos_agent_orchestration::ProfileAbsence::NoModelSetVocabulary
+pub enum variant nomos_agent_orchestration::ProfileAbsence::NoPredicateVocabulary
+pub enum variant nomos_agent_orchestration::ProfileAbsence::NoRankingVocabulary
+pub enum variant nomos_agent_orchestration::ProfileResolution::Resolved { config: DispatchConfig, also_satisfied: Vec<Backend>, }
+pub enum variant nomos_agent_orchestration::ProfileResolution::Unresolved { selector: ModelSelector, absence: ProfileAbsence, }
 pub enum variant nomos_agent_orchestration::ValidatedCorrectionOutcome::Committed { preview: Preview, committed: CommittedPlan, }
 pub enum variant nomos_agent_orchestration::ValidatedCorrectionOutcome::NoPlan
+pub fn nomos_agent_orchestration::Resolve_Profile(profile: &ModelExecutionProfile, declared: &[DeclaredTarget]) -> ProfileResolution
 pub fn nomos_agent_orchestration::Run_Agent_Execute<Launcher: ProgramLauncher>(goal: &str, config: DispatchConfig, environment: &AgentEnvironment<'_, Launcher>) -> AgentDispatchOutcome
 pub fn nomos_agent_orchestration::Run_Agent_Judgment<Launcher: ProgramLauncher>( pair: &RoleSurfacePair, finding: &Finding, config: DispatchConfig, environment: &AgentEnvironment<'_, Launcher>, ) -> AgentDispatchOutcome
 pub fn nomos_agent_orchestration::Run_Validated_Correction( result: &WorkResult, workspace: &mut Workspace, evidence: Evidence, ) -> Result<ValidatedCorrectionOutcome, CorrectionError>
 pub struct field nomos_agent_orchestration::AgentEnvironment::launcher: &'a Launcher
+pub struct field nomos_agent_orchestration::DeclaredTarget::backend: Backend
+pub struct field nomos_agent_orchestration::DeclaredTarget::package: ModelRoutePackage
 pub struct field nomos_agent_orchestration::DispatchConfig::backend: Backend
 pub struct field nomos_agent_orchestration::DispatchConfig::effort: EffortLevel
 pub struct nomos_agent_orchestration::AgentEnvironment<'a, Launcher: ProgramLauncher>
+pub struct nomos_agent_orchestration::DeclaredTarget
 pub struct nomos_agent_orchestration::DispatchConfig

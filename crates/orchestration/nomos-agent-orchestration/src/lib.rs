@@ -45,6 +45,13 @@
 //! `nomos-cli`'s `agent` module and `nomos-api`'s own agent surface both call
 //! [`Run_Agent_Execute`]/[`Run_Agent_Judgment`] now; neither owns this dispatch any more.
 //!
+//! [`Resolve_Profile`] is a third, independent seam, added later: which [`Backend`] a declared
+//! [`nomos_model_package::ModelExecutionProfile`] resolves to, against a package set the caller
+//! declares. It chooses; it dispatches nothing, so it neither calls [`Run_Agent_Execute`] nor is
+//! called by it -- a composition root that has a profile resolves it and then dispatches the
+//! `DispatchConfig` it produced. `OD-PACKAGE-016` decides it and
+//! `profile_resolution`'s own module doc states what resolves and what deliberately does not.
+//!
 //! [`validated_correction`] is a second, independent seam this crate owns: carrying a
 //! [`nomos_agent_contracts::WorkResult`]'s own `plan`, once dispatch has produced one,
 //! through `nomos-corrections`' `Preview -> Stage -> Validate -> Commit` lifecycle. It does
@@ -57,6 +64,7 @@ mod agent_dispatch_outcome;
 mod agent_environment;
 mod backend;
 mod dispatch_config;
+mod profile_resolution;
 mod run;
 mod validated_correction;
 mod validated_correction_outcome;
@@ -65,6 +73,7 @@ pub use agent_dispatch_outcome::AgentDispatchOutcome;
 pub use agent_environment::AgentEnvironment;
 pub use backend::Backend;
 pub use dispatch_config::DispatchConfig;
+pub use profile_resolution::{DeclaredTarget, ProfileAbsence, ProfileResolution, Resolve_Profile};
 pub use run::{Run_Agent_Execute, Run_Agent_Judgment};
 pub use validated_correction::Run_Validated_Correction;
 pub use validated_correction_outcome::ValidatedCorrectionOutcome;
