@@ -85039,6 +85039,40 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P115-THE-GATE-HAS-ONE-MODEL-AND-NO-SECOND-EXECUTOR",
+      "title": "The gate has one canonical model and one executor, so a scheduling refusal is indistinguishable from a judgment",
+      "why": "Measured 2026-09-17 at 80e0bbbe: `gh run list --workflow gate --limit 12` returns twelve consecutive completed/failure runs, and every one of them took 4 to 10 seconds; the most recent is 2026-09-17T16:52:12Z. No gate step has executed since 2026-09-07T06:19:25Z. `OD-GATE-027` already decided what a red check means inside that window and is not restated here.\n\nWhat that record did not decide, and what this item exists to decide, is the two things its own Recovery section assumes and the repository does not have.\n\nFirst: nothing mechanically distinguishes \"the gate executed and judged\" from \"the gate never executed\". The distinction exists as prose in one record and nowhere else. Every reader and every tooling surface this repository drives sees a single bit, and it is the wrong one -- a red check. The workspace already owns the vocabulary and does not use it mechanically: `Applicability` separates `MissingCapability` and `ProviderUnavailable` from a judgment precisely so that \"nothing could look\" never reads as \"nothing was wrong\", and `SynchronizationState::Unavailable` records that unavailable is neither agreement nor divergence. A refused workflow is that state for the gate, and nothing reports it as one.\n\nSecond: the authoritative step set has exactly one executor and it is GitHub Actions. `nomos work finish` derives only the step named `Lint` out of `.github/workflows/gate.yml` (`nomos_ledger::Derive_Step` with `LINT_STEP`) and then runs the item's own predicate. Measured against that file at this revision, eleven further steps have no local caller at all -- `Test`, `Compatibility floor`, `Determinism`, `Portability floor`, `Boundaries`, `XVPE crossing (cold by construction)`, `Required projections`, `Rules`, `Supply chain`, `Corpus gates`, and the toolchain and install steps they depend on. The derivation already exists and already reads the workflow file rather than restating it; what does not exist is a second executor of that same derivation. That is why this is a decision and not a shell script: the repository would gain nothing from a script that reimplements `gate.yml`, because the second copy is exactly the defect `OD-GATE-004` and `OD-GATE-011` are about, and it would drift from the file `work finish` already derives from.\n\nThe consequence is precise. While the hosted executor is unavailable, a claim resting on any step outside `Lint` is unverified in a way that nothing reports -- and `work/ledger.json` cannot show it either, because the item predicates on this board are package-scoped and were green throughout. `OD-GATE-027` says this needs no new vocabulary. It does need a mechanism, and the mechanism is blocked on deciding what the one model is and what projecting from it means for a step that is host-conditional: `Lint`, `Test`, `Rules`, `Supply chain`, `Compatibility floor`, `Portability floor` and the cold crossing are Linux-only, `Determinism` is Windows-only, and `Boundaries` and `Required projections` run on both legs.",
+      "done_when": "A governing record decides the questions this item raises and names the work they authorize, without building the executor itself.\n\nIt states what the canonical model of the gate step set is, such that GitHub Actions and a local executor both project from it rather than one restating the other. It must say explicitly whether that model is `.github/workflows/gate.yml` itself -- which `nomos_ledger::Derive_Step` already parses, and which `work finish` therefore already treats as the authority -- or a declaration the workflow is rendered from, and it must give the reason that decides between them rather than leaving it open.\n\nIt states what a local execution means for every step that is host-conditional. It must enumerate, against the workflow file at this revision, which steps are host-conditional and what a local executor does with each, and it must not resolve the question by silently dropping a step: an execution that judged a subset and reported a clean result is precisely the defect `OD-GATE-001` and `OD-GATE-020` are about, one level up, and a step whose subject is absent must fail rather than report clean -- the same rule the `Portability floor` step already applies to an empty derived crate list.\n\nIt states that gate availability is a repository-health state distinct from pass and fail, borrowing the vocabulary this workspace already owns rather than declaring a parallel one, and it names the surface that reports that state mechanically rather than only in prose: what a reader or a tool sees that says the authoritative gate did not execute, as distinct from what it sees when the gate executed and found nothing.\n\nIt names what recovery requires and what replay is owed, consistent with `OD-GATE-027`'s own position rather than contradicting it, and it is explicit that a successful hosted run ends the state by observation rather than by decision.\n\nThe record is registered rather than only written, both projections are re-rendered from a tree publishing exactly the records this commit publishes (`nomos spec render --profile diagram-set --into .` and `nomos spec render --profile domain-specification --into .`), and `cargo test -p nomos-contract-tests` passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md",
+          "crates/spec/nomos-spec-store/records/OD-GATE-033.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
