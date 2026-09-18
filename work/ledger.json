@@ -85505,6 +85505,95 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "OD-EXECUTOR-011-SUBSTANTIATION-IMPLEMENTATION",
+      "title": "A WorkResult carries the substantiation declaration its producer sets",
+      "why": "OD-EXECUTOR-011 decided that a WorkResult must be able to say which of its portions its\nproducer could substantiate, and named this implementation as a follow-up rather than\nperforming it. Until it lands, the distinction between an empty value that means the task\nproduced none and an empty value that means the producing executor cannot ground the portion\nis carried only by prose: one doc comment in nomos-agent-executor-claude-code's response.rs,\none in its lib.rs that AGT-002's own assessment cites as its gap, and two written out by hand\nat the nomos-api boundary. A consumer holding only the value cannot recover it at all, and\nthe workspace holds two answers to one question -- the comments say the absence is structural,\nand the type says nothing.\n\nThe record names the territories so they can be declared completely rather than discovered\nmid-claim, and this item reserves them by measurement rather than by reading that list. This\nfamily's predecessors were declined four times, every one of them for under-reserved\nterritory found by grepping after the fact, so the census is recorded here.\n\nEvery non-test construction site of a WorkResult in this workspace is one: Work_Result in\ncrates/agent/nomos-agent-executor-claude-code/src/response.rs. Every test construction site\nis eight, across three files: two in work_result.rs's own test module, four in\ncrates/agent/nomos-agent-contracts/tests/integration_seams.rs, and two in\ncrates/orchestration/nomos-agent-orchestration/src/validated_correction.rs, the last two\ninside the cfg(test) module that opens at that file's line 58. The record's own measurement\nsaid six fixtures; it did not count the orchestration pair, which is why this item's\nterritory is wider than that sentence. Every other file naming the type reads it, re-exports\nit or quotes it in prose and constructs nothing, so it does not move and is not reserved:\nnomos-cli's agent.rs and agent/parsing.rs, nomos-agent-orchestration's run.rs,\nnomos-scope-verification's lib.rs, nomos-rules' role_surface_pair.rs, and nomos-spec-model's\ndiscriminating-blocks corpus, whose WorkResult is a string in a v14 fixture rather than this\ntype.\n\nThe blessed field list is tests/contract/surface/nomos-agent-contracts.txt, one line per\nfield, so a new field adds a line; the executor's own snapshot blesses the result an outcome\ncarries; and AGT-002's assessment is the file whose gap line cites the lib.rs phrase this work\ntouches, the same trap that declined a predecessor of this family.\n\nThe two nomos-api wire twins are deliberately not in this item's territory. They are\nnomos-api's own serializable shapes rather than the contract type, and whether they project\nthe declaration is a question OD-EXECUTOR-011 left open on purpose; it is filed separately so\nthis item can land and be verified without it.",
+      "done_when": "A WorkResult declares, per portion, whether the producing executor substantiated it, and the\ndeclaration follows the discipline nomos-model's UnknownReason already holds: named variants\nrather than a boolean, each able to carry what makes its reason specific, with a test that\nenumerates every reason so a second one is a compile error there rather than a variant nothing\ncovers. Each of the six portions has its own named entry, so a seventh field added to\nWorkResult is a compile error until its substantiation is declared.\n\nThe producing executor publishes the declaration as a pub const beside JSON_SCHEMA in\ncrates/agent/nomos-agent-executor-claude-code/src/lib.rs, which is the declaration it already\npublishes about the shape of its own answers, and Work_Result in response.rs sets it on every\nresult it builds.\n\nOD-EXECUTOR-008 is unweakened and this item does not relax it: the four portions still come\nback empty, still constructed by the crate and never read from the model, the schema stays\nnarrow and additionalProperties: false stays, and a response missing structured_output is\nstill refused rather than coerced. The two portions that are read keep the guarantee that a\nconforming answer carries both as arrays, so an empty assumptions genuinely means the model\nproduced none.\n\nAll eight test construction sites build a result whose declaration agrees with its own values,\nand both blessed snapshots are updated to the surface the change produces. AGT-002's\nassessment is re-read rather than assumed unaffected, because its gap line names a phrase in\nthe executor's lib.rs: if that phrase moves the assessment moves with it, and if it does not,\nthe assessment is left alone and that is stated in the item's commit rather than left silent.\n\nThe predicate passes, and it is wider than the three crates this item edits on purpose:\nnomos-api's own tests read the surface snapshot this change rewrites, so a predicate naming\nonly the edited crates would leave the snapshot's reader unrun.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts/src/work_result.rs",
+          "crates/agent/nomos-agent-contracts/src/lib.rs",
+          "crates/agent/nomos-agent-contracts/src/substantiation.rs",
+          "crates/agent/nomos-agent-contracts/src/substantiation_reason.rs",
+          "crates/agent/nomos-agent-contracts/tests/integration_seams.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/response.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+          "crates/agent/nomos-agent-executor-claude-code/src/tests.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/validated_correction.rs",
+          "tests/contract/surface/nomos-agent-contracts.txt",
+          "tests/contract/surface/nomos-agent-executor-claude-code.txt",
+          "tests/contract/requirements/AGT-002.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-api",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "OD-EXECUTOR-011-API-TWINS-PROJECTION",
+      "title": "Each wire twin answers whether it projects the substantiation declaration",
+      "why": "OD-EXECUTOR-011 binds any surface that projects a WorkResult -- a projection that omits a\nportion must be able to say why the portion is omitted, or it is back to the sentence that\nrecord found written twice by hand -- and it deliberately did not decide the wire. It records\nthat whether the two nomos-api twins carry the declaration, or are justified in not carrying\nit because every portion they omit is declared unsubstantiated, is a real question rather\nthan a formality, because the twins are nomos-api's own serializable shapes and not the\ncontract type.\n\nBoth twins currently drop the same four portions and explain the omission in identical prose,\nand that prose is the distinction the record decided. Once the declaration exists, a reader\nof either wire shape is holding a response built from a value whose four absences are\ndeclared, and the twin either carries that or says why it need not.\n\nFiled as its own item rather than folded into the implementation beside it because it\nreserves different files and answers a different question, and because the implementation can\nland and be verified without it. It depends on that implementation, since there is no\ndeclaration to project or to be justified against until the implementation lands.",
+      "done_when": "Each of the two twins either projects the substantiation declaration or states, against the\ncriterion OD-EXECUTOR-011 itself supplies, why it need not -- and the answer is legible to a\nreader of the wire shape rather than only in a commit message. Neither twin's prose asserts\nanything the contract type now contradicts, and the blessed nomos-api surface snapshot is\nupdated if either twin's fields move. Whichever way each twin answers, the answer is the same\nkind of answer for both, or the difference between them is stated rather than left to be\ninferred, since they are twins and a reader will assume they agree.\n\nThe predicate passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/agent/agent_dispatch_response.rs",
+          "crates/host/nomos-api/src/workflow/agent_execution_outcome_response.rs",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "OD-EXECUTOR-011-SUBSTANTIATION-IMPLEMENTATION"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
