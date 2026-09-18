@@ -81821,7 +81821,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -81839,7 +81839,32 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-cap-requirement-trace",
+          "--lib",
+          "--test",
+          "requirement_trace"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Decided_It ... ok\ntest reader::Test_The_Reader_Should_Enumerate_The_Directory_It_Is_Given ... ok\ntest committed::Test_Every_Divergence_Should_Name_A_Governing_Record ... ok\ntest committed::Test_Every_Partial_Should_Name_A_Gap ... ok\ntest committed::Test_Every_Gap_Should_Resolve ... ok\ntest committed::Test_Every_Named_Record_Should_Exist_And_Be_Registered ... ok\ntest committed::Test_Every_Assessment_Should_Name_A_Site_That_Exists ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_cap_requirement_trace-728ca6f925018823.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-6db067559ac50d12.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-56ef20b6bcf098f7.exe)\n",
+        "verified_at": 1789715568,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "de7dfef37a5ebfeab0eb26b1dd6d9b7a63c42fed"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
