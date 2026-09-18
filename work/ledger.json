@@ -85735,6 +85735,72 @@
           "widened_at": 1789714465
         }
       ]
+    },
+    {
+      "id": "P116-A-SIBLING-SPLIT-MOVED-THREE-CORPUS-GATED-TESTS-WHERE-NO-DERIVATION-COUNTS-THEM",
+      "title": "A sibling split moved three corpus-gated tests where no derivation can count them, so the declared row contradicts the source",
+      "why": "corpus_gates is red at HEAD on a clean tree: exit 101, 4 passed and 2 failed, and exactly two messages. declared::Test_Every_Declared_File_Should_Match_What_It_Declares reports crates/spec/nomos-spec-ingest/tests/siblings.rs: declares 9 tests, has 6. derived::Test_Every_Declared_Gate_Count_Should_Be_The_One_In_The_Source reports the same file: declares 9 gated, source has 6. Nothing else in the target is red, the package's other fourteen targets are green, and no live item owns this.\n\nThe cause is db68c76e, whose message is the single word refactor. crates/spec/nomos-spec-ingest/tests/siblings.rs holds 9 tests immediately before it and 6 after, and it is the commit that added crates/spec/nomos-spec-ingest/tests/siblings/game_plans.rs holding the other three. An earlier commit message in this repository attributes the same fall to d8fedb6b; that is wrong, and measured wrong -- siblings.rs holds 6 tests both before and after d8fedb6b. The attribution is corrected here because a fact this load-bearing should not live in a commit message alone.\n\nThe three moved tests are corpus-gated and are counted by nobody. tests/contract/src/gates.rs derives a gate by propagating the corpus variable along the calls a test makes, and tests/contract/tests/corpus_gates/derived.rs states the scope in its own words: scoped to one file, a helper shared across files would be missed, which is a false negative rather than a false positive. game_plans.rs reaches the corpus only through use super::{Archives, Ecosystem}; nothing in that file names a corpus variable, so nothing in it is reported as gated and its three tests are absent from Corpus_Gates() entirely. That is also why the failure list carries no not-in-GATES line for it: the table is not missing the file, the derivation cannot see it, and the second direction of the comparison can only report a file the source gates.\n\nThe other derivation is blind in the same place for the same reason. declared.rs asks Files_Naming_A_Corpus which files spell a corpus variable; game_plans.rs spells none, it imports the helper, so the file is in neither the found set nor the table and the file-set assertion stays green while three gated tests go uncounted.\n\nWhat that costs is the direction this table exists to prevent, and the numbers say so. The three tests early-return when NOMOS_SPEC_ARCHIVES is unset, exactly as they did when they sat in siblings.rs, so the hole is unchanged: GATED_TOTAL is 69 and 69 is still the truth. What moved is the address of three of the sixty-nine, into a place no row and no derivation reaches. The naive repair -- the one the two failing messages literally ask for, set the row to 6 tests and 6 gated -- would drop GATED_TOTAL to 66 and assert that three assertions now run on a machine with no corpus, which is false. Both sums check this: the sixteen rows total 69 gated of 85 tests today, and the same two numbers come out if the three moved tests are counted where they are, so the totals are the invariant and the file boundary is the variable.\n\nThe rule the split broke is written in the table three times. The rows for table_rows/corpus.rs, portable/over_the_corpus.rs and analysis_slice/scale.rs each say in prose that their gated tests sit beside the gate because the derivation follows calls within one file, and two of them say a test was placed there for that reason. The convention is real, it is followed everywhere else, and db68c76e crossed it with no reason recorded for the split.\n\nSECOND: this target is the predicate of P103-THE-CORPUS-HOLE-REPORT-IS-UNREACHABLE-FROM-THE-SCOPED-RUN-EVERY-PREDICATE-USES, which reserves the five files under tests/contract/tests/corpus_gates/ and nothing else. That item's claim is about where the report speaks and cannot make this target green; the two territories are disjoint, and the repair here is what unblocks its predicate. The board's next item, P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-8, spans nomos-contract-tests in its predicate too and is blocked by the same red target.",
+      "done_when": "The two assertions are green because the tests are counted, not because the counts were lowered. Concretely: cargo test -p nomos-contract-tests --test corpus_gates --no-fail-fast exits 0; GATES, GATED_TOTAL and TESTS_IN_GATED_FILES are unchanged from the revision this item was authored at, because the hole did not move -- the same nine tests of the siblings suite are gated before and after, and 9 tests, 9 of them gated, and 69 gated of 85 tests in gated files are the numbers that describe them either way; and the three tests still return early when NOMOS_SPEC_ARCHIVES is unset and still pass when it is set, which is what makes 69 true rather than stale.\n\ncrates/spec/nomos-spec-ingest/tests/siblings/game_plans.rs no longer exists and no test that was in it remains anywhere else. The two declarations in siblings.rs that name it -- the module doc sentence and the path-attribute module declaration -- are removed with it. The nine test bodies and the helpers they call are byte-identical to what they are at the revision this item was authored at, apart from where they sit in the file.\n\ncargo test -p nomos-spec-ingest --no-fail-fast reports what it reports before the change, and the workspace check reports 433 findings of which 29 can fail, unchanged: the move may not buy a green by minting a finding somewhere else.\n\nFORBIDDEN, each because it makes the number flatter than the truth. Setting the siblings.rs row to 6 tests and 6 gated and lowering GATED_TOTAL to 66, which declares three assertions that still skip as though they run. Adding a row for game_plans.rs, or teaching either derivation to resolve an import across files: the declaration records the hole, the hole did not move, and the one-file scope of the derivation is documented and deliberate in derived.rs and named in the three table comments that give it as the reason their tests are where they are, so widening it is a separate decision and not this item. Deleting or weakening either failing assertion, or exempting any file from either derivation. And making the three tests run without a corpus, which changes what is tested rather than where it is counted.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/spec/nomos-spec-ingest/tests/siblings.rs",
+          "crates/spec/nomos-spec-ingest/tests/siblings/game_plans.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "corpus_gates"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "corpus_gates"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 6 tests\ntest declared::Test_The_Declared_Total_Should_Be_The_Sum_Of_The_Table ... ok\ntest derived::Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables ... ok\ntest report::Test_A_Run_Should_Report_What_It_Did_Not_Check ... ok\ntest declared::Test_Every_Declared_File_Should_Match_What_It_Declares ... ok\ntest declared::Test_Every_File_That_Reaches_A_Corpus_Should_Be_Declared ... ok\ntest derived::Test_Every_Declared_Gate_Count_Should_Be_The_One_In_The_Source ... ok\n\ntest result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.14s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.15s\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-767f5d779d25e091.exe)\n",
+        "verified_at": 1789717411,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "31e6e34c00d22f7a40e7fe0c3afc4b1cc7771192"
+      },
+      "abandoned": [
+        {
+          "holder": "fable-p116",
+          "reason": "Correcting the last paragraph of this item's why, before implementing it. That paragraph says the co-location convention is followed everywhere else and that db68c76e crossed it with no reason recorded for the split. The second half of that is false, and measured against the file the same commit added: the module doc of crates/spec/nomos-spec-ingest/tests/siblings/game_plans.rs records the reason in its own words -- the split is where the file crossed the 500-line review trigger, not a second authority over the same store. A reason was recorded, the item failed to answer it, and that reason is the one argument that could defeat the repair the item asks for.\n\nThe answer, also measured. The Rust 500-line rule id is 500-lines and its check is Check_File_Size_Review_Trigger, in crates/rules/nomos-rules/src/checks/structure.rs. It is deliberately uncomposed: crates/rules/nomos-rules/src/rule_descriptor.rs carries no Descriptor_For row for it, and the only size descriptors in that table are FILE_SIZE_JUSTIFICATION_TRIGGER at 1500 lines for Rust and the two Go ids; tests/contract/tests/rule_composition.rs then declares it in ACCOUNTED_FOR with the reason 42 blocking findings measured against this workspace's own tree, each of which would need review before composing. So no composed rule fires at 500 lines for Rust, and the only composed Rust size rule fires at 1500, which the restored 647-line file is far below. The tree agrees: four .rs files here already exceed 500 lines and nomos check --root . reports 433 findings, none of them about file size. The split avoided a trigger that reports nothing today, which is not a fault in the change that made it, so restoring co-location mints no finding, which is what this item's done_when already requires. Composing 500-lines and reviewing its 42 findings is separate work and belongs to whoever takes it, not here.\n\nEverything else in this item stands as filed: the diagnosis, the two failing assertions, GATED_TOTAL 69 and TESTS_IN_GATED_FILES 85 as the invariant, and the four forbidden repairs. The claim is abandoned and retaken immediately so that this correction sits in the item's own history rather than in a commit message alone, because the ledger has no edit verb.",
+          "abandoned_at": 1789717202
+        }
+      ],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
