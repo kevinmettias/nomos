@@ -7,9 +7,29 @@ use serde::Serialize;
 ///
 /// `ClaudeCode`'s `assumptions`/`unresolved_questions` are
 /// [`nomos_agent_contracts::WorkResult`]'s own two fields this executor can honestly
-/// populate -- `OD-EXECUTOR-008`'s decision. `plan`, `claims`, `tests` and
-/// `requested_verification` are not projected here because they are always structurally
-/// absent for this executor, never because a wire caller could not use them if they existed.
+/// populate -- `OD-EXECUTOR-008`'s decision.
+///
+/// The other four -- `plan`, `claims`, `tests` and `requested_verification` -- are not
+/// projected, and this shape says why rather than leaving it to a convention:
+/// [`nomos_agent_executor_claude_code::WORK_RESULT_SUBSTANTIATION`], the declaration the
+/// producing executor publishes beside its schema, declares exactly those four
+/// `Unsubstantiated` and exactly the two carried here `Substantiated`. `OD-EXECUTOR-011`'s
+/// criterion for a projection that omits a portion is that it be able to say why, and that
+/// declaration is the why -- a portion declared unsubstantiated says nothing about the task
+/// whatever it holds, so omitting it drops nothing a caller could act on. The field list
+/// above is therefore the declaration itself rather than a summary of it: the portions a
+/// caller may act on are exactly the portions a caller receives.
+///
+/// The declaration is not a field of this shape. It is a constant of the executor rather
+/// than a fact about one result, so carrying it would repeat one sentence on every response;
+/// and nothing here would read it -- no transport serves this shape yet, so a field added
+/// now would be a shape with no caller to check it against, which is the premature-surface
+/// caution this crate's own module doc names. The `Ollama` and `Unavailable` variants
+/// project no work result at all, so the criterion above does not reach them.
+///
+/// [`Test_This_Shape_Should_Project_Exactly_The_Portions_Its_Executor_Declares_Substantiated`]
+/// derives that agreement from the declaration instead of restating it, so a portion added to
+/// either one alone reddens there rather than rotting here.
 #[derive(Clone, Debug, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case", tag = "backend")]
 pub enum AgentDispatchResponse
@@ -27,4 +47,85 @@ pub enum AgentDispatchResponse
     {
         reason: String
     },
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_agent_contracts::{Substantiation, WorkResult};
+    use nomos_agent_executor_claude_code::{
+        AgentExecutionOutcome, MicroDollars, WORK_RESULT_SUBSTANTIATION,
+    };
+    use nomos_agent_orchestration::AgentDispatchOutcome;
+    use serde_json::Value;
+
+    /// The claim the doc comment above makes, derived rather than restated: every portion of a
+    /// `WorkResult` is carried here exactly when the executor's own declaration says it is
+    /// substantiated.
+    ///
+    /// Both directions are asserted by the one comparison, and that is what makes the field
+    /// list above the declaration rather than a copy of it -- a portion that moves in either
+    /// place without the other is red, whichever way it moved.
+    #[test]
+    fn Test_This_Shape_Should_Project_Exactly_The_Portions_Its_Executor_Declares_Substantiated()
+    {
+        let wire = Serialized_Claude_Code_Response();
+        // Every field by name, deliberately without a `..`: a seventh portion added to the
+        // declaration is a compile error here rather than a portion nothing checks.
+        let Substantiation {
+            plan,
+            claims,
+            tests,
+            requested_verification,
+            assumptions,
+            unresolved_questions,
+        } = &WORK_RESULT_SUBSTANTIATION;
+
+        for (field, portion) in [
+            ("plan", plan),
+            ("claims", claims),
+            ("tests", tests),
+            ("requested_verification", requested_verification),
+            ("assumptions", assumptions),
+            ("unresolved_questions", unresolved_questions),
+        ]
+        {
+            assert_eq!(
+                wire.get(field).is_some(),
+                portion.Is_Substantiated(),
+                "this shape carries {field} exactly when its executor declares it substantiated"
+            );
+        }
+    }
+
+    /// The `ClaudeCode` variant of a result that carries this executor's own declaration,
+    /// serialized the way a wire caller would receive it.
+    ///
+    /// Empty, because the portions the declaration grounds and the values they hold are two
+    /// different questions and only the first is this file's: an empty `assumptions` here
+    /// means the model produced none, which `String_Array` in the executor's `response.rs`
+    /// guarantees by refusing an absent, non-array or non-string field.
+    fn Serialized_Claude_Code_Response() -> Value
+    {
+        let outcome = AgentExecutionOutcome {
+            result: WorkResult {
+                plan: None,
+                claims: Vec::new(),
+                tests: Vec::new(),
+                requested_verification: None,
+                assumptions: Vec::new(),
+                unresolved_questions: Vec::new(),
+                substantiation: WORK_RESULT_SUBSTANTIATION,
+            },
+            denied_tool_uses: Vec::new(),
+            is_error: false,
+            cost: MicroDollars::From_Micros(1_000),
+            duration_ms: 1,
+        };
+
+        let response = AgentDispatchResponse::From(AgentDispatchOutcome::ClaudeCode(outcome));
+        return serde_json::to_value(&response)
+            .expect("a derived Serialize over owned strings, a bool, an f64 and a u64 has nothing to refuse");
+    }
 }

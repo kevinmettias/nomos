@@ -997,6 +997,7 @@ dependencies = [
 name = "nomos-api"
 version = "0.1.0"
 dependencies = [
+ "nomos-agent-contracts",
  "nomos-agent-executor-claude-code",
  "nomos-agent-orchestration",
  "nomos-analysis",
