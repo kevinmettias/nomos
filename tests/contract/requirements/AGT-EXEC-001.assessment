@@ -11,7 +11,7 @@
 # site. Re-checked directly: `AuthorityClass` (`nomos-contracts`) is a real, deliberately
 # designed enum partitioning agent capability into exactly the seven classes this
 # requirement names -- Read, Propose, Preview, Mutate, Execute, Approve, Publish, verbatim
-# -- and `Requires_Explicit_Grant` gives a real, if binary, per-class authorization
+# -- and `Is_Explicit_Grant_Required` gives a real, if binary, per-class authorization
 # distinction. It was simply never cited before now.
 #
 # At the time of that re-check, no operation anywhere in the live workspace actually
@@ -45,7 +45,7 @@
 # unbuilt entirely for Propose/Approve/Publish.
 verdict: Partial
 site: crates/contracts/nomos-contracts/src/authority.rs#AuthorityClass
-site: crates/contracts/nomos-contracts/src/authority/class.rs#Is_Explicit_Grant_Required
+site: crates/contracts/nomos-contracts/src/authority/authority_class.rs#Is_Explicit_Grant_Required
 site: crates/contracts/nomos-contracts/src/authority/mutation_class.rs#MutationClass
 site: crates/corrections/nomos-corrections/src/preview.rs#Mutation_Class
 site: crates/corrections/nomos-corrections/src/staged_plan.rs#Mutation_Class

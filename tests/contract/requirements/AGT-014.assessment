@@ -12,8 +12,8 @@
 # specification store: a superseded record stays visible as a node carrying an explicit
 # bidirectional supersedes/superseded_by edge rather than being dropped
 # (`Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder`), and a statement whose
-# recorded hash disagrees with its recomputed one is reported as a named `StatementDivergence`
-# rather than silently accepted.
+# recorded hash disagrees with its recomputed one is reported as a named `Divergence` -- spelled
+# `StatementDivergence` where the report carries it -- rather than silently accepted.
 #
 # The final clause -- an agent-generated interpretation must never present as authoritative
 # evidence -- is strongly grounded: `EvidenceClass::AgentJudged` is the type's documented
@@ -27,6 +27,6 @@
 # prospective.
 verdict: Partial
 site: crates/spec/nomos-spec-store/tests/governing_records_are_present/supersession.rs#Test_The_Superseded_Record_Should_Be_A_Visible_Placeholder
-site: crates/spec/nomos-spec-ingest/src/content/statement/report.rs#StatementDivergence
+site: crates/spec/nomos-spec-ingest/src/content/statement/divergence.rs#Divergence
 site: crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs#AgentJudged
 gap: crates/substrate/nomos-capability/src/resolution.rs#Resolution
