@@ -85139,6 +85139,41 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "OD-EXECUTOR-011-A-WORKRESULT-CANNOT-SAY-WHICH-ABSENCE-IT-CARRIES",
+      "title": "A WorkResult cannot say whether an empty field means the task produced none or the producing executor cannot substantiate it",
+      "why": "OD-EXECUTOR-008 decided, correctly, that the canonical WorkResult carries only what a bare-prompt executor can honestly populate: plan, claims, tests and requested_verification are always None or empty when the producer is nomos-agent-executor-claude-code, constructed by that crate and never read from the model, because the executor boundary means the model has seen no real file and computed no digest, and a conforming lie is not the goal. That decision is about CONTENT and it is sound and is not re-opened here. What it does not decide is how a consumer distinguishes one absence from another. plan: None and claims: [] are byte-identical whether the task genuinely produced no plan and no findings, or the producing executor structurally cannot substantiate either field. The only carriers of that distinction today are a doc comment in the executor crate and OD-EXECUTOR-008 itself, so a consumer holding only the value cannot recover it. The sharper case is assumptions and unresolved_questions: those ARE read from the model, so an empty vector there is genuinely ambiguous between a task that produced none and a run whose extraction produced none, and nothing in the type separates the two. A person has stated the invariant this item exists to satisfy: an empty value must mean the task produced none, never that the adapter never implemented extraction. Measured 2026-09-17 at ac7991c5: crates/agent/nomos-agent-contracts/src/work_result.rs declares the six fields with no presence marker of any kind, crates/agent/nomos-agent-executor-claude-code/src/response.rs sets the four to None or empty unconditionally and documents that alone, and crates/agent/nomos-agent-executor-claude-code/src/lib.rs JSON_SCHEMA declares only assumptions and unresolved_questions with additionalProperties false. OD-EXECUTOR-001 governs the invocation-site capability boundary and OD-EXECUTOR-008 governs content honesty; neither decides the representation of unavailability, which is why this is a decision item rather than a correction.",
+      "done_when": "A governing record decides how a value of WorkResult distinguishes an empty field the task produced none for from an empty field the producing executor cannot substantiate, and names the mechanism that makes the distinction explicit in the type or in a surface reachable from it rather than conventional in a doc comment. It states explicitly that the content decision OD-EXECUTOR-008 already made is unchanged, and it does not weaken that record to make the distinction easier. It states what an executor must publish about its own substantiation so that a reader can derive the second case rather than infer it. It is registered rather than only written, both projections are re-rendered from a tree publishing exactly the records this commit publishes, and cargo test -p nomos-spec-store --no-fail-fast passes. That predicate is deliberately the specification store rather than nomos-contract-tests, because cargo test -p nomos-contract-tests is red at HEAD on a clean tree in four targets -- corpus_gates, determinism_declarations, record_citation and requirement_trace -- for reasons this item does not own and does not touch, and an item whose predicate names a command that cannot go green is an item that cannot finish.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md",
+          "crates/spec/nomos-spec-store/records/OD-EXECUTOR-011.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
