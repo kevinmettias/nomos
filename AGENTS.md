@@ -53,14 +53,14 @@ governing.
 These are the facts that have no other home. Each is a rule for working here, not an
 architectural claim; where a *why* exists, it is named.
 
-**This workspace does not build without the `xvpe` checkout beside it.** Six crates name an
-`xvpe-*` dependency by a relative path that climbs out of this repository into a sibling
-directory named `xvpe`, and ten reach one transitively (measured 2026-09-11). That checkout
-must be present and must itself compile. A missing or broken one fails the build at manifest
-resolution, before any code of this workspace's is read, which reads nothing like the real
-cause. `OD-PLATFORM-003` accepted that cost deliberately -- this workspace is an application
-over that engine, not its peer -- and `OD-HOST-013` extended it to the editor surface;
-`docs/records/` holds both.
+**The XVPE crossing is a pinned revision, not a checkout beside this repository.** Every
+`xvpe-*` dependency names a git source pinned to a revision, so the workspace resolves XVPE
+from what that revision pins and needs no sibling directory to build. A local override does
+exist and is opt-in: `.cargo/xvpe-local.toml` substitutes a sibling checkout, is deliberately
+not named so cargo cannot discover it, and is never the governing form (`OD-PLATFORM-004`).
+Requesting it rewrites `Cargo.lock`, so the build then answers to whatever that checkout sits
+at, and no number taken under it is evidence about what this repository publishes. How the
+crossing is pinned is measured by `tests/contract/tests/boundaries/lock_pinning.rs`.
 
 **Never run `cargo fmt`.** It cannot produce this workspace's style and rewrites the tree
 every time. `README.md` and `rustfmt.toml` carry the reason. `cargo fmt --check` is

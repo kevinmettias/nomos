@@ -1,6 +1,7 @@
 use crate::readers::{
-    Board, Declared_Skill_Name, Gate_Run_Commands, Imports, Ledger_Verb_Lines, Missing_Paths,
-    Named_Items, Restated_Gate_Commands, Restated_Ledger_Verb_Lines, Restated_Rows,
+    Board, Crossing_Counts, Declared_Skill_Name, Gate_Run_Commands, Imports, Ledger_Verb_Lines,
+    Missing_Paths, Named_Items, Restated_Gate_Commands, Restated_Ledger_Verb_Lines,
+    Restated_Rows,
 };
 
 /// Every check above passes over a file that says nothing, so each is shown failing.
@@ -17,6 +18,7 @@ fn Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It()
     Assert_The_Item_Reader_Reports_An_Id_And_Nothing_Else();
     Assert_The_Gate_Command_Check_Reports_A_Pasted_List();
     Assert_The_Ledger_Verb_Check_Reports_A_Pasted_Reference();
+    Assert_The_Crossing_Count_Check_Reports_A_Restated_Count();
 }
 
 /// Shown reporting a link to nowhere, and shown not reporting a command or a real path.
@@ -172,5 +174,35 @@ pub(crate) fn Assert_The_Item_Reader_Reports_An_Id_And_Nothing_Else()
         Board().items.iter().any(|entry| return entry.state.Is_Finished()),
         "no finished item was found on the board, so the expiry check has never been \
          shown the state it exists to catch"
+    );
+}
+
+/// Shown reporting the count restated about the crossing, and shown leaving prose about that
+/// crossing alone when it states no number.
+///
+/// The first fixture is the retired sentence itself, verbatim, because the check that reads
+/// for it was written after it had already gone stale: a fixture invented here would prove
+/// the reader works on a shape that never occurred.
+pub(crate) fn Assert_The_Crossing_Count_Check_Reports_A_Restated_Count()
+{
+    assert!(
+        !Crossing_Counts(
+            "**This workspace does not build without the `xvpe` checkout beside it.** Six \
+             crates name an `xvpe-*` dependency by a relative path that climbs out of this \
+             repository into a sibling directory named `xvpe`, and ten reach one \
+             transitively (measured 2026-09-11)."
+        )
+        .is_empty(),
+        "the contract's own retired sentence was accepted, so the check would let a \
+         crossing count be restated in the contract again"
+    );
+    assert!(
+        Crossing_Counts(
+            "The workspace resolves XVPE from a pinned revision. A local override is opt-in, \
+             is requested by naming it, and is never the governing form."
+        )
+        .is_empty(),
+        "prose about the crossing that states no count was reported as one, so the check \
+         would forbid the contract from saying anything about XVPE at all"
     );
 }

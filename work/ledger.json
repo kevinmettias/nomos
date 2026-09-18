@@ -85073,6 +85073,68 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P115-THE-CONTRACT-STATES-A-CROSSING-THAT-IS-NOT-THE-ONE-THE-MANIFESTS-DECLARE",
+      "title": "The contract's crossing hazard describes a workspace that no longer exists, and nothing re-derives it",
+      "why": "The contract's opening operating hazard is load-bearing and false in all three of its clauses, and nothing in this repository re-derives it.\n\nIt reads: \"This workspace does not build without the `xvpe` checkout beside it. Six crates name an `xvpe-*` dependency by a relative path that climbs out of this repository into a sibling directory named `xvpe`, and ten reach one transitively (measured 2026-09-11).\"\n\nMeasured 2026-09-17 at 80e0bbbe. The count is wrong: sixteen `xvpe-*` dependency declarations across eight manifests -- seven under `crates/` and `tests/contract` -- naming twelve distinct packages. The mechanism is wrong: every declaration is `{ git = \"https://github.com/kevinmettias/xvpe.git\", rev = \"82a3c8fccf4ef7f3759f36d3f320a91d0f96341c\" }`, and a grep for `path =` across the manifests returns exactly one hit, `Cargo.toml:398`, which is this workspace's own `nomos-platform-xvpe` crate and not a sibling checkout at all. The premise is wrong: the workspace resolves XVPE from the pinned revision, and `Cargo.lock` carries twelve `source = \"git+https://github.com/kevinmettias/xvpe.git` lines that `tests/contract/tests/boundaries/lock_pinning.rs` fails the gate over if any loses that source.\n\n`OD-PLATFORM-004` decides the thing the sentence has backwards: local substitution is permitted and is never the governing dependency authority. What implements it is `.cargo/xvpe-local.toml`, deliberately not named `config.toml` so cargo cannot discover it, requested by naming it -- `cargo --config .cargo/xvpe-local.toml check --workspace`. A sibling checkout is therefore an opt-in development convenience, not a precondition, and the file that performs the substitution states that in its own header.\n\nThe cost is not the stale number. This paragraph sits under \"what must pass before I finish\" in the file every session reads first, and it instructs every agent to defend against a build failure that cannot occur while saying nothing about the one that can. Running cargo under that config rewrites `Cargo.lock`, deleting the git source line from all twelve packages, so the build becomes development-resolved and every number taken under it -- benchmark, corpus count, gate result -- is evidence about a checkout nobody else has. That is a hazard with no other home, and the contract omits it in favour of one measured once and never again.\n\nNothing re-derived the sentence, which is why it survived. `tests/contract/tests/agent_harness.rs` asserts the contract's structure -- that its paths exist, that it names the authorities it routes to, that a temporary hazard names an open item -- and deliberately does not assert that its prose is still true. `P10-HAZARD-EXPIRY` built the one mechanism pairing a contract sentence with something that can change, and it reaches only hazards that are temporary; a claim meant to be permanent has neither an expiry nor a check. A prior session recorded the staleness and did not fix it.\n\nThis item corrects the sentence and closes the class narrowly. A count restated in the contract about a fact another test already measures is a second encoding of one decision, which is `OD-GATE-011`'s defect, and it is precisely what went stale here: the gate has a measurement for this crossing and the contract paraphrases it instead of routing to it.",
+      "done_when": "`AGENTS.md`'s crossing hazard states what is true, and a check fails when the class recurs.\n\nThe paragraph names the pin rather than a sibling checkout: the workspace resolves XVPE through a pinned git revision, a local override exists, it is opt-in and requested by naming `.cargo/xvpe-local.toml`, and it is never the governing form (`OD-PLATFORM-004`). It names the live hazard that override carries -- a `Cargo.lock` rewritten to drop the git source line, and a build that is therefore development-resolved and not reproducible -- rather than the build failure the sentence describes today.\n\nIt carries no count. How many crates cross, and how they are declared, is what `tests/contract/tests/boundaries/lock_pinning.rs` measures in both directions, and a number restated here is a second encoding nothing re-derives; the contract names that path inside a code span so the harness's existing path-existence check resolves it.\n\nA check in `tests/contract/tests/agent_harness/checks.rs` reports a crate count stated about the crossing, and its failing case is shown over a fixture in `controls.rs` -- the convention every check in that file follows, and the reason none of them may pass trivially over a file that says nothing. The check is not satisfied by deleting the paragraph: the route assertion fails if the authority is not named.\n\n`cargo test -p nomos-contract-tests --test agent_harness --no-fail-fast` passes, and `AGENTS.md` stays inside the harness's `CONTRACT_LINE_BUDGET`.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "AGENTS.md",
+          "tests/contract/tests/agent_harness/checks.rs",
+          "tests/contract/tests/agent_harness/controls.rs",
+          "tests/contract/tests/agent_harness/readers.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Door ... ok\ntest checks::Test_The_Contract_Should_Not_Restate_The_Crossing_Count ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Ledger_Verb_Reference ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Gate_Command_List ... ok\ntest checks::Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard ... ok\ntest checks::Test_Every_Path_The_Harness_Names_Should_Exist ... ok\ntest checks::Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open ... ok\ntest controls::Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-cb6ddcb0c46d55b5.exe)\n",
+        "verified_at": 1789699104,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "cbd36bd7de1ca3143c749ccbf9049582b0bb8014"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

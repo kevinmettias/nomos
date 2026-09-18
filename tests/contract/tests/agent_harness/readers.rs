@@ -323,3 +323,66 @@ pub(crate) fn Declared_Skill_Name(text: &str) -> Option<String>
         return Some(value.trim().to_owned());
     });
 }
+
+/// Every crate count a text states about the XVPE crossing.
+///
+/// `tests/contract/tests/boundaries/lock_pinning.rs` measures the crossing in both
+/// directions — which packages cross, and that every one is pinned to the revision the
+/// manifests declare. A number restated elsewhere is a second encoding of that same fact
+/// with nothing re-deriving it, which is `OD-GATE-011`'s defect, and it is exactly how
+/// `AGENTS.md` came to promise six crates over a crossing that carries sixteen declarations
+/// across eight manifests.
+///
+/// A count is reported when a paragraph about the crossing carries a number immediately
+/// before the noun it counts. Wording is otherwise left alone: this reads for the shape of a
+/// restated measurement, not for every sentence a paragraph mentions XVPE in.
+pub(crate) fn Crossing_Counts(text: &str) -> Vec<String>
+{
+    const COUNTED: [&str; 4] = ["crate", "manifest", "package", "dependency"];
+    const SPELLED: [&str; 12] = [
+        "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+        "eleven", "twelve",
+    ];
+
+    // The paragraph is the unit, not the line and not the sentence. Line breaks in the
+    // contract are wrapping rather than meaning, and the sentence is too narrow in the other
+    // direction: a count fairly often sits one sentence away from the crossing it counts,
+    // which is exactly where the retired sentence would have drifted to escape a check
+    // written against the sentence.
+    let lowered = text.to_lowercase();
+    let mut counts = Vec::new();
+
+    for paragraph in lowered.split("\n\n")
+    {
+        if !paragraph.contains("xvpe")
+        {
+            continue;
+        }
+        let words: Vec<&str> = paragraph.split_whitespace().collect();
+
+        for pair in words.windows(2)
+        {
+            // Destructured rather than indexed. `windows(2)` cannot yield a short slice, but
+            // the slice pattern says so in the type of the binding, where an index and a
+            // comment claiming it is in range would leave a panic path a reader has to trust.
+            let [left, right] = pair
+            else
+            {
+                continue;
+            };
+
+            let number = left.chars().all(|character| return character.is_ascii_digit())
+                || SPELLED.contains(left);
+            let counted = COUNTED.iter().any(|noun| return right.starts_with(noun));
+
+            if number && counted
+            {
+                counts.push(format!("{left} {right}"));
+            }
+        }
+    }
+
+    counts.sort();
+    counts.dedup();
+    return counts;
+}

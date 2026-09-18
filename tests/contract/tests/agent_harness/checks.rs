@@ -3,9 +3,10 @@ use nomos_ledger::{LedgerDocument, LedgerItem};
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 use crate::readers::{
-    Board, Declared_Skill_Name, Gate_Run_Commands, Harness_Files, Imports, Ledger_Verb_Lines,
-    Missing_Paths, Named_Items, Named_Paths, Read_Harness_File, Read_Repo_File,
-    Restated_Gate_Commands, Restated_Ledger_Verb_Lines, Restated_Rows, Skill_Directories,
+    Board, Crossing_Counts, Declared_Skill_Name, Gate_Run_Commands, Harness_Files, Imports,
+    Ledger_Verb_Lines, Missing_Paths, Named_Items, Named_Paths, Read_Harness_File,
+    Read_Repo_File, Restated_Gate_Commands, Restated_Ledger_Verb_Lines, Restated_Rows,
+    Skill_Directories,
 };
 use crate::{
     ADAPTER, ADAPTER_LINE_BUDGET, CONTRACT, CONTRACT_LINE_BUDGET, GATE_WORKFLOW,
@@ -426,4 +427,45 @@ fn Declared_Name_In_Manifest(manifest: &Path, label: &str) -> String
         // then has nothing to report the skill under at all. Reading the absence as "nothing
         // to compare" would pass it through the check that exists to pin the name down.
         .unwrap_or_else(|| panic!("{label}/SKILL.md declares no name in its front matter"));
+}
+
+/// The test that measures the crossing, and the authority on every number about it.
+const CROSSING_AUTHORITY: &str = "tests/contract/tests/boundaries/lock_pinning.rs";
+
+/// The crossing's numbers are measured where the crossing is, and are not restated here.
+///
+/// The contract claimed six crates named an `xvpe-*` dependency by a relative path into a
+/// sibling checkout, with ten reaching one transitively, and was wrong on the count, the
+/// mechanism and the premise all at once. Nothing re-derived it. This suite asserts the
+/// contract's structure — that its paths exist, that it names the authorities it routes to,
+/// that a temporary hazard names an open item — and deliberately says nothing about whether
+/// its prose is still true, so the sentence sat under "what must pass before I finish", in
+/// the file every session reads first, for a week after the crossing had stopped working
+/// that way.
+///
+/// A number here is a second encoding of a fact this workspace already measures, which is
+/// `OD-GATE-011`'s defect and is how the two came to disagree. The route is asserted as well
+/// as the absence, so the check cannot be satisfied by deleting the paragraph and leaving
+/// nothing in its place — that would be `OD-GATE-001`'s shape one level up, a check reading
+/// clean over a file that has stopped saying anything.
+#[test]
+fn Test_The_Contract_Should_Not_Restate_The_Crossing_Count()
+{
+    let contract = Read_Harness_File(CONTRACT);
+
+    let counts = Crossing_Counts(&contract);
+
+    assert!(
+        counts.is_empty(),
+        "the contract states a count about the XVPE crossing: {counts:#?}.\n\
+         How many packages cross, and how they are declared, is what \
+         `{CROSSING_AUTHORITY}` measures in both directions. A copy here is unchecked, and \
+         drifted once already: it read six crates over eight manifests carrying sixteen \
+         declarations."
+    );
+    assert!(
+        contract.contains(CROSSING_AUTHORITY),
+        "the contract no longer names `{CROSSING_AUTHORITY}`, so whatever it says about the \
+         crossing routes to nothing that measures it."
+    );
 }
