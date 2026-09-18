@@ -85607,11 +85607,13 @@
         "paths": [
           "crates/host/nomos-api/src/agent/agent_dispatch_response.rs",
           "crates/host/nomos-api/src/workflow/agent_execution_outcome_response.rs",
-          "tests/contract/surface/nomos-api.txt"
+          "tests/contract/surface/nomos-api.txt",
+          "crates/host/nomos-api/Cargo.toml",
+          "Cargo.lock"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "OD-EXECUTOR-011-SUBSTANTIATION-IMPLEMENTATION"
       ],
@@ -85627,11 +85629,41 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-api",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "t result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n   Compiling nomos-api v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api)\nwarning: unused import: `CommitIntent`\n  --> crates\\host\\nomos-api\\src\\workflow.rs:45:53\n   |\n45 | use nomos_workflow_orchestration::{Body, CheckBody, CommitIntent, CorrectionBody, GateBody, Platform, Run, StepOutcome, WorkflowOutcome, ...\n   |                                                     ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-api` (lib) generated 1 warning (run `cargo fix --lib -p nomos-api` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.01s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-34a637db8cbe9cb4.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-7a6777d1223ba41b.exe)\n   Doc-tests nomos_api\n",
+        "verified_at": 1789714735,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0119e013c06088aa9c710f0c43e2716fed0d992f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-design",
+          "added": [
+            "crates/host/nomos-api/Cargo.toml",
+            "Cargo.lock"
+          ],
+          "widened_at": 1789714465
+        }
+      ]
     }
   ]
 }
