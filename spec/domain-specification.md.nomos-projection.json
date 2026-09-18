@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:924023885d6899494ab86ca1df489e0910f0d7be8a74968702cd3bc50d79a55f",
-  "inputs_digest": "sha256:a54d6521ea251d086173fcd1ee3ea710627f5feea011e71499cd83207facc9c0",
+  "content_digest": "sha256:6d2ea442d10d3a574099a4414203d1c08ffb206e2f3f39d87efb4deb31c4c751",
+  "inputs_digest": "sha256:9bd8798d35b824dadabd794a6544dfdcefec28708a8ad77c617e70ddd7d34b75",
   "sections": [
     [
       "Documents",
-      249
+      250
     ],
     [
       "Sections",
-      2072
+      2083
     ],
     [
       "Source blocks",
-      7292
+      7340
     ]
   ],
   "inputs": [
@@ -554,6 +554,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md@authored",
       "hash": "sha256:144fc0a0a362fdfb6b88913446ae17c051ff9c6c72675109af37a715a25a29a9"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md@authored",
+      "hash": "sha256:fbd373403646110ce167420a031964ee26ad49e92f21db8c9141e7a498148b4b"
     },
     {
       "content": "documents",
@@ -5519,6 +5524,61 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#32",
       "hash": "sha256:2d9e249cac1272c97b1ac5273617a967f4671942a835e77575a7bff98c02dad7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#1",
+      "hash": "sha256:4387e0ccb59d09453b8c8a7e35fef9c65603365a0e3267cae12d09bce6317bbb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#2",
+      "hash": "sha256:61484d0b85fbb395af64471931941f24da8462a55750d34a1c4b417d218ead6c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#5",
+      "hash": "sha256:f112cba6766433c883e3ad2189258a8b2903e81ec6779e111385831b520d1c04"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#14",
+      "hash": "sha256:edbaa10cebe0553b7c673269fff78ccf825f9605de3e940c1d2b0319c54d17b0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#15",
+      "hash": "sha256:cabd608dab8d3b146dc6bd0019b7528b2130f0486b1701650382100756dbcbc3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#20",
+      "hash": "sha256:3161c957334d6e76aa185e03ac3efb9beb2c437311e2abea9a771d5297f99b1b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#25",
+      "hash": "sha256:92a03e1f7b3e036c40eac621d78ad9e0216b8dd535a603a7253cbd557391e2a1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#29",
+      "hash": "sha256:49e4e6ced1495ad351ca8281fb167cdd62e476cd8b5ffecf3647d933b2287b97"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#36",
+      "hash": "sha256:5d544f8261b695a21035320eb7fc32d2b0bce27fdf44b1ca11ff2a91dfea9c23"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#39",
+      "hash": "sha256:26b832d4a456caa92375ea84d2fb390afc8556877b56e6cf9a20c88462ebf493"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#42",
+      "hash": "sha256:b4b727ec683396612331f67d02444d936f8cf6ae2967b3f84588f0db0acd372c"
     },
     {
       "content": "headings",
@@ -26579,6 +26639,246 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#33",
       "hash": "sha256:61f63fae9d42f7c6cf7868d69bc74e6c651ad4bcdcdb909f75ef0d3b0610bea1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#1",
+      "hash": "sha256:a6e431f622d8bfecd6cd26f30858a827a966cfae5f2e9fcf7d6fb557e3e6d682"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#3",
+      "hash": "sha256:660b9a2ed4825fa8d3a2e323124189395199849f75113c299da7350c3d0d312a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#4",
+      "hash": "sha256:939df5c5c657ae7f083a2308f8a6dd155ddb5a6281b040d7f9ac901a6dcefce7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#6",
+      "hash": "sha256:f31fded2d016da7d810a9ced04337ae0a10e6fd351af71b89765623ed3c122e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#7",
+      "hash": "sha256:35509610b59002077b9ca9cd31e635987707cc211d61de62126d39a925916bf0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#8",
+      "hash": "sha256:74f2f4911aad4fa62987f14055d7d48d62a4d98bfbcb233f2eb7c8f0ad5af42c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#9",
+      "hash": "sha256:b8a7627fc95575343886d09e5bfb706791f4721f8ed91551dcdae4126c4378bf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#10",
+      "hash": "sha256:d45ea662df31e91482cfa3bc9fe3b1540833ecf4512b5f03e98fb1b2354d14ae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#11",
+      "hash": "sha256:c3ebbfb906ef1edea85d2fcc3ece5103d11eeaef75b506dfa3584e9be981f1fc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#12",
+      "hash": "sha256:aab29dd642612700bcf1fcba86382d4f926a2ee1eb68ebd28b80e7a8c7da392d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#13",
+      "hash": "sha256:3de289fc492f426bd8129d4ec42a6f961f9948893b805b6d65dcc3927fda7fb3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#14",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#15",
+      "hash": "sha256:3b210d5ffeb3b5bac1f68063360149c243e4b87071730dd16a2e64afc52d66b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#16",
+      "hash": "sha256:1b36f512a8f3785f115cff732557c9af25578e701eacd87edbe2b76e71323879"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#17",
+      "hash": "sha256:d300ce3cb6055729b870ee6756d606b8487d11228c387606bef576624d090b3b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#18",
+      "hash": "sha256:8d5798086e7edab826569361ded6b21b8573164aa7bad9383c48644f3fb251f0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#19",
+      "hash": "sha256:ea6f9a6de664d115a3680f62e0df23dda12aaeb70ed6099ab22ae71340f2bb10"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#20",
+      "hash": "sha256:e06d978fa6f89a5e561d1e70fe34c37afa23e3628addea50d34d8f8b360735c5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#21",
+      "hash": "sha256:6577be6c17c20358b59e64afb1ac72ab04438510465155bf88018577f173cfbb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#22",
+      "hash": "sha256:45d3c5e1339382b33e1e984406993e4b929cf3ec88239652e5ab3f4eeed65fe9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#23",
+      "hash": "sha256:8113e05a27b8e42095850306fa595832ceaae4f576b7d9b304f3c12b66fe93d1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#24",
+      "hash": "sha256:2faea3cca137bd916d626ae28b5e3a82719dcdb6282bfbe93a0c2afa2b5b3566"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#25",
+      "hash": "sha256:8a9ebc1d105dc567d3cb11e23389e57c31539e0830d25b5ae26c4b209469818b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#26",
+      "hash": "sha256:f5c0b98d664c477c30f8ab55afba34ebcfaf00d18ef412939f4bee875afc2c31"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#27",
+      "hash": "sha256:d7c4bd0abe107dbe8c7e1a8e25a497d014f8eb1fbdf0669e8943e7755e9ed2a7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#28",
+      "hash": "sha256:41148f87f72e828710b2e560483b08d37f5824c3f3cea39e0ad75728ae4eef39"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#29",
+      "hash": "sha256:337a2f2b2e4f88cab27ae3798e4553b2cf39bd272912873423c2546f595d34b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#30",
+      "hash": "sha256:f5a4909e0dd3968608a9320f5b2f6929bfe080e2623cbf539567aadb91c532c5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#31",
+      "hash": "sha256:d3c7f94f646c01a580200cd8d10cd9c35d03e269255d350e00c7624b45d52973"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#32",
+      "hash": "sha256:b72351c9f40735041e3d0ebf02c1ce97ce9f4c0d5f2610c3b233b299af84b10d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#33",
+      "hash": "sha256:8910f67ba2e1f79623dbbe55c1d9f247e5f396f75e9a72179a6d7b5850ba35c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#34",
+      "hash": "sha256:bfb57edb88d5be0e170e0e6a7abfdb673bd1dc1a27b0e2d947db7fbe3908efbd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#35",
+      "hash": "sha256:c6d28749d8a76d49af61ae90d5d62649e385e8ecbb686ed5077925417d1b0012"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#36",
+      "hash": "sha256:6544a4c47b3fc24953e87b26f2903261632ac8aa1b3a41c1c04733b8cb7e8490"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#37",
+      "hash": "sha256:3834aa027aed071cfa2e8936d689dc96c27e45f9470ba1e3ba847cdc6f81def0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#38",
+      "hash": "sha256:0e350910b16517aabe447cdca6896921eda55e0f4c015a4dc5274f01d7f5898d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#39",
+      "hash": "sha256:4a4f2d4d6cb5c72ec9ac49e5eda4ec4472c287391b5996e60e31ec8d133eddb2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#40",
+      "hash": "sha256:1ddeadd318adeaf8a7eedaaccd0edcd9e14e9153dc0c0f156f9e03ce653f122d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#41",
+      "hash": "sha256:45181d976edbbc59b04b3ade96f6b227dff461c2c0005adbb98a5cea83425f58"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#42",
+      "hash": "sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#43",
+      "hash": "sha256:fc487705b05999d6c3ffb6cc20cd536282f6b4e8e769a2a5dd89afbdcd247aac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#44",
+      "hash": "sha256:838cb689b80ae9368b88dc056746d159dd9cb2d1bed88facacd07db45d5db64d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#45",
+      "hash": "sha256:ecf18fc04d841297c8e042e1d512430e98af0ced0087e02302b5fdb803cbcc43"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#46",
+      "hash": "sha256:1a030a19a5a8f96f5c150d2dd3d2c16070898a35eb04e360e6f94acfb9eaf163"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#47",
+      "hash": "sha256:81fa3c23da45c57fdc433dbe6cb9f8f7fb994598d6d81b4885634865fb91dd25"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#48",
+      "hash": "sha256:a6985cf851b1314ab6e71d84e20eb70041ebc859d96c4535a4bd7e8bf04c70ba"
     },
     {
       "content": "blocks",

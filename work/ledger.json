@@ -85055,10 +85055,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable",
+        "acquired_at": 1789699265,
+        "lease_expires_at": 1789706465
+      },
       "verification": {
         "argv": [
           "cargo",

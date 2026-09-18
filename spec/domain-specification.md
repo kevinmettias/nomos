@@ -117,6 +117,7 @@ profile: domain-specification
 | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md@authored | docs/records/OD-GATE-030-a-baseline-entry-is-evidence-of-an-occurrence-at-a-snapshot-and-continuity-is-not-claimed-until-it-can-be-shown.md | authored | 41 | 8 | sha256:ac575bc06aa94ff1e34178e278645a40b331da87f233d0b3bf58f97cf3e913ba |
 | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md@authored | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md | authored | 31 | 6 | sha256:a6afa613786d72b5021c8eb78a1667996d917658d7c478db9396d478dac8f4ce |
 | docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md@authored | docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md | authored | 33 | 6 | sha256:144fc0a0a362fdfb6b88913446ae17c051ff9c6c72675109af37a715a25a29a9 |
+| docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md@authored | docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md | authored | 48 | 11 | sha256:fbd373403646110ce167420a031964ee26ad49e92f21db8c9141e7a498148b4b |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -1115,6 +1116,17 @@ profile: domain-specification
 | docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#15 | authored | 2 | Decision |
 | docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#26 | authored | 2 | What This Does Not Decide |
 | docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md#32 | authored | 2 | Status |
+| docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#1 | authored | 1 | The gate has one canonical model and no local executor of it |
+| docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#14 | authored | 2 | Decision |
+| docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#15 | authored | 3 | 1. The canonical model is `.github/workflows/gate.yml` itself |
+| docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#20 | authored | 3 | 2. A local execution gives every step one of three values |
+| docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#25 | authored | 3 | 3. Enumerated against this revision |
+| docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#29 | authored | 3 | 4. Gate availability is a repository-health state, reported from evidence |
+| docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#36 | authored | 3 | 5. What this record authorizes, and what it does not do |
+| docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#39 | authored | 2 | What This Does And Does Not Invalidate |
+| docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#42 | authored | 2 | Alternatives Considered |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -30220,6 +30232,426 @@ resolves to nothing is refused rather than reported as an entry that matched not
 family's fourth derivation is named and `OD-ANALYSIS-011` is amended to carry it. `OD-GATE-030`'s
 baseline capacity question and `OD-GATE-024`'s retracted decisions are both untouched, and no
 mechanism is built here.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#1
+
+*revision: authored · kind: heading · heading: The gate has one canonical model and no local executor of it · hash: sha256:a6e431f622d8bfecd6cd26f30858a827a966cfae5f2e9fcf7d6fb557e3e6d682*
+
+# The gate has one canonical model and no local executor of it
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#2
+
+*revision: authored · kind: heading · heading: The gate has one canonical model and no local executor of it / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#3
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Question · hash: sha256:660b9a2ed4825fa8d3a2e323124189395199849f75113c299da7350c3d0d312a*
+
+The gate's authoritative executor is GitHub Actions, and it is currently unavailable —
+`OD-GATE-027` measured that and decided what a red check means while it is true. That record's
+own Recovery section assumes two things this repository does not have, and this record exists
+to decide them.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#4
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Question · hash: sha256:939df5c5c657ae7f083a2308f8a6dd155ddb5a6281b040d7f9ac901a6dcefce7*
+
+What is the canonical model of the gate's step set, such that GitHub Actions and a local
+executor both project from it rather than one restating the other? And what does a local
+execution mean for each step whose participation is host-conditional — including the steps no
+local run may claim at all?
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#5
+
+*revision: authored · kind: heading · heading: The gate has one canonical model and no local executor of it / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#6
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / What Was Measured · hash: sha256:f31fded2d016da7d810a9ced04337ae0a10e6fd351af71b89765623ed3c122e6*
+
+Taken from `.github/workflows/gate.yml` at this revision, and from a search of `crates/` and
+`tests/` for anything that reads it.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#7
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / What Was Measured · hash: sha256:35509610b59002077b9ca9cd31e635987707cc211d61de62126d39a925916bf0*
+
+The gate is one job on a two-entry matrix (`ubuntu-latest`, `windows-latest`,
+`fail-fast: false`) and declares **fifteen** steps. Which legs a step reaches is decided per
+step by an `if: matrix.os == '…'` guard, or by no guard at all.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#8
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / What Was Measured · hash: sha256:74f2f4911aad4fa62987f14055d7d48d62a4d98bfbcb233f2eb7c8f0ad5af42c*
+
+| Step | Guard | Legs | Local caller today |
+|---|---|---|---|
+| Show toolchain | none | both | none |
+| Install cargo-deny | none | both | none |
+| Lint | `ubuntu-latest` | Linux | `work finish` |
+| Test | `ubuntu-latest` | Linux | none |
+| Install compatibility floor toolchain | `ubuntu-latest` | Linux | none |
+| Compatibility floor | `ubuntu-latest` | Linux | none |
+| Determinism | `windows-latest` | Windows | none |
+| Install freestanding targets | `ubuntu-latest` | Linux | none |
+| Portability floor | `ubuntu-latest` | Linux | none |
+| Boundaries | none | both | none |
+| XVPE crossing (cold by construction) | `ubuntu-latest` | Linux | none |
+| Required projections | none | both | none |
+| Rules | `ubuntu-latest` | Linux | none |
+| Supply chain | `ubuntu-latest` | Linux | none |
+| Corpus gates (reports what did not run) | `ubuntu-latest` | Linux | none |
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#9
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / What Was Measured · hash: sha256:b8a7627fc95575343886d09e5bfb706791f4721f8ed91551dcdae4126c4378bf*
+
+Four steps are unguarded and run on both legs. Ten are Linux-only. One, `Determinism`, is
+Windows-only. Exactly **one step has a local caller**, and it is `Lint`:
+`crates/substrate/nomos-ledger/src/gate_unknown.rs` names `LINT_STEP` and
+`nomos_ledger::Derive_Step` reads the workflow to produce its argv, so `work finish` runs the
+gate's lint step before an item's predicate.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#10
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / What Was Measured · hash: sha256:d45ea662df31e91482cfa3bc9fe3b1540833ecf4512b5f03e98fb1b2354d14ae*
+
+**What already reads the file, and why that matters.** The derivation is not the only reader,
+and none of them restates what they read. `Derive_Step` and `Workflow_Path` parse it;
+`crates/host/nomos-cli/tests/gate_step/lint_step.rs` asserts the derivation against the real
+file; `step_order.rs` asserts every `cargo install` precedes the first `cargo test`;
+`excuses.rs` refuses `continue-on-error` by name; `pinning.rs` requires every `uses:` to be a
+commit; and `tests/contract/tests/agent_harness/readers.rs` derives the gate's own command
+list from its `run:` lines. The module doc states the reason in as many words: a copy of the
+lint command in that crate "is a second source of truth that goes stale the day the workflow
+changes, and two guards for one rule is how they come to disagree."
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#11
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / What Was Measured · hash: sha256:c3ebbfb906ef1edea85d2fcc3ece5103d11eeaef75b506dfa3584e9be981f1fc*
+
+**The gap this record is about.** Nothing reads a guard. A search of `crates/` and `tests/`
+for `matrix.os`, and for any prefix `if:`, returns nothing. `Find_Run` moves between steps on
+`- name:` and `name:` and returns the first `run:` inside the one it wants, ignoring every
+other key — the workflow says so itself at the `Lint` step, and calls that deliberate for
+`work finish`'s purpose.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#12
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / What Was Measured · hash: sha256:aab29dd642612700bcf1fcba86382d4f926a2ee1eb68ebd28b80e7a8c7da392d*
+
+The consequence is exact. An executor projected from the workflow by the existing derivation
+would treat `Determinism` as an ordinary step, because the only thing distinguishing it is the
+key that reader discards. On a Linux host it would either run a Windows-only step's command or
+skip it, and a skip reported as a clean result is the defect the `Portability floor` step
+already refuses for its own subject: that step fails when its derived crate list is empty
+because "a gate that cannot find its subject must say so rather than report a clean result
+over nothing."
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#13
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / What Was Measured · hash: sha256:3de289fc492f426bd8129d4ec42a6f961f9948893b805b6d65dcc3927fda7fb3*
+
+`GateUnknown` already carries the refusal vocabulary for the other half — `Unreadable`,
+`NoSuchStep` and `NotASingleCommand` — and its doc states the principle this record extends to
+guards: "a guessed predicate is the defect this module exists to close," and "unknown gate
+coverage is not gate coverage."
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#14
+
+*revision: authored · kind: heading · heading: The gate has one canonical model and no local executor of it / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#15
+
+*revision: authored · kind: heading · heading: The gate has one canonical model and no local executor of it / Decision / 1. The canonical model is `.github/workflows/gate.yml` itself · hash: sha256:3b210d5ffeb3b5bac1f68063360149c243e4b87071730dd16a2e64afc52d66b1*
+
+### 1. The canonical model is `.github/workflows/gate.yml` itself
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#16
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 1. The canonical model is `.github/workflows/gate.yml` itself · hash: sha256:1b36f512a8f3785f115cff732557c9af25578e701eacd87edbe2b76e71323879*
+
+The workflow file is the model. GitHub Actions and a local executor both project from it, and
+neither holds a copy of the step set.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#17
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 1. The canonical model is `.github/workflows/gate.yml` itself · hash: sha256:d300ce3cb6055729b870ee6756d606b8487d11228c387606bef576624d090b3b*
+
+The reason is not that the file is convenient. It is that the file is the only artifact that
+is simultaneously what the authoritative executor runs and what every local reader already
+parses. Actions executes this file and nothing else, so any other model would be authoritative
+about something nobody executes — a declaration whose divergence from the file that runs would
+be invisible. And the readers above already treat it as the authority in fact, each of them
+written specifically so that it cannot disagree with the file.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#18
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 1. The canonical model is `.github/workflows/gate.yml` itself · hash: sha256:8d5798086e7edab826569361ded6b21b8573164aa7bad9383c48644f3fb251f0*
+
+A declaration the workflow were rendered from is refused for two reasons, either of which is
+sufficient. It puts a second artifact between the policy and the executor, so the gate could be
+green while the declaration and the executed file disagreed — `OD-GATE-011`'s defect at the
+gate's own root. And the rendered workflow would be a projection nobody owns, which is the
+state `OD-GATE-005` records for `diagrams/relations.mmd` and `spec/domain-specification.md`,
+and which already fails the gate when it goes stale.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#19
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 1. The canonical model is `.github/workflows/gate.yml` itself · hash: sha256:ea6f9a6de664d115a3680f62e0df23dda12aaeb70ed6099ab22ae71340f2bb10*
+
+**What this does not claim.** The file is YAML in the Actions dialect, its `run:` bodies are
+shell, and its guard vocabulary is GitHub's expression language rather than this workspace's.
+The model is the file; the *reading* of it is a closed subset that this workspace implements
+and refuses outside of. That subset is currently `name:`/`run:` for one named step, and
+decision 2 states what it must grow to.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#20
+
+*revision: authored · kind: heading · heading: The gate has one canonical model and no local executor of it / Decision / 2. A local execution gives every step one of three values · hash: sha256:e06d978fa6f89a5e561d1e70fe34c37afa23e3628addea50d34d8f8b360735c5*
+
+### 2. A local execution gives every step one of three values
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#21
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 2. A local execution gives every step one of three values · hash: sha256:6577be6c17c20358b59e64afb1ac72ab04438510465155bf88018577f173cfbb*
+
+`Executed(exit)` — the step's guard admits this host, and its `run:` derived, so it ran here
+and this is what it exited with.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#22
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 2. A local execution gives every step one of three values · hash: sha256:45d3c5e1339382b33e1e984406993e4b929cf3ec88239652e5ab3f4eeed65fe9*
+
+`Unavailable(host)` — the step's guard does not admit this host, so this execution produced no
+evidence about it. Reported as unavailable. Never as a pass, and never as a skip whose absence
+is unmentioned.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#23
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 2. A local execution gives every step one of three values · hash: sha256:8113e05a27b8e42095850306fa595832ceaae4f576b7d9b304f3c12b66fe93d1*
+
+`Refused(cause)` — the guard, or the `run:` body, uses a form outside the subset. `GateUnknown`
+already names the three causes for the `run:` half; the guard half needs the same treatment,
+and a guard the executor does not implement must refuse the step rather than guess which leg it
+selects.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#24
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 2. A local execution gives every step one of three values · hash: sha256:2faea3cca137bd916d626ae28b5e3a82719dcdb6282bfbe93a0c2afa2b5b3566*
+
+The forbidden fourth value is a subset reported as clean. It is `OD-GATE-001` and
+`OD-GATE-020` one level up, and the file's own precedent for refusing it is the `Portability
+floor` step.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#25
+
+*revision: authored · kind: heading · heading: The gate has one canonical model and no local executor of it / Decision / 3. Enumerated against this revision · hash: sha256:8a9ebc1d105dc567d3cb11e23389e57c31539e0830d25b5ae26c4b209469818b*
+
+### 3. Enumerated against this revision
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#26
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 3. Enumerated against this revision · hash: sha256:f5c0b98d664c477c30f8ab55afba34ebcfaf00d18ef412939f4bee875afc2c31*
+
+The four unguarded steps — `Show toolchain`, `Install cargo-deny`, `Boundaries`, `Required
+projections` — execute on either host. The ten Linux-only steps execute on a Linux local host
+and are `Unavailable(Linux)` on Windows. `Determinism` executes on a Windows host and is
+`Unavailable(Windows)` on Linux.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#27
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 3. Enumerated against this revision · hash: sha256:d7c4bd0abe107dbe8c7e1a8e25a497d014f8eb1fbdf0669e8943e7755e9ed2a7*
+
+**A local run reports the set it did not execute.** The precedent is the `Corpus gates` step,
+which exists for exactly this reason: cargo swallows a passing test's output, so the absence of
+three corpora from a runner would otherwise be invisible, and `--nocapture` is what makes it
+appear. A local run's unavailable set is the same kind of hole and gets the same treatment.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#28
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 3. Enumerated against this revision · hash: sha256:41148f87f72e828710b2e560483b08d37f5824c3f3cea39e0ad75728ae4eef39*
+
+**A local run cannot substitute for the second leg, and must say so.** `Boundaries` and
+`Required projections` run on both legs because their subjects vary by host — directory
+iteration order, filename case, path separators, and for `Required projections` a content hash
+recomputed over the rendered bytes. One host's local run answers that host's question. The
+Windows-only step cannot be answered from Linux at all. An executor that reported one clean
+result for both legs would be claiming the second leg on evidence it never took.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#29
+
+*revision: authored · kind: heading · heading: The gate has one canonical model and no local executor of it / Decision / 4. Gate availability is a repository-health state, reported from evidence · hash: sha256:337a2f2b2e4f88cab27ae3798e4553b2cf39bd272912873423c2546f595d34b1*
+
+### 4. Gate availability is a repository-health state, reported from evidence
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#30
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 4. Gate availability is a repository-health state, reported from evidence · hash: sha256:f5a4909e0dd3968608a9320f5b2f6929bfe080e2623cbf539567aadb91c532c5*
+
+Availability is a state distinct from pass and fail, and it borrows the vocabulary this
+workspace already owns rather than declaring a parallel one — `Applicability` separates
+`MissingCapability` and `ProviderUnavailable` from a judgment, and
+`SynchronizationState::Unavailable` records that unavailable is neither agreement nor
+divergence. `OD-GATE-027` made that decision; this record supplies the mechanism, and does not
+restate the decision.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#31
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 4. Gate availability is a repository-health state, reported from evidence · hash: sha256:d3c7f94f646c01a580200cd8d10cd9c35d03e269255d350e00c7624b45d52973*
+
+**The surface is a gate execution report.** One report describes one execution: the step set it
+projected from, the source revision, the host, each step's value from decision 2, and when it
+ran. Availability is then computed rather than fetched. A step a report covers is available on
+that report's evidence; a step no report covers is `Unavailable`, and an execution carrying any
+`Refused` step is not evidence about that step.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#32
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 4. Gate availability is a repository-health state, reported from evidence · hash: sha256:b72351c9f40735041e3d0ebf02c1ce97ce9f4c0d5f2610c3b233b299af84b10d*
+
+What a reader sees is therefore per step and never a single bit: `executed(0)` and
+`unavailable(no execution since <revision>)` are different lines, where today both are one red
+check. That difference is the whole content of `OD-GATE-027`, and nothing reports it. The
+surface must be reachable from the command line rather than present only in prose — a state
+that can be read only by someone who already knows it exists is the shape `OD-GATE-001`
+refuses.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#33
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 4. Gate availability is a repository-health state, reported from evidence · hash: sha256:8910f67ba2e1f79623dbbe55c1d9f247e5f396f75e9a72179a6d7b5850ba35c1*
+
+**Deliberately not by reading GitHub's run history.** Availability computed from an API would
+depend on the network and on a settings page — `OD-GATE-027` names a billing matter as the
+cause — so the state could not be computed in the tree that needs it, which is the tree a
+session is working in. Availability computed from evidence in hand is computable everywhere,
+and it answers the question that matters: not "is the scheduler up" but "what has actually
+been executed, and what has not".
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#34
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 4. Gate availability is a repository-health state, reported from evidence · hash: sha256:bfb57edb88d5be0e170e0e6a7abfdb673bd1dc1a27b0e2d947db7fbe3908efbd*
+
+A fresh clone with no report genuinely has no gate evidence, and reads `Unavailable` for every
+step. That is the correct answer rather than a defect: the alternative is the corpora situation
+`tests/contract/` already declares, where a test that cannot find its corpus returns early and
+prints `ok`.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#35
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 4. Gate availability is a repository-health state, reported from evidence · hash: sha256:c6d28749d8a76d49af61ae90d5d62649e385e8ecbb686ed5077925417d1b0012*
+
+`OD-GATE-027`'s retirement is unchanged and is not re-decided here. The first successful hosted
+run ends the state by observation rather than by decision.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#36
+
+*revision: authored · kind: heading · heading: The gate has one canonical model and no local executor of it / Decision / 5. What this record authorizes, and what it does not do · hash: sha256:6544a4c47b3fc24953e87b26f2903261632ac8aa1b3a41c1c04733b8cb7e8490*
+
+### 5. What this record authorizes, and what it does not do
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#37
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 5. What this record authorizes, and what it does not do · hash: sha256:3834aa027aed071cfa2e8936d689dc96c27e45f9470ba1e3ba847cdc6f81def0*
+
+It authorizes a second executor that projects from the model in decision 1, produces the values
+in decision 2 for every step in decision 3, and reports the surface in decision 4 — filed as
+its own item with its own territory, because it touches the CLI and the ledger rather than
+these records.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#38
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Decision / 5. What this record authorizes, and what it does not do · hash: sha256:0e350910b16517aabe447cdca6896921eda55e0f4c015a4dc5274f01d7f5898d*
+
+It does not build that executor. It does not narrow the gap `LINT_STEP` records: a per-item
+predicate stays authored per item, because a scoped test is what such a predicate is for —
+running the whole workspace on every finish costs minutes, and a finish that costs minutes is
+one that gets skipped.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#39
+
+*revision: authored · kind: heading · heading: The gate has one canonical model and no local executor of it / What This Does And Does Not Invalidate · hash: sha256:4a4f2d4d6cb5c72ec9ac49e5eda4ec4472c287391b5996e60e31ec8d133eddb2*
+
+## What This Does And Does Not Invalidate
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#40
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / What This Does And Does Not Invalidate · hash: sha256:1ddeadd318adeaf8a7eedaaccd0edcd9e14e9153dc0c0f156f9e03ce653f122d*
+
+Nothing here weakens `OD-GATE-027`'s position, and the two errors it separates stay separate.
+Every commit in the unavailability window carries the verification its own item declared, and
+that evidence really was produced. What remains unverified is remote full-gate execution
+evidence, and this record adds the second thing it was missing: a way for the steps that
+predicate never covered — `Determinism` above all, which no item predicate on this board runs —
+to be seen as uncovered rather than assumed covered.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#41
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / What This Does And Does Not Invalidate · hash: sha256:45181d976edbbc59b04b3ade96f6b227dff461c2c0005adbb98a5cea83425f58*
+
+Replay is not owed by default, for the reason `OD-GATE-027` gives. Re-running a week of history
+to produce evidence nobody asked for is work this repository declines elsewhere for the same
+reason.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#42
+
+*revision: authored · kind: heading · heading: The gate has one canonical model and no local executor of it / Alternatives Considered · hash: sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83*
+
+## Alternatives Considered
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#43
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Alternatives Considered · hash: sha256:fc487705b05999d6c3ffb6cc20cd536282f6b4e8e769a2a5dd89afbdcd247aac*
+
+**A declaration the workflow is rendered from.** Rejected in decision 1: it inserts a second
+artifact between the policy and the executor, making a green gate compatible with the two
+disagreeing, and the rendered file would be a projection nobody owns.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#44
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Alternatives Considered · hash: sha256:838cb689b80ae9368b88dc056746d159dd9cb2d1bed88facacd07db45d5db64d*
+
+**A shell script that reimplements the steps locally.** Rejected. The second copy is precisely
+what `OD-GATE-004` and `OD-GATE-011` refuse, and it would drift from the file `work finish`
+already derives from — which is why this item is a decision rather than a script.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#45
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Alternatives Considered · hash: sha256:ecf18fc04d841297c8e042e1d512430e98af0ced0087e02302b5fdb803cbcc43*
+
+**Deriving a local argv for every step by reusing `Derive_Step`.** Rejected: it ignores the
+guard by construction, so it would run `Determinism` on Linux or drop it silently. Deriving an
+argv and deciding whether that argv should run here are two questions, and only the first
+exists today.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#46
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Alternatives Considered · hash: sha256:1a030a19a5a8f96f5c150d2dd3d2c16070898a35eb04e360e6f94acfb9eaf163*
+
+**Treating a locally-green run as evidence the hosted gate passed.** Rejected as
+`OD-GATE-027`'s error in the other direction. One host cannot answer the other leg's question,
+and `Determinism` cannot run on the wrong one at all.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#47
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Alternatives Considered · hash: sha256:81fa3c23da45c57fdc433dbe6cb9f8f7fb994598d6d81b4885634865fb91dd25*
+
+**Reading GitHub's run history to compute availability.** Rejected in decision 4: it makes
+repository health depend on a network API and on a settings page, so the state could not be
+computed where it is needed.
+
+### docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#48
+
+*revision: authored · kind: prose · heading: The gate has one canonical model and no local executor of it / Alternatives Considered · hash: sha256:a6985cf851b1314ab6e71d84e20eb70041ebc859d96c4535a4bd7e8bf04c70ba*
+
+**Reporting a host-unavailable subset as clean.** Rejected: the `Portability floor` precedent,
+and `OD-GATE-001`'s defect with one more layer between the reader and the absence.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 
