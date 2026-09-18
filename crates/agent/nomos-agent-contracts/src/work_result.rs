@@ -1,5 +1,6 @@
 //! What an agent-assisted operation hands back when it is done.
 
+use crate::Substantiation;
 use nomos_contracts::Finding;
 use nomos_corrections::CorrectionPlan;
 use nomos_scope_verification::VerificationPredicate;
@@ -27,6 +28,12 @@ use nomos_scope_verification::VerificationPredicate;
 /// this field's type would fabricate a correction nobody put forward. `OD-CONTRACTS-003`
 /// found this directly: `nomos-agent-executor-claude-code`, this crate's own first real caller, could
 /// not construct a `WorkResult` for exactly this reason.
+///
+/// `OD-EXECUTOR-011` found the consequence of that tolerance: those absences were
+/// indistinguishable from one another. `plan: None` and `claims: []` read the same whether the
+/// task genuinely produced none or the producing executor could not ground the portion at all,
+/// and the only carrier of the difference was prose. The `substantiation` field below is that
+/// record's answer -- the value now states, per portion, which of the two it is.
 #[derive(Clone, Debug, PartialEq)]
 pub struct WorkResult
 {
@@ -36,12 +43,24 @@ pub struct WorkResult
     pub requested_verification: Option<VerificationPredicate>,
     pub assumptions: Vec<String>,
     pub unresolved_questions: Vec<String>,
+    /// What the producing executor could substantiate, one entry per portion above.
+    ///
+    /// A reader asks this value directly -- `result.substantiation.plan` -- rather than
+    /// inferring from an empty field, and a seventh field added above is a compile error here
+    /// until its entry is declared, because the six entries are named rather than positional.
+    /// The rule this carries, so it is derived rather than looked up: an entry declared
+    /// [`Substantiated`](crate::PortionSubstantiation::Substantiated) whose value is empty
+    /// means the task produced none, and an entry declared
+    /// [`Unsubstantiated`](crate::PortionSubstantiation::Unsubstantiated) means the value says
+    /// nothing about the task whatever it holds.
+    pub substantiation: Substantiation,
 }
 
 #[cfg(test)]
 mod tests
 {
     use super::*;
+    use crate::PortionSubstantiation;
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
     use nomos_corrections::{ChangeSet, CorrectionCandidate, CorrectionClass, Edit};
 
@@ -74,6 +93,18 @@ mod tests
             requested_verification: Some(VerificationPredicate::From_String_Arguments(vec!["cargo".to_owned(), "test".to_owned(), "--no-fail-fast".to_owned(), "-p".to_owned(), "nomos-contract-tests".to_owned()])),
             assumptions: vec!["the module is wired into lib.rs before this runs".to_owned()],
             unresolved_questions: vec![],
+            // This fixture is its own producer and built every value above itself, so it
+            // grounded every portion: the empty `unresolved_questions` means this producer
+            // produced none, which is what a Substantiated entry licenses and the whole
+            // reason the entry is not left out.
+            substantiation: Substantiation {
+                plan: PortionSubstantiation::Substantiated,
+                claims: PortionSubstantiation::Substantiated,
+                tests: PortionSubstantiation::Substantiated,
+                requested_verification: PortionSubstantiation::Substantiated,
+                assumptions: PortionSubstantiation::Substantiated,
+                unresolved_questions: PortionSubstantiation::Substantiated,
+            },
         };
 
         assert!(result.plan.is_some());
@@ -108,6 +139,18 @@ mod tests
             requested_verification: None,
             assumptions: vec![],
             unresolved_questions: vec!["does this warrant a follow-up correction?".to_owned()],
+            // Grounded for the reason the fixture above is: this test is the producer, and it
+            // held this claim itself rather than reading it from a model. The three absent
+            // portions therefore mean this task proposed none -- not that a dispatch could not
+            // have grounded them, which is a different declaration and a different value.
+            substantiation: Substantiation {
+                plan: PortionSubstantiation::Substantiated,
+                claims: PortionSubstantiation::Substantiated,
+                tests: PortionSubstantiation::Substantiated,
+                requested_verification: PortionSubstantiation::Substantiated,
+                assumptions: PortionSubstantiation::Substantiated,
+                unresolved_questions: PortionSubstantiation::Substantiated,
+            },
         };
 
         assert!(result.plan.is_none());

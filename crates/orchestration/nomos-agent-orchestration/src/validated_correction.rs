@@ -59,6 +59,7 @@ pub fn Run_Validated_Correction(
 mod tests
 {
     use super::*;
+    use nomos_agent_contracts::{PortionSubstantiation, Substantiation};
     use nomos_contracts::{ConfigurationId, Digest128, EvidenceClass, ProviderId};
     use nomos_corrections::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionPlan, Edit};
     use nomos_model::Content_Digest;
@@ -127,6 +128,9 @@ mod tests
         assert_eq!(workspace.Id(), starting);
     }
 
+    /// The declared portions are all grounded because this module is their producer and
+    /// built them itself, so the absent ones mean this task proposed none rather than that
+    /// a dispatch could not ground them (`OD-EXECUTOR-011`).
     fn Judgment_Only_Result() -> WorkResult
     {
         return WorkResult {
@@ -136,6 +140,14 @@ mod tests
             requested_verification: None,
             assumptions: Vec::new(),
             unresolved_questions: vec!["does this warrant a follow-up correction?".to_owned()],
+            substantiation: Substantiation {
+                plan: PortionSubstantiation::Substantiated,
+                claims: PortionSubstantiation::Substantiated,
+                tests: PortionSubstantiation::Substantiated,
+                requested_verification: PortionSubstantiation::Substantiated,
+                assumptions: PortionSubstantiation::Substantiated,
+                unresolved_questions: PortionSubstantiation::Substantiated,
+            },
         };
     }
 
@@ -175,6 +187,17 @@ mod tests
             requested_verification: None,
             assumptions: Vec::new(),
             unresolved_questions: Vec::new(),
+            // Grounded for the reason `Judgment_Only_Result`'s own declaration is: this
+            // module built the plan it proposes, so the portions it left absent are ones it
+            // had nothing to say about rather than ones no dispatch could have grounded.
+            substantiation: Substantiation {
+                plan: PortionSubstantiation::Substantiated,
+                claims: PortionSubstantiation::Substantiated,
+                tests: PortionSubstantiation::Substantiated,
+                requested_verification: PortionSubstantiation::Substantiated,
+                assumptions: PortionSubstantiation::Substantiated,
+                unresolved_questions: PortionSubstantiation::Substantiated,
+            },
         };
     }
 

@@ -11,7 +11,7 @@
 use nomos_agent_contracts::WorkResult;
 use xvpe_agent_execution::AgentOutcome;
 
-use crate::{AgentExecutionError, AgentExecutionOutcome};
+use crate::{AgentExecutionError, AgentExecutionOutcome, WORK_RESULT_SUBSTANTIATION};
 
 /// The engine's outcome, as this workspace's.
 ///
@@ -43,6 +43,12 @@ pub(crate) fn Outcome_For(
 /// stay structurally absent rather than model-filled: this dispatch has no honest grounding for
 /// any of them, only for the judgment `assumptions` and `unresolved_questions`
 /// name.
+///
+/// The result carries [`WORK_RESULT_SUBSTANTIATION`] rather than leaving a reader to
+/// take that sentence on trust: the declaration is the crate's, stated once in `lib.rs`
+/// beside `JSON_SCHEMA`, so every result built here states which portions it could ground
+/// and a consumer holding only the value can tell the two kinds of emptiness apart
+/// (`OD-EXECUTOR-011`).
 fn Work_Result(answer: &str) -> Result<WorkResult, AgentExecutionError>
 {
     let document: serde_json::Value = serde_json::from_str(answer).map_err(|error| {
@@ -58,6 +64,7 @@ fn Work_Result(answer: &str) -> Result<WorkResult, AgentExecutionError>
         requested_verification: None,
         assumptions: String_Array(&document, "assumptions")?,
         unresolved_questions: String_Array(&document, "unresolved_questions")?,
+        substantiation: WORK_RESULT_SUBSTANTIATION,
     });
 }
 

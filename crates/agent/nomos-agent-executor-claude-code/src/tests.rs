@@ -50,6 +50,12 @@ const ANSWER_BECOMES_A_RESULT: &str = "a validated answer builds the work result
 /// A work result claims only what this dispatch can ground.
 const RESULT_CLAIMS_ONLY_WHAT_IS_GROUNDED: &str =
     "plan, claims, tests and requested verification stay structurally absent";
+/// The declaration the result carries is the one this crate publishes.
+const RESULT_CARRIES_ITS_DECLARATION: &str =
+    "the result carries the substantiation declaration this crate publishes";
+/// A substantiated portion is what makes its emptiness mean the task produced none.
+const SUBSTANTIATED_MEANS_PRODUCED_NONE: &str =
+    "a portion the dispatch did read is declared substantiated, so its emptiness means the model produced none";
 /// An answer that never validated is refused rather than coerced.
 const MALFORMED_IS_REFUSED: &str = "an answer that is not the promised document is refused";
 /// A caller-chosen directory must actually be used.
@@ -212,6 +218,24 @@ fn Test_A_Validated_Answer_Should_Build_The_Work_Result()
     assert!(outcome.result.tests.is_empty(), "{RESULT_CLAIMS_ONLY_WHAT_IS_GROUNDED}");
     assert!(
         outcome.result.requested_verification.is_none(),
+        "{RESULT_CLAIMS_ONLY_WHAT_IS_GROUNDED}"
+    );
+    // The four assertions above are what `OD-EXECUTOR-011` found indistinguishable from a task
+    // that produced none. What follows is the declaration that separates them, asserted in
+    // both directions because either half alone is passable by a declaration that says nothing:
+    // the portions that were read are declared substantiated, so their emptiness means the
+    // model produced none, and the four that were never read are declared unsubstantiated, so
+    // their emptiness cannot be misread as a task that produced none. The first assertion is
+    // decision 4 -- the result carries the crate's own published declaration rather than an
+    // equal-looking one built at this call site -- and it is checked for all six portions, so a
+    // call site that diverged from `response.rs` in any single entry reddens here.
+    assert_eq!(outcome.result.substantiation, WORK_RESULT_SUBSTANTIATION, "{RESULT_CARRIES_ITS_DECLARATION}");
+    assert!(
+        outcome.result.substantiation.assumptions.Is_Substantiated(),
+        "{SUBSTANTIATED_MEANS_PRODUCED_NONE}"
+    );
+    assert!(
+        !outcome.result.substantiation.plan.Is_Substantiated(),
         "{RESULT_CLAIMS_ONLY_WHAT_IS_GROUNDED}"
     );
 }

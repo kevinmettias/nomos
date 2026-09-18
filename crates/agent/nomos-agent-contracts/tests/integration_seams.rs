@@ -1,12 +1,15 @@
-//! Each of `nomos-agent-contracts`'s field types is a direct reuse of a type from a
-//! sibling crate (`work_result.rs`'s own doc comment says so), so the real contract this
-//! crate stands behind is that a value built by that sibling crate is one its own public
-//! structs can carry and hand back unchanged. Compiled outside `src/`, this file can only
+//! Each of `nomos-agent-contracts`'s six `WorkResult` field types is a direct reuse of a
+//! type from a sibling crate (`work_result.rs`'s own doc comment says so), so the real
+//! contract this crate stands behind is that a value built by that sibling crate is one its
+//! own public structs can carry and hand back unchanged. `Substantiation` is the one type
+//! that is not a reuse — it is this crate's own vocabulary, added by `OD-EXECUTOR-011` — and
+//! it is exercised here too, since a consumer reaching this crate from outside `src/` reads
+//! it the same way it reads the others. Compiled outside `src/`, this file can only
 //! reach `nomos_contracts`, `nomos_corrections` and `nomos_scope_verification` through
 //! `nomos-agent-contracts`'s own public API — the same view a real consumer has, unlike
 //! an internal `#[cfg(test)]` module which can also see private items on either side.
 
-use nomos_agent_contracts::{TaskEnvelope, WorkResult};
+use nomos_agent_contracts::{PortionSubstantiation, Substantiation, TaskEnvelope, WorkResult};
 use nomos_contracts::{CapabilityId, Finding, KnowledgeReferenceId, RuleId, SchemaId};
 use nomos_corrections::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionPlan, Edit};
 use nomos_model_package::EffortLevel;
@@ -53,6 +56,14 @@ fn Test_A_Work_Results_Requested_Verification_Is_A_Real_Runnable_Predicate()
         ])),
         assumptions: vec![],
         unresolved_questions: vec![],
+        substantiation: Substantiation {
+            plan: PortionSubstantiation::Substantiated,
+            claims: PortionSubstantiation::Substantiated,
+            tests: PortionSubstantiation::Substantiated,
+            requested_verification: PortionSubstantiation::Substantiated,
+            assumptions: PortionSubstantiation::Substantiated,
+            unresolved_questions: PortionSubstantiation::Substantiated,
+        },
     };
     let unrunnable = WorkResult {
         requested_verification: Some(VerificationPredicate::From_String_Arguments(Vec::new())),
@@ -99,6 +110,12 @@ fn Test_A_Work_Results_Plan_Is_A_Real_Correction_Plan_And_An_Empty_One_Is_Refuse
 
 /// A judgment-only `WorkResult` (`plan: None`) — the shape `OD-CONTRACTS-003` exists for,
 /// reused as the base for the two tests above so each varies only the field it is about.
+///
+/// It carries the all-grounded substantiation declaration, so the two results derived from
+/// it by functional update inherit that rather than restating it. Grounded here means the
+/// test itself is the producer and built every one of these values by hand, so the empty
+/// ones mean this task produced none — the reading `OD-EXECUTOR-011` requires a
+/// `Substantiated` entry to license.
 fn Blank_Judgment_Only_Result() -> WorkResult
 {
     return WorkResult {
@@ -108,5 +125,13 @@ fn Blank_Judgment_Only_Result() -> WorkResult
         requested_verification: None,
         assumptions: vec![],
         unresolved_questions: vec![],
+        substantiation: Substantiation {
+            plan: PortionSubstantiation::Substantiated,
+            claims: PortionSubstantiation::Substantiated,
+            tests: PortionSubstantiation::Substantiated,
+            requested_verification: PortionSubstantiation::Substantiated,
+            assumptions: PortionSubstantiation::Substantiated,
+            unresolved_questions: PortionSubstantiation::Substantiated,
+        },
     };
 }

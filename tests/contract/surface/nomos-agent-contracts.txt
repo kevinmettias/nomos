@@ -1,9 +1,17 @@
 pub enum nomos_agent_contracts::ChangeContextSubject
+pub enum nomos_agent_contracts::PortionSubstantiation
+pub enum nomos_agent_contracts::UnsubstantiatedReason
 pub enum variant nomos_agent_contracts::ChangeContextSubject::Scope(Territory)
 pub enum variant nomos_agent_contracts::ChangeContextSubject::Symbol(SubjectId)
 pub enum variant nomos_agent_contracts::ChangeContextSubject::TaskDescription(String)
+pub enum variant nomos_agent_contracts::PortionSubstantiation::Substantiated
+pub enum variant nomos_agent_contracts::PortionSubstantiation::Unsubstantiated(UnsubstantiatedReason)
+pub enum variant nomos_agent_contracts::UnsubstantiatedReason::ProducerCannotGround
 pub fn nomos_agent_contracts::IsolatedWorkingDirectoryError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_agent_contracts::Isolated_Working_Directory(prefix: &str) -> Result<PathBuf, IsolatedWorkingDirectoryError>
+pub fn nomos_agent_contracts::PortionSubstantiation::Describe(&self) -> String
+pub fn nomos_agent_contracts::PortionSubstantiation::Is_Substantiated(&self) -> bool
+pub fn nomos_agent_contracts::UnsubstantiatedReason::Describe(&self) -> String
 pub impl nomos_agent_contracts::IsolatedWorkingDirectoryError implements core::fmt::Display
 pub struct field nomos_agent_contracts::IsolatedWorkingDirectoryError::cause: std::io::Error
 pub struct field nomos_agent_contracts::IsolatedWorkingDirectoryError::path: PathBuf
@@ -15,6 +23,12 @@ pub struct field nomos_agent_contracts::NomosResolvedChangeContext::requested: C
 pub struct field nomos_agent_contracts::NomosResolvedChangeContext::required_verification: Vec<VerificationPredicate>
 pub struct field nomos_agent_contracts::NomosResolvedChangeContext::snapshot: SnapshotId
 pub struct field nomos_agent_contracts::NomosResolvedChangeContext::variant: BuildVariantId
+pub struct field nomos_agent_contracts::Substantiation::assumptions: PortionSubstantiation
+pub struct field nomos_agent_contracts::Substantiation::claims: PortionSubstantiation
+pub struct field nomos_agent_contracts::Substantiation::plan: PortionSubstantiation
+pub struct field nomos_agent_contracts::Substantiation::requested_verification: PortionSubstantiation
+pub struct field nomos_agent_contracts::Substantiation::tests: PortionSubstantiation
+pub struct field nomos_agent_contracts::Substantiation::unresolved_questions: PortionSubstantiation
 pub struct field nomos_agent_contracts::TaskEnvelope::applicable_rules: Vec<RuleId>
 pub struct field nomos_agent_contracts::TaskEnvelope::available_tools: Vec<CapabilityId>
 pub struct field nomos_agent_contracts::TaskEnvelope::effort: EffortLevel
@@ -27,9 +41,11 @@ pub struct field nomos_agent_contracts::WorkResult::assumptions: Vec<String>
 pub struct field nomos_agent_contracts::WorkResult::claims: Vec<Finding>
 pub struct field nomos_agent_contracts::WorkResult::plan: Option<CorrectionPlan>
 pub struct field nomos_agent_contracts::WorkResult::requested_verification: Option<VerificationPredicate>
+pub struct field nomos_agent_contracts::WorkResult::substantiation: Substantiation
 pub struct field nomos_agent_contracts::WorkResult::tests: Vec<VerificationPredicate>
 pub struct field nomos_agent_contracts::WorkResult::unresolved_questions: Vec<String>
 pub struct nomos_agent_contracts::IsolatedWorkingDirectoryError
 pub struct nomos_agent_contracts::NomosResolvedChangeContext
+pub struct nomos_agent_contracts::Substantiation
 pub struct nomos_agent_contracts::TaskEnvelope
 pub struct nomos_agent_contracts::WorkResult

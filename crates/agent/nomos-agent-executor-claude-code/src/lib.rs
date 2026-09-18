@@ -36,6 +36,13 @@
 //! real file and computed no real digest by the time it answers, so nothing here
 //! has an honest grounding for any of the four. A schema can only make the
 //! *shape* conform, and a conforming lie is not the goal.
+//!
+//! Absent is not the same as unstated, though, which is what `OD-EXECUTOR-011` decided: a
+//! consumer holding a `WorkResult` could not tell a portion the task produced none for from a
+//! portion this crate could never ground, because both read as empty. [`WORK_RESULT_SUBSTANTIATION`]
+//! is published beside [`JSON_SCHEMA`] for that reason -- the schema says what shape the model
+//! may return, the declaration says what this crate grounded -- and every result built here
+//! carries it.
 
 #![forbid(unsafe_code)]
 
@@ -53,7 +60,7 @@ pub use xvpe_agent_execution::MicroDollars;
 
 use std::path::{Path, PathBuf};
 
-use nomos_agent_contracts::TaskEnvelope;
+use nomos_agent_contracts::{PortionSubstantiation, Substantiation, TaskEnvelope, UnsubstantiatedReason};
 use nomos_model_package::EffortLevel;
 use nomos_platform::ProgramLauncher;
 use nomos_platform_xvpe::XvpeLauncher;
@@ -72,6 +79,30 @@ use xvpe_agent_execution::{
 /// the model's own text named the reason — `additionalProperties: false` refused
 /// the extra key structurally.
 pub const JSON_SCHEMA: &str = r#"{"type":"object","properties":{"assumptions":{"type":"array","items":{"type":"string"}},"unresolved_questions":{"type":"array","items":{"type":"string"}}},"required":["assumptions","unresolved_questions"],"additionalProperties":false}"#;
+
+/// What this crate could substantiate about the work results it builds.
+///
+/// Published beside [`JSON_SCHEMA`] because the two answer different questions about the same
+/// artifact and both are facts about this crate rather than about one invocation: the schema
+/// says what shape the model may return, this says what the crate grounded.
+///
+/// The four portions the module doc above explains are declared unsubstantiated rather than
+/// left to be misread as empty, and the two read from the answer are substantiated --
+/// `String_Array` in `response.rs` refuses an absent, non-array or non-string field rather
+/// than coercing one, so a conforming answer always carries both as arrays and an empty
+/// `assumptions` genuinely means the model produced none. A caller holding only the value can
+/// therefore recover the distinction `OD-EXECUTOR-011` required without reading this crate's
+/// comments, which is the whole of what that record asked for.
+pub const WORK_RESULT_SUBSTANTIATION: Substantiation = Substantiation {
+    plan: PortionSubstantiation::Unsubstantiated(UnsubstantiatedReason::ProducerCannotGround),
+    claims: PortionSubstantiation::Unsubstantiated(UnsubstantiatedReason::ProducerCannotGround),
+    tests: PortionSubstantiation::Unsubstantiated(UnsubstantiatedReason::ProducerCannotGround),
+    requested_verification: PortionSubstantiation::Unsubstantiated(
+        UnsubstantiatedReason::ProducerCannotGround,
+    ),
+    assumptions: PortionSubstantiation::Substantiated,
+    unresolved_questions: PortionSubstantiation::Substantiated,
+};
 
 /// A starting bound on what one dispatch may spend.
 ///

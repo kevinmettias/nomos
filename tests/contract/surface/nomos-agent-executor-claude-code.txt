@@ -1,5 +1,6 @@
 pub const nomos_agent_executor_claude_code::JSON_SCHEMA: &str
 pub const nomos_agent_executor_claude_code::MAXIMUM_SPEND: MicroDollars
+pub const nomos_agent_executor_claude_code::WORK_RESULT_SUBSTANTIATION: Substantiation
 pub enum nomos_agent_executor_claude_code::AgentExecutionError
 pub enum variant nomos_agent_executor_claude_code::AgentExecutionError::ProhibitedChange(String)
 pub enum variant nomos_agent_executor_claude_code::AgentExecutionError::Unavailable(String)
