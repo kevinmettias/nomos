@@ -85249,6 +85249,205 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P40-MODEL-ROUTING-RESOLVER-DECISION",
+      "title": "The decision the model routing consumer item was declined for lack of",
+      "why": "P40-MODEL-ROUTING-REAL-CONSUMER was declined because its done_when needs a resolver, a catalog to resolve against, a dispatch that stops hard-coding and four reassessments, and its territory was one file. Its decliner named three things this build does not state: what a resolver reads given ResolvedModelExecution stays deliberately unbuilt; whether the resolver and the dispatch wiring are one item or two; and, binding, OD-PACKAGE-012 own question -- whether a model executor selection fits the nomos_capability provider-offer-guarantee shape or needs its own mechanism. No item with reaching territory can be authored until those are decided, because a worker handed the wrong answer would either build ResolvedModelExecution past its deferral condition or invent a second resolution mechanism beside the capability registry.\n\nTwo facts were measured while diagnosing this and are written down nowhere. The hard-coded choice the done_when names is a string match in the nomos-cli workflow parser, and no model backend package manifest exists on disk at all -- nothing declares a catalog for a resolver to read. Both are things a successor item has to be authored around rather than discover mid-implementation.",
+      "done_when": "OD-PACKAGE-016 is registered under crates/spec/nomos-spec-store/records/ and governs. It decides what an execution profile resolves against and what shape the resolution produces; answers OD-PACKAGE-012 binding question against nomos_capability with the measurement rather than an assertion; says whether the resolver and the dispatch wiring are one item or two; and names the one addition to existing vocabulary it authorizes while refusing the alternatives it considered. Both derived projections are re-rendered from a worktree publishing exactly the records this item commits and are fresh at the committed revision. The successor items are on the board with territory that reaches every artifact their own done_when names.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md",
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-016.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-design",
+        "acquired_at": 1789711579,
+        "lease_expires_at": 1789725979
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P40-MODEL-ROUTING-RESOLVER",
+      "title": "An execution profile resolves against a caller-supplied declared package set into a DispatchConfig, and Backend gains the family label that makes BackendFamily answerable",
+      "why": "OD-PACKAGE-016 decides the resolver and this item builds it. Measured 2026-09-17 at 46dea2f6. ModelExecutionProfile with selector and effort, and DispatchConfig with effort and backend, both already exist; the missing piece is only the map between them. No manifest file exists anywhere in this tree, and ModelSelection is constructed nowhere outside nomos-model-package's own unit tests, so a resolver cannot read a catalog from disk because nothing has written one. The only routing constraint that changes which backend is chosen today is a string match in a person's flag parser: crates/host/nomos-cli/src/agent/parsing.rs:80 and :85 map claude-code and ollama, and :88 returns Backend::ClaudeCode when neither flag was given, which is the hard-coded choice in its purest form; crates/host/nomos-cli/src/workflow/parsing.rs turns the same two strings into Body::ClaudeCode and Body::Ollama. Backend has no family name, so ModelSelector::BackendFamily currently names nothing any backend answers to. A nominal-attribute Label is the shape this workspace already uses for exactly this and EffortLevel::Label is the sibling case, and tests/contract/surface/nomos-agent-orchestration.txt lists inherent methods, so this addition moves that snapshot rather than leaving it alone. Forbidden interpretations, each of which would produce a green predicate and a false claim: reading a manifest from disk or walking the tree for packages, because the declared set is a value the caller supplies and a resolver that discovered packages would be a second place that decides which packages exist; adding a variant to ModelSelector, to ModelSelection or to the manifest reader, because Backend::Label() is the only addition to existing vocabulary this record authorizes; mapping profile.effort onto a backend's native level, because that mapping is the backend's own job and MODEL-ROUTE-004 states it as one; answering ExactIdentity, AllowedSet, CapabilityPredicate or PolicyRankedCandidates by string-matching a catalog the resolver invented, which is the same defect OD-EXECUTOR-008 refused in the other direction; and building ResolvedModelExecution, which MODEL-ROUTE-029 conditions on an accounting that is not met. This item is the resolver alone. It does not wire a dispatch, which OD-PACKAGE-016 decision 9 makes a second item depending on this one rather than a widening of this territory.",
+      "done_when": "A public ProfileResolution in crates/orchestration/nomos-agent-orchestration/src/profile_resolution.rs answers a ModelExecutionProfile resolved against a caller-supplied declared package set, and is either the resolved DispatchConfig or an unresolved result naming the selector and the measured absence, with no third shape and no Option and no bool. The only input beyond the profile is a caller-supplied sequence pairing a dispatch target with the ModelRoutePackage that declares its model selection; the resolver reads no file, discovers no package and consults no environment variable. Backend::Label() returns the two strings the CLI already accepts as --executor and --model-backend values, and BackendFamily is the one ModelSelector variant that resolves through it. The other four variants return unresolved results whose stated reason is the measured absence rather than free text, and the resolver is tested for each of the four, so that a later change to one of them is a decision rather than a drift. Where more than one available target satisfies a selector, the result reports the chosen one and carries the others beside it in the caller's declared order, and no ranking is applied. The profile's effort becomes the resolved config's effort unchanged. The names the resolver adds appear in tests/contract/surface/nomos-agent-orchestration.txt, which is the oracle for whether another crate can reach them rather than the pub modifier, and that snapshot is re-blessed with NOMOS_SURFACE_BLESS=nomos-agent-orchestration rather than edited by hand. cargo test -p nomos-agent-orchestration --no-fail-fast exits 0.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-agent-orchestration/src/profile_resolution.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/backend.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/lib.rs",
+          "tests/contract/surface/nomos-agent-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-orchestration",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-orchestration",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Agent_Execute_Should_Reach_Ollama_With_A_Scripted_Launcher ... ok\ntest run::tests::Test_Run_Agent_Judgment_Should_Reach_Claude_Code_With_A_Scripted_Launcher ... ok\ntest run::tests::Test_Run_Agent_Execute_Should_Reach_Claude_Code_With_A_Scripted_Launcher ... ok\ntest run::tests::Test_Run_Agent_Execute_Should_Report_Unavailable_When_The_Launcher_Cannot_Start_Either_Backend ... ok\n\ntest result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n   Compiling nomos-agent-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-agent-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.05s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_agent_orchestration-eb58c6cfa7c9c253.exe)\n   Doc-tests nomos_agent_orchestration\n",
+        "verified_at": 1789712613,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5bb0219cc9332cf62f320dedcdfb10b8e5ba9021"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P40-MODEL-ROUTING-DISPATCH-WIRING",
+      "title": "A dispatch selects its backend by resolving a declared profile against a declared package set, and no call site constructs a Backend from a default or a string match",
+      "why": "OD-PACKAGE-016 decision 9 states the property that the record alone does not satisfy and names this as a second item depending on the first. Measured 2026-09-17 at 46dea2f6, and the measurement is why the territory is this wide rather than why it might be. There are two dispatch seams and they do not share a path. The first is nomos-agent-orchestration's Run_Agent_Execute and Run_Agent_Judgment, whose config is DispatchConfig with an already-resolved Backend field, reached by crates/host/nomos-api/src/agent.rs:52 and :64 and by crates/host/nomos-cli/src/agent/dispatch.rs:34 and agent/judge_role.rs:36. The second is nomos-workflow-orchestration, which bypasses the first entirely: crates/orchestration/nomos-workflow-orchestration/src/run.rs:89 and :94 dispatch Body::ClaudeCode and Body::Ollama straight to the two executor crates, so a workflow step's own variant is its backend choice. Four sites construct a Backend today and three of them are a hard-coded choice: crates/host/nomos-cli/src/agent/parsing.rs:88 returns Backend::ClaudeCode when neither --executor nor --model-backend was given, crates/host/nomos-cli/src/agent.rs:128 and agent/judge_role.rs:185 default to ClaudeCode in their own tests, and crates/host/nomos-api/src/agent.rs:247 does the same. Two territory facts are not visible from the call sites and are the ones a worker discovers halfway if they are not written here. First, nomos-model-package is in crates/orchestration/nomos-workflow-orchestration/Cargo.toml as a dev-dependency only, and a dev-dependency cannot be imported from src, so a workflow step that carries a profile needs that promoted to a real dependency before anything compiles. Second, crates/orchestration/nomos-workflow-orchestration reaches the zone another orchestration crate sits in, and nomos-architecture.json's exceptions entry for it lists exactly its three existing same-zone edges, so an edge to nomos-agent-orchestration is a declaration change as well as a manifest change. Forbidden interpretations, each of which satisfies a narrow reading and falsifies the property. Removing --executor and --model-backend rather than rebasing them on the resolver: a flag a person gives is a declared preference, not a hard-coded choice, and Selection::Over(usable, preferred) is the precedent that a named preference outranks the resolver's own answer without being one. Leaving the (None, None) default in place because a resolution was added beside it: the default is the hard-coded choice and the property is about it specifically, so a resolution that runs only when a flag was given has changed nothing that was broken. Giving the workflow step a profile field while Body keeps a variant per backend and the variant still decides: the resolution must be what selects, which means the step declares what it wants and not what it gets. Inventing a ranking to break a tie between two satisfying targets, which OD-PACKAGE-016 decision 5 refuses and nomos_capability's Selection refuses in the same words. And widening this item to write a manifest and point a host at it: no manifest exists, writing one is a later item with its own territory, and a resolver that reads a file is what the first item's predicate forbids.",
+      "done_when": "Both dispatch seams resolve rather than receive. nomos-agent-orchestration's Run_Agent_Execute and Run_Agent_Judgment reach a backend through ProfileResolution instead of through a DispatchConfig that already carries one. nomos-workflow-orchestration no longer dispatches a workflow step by matching a Body variant to an executor crate: the step declares a ModelExecutionProfile and the resolution selects the target. No call site in the workspace constructs a Backend from a default or from a string match, and a test holds it: a profile resolving with no declared preference still answers, so the (None, None) path in crates/host/nomos-cli/src/agent/parsing.rs:88 cannot return a backend that nothing chose. A backend named by a person through --executor or --model-backend is carried as a declared preference that is attempted first and may fail, rather than as a resolution, and the item reports what a preference naming a backend that the declared set cannot offer returns. crates/orchestration/nomos-workflow-orchestration/Cargo.toml promotes nomos-model-package from dev-dependencies to dependencies before any src use of it, and every edge the change adds is permitted by nomos-architecture.json's declaration, adding the exception entry if the boundary checker requires one rather than leaving the declaration to disagree with the manifest. README's row for nomos-workflow-orchestration is updated to say what the declaration now says, because tests/contract asserts the table against the workspace in both directions. tests/contract/surface/nomos-agent-orchestration.txt, nomos-api.txt and nomos-workflow-orchestration.txt are re-blessed with NOMOS_SURFACE_BLESS rather than edited by hand. cargo test -p nomos-agent-orchestration -p nomos-workflow-orchestration -p nomos-cli -p nomos-api --no-fail-fast exits 0.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-agent-orchestration/src/run.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/dispatch_config.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-workflow-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-workflow-orchestration/src/body.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/body",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/src/agent.rs",
+          "crates/host/nomos-cli/src/agent",
+          "crates/host/nomos-cli/src/workflow/parsing.rs",
+          "crates/host/nomos-api/src/agent.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "nomos-architecture.json",
+          "README.md",
+          "tests/contract/surface/nomos-agent-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt",
+          "tests/contract/surface/nomos-workflow-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-MODEL-ROUTING-RESOLVER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P40-MODEL-ROUTING-ASSESSMENT-CLOSURE",
+      "title": "Four MODEL-ROUTE assessments cite one gap the resolver and the wiring close, and each has to be re-read rather than flipped",
+      "why": "Measured 2026-09-17 at 46dea2f6. All four assessment files in tests/contract/requirements name the identical gap, crates/packages/nomos-model-package/src/model_execution_profile.rs#ModelExecutionProfile, and all four are verdict Partial for a sentence that says nothing outside nomos-model-package references a profile yet. That sentence is what OD-PACKAGE-016 and its successor close, and the four do not take the same repair when it does. MODEL-ROUTE-001's own prose already measures the reason it stays Partial: of five referencing surfaces only GateCommand::model is a real typed field, and rules/checks, phases, workflows and agent task classes have no structured type to hold a reference at all, so the resolver closes its second sentence and not its first. MODEL-ROUTE-010 needs a model-assisted check, fix or workflow step to emit a ModelExecutionTelemetry, and the wiring makes a step able to resolve a profile without making it emit anything. MODEL-ROUTE-015 needs an effort request resolved against a real backend, and MODEL-ROUTE-016 needs a context-assembly pipeline of any kind; neither exists after the wiring, so for both the cited gap is not the absence they actually have and their prose would become a measurement that is false rather than a verdict that is wrong. The predicate is structural and this is the reason it is stated here: nomos_cap_requirement_trace's Partials_With_No_Gap and its gap-placement check, reached through tests/contract/tests/requirement_trace/predicates.rs, assert that a Partial names a gap, that the gap is where the entry says it is, and that the assessed set does not shrink. Nothing in that binary reads a verdict for truth, so a gap citing a site that now has a real consumer passes it, and a verdict asserting a state of the tree that is no longer true passes it too. The repair is therefore a re-reading held by the commit and not by the predicate, which is stated here rather than discovered by a worker who sees green and stops. This item is filed with --depends-on rather than given the whole nomos-contract-tests package as its predicate, because Test_Every_Assessment_Should_Name_A_Site_That_Exists is red at HEAD on two sites P112 placement moved, which P114-TRACE-STALE-SITES-FROM-P112-PLACEMENT owns, and this item repairs neither of them.",
+      "done_when": "Each of the four assessment files is re-read against the post-wiring tree and its verdict and its gap are re-authored together, rather than the verdict being changed on its own or the gap being left as it is. Where a verdict stays Partial its gap names the absence that is still there and not the ModelExecutionProfile reference the wiring closed, because a gap citing a site that now has a real consumer is a false citation even though the site still resolves and the predicate stays green. Where a verdict becomes Met the entry names no gap, and the commit says what it read to conclude that. The commit message states, per requirement, what was re-read, what the tree now shows and why the verdict is what it is, and names explicitly that the predicate does not read a verdict and therefore did not hold this. No entry is removed and no entry is added, and the assessed set is unchanged. cargo test -p nomos-contract-tests --test requirement_trace --no-fail-fast exits 0.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/requirements/MODEL-ROUTE-001.assessment",
+          "tests/contract/requirements/MODEL-ROUTE-010.assessment",
+          "tests/contract/requirements/MODEL-ROUTE-015.assessment",
+          "tests/contract/requirements/MODEL-ROUTE-016.assessment"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P40-MODEL-ROUTING-DISPATCH-WIRING",
+        "P114-TRACE-STALE-SITES-FROM-P112-PLACEMENT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "requirement_trace",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
