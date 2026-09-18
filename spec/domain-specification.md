@@ -187,6 +187,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md@authored | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md | authored | 23 | 7 | sha256:dcc46751eb94d3bee57169f30884a606ccba06f0162d77b4587cb383ee7e499e |
 | docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md@authored | docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md | authored | 18 | 6 | sha256:f17c861d194a9cc9d84cd2a1dd636f2d20cf8f6ce02d03d175153c13487a2288 |
 | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md@authored | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md | authored | 21 | 7 | sha256:ad7db84e0e6c5bd783952fb02f6bde672224a893e8ea7fdf510c2a1ceb6cedd2 |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md@authored | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md | authored | 73 | 21 | sha256:869fcd6c1da5288bad1e3edc4fdafadb040f475c06009c158ed88d8426536f5c |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 21 | 7 | sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc |
@@ -1729,6 +1730,27 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#12 | authored | 2 | Reconciling with OD-RULES-019 |
 | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#16 | authored | 2 | What This Does Not Do |
 | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md#20 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#1 | authored | 1 | An execution profile resolves against the declared package set into the resolved shape dispatch already takes |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#2 | authored | 2 | Question |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#8 | authored | 3 | The two ends already exist, and they are already the same shape |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#12 | authored | 3 | Where a profile is declared today, and where a backend is chosen today |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#15 | authored | 3 | Nothing declares a catalog |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#18 | authored | 3 | What each selector variant needs, against what this build has |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#21 | authored | 3 | The capability shape, read rather than recalled |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#27 | authored | 2 | Decision |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#28 | authored | 3 | 1. The resolver lives in `nomos-agent-orchestration` |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#31 | authored | 3 | 2. It reads the declared package set, supplied as a value |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#35 | authored | 3 | 3. `Backend` gains a family name, and that is the only addition to existing vocabulary |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#39 | authored | 3 | 4. The other four selectors are unresolved, by named reason |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#42 | authored | 3 | 5. Two-valued, with a closed diagnosis and a remedy, and no invented ranking |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#47 | authored | 3 | 6. Effort is carried, never mapped |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#51 | authored | 3 | 7. `ResolvedModelExecution` stays unbuilt, and the resolver's output is `DispatchConfig` |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#54 | authored | 3 | 8. `OD-PACKAGE-012`'s question, answered: it does not fit, on four measured counts |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#58 | authored | 3 | 9. The wiring is a second item, not this one |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#60 | authored | 2 | What This Does And Does Not Invalidate |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#64 | authored | 2 | Alternatives Considered |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#72 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -50039,6 +50061,600 @@ Accepted, version 2. Ten capability-contract crates stay crates; six repository-
 are found to be paying crate cost for what a module would give free, reconciled explicitly
 against `OD-RULES-019`'s own packaging choice for the same six crates, with the consolidation
 itself left to a future item.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#1
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes · hash: sha256:017275462aa221f0924d8c75352cb20f35352dfd93d33d55156a1e5b68d227c4*
+
+# An execution profile resolves against the declared package set into the resolved shape dispatch already takes
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#2
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#3
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Question · hash: sha256:3f7c5ca3fa1140985faa373d7ed5e316fe4bb7d1a9b50b5f3800a5c05c28ca28*
+
+`OD-PACKAGE-011` licensed twenty-five `MODEL-ROUTE` identifiers and `nomos-model-package`
+carries ten maturities of vocabulary for them. `README.md` states the outcome plainly: none of
+it is wired into a real consumer yet. An item asking for that consumer — a dispatch that
+selects its backend by resolving a declared execution profile rather than by a hard-coded
+choice — was **declined**, and the decline was a measurement rather than a preference. Its
+territory was one file, and reaching its own `done_when` needs a resolver, a set to resolve
+against, a call site that stops naming a backend, and four reassessments. None of those is
+reachable from the one file it reserved.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#4
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Question · hash: sha256:879caaf92d4c093a1451e54bff4757581cffab8bfcd426099e75ac364adc1263*
+
+That item named three questions it surfaced and did not answer. No successor with reaching
+territory can be authored until they are decided, because a worker handed the wrong answer
+would either build `ResolvedModelExecution` past the condition its own deferral rests on, or
+invent a second resolution mechanism beside the capability registry. They are:
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#5
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Question · hash: sha256:5349ed1378f6c9c6366c3eff9c10de15f6e4f2d8fa451f1e4ce742c5a33d1d4a*
+
+1. What does a resolver read, given `ResolvedModelExecution` stays deliberately unbuilt?
+2. Is the resolver one item and the dispatch wiring another, or is it one?
+3. `OD-PACKAGE-012`'s binding question, owed for this case and not yet paid: does a model
+   executor's selection genuinely fit the existing capability/provider/evidence shape, or does
+   it need its own?
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#6
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#7
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured · hash: sha256:e7d16be09cb30c76dd07a62724a6337298508f76d668627d071367f75b4f73d2*
+
+Taken from the crates named, at this revision.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#8
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / The two ends already exist, and they are already the same shape · hash: sha256:53d3366ae58ceb36f0a26c57162acfd8ed856f5e69f8c3cbfa800c5289674f32*
+
+### The two ends already exist, and they are already the same shape
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#9
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / The two ends already exist, and they are already the same shape · hash: sha256:a9705ce6ab19c5ec6189fe072840e979c2ea6045be5bf825464b6905c5ed9055*
+
+`ModelExecutionProfile` carries `selector: ModelSelector` and `effort: EffortLevel`.
+`DispatchConfig` carries `effort: EffortLevel` and `backend: Backend`. `Backend`'s own doc
+comment already says what it is:
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#10
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / The two ends already exist, and they are already the same shape · hash: sha256:48e0787146b79b8abfa6d716dd54ab161291817886bbdaf3adc886516650a1fd*
+
+> this type is only the resolved choice both hosts now share, not a second, host-local copy of
+> it.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#11
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / The two ends already exist, and they are already the same shape · hash: sha256:88b52cee212041105d6d99e6b48b2e6e110d5c14d7cd8bbf1d91f87ff09c3fda*
+
+Nothing maps the declared shape onto the resolved one. That missing map is the whole of what
+this record decides.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#12
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / Where a profile is declared today, and where a backend is chosen today · hash: sha256:3555da20df7bfd083c6635ca30410887c83fb895983b843da351f8c4e739d753*
+
+### Where a profile is declared today, and where a backend is chosen today
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#13
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / Where a profile is declared today, and where a backend is chosen today · hash: sha256:3d5c533f7a2feb468177b3df9b95df3f2cf9148c1e6559d644d94b8bd6056e78*
+
+Of `MODEL-ROUTE-001`'s five referencing surfaces, exactly one is a real typed field:
+`GateCommand.model: Option<ModelExecutionProfile>`. A search of that crate for the name `model`
+returns its declaration and no other use — the field is **never read**. And `nomos-cli` sets it
+to `None` with a comment stating that no flag authors one.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#14
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / Where a profile is declared today, and where a backend is chosen today · hash: sha256:536d89330306eb71b13f895b18e87a12869344ba525ad5a022e63365927d54a2*
+
+The choice that *is* made is a string match. `Backend_Body_From_String_Arguments` in
+`nomos-cli`'s workflow parser turns `--executor claude-code` and `--model-backend ollama`
+directly into `Body::ClaudeCode` and `Body::Ollama`. That is a caller naming a backend
+directly, literally, in a parser — which is the hard-coded choice the consumer item was written
+to remove.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#15
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / Nothing declares a catalog · hash: sha256:15dd77a7d0c9238a606f6414826dcf6b7bbb4c6b0fc1b61722716553005b5bbb*
+
+### Nothing declares a catalog
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#16
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / Nothing declares a catalog · hash: sha256:a132334b234ad11a28afde4f1fdf82dd7796c000e6034ebe955bc23271b09878*
+
+`ModelSelector`'s five variants all carry raw strings, and `model_selector.rs` states why: there
+is no live provider, catalog, or entitlement system anywhere in this workspace yet to resolve
+an identity, a family name or a predicate against. That is still true, and it is stronger than
+the doc comment says. `Read_Manifest` and `Parse_Manifest` can read a model backend package
+manifest, and **no manifest file exists anywhere in this tree to read.** `ModelSelection` is
+constructed nowhere outside `nomos-model-package`'s own unit tests.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#17
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / Nothing declares a catalog · hash: sha256:7d50eb43a87c1e2bfa36ff4b961356f7cb4a64f445f4672e3433c9c2180088bb*
+
+So a resolver cannot read a catalog from disk today, because nothing has written one. That is a
+fact a successor item has to be authored around rather than discover halfway through.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#18
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / What each selector variant needs, against what this build has · hash: sha256:b66749ffd19466dd5dd2e662443048fb181f03bda2de9fff89e39dff0a765aa7*
+
+### What each selector variant needs, against what this build has
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#19
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / What each selector variant needs, against what this build has · hash: sha256:293ab104a390bcae0ceab1488e79ed4601c588a7ec8574f1889a12ea1661fd12*
+
+| `ModelSelector` variant | What resolving it needs | What this build has |
+|---|---|---|
+| `BackendFamily(String)` | a name for the family a candidate backend belongs to | two real backends, and no name for either |
+| `ExactIdentity { identity, pinned }` | a candidate's `ModelSelection::Catalog` | no package declares one |
+| `AllowedSet` | the same | the same |
+| `PolicyRankedCandidates` | the same, plus a policy object | the same, and no policy object |
+| `CapabilityPredicate` | a typed predicate vocabulary | none; the variant holds the raw expression its author wrote |
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#20
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / What each selector variant needs, against what this build has · hash: sha256:7c5620a4f8e8caa4f7c8b79ed3a4b1f323bf0b09c7afc6a69c8627aae177e8ae*
+
+`BackendFamily`'s own doc says "Any model belonging to a named backend family, such as
+`acme-family`" — so the variant names a family, and nothing in the workspace names a backend's
+family. `CapabilityPredicate`'s says the vocabulary has not been "typed further than
+the raw expression an author wrote".
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#21
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / The capability shape, read rather than recalled · hash: sha256:02788737a03e1a4f3cf6516a7b36297a3e67475b35a7ac139415675823b4b0fa*
+
+### The capability shape, read rather than recalled
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#22
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / The capability shape, read rather than recalled · hash: sha256:99570978d70c9b3f1691c92bfb570e677ccdabed7ce84d5aeea69473faaa955b*
+
+`Requirement` carries `capability: CapabilityId`, `version: ContractVersion`,
+`minimum: Guarantee` and `preferred: Option<ProviderId>`. `ProviderOffer` carries
+`provider: ProviderId`, `capability: CapabilityId`, `version: ContractVersion` and
+`guarantee: Guarantee`. `Resolution` is `Satisfied { selection, applicability }` or
+`Unsatisfied { capability, reason }`, and its own doc says why it is not an `Option`:
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#23
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / The capability shape, read rather than recalled · hash: sha256:280bc5f6b59e3ccdf4631cae1a29b08e701608d6029fa66bcf914fdb45b7552c*
+
+> Two results, never a `bool` and never an `Option`. An `Option::None` here would be a caller's
+> invitation to write `unwrap_or_default`, and there is no defensible default for "can this
+> analysis be performed".
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#24
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / The capability shape, read rather than recalled · hash: sha256:911a626cc752902018b6779672daad236009c133310d8b1eba72b426834f436d*
+
+`Unmet` has exactly four variants — `Undeclared`, `NoProvider`, `VersionMismatch { offered }`,
+`BelowRequirement { closest }` — and `Remedy` pairs each with the act that closes it:
+`DeclareTheContract`, `RegisterAProvider`, `AgreeOnAVersion`, `StrengthenTheClosestOffer`.
+`Remedy`'s doc calls itself "the only half of the pair a caller can act on".
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#25
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / The capability shape, read rather than recalled · hash: sha256:b3ea357c660786a17e7fbaf34ad3b04f1a91b1e2759ca8a9fa50cd3982f39333*
+
+`Guarantee` is built on `FactVariant`, whose five variants are the resolution level a *fact* was
+established at: `Predicted` ("Modelled rather than measured"), `Approximate` ("Established by a
+method that trades accuracy for cost"), `Syntactic` ("Read from the text or its parse tree, with
+no name resolution"), `SemanticallyResolved`, `RuntimeObserved`. `Assurance` is
+`Sound`/`Unsound`/`Unknown`, and `Satisfies_Requirement` admits nothing but `Sound`.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#26
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What Was Measured / The capability shape, read rather than recalled · hash: sha256:fbf4afce16730546edc9359b40706d60f8b999be40caa9bcd2006c7d150187fa*
+
+`PackageId` and `ProviderId` are both `Named_Identity!` newtypes over `String` — names, not
+digests. `ModelRoutePackage` carries `package_id: PackageId`, `package_kind`,
+`package_version`, `protocol_range` and `model_selection`. It has no family field.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#27
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#28
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 1. The resolver lives in `nomos-agent-orchestration` · hash: sha256:c0efde720d77e587c9b9fa71637f8b8513596ef92903069be5851bb44726d351*
+
+### 1. The resolver lives in `nomos-agent-orchestration`
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#29
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 1. The resolver lives in `nomos-agent-orchestration` · hash: sha256:c81ba241e54594f2561ca0ee36743cee0d0c1d57a073b90e1a9e641d0a4b2c88*
+
+It must name `Backend` and produce `DispatchConfig`, both of which live there, and it must reach
+both backend crates. `nomos-model-package` is in the Provider zone and a provider may not name
+an agent, so the crate holding the declared vocabulary cannot be the crate holding the resolved
+shape.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#30
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 1. The resolver lives in `nomos-agent-orchestration` · hash: sha256:c0afe8b036767eea720c87efd452d09aba731355ab5f106918633f372aeb032d*
+
+`nomos-agent-orchestration` is the only crate that already depends on `nomos-model-package` and
+on both `nomos-agent-executor-claude-code` and `nomos-model-backend-ollama`, and it already owns
+the type whose own doc calls itself the resolved choice. `nomos-gate-orchestration` reaches the
+vocabulary but reaches neither backend. `nomos-workflow-orchestration` is a consumer of the
+dispatch seam rather than a place the seam's own choice is made.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#31
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 2. It reads the declared package set, supplied as a value · hash: sha256:50cb7f1450900d1aff402ce61a0bda28cfe5062c1239f36dc9ff27f7f76e0820*
+
+### 2. It reads the declared package set, supplied as a value
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#32
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 2. It reads the declared package set, supplied as a value · hash: sha256:30bf2e50a2666701086b0329f43f5437d2f907b8fb8718c55b4ad4339b294fea*
+
+The resolver resolves against a caller-supplied sequence pairing a dispatch target with the
+manifest that declares its model selection. It does not discover packages, read disk, or invent
+availability.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#33
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 2. It reads the declared package set, supplied as a value · hash: sha256:2a02678a6818338423506fc571017566ac4b4407b4f442bf897d962d94b68a80*
+
+The division is not new. `nomos_capability::Registry` is populated by a composition root —
+`registry.Offer(nomos_lang_rust::Provider_Offer())` — rather than discovering its own providers,
+and `Selection::Over(usable, preferred)` takes the usable set as a value rather than assembling
+it. Reading files is a composition root's concern (`OD-HOST-002`), and a resolver that walked
+the tree would be a second place that decides which packages exist.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#34
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 2. It reads the declared package set, supplied as a value · hash: sha256:150aa5593e06470008f295fd2f305a932d9b1e8673f60815703c3c317db74ca7*
+
+**Why supplied rather than read:** because no manifest exists to read, per the measurement
+above. The reader stays where it is. Writing the file and pointing a host at it is a later item
+with its own territory, and deciding it here would be deciding for a file that does not exist.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#35
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 3. `Backend` gains a family name, and that is the only addition to existing vocabulary · hash: sha256:665195b8eedebd1a147a28538da8bfe92bb98f31e09e98954ccbf802a47aecbd*
+
+### 3. `Backend` gains a family name, and that is the only addition to existing vocabulary
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#36
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 3. `Backend` gains a family name, and that is the only addition to existing vocabulary · hash: sha256:5cf4dd604fd9c4cff8447d0f03ddafcdbb4e255e8955333157719d69323d0049*
+
+`BackendFamily` names a family, and for a family name to select anything, a backend has to have
+one. `Backend` gains a `Label()` in the form every enum in this workspace already has —
+`EffortLevel::Label`, `FactVariant::Label` — returning the two strings the CLI already accepts
+as `--executor` and `--model-backend` values.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#37
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 3. `Backend` gains a family name, and that is the only addition to existing vocabulary · hash: sha256:b2b0a8f1afc53b4947718ea76c70f53c8e96a1e9d23928d1f19bd0cc57259964*
+
+This is an addition, and this record names it as one rather than letting it arrive as incidental
+detail. It is the smallest addition that makes a selector resolvable at all, it names one of two
+existing variants rather than introducing a concept, and it touches neither `ModelSelector` nor
+`ModelSelection` nor the manifest reader.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#38
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 3. `Backend` gains a family name, and that is the only addition to existing vocabulary · hash: sha256:6bb820c4fa818e5efab57230eb80b306fba58be6de51c051bd611e4110743926*
+
+`BackendFamily` is the one selector that resolves today, and that is what makes a successor
+item's "at least one routing constraint changes which backend is chosen" satisfiable honestly
+rather than by construction.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#39
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 4. The other four selectors are unresolved, by named reason · hash: sha256:32bcc6c9f588689788f5f1f7d6264a1f42c5834d6894fb09722d6755e0a7b9d9*
+
+### 4. The other four selectors are unresolved, by named reason
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#40
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 4. The other four selectors are unresolved, by named reason · hash: sha256:bed759e54c11548a7e61599d5ef736fbc49a7f39c870f540bd5886d94744afb8*
+
+The resolver does not evaluate `CapabilityPredicate`, does not rank `PolicyRankedCandidates`,
+and does not manufacture a catalog to make `ExactIdentity` or `AllowedSet` resolve. Each comes
+back unresolved, and the reason is the absence the measurement names — no available package
+declares a model catalog, no policy object exists, no typed predicate vocabulary exists — rather
+than free text.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#41
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 4. The other four selectors are unresolved, by named reason · hash: sha256:1b6b9101af7522d837d650c11a7ddf835cb5f3d3ffaa871096c5dc069e881a7c*
+
+This is not a stub. A resolver that answered `ExactIdentity { identity: "llama3" }` by
+string-matching a name it invented would be reporting a routing decision this build cannot make.
+That is the same defect `OD-EXECUTOR-008` refused in the other direction: an executor must not
+synthesize the types whose concrete evidence it lacks.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#42
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 5. Two-valued, with a closed diagnosis and a remedy, and no invented ranking · hash: sha256:648ba6711d1adb2375639f907d762cf44c9c75b648590364611cc4f3756adbda*
+
+### 5. Two-valued, with a closed diagnosis and a remedy, and no invented ranking
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#43
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 5. Two-valued, with a closed diagnosis and a remedy, and no invented ranking · hash: sha256:c2a586a6954dd09934a12d398fc458e5d424ae4f0855450c47fa72b9edd08020*
+
+`nomos_capability::Resolution` is the shape and the reason: two results, never a `bool` and never
+an `Option`, and on the unsatisfied side a closed diagnosis paired with the act that closes it,
+kept separate because a message that merges them is neither useful nor accurate.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#44
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 5. Two-valued, with a closed diagnosis and a remedy, and no invented ranking · hash: sha256:201796c5251757d41929ab2651b079df84b51bc0852a368992616199becb0c98*
+
+So a resolution is either a `DispatchConfig` or an unresolved result naming the selector and why
+nothing answered it, where the why is one of the measured absences above.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#45
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 5. Two-valued, with a closed diagnosis and a remedy, and no invented ranking · hash: sha256:270174c990c4898c0fc39ba9693d66c49ec91f0981184bf0593973946efb6e0b*
+
+Where more than one available backend satisfies a selector, the result reports the chosen one
+and carries the others beside it, for the reason `Selection` carries `alternatives`: "the answer
+to 'who answers' is not complete without 'instead of whom'". The order among them is the
+caller's declared order, and the resolver does not rank. `Selection` draws exactly this line
+about its own tiebreak — "the order the registry holds its offers in, which is by provider name,
+and that is a deterministic tiebreak rather than a judgement" — and its module doc states the
+refusal in full:
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#46
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 5. Two-valued, with a closed diagnosis and a remedy, and no invented ranking · hash: sha256:60c6121c1a542a5332f9d45d06d2581e7900ef1fb17b1455bda8365232fed41b*
+
+> Where two offers are equivalent or incomparable this module does not invent a ranking; it
+> reports that it did not decide.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#47
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 6. Effort is carried, never mapped · hash: sha256:ba4dcfdde8ff66e404a2e43aaef6b096869866eb8bdab591c64347629d7afcb7*
+
+### 6. Effort is carried, never mapped
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#48
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 6. Effort is carried, never mapped · hash: sha256:93597d092291121eb1e5dfde13dd69c7c2d7969229c7291d25c27d13355cea25*
+
+`profile.effort` becomes `config.effort` unchanged. Mapping a canonical level onto a specific
+backend's native control is the backend's own job — `MODEL-ROUTE-004` states it as one, and
+`EffortLevel`'s own doc says the mapping is "a mapping and a non-equivalence rule for a real
+backend to carry out, not a fact this enum could state about itself" — and it is precisely the
+category `nomos_capability` already refused to hold:
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#49
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 6. Effort is carried, never mapped · hash: sha256:8487f5e6bfd14b65693c99722aefbda93ed15c2319aa21303496b43a1eccb6d0*
+
+> Adding a cost axis to `Guarantee` would put a scheduling concern in the crate every non-Rust
+> peer reimplements, to answer a question the caller was already answering.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#50
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 6. Effort is carried, never mapped · hash: sha256:7ee2629769a42a3a22090e88fb70384fd0c62863f6783a21095da384f5085ee0*
+
+A resolver that mapped effort would be deciding, on a backend's behalf, the one thing only that
+backend can state.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#51
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 7. `ResolvedModelExecution` stays unbuilt, and the resolver's output is `DispatchConfig` · hash: sha256:d2544c89708cbe8fad7142b23baae593380a0b6e6cf6c992323c51026a7271da*
+
+### 7. `ResolvedModelExecution` stays unbuilt, and the resolver's output is `DispatchConfig`
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#52
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 7. `ResolvedModelExecution` stays unbuilt, and the resolver's output is `DispatchConfig` · hash: sha256:3694eba46d1c11846bcaf789fc731be2fe5696c52cdeb35413f4d101c19bf53f*
+
+`MODEL-ROUTE-029`'s `ModelInputAssemblyIdentity` established that `ResolvedModelExecution` stays
+unbuilt until every requirement naming one of its fields is accounted for, and `MODEL-ROUTE-005`
+records that this is deliberate rather than an oversight. That condition is not met. Building it
+now so that the resolver has a richer output would reverse a deferral without the accounting it
+was conditioned on — exactly the failure the decliner warned a successor would walk into.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#53
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 7. `ResolvedModelExecution` stays unbuilt, and the resolver's output is `DispatchConfig` · hash: sha256:1e685ccba5a8a6eed6f58737e79257b5b1416664e742a9cfc4b3030b14b4d6cb*
+
+`DispatchConfig` is the resolved execution shape this workspace already has and already
+dispatches through. The resolver consumes the declared vocabulary and produces the resolved one.
+It does not mint a third.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#54
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 8. `OD-PACKAGE-012`'s question, answered: it does not fit, on four measured counts · hash: sha256:a674b57c2d2eaf1f1a925c1621c3c4b044735f79c520787122158c3ac0d3680a*
+
+### 8. `OD-PACKAGE-012`'s question, answered: it does not fit, on four measured counts
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#55
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 8. `OD-PACKAGE-012`'s question, answered: it does not fit, on four measured counts · hash: sha256:7022cd93279bcad46facf7111b0d37e6ff82061e7246b0bc0f211dddea0d8c04*
+
+- **The guarantee axis.** `ProviderOffer` requires a `Guarantee`, whose first component is a
+  `FactVariant` — the level a *fact* was established at, over five levels that are all about
+  facts. A model backend answers a prompt; it does not establish a fact, and there is no honest
+  `FactVariant` for prose. `Assurance::Sound` is a completeness claim a provider earns by
+  bounding its own gap: `nomos-lang-go` holds `Sound` on both axes because Go has no macro
+  system, so there is no region where its parse tree ends and an unexpanded token stream begins,
+  which is the same gap that keeps `nomos-lang-rust`'s completeness at `Unknown`. A prose
+  backend has no way to bound that gap, so a `Sound` it declared would be a guarantee nobody can
+  back — the conforming lie `OD-EXECUTOR-008` exists to refuse.
+- **The selector slot.** `Requirement` carries exactly one `preferred: Option<ProviderId>`.
+  `ModelSelector` has five ways to name what it wants. Four name something that is not a
+  provider implementation at all — a model identity, a set of identities, a family, a ranked
+  candidate set — and the fifth is the untyped predicate `Requirement` has no field to hold.
+- **The remedy vocabulary.** `Unmet`'s four variants and `Remedy`'s four acts are about
+  capability contracts and provider offers: author a contract, register an offer, agree on a
+  version, strengthen the closest offer. The absences measured here are different absences whose
+  remedies are different acts, so reusing the pair would force them into a diagnosis naming the
+  wrong thing.
+- **The effort axis**, per decision 6.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#56
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 8. `OD-PACKAGE-012`'s question, answered: it does not fit, on four measured counts · hash: sha256:ffc5ec8177eb7b9c4681c42642ed05801f21397919106cdf4a7a5573b20f91e4*
+
+`OD-CAPABILITY-002` gives the same answer from the other side: shared machinery earns its place
+when a second real party contends for it, and a model backend contends to answer a question, not
+to serve an analysis capability with evidence about a subject.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#57
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 8. `OD-PACKAGE-012`'s question, answered: it does not fit, on four measured counts · hash: sha256:be22124d5cd499472076d54dd82088ed1dda4e72a425cbc2f267c2a833d7b048*
+
+**This is the check `OD-PACKAGE-012` owed, made and answered.** That record's own words: does a
+model or agent executor's selection genuinely fit the existing capability/provider/evidence
+shape, or does it need its own? It needs its own, on the measurement above rather than by
+resemblance. That does not weaken the record. `OD-PACKAGE-012` governs the routing and
+conformance system `MODEL-ROUTE-038` through `049` elaborate; this record decides the first
+resolution step of it and authorizes no mechanism for the parts that record still governs.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#58
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 9. The wiring is a second item, not this one · hash: sha256:0678ce87d8a4b04c1cfec75cbca875d86d056624e2cc88cf5363fe061c1cabfb*
+
+### 9. The wiring is a second item, not this one
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#59
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Decision / 9. The wiring is a second item, not this one · hash: sha256:3ff8b34bb0f39d3731720fbeef821f206f162b8552f425f4dba36b8d2cc98785*
+
+Decision 3's table is the whole of what a resolver can honestly do today. Making a *dispatch*
+select its backend this way needs a workflow step to carry a profile and the dispatch seam to
+stop taking a backend as a given — `nomos-workflow-orchestration` and `nomos-cli` territory,
+neither of which this record's own item reserves. The decliner was right that a resolver alone
+does not satisfy "rather than by a hard-coded choice". The answer is a second item that depends
+on the first, not one item whose territory quietly widens to reach both.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#60
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What This Does And Does Not Invalidate · hash: sha256:4a4f2d4d6cb5c72ec9ac49e5eda4ec4472c287391b5996e60e31ec8d133eddb2*
+
+## What This Does And Does Not Invalidate
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#61
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What This Does And Does Not Invalidate · hash: sha256:44ffbeaff30a96c094ce7a8779f9a353bf4dc3c4c0f691c476b896da53e03c7f*
+
+It does not change `ModelSelection`'s three variants, the manifest reader, or any part of the
+manifest maturity `OD-PACKAGE-010` drew. It does not claim any package declares a model catalog;
+today none does, and every selector needing one is unresolved by name.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#62
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What This Does And Does Not Invalidate · hash: sha256:0adb33fb4bee6510b9b0f0e898f9790323b473bc06bc1413c3905c67a676f1b8*
+
+It does not make `GateCommand.model` read. That field is a declared surface with no reader
+today, and this record leaves it as it found it rather than implying the resolver closed it.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#63
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / What This Does And Does Not Invalidate · hash: sha256:99b5089239a1742515bf8f8c0e0306f5d402a1f8a9d902a0f1d168d6b86ad8e8*
+
+It does not decide anything about `MODEL-ROUTE-038` through `049` beyond the first resolution
+step, and it does not reopen `OD-PACKAGE-011`'s licensing or `OD-ROADMAP-001`.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#64
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Alternatives Considered · hash: sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83*
+
+## Alternatives Considered
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#65
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Alternatives Considered · hash: sha256:fafc90fa8e17ff4b9e7ab7bb38f88f7212460b2a232a2cd3696d6d1584ddf76a*
+
+**Reading packages from manifest files.** Rejected for this step. No manifest file exists to
+read, and a resolver that reads disk is a composition root's concern (`OD-HOST-002`). The reader
+stays; the file and the host that points at it are a later item.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#66
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Alternatives Considered · hash: sha256:2dcf437440a929fafee044278484c0905c436c07200ae6386c3fc434d70743ad*
+
+**Building `ResolvedModelExecution` first, so the resolver has a richer output.** Rejected per
+decision 7: it reverses a deferral without the accounting that deferral was conditioned on.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#67
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Alternatives Considered · hash: sha256:5004f556374a7fce5e93de0a96b56985ba7f5e37d909580c45dd128440a88bf1*
+
+**Routing through `nomos_capability::Registry`.** Rejected on the four measured counts in
+decision 8. This is the alternative `OD-PACKAGE-012` required be considered, and it was
+considered against the real types rather than recalled from their names.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#68
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Alternatives Considered · hash: sha256:71c8b4b1d5b9a14c7319d81bf5dfd6fd31ed1c49cb1b8858ab285863007c5355*
+
+**Putting the resolver in `nomos-model-package`.** Rejected in decision 1: Provider may not name
+Agent, and the resolved shape is Agent's.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#69
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Alternatives Considered · hash: sha256:de1c084940579056078f4c5cb5ee81c28dd0c58a3dd922389569cc7bf4c3e229*
+
+**Resolving `CapabilityPredicate` by evaluating the expression.** Rejected: the workspace has no
+typed predicate vocabulary, and evaluating an untyped expression is the guessed predicate
+`GateUnknown` exists to refuse.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#70
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Alternatives Considered · hash: sha256:60baa0dde27348bdcebeb079ac375cfb13ef226a743ff8091b620ff217474b06*
+
+**Adding a `ModelSelector` variant for "the backend the caller named".** Rejected: it would make
+the resolver a pass-through and re-introduce the hard-coded choice one layer in, which is the
+defect the consumer item was written to remove.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#71
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Alternatives Considered · hash: sha256:9501ceea1ce069ce7bc5c17ae0db37b206379dfed75d7ab3b5a0171f046c9681*
+
+**Letting the resolver pick among equals by some internal order.** Rejected in decision 5: an
+invented ranking is a decision the resolver is not entitled to make, and
+`nomos_capability::Selection` already refused the same move for the same reason.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#72
+
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#73
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Status · hash: sha256:94b945b7acfbbe7bd176f02d7278bbe6c1da4a57d4da756839dace67ef33c372*
+
+Accepted. Decides the three questions the declined consumer item surfaced and did not answer,
+and pays `OD-PACKAGE-012`'s binding question with the measurement taken against the real types.
+Authorizes one resolver and one addition to existing vocabulary; files the dispatch wiring as a
+dependent item rather than widening its own territory.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 
