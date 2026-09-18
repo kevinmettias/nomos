@@ -88,6 +88,7 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md@authored | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md | authored | 19 | 6 | sha256:2b4a9d2bb3daa50e11f78a921b819c109cbcab767766c84970181f3873081454 |
 | docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md@authored | docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md | authored | 18 | 6 | sha256:45cf84c5f564bbf8c10b18bf9bcfd793f0fb284d663a48bda04e8376577f3728 |
 | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md@authored | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md | authored | 28 | 8 | sha256:3591b780c13db3d7e66d70b17727c44fadc80e583eeb90eda64e8f65984a8231 |
+| docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md@authored | docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md | authored | 38 | 7 | sha256:15070ae3d008d24d982cfce4e11453bc74932e1f6e6a513fc3101d6169405f0c |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
@@ -866,6 +867,13 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#20 | authored | 2 | What Would License A Third Adapter |
 | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#23 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#27 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#1 | authored | 1 | A WorkResult cannot say which absence it carries |
+| docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#2 | authored | 2 | Question |
+| docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#16 | authored | 2 | The Decision |
+| docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#24 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#30 | authored | 2 | Alternatives Considered |
+| docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#37 | authored | 2 | Status |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1 | authored | 1 | A skipped test reports ok, so the size of the hole is declared rather than the hole being closed |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#5 | authored | 2 | What Was Found |
@@ -21863,6 +21871,381 @@ already exists and has now been used for exactly that, so `P42-SECOND-HARNESS-EX
 declined rather than authored a sixth time. What the two adapters share and where they
 diverge is recorded above, measured against the crates, with each divergence traced to a real
 difference in backend capability.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#1
+
+*revision: authored · kind: heading · heading: A WorkResult cannot say which absence it carries · hash: sha256:09b44d3b2288180947e0ae14c8c1e74ce1170958f4c52a3858956f59e8cc8e9b*
+
+# A WorkResult cannot say which absence it carries
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#2
+
+*revision: authored · kind: heading · heading: A WorkResult cannot say which absence it carries / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#3
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / Question · hash: sha256:e80eeb8c5631a9520b373662fabcc1c595828ea67b8fa710fcda0f90b0178faa*
+
+`OD-EXECUTOR-008` decided what content a canonical `WorkResult` may honestly carry, and
+that decision holds: four of its six fields stay structurally absent for a bare-prompt
+executor rather than model-filled. What that record did not decide is how a consumer tells
+one absence from another. `plan: None` and `claims: []` are byte-identical whether the task
+genuinely produced no plan and no findings, or the producing executor structurally cannot
+substantiate either field. The only carriers of that distinction today are doc comments —
+one in the executor crate, two at the API boundary — so a consumer holding only the value
+cannot recover it at all.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#4
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / Question · hash: sha256:6a86f86590c8914449c3f6e03e5e787128486918bc323deed0a92276d77b9149*
+
+A person has stated the invariant this record exists to satisfy: **an empty value must mean
+the task produced none, never that the adapter never implemented extraction.**
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#5
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / Question · hash: sha256:3f33a89b857c37519f837ab82f131cf952d1b652b784256ecbb9d5983011fe58*
+
+This is a decision rather than a correction because neither of the two records that reach
+this ground decides it. `OD-EXECUTOR-001` governs the invocation-site capability boundary
+and `OD-EXECUTOR-008` governs content honesty; the representation of unavailability is a
+third question, and it is open.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#6
+
+*revision: authored · kind: heading · heading: A WorkResult cannot say which absence it carries / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#7
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What Was Measured · hash: sha256:705060c10ad6c841e9651af8f1cb55e998a7e56fff463ddd2c7bd3fdb6e9a5c6*
+
+Measured 2026-09-17 at `f8b9310b`, against the working tree and the crate sources rather
+than against this record's own summary of them.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#8
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What Was Measured · hash: sha256:dbda29c9e809bd64101ac2931d46571a261d113032f533b67171a9f6a4c823e5*
+
+**The type carries no presence marker of any kind.**
+`crates/agent/nomos-agent-contracts/src/work_result.rs` declares six public fields —
+`plan: Option<CorrectionPlan>`, `claims: Vec<Finding>`, `tests: Vec<VerificationPredicate>`,
+`requested_verification: Option<VerificationPredicate>`, `assumptions: Vec<String>`,
+`unresolved_questions: Vec<String>` — and nothing beside them. Its own doc comment reasons
+carefully about which of them an agent may legitimately have nothing to say about, which is
+exactly the reasoning a reader of the *value* cannot repeat.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#9
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What Was Measured · hash: sha256:0b0045a27ad6c8aeb2f50fa6e4a1067dfb973708d320bbd8f90b2bb2d2781c70*
+
+**There is exactly one producer of a `WorkResult` in this workspace.**
+A sweep for `WorkResult` across `crates/` finds one non-test construction site:
+`Work_Result` in `crates/agent/nomos-agent-executor-claude-code/src/response.rs`. Every
+other occurrence is a consumer, a re-export, a test fixture, or prose. In particular
+`nomos-model-backend-ollama` builds none: `OD-EXECUTOR-005` established it is a
+`ModelBackend` and not a second `AgentExecutor`, so the phrase "the producing executor" names
+one crate today and not an abstraction with two instances.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#10
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What Was Measured · hash: sha256:609d1a11a50e2541f8644b5e4a221d25e30016e3d98c62cdda6db2a0bd47b861*
+
+**Four of the six portions are set unconditionally, and the reason is documented rather than
+typed.** `response.rs` constructs `plan: None`, `claims: Vec::new()`, `tests: Vec::new()`,
+`requested_verification: None` on every invocation, above a doc comment stating that this
+dispatch "has no honest grounding for any of them, only for the judgment `assumptions` and
+`unresolved_questions` name." `lib.rs`'s `JSON_SCHEMA` declares the other two and refuses
+additional properties, so the model is structurally unable to return a plan.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#11
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What Was Measured · hash: sha256:a357e525f685f1d2c4952656a0d3b981bf2f1ada9fd4ff5f7b36226ef4b09012*
+
+**The two portions that are read have a real guarantee, and it too is prose.**
+`String_Array` refuses an absent, non-array, or non-string field as
+`AgentExecutionError::Unparseable`, so a conforming answer always carries both as arrays and
+an empty `assumptions` genuinely means the model produced none. That is a stronger guarantee
+than the four others have, it is the guarantee the invariant asks for, and a reader can
+recover it only by reading `response.rs`.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#12
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What Was Measured · hash: sha256:86ead7b90433cb42b2dd7014e5fb996e877cd175b98265697adc78c2e0f832af*
+
+**The distinction has already been forced into prose twice, at the API boundary.**
+`crates/host/nomos-api/src/agent/agent_dispatch_response.rs` and
+`crates/host/nomos-api/src/workflow/agent_execution_outcome_response.rs` both drop the four
+portions from their wire shape and explain the omission identically: "not projected here
+because they are always structurally absent for this executor, never because a wire caller
+could not use them if they existed." That sentence *is* the distinction this record decides,
+written out by hand in two places because the type cannot carry it. A wire caller holding
+either response cannot recover it.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#13
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What Was Measured · hash: sha256:24f9b4e8ed234e43300a3a9a851517565fa701c63454cf1f8e29b855147da72d*
+
+**The assessment registry cites a doc comment as the gap.**
+`tests/contract/requirements/AGT-002.assessment` carries `verdict: Partial` with a `gap:`
+line naming `crates/agent/nomos-agent-executor-claude-code/src/lib.rs#stay structurally
+absent rather` — a phrase from a comment. A requirement whose remaining gap is a sentence is
+a requirement whose gap no checker can see.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#14
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What Was Measured · hash: sha256:62a36b78e32e0aef712991ea8bba654a68f5de29009edd3ffa85c33fa1c15026*
+
+**This workspace already has the shape this needs, one crate over.**
+`crates/kernel/nomos-model/src/subject/unknown_reason.rs` solves the same problem — a caller
+cannot act on an absence that does not say why — with `UnknownReason`: named variants rather
+than a bare absence, carried as a payload (`Intersection::Unknown(UnknownReason)`), each
+variant holding the data that makes its reason specific, a `Describe()` rendering one line a
+person can read, and `Every_Way_Independence_Can_Go_Unresolved` enumerating *every* variant so
+a new one is a compile error in that test rather than a variant nothing covers.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#15
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What Was Measured · hash: sha256:47e39d8c0d03163ecc9128743bc6e385ad495de9015b50d3a5e2b6f0c8a6be92*
+
+**The surface is blessed, so this change cannot be silent.**
+`WorkResult`'s six fields are blessed in `tests/contract/surface/nomos-agent-contracts.txt`,
+and `AgentExecutionOutcome::result` in
+`tests/contract/surface/nomos-agent-executor-claude-code.txt`. A change to either is visible
+to the contract tests rather than to whoever next reads the diff.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#16
+
+*revision: authored · kind: heading · heading: A WorkResult cannot say which absence it carries / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#17
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / The Decision · hash: sha256:5dd5d2094339c28834d8e0c45566105173fca453fd3fdbf397bd8d10d9537922*
+
+**A `WorkResult` carries what its producer could substantiate, as a value rather than as
+convention.**
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#18
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / The Decision · hash: sha256:647d01f65b1ab7fe9e5dfa7d6facc9a42bd8604d3bb41551c51d84d041e41279*
+
+**1. Each of the six portions is declared.** A new type in `nomos-agent-contracts` states,
+per portion, either that the producing executor substantiated it or that it could not. The
+shape is two variants, not a boolean and not a presence flag.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#19
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / The Decision · hash: sha256:bab2ef78a5d545d6323c8aa1171f2577cb071bdf64025c8b221702bb7fd36d98*
+
+**2. The reason is named.** Where a portion cannot be substantiated, the value carries *why*,
+following `UnknownReason` rather than a bare absence: today exactly one reason is justified —
+the producer's own mechanism cannot ground the portion, which is the bare-prompt dispatch
+`OD-EXECUTOR-008` measured (an isolated empty directory, no tool granted, one turn, so the
+model has seen no real file and computed no real digest by the time it answers). A test
+enumerates every reason, so a second reason is a compile error in that test rather than a
+variant nothing covers, the discipline `Every_Way_Independence_Can_Go_Unresolved` already
+holds one crate over. A boolean was refused precisely here: "this executor cannot ground it"
+and "the answer's schema did not carry it" call for different replies, and a boolean cannot
+tell them apart.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#20
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / The Decision · hash: sha256:1b86cb2653519ee7a94e6081b5d0630cacc45f1bf7fde58886299741d143ff9d*
+
+**3. The declaration is one field on `WorkResult`, with one named entry per portion.** A
+reader asks the value directly — `result.substantiation.plan` — so no lookup by a separate
+portion identifier is needed and no portion can be silently omitted from the declaration:
+the six entries are the six fields, and a seventh field added to `WorkResult` is a compile
+error until its substantiation is declared.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#21
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / The Decision · hash: sha256:f743b188de7abb0451eb5016550c1b8cf196fb4e97638fc02b292d5071f2be36*
+
+**4. The producing executor publishes the declaration it sets, beside the declaration it
+already publishes.** `crates/agent/nomos-agent-executor-claude-code/src/lib.rs` already
+publishes `JSON_SCHEMA` — a `pub const` stating what its answers carry. The substantiation
+declaration is published the same way and in the same place: what this executor can
+substantiate about its own answers is a property of the executor, stated once, and the value
+it returns carries it. `JSON_SCHEMA` answers "what shape may the model return"; the
+declaration answers "what did this crate ground" — two facts, both about the producer, both
+published rather than implied.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#22
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / The Decision · hash: sha256:fb3dc8725e0a31a027fce43ffad3af87421d8bee3293c2fbbb3c3ad2ac048d17*
+
+**5. The consumer's rule, stated so it is derived rather than inferred.** A portion declared
+substantiated whose value is empty means the task produced none: this is the invariant, and
+it now holds by construction rather than by reading a comment. A portion declared
+unsubstantiated means the value says nothing about the task, whatever it holds. No consumer
+infers, and no consumer has to know which executor it is holding.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#23
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / The Decision · hash: sha256:520ebc85c484243072d8b30e8c2b165e65deb752d52c0a146ed696cfabd11646*
+
+**6. `OD-EXECUTOR-008` is unchanged, and this record does not weaken it to make the
+distinction easier.** The four portions still come back empty; they are still constructed by
+the crate and never read from the model; they are still empty for exactly the reason that
+record measured. The narrow schema stays narrow, `additionalProperties: false` stays, and a
+response missing `structured_output` is still refused rather than coerced. What changes is
+that the emptiness is accompanied by a value stating it, which is the opposite of weakening:
+the content decision is now enforced by a type that a consumer can read instead of by a
+comment a consumer must trust.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#24
+
+*revision: authored · kind: heading · heading: A WorkResult cannot say which absence it carries / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#25
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What This Record Does Not Do · hash: sha256:1a654bf635a43e227843cff685ab293a91f428de9ac453f1cfbc2f722a5e6a29*
+
+**No code changes here.** The types, the field on `WorkResult`, the constant, the six test
+fixtures that construct a `WorkResult` literal, the blessed surface snapshot, and the two API
+twins are each a follow-up item's own territory. Named so those territories can be declared
+completely rather than discovered mid-claim — the way `OD-EXECUTOR-008` named its own four
+rendering sites — they are: `nomos-agent-contracts`'s new types and new field (three new
+files, one per public type, plus `work_result.rs`, `lib.rs` and the blessed snapshot);
+`nomos-agent-executor-claude-code`'s published constant, its `response.rs` construction and
+its snapshot; and `nomos-api`'s two response twins if the wire question below is answered
+yes.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#26
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What This Record Does Not Do · hash: sha256:a8204b012beaeb88e82566cf062b02f38c8d22a31761d9f33abf1ec0ecda9410*
+
+**It does not populate the four portions.** `OD-EXECUTOR-008`'s deferral stands unchanged:
+`plan`, `claims`, `tests` and `requested_verification` stay unbuilt until a real executor
+with real grounding exists. This record makes their absence *sayable*. It does not make them
+fillable, and a reader must not read "declared unsubstantiated" as "about to be implemented".
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#27
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What This Record Does Not Do · hash: sha256:4bb51fae8da34bb4497cba646e2547747e2260f1990ad5e58af39631f855966e*
+
+**It does not decide the wire.** It binds any surface that projects a `WorkResult`: a
+projection that omits a portion must be able to say why the portion is omitted, or it is back
+to the sentence this record found written twice by hand. Whether the two existing twins carry
+the declaration, or are justified in not carrying it because every portion they omit is
+declared unsubstantiated, is that follow-up's question — and it is a real question rather
+than a formality, because the twins are `nomos-api`'s own serializable shapes and not the
+contract type (`OD-HOST-002`).
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#28
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What This Record Does Not Do · hash: sha256:aac52688c03e9b20986e234174edad7f47ed4f8d56d656a639044d64805a46eb*
+
+**It does not move the distinction to the outcome, and it does not add an error variant.**
+`AgentExecutionOutcome` carries facts about the invocation — `denied_tool_uses`, `is_error`,
+`cost`, `duration_ms` — and `OD-EXECUTOR-008` drew that line deliberately. Substantiation is a
+fact about the content's completeness, so it belongs to the content. An
+`AgentExecutionError` variant was refused as well: an error is a dispatch that produced no
+result, and this is a result that was produced and is honest about its own limits. Refusing
+rather than answering would delete the judgment that `assumptions` and
+`unresolved_questions` legitimately carry.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#29
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / What This Record Does Not Do · hash: sha256:fef8cd0f5a97d1015b6500056ba6853aa795b629e63dae2b26b94fa880afe0b1*
+
+**It does not generalize to `TaskEnvelope`, and it does not touch model-input assembly.**
+`TaskEnvelope.expected_output_schema` names a schema by `SchemaId`; whether a task's declared
+expectation should also declare what a conforming answer may substantiate is a question about
+the envelope, not about the result, and no measurement here reaches it.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#30
+
+*revision: authored · kind: heading · heading: A WorkResult cannot say which absence it carries / Alternatives Considered · hash: sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83*
+
+## Alternatives Considered
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#31
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / Alternatives Considered · hash: sha256:72a8f1301a2d685f1aa46d952d0b014c45aed7063fbd6e7b616c00884c43cdfe*
+
+**A declaration of six booleans.** Refused. A boolean says *that* a producer cannot
+substantiate a portion and never *why*, so a consumer still cannot choose a reply, and the
+six booleans are individually unverifiable — nothing distinguishes a producer that honestly
+declares a limit from one that sets a field to `false` and moves on. `UnknownReason` already
+rejected the bare absence for this reason, and this workspace would then hold two answers to
+one question.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#32
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / Alternatives Considered · hash: sha256:51cc18031a3610081b76ab93bcfcfc3f390707309ee80db3e1d183ca215b44e2*
+
+**Changing the four field types so the distinction is inside each field** — replacing
+`Option<CorrectionPlan>` with a three-state value, and the `Vec`s likewise. Refused on two
+counts. It makes the ordinary case worse for every existing reader, who would unwrap a
+presence marker to reach a plan that is there; and it expresses one fact about the producer
+six times over, so a second executor's declaration becomes six edits in six places instead of
+one value, which is how a declaration drifts out of agreement with itself.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#33
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / Alternatives Considered · hash: sha256:44fbcb8bacef02de45a9100bf8b0a9a612dda48f1982e3abcb6b63f79e7c147a*
+
+**Carrying the declaration on `AgentExecutionOutcome` rather than on `WorkResult`.**
+Refused, and this is the alternative closest to sound. `OD-EXECUTOR-008` separated invocation
+facts from content, and putting substantiation beside `cost` would follow that line. It fails
+on the measurement that opened this record: a consumer holding only the value cannot recover
+the distinction, and a declaration on the outcome leaves exactly that consumer unable to.
+`WorkResult` is the artifact the workspace agrees on — the reason `OD-EXECUTOR-008` built one
+at all — so the fact that makes it readable belongs on it.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#34
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / Alternatives Considered · hash: sha256:9ba552942de7b8c6bc595661c0969ecf8fc3e2e103d2a288c325370190c86e59*
+
+**An `AgentExecutionError` variant, or reuse of the existing `Unavailable`.** Refused. It
+converts an honest, useful result into a failure. A judgment-only dispatch that returns its
+assumptions and its open questions, and truthfully reports that it could ground nothing else,
+is not an errored dispatch, and modelling it as one would make the common case an error path.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#35
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / Alternatives Considered · hash: sha256:cd2972195bd7aa9566b251284450013625d0c868d4a46664b03c81b4912d6f62*
+
+**Deriving the distinction from the schema the task requested** —
+`TaskEnvelope.expected_output_schema`, which names `JSON_SCHEMA` by id. Refused as the
+*carrier*, though it is true that the schema describes which portions an answer can carry.
+The linkage is enforced in `response.rs`'s code and not by the schema, so a reader would
+still be inferring; and a consumer holding a result has no envelope to consult. It is
+recorded here as a related fact and not as a second authority: the schema says what the model
+may return, and this record's declaration says what the crate grounded.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#36
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / Alternatives Considered · hash: sha256:be8779080fa974a747838168f1007b241078bf602cab29ac6186461fd402d02b*
+
+**A presence flag per field.** Refused for the reason the boolean was: `Some`/`None` and a
+boolean are the same absence with a different spelling, and the question this record answers
+is not whether a field is present but why it is not.
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#37
+
+*revision: authored · kind: heading · heading: A WorkResult cannot say which absence it carries / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#38
+
+*revision: authored · kind: prose · heading: A WorkResult cannot say which absence it carries / Status · hash: sha256:ab45d7912f5d8179a168ea34489dc01834b4e65a932e570d2848c59bb7189eea*
+
+Accepted. A `WorkResult` carries its producer's own substantiation declaration as a value,
+with a named reason where a portion cannot be grounded; `OD-EXECUTOR-008`'s content decision
+is unchanged and unweakened; the producing executor publishes the declaration beside
+`JSON_SCHEMA` and sets it on every result it builds. No code changes here — the follow-up
+territories are named above.
 
 ### docs/records/OD-GATE-001-a-skipped-test-reports-ok.md#1
 

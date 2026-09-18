@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:26df1ba35b292712d30c2a86808f8c0faf98444b7434b147866cd5ee681e72b6",
-  "inputs_digest": "sha256:46af34dbeb3941fa906fc8cdaa1314f29c1f484c4ee8786c226dc9ab8af9650f",
+  "content_digest": "sha256:765f370b4869a272282800d68dd24d0bc32d3a63e7393263d9427e1b75ac0fcc",
+  "inputs_digest": "sha256:f55d1081e45660b1f82310a3ddfd23ac2eabdc450be42b531385549fe5216c29",
   "sections": [
     [
       "Documents",
-      251
+      252
     ],
     [
       "Sections",
-      2104
+      2111
     ],
     [
       "Source blocks",
-      7413
+      7451
     ]
   ],
   "inputs": [
@@ -409,6 +409,11 @@
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md@authored",
       "hash": "sha256:3591b780c13db3d7e66d70b17727c44fadc80e583eeb90eda64e8f65984a8231"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md@authored",
+      "hash": "sha256:15070ae3d008d24d982cfce4e11453bc74932e1f6e6a513fc3101d6169405f0c"
     },
     {
       "content": "documents",
@@ -4274,6 +4279,41 @@
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#27",
       "hash": "sha256:c03380ec000b16a3c9e1942d414a573202557981d3091ec0891ad38b8a8555da"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#1",
+      "hash": "sha256:468877014623f8fd16b73b2be8b5e643a248198b73dec8cece865dae8bfe5eb3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#2",
+      "hash": "sha256:ae67138fbc965f1aa2b9b5df1850cc939f3570393cc7546d1325fb46e445cc38"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#6",
+      "hash": "sha256:aaf753eee93290d19afe30f77c7f82ca182cb7ced4781adee60229cb8736e059"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#16",
+      "hash": "sha256:5772e8ac17bf557d74f6a4c81931d76fc18ef6ee6b02ed920c22ce39ecf96151"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#24",
+      "hash": "sha256:a6793c54f97bade20f6c6c78dbdfd60c73b44557a1344489b9778164f99f1c6e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#30",
+      "hash": "sha256:051d0790dfdd0a10e3203f80153ee672ea74f13a731299fa1e6592235f889eb0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#37",
+      "hash": "sha256:79c170a608e58eaa96e35096ab8a07ac2917eeefb70f085e2e77433605267220"
     },
     {
       "content": "headings",
@@ -22124,6 +22164,196 @@
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#28",
       "hash": "sha256:0485c480fbaa4e25e5c05a61538c9b0285efb0353c47ee34c9f72d52acf8d444"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#1",
+      "hash": "sha256:09b44d3b2288180947e0ae14c8c1e74ce1170958f4c52a3858956f59e8cc8e9b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#3",
+      "hash": "sha256:e80eeb8c5631a9520b373662fabcc1c595828ea67b8fa710fcda0f90b0178faa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#4",
+      "hash": "sha256:6a86f86590c8914449c3f6e03e5e787128486918bc323deed0a92276d77b9149"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#5",
+      "hash": "sha256:3f33a89b857c37519f837ab82f131cf952d1b652b784256ecbb9d5983011fe58"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#7",
+      "hash": "sha256:705060c10ad6c841e9651af8f1cb55e998a7e56fff463ddd2c7bd3fdb6e9a5c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#8",
+      "hash": "sha256:dbda29c9e809bd64101ac2931d46571a261d113032f533b67171a9f6a4c823e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#9",
+      "hash": "sha256:0b0045a27ad6c8aeb2f50fa6e4a1067dfb973708d320bbd8f90b2bb2d2781c70"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#10",
+      "hash": "sha256:609d1a11a50e2541f8644b5e4a221d25e30016e3d98c62cdda6db2a0bd47b861"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#11",
+      "hash": "sha256:a357e525f685f1d2c4952656a0d3b981bf2f1ada9fd4ff5f7b36226ef4b09012"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#12",
+      "hash": "sha256:86ead7b90433cb42b2dd7014e5fb996e877cd175b98265697adc78c2e0f832af"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#13",
+      "hash": "sha256:24f9b4e8ed234e43300a3a9a851517565fa701c63454cf1f8e29b855147da72d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#14",
+      "hash": "sha256:62a36b78e32e0aef712991ea8bba654a68f5de29009edd3ffa85c33fa1c15026"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#15",
+      "hash": "sha256:47e39d8c0d03163ecc9128743bc6e385ad495de9015b50d3a5e2b6f0c8a6be92"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#16",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#17",
+      "hash": "sha256:5dd5d2094339c28834d8e0c45566105173fca453fd3fdbf397bd8d10d9537922"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#18",
+      "hash": "sha256:647d01f65b1ab7fe9e5dfa7d6facc9a42bd8604d3bb41551c51d84d041e41279"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#19",
+      "hash": "sha256:bab2ef78a5d545d6323c8aa1171f2577cb071bdf64025c8b221702bb7fd36d98"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#20",
+      "hash": "sha256:1b86cb2653519ee7a94e6081b5d0630cacc45f1bf7fde58886299741d143ff9d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#21",
+      "hash": "sha256:f743b188de7abb0451eb5016550c1b8cf196fb4e97638fc02b292d5071f2be36"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#22",
+      "hash": "sha256:fb3dc8725e0a31a027fce43ffad3af87421d8bee3293c2fbbb3c3ad2ac048d17"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#23",
+      "hash": "sha256:520ebc85c484243072d8b30e8c2b165e65deb752d52c0a146ed696cfabd11646"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#24",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#25",
+      "hash": "sha256:1a654bf635a43e227843cff685ab293a91f428de9ac453f1cfbc2f722a5e6a29"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#26",
+      "hash": "sha256:a8204b012beaeb88e82566cf062b02f38c8d22a31761d9f33abf1ec0ecda9410"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#27",
+      "hash": "sha256:4bb51fae8da34bb4497cba646e2547747e2260f1990ad5e58af39631f855966e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#28",
+      "hash": "sha256:aac52688c03e9b20986e234174edad7f47ed4f8d56d656a639044d64805a46eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#29",
+      "hash": "sha256:fef8cd0f5a97d1015b6500056ba6853aa795b629e63dae2b26b94fa880afe0b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#30",
+      "hash": "sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#31",
+      "hash": "sha256:72a8f1301a2d685f1aa46d952d0b014c45aed7063fbd6e7b616c00884c43cdfe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#32",
+      "hash": "sha256:51cc18031a3610081b76ab93bcfcfc3f390707309ee80db3e1d183ca215b44e2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#33",
+      "hash": "sha256:44fbcb8bacef02de45a9100bf8b0a9a612dda48f1982e3abcb6b63f79e7c147a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#34",
+      "hash": "sha256:9ba552942de7b8c6bc595661c0969ecf8fc3e2e103d2a288c325370190c86e59"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#35",
+      "hash": "sha256:cd2972195bd7aa9566b251284450013625d0c868d4a46664b03c81b4912d6f62"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#36",
+      "hash": "sha256:be8779080fa974a747838168f1007b241078bf602cab29ac6186461fd402d02b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#37",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#38",
+      "hash": "sha256:ab45d7912f5d8179a168ea34489dc01834b4e65a932e570d2848c59bb7189eea"
     },
     {
       "content": "blocks",
