@@ -29,7 +29,7 @@
 //!
 //! Nothing enumerates these attributes, because a hand-written list of types is only as
 //! complete as the hand — `OD-COMPLETENESS-001`. What holds them in place is
-//! `Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key`, which walks a fully
+//! `Test_Every_Node_In_A_Ledger_Should_Refuse_An_Undeclared_Key`, which walks a fully
 //! populated document and probes every object node it finds.
 
 // An item's identity, the state it is in, what kind of work it is, and where it came from.

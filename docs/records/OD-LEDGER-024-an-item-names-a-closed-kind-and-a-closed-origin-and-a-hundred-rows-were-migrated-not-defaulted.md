@@ -3,7 +3,7 @@ id: OD-LEDGER-024
 type: decision
 title: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - ledger
@@ -244,7 +244,7 @@ describes, and "the item that named a missing field was itself fixing a gap" is 
 - `Test_An_Unrecognized_Kind_Or_Origin_Should_Be_Refused`
   (`crates/substrate/nomos-ledger/src/item/tests.rs`) — the closed-set guard, and a
   round-trip over every declared variant of both types.
-- `Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key`
+- `Test_Every_Node_In_A_Ledger_Should_Refuse_An_Undeclared_Key`
   (`crates/substrate/nomos-ledger/tests/exclusion_holds/persistence.rs`) — unaffected in what
   it walks, since both new fields serialize as bare strings rather than objects, but still
   green over a document now carrying them.
@@ -298,3 +298,23 @@ instead of two orthogonal fields.** Rejected: the two axes are independent in ex
 collapsing them into one enum would either lose that independence or duplicate five variants
 across two prefixes for no comparison the flat form does not already give a caller matching
 on either field alone.
+
+## Amendment: The Test Named Above Was Renamed
+
+Version 1 named a test under **What Holds It** that no longer exists under that name:
+`Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key` does not resolve. It is
+`Test_Every_Node_In_A_Ledger_Should_Refuse_An_Undeclared_Key` in
+`crates/substrate/nomos-ledger/tests/exclusion_holds/persistence.rs` since `6927e8d0`, the
+naming pass that took `object` to `node` across this crate. Only the name moved.
+
+**The assertion still holds**, and the sentence above now names the test that is there. What it
+walks is unaffected by either new field for the reason version 1 gives — a unit variant
+serializes as a bare string, so `kind` and `origin` are values and not containers, and the walk
+probes object nodes — and the test is green over a document carrying them.
+
+It is re-pointed rather than declared because the sentence is a claim about coverage: present
+tense, under a heading that exists to name what holds this record today. `OD-SPEC-017` decided a
+test name in a record is a live reference while a path citation is dated history, and `D-134`
+already ranks a false claim of coverage above an admitted gap. The name version 1 used is quoted
+here rather than left in place because a reader arriving at it in the list above would have gone
+looking for a test that is not there, and the record republishes into `spec/domain-specification.md`.

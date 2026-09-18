@@ -139,7 +139,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-005-ready-meant-unheld-and-was-read-as-claimable.md@authored | docs/records/OD-LEDGER-005-ready-meant-unheld-and-was-read-as-claimable.md | authored | 25 | 8 | sha256:d749ba4084b715e35c6f0181a25e7ad2eaa66d828b206ba1aa458129ad7b8bf7 |
 | docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md@authored | docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md | authored | 44 | 10 | sha256:08ce1c3aeba931272c008e3dce188cfc2ae742b48eaa0aa5c912b5913a863f80 |
 | docs/records/OD-LEDGER-007-a-record-excludes-nobody-and-two-other-files-serialize-the-board.md@authored | docs/records/OD-LEDGER-007-a-record-excludes-nobody-and-two-other-files-serialize-the-board.md | authored | 25 | 7 | sha256:3d4f64f71ad3b6a5ddfd57306864cd157b6538b13bea09963e4383da81d8626f |
-| docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md@authored | docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md | authored | 48 | 10 | sha256:0eaa8bebddc2d41f06c3bb0fb95baf771a5688070de1462c87a0758f14e7fe19 |
+| docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md@authored | docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md | authored | 52 | 11 | sha256:eb4d527298202cbbbc2e012dadd12b6f0fbccac1056e88939ecaa9a4e3ba48d7 |
 | docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md@authored | docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md | authored | 33 | 9 | sha256:95f3fe0d373c5cc55181059cc2cf5b0ec592e1f2ca614ef05d94fe1b23e9535e |
 | docs/records/OD-LEDGER-010-opening-an-item-on-held-ground-is-how-the-board-is-used.md@authored | docs/records/OD-LEDGER-010-opening-an-item-on-held-ground-is-how-the-board-is-used.md | authored | 32 | 7 | sha256:17278bb3678519fb59aeb633a882c2c7860eed22d6dd7172de4f0a90116c0c34 |
 | docs/records/OD-LEDGER-011-an-item-reserves-the-snapshot-it-writes-and-the-register-empties.md@authored | docs/records/OD-LEDGER-011-an-item-reserves-the-snapshot-it-writes-and-the-register-empties.md | authored | 57 | 11 | sha256:bea0117983798941618c6bb02e434e01724011b472b15ce2789eea55dffdc6bd |
@@ -155,7 +155,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md@authored | docs/records/OD-LEDGER-021-a-verb-that-changes-the-board-is-one-the-store-owns-and-add-was-outside-the-door.md | authored | 46 | 15 | sha256:cc8a2ef491d5cdcf621e5737c5ac59e42f9e0491c536276f6e8f32f4a7f2f38d |
 | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md@authored | docs/records/OD-LEDGER-022-a-claim-refusal-is-a-plan-fact-or-a-coordination-fact-and-layer-says-which.md | authored | 29 | 8 | sha256:9e909d1fed72c0982d9536dd083e4d5d490520c52bc98a51c0fd50d121680f79 |
 | docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md@authored | docs/records/OD-LEDGER-023-what-to-work-on-next-is-computed-from-the-board-and-not-read-off-it.md | authored | 24 | 11 | sha256:62bf063f758eb9add016cf3720f2a90cf662d3a26d740a08e474837ca3d46dea |
-| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md@authored | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md | authored | 42 | 11 | sha256:d34cb4980991f1dea453392a7c9146606771d68470cbb42fa3be7af96b5872c7 |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md@authored | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md | authored | 46 | 12 | sha256:f47f3a2443b70cf6c2ecfce75efe203bb289b4003baedb37dd41dfd95ab51227 |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md@authored | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md | authored | 43 | 13 | sha256:912850b32803e66cc7c192ad341c167ffdb7000ec320965300d3ddd027f230c8 |
 | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md@authored | docs/records/OD-LEDGER-026-an-amendment-and-an-allocation-both-reserve-a-record-and-only-the-item-can-say-which.md | authored | 32 | 8 | sha256:93069409178928d99992914e407a904ac6fb92889b77e22260bae978c2d59556 |
 | docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md@authored | docs/records/OD-LEDGER-027-a-verification-record-names-head-as-the-tree-it-ran-against-and-work-show-reports-when-that-has-moved.md | authored | 31 | 10 | sha256:0f75915bb0a6e047768f8b26509aa5e946b77f20b68f07298aacb082d7709cfa |
@@ -1290,7 +1290,8 @@ profile: domain-specification
 | docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#27 | authored | 2 | What The Experiment Showed |
 | docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#37 | authored | 2 | What This Does Not Reach |
 | docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#42 | authored | 2 | Consequences |
-| docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#46 | authored | 2 | Status |
+| docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#46 | authored | 2 | Amendment: The Test Named In The Mutation Record Was Renamed |
+| docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#50 | authored | 2 | Status |
 | docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md#1 | authored | 1 | A document's validity must not depend on when it is read, and a lapsed item is not claimable |
 | docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-009-a-documents-validity-must-not-depend-on-when-it-is-read.md#6 | authored | 2 | The Decision, In Two Parts |
@@ -1475,6 +1476,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#33 | authored | 2 | What Holds It |
 | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#35 | authored | 2 | What This Record Does Not Decide |
 | docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#39 | authored | 2 | What Was Considered And Rejected |
+| docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#43 | authored | 2 | Amendment: The Test Named Above Was Renamed |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#1 | authored | 1 | A record identifier is allocated once, and add refuses a spent one by naming what spent it |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#5 | authored | 2 | What Was Measured |
@@ -36209,18 +36211,60 @@ it to a type.
 
 ### docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#46
 
+*revision: authored · kind: heading · heading: A writer that does not understand a document must not write it back / Amendment: The Test Named In The Mutation Record Was Renamed · hash: sha256:6245f9c4bf64f8a75368d7d314fda36d86d231246f0656e45be600197c616e6e*
+
+## Amendment: The Test Named In The Mutation Record Was Renamed
+
+### docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#47
+
+*revision: authored · kind: prose · heading: A writer that does not understand a document must not write it back / Amendment: The Test Named In The Mutation Record Was Renamed · hash: sha256:98598150731e7ff4d1ae758eafc8a3e01c2ff8d5dd81beac4eba9a3c3dfe5b7d*
+
+Version 1 reports the six controls one at a time, each reverted, and three of them name the one
+test that went red. The name is written as it stood when the measurement was taken:
+`Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key` does not resolve today. It is
+`Test_Every_Node_In_A_Ledger_Should_Refuse_An_Undeclared_Key` in
+`crates/substrate/nomos-ledger/tests/exclusion_holds/persistence.rs` since `6927e8d0`, the
+naming pass that took `object` to `node` across this crate. Only the name moved.
+
+### docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#48
+
+*revision: authored · kind: prose · heading: A writer that does not understand a document must not write it back / Amendment: The Test Named In The Mutation Record Was Renamed · hash: sha256:b1da15b9ce9cbd6eb00fd0cdb4ee9699c0e119404f4d8a65f96f0dfa276902cc*
+
+**The sentence is left as measured, because it is a record of a measurement and not a claim of
+coverage.** It says which test went red when a control was removed, and that is what the test
+was called when it did. `OD-SPEC-017`'s own discriminator is the tense — present tense claims
+coverage, past tense reports history — and this one is past. Writing the successor into the
+sentence would have the record report a name that did not exist at the moment it says it
+measured, which is the one edit `OD-SPEC-017` refused for a path and did not notice it also
+applied to a test.
+
+### docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#49
+
+*revision: authored · kind: prose · heading: A writer that does not understand a document must not write it back / Amendment: The Test Named In The Mutation Record Was Renamed · hash: sha256:9fca155a1a6d8af677e04363ac014dff28bb6b2574ed469ea87f5b0e50d94fe8*
+
+**What the sentence attributes to that test is re-measured rather than assumed**, because two
+similar names are exactly the evidence a reader cannot check a rename from. Removing
+`deny_unknown_fields` from `Claim` — the third of the three containers the sentence names —
+fails `persistence::Test_Every_Node_In_A_Ledger_Should_Refuse_An_Undeclared_Key` and no other
+test in `nomos-ledger`, out of 267 across its eight targets. The mutation was restored
+byte-identically: `crates/substrate/nomos-ledger/src/claim.rs` hashes to
+`b1ecdc9c349a4cce2a6c8c9832c92a0565b3ace3d28f445bd1c30b788eec360b` before and after.
+
+### docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#50
+
 *revision: authored · kind: heading · heading: A writer that does not understand a document must not write it back / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#47
+### docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#51
 
-*revision: authored · kind: prose · heading: A writer that does not understand a document must not write it back / Status · hash: sha256:dd465eef60c08ca4bfd8488f844a8c566e9836db0e4db741e04b471894c86c7d*
+*revision: authored · kind: prose · heading: A writer that does not understand a document must not write it back / Status · hash: sha256:c3a447004011d15693513a220f38d36f5ab7f9ee1d79b3dba3623768a1e73669*
 
-Accepted. Implemented in `nomos-ledger`, reported by `nomos work validate`, and documented in
-README.
+Accepted, version 2. Implemented in `nomos-ledger`, reported by `nomos work validate`, and
+documented in README. Amended once, to declare the name the measurement above was taken under
+rather than to re-point it.
 
-### docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#48
+### docs/records/OD-LEDGER-008-a-writer-that-does-not-understand-a-document-must-not-write-it.md#52
 
 *revision: authored · kind: prose · heading: A writer that does not understand a document must not write it back / Status · hash: sha256:92fc6cda056123a01f8c1489d5a3b6cf5f91b1fde1d1dbf4e54972e14ccef639*
 
@@ -42098,7 +42142,7 @@ describes, and "the item that named a missing field was itself fixing a gap" is 
 
 ### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#34
 
-*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Holds It · hash: sha256:b3f1f5bb249fecf7d19374d7a7b0253466082a1ab9bea8d5d681ccc50270424a*
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / What Holds It · hash: sha256:c58db9757b6c1524086be78be1cd24150c4d71085bd844eafb1aeec361fc60a8*
 
 - `Test_A_Field_Added_To_An_Item_Should_Raise_The_Schema_Version`
   (`crates/substrate/nomos-ledger/src/item/tests.rs`) — the field-count assertion moved
@@ -42106,7 +42150,7 @@ describes, and "the item that named a missing field was itself fixing a gap" is 
 - `Test_An_Unrecognized_Kind_Or_Origin_Should_Be_Refused`
   (`crates/substrate/nomos-ledger/src/item/tests.rs`) — the closed-set guard, and a
   round-trip over every declared variant of both types.
-- `Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key`
+- `Test_Every_Node_In_A_Ledger_Should_Refuse_An_Undeclared_Key`
   (`crates/substrate/nomos-ledger/tests/exclusion_holds/persistence.rs`) — unaffected in what
   it walks, since both new fields serialize as bare strings rather than objects, but still
   green over a document now carrying them.
@@ -42192,6 +42236,42 @@ instead of two orthogonal fields.** Rejected: the two axes are independent in ex
 collapsing them into one enum would either lose that independence or duplicate five variants
 across two prefixes for no comparison the flat form does not already give a caller matching
 on either field alone.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#43
+
+*revision: authored · kind: heading · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Amendment: The Test Named Above Was Renamed · hash: sha256:fea0cf5240f5ac9e61b84af26d138def26116ecdedb70583eaf73b2d1c1e2a7a*
+
+## Amendment: The Test Named Above Was Renamed
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#44
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Amendment: The Test Named Above Was Renamed · hash: sha256:5985f9ed1b38c20927cd22d7dafb7843b125f973f330ba7b14ec8271625026f6*
+
+Version 1 named a test under **What Holds It** that no longer exists under that name:
+`Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key` does not resolve. It is
+`Test_Every_Node_In_A_Ledger_Should_Refuse_An_Undeclared_Key` in
+`crates/substrate/nomos-ledger/tests/exclusion_holds/persistence.rs` since `6927e8d0`, the
+naming pass that took `object` to `node` across this crate. Only the name moved.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#45
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Amendment: The Test Named Above Was Renamed · hash: sha256:5d83dac136ee918d582a89b54c13782b70654454ea3d3a61a63b0762106059c8*
+
+**The assertion still holds**, and the sentence above now names the test that is there. What it
+walks is unaffected by either new field for the reason version 1 gives — a unit variant
+serializes as a bare string, so `kind` and `origin` are values and not containers, and the walk
+probes object nodes — and the test is green over a document carrying them.
+
+### docs/records/OD-LEDGER-024-an-item-names-a-closed-kind-and-a-closed-origin-and-a-hundred-rows-were-migrated-not-defaulted.md#46
+
+*revision: authored · kind: prose · heading: An item names a closed kind and a closed origin, and a hundred rows were migrated, not defaulted / Amendment: The Test Named Above Was Renamed · hash: sha256:397da3a0a39ed598f254061ac4c474c016f85430e71f85a9457e35f71b61728a*
+
+It is re-pointed rather than declared because the sentence is a claim about coverage: present
+tense, under a heading that exists to name what holds this record today. `OD-SPEC-017` decided a
+test name in a record is a live reference while a path citation is dated history, and `D-134`
+already ranks a false claim of coverage above an admitted gap. The name version 1 used is quoted
+here rather than left in place because a reader arriving at it in the list above would have gone
+looking for a test that is not there, and the record republishes into `spec/domain-specification.md`.
 
 ### docs/records/OD-LEDGER-025-a-record-identifier-is-allocated-once-and-add-is-where-that-is-decided.md#1
 

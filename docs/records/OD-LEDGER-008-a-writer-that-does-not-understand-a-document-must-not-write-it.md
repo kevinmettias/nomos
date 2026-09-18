@@ -3,7 +3,7 @@ id: OD-LEDGER-008
 type: decision
 title: A writer that does not understand a document must not write it back
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - work-ledger
@@ -223,10 +223,36 @@ nothing except the ability to lose it.
 A key nobody declared can no longer be parked in the ledger by hand. Adding one now means adding
 it to a type.
 
+## Amendment: The Test Named In The Mutation Record Was Renamed
+
+Version 1 reports the six controls one at a time, each reverted, and three of them name the one
+test that went red. The name is written as it stood when the measurement was taken:
+`Test_Every_Object_In_A_Ledger_Should_Refuse_An_Undeclared_Key` does not resolve today. It is
+`Test_Every_Node_In_A_Ledger_Should_Refuse_An_Undeclared_Key` in
+`crates/substrate/nomos-ledger/tests/exclusion_holds/persistence.rs` since `6927e8d0`, the
+naming pass that took `object` to `node` across this crate. Only the name moved.
+
+**The sentence is left as measured, because it is a record of a measurement and not a claim of
+coverage.** It says which test went red when a control was removed, and that is what the test
+was called when it did. `OD-SPEC-017`'s own discriminator is the tense — present tense claims
+coverage, past tense reports history — and this one is past. Writing the successor into the
+sentence would have the record report a name that did not exist at the moment it says it
+measured, which is the one edit `OD-SPEC-017` refused for a path and did not notice it also
+applied to a test.
+
+**What the sentence attributes to that test is re-measured rather than assumed**, because two
+similar names are exactly the evidence a reader cannot check a rename from. Removing
+`deny_unknown_fields` from `Claim` — the third of the three containers the sentence names —
+fails `persistence::Test_Every_Node_In_A_Ledger_Should_Refuse_An_Undeclared_Key` and no other
+test in `nomos-ledger`, out of 267 across its eight targets. The mutation was restored
+byte-identically: `crates/substrate/nomos-ledger/src/claim.rs` hashes to
+`b1ecdc9c349a4cce2a6c8c9832c92a0565b3ace3d28f445bd1c30b788eec360b` before and after.
+
 ## Status
 
-Accepted. Implemented in `nomos-ledger`, reported by `nomos work validate`, and documented in
-README.
+Accepted, version 2. Implemented in `nomos-ledger`, reported by `nomos work validate`, and
+documented in README. Amended once, to declare the name the measurement above was taken under
+rather than to re-point it.
 
 Six controls confirmed red, one at a time, each reverted. Removing `deny_unknown_fields` from
 `LedgerItem` failed five tests, all of them in this item's own set and no other test in
