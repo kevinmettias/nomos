@@ -85527,11 +85527,13 @@
           "crates/orchestration/nomos-agent-orchestration/src/validated_correction.rs",
           "tests/contract/surface/nomos-agent-contracts.txt",
           "tests/contract/surface/nomos-agent-executor-claude-code.txt",
-          "tests/contract/requirements/AGT-002.assessment"
+          "tests/contract/requirements/AGT-002.assessment",
+          "crates/agent/nomos-agent-contracts/src/portion_substantiation.rs",
+          "crates/agent/nomos-agent-contracts/src/unsubstantiated_reason.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -85551,11 +85553,47 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-api",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": " |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: unused import: `CommitIntent`\n  --> crates\\host\\nomos-api\\src\\workflow.rs:45:53\n   |\n45 | use nomos_workflow_orchestration::{Body, CheckBody, CommitIntent, CorrectionBody, GateBody, Platform, Run, StepOutcome, WorkflowOutcome, ...\n   |                                                     ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-api` (lib) generated 1 warning (run `cargo fix --lib -p nomos-api` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_agent_contracts-9f57e9d584170c76.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-5bfc671ccf945b0c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_agent_executor_claude_code-22e288e9389130fc.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-3610df82aeaa4484.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_agent_orchestration-d88c28231c053ffc.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-c92991675f500aa9.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-bb2d2d3fc56dfa8b.exe)\n   Doc-tests nomos_agent_contracts\n   Doc-tests nomos_agent_executor_claude_code\n   Doc-tests nomos_agent_orchestration\n   Doc-tests nomos_api\n",
+        "verified_at": 1789714075,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "38512695fe43c27f68ba04e7426ad209deed9f5b"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-design",
+          "added": [
+            "crates/agent/nomos-agent-contracts/src/portion_substantiation.rs",
+            "crates/agent/nomos-agent-contracts/src/unsubstantiated_reason.rs"
+          ],
+          "widened_at": 1789713456
+        }
+      ]
     },
     {
       "id": "OD-EXECUTOR-011-API-TWINS-PROJECTION",
