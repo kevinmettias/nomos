@@ -36,7 +36,7 @@ mod tests_support;
 
 pub use abandon_response::{AbandonResponse, Handle_Work_Abandon};
 pub use add_response::{AddResponse, Handle_Work_Add};
-pub use audit_response::{AuditResponse, Handle_Work_Audit};
+pub use audit_response::{AbsentPath, AuditResponse, Handle_Work_Audit};
 pub use blocked_item::BlockedItem;
 pub use claim::Handle_Work_Claim;
 pub use decline_response::{DeclineResponse, Handle_Work_Decline};

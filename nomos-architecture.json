@@ -200,7 +200,8 @@
       "nomos-package"
     ],
     "nomos-scope-verification": [
-      "nomos-model"
+      "nomos-model",
+      "nomos-platform"
     ],
     "nomos-spec-bundle": [
       "nomos-spec-model",

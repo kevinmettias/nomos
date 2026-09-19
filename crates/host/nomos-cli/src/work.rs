@@ -55,7 +55,7 @@ pub fn Run(
         || Published_Records(directory, &FILE_SYSTEM),
     );
 
-    return Render_Outcome(command, outcome, output);
+    return Render_Outcome(command, outcome, directory, output);
 }
 
 /// Every record this repository has already published, as repository-relative paths.
@@ -187,7 +187,7 @@ mod published_records_tests
 /// empty -- `nomos_work_orchestration::Run` returns the one `WorkOutcome` variant naming the
 /// `WorkCommand` variant it was given -- so it reports that pairing coming apart rather than
 /// panicking on it.
-fn Render_Outcome(command: &WorkCommand, outcome: WorkOutcome, output: &mut impl std::io::Write) -> ExitCode
+fn Render_Outcome(command: &WorkCommand, outcome: WorkOutcome, directory: &Path, output: &mut impl std::io::Write) -> ExitCode
 {
     return match (command, outcome)
     {
@@ -219,7 +219,7 @@ fn Render_Outcome(command: &WorkCommand, outcome: WorkOutcome, output: &mut impl
             Report_Decline(&ended, declined, output)
         }
         (WorkCommand::Validate, WorkOutcome::Validate(result)) => Report_Validation(result, output),
-        (WorkCommand::Audit, WorkOutcome::Audit(result)) => Render_Audit(result, output),
+        (WorkCommand::Audit, WorkOutcome::Audit(result)) => Render_Audit(result, directory, output),
         // `Run` above builds each `WorkOutcome` from the variant it dispatched on, so this arm
         // is that pairing coming apart rather than an input a caller could have got right.
         (_, _) => Report_Unmatched_Outcome(command, output),
@@ -356,7 +356,7 @@ fn Render_Add(
     };
 }
 
-fn Render_Audit(result: Result<BoardView, LedgerError>, output: &mut impl std::io::Write) -> ExitCode
+fn Render_Audit(result: Result<BoardView, LedgerError>, directory: &Path, output: &mut impl std::io::Write) -> ExitCode
 {
     let BoardView { document, now } = match result
     {
@@ -365,6 +365,11 @@ fn Render_Audit(result: Result<BoardView, LedgerError>, output: &mut impl std::i
     };
 
     Print_Audit(&document, now, output);
+
+    // The ledger lives in `work/`, so the repository is its parent. A `work/` at the root
+    // of nothing has no tree to check a reservation against, and `None` reads as "report no
+    // absent paths" rather than "fail to audit".
+    Print_Absent_Paths(&document, directory.parent(), &FILE_SYSTEM, output);
 
     return ExitCode::Ok;
 }
@@ -389,6 +394,50 @@ fn Print_Audit(document: &LedgerDocument, now: nomos_platform::Timestamp, output
         // express what is blocking this", and only one of those is good news.
         let _ = writeln!(output, "nothing claimable is blocked");
     }
+}
+
+/// Every reserved path that is not in the tree, on an item that could still be worked.
+///
+/// `root` and `filesystem` answer the question the blocked report above cannot: a reservation
+/// names paths the tree moved under, and nothing in the document says whether those paths
+/// still exist. They are threaded here rather than read from ambient state, the same
+/// `OD-HOST-001` division `Published_Records` already respects.
+fn Print_Absent_Paths(
+    document: &LedgerDocument,
+    root: Option<&Path>,
+    filesystem: &impl FileSystem,
+    output: &mut impl std::io::Write,
+)
+{
+    // A reservation names paths the tree moved under. An item that is Done or Declined is
+    // history, and a stale path in it is not debt; every other item could still be worked,
+    // so a path its territory reserves that is no longer in the tree is reported here.
+    let Some(root) = root
+    else
+    {
+        return;
+    };
+    for item in &document.items
+    {
+        if item.state.Is_Finished()
+        {
+            continue;
+        }
+        for absent in item.territory.Absent_Paths(root, filesystem)
+        {
+            Print_Absent_Path(item, &absent, output);
+        }
+    }
+}
+
+/// One absent reserved path: the path that is not in the tree, and the item that reserves it.
+/// Authored as *absent* rather than *decayed* — the line states the fact and does not guess
+/// whether the item means to create the file or a peer moved it, because a report that guessed
+/// would cry wolf on a board that already contains the first kind. Indented and path-first so
+/// it reads as a second section rather than as one more blocked item.
+fn Print_Absent_Path(item: &nomos_ledger::LedgerItem, absent: &str, output: &mut impl std::io::Write)
+{
+    let _ = writeln!(output, "  {absent} is not in the tree (reserved by {})", item.id);
 }
 
 /// A `WorkOutcome` whose variant does not belong to the `WorkCommand` standing beside it.

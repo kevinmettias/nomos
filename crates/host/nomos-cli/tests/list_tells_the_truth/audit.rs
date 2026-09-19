@@ -138,6 +138,12 @@ fn Test_Audit_Should_Agree_With_The_Listing_Item_For_Item()
     let mut checked = 0_u32;
     for line in audit.lines()
     {
+        // The absent-path report is a second, indented section — its lines name a path, not
+        // an item, so the item-for-item agreement below is about the blocked lines alone.
+        if line.starts_with(' ')
+        {
+            continue;
+        }
         let statement = AuditStatement(line);
         let named = Assert_The_Listing_Agrees(&board, statement, &audit);
         checked = checked.saturating_add(named);
@@ -197,6 +203,26 @@ fn Test_Audit_Should_Say_So_When_Nothing_Is_Blocked()
     assert!(
         audit.contains("nothing"),
         "an empty report must say it found nothing rather than print nothing:\n{audit}"
+    );
+}
+
+/// A reservation names paths the tree moved under. Every item that could still be worked
+/// reserves a path that is not in the tree here, so the audit names each; the Done item's
+/// path is history and is not reported.
+#[test]
+fn Test_Audit_Should_Report_An_Absent_Reserved_Path()
+{
+    let board = Mixed_Board("audit-absent");
+    let audit = board.Audit();
+
+    assert!(audit.contains("src/shared.rs is not in the tree"), "{audit}");
+    assert!(audit.contains("src/c.rs is not in the tree"), "{audit}");
+    assert!(audit.contains("src/d.rs is not in the tree"), "{audit}");
+    assert!(audit.contains("reserved by T-1"), "the holder's reserved path is still a reservation:\n{audit}");
+    assert!(audit.contains("reserved by T-4"), "{audit}");
+    assert!(
+        !audit.contains("reserved by T-5"),
+        "a Done item's stale path is not debt:\n{audit}"
     );
 }
 

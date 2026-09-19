@@ -195,7 +195,7 @@ pub use spec::{
     TableResponse, VacateOutcomeResponse, VacatedResponse, VerdictResponse,
 };
 pub use work::{
-    AbandonResponse, AddResponse, AuditResponse, BlockedItem, DeclineResponse, FinishResponse, Handle_Work_Abandon,
+    AbandonResponse, AbsentPath, AddResponse, AuditResponse, BlockedItem, DeclineResponse, FinishResponse, Handle_Work_Abandon,
     Handle_Work_Add, Handle_Work_Audit, Handle_Work_Claim, Handle_Work_Decline, Handle_Work_Finish, Handle_Work_List,
     Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver, Handle_Work_Validate, ListResponse,
     ReservationOutcomeResponse, ReservationResponse, ShowResponse, ValidateResponse,

@@ -1,4 +1,5 @@
 pub fn nomos_scope_verification::Normalize_Path(path: &str) -> String
+pub fn nomos_scope_verification::Territory::Absent_Paths(&self, root: &std::path::Path, filesystem: &impl nomos_platform::FileSystem) -> Vec<String>
 pub fn nomos_scope_verification::Territory::Ambiguous_Paths(&self) -> Vec<(String, String)>
 pub fn nomos_scope_verification::Territory::As_Subject_Set(&self) -> SubjectSet
 pub fn nomos_scope_verification::Territory::Empty() -> Self

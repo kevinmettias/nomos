@@ -62,7 +62,7 @@ pub enum variant nomos_api::AgentExecutionErrorResponse::UnsupportedTools { capa
 pub enum variant nomos_api::AgentJudgeRoleResponse::Dispatched { dispatch: AgentDispatchResponse }
 pub enum variant nomos_api::AgentJudgeRoleResponse::NoDeclaredRoleOrSurface
 pub enum variant nomos_api::AgentJudgeRoleResponse::NoFinding
-pub enum variant nomos_api::AuditResponse::Audited { blocked: Vec<BlockedItem>, #[serde(serialize_with = "nomos_platform::timestamp_serde::Write_Unix_Seconds")] now: Timestamp, }
+pub enum variant nomos_api::AuditResponse::Audited { blocked: Vec<BlockedItem>, absent: Vec<AbsentPath>, #[serde(serialize_with = "nomos_platform::timestamp_serde::Write_Unix_Seconds")] now: Timestamp, }
 pub enum variant nomos_api::AuditResponse::Unreadable { cause: String, }
 pub enum variant nomos_api::BaselineAllowanceResponse::AtMost { accepted_occurrence_count: u32, }
 pub enum variant nomos_api::BaselineAllowanceResponse::Unbounded
@@ -244,6 +244,8 @@ pub struct field nomos_api::AbsenceResponse::cause: String
 pub struct field nomos_api::AbsenceResponse::cost: String
 pub struct field nomos_api::AbsenceResponse::expected: String
 pub struct field nomos_api::AbsenceResponse::subject: String
+pub struct field nomos_api::AbsentPath::item: ItemId
+pub struct field nomos_api::AbsentPath::path: String
 pub struct field nomos_api::AgentExecutionOutcomeResponse::assumptions: Vec<String>
 pub struct field nomos_api::AgentExecutionOutcomeResponse::cost_usd: f64
 pub struct field nomos_api::AgentExecutionOutcomeResponse::denied_tool_uses: Vec<String>
@@ -384,6 +386,7 @@ pub struct field nomos_api::TableLineResponse::text: String
 pub struct field nomos_api::VacatedResponse::outcome: VacateOutcomeResponse
 pub struct field nomos_api::VacatedResponse::path: PathBuf
 pub struct nomos_api::AbsenceResponse
+pub struct nomos_api::AbsentPath
 pub struct nomos_api::AgentExecutionOutcomeResponse
 pub struct nomos_api::BaselineDebtResponse
 pub struct nomos_api::BaselinePopulationResponse

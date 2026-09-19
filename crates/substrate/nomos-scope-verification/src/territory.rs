@@ -225,6 +225,42 @@ impl Territory
 
         return duplicates;
     }
+
+    /// Authored paths that are not in the tree at `root`, in the order they were authored.
+    ///
+    /// # Why this exists, and why it answers "absent" and not "decayed"
+    ///
+    /// Territory is authored once and the tree moves under it. A peer's refactor renames or
+    /// splits a reserved file, and the reservation is then false while continuing to look
+    /// exactly like a correct one. Nothing reports that. This names the paths a reservation
+    /// points at that no longer exist in the tree the reservation is being checked against.
+    ///
+    /// The finding is authored as *absent* rather than as *decayed* because the two are
+    /// indistinguishable by existence alone: an item that reserves a file it is about to
+    /// create is exactly as absent as one whose file a peer moved. A report that guessed
+    /// would be wrong on a board that already contains the first kind, and an author who
+    /// learned the report cries wolf would stop reading it. So this states the fact — the
+    /// path is not in the tree — and leaves which case it is to the caller who holds the
+    /// context that decides it.
+    ///
+    /// Patterns are deliberately not checked: an unexpanded pattern has no single file to
+    /// point at, so "absent" has no meaning for it, and reporting it would say a reservation
+    /// is stale when the reservation never named a file in the first place.
+    #[must_use]
+    pub fn Absent_Paths(&self, root: &std::path::Path, filesystem: &impl nomos_platform::FileSystem) -> Vec<String>
+    {
+        let mut absent = Vec::new();
+
+        for path in &self.paths
+        {
+            if !filesystem.Exists(&root.join(path))
+            {
+                absent.push(path.clone());
+            }
+        }
+
+        return absent;
+    }
 }
 
 // `mod tests` above is a SEPARATE file (`territory/tests.rs`), loaded via a bare `mod
@@ -305,5 +341,68 @@ mod local_tests
         let pairs = territory.Ambiguous_Paths();
 
         assert_eq!(pairs, vec![("src/Main.rs".to_owned(), "src/main.rs".to_owned())]);
+    }
+
+    #[test]
+    fn Test_Absent_Paths_Should_Name_Only_The_Paths_Not_In_The_Tree()
+    {
+        let territory = Territory::Of_Files(["present.rs", "absent.rs", "created-later.rs"]);
+        let filesystem = Filesystem_With(&["present.rs"]);
+        let root = std::path::Path::new("repository-root");
+
+        let absent = territory.Absent_Paths(root, &filesystem);
+
+        assert_eq!(absent, vec!["absent.rs".to_owned(), "created-later.rs".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Absent_Paths_Should_Ignore_Patterns()
+    {
+        let territory = Territory::Empty().With_Pattern("crates/**");
+        let filesystem = Filesystem_With(&[]);
+
+        assert!(territory.Absent_Paths(std::path::Path::new("root"), &filesystem).is_empty());
+    }
+
+    /// A [`nomos_platform::FileSystem`] that reports only the given file names as present,
+    /// so an absent-path assertion can be driven against a tree this test constructs rather
+    /// than the real one.
+    fn Filesystem_With<'a>(present: &'a [&'a str]) -> impl nomos_platform::FileSystem + 'a
+    {
+        use nomos_contracts::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
+        use nomos_platform::{FileSystem, FileSystemError};
+        use std::path::Path;
+
+        struct Fake<'a>
+        {
+            present: &'a [&'a str],
+        }
+
+        impl Strategy for Fake<'_>
+        {
+            const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+            const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+            const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+        }
+
+        impl FileSystem for Fake<'_>
+        {
+            fn Read_To_String(&self, _path: &Path) -> Result<String, FileSystemError>
+            {
+                unimplemented!("Absent_Paths only calls Exists")
+            }
+
+            fn Replace_Atomically(&self, _path: &Path, _contents: &str) -> Result<(), FileSystemError>
+            {
+                unimplemented!("Absent_Paths only calls Exists")
+            }
+
+            fn Exists(&self, path: &Path) -> bool
+            {
+                return self.present.iter().any(|name| path.ends_with(name));
+            }
+        }
+
+        return Fake { present };
     }
 }
