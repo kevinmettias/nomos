@@ -77481,7 +77481,13 @@
           "crates/orchestration/nomos-work-orchestration/src/run.rs",
           "crates/orchestration/nomos-work-orchestration/src/tests.rs",
           "tests/contract/surface/nomos-ledger.txt",
-          "tests/contract/surface/nomos-scope-verification.txt"
+          "tests/contract/surface/nomos-scope-verification.txt",
+          "crates/substrate/nomos-scope-verification/Cargo.toml",
+          "nomos-architecture.json",
+          "crates/host/nomos-api/src/lib.rs",
+          "crates/host/nomos-api/src/work.rs",
+          "crates/host/nomos-cli/tests/list_tells_the_truth/audit.rs",
+          "tests/contract/surface/nomos-api.txt"
         ],
         "patterns": []
       },
@@ -77510,10 +77516,35 @@
         "timeout_seconds": 2700
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-reservation",
+          "reason": "The change is committed (611becca) and its own tests are green: the audit reports absent reserved paths, the API returns them, and the territory method plus its tests pass. The item's predicate, however, names -p nomos-cli, and nomos-cli's own self-check is red on Blocking findings this item did not introduce and does not own.\n\nThe census, all in committed content and none in this item's files: 1 file-name-matches-declared-type (NestedLockFactProduction in crates/languages/nomos-lang-rust-compiler/src/nested_lock/fact_production.rs, from P112), 3 parameter-count (Member_Finding, Qualified_Name_Finding and Subject_Finding in crates/rules/nomos-rules/src/checks/finding_shape.rs, from P112), and 12 single-letter-names (a b c d p q r s w x y z in crates/substrate/nomos-analysis/tests/invalidation_order.rs, from P114). All three files are clean and their last commits are P112/P114, so this is HEAD's own state and waiting will not clear it.\n\nThe self-check reddens every predicate naming -p nomos-cli whatever the item changed; that mechanism is documented in memory and says do not fix findings that are not yours and do not weaken the predicate. The change itself satisfies the done_when. Re-claim and finish once the self-check is green.",
+          "abandoned_at": 1789797578
+        }
+      ],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-reservation",
+          "added": [
+            "crates/substrate/nomos-scope-verification/Cargo.toml",
+            "nomos-architecture.json"
+          ],
+          "widened_at": 1789796311
+        },
+        {
+          "holder": "fable-reservation",
+          "added": [
+            "crates/host/nomos-api/src/lib.rs",
+            "crates/host/nomos-api/src/work.rs",
+            "crates/host/nomos-cli/tests/list_tells_the_truth/audit.rs",
+            "tests/contract/surface/nomos-api.txt"
+          ],
+          "widened_at": 1789797465
+        }
+      ]
     },
     {
       "id": "P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-7",
@@ -86107,7 +86138,55 @@
         "paths": [
           "crates/rules/nomos-rules/src/checks/closure_bounds.rs",
           "crates/rules/nomos-rules/src/checks/closure_bounds/tests.rs",
-          "crates/rules/nomos-rules/src/rule_descriptor.rs"
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-external-review-reconciliation",
+        "acquired_at": 1789797276,
+        "lease_expires_at": 1789808076
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "tests/contract/surface/nomos-rules.txt"
+          ],
+          "widened_at": 1789797304
+        }
+      ]
+    },
+    {
+      "id": "P118-A-POLICY-READING-TEXT-RULE-DROPS-ITS-TEXT-INVALIDATION-UNDER-REASSESSMENT",
+      "title": "Nine text-scanning rules lose their text invalidation the moment they declare a policy fact, so a reassessing run can serve findings from before the edit",
+      "why": "Found while wiring the two closure rules to the shared test-material classification, and it is not caused by that wiring: it is already true of nine rules at HEAD.\n\nRuleReassessmentCache::Reusable reuses a rule's prior findings unless a family it reads appears in the changed set, and the families it reads come from Effective_Requires in run_context/rule_reassessment_cache.rs. That function returns descriptor.requires, and substitutes SyntaxItems only when requires is EMPTY. Its own doc says why the substitution exists: a rule with no declared family still judges its subject's own text, every change to that text shows up as a new syntax materialization, and declaring the dependency in the cache rather than in DESCRIPTORS keeps that table's claim about materialization exact.\n\nThe substitution is therefore load-bearing and conditional on emptiness, and nine rules that judge source text have made requires non-empty by declaring a policy fact:\nEVERY_ALLOW_CARRIES_A_JUSTIFICATION, SLEEP_BASED_SYNCHRONIZATION, A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, SEQCST_JUSTIFIED_EXPLICITLY, RELAXED_NOT_USED_WHEN_ORDERING_MATTERS and NO_WILDCARD_IMPORTS, each SubjectKind::SourceFacts with requires exactly [TestMaterialPolicy]. For all nine, Effective_Requires now returns [TestMaterialPolicy] and no longer includes SyntaxItems, so a run that reports SyntaxItems changed and TestMaterialPolicy unchanged reuses their prior findings although the text they judge has changed.\n\nThe damaging direction is the security half. A credential added to a source file would be reported by a fresh run and not by a reassessing one. The blast radius is bounded today because Run always starts from an empty cache and drops it; only Run_Reassessing carries one across calls, and nomos-lsp is the caller that keeps a store alive. So this is latent rather than active, and it becomes active exactly when the reassessing path gets more callers.\n\nThe two closure rules were given [SyntaxItems, TestMaterialPolicy] by P117-THE-TWO-CLOSURE-RULES-CONSULT-NO-TEST-MATERIAL-PREDICATE-AT-ALL rather than [TestMaterialPolicy] alone, precisely to avoid joining this set. That is a per-rule workaround and not the decision this item is for.",
+      "done_when": "A reassessing run does not reuse a text-judging rule's findings across a change to the text it judges, for all nine rules named in the why and for any later rule of the same shape.\n\nWhether that is done by declaring SyntaxItems beside the policy fact in each descriptor, or by making Effective_Requires add it for every rule that judges source text rather than only for rules declaring nothing, is this item's to decide. The second is the one that generalizes, and the tension the first has to answer is named in Effective_Requires own doc: DESCRIPTORS.requires is a claim about what must be MATERIALIZED, and a text rule needs no syntax fact materialized, so writing SyntaxItems there to buy invalidation makes that table say something untrue. Materialize_Syntax writes that family unconditionally for every source on every call, so neither choice changes what is computed.\n\nA falsifier exists and is performed: a test in which a text-judging rule that declares a policy fact is handed a cache, the text it judges changes, SyntaxItems is reported changed and the policy fact is not, and the rule is shown to run again rather than be reused. Removing the repair alone must make that test fail.\n\nThe nine are checked as a population rather than one example, so a tenth rule of the same shape cannot be added silently.\n\nThe predicate is cargo test --no-fail-fast -p nomos-rules -p nomos-check-orchestration, the two crates the defect spans: the descriptors are in the first and the cache is in the second.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context/rule_reassessment_cache.rs"
         ],
         "patterns": []
       },
@@ -86121,9 +86200,45 @@
           "test",
           "--no-fail-fast",
           "-p",
-          "nomos-rules"
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P118-THE-TWO-RULE-FIX-INCREMENTS-ARE-UNVERIFIED-AGAINST-THE-INTEGRATION-SUITE",
+      "title": "The two rule-exemption increments were verified on their own crate only, because a peer held the crate the integration suite needs",
+      "why": "P117-AN-INLINE-TEST-MODULE-SPLIT-LEFT-TWO-RULES-JUDGING-THEIR-OWN-FIXTURES-2 and P117-THE-TWO-CLOSURE-RULES-CONSULT-NO-TEST-MATERIAL-PREDICATE-AT-ALL both change what two rules judge. Both declared a predicate scoped to nomos-rules, and both said in their own done_when that the calibration verdicts in tests/integration were not part of the claim.\n\nFor the first, that was not only a scope choice: nomos-integration-tests could not be run at all. It depends on nomos-spec-bundle, and fable-p103 held that crate uncompilable in the shared tree for the whole window, so the suite did not merely go unclaimed, it went unrun. That is recorded in the commit rather than glossed, and this item exists so the absence stays visible on the board instead of only in a message.\n\ntests/integration/tests/calibration.rs carries a RuleVerdict for closure-bounds-are-minimal against a third-party fixture, and the two increments changed which sources both closure rules and the three security rules judge. So the suite is not merely unrun, it is the one place a behaviour change of exactly this kind would show up against real code rather than against fixtures this workspace wrote.",
+      "done_when": "cargo test --no-fail-fast -p nomos-integration-tests is run at a revision that carries both increments and a compiling nomos-spec-bundle, and its result is recorded.\n\nIf a calibration verdict moved, it is judged rather than re-blessed: a verdict that changed because a rule now correctly declines to judge test material is a corrected expectation and the file says so in its reason text, while a verdict that changed for any other reason is a defect in the increments and is filed as one rather than absorbed here.\n\nIf nothing moved, that is the finding, and this item records that the two increments are verified against the suite rather than merely presumed to be.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/tests/calibration.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 2700
       },
       "verified": null,
       "abandoned": [],
