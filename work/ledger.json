@@ -76442,18 +76442,16 @@
           "crates/spec/nomos-spec-bundle/src/import/graph.rs",
           "crates/spec/nomos-spec-bundle/src/import/graph/insert.rs",
           "crates/spec/nomos-spec-bundle/tests/round_trip/fixpoint.rs",
-          "crates/spec/nomos-spec-ingest/src/lib.rs"
+          "crates/spec/nomos-spec-ingest/src/lib.rs",
+          "crates/spec/nomos-spec-bundle/src/import/disjoint.rs",
+          "crates/spec/nomos-spec-bundle/src/import/resolve.rs"
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p103",
-        "acquired_at": 1789794816,
-        "lease_expires_at": 1789823616
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -76479,7 +76477,43 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-spec-bundle",
+          "-p",
+          "nomos-spec-ingest",
+          "--lib",
+          "--test",
+          "round_trip",
+          "--test",
+          "durable_load",
+          "--test",
+          "store_holds",
+          "--test",
+          "round_trip_holds",
+          "--test",
+          "archive_reads"
+        ],
+        "exit_code": 0,
+        "output_tail": "Edit_Should_Be_Readable_Back_Out_As_What_Was_Committed ... ok\ntest projection::Test_Every_Governing_Record_Should_Project_To_Its_Own_Bytes ... ok\n\ntest result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.79s\n\n\nrunning 14 tests\ntest Test_Filler_Should_Never_Count_As_Preservation ... ok\ntest Test_A_Fresh_Store_Should_Be_At_The_Latest_Version ... ok\ntest Test_A_Failed_Transaction_Should_Roll_Back_Every_Table ... ok\ntest Test_Every_Table_In_The_Schema_Should_Be_Declared ... ok\ntest Test_Two_Revisions_Of_One_Path_Should_Be_Distinct ... ok\ntest Test_A_Successful_Transaction_Should_Commit_Every_Table ... ok\ntest Test_Identical_Blobs_Should_Be_Stored_Once ... ok\ntest Test_Every_Declared_Table_Should_Exist ... ok\ntest Test_Re_Ingesting_A_Document_Should_Be_Idempotent ... ok\ntest Test_Block_Hashes_Should_Survive_Storage ... ok\ntest Test_A_Dangling_Reference_Should_Be_Refused ... ok\ntest Test_An_Unjustified_Omission_Should_Be_Refused ... ok\ntest Test_A_Future_Schema_Version_Should_Be_Refused ... ok\ntest Test_Reopening_Should_Not_Re_Run_Migrations ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.02s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_bundle-ed5257fc65d0bffe.exe)\n     Running tests\\durable_load.rs (target\\debug\\deps\\durable_load-576397e33601cc28.exe)\n     Running tests\\round_trip\\main.rs (target\\debug\\deps\\round_trip-d73fe1df96eda61d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_ingest-bac54ef10fdc70e8.exe)\n     Running tests\\archive_reads.rs (target\\debug\\deps\\archive_reads-fea7158a9ce486cb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-71c6852c886b8e78.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-10933b3340a61a01.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-09f8d87294b1f5d7.exe)\n",
+        "verified_at": 1789795879,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "9a7f3a3576ca07c96280f87e43ea01ea985e7caf"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -76505,6 +76539,14 @@
             "crates/spec/nomos-spec-ingest/src/lib.rs"
           ],
           "widened_at": 1789795608
+        },
+        {
+          "holder": "fable-p103",
+          "added": [
+            "crates/spec/nomos-spec-bundle/src/import/disjoint.rs",
+            "crates/spec/nomos-spec-bundle/src/import/resolve.rs"
+          ],
+          "widened_at": 1789795689
         }
       ]
     },
