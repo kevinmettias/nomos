@@ -6,7 +6,7 @@
 //! `_Should_Not_` so the failing test report names the expectation that broke.
 
 use crate::SourceFile;
-use crate::checks::finding_shape::Qualified_Name_Finding;
+use crate::checks::finding_shape::{Finding_Shape, Qualified_Name_Finding};
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload, FUNCTION};
 use nomos_contracts::{Finding, GateCategory, RuleId};
@@ -63,15 +63,17 @@ fn Is_Stating_An_Expectation(name: &str) -> bool
 fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
 {
     return Qualified_Name_Finding(
-        TEST_NAME_DESCRIBES_BEHAVIOR,
-        path,
+        Finding_Shape {
+            rule: TEST_NAME_DESCRIBES_BEHAVIOR,
+            path,
+            summary: format!(
+                "`{}` is a test function whose name does not state a `_Should_` or \
+                 `_Should_Not_` expectation",
+                item.Own_Name()
+            ),
+        },
         item,
         GateCategory::Blocking,
-        format!(
-            "`{}` is a test function whose name does not state a `_Should_` or \
-             `_Should_Not_` expectation",
-            item.Own_Name()
-        ),
     );
 }
 

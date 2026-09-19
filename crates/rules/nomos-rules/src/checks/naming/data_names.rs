@@ -6,7 +6,7 @@
 //! leaves the rest for a richer provider.
 
 use crate::SourceFile;
-use crate::checks::finding_shape::Member_Finding;
+use crate::checks::finding_shape::{Finding_Shape, Member_Finding};
 use crate::checks::naming::Resolve_Case;
 use nomos_analysis::FactReader;
 use nomos_cap_naming_policy::Case;
@@ -118,11 +118,9 @@ fn Unescaped_Name(name: &str) -> &str
 fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
 {
     return Member_Finding(
-        DATA_NAMES_STAY_LOWER_SNAKE,
-        path,
+        Finding_Shape { rule: DATA_NAMES_STAY_LOWER_SNAKE, path, summary: format!("`{name}` is a data name that is not lower snake case") },
         item,
         name,
-        format!("`{name}` is a data name that is not lower snake case"),
     );
 }
 

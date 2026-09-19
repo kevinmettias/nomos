@@ -64,7 +64,7 @@ mod nested_lock_check;
 mod nested_lock_contract;
 #[path = "nested_lock/fact_context.rs"]
 mod nested_lock_fact_context;
-#[path = "nested_lock/fact_production.rs"]
+#[path = "nested_lock/nested_lock_fact_production.rs"]
 mod nested_lock_fact_production;
 #[path = "nested_lock/guarantee.rs"]
 mod nested_lock_guarantee;

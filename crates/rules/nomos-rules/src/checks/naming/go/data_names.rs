@@ -10,7 +10,7 @@
 //! — so this rule judges that one visible slice against `lower_snake_case` without a split
 //! by export status, the same way the standard itself does not split it.
 
-use crate::checks::finding_shape::Own_Name_Finding;
+use crate::checks::finding_shape::{Finding_Shape, Own_Name_Finding};
 use crate::{GO_LANGUAGE, SourceFile};
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload};
@@ -109,10 +109,8 @@ fn Variable_Violation_Finding(path: &str, item: &PayloadItem) -> Finding
     let name = item.Own_Name();
 
     return Own_Name_Finding(
-        GO_VARIABLES_USE_LOWER_SNAKE_CASE,
-        path,
+        Finding_Shape { rule: GO_VARIABLES_USE_LOWER_SNAKE_CASE, path, summary: format!("Go variable `{name}` is not lower_snake_case") },
         item,
-        format!("Go variable `{name}` is not lower_snake_case"),
     );
 }
 

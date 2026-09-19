@@ -4,7 +4,7 @@
 //! testable against hand-written fixture text the way [`crate::facts::Check_Names_In`]
 //! is — no registry, no store, no reader.
 
-use crate::checks::finding_shape::Qualified_Name_Finding;
+use crate::checks::finding_shape::{Finding_Shape, Qualified_Name_Finding};
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload, FUNCTION, IMPLEMENTATION, Impl_Serves_A_Trait};
 use nomos_contracts::{Finding, GateCategory};
@@ -63,17 +63,19 @@ fn Is_Trait_Method(payload: &SyntaxPayload, ordinal: usize) -> bool
 fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
 {
     return Qualified_Name_Finding(
-        super::NAMING_CONVENTION,
-        path,
+        Finding_Shape {
+            rule: super::NAMING_CONVENTION,
+            path,
+            summary: format!(
+                "`{}` is not Pascal_Snake_Case: README.md's Conventions section requires \
+                 function names to be Pascal_Snake_Case, and Cargo.toml disables rustc's own \
+                 non_snake_case lint specifically because this workspace uses a different \
+                 convention — nothing else was checking it.",
+                item.Own_Name()
+            ),
+        },
         item,
         GateCategory::Advisory,
-        format!(
-            "`{}` is not Pascal_Snake_Case: README.md's Conventions section requires \
-             function names to be Pascal_Snake_Case, and Cargo.toml disables rustc's own \
-             non_snake_case lint specifically because this workspace uses a different \
-             convention — nothing else was checking it.",
-            item.Own_Name()
-        ),
     );
 }
 

@@ -4,7 +4,7 @@
 //! syntax payload already carries Go type declarations, their visibility, and their names,
 //! so this check is exact for source files recognized as Go by path.
 
-use crate::checks::finding_shape::Own_Name_Finding;
+use crate::checks::finding_shape::{Finding_Shape, Own_Name_Finding};
 use crate::checks::naming::Resolve_Case;
 use crate::{GO_LANGUAGE, SourceFile};
 use nomos_analysis::FactReader;
@@ -101,10 +101,8 @@ fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
     let expected = Expected_Case_Label(item);
 
     return Own_Name_Finding(
-        TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
-        path,
+        Finding_Shape { rule: TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, path, summary: format!("Go type `{name}` is not {expected}") },
         item,
-        format!("Go type `{name}` is not {expected}"),
     );
 }
 

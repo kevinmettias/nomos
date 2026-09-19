@@ -22,7 +22,7 @@
 //! discard token a wildcard-adjacent `use` binding can also carry.
 
 use crate::SourceFile;
-use crate::checks::finding_shape::Member_Finding;
+use crate::checks::finding_shape::{Finding_Shape, Member_Finding};
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{IMPLEMENTATION, Impl_Generics, PayloadItem, Struct_Fields, SyntaxPayload};
 use nomos_contracts::{Finding, RuleId};
@@ -153,11 +153,9 @@ fn Is_Single_Letter(name: &str) -> bool
 fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
 {
     return Member_Finding(
-        SINGLE_LETTER_NAMES,
-        path,
+        Finding_Shape { rule: SINGLE_LETTER_NAMES, path, summary: format!("`{name}` is a single-letter name outside the local-variable exception this payload can judge") },
         item,
         name,
-        format!("`{name}` is a single-letter name outside the local-variable exception this payload can judge"),
     );
 }
 

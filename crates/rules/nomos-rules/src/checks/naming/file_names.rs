@@ -22,7 +22,7 @@
 //! same answer for a whole file whose name carries no such claim either.
 
 use crate::SourceFile;
-use crate::checks::finding_shape::Own_Name_Finding;
+use crate::checks::finding_shape::{Finding_Shape, Own_Name_Finding};
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{FUNCTION, PayloadItem, SyntaxPayload};
 use nomos_contracts::{Finding, RuleId};
@@ -140,10 +140,8 @@ fn Violation_Finding(path: &str, item: &PayloadItem, stem: &str) -> Finding
     let expected = To_Snake_Case(type_name);
 
     return Own_Name_Finding(
-        FILE_NAME_MATCHES_DECLARED_TYPE,
-        path,
+        Finding_Shape { rule: FILE_NAME_MATCHES_DECLARED_TYPE, path, summary: format!("`{type_name}` is public but {path} has stem `{stem}` instead of `{expected}`") },
         item,
-        format!("`{type_name}` is public but {path} has stem `{stem}` instead of `{expected}`"),
     );
 }
 
@@ -172,10 +170,8 @@ fn One_Public_Type_Finding(path: &str, item: &PayloadItem) -> Finding
     let type_name = item.Own_Name();
 
     return Own_Name_Finding(
-        ONE_PUBLIC_TYPE_PER_FILE,
-        path,
+        Finding_Shape { rule: ONE_PUBLIC_TYPE_PER_FILE, path, summary: format!("{path} declares more than one top-level public type; `{type_name}` needs its own file") },
         item,
-        format!("{path} declares more than one top-level public type; `{type_name}` needs its own file"),
     );
 }
 

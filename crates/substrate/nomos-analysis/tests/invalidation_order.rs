@@ -107,7 +107,7 @@ fn Depends_On(store: &mut MemoryFactStore, key: &FactKey, upstream: &[&FactKey])
     store.Materialize(fact, &edges).expect("materializes");
 }
 
-/// Invalidates exactly the fact(s) `subject` names, at file granularity, and returns the
+/// Invalidates exactly the fact(leaving) `subject` names, at file granularity, and returns the
 /// report — the entry point the whole walk spreads out from.
 fn Subject_Changed(store: &mut MemoryFactStore, subject: SubjectId) -> InvalidationReport
 {
@@ -120,46 +120,46 @@ fn Subject_Changed(store: &mut MemoryFactStore, subject: SubjectId) -> Invalidat
     );
 }
 
-/// The four-node chain `a` → `b` → `c` → `d` in a fresh store, alongside its four keys.
+/// The four-node chain `head` → `second` → `third` → `tail` in a fresh store, alongside its four keys.
 struct FourLongChain
 {
     store: MemoryFactStore,
-    a: FactKey,
-    b: FactKey,
-    c: FactKey,
-    d: FactKey,
+    head: FactKey,
+    second: FactKey,
+    third: FactKey,
+    tail: FactKey,
 }
 
 /// A depends on B depends on C depends on D, in a fresh store — the fixture graph
 /// `Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_Order`
 /// asserts over.
 ///
-/// The assertion reads `Condensation_Of`'s output directly rather than `dependent`'s
+/// The assertion reads `Condensation_Of`'leaving output directly rather than `dependent`'leaving
 /// traversal order: `dependent` is filled by a walk whose entry point and pop order are
-/// incidental to this graph's shape, and `Condensation_Of` is computed fresh from the
-/// store's own dependency edges among the invalidated keys, so it does not vary with where
+/// incidental to this graph'leaving shape, and `Condensation_Of` is computed fresh from the
+/// store'leaving own dependency edges among the invalidated keys, so it does not vary with where
 /// the walk entered.
 fn FourLongChain() -> FourLongChain
 {
-    /// The subject seed of each node, in the order the chain reads: `a` reads `b` reads `c`
-    /// reads `d`. Only distinctness matters — no assertion compares a seed's value.
+    /// The subject seed of each node, in the order the chain reads: `head` reads `second` reads `third`
+    /// reads `tail`. Only distinctness matters — no assertion compares a seed'leaving value.
     const SEED_A: u8 = 1;
     const SEED_B: u8 = 2;
     const SEED_C: u8 = 3;
     const SEED_D: u8 = 4;
 
-    let a = Key_For(SEED_A);
-    let b = Key_For(SEED_B);
-    let c = Key_For(SEED_C);
-    let d = Key_For(SEED_D);
+    let head = Key_For(SEED_A);
+    let second = Key_For(SEED_B);
+    let third = Key_For(SEED_C);
+    let tail = Key_For(SEED_D);
 
     let mut store = MemoryFactStore::New();
-    Depends_On(&mut store, &d, &[]);
-    Depends_On(&mut store, &c, &[&d]);
-    Depends_On(&mut store, &b, &[&c]);
-    Depends_On(&mut store, &a, &[&b]);
+    Depends_On(&mut store, &tail, &[]);
+    Depends_On(&mut store, &third, &[&tail]);
+    Depends_On(&mut store, &second, &[&third]);
+    Depends_On(&mut store, &head, &[&second]);
 
-    return FourLongChain { store, a, b, c, d };
+    return FourLongChain { store, head, second, third, tail };
 }
 
 #[test]
@@ -167,9 +167,9 @@ fn Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_
 {
     let mut fixture = FourLongChain();
 
-    let report = Subject_Changed(&mut fixture.store, fixture.d.subject);
-    assert_eq!(report.direct, vec![fixture.d.clone()]);
-    let mut expected_dependent = vec![fixture.c.clone(), fixture.b.clone(), fixture.a.clone()];
+    let report = Subject_Changed(&mut fixture.store, fixture.tail.subject);
+    assert_eq!(report.direct, vec![fixture.tail.clone()]);
+    let mut expected_dependent = vec![fixture.third.clone(), fixture.second.clone(), fixture.head.clone()];
     expected_dependent.sort();
     assert_eq!(report.dependent, expected_dependent, "the chain was not fully invalidated");
 
@@ -177,23 +177,23 @@ fn Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_
     assert_eq!(
         groups,
         vec![
-            RematerializationGroup { members: vec![fixture.d] },
-            RematerializationGroup { members: vec![fixture.c] },
-            RematerializationGroup { members: vec![fixture.b] },
-            RematerializationGroup { members: vec![fixture.a] },
+            RematerializationGroup { members: vec![fixture.tail] },
+            RematerializationGroup { members: vec![fixture.third] },
+            RematerializationGroup { members: vec![fixture.second] },
+            RematerializationGroup { members: vec![fixture.head] },
         ],
         "D must be rematerializable before C before B before A"
     );
 }
 
-/// The four-node cycle `w` → `x` → `y` → `z` → `w` in a fresh store, alongside its four keys.
+/// The four-node cycle `first` → `second` → `third` → `fourth` → `first` in a fresh store, alongside its four keys.
 struct FourCycle
 {
     store: MemoryFactStore,
-    w: FactKey,
-    x: FactKey,
-    y: FactKey,
-    z: FactKey,
+    first: FactKey,
+    second: FactKey,
+    third: FactKey,
+    fourth: FactKey,
 }
 
 /// W depends on X depends on Y depends on Z depends on W, in a fresh store — the fixture
@@ -205,24 +205,24 @@ struct FourCycle
 fn FourCycle() -> FourCycle
 {
     /// The subject seed of each node, in the order the cycle reads. Only distinctness
-    /// matters — no assertion compares a seed's value.
+    /// matters — no assertion compares a seed'leaving value.
     const SEED_W: u8 = 10;
     const SEED_X: u8 = 11;
     const SEED_Y: u8 = 12;
     const SEED_Z: u8 = 13;
 
-    let w = Key_For(SEED_W);
-    let x = Key_For(SEED_X);
-    let y = Key_For(SEED_Y);
-    let z = Key_For(SEED_Z);
+    let first = Key_For(SEED_W);
+    let second = Key_For(SEED_X);
+    let third = Key_For(SEED_Y);
+    let fourth = Key_For(SEED_Z);
 
     let mut store = MemoryFactStore::New();
-    Depends_On(&mut store, &w, &[&x]);
-    Depends_On(&mut store, &x, &[&y]);
-    Depends_On(&mut store, &y, &[&z]);
-    Depends_On(&mut store, &z, &[&w]);
+    Depends_On(&mut store, &first, &[&second]);
+    Depends_On(&mut store, &second, &[&third]);
+    Depends_On(&mut store, &third, &[&fourth]);
+    Depends_On(&mut store, &fourth, &[&first]);
 
-    return FourCycle { store, w, x, y, z };
+    return FourCycle { store, first, second, third, fourth };
 }
 
 #[test]
@@ -230,8 +230,8 @@ fn Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four()
 {
     let mut fixture = FourCycle();
 
-    let report = Subject_Changed(&mut fixture.store, fixture.w.subject);
-    assert_eq!(report.direct, vec![fixture.w.clone()]);
+    let report = Subject_Changed(&mut fixture.store, fixture.first.subject);
+    assert_eq!(report.direct, vec![fixture.first.clone()]);
     assert_eq!(report.Invalidated(), CYCLE_LENGTH, "the cycle did not terminate cleanly");
 
     let groups = Condensation_Of(&report, &fixture.store);
@@ -241,7 +241,7 @@ fn Test_A_Four_Cycle_Should_Condense_Into_One_Group_Naming_All_Four()
     {
         panic!("checked len == 1 above");
     };
-    Assert_Names_Exactly(only, &[&fixture.w, &fixture.x, &fixture.y, &fixture.z]);
+    Assert_Names_Exactly(only, &[&fixture.first, &fixture.second, &fixture.third, &fixture.fourth]);
     assert!(only.Is_Cycle(), "four mutually dependent facts were not reported as a cycle");
 }
 
@@ -257,15 +257,15 @@ fn Assert_Names_Exactly(group: &RematerializationGroup, keys: &[&FactKey])
     assert_eq!(members, expected, "the group named a different set of facts");
 }
 
-/// The chain-through-a-cycle fixture: `p` reads `q`, `q` and `r` read each other, and `r`
-/// also reads `s`.
+/// The chain-through-a-cycle fixture: `entering` reads `cycle_left`, `cycle_left` and `cycle_right` read each other, and `cycle_right`
+/// also reads `leaving`.
 struct ChainThroughCycle
 {
     store: MemoryFactStore,
-    p: FactKey,
-    q: FactKey,
-    r: FactKey,
-    s: FactKey,
+    entering: FactKey,
+    cycle_left: FactKey,
+    cycle_right: FactKey,
+    leaving: FactKey,
 }
 
 /// P depends on Q; Q and R depend on each other; R also depends on S, in a fresh store — the
@@ -279,29 +279,29 @@ struct ChainThroughCycle
 fn ChainThroughCycle() -> ChainThroughCycle
 {
     /// The subject seed of each node, in the order the chain reads. Only distinctness
-    /// matters — no assertion compares a seed's value.
+    /// matters — no assertion compares a seed'leaving value.
     const SEED_P: u8 = 20;
     const SEED_Q: u8 = 21;
     const SEED_R: u8 = 22;
     const SEED_S: u8 = 23;
 
-    let p = Key_For(SEED_P);
-    let q = Key_For(SEED_Q);
-    let r = Key_For(SEED_R);
-    let s = Key_For(SEED_S);
+    let entering = Key_For(SEED_P);
+    let cycle_left = Key_For(SEED_Q);
+    let cycle_right = Key_For(SEED_R);
+    let leaving = Key_For(SEED_S);
 
     let mut store = MemoryFactStore::New();
-    Depends_On(&mut store, &s, &[]);
-    Depends_On(&mut store, &r, &[&q, &s]);
-    Depends_On(&mut store, &q, &[&r]);
-    Depends_On(&mut store, &p, &[&q]);
+    Depends_On(&mut store, &leaving, &[]);
+    Depends_On(&mut store, &cycle_right, &[&cycle_left, &leaving]);
+    Depends_On(&mut store, &cycle_left, &[&cycle_right]);
+    Depends_On(&mut store, &entering, &[&cycle_left]);
 
-    return ChainThroughCycle { store, p, q, r, s };
+    return ChainThroughCycle { store, entering, cycle_left, cycle_right, leaving };
 }
 
-/// Asserts `groups` is exactly three, in order: `before` alone, `cycle`'s two members
+/// Asserts `groups` is exactly three, in order: `before` alone, `cycle`'leaving two members
 /// together as one cycle, then `after` alone — both the acyclic order around the cycle and
-/// the mutual-dependency group inside it, which is the property this file's chain-through-a-
+/// the mutual-dependency group inside it, which is the property this file'leaving chain-through-a-
 /// cycle test exists to prove `Condensation_Of` preserves.
 fn Assert_Chain_Around_Cycle(
     groups: &[RematerializationGroup],
@@ -331,8 +331,8 @@ fn Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group()
 {
     let mut fixture = ChainThroughCycle();
 
-    let report = Subject_Changed(&mut fixture.store, fixture.s.subject);
-    assert_eq!(report.direct, vec![fixture.s.clone()]);
+    let report = Subject_Changed(&mut fixture.store, fixture.leaving.subject);
+    assert_eq!(report.direct, vec![fixture.leaving.clone()]);
     assert_eq!(
         report.Invalidated(),
         CHAIN_THROUGH_CYCLE_LENGTH,
@@ -342,15 +342,15 @@ fn Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group()
     let groups = Condensation_Of(&report, &fixture.store);
     Assert_Chain_Around_Cycle(
         &groups,
-        fixture.s.clone(),
-        [fixture.q.clone(), fixture.r.clone()],
-        fixture.p.clone(),
+        fixture.leaving.clone(),
+        [fixture.cycle_left.clone(), fixture.cycle_right.clone()],
+        fixture.entering.clone(),
     );
 }
 
-/// `depth` fact keys, distinguished only by an index folded into the subject's digest —
+/// `depth` fact keys, distinguished only by an index folded into the subject'leaving digest —
 /// large enough, and cheap enough to build, to make a chain over them exercise
-/// `Tarjan::Visit`'s iterative walk rather than a native recursion depth nothing here
+/// `Tarjan::Visit`'leaving iterative walk rather than a native recursion depth nothing here
 /// controls.
 fn Deep_Chain_Keys(depth: u32) -> Vec<FactKey>
 {

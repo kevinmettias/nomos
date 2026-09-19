@@ -31,7 +31,7 @@
 //! what [`super::abbreviations::Check_Abbreviations`] already judges.
 
 use crate::SourceFile;
-use crate::checks::finding_shape::Member_Finding;
+use crate::checks::finding_shape::{Finding_Shape, Member_Finding};
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_syntax::{IMPLEMENTATION, Impl_Serves_A_Trait, PayloadItem, Struct_Fields, SyntaxPayload};
 use nomos_contracts::{Finding, RuleId};
@@ -300,11 +300,9 @@ fn Is_All_Digits(field: &str) -> bool
 fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, word: String) -> Finding
 {
     return Member_Finding(
-        NAMING_CLARITY,
-        path,
+        Finding_Shape { rule: NAMING_CLARITY, path, summary: format!("`{name}` contains vague word `{word}`; use a concrete responsibility name") },
         item,
         name,
-        format!("`{name}` contains vague word `{word}`; use a concrete responsibility name"),
     );
 }
 

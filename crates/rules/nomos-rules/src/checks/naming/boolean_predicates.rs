@@ -5,7 +5,7 @@
 //! judges boolean fields and leaves the other boolean-name sites to a richer provider.
 
 use crate::SourceFile;
-use crate::checks::finding_shape::Member_Finding;
+use crate::checks::finding_shape::{Finding_Shape, Member_Finding};
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{PayloadItem, Struct_Fields, SyntaxPayload};
 use nomos_contracts::{Finding, RuleId};
@@ -60,11 +60,9 @@ fn Field_Violations_In(path: &str, item: &PayloadItem) -> Vec<Finding>
 fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
 {
     return Member_Finding(
-        BOOLEAN_PREDICATES,
-        path,
+        Finding_Shape { rule: BOOLEAN_PREDICATES, path, summary: format!("boolean field `{name}` does not start with `is_`, `has_`, `can_`, or `should_`") },
         item,
         name,
-        format!("boolean field `{name}` does not start with `is_`, `has_`, `can_`, or `should_`"),
     );
 }
 
