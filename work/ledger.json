@@ -78006,11 +78006,26 @@
           "tests/integration/fixtures/third-party/hex-0.4.3/nomos-test-material.json",
           "nomos-test-material.json",
           "README.md",
-          "Cargo.toml"
+          "Cargo.toml",
+          "crates/rules/nomos-rules/src/rule_descriptor/required_fact.rs",
+          "crates/rules/nomos-rules/src/checks/security_text/certificate_verification.rs",
+          "crates/rules/nomos-rules/src/checks/security_text/tests.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+          "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape.rs",
+          "crates/rules/nomos-rules/src/checks/naming/file_names.rs",
+          "crates/rules/nomos-rules/src/checks/placement.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text/unwrap_expect.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text/comment_justified.rs",
+          "crates/rules/nomos-rules/src/checks/rust_text/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context/capabilities.rs",
+          "tests/integration/fixtures/third-party/hex-0.4.3/samples/example_credential.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text/relaxed.rs",
+          "nomos-architecture.json"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P100-THE-ARCHITECTURE-A-RULE-JUDGES-IS-COMPILED-INTO-THE-RULE-CRATE-INSTEAD-OF-DECLARED-BY-THE-REPOSITORY-8"
       ],
@@ -78034,11 +78049,80 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cap-test-material-policy",
+          "-p",
+          "nomos-repo-policy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "rget\\debug\\deps\\unchanged_run_economy-f89249e6aac5f2eb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-efb1c5409ff48997.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-9649245b3093802e.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-8375971d46d303ee.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-fbe5a6a85c31d1e0.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-623f5081f1a00001.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-ed40cff72442ea9f.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-537e4e671eee3b71.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-59c2e7359dad7786.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a0ccf90f57c824aa.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-7823783247efa995.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-6d9ea5566e8cb295.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-06590187a8b5eacd.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-d75e4d44b554ec9d.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-c2ff689603c18aa2.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-405baf25f9ace22a.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_repo_policy-187f18827359df2b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-53c015f64b0a99f3.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-0e54574603f97f59.exe)\n   Doc-tests nomos_cap_test_material_policy\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_repo_policy\n   Doc-tests nomos_rules\n",
+        "verified_at": 1789786656,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "9c0de291a1f61049b08b4d228fe336312842b1e3"
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "fable-p100",
+          "acquired_at": 1789717533,
+          "lease_expires_at": 1789731933
+        }
+      ],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p100",
+          "added": [
+            "crates/rules/nomos-rules/src/rule_descriptor/required_fact.rs",
+            "crates/rules/nomos-rules/src/checks/security_text/certificate_verification.rs",
+            "crates/rules/nomos-rules/src/checks/security_text/tests.rs",
+            "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+            "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
+            "crates/rules/nomos-rules/src/checks/function_shape.rs",
+            "crates/rules/nomos-rules/src/checks/naming/file_names.rs",
+            "crates/rules/nomos-rules/src/checks/placement.rs",
+            "crates/rules/nomos-rules/src/checks/rust_text/unwrap_expect.rs",
+            "crates/rules/nomos-rules/src/checks/rust_text/comment_justified.rs",
+            "crates/rules/nomos-rules/src/checks/rust_text/tests.rs",
+            "crates/orchestration/nomos-check-orchestration/src/run_context/capabilities.rs",
+            "tests/integration/fixtures/third-party/hex-0.4.3/samples/example_credential.rs"
+          ],
+          "widened_at": 1789785103
+        },
+        {
+          "holder": "fable-p100",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/concurrency_text/relaxed.rs"
+          ],
+          "widened_at": 1789786187
+        },
+        {
+          "holder": "fable-p100",
+          "added": [
+            "nomos-architecture.json"
+          ],
+          "widened_at": 1789786346
+        }
+      ]
     },
     {
       "id": "P110-B-A-FINDING-CARRIES-THE-ADDRESS-ITS-RULE-DECLARES",
