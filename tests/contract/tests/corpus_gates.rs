@@ -19,7 +19,7 @@
 //!
 //! # The three variables
 //!
-//! `NOMOS_V14_CORPUS` — the v14.36 authoring tree. Carries the normalizer's reproduction of
+//! `NOMOS_V14_CORPUS` — the v14.19 authoring tree. Carries the normalizer's reproduction of
 //! the real canonical hash, the byte order mark sweep over every authored document, the
 //! 282/258/234 and 30/28 domain counts, the whole-corpus ingestion, and restoration.
 //!
