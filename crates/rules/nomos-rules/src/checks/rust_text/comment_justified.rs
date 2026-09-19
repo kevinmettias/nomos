@@ -7,6 +7,7 @@
 
 use crate::checks::Is_Test_Or_Example_Source;
 use crate::{RUST_LANGUAGE, SourceFile};
+use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
 
 use super::comment_block::{Is_A_Non_Empty_Comment, Has_A_Previous_Comment_Block};
@@ -26,14 +27,15 @@ use super::{
 /// `a-disabled-test-states-why` would be deleted outright by it, since a disabled test is in
 /// a test source by construction.
 #[must_use]
-pub fn Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile]) -> Vec<Finding>
+pub fn Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
 
     for source in sources
     {
         let is_judged_rust_source = source.Is_Written_In(RUST_LANGUAGE)
-            && !Is_Test_Or_Example_Source(source)
+            && !Is_Test_Or_Example_Source(source, &declared)
             && !Is_Own_Implementation_File(source);
         if is_judged_rust_source
         {

@@ -66,6 +66,12 @@ nomos-cap-words-policy = { workspace = true }
 # declaration are the same answer, since a repository that declared no goals is judged
 # nothing either way, so this rule carries no fallback default of its own.
 nomos-cap-goals-policy = { workspace = true }
+# nomos-cap-test-material-policy, a sixth OD-RULES-011 instance: the three security checks
+# and the shared test-or-example exemption name nomos.cap.test.material.policy, never
+# nomos-repo-policy::test_material, which is where the answer happens to come from today.
+# Optional in the same OD-CAPABILITY-004 sense as its five siblings -- an absent read falls
+# back to each rule's own toolchain-fixed clause list rather than becoming a Finding.
+nomos-cap-test-material-policy = { workspace = true }
 # nomos-cap-architecture, and deliberately not a sixth OD-RULES-011 family: OD-RULES-029
 # decided that a family is a repository policy parameter and that a declared architecture is
 # the description a rule judges against. The three dependency checks name this contract and

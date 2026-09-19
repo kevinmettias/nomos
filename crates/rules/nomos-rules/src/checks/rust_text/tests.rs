@@ -1,4 +1,6 @@
 use super::*;
+use nomos_analysis::{FactReader, MemoryFactStore, Reader};
+use nomos_capability::Registry;
 use nomos_contracts::SubjectId;
 use nomos_model::Content_Digest;
 
@@ -7,7 +9,7 @@ fn Test_Check_Unwrap_Expect_Discipline_Should_Report_Unwrap_In_Production_Rust()
 {
     let source = Source(Path("src/lib.rs"), Text("let value = option.unwrap();\n"));
 
-    let findings = Check_Unwrap_Expect_Discipline(&[source]);
+    let findings = Check(Check_Unwrap_Expect_Discipline, source);
 
     assert_eq!(findings.len(), 1, "{findings:?}");
     assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(UNWRAP_EXPECT_DISCIPLINE));
@@ -18,7 +20,7 @@ fn Test_Check_Unwrap_Expect_Discipline_Should_Ignore_Test_Rust()
 {
     let source = Source(Path("tests/parser.rs"), Text("let value = option.unwrap();\n"));
 
-    let findings = Check_Unwrap_Expect_Discipline(&[source]);
+    let findings = Check(Check_Unwrap_Expect_Discipline, source);
 
     assert!(findings.is_empty(), "{findings:?}");
 }
@@ -28,7 +30,7 @@ fn Test_Check_Unwrap_Expect_Discipline_Should_Report_Placeholder_Expect()
 {
     let source = Source(Path("src/lib.rs"), Text("let value = result.expect(\"should not happen\");\n"));
 
-    let findings = Check_Unwrap_Expect_Discipline(&[source]);
+    let findings = Check(Check_Unwrap_Expect_Discipline, source);
 
     assert_eq!(findings.len(), 1, "{findings:?}");
 }
@@ -132,7 +134,7 @@ fn Test_Check_Every_Allow_Carries_A_Justification_Should_Report_An_Unexplained_A
 {
     let source = Source(Path("src/lib.rs"), Text("#[allow(clippy::redundant_clone)]\nlet processed = input.clone();\n"));
 
-    let findings = Check_Every_Allow_Carries_A_Justification(&[source]);
+    let findings = Check(Check_Every_Allow_Carries_A_Justification, source);
 
     assert_eq!(findings.len(), 1, "{findings:?}");
     assert_eq!(
@@ -151,7 +153,7 @@ fn Test_Check_Every_Allow_Carries_A_Justification_Should_Accept_An_Explained_All
          let processed = input.clone();\n"),
     );
 
-    let findings = Check_Every_Allow_Carries_A_Justification(&[source]);
+    let findings = Check(Check_Every_Allow_Carries_A_Justification, source);
 
     assert!(findings.is_empty(), "{findings:?}");
 }
@@ -161,7 +163,7 @@ fn Test_Check_Every_Allow_Carries_A_Justification_Should_Accept_A_Crate_Level_Al
 {
     let source = Source(Path("src/lib.rs"), Text("// this crate is a thin FFI shim and every public item is consumed externally\n#![allow(dead_code)]\n"));
 
-    let findings = Check_Every_Allow_Carries_A_Justification(&[source]);
+    let findings = Check(Check_Every_Allow_Carries_A_Justification, source);
 
     assert!(findings.is_empty(), "{findings:?}");
 }
@@ -174,7 +176,7 @@ fn Test_Check_Every_Allow_Carries_A_Justification_Should_Not_Judge_A_Test_Source
 {
     let source = Source(Path("crates/languages/nomos-lang-rust/tests/guarantee.rs"), Text("#[allow(clippy::redundant_clone)]\nlet processed = input.clone();\n"));
 
-    let findings = Check_Every_Allow_Carries_A_Justification(&[source]);
+    let findings = Check(Check_Every_Allow_Carries_A_Justification, source);
 
     assert!(findings.is_empty(), "{findings:?}");
 }
@@ -477,4 +479,15 @@ fn Source(path: Path<'_>, text: Text<'_>) -> SourceFile
     let mut source = SourceFile::New(path.0, SubjectId::From_Digest(Content_Digest(path.0.as_bytes())), text.0);
     source.language = crate::Recognized_Language_In_Tests(path.0);
     return source;
+}
+
+/// Runs `check` over `source` through a real, empty reader — these checks read only
+/// `nomos.cap.test.material.policy`, which no fixture here declares, so `Require` fails and
+/// each resolves to its own fixed clauses alone.
+fn Check(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, source: SourceFile) -> Vec<Finding>
+{
+    let store = MemoryFactStore::New();
+    let registry = Registry::New();
+    let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
+    return check(&[source], &mut facts);
 }

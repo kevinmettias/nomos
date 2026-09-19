@@ -30,6 +30,7 @@ mod relaxed;
 
 use super::code_prefix::Code_Prefix;
 use crate::{RUST_LANGUAGE, SourceFile};
+use nomos_analysis::FactReader;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 pub use relaxed::Check_Relaxed_Not_Used_When_Ordering_Matters;
@@ -52,9 +53,9 @@ const ATOMIC_ORDERING_MARKER: &str = "atomic-ordering: allow";
 /// Reports an `AcqRel`, `Acquire` or `Release` ordering with no adjacent `atomic-ordering:
 /// allow` reason -- the "name the happens-before pairing" obligation.
 #[must_use]
-pub fn Check_Atomic_Ordering_Choices_Are_Justified(sources: &[SourceFile]) -> Vec<Finding>
+pub fn Check_Atomic_Ordering_Choices_Are_Justified(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    return Findings_For(sources, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, |variant| {
+    return Findings_For(sources, facts, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, |variant| {
         return variant != "SeqCst" && variant != "Relaxed";
     });
 }
@@ -62,19 +63,20 @@ pub fn Check_Atomic_Ordering_Choices_Are_Justified(sources: &[SourceFile]) -> Ve
 /// Reports a `SeqCst` ordering with no adjacent `atomic-ordering: allow` reason -- the "name the
 /// total order and why weaker would not do" obligation.
 #[must_use]
-pub fn Check_Seqcst_Justified_Explicitly(sources: &[SourceFile]) -> Vec<Finding>
+pub fn Check_Seqcst_Justified_Explicitly(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    return Findings_For(sources, SEQCST_JUSTIFIED_EXPLICITLY, |variant| return variant == "SeqCst");
+    return Findings_For(sources, facts, SEQCST_JUSTIFIED_EXPLICITLY, |variant| return variant == "SeqCst");
 }
 
-fn Findings_For(sources: &[SourceFile], rule: &str, matches_partition: fn(&str) -> bool) -> Vec<Finding>
+fn Findings_For(sources: &[SourceFile], facts: &mut dyn FactReader, rule: &str, matches_partition: fn(&str) -> bool) -> Vec<Finding>
 {
+    let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
 
     for source in sources
     {
         let is_judged_rust_source =
-            source.Is_Written_In(RUST_LANGUAGE) && !super::Is_Test_Or_Example_Source(source) && !Is_Own_Implementation_File(source);
+            source.Is_Written_In(RUST_LANGUAGE) && !super::Is_Test_Or_Example_Source(source, &declared) && !Is_Own_Implementation_File(source);
         if is_judged_rust_source
         {
             let ordering_findings = Ordering_Findings_In(source, rule, matches_partition);
@@ -328,6 +330,8 @@ fn Marker_Reason_In(line: &str) -> Option<&str>
 mod tests
 {
     use super::*;
+    use nomos_analysis::{FactReader, MemoryFactStore, Reader};
+    use nomos_capability::Registry;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
@@ -335,7 +339,7 @@ mod tests
     fn Test_Check_Atomic_Ordering_Choices_Are_Justified_Should_Report_An_Unexplained_Acquire()
     {
         let source = Source_File(SourceText { path: "src/counter.rs", text: "let count = work_count.load(Ordering::Acquire);\n" });
-        let findings = Check_Atomic_Ordering_Choices_Are_Justified(&[source]);
+        let findings = Check(Check_Atomic_Ordering_Choices_Are_Justified, source);
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED));
     }
@@ -346,7 +350,7 @@ mod tests
         let source = Source_File(
             SourceText { path: "src/counter.rs", text: "// atomic-ordering: allow: pairs with the Release store in submit_work\nlet count = work_count.load(Ordering::Acquire);\n" },
         );
-        let findings = Check_Atomic_Ordering_Choices_Are_Justified(&[source]);
+        let findings = Check(Check_Atomic_Ordering_Choices_Are_Justified, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -356,7 +360,7 @@ mod tests
         let source = Source_File(
             SourceText { path: "src/counter.rs", text: "// Acquire: pairs with the Release store in submit_work; ensures we\n// observe the work-item fields written before the release.\nlet count = work_count.load(Ordering::Acquire);\n" },
         );
-        let findings = Check_Atomic_Ordering_Choices_Are_Justified(&[source]);
+        let findings = Check(Check_Atomic_Ordering_Choices_Are_Justified, source);
         assert_eq!(findings.len(), 1, "the implementation requires the literal marker, not any adjacent prose: {findings:?}");
     }
 
@@ -364,7 +368,7 @@ mod tests
     fn Test_Check_Atomic_Ordering_Choices_Are_Justified_Should_Accept_A_Trailing_Same_Line_Marker()
     {
         let source = Source_File(SourceText { path: "src/counter.rs", text: "let count = work_count.load(Ordering::Release); // atomic-ordering: allow: publishes count before the flag\n" });
-        let findings = Check_Atomic_Ordering_Choices_Are_Justified(&[source]);
+        let findings = Check(Check_Atomic_Ordering_Choices_Are_Justified, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -372,7 +376,7 @@ mod tests
     fn Test_Check_Atomic_Ordering_Choices_Are_Justified_Should_Ignore_An_Import_Line()
     {
         let source = Source_File(SourceText { path: "src/counter.rs", text: "use std::sync::atomic::Ordering::Acquire;\n" });
-        let findings = Check_Atomic_Ordering_Choices_Are_Justified(&[source]);
+        let findings = Check(Check_Atomic_Ordering_Choices_Are_Justified, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -380,7 +384,7 @@ mod tests
     fn Test_Check_Atomic_Ordering_Choices_Are_Justified_Should_Ignore_Test_Files()
     {
         let source = Source_File(SourceText { path: "tests/counter_test.rs", text: "let count = work_count.load(Ordering::Acquire);\n" });
-        let findings = Check_Atomic_Ordering_Choices_Are_Justified(&[source]);
+        let findings = Check(Check_Atomic_Ordering_Choices_Are_Justified, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -388,7 +392,7 @@ mod tests
     fn Test_Check_Atomic_Ordering_Choices_Are_Justified_Should_Ignore_The_Sibling_Cmp_Ordering_Enum()
     {
         let source = Source_File(SourceText { path: "src/sort.rs", text: "if a.cmp(&b) == std::cmp::Ordering::Less { return; }\n" });
-        let findings = Check_Atomic_Ordering_Choices_Are_Justified(&[source]);
+        let findings = Check(Check_Atomic_Ordering_Choices_Are_Justified, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -396,7 +400,7 @@ mod tests
     fn Test_Check_Seqcst_Justified_Explicitly_Should_Report_An_Unexplained_Seqcst()
     {
         let source = Source_File(SourceText { path: "src/counter.rs", text: "flag.store(true, Ordering::SeqCst);\n" });
-        let findings = Check_Seqcst_Justified_Explicitly(&[source]);
+        let findings = Check(Check_Seqcst_Justified_Explicitly, source);
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(SEQCST_JUSTIFIED_EXPLICITLY));
     }
@@ -405,7 +409,7 @@ mod tests
     fn Test_Check_Seqcst_Justified_Explicitly_Should_Not_Also_Fire_The_Choices_Are_Justified_Rule()
     {
         let source = Source_File(SourceText { path: "src/counter.rs", text: "flag.store(true, Ordering::SeqCst);\n" });
-        let findings = Check_Atomic_Ordering_Choices_Are_Justified(&[source]);
+        let findings = Check(Check_Atomic_Ordering_Choices_Are_Justified, source);
         assert!(findings.is_empty(), "the three rules partition the argument -- SeqCst belongs only to its own rule: {findings:?}");
     }
 
@@ -413,7 +417,7 @@ mod tests
     fn Test_Findings_Should_Report_Only_The_Leftmost_Ordering_On_A_Compare_Exchange_Line()
     {
         let source = Source_File(SourceText { path: "src/counter.rs", text: "state.compare_exchange(old, new, Ordering::AcqRel, Ordering::Acquire).ok();\n" });
-        let choices = Check_Atomic_Ordering_Choices_Are_Justified(&[source]);
+        let choices = Check(Check_Atomic_Ordering_Choices_Are_Justified, source);
         assert_eq!(choices.len(), 1, "one decision, one finding: {choices:?}");
     }
 
@@ -422,7 +426,7 @@ mod tests
     {
         let source = Source_File(SourceText { path: "crates/rules/nomos-rules/src/checks/concurrency_text.rs", text: "let value = counter.load(Ordering::SeqCst);\n" });
 
-        let findings = Check_Seqcst_Justified_Explicitly(&[source]);
+        let findings = Check(Check_Seqcst_Justified_Explicitly, source);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -443,5 +447,16 @@ mod tests
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
         source.language = crate::Recognized_Language_In_Tests(path);
         return source;
+    }
+
+    /// Runs `check` over `source` through a real, empty reader — these checks read only
+    /// `nomos.cap.test.material.policy`, which no fixture here declares, so `Require` fails
+    /// and each resolves to its own fixed clauses alone.
+    pub(super) fn Check(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, source: SourceFile) -> Vec<Finding>
+    {
+        let store = MemoryFactStore::New();
+        let registry = Registry::New();
+        let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
+        return check(&[source], &mut facts);
     }
 }

@@ -2,9 +2,13 @@
 //!
 //! Unlike `rust_text.rs`/`go_text.rs`, none of these three names a `language:` — each is
 //! decidable from raw text against a fixed, narrow pattern set the standard's own doc
-//! bounds explicitly, in any source file. None has a repository-configurable dimension
-//! (a credential prefix, a sensitive URL parameter name, or a disabled-verification
-//! literal is not a house-style choice), so this is a shared module, not a capability.
+//! bounds explicitly, in any source file. None of the three *patterns* has a
+//! repository-configurable dimension — a credential prefix, a sensitive URL parameter
+//! name, or a disabled-verification literal is not a house-style choice. What each does
+//! have, shared with the rest of this crate, is a repository-configurable *exemption*:
+//! what counts as test material is read from `nomos.cap.test.material.policy`, composed
+//! with this module's own toolchain-fixed clauses, rather than compiled in alone. So this
+//! is a shared module that reads one capability, not a capability itself.
 //!
 //! Each rule states its own exact scope in its doc comment below, because each is
 //! deliberately narrower than its title suggests: entropy-based secret scanning,
@@ -14,6 +18,7 @@
 mod certificate_verification;
 
 use crate::SourceFile;
+use nomos_analysis::FactReader;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 pub use certificate_verification::Check_Certificate_Verification_Is_Not_Disabled;
@@ -59,12 +64,13 @@ const SENSITIVE_URL_PARAMETERS: &[&str] = &["api_key", "access_token", "token", 
 /// dedicated secret scanner's own job, and skips test/fixture/example sources, where the
 /// standard says example values and fixtures are expected to live.
 #[must_use]
-pub fn Check_A_Credential_Is_Not_Hardcoded_In_Source(sources: &[SourceFile]) -> Vec<Finding>
+pub fn Check_A_Credential_Is_Not_Hardcoded_In_Source(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
     for source in sources
     {
-        if !Is_Test_Or_Fixture_Source(source) && !Is_Own_Implementation_File(source)
+        if !Is_Test_Or_Fixture_Source(source, &declared) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Credential_Findings_In(source));
         }
@@ -161,12 +167,13 @@ fn Credential_At(line: &str, start: usize, prefix: &str, minimum_trailing: usize
 /// distinction as the consuming system's call, not the parser's — and skips test/fixture
 /// sources.
 #[must_use]
-pub fn Check_A_Secret_Does_Not_Travel_In_A_Url(sources: &[SourceFile]) -> Vec<Finding>
+pub fn Check_A_Secret_Does_Not_Travel_In_A_Url(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
     for source in sources
     {
-        if !Is_Test_Or_Fixture_Source(source) && !Is_Own_Implementation_File(source)
+        if !Is_Test_Or_Fixture_Source(source, &declared) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Url_Secret_Findings_In(source));
         }
@@ -217,8 +224,10 @@ fn Has_Secret_In_Url(line: &str) -> bool
 /// A path segment any of `tests/`, `/test/`, `testdata/`, `fixtures/`, `examples/`
 /// contains, or a `_test.`/`_tests.` file-name suffix — the standard's own "example
 /// values, fixtures, and keys that live in test files" exemption, read broadly enough to
-/// cover Go's `testdata/` and either language's fixture convention.
-fn Is_Test_Or_Fixture_Source(source: &SourceFile) -> bool
+/// cover Go's `testdata/` and either language's fixture convention — or a repository's own
+/// declared fixture location, the same additions [`super::Resolve_Declared_Fixture_Locations`]
+/// hands every other test-or-example predicate in this crate.
+fn Is_Test_Or_Fixture_Source(source: &SourceFile, declared: &[String]) -> bool
 {
     let normalized = source.path.replace('\\', "/");
     return normalized.starts_with("tests/")
@@ -229,7 +238,8 @@ fn Is_Test_Or_Fixture_Source(source: &SourceFile) -> bool
         || normalized.contains("/examples/")
         || normalized.ends_with("_test.rs")
         || normalized.ends_with("_tests.rs")
-        || normalized.ends_with("_test.go");
+        || normalized.ends_with("_test.go")
+        || declared.iter().any(|location| return crate::checks::Is_Under_Declared_Location(&normalized, location));
 }
 
 /// Every file this module is written in. Every rule here exempts its own implementing
@@ -296,6 +306,8 @@ mod tests;
 mod self_tests
 {
     use super::*;
+    use nomos_analysis::{MemoryFactStore, Reader};
+    use nomos_capability::Registry;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
@@ -305,7 +317,7 @@ mod self_tests
         let secret = format!("AKIA{}", "ABCDEFGHIJKLMNOP");
         let text = format!("const KEY: &str = \"{secret}\";\n");
 
-        let findings = Check_A_Credential_Is_Not_Hardcoded_In_Source(&[Source_For(Path("src/config.rs"), Text(&text))]);
+        let findings = Check(Check_A_Credential_Is_Not_Hardcoded_In_Source, Source_For(Path("src/config.rs"), Text(&text)));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(
@@ -319,7 +331,7 @@ mod self_tests
     {
         let text = format!("let url = format!(\"https://api.example.com/data?{}={{key}}\");\n", "api_key");
 
-        let findings = Check_A_Secret_Does_Not_Travel_In_A_Url(&[Source_For(Path("src/client.rs"), Text(&text))]);
+        let findings = Check(Check_A_Secret_Does_Not_Travel_In_A_Url, Source_For(Path("src/client.rs"), Text(&text)));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(
@@ -342,5 +354,16 @@ mod self_tests
         let mut source = SourceFile::New(path.0, SubjectId::From_Digest(Content_Digest(path.0.as_bytes())), text.0);
         source.language = crate::Recognized_Language_In_Tests(path.0);
         return source;
+    }
+
+    /// Runs `check` over `source` through a real, empty reader — the three checks read only
+    /// `nomos.cap.test.material.policy`, which no fixture here declares, so `Require` fails
+    /// and each resolves to its own fixed clauses alone.
+    fn Check(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, source: SourceFile) -> Vec<Finding>
+    {
+        let store = MemoryFactStore::New();
+        let registry = Registry::New();
+        let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
+        return check(&[source], &mut facts);
     }
 }

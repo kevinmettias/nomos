@@ -165,6 +165,14 @@ members = [
     # graph rather than rows, a scalar or a list: goals, parts, and the edges between them.
     "crates/capabilities/nomos-cap-goals-policy",
 
+    # Zone: Capability Contract — the nomos.cap.test.material.policy contract, alongside its ten siblings
+    # above, for the same reason: the three security checks and the shared test-or-example
+    # exemption are a real second party to it from the day it was written. A sixth
+    # OD-RULES-011 instance: a repository's own fixture locations, read as data rather than
+    # compiled as a constant. A bare list rather than rows, a scalar or a graph: a fixture
+    # location has no scope to qualify and no value to carry.
+    "crates/capabilities/nomos-cap-test-material-policy",
+
     # Zone: Capability Contract — the nomos.cap.architecture.declaration contract. Beside the
     # five OD-RULES-011 families above it and deliberately not one of them: OD-RULES-029
     # decided that a family is a repository's policy parameters and this is the description a
@@ -413,6 +421,7 @@ nomos-cap-scripting-policy = { path = "crates/capabilities/nomos-cap-scripting-p
 nomos-cap-words-policy = { path = "crates/capabilities/nomos-cap-words-policy" }
 nomos-cap-goals-policy = { path = "crates/capabilities/nomos-cap-goals-policy" }
 nomos-cap-architecture = { path = "crates/capabilities/nomos-cap-architecture" }
+nomos-cap-test-material-policy = { path = "crates/capabilities/nomos-cap-test-material-policy" }
 nomos-connector-coderabbit = { path = "crates/connectors/nomos-connector-coderabbit" }
 nomos-cap-requirement-trace = { path = "crates/capabilities/nomos-cap-requirement-trace" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }

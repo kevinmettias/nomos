@@ -64,7 +64,7 @@ mod structure;
 mod test_support;
 
 use crate::SourceFile;
-use nomos_analysis::FactReader;
+use nomos_analysis::{FactReader, InputDigest};
 use nomos_contracts::Finding;
 
 pub use borrowed_container::{Check_Parameters_Borrow_Unless_Ownership_Is_Taken, PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN};
@@ -246,8 +246,12 @@ pub(crate) fn Relay_Findings<Payload>(
 /// fact a path predicate cannot read and these two clauses stand in for. `security_text`'s own `Is_Test_Or_Fixture_Source` is
 /// deliberately not folded in: it admits `/testdata/`, `/fixtures/` and `_test.go` besides,
 /// and reads `examples` as an infix rather than a prefix, so it is a different predicate
-/// that resembles this one rather than a third copy of it.
-pub(crate) fn Is_Test_Or_Example_Source(source: &SourceFile) -> bool
+/// that resembles this one rather than a third copy of it. The two do share one thing: both
+/// extend their own fixed clauses with the same repository-declared fixture locations,
+/// resolved once by [`Resolve_Declared_Fixture_Locations`] and handed in as `declared`, so
+/// "what counts as test material" is one criterion — fixed clauses plus a repository's own
+/// additions — rather than two independent path lists.
+pub(crate) fn Is_Test_Or_Example_Source(source: &SourceFile, declared: &[String]) -> bool
 {
     let normalized = source.path.replace('\\', "/");
     return normalized.starts_with("tests/")
@@ -259,7 +263,59 @@ pub(crate) fn Is_Test_Or_Example_Source(source: &SourceFile) -> bool
         || normalized.ends_with("/tests.rs")
         || normalized == "tests.rs"
         || normalized.ends_with("/test_support.rs")
-        || normalized == "test_support.rs";
+        || normalized == "test_support.rs"
+        || declared.iter().any(|location| return Is_Under_Declared_Location(&normalized, location));
+}
+
+/// A repository's own declared fixture locations, read through the
+/// `nomos.cap.test.material.policy` fact — empty on any `Require` failure, per
+/// `OD-CAPABILITY-004`/`OD-RULES-011`'s settled optional-read pattern: this capability is
+/// optional, and its absence must never surface as a `Finding` or this capability's own
+/// `Applicability`.
+///
+/// Shared by [`Is_Test_Or_Example_Source`] here and `security_text`'s own
+/// `Is_Test_Or_Fixture_Source`, so the two predicates extend their distinct fixed clause
+/// lists with the same declared set rather than each re-reading the same fact.
+pub(crate) fn Resolve_Declared_Fixture_Locations(facts: &mut dyn FactReader) -> Vec<String>
+{
+    let subject = nomos_model::Subject_Of_Path("");
+    let Ok(fact) = facts.Require(
+        &nomos_cap_test_material_policy::Capability(),
+        &subject,
+        InputDigest::Of(&[]),
+        &Test_Material_Policy_Requirement(),
+    )
+    else
+    {
+        return Vec::new();
+    };
+
+    let Ok(payload) = nomos_cap_test_material_policy::Parse_Payload(&fact.payload.bytes) else { return Vec::new() };
+
+    return payload.locations;
+}
+
+/// This crate's own floor for `nomos.cap.test.material.policy` — stated at the capability's
+/// own ceiling since there is only one real provider today and no weaker answer this crate
+/// could honestly still act on. Mirrors `checks::naming::Naming_Policy_Requirement` and
+/// `checks::structure::Limits_Policy_Requirement` exactly, for the sixth sibling capability.
+fn Test_Material_Policy_Requirement() -> nomos_capability::Requirement
+{
+    return nomos_capability::Requirement::New(
+        nomos_cap_test_material_policy::Capability(),
+        nomos_cap_test_material_policy::CONTRACT_VERSION,
+        nomos_cap_test_material_policy::Ceiling(),
+    );
+}
+
+/// Whether `normalized_path` is a repository's own declared fixture location, or sits under
+/// one — a location is a repository-relative directory prefix, so an exact match or a
+/// `location/` prefix both count, and a sibling directory that merely shares the spelling
+/// (`samples2/`) does not.
+pub(crate) fn Is_Under_Declared_Location(normalized_path: &str, location: &str) -> bool
+{
+    let location = location.trim_matches('/');
+    return normalized_path == location || normalized_path.starts_with(&format!("{location}/"));
 }
 
 #[cfg(test)]
@@ -322,12 +378,25 @@ mod tests
 
         for path in inside
         {
-            assert!(Is_Test_Or_Example_Source(&Source_File(path)), "should be exempt: {path}");
+            assert!(Is_Test_Or_Example_Source(&Source_File(path), &[]), "should be exempt: {path}");
         }
         for path in outside
         {
-            assert!(!Is_Test_Or_Example_Source(&Source_File(path)), "should be judged: {path}");
+            assert!(!Is_Test_Or_Example_Source(&Source_File(path), &[]), "should be judged: {path}");
         }
+    }
+
+    /// A repository-declared fixture location exempts a source under it, exactly the way a
+    /// fixed clause would, and a sibling that merely shares the spelling does not.
+    #[test]
+    fn Test_Is_Test_Or_Example_Source_Should_Exempt_A_Declared_Fixture_Location()
+    {
+        let declared = ["samples".to_owned()];
+
+        assert!(Is_Test_Or_Example_Source(&Source_File("samples/one.rs"), &declared), "declared prefix exempts");
+        assert!(Is_Test_Or_Example_Source(&Source_File("samples"), &declared), "the bare location exempts itself");
+        assert!(!Is_Test_Or_Example_Source(&Source_File("samples2/one.rs"), &declared), "a sibling sharing the spelling is judged");
+        assert!(!Is_Test_Or_Example_Source(&Source_File("src/one.rs"), &declared), "an undeclared path is judged");
     }
 
     #[test]

@@ -5,6 +5,7 @@
 
 use super::{CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, Finding_For_Line, Is_Own_Implementation_File, Is_Test_Or_Fixture_Source, Line_Number};
 use crate::SourceFile;
+use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
 
 /// Reports a TLS/SSL client or server told, by a literal value, to skip verifying the
@@ -15,12 +16,13 @@ use nomos_contracts::Finding;
 /// accepts either an adjacent explanatory comment (a reasoned, recorded exception) or a
 /// test/fixture source, both of which the standard names as exempt.
 #[must_use]
-pub fn Check_Certificate_Verification_Is_Not_Disabled(sources: &[SourceFile]) -> Vec<Finding>
+pub fn Check_Certificate_Verification_Is_Not_Disabled(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
     for source in sources
     {
-        if !Is_Test_Or_Fixture_Source(source) && !Is_Own_Implementation_File(source)
+        if !Is_Test_Or_Fixture_Source(source, &declared) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Tls_Verification_Findings_In(source));
         }
@@ -114,6 +116,8 @@ fn Comment_Text_Of(line: &str) -> Option<&str>
 mod self_tests
 {
     use super::*;
+    use nomos_analysis::{MemoryFactStore, Reader};
+    use nomos_capability::Registry;
     use nomos_contracts::{RuleId, SubjectId};
     use nomos_model::Content_Digest;
 
@@ -125,7 +129,10 @@ mod self_tests
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
         source.language = crate::Recognized_Language_In_Tests(path);
 
-        let findings = Check_Certificate_Verification_Is_Not_Disabled(&[source]);
+        let store = MemoryFactStore::New();
+        let registry = Registry::New();
+        let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
+        let findings = Check_Certificate_Verification_Is_Not_Disabled(&[source], &mut facts);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(CERTIFICATE_VERIFICATION_IS_NOT_DISABLED));

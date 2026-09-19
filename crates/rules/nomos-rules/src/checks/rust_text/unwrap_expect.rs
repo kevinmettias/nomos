@@ -6,19 +6,21 @@
 
 use crate::checks::{code_prefix::Code_Prefix, Is_Test_Or_Example_Source};
 use crate::{RUST_LANGUAGE, SourceFile};
+use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
 
 use super::{Finding_For_Line, Line_Number, UNWRAP_EXPECT_DISCIPLINE};
 
 /// Reports `unwrap()` and placeholder `expect(...)` outside test and example Rust sources.
 #[must_use]
-pub fn Check_Unwrap_Expect_Discipline(sources: &[SourceFile]) -> Vec<Finding>
+pub fn Check_Unwrap_Expect_Discipline(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Test_Or_Example_Source(source)
+        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Test_Or_Example_Source(source, &declared)
         {
             findings.extend(Unwrap_Expect_Findings_In(source));
         }

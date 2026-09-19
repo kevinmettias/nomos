@@ -1131,6 +1131,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-cap-test-material-policy"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+]
+
+[[package]]
 name = "nomos-cap-words-policy"
 version = "0.1.0"
 dependencies = [
@@ -1161,6 +1169,7 @@ dependencies = [
  "nomos-cap-requirement-trace",
  "nomos-cap-scripting-policy",
  "nomos-cap-syntax",
+ "nomos-cap-test-material-policy",
  "nomos-cap-words-policy",
  "nomos-capability",
  "nomos-connector-coderabbit",
@@ -1597,6 +1606,7 @@ dependencies = [
  "nomos-cap-limits-policy",
  "nomos-cap-naming-policy",
  "nomos-cap-scripting-policy",
+ "nomos-cap-test-material-policy",
  "nomos-cap-words-policy",
  "nomos-capability",
  "nomos-contracts",
@@ -1631,6 +1641,7 @@ dependencies = [
  "nomos-cap-requirement-trace",
  "nomos-cap-scripting-policy",
  "nomos-cap-syntax",
+ "nomos-cap-test-material-policy",
  "nomos-cap-words-policy",
  "nomos-capability",
  "nomos-connector-coderabbit",

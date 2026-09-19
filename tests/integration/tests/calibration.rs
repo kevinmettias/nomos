@@ -122,17 +122,18 @@ fn Fixture_Root() -> PathBuf
     return manifest.join("fixtures").join("third-party").join("hex-0.4.3");
 }
 
-/// The fixture's own two files, read directly rather than walked: a fixture of exactly two
+/// The fixture's own files, read directly rather than walked: a fixture of exactly three
 /// named files needs no walk at all, and `nomos_platform::FileSystem`'s `Read_Directory` is
 /// one level rather than the recursive shape `nomos-cli::check::sources` documents.
-/// need one.
+/// `samples/example_credential.rs` is this test's own addition, not hex 0.4.3's: it proves
+/// the test-material exemption against a location no fixed clause names.
 fn Fixture_Sources() -> Vec<SourceFile>
 {
     let root = Fixture_Root();
     let mut sources = Vec::new();
-    for name in ["lib.rs", "error.rs"]
+    for name in ["lib.rs", "error.rs", "samples/example_credential.rs"]
     {
-        let text = std::fs::read_to_string(root.join(name)).expect("the fixture's own two files are committed and readable");
+        let text = std::fs::read_to_string(root.join(name)).expect("the fixture's own files are committed and readable");
         sources.push(SourceFile::New(name, nomos_model::Subject_Of_Path(name), text));
     }
     return sources;
@@ -176,7 +177,7 @@ fn Findings_By_Rule() -> BTreeMap<String, Vec<Finding>>
     // Both fixture files must have a current syntax fact and nothing must be left
     // incomplete -- the same vacuity guard `nomos-cli::check` applies before trusting any
     // finding list at all.
-    assert_eq!(examined, nomos_check_orchestration::Examined { files: 2, facts: 2 }, "both fixture files must be read and parsed");
+    assert_eq!(examined, nomos_check_orchestration::Examined { files: 3, facts: 3 }, "all three fixture files must be read and parsed");
     assert_eq!(claim, nomos_check_orchestration::Claim::Complete, "no subject may be left in a debt or agent-required state");
 
     let mut by_rule: BTreeMap<String, Vec<Finding>> = BTreeMap::new();
@@ -244,8 +245,8 @@ fn Verdicts() -> Vec<RuleVerdict>
         RuleVerdict { id: "executed-scripts-set-nounset", expected: Expected::Clean, reason: "not applicable, same reason as scripts-use-a-portable-shebang." },
         RuleVerdict { id: "sleep-based-synchronization", expected: Expected::Clean, reason: "no `sleep`-based synchronization pattern in the fixture." },
         RuleVerdict { id: "zero-flake-policy", expected: Expected::Clean, reason: "the fixture carries no #[test] functions at all (PROVENANCE.md: hex's own dev-dependency test module was excluded), so there is nothing shaped like a retried test to examine -- a real but shallow zero, not evidence of disciplined test authorship one way or the other." },
-        RuleVerdict { id: "no-mod-rs-files", expected: Expected::Clean, reason: "the fixture's files are lib.rs and error.rs, neither named mod.rs." },
-        RuleVerdict { id: "a-credential-is-not-hardcoded-in-source", expected: Expected::Clean, reason: "no credential-shaped literal anywhere in the fixture." },
+        RuleVerdict { id: "no-mod-rs-files", expected: Expected::Clean, reason: "the fixture's files are lib.rs, error.rs and samples/example_credential.rs, none named mod.rs." },
+        RuleVerdict { id: "a-credential-is-not-hardcoded-in-source", expected: Expected::Clean, reason: "the calibration's test-material centerpiece. The fixture's one credential-shaped literal sits in samples/example_credential.rs, under a location ../nomos-test-material.json declares as a fixture location, so the rule exempts it and reports zero. Without that declaration the same file would be judged and the literal reported as a real credential -- the false positive the nomos.cap.test.material.policy family exists to close, and the reason this file is this test's own addition rather than hex's. lib.rs and error.rs carry no credential-shaped literal at all." },
         RuleVerdict { id: "a-secret-does-not-travel-in-a-url", expected: Expected::Clean, reason: "no URL literal anywhere in the fixture." },
         RuleVerdict { id: "certificate-verification-is-not-disabled", expected: Expected::Clean, reason: "no certificate-verification code of any kind in the fixture." },
         RuleVerdict { id: "a-discarded-error-is-explained", expected: Expected::Clean, reason: "Go-only (Check_A_Discarded_Error_Is_Explained gates on source.Is_Written_In(GO_LANGUAGE) despite living in nomos-rules::checks::go_text): not applicable to a Rust-only fixture." },

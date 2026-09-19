@@ -36,6 +36,7 @@ pub fn Registered() -> Result<Registry, RegistryError>
     Declare_Scripting_Policy_Capability(&mut registry)?;
     Declare_Goals_Policy_Capability(&mut registry)?;
     Declare_Words_Policy_Capability(&mut registry)?;
+    Declare_Test_Material_Policy_Capability(&mut registry)?;
     Declare_Review_Capability(&mut registry)?;
     Declare_Requirement_Trace_Capability(&mut registry)?;
 
@@ -247,6 +248,25 @@ fn Declare_Words_Policy_Capability(registry: &mut Registry) -> Result<(), Regist
     return Ok(());
 }
 
+/// A thirteenth capability, one offer against it — the sixth of `OD-RULES-011`'s families,
+/// and the one that makes a path-list judgement a repository's own to extend.
+///
+/// Its ten rules were already running before this declaration existed: the three security
+/// checks and the seven rules that read the shared test-or-example exemption all carried
+/// their own hardcoded clause lists, and every one of them fell back to that list when the
+/// capability was absent. Worth stating plainly because it is easy to oversell: on *this*
+/// repository the wiring changes no finding at all, since `nomos-test-material.json` declares
+/// no locations and the fixed clauses already cover where this repository's own fixtures
+/// live. What it changes is that those lists are now read rather than assumed, so a
+/// repository declaring different fixture locations is finally judged by its own.
+fn Declare_Test_Material_Policy_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_test_material_policy::Capability_Contract())?;
+    registry.Offer(nomos_repo_policy::test_material::Provider_Offer())?;
+
+    return Ok(());
+}
+
 /// An eleventh capability, one offer against it -- the first connector under
 /// `ARC-CONNECTOR-001` wired for real. `nomos-connector-coderabbit` bundles
 /// `nomos.cap.review.finding`'s contract with its own one provider in a single crate
@@ -410,16 +430,16 @@ mod tests
     use super::*;
 
     /// How many `Declare` calls [`Registered`]'s own body wires: syntax, dependency,
-    /// controlflow, lint, dependency-policy, all five of `OD-RULES-011`'s families --
-    /// naming, limits, scripting, goals and words -- review, requirement trace, and the
-    /// architecture declaration.
-    const DECLARED_CAPABILITY_COUNT: usize = 13;
+    /// controlflow, lint, dependency-policy, all six of `OD-RULES-011`'s families --
+    /// naming, limits, scripting, goals, words and test-material -- review, requirement
+    /// trace, and the architecture declaration.
+    const DECLARED_CAPABILITY_COUNT: usize = 14;
 
     /// The composition this crate ships must not be self-contradictory, and it must
-    /// declare exactly the thirteen capabilities [`Registered`]'s own body wires: syntax,
-    /// dependency, controlflow, lint, dependency-policy, all five of `OD-RULES-011`'s
-    /// families -- naming, limits, scripting, goals and words -- review, requirement trace,
-    /// and the architecture declaration.
+    /// declare exactly the fourteen capabilities [`Registered`]'s own body wires: syntax,
+    /// dependency, controlflow, lint, dependency-policy, all six of `OD-RULES-011`'s
+    /// families -- naming, limits, scripting, goals, words and test-material -- review,
+    /// requirement trace, and the architecture declaration.
     #[test]
     fn Test_Registered_Should_Declare_Every_Composed_Capability()
     {

@@ -64,6 +64,7 @@
 
 use super::code_prefix::Code_Prefix;
 use crate::{GO_LANGUAGE, RUST_LANGUAGE, SourceFile};
+use nomos_analysis::FactReader;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// The code-standards sleep-as-synchronization rule id.
@@ -85,8 +86,9 @@ const RUST_RETRY_ATTRIBUTES: &[&str] = &["retry", "flaky_test", "flaky", "retry_
 
 /// Reports a sleep standing in for synchronization in a test -- `FAULT_SLEEP_SYNC`.
 #[must_use]
-pub fn Check_Sleep_Is_Not_Synchronization(sources: &[SourceFile]) -> Vec<Finding>
+pub fn Check_Sleep_Is_Not_Synchronization(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
 
     for source in sources
@@ -102,7 +104,7 @@ pub fn Check_Sleep_Is_Not_Synchronization(sources: &[SourceFile]) -> Vec<Finding
             continue;
         };
 
-        let source_findings = Sleep_Findings_In(source, vocabulary);
+        let source_findings = Sleep_Findings_In(source, vocabulary, &declared);
         findings.extend(source_findings);
     }
 
@@ -127,10 +129,10 @@ fn Sleep_Vocabulary_For(source: &SourceFile) -> Option<&'static [&'static str]>
     return None;
 }
 
-fn Sleep_Findings_In(source: &SourceFile, vocabulary: &[&str]) -> Vec<Finding>
+fn Sleep_Findings_In(source: &SourceFile, vocabulary: &[&str], declared: &[String]) -> Vec<Finding>
 {
     let lines: Vec<&str> = source.text.lines().collect();
-    let Some(scan_from) = Test_Scan_Start(source, &lines)
+    let Some(scan_from) = Test_Scan_Start(source, &lines, declared)
     else
     {
         return Vec::new();
@@ -149,9 +151,9 @@ fn Sleep_Findings_In(source: &SourceFile, vocabulary: &[&str]) -> Vec<Finding>
 }
 
 /// The first in-scope line index, or [`None`] if nothing in this file is test scope.
-fn Test_Scan_Start(source: &SourceFile, lines: &[&str]) -> Option<usize>
+fn Test_Scan_Start(source: &SourceFile, lines: &[&str], declared: &[String]) -> Option<usize>
 {
-    if super::Is_Test_Or_Example_Source(source) || Is_Go_Test_File(source)
+    if super::Is_Test_Or_Example_Source(source, declared) || Is_Go_Test_File(source)
     {
         return Some(0);
     }
@@ -374,6 +376,8 @@ fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 mod tests
 {
     use super::*;
+    use nomos_analysis::{FactReader, MemoryFactStore, Reader};
+    use nomos_capability::Registry;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
@@ -381,7 +385,7 @@ mod tests
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Report_A_Qualified_Sleep_In_An_Integration_Test()
     {
         let source = Source_File(SourceText { path: "tests/lock.rs", text: "thread::sleep(Duration::from_millis(50));\n" });
-        let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
+        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(SLEEP_BASED_SYNCHRONIZATION));
     }
@@ -392,7 +396,7 @@ mod tests
         let source = Source_File(
             SourceText { path: "src/latch.rs", text: "pub fn is_open(&self) -> bool { true }\n\n#[cfg(test)]\nmod tests {\n #[test]\n fn opens() {\n thread::sleep(Duration::from_millis(50));\n }\n}\n" },
         );
-        let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
+        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
 
@@ -400,7 +404,7 @@ mod tests
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Ignore_A_Sleep_In_Production_Code()
     {
         let source = Source_File(SourceText { path: "src/rate_limiter.rs", text: "thread::sleep(backoff);\n" });
-        let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
+        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -408,7 +412,7 @@ mod tests
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Ignore_A_Path_That_Merely_Ends_In_The_Same_Letters()
     {
         let source = Source_File(SourceText { path: "tests/worker.rs", text: "worker_thread::sleep(backoff);\n" });
-        let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
+        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -416,7 +420,7 @@ mod tests
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Accept_A_Same_Line_Allow_Marker()
     {
         let source = Source_File(SourceText { path: "tests/lock.rs", text: "thread::sleep(debounce); // flakiness: allow this waits on the debounce window under test\n" });
-        let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
+        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -424,7 +428,7 @@ mod tests
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Report_A_Qualified_Time_Sleep_In_A_Go_Test_File()
     {
         let source = Source_File(SourceText { path: "worker_test.go", text: "func TestReady(t *testing.T) {\n\ttime.Sleep(50 * time.Millisecond)\n}\n" });
-        let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
+        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
 
@@ -432,7 +436,7 @@ mod tests
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Ignore_Go_Sleep_Outside_A_Test_File()
     {
         let source = Source_File(SourceText { path: "worker.go", text: "func Ready() {\n\ttime.Sleep(50 * time.Millisecond)\n}\n" });
-        let findings = Check_Sleep_Is_Not_Synchronization(&[source]);
+        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -494,5 +498,16 @@ mod tests
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
         source.language = crate::Recognized_Language_In_Tests(path);
         return source;
+    }
+
+    /// Runs `check` over `source` through a real, empty reader — this check reads only
+    /// `nomos.cap.test.material.policy`, which no fixture here declares, so `Require` fails
+    /// and it resolves to its own fixed clauses alone.
+    fn Check(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, source: SourceFile) -> Vec<Finding>
+    {
+        let store = MemoryFactStore::New();
+        let registry = Registry::New();
+        let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
+        return check(&[source], &mut facts);
     }
 }

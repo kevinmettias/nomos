@@ -7,6 +7,7 @@
 //! [`SourceFile`] text alone.
 
 use crate::{GO_LANGUAGE, RUST_LANGUAGE, SourceFile};
+use nomos_analysis::FactReader;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// The code-standards Go package-placement rule id.
@@ -117,15 +118,16 @@ fn Is_Package_Matching_Directory(package: &str, directory: Directory<'_>) -> boo
 /// curated prelude from any other wildcard in *non*-test code, so that exemption is not
 /// attempted there — this rule only reports what it can already tell apart.
 #[must_use]
-pub fn Check_No_Wildcard_Imports(sources: &[SourceFile]) -> Vec<Finding>
+pub fn Check_No_Wildcard_Imports(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
 
     for source in sources
     {
         if source.Is_Written_In(RUST_LANGUAGE)
         {
-            findings.extend(Rust_Wildcard_Findings_In(source));
+            findings.extend(Rust_Wildcard_Findings_In(source, &declared));
         }
         else if source.Is_Written_In(GO_LANGUAGE)
         {
@@ -137,11 +139,11 @@ pub fn Check_No_Wildcard_Imports(sources: &[SourceFile]) -> Vec<Finding>
     return findings;
 }
 
-fn Rust_Wildcard_Findings_In(source: &SourceFile) -> Vec<Finding>
+fn Rust_Wildcard_Findings_In(source: &SourceFile, declared: &[String]) -> Vec<Finding>
 {
     let lines: Vec<&str> = source.text.lines().collect();
     let first_test_cfg_line = lines.iter().position(|line| return line.contains("#[cfg(test)]"));
-    let whole_file_is_a_test_module = super::Is_Test_Or_Example_Source(source);
+    let whole_file_is_a_test_module = super::Is_Test_Or_Example_Source(source, declared);
 
     let mut findings = Vec::new();
     for (index, line) in lines.iter().enumerate()
@@ -271,6 +273,8 @@ fn Finding_For_Line(source: &SourceFile, rule: &str, line_number: usize, because
 mod tests
 {
     use super::*;
+    use nomos_analysis::{FactReader, MemoryFactStore, Reader};
+    use nomos_capability::Registry;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
@@ -330,7 +334,7 @@ mod tests
     {
         let source = Source_File(SourceText { path: "src/lib.rs", text: "use acme_math::signals::filters::*;\n" });
 
-        let findings = Check_No_Wildcard_Imports(&[source]);
+        let findings = Check(Check_No_Wildcard_Imports, source);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(NO_WILDCARD_IMPORTS));
@@ -341,7 +345,7 @@ mod tests
     {
         let source = Source_File(SourceText { path: "src/lib.rs", text: "use acme_math::signals::filters::Biquad;\n" });
 
-        let findings = Check_No_Wildcard_Imports(&[source]);
+        let findings = Check(Check_No_Wildcard_Imports, source);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -353,7 +357,7 @@ mod tests
             SourceText { path: "src/lib.rs", text: "pub fn Compute() {}\n\n#[cfg(test)]\nmod tests\n{\n use super::*;\n}\n" },
         );
 
-        let findings = Check_No_Wildcard_Imports(&[source]);
+        let findings = Check(Check_No_Wildcard_Imports, source);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -366,7 +370,7 @@ mod tests
     {
         let source = Source_File(SourceText { path: "src/module/tests.rs", text: "use super::*;\n\n#[test]\nfn Test_Compute() {}\n" });
 
-        let findings = Check_No_Wildcard_Imports(&[source]);
+        let findings = Check(Check_No_Wildcard_Imports, source);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -381,7 +385,7 @@ mod tests
     {
         let source = Source_File(SourceText { path: "tests/suite/claiming.rs", text: "use crate::board::*;\n\n#[test]\nfn Test_Claim() {}\n" });
 
-        let findings = Check_No_Wildcard_Imports(&[source]);
+        let findings = Check(Check_No_Wildcard_Imports, source);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -391,7 +395,7 @@ mod tests
     {
         let source = Source_File(SourceText { path: "src/mod.rs", text: "use super::*;\n" });
 
-        let findings = Check_No_Wildcard_Imports(&[source]);
+        let findings = Check(Check_No_Wildcard_Imports, source);
 
         assert_eq!(findings.len(), 1, "a wildcard reaching for the enclosing scope outside a test is still a finding: {findings:?}");
     }
@@ -401,7 +405,7 @@ mod tests
     {
         let source = Source_File(SourceText { path: "main.go", text: "import . \"acme/widget\"\n" });
 
-        let findings = Check_No_Wildcard_Imports(&[source]);
+        let findings = Check(Check_No_Wildcard_Imports, source);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -411,7 +415,7 @@ mod tests
     {
         let source = Source_File(SourceText { path: "main.go", text: "import (\n\t\"fmt\"\n\t. \"acme/widget\"\n)\n" });
 
-        let findings = Check_No_Wildcard_Imports(&[source]);
+        let findings = Check(Check_No_Wildcard_Imports, source);
 
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -421,7 +425,7 @@ mod tests
     {
         let source = Source_File(SourceText { path: "widget/widget_test.go", text: "package widget_test\n\nimport . \"acme/widget\"\n" });
 
-        let findings = Check_No_Wildcard_Imports(&[source]);
+        let findings = Check(Check_No_Wildcard_Imports, source);
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -431,7 +435,7 @@ mod tests
     {
         let source = Source_File(SourceText { path: "widget/widget_test.go", text: "package widget_test\n\nimport . \"acme/other\"\n" });
 
-        let findings = Check_No_Wildcard_Imports(&[source]);
+        let findings = Check(Check_No_Wildcard_Imports, source);
 
         assert_eq!(findings.len(), 1, "a test wildcard-importing something other than its own subject is still a finding: {findings:?}");
     }
@@ -451,5 +455,16 @@ mod tests
         let mut source = SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), text);
         source.language = crate::Recognized_Language_In_Tests(path);
         return source;
+    }
+
+    /// Runs `check` over `source` through a real, empty reader — this check reads only
+    /// `nomos.cap.test.material.policy`, which no fixture here declares, so `Require` fails
+    /// and it resolves to its own fixed clauses alone.
+    fn Check(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, source: SourceFile) -> Vec<Finding>
+    {
+        let store = MemoryFactStore::New();
+        let registry = Registry::New();
+        let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
+        return check(&[source], &mut facts);
     }
 }

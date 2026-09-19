@@ -31,6 +31,7 @@
     "nomos-cap-requirement-trace": "Capability Contract",
     "nomos-cap-scripting-policy": "Capability Contract",
     "nomos-cap-syntax": "Capability Contract",
+    "nomos-cap-test-material-policy": "Capability Contract",
     "nomos-cap-words-policy": "Capability Contract",
     "nomos-capability": "Substrate",
     "nomos-check-orchestration": "Application Service",

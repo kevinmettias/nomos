@@ -20,6 +20,7 @@ nomos-cap-scripting-policy = { workspace = true }
 nomos-cap-goals-policy = { workspace = true }
 nomos-cap-architecture = { workspace = true }
 nomos-cap-words-policy = { workspace = true }
+nomos-cap-test-material-policy = { workspace = true }
 nomos-cap-requirement-trace = { workspace = true }
 nomos-connector-coderabbit = { workspace = true }
 nomos-capability = { workspace = true }

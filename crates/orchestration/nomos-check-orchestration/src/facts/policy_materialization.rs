@@ -26,6 +26,7 @@ mod limits;
 mod naming;
 mod requirement_trace;
 mod scripting;
+mod test_material;
 mod words;
 
 pub use architecture::Materialize_Architecture;
@@ -34,4 +35,5 @@ pub use limits::Materialize_Limits_Policy;
 pub use naming::Materialize_Naming_Policy;
 pub use requirement_trace::Materialize_Requirement_Trace;
 pub use scripting::Materialize_Scripting_Policy;
+pub use test_material::Materialize_Test_Material_Policy;
 pub use words::Materialize_Words_Policy;

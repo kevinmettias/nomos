@@ -138,6 +138,7 @@ pub enum variant nomos_rules::RequiredFact::RequirementTrace
 pub enum variant nomos_rules::RequiredFact::ReviewFindings
 pub enum variant nomos_rules::RequiredFact::ScriptingPolicy
 pub enum variant nomos_rules::RequiredFact::SyntaxItems
+pub enum variant nomos_rules::RequiredFact::TestMaterialPolicy
 pub enum variant nomos_rules::RequiredFact::WordsPolicy
 pub enum variant nomos_rules::RuleRegistryError::AlreadyOffered(RuleId)
 pub enum variant nomos_rules::SubjectKind::SourceFacts
@@ -146,7 +147,7 @@ pub enum variant nomos_rules::SubjectKind::Workspace
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
 pub fn nomos_rules::Check_A_Consumer_Imports_Through_The_Facade(sources: &[SourceFile]) -> Vec<Finding>
-pub fn nomos_rules::Check_A_Credential_Is_Not_Hardcoded_In_Source(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Credential_Is_Not_Hardcoded_In_Source(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Disabled_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Discarded_Error_Is_Explained(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Facade_Publishes_A_Child_One_Way(sources: &[SourceFile]) -> Vec<Finding>
@@ -155,15 +156,15 @@ pub fn nomos_rules::Check_A_Package_Is_Named_After_Its_Directory(sources: &[Sour
 pub fn nomos_rules::Check_A_Renamed_Facade_Re_Export_Names_The_Contract(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Script_Declares_Its_Purpose(sources: &[SourceFile]) -> Vec<Finding>
-pub fn nomos_rules::Check_A_Secret_Does_Not_Travel_In_A_Url(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Secret_Does_Not_Travel_In_A_Url(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Skipped_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_A_Test_Does_Not_Retry_Until_Green(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Abbreviations(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_An_Excluded_File_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
-pub fn nomos_rules::Check_Atomic_Ordering_Choices_Are_Justified(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Atomic_Ordering_Choices_Are_Justified(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Boolean_Predicates( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(sources: &[SourceFile]) -> Vec<Finding>
-pub fn nomos_rules::Check_Certificate_Verification_Is_Not_Disabled(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Certificate_Verification_Is_Not_Disabled(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Closure_Bounds_Are_Minimal(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Constants_Are_The_Exception_To_Function_Scope_Use(sources: &[SourceFile]) -> Vec<Finding>
@@ -178,7 +179,7 @@ pub fn nomos_rules::Check_Domain_Values_Are_Distinct_Types(sources: &[SourceFile
 pub fn nomos_rules::Check_Eager_Vs_Lazy_Context(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Error_Message_Has_No_Trailing_Punctuation(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Error_Message_Starts_Lowercase(sources: &[SourceFile]) -> Vec<Finding>
-pub fn nomos_rules::Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Every_Member_Declares_A_Band(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Executed_Scripts_Set_Nounset(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Exported_Go_Functions_Use_Upper_Snake_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
@@ -206,7 +207,7 @@ pub fn nomos_rules::Check_No_Mod_Rs_Files(sources: &[SourceFile]) -> Vec<Finding
 pub fn nomos_rules::Check_No_Orphan_Modules(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Single_Line_Function_Bodies(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_No_Trailing_Whitespace(sources: &[SourceFile]) -> Vec<Finding>
-pub fn nomos_rules::Check_No_Wildcard_Imports(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Wildcard_Imports(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Nonnegative_Storage_Is_Unsigned(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_One_Public_Type_Per_File( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Panics_Are_Justified_Documented_And_Validated(sources: &[SourceFile]) -> Vec<Finding>
@@ -214,14 +215,14 @@ pub fn nomos_rules::Check_Parameter_Count( sources: &[SourceFile], facts: &mut d
 pub fn nomos_rules::Check_Parameters_Borrow_Unless_Ownership_Is_Taken(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Prefer_Macro_Rules_Over_Procedural_Macros(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Project_Owned_Function_Names_Use_Upper_Snake_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
-pub fn nomos_rules::Check_Relaxed_Not_Used_When_Ordering_Matters(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Relaxed_Not_Used_When_Ordering_Matters(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Requirement_Trace_Staleness(facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Review_Findings(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Scripts_Use_A_Portable_Shebang(sources: &[SourceFile]) -> Vec<Finding>
-pub fn nomos_rules::Check_Seqcst_Justified_Explicitly(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Seqcst_Justified_Explicitly(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Single_Letter_Names( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
-pub fn nomos_rules::Check_Sleep_Is_Not_Synchronization(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Sleep_Is_Not_Synchronization(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Static_Bounds_Are_Justified(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Suppression_Directives_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Test_Names_Describe_Behavior( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
@@ -229,7 +230,7 @@ pub fn nomos_rules::Check_Todo_Format(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Unread_Reaches_A_Finding(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
-pub fn nomos_rules::Check_Unwrap_Expect_Discipline(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Unwrap_Expect_Discipline(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Workspace_Markers_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Write_Authority(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::RequiredFact::Capability(self) -> CapabilityId

@@ -147,11 +147,12 @@ pub fn Check_Function_Arity_Policy(
     policy: FunctionArityPolicy,
 ) -> Vec<Finding>
 {
+    let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
 
     for source in sources
     {
-        if !Is_Policy_Accepting_Source(policy, source) || crate::checks::Is_Test_Or_Example_Source(source)
+        if !Is_Policy_Accepting_Source(policy, source) || crate::checks::Is_Test_Or_Example_Source(source, &declared)
         {
             continue;
         }

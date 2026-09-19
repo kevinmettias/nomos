@@ -20,7 +20,7 @@ use crate::facts::{
     DependencyMaterialization, LintMaterialization, Materialize_Architecture, Materialize_Dependencies,
     Materialize_Goals_Policy, Materialize_Limits_Policy, Materialize_Lint, Materialize_Naming_Policy,
     Materialize_Policy, Materialize_Reachability, Materialize_Requirement_Trace, Materialize_Review,
-    Materialize_Scripting_Policy, Materialize_Words_Policy, PolicyMaterialization, ReviewMaterialization,
+    Materialize_Scripting_Policy, Materialize_Test_Material_Policy, Materialize_Words_Policy, PolicyMaterialization, ReviewMaterialization,
     Subprocess,
 };
 
@@ -197,10 +197,10 @@ fn Materialize_Reachability_Section<Launcher: ProgramLauncher, Fs: FileSystem, E
     }
 }
 
-/// The seven repository-declared policy families, in the order [`Materialize_Capabilities`]
+/// The eight repository-declared policy families, in the order [`Materialize_Capabilities`]
 /// runs them -- the one list [`Materialize_Policy_Family`] is a total function over, so a
-/// family added to the set has one row here and one arm there rather than a ninth and a
-/// tenth statement above.
+/// family added to the set has one row here and one arm there rather than a tenth and an
+/// eleventh statement above.
 fn Policy_Families() -> Vec<RequiredFact>
 {
     return vec![
@@ -210,6 +210,7 @@ fn Policy_Families() -> Vec<RequiredFact>
         RequiredFact::ScriptingPolicy,
         RequiredFact::GoalsPolicy,
         RequiredFact::WordsPolicy,
+        RequiredFact::TestMaterialPolicy,
         RequiredFact::RequirementTrace,
     ];
 }
@@ -234,6 +235,7 @@ fn Materialize_Policy_Family<Launcher: ProgramLauncher, Fs: FileSystem, Env: Env
         RequiredFact::ScriptingPolicy => Materialize_Scripting_Policy_Section(env, demanded),
         RequiredFact::GoalsPolicy => Materialize_Goals_Policy_Section(env, demanded),
         RequiredFact::WordsPolicy => Materialize_Words_Policy_Section(env, demanded),
+        RequiredFact::TestMaterialPolicy => Materialize_Test_Material_Policy_Section(env, demanded),
         RequiredFact::RequirementTrace => Materialize_Requirement_Trace_Section(env, demanded),
         RequiredFact::SyntaxItems
         | RequiredFact::DependencyEdges
@@ -346,6 +348,25 @@ fn Materialize_Words_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, E
     if demanded.contains(&RequiredFact::WordsPolicy)
     {
         Materialize_Words_Policy(env.root, env.context, env.store, env.filesystem);
+    }
+}
+
+/// The test-material-policy section: [`Materialize_Test_Material_Policy`] when any selected
+/// rule declares it.
+///
+/// Ten rules read this capability -- the three security checks and the seven rules that read
+/// the shared test-or-example exemption -- so the gate is any one of them being selected,
+/// which is wider than the one-rule gates above. Absence is a fallback to each rule's own
+/// toolchain-fixed clauses, not a Finding: the same "no override" read every other family
+/// carries.
+fn Materialize_Test_Material_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
+    demanded: &[RequiredFact],
+)
+{
+    if demanded.contains(&RequiredFact::TestMaterialPolicy)
+    {
+        Materialize_Test_Material_Policy(env.root, env.context, env.store, env.filesystem);
     }
 }
 

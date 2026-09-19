@@ -209,11 +209,12 @@ fn Judged_Sources(
     unread: fn(Finding) -> Finding,
 ) -> Vec<Finding>
 {
+    let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
 
     for source in sources
     {
-        if crate::checks::Is_Test_Or_Example_Source(source)
+        if crate::checks::Is_Test_Or_Example_Source(source, &declared)
         {
             continue;
         }
