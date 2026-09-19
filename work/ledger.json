@@ -76013,7 +76013,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "The territory this item was authored with — five files under tests/contract/tests/corpus_gates — cannot reach its own done_when. The report is a test in nomos-contract-tests (Verification); the gated tests it must warn about live in six other crates (nomos-lang-rust, nomos-spec-ingest, nomos-spec-model, nomos-spec-store, nomos-workspace, tests/integration), and a package-scoped run of any of those never runs nomos-contract-tests. Making the report reach that reader needs one of two mechanisms, and neither is a widening of five files: six dev-dependencies on nomos-contract-tests plus a shared report-printing helper the gated files' own Corpus/Archives helpers call, or moving the report computation down to a lower-band shared crate those six can depend on. That is an architectural decision the item does not make and its territory does not reserve, so as-authored it cannot be finished. Re-author with territory over the gated crates or the shared helper's home. The stale v14.36 edition (the SECOND half) is already corrected in b2d5c275, so nothing here is lost; the finding itself — a scoped run reads hollow corpus results as clean — is unchanged and worth the re-authored item."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -76043,7 +76047,10 @@
         }
       ],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "fable-corpus-hole",
+        "declined_at": 1789799760
+      },
       "widened": []
     },
     {
