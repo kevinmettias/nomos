@@ -77491,7 +77491,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -77515,7 +77515,38 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-scope-verification",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-32dfb066c0981457.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-4a646ccb315f7073.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-2c2d7e829f90276d.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-551abd3144b80b48.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-c7c39a68de27f380.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-a65d76d3361478a9.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b6f6f9d3e839222c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-5b5eaa95f70e11d8.exe)\n     Running tests\\declining_ends_an_item\\main.rs (target\\debug\\deps\\declining_ends_an_item-1ffa2794f2e78e7b.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-1f293cbc130a9cc3.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-799ca052e8972090.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-64b50004f465877a.exe)\n     Running tests\\scope_verification_integration.rs (target\\debug\\deps\\scope_verification_integration-bb615d6b0a1c1110.exe)\n     Running tests\\widening_is_recorded\\main.rs (target\\debug\\deps\\widening_is_recorded-da478e3a9dab124c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_scope_verification-4b60c68c61e76a9e.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-b0aea8a6f94943e9.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_work_orchestration-56998d3a591ad42b.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-b965d4aa6fd4429e.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_scope_verification\n   Doc-tests nomos_work_orchestration\n",
+        "verified_at": 1789798897,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3342f55151d1a5d2afbad2b227918811284ad0f2"
+      },
       "abandoned": [
         {
           "holder": "fable-reservation",
