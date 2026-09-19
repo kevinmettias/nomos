@@ -76432,14 +76432,28 @@
           "crates/spec/nomos-spec-ingest/src/archive.rs",
           "tests/contract/surface/nomos-spec-store.txt",
           "tests/contract/surface/nomos-spec-bundle.txt",
-          "tests/contract/surface/nomos-spec-ingest.txt"
+          "tests/contract/surface/nomos-spec-ingest.txt",
+          "crates/spec/nomos-spec-bundle/src/row.rs",
+          "crates/spec/nomos-spec-bundle/src/row/record.rs",
+          "crates/spec/nomos-spec-bundle/src/row/repeated_text_declaration.rs",
+          "crates/spec/nomos-spec-bundle/src/lib.rs",
+          "crates/spec/nomos-spec-bundle/src/export/graph.rs",
+          "crates/spec/nomos-spec-bundle/src/export/graph/collect.rs",
+          "crates/spec/nomos-spec-bundle/src/import/graph.rs",
+          "crates/spec/nomos-spec-bundle/src/import/graph/insert.rs",
+          "crates/spec/nomos-spec-bundle/tests/round_trip/fixpoint.rs",
+          "crates/spec/nomos-spec-ingest/src/lib.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p103",
+        "acquired_at": 1789794816,
+        "lease_expires_at": 1789823616
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -76469,7 +76483,30 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p103",
+          "added": [
+            "crates/spec/nomos-spec-bundle/src/row.rs",
+            "crates/spec/nomos-spec-bundle/src/row/record.rs",
+            "crates/spec/nomos-spec-bundle/src/row/repeated_text_declaration.rs",
+            "crates/spec/nomos-spec-bundle/src/lib.rs",
+            "crates/spec/nomos-spec-bundle/src/export/graph.rs",
+            "crates/spec/nomos-spec-bundle/src/export/graph/collect.rs",
+            "crates/spec/nomos-spec-bundle/src/import/graph.rs",
+            "crates/spec/nomos-spec-bundle/src/import/graph/insert.rs",
+            "crates/spec/nomos-spec-bundle/tests/round_trip/fixpoint.rs"
+          ],
+          "widened_at": 1789795491
+        },
+        {
+          "holder": "fable-p103",
+          "added": [
+            "crates/spec/nomos-spec-ingest/src/lib.rs"
+          ],
+          "widened_at": 1789795608
+        }
+      ]
     },
     {
       "id": "P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE-2",
@@ -85904,6 +85941,150 @@
           "abandoned_at": 1789717202
         }
       ],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P117-AN-INLINE-TEST-MODULE-SPLIT-LEFT-TWO-RULES-JUDGING-THEIR-OWN-FIXTURES",
+      "title": "A module split moved two rules' fixtures out from under their exemptions, so each blocks the gate on its own test data",
+      "why": "Measured at 72e2ad5f: nomos gate run --root . exits 1 with 435 findings, 29 of which can fail a build, and 13 of those 29 are two rules reporting their own inline test modules.\n\nclosure-bounds-are-minimal and boxed-closures-are-justified-and-off-hot-paths report eight findings against crates/rules/nomos-rules/src/checks/closure_bounds/tests.rs. That module's only exemption is Is_Own_Implementation_File, a single path literal naming closure_bounds.rs, written when the implementation and its fixtures were one file. The doc above the literal states a reason that covers both halves: every pattern the module looks for is spelled out in its own constants and, in its words, worse, in its own tests' fixture strings. The split into a folder module moved the fixture half out from under the literal, and nothing re-derives a literal when a sibling appears.\n\na-credential-is-not-hardcoded-in-source, a-secret-does-not-travel-in-a-url and certificate-verification-is-not-disabled report five findings against crates/rules/nomos-rules/src/checks/security_text/tests.rs. Those three do consult a test-material predicate, Is_Test_Or_Fixture_Source, and it is missing the two clauses its sibling Is_Test_Or_Example_Source carries for exactly this case: a path ending in /tests.rs, and the bare name tests.rs. checks.rs states why the sibling has them, which is that this workspace names an inline test module's file plainly, so the gap is in the security predicate rather than in the convention it fails to follow.\n\nNothing reports either. No gate step has executed since 2026-09-07, which OD-GATE-027 measured and OD-GATE-033 decided the mechanism for, so a rule blocking on its own fixtures is invisible to CI and appears only in a local run.\n\n966ab406 decided that what counts as test material is a declared criterion rather than a path list compiled into the rules, and was deliberately finding-neutral: nomos-test-material.json at this root declares an empty fixture_locations list, so no repository declaration closes these thirteen.",
+      "done_when": "Is_Test_Or_Fixture_Source in security_text.rs admits an inline test module by the same two clauses its sibling already uses, so the repair holds for any repository's foo/tests.rs rather than for this one only.\n\nThe self-exemption in closure_bounds.rs covers the files of its own module rather than one pre-split path, taking the list form that security_text's OWN_IMPLEMENTATION_FILES already took when a split moved one rule's literals into a sibling file. A self-exemption names this repository's own detector on purpose, so a path literal is the right form here and the generalizing clause belongs in the test-material predicate above.\n\nEvery clause added owns a falsifier: a test that fails when that clause alone is removed, and the removal is performed and the file restored byte-identically rather than the falsifier being assumed.\n\nnomos gate run --root . reports zero findings against either tests.rs file, and the count of findings that can fail a build falls from 29 to 16.\n\nThe predicate is cargo test --no-fail-fast -p nomos-rules, the crate the whole territory lies in. It deliberately does not reach the calibration verdicts in tests/integration or the capability-demand tests in nomos-check-orchestration: those obligations are not this item's claim, though the change must not break them and they are run by hand before finishing.\n\nThis item does not give closure-bounds a test-material exemption. That rule consults none at all, so another repository's inline fixtures are still judged as production code, and that gap is filed as its own item rather than closed here.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/closure_bounds.rs",
+          "crates/rules/nomos-rules/src/checks/closure_bounds/tests.rs",
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/rules/nomos-rules/src/checks/security_text/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "The done_when required that nomos gate run report zero findings against either tests.rs file. Measured after the change, three Advisory lint-diagnostics findings remain located in those two files -- clippy implicit_clone at closure_bounds/tests.rs and needless_pass_by_value at security_text/tests.rs. All three are present in the before run at the same sites, shifted only by the lines this item added, and they come from a different rule than the five this item is about. The clause is therefore false however the work is done, and satisfying it literally would mean refactoring a test helper used across that file, which is the neighbouring defect this repository files rather than folds in. Re-authored as -2 with a clause that names the Blocking class and declares those three as out of scope. The implementation this item produced is correct and is carried unchanged into the successor."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "reason": "Releasing the claim so the item can be declined: its done_when cannot be satisfied as written. Superseded by P117-AN-INLINE-TEST-MODULE-SPLIT-LEFT-TWO-RULES-JUDGING-THEIR-OWN-FIXTURES-2.",
+          "abandoned_at": 1789795433
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "claude-external-review-reconciliation",
+        "declined_at": 1789795433
+      },
+      "widened": []
+    },
+    {
+      "id": "P117-AN-INLINE-TEST-MODULE-SPLIT-LEFT-TWO-RULES-JUDGING-THEIR-OWN-FIXTURES-2",
+      "title": "A module split moved two rules' fixtures out from under their exemptions, so each blocks the gate on its own test data",
+      "why": "Successor to the item of the same name, declined for a done_when that no implementation could satisfy. The measurement below is unchanged and was taken at 72e2ad5f.\n\nnomos gate run --root . exits 1 with 435 findings, 29 of which can fail a build, and 13 of those 29 are two rules reporting their own inline test modules.\n\nclosure-bounds-are-minimal and boxed-closures-are-justified-and-off-hot-paths report eight findings against crates/rules/nomos-rules/src/checks/closure_bounds/tests.rs. That module's only exemption is Is_Own_Implementation_File, a single path literal naming closure_bounds.rs, written when the implementation and its fixtures were one file. The doc above the literal states a reason covering both halves: every pattern the module looks for is spelled out in its own constants and, in its words, worse, in its own tests' fixture strings. The split into a folder module moved the fixture half out from under the literal, and nothing re-derives a literal when a sibling appears.\n\na-credential-is-not-hardcoded-in-source, a-secret-does-not-travel-in-a-url and certificate-verification-is-not-disabled report five findings against crates/rules/nomos-rules/src/checks/security_text/tests.rs. Those three do consult a test-material predicate, Is_Test_Or_Fixture_Source, and it is missing the two clauses its sibling Is_Test_Or_Example_Source carries for exactly this case: a path ending in /tests.rs, and the bare name tests.rs. checks.rs states why the sibling has them, which is that this workspace names an inline test module's file plainly, so the gap is in the security predicate rather than in the convention it fails to follow.\n\nNothing reports either. No gate step has executed since 2026-09-07, which OD-GATE-027 measured and OD-GATE-033 decided the mechanism for, so a rule blocking on its own fixtures is invisible to CI and appears only in a local run.\n\n966ab406 decided that what counts as test material is a declared criterion rather than a path list compiled into the rules, and was deliberately finding-neutral: nomos-test-material.json at this root declares an empty fixture_locations list, so no repository declaration closes these thirteen.",
+      "done_when": "Is_Test_Or_Fixture_Source in security_text.rs admits an inline test module by the same two clauses its sibling already uses, so the repair holds for any repository's foo/tests.rs rather than for this one only.\n\nThe self-exemption in closure_bounds.rs covers the files of its own module rather than one pre-split path, taking the list form that security_text's OWN_IMPLEMENTATION_FILES already took when a split moved one rule's literals into a sibling file. A self-exemption names this repository's own detector on purpose, so a path literal is the right form here and the generalizing clause belongs in the test-material predicate above.\n\nEvery clause added owns a falsifier: a test that fails when that clause alone is removed, with the removal performed and the file restored byte-identically rather than the falsifier being assumed.\n\nnomos gate run --root . reports no finding of the Blocking class located in either tests.rs file, and the count of findings that can fail a build falls from 29 to 16.\n\nThree Advisory findings of the lint-diagnostics rule are located in those two files, at closure_bounds/tests.rs and security_text/tests.rs, and are present in the before run at the same sites shifted only by the lines this item adds. They are pre-existing clippy warnings from a different rule than the five this item is about. This item neither closes nor claims them, and the predecessor was declined for a clause that required it to.\n\nThe predicate is cargo test --no-fail-fast -p nomos-rules, the crate the whole territory lies in. It deliberately does not reach the calibration verdicts in tests/integration or the capability-demand tests in nomos-check-orchestration: those obligations are not this item's claim, though the change must not break them and they are run by hand before finishing.\n\nThis item does not give closure-bounds a test-material exemption. That rule consults none at all, so another repository's inline fixtures are still judged as production code, and that gap is filed as its own item rather than closed here.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/closure_bounds.rs",
+          "crates/rules/nomos-rules/src/checks/closure_bounds/tests.rs",
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/rules/nomos-rules/src/checks/security_text/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "tax)\n   Compiling nomos-cap-controlflow v0.1.0 (F:\\repos\\verify-p117\\crates\\capabilities\\nomos-cap-controlflow)\n   Compiling nomos-cap-architecture v0.1.0 (F:\\repos\\verify-p117\\crates\\capabilities\\nomos-cap-architecture)\n   Compiling nomos-cap-test-material-policy v0.1.0 (F:\\repos\\verify-p117\\crates\\capabilities\\nomos-cap-test-material-policy)\n   Compiling nomos-cap-lint v0.1.0 (F:\\repos\\verify-p117\\crates\\capabilities\\nomos-cap-lint)\n   Compiling nomos-cap-goals-policy v0.1.0 (F:\\repos\\verify-p117\\crates\\capabilities\\nomos-cap-goals-policy)\n   Compiling nomos-cap-words-policy v0.1.0 (F:\\repos\\verify-p117\\crates\\capabilities\\nomos-cap-words-policy)\n   Compiling nomos-cap-limits-policy v0.1.0 (F:\\repos\\verify-p117\\crates\\capabilities\\nomos-cap-limits-policy)\n   Compiling nomos-cap-scripting-policy v0.1.0 (F:\\repos\\verify-p117\\crates\\capabilities\\nomos-cap-scripting-policy)\n   Compiling nomos-cap-dependency v0.1.0 (F:\\repos\\verify-p117\\crates\\capabilities\\nomos-cap-dependency)\n   Compiling nomos-cap-naming-policy v0.1.0 (F:\\repos\\verify-p117\\crates\\capabilities\\nomos-cap-naming-policy)\n   Compiling nomos-cap-dependency-policy v0.1.0 (F:\\repos\\verify-p117\\crates\\capabilities\\nomos-cap-dependency-policy)\n   Compiling nomos-analysis v0.1.0 (F:\\repos\\verify-p117\\crates\\substrate\\nomos-analysis)\n   Compiling nomos-connector-coderabbit v0.1.0 (F:\\repos\\verify-p117\\crates\\connectors\\nomos-connector-coderabbit)\n   Compiling nomos-cap-requirement-trace v0.1.0 (F:\\repos\\verify-p117\\crates\\capabilities\\nomos-cap-requirement-trace)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\verify-p117\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\verify-p117\\crates\\rules\\nomos-rules)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.75s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-02c2da53374a3065.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-0778112353cf1c4b.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1789795603,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P117-THE-TWO-CLOSURE-RULES-CONSULT-NO-TEST-MATERIAL-PREDICATE-AT-ALL",
+      "title": "The two closure rules judge any repository's inline fixtures as production code, because they consult no test-material predicate",
+      "why": "P117 closed a regression in which a folder split moved two rules' own fixtures out from under their exemptions. It closed it for this repository by following the self-exemption precedent, and deliberately left the general half open. This item is that half.\n\nclosure-bounds-are-minimal and boxed-closures-are-justified-and-off-hot-paths filter on Is_Own_Implementation_File alone, a literal naming this repository's own two files. They consult no test-material predicate of any kind. Every other test-material-sensitive rule in this crate resolves nomos.cap.test.material.policy through Resolve_Declared_Fixture_Locations and composes the declared locations with its own fixed clauses, which is what 966ab406 built as OD-RULES-011's sixth family and applied to the three security checks and the seven rules reading the shared exemption.\n\nThese two were not among them, and could not have been: rule_descriptor.rs gives both SubjectKind::SourceText with an empty RequiredFact list and a closure of the form |sources, _reader| that discards the reader, so neither check can read a fact at all. The consequence is that another repository's fixtures -- a test module that boxes a dyn Fn on purpose, which is the ordinary way to write such a fixture -- are reported as production violations, and that repository's nomos-test-material.json cannot say otherwise. That is the failure direction the security half of 966ab406 called the damaging one.\n\nMeasured at the commit that closed P117: the two rules' own fixtures are exempt by path literal, and nothing else is.",
+      "done_when": "Both closure descriptors in rule_descriptor.rs declare RequiredFact::TestMaterialPolicy and pass the reader to their check rather than discarding it.\n\nBoth checks resolve the declared fixture locations and consult a test-material predicate composed with their own fixed clauses, in the shape checks.rs already establishes for the seven rules that read the shared exemption -- not a third independent path list.\n\nA repository that declares a fixture location has its closure fixtures exempted there, proved by a test that fails when the declared locations are ignored, so the declaration is load-bearing rather than merely read.\n\nThe self-exemption for this module's own detector files stays. A declared fixture location is a different fact from a detector whose own constants spell out the patterns it looks for, and folding the second into the first would make the exemption depend on a declaration this repository does not make.\n\nThe predicate is cargo test --no-fail-fast -p nomos-rules. If adding a required fact changes what nomos-check-orchestration demands for these rules, its capability-demand tests are territory this item does not yet reserve and widening is the repair.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/closure_bounds.rs",
+          "crates/rules/nomos-rules/src/checks/closure_bounds/tests.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
       "displaced": [],
       "declined": null,
       "widened": []

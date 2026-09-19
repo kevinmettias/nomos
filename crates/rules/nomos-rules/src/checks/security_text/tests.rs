@@ -74,6 +74,30 @@ fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Ignore_Test_Files()
     assert!(findings.is_empty(), "{findings:?}");
 }
 
+/// Falsifier for the `/tests.rs` clause alone. This module's own fixtures live at that
+/// path shape, which no other clause in `Is_Test_Or_Fixture_Source` reaches: the name
+/// carries no `_tests` suffix, and the `tests` segment has no trailing slash. Remove that
+/// one clause and this test reports the fixture credential on the next line up.
+#[test]
+fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Ignore_An_Inline_Test_Module()
+{
+    let text = format!("const KEY: &str = \"{}\";\n", Stripe_Live_Key_Fixture());
+    let source = Source(SourceText { path: "src/checks/security_text/tests.rs", text: &text });
+    let findings = Check(Check_A_Credential_Is_Not_Hardcoded_In_Source, source);
+    assert!(findings.is_empty(), "{findings:?}");
+}
+
+/// Falsifier for the bare-name clause alone: an inline test module at a crate root has no
+/// leading path segment, so the clause above it cannot match this one.
+#[test]
+fn Test_Check_A_Credential_Is_Not_Hardcoded_In_Source_Should_Ignore_A_Crate_Root_Inline_Test_Module()
+{
+    let text = format!("const KEY: &str = \"{}\";\n", Stripe_Live_Key_Fixture());
+    let source = Source(SourceText { path: "tests.rs", text: &text });
+    let findings = Check(Check_A_Credential_Is_Not_Hardcoded_In_Source, source);
+    assert!(findings.is_empty(), "{findings:?}");
+}
+
 #[test]
 fn Test_Check_A_Secret_Does_Not_Travel_In_A_Url_Should_Report_An_Api_Key_Query_Parameter()
 {

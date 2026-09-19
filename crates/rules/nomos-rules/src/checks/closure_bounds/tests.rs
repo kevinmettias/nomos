@@ -60,6 +60,21 @@ fn Test_Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths_Should_Ignore_A_Lan
     assert!(findings.is_empty(), "{findings:?}");
 }
 
+/// Falsifier for the second entry of `OWN_IMPLEMENTATION_FILES`. This file is where this
+/// module keeps its fixtures, and the boxed-closure fixture below is the same shape as the
+/// ones above it -- so with only the pre-split path exempt, every one of them is reported
+/// against this file, which is exactly what the folder split caused.
+#[test]
+fn Test_Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths_Should_Ignore_This_Modules_Own_Fixtures()
+{
+    let path = "crates/rules/nomos-rules/src/checks/closure_bounds/tests.rs";
+    let sources = vec![Source(path, "struct Handler { callback: Box<dyn Fn(Event)> }".to_owned())];
+
+    let findings = Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(&sources);
+
+    assert!(findings.is_empty(), "{findings:?}");
+}
+
 /// Translated from the original's `Test_Closure_Static_Bound_Needs_A_Reason`. One
 /// finding even though the line widens with both `Send` and `'static`, matching the
 /// original's one-finding-per-line shape.

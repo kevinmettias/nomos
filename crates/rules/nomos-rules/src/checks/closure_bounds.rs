@@ -379,11 +379,20 @@ fn Is_An_Explanatory_Comment(line: &str) -> bool
 /// Verified rather than assumed: composing this rule and running a real `nomos gate run`
 /// against this workspace reported eight findings against this exact file before this
 /// exemption existed, none of them a real violation.
-const OWN_IMPLEMENTATION_FILE: &str = "crates/rules/nomos-rules/src/checks/closure_bounds.rs";
+///
+/// A list rather than one path, for the reason `security_text`'s own
+/// `OWN_IMPLEMENTATION_FILES` is one: a folder split moved the fixture half of that measured
+/// eight into `closure_bounds/tests.rs`, and a literal naming only the pre-split file stopped
+/// covering them. The exemption follows the module, not the file the module used to be.
+const OWN_IMPLEMENTATION_FILES: &[&str] = &[
+    "crates/rules/nomos-rules/src/checks/closure_bounds.rs",
+    "crates/rules/nomos-rules/src/checks/closure_bounds/tests.rs",
+];
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
-    return source.path.replace('\\', "/") == OWN_IMPLEMENTATION_FILE;
+    let normalized = source.path.replace('\\', "/");
+    return OWN_IMPLEMENTATION_FILES.contains(&normalized.as_str());
 }
 
 /// The code before any line comment. This crate's established per-file convention, which

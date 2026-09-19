@@ -227,6 +227,14 @@ fn Has_Secret_In_Url(line: &str) -> bool
 /// cover Go's `testdata/` and either language's fixture convention — or a repository's own
 /// declared fixture location, the same additions [`super::Resolve_Declared_Fixture_Locations`]
 /// hands every other test-or-example predicate in this crate.
+///
+/// The `/tests.rs` and bare-`tests.rs` clauses are an inline test module's own file, which
+/// this workspace names plainly rather than with a suffix. They are the two
+/// [`super::Is_Test_Or_Example_Source`] already carries, and their absence here was not
+/// theoretical: a folder split moved this module's own fixtures into
+/// `security_text/tests.rs`, every clause above missed it -- `_tests.rs` does not reach that
+/// name, and `/tests/` does not either, because the segment carries no trailing slash -- and
+/// all three rules in this file reported their own test data until these were added.
 fn Is_Test_Or_Fixture_Source(source: &SourceFile, declared: &[String]) -> bool
 {
     let normalized = source.path.replace('\\', "/");
@@ -238,6 +246,8 @@ fn Is_Test_Or_Fixture_Source(source: &SourceFile, declared: &[String]) -> bool
         || normalized.contains("/examples/")
         || normalized.ends_with("_test.rs")
         || normalized.ends_with("_tests.rs")
+        || normalized.ends_with("/tests.rs")
+        || normalized == "tests.rs"
         || normalized.ends_with("_test.go")
         || declared.iter().any(|location| return crate::checks::Is_Under_Declared_Location(&normalized, location));
 }
