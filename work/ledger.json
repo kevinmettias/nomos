@@ -76791,7 +76791,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2",
         "P103-A-REPEATED-FRAGMENT-BELOW-A-LENGTH-FLOOR-IS-NOT-A-TEMPLATE-3"
@@ -76808,7 +76808,28 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-validate"
+        ],
+        "exit_code": 0,
+        "output_tail": "s\ntest Test_Registered_Should_Build_One_Rule_Object_Per_Declared_Identifier ... ok\ntest Test_Eligibility_Should_Be_Counted_Over_The_Normalized_Text ... ok\ntest Test_The_Floor_Should_Admit_A_Body_Of_Exactly_Its_Own_Length ... ok\ntest Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004 ... ok\ntest Test_An_Omitted_Block_Should_Satisfy_Preserve_002 ... ok\ntest Test_The_Registry_Should_Match_The_Manifest ... ok\ntest Test_A_Statement_Without_Preserved_Lineage_Should_Violate_Preserve_006 ... ok\ntest Test_An_Undisposed_Block_Should_Violate_Preserve_002 ... ok\ntest Test_A_Declared_Repetition_With_An_Extra_Occurrence_Should_Violate_Preserve_004 ... ok\ntest Test_A_Traced_Statement_Should_Satisfy_Preserve_006 ... ok\ntest Test_A_Populated_Store_Should_Not_Report_Vacuous_Block_Rules ... ok\ntest Test_An_Undeclared_Repeated_Body_Should_Violate_Preserve_004 ... ok\ntest Test_An_Empty_Store_Should_Report_Vacuous_Rules ... ok\ntest Test_Disposed_Blocks_Should_Satisfy_Preserve_002 ... ok\ntest Test_A_Body_Below_The_Floor_Should_Not_Violate_Preserve_004_However_Often_It_Repeats ... ok\ntest Test_A_Body_At_The_Shortest_Deliberate_Length_Should_Still_Violate_Preserve_004 ... ok\ntest Test_A_Declared_Repetition_Should_Satisfy_Preserve_004 ... ok\ntest Test_A_Seeded_Store_Should_Pass_Preservation_Non_Vacuously ... ok\n\ntest result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.37s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-spec-validate v0.1.0 (F:\\repos\\nomos\\crates\\spec\\nomos-spec-validate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.57s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_validate-acd7b674edff1f45.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-cc86bb37eb4785b6.exe)\n     Running tests\\preservation_holds.rs (target\\debug\\deps\\preservation_holds-c1582b858346687e.exe)\n   Doc-tests nomos_spec_validate\n",
+        "verified_at": 1789799279,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "271528945126932678aa73a3260e05cb6fa1952f"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -86386,6 +86407,40 @@
           "determinism"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P118-A-SINGLE-LETTER-RENAME-REWROTE-TEN-POSSESSIVES-IN-PROSE",
+      "title": "The rename that cleared sixteen naming findings replaced the s inside ten English possessives, and no rule judges prose",
+      "why": "Measured at 27152894. 502fe7b3, P103-SELFCHECK, cleared the sixteen Blocking findings the self-check carried. Part of that work renamed a field and its bindings from s to leaving in crates/substrate/nomos-analysis/tests/invalidation_order.rs. The replacement also matched the s inside the possessive suffix, and ten doc-comment possessives now read leaving where they used to read s:\n\n  137  Condensation_Of'leaving output, and dependent'leaving\n  139  graph'leaving shape\n  140  store'leaving own dependency edges\n  145  a seed'leaving value\n  208  a seed'leaving value\n  282  a seed'leaving value\n  302  cycle'leaving two members\n  304  this file'leaving chain-through-a\n  351  the subject'leaving digest\n  353  Tarjan::Visit'leaving iterative walk\n\nAll ten are in one file and all ten are the same edit. The naming work itself is sound and is not in question here: the fields really were named a, b, c, d and w, x, y, z and p, q, r, s, the findings were genuine, and the new names read correctly. Only the prose was damaged.\n\nNothing in this repository can catch it. Every rule judges identifiers, types, files or structure; none judges English, so a doc comment can say anything and stay Clean. The compiler cannot see it either, because a doc comment is not code. cargo test is green over the file. And the gate has executed no step since 2026-09-07, so even a rule that could judge it would not have run. This is the blind channel three ways at once, which is why it is worth an item rather than a quiet edit: the same rename pattern is available to every later naming item, and the next single-letter binding named s or a or d will corrupt prose the same way.\n\nFound by reading the file while classifying the sixteen, not by any check.",
+      "done_when": "The ten possessives read as possessives again, and the file says what it said before 502fe7b3 renamed anything.\n\nEach repair is checked against the pre-rename text rather than guessed: git show 502fe7b3^:crates/substrate/nomos-analysis/tests/invalidation_order.rs carries the original wording, and the restored line must differ from it only where the rename was intended to change a name. A possessive whose subject was itself renamed keeps the new name and recovers only the suffix.\n\nThe file is searched for the damage rather than only the ten lines listed, because the listing was produced by one spelling. A grep for leaving across the file that returns only genuine uses of the word is the evidence, and the count of genuine uses is stated so a later reader can tell a real occurrence from a repaired one.\n\nNo rule is added to judge prose. That would be a new capability and a large one, and this item does not decide it. What this item may add instead is a note wherever a naming sweep is described, saying that a single-letter rename must not be applied as a bare token replacement, since the possessive suffix is a token boundary a word-level pattern does not see.\n\nThe predicate is cargo test --no-fail-fast -p nomos-analysis, the crate the file belongs to. It cannot detect the defect, and that is stated rather than hidden: it is here to show the repair did not break the test the file exists to run, and the repair itself is judged by the diff against 502fe7b3^.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis/tests/invalidation_order.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis"
+        ],
+        "timeout_seconds": 1800
       },
       "verified": null,
       "abandoned": [],
