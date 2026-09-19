@@ -86143,14 +86143,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-external-review-reconciliation",
-        "acquired_at": 1789797276,
-        "lease_expires_at": 1789808076
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -86161,7 +86157,28 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": "p-controlflow)\n   Compiling nomos-cap-syntax v0.1.0 (F:\\repos\\attrib-p118\\crates\\capabilities\\nomos-cap-syntax)\n   Compiling nomos-cap-limits-policy v0.1.0 (F:\\repos\\attrib-p118\\crates\\capabilities\\nomos-cap-limits-policy)\n   Compiling nomos-cap-lint v0.1.0 (F:\\repos\\attrib-p118\\crates\\capabilities\\nomos-cap-lint)\n   Compiling nomos-cap-naming-policy v0.1.0 (F:\\repos\\attrib-p118\\crates\\capabilities\\nomos-cap-naming-policy)\n   Compiling nomos-cap-dependency-policy v0.1.0 (F:\\repos\\attrib-p118\\crates\\capabilities\\nomos-cap-dependency-policy)\n   Compiling nomos-cap-scripting-policy v0.1.0 (F:\\repos\\attrib-p118\\crates\\capabilities\\nomos-cap-scripting-policy)\n   Compiling nomos-cap-goals-policy v0.1.0 (F:\\repos\\attrib-p118\\crates\\capabilities\\nomos-cap-goals-policy)\n   Compiling nomos-cap-dependency v0.1.0 (F:\\repos\\attrib-p118\\crates\\capabilities\\nomos-cap-dependency)\n   Compiling nomos-cap-words-policy v0.1.0 (F:\\repos\\attrib-p118\\crates\\capabilities\\nomos-cap-words-policy)\n   Compiling nomos-cap-architecture v0.1.0 (F:\\repos\\attrib-p118\\crates\\capabilities\\nomos-cap-architecture)\n   Compiling nomos-cap-test-material-policy v0.1.0 (F:\\repos\\attrib-p118\\crates\\capabilities\\nomos-cap-test-material-policy)\n   Compiling nomos-analysis v0.1.0 (F:\\repos\\attrib-p118\\crates\\substrate\\nomos-analysis)\n   Compiling nomos-cap-requirement-trace v0.1.0 (F:\\repos\\attrib-p118\\crates\\capabilities\\nomos-cap-requirement-trace)\n   Compiling nomos-connector-coderabbit v0.1.0 (F:\\repos\\attrib-p118\\crates\\connectors\\nomos-connector-coderabbit)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\attrib-p118\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\attrib-p118\\crates\\rules\\nomos-rules)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.26s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-02c2da53374a3065.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-0778112353cf1c4b.exe)\n   Doc-tests nomos_rules\n",
+        "verified_at": 1789798585,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -86237,6 +86254,86 @@
           "--no-fail-fast",
           "-p",
           "nomos-integration-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P103-SELFCHECK-RED-SIXTEEN-BLOCKING-FINDINGS",
+      "title": "The self-check is red on sixteen Blocking findings left by P112 and P114",
+      "why": "The self-check is red and it reddens every predicate naming -p nomos-cli, whatever the item changed. Measured by running nomos check --root . and reading the Blocking lines: sixteen findings, all in committed content, none owned by the item whose predicate surfaced them. Three files carry them. crates/languages/nomos-lang-rust-compiler/src/nested_lock/fact_production.rs declares the public type NestedLockFactProduction but the file stem is fact_production, so file-name-matches-declared-type reports one; the file is clean and its last commit is P112. crates/rules/nomos-rules/src/checks/finding_shape.rs declares Member_Finding, Qualified_Name_Finding and Subject_Finding at arity five, five and six, so parameter-count reports three; the file is clean and its last commit is P112. crates/substrate/nomos-analysis/tests/invalidation_order.rs uses the single-letter names a b c d p q r s w x y z outside the local-variable exception, so single-letter-names reports twelve; the file is clean and its last commit is P114. All three files are committed and clean, so waiting will not clear them and they are nobody's uncommitted work to respect. This is the census the self-check mechanism exists to surface; the finding-bearing files are the ones to measure before fixing, and the fix may be a rename, a parameter grouping, or a rule reading, decided per finding rather than assumed.",
+      "done_when": "The self-check test is green again: cargo test -p nomos-cli --test check_command this_workspace exits 0, meaning nomos check --root . reports no Blocking finding that the test's accepted list does not already name. Each of the sixteen findings is resolved in its own terms -- the misnamed file is renamed or exempted, the three arity-five-and-six helpers are grouped or exempted, and the twelve single-letter test fixture names are judged the way the rule's own local-variable exception already judges them -- with none suppressed by a marker that hides the finding from every predicate. The gate's own real-run tests that run the same check over this tree go green with it.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-compiler/src/nested_lock",
+          "crates/languages/nomos-lang-rust-compiler/src/lib.rs",
+          "crates/rules/nomos-rules/src/checks/finding_shape.rs",
+          "crates/substrate/nomos-analysis/tests/invalidation_order.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-census",
+        "acquired_at": 1789797700,
+        "lease_expires_at": 1789826500
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "check_command",
+          "this_workspace"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P118-THE-BUNDLE-GOLDEN-WAS-NOT-REPINNED-WHEN-THE-RECORD-SET-GAINED-A-VARIANT",
+      "title": "dev is red in the integration determinism target: a bundle format change landed without re-pinning the golden it moves",
+      "why": "Measured, not inferred. cargo test -p nomos-integration-tests --test determinism at 7c41bf19, in a detached worktree with zero working-tree changes, reports 24 passed and 2 failed:\n\n  controls::Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins\n  domains::Test_Bundle_Serialization_Should_Meet_Its_Declared_Strategy\n\nThe control panics at tests/integration/tests/determinism/controls.rs:122 with left 21b4117f8b5ec2bb8c54a2036dc5fff4 against right 6d4589efb6920ec2294231ef235b63cf, saying the honest half of this control must be the bundle the golden was captured from. BUNDLE_GOLDEN is pinned at tests/integration/tests/determinism/goldens.rs:87 and still carries the second value.\n\nAttribution was established by running the same target twice rather than by reading the diff: once in a shared tree carrying an unrelated nomos-rules change, and once at pristine HEAD carrying nothing. Both report the same two failures and the same 24 passed, so the cause is in HEAD and not in any working-tree change.\n\nThe mechanism is a predicate narrower than the change's blast radius, which is a shape this repository already reasons about rather than a new one. P103-A-CORPUS-CANNOT-DECLARE-THE-TEXT-ITS-OWN-LAYOUT-REPEATS-2 added a RepeatedTextDeclaration variant to the bundle's record set, which is exactly a change to serialized bundle bytes. Its predicate is scoped to nomos-spec-store, nomos-spec-bundle and nomos-spec-ingest with five named test targets, and its territory names three surface snapshots but not goldens.rs. So it finished green on its own acceptance while moving a digest pinned outside every crate it declared. Nothing else caught it: the gate has executed no step since 2026-09-07, and the integration suite was additionally unrunnable during that window because the crate under edit did not compile.\n\nThis item does not fault that scoping. It records that the golden is now stale and that dev is red for it.",
+      "done_when": "The integration determinism target passes at a revision that includes the RepeatedTextDeclaration variant.\n\nThe golden is re-pinned only after the new digest is judged to be the right one rather than merely the current one. A golden exists to fail when bytes move, so accepting a new value because a test demands it is the one thing this item must not do: the work states why the bundle bytes changed, that the change is the intended consequence of adding a declared variant to the record set, and that the control test still discriminates afterwards.\n\nThat last clause is the falsifier and it is performed, not assumed. Test_An_Altered_Byte_Should_Move_The_Digest_The_Golden_Pins exists to prove the golden still detects an altered byte, so after re-pinning, an altered byte must still move the digest and fail it. A golden updated to whatever the code now emits, with a control that no longer discriminates, is the defect this clause exists to exclude.\n\nIf the new bytes turn out to be wrong rather than intended, this item is declined and the defect is filed against the bundle instead, because re-pinning would then encode a corruption as the expectation.\n\nThe predicate is cargo test --no-fail-fast -p nomos-integration-tests --test determinism. It is the target that is red and the one the golden governs; the rest of the integration package is not this item's claim.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/tests/determinism/goldens.rs",
+          "tests/integration/tests/determinism/controls.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "determinism"
         ],
         "timeout_seconds": 2700
       },

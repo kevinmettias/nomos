@@ -37,6 +37,7 @@
 
 use super::code_prefix::Code_Prefix;
 use crate::{RUST_LANGUAGE, SourceFile};
+use nomos_analysis::FactReader;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// The code-standards closure-bounds-are-minimal rule id.
@@ -53,11 +54,12 @@ const JUSTIFICATION_WINDOW_LINES: usize = 3;
 /// explanation, and a public function's own closure-trait choice with no adjacent
 /// explanation either.
 #[must_use]
-pub fn Check_Closure_Bounds_Are_Minimal(sources: &[SourceFile]) -> Vec<Finding>
+pub fn Check_Closure_Bounds_Are_Minimal(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
 
-    for source in sources.iter().filter(|source| return source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source))
+    for source in sources.iter().filter(|source| return Judgeable(source, &declared))
     {
         findings.extend(Minimal_Bound_Findings_In(source));
     }
@@ -286,11 +288,12 @@ fn Public_Api_Finding(source: &SourceFile, line_number: usize) -> Finding
 
 /// Reports a `Box`, `Arc`, or `Rc` of `dyn Fn*` with no adjacent explanation.
 #[must_use]
-pub fn Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(sources: &[SourceFile]) -> Vec<Finding>
+pub fn Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
 
-    for source in sources.iter().filter(|source| return source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source))
+    for source in sources.iter().filter(|source| return Judgeable(source, &declared))
     {
         findings.extend(Boxed_Closure_Findings_In(source));
     }
@@ -388,6 +391,22 @@ const OWN_IMPLEMENTATION_FILES: &[&str] = &[
     "crates/rules/nomos-rules/src/checks/closure_bounds.rs",
     "crates/rules/nomos-rules/src/checks/closure_bounds/tests.rs",
 ];
+
+/// Whether either rule in this module judges `source` at all.
+///
+/// Three clauses, and they are three different questions. The language clause is what these
+/// rules are about. [`Is_Own_Implementation_File`] is a self-exemption: this module's own
+/// detector constants and fixture strings spell out the very shapes it looks for, and no
+/// repository declaration could or should make that judgeable. The third is the shared
+/// classification -- [`super::Is_Test_Or_Example_Source`], the same predicate and the same
+/// repository-declared fixture locations every other test-material-sensitive rule in this
+/// crate reads, rather than a third private path list beside it.
+fn Judgeable(source: &SourceFile, declared: &[String]) -> bool
+{
+    return source.Is_Written_In(RUST_LANGUAGE)
+        && !Is_Own_Implementation_File(source)
+        && !super::Is_Test_Or_Example_Source(source, declared);
+}
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {

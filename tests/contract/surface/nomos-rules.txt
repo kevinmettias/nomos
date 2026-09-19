@@ -163,9 +163,9 @@ pub fn nomos_rules::Check_Abbreviations(sources: &[SourceFile], facts: &mut dyn 
 pub fn nomos_rules::Check_An_Excluded_File_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Atomic_Ordering_Choices_Are_Justified(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Boolean_Predicates( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
-pub fn nomos_rules::Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Certificate_Verification_Is_Not_Disabled(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
-pub fn nomos_rules::Check_Closure_Bounds_Are_Minimal(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Closure_Bounds_Are_Minimal(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Constants_Are_The_Exception_To_Function_Scope_Use(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Cross_Language_Correspondence(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>

@@ -248,8 +248,8 @@ pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Descriptor_For(crate::STATIC_BOUNDS_ARE_JUSTIFIED, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Static_Bounds_Are_Justified(sources)),
     Descriptor_For(crate::PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Prefer_Macro_Rules_Over_Procedural_Macros(sources)),
     Descriptor_For(crate::NESTING_DEPTH, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_Nesting_Depth),
-    Descriptor_For(crate::CLOSURE_BOUNDS_ARE_MINIMAL, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Closure_Bounds_Are_Minimal(sources)),
-    Descriptor_For(crate::BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(sources)),
+    Descriptor_For(crate::CLOSURE_BOUNDS_ARE_MINIMAL, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::TestMaterialPolicy], crate::Check_Closure_Bounds_Are_Minimal),
+    Descriptor_For(crate::BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::TestMaterialPolicy], crate::Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths),
 ];
 
 #[cfg(test)]
