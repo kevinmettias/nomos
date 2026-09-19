@@ -20,7 +20,8 @@ use nomos_spec_store::{SpecificationStore, Table};
 /// threshold this rule enforces and the one `archaeology::Shared_Templates` reports over a
 /// revision pair stay the same constant rather than two numbers somebody has to notice
 /// disagree.
-const TEMPLATES: &str = "SELECT count(*) AS sections,
+const TEMPLATES: &str = "SELECT normalized_hash,
+                                count(*) AS sections,
                                 count(DISTINCT document_uid) AS documents,
                                 min(text) AS sample
                          FROM source_blocks
@@ -30,9 +31,10 @@ const TEMPLATES: &str = "SELECT count(*) AS sections,
                          ORDER BY sections DESC, sample";
 
 /// A block body carried by `SHARED_BY` or more sections is a template, not prose. A
-/// template `Get_Filler_Pattern` already names is accounted for; one it does not name is a form
-/// letter nobody declared, the exact shape `OD-SPEC-004` measured hollowing 44 restored
-/// members with one undeclared adjective.
+/// template `Get_Filler_Pattern` already names is accounted for; one the corpus's own
+/// declaration rows admit is accounted for; one neither names is a form letter nobody
+/// declared, the exact shape `OD-SPEC-004` measured hollowing 44 restored members with one
+/// undeclared adjective.
 pub(crate) struct NoUndeclaredFillerTemplate;
 
 impl Rule for NoUndeclaredFillerTemplate
@@ -45,7 +47,7 @@ impl Rule for NoUndeclaredFillerTemplate
     fn Describe(&self) -> &'static str
     {
         return "a body repeated across SHARED_BY or more sections is a declared filler \
-                 pattern or a violation";
+                 pattern, a declared repetition, or a violation";
     }
 
     fn Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
@@ -85,7 +87,7 @@ fn Counted_And_Undeclared(store: &SpecificationStore) -> Result<(u32, Vec<Violat
 fn Undeclared_Templates(store: &SpecificationStore) -> Result<Vec<Violation>, String>
 {
     let mut violations = Vec::new();
-    for (sections, documents, sample) in Template_Rows(store)?
+    for (normalized_hash, sections, documents, sample) in Template_Rows(store)?
     {
         // Eligibility first, because a body below the floor is not a template that
         // happens to be undeclared -- it is not a template at all, and reporting it as
@@ -102,30 +104,70 @@ fn Undeclared_Templates(store: &SpecificationStore) -> Result<Vec<Violation>, St
             continue;
         }
 
-        violations.push(Violation {
-            subject: format!("{sections} section(s) across {documents} document(s)"),
-            detail: format!("repeats an undeclared template: {}", Preview_Text(&sample)),
-        });
+        // The declaration rows a corpus authors admit a repetition whose occurrences are
+        // the ones the declaration names. A block declared for N places that appears N or
+        // fewer times is admitted without being called filler; a further occurrence is the
+        // same undeclared shape this rule already reports.
+        let declared = Declared_Multiplicity(store, &normalized_hash)?;
+        if declared >= i64::from(sections)
+        {
+            continue;
+        }
+
+        if declared == 0
+        {
+            violations.push(Violation {
+                subject: format!("{sections} section(s) across {documents} document(s)"),
+                detail: format!("repeats an undeclared template: {}", Preview_Text(&sample)),
+            });
+        }
+        else
+        {
+            let excess = i64::from(sections).saturating_sub(declared);
+            violations.push(Violation {
+                subject: format!("{excess} section(s) beyond the {declared} the declaration names"),
+                detail: format!("declared for {declared} occurrences but appears {sections}: {}", Preview_Text(&sample)),
+            });
+        }
     }
 
     return Ok(violations);
 }
 
+/// The total multiplicity the declaration rows name for one normalized body -- the number
+/// of places the corpus says that body is intentionally projected into, summed across every
+/// role it is declared under. Zero when the corpus declares nothing for it.
+fn Declared_Multiplicity(store: &SpecificationStore, normalized_hash: &str) -> Result<i64, String>
+{
+    const DECLARED: &str =
+        "SELECT coalesce(sum(multiplicity), 0) FROM repeated_text_declarations WHERE normalized_hash = ?1";
+
+    let connection = store.Connection();
+    let mut statement = connection.prepare(DECLARED).map_err(|error| return error.to_string())?;
+    let declared: i64 = statement
+        .query_row([normalized_hash], |row| return row.get(0))
+        .map_err(|error| return error.to_string())?;
+
+    return Ok(declared);
+}
+
 /// The column `Template_Rows`'s query selects the shared text sample from.
-const SAMPLE_COLUMN: usize = 2;
+const SAMPLE_COLUMN: usize = 3;
 
 /// Every group of prose blocks sharing a body across `SHARED_BY` or more sections: the
-/// section count, the document count, and one sample of the shared text.
-fn Template_Rows(store: &SpecificationStore) -> Result<Vec<(u32, u32, String)>, String>
+/// normalized hash that groups them, the section count, the document count, and one sample
+/// of the shared text.
+fn Template_Rows(store: &SpecificationStore) -> Result<Vec<(String, u32, u32, String)>, String>
 {
     let connection = store.Connection();
     let mut statement = connection.prepare(TEMPLATES).map_err(|error| return error.to_string())?;
     let rows = statement
         .query_map([SHARED_BY], |row| {
-            let sections: u32 = row.get(0)?;
-            let documents: u32 = row.get(1)?;
+            let normalized_hash: String = row.get(0)?;
+            let sections: u32 = row.get(1)?;
+            let documents: u32 = row.get(2)?;
             let sample: String = row.get(SAMPLE_COLUMN)?;
-            return Ok((sections, documents, sample));
+            return Ok((normalized_hash, sections, documents, sample));
         })
         .map_err(|error| return error.to_string())?;
 

@@ -1,7 +1,7 @@
 //! The preservation rules over a real store.
 
 use nomos_spec_ingest::{Ingest_Block_Dispositions, Ingest_Source_Document, Is_Template_Eligible,
-                        TEMPLATE_FLOOR};
+                        SHARED_BY, TEMPLATE_FLOOR};
 use nomos_spec_store::SpecificationStore;
 use nomos_spec_validate::{DECLARED_RULES, Registered, RuleOutcome, Validate_Rules};
 
@@ -339,6 +339,80 @@ fn Test_A_Declared_Repeated_Body_Should_Satisfy_Preserve_004()
         matches!(template_rule.outcome, RuleOutcome::Satisfied { .. }),
         "a declared pattern must not violate: {:?}",
         template_rule.outcome
+    );
+}
+
+/// The normalized hash the fixture's one repeated body groups under, so a test can declare it.
+fn Repeated_Hash(store: &SpecificationStore) -> String
+{
+    return store
+        .Connection()
+        .query_row(
+            "SELECT normalized_hash FROM source_blocks WHERE kind = 'prose'
+             GROUP BY normalized_hash HAVING count(*) >= ?1",
+            [SHARED_BY],
+            |row| return row.get(0),
+        )
+        .expect("the fixture repeats one body across SHARED_BY or more sections");
+}
+
+/// One declaration row: the normalized hash of the repeated body, the role it plays, and the
+/// multiplicity that role implies.
+fn Declare(store: &mut SpecificationStore, normalized_hash: &str, role: &str, multiplicity: i64)
+{
+    store
+        .Connection()
+        .execute(
+            "INSERT INTO repeated_text_declarations (normalized_hash, role, multiplicity) VALUES (?1, ?2, ?3)",
+            rusqlite::params![normalized_hash, role, multiplicity],
+        )
+        .expect("the declaration table accepts this row");
+}
+
+/// A block declared for three named roles, appearing in exactly those three places, is
+/// admitted and is not filler.
+#[test]
+fn Test_A_Declared_Repetition_Should_Satisfy_Preserve_004()
+{
+    let mut store = SpecificationStore::In_Memory().expect("in-memory opens no file, so only the schema can fail");
+    Ingest_Source_Document(&mut store, "a.md", "v14.36", REPEATED_UNDECLARED).expect("the store is empty and in memory");
+
+    let hash = Repeated_Hash(&store);
+    Declare(&mut store, &hash, "edition-line", 1);
+    Declare(&mut store, &hash, "suite-title", 1);
+    Declare(&mut store, &hash, "volume-abstract", 1);
+
+    let run = Validate_Rules(&store, &Registered());
+    let template_rule = run.results.iter().find(|result| result.id == "NSV-PRESERVE-004").expect("the rule ran");
+
+    assert!(
+        matches!(template_rule.outcome, RuleOutcome::Satisfied { .. }),
+        "a repetition admitted by its declaration must not violate: {:?}",
+        template_rule.outcome
+    );
+}
+
+/// The falsifier: the same declaration, but the block appears a fourth time. The three
+/// declared occurrences are admitted; the fourth is still an undeclared repetition.
+#[test]
+fn Test_A_Declared_Repetition_With_An_Extra_Occurrence_Should_Violate_Preserve_004()
+{
+    let document = Repeating(REPEATED_BODY, DELIBERATE_SECTIONS + 1);
+    let mut store = SpecificationStore::In_Memory().expect("in-memory opens no file, so only the schema can fail");
+    Ingest_Source_Document(&mut store, "a.md", "v14.36", &document).expect("the store is empty and in memory");
+
+    let hash = Repeated_Hash(&store);
+    Declare(&mut store, &hash, "edition-line", 1);
+    Declare(&mut store, &hash, "suite-title", 1);
+    Declare(&mut store, &hash, "volume-abstract", 1);
+
+    let run = Validate_Rules(&store, &Registered());
+    let violations = run.Violations();
+
+    assert!(!run.Is_Passed(), "an extra occurrence beyond the declaration must violate");
+    assert!(
+        violations.iter().any(|violation| violation.detail.contains("declared for 3 occurrences but appears 4")),
+        "the violation must name the declared count and the actual count: {violations:?}"
     );
 }
 
