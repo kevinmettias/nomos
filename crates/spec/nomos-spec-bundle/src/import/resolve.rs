@@ -82,7 +82,7 @@ impl Identities
             Record::NodeAlias(_) | Record::NodeHistory(_) | Record::Relation(_)
             | Record::Lineage(_) | Record::Omission(_) | Record::RecordFrontMatter(_)
             | Record::RecordRelation(_) | Record::SubmissionValue(_)
-            | Record::SubmissionGap(_) => {}
+            | Record::SubmissionGap(_) | Record::RepeatedTextDeclaration(_) => {}
         }
     }
 }
@@ -133,7 +133,7 @@ fn Assert_Resolves(record: &Record, carried: &Identities) -> Result<(), BundleEr
             omission.source_heading.as_ref(),
             carried,
         )?,
-        Record::Blob(_) | Record::Suite(_) =>
+        Record::Blob(_) | Record::Suite(_) | Record::RepeatedTextDeclaration(_) =>
         {}
     }
 

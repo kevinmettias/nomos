@@ -23,6 +23,7 @@ use crate::TableRow as SourceTableRow;
 use crate::row::submission::Submission;
 use crate::row::submission::gap::Gap as SubmissionGap;
 use crate::row::submission::value::Value as SubmissionValue;
+use crate::RepeatedTextDeclaration;
 use crate::Suite;
 
 /// One row, carrying its own table name and only natural keys.
@@ -71,6 +72,8 @@ pub enum Record
     RecordFrontMatter(RecordFrontMatter),
     #[serde(rename = "record_relations")]
     RecordRelation(RecordRelation),
+    #[serde(rename = "repeated_text_declarations")]
+    RepeatedTextDeclaration(RepeatedTextDeclaration),
 }
 
 impl Record
@@ -99,6 +102,7 @@ impl Record
             Self::Omission(_) => "omissions",
             Self::RecordFrontMatter(_) => "record_front_matter",
             Self::RecordRelation(_) => "record_relations",
+            Self::RepeatedTextDeclaration(_) => "repeated_text_declarations",
         };
     }
 }

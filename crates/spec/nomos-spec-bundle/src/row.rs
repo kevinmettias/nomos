@@ -16,6 +16,7 @@ pub(crate) mod normative_statement;
 pub(crate) mod record;
 pub(crate) mod reference;
 pub(crate) mod relation;
+pub(crate) mod repeated_text_declaration;
 pub(crate) mod source;
 pub(crate) mod submission;
 pub(crate) mod suite;

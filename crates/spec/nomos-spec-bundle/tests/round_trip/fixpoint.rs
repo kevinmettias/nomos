@@ -161,6 +161,51 @@ fn Test_A_Relation_Types_Constraint_Should_Survive_The_Round_Trip()
     );
 }
 
+/// The declaration's multiplicity and identity are part of what a declaration means, and
+/// the corruption that would otherwise pass is not a dropped row but a *merged* one: an
+/// exporter that coalesced two declarations of one block into one row, or an importer that
+/// merged declarations naming different roles, would leave the count intact and the meaning
+/// destroyed. The fixture carries both shapes, so this asserts each by value.
+#[test]
+fn Test_A_Repeated_Text_Declaration_Should_Survive_Its_Role_And_Multiplicity()
+{
+    let source = Populated();
+    let bundle = Export(&source).expect("Export ran over the store Populated() filled");
+
+    let mut rebuilt = SpecificationStore::In_Memory().expect("In_Memory applies the schema MIGRATIONS");
+    Import_Bundle(&mut rebuilt, &bundle).expect("the bundle is disjoint from the fresh store");
+
+    let declarations = Repeated_Text_Declarations(&rebuilt);
+
+    assert_eq!(declarations.len(), 3, "all three declarations survived: {declarations:?}");
+    assert!(
+        declarations.contains(&("sha256:front-matter".to_owned(), "edition-line".to_owned(), 10)),
+        "the first declaration's role and multiplicity did not survive: {declarations:?}"
+    );
+    assert!(
+        declarations.contains(&("sha256:front-matter".to_owned(), "suite-title".to_owned(), 10)),
+        "a declaration differing only in role did not survive: {declarations:?}"
+    );
+    assert!(
+        declarations.contains(&("sha256:front-matter".to_owned(), "volume-abstract".to_owned(), 3)),
+        "a declaration differing in role and multiplicity did not survive: {declarations:?}"
+    );
+}
+
+/// The declaration rows a store holds, read by their natural key.
+fn Repeated_Text_Declarations(store: &SpecificationStore) -> Vec<(String, String, i64)>
+{
+    return store
+        .Connection()
+        .prepare("SELECT normalized_hash, role, multiplicity FROM repeated_text_declarations ORDER BY role")
+        .and_then(|mut statement| {
+            return statement
+                .query_map([], |row| return Ok((row.get(0)?, row.get(1)?, row.get(2)?)))
+                .and_then(std::iter::Iterator::collect);
+        })
+        .expect("Populated() wrote three repeated_text_declarations rows");
+}
+
 /// A blob that is not valid UTF-8 must come back byte-exact.
 #[test]
 fn Test_Binary_Blobs_Should_Survive_As_Bytes()

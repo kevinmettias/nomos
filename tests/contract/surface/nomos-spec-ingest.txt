@@ -19,6 +19,7 @@ pub const nomos_spec_ingest::COMMENTARY: &str
 pub const nomos_spec_ingest::DOMAIN_VOLUMES: &str
 pub const nomos_spec_ingest::FILLER_PATTERNS: &[&str]
 pub const nomos_spec_ingest::LINEAGE_NOTES: &str
+pub const nomos_spec_ingest::REPEATED_TEXT_DECLARATIONS: &str
 pub const nomos_spec_ingest::ROOT_SUITE: &str
 pub const nomos_spec_ingest::SHARED_BY: u32
 pub const nomos_spec_ingest::TEMPLATE_FLOOR: usize
@@ -116,6 +117,7 @@ pub fn nomos_spec_ingest::Parse_Catalog(json: &str) -> Result<Vec<CatalogEntity>
 pub fn nomos_spec_ingest::Parse_Section_Lineage(yaml: &str) -> Result<SectionLineage, IngestError>
 pub fn nomos_spec_ingest::Parse_Statements(yaml: &str) -> Result<StatementFile, IngestError>
 pub fn nomos_spec_ingest::Prepare_Commentary_View(store: &SpecificationStore) -> Result<(), IngestError>
+pub fn nomos_spec_ingest::Read_Repeated_Text_Declarations(archive: &mut Archive) -> Result<Vec<RepeatedTextDeclaration>, ArchiveError>
 pub fn nomos_spec_ingest::Reconcile_Artifacts(v14: &[Artifact], v15: &BTreeMap<String, String>) -> ReconciliationReport
 pub fn nomos_spec_ingest::ReconciliationReport::Absent(&self) -> Vec<&IdentifierOutcome>
 pub fn nomos_spec_ingest::ReconciliationReport::Absent_In(&self, family: Family) -> Vec<&str>
@@ -243,6 +245,9 @@ pub struct field nomos_spec_ingest::RegressionReport::members: Vec<MemberFate>
 pub struct field nomos_spec_ingest::RegressionReport::to: String
 pub struct field nomos_spec_ingest::Relocation::from: Vec<String>
 pub struct field nomos_spec_ingest::Relocation::to: String
+pub struct field nomos_spec_ingest::RepeatedTextDeclaration::multiplicity: i64
+pub struct field nomos_spec_ingest::RepeatedTextDeclaration::normalized_hash: String
+pub struct field nomos_spec_ingest::RepeatedTextDeclaration::role: String
 pub struct field nomos_spec_ingest::RestorationReport::ambiguous_names: Vec<String>
 pub struct field nomos_spec_ingest::RestorationReport::contested_aliases: Vec<String>
 pub struct field nomos_spec_ingest::RestorationReport::members: Vec<Member>
@@ -299,6 +304,7 @@ pub struct nomos_spec_ingest::RecordedSection
 pub struct nomos_spec_ingest::RecordedStatement
 pub struct nomos_spec_ingest::RegressionReport
 pub struct nomos_spec_ingest::Relocation
+pub struct nomos_spec_ingest::RepeatedTextDeclaration
 pub struct nomos_spec_ingest::RestorationReport
 pub struct nomos_spec_ingest::Revision
 pub struct nomos_spec_ingest::RevisionFingerprint

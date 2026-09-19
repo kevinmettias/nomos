@@ -346,3 +346,32 @@ pub(crate) fn Insert_Record_Relations(
         },
     );
 }
+
+/// The corpus's declaration of the text its layout repeats, placed whole: the three columns
+/// are the row, with no parent to resolve, so the insert is the row's own natural key.
+pub(crate) fn Insert_Repeated_Text_Declarations(
+    transaction: &Transaction<'_>,
+    bundle: &Bundle,
+) -> Result<(), BundleError>
+{
+    return Insert_Each(
+        transaction,
+        bundle,
+        "INSERT INTO repeated_text_declarations (normalized_hash, role, multiplicity)
+         VALUES (?1, ?2, ?3)",
+        |insert, record| {
+            let Record::RepeatedTextDeclaration(declaration) = record
+            else
+            {
+                return Ok(());
+            };
+            insert.execute(params![
+                declaration.normalized_hash,
+                declaration.role,
+                declaration.multiplicity
+            ])?;
+
+            return Ok(());
+        },
+    );
+}

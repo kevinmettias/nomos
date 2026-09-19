@@ -39,6 +39,7 @@ pub use row::record::front_matter::FrontMatter;
 pub use row::record::record_relation::RecordRelation;
 pub use row::relation::Relation;
 pub use row::relation::r#type::Type;
+pub use row::repeated_text_declaration::RepeatedTextDeclaration;
 pub use row::source::block::Block;
 pub use row::source::document::Document;
 pub use row::source::heading::Heading;

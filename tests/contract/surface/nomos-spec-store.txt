@@ -73,6 +73,7 @@ pub enum variant nomos_spec_store::Table::RecordFrontMatter
 pub enum variant nomos_spec_store::Table::RecordRelations
 pub enum variant nomos_spec_store::Table::RelationTypes
 pub enum variant nomos_spec_store::Table::Relations
+pub enum variant nomos_spec_store::Table::RepeatedTextDeclarations
 pub enum variant nomos_spec_store::Table::SourceBlocks
 pub enum variant nomos_spec_store::Table::SourceDocuments
 pub enum variant nomos_spec_store::Table::SourceHeadings

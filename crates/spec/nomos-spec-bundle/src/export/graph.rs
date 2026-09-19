@@ -7,8 +7,8 @@
 mod collect;
 
 pub(super) use collect::{
-    Collect_Lineages, Collect_Nodes, Collect_Omissions, Collect_Relations, Collect_Suites,
-    Node_Aliases, Node_Histories, Normative_Statements, Record_Front_Matter, Record_Relations,
+    Collect_Lineages, Collect_Nodes, Collect_Omissions, Collect_Relations, Collect_Repeated_Text_Declarations,
+    Collect_Suites, Node_Aliases, Node_Histories, Normative_Statements, Record_Front_Matter, Record_Relations,
     Relation_Types,
 };
 

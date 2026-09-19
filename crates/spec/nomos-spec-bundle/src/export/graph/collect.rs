@@ -402,3 +402,29 @@ fn Ordinal_Reference(columns: &mut Columns<'_, '_>) -> rusqlite::Result<Option<O
         _ => None,
     });
 }
+
+/// The corpus's own declaration of the text its layout repeats, in the order the natural
+/// key sorts it. No join and no JSON: the three columns are the whole row.
+pub(crate) fn Collect_Repeated_Text_Declarations(
+    connection: &Connection,
+    records: &mut Vec<Record>,
+) -> Result<(), BundleError>
+{
+    use crate::RepeatedTextDeclaration;
+
+    return Collect_Rows(
+        connection,
+        records,
+        "SELECT normalized_hash, role, multiplicity
+         FROM repeated_text_declarations
+         ORDER BY normalized_hash, role",
+        |row| {
+            let mut columns = Columns::Of(row);
+            return Ok(Record::RepeatedTextDeclaration(RepeatedTextDeclaration {
+                normalized_hash: columns.Next()?,
+                role: columns.Next()?,
+                multiplicity: columns.Next()?,
+            }));
+        },
+    );
+}

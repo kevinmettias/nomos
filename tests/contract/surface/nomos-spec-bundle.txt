@@ -35,6 +35,7 @@ pub enum variant nomos_spec_bundle::Record::RecordFrontMatter(RecordFrontMatter)
 pub enum variant nomos_spec_bundle::Record::RecordRelation(RecordRelation)
 pub enum variant nomos_spec_bundle::Record::Relation(Relation)
 pub enum variant nomos_spec_bundle::Record::RelationType(RelationType)
+pub enum variant nomos_spec_bundle::Record::RepeatedTextDeclaration(RepeatedTextDeclaration)
 pub enum variant nomos_spec_bundle::Record::SourceBlock(SourceBlock)
 pub enum variant nomos_spec_bundle::Record::SourceDocument(SourceDocument)
 pub enum variant nomos_spec_bundle::Record::SourceHeading(SourceHeading)
@@ -132,6 +133,9 @@ pub struct field nomos_spec_bundle::RecordRelation::target: String
 pub struct field nomos_spec_bundle::Relation::from_node_id: String
 pub struct field nomos_spec_bundle::Relation::relation_type: String
 pub struct field nomos_spec_bundle::Relation::to_node_id: String
+pub struct field nomos_spec_bundle::RepeatedTextDeclaration::multiplicity: i64
+pub struct field nomos_spec_bundle::RepeatedTextDeclaration::normalized_hash: String
+pub struct field nomos_spec_bundle::RepeatedTextDeclaration::role: String
 pub struct field nomos_spec_bundle::Report::counts: BTreeMap<String, u32>
 pub struct field nomos_spec_bundle::Report::records: u32
 pub struct field nomos_spec_bundle::Suite::authority_root: bool
@@ -166,6 +170,7 @@ pub struct nomos_spec_bundle::Omission
 pub struct nomos_spec_bundle::OrdinalRef
 pub struct nomos_spec_bundle::RecordRelation
 pub struct nomos_spec_bundle::Relation
+pub struct nomos_spec_bundle::RepeatedTextDeclaration
 pub struct nomos_spec_bundle::Report
 pub struct nomos_spec_bundle::Suite
 pub struct nomos_spec_bundle::TableRow

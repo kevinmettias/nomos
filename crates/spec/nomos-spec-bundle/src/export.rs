@@ -5,8 +5,8 @@ mod source;
 mod submission;
 
 use graph::{
-    Collect_Lineages, Collect_Nodes, Collect_Omissions, Collect_Relations, Collect_Suites,
-    Node_Aliases, Node_Histories, Normative_Statements, Record_Front_Matter, Record_Relations,
+    Collect_Lineages, Collect_Nodes, Collect_Omissions, Collect_Relations, Collect_Repeated_Text_Declarations,
+    Collect_Suites, Node_Aliases, Node_Histories, Normative_Statements, Record_Front_Matter, Record_Relations,
     Relation_Types,
 };
 use source::{
@@ -93,6 +93,7 @@ fn The_Graph(connection: &Connection, records: &mut Vec<Record>) -> Result<(), B
     Collect_Omissions(connection, records)?;
     Record_Front_Matter(connection, records)?;
     Record_Relations(connection, records)?;
+    Collect_Repeated_Text_Declarations(connection, records)?;
 
     return Ok(());
 }

@@ -412,6 +412,34 @@ pub const MIGRATIONS: &[Migration] = &[
             "ALTER TABLE relation_types_next RENAME TO relation_types",
         ],
     },
+    Migration {
+        version: 8,
+        name: "repeated-text-declarations",
+        statements: &[
+            // What a corpus declares about the text its own layout repeats. `OD-SPEC-004`
+            // version 3 decided this is corpus-side data rather than a compiled-in list, and
+            // that it names structural roles rather than the literal strings: a row here says
+            // "the block whose normalized text has this hash is intentionally projected into
+            // this role, that many times", never "this string is filler".
+            //
+            // `normalized_hash` is the identity of the canonical text — the same column
+            // `NSV-PRESERVE-004` groups `source_blocks` by, so a declaration names the thing
+            // the rule already measures rather than a second spelling of it. `multiplicity` is
+            // derived from the role at ingest and stored rather than re-derived, because it is
+            // part of what a declaration means and a reader must not have to recompute it.
+            //
+            // `UNIQUE (normalized_hash, role)` is the natural key: one block can be declared
+            // under several roles, and each (block, role) pair carries one multiplicity. Two
+            // declarations that differ only in role are two rows, not one row to merge.
+            "CREATE TABLE repeated_text_declarations (
+                 uid             INTEGER PRIMARY KEY,
+                 normalized_hash TEXT NOT NULL,
+                 role            TEXT NOT NULL,
+                 multiplicity    INTEGER NOT NULL CHECK (multiplicity > 0),
+                 UNIQUE (normalized_hash, role)
+             )",
+        ],
+    },
 ];
 
 pub struct Migration

@@ -90,6 +90,11 @@ fn Stated_Identity(record: &Record) -> Option<Stated<'_>>
              WHERE n.node_id = ?1",
             &submission.node_id,
         )),
+        Record::RepeatedTextDeclaration(declaration) => Some(Stated {
+            sql: "SELECT 1 FROM repeated_text_declarations WHERE normalized_hash = ?1 AND role = ?2",
+            arguments: vec![declaration.normalized_hash.as_str(), declaration.role.as_str()],
+            identity: format!("{} as {}", declaration.normalized_hash, declaration.role),
+        }),
         Record::SourceHeading(_) | Record::SourceBlock(_) | Record::SourceTableRow(_)
         | Record::NodeHistory(_) | Record::Relation(_) | Record::Lineage(_)
         | Record::Omission(_) | Record::RecordFrontMatter(_) | Record::RecordRelation(_)

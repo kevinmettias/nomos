@@ -13,7 +13,7 @@ pub use report::Report;
 use graph::{
     Insert_Lineage, Insert_Node_Aliases, Insert_Node_History, Insert_Nodes, Insert_Normative_Statements,
     Insert_Omissions, Insert_Record_Front_Matter, Insert_Record_Relations, Insert_Relation_Types,
-    Insert_Relations, Insert_Suites,
+    Insert_Relations, Insert_Repeated_Text_Declarations, Insert_Suites,
 };
 use source::{
     Insert_Blobs, Insert_Source_Blocks, Insert_Source_Documents, Insert_Source_Headings,
@@ -162,8 +162,9 @@ fn Insert_Graph(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), Bu
 fn Insert_Declarations(transaction: &Transaction<'_>, bundle: &Bundle) -> Result<(), BundleError>
 {
     Insert_Record_Front_Matter(transaction, bundle)?;
+    Insert_Record_Relations(transaction, bundle)?;
 
-    return Insert_Record_Relations(transaction, bundle);
+    return Insert_Repeated_Text_Declarations(transaction, bundle);
 }
 
 /// The submissions, the values attributed to them, and the gaps left open.

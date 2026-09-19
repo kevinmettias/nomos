@@ -9,7 +9,8 @@ mod insert;
 pub(super) use insert::{
     Insert_Lineage, Insert_Node_Aliases, Insert_Node_History, Insert_Nodes,
     Insert_Normative_Statements, Insert_Omissions, Insert_Record_Front_Matter,
-    Insert_Record_Relations, Insert_Relation_Types, Insert_Relations, Insert_Suites,
+    Insert_Record_Relations, Insert_Relation_Types, Insert_Relations,
+    Insert_Repeated_Text_Declarations, Insert_Suites,
 };
 
 #[cfg(test)]

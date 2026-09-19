@@ -16,7 +16,7 @@ mod revisions;
 mod siblings;
 
 pub use archaeology::{Is_Template_Eligible, Regression_Between_Revisions, Revision, SHARED_BY, TEMPLATE_FLOOR};
-pub use archive::{Archive, Archives_In};
+pub use archive::{Archive, Archives_In, Read_Repeated_Text_Declarations, RepeatedTextDeclaration, REPEATED_TEXT_DECLARATIONS};
 pub use archive::error::Error;
 pub use archive::error_kind::ErrorKind;
 pub use archive::artifact::Artifact;

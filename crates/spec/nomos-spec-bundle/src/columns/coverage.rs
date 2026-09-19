@@ -235,4 +235,16 @@ pub(super) const COVERAGE: &[Coverage] = &[
             ("decision_record", Carried::Field("decision_record")),
         ],
     },
+    // A corpus's declaration of the text its own layout repeats. `OD-SPEC-004` version 3
+    // decided this travels as corpus-side data rather than a compiled-in list, so it is a
+    // table like any other: it reaches the bundle, or a rebuilt store cannot hold it.
+    Coverage {
+        table: "repeated_text_declarations",
+        columns: &[
+            ("uid", Carried::Surrogate),
+            ("normalized_hash", Carried::Field("normalized_hash")),
+            ("role", Carried::Field("role")),
+            ("multiplicity", Carried::Field("multiplicity")),
+        ],
+    },
 ];

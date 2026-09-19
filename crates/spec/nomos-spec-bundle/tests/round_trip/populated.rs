@@ -313,7 +313,17 @@ const GRAPH: &str =
 
      INSERT INTO record_relations (document_uid, ordinal, target, relation)
      SELECT d.uid, 2, 'REQ-RETIRED-009', 'verified_by'
-     FROM source_documents d WHERE d.path = 'volumes/02-core.md';";
+     FROM source_documents d WHERE d.path = 'volumes/02-core.md';
+
+     -- The corpus's own declaration of the text its layout repeats. Three rows on one
+     -- normalized hash, deliberately: the first two differ only in role, and the third
+     -- differs in role and multiplicity too. An exporter that coalesced two declarations of
+     -- one block into one row, or an importer that merged declarations naming different
+     -- roles, would drop a row here and the round trip would stop being a fixpoint.
+     INSERT INTO repeated_text_declarations (normalized_hash, role, multiplicity)
+     VALUES ('sha256:front-matter', 'edition-line', 10),
+            ('sha256:front-matter', 'suite-title', 10),
+            ('sha256:front-matter', 'volume-abstract', 3);";
 
 /// Split out of the fixture rather than inlined so the document-ordering half stays
 /// readable. Both halves are one fixture and neither is useful alone.

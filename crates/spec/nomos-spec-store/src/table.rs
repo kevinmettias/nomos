@@ -46,6 +46,8 @@ const TALLY_SUBMISSION_VALUES: &str =
     "SELECT 'submission_values' AS which, count(*) AS tally FROM submission_values";
 const TALLY_SUBMISSION_GAPS: &str =
     "SELECT 'submission_gaps' AS which, count(*) AS tally FROM submission_gaps";
+const TALLY_REPEATED_TEXT_DECLARATIONS: &str =
+    "SELECT 'repeated_text_declarations' AS which, count(*) AS tally FROM repeated_text_declarations";
 
 /// The tables a caller may count.
 ///
@@ -73,6 +75,7 @@ pub enum Table
     Submissions,
     SubmissionValues,
     SubmissionGaps,
+    RepeatedTextDeclarations,
 }
 
 impl Table
@@ -101,6 +104,7 @@ impl Table
             Self::Submissions => "submissions",
             Self::SubmissionValues => "submission_values",
             Self::SubmissionGaps => "submission_gaps",
+            Self::RepeatedTextDeclarations => "repeated_text_declarations",
         };
     }
 
@@ -136,6 +140,7 @@ impl Table
             Self::Submissions => TALLY_SUBMISSIONS,
             Self::SubmissionValues => TALLY_SUBMISSION_VALUES,
             Self::SubmissionGaps => TALLY_SUBMISSION_GAPS,
+            Self::RepeatedTextDeclarations => TALLY_REPEATED_TEXT_DECLARATIONS,
         };
     }
 
@@ -166,6 +171,7 @@ impl Table
             Self::Submissions,
             Self::SubmissionValues,
             Self::SubmissionGaps,
+            Self::RepeatedTextDeclarations,
         ];
     }
 }
@@ -176,7 +182,7 @@ mod tests
     use super::*;
 
     /// How many tables the schema declares.
-    const DECLARED_TABLES: usize = 19;
+    const DECLARED_TABLES: usize = 20;
 
     #[test]
     fn Test_Name_Should_Return_Every_Tables_Own_Snake_Case_Name()

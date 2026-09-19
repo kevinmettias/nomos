@@ -200,6 +200,51 @@ pub fn Archives_In(directory: &Path) -> Result<Vec<PathBuf>, ArchiveError>
     return Ok(archives);
 }
 
+/// The entry a corpus carries its own declaration of repeated text in.
+///
+/// Named by convention rather than discovered: a declaration this reader has to hunt for is
+/// a declaration a later reader can miss, and an absent one is `NoSuchEntry`, which a corpus
+/// that has not taken the declaration on reads as rather than an error to work around.
+pub const REPEATED_TEXT_DECLARATIONS: &str = "repeated-text-declarations.json";
+
+/// One declaration a corpus makes about the text its own layout repeats.
+///
+/// `OD-SPEC-004` version 3 decided this is corpus-side data that names structural roles
+/// rather than the literal strings: a row here is the normalized hash of the repeated block,
+/// the role the block plays, and the multiplicity the role implies. The text itself is never
+/// carried — the store already holds it, and carrying it again would be the second list the
+/// amendment refused.
+#[derive(Clone, Debug, PartialEq, Eq, serde::Deserialize)]
+pub struct RepeatedTextDeclaration
+{
+    pub normalized_hash: String,
+    pub role: String,
+    pub multiplicity: i64,
+}
+
+/// Reads and parses a corpus's own declaration of the text its layout repeats.
+///
+/// The rows this returns are what the ingest turns into `repeated_text_declarations` rows in
+/// the store, so a rule can consult them. A corpus that carries no such entry is a corpus
+/// that has not declared any repeated text, which is a real answer and not this reader's
+/// failure.
+///
+/// # Errors
+///
+/// Returns [`ArchiveErrorKind::NoSuchEntry`] if the archive has no declaration entry, and
+/// [`ArchiveErrorKind::Unreadable`] if it is present but not the JSON this reader expects.
+pub fn Read_Repeated_Text_Declarations(archive: &mut Archive) -> Result<Vec<RepeatedTextDeclaration>, ArchiveError>
+{
+    let text = archive.Read_Text(REPEATED_TEXT_DECLARATIONS)?;
+
+    return serde_json::from_str(&text).map_err(|error| ArchiveError {
+        archive: archive.Path().to_path_buf(),
+        kind: ArchiveErrorKind::Unreadable {
+            cause: format!("{REPEATED_TEXT_DECLARATIONS} is not a declaration: {error}"),
+        },
+    });
+}
+
 #[cfg(test)]
 pub(crate) mod tests
 {
@@ -337,5 +382,55 @@ pub(crate) mod tests
     fn Archive_Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
     {
         return Zip_Fixture(FixturePrefix("nomos-spec-ingest-archive"), name, entries);
+    }
+
+    #[test]
+    fn Test_Read_Repeated_Text_Declarations_Should_Parse_The_Declared_Rows()
+    {
+        let mut archive = Zip_Fixture(
+            FixturePrefix("nomos-spec-ingest-declaration"),
+            "parses",
+            &[(
+                REPEATED_TEXT_DECLARATIONS,
+                r#"[{"normalized_hash":"sha256:front","role":"edition-line","multiplicity":10}]"#,
+            )],
+        );
+
+        let declarations = Read_Repeated_Text_Declarations(&mut archive)
+            .expect("the fixture wrote the declaration entry, so the reader parses it");
+
+        assert_eq!(
+            declarations,
+            vec![RepeatedTextDeclaration {
+                normalized_hash: "sha256:front".to_owned(),
+                role: "edition-line".to_owned(),
+                multiplicity: 10,
+            }]
+        );
+    }
+
+    #[test]
+    fn Test_Read_Repeated_Text_Declarations_Should_Refuse_An_Entry_That_Is_Not_Json()
+    {
+        let mut archive = Zip_Fixture(
+            FixturePrefix("nomos-spec-ingest-declaration"),
+            "not-json",
+            &[(REPEATED_TEXT_DECLARATIONS, "not json at all")],
+        );
+
+        let refusal = Read_Repeated_Text_Declarations(&mut archive).expect_err("must refuse");
+
+        assert!(matches!(refusal.kind, ArchiveErrorKind::Unreadable { .. }), "{refusal}");
+        assert!(refusal.to_string().contains(REPEATED_TEXT_DECLARATIONS), "{refusal}");
+    }
+
+    #[test]
+    fn Test_Read_Repeated_Text_Declarations_Should_Refuse_A_Missing_Entry()
+    {
+        let mut archive = Archive_Fixture("no-declaration", &[("a.md", "one")]);
+
+        let refusal = Read_Repeated_Text_Declarations(&mut archive).expect_err("must refuse");
+
+        assert!(matches!(refusal.kind, ArchiveErrorKind::NoSuchEntry { .. }), "{refusal}");
     }
 }
