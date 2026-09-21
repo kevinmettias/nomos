@@ -83803,7 +83803,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P103-NSV-PRESERVE-004-ADMITS-A-DECLARED-REPETITION-AND-STILL-CATCHES-AN-UNDECLARED-ONE-4"
       ],
@@ -83829,7 +83829,38 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-flag",
+          "--include-tests",
+          "-target",
+          "F:/repos/nomos/crates/spec/nomos-spec-validate",
+          "-parallel",
+          "4",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0    14 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1790011588,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4863f6bb243683fafa8d2c6a72e5e93b90ccc5df"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -85799,6 +85830,11 @@
           "holder": "fable-design",
           "reason": "Widened, not worked. Claimed only so widen could add the three paths the item's own done_when reaches and the filed reservation missed: nomos-cli's workflow module and its tests both name Body::ClaudeCode, and workflow-orchestration's workflow_step_plan holds the declaration-body pair a profile would ride on. Released so whoever takes the item is not blocked by a claim nobody is working.",
           "abandoned_at": 1789712657
+        },
+        {
+          "holder": "claude-external-review-reconciliation",
+          "reason": "Blocked on a gap in the item, not on difficulty, and released rather than held so nobody is blocked by a claim nobody is working. The done_when requires a profile resolving with no declared preference to still answer, so that the (None, None) default cannot return a backend nothing chose. Resolve_Profile answers only against a caller-supplied sequence of DeclaredTarget, and DeclaredTarget pairs a Backend with a ModelRoutePackage. Measured at 4863f6bb: DeclaredTarget is constructed nowhere in production -- lib.rs exports it and nothing else names it -- and ModelRoutePackage is constructed in exactly three places, the resolver's own test fixture, nomos-model-package's reader from a parsed manifest, and a manifest test. So a production caller must supply package_id, package_kind, package_version, protocol_range and model_selection for each of the two real backends. There is no authority for any of them: no manifest file exists, the item's own why forbids writing one as a later item with its own territory, and nomos-package declares no canonical current protocol range or version constant. The resolver's test fixture invents PackageVersion::New(1,0,0), a one-to-one ProtocolRange and ModelSelection::Catalog with a fabricated model name, which is correct for a fixture and would be fabricated fact in production -- a claim about what Ollama offers and what protocol claude-code speaks, with nothing behind it. The item forbids writing the manifest and requires an answer only the manifest's data can give. Recommend authoring the manifest item first, or amending this one to say where a production declared set comes from and on whose authority its values rest.",
+          "abandoned_at": 1789965625
         }
       ],
       "displaced": [],
@@ -86330,10 +86366,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-external-review-reconciliation",
+        "acquired_at": 1790011305,
+        "lease_expires_at": 1790018505
+      },
       "verification": {
         "argv": [
           "cargo",

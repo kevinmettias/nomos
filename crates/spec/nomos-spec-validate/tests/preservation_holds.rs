@@ -62,10 +62,10 @@ fn Test_The_Registry_Should_Match_The_Manifest()
 }
 
 /// `Registered()` itself, independent of the reconciliation `Test_The_Registry_Should_Match_
-/// The_Manifest` performs through `Validate_Rules`: it must build exactly one rule object per
+/// The_Manifest` performs through `Validate_Rules`: it must build exactly one rule per
 /// identifier `DECLARED_RULES` names, with nothing missing and nothing extra.
 #[test]
-fn Test_Registered_Should_Build_One_Rule_Object_Per_Declared_Identifier()
+fn Test_Registered_Should_Build_One_Rule_Per_Declared_Identifier()
 {
     let rules = Registered();
     let ids: Vec<&str> = rules.iter().map(|rule| rule.Id()).collect();
@@ -358,7 +358,7 @@ fn Repeated_Hash(store: &SpecificationStore) -> String
 
 /// One declaration row: the normalized hash of the repeated body, the role it plays, and the
 /// multiplicity that role implies.
-fn Declare(store: &mut SpecificationStore, normalized_hash: &str, role: &str, multiplicity: i64)
+fn Declare_Repeated_Text(store: &mut SpecificationStore, normalized_hash: &str, role: &str, multiplicity: i64)
 {
     store
         .Connection()
@@ -378,9 +378,9 @@ fn Test_A_Declared_Repetition_Should_Satisfy_Preserve_004()
     Ingest_Source_Document(&mut store, "a.md", "v14.36", REPEATED_UNDECLARED).expect("the store is empty and in memory");
 
     let hash = Repeated_Hash(&store);
-    Declare(&mut store, &hash, "edition-line", 1);
-    Declare(&mut store, &hash, "suite-title", 1);
-    Declare(&mut store, &hash, "volume-abstract", 1);
+    Declare_Repeated_Text(&mut store, &hash, "edition-line", 1);
+    Declare_Repeated_Text(&mut store, &hash, "suite-title", 1);
+    Declare_Repeated_Text(&mut store, &hash, "volume-abstract", 1);
 
     let run = Validate_Rules(&store, &Registered());
     let template_rule = run.results.iter().find(|result| result.id == "NSV-PRESERVE-004").expect("the rule ran");
@@ -397,14 +397,14 @@ fn Test_A_Declared_Repetition_Should_Satisfy_Preserve_004()
 #[test]
 fn Test_A_Declared_Repetition_With_An_Extra_Occurrence_Should_Violate_Preserve_004()
 {
-    let document = Repeating(REPEATED_BODY, DELIBERATE_SECTIONS + 1);
+    let document = Document_With_Repeated_Body(REPEATED_BODY, DELIBERATE_SECTIONS + 1);
     let mut store = SpecificationStore::In_Memory().expect("in-memory opens no file, so only the schema can fail");
     Ingest_Source_Document(&mut store, "a.md", "v14.36", &document).expect("the store is empty and in memory");
 
     let hash = Repeated_Hash(&store);
-    Declare(&mut store, &hash, "edition-line", 1);
-    Declare(&mut store, &hash, "suite-title", 1);
-    Declare(&mut store, &hash, "volume-abstract", 1);
+    Declare_Repeated_Text(&mut store, &hash, "edition-line", 1);
+    Declare_Repeated_Text(&mut store, &hash, "suite-title", 1);
+    Declare_Repeated_Text(&mut store, &hash, "volume-abstract", 1);
 
     let run = Validate_Rules(&store, &Registered());
     let violations = run.Violations();
@@ -436,7 +436,7 @@ const DELIBERATE_BODY_FLOOR: usize = 43;
 const DELIBERATE_SECTIONS: usize = 3;
 
 /// `body` repeated across `sections` sections of one document.
-fn Repeating(body: &str, sections: usize) -> String
+fn Document_With_Repeated_Body(body: &str, sections: usize) -> String
 {
     let mut document = String::from("---\nid: X\n---\n# Title\n");
     for section in 0..sections
@@ -477,7 +477,7 @@ fn Test_A_Body_Below_The_Floor_Should_Not_Violate_Preserve_004_However_Often_It_
         "this fixture is the measured ceiling of the accidental population and has drifted"
     );
 
-    let repeated = Repeating(BELOW_FLOOR, ACCIDENTAL_SECTIONS);
+    let repeated = Document_With_Repeated_Body(BELOW_FLOOR, ACCIDENTAL_SECTIONS);
     let outcome = Template_Outcome(&repeated);
 
     assert!(
@@ -502,7 +502,7 @@ fn Test_A_Body_At_The_Shortest_Deliberate_Length_Should_Still_Violate_Preserve_0
         "this fixture is the measured floor of the deliberate population and has drifted"
     );
 
-    let repeated = Repeating(AT_STRUCTURAL_MINIMUM, DELIBERATE_SECTIONS);
+    let repeated = Document_With_Repeated_Body(AT_STRUCTURAL_MINIMUM, DELIBERATE_SECTIONS);
     let outcome = Template_Outcome(&repeated);
 
     assert!(
