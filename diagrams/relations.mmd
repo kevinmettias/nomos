@@ -647,6 +647,7 @@ graph LR
     od_gate_001 -->|"relates-to"| od_ledger_003["OD-LEDGER-003"]
     od_gate_001 -->|"relates-to"| od_ledger_017
     od_gate_001 -->|"relates-to"| od_ledger_032["OD-LEDGER-032"]
+    od_gate_001 -->|"relates-to"| od_ledger_040["OD-LEDGER-040"]
     od_gate_001 -->|"relates-to"| od_platform_001
     od_gate_001 -->|"relates-to"| od_project_001
     od_gate_001 -->|"relates-to"| od_rules_001
@@ -692,6 +693,7 @@ graph LR
     od_gate_005 -->|"relates-to"| od_ledger_011["OD-LEDGER-011"]
     od_gate_005 -->|"relates-to"| od_ledger_018["OD-LEDGER-018"]
     od_gate_005 -->|"relates-to"| od_ledger_035["OD-LEDGER-035"]
+    od_gate_005 -->|"relates-to"| od_ledger_040
     od_gate_005 -->|"relates-to"| od_package_004
     od_gate_005 -->|"relates-to"| od_package_005
     od_gate_005 -->|"relates-to"| od_project_001
@@ -716,6 +718,7 @@ graph LR
     od_gate_007 -->|"relates-to"| od_gate_011
     od_gate_007 -->|"relates-to"| od_gate_013["OD-GATE-013"]
     od_gate_007 -->|"relates-to"| od_ledger_003
+    od_gate_007 -->|"relates-to"| od_ledger_040
     od_gate_008 -->|"relates-to"| od_gate_006
     od_gate_008 -->|"relates-to"| od_gate_009
     od_gate_009 -->|"relates-to"| od_determinism_001
@@ -1125,6 +1128,7 @@ graph LR
     od_ledger_024 -->|"relates-to"| od_ledger_019
     od_ledger_024 -->|"relates-to"| od_ledger_022
     od_ledger_024 -->|"relates-to"| od_ledger_039
+    od_ledger_024 -->|"relates-to"| od_ledger_040
     od_ledger_025 -->|"affected_by"| od_ledger_026
     od_ledger_025 -->|"relates-to"| od_ledger_014
     od_ledger_025 -->|"relates-to"| od_ledger_016
@@ -1186,6 +1190,12 @@ graph LR
     od_ledger_039 -->|"relates-to"| od_ledger_019
     od_ledger_039 -->|"relates-to"| od_ledger_024
     od_ledger_039 -->|"relates-to"| od_ledger_038
+    od_ledger_039 -->|"relates-to"| od_ledger_040
+    od_ledger_040 -->|"relates-to"| od_gate_001
+    od_ledger_040 -->|"relates-to"| od_gate_005
+    od_ledger_040 -->|"relates-to"| od_gate_007
+    od_ledger_040 -->|"relates-to"| od_ledger_024
+    od_ledger_040 -->|"relates-to"| od_ledger_039
     od_model_001 -->|"relates-to"| od_gate_032
     od_model_001 -->|"relates-to"| od_ledger_001
     od_model_001 -->|"relates-to"| od_model_002
@@ -1958,6 +1968,7 @@ graph LR
     od_ledger_037
     od_ledger_038
     od_ledger_039
+    od_ledger_040
     od_model_001
     od_model_002
     od_package_001

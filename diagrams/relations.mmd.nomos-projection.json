@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:fb77e6f4225e78eedd6e43843c2b17a7739bd5206ee3f40dd3cf3e7b91f96f3d",
-  "inputs_digest": "sha256:9d5d9093c46e6103106bdf78eebbc189b3dc76ee123cd0f05577054268f9fdee",
+  "content_digest": "sha256:12ed105e17901c1b97a051f7804da13b785b3b7bc31ae0505271555a3b953d1a",
+  "inputs_digest": "sha256:8b83d2141773507b0c899bc900bf187797171140058d3b382b845a38ad38f25e",
   "sections": [
     [
       "Relations",
-      1800
+      1810
     ],
     [
       "Decisions",
-      244
+      245
     ]
   ],
   "inputs": [
@@ -3238,6 +3238,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-001 relates-to OD-LEDGER-040",
+      "hash": "sha256:c8aedbc68f6e16d485ae0566d13b988ee0cfb61c7afc98a4b845148748efa73f"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-001 relates-to OD-PLATFORM-001",
       "hash": "sha256:0ac2528e6870fbfad5b077a504ae1745a1f066507f371d600b9da0a3483f4cd5"
     },
@@ -3463,6 +3468,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-005 relates-to OD-LEDGER-040",
+      "hash": "sha256:30d9c2f4f2758b030782e2e3dd7bc6e303b893139678a4d9286f8d7b60a1a808"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-005 relates-to OD-PACKAGE-004",
       "hash": "sha256:4c5d54488ded383fbeb3427fc499aff1f7b54e091c2e12a068ff97817fc4a919"
     },
@@ -3580,6 +3590,11 @@
       "content": "relations",
       "identity": "OD-GATE-007 relates-to OD-LEDGER-003",
       "hash": "sha256:4da1e4c41816435181f5a5afd04ee3d2e61472f11801b7daf41489907ea2c812"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-007 relates-to OD-LEDGER-040",
+      "hash": "sha256:c69f845355c0fb0745dc11c265b52790eab0a95dace8926aa33774ec0df84299"
     },
     {
       "content": "relations",
@@ -5628,6 +5643,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-LEDGER-024 relates-to OD-LEDGER-040",
+      "hash": "sha256:b74233cd0ab2208110b7868b8e168718154d00cb1ec78ddcaa7552053bbbac01"
+    },
+    {
+      "content": "relations",
       "identity": "OD-LEDGER-025 affected_by OD-LEDGER-026",
       "hash": "sha256:6673c14550acbd7b885ab066b36d4c4ab9739de06d5015483266603a28acba25"
     },
@@ -5930,6 +5950,36 @@
       "content": "relations",
       "identity": "OD-LEDGER-039 relates-to OD-LEDGER-038",
       "hash": "sha256:1e98f5ad35e1fdab6b0f0675bdb89e261503da679cc3d6d9ce4b04f1e1a8b5d7"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-039 relates-to OD-LEDGER-040",
+      "hash": "sha256:d4849a893fcd5800bcd704a734ea001f41fab91acaaf24e6d1ed63b0f291fb38"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-040 relates-to OD-GATE-001",
+      "hash": "sha256:c86ce098328de8ecb5aacc08c05d4ca9ca588584cd252a4f6a47510cb76fc864"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-040 relates-to OD-GATE-005",
+      "hash": "sha256:3918c7bfa9be4e4fb1aca3ed16c29dae7b861bcb006131d01d8b783063d1212e"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-040 relates-to OD-GATE-007",
+      "hash": "sha256:ddc66275b6a47a574b1a2f452eb5531a82fc263508e317f6e4287005c01d2531"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-040 relates-to OD-LEDGER-024",
+      "hash": "sha256:5c54f645edea92b40ce932396b1430d2360fb091075bc130b30be5f0064ddac0"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-040 relates-to OD-LEDGER-039",
+      "hash": "sha256:40dfbeeee43bc893f1835d1a79b391748325af481d063abc0cff4cc3cfce043c"
     },
     {
       "content": "relations",
@@ -9780,6 +9830,11 @@
       "content": "nodes",
       "identity": "OD-LEDGER-039",
       "hash": "sha256:3adca1369c7a6ce0619f0d6e0e0a73c72258cb3817e6ba0834aed7a4af8dbbcc"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-LEDGER-040",
+      "hash": "sha256:9747e6d200e75a1270575d2cbeda3b0790ee502bb475e9ac31fa79c2dab13067"
     },
     {
       "content": "nodes",

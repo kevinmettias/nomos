@@ -171,6 +171,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md@authored | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md | authored | 18 | 6 | sha256:ab5cb902ffef3564343e99f10236808102e5e0f1d3c8374831bc8e8ab0d579ad |
 | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md@authored | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md | authored | 38 | 12 | sha256:5c7849568533836d07c6844c09979f45b1d256845c3b09136bb51a9a9d5137f5 |
 | docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md@authored | docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md | authored | 45 | 14 | sha256:844727432856f31929b4e334136e241c81c3c25ed23cbddcda8923af41ba995f |
+| docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md@authored | docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md | authored | 43 | 9 | sha256:62beae8bdbc0b1e37b399cfd603188f456802beb7dffc83ee1264d1e52848399 |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -1603,6 +1604,15 @@ profile: domain-specification
 | docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#40 | authored | 2 | What was considered and rejected |
 | docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#42 | authored | 2 | Controls |
 | docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md#44 | authored | 2 | Status |
+| docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#1 | authored | 1 | A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in |
+| docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#2 | authored | 2 | Question |
+| docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#5 | authored | 2 | The Decision |
+| docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#9 | authored | 2 | Why The Crude Rule Is Refused |
+| docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#14 | authored | 2 | The Three Instances |
+| docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#29 | authored | 2 | The Mirror |
+| docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#33 | authored | 2 | The Convention That Applies Today |
+| docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#37 | authored | 2 | What Is Not Built Here |
+| docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#40 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -45739,6 +45749,364 @@ today about a reserved path that is no longer in the tree. That is filed separat
 Accepted. Decisions 1 through 6 are closed by the commit that publishes this record; the
 detection of a reservation that decayed under a peer's refactor is a separate filed item and
 not a clause of this one.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#1
+
+*revision: authored · kind: heading · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in · hash: sha256:146136da67cc93559659ac025fed8f5f90ba93a902afa9b93a74461edd4ca48b*
+
+# A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#2
+
+*revision: authored · kind: heading · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#3
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / Question · hash: sha256:feac58a9aad546e1d98ab4b7f8a14cf471075dddeba91bbd13e3bb60170d28e3*
+
+An item reserves files and declares a predicate. Nothing compares the two. So an item can
+finish green having never verified part of what it changed, and the ledger records it as
+done because the thing it was asked to run exited zero.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#4
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / Question · hash: sha256:b768990e0599417cffc139ca85e907f276712d70b6cb0d35491545c87f8c8ac1*
+
+The obvious rule is to require the predicate to name every crate the territory touches. This
+record refuses that rule, states what the obligation actually is, and says why the cheap
+version was not merely incomplete but would have been wrong on the very instances that
+motivated the question.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#5
+
+*revision: authored · kind: heading · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#6
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Decision · hash: sha256:4856da01c144213d247bf93720019d7173db7617c0391a0441ce29a0d288b11c*
+
+**A predicate need not name every crate its territory touches, and naming them all is not
+what makes a predicate adequate.**
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#7
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Decision · hash: sha256:ee15336e12c8eb34ca2883aa462aa0980ba08310ed002eed467e1d39502fe4ff*
+
+The obligation is per **artifact class**. For every class of artifact an item's territory
+holds, at least one declared predicate must be capable of detecting an invalid change to that
+class. Rust source resolves to compilation, its tests, *and* the nomos checks over that tree,
+because those three catch different things. A surface snapshot resolves to the surface
+contract test. A governing record resolves to specification validation and projection
+freshness. A fixture resolves to a consumer test that actually loads it. Prose resolves,
+today, to nothing — and that is a hole this record names rather than closes.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#8
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Decision · hash: sha256:886471c07db0d46f48df400421ac7c073195795899e2e9bd296e94418fe2f563*
+
+**A reserved path that belongs to no Cargo package is not an exception to be excused; it is
+the ordinary case that shows why crates are the wrong unit.** Territory routinely names
+records, surface snapshots, generated projections, shared manifests, fixtures and the ledger
+itself. Each of those has a verification that judges it. None of them has a `-p`.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#9
+
+*revision: authored · kind: heading · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / Why The Crude Rule Is Refused · hash: sha256:d65ebcdf8073ab4feba12932b9dd1ea544675a362e176bbac44cc03ddd858612*
+
+## Why The Crude Rule Is Refused
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#10
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / Why The Crude Rule Is Refused · hash: sha256:755b947408a08f51bd592fadfb81cad97c679e5d4d026685cb7d41fae26fa58c*
+
+Three reasons, in the order they bite. The third is the one that settles it.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#11
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / Why The Crude Rule Is Refused · hash: sha256:3d6bf0a3b97af02b30d5aa5c6911ecf25babf490127b405fd6dd86dfd88cf312*
+
+**It cannot be stated over the things territory actually names.** A rule quantified over
+crates has nothing to say about the majority of reserved paths, so it would have to be
+written as an exemption list, and an exemption list over "everything that is not a crate" is
+not a rule.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#12
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / Why The Crude Rule Is Refused · hash: sha256:852a28e80a4ac8960758be00c08b2960d2d4f35a774df86c7d2531807a1f7e2e*
+
+**It rewards bookkeeping.** An author blocked by the check adds a `-p` until it passes. The
+added package is compiled and its tests run, which costs time and proves whatever those tests
+happened to prove. Nothing in the mechanism asks whether the addition can detect anything
+about the change in hand.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#13
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / Why The Crude Rule Is Refused · hash: sha256:6f4045d0c2af561c9bee4e107f11d00fec345b4900ef6dc7b19e30ee59f8e656*
+
+**Measured against three instances it is right once, wrong once and silent once.** This is
+the part that is not a prediction. See below.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#14
+
+*revision: authored · kind: heading · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:5cca39d71c8fa4eb0b77e72c5ceddfaeded03d45b90bd65f5ab29bac8a067e33*
+
+## The Three Instances
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#15
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:5574a274315b2b1dc1f6e4c211741f2abea06745eac3d18effedece0155de405*
+
+**First: a predicate that did not reach its own territory.**
+`P104-COMPARE-COLLAPSES-EVERY-FINDING-A-RULE-MAKES-ABOUT-ONE-SUBJECT-INTO-ONE-4` reserved
+`crates/host/nomos-cli/src/gate/report.rs` and declared
+`cargo test -p nomos-gate-orchestration -p nomos-api`, which does not build `nomos-cli`. The
+implementation added a directory walk nested four levels deep. `nesting-depth` reported it as
+blocking and two real-tree tests in `nomos-cli` went red. The declared predicate was green
+throughout, and `work finish` would not have seen it either: its lint step is bare clippy,
+whose severities `OD-GATE-007` settles in the workspace table with no `-D warnings`, and
+`nesting-depth` is a nomos rule that neither `cargo test` nor `cargo clippy` runs. The same
+item also reserved `tests/contract/surface/nomos-gate-orchestration.txt`, a path with no
+owning package at all.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#16
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:1bd3fad3d571e1db7cdc448627f0d1a7a68869f8df7ff0d3431a6a23752d6fef*
+
+Crate coverage would have caught this one. That is the whole of its support.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#17
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:d4af41b123aa57702db6f350ab78541f1c4ab8a8c49a207265b00f5f1693e9e1*
+
+**Second: a predicate that reached its territory by a better route, and still could not see
+the change.** `P103-SELFCHECK-RED-SIXTEEN-BLOCKING-FINDINGS` reserved four paths across three
+crates — `nomos-lang-rust-compiler`, `nomos-rules` and `nomos-analysis` — and declared
+`cargo test -p nomos-cli --test check_command this_workspace`, naming a crate it does not
+reserve and none of the three it does. Under crate coverage that item is defective.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#18
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:9442fca7bdad1fc0caf5da791c29e5b3f35f1b6dab74f72bad033336e01aa5f6*
+
+It was not. That predicate runs nomos's own self-check over the entire workspace, reaching
+every reserved file by scanning the tree rather than by the crate graph, which is a *stronger*
+obligation than compiling the three packages.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#19
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:10c2aa43a2a0caf753cca279c79ec08d2ec495c9325f9340f461a1c528db9330*
+
+It still shipped an invalid change. Commit `502fe7b3` renamed a binding from `s` to `leaving`
+in `crates/substrate/nomos-analysis/tests/invalidation_order.rs`, and the replacement also
+matched the `s` inside ten English possessives, so committed doc comments now read
+`store'leaving own dependency edges`. Nothing in the repository judges English: every rule
+judges identifiers, types, files or structure, a doc comment is not code so the compiler
+cannot see it, and `cargo test` is green over the file. It was found by a person reading the
+file, and filed as `P118-A-SINGLE-LETTER-RENAME-REWROTE-TEN-POSSESSIVES-IN-PROSE`.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#20
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:fff582dde1f1a14047d18d80fc1cc51df37bcf70f5a3008c7241e7d8d941093b*
+
+**Now apply the crude rule to it.** It demands `-p nomos-analysis`. Adding that compiles the
+file and runs its tests — and a doc comment is still not code, so the corruption still passes.
+The rule fires on a correct item, is satisfied by an addition that verifies nothing about the
+defect, and the defect ships anyway. That is the bookkeeping failure above, observed rather
+than imagined.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#21
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:213b18b8286546f04c5de0d517efaabfccb01be64b8ae49a04ffb4877dddd8db*
+
+**Third: the same shape again, four days later, with the check sitting in plain sight.**
+`P40-MODEL-ROUTING-RESOLVER` reserved
+`crates/orchestration/nomos-agent-orchestration/src/backend.rs` and declared
+`cargo test -p nomos-agent-orchestration --no-fail-fast`. Crate coverage satisfied, by the
+same reading that would have called instance one defective.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#22
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:c2fd05f78d7e62830e197fed740fe5c0192274e95854980c57a0b5ed7855cde6*
+
+Commit `c0b61c1f` promoted `Backend::ALL` from a test-only constant to a public one, because
+`Declared_Targets` now derives the declared package set from it. That makes it a declared
+universe, and a declared universe is judged by `completeness_universes` in
+`nomos-contract-tests` — a package the territory does not mention and the predicate does not
+name. The item finished green. `cargo test -p nomos-contract-tests` was red at `HEAD` for
+every session in the tree until
+`P122-A-DECLARED-UNIVERSE-LANDED-AT-HEAD-CLAIMING-A-MIRROR-THAT-WAS-NEVER-WRITTEN` repaired it.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#23
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:a6aecdafa8d135058abe563ba465009f84b9eeefc086f8789a5dc709f3e429d7*
+
+What makes this one the clearest of the three: the check already existed, already ran on every
+full test invocation, and already knew how to fail on exactly this. Nothing connected it to
+the artifact. Instance two could be dismissed as a hole nobody had dug yet — no rule judges
+English — and this one cannot.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#24
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:f7ba0b569aaad036c0dedd62e2bb36741c4b7290e47ca22e1423b2574634ca2e*
+
+**What the three establish.** Put the crude rule against each of them and it behaves
+differently three times.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#25
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:648c68c2ecf3a5781d691fc70e8e629ac85cca8c7399a7dd7ce09cbba5039a32*
+
+On instance one it fires and is right, and that is the whole of its support.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#26
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:25008891bd3f698e02c9db4c30dd72c553bba42d1301c575c865081ae413a679*
+
+On instance two it fires and is wrong. The predicate named `nomos-cli` and the territory named
+three other crates, so the rule flags it — yet the item was correct, its predicate reaching
+every reserved file by a stronger route than compilation. Satisfying the rule would have added
+`-p nomos-analysis`, compiled the file, run its tests, and left a doc comment still not code.
+The rule would have been obeyed and the defect would have shipped unchanged.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#27
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:e8f6f61e64a07cc5b9a05f50929fe9a7af4d3c365ed5e0a8bb91f647ce0612b8*
+
+On instance three it does not fire at all. Crate coverage was satisfied, and the defect
+shipped into `HEAD`.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#28
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Three Instances · hash: sha256:b76496da035b667cd285666cb7f0e69ae4100d816aac47dc3ba634faf804d56f*
+
+So it is right once, wrong once, and silent once, and its one success is a case where what was
+actually wanted — the nomos checks over that tree — is an artifact-class obligation crate
+coverage names only by accident.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#29
+
+*revision: authored · kind: heading · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Mirror · hash: sha256:b96a2cc257b14c757539484275cfe19fc011dc2c43aefd7f54fc1fa36f37045c*
+
+## The Mirror
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#30
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Mirror · hash: sha256:fa7fe24ac43e46792c63de89b52847ef7180feff22971f40dc7e5ff69a396f43*
+
+`P103-A-LEDGER-PREDICATE-MUST-NOT-INHERIT-UNRELATED-CRATE-OBLIGATIONS` and its two
+predecessors asked the opposite question: a predicate too *broad*, inheriting sibling
+obligations because they share a crate. All three were declined, the last on 2026-09-14 for
+its carrier rather than its substance.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#31
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Mirror · hash: sha256:b28c9580bfeafd8ad1b339848b675a123e37dfec02a44c2caba72d20858ee3f3*
+
+They are one principle and deciding either alone would leave the other contradicting it. A
+predicate scoped to crates is simultaneously too narrow — it misses artifact classes inside
+the crates it names — and too broad, since it inherits every unrelated failure those crates
+can produce. Scoped to artifact classes it is neither.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#32
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Mirror · hash: sha256:13449b4b67540839389deb3c70216dbc6a1939fe7872e96fd975159c24b03c41*
+
+That second half is not theoretical either. This record's own item declared
+`cargo test --no-fail-fast -p nomos-contract-tests` over a territory of two record files, and
+was red on three crates it does not touch: two surface snapshots left stale by items that
+finished without re-blessing them, and one a peer's in-flight work. The fix was
+`P121-TWO-SNAPSHOTS-THE-PATH-ATTRIBUTE-REPAIR-MOVED-ARE-OWNED-BY-NOBODY-AND-REDDEN-THE-WHOLE-CONTRACT-SUITE`,
+a cleanup item this one had to wait behind in order to run at all.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#33
+
+*revision: authored · kind: heading · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Convention That Applies Today · hash: sha256:fd0137c16cf33e3e73094a7602a2ca2d76a7a5c10b4c06f0e47a53747932a0ba*
+
+## The Convention That Applies Today
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#34
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Convention That Applies Today · hash: sha256:10c78b435f25915ecd0c058c96121638aed5683375599a6f923c2969e2e78b78*
+
+Binding on authors now, with no mechanism waiting to be built.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#35
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Convention That Applies Today · hash: sha256:e5c855c8246c7247e24d69390badfde53d889a83cf584c37665c54f07fe23302*
+
+For each artifact class an item's territory holds, name a predicate that can detect an
+invalid change to that class. For Rust source that means the nomos checks over the tree and
+not merely compilation and linting, because instance one proved those are not the same thing.
+For a snapshot, a record, a projection or a fixture, name the check that judges that artifact
+— it exists, and it is not a `-p`.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#36
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / The Convention That Applies Today · hash: sha256:652992de28c6def37f51c38128188eff9666449dde8d6dbb6eed06ab04534c3c*
+
+Read the other way: do not add a package to a predicate to make a territory look covered. If
+the added package cannot fail on the change in hand, it is cost without evidence, and
+`OD-GATE-001` is the record about checks that report success without having looked.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#37
+
+*revision: authored · kind: heading · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / What Is Not Built Here · hash: sha256:fa54232bd4ce1228712ac359b11970804db90063ababfb0bde4539f73d8b2b5b*
+
+## What Is Not Built Here
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#38
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / What Is Not Built Here · hash: sha256:19e0c806a4f9b5e14bff641e08f4a6532ef277514f766d3209c054e7c0668d46*
+
+No ledger feature. The decision is that crate coverage is refused, so there is nothing
+mechanical to add for it, and the artifact-class obligation cannot be enforced mechanically
+today because no declared map from artifact class to verifying check exists. Building that
+map is a separate item with a separate carrier — `work add`, `work finish`, or a contract
+test over the committed board are three different answers — and it is not boarded by this
+record.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#39
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / What Is Not Built Here · hash: sha256:578613243b9c66f68c1d7dd869cb47d5d12339359eedf088fb474aa74078cbe2*
+
+The prose hole is left open deliberately and is recorded so it is not mistaken for an
+oversight: an artifact class with no verification obligation at all is the one case the
+convention above cannot help with, because there is no check to name.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#40
+
+*revision: authored · kind: heading · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#41
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / Status · hash: sha256:9eeb902372e545889c4dd955c6f0808c64d8d37692aa158c896c0c04e296e392*
+
+Version 1 closed by `P104-A-VERIFICATION-PREDICATE-NEED-NOT-REACH-THE-CRATES-ITS-OWN-TERRITORY-NAMES-2`,
+which held the first instance from 2026-09-14 until a second arrived.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#42
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / Status · hash: sha256:5ae98d08159cd03ed68c3f8811e1699d88b33cb7ec6a8e5717e1a7b0bcc4756a*
+
+The second is `P103-SELFCHECK-RED-SIXTEEN-BLOCKING-FINDINGS` by way of `P118`, and it is the
+instance that decided the shape, because it is the one the obvious rule gets wrong. The third,
+`P40-MODEL-ROUTING-RESOLVER` by way of `P122`, arrived unprompted on 2026-09-21 while this
+record was being written, and is the one that made the shape unarguable: it satisfies crate
+coverage and ships anyway, against a check that already existed.
+
+### docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md#43
+
+*revision: authored · kind: prose · heading: A verification predicate answers for the artifact classes its territory holds, not for the crates those paths happen to sit in / Status · hash: sha256:0e7593cd05245122a327577c1cfa5b2a205daa8b6c771bec402119d7c2190d82*
+
+That the third instance surfaced during the authoring of the record about it is not a
+coincidence worth much, but it is worth stating: the item waited seven days for a second
+instance and got two, which is the rate a defect class produces when nothing is stopping it.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 
