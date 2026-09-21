@@ -84,12 +84,62 @@ pub(crate) enum Command
 {
     Execute
     {
-        goal: String, effort: nomos_model_package::EffortLevel, backend: Backend
+        goal: String, effort: nomos_model_package::EffortLevel, preferred: Option<String>
     },
     JudgeRole
     {
-        crate_name: String, root: PathBuf, effort: nomos_model_package::EffortLevel, backend: Backend
+        crate_name: String, root: PathBuf, effort: nomos_model_package::EffortLevel, preferred: Option<String>
     },
+}
+
+/// The profile this group declares when a person states none.
+///
+/// A profile is not a backend, and that difference is the whole of what changed here. This
+/// says which family the group asks for; `nomos_agent_orchestration::Selected_Dispatch`
+/// answers it against the declared set, and answers with nothing if that set does not offer
+/// the family. The line this replaced returned `Backend::ClaudeCode` directly, which is a
+/// dispatch target no declaration had to offer and no resolution had to agree to -- a run
+/// against a set that had dropped Claude Code would still have dispatched to it.
+///
+/// It is stated in terms of a family label rather than a `Backend` value for the same
+/// reason: a label is what a profile carries and what a declaration answers, and nothing
+/// here may construct the target itself.
+const DECLARED_FAMILY: &str = "claude-code";
+
+/// What a command asks a dispatch for: the effort it stated, the family this group declares,
+/// and whatever backend a person named as a preference.
+fn Requested(effort: nomos_model_package::EffortLevel, preferred: Option<String>) -> Requested_Dispatch
+{
+    return Requested_Dispatch {
+        profile: nomos_model_package::ModelExecutionProfile::New(
+            nomos_model_package::ModelSelector::BackendFamily(DECLARED_FAMILY.to_owned()),
+            effort,
+        ),
+        declared: nomos_agent_orchestration::Declared_Targets(),
+        preferred,
+    };
+}
+
+/// The owned parts a [`nomos_agent_orchestration::BackendSelection`] borrows, kept together
+/// so a caller holds one value rather than three with the same lifetime.
+pub(super) struct Requested_Dispatch
+{
+    pub(super) profile: nomos_model_package::ModelExecutionProfile,
+    pub(super) declared: Vec<nomos_agent_orchestration::DeclaredTarget>,
+    pub(super) preferred: Option<String>,
+}
+
+impl Requested_Dispatch
+{
+    /// This request as the borrowed shape the orchestration seam takes.
+    pub(super) fn Selection(&self) -> nomos_agent_orchestration::BackendSelection<'_>
+    {
+        return nomos_agent_orchestration::BackendSelection {
+            profile: &self.profile,
+            preferred: self.preferred.as_deref(),
+            declared: &self.declared,
+        };
+    }
 }
 
 /// Runs a command, writing content to `output` and everything about it to `notes`.
@@ -99,10 +149,12 @@ pub(crate) fn Run(command: &Command, output: &mut impl std::io::Write, notes: &m
 {
     return match command
     {
-        Command::Execute { goal, effort, backend } => dispatch::Execute_Goal(goal, DispatchConfig { effort: *effort, backend: *backend }, output, notes),
-        Command::JudgeRole { crate_name, root, effort, backend } => judge_role::Judge_Role(
+        Command::Execute { goal, effort, preferred } => {
+            dispatch::Execute_Goal(goal, Requested(*effort, preferred.clone()), output, notes)
+        }
+        Command::JudgeRole { crate_name, root, effort, preferred } => judge_role::Judge_Role(
             judge_role::RoleRequest { crate_name, root },
-            DispatchConfig { effort: *effort, backend: *backend },
+            Requested(*effort, preferred.clone()),
             output,
             notes,
         ),
@@ -125,7 +177,7 @@ mod run_coverage
             crate_name: "nomos-does-not-exist".to_owned(),
             root: PathBuf::from("no-such-directory-anywhere-for-run-coverage-test"),
             effort: nomos_model_package::EffortLevel::BackendDefault,
-            backend: Backend::ClaudeCode,
+            preferred: Some("claude-code".to_owned()),
         };
         let mut output = Vec::new();
         let mut notes = Vec::new();

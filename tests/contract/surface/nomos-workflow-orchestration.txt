@@ -3,21 +3,19 @@ pub enum nomos_workflow_orchestration::CommitIntent
 pub enum nomos_workflow_orchestration::DispatchError
 pub enum nomos_workflow_orchestration::StepOutcome
 pub enum nomos_workflow_orchestration::WorkflowOutcome
+pub enum variant nomos_workflow_orchestration::Body::Agent(AgentBody)
 pub enum variant nomos_workflow_orchestration::Body::Check(CheckBody)
-pub enum variant nomos_workflow_orchestration::Body::ClaudeCode(TaskEnvelope)
 pub enum variant nomos_workflow_orchestration::Body::Correction(CorrectionBody)
 pub enum variant nomos_workflow_orchestration::Body::Gate(GateBody)
-pub enum variant nomos_workflow_orchestration::Body::Ollama(TaskEnvelope)
 pub enum variant nomos_workflow_orchestration::CommitIntent::Commit
 pub enum variant nomos_workflow_orchestration::CommitIntent::Stage
-pub enum variant nomos_workflow_orchestration::DispatchError::ClaudeCode(nomos_agent_executor_claude_code::AgentExecutionError)
+pub enum variant nomos_workflow_orchestration::DispatchError::AgentNotSelected(nomos_agent_orchestration::BackendAbsence)
+pub enum variant nomos_workflow_orchestration::DispatchError::AgentUnavailable(String)
 pub enum variant nomos_workflow_orchestration::DispatchError::Gate(nomos_gate_orchestration::GateRunResult)
-pub enum variant nomos_workflow_orchestration::DispatchError::Ollama(nomos_model_backend_ollama::AgentExecutionError)
+pub enum variant nomos_workflow_orchestration::StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome)
 pub enum variant nomos_workflow_orchestration::StepOutcome::Check(nomos_check_orchestration::CheckOutcome)
-pub enum variant nomos_workflow_orchestration::StepOutcome::ClaudeCode(nomos_agent_executor_claude_code::AgentExecutionOutcome)
 pub enum variant nomos_workflow_orchestration::StepOutcome::Correction(nomos_correction_orchestration::CorrectionOutcome)
 pub enum variant nomos_workflow_orchestration::StepOutcome::Gate(nomos_gate_orchestration::GateRunResult)
-pub enum variant nomos_workflow_orchestration::StepOutcome::Ollama(nomos_model_backend_ollama::AgentExecutionOutcome)
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Completed { completed: Vec<StepOutcome>, }
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Failed { completed: Vec<StepOutcome>, index: usize, error: DispatchError, }
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Refused { completed: Vec<StepOutcome>, index: usize, }
@@ -27,6 +25,8 @@ pub fn nomos_workflow_orchestration::CommitIntent::Is_A_Commit(self) -> bool
 pub fn nomos_workflow_orchestration::CorrectionBody::New(root: PathBuf, sources: Vec<SourceFile>, commit: CommitIntent) -> Self
 pub fn nomos_workflow_orchestration::GateBody::New(sources: Vec<SourceFile>, command: GateCommand) -> Self
 pub fn nomos_workflow_orchestration::Run<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> WorkflowOutcome
+pub struct field nomos_workflow_orchestration::AgentBody::profile: ModelExecutionProfile
+pub struct field nomos_workflow_orchestration::AgentBody::task: TaskEnvelope
 pub struct field nomos_workflow_orchestration::CheckBody::root: PathBuf
 pub struct field nomos_workflow_orchestration::CheckBody::selected: Vec<RuleId>
 pub struct field nomos_workflow_orchestration::CheckBody::sources: Vec<SourceFile>
@@ -35,12 +35,14 @@ pub struct field nomos_workflow_orchestration::CorrectionBody::root: PathBuf
 pub struct field nomos_workflow_orchestration::CorrectionBody::sources: Vec<SourceFile>
 pub struct field nomos_workflow_orchestration::GateBody::command: GateCommand
 pub struct field nomos_workflow_orchestration::GateBody::sources: Vec<SourceFile>
+pub struct field nomos_workflow_orchestration::Platform::declared: &'a [nomos_agent_orchestration::DeclaredTarget]
 pub struct field nomos_workflow_orchestration::Platform::environment: &'a Env
 pub struct field nomos_workflow_orchestration::Platform::filesystem: &'a Fs
 pub struct field nomos_workflow_orchestration::Platform::launcher: &'a Launcher
 pub struct field nomos_workflow_orchestration::Platform::now: Timestamp
 pub struct field nomos_workflow_orchestration::WorkflowStepPlan::body: Body
 pub struct field nomos_workflow_orchestration::WorkflowStepPlan::declaration: WorkflowStep
+pub struct nomos_workflow_orchestration::AgentBody
 pub struct nomos_workflow_orchestration::CheckBody
 pub struct nomos_workflow_orchestration::CorrectionBody
 pub struct nomos_workflow_orchestration::GateBody

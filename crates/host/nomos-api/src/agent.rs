@@ -34,7 +34,7 @@
 //! `AgentDispatchOutcome` doc. A caller of this crate's own bare Agent verb sees exactly
 //! that fold, not a structure this seam does not keep.
 
-use nomos_agent_orchestration::{AgentDispatchOutcome, AgentEnvironment, DispatchConfig, Run_Agent_Execute, Run_Agent_Judgment};
+use nomos_agent_orchestration::{AgentDispatchOutcome, AgentEnvironment, BackendSelection, Run_Agent_Execute, Run_Agent_Judgment};
 use nomos_agent_executor_claude_code::MicroDollars;
 use nomos_composer_std::LAUNCHER;
 use nomos_rules::RoleSurfacePair;
@@ -46,12 +46,12 @@ mod agent_judge_role_response;
 pub use agent_dispatch_response::AgentDispatchResponse;
 pub use agent_judge_role_response::AgentJudgeRoleResponse;
 
-/// Dispatches `goal` to `config.backend` exactly as `nomos agent execute --goal <goal>
+/// Dispatches `goal` to whatever `selection` resolves to, exactly as `nomos agent execute --goal <goal>
 /// --effort <effort>` would, and hands back a JSON-serializable [`AgentDispatchResponse`].
 #[must_use]
-pub fn Handle_Agent_Execute(goal: &str, config: DispatchConfig) -> AgentDispatchResponse
+pub fn Handle_Agent_Execute(goal: &str, selection: &BackendSelection<'_>) -> AgentDispatchResponse
 {
-    let outcome = Run_Agent_Execute(goal, config, &AgentEnvironment { launcher: &LAUNCHER });
+    let outcome = Run_Agent_Execute(goal, selection, &AgentEnvironment { launcher: &LAUNCHER });
 
     return AgentDispatchResponse::From(outcome);
 }
@@ -61,7 +61,7 @@ pub fn Handle_Agent_Execute(goal: &str, config: DispatchConfig) -> AgentDispatch
 /// produces, and dispatches the question that finding names to `config.backend` exactly as
 /// `nomos agent judge-role --crate <crate_name> --root <root>` would.
 #[must_use]
-pub fn Handle_Agent_Judge_Role(root: &Path, crate_name: &str, config: DispatchConfig) -> AgentJudgeRoleResponse
+pub fn Handle_Agent_Judge_Role(root: &Path, crate_name: &str, selection: &BackendSelection<'_>) -> AgentJudgeRoleResponse
 {
     let Some(pair) = Role_Surface_Pair(root, crate_name)
     else
@@ -76,7 +76,7 @@ pub fn Handle_Agent_Judge_Role(root: &Path, crate_name: &str, config: DispatchCo
         return AgentJudgeRoleResponse::NoFinding;
     };
 
-    let outcome = Run_Agent_Judgment(&pair, finding, config, &AgentEnvironment { launcher: &LAUNCHER });
+    let outcome = Run_Agent_Judgment(&pair, finding, selection, &AgentEnvironment { launcher: &LAUNCHER });
 
     return AgentJudgeRoleResponse::Dispatched { dispatch: AgentDispatchResponse::From(outcome) };
 }
@@ -168,7 +168,7 @@ pub(crate) fn Dollars_Of(cost: MicroDollars) -> f64
 
 impl AgentDispatchResponse
 {
-    fn From(outcome: AgentDispatchOutcome) -> Self
+    pub(crate) fn From(outcome: AgentDispatchOutcome) -> Self
     {
         return match outcome
         {
@@ -182,6 +182,11 @@ impl AgentDispatchResponse
             },
             AgentDispatchOutcome::Ollama(outcome) => Self::Ollama { response: outcome.response },
             AgentDispatchOutcome::Unavailable(reason) => Self::Unavailable { reason },
+            // Nothing was selected, so there is no backend this response could be about.
+            // Carried as its own variant rather than folded into `Unavailable`, because a
+            // wire caller that cannot tell "the backend we chose did not answer" from "we
+            // chose nothing" cannot act on either.
+            AgentDispatchOutcome::NotSelected(absence) => Self::NotSelected { absence: format!("{absence:?}") },
         };
     }
 }
@@ -241,10 +246,15 @@ mod tests
     #[test]
     fn Test_Handle_Agent_Judge_Role_Should_Report_No_Declared_Role_When_The_Root_Has_No_Readme()
     {
+        let profile = nomos_model_package::ModelExecutionProfile::New(
+            nomos_model_package::ModelSelector::BackendFamily(Backend::ClaudeCode.Label().to_owned()),
+            EffortLevel::BackendDefault,
+        );
+        let declared = nomos_agent_orchestration::Declared_Targets();
         let response = Handle_Agent_Judge_Role(
             Path::new("no-such-directory-anywhere-for-nomos-api-agent-test"),
             "nomos-does-not-exist",
-            DispatchConfig { effort: EffortLevel::BackendDefault, backend: Backend::ClaudeCode },
+            &BackendSelection { profile: &profile, preferred: None, declared: &declared },
         );
 
         assert_eq!(response, AgentJudgeRoleResponse::NoDeclaredRoleOrSurface);

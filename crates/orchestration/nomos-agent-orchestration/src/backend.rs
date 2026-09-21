@@ -18,6 +18,18 @@ pub enum Backend
 
 impl Backend
 {
+    /// Every backend this build carries, in declaration order.
+    ///
+    /// Public and outside the test module because [`crate::Declared_Targets`] derives the
+    /// declared package set from it: the set of backends is written once, here, so a third
+    /// backend cannot reach dispatch without also being declared. It was a test-only constant
+    /// while nothing in production needed the set.
+    ///
+    /// A variant missing from this array is not a compile error, which is why
+    /// `Test_Every_Variant_Should_Be_Listed` exists beside it; a variant missing a label
+    /// already is one, in [`Self::Label`].
+    pub const ALL: [Self; 2] = [Self::ClaudeCode, Self::Ollama];
+
     /// The name a person reaches this backend by: `--executor claude-code` for
     /// [`Backend::ClaudeCode`], `--model-backend ollama` for [`Backend::Ollama`].
     ///
@@ -51,7 +63,8 @@ mod tests
 
     /// Both backends, so a third one added without a label of its own is a compile error in
     /// [`Label`] rather than a test that silently stops covering it.
-    const ALL: [Backend; 2] = [Backend::ClaudeCode, Backend::Ollama];
+    use super::Backend as Subject;
+    const ALL: [Subject; 2] = Subject::ALL;
 
     #[test]
     fn Test_Labels_Should_Be_The_Spellings_The_Cli_Accepts()

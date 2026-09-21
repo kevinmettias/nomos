@@ -11,9 +11,9 @@ fn Test_A_Judge_Role_Command_Should_Parse_Its_Model_Backend()
 {
     let arguments = Arguments("judge-role --crate nomos-agent-executor-claude-code --model-backend ollama");
 
-    let Command::JudgeRole { backend, .. } = Command_From_String_Arguments(&arguments).expect("the arguments above are a command line this parser takes") else { panic!("wrong variant") };
+    let Command::JudgeRole { preferred, .. } = Command_From_String_Arguments(&arguments).expect("the arguments above are a command line this parser takes") else { panic!("wrong variant") };
 
-    assert_eq!(backend, Backend::Ollama);
+    assert_eq!(preferred.as_deref(), Some("ollama"));
 }
 
 #[test]
@@ -21,12 +21,12 @@ fn Test_A_Judge_Role_Command_Should_Parse_Its_Crate_And_Default_Root()
 {
     let arguments = Arguments("judge-role --crate nomos-agent-executor-claude-code");
 
-    let Command::JudgeRole { crate_name, root, effort, backend } = Command_From_String_Arguments(&arguments).expect("the arguments above are a command line this parser takes") else { panic!("wrong variant") };
+    let Command::JudgeRole { crate_name, root, effort, preferred } = Command_From_String_Arguments(&arguments).expect("the arguments above are a command line this parser takes") else { panic!("wrong variant") };
 
     assert_eq!(crate_name, "nomos-agent-executor-claude-code");
     assert_eq!(root, PathBuf::from("."));
     assert_eq!(effort, nomos_model_package::EffortLevel::BackendDefault);
-    assert_eq!(backend, Backend::ClaudeCode);
+    assert_eq!(preferred, None, "no backend flag was given, so nothing is preferred");
 }
 
 #[test]
@@ -117,7 +117,7 @@ fn Test_Run_Should_Report_Not_Found_For_A_Judge_Role_Command_Naming_A_Root_With_
         crate_name: "nomos-does-not-exist".to_owned(),
         root: PathBuf::from("no-such-directory-anywhere-for-agent-run-test"),
         effort: nomos_model_package::EffortLevel::BackendDefault,
-        backend: Backend::ClaudeCode,
+        preferred: Some("claude-code".to_owned()),
     };
     let mut output = Vec::new();
     let mut notes = Vec::new();

@@ -21,4 +21,12 @@ pub struct Platform<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environm
     /// limit, and a workflow's gate step must judge a waiver's expiry against the run's own
     /// moment rather than a clock read inside policy logic.
     pub now: Timestamp,
+    /// The dispatch targets an agent step may reach.
+    ///
+    /// Supplied by the composition root rather than read here, because `OD-PACKAGE-016`
+    /// decision 2 decided the resolver resolves against a caller-supplied sequence and
+    /// discovers nothing. `nomos_agent_orchestration::Declared_Targets` is what a host
+    /// supplies today; a host holding a real manifest would supply that instead, and nothing
+    /// in this crate would change.
+    pub declared: &'a [nomos_agent_orchestration::DeclaredTarget],
 }

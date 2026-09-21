@@ -131,7 +131,8 @@ fn Ran_Step(body: Body) -> WorkflowOutcome
     use nomos_gate_orchestration::Fresh_Run_Id;
 
     let plan = [WorkflowStepPlan { declaration: Coherent_Declaration(), body }];
-    let platform = Platform { launcher: &LAUNCHER, filesystem: &FILE_SYSTEM, environment: &ENVIRONMENT, now: CLOCK.Now() };
+    let declared = nomos_agent_orchestration::Declared_Targets();
+    let platform = Platform { launcher: &LAUNCHER, filesystem: &FILE_SYSTEM, environment: &ENVIRONMENT, now: CLOCK.Now(), declared: &declared };
     let run = Fresh_Run_Id(CLOCK.Now());
 
     return nomos_workflow_orchestration::Run(&plan, &platform, &Workflow_Variant(), run);

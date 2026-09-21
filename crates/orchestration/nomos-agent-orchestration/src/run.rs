@@ -37,7 +37,7 @@
 
 use std::path::Path;
 
-use crate::{AgentDispatchOutcome, AgentEnvironment, Backend, DispatchConfig};
+use crate::{AgentDispatchOutcome, AgentEnvironment, Backend, BackendSelection, Selected_Dispatch};
 use nomos_agent_contracts::TaskEnvelope;
 use nomos_contracts::{Finding, SchemaId};
 use nomos_model_package::EffortLevel;
@@ -56,8 +56,15 @@ use nomos_scope_verification::Territory;
 /// carries no `RuleId` or `SubjectId` to give a `Finding` either, since nothing dispatched
 /// it as a rule's judgment; it is a person, asking a question directly.
 #[must_use]
-pub fn Run_Agent_Execute<Launcher: ProgramLauncher>(goal: &str, config: DispatchConfig, environment: &AgentEnvironment<'_, Launcher>) -> AgentDispatchOutcome
+pub fn Run_Agent_Execute<Launcher: ProgramLauncher>(
+    goal: &str, selection: &BackendSelection<'_>, environment: &AgentEnvironment<'_, Launcher>,
+) -> AgentDispatchOutcome
 {
+    let config = match Selected_Dispatch(selection)
+    {
+        Ok(config) => config,
+        Err(absence) => return AgentDispatchOutcome::NotSelected(absence),
+    };
     let task = Bare_Task(goal, config.effort);
 
     return Dispatched_Task(&task, config.backend, environment);
@@ -98,9 +105,15 @@ fn Bare_Task(goal: &str, effort: EffortLevel) -> TaskEnvelope
 /// (`OD-HOST-002`), not this seam's.
 #[must_use]
 pub fn Run_Agent_Judgment<Launcher: ProgramLauncher>(
-    pair: &RoleSurfacePair, finding: &Finding, config: DispatchConfig, environment: &AgentEnvironment<'_, Launcher>,
+    pair: &RoleSurfacePair, finding: &Finding, selection: &BackendSelection<'_>,
+    environment: &AgentEnvironment<'_, Launcher>,
 ) -> AgentDispatchOutcome
 {
+    let config = match Selected_Dispatch(selection)
+    {
+        Ok(config) => config,
+        Err(absence) => return AgentDispatchOutcome::NotSelected(absence),
+    };
     let task = Judgment_Task(pair, finding, config.effort);
 
     return Dispatched_Task(&task, config.backend, environment);
@@ -151,6 +164,33 @@ const NO_ROOT: &str = "";
 /// `--model-backend` replaced `--backend`: there is still only one real `AgentExecutor`, so
 /// this match is the entire dispatch, not a stand-in for a trait either flag's own
 /// vocabulary would need.
+/// Dispatches a task a caller already built, to whatever `selection` resolves to.
+///
+/// The seam a workflow step reaches, and the reason it exists: before this,
+/// `nomos-workflow-orchestration` matched its own `Body` variant straight to an executor
+/// crate, so the variant a step was written as *was* its backend choice and no resolution
+/// happened anywhere. `OD-PACKAGE-016` decision 9's wiring is that a step declares what it
+/// wants and the declared set decides what answers.
+///
+/// Distinct from [`Run_Agent_Execute`] only in where the task comes from. That one builds a
+/// bare task from a goal, which is what a person at a command line has; this one takes a
+/// whole [`TaskEnvelope`], which is what a workflow step carries. Both resolve the same way,
+/// through the same [`Selected_Dispatch`], so neither can reach a backend the other could
+/// not.
+#[must_use]
+pub fn Run_Agent_Task<Launcher: ProgramLauncher>(
+    task: &TaskEnvelope, selection: &BackendSelection<'_>, environment: &AgentEnvironment<'_, Launcher>,
+) -> AgentDispatchOutcome
+{
+    let config = match Selected_Dispatch(selection)
+    {
+        Ok(config) => config,
+        Err(absence) => return AgentDispatchOutcome::NotSelected(absence),
+    };
+
+    return Dispatched_Task(task, config.backend, environment);
+}
+
 fn Dispatched_Task<Launcher: ProgramLauncher>(task: &TaskEnvelope, backend: Backend, environment: &AgentEnvironment<'_, Launcher>) -> AgentDispatchOutcome
 {
     return match backend
@@ -173,6 +213,8 @@ mod tests
 {
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
+    use crate::ProfileAbsence;
+    use nomos_model_package::{ModelExecutionProfile, ModelSelector};
     use nomos_platform::{Command, ExitOutcome, ProgramOutput};
 
     struct Scripted
@@ -220,7 +262,7 @@ mod tests
     {
         let launcher = Scripted { outcome: ExitOutcome::Exited { code: 0 }, stdout: Claude_Code_Success_Json() };
 
-        let outcome = Run_Agent_Execute("say PONG", Dispatch_Config(Backend::ClaudeCode), &AgentEnvironment { launcher: &launcher });
+        let outcome = Run_Agent_Execute("say PONG", &Selecting::Preferring(Backend::ClaudeCode).Selection(), &AgentEnvironment { launcher: &launcher });
 
         match outcome
         {
@@ -234,7 +276,7 @@ mod tests
     {
         let launcher = Scripted { outcome: ExitOutcome::Exited { code: 0 }, stdout: "PONG\n".to_owned() };
 
-        let outcome = Run_Agent_Execute("say PONG", Dispatch_Config(Backend::Ollama), &AgentEnvironment { launcher: &launcher });
+        let outcome = Run_Agent_Execute("say PONG", &Selecting::Preferring(Backend::Ollama).Selection(), &AgentEnvironment { launcher: &launcher });
 
         match outcome
         {
@@ -251,7 +293,7 @@ mod tests
     {
         for backend in [Backend::ClaudeCode, Backend::Ollama]
         {
-            let outcome = Run_Agent_Execute("say PONG", Dispatch_Config(backend), &AgentEnvironment { launcher: &Unreachable });
+            let outcome = Run_Agent_Execute("say PONG", &Selecting::Preferring(backend).Selection(), &AgentEnvironment { launcher: &Unreachable });
 
             assert!(matches!(outcome, AgentDispatchOutcome::Unavailable(_)), "{backend:?}: {outcome:?}");
         }
@@ -264,7 +306,7 @@ mod tests
         let pair = Fixture_Pair();
         let finding = Fixture_Finding();
 
-        let outcome = Run_Agent_Judgment(&pair, &finding, Dispatch_Config(Backend::ClaudeCode), &AgentEnvironment { launcher: &launcher });
+        let outcome = Run_Agent_Judgment(&pair, &finding, &Selecting::Preferring(Backend::ClaudeCode).Selection(), &AgentEnvironment { launcher: &launcher });
 
         match outcome
         {
@@ -301,14 +343,133 @@ mod tests
         assert!(task.available_tools.is_empty());
     }
 
+    /// The clause the whole item turns on: with nothing named, a dispatch still reaches a
+    /// backend, and it reaches it because the profile resolved rather than because a default
+    /// was written down. Before this, `nomos_cli::agent::parsing` returned
+    /// `Backend::ClaudeCode` when neither flag was given, which is a backend nothing chose.
+    #[test]
+    fn Test_A_Profile_With_No_Preference_Should_Still_Reach_A_Backend()
+    {
+        let selecting = Selecting::Resolving(Backend::Ollama.Label());
+
+        let config = Selected_Dispatch(&selecting.Selection()).expect("the declared set offers the family");
+
+        assert_eq!(config.backend, Backend::Ollama);
+    }
+
+    /// Every declared backend is reachable by its own family name with no preference, so the
+    /// resolution is answering rather than one arm of it happening to be first.
+    #[test]
+    fn Test_Every_Declared_Backend_Should_Be_Reachable_By_Family_Alone()
+    {
+        for backend in Backend::ALL
+        {
+            let selecting = Selecting::Resolving(backend.Label());
+
+            let config = Selected_Dispatch(&selecting.Selection()).expect("a declared family resolves");
+
+            assert_eq!(config.backend, backend, "{}", backend.Label());
+        }
+    }
+
+    /// A family nothing declares does not quietly become a backend. This is the falsifier for
+    /// the clause above: if resolution were bypassed in favour of any default, this would
+    /// return that default instead of refusing.
+    #[test]
+    fn Test_An_Undeclared_Family_Should_Reach_No_Backend()
+    {
+        let selecting = Selecting::Resolving("no-such-family");
+
+        let absence = Selected_Dispatch(&selecting.Selection()).expect_err("nothing declares that family");
+
+        assert!(
+            matches!(absence, crate::BackendAbsence::Unresolved { absence: ProfileAbsence::NoDeclaredTargetOfThatFamily, .. }),
+            "{absence:?}"
+        );
+    }
+
+    /// What a preference naming a backend the declared set cannot offer returns, which the
+    /// item required be reported rather than left to be discovered.
+    ///
+    /// It fails rather than falling back. `nomos_capability::Selection::Over` does fall back
+    /// for a provider preference, and doing that here would run a different backend than the
+    /// one a person typed after `--executor`.
+    #[test]
+    fn Test_A_Preference_The_Declared_Set_Cannot_Offer_Should_Fail_Rather_Than_Fall_Back()
+    {
+        let profile = ModelExecutionProfile::New(
+            ModelSelector::BackendFamily(Backend::Ollama.Label().to_owned()),
+            EffortLevel::BackendDefault,
+        );
+        let declared: Vec<crate::DeclaredTarget> = crate::Declared_Targets()
+            .into_iter()
+            .filter(|target| return target.backend != Backend::ClaudeCode)
+            .collect();
+
+        let absence = Selected_Dispatch(&BackendSelection {
+            profile: &profile,
+            preferred: Some(Backend::ClaudeCode.Label()),
+            declared: &declared,
+        })
+        .expect_err("the set no longer offers the preferred backend");
+
+        assert_eq!(absence, crate::BackendAbsence::PreferenceNotDeclared { preferred: Backend::ClaudeCode.Label().to_owned() });
+    }
+
     fn Claude_Code_Success_Json() -> String
     {
         return r#"{"result": "PONG", "structured_output": {"assumptions": ["PONG"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#.to_owned();
     }
 
-    fn Dispatch_Config(backend: Backend) -> DispatchConfig
+    /// A request that reaches exactly `backend`, with the owned parts a
+    /// [`BackendSelection`] borrows kept alive beside it.
+    ///
+    /// Names `backend` as the preference rather than writing a selector that happens to
+    /// resolve to it, because these tests are about what the seam does once a backend is
+    /// chosen. The resolution path is exercised by
+    /// `Test_A_Profile_With_No_Preference_Should_Still_Reach_A_Backend`, which is the one
+    /// that matters for the default a person never typed.
+    struct Selecting
     {
-        return DispatchConfig { effort: EffortLevel::BackendDefault, backend };
+        profile: ModelExecutionProfile,
+        declared: Vec<crate::DeclaredTarget>,
+        preferred: Option<String>,
+    }
+
+    impl Selecting
+    {
+        fn Preferring(backend: Backend) -> Self
+        {
+            return Self {
+                profile: ModelExecutionProfile::New(
+                    ModelSelector::BackendFamily(backend.Label().to_owned()),
+                    EffortLevel::BackendDefault,
+                ),
+                declared: crate::Declared_Targets(),
+                preferred: Some(backend.Label().to_owned()),
+            };
+        }
+
+        fn Resolving(family: &str) -> Self
+        {
+            return Self {
+                profile: ModelExecutionProfile::New(
+                    ModelSelector::BackendFamily(family.to_owned()),
+                    EffortLevel::BackendDefault,
+                ),
+                declared: crate::Declared_Targets(),
+                preferred: None,
+            };
+        }
+
+        fn Selection(&self) -> BackendSelection<'_>
+        {
+            return BackendSelection {
+                profile: &self.profile,
+                preferred: self.preferred.as_deref(),
+                declared: &self.declared,
+            };
+        }
     }
 
     fn Fixture_Pair() -> RoleSurfacePair

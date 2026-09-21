@@ -63,6 +63,9 @@
 mod agent_dispatch_outcome;
 mod agent_environment;
 mod backend;
+mod backend_absence;
+mod backend_selection;
+mod declared_targets;
 mod dispatch_config;
 mod profile_resolution;
 mod run;
@@ -70,10 +73,13 @@ mod validated_correction;
 mod validated_correction_outcome;
 
 pub use agent_dispatch_outcome::AgentDispatchOutcome;
+pub use backend_absence::BackendAbsence;
+pub use backend_selection::{BackendSelection, Selected_Dispatch};
+pub use declared_targets::Declared_Targets;
 pub use agent_environment::AgentEnvironment;
 pub use backend::Backend;
 pub use dispatch_config::DispatchConfig;
 pub use profile_resolution::{DeclaredTarget, ProfileAbsence, ProfileResolution, Resolve_Profile};
-pub use run::{Run_Agent_Execute, Run_Agent_Judgment};
+pub use run::{Run_Agent_Execute, Run_Agent_Judgment, Run_Agent_Task};
 pub use validated_correction::Run_Validated_Correction;
 pub use validated_correction_outcome::ValidatedCorrectionOutcome;

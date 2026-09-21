@@ -28,14 +28,14 @@
 //! `nomos-agent-orchestration`'s own tests now reach the identical match with a scripted
 //! one instead -- see that crate's own `run` module doc for the fuller account.
 
-use super::{DispatchConfig, ExitCode};
-use nomos_agent_orchestration::{AgentDispatchOutcome, AgentEnvironment, Run_Agent_Execute};
+use super::{ExitCode, Requested_Dispatch};
+use nomos_agent_orchestration::{AgentDispatchOutcome, AgentEnvironment, BackendAbsence, Run_Agent_Execute};
 
-pub(super) fn Execute_Goal(goal: &str, config: DispatchConfig, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
+pub(super) fn Execute_Goal(goal: &str, requested: Requested_Dispatch, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
 {
     use nomos_composer_std::LAUNCHER;
 
-    let outcome = Run_Agent_Execute(goal, config, &AgentEnvironment { launcher: &LAUNCHER });
+    let outcome = Run_Agent_Execute(goal, &requested.Selection(), &AgentEnvironment { launcher: &LAUNCHER });
 
     return Rendered_Dispatch_Outcome(&outcome, output, notes);
 }
@@ -77,5 +77,28 @@ pub(super) fn Rendered_Dispatch_Outcome(outcome: &AgentDispatchOutcome, output: 
             let _ = writeln!(notes, "{reason}");
             ExitCode::Unavailable
         }
+        AgentDispatchOutcome::NotSelected(absence) =>
+        {
+            let _ = writeln!(notes, "{}", Absence_Line(absence));
+            ExitCode::Unavailable
+        }
+    };
+}
+
+/// What a person reads when nothing was selected.
+///
+/// Says which of the two happened rather than reporting one line for both: a family nothing
+/// declares and a named backend nothing offers have different remedies, and a reader who
+/// cannot tell them apart cannot act on either.
+fn Absence_Line(absence: &BackendAbsence) -> String
+{
+    return match absence
+    {
+        BackendAbsence::Unresolved { selector, absence } => format!(
+            "no declared backend answers {selector:?}: {absence:?}. Nothing was dispatched, because nothing was selected."
+        ),
+        BackendAbsence::PreferenceNotDeclared { preferred } => format!(
+            "`{preferred}` was named, and this build declares no such dispatch target. Nothing was dispatched, and no other backend was substituted for the one you named."
+        ),
     };
 }

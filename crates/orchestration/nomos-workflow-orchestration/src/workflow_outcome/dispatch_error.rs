@@ -13,9 +13,20 @@
 pub enum DispatchError
 {
     /// Why `nomos-agent-executor-claude-code::Execute_Task` could not answer.
-    ClaudeCode(nomos_agent_executor_claude_code::AgentExecutionError),
     /// Why `nomos-model-backend-ollama::Execute_Task` could not answer.
-    Ollama(nomos_model_backend_ollama::AgentExecutionError),
     /// A `Body::Gate` step whose own `GateRunOutcome` was `Failed`.
+    /// The backend this step's profile resolved to could not be started, or did not answer.
+    ///
+    /// A dispatch error rather than a step outcome, because it stops the run: that is what a
+    /// failing agent step did before the two per-backend variants were collapsed, and
+    /// collapsing them was about which backend answers, not about whether a failure ends the
+    /// workflow.
+    AgentUnavailable(String),
+    /// No backend was selected, so nothing was dispatched at all.
+    ///
+    /// Kept apart from [`Self::AgentUnavailable`] for the reason
+    /// `nomos_agent_orchestration::BackendAbsence` exists: a backend that failed and a
+    /// declaration that offered nothing have different remedies.
+    AgentNotSelected(nomos_agent_orchestration::BackendAbsence),
     Gate(nomos_gate_orchestration::GateRunResult),
 }

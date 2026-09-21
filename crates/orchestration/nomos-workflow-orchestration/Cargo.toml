@@ -1,7 +1,7 @@
 [package]
 name = "nomos-workflow-orchestration"
 version = "0.1.0"
-description = "The workflow tier's first real execution increment: runs an ordered sequence of WorkflowStep declarations, each paired with a real dispatch to one of this workspace's five real dispatch targets (two AgentExecutor/ModelBackend crates, nomos-check-orchestration::Run, nomos-correction-orchestration::Run_Correction and nomos-gate-orchestration::Run_Gate), refusing whichever step first declares itself incoherent before that step's body ever dispatches. A failing gate step ends the workflow rather than merely completing. OD-WORKFLOW-005, P40-WORKFLOW-CHECK-BODY, P40-WORKFLOW-CORRECTION-BODY, P40-WORKFLOW-GATE-BODY."
+description = "The workflow tier's first real execution increment: runs an ordered sequence of WorkflowStep declarations, each paired with a real dispatch to one of this workspace's four real dispatch targets (nomos-agent-orchestration::Run_Agent_Task, nomos-check-orchestration::Run, nomos-correction-orchestration::Run_Correction and nomos-gate-orchestration::Run_Gate), refusing whichever step first declares itself incoherent before that step's body ever dispatches. An agent step declares a ModelExecutionProfile and the declared package set selects what answers it. A failing gate step ends the workflow rather than merely completing. OD-WORKFLOW-005, OD-PACKAGE-016, P40-WORKFLOW-CHECK-BODY, P40-WORKFLOW-CORRECTION-BODY, P40-WORKFLOW-GATE-BODY."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -10,12 +10,14 @@ publish.workspace = true
 [dependencies]
 nomos-agent-contracts = { workspace = true }
 nomos-agent-executor-claude-code = { workspace = true }
+nomos-agent-orchestration = { workspace = true }
 nomos-analysis = { workspace = true }
 nomos-check-orchestration = { workspace = true }
 nomos-contracts = { workspace = true }
 nomos-correction-orchestration = { workspace = true }
 nomos-gate-orchestration = { workspace = true }
 nomos-model-backend-ollama = { workspace = true }
+nomos-model-package = { workspace = true }
 nomos-platform = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-workspace = { workspace = true }
@@ -23,7 +25,6 @@ nomos-workspace = { workspace = true }
 [dev-dependencies]
 nomos-ledger = { workspace = true }
 nomos-model = { workspace = true }
-nomos-model-package = { workspace = true }
 nomos-platform-std = { workspace = true }
 
 [lints]

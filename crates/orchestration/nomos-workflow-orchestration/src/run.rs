@@ -82,20 +82,49 @@ const NO_ROOT: &str = "";
 /// a `GateRunOutcome::Failed` disposition becomes `DispatchError::Gate` rather than
 /// `StepOutcome::Gate`, which is what makes a failing gate end the workflow instead of
 /// merely being reported as a step that ran.
+/// Runs an agent step, and keeps a failure ending the workflow the way it always did.
+///
+/// The three outcomes are not one. A backend that answered is a completed step. A backend
+/// that was selected and then could not be started is a dispatch error, which is what a
+/// failing agent step produced before the two per-backend bodies were collapsed into one --
+/// collapsing them decided which backend answers, not whether a failure stops the run. And a
+/// selection that reached no backend at all is a third thing, because nothing was dispatched
+/// for a step to have failed at.
+fn Dispatched_Agent<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    body: &crate::AgentBody, platform: &Platform<'_, Launcher, Fs, Env>,
+) -> Result<StepOutcome, DispatchError>
+{
+    use nomos_agent_orchestration::AgentDispatchOutcome;
+
+    let outcome = nomos_agent_orchestration::Run_Agent_Task(
+        &body.task,
+        &nomos_agent_orchestration::BackendSelection {
+            profile: &body.profile,
+            preferred: None,
+            declared: platform.declared,
+        },
+        &nomos_agent_orchestration::AgentEnvironment { launcher: platform.launcher },
+    );
+
+    return match outcome
+    {
+        AgentDispatchOutcome::Unavailable(reason) => Err(DispatchError::AgentUnavailable(reason)),
+        AgentDispatchOutcome::NotSelected(absence) => Err(DispatchError::AgentNotSelected(absence)),
+        answered => Ok(StepOutcome::Agent(answered)),
+    };
+}
+
 fn Dispatch_Body<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(body: &Body, platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> Result<StepOutcome, DispatchError>
 {
     return match body
     {
-        Body::ClaudeCode(task) => match nomos_agent_executor_claude_code::Execute_Task(task, platform.launcher, Path::new(NO_ROOT))
-        {
-            Ok(outcome) => Ok(StepOutcome::ClaudeCode(outcome)),
-            Err(error) => Err(DispatchError::ClaudeCode(error)),
-        },
-        Body::Ollama(task) => match nomos_model_backend_ollama::Execute_Task(task, platform.launcher)
-        {
-            Ok(outcome) => Ok(StepOutcome::Ollama(outcome)),
-            Err(error) => Err(DispatchError::Ollama(error)),
-        },
+        // The step declares a profile and the declared set decides what answers it. This
+        // used to be two arms, one per backend, which made the variant a step was written as
+        // its own backend choice -- nothing resolved, and a step could not say "whatever
+        // answers to this family" at all. A backend that could not be selected arrives as
+        // `AgentDispatchOutcome::NotSelected` rather than as a dispatch error, because
+        // nothing was dispatched: there is no step failure to report, only an absence.
+        Body::Agent(body) => Dispatched_Agent(body, platform),
         Body::Check(check) =>
         {
             let judged = Dispatched_Check(check, platform, variant);

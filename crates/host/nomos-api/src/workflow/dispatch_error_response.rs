@@ -12,8 +12,16 @@ use super::{AgentExecutionErrorResponse, OllamaExecutionErrorResponse};
 #[serde(rename_all = "snake_case", tag = "backend")]
 pub enum DispatchErrorResponse
 {
-    ClaudeCode(AgentExecutionErrorResponse),
-    Ollama(OllamaExecutionErrorResponse),
+    /// The backend the step resolved to could not be started, or did not answer.
+    AgentUnavailable
+    {
+        reason: String
+    },
+    /// No backend was selected, so nothing was dispatched.
+    AgentNotSelected
+    {
+        absence: String
+    },
     Gate(GateRunResponse),
 }
 
@@ -23,8 +31,9 @@ impl DispatchErrorResponse
     {
         return match error
         {
-            DispatchError::ClaudeCode(error) => Self::ClaudeCode(AgentExecutionErrorResponse::From(error)),
-            DispatchError::Ollama(error) => Self::Ollama(OllamaExecutionErrorResponse::From(error)),
+
+            DispatchError::AgentUnavailable(reason) => Self::AgentUnavailable { reason },
+            DispatchError::AgentNotSelected(absence) => Self::AgentNotSelected { absence: format!("{absence:?}") },
             DispatchError::Gate(result) => Self::Gate(GateRunResponse::From(result)),
         };
     }

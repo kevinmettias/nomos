@@ -9,11 +9,11 @@ fn Test_An_Execute_Command_Should_Parse_Its_Goal()
 {
     let arguments = Arguments("execute --goal hello");
 
-    let Command::Execute { goal, effort, backend } = Command_From_String_Arguments(&arguments).expect("the arguments above are a command line this parser takes") else { panic!("wrong variant") };
+    let Command::Execute { goal, effort, preferred } = Command_From_String_Arguments(&arguments).expect("the arguments above are a command line this parser takes") else { panic!("wrong variant") };
 
     assert_eq!(goal, "hello");
     assert_eq!(effort, nomos_model_package::EffortLevel::BackendDefault);
-    assert_eq!(backend, Backend::ClaudeCode);
+    assert_eq!(preferred, None, "no backend flag was given, so nothing is preferred");
 }
 
 /// The default is `BackendDefault`, the one value `Effort_Flag` maps to "omit the flag
@@ -86,18 +86,27 @@ fn Test_An_Unrecognized_Effort_Should_Be_A_Usage_Error()
     }
 }
 
-/// The default is `ClaudeCode` -- every caller before `--executor`/`--model-backend`
-/// existed must keep reaching `nomos-agent-executor-claude-code`.
+/// With neither flag, the command carries no preference at all.
+///
+/// It used to carry `Backend::ClaudeCode`, and that constant was the defect
+/// `OD-PACKAGE-016` decision 9 is about: a dispatch target chosen by this parser rather than
+/// resolved against anything, so a build whose declared set had dropped Claude Code would
+/// still have dispatched to it. `None` here is not a missing value -- it is the absence of a
+/// preference, which is what lets the declared profile resolve and answer for a reason.
+///
+/// Where the backend now comes from is asserted in `nomos-agent-orchestration`, by
+/// `Test_A_Profile_With_No_Preference_Should_Still_Reach_A_Backend`. This end only has to
+/// stop choosing.
 // test-data: allow this pins the single, fixed scenario of omitting both flags; there is
 // no second "no backend given" input to tabulate against it.
 #[test]
-fn Test_An_Execute_Command_With_No_Backend_Defaults_To_Claude_Code()
+fn Test_An_Execute_Command_With_No_Flag_Should_Carry_No_Preference()
 {
     let arguments = Arguments("execute --goal hello");
 
-    let Command::Execute { backend, .. } = Command_From_String_Arguments(&arguments).expect("the arguments above are a command line this parser takes") else { panic!("wrong variant") };
+    let Command::Execute { preferred, .. } = Command_From_String_Arguments(&arguments).expect("the arguments above are a command line this parser takes") else { panic!("wrong variant") };
 
-    assert_eq!(backend, Backend::ClaudeCode);
+    assert_eq!(preferred, None, "this parser must not choose a backend");
 }
 
 // test-data: allow `claude-code` is the only spelling `--executor` accepts today --
@@ -108,9 +117,9 @@ fn Test_An_Execute_Command_Parses_Executor_Claude_Code()
 {
     let arguments = Arguments("execute --goal hello --executor claude-code");
 
-    let Command::Execute { backend, .. } = Command_From_String_Arguments(&arguments).expect("the arguments above are a command line this parser takes") else { panic!("wrong variant") };
+    let Command::Execute { preferred, .. } = Command_From_String_Arguments(&arguments).expect("the arguments above are a command line this parser takes") else { panic!("wrong variant") };
 
-    assert_eq!(backend, Backend::ClaudeCode);
+    assert_eq!(preferred.as_deref(), Some("claude-code"));
 }
 
 #[test]
@@ -118,9 +127,9 @@ fn Test_An_Execute_Command_Parses_Model_Backend_Ollama()
 {
     let arguments = Arguments("execute --goal hello --model-backend ollama");
 
-    let Command::Execute { backend, .. } = Command_From_String_Arguments(&arguments).expect("the arguments above are a command line this parser takes") else { panic!("wrong variant") };
+    let Command::Execute { preferred, .. } = Command_From_String_Arguments(&arguments).expect("the arguments above are a command line this parser takes") else { panic!("wrong variant") };
 
-    assert_eq!(backend, Backend::Ollama);
+    assert_eq!(preferred.as_deref(), Some("ollama"));
 }
 
 /// Values `--executor` refuses -- a name with no meaning at all, and `ollama`, which is a

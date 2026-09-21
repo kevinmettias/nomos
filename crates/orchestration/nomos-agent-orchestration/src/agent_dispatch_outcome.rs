@@ -23,4 +23,12 @@ pub enum AgentDispatchOutcome
     /// (Claude Code only) answered with something other than the JSON `--output-format
     /// json` promises.
     Unavailable(String),
+    /// No backend was selected, so nothing ran.
+    ///
+    /// Deliberately not [`Self::Unavailable`]. That one reports a backend that was chosen and
+    /// then did not answer; this one reports that nothing was chosen at all, and the two
+    /// have different remedies -- one is a backend to fix, the other is a declaration to
+    /// change. Folding them together is how "nothing could look" comes to read as "nothing
+    /// was wrong", which `OD-GATE-001` is about one layer out.
+    NotSelected(crate::BackendAbsence),
 }

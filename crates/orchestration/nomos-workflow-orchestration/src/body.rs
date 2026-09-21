@@ -1,11 +1,13 @@
 //! Which real backend, or which canonical check seam, a workflow step's body dispatches
 //! through.
 
+mod agent_body;
 mod check_body;
 mod commit_intent;
 mod correction_body;
 mod gate_body;
 
+pub use agent_body::AgentBody;
 pub use check_body::CheckBody;
 pub use commit_intent::CommitIntent;
 pub use correction_body::CorrectionBody;
@@ -51,10 +53,8 @@ use nomos_agent_contracts::TaskEnvelope;
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Body
 {
-    /// Dispatches through `nomos-agent-executor-claude-code`.
-    ClaudeCode(TaskEnvelope),
-    /// Dispatches through `nomos-model-backend-ollama`.
-    Ollama(TaskEnvelope),
+    /// Dispatches to whatever this step's declared profile resolves to.
+    Agent(AgentBody),
     /// Dispatches through `nomos-check-orchestration::Run`.
     Check(CheckBody),
     /// Dispatches through `nomos-correction-orchestration::Run_Correction`.

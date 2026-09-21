@@ -241,6 +241,7 @@
       "nomos-ledger"
     ],
     "nomos-workflow-orchestration": [
+      "nomos-agent-orchestration",
       "nomos-check-orchestration",
       "nomos-correction-orchestration",
       "nomos-gate-orchestration"

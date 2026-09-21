@@ -47,6 +47,16 @@ pub enum AgentDispatchResponse
     {
         reason: String
     },
+    /// No backend was selected, so nothing was dispatched and there is no backend this
+    /// response is about.
+    ///
+    /// Distinct from [`Self::Unavailable`], which reports a backend that was chosen and then
+    /// did not answer. A caller that cannot tell the two apart cannot act on either: one is a
+    /// backend to fix, the other is a declaration to change.
+    NotSelected
+    {
+        absence: String
+    },
 }
 
 #[cfg(test)]

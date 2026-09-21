@@ -33,7 +33,7 @@ pub(super) struct RoleRequest<'a>
 /// the question that finding names — never its own guess — to Claude Code.
 pub(super) fn Judge_Role(
     request: RoleRequest<'_>,
-    config: DispatchConfig,
+    requested: super::Requested_Dispatch,
     output: &mut impl std::io::Write,
     notes: &mut impl std::io::Write,
 ) -> ExitCode
@@ -53,7 +53,7 @@ pub(super) fn Judge_Role(
         Err(code) => return code,
     };
 
-    let outcome = Run_Agent_Judgment(&pair, &finding, config, &AgentEnvironment { launcher: &LAUNCHER });
+    let outcome = Run_Agent_Judgment(&pair, &finding, &requested.Selection(), &AgentEnvironment { launcher: &LAUNCHER });
 
     return super::dispatch::Rendered_Dispatch_Outcome(&outcome, output, notes);
 }
@@ -180,14 +180,11 @@ mod tests
             crate_name: "nomos-does-not-exist",
             root: Path::new("no-such-directory-anywhere-for-judge-role-test"),
         };
-        let config = DispatchConfig {
-            effort: nomos_model_package::EffortLevel::BackendDefault,
-            backend: Backend::ClaudeCode,
-        };
+        let requested = super::super::Requested(nomos_model_package::EffortLevel::BackendDefault, None);
         let mut output = Vec::new();
         let mut notes = Vec::new();
 
-        let code = Judge_Role(request, config, &mut output, &mut notes);
+        let code = Judge_Role(request, requested, &mut output, &mut notes);
 
         assert_eq!(code, ExitCode::NotFound);
         assert!(

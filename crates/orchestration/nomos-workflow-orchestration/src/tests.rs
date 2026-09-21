@@ -164,6 +164,23 @@ fn Failing_Response(stderr: &str) -> ProgramOutput
 /// The platform every test in this file needs is the same one — a scripted launcher, the real
 /// standard filesystem, this process's own environment, and one fixed moment — so building it
 /// in a single place is what makes a test's result depend on its plan and its script alone.
+/// A body that declares the family `backend` answers to, rather than naming `backend` itself.
+///
+/// The difference is the item's whole point: a step states what it wants, and
+/// `nomos_agent_orchestration::Run_Agent_Task` decides what answers it against the declared
+/// set. Writing the family the intended backend already labels keeps these tests asserting
+/// the same dispatches they always did, through the resolution rather than around it.
+fn Agent_Step(backend: nomos_agent_orchestration::Backend, task: nomos_agent_contracts::TaskEnvelope) -> Body
+{
+    return Body::Agent(crate::AgentBody {
+        task,
+        profile: nomos_model_package::ModelExecutionProfile::New(
+            nomos_model_package::ModelSelector::BackendFamily(backend.Label().to_owned()),
+            nomos_model_package::EffortLevel::BackendDefault,
+        ),
+    });
+}
+
 fn Ran_Outcome(plan: &[WorkflowStepPlan], answers: Vec<ProgramOutput>) -> WorkflowOutcome
 {
     let launcher = Scripted::Of(answers);
@@ -172,6 +189,7 @@ fn Ran_Outcome(plan: &[WorkflowStepPlan], answers: Vec<ProgramOutput>) -> Workfl
         filesystem: &StdFileSystem,
         environment: &nomos_platform_std::StdEnvironment,
         now: nomos_platform::Timestamp::From_Unix_Seconds(0),
+        declared: &nomos_agent_orchestration::Declared_Targets(),
     };
 
     return Run(plan, &platform, &Test_Variant(), Test_Run_Id());
@@ -268,37 +286,37 @@ fn Test_An_Empty_Plan_Completes_Vacuously()
 #[test]
 fn Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes()
 {
-    let step = Only_Step(Body::ClaudeCode(Task_Envelope("say PONG")), vec![Clean_Claude_Code_Response("PONG")]);
+    let step = Only_Step(Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("say PONG")), vec![Clean_Claude_Code_Response("PONG")]);
 
-    assert!(matches!(step, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["PONG".to_owned()]));
+    assert!(matches!(step, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::ClaudeCode(answer)) if answer.result.assumptions == ["PONG".to_owned()]));
 }
 
 #[test]
 fn Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes()
 {
-    let step = Only_Step(Body::Ollama(Task_Envelope("say PONG")), vec![Clean_Ollama_Response("PONG")]);
+    let step = Only_Step(Agent_Step(nomos_agent_orchestration::Backend::Ollama, Task_Envelope("say PONG")), vec![Clean_Ollama_Response("PONG")]);
 
-    assert!(matches!(step, StepOutcome::Ollama(answer) if answer.response == "PONG"));
+    assert!(matches!(step, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::Ollama(answer)) if answer.response == "PONG"));
 }
 
 #[test]
 fn Test_A_Two_Step_Sequence_Completes_In_Order()
 {
-    let bodies = [Body::ClaudeCode(Task_Envelope("first")), Body::Ollama(Task_Envelope("second"))];
+    let bodies = [Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("first")), Agent_Step(nomos_agent_orchestration::Backend::Ollama, Task_Envelope("second"))];
     let plan: Vec<WorkflowStepPlan> = bodies.into_iter().map(|body| return WorkflowStepPlan { declaration: Coherent_Step(), body }).collect();
 
     let completed = Ran_To_Completion(&plan, vec![Clean_Claude_Code_Response("first"), Clean_Ollama_Response("second")]);
 
     let first = completed.first().expect("the run above asserted a step for every body");
     let second = completed.get(1).expect("the run above asserted a step for every body");
-    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["first".to_owned()]));
-    assert!(matches!(second, StepOutcome::Ollama(answer) if answer.response == "second"));
+    assert!(matches!(first, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::ClaudeCode(answer)) if answer.result.assumptions == ["first".to_owned()]));
+    assert!(matches!(second, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::Ollama(answer)) if answer.response == "second"));
 }
 
 #[test]
 fn Test_An_Incoherent_Step_Is_Refused_Before_Dispatch()
 {
-    let coherent = WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task_Envelope("never runs")) };
+    let coherent = WorkflowStepPlan { declaration: Incoherent_Step(), body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("never runs")) };
 
     let outcome = Ran_Outcome(&[coherent], Vec::new());
 
@@ -309,8 +327,8 @@ fn Test_An_Incoherent_Step_Is_Refused_Before_Dispatch()
 fn Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions()
 {
     let plan = [
-        WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task_Envelope("first")) },
-        WorkflowStepPlan { declaration: Incoherent_Step(), body: Body::ClaudeCode(Task_Envelope("never runs")) },
+        WorkflowStepPlan { declaration: Coherent_Step(), body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("first")) },
+        WorkflowStepPlan { declaration: Incoherent_Step(), body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("never runs")) },
     ];
 
     let outcome = Ran_Outcome(&plan, vec![Clean_Claude_Code_Response("first")]);
@@ -323,19 +341,19 @@ fn Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions()
     assert_eq!(index, 1, "the second step is the incoherent one");
     assert_eq!(completed.len(), 1, "only the step before the refusal ran");
     let first = completed.first().expect("the assertion above fixes the length at one");
-    assert!(matches!(first, StepOutcome::ClaudeCode(answer) if answer.result.assumptions == ["first".to_owned()]));
+    assert!(matches!(first, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::ClaudeCode(answer)) if answer.result.assumptions == ["first".to_owned()]));
 }
 
 #[test]
 fn Test_A_Failed_Dispatch_Stops_The_Run()
 {
-    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Body::ClaudeCode(Task_Envelope("fails")) }];
+    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("fails")) }];
 
     let outcome = Ran_Outcome(&plan, vec![Failing_Response("claude exited 1")]);
 
     assert!(
         matches!(outcome, WorkflowOutcome::Failed { ref completed, index: 0, ref error }
-            if completed.is_empty() && matches!(error, DispatchError::ClaudeCode(_))),
+            if completed.is_empty() && matches!(error, DispatchError::AgentUnavailable(_))),
         "a failing first step stops the run as Failed and completes nothing: {outcome:?}"
     );
 }
@@ -347,7 +365,7 @@ fn Test_A_Failed_Dispatch_Stops_The_Run()
 #[test]
 fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
 {
-    let bodies = [Body::ClaudeCode(Task_Envelope("fails")), Body::Ollama(Task_Envelope("never runs"))];
+    let bodies = [Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("fails")), Agent_Step(nomos_agent_orchestration::Backend::Ollama, Task_Envelope("never runs"))];
     let plan: Vec<WorkflowStepPlan> = bodies.into_iter().map(|body| return WorkflowStepPlan { declaration: Coherent_Step(), body }).collect();
 
     let outcome = Ran_Outcome(&plan, vec![Failing_Response("claude exited 1")]);
@@ -367,7 +385,7 @@ fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
 #[test]
 fn Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonical_Seam()
 {
-    let bodies = [Body::Check(Check_Body_Over("pub fn Ok() {}\n")), Body::Ollama(Task_Envelope("second"))];
+    let bodies = [Body::Check(Check_Body_Over("pub fn Ok() {}\n")), Agent_Step(nomos_agent_orchestration::Backend::Ollama, Task_Envelope("second"))];
     let plan: Vec<WorkflowStepPlan> = bodies.into_iter().map(|body| return WorkflowStepPlan { declaration: Coherent_Step(), body }).collect();
 
     let completed = Ran_To_Completion(&plan, vec![Clean_Ollama_Response("second")]);
@@ -378,7 +396,7 @@ fn Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonic
         matches!(first, StepOutcome::Check(nomos_check_orchestration::CheckOutcome::Judged { findings, .. }) if findings.is_empty()),
         "{first:?}"
     );
-    assert!(matches!(second, StepOutcome::Ollama(answer) if answer.response == "second"));
+    assert!(matches!(second, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::Ollama(answer)) if answer.response == "second"));
 }
 
 /// `P40-WORKFLOW-CORRECTION-BODY`'s own `done_when`, the committed half: a workflow step

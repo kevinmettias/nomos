@@ -44,7 +44,15 @@ fn Test_Command_From_String_Arguments_Should_Parse_A_Claude_Code_Run()
 
     let command = Command_From_String_Arguments(&arguments).expect("the argv literal above names exactly one body flag, which this parser accepts");
 
-    assert!(matches!(command.body, Body::ClaudeCode(ref task) if task.goal == "say hello"), "{command:?}");
+    // The flag still names a backend; the body now declares the family it asks for, and the
+    // declared set is what answers. `--executor claude-code` reaching a step written as
+    // `Body::ClaudeCode` was the thing `OD-PACKAGE-016` decision 9 is about.
+    assert!(
+        matches!(command.body, Body::Agent(ref agent)
+            if agent.task.goal == "say hello"
+                && agent.profile.selector == nomos_model_package::ModelSelector::BackendFamily("claude-code".to_owned())),
+        "{command:?}"
+    );
 }
 
 #[test]

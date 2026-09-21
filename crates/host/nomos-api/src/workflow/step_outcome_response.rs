@@ -13,8 +13,8 @@ use super::{AgentExecutionOutcomeResponse, OllamaExecutionOutcomeResponse};
 #[serde(rename_all = "snake_case", tag = "backend")]
 pub enum StepOutcomeResponse
 {
-    ClaudeCode(AgentExecutionOutcomeResponse),
-    Ollama(OllamaExecutionOutcomeResponse),
+    /// What the backend this step resolved to reported, or why none was selected.
+    Agent(crate::agent::AgentDispatchResponse),
     Check(check::CheckResponse),
     Correction(correction::CorrectionResponse),
     Gate(GateRunResponse),
@@ -26,8 +26,7 @@ impl StepOutcomeResponse
     {
         return match outcome
         {
-            StepOutcome::ClaudeCode(outcome) => Self::ClaudeCode(AgentExecutionOutcomeResponse::From(outcome)),
-            StepOutcome::Ollama(outcome) => Self::Ollama(OllamaExecutionOutcomeResponse::From(outcome)),
+            StepOutcome::Agent(outcome) => Self::Agent(crate::agent::AgentDispatchResponse::From(outcome)),
             StepOutcome::Check(outcome) => Self::Check(check::CheckResponse::From(outcome)),
             StepOutcome::Correction(outcome) => Self::Correction(correction::CorrectionResponse::From(outcome)),
             StepOutcome::Gate(result) => Self::Gate(GateRunResponse::From(result)),

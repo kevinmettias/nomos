@@ -52,6 +52,24 @@ fn Body_From_String_Arguments(arguments: &[String]) -> Result<Body, String>
     return Dispatched_Body_From_String_Arguments(arguments);
 }
 
+/// A step body declaring the family the named flag value asks for.
+///
+/// The flag still names a backend, and the step still reaches it -- but it reaches it by
+/// declaring the family and letting the declared set answer, rather than by being written as
+/// the variant for that backend. That difference is what `OD-PACKAGE-016` decision 9's
+/// wiring is: a step says what it wants, and a build whose declared set no longer offers it
+/// says so instead of dispatching anyway.
+fn Agent_Body(family: &str, task: nomos_agent_contracts::TaskEnvelope) -> Body
+{
+    return Body::Agent(nomos_workflow_orchestration::AgentBody {
+        task,
+        profile: nomos_model_package::ModelExecutionProfile::New(
+            nomos_model_package::ModelSelector::BackendFamily(family.to_owned()),
+            nomos_model_package::EffortLevel::BackendDefault,
+        ),
+    });
+}
+
 /// How many of the five body-naming flags `arguments` carries. The flags are counted as booleans
 /// rather than collected, because a repeated flag still names one body and a `Vec` of them would
 /// silently read a repeat as a conflict.
@@ -139,7 +157,7 @@ fn Backend_Body_From_String_Arguments(arguments: &[String]) -> Result<Body, Stri
     {
         return match text.as_str()
         {
-            "claude-code" => Ok(Body::ClaudeCode(Task_From_String_Arguments(arguments)?)),
+            "claude-code" => Ok(Agent_Body(text.as_str(), Task_From_String_Arguments(arguments)?)),
             other => Err(format!("--executor {other:?} is not one of claude-code.\n\n{}", Usage_Text())),
         };
     }
@@ -147,7 +165,7 @@ fn Backend_Body_From_String_Arguments(arguments: &[String]) -> Result<Body, Stri
     {
         return match text.as_str()
         {
-            "ollama" => Ok(Body::Ollama(Task_From_String_Arguments(arguments)?)),
+            "ollama" => Ok(Agent_Body(text.as_str(), Task_From_String_Arguments(arguments)?)),
             other => Err(format!("--model-backend {other:?} is not one of ollama.\n\n{}", Usage_Text())),
         };
     }

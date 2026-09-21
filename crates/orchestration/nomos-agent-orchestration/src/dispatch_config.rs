@@ -10,7 +10,7 @@ use nomos_model_package::EffortLevel;
 /// this crate existed. Also what keeps `Run_Agent_Judgment` inside this crate's own
 /// `parameter-count` limit: `pair`, `finding`, `environment` and this one value are four, not
 /// five.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct DispatchConfig
 {
     pub effort: EffortLevel,

@@ -33,7 +33,7 @@ fn Execute_Command_From_String_Arguments(arguments: &[String]) -> Result<Command
     let effort = Effort_From_String_Arguments(arguments)?;
     let backend = Backend_From_String_Arguments(arguments)?;
 
-    return Ok(Command::Execute { goal, effort, backend });
+    return Ok(Command::Execute { goal, effort, preferred: backend });
 }
 
 fn Judge_Role_Command_From_String_Arguments(arguments: &[String]) -> Result<Command, String>
@@ -46,12 +46,20 @@ fn Judge_Role_Command_From_String_Arguments(arguments: &[String]) -> Result<Comm
     let effort = Effort_From_String_Arguments(arguments)?;
     let backend = Backend_From_String_Arguments(arguments)?;
 
-    return Ok(Command::JudgeRole { crate_name, root, effort, backend });
+    return Ok(Command::JudgeRole { crate_name, root, effort, preferred: backend });
 }
 
-/// `--executor`'s or `--model-backend`'s value, or [`Backend::ClaudeCode`] when neither flag
-/// is given -- every caller before either flag existed reached
-/// `nomos-agent-executor-claude-code`, so both absent must keep reaching it, byte-identical.
+/// `--executor`'s or `--model-backend`'s value as a family label, or `None` when neither flag
+/// is given.
+///
+/// It used to answer `Backend::ClaudeCode` for the both-absent case, on the reasoning that
+/// every caller before either flag existed reached `nomos-agent-executor-claude-code` and so
+/// both absent must keep reaching it. What that actually built was a dispatch target this
+/// parser chose on its own, which no declaration had to offer and no resolution had to agree
+/// to. `OD-PACKAGE-016` decision 9 is about exactly that line. The reached backend is
+/// unchanged for a caller who passes nothing, because the profile this group declares
+/// resolves to it -- but now it resolves, and a build whose declared set stopped offering it
+/// says so instead of dispatching anyway.
 ///
 /// The two flags used to be one, `--backend`, spelling `claude-code` and `ollama` as if they
 /// were peer choices of the same kind. `OD-PACKAGE-013` found they are not -- Ollama is a
@@ -64,7 +72,18 @@ fn Judge_Role_Command_From_String_Arguments(arguments: &[String]) -> Result<Comm
 /// Returns a message naming the accepted spelling for whichever flag was given, when its
 /// value is not that spelling, or when both flags are given at once -- a call dispatches to
 /// exactly one backend, and naming two is not a request either flag alone could satisfy.
-fn Backend_From_String_Arguments(arguments: &[String]) -> Result<Backend, String>
+///
+/// `None` is not a failure and not a default: it is the absence of a preference, which is
+/// what lets the profile's own resolution decide. A backend named here is a *preference*,
+/// attempted ahead of the resolution and allowed to fail if the declared set cannot offer
+/// it, rather than an answer.
+///
+/// It answers with the validated spelling rather than a `Backend`, and that is the point
+/// rather than a convenience. This function's job is to refuse a value neither flag accepts;
+/// deciding which dispatch target a accepted value names belongs to
+/// `nomos_agent_orchestration::Selected_Dispatch`, against the declared set, so that no call
+/// site in this workspace turns a string into a dispatch target by matching on it.
+fn Backend_From_String_Arguments(arguments: &[String]) -> Result<Option<String>, String>
 {
     let executor = Named_Value_From_String_Arguments(arguments, "--executor");
     let model_backend = Named_Value_From_String_Arguments(arguments, "--model-backend");
@@ -77,15 +96,21 @@ fn Backend_From_String_Arguments(arguments: &[String]) -> Result<Backend, String
         )),
         (Some(text), None) => match text.as_str()
         {
-            "claude-code" => Ok(Backend::ClaudeCode),
+            "claude-code" => Ok(Some(text)),
             other => Err(format!("--executor {other:?} is not one of claude-code.\n\n{}", Usage_Text())),
         },
         (None, Some(text)) => match text.as_str()
         {
-            "ollama" => Ok(Backend::Ollama),
+            "ollama" => Ok(Some(text)),
             other => Err(format!("--model-backend {other:?} is not one of ollama.\n\n{}", Usage_Text())),
         },
-        (None, None) => Ok(Backend::ClaudeCode),
+        // Neither flag names one, so nothing here chooses. `OD-PACKAGE-016` decision 9 and
+        // its wiring item are about this line specifically: it used to answer
+        // `Backend::ClaudeCode`, which is a backend nobody declared and nothing resolved --
+        // a default wearing a decision's clothes. The absence travels to
+        // `nomos_agent_orchestration::Selected_Dispatch`, where the profile resolves against
+        // the declared set and answers for a reason.
+        (None, None) => Ok(None),
     };
 }
 
@@ -202,7 +227,9 @@ mod tests
             Command::Execute {
                 goal: "say hello".to_owned(),
                 effort: nomos_model_package::EffortLevel::BackendDefault,
-                backend: Backend::ClaudeCode,
+                // No `--executor` and no `--model-backend`, so no preference. This used to
+                // read `Backend::ClaudeCode`, which is what the parser chose on its own.
+                preferred: None,
             }
         );
     }

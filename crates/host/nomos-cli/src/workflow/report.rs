@@ -37,21 +37,46 @@ pub(super) fn Rendered_Workflow_Outcome(outcome: &WorkflowOutcome, stdout: &mut 
 }
 
 /// The one step's own outcome, rendered.
+/// What an agent step reports, whichever backend its profile resolved to.
+///
+/// One renderer for both backends now, because the step no longer names one. The two
+/// answered shapes still print what they always printed; the two unanswered ones print why,
+/// and go to `stderr`, because a step that produced no answer is not a result to read.
+fn Rendered_Agent(answer: &nomos_agent_orchestration::AgentDispatchOutcome, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+{
+    use nomos_agent_orchestration::AgentDispatchOutcome;
+
+    return match answer
+    {
+        AgentDispatchOutcome::ClaudeCode(claude) =>
+        {
+            let _ = writeln!(stdout, "assumptions: {:?}", claude.result.assumptions);
+            let _ = writeln!(stdout, "unresolved questions: {:?}", claude.result.unresolved_questions);
+            ExitCode::Ok
+        }
+        AgentDispatchOutcome::Ollama(ollama) =>
+        {
+            let _ = writeln!(stdout, "{}", ollama.response);
+            ExitCode::Ok
+        }
+        AgentDispatchOutcome::Unavailable(reason) =>
+        {
+            let _ = writeln!(stderr, "{reason}");
+            ExitCode::Unavailable
+        }
+        AgentDispatchOutcome::NotSelected(absence) =>
+        {
+            let _ = writeln!(stderr, "no backend was selected, so nothing ran: {absence:?}");
+            ExitCode::Unavailable
+        }
+    };
+}
+
 fn Rendered_Step(step: &StepOutcome, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
     return match step
     {
-        StepOutcome::ClaudeCode(answer) =>
-        {
-            let _ = writeln!(stdout, "assumptions: {:?}", answer.result.assumptions);
-            let _ = writeln!(stdout, "unresolved questions: {:?}", answer.result.unresolved_questions);
-            ExitCode::Ok
-        }
-        StepOutcome::Ollama(answer) =>
-        {
-            let _ = writeln!(stdout, "{}", answer.response);
-            ExitCode::Ok
-        }
+        StepOutcome::Agent(answer) => Rendered_Agent(answer, stdout, stderr),
         StepOutcome::Check(check) => Rendered_Check(check, stdout, stderr),
         StepOutcome::Correction(correction) => Rendered_Correction(correction, stdout, stderr),
         StepOutcome::Gate(result) => Rendered_Gate(result, stdout),

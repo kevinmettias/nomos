@@ -73,7 +73,14 @@ pub fn Handle_Workflow_Run(plan: &WorkflowStepPlan) -> WorkflowRunResponse
     };
     let walked_plan = WorkflowStepPlan { declaration: plan.declaration.clone(), body };
 
-    let platform = Platform { launcher: &LAUNCHER, filesystem: &FILE_SYSTEM, environment: &ENVIRONMENT, now: CLOCK.Now() };
+    let declared = nomos_agent_orchestration::Declared_Targets();
+    let platform = Platform {
+        launcher: &LAUNCHER,
+        filesystem: &FILE_SYSTEM,
+        environment: &ENVIRONMENT,
+        now: CLOCK.Now(),
+        declared: &declared,
+    };
     let run = Fresh_Run_Id(CLOCK.Now());
     let outcome = Run(std::slice::from_ref(&walked_plan), &platform, &composition::Host_Variant(), run);
 
@@ -125,7 +132,7 @@ fn Walked_Body(body: Body) -> Result<Body, WorkflowRunResponse>
                 Ok(Body::Gate(walked))
             }
         },
-        other @ (Body::ClaudeCode(_) | Body::Ollama(_)) => Ok(other),
+        other @ Body::Agent(_) => Ok(other),
     };
 }
 
