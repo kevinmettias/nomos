@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:6c2cc35da685e5c1eccb3395f925faee300da8de4db26c2958af46152bfa16f6",
-  "inputs_digest": "sha256:a2cf6e8e4c8c68226f5c035df59038495bff274662062fd7a09b2931c4f816c0",
+  "content_digest": "sha256:caeeb6156fe682343192aceb4e37334da6ca7707ef8f991944e701a412cbe741",
+  "inputs_digest": "sha256:65d8ab65f77b6367e673d02a054623d0b8a1c5170419c4f44d0438dbdab7116d",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2113
+      2114
     ],
     [
       "Source blocks",
-      7459
+      7467
     ]
   ],
   "inputs": [
@@ -423,7 +423,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored",
-      "hash": "sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf"
+      "hash": "sha256:e225357e3fbcbc6fab4c9762d7f6c0857cd9560625c298ff8696ff0d0355999c"
     },
     {
       "content": "documents",
@@ -4388,17 +4388,22 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#27",
-      "hash": "sha256:db7ef04ea2706ba0fbe86d0fe5184509fbbeb4f09036f059c2ca309207f47efb"
+      "hash": "sha256:06fb57b405b682cb4bfd88fc3b5df73164d5a11fb9c5ad6762db20bd9478419d"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#29",
-      "hash": "sha256:9e02a2a85be9fa1be073e6435785b2b6be059ab04251d42266cbb9ba6134c0b9"
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#35",
+      "hash": "sha256:7933ee163780f603a7d98b0fa324913431a560662fd5878366791f0859ba85e9"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31",
-      "hash": "sha256:dd339ebc1e6a29fe951f390708c05b6860c8886cdec17319f10b754b338968dd"
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#37",
+      "hash": "sha256:d42957f3cb923c64d01bad677db3487805bc290e0bb6f4f2b5faf7c0746ebf66"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#39",
+      "hash": "sha256:f1f9b4e78547e09859b29d6a0c48093bb69ffa4747750365dc946522878b174a"
     },
     {
       "content": "headings",
@@ -22648,32 +22653,72 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#27",
-      "hash": "sha256:5fa0e3ac46acb99b145b67a28728ce1bdba39c2ad425dc0d8fbea375a08558b0"
+      "hash": "sha256:72b7306f1d7504a9a9ae06cdb413ac679da07a3212c85455eff4e29f94db507d"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#28",
-      "hash": "sha256:933e53cc0bc56ffe81a366e2a2d67ddaad671aa11a713fc3235b0a0fa66d2451"
+      "hash": "sha256:b7b6836dc156c866199237b92bf9c1faac29c8fece38fdfd3f7a9c053f5fefca"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#29",
-      "hash": "sha256:555ac5e2947b4d7528ab7a18bac24ba8889418d9a2655d42618ef9cf79630668"
+      "hash": "sha256:1029db287546bdf2a77583cbe2313ff21ad4b48cdb794b23f8848038c207a22f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#30",
-      "hash": "sha256:86dc515771db13c51903f2dbb0c6a4e98ab5650009f5c93d3e8c4f55af7f5f00"
+      "hash": "sha256:ec32931e33191beb444c5b5e0eb155624ffb11f875ea7939f15973db1872ec7a"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:7b83f5c2f1f60afe223ac36fd478073445861d0c538534fa2da8499a3198a448"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#32",
-      "hash": "sha256:4193ff51826b0528afc76c94a023749e9f5fb7267adc4f4bb9084e37f28f060e"
+      "hash": "sha256:f9388f96a19022dfe95879652ac426d96f94d481ef2ef11384f3db58739df609"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#33",
+      "hash": "sha256:d2196798f531a03c4e81d90b22a3d5f704f2b817385e3932ca1a49fa62bb8265"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#34",
+      "hash": "sha256:232c0cf16a13423ff556297536919ced9baf54bfe9544a2d09075207f08203c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#35",
+      "hash": "sha256:5fa0e3ac46acb99b145b67a28728ce1bdba39c2ad425dc0d8fbea375a08558b0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#36",
+      "hash": "sha256:933e53cc0bc56ffe81a366e2a2d67ddaad671aa11a713fc3235b0a0fa66d2451"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#37",
+      "hash": "sha256:555ac5e2947b4d7528ab7a18bac24ba8889418d9a2655d42618ef9cf79630668"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#38",
+      "hash": "sha256:86dc515771db13c51903f2dbb0c6a4e98ab5650009f5c93d3e8c4f55af7f5f00"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#39",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#40",
+      "hash": "sha256:a52554779850af5d59f3720be58649978fa827d15fc47a2418cc938fd0c8f3f0"
     },
     {
       "content": "blocks",

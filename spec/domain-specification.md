@@ -90,7 +90,7 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md@authored | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md | authored | 28 | 8 | sha256:3591b780c13db3d7e66d70b17727c44fadc80e583eeb90eda64e8f65984a8231 |
 | docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md@authored | docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md | authored | 38 | 7 | sha256:15070ae3d008d24d982cfce4e11453bc74932e1f6e6a513fc3101d6169405f0c |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 32 | 9 | sha256:1027b7b589216b9cbe4598a2a569261111071dce14529a2556e82f61852f74cf |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 40 | 10 | sha256:e225357e3fbcbc6fab4c9762d7f6c0857cd9560625c298ff8696ff0d0355999c |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md@authored | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md | authored | 20 | 7 | sha256:eca88bdcb033ae337eed44a34b8e00e16b9c0208f5bec59b8560b4850808de81 |
 | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md@authored | docs/records/OD-GATE-004-the-rule-layer-becomes-a-gate-step-and-zero-is-the-only-success.md | authored | 71 | 17 | sha256:67920338ae2badd1b2d873367aa47579ba2c38312c788bb6d9e5029de6db8e90 |
 | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md@authored | docs/records/OD-GATE-005-a-derived-projection-is-owned-by-nobody-and-is-rendered-from-the-record-set-its-commit-publishes.md | authored | 59 | 14 | sha256:4024d62bfb1164616bac47b7dc4e2e066355992c3268d8195d77e857dddb06b7 |
@@ -888,9 +888,10 @@ profile: domain-specification
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#10 | authored | 2 | The Decision |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#14 | authored | 2 | What This Gives Up |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#21 | authored | 2 | Version 2: A Name Is Reported, Not A Declaration |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#27 | authored | 2 | Blessing Is Not A Passing Run |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#29 | authored | 2 | What Would Change This |
-| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31 | authored | 2 | Status |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#27 | authored | 2 | Version 3: A Path Attribute Is Not A Concession |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#35 | authored | 2 | Blessing Is Not A Passing Run |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#37 | authored | 2 | What Would Change This |
+| docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#39 | authored | 2 | Status |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#1 | authored | 1 | A judging group's no-vacuous-success guarantee is declared once, not argued per module |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#6 | authored | 2 | The Decision |
@@ -22731,11 +22732,98 @@ comparison, which is the shape of the defect — it was never about one crate.
 
 ### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#27
 
+*revision: authored · kind: heading · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 3: A Path Attribute Is Not A Concession · hash: sha256:72b7306f1d7504a9a9ae06cdb413ac679da07a3212c85455eff4e29f94db507d*
+
+## Version 3: A Path Attribute Is Not A Concession
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#28
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 3: A Path Attribute Is Not A Concession · hash: sha256:b7b6836dc156c866199237b92bf9c1faac29c8fece38fdfd3f7a9c053f5fefca*
+
+`P114-SURFACE-PATH-DECLARED-MODULES-STAY-UNRESOLVED-2`. A module declared with
+`#[path = "…"]` is known to the language by the name its `mod` writes and lives in the file
+the attribute names. The reader in `tests/contract/src/reading/module_tree.rs` knew only the
+two ordinary layouts, `name.rs` and `name/mod.rs`. It found no file, registered the module
+holding nothing, and every route through it failed to resolve.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#29
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 3: A Path Attribute Is Not A Concession · hash: sha256:1029db287546bdf2a77583cbe2313ff21ad4b48cdb794b23f8848038c207a22f*
+
+**A same-crate module declared with a path attribute now resolves.** The file the attribute
+names is tried first, against the directory the *declaring* file sits in — the base the
+language uses, and not the one that module's other children resolve against. An attribute
+naming a file that is not there falls through to the two layouts rather than being taken at
+its word, so a declaration that genuinely cannot be followed is still reported as it was.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#30
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 3: A Path Attribute Is Not A Concession · hash: sha256:ec32931e33191beb444c5b5e0eb155624ffb11f875ea7939f15973db1872ec7a*
+
+Two spellings were in the tree and reading the attribute only fixed one. Where the attribute
+sits on its own line above the `mod`, the walk already saw the `mod` and needed only the
+file. Where the two are written together — `#[path = "fact_reuse.rs"] mod determinism;` — the
+line opens with an attribute, so no declaration keyword starts it and the walk steps over the
+whole line: the module was never a child, and supplying its file fixed nothing. The first
+repair without the second measures as working on thirteen crates out of fourteen, which is
+the kind of result that gets believed. `nomos-analysis` is the fourteenth and writes all
+fifteen of its sites that way.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 3: A Path Attribute Is Not A Concession · hash: sha256:7b83f5c2f1f60afe223ac36fd478073445861d0c538534fa2da8499a3198a448*
+
+**This was a defect, not a concession, so the version 1 list is complete without it.** That
+list says what a source-level reading gives up against rustdoc's resolution: glob targets,
+another crate's declarations, macro expansions, `#[cfg]` branches, blanket impls, aliases. A
+path attribute is none of them. It is a plain module of this crate, written here on purpose
+at 156 sites across 18 crates, and the reader did not know the third layout.
+`P22-REACHABILITY-PATH-ATTR` had already fixed the same blind spot in `Declared_Modules`, a
+different reader — which is what makes this a defect with a precedent rather than a limit
+with a reason.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#32
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 3: A Path Attribute Is Not A Concession · hash: sha256:f9388f96a19022dfe95879652ac426d96f94d481ef2ef11384f3db58739df609*
+
+**The final claim above was false for a type reached that way, and is now true.** Adding a
+variant, a public field, a method, or changing a signature on such a type changed no
+committed file. The re-exported *name* was reported in the unresolved section, so adding or
+removing the name still failed the test while everything hanging off it stayed invisible —
+the same shape version 2 found for the cross-crate case, true of every name somebody happened
+to test.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#33
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 3: A Path Attribute Is Not A Concession · hash: sha256:d2196798f531a03c4e81d90b22a3d5f704f2b817385e3932ca1a49fa62bb8265*
+
+Measured at the repair, and against the tree rather than against the numbers the item was
+filed with, which had moved: 27 snapshots carried an unresolved section holding 188 entries
+between them, of which 123 named a module their own crate declares with a path attribute.
+Seventy-five of those cleared here and the twelve snapshots that held them went to none —
+`nomos-lang-rust-compiler` 18, `nomos-analysis` 12, `nomos-lang-rust-cargo` and
+`nomos-lang-rust-clippy` and `nomos-lang-go-modules` 7 each, `nomos-lang-rust-scan` and
+`nomos-lang-rust-deny` 6 each, `nomos-lang-rust` and `nomos-lang-go` 4 each,
+`nomos-connector-coderabbit` 2, `nomos-capability` and `nomos-workspace` 1 each. The other 48
+are `nomos-ledger` and `nomos-repo-policy`, whose snapshots are reserved by other live items
+and stay stale until their holders re-bless them.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#34
+
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Version 3: A Path Attribute Is Not A Concession · hash: sha256:232c0cf16a13423ff556297536919ced9baf54bfe9544a2d09075207f08203c4*
+
+What the twelve gained is the point rather than what they lost. `pub use
+contract::CapabilityContract` was one bare line and is now the struct with its four public
+fields; `pub use determinism::SnapshotSerialization` is now the struct, its three associated
+constants and the `Strategy` it implements.
+
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#35
+
 *revision: authored · kind: heading · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Blessing Is Not A Passing Run · hash: sha256:5fa0e3ac46acb99b145b67a28728ce1bdba39c2ad425dc0d8fbea375a08558b0*
 
 ## Blessing Is Not A Passing Run
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#28
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#36
 
 *revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Blessing Is Not A Passing Run · hash: sha256:933e53cc0bc56ffe81a366e2a2d67ddaad671aa11a713fc3235b0a0fa66d2451*
 
@@ -22744,13 +22832,13 @@ check any environment could switch off by exporting a variable, and a CI job wit
 set would report green having compared nothing — the same failure this whole item is about,
 one level out.
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#29
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#37
 
 *revision: authored · kind: heading · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What Would Change This · hash: sha256:555ac5e2947b4d7528ab7a18bac24ba8889418d9a2655d42618ef9cf79630668*
 
 ## What Would Change This
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#30
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#38
 
 *revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / What Would Change This · hash: sha256:86dc515771db13c51903f2dbb0c6a4e98ab5650009f5c93d3e8c4f55af7f5f00*
 
@@ -22760,19 +22848,22 @@ the two derivations should be compared against each other before either is trust
 the way `P9-ONE-DIRECTION` compared the corpus-gate count against the source: two
 independent readings that agree are worth more than one authoritative one.
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#31
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#39
 
 *revision: authored · kind: heading · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#32
+### docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md#40
 
-*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Status · hash: sha256:4193ff51826b0528afc76c94a023749e9f5fb7267adc4f4bb9084e37f28f060e*
+*revision: authored · kind: prose · heading: The public surface check is derived in this workspace rather than by a tool nobody has / Status · hash: sha256:a52554779850af5d59f3720be58649978fa827d15fc47a2418cc938fd0c8f3f0*
 
 Version 1 closed by `P9-PUBLIC-API`. Version 2 closed by `P11-REEXPORT-GRAIN`, which
 re-authored `P11-REEXPORT-SURFACE` once the reading found the defect in three crates rather
-than the one it was opened for.
+than the one it was opened for. Version 3 closed by
+`P114-SURFACE-PATH-DECLARED-MODULES-STAY-UNRESOLVED-2`, itself a re-author of
+`P114-SURFACE-PATH-DECLARED-MODULES-STAY-UNRESOLVED` with two snapshots dropped from its
+territory because live items held them.
 
 ### docs/records/OD-GATE-003-a-judging-groups-no-vacuous-success-guarantee-is-declared-once-not-argued-per-module.md#1
 

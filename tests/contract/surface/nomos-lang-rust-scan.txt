@@ -2,6 +2,9 @@ pub const fn nomos_lang_rust_scan::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_rust_scan::ItemKind::Label(self) -> &'static str
 pub const nomos_lang_rust_scan::LANGUAGE: &str
 pub const nomos_lang_rust_scan::PROVIDER: &str
+pub const nomos_lang_rust_scan::ScanFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_rust_scan::ScanFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_rust_scan::ScanFactProduction::TRACE: TraceEquivalence
 pub enum nomos_lang_rust_scan::ItemKind
 pub enum nomos_lang_rust_scan::Visibility
 pub enum variant nomos_lang_rust_scan::ItemKind::Constant
@@ -20,16 +23,24 @@ pub enum variant nomos_lang_rust_scan::ItemKind::Use
 pub enum variant nomos_lang_rust_scan::Visibility::Private
 pub enum variant nomos_lang_rust_scan::Visibility::Public
 pub enum variant nomos_lang_rust_scan::Visibility::Restricted { scope: String, }
+pub fn nomos_lang_rust_scan::Encode_Payload(scanned: &ScannedFile) -> Vec<u8>
+pub fn nomos_lang_rust_scan::Materialize_Syntax_Fact(subject: SubjectId, source: &str, context: FactContext) -> MaterializedFact
 pub fn nomos_lang_rust_scan::Provider_Offer() -> ProviderOffer
+pub fn nomos_lang_rust_scan::Scan_Source(source: &str) -> ScannedFile
 pub fn nomos_lang_rust_scan::Visibility::Label(&self) -> String
+pub impl nomos_lang_rust_scan::ScanFactProduction implements Strategy
+pub struct field nomos_lang_rust_scan::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_rust_scan::FactContext::generation: GenerationId
+pub struct field nomos_lang_rust_scan::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_rust_scan::FactContext::variant: BuildVariantId
 pub struct field nomos_lang_rust_scan::ScannedFile::items: Vec<ScannedItem>
 pub struct field nomos_lang_rust_scan::ScannedFile::lines: u32
+pub struct field nomos_lang_rust_scan::ScannedItem::kind: ItemKind
+pub struct field nomos_lang_rust_scan::ScannedItem::line: u32
+pub struct field nomos_lang_rust_scan::ScannedItem::name: String
+pub struct field nomos_lang_rust_scan::ScannedItem::ordinal: u32
+pub struct field nomos_lang_rust_scan::ScannedItem::visibility: Visibility
+pub struct nomos_lang_rust_scan::FactContext
+pub struct nomos_lang_rust_scan::ScanFactProduction
 pub struct nomos_lang_rust_scan::ScannedFile
-
-# re-exports of items declared outside this crate
-pub use determinism::ScanFactProduction
-pub use provider::Encode_Payload
-pub use provider::FactContext
-pub use provider::Materialize_Syntax_Fact
-pub use scan::Scan_Source
-pub use scan::ScannedItem
+pub struct nomos_lang_rust_scan::ScannedItem

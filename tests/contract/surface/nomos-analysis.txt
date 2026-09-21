@@ -2,8 +2,21 @@ pub const fn nomos_analysis::Component::All() -> &'static [Self]
 pub const fn nomos_analysis::Component::Label(self) -> &'static str
 pub const fn nomos_analysis::FactIdentity::Key(&self) -> &FactKey
 pub const fn nomos_analysis::FactKey::At(self, generation: GenerationId) -> FactIdentity
+pub const fn nomos_analysis::GenerationCause::Granularity(&self) -> IncrementalGranularity
+pub const fn nomos_analysis::GuaranteeDigest::Digest(self) -> Digest128
+pub const fn nomos_analysis::InputDigest::Digest(self) -> Digest128
+pub const fn nomos_analysis::InputDigest::From_Digest(digest: Digest128) -> Self
+pub const fn nomos_analysis::MaterializedFact::Generation(&self) -> GenerationId
+pub const fn nomos_analysis::MaterializedFact::Key(&self) -> &FactKey
+pub const fn nomos_analysis::ReadOutcome::Is_Answered(self) -> bool
+pub const fn nomos_analysis::Reader::Context(&self) -> &Context
+pub const nomos_analysis::FactReuse::SCOPE: ReproducibilityScope
+pub const nomos_analysis::FactReuse::STRENGTH: DeterminismStrength
+pub const nomos_analysis::FactReuse::TRACE: TraceEquivalence
 pub enum nomos_analysis::Component
 pub enum nomos_analysis::FactError
+pub enum nomos_analysis::GenerationCause
+pub enum nomos_analysis::ReadOutcome
 pub enum variant nomos_analysis::Component::Configuration
 pub enum variant nomos_analysis::Component::Contract
 pub enum variant nomos_analysis::Component::ContractVersion
@@ -16,11 +29,23 @@ pub enum variant nomos_analysis::Component::Variant
 pub enum variant nomos_analysis::FactError::Absent { identity: Box<FactIdentity>, }
 pub enum variant nomos_analysis::FactError::Backdated { identity: Box<FactIdentity>, current: GenerationId, }
 pub enum variant nomos_analysis::FactError::Superseded { identity: Box<FactIdentity>, invalidated_at: GenerationId, }
+pub enum variant nomos_analysis::GenerationCause::ConfigurationChanged { configuration: ConfigurationId, }
+pub enum variant nomos_analysis::GenerationCause::ProviderChanged { provider: ProviderId, }
+pub enum variant nomos_analysis::GenerationCause::SnapshotReplaced { from: SnapshotId, to: SnapshotId, differing: BTreeSet<SubjectId>, }
+pub enum variant nomos_analysis::GenerationCause::SubjectChanged { subject: SubjectId, granularity: IncrementalGranularity, }
+pub enum variant nomos_analysis::GenerationCause::VariantChanged { variant: BuildVariantId, }
+pub enum variant nomos_analysis::ReadOutcome::Absent
+pub enum variant nomos_analysis::ReadOutcome::Degraded(Applicability)
+pub enum variant nomos_analysis::ReadOutcome::Materialized
+pub enum variant nomos_analysis::ReadOutcome::Superseded
+pub fn nomos_analysis::Condensation_Of(report: &InvalidationReport, store: &MemoryFactStore) -> Vec<RematerializationGroup>
 pub fn nomos_analysis::FactError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_analysis::FactIdentity::Digest(&self) -> Digest128
 pub fn nomos_analysis::FactIdentity::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_analysis::FactKey::Digest(&self) -> Digest128
 pub fn nomos_analysis::FactKey::Parts(&self) -> Vec<Vec<u8>>
+pub fn nomos_analysis::FactPayload::Digest(&self) -> Digest128
+pub fn nomos_analysis::FactPayload::New(schema: SchemaId, bytes: Vec<u8>) -> Self
 pub fn nomos_analysis::FactReader::Dependencies(&self) -> &[Dependency]
 pub fn nomos_analysis::FactReader::Get(&mut self, identity: &FactIdentity) -> Result<&MaterializedFact, FactError>
 pub fn nomos_analysis::FactReader::Require( &mut self, capability: &CapabilityId, subject: &SubjectId, inputs: InputDigest, need: &Requirement, ) -> Result<&MaterializedFact, Applicability>
@@ -28,11 +53,37 @@ pub fn nomos_analysis::FactReader::Require_Any( &mut self, capability: &Capabili
 pub fn nomos_analysis::FactStore::Current(&self, identity: &FactIdentity, at: GenerationId) -> Option<MaterializedFact>
 pub fn nomos_analysis::FactStore::Historical(&self, key: &FactKey) -> Option<(MaterializedFact, Supersession)>
 pub fn nomos_analysis::FactStore::Invalidate(&mut self, cause: &GenerationCause, from: GenerationId) -> InvalidationReport
+pub fn nomos_analysis::GenerationCause::Describe(&self) -> String
+pub fn nomos_analysis::GuaranteeDigest::Of(guarantee: &Guarantee) -> Self
+pub fn nomos_analysis::GuaranteeDigest::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_analysis::InputDigest::Of(parts: &[&[u8]]) -> Self
+pub fn nomos_analysis::InputDigest::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_analysis::InvalidationReport::Invalidated(&self) -> usize
 pub fn nomos_analysis::InvalidationReport::Report(&self) -> String
+pub fn nomos_analysis::MemoryFactStore::Current(&self, identity: &FactIdentity, at: GenerationId) -> Option<MaterializedFact>
+pub fn nomos_analysis::MemoryFactStore::Dependencies_Of(&self, key: &FactKey) -> Vec<Dependency>
+pub fn nomos_analysis::MemoryFactStore::Historical(&self, key: &FactKey) -> Option<(MaterializedFact, Supersession)>
+pub fn nomos_analysis::MemoryFactStore::Invalidate(&mut self, cause: &GenerationCause, from: GenerationId) -> InvalidationReport
+pub fn nomos_analysis::MemoryFactStore::Live(&self) -> usize
+pub fn nomos_analysis::MemoryFactStore::Materializations(&self) -> u32
+pub fn nomos_analysis::MemoryFactStore::Materialize( &mut self, fact: MaterializedFact, dependencies: &[Dependency], ) -> Result<(), FactError>
+pub fn nomos_analysis::MemoryFactStore::New() -> Self
+pub fn nomos_analysis::Reader::Dependencies(&self) -> &[Dependency]
+pub fn nomos_analysis::Reader::Get(&mut self, identity: &FactIdentity) -> Result<&MaterializedFact, FactError>
+pub fn nomos_analysis::Reader::Into_Dependencies(self) -> Vec<Dependency>
+pub fn nomos_analysis::Reader::On( store: &'store MemoryFactStore, registry: &'registry Registry, context: Context, ) -> Self
+pub fn nomos_analysis::Reader::Require( &mut self, capability: &CapabilityId, subject: &SubjectId, inputs: InputDigest, need: &Requirement, ) -> Result<&MaterializedFact, Applicability>
+pub fn nomos_analysis::Reader::Require_Any( &mut self, capability: &CapabilityId, subject: &SubjectId, inputs: InputDigest, need: &Requirement, ) -> Result<(&MaterializedFact, Applicability), Applicability>
+pub fn nomos_analysis::RematerializationGroup::Is_Cycle(&self) -> bool
 pub impl nomos_analysis::FactError implements core::fmt::Display
 pub impl nomos_analysis::FactError implements std::error::Error
 pub impl nomos_analysis::FactIdentity implements core::fmt::Display
+pub impl nomos_analysis::FactReuse implements Strategy
+pub impl nomos_analysis::GuaranteeDigest implements core::fmt::Display
+pub impl nomos_analysis::InputDigest implements core::fmt::Display
+pub impl nomos_analysis::MemoryFactStore implements FactStore
+pub impl nomos_analysis::MemoryFactStore implements sealed::Sealed
+pub impl nomos_analysis::Reader implements FactReader
 pub struct field nomos_analysis::Broadening::applied: IncrementalGranularity
 pub struct field nomos_analysis::Broadening::key: FactKey
 pub struct field nomos_analysis::Broadening::requested: IncrementalGranularity
@@ -40,6 +91,8 @@ pub struct field nomos_analysis::Context::configuration: ConfigurationId
 pub struct field nomos_analysis::Context::generation: GenerationId
 pub struct field nomos_analysis::Context::snapshot: SnapshotId
 pub struct field nomos_analysis::Context::variant: BuildVariantId
+pub struct field nomos_analysis::Dependency::key: FactKey
+pub struct field nomos_analysis::Dependency::outcome: ReadOutcome
 pub struct field nomos_analysis::FactIdentity::generation: GenerationId
 pub struct field nomos_analysis::FactIdentity::key: FactKey
 pub struct field nomos_analysis::FactKey::configuration: ConfigurationId
@@ -51,33 +104,36 @@ pub struct field nomos_analysis::FactKey::provider_version: ContractVersion
 pub struct field nomos_analysis::FactKey::semantic_inputs: InputDigest
 pub struct field nomos_analysis::FactKey::subject: SubjectId
 pub struct field nomos_analysis::FactKey::variant: BuildVariantId
+pub struct field nomos_analysis::FactPayload::bytes: Vec<u8>
+pub struct field nomos_analysis::FactPayload::schema: SchemaId
 pub struct field nomos_analysis::InvalidationReport::broadened: Vec<Broadening>
 pub struct field nomos_analysis::InvalidationReport::cause: GenerationCause
 pub struct field nomos_analysis::InvalidationReport::dependent: Vec<FactKey>
 pub struct field nomos_analysis::InvalidationReport::direct: Vec<FactKey>
 pub struct field nomos_analysis::InvalidationReport::from: GenerationId
 pub struct field nomos_analysis::InvalidationReport::retained: u32
+pub struct field nomos_analysis::MaterializedFact::evidence: EvidenceClass
+pub struct field nomos_analysis::MaterializedFact::guarantee: Guarantee
+pub struct field nomos_analysis::MaterializedFact::identity: FactIdentity
+pub struct field nomos_analysis::MaterializedFact::payload: FactPayload
+pub struct field nomos_analysis::MaterializedFact::snapshot: SnapshotId
+pub struct field nomos_analysis::RematerializationGroup::members: Vec<FactKey>
 pub struct field nomos_analysis::Supersession::cause: String
 pub struct field nomos_analysis::Supersession::invalidated_at: GenerationId
 pub struct nomos_analysis::Broadening
 pub struct nomos_analysis::Context
+pub struct nomos_analysis::Dependency
 pub struct nomos_analysis::FactIdentity
 pub struct nomos_analysis::FactKey
+pub struct nomos_analysis::FactPayload
+pub struct nomos_analysis::FactReuse
+pub struct nomos_analysis::GuaranteeDigest(Digest128)
+pub struct nomos_analysis::InputDigest(Digest128)
 pub struct nomos_analysis::InvalidationReport
+pub struct nomos_analysis::MaterializedFact
+pub struct nomos_analysis::MemoryFactStore
+pub struct nomos_analysis::Reader<'store, 'registry>
+pub struct nomos_analysis::RematerializationGroup
 pub struct nomos_analysis::Supersession
 pub trait nomos_analysis::FactReader
 pub trait nomos_analysis::FactStore: sealed::Sealed
-
-# re-exports of items declared outside this crate
-pub use determinism::FactReuse
-pub use fact::FactPayload
-pub use fact::GuaranteeDigest
-pub use fact::MaterializedFact
-pub use fact::MemoryFactStore
-pub use identity::InputDigest
-pub use reader::ReadOutcome
-pub use reading::Dependency
-pub use reading::Reader
-pub use store::Condensation_Of
-pub use store::GenerationCause
-pub use store::RematerializationGroup

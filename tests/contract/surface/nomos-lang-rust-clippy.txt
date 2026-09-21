@@ -1,12 +1,26 @@
 pub const fn nomos_lang_rust_clippy::Declared_Guarantee() -> Guarantee
+pub const nomos_lang_rust_clippy::LintFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_rust_clippy::LintFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_rust_clippy::LintFactProduction::TRACE: TraceEquivalence
 pub const nomos_lang_rust_clippy::PROVIDER: &str
+pub fn nomos_lang_rust_clippy::ClippyError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_rust_clippy::Discover_Workspace<Launcher: ProgramLauncher, Env: Environment>(root: &Path, launcher: &Launcher, environment: &Env) -> Result<Vec<DiscoveredDiagnostics>, ClippyError>
+pub fn nomos_lang_rust_clippy::Materialize_Workspace<Launcher: ProgramLauncher, Env: Environment>( root: &Path, context: FactContext, launcher: &Launcher, environment: &Env, ) -> Result<Vec<DiagnosticsFact>, ClippyError>
 pub fn nomos_lang_rust_clippy::Provider_Offer() -> ProviderOffer
-
-# re-exports of items declared outside this crate
-pub use determinism::LintFactProduction
-pub use provider::DiagnosticsFact
-pub use provider::FactContext
-pub use provider::Materialize_Workspace
-pub use reading::ClippyError
-pub use reading::Discover_Workspace
-pub use reading::DiscoveredDiagnostics
+pub impl nomos_lang_rust_clippy::ClippyError implements core::fmt::Display
+pub impl nomos_lang_rust_clippy::LintFactProduction implements Strategy
+pub struct field nomos_lang_rust_clippy::ClippyError::reason: String
+pub struct field nomos_lang_rust_clippy::DiagnosticsFact::fact: MaterializedFact
+pub struct field nomos_lang_rust_clippy::DiagnosticsFact::path: String
+pub struct field nomos_lang_rust_clippy::DiagnosticsFact::subject: SubjectId
+pub struct field nomos_lang_rust_clippy::DiscoveredDiagnostics::manifest_relative_root: String
+pub struct field nomos_lang_rust_clippy::DiscoveredDiagnostics::payload: DiagnosticsPayload
+pub struct field nomos_lang_rust_clippy::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_rust_clippy::FactContext::generation: GenerationId
+pub struct field nomos_lang_rust_clippy::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_rust_clippy::FactContext::variant: BuildVariantId
+pub struct nomos_lang_rust_clippy::ClippyError
+pub struct nomos_lang_rust_clippy::DiagnosticsFact
+pub struct nomos_lang_rust_clippy::DiscoveredDiagnostics
+pub struct nomos_lang_rust_clippy::FactContext
+pub struct nomos_lang_rust_clippy::LintFactProduction

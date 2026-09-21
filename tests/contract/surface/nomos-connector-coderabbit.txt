@@ -3,6 +3,9 @@ pub const fn nomos_connector_coderabbit::Declared_Guarantee() -> Guarantee
 pub const nomos_connector_coderabbit::CAPABILITY: &str
 pub const nomos_connector_coderabbit::CONTRACT_VERSION: ContractVersion
 pub const nomos_connector_coderabbit::PROVIDER: &str
+pub const nomos_connector_coderabbit::ReviewFindingProduction::SCOPE: ReproducibilityScope
+pub const nomos_connector_coderabbit::ReviewFindingProduction::STRENGTH: DeterminismStrength
+pub const nomos_connector_coderabbit::ReviewFindingProduction::TRACE: TraceEquivalence
 pub const nomos_connector_coderabbit::SCHEMA: &str
 pub enum nomos_connector_coderabbit::ConnectorError
 pub enum variant nomos_connector_coderabbit::ConnectorError::Fetch(FetchError)
@@ -21,6 +24,10 @@ pub fn nomos_connector_coderabbit::Parse_Payload(bytes: &[u8]) -> Result<Finding
 pub fn nomos_connector_coderabbit::PayloadRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_connector_coderabbit::Payload_Schema() -> SchemaId
 pub fn nomos_connector_coderabbit::Provider_Offer() -> ProviderOffer
+pub fn nomos_connector_coderabbit::ReviewFindingId::As_Str(&self) -> &str
+pub fn nomos_connector_coderabbit::ReviewFindingId::New(value: impl Into<String>) -> Self
+pub fn nomos_connector_coderabbit::ReviewFindingId::Of_Review_Comment(repository: &str, comment_id: u64) -> Self
+pub fn nomos_connector_coderabbit::ReviewFindingId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_connector_coderabbit::Sample_Review_Comment_Response() -> &'static [u8]
 pub fn nomos_connector_coderabbit::Translate_Review_Comment(repository: &str, vendor_bytes: &[u8]) -> Result<FindingPayload, TranslationError>
 pub fn nomos_connector_coderabbit::TranslationError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
@@ -29,6 +36,8 @@ pub impl nomos_connector_coderabbit::ConnectorError implements From<TranslationE
 pub impl nomos_connector_coderabbit::ConnectorError implements core::fmt::Display
 pub impl nomos_connector_coderabbit::FetchError implements core::fmt::Display
 pub impl nomos_connector_coderabbit::PayloadRefusal implements core::fmt::Display
+pub impl nomos_connector_coderabbit::ReviewFindingId implements core::fmt::Display
+pub impl nomos_connector_coderabbit::ReviewFindingProduction implements Strategy
 pub impl nomos_connector_coderabbit::TranslationError implements core::fmt::Display
 pub struct field nomos_connector_coderabbit::FactContext::configuration: ConfigurationId
 pub struct field nomos_connector_coderabbit::FactContext::generation: GenerationId
@@ -52,8 +61,6 @@ pub struct nomos_connector_coderabbit::FetchError
 pub struct nomos_connector_coderabbit::FindingPayload
 pub struct nomos_connector_coderabbit::PayloadRefusal
 pub struct nomos_connector_coderabbit::ReviewFindingFact
+pub struct nomos_connector_coderabbit::ReviewFindingId(String)
+pub struct nomos_connector_coderabbit::ReviewFindingProduction
 pub struct nomos_connector_coderabbit::TranslationError
-
-# re-exports of items declared outside this crate
-pub use determinism::ReviewFindingProduction
-pub use identity::ReviewFindingId

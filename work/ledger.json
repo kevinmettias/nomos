@@ -82915,14 +82915,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-surface-path",
-        "acquired_at": 1790011887,
-        "lease_expires_at": 1790023179
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "C:/Users/kmett/.claude/tools/nomos-surface-scope/nomos-surface-scope.exe",
@@ -82933,7 +82929,28 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/nomos-surface-scope/nomos-surface-scope.exe",
+          "-cwd",
+          "F:/repos/nomos",
+          "-expect",
+          "nomos-ledger,nomos-repo-policy"
+        ],
+        "exit_code": 0,
+        "output_tail": "nomos-surface-scope: 2 snapshot(s) disagree, all of them allowed: (nomos-ledger, nomos-repo-policy)\n",
+        "verified_at": 1790013660,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -85833,16 +85850,36 @@
           "tests/contract/surface/nomos-workflow-orchestration.txt",
           "crates/host/nomos-cli/src/workflow.rs",
           "crates/host/nomos-cli/src/workflow/tests.rs",
-          "crates/orchestration/nomos-workflow-orchestration/src/workflow_step_plan.rs"
+          "crates/orchestration/nomos-workflow-orchestration/src/workflow_step_plan.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/declared_targets.rs",
+          "crates/orchestration/nomos-agent-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-agent-orchestration/src/backend.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/backend_absence.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/backend_selection.rs",
+          "crates/orchestration/nomos-agent-orchestration/src/agent_dispatch_outcome.rs",
+          "crates/host/nomos-api/src/agent/agent_dispatch_response.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run/platform.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/workflow_outcome.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/body/agent_body.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run/dispatch.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/workflow_outcome/dispatch_error.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/workflow_outcome/step_outcome.rs",
+          "crates/host/nomos-api/src/workflow/dispatch_error_response.rs",
+          "crates/host/nomos-api/src/workflow/step_outcome_response.rs",
+          "crates/host/nomos-cli/src/workflow/report.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P40-MODEL-ROUTING-RESOLVER"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-external-review-reconciliation",
+        "acquired_at": 1790012530,
+        "lease_expires_at": 1790023330
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -85883,6 +85920,70 @@
             "crates/orchestration/nomos-workflow-orchestration/src/workflow_step_plan.rs"
           ],
           "widened_at": 1789712650
+        },
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "crates/orchestration/nomos-agent-orchestration/src/declared_targets.rs",
+            "crates/orchestration/nomos-agent-orchestration/Cargo.toml"
+          ],
+          "widened_at": 1790012599
+        },
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "crates/orchestration/nomos-agent-orchestration/src/backend.rs"
+          ],
+          "widened_at": 1790012639
+        },
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "crates/orchestration/nomos-agent-orchestration/src/backend_absence.rs",
+            "crates/orchestration/nomos-agent-orchestration/src/backend_selection.rs",
+            "crates/orchestration/nomos-agent-orchestration/src/agent_dispatch_outcome.rs"
+          ],
+          "widened_at": 1790012709
+        },
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "crates/host/nomos-api/src/agent/agent_dispatch_response.rs"
+          ],
+          "widened_at": 1790013067
+        },
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "crates/orchestration/nomos-workflow-orchestration/src/run/platform.rs",
+            "crates/orchestration/nomos-workflow-orchestration/src/workflow_outcome.rs",
+            "crates/orchestration/nomos-workflow-orchestration/src/body/agent_body.rs",
+            "crates/orchestration/nomos-workflow-orchestration/src/run/dispatch.rs"
+          ],
+          "widened_at": 1790013208
+        },
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "crates/orchestration/nomos-workflow-orchestration/src/workflow_outcome/dispatch_error.rs",
+            "crates/orchestration/nomos-workflow-orchestration/src/workflow_outcome/step_outcome.rs"
+          ],
+          "widened_at": 1790013251
+        },
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "crates/host/nomos-api/src/workflow/dispatch_error_response.rs",
+            "crates/host/nomos-api/src/workflow/step_outcome_response.rs"
+          ],
+          "widened_at": 1790013330
+        },
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "crates/host/nomos-cli/src/workflow/report.rs"
+          ],
+          "widened_at": 1790013445
         }
       ]
     },
@@ -86769,6 +86870,42 @@
           "widened_at": 1789963815
         }
       ]
+    },
+    {
+      "id": "P120-THE-AGENT-HARNESS-PATH-CHECK-IS-GREEN-ONLY-ON-A-MACHINE-THAT-HAS-AN-IGNORED-FILE",
+      "title": "The harness check that every path AGENTS.md names exists passes only where an untracked, gitignored file happens to be present",
+      "why": "Measured 2026-09-21 while finishing P114-SURFACE-PATH-DECLARED-MODULES-STAY-UNRESOLVED-2, whose verification was run in a git worktree checked out at HEAD because a peer had the shared tree red. The full contract suite passes in the shared working tree and fails in that worktree, and the failing test is checks::Test_Every_Path_The_Harness_Names_Should_Exist with the message that AGENTS.md names .cargo/xvpe-local.toml, which is not in the tree.\n\nThe cause is that the path is not in any tree but this one. .gitignore line 42 ignores the whole /.cargo/ directory, so .cargo/xvpe-local.toml is untracked and exists on this machine only because somebody created it. A fresh clone does not have it, the worktree did not have it, and CI does not have it. The harness asserts on-disk presence, so it reports the state of the developer machine rather than the state of the repository.\n\nThis is the failure OD-GATE-001 is about, arriving from the other direction. A skipped test reports ok; this one reports ok because a local artifact stands in for a committed one. The check was added so that AGENTS.md could not name a path that had gone away, and against a fresh checkout it has never been able to answer that question for this path.\n\nIt is currently unseen rather than tolerated. Real CI has been dark since a GitHub billing failure on 2026-09-07, so no gate step has run against a clean checkout since before the AGENTS.md paragraph that names this path was written. The moment CI is restored this is red, and it will be read as a regression caused by whatever commit happens to be in flight.\n\nThe path is named by the XVPE crossing paragraph, which says the override is deliberately not named so cargo cannot discover it and is never the governing form, citing OD-PLATFORM-004. So the prose is correct and the check is wrong about what it can prove: AGENTS.md is describing a file that is absent by design, and the harness has no way to say so.",
+      "done_when": "The harness can no longer be made green by a file that is not in the repository. Every path AGENTS.md names is judged against what a fresh checkout has rather than against what happens to be on this disk, so a path that is untracked or ignored either fails the check or is declared optional in a form the check reads, and no third state exists where an untracked file quietly satisfies it.\n\nProven by running the harness in a tree that does not have .cargo/xvpe-local.toml and getting the same answer as in a tree that does. A run in the shared working tree alone is not evidence, because that tree is the one that has the file, and agreeing with itself is what the defect already does.\n\nThe resolution must keep the property the check was added for: a path AGENTS.md names that has genuinely gone away still fails. A fix that answers the new question by no longer asking the old one is refused, and a test covers the removed-path case so the exemption cannot be widened into a blanket one.\n\nAGENTS.md keeps saying what OD-PLATFORM-004 decided about the override. If the prose moves at all it says the same thing, because the prose is not what is wrong here.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/agent_harness.rs",
+          "AGENTS.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

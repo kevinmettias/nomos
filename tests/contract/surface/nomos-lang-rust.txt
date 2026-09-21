@@ -1,5 +1,6 @@
 pub const fn nomos_lang_rust::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_rust::ItemKind::Label(self) -> &'static str
+pub const fn nomos_lang_rust::reachability::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_rust::rollup::Ceiling() -> Guarantee
 pub const fn nomos_lang_rust::rollup::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_rust::rollup::Outcome::Is_Answered(self) -> bool
@@ -7,6 +8,9 @@ pub const fn nomos_lang_rust::rollup::Outcome::Label(self) -> &'static str
 pub const nomos_lang_rust::LANGUAGE: &str
 pub const nomos_lang_rust::PROVIDER: &str
 pub const nomos_lang_rust::RUST_EXTENSION: &str
+pub const nomos_lang_rust::SyntaxFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_rust::SyntaxFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_rust::SyntaxFactProduction::TRACE: TraceEquivalence
 pub const nomos_lang_rust::rollup::APPROXIMATE: &str
 pub const nomos_lang_rust::rollup::CAPABILITY: &str
 pub const nomos_lang_rust::rollup::CONTRACT_VERSION: ContractVersion
@@ -19,6 +23,7 @@ pub enum nomos_lang_rust::Materialization
 pub enum nomos_lang_rust::Reading
 pub enum nomos_lang_rust::Recognition
 pub enum nomos_lang_rust::Visibility
+pub enum nomos_lang_rust::reachability::ReachabilityReading
 pub enum nomos_lang_rust::rollup::Outcome
 pub enum variant nomos_lang_rust::ItemKind::Constant
 pub enum variant nomos_lang_rust::ItemKind::Enum
@@ -45,18 +50,25 @@ pub enum variant nomos_lang_rust::Visibility::NotApplicable
 pub enum variant nomos_lang_rust::Visibility::Private
 pub enum variant nomos_lang_rust::Visibility::Public
 pub enum variant nomos_lang_rust::Visibility::Restricted { scope: String, }
+pub enum variant nomos_lang_rust::reachability::ReachabilityReading::Parsed(Vec<ReachabilitySite>)
+pub enum variant nomos_lang_rust::reachability::ReachabilityReading::Unparseable(ParseFailure)
 pub enum variant nomos_lang_rust::rollup::Outcome::Approximate
 pub enum variant nomos_lang_rust::rollup::Outcome::Read
 pub enum variant nomos_lang_rust::rollup::Outcome::Unreachable
+pub fn nomos_lang_rust::Encode_Payload(facts: &Facts) -> Vec<u8>
 pub fn nomos_lang_rust::Facts::Has_No_Declarations(&self) -> bool
 pub fn nomos_lang_rust::Item::Qualified_Name(&self) -> String
 pub fn nomos_lang_rust::ItemKind::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_rust::Materialize_Syntax_Fact(subject: SubjectId, source: &str, context: FactContext) -> Materialization
 pub fn nomos_lang_rust::ParseFailure::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_lang_rust::Provider_Offer() -> ProviderOffer
 pub fn nomos_lang_rust::Read_Source(source: &str) -> Reading
 pub fn nomos_lang_rust::Recognition::Of_Path(path: &str) -> Self
 pub fn nomos_lang_rust::Visibility::Label(&self) -> String
 pub fn nomos_lang_rust::Visibility::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_rust::reachability::Materialize_Reachability_Fact(subject: SubjectId, source: &str, context: FactContext) -> Materialization
+pub fn nomos_lang_rust::reachability::Provider_Offer() -> ProviderOffer
+pub fn nomos_lang_rust::reachability::Read_Reachability(source: &str) -> ReachabilityReading
 pub fn nomos_lang_rust::rollup::Capability() -> CapabilityId
 pub fn nomos_lang_rust::rollup::Capability_Contract() -> CapabilityContract
 pub fn nomos_lang_rust::rollup::Encode_Index(index: &Index) -> Vec<u8>
@@ -72,7 +84,12 @@ pub fn nomos_lang_rust::rollup::Provider_Offer() -> ProviderOffer
 pub impl nomos_lang_rust::ItemKind implements core::fmt::Display
 pub impl nomos_lang_rust::ParseFailure implements core::fmt::Display
 pub impl nomos_lang_rust::ParseFailure implements std::error::Error
+pub impl nomos_lang_rust::SyntaxFactProduction implements Strategy
 pub impl nomos_lang_rust::Visibility implements core::fmt::Display
+pub struct field nomos_lang_rust::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_rust::FactContext::generation: GenerationId
+pub struct field nomos_lang_rust::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_rust::FactContext::variant: BuildVariantId
 pub struct field nomos_lang_rust::Facts::items: Vec<Item>
 pub struct field nomos_lang_rust::Facts::unexpanded: u32
 pub struct field nomos_lang_rust::Item::documentation: Option<String>
@@ -105,9 +122,11 @@ pub struct field nomos_lang_rust::rollup::Module::subject: SubjectId
 pub struct field nomos_lang_rust::rollup::Rolled::dependencies: Vec<Dependency>
 pub struct field nomos_lang_rust::rollup::Rolled::index: Index
 pub struct field nomos_lang_rust::rollup::Rolled::key: FactKey
+pub struct nomos_lang_rust::FactContext
 pub struct nomos_lang_rust::Facts
 pub struct nomos_lang_rust::Item
 pub struct nomos_lang_rust::ParseFailure
+pub struct nomos_lang_rust::SyntaxFactProduction
 pub struct nomos_lang_rust::rollup::Against<'a>
 pub struct nomos_lang_rust::rollup::Index
 pub struct nomos_lang_rust::rollup::IndexEntry
@@ -115,9 +134,3 @@ pub struct nomos_lang_rust::rollup::Member
 pub struct nomos_lang_rust::rollup::MemberReading
 pub struct nomos_lang_rust::rollup::Module
 pub struct nomos_lang_rust::rollup::Rolled
-
-# re-exports of items declared outside this crate
-pub use determinism::SyntaxFactProduction
-pub use provider::Encode_Payload
-pub use provider::FactContext
-pub use provider::Materialize_Syntax_Fact

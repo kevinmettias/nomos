@@ -59,6 +59,10 @@ pub fn nomos_capability::contract_testing::Assert_Stands_With_No_Provider( contr
 pub fn nomos_capability::contract_testing::Declared_Registry(contract: CapabilityContract) -> Registry
 pub impl nomos_capability::RegistryError implements core::fmt::Display
 pub impl nomos_capability::RegistryError implements std::error::Error
+pub struct field nomos_capability::CapabilityContract::ceiling: Guarantee
+pub struct field nomos_capability::CapabilityContract::id: CapabilityId
+pub struct field nomos_capability::CapabilityContract::summary: String
+pub struct field nomos_capability::CapabilityContract::version: ContractVersion
 pub struct field nomos_capability::ProviderOffer::capability: CapabilityId
 pub struct field nomos_capability::ProviderOffer::guarantee: Guarantee
 pub struct field nomos_capability::ProviderOffer::provider: ProviderId
@@ -71,11 +75,9 @@ pub struct field nomos_capability::Requirement::preferred: Option<ProviderId>
 pub struct field nomos_capability::Requirement::version: ContractVersion
 pub struct field nomos_capability::Selection::alternatives: Vec<ProviderOffer>
 pub struct field nomos_capability::Selection::chosen: ProviderOffer
+pub struct nomos_capability::CapabilityContract
 pub struct nomos_capability::ProviderOffer
 pub struct nomos_capability::Registry
 pub struct nomos_capability::RegistryError
 pub struct nomos_capability::Requirement
 pub struct nomos_capability::Selection
-
-# re-exports of items declared outside this crate
-pub use contract::CapabilityContract

@@ -12,6 +12,9 @@ pub const fn nomos_workspace::WorkspaceChangeSet::Source(&self) -> ChangeSource
 pub const fn nomos_workspace::WorkspaceSnapshot::Configuration(&self) -> ConfigurationId
 pub const fn nomos_workspace::WorkspaceSnapshot::Variant(&self) -> &BuildVariant
 pub const nomos_workspace::SNAPSHOT_SCHEMA: &str
+pub const nomos_workspace::SnapshotSerialization::SCOPE: ReproducibilityScope
+pub const nomos_workspace::SnapshotSerialization::STRENGTH: DeterminismStrength
+pub const nomos_workspace::SnapshotSerialization::TRACE: TraceEquivalence
 pub enum nomos_workspace::Applied
 pub enum nomos_workspace::Change
 pub enum nomos_workspace::ChangeSource
@@ -63,6 +66,7 @@ pub fn nomos_workspace::WorkspaceSnapshot::Length(&self) -> usize
 pub fn nomos_workspace::WorkspaceSnapshot::Members(&self) -> Vec<Member>
 pub fn nomos_workspace::WorkspaceSnapshot::Of(variant: BuildVariant, configuration: ConfigurationId) -> Self
 pub impl nomos_workspace::ChangeSource implements core::fmt::Display
+pub impl nomos_workspace::SnapshotSerialization implements Strategy
 pub impl nomos_workspace::WorkspaceError implements From<StoreError>
 pub impl nomos_workspace::WorkspaceError implements core::fmt::Display
 pub impl nomos_workspace::WorkspaceError implements std::error::Error
@@ -77,9 +81,7 @@ pub struct field nomos_workspace::Member::path: String
 pub struct nomos_workspace::BuildVariant
 pub struct nomos_workspace::Effect
 pub struct nomos_workspace::Member
+pub struct nomos_workspace::SnapshotSerialization
 pub struct nomos_workspace::Workspace
 pub struct nomos_workspace::WorkspaceChangeSet
 pub struct nomos_workspace::WorkspaceSnapshot
-
-# re-exports of items declared outside this crate
-pub use determinism::SnapshotSerialization

@@ -3,7 +3,7 @@ id: OD-GATE-002
 type: decision
 title: The public surface check is derived in this workspace rather than by a tool nobody has
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - gate
@@ -140,6 +140,61 @@ Measured when the grain changed: fifteen names in three crates were being droppe
 and twelve in `nomos-contracts` from the macro above. Three snapshots moved for one
 comparison, which is the shape of the defect — it was never about one crate.
 
+## Version 3: A Path Attribute Is Not A Concession
+
+`P114-SURFACE-PATH-DECLARED-MODULES-STAY-UNRESOLVED-2`. A module declared with
+`#[path = "…"]` is known to the language by the name its `mod` writes and lives in the file
+the attribute names. The reader in `tests/contract/src/reading/module_tree.rs` knew only the
+two ordinary layouts, `name.rs` and `name/mod.rs`. It found no file, registered the module
+holding nothing, and every route through it failed to resolve.
+
+**A same-crate module declared with a path attribute now resolves.** The file the attribute
+names is tried first, against the directory the *declaring* file sits in — the base the
+language uses, and not the one that module's other children resolve against. An attribute
+naming a file that is not there falls through to the two layouts rather than being taken at
+its word, so a declaration that genuinely cannot be followed is still reported as it was.
+
+Two spellings were in the tree and reading the attribute only fixed one. Where the attribute
+sits on its own line above the `mod`, the walk already saw the `mod` and needed only the
+file. Where the two are written together — `#[path = "fact_reuse.rs"] mod determinism;` — the
+line opens with an attribute, so no declaration keyword starts it and the walk steps over the
+whole line: the module was never a child, and supplying its file fixed nothing. The first
+repair without the second measures as working on thirteen crates out of fourteen, which is
+the kind of result that gets believed. `nomos-analysis` is the fourteenth and writes all
+fifteen of its sites that way.
+
+**This was a defect, not a concession, so the version 1 list is complete without it.** That
+list says what a source-level reading gives up against rustdoc's resolution: glob targets,
+another crate's declarations, macro expansions, `#[cfg]` branches, blanket impls, aliases. A
+path attribute is none of them. It is a plain module of this crate, written here on purpose
+at 156 sites across 18 crates, and the reader did not know the third layout.
+`P22-REACHABILITY-PATH-ATTR` had already fixed the same blind spot in `Declared_Modules`, a
+different reader — which is what makes this a defect with a precedent rather than a limit
+with a reason.
+
+**The final claim above was false for a type reached that way, and is now true.** Adding a
+variant, a public field, a method, or changing a signature on such a type changed no
+committed file. The re-exported *name* was reported in the unresolved section, so adding or
+removing the name still failed the test while everything hanging off it stayed invisible —
+the same shape version 2 found for the cross-crate case, true of every name somebody happened
+to test.
+
+Measured at the repair, and against the tree rather than against the numbers the item was
+filed with, which had moved: 27 snapshots carried an unresolved section holding 188 entries
+between them, of which 123 named a module their own crate declares with a path attribute.
+Seventy-five of those cleared here and the twelve snapshots that held them went to none —
+`nomos-lang-rust-compiler` 18, `nomos-analysis` 12, `nomos-lang-rust-cargo` and
+`nomos-lang-rust-clippy` and `nomos-lang-go-modules` 7 each, `nomos-lang-rust-scan` and
+`nomos-lang-rust-deny` 6 each, `nomos-lang-rust` and `nomos-lang-go` 4 each,
+`nomos-connector-coderabbit` 2, `nomos-capability` and `nomos-workspace` 1 each. The other 48
+are `nomos-ledger` and `nomos-repo-policy`, whose snapshots are reserved by other live items
+and stay stale until their holders re-bless them.
+
+What the twelve gained is the point rather than what they lost. `pub use
+contract::CapabilityContract` was one bare line and is now the struct with its four public
+fields; `pub use determinism::SnapshotSerialization` is now the struct, its three associated
+constants and the `Strategy` it implements.
+
 ## Blessing Is Not A Passing Run
 
 `NOMOS_SURFACE_BLESS` rewrites the snapshots and then fails. A bless that passed would be a
@@ -159,4 +214,7 @@ independent readings that agree are worth more than one authoritative one.
 
 Version 1 closed by `P9-PUBLIC-API`. Version 2 closed by `P11-REEXPORT-GRAIN`, which
 re-authored `P11-REEXPORT-SURFACE` once the reading found the defect in three crates rather
-than the one it was opened for.
+than the one it was opened for. Version 3 closed by
+`P114-SURFACE-PATH-DECLARED-MODULES-STAY-UNRESOLVED-2`, itself a re-author of
+`P114-SURFACE-PATH-DECLARED-MODULES-STAY-UNRESOLVED` with two snapshots dropped from its
+territory because live items held them.

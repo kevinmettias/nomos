@@ -3,6 +3,9 @@ pub const fn nomos_lang_go::ItemKind::Label(self) -> &'static str
 pub const nomos_lang_go::GO_EXTENSION: &str
 pub const nomos_lang_go::LANGUAGE: &str
 pub const nomos_lang_go::PROVIDER: &str
+pub const nomos_lang_go::SyntaxFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_go::SyntaxFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_go::SyntaxFactProduction::TRACE: TraceEquivalence
 pub enum nomos_lang_go::ItemKind
 pub enum nomos_lang_go::Materialization
 pub enum nomos_lang_go::Reading
@@ -25,9 +28,11 @@ pub enum variant nomos_lang_go::Recognition::Unrecognized { extension: Option<St
 pub enum variant nomos_lang_go::Visibility::NotApplicable
 pub enum variant nomos_lang_go::Visibility::Private
 pub enum variant nomos_lang_go::Visibility::Public
+pub fn nomos_lang_go::Encode_Payload(facts: &Facts) -> Vec<u8>
 pub fn nomos_lang_go::Facts::Has_No_Declarations(&self) -> bool
 pub fn nomos_lang_go::Item::Qualified_Name(&self) -> String
 pub fn nomos_lang_go::ItemKind::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_go::Materialize_Syntax_Fact(subject: SubjectId, source: &str, context: FactContext) -> Materialization
 pub fn nomos_lang_go::ParseFailure::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_lang_go::Provider_Offer() -> ProviderOffer
 pub fn nomos_lang_go::Read_Source(source: &str) -> Reading
@@ -38,7 +43,12 @@ pub fn nomos_lang_go::Visibility::fmt(&self, formatter: &mut core::fmt::Formatte
 pub impl nomos_lang_go::ItemKind implements core::fmt::Display
 pub impl nomos_lang_go::ParseFailure implements core::fmt::Display
 pub impl nomos_lang_go::ParseFailure implements std::error::Error
+pub impl nomos_lang_go::SyntaxFactProduction implements Strategy
 pub impl nomos_lang_go::Visibility implements core::fmt::Display
+pub struct field nomos_lang_go::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_go::FactContext::generation: GenerationId
+pub struct field nomos_lang_go::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_go::FactContext::variant: BuildVariantId
 pub struct field nomos_lang_go::Facts::items: Vec<Item>
 pub struct field nomos_lang_go::Facts::unexpanded: u32
 pub struct field nomos_lang_go::Item::documentation: Option<String>
@@ -51,12 +61,8 @@ pub struct field nomos_lang_go::Item::visibility: Visibility
 pub struct field nomos_lang_go::ParseFailure::column: usize
 pub struct field nomos_lang_go::ParseFailure::line: usize
 pub struct field nomos_lang_go::ParseFailure::message: String
+pub struct nomos_lang_go::FactContext
 pub struct nomos_lang_go::Facts
 pub struct nomos_lang_go::Item
 pub struct nomos_lang_go::ParseFailure
-
-# re-exports of items declared outside this crate
-pub use determinism::SyntaxFactProduction
-pub use provider::Encode_Payload
-pub use provider::FactContext
-pub use provider::Materialize_Syntax_Fact
+pub struct nomos_lang_go::SyntaxFactProduction
