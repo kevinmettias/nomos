@@ -210,6 +210,50 @@ fn Test_Two_Policies_Over_One_Source_Should_Differ_In_The_Policy_Alone()
     assert_eq!(one.instrument, other.instrument);
 }
 
+/// One tree, two tolerances: raising or lowering what a baseline entry accepts must move
+/// the policy identity and nothing else.
+///
+/// `P109-F`. Until it, `Baseline_Parts` hashed a debt's rule, subject and rationale and not
+/// its allowance, so these two policies digested alike. A comparison reads equal policy
+/// digests as "both sides were judged under the same policy" and attributes any difference
+/// in findings to the repository -- so a repository that raised or lowered a tolerance
+/// between two runs got a report saying its source had changed, which is the failure class
+/// `OD-GATE-031` exists to prevent.
+///
+/// Asserted on the digest rather than on the policy, because the two policies were never
+/// equal: `accepted_occurrence_count` reaches `BaselineDebt::allowance` perfectly well and
+/// the run tolerates the right number of occurrences either way. The omission was only ever
+/// visible in what the run *recorded* about the policy, which is why no test of the policy
+/// could have found it.
+///
+/// Two counts rather than a count against an absent one, so that neither side is the
+/// `Unbounded` case. An entry with no `accepted_occurrence_count` at all differs from one
+/// with a count in a second way -- the variant, not just the number -- and would pass this
+/// test even if only the variant were hashed.
+#[test]
+fn Test_Two_Allowances_Over_One_Baseline_Entry_Should_Differ_In_The_Policy_Alone()
+{
+    let accepts_one = Root_With_Policy(
+        RootName("provenance-allowance-one"),
+        PolicyText(r#"{ "baseline": [ { "rule": "todo-format", "path": "src/legacy.rs", "rationale": "adopted", "accepted_occurrence_count": 1 } ] }"#),
+    );
+    let accepts_two = Root_With_Policy(
+        RootName("provenance-allowance-two"),
+        PolicyText(r#"{ "baseline": [ { "rule": "todo-format", "path": "src/legacy.rs", "rationale": "adopted", "accepted_occurrence_count": 2 } ] }"#),
+    );
+
+    let one = Provenance_Over(&accepts_one, Blocking_Sources(), &RuleSelector::default());
+    let two = Provenance_Over(&accepts_two, Blocking_Sources(), &RuleSelector::default());
+
+    assert_eq!(one.source, two.source, "the same files were judged on both sides");
+    assert_ne!(
+        one.policy, two.policy,
+        "two baseline entries accepting different numbers of occurrences judge differently, so they must not record one identity"
+    );
+    assert_eq!(one.selection, two.selection);
+    assert_eq!(one.instrument, two.instrument);
+}
+
 /// One tree, two selections: a side told to look at less must be distinguishable from a
 /// side that looked at everything and found less.
 #[test]

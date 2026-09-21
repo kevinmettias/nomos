@@ -11,7 +11,7 @@ use nomos_platform::Timestamp;
 use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 
-use crate::policy::{BaselineDebt, GatePolicyFile, RuleCalibration, Suppression};
+use crate::policy::{BaselineAllowance, BaselineDebt, GatePolicyFile, RuleCalibration, Suppression};
 use crate::{CoveragePolicy, GateCommand, SuppressionDisposition};
 
 /// Every file this run judged, by path and content.
@@ -129,9 +129,37 @@ fn Baseline_Parts(entries: &[BaselineDebt]) -> Vec<Vec<u8>>
         parts.push(debt.rule.As_Str().as_bytes().to_vec());
         parts.push(debt.subject.Digest().Bytes().to_vec());
         parts.push(debt.rationale.as_bytes().to_vec());
+        parts.extend(Allowance_Parts(debt.allowance));
     }
 
     return parts;
+}
+
+/// How much one baseline entry accepted, as bytes.
+///
+/// Hashed because it decides the judgment. `BaselinePolicy::Tolerating` reads it to say
+/// whether a finding is within what the entry accepted or exceeds it, so two policies
+/// differing only here judge differently -- and until `P109-F` they digested alike, which
+/// made a comparison attribute a raised or lowered tolerance to the repository instead of to
+/// the policy. That is the failure class `OD-GATE-031` exists to stop.
+///
+/// Not the same question as `declared_path`, which is deliberately still absent from this
+/// digest: that is display material, and hashing it would make two spellings of one entry
+/// digest differently. `rationale` is display material too and is hashed, which is the
+/// inconsistency that showed this was an omission rather than a decision.
+///
+/// Two parts rather than one, and a written-out tag rather than a number, for the reason
+/// [`Disposition_Tag`] gives: `Unbounded` must not be able to collide with any `AtMost`
+/// count, and adding a variant must fail to compile here rather than hash to whatever the
+/// last arm happened to be. `nomos_model::Digest_Of_Parts` length-prefixes, so the tag alone
+/// already separates them and the count is carried beside it rather than encoded into it.
+fn Allowance_Parts(allowance: BaselineAllowance) -> Vec<Vec<u8>>
+{
+    return match allowance
+    {
+        BaselineAllowance::Unbounded => vec![b"allowance-unbounded".to_vec()],
+        BaselineAllowance::AtMost(count) => vec![b"allowance-at-most".to_vec(), count.to_be_bytes().to_vec()],
+    };
 }
 
 /// Every field of one calibration that decides which rule it covers, in policy order.

@@ -78409,11 +78409,13 @@
       "territory": {
         "resolution": "File",
         "paths": [
-          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs"
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/provenance.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/tests.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -78428,11 +78430,42 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-gate-orchestration",
+          "--lib",
+          "gate_environment"
+        ],
+        "exit_code": 0,
+        "output_tail": "ding ... ok\ntest gate_environment::tests::Test_Run_Gate_Should_Record_No_Reason_When_It_Reached_A_Verdict ... ok\ntest gate_environment::tests::Test_Run_Gate_Should_Pass_When_A_Phase_Approval_Covers_Every_Blocking_Finding ... ok\n\ntest result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 139 filtered out; finished in 9.50s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.50s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-a1fbaad3e9313179.exe)\n",
+        "verified_at": 1790035057,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "38ed78a0d0197fee3172ba8abd7c8a8231f8db61"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-policy-digest",
+          "added": [
+            "crates/orchestration/nomos-gate-orchestration/src/gate_environment/provenance.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/gate_environment/tests.rs"
+          ],
+          "widened_at": 1790034824
+        }
+      ]
     },
     {
       "id": "P111-EIGHT-PHASE-GATE-ORCH",
