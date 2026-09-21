@@ -86459,6 +86459,72 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P119-THE-LOCAL-GATE-EXECUTOR-READS-THE-GUARD-THE-DERIVATION-DISCARDS",
+      "title": "A second executor of the canonical gate step set, giving every step one of the three values OD-GATE-033 decided",
+      "why": "OD-GATE-033 decided the canonical model is .github/workflows/gate.yml itself, decided that a local execution gives every step one of Executed, Unavailable or Refused, enumerated the fifteen steps against that file, and authorized a second executor as its own item because it touches the CLI and the ledger rather than those records. This is that item, and it builds the ledger half.\n\nThe gap the record measured is exact and still true at 4e255535. Nothing in this workspace reads a step guard. A search of crates and tests for matrix.os returns nothing. Find_Run in gate_unknown.rs moves between steps on the two name spellings and returns the first run: inside the one it wants, ignoring every other key, and the workflow says so at the Lint step and calls that deliberate for what work finish needs. Derive_Step therefore answers for one named step and cannot answer for the set.\n\nThe consequence the record names is what this item must not reproduce: an executor projected from the workflow by that derivation would treat Determinism as an ordinary step, because the only thing distinguishing it is the key the reader discards. On a Linux host it would either run a Windows-only step's command or skip it, and a skip reported as a clean result is what the Portability floor step already refuses for its own subject, and what OD-GATE-001 and OD-GATE-020 are about one level up.\n\nThe execution half needs no new port. ProgramLauncher already exists in nomos-platform, and finish/gate_step.rs already derives one step and runs it through that port with Command_From_Argv and Ran_To_Completion. That file belongs to another item's territory and is read here as the pattern, not edited.\n\nMeasured host conditions at this revision, which the record's own table states and which were re-measured for it: fifteen steps, four unguarded (Show toolchain, Install cargo-deny, Boundaries, Required projections), ten guarded to ubuntu-latest, one guarded to windows-latest (Determinism).",
+      "done_when": "The whole step set is derived from the workflow, in file order, each step carrying its name, the guard it declares, and either the argv its run: line yields or the refusal that says why none could be derived. The reader stays the closed subset gate_unknown.rs already is: a guard spelling it does not implement refuses that step rather than guessing which leg the step selects, and Derive_Step keeps answering for one named step exactly as it does now, because work finish depends on it.\n\nGiven a host, every step in the set carries exactly one of the three values OD-GATE-033 decided. Executed carries the exit code the step really exited with. Unavailable names the host that excluded it and is never a pass. Refused carries the cause, and GateUnknown's existing three causes are reused rather than a fourth vocabulary being introduced beside them.\n\nA local run reports the set it did not execute, by name. This is the clause the item exists for: a run that judged a subset and reported a clean result is the defect, and the Corpus gates step is the precedent, existing because a passing test's swallowed output made an absence invisible.\n\nThe three values own falsifiers and the mutations are performed rather than assumed. For Unavailable: with the guard reading removed, a Windows-only step must stop being reported as unavailable on a Linux host, and the named test must fail. For Refused: a workflow whose guard is outside the subset must refuse that step, and injecting such a guard must fail a test that otherwise passes. For the unexecuted-set report: removing it must fail a test that reads the report rather than the values.\n\nExecution goes through ProgramLauncher rather than a process API called directly, so a test drives the whole set with a scripted launcher and asserts the three values without running cargo. Whether a real launcher is wired to a command line is not this item's claim: the CLI verb, its rendering and its exit code are a separate item, and this one is finished when the ledger half is real and tested.\n\nThe predicate is cargo test --no-fail-fast -p nomos-ledger -p nomos-contract-tests. It is wider than one crate on purpose, and the reason is territory rather than caution: this item changes the public surface of nomos-ledger and therefore edits tests/contract/surface/nomos-ledger.txt, which nomos-contract-tests is the guard for. A predicate naming only nomos-ledger would leave a blessed-or-stale snapshot unchecked, which is how a commit adding a public item reddens both CI legs.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/gate_unknown.rs",
+          "crates/substrate/nomos-ledger/src/lib.rs",
+          "crates/substrate/nomos-ledger/src/gate/step_guard.rs",
+          "crates/substrate/nomos-ledger/src/gate/derived_step.rs",
+          "crates/substrate/nomos-ledger/src/gate/step_execution.rs",
+          "crates/substrate/nomos-ledger/src/gate/local_gate_run.rs",
+          "crates/substrate/nomos-ledger/tests/local_gate_execution.rs",
+          "tests/contract/surface/nomos-ledger.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "us_gates.rs (target\\debug\\deps\\corpus_gates-091b0abece4b1859.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-5606c231f04a465f.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-d651a45aea22e5aa.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-0e47b0589b38f843.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-d70300b6ebfabb84.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-4dfcd042cb303964.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-a7d1f0df04e0b29f.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-8fea3a6be293a1e3.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-c41774ea79062ac9.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-017992e3a6ec85fb.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-d44a6c1bdbcc2ac7.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_ledger-956e5d6c6b822109.exe)\n     Running tests\\declining_ends_an_item\\main.rs (target\\debug\\deps\\declining_ends_an_item-299bfc8cbb453072.exe)\n     Running tests\\exclusion_holds\\main.rs (target\\debug\\deps\\exclusion_holds-4b229478ca85e751.exe)\n     Running tests\\gate_covers_finish\\main.rs (target\\debug\\deps\\gate_covers_finish-fcce80f5165dd40a.exe)\n     Running tests\\local_gate_execution.rs (target\\debug\\deps\\local_gate_execution-97ec6d9e6af441fc.exe)\n     Running tests\\records_do_not_serialize\\main.rs (target\\debug\\deps\\records_do_not_serialize-b938da8858af6f99.exe)\n     Running tests\\scope_verification_integration.rs (target\\debug\\deps\\scope_verification_integration-cfd9bd94d751c458.exe)\n     Running tests\\widening_is_recorded\\main.rs (target\\debug\\deps\\widening_is_recorded-20e70b973cc6dfe6.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1789980351,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4e25553589318090b6e6ebbc71f9f1e484d313dd"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

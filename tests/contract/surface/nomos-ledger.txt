@@ -53,10 +53,16 @@ pub use exclusion::ExclusionLedger
 pub use exclusion::Reservation
 pub use finish::FinishRefusal
 pub use gate::Derive_Step
+pub use gate::Derive_Steps
+pub use gate::DerivedStep
 pub use gate::GATE_WORKFLOW
 pub use gate::GateOutcome
 pub use gate::GateUnknown
 pub use gate::LINT_STEP
+pub use gate::LocalGateRun
+pub use gate::Run_Gate_Locally
+pub use gate::StepExecution
+pub use gate::StepGuard
 pub use gate::StepName
 pub use gate::WorkflowText
 pub use gate::Workflow_Path

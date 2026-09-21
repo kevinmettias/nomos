@@ -26,6 +26,22 @@ mod step_name;
 pub use workflow_text::WorkflowText;
 pub use step_name::StepName;
 
+// The whole step set, and what a local execution of it produced. Each is a public type of
+// its own, so each has the file the naming rule wants.
+#[path = "gate/step_guard.rs"]
+mod step_guard;
+#[path = "gate/derived_step.rs"]
+mod derived_step;
+#[path = "gate/step_execution.rs"]
+mod step_execution;
+#[path = "gate/local_gate_run.rs"]
+mod local_gate_run;
+
+pub use step_guard::StepGuard;
+pub use derived_step::DerivedStep;
+pub use step_execution::StepExecution;
+pub use local_gate_run::{LocalGateRun, Run_Gate_Locally};
+
 use std::path::Path;
 
 /// Where the gate is defined, relative to the tree the predicate runs in.
@@ -78,6 +94,30 @@ pub enum GateUnknown
         /// What it runs.
         run: String,
     },
+    /// The step's `if:` uses a form this reader does not implement, so which legs run it
+    /// cannot be decided without guessing.
+    ///
+    /// `OD-GATE-033` names this half in as many words: `GateUnknown` already carried the
+    /// three causes for the `run:` half, and the guard half needs the same treatment.
+    GuardOutsideSubset
+    {
+        /// The step.
+        step: String,
+        /// The `if:` text, verbatim, so a refusal can quote what it did not understand.
+        guard: String,
+    },
+    /// The step was admitted and its argv derived, but it never exited on its own, so this
+    /// execution is not evidence about the step's subject.
+    ///
+    /// Distinct from an exit code for the reason `ProgramLauncher` already separates the
+    /// two: "we could not ask" is not "we asked and the answer was no".
+    DidNotRun
+    {
+        /// The step.
+        step: String,
+        /// What became of it instead of an exit.
+        cause: String,
+    },
 }
 
 impl GateUnknown
@@ -99,6 +139,12 @@ impl GateUnknown
                 "the gate's `{step}` step runs `{run}`, which is a script rather than one \
                  command. Deriving an argv from it would mean guessing, and a guessed \
                  predicate is the defect this module exists to close"
+            ),
+            Self::GuardOutsideSubset { step, guard } => format!(
+                "the gate's `{step}` step is guarded by `{guard}`, which this reader does                  not implement. Which legs run it is therefore unknown, and an executor                  that guessed would run a step on the wrong host or drop it silently"
+            ),
+            Self::DidNotRun { step, cause } => format!(
+                "the gate's `{step}` step was admitted here but did not exit on its own                  ({cause}), so this execution says nothing about what it would have found"
             ),
         };
     }
@@ -134,6 +180,118 @@ pub fn Derive_Step<'a>(workflow: impl Into<WorkflowText<'a>>, step: impl Into<St
     };
 
     return Argv_Of(run, step);
+}
+
+/// Every step the workflow declares, in file order, each with its guard and its argv.
+///
+/// Beside [`Derive_Step`] rather than replacing it: that function answers for one named
+/// step and `work finish` depends on exactly that, so it keeps its behaviour including its
+/// indifference to every key but `run:`. This answers the different question `OD-GATE-033`
+/// needs -- what the whole set is, and which legs each member belongs to.
+///
+/// Unreadable parts are carried rather than dropped. A step whose guard is outside the
+/// subset still appears, with [`StepGuard::Outside`]; a step with no derivable command
+/// still appears, with the cause in its `argv`. A reader that dropped either would hand a
+/// caller a set that looks complete and is not.
+#[must_use]
+pub fn Derive_Steps<'a>(workflow: impl Into<WorkflowText<'a>>) -> Vec<DerivedStep>
+{
+    let workflow = workflow.into();
+    let mut parsed: Vec<ParsedStep> = Vec::new();
+
+    for line in workflow.As_Text().lines()
+    {
+        let trimmed = line.trim();
+
+        if let Some(name) = Step_Named(trimmed)
+            && Is_Nested(line)
+        {
+            parsed.push(ParsedStep { name: name.to_owned(), guard: StepGuard::Unguarded, run: None });
+            continue;
+        }
+
+        let Some(current) = parsed.last_mut()
+        else
+        {
+            continue;
+        };
+
+        if let Some(guard) = trimmed.strip_prefix("if:")
+        {
+            current.guard = Guard_From(guard);
+            continue;
+        }
+
+        if let Some(run) = trimmed.strip_prefix("run:")
+            && current.run.is_none()
+        {
+            current.run = Some(run.trim().to_owned());
+        }
+    }
+
+    return parsed.into_iter().map(Derived_From).collect();
+}
+
+/// Whether a line is nested under something, rather than a key of the document itself.
+///
+/// The discriminator is indentation, and it is needed here and not in [`Derive_Step`]. That
+/// function is asked for one step by name and is indifferent to every other `name:` in the
+/// file; this one collects them all, and a workflow's own `name:` key sits at column zero
+/// looking exactly like a step's. Reading it as one produced a sixteenth step called `gate`
+/// with no `run:`, which then reported as a refusal in a local run -- a step the workflow
+/// does not have, named in the set of steps this host did not execute.
+fn Is_Nested(line: &str) -> bool
+{
+    return line.starts_with(char::is_whitespace);
+}
+
+/// One step mid-read, before its `run:` has been turned into an argv or a refusal.
+struct ParsedStep
+{
+    name: String,
+    guard: StepGuard,
+    run: Option<String>,
+}
+
+/// A read step, with its `run:` resolved through the same [`Argv_Of`] the single-step
+/// derivation uses, so the two cannot disagree about what a derivable command is.
+fn Derived_From(parsed: ParsedStep) -> DerivedStep
+{
+    let run = parsed.run.unwrap_or_default();
+    let argv = Argv_Of(&run, StepName::from(parsed.name.as_str()));
+
+    return DerivedStep { name: parsed.name, guard: parsed.guard, argv };
+}
+
+/// The guard an `if:` line declares, or [`StepGuard::Outside`] when it is not the one
+/// spelling this reader implements.
+///
+/// The subset is deliberately one spelling wide. GitHub's expression language admits
+/// boolean operators, functions and contexts this workspace does not evaluate, and a reader
+/// that accepted more of it than it understood would decide a step's legs by accident.
+fn Guard_From(text: &str) -> StepGuard
+{
+    let trimmed = text.trim();
+
+    let Some(operand) = trimmed.strip_prefix("matrix.os ==")
+    else
+    {
+        return StepGuard::Outside(trimmed.to_owned());
+    };
+
+    let quoted = operand.trim();
+    let Some(host) = quoted.strip_prefix("'").and_then(|rest| return rest.strip_suffix("'"))
+    else
+    {
+        return StepGuard::Outside(trimmed.to_owned());
+    };
+
+    if host.is_empty() || host.contains("'")
+    {
+        return StepGuard::Outside(trimmed.to_owned());
+    }
+
+    return StepGuard::Host(host.to_owned());
 }
 
 /// The trimmed argument of the named step's `run:` line, or `None` if the workflow never

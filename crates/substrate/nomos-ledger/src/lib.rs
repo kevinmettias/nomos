@@ -70,7 +70,7 @@ pub use claim::{Claim, ClaimRefusal, RefusalLayer};
 pub use exclusion::{Blocker, ExclusionLedger, Reservation};
 pub use finish::{Abandonment, Declination, Finish_Item, FinishRefusal, Finishing};
 pub use finish::release_outcome::ReleaseOutcome;
-pub use gate::{Derive_Step, GATE_WORKFLOW, GateOutcome, GateUnknown, LINT_STEP, StepName, Workflow_Path, WorkflowText};
+pub use gate::{Derive_Step, Derive_Steps, DerivedStep, GATE_WORKFLOW, GateOutcome, GateUnknown, LINT_STEP, LocalGateRun, Run_Gate_Locally, StepExecution, StepGuard, StepName, Workflow_Path, WorkflowText};
 pub use item::{DEFAULT_LEASE, DeclineReason, Holder, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, MAXIMUM_LEASE, Widening};
 pub use ledger_error::LedgerError;
 pub use nomos_scope_verification::{Normalize_Path, Territory};
