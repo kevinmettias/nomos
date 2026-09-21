@@ -2,10 +2,43 @@ pub const fn nomos_ledger::ClaimRefusal::Is_Dispatch(&self) -> bool
 pub const fn nomos_ledger::ClaimRefusal::Is_Readiness(&self) -> bool
 pub const fn nomos_ledger::ClaimRefusal::Is_Retryable(&self) -> bool
 pub const fn nomos_ledger::ClaimRefusal::Layer(&self) -> Layer
+pub const fn nomos_ledger::FinishRefusal::Has_Judged_The_Work(&self) -> bool
+pub const fn nomos_ledger::ItemState::Is_Claimable(&self) -> bool
+pub const fn nomos_ledger::ItemState::Is_Finished(&self) -> bool
+pub const nomos_ledger::DOCUMENT_FILENAME: &str
+pub const nomos_ledger::GATE_WORKFLOW: &str
+pub const nomos_ledger::LINT_STEP: &str
+pub const nomos_ledger::LOCK_FILENAME: &str
+pub const nomos_ledger::LOCK_STALE_AFTER: Duration
+pub const nomos_ledger::LOCK_WAIT_LIMIT: Duration
+pub const nomos_ledger::MAXIMUM_LEASE: Duration
+pub const nomos_ledger::SCHEMA_VERSION: u32
+pub enum nomos_ledger::AddRefusal
+pub enum nomos_ledger::Blocker
 pub enum nomos_ledger::ClaimRefusal
+pub enum nomos_ledger::FinishRefusal
+pub enum nomos_ledger::GateUnknown
+pub enum nomos_ledger::ItemKind
+pub enum nomos_ledger::ItemOrigin
+pub enum nomos_ledger::ItemState
 pub enum nomos_ledger::LedgerError
 pub enum nomos_ledger::RefusalLayer
 pub enum nomos_ledger::ReleaseOutcome
+pub enum nomos_ledger::StepExecution
+pub enum nomos_ledger::StepGuard
+pub enum variant nomos_ledger::AddRefusal::AlreadyPresent { item: ItemId, }
+pub enum variant nomos_ledger::AddRefusal::AmendmentMisspelled { identifier: String, declared: String, file: String, }
+pub enum variant nomos_ledger::AddRefusal::AmendmentNotPublished { identifier: String, }
+pub enum variant nomos_ledger::AddRefusal::LedgerUnusable { cause: String, }
+pub enum variant nomos_ledger::AddRefusal::RecordPublished { identifier: String, file: String, }
+pub enum variant nomos_ledger::AddRefusal::RecordReserved { identifier: String, item: ItemId, }
+pub enum variant nomos_ledger::AddRefusal::WouldBeInvalid { violations: Vec<String>, }
+pub enum variant nomos_ledger::Blocker::Decision { question: String, }
+pub enum variant nomos_ledger::Blocker::Dependency { items: Vec<ItemId>, }
+pub enum variant nomos_ledger::Blocker::ExternalResource { resource: String, }
+pub enum variant nomos_ledger::Blocker::NeedsSplit
+pub enum variant nomos_ledger::Blocker::Other { detail: String, }
+pub enum variant nomos_ledger::Blocker::TerritoryMismatch { detail: String, }
 pub enum variant nomos_ledger::ClaimRefusal::DependencyDeclined { item: ItemId, dependency: ItemId, state: String, }
 pub enum variant nomos_ledger::ClaimRefusal::DependencyUnmet { item: ItemId, dependency: ItemId, state: String, }
 pub enum variant nomos_ledger::ClaimRefusal::HeldBy { holder: String, until: Timestamp, item: ItemId, }
@@ -16,6 +49,31 @@ pub enum variant nomos_ledger::ClaimRefusal::NoSuchItem { item: ItemId, }
 pub enum variant nomos_ledger::ClaimRefusal::NotClaimable { item: ItemId, state: String, }
 pub enum variant nomos_ledger::ClaimRefusal::StillHeld { item: ItemId, holder: String, until: Timestamp, }
 pub enum variant nomos_ledger::ClaimRefusal::UnknownIndependence { against: ItemId, reason: UnknownReason, }
+pub enum variant nomos_ledger::FinishRefusal::CouldNotRun { item: ItemId, cause: String, }
+pub enum variant nomos_ledger::FinishRefusal::GateFailed { item: ItemId, argv: Vec<String>, exit_code: i32, output_tail: String, }
+pub enum variant nomos_ledger::FinishRefusal::GateUndetermined { item: ItemId, cause: GateUnknown, }
+pub enum variant nomos_ledger::FinishRefusal::NoPredicate { item: ItemId, done_when: String, }
+pub enum variant nomos_ledger::FinishRefusal::NoVerdict { item: ItemId, outcome: ExitOutcome, }
+pub enum variant nomos_ledger::FinishRefusal::NotHeld { refusal: ClaimRefusal, }
+pub enum variant nomos_ledger::FinishRefusal::NotRecorded { cause: String, }
+pub enum variant nomos_ledger::FinishRefusal::PredicateFailed { item: ItemId, exit_code: i32, output_tail: String, }
+pub enum variant nomos_ledger::GateUnknown::DidNotRun { step: String, cause: String, }
+pub enum variant nomos_ledger::GateUnknown::GuardOutsideSubset { step: String, guard: String, }
+pub enum variant nomos_ledger::GateUnknown::NoSuchStep { step: String, }
+pub enum variant nomos_ledger::GateUnknown::NotASingleCommand { step: String, run: String, }
+pub enum variant nomos_ledger::GateUnknown::Unreadable { path: String, cause: String, }
+pub enum variant nomos_ledger::ItemKind::Capability
+pub enum variant nomos_ledger::ItemKind::Cleanup
+pub enum variant nomos_ledger::ItemKind::Correction
+pub enum variant nomos_ledger::ItemKind::Decision
+pub enum variant nomos_ledger::ItemKind::Validation
+pub enum variant nomos_ledger::ItemOrigin::Proposed
+pub enum variant nomos_ledger::ItemOrigin::Required
+pub enum variant nomos_ledger::ItemState::Blocked
+pub enum variant nomos_ledger::ItemState::Claimed
+pub enum variant nomos_ledger::ItemState::Declined { reason: String, }
+pub enum variant nomos_ledger::ItemState::Done
+pub enum variant nomos_ledger::ItemState::Ready
 pub enum variant nomos_ledger::LedgerError::Invalid { violations: Vec<String>, }
 pub enum variant nomos_ledger::LedgerError::Locked { cause: String, }
 pub enum variant nomos_ledger::LedgerError::Malformed { cause: String, }
@@ -25,71 +83,146 @@ pub enum variant nomos_ledger::RefusalLayer::Dispatch
 pub enum variant nomos_ledger::RefusalLayer::Readiness
 pub enum variant nomos_ledger::ReleaseOutcome::Abandoned { reason: String, }
 pub enum variant nomos_ledger::ReleaseOutcome::Finished(VerificationRecord)
+pub enum variant nomos_ledger::StepExecution::Executed { code: i32, }
+pub enum variant nomos_ledger::StepExecution::Refused(GateUnknown)
+pub enum variant nomos_ledger::StepExecution::Unavailable { host: String, }
+pub enum variant nomos_ledger::StepGuard::Host(String)
+pub enum variant nomos_ledger::StepGuard::Outside(String)
+pub enum variant nomos_ledger::StepGuard::Unguarded
+pub fn nomos_ledger::AddRefusal::Describe(&self) -> String
+pub fn nomos_ledger::AddRefusal::from(error: &LedgerError) -> Self
+pub fn nomos_ledger::Board_In(directory: &Path) -> BoardFiles
 pub fn nomos_ledger::Claim::Has_Lapsed(&self, now: Timestamp) -> bool
 pub fn nomos_ledger::ClaimRefusal::Describe(&self) -> String
+pub fn nomos_ledger::Claim_Refusal( document: &LedgerDocument, item: &ItemId, now: Timestamp, ) -> Option<ClaimRefusal>
+pub fn nomos_ledger::DeclineReason::As_Text(&self) -> &'a str
+pub fn nomos_ledger::DeclineReason::from(value: &'a Text) -> Self
+pub fn nomos_ledger::Derive_Step<'a>(workflow: impl Into<WorkflowText<'a>>, step: impl Into<StepName<'a>>) -> Result<Vec<String>, GateUnknown>
+pub fn nomos_ledger::Derive_Steps<'a>(workflow: impl Into<WorkflowText<'a>>) -> Vec<DerivedStep>
+pub fn nomos_ledger::Eligible_Items(document: &LedgerDocument, now: Timestamp) -> Vec<&LedgerItem>
+pub fn nomos_ledger::ExclusionLedger::Claim( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
+pub fn nomos_ledger::ExclusionLedger::Release( &mut self, item: &ItemId, holder: &str, outcome: ReleaseOutcome, ) -> Result<(), ClaimRefusal>
+pub fn nomos_ledger::ExclusionLedger::Renew(&mut self, item: &ItemId, holder: &str, lease: Duration) -> Result<Reservation, ClaimRefusal>
+pub fn nomos_ledger::FileLedger::Add( &mut self, item: &LedgerItem, holder: &str, published: &Territory, amending: &Territory, ) -> Result<(), AddRefusal>
+pub fn nomos_ledger::FileLedger::At(path: impl Into<PathBuf>, filesystem: Files, clock: TimeSource, lock: Lock) -> Self
+pub fn nomos_ledger::FileLedger::Claim( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
+pub fn nomos_ledger::FileLedger::Decline<'a>( &mut self, item: &ItemId, holder: impl Into<Holder<'a>>, reason: impl Into<DeclineReason<'a>>, ) -> Result<(), ClaimRefusal>
+pub fn nomos_ledger::FileLedger::Load(&self) -> Result<LedgerDocument, LedgerError>
+pub fn nomos_ledger::FileLedger::Now(&self) -> Timestamp
+pub fn nomos_ledger::FileLedger::Path(&self) -> &Path
+pub fn nomos_ledger::FileLedger::Read_File(&self, path: &Path) -> Result<String, String>
+pub fn nomos_ledger::FileLedger::Release( &mut self, item: &ItemId, holder: &str, outcome: ReleaseOutcome, ) -> Result<(), ClaimRefusal>
+pub fn nomos_ledger::FileLedger::Renew( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
+pub fn nomos_ledger::FileLedger::Save(&self, document: &LedgerDocument) -> Result<(), LedgerError>
+pub fn nomos_ledger::FileLedger::Take_Over( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
+pub fn nomos_ledger::FileLedger::Validate_Current(&self) -> Result<(), LedgerError>
+pub fn nomos_ledger::FileLedger::Widen( &mut self, item: &ItemId, holder: Holder<'_>, adding: &[String], ) -> Result<Vec<String>, ClaimRefusal>
+pub fn nomos_ledger::FileLedger::With_Lock<Outcome>( &self, holder: &str, modify: impl FnOnce(&mut LedgerDocument) -> Result<Outcome, LedgerError>, ) -> Result<(Outcome, Option<StaleTakeover>), LedgerError>
+pub fn nomos_ledger::FinishRefusal::Describe(&self) -> String
 pub fn nomos_ledger::Finish_Item<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>( ledger: &mut FileLedger<Files, TimeSource, Lock>, launcher: &impl ProgramLauncher, finishing: &Finishing<'_>, working_directory: Option<&Path>, ) -> Result<VerificationRecord, FinishRefusal>
+pub fn nomos_ledger::GateUnknown::Describe(&self) -> String
+pub fn nomos_ledger::Holder::As_Text(&self) -> &'a str
+pub fn nomos_ledger::Holder::from(value: &'a Text) -> Self
+pub fn nomos_ledger::ItemId::As_Text(&self) -> &str
+pub fn nomos_ledger::ItemId::New(value: impl Into<String>) -> Self
+pub fn nomos_ledger::ItemId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_ledger::ItemState::Describe(&self) -> String
 pub fn nomos_ledger::LedgerError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_ledger::LedgerItem::Decline<'a>(&mut self, reason: impl Into<DeclineReason<'a>>, holder: impl Into<Holder<'a>>, at: Timestamp)
+pub fn nomos_ledger::LedgerItem::Has_Active_Claim(&self, now: Timestamp) -> bool
+pub fn nomos_ledger::LedgerItem::Try_Replace_Lapsed_Claim(&mut self, replacement: Claim, now: Timestamp) -> bool
+pub fn nomos_ledger::LedgerItem::Widen<'a>(&mut self, paths: &[String], holder: impl Into<Holder<'a>>, at: Timestamp) -> Vec<String>
+pub fn nomos_ledger::LocalGateRun::Steps(&self) -> &[(String, StepExecution)]
+pub fn nomos_ledger::LocalGateRun::Unexecuted(&self) -> Vec<&str>
 pub fn nomos_ledger::ReleaseOutcome::Record_On(&self, item: &mut LedgerItem, holder: &str, at: Timestamp)
+pub fn nomos_ledger::Run_Gate_Locally( steps: &[DerivedStep], host: &str, launcher: &impl ProgramLauncher, working_directory: Option<&Path>, ) -> LocalGateRun
+pub fn nomos_ledger::StepGuard::Admits(&self, host: &str) -> bool
+pub fn nomos_ledger::StepName::As_Text(&self) -> &'a str
+pub fn nomos_ledger::StepName::from(value: &'a Text) -> Self
+pub fn nomos_ledger::Validate_Document(document: &LedgerDocument, now: Timestamp) -> Vec<String>
+pub fn nomos_ledger::WorkflowText::As_Text(&self) -> &'a str
+pub fn nomos_ledger::WorkflowText::from(value: &'a Text) -> Self
+pub fn nomos_ledger::Workflow_Path(tree: &Path) -> std::path::PathBuf
+pub impl nomos_ledger::AddRefusal implements From<&LedgerError>
+pub impl nomos_ledger::DeclineReason implements From<&'a Text>
+pub impl nomos_ledger::FileLedger implements ExclusionLedger
+pub impl nomos_ledger::Holder implements From<&'a Text>
+pub impl nomos_ledger::ItemId implements core::fmt::Display
 pub impl nomos_ledger::LedgerError implements core::fmt::Display
 pub impl nomos_ledger::LedgerError implements std::error::Error
+pub impl nomos_ledger::StepName implements From<&'a Text>
+pub impl nomos_ledger::WorkflowText implements From<&'a Text>
 pub struct field nomos_ledger::Abandonment::abandoned_at: Timestamp
 pub struct field nomos_ledger::Abandonment::holder: String
 pub struct field nomos_ledger::Abandonment::reason: String
+pub struct field nomos_ledger::BoardFiles::document: PathBuf
+pub struct field nomos_ledger::BoardFiles::lock: PathBuf
 pub struct field nomos_ledger::Claim::acquired_at: Timestamp
 pub struct field nomos_ledger::Claim::holder: String
 pub struct field nomos_ledger::Claim::lease_expires_at: Timestamp
 pub struct field nomos_ledger::Declination::declined_at: Timestamp
 pub struct field nomos_ledger::Declination::holder: String
+pub struct field nomos_ledger::DerivedStep::argv: Result<Vec<String>, GateUnknown>
+pub struct field nomos_ledger::DerivedStep::guard: StepGuard
+pub struct field nomos_ledger::DerivedStep::name: String
 pub struct field nomos_ledger::Finishing::holder: &'a str
 pub struct field nomos_ledger::Finishing::item: &'a ItemId
+pub struct field nomos_ledger::GateOutcome::argv: Vec<String>
+pub struct field nomos_ledger::GateOutcome::exit_code: i32
+pub struct field nomos_ledger::LedgerDocument::items: Vec<LedgerItem>
+pub struct field nomos_ledger::LedgerDocument::schema_version: u32
+pub struct field nomos_ledger::LedgerItem::abandoned: Vec<Abandonment>
+pub struct field nomos_ledger::LedgerItem::blocked: Option<Blocker>
+pub struct field nomos_ledger::LedgerItem::claim: Option<Claim>
+pub struct field nomos_ledger::LedgerItem::declined: Option<Declination>
+pub struct field nomos_ledger::LedgerItem::depends_on: Vec<ItemId>
+pub struct field nomos_ledger::LedgerItem::displaced: Vec<Claim>
+pub struct field nomos_ledger::LedgerItem::done_when: String
+pub struct field nomos_ledger::LedgerItem::id: ItemId
+pub struct field nomos_ledger::LedgerItem::kind: ItemKind
+pub struct field nomos_ledger::LedgerItem::origin: ItemOrigin
+pub struct field nomos_ledger::LedgerItem::state: ItemState
+pub struct field nomos_ledger::LedgerItem::territory: Territory
+pub struct field nomos_ledger::LedgerItem::title: String
+pub struct field nomos_ledger::LedgerItem::verification: Option<VerificationPredicate>
+pub struct field nomos_ledger::LedgerItem::verified: Option<VerificationRecord>
+pub struct field nomos_ledger::LedgerItem::why: String
+pub struct field nomos_ledger::LedgerItem::widened: Vec<Widening>
+pub struct field nomos_ledger::Reservation::expires_at: Timestamp
+pub struct field nomos_ledger::Reservation::holder: String
+pub struct field nomos_ledger::Reservation::item: ItemId
+pub struct field nomos_ledger::VerificationRecord::argv: Vec<String>
+pub struct field nomos_ledger::VerificationRecord::exit_code: i32
+pub struct field nomos_ledger::VerificationRecord::gate: Option<GateOutcome>
+pub struct field nomos_ledger::VerificationRecord::output_tail: String
+pub struct field nomos_ledger::VerificationRecord::revision: Option<String>
+pub struct field nomos_ledger::VerificationRecord::verified_at: Timestamp
+pub struct field nomos_ledger::Widening::added: Vec<String>
+pub struct field nomos_ledger::Widening::holder: String
+pub struct field nomos_ledger::Widening::widened_at: Timestamp
 pub struct nomos_ledger::Abandonment
+pub struct nomos_ledger::BoardFiles
 pub struct nomos_ledger::Claim
 pub struct nomos_ledger::Declination
+pub struct nomos_ledger::DeclineReason<'a>(&'a str)
+pub struct nomos_ledger::DerivedStep
+pub struct nomos_ledger::FileLedger<Files, TimeSource, Lock>
 pub struct nomos_ledger::Finishing<'a>
+pub struct nomos_ledger::GateOutcome
+pub struct nomos_ledger::Holder<'a>(&'a str)
+pub struct nomos_ledger::ItemId(String)
+pub struct nomos_ledger::LedgerDocument
+pub struct nomos_ledger::LedgerItem
+pub struct nomos_ledger::LocalGateRun
+pub struct nomos_ledger::Reservation
+pub struct nomos_ledger::StepName<'a>(&'a str)
+pub struct nomos_ledger::VerificationRecord
+pub struct nomos_ledger::Widening
+pub struct nomos_ledger::WorkflowText<'a>(&'a str)
+pub trait nomos_ledger::ExclusionLedger
 
 # re-exports of items declared outside this crate
-pub use exclusion::Blocker
-pub use exclusion::ExclusionLedger
-pub use exclusion::Reservation
-pub use finish::FinishRefusal
-pub use gate::Derive_Step
-pub use gate::Derive_Steps
-pub use gate::DerivedStep
-pub use gate::GATE_WORKFLOW
-pub use gate::GateOutcome
-pub use gate::GateUnknown
-pub use gate::LINT_STEP
-pub use gate::LocalGateRun
-pub use gate::Run_Gate_Locally
-pub use gate::StepExecution
-pub use gate::StepGuard
-pub use gate::StepName
-pub use gate::WorkflowText
-pub use gate::Workflow_Path
 pub use item::DEFAULT_LEASE
-pub use item::DeclineReason
-pub use item::Holder
-pub use item::ItemId
-pub use item::ItemKind
-pub use item::ItemOrigin
-pub use item::ItemState
-pub use item::LedgerItem
-pub use item::MAXIMUM_LEASE
-pub use item::Widening
 pub use nomos_scope_verification::Normalize_Path
 pub use nomos_scope_verification::Territory
-pub use store::AddRefusal
-pub use store::BoardFiles
-pub use store::Board_In
-pub use store::Claim_Refusal
-pub use store::DOCUMENT_FILENAME
-pub use store::Eligible_Items
-pub use store::FileLedger
-pub use store::LOCK_FILENAME
-pub use store::LOCK_STALE_AFTER
-pub use store::LOCK_WAIT_LIMIT
-pub use store::LedgerDocument
-pub use store::SCHEMA_VERSION
-pub use store::Validate_Document
 pub use verification::VerificationPredicate
-pub use verification::VerificationRecord

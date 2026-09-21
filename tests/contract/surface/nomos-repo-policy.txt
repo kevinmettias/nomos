@@ -7,62 +7,140 @@ pub const fn nomos_repo_policy::test_material::Declared_Guarantee() -> Guarantee
 pub const fn nomos_repo_policy::words::Declared_Guarantee() -> Guarantee
 pub const nomos_repo_policy::architecture::ARCHITECTURE_JSON: &str
 pub const nomos_repo_policy::architecture::PROVIDER: &str
+pub const nomos_repo_policy::goals::GoalsPolicyFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_repo_policy::goals::GoalsPolicyFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_repo_policy::goals::GoalsPolicyFactProduction::TRACE: TraceEquivalence
 pub const nomos_repo_policy::goals::PROVIDER: &str
+pub const nomos_repo_policy::limits::LimitsPolicyFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_repo_policy::limits::LimitsPolicyFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_repo_policy::limits::LimitsPolicyFactProduction::TRACE: TraceEquivalence
 pub const nomos_repo_policy::limits::PROVIDER: &str
+pub const nomos_repo_policy::naming::NamingPolicyFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_repo_policy::naming::NamingPolicyFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_repo_policy::naming::NamingPolicyFactProduction::TRACE: TraceEquivalence
 pub const nomos_repo_policy::naming::PROVIDER: &str
 pub const nomos_repo_policy::scripting::PROVIDER: &str
+pub const nomos_repo_policy::scripting::ScriptingPolicyFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_repo_policy::scripting::ScriptingPolicyFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_repo_policy::scripting::ScriptingPolicyFactProduction::TRACE: TraceEquivalence
 pub const nomos_repo_policy::test_material::PROVIDER: &str
 pub const nomos_repo_policy::test_material::TEST_MATERIAL_JSON: &str
 pub const nomos_repo_policy::words::PROVIDER: &str
+pub const nomos_repo_policy::words::WordsPolicyFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_repo_policy::words::WordsPolicyFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_repo_policy::words::WordsPolicyFactProduction::TRACE: TraceEquivalence
 pub fn nomos_repo_policy::architecture::ArchitectureError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_repo_policy::architecture::Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<ArchitecturePayload, ArchitectureError>
+pub fn nomos_repo_policy::architecture::Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, filesystem: &Fs) -> Result<PolicyFact, ArchitectureError>
 pub fn nomos_repo_policy::architecture::Provider_Offer() -> ProviderOffer
 pub fn nomos_repo_policy::goals::Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<GoalsPolicyPayload, GoalsPolicyError>
 pub fn nomos_repo_policy::goals::GoalsPolicyError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_repo_policy::goals::Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, filesystem: &Fs) -> Result<PolicyFact, GoalsPolicyError>
 pub fn nomos_repo_policy::goals::Provider_Offer() -> ProviderOffer
 pub fn nomos_repo_policy::limits::Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<Vec<PolicyRow>, LimitsPolicyError>
 pub fn nomos_repo_policy::limits::LimitsPolicyError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_repo_policy::limits::Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, filesystem: &Fs) -> Result<PolicyFact, LimitsPolicyError>
 pub fn nomos_repo_policy::limits::Provider_Offer() -> ProviderOffer
 pub fn nomos_repo_policy::naming::Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<Vec<PolicyRow>, NamingPolicyError>
+pub fn nomos_repo_policy::naming::Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, filesystem: &Fs) -> Result<PolicyFact, NamingPolicyError>
 pub fn nomos_repo_policy::naming::NamingPolicyError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_repo_policy::naming::Provider_Offer() -> ProviderOffer
 pub fn nomos_repo_policy::scripting::Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<ScriptingPolicyPayload, ScriptingPolicyError>
+pub fn nomos_repo_policy::scripting::Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, filesystem: &Fs) -> Result<PolicyFact, ScriptingPolicyError>
 pub fn nomos_repo_policy::scripting::Provider_Offer() -> ProviderOffer
 pub fn nomos_repo_policy::scripting::ScriptingPolicyError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_repo_policy::test_material::Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<TestMaterialPolicyPayload, TestMaterialPolicyError>
+pub fn nomos_repo_policy::test_material::Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, filesystem: &Fs) -> Result<PolicyFact, TestMaterialPolicyError>
 pub fn nomos_repo_policy::test_material::Provider_Offer() -> ProviderOffer
 pub fn nomos_repo_policy::test_material::TestMaterialPolicyError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_repo_policy::words::Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Result<WordsPolicyPayload, WordsPolicyError>
+pub fn nomos_repo_policy::words::Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, filesystem: &Fs) -> Result<PolicyFact, WordsPolicyError>
 pub fn nomos_repo_policy::words::Provider_Offer() -> ProviderOffer
 pub fn nomos_repo_policy::words::WordsPolicyError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub impl nomos_repo_policy::architecture::ArchitectureError implements core::fmt::Display
 pub impl nomos_repo_policy::goals::GoalsPolicyError implements core::fmt::Display
+pub impl nomos_repo_policy::goals::GoalsPolicyFactProduction implements Strategy
 pub impl nomos_repo_policy::limits::LimitsPolicyError implements core::fmt::Display
+pub impl nomos_repo_policy::limits::LimitsPolicyFactProduction implements Strategy
 pub impl nomos_repo_policy::naming::NamingPolicyError implements core::fmt::Display
+pub impl nomos_repo_policy::naming::NamingPolicyFactProduction implements Strategy
 pub impl nomos_repo_policy::scripting::ScriptingPolicyError implements core::fmt::Display
+pub impl nomos_repo_policy::scripting::ScriptingPolicyFactProduction implements Strategy
 pub impl nomos_repo_policy::test_material::TestMaterialPolicyError implements core::fmt::Display
 pub impl nomos_repo_policy::words::WordsPolicyError implements core::fmt::Display
+pub impl nomos_repo_policy::words::WordsPolicyFactProduction implements Strategy
 pub struct field nomos_repo_policy::architecture::ArchitectureError::reason: String
+pub struct field nomos_repo_policy::architecture::FactContext::configuration: ConfigurationId
+pub struct field nomos_repo_policy::architecture::FactContext::generation: GenerationId
+pub struct field nomos_repo_policy::architecture::FactContext::snapshot: SnapshotId
+pub struct field nomos_repo_policy::architecture::FactContext::variant: BuildVariantId
+pub struct field nomos_repo_policy::architecture::PolicyFact::fact: MaterializedFact
+pub struct field nomos_repo_policy::architecture::PolicyFact::subject: SubjectId
+pub struct field nomos_repo_policy::goals::FactContext::configuration: ConfigurationId
+pub struct field nomos_repo_policy::goals::FactContext::generation: GenerationId
+pub struct field nomos_repo_policy::goals::FactContext::snapshot: SnapshotId
+pub struct field nomos_repo_policy::goals::FactContext::variant: BuildVariantId
 pub struct field nomos_repo_policy::goals::GoalsPolicyError::reason: String
+pub struct field nomos_repo_policy::goals::PolicyFact::fact: MaterializedFact
+pub struct field nomos_repo_policy::goals::PolicyFact::subject: SubjectId
+pub struct field nomos_repo_policy::limits::FactContext::configuration: ConfigurationId
+pub struct field nomos_repo_policy::limits::FactContext::generation: GenerationId
+pub struct field nomos_repo_policy::limits::FactContext::snapshot: SnapshotId
+pub struct field nomos_repo_policy::limits::FactContext::variant: BuildVariantId
 pub struct field nomos_repo_policy::limits::LimitsPolicyError::reason: String
+pub struct field nomos_repo_policy::limits::PolicyFact::fact: MaterializedFact
+pub struct field nomos_repo_policy::limits::PolicyFact::subject: SubjectId
+pub struct field nomos_repo_policy::naming::FactContext::configuration: ConfigurationId
+pub struct field nomos_repo_policy::naming::FactContext::generation: GenerationId
+pub struct field nomos_repo_policy::naming::FactContext::snapshot: SnapshotId
+pub struct field nomos_repo_policy::naming::FactContext::variant: BuildVariantId
 pub struct field nomos_repo_policy::naming::NamingPolicyError::reason: String
+pub struct field nomos_repo_policy::naming::PolicyFact::fact: MaterializedFact
+pub struct field nomos_repo_policy::naming::PolicyFact::subject: SubjectId
+pub struct field nomos_repo_policy::scripting::FactContext::configuration: ConfigurationId
+pub struct field nomos_repo_policy::scripting::FactContext::generation: GenerationId
+pub struct field nomos_repo_policy::scripting::FactContext::snapshot: SnapshotId
+pub struct field nomos_repo_policy::scripting::FactContext::variant: BuildVariantId
+pub struct field nomos_repo_policy::scripting::PolicyFact::fact: MaterializedFact
+pub struct field nomos_repo_policy::scripting::PolicyFact::subject: SubjectId
 pub struct field nomos_repo_policy::scripting::ScriptingPolicyError::reason: String
+pub struct field nomos_repo_policy::test_material::FactContext::configuration: ConfigurationId
+pub struct field nomos_repo_policy::test_material::FactContext::generation: GenerationId
+pub struct field nomos_repo_policy::test_material::FactContext::snapshot: SnapshotId
+pub struct field nomos_repo_policy::test_material::FactContext::variant: BuildVariantId
+pub struct field nomos_repo_policy::test_material::PolicyFact::fact: MaterializedFact
+pub struct field nomos_repo_policy::test_material::PolicyFact::subject: SubjectId
 pub struct field nomos_repo_policy::test_material::TestMaterialPolicyError::reason: String
+pub struct field nomos_repo_policy::words::FactContext::configuration: ConfigurationId
+pub struct field nomos_repo_policy::words::FactContext::generation: GenerationId
+pub struct field nomos_repo_policy::words::FactContext::snapshot: SnapshotId
+pub struct field nomos_repo_policy::words::FactContext::variant: BuildVariantId
+pub struct field nomos_repo_policy::words::PolicyFact::fact: MaterializedFact
+pub struct field nomos_repo_policy::words::PolicyFact::subject: SubjectId
 pub struct field nomos_repo_policy::words::WordsPolicyError::reason: String
 pub struct nomos_repo_policy::architecture::ArchitectureError
+pub struct nomos_repo_policy::architecture::FactContext
+pub struct nomos_repo_policy::architecture::PolicyFact
+pub struct nomos_repo_policy::goals::FactContext
 pub struct nomos_repo_policy::goals::GoalsPolicyError
+pub struct nomos_repo_policy::goals::GoalsPolicyFactProduction
+pub struct nomos_repo_policy::goals::PolicyFact
+pub struct nomos_repo_policy::limits::FactContext
 pub struct nomos_repo_policy::limits::LimitsPolicyError
+pub struct nomos_repo_policy::limits::LimitsPolicyFactProduction
+pub struct nomos_repo_policy::limits::PolicyFact
+pub struct nomos_repo_policy::naming::FactContext
 pub struct nomos_repo_policy::naming::NamingPolicyError
+pub struct nomos_repo_policy::naming::NamingPolicyFactProduction
+pub struct nomos_repo_policy::naming::PolicyFact
+pub struct nomos_repo_policy::scripting::FactContext
+pub struct nomos_repo_policy::scripting::PolicyFact
 pub struct nomos_repo_policy::scripting::ScriptingPolicyError
+pub struct nomos_repo_policy::scripting::ScriptingPolicyFactProduction
+pub struct nomos_repo_policy::test_material::FactContext
+pub struct nomos_repo_policy::test_material::PolicyFact
 pub struct nomos_repo_policy::test_material::TestMaterialPolicyError
+pub struct nomos_repo_policy::words::FactContext
+pub struct nomos_repo_policy::words::PolicyFact
 pub struct nomos_repo_policy::words::WordsPolicyError
-
-# re-exports of items declared outside this crate
-pub use determinism::GoalsPolicyFactProduction
-pub use determinism::LimitsPolicyFactProduction
-pub use determinism::NamingPolicyFactProduction
-pub use determinism::ScriptingPolicyFactProduction
-pub use determinism::WordsPolicyFactProduction
-pub use provider::FactContext
-pub use provider::Materialize_Workspace
-pub use provider::PolicyFact
+pub struct nomos_repo_policy::words::WordsPolicyFactProduction

@@ -75691,10 +75691,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-predicate-scope",
+        "acquired_at": 1790013793,
+        "lease_expires_at": 1790024593
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -86902,6 +86906,66 @@
         "timeout_seconds": 1800
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P121-TWO-SNAPSHOTS-THE-PATH-ATTRIBUTE-REPAIR-MOVED-ARE-OWNED-BY-NOBODY-AND-REDDEN-THE-WHOLE-CONTRACT-SUITE",
+      "title": "The two surface snapshots P114-SURFACE-PATH was forbidden to bless are stale, unowned, and fail the contract suite for every other item",
+      "why": "P114-SURFACE-PATH-DECLARED-MODULES-STAY-UNRESOLVED-2 repaired the surface reader so that a module declared with a path attribute resolves, and re-blessed the twelve snapshots it reserved. It was forbidden to touch two more. Its done_when says, read the other way, that it does not re-bless tests/contract/surface/nomos-ledger.txt or tests/contract/surface/nomos-repo-policy.txt, because they remained with P103-A-RESERVATION-THAT-DECAYED-UNDER-A-PEERS-REFACTOR-IS-REPORTED-BY-NOTHING and P100-WHAT-COUNTS-AS-TEST-MATERIAL-IS-A-HARDCODED-PATH-CONVENTION-INSIDE-THE-SECURITY-RULES-8, and its predicate tolerated exactly those two by naming them.\n\nThat premise was already false when the item was claimed. Both of those items read Done in the ledger committed at 492f4ad8, which is the parent of the repair commit, and neither re-blessed the snapshot it had reserved. So the reservation the done_when deferred to had already ended, and the obligation it deferred did not pass to anybody.\n\nThe repair was therefore committed at 24951044 correctly and with these two left stale, which is what the item as authored required. The consequence is that they are now owned by nobody and are wrong: the reader resolves routes their committed text still reports as unresolved.\n\nMeasured at 24951044. tests/contract/surface/nomos-ledger.txt carries 45 unresolved re-export entries of which 40 name a module nomos-ledger itself declares with a path attribute, and tests/contract/surface/nomos-repo-policy.txt carries 8 of which all 8 do. Those 48 are the remainder of the 123 the repair measured; the other 75 cleared with the twelve.\n\nThis is not confined to the two crates. Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot judges every crate at once and fails naming all of them together, so cargo test -p nomos-contract-tests is red for every session in this tree, and any item whose predicate names that package inherits a failure that has nothing to do with it. P104-A-VERIFICATION-PREDICATE-NEED-NOT-REACH-THE-CRATES-ITS-OWN-TERRITORY-NAMES-2 is the item that found this, its own territory being two record files and its predicate being that suite.",
+      "done_when": "Both snapshots carry the surface the repaired reader derives, so Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot names neither of them. A run that still names a crate is judged by which crate: the two this item owns must be gone, and a third belonging to another session in-flight work is not this item to fix and not this item to hide either, so it is reported rather than tolerated by name.\n\nRead the other way, this is a bless and not a rewrite. Every removed line is an unresolved re-export entry, its section header or the blank beside it, and no line recording a declaration is removed; the count of removals is stated against those three categories rather than asserted to be safe. The additions are the declarations those entries were hiding, which is the direction the repair was for.\n\nThe two snapshots are the whole territory. No source changes, because the reader is already correct and this item exists only because the bless that should have accompanied it was forbidden.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-ledger.txt",
+          "tests/contract/surface/nomos-repo-policy.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "ed_Library_Less ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.20s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on build directory\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.31s\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-d70300b6ebfabb84.exe)\n",
+        "verified_at": 1790014145,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "249510446683205b534264ec7d276ed5e226ee58"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
