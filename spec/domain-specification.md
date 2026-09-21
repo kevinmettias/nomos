@@ -132,6 +132,7 @@ profile: domain-specification
 | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md@authored | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md | authored | 19 | 7 | sha256:361139ee1bbe26b54f84f93988dbf0ccf3488045465fa4f1558161c02d48ba8b |
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md@authored | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md | authored | 18 | 6 | sha256:1f5a1bfd574bfb0b43f9b1b360bd932f8c620d390cb1eb9a0931804fbc9d76db |
 | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md@authored | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md | authored | 25 | 9 | sha256:5a4499b293dcf3cd5427520182b60d4f21d816e6a0f1733e35cfaee37721a099 |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md@authored | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md | authored | 39 | 12 | sha256:af086972c1c5a6fe934fe91f8e0b7dc9bff973d7986240dcbb05a3bdac229496 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -1224,6 +1225,18 @@ profile: domain-specification
 | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#18 | authored | 2 | What it cost |
 | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#21 | authored | 2 | A guard this repaired |
 | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#24 | authored | 2 | Consequences |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#1 | authored | 1 | The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#13 | authored | 2 | Decision |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#14 | authored | 3 | 1. The criterion is what the operation causes on the host, not who asks it |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#17 | authored | 3 | 2. Check_Run is admitted |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#19 | authored | 3 | 3. Agent_Execute and Agent_Judge_Role are refused |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#23 | authored | 3 | 4. Workflow_Run is refused while a step may carry an agent body |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#26 | authored | 3 | 5. What an admitting increment must edit |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#28 | authored | 3 | 6. What would reopen decisions 3 and 4 |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#31 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#35 | authored | 2 | Alternatives Considered |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -34111,6 +34124,312 @@ quietly under-quantified.
   vocabulary, and sees generic implementations.
 - `tests/contract/tests/boundaries/mcp_registry.rs` still holds: `nomos-mcp` depends on
   `nomos-api-transport` and no other workspace member.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#1
+
+*revision: authored · kind: heading · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process · hash: sha256:e423c19bea5388d9ba52e7951507329b12dc25f7708eb916ac227f2c9508222c*
+
+# The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#2
+
+*revision: authored · kind: heading · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#3
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Question · hash: sha256:a3c6b854530d98d62a92e301860dd488f73b525ccbf672adeb45382bbb7edb94*
+
+`nomos-api` exports thirty `Handle_*` functions. `OD-HOST-007` decided that the twenty-one
+repo-tooling verbs -- eleven `Work_*` and ten `Spec_*` -- are not projected, structurally
+rather than advisorily. Nine are product operations an end-user repository would ask.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#4
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Question · hash: sha256:499e75548f906140237ad04885a4b10699beba5fcbc7c856d58421faabe70334*
+
+Five of those nine are served: the four Gate verbs and `Correction_Run`. The other four --
+`Check_Run`, `Workflow_Run`, `Agent_Execute`, `Agent_Judge_Role` -- are real, tested,
+canonical application seams that no wire caller and no MCP client can reach.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#5
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Question · hash: sha256:8124d72d6b0b75bc87c725c6aa1b8dc63237f51ad2f23d53ec5bf1dc0cc45b5a*
+
+The criterion in `OD-HOST-007` cannot decide them. It separates a repository-development verb
+from an end-user verb, and by it all nine are end-user verbs. So either something else
+separates the four from the five, or nothing does and they are simply unadmitted. This record
+says which.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#6
+
+*revision: authored · kind: heading · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#7
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / What Was Measured · hash: sha256:9a09d9304be7f679beaf07fde9e3b0303105f9ecd1f7e28a6a44531c4534e389*
+
+Taken at `0f793cc0`.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#8
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / What Was Measured · hash: sha256:4870ea68046f69e6fa83e133e1a07ea9af956e791fa28d24b2209ca59819910a*
+
+`ServedMethod::REGISTRY` names five methods and the `ServedTool::REGISTRY` in `nomos-mcp`
+projects exactly that array. `tests/contract/tests/boundaries/transport_registry.rs` holds an
+`ADMITTED` list of five handler names and quantifies it over the real exported surface of
+`nomos-api`, so a handler not named there is excluded by default rather than by a prefix
+guess. A widening is therefore a visible edit in three places, which is what
+`P62-TRANSPORT-MCP-CORRECTION-SURFACE-2` measured when it admitted `Correction_Run`.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#9
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / What Was Measured · hash: sha256:d57491ea6388921624696435be9d3a3ee111546fe40689a49306339fee3a7323*
+
+What each of the four unadmitted operations causes on the host:
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#10
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / What Was Measured · hash: sha256:87e1dd4f5016c21b691273824a05b135351beaedc70bb498e6dc31da185e508b*
+
+| Operation | What it does |
+|---|---|
+| `Check_Run` | Walks and judges a tree. Reads only. |
+| `Workflow_Run` | Executes a step sequence. A step body may be `Check`, `Correction`, `Gate` or `Agent`. |
+| `Agent_Execute` | Starts a subprocess through a `ProgramLauncher` and spends against a ceiling. |
+| `Agent_Judge_Role` | Reads a `README.md` row and a committed surface snapshot, then dispatches an agent as above. |
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#11
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / What Was Measured · hash: sha256:90a1fec61c56069002f9714ecaa90ce228ca6908104684c6c212aa3db233ce8e*
+
+And what the five already served cause: the four Gate verbs read and judge, and
+`Correction_Run` stages and, if asked, commits a change inside the tree it was given. None
+starts a process that costs money outside it.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#12
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / What Was Measured · hash: sha256:d4a6def1dbcc4cf2ae3b11e78d5902c814bc1fd277f66c8dfcbd8500f611790c*
+
+The agent dispatch is not unbounded. The clauses named by `OD-EXECUTOR-001` moved down into
+`xvpe-agent-backend-claude-code`: an isolated working directory, an allow-list granting
+nothing real, one `--print` turn, a spend ceiling, a wall bound that kills, and an answer read
+from schema-validated `structured_output`. Those bound one call. They do not bound how many
+calls a wire client makes, and the ceiling is per dispatch rather than per caller.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#13
+
+*revision: authored · kind: heading · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#14
+
+*revision: authored · kind: heading · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 1. The criterion is what the operation causes on the host, not who asks it · hash: sha256:76d1b3dc105421caf586d101a452ba61af4a36286dfb0ae2f92295bf2c097fa4*
+
+### 1. The criterion is what the operation causes on the host, not who asks it
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#15
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 1. The criterion is what the operation causes on the host, not who asks it · hash: sha256:af5534f5fb49d784e7b7150f652eb17aec83945fae9735184d2540a75ba30872*
+
+The question in `OD-HOST-007` was whose verb it is. That question is answered and exhausted:
+the twenty-one are excluded and the nine are product operations. The line inside the nine is a
+different one, and it is the blast radius of a single call.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#16
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 1. The criterion is what the operation causes on the host, not who asks it · hash: sha256:3b81bbd624c23a10ab8188ab01b56b6671af1dc7b0d90e3122649ef86eff6fb0*
+
+An operation that reads the tree it is given, or writes inside it, is admitted. An operation
+that starts an external process which costs money is refused, because a transport admitting it
+hands an unauthenticated caller a spend decision the host never made. This is stated as a
+criterion rather than as four separate judgements, so that the tenth product operation is
+decided the day it is written rather than the day somebody notices it is missing.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#17
+
+*revision: authored · kind: heading · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 2. Check_Run is admitted · hash: sha256:e3f46e9194a75690094f3b938e30ff2393ae06613a1e598274f1c544bf352089*
+
+### 2. Check_Run is admitted
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#18
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 2. Check_Run is admitted · hash: sha256:7e0d68d596aa7f9fe076b7350605ca9323916b8dff869bd8f97bb97d64041bde*
+
+It walks and judges a tree exactly as `Gate_Run` does, and reads nothing else. No property
+distinguishes it from the four Gate verbs already served, and refusing it would be a registry
+that is merely short -- the absence-as-boundary that `OD-CONNECTOR-001` refuses and
+`OD-HOST-007` named.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#19
+
+*revision: authored · kind: heading · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 3. Agent_Execute and Agent_Judge_Role are refused · hash: sha256:29cc0f2acf05337a66df758650954e33411f858cb930a3ffa88d86ad1195f3bb*
+
+### 3. Agent_Execute and Agent_Judge_Role are refused
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#20
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 3. Agent_Execute and Agent_Judge_Role are refused · hash: sha256:a461ccca178d5932462f841c330978c030ba73d5ab52c94f2fc3368fd3f9eba9*
+
+They start a subprocess and spend against a ceiling. Every operation served today is bounded
+by the tree it was handed; these are not, and the difference is real rather than a matter of
+degree. The clauses named by `OD-EXECUTOR-001` make one dispatch safe, which is not the same
+as making an open number of them safe from a caller the transport does not authenticate.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#21
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 3. Agent_Execute and Agent_Judge_Role are refused · hash: sha256:52c12b05a3f326c12ae83ad62537063cf2d00cbb89231abdbd980ee4b549adc7*
+
+`Agent_Judge_Role` carries a second reason, weaker but worth recording: it reads a `README.md`
+row and a committed surface snapshot, and it is a convention of this repository that those
+exist and mean what this workspace means by them. In a repository that has neither, the
+operation answers `NoDeclaredRoleOrSurface`, which is honest and is also the whole of what it
+can say. That does not make it a repo-tooling verb under `OD-HOST-007` -- it carries no
+repo-tooling mark and lives beside the product handlers -- but it does mean admitting it would
+project an operation shaped around a convention the caller may not share.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#22
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 3. Agent_Execute and Agent_Judge_Role are refused · hash: sha256:c7fa5d3eab4d333e4de54b43e172260c175897a383b35aaa141734098f257e79*
+
+The refusal is not permanent, and it is not a judgement that the operation is unsuitable. It
+is a statement that a transport has no way to bound aggregate spend today, and that admitting
+an operation which can incur it would be deciding that question by not asking it.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#23
+
+*revision: authored · kind: heading · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 4. Workflow_Run is refused while a step may carry an agent body · hash: sha256:96e024c36cef39fa07b530f3e3ca513cfe3f0514cc732534e9b9395df9fca9ed*
+
+### 4. Workflow_Run is refused while a step may carry an agent body
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#24
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 4. Workflow_Run is refused while a step may carry an agent body · hash: sha256:6ab996881597f749f4ded65ba408c55bd4e2ce88ce2f05fb83ba8b882958b247*
+
+Admitting it would admit `Agent_Execute` transitively. `Body::Agent` is one of the four bodies
+a step may carry, so a caller who can run a workflow can run an agent by writing a step that
+does. That is the widening-by-the-back-door `OD-HOST-007` refuses when it says a later
+transport must make its case explicitly rather than by widening a registry nobody is watching.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#25
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 4. Workflow_Run is refused while a step may carry an agent body · hash: sha256:1ce459a91c2c105f649fa45eeac09564c5e96e7bf745f990dc2708cf77e72b02*
+
+This refuses the operation as it stands rather than the operation. A transport that admitted
+`Workflow_Run` over a step vocabulary it could assert carried no agent body would be a
+different proposal, and the criterion in decision 1 would admit it.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#26
+
+*revision: authored · kind: heading · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 5. What an admitting increment must edit · hash: sha256:b86f3f34e761b31938026fbe5d117e3ddd5518c01f21e181af3745bbc1ec6cf3*
+
+### 5. What an admitting increment must edit
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#27
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 5. What an admitting increment must edit · hash: sha256:b748e2c667f7851d03a3c4cfa6e997f77075c9d39678a9bb1ce96caa3029ec4d*
+
+Three places, and all three are the mechanism that keeps the exclusion structural:
+`ServedMethod::REGISTRY` in `nomos-api-transport`, `ServedTool::REGISTRY` in `nomos-mcp`, and
+the `ADMITTED` array in `tests/contract/tests/boundaries/transport_registry.rs`. A widening
+that edited fewer than three would be caught by the contract suite, which is the point of
+there being three.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#28
+
+*revision: authored · kind: heading · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 6. What would reopen decisions 3 and 4 · hash: sha256:f1724c81214ff40802ef120f84ea3a01f109dac0c5640e56165af41cac9d1e37*
+
+### 6. What would reopen decisions 3 and 4
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#29
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 6. What would reopen decisions 3 and 4 · hash: sha256:a28afb153700b888fea3400444994658d2bd65424f6775eedc68869eacbe3dd7*
+
+Four events, named so the refusal is falsifiable rather than a standing preference:
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#30
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Decision / 6. What would reopen decisions 3 and 4 · hash: sha256:af32455c4d821e3066e6636c307d41d3df561f0e12cd2f040c7da05e859c2059*
+
+- a transport that authenticates callers, so a spend decision has somebody to attribute to;
+- an aggregate spend bound a transport can enforce across calls rather than within one;
+- a workflow step vocabulary a transport can assert excludes agent bodies, which reopens
+  decision 4 on its own;
+- a measured request from a real external client, which is the same kind of concrete event
+  `OD-HOST-007` used to fire its own trigger rather than waiting for a judgement that the
+  surface had become popular enough.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#31
+
+*revision: authored · kind: heading · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#32
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / What This Record Does Not Do · hash: sha256:4e336d457decd1bfca063cceae3dd9848083dfa5d50940277b591852762335e4*
+
+It does not admit `Check_Run`. Admitting an operation is its own item with its own territory,
+judged against this record, the way the transport and the correction surface each were.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#33
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / What This Record Does Not Do · hash: sha256:d65cab227578a526595cffb9a13901b8ec6aba8595b3845bf2f9fe55cff21139*
+
+It does not revisit the exclusion of the twenty-one repo-tooling verbs in `OD-HOST-007`, or
+decide whether one could ever be projected under a later framing. That record left the
+question open and this one does not answer it.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#34
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / What This Record Does Not Do · hash: sha256:a454ce08ca167bee51e6e34e62ea3da266dfc733afdff725504b884631668cc4*
+
+It does not decide whether the response twins `OD-HOST-011` reasons about should become one
+serializable contract layer. A wider registry makes that question larger; it does not answer
+it.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#35
+
+*revision: authored · kind: heading · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Alternatives Considered · hash: sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83*
+
+## Alternatives Considered
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#36
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Alternatives Considered · hash: sha256:a2f4a9209845616a079b21abb3ff512da16198c92e43fd1a5173284242402c12*
+
+**Admit all four, on the ground that all nine are product operations.** Rejected: it reads the
+criterion in `OD-HOST-007` as the only criterion there could be, and the measurement shows a
+second line inside the nine that the first never had to consider.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#37
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Alternatives Considered · hash: sha256:1574c140772b1f46ae95dc50232dcc22c8b240a30311185e1354c00335a95699*
+
+**Refuse all four, keeping the registry at the Gate verbs plus `Correction_Run`.** Rejected
+for `Check_Run` specifically: nothing distinguishes it from `Gate_Run`, so refusing it would
+be a boundary drawn by inertia, which is the shape `OD-CONNECTOR-001` refuses.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#38
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Alternatives Considered · hash: sha256:a6844313b2f4deaed134548c7a5eb7f84151998e577bdb10a68436b498403d55*
+
+**Admit `Agent_Execute` and rely on the ceiling the executor already carries.** Rejected: that
+ceiling is per dispatch. It makes one call safe and says nothing about a caller making many,
+and a per-call bound presented as an aggregate one is the kind of guarantee `OD-GATE-001` is
+about in its own domain -- the check ran, said something narrower than the reader assumed, and
+nothing was listening for the difference.
+
+### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#39
+
+*revision: authored · kind: prose · heading: The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process / Alternatives Considered · hash: sha256:634e75a61720a39fcfa5a5c61cd10badfeeae890c9dab9d570726641279525bf*
+
+**Admit `Workflow_Run` and refuse `Agent_Execute`.** Rejected as incoherent: a step may carry
+an agent body, so the refusal would be reachable through the admission.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 

@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:589ec511e69dbe6cd94f2403fe1d49159a95a19d4fe6d18be9c1d81d1614a9f9",
-  "inputs_digest": "sha256:39c0f76cf90226e11322976d670f02be6d6075734056217f25ba5d7f3642d822",
+  "content_digest": "sha256:61645d8ef860c5bbf2e6037aad5399a20f8bc5bcc590287915e8fcc09b80b2ae",
+  "inputs_digest": "sha256:fe0d2a441dfd0411bd6208120df3f912a4e1ea0c238e9b72fbb372237106eb6c",
   "sections": [
     [
       "Documents",
-      253
+      254
     ],
     [
       "Sections",
-      2123
+      2135
     ],
     [
       "Source blocks",
-      7510
+      7549
     ]
   ],
   "inputs": [
@@ -629,6 +629,11 @@
       "content": "documents",
       "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md@authored",
       "hash": "sha256:5a4499b293dcf3cd5427520182b60d4f21d816e6a0f1733e35cfaee37721a099"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md@authored",
+      "hash": "sha256:af086972c1c5a6fe934fe91f8e0b7dc9bff973d7986240dcbb05a3bdac229496"
     },
     {
       "content": "documents",
@@ -6064,6 +6069,66 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#24",
       "hash": "sha256:e29527d8074275a311fa60280ba4853007b19a60a017e2c0fb8ca5196cf979cb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#1",
+      "hash": "sha256:eda6bb769e3a6003ef98ba903218c6df79d880808049f128e4d154d4ae8e22f8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#2",
+      "hash": "sha256:59e22e0de9c7ecae25144b7da098f03d72d25738bc8b2735984a321d8a479e49"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#6",
+      "hash": "sha256:fea54a3577e93e80e2cf974218cb1fb8e3120b88d22cd31c644dcd54f13a46fe"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#13",
+      "hash": "sha256:e4fe081659049a26cd5ad5404ff82c7d650c0a916b964e9cc8bc543039ce807c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#14",
+      "hash": "sha256:bfe67ede71ba3a88483f40b3b424126801f6d06089d7b92d0e1dc1c51aa1f171"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#17",
+      "hash": "sha256:7813cb1a0b846e90509bf19c192e978ed419699fbb255fc352fd2874a5ef8cce"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#19",
+      "hash": "sha256:5ecc8ca975ddb361748968395fb0a15dad364d20f6c6fe4a5be75638fcbceb74"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#23",
+      "hash": "sha256:7e449d952422757b47a155c912698d201fab9fe6c88d7b0b2d740be72c47034d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#26",
+      "hash": "sha256:e1a0621919101a1625fdc0bcd4584f10a3e0cb3d5bfc85fb9e030b5ead54098e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#28",
+      "hash": "sha256:e812269fcaa239d16aa262a0b3a6441815891d9a9103195336606a0a3c7e0308"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#31",
+      "hash": "sha256:4060d357f0651f8f179c2b6d589bd8f9e7c93031e4b4ae285e9238678cf61803"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#35",
+      "hash": "sha256:39e87057942bebf783bb2c99c1c84dd32e7de40fad0ff4a68fe7686915ce2230"
     },
     {
       "content": "headings",
@@ -28769,6 +28834,201 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#25",
       "hash": "sha256:989097b0be905b9ad283a2a659cb164d945378363b1b6f962a656d003fa56d9a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#1",
+      "hash": "sha256:e423c19bea5388d9ba52e7951507329b12dc25f7708eb916ac227f2c9508222c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#3",
+      "hash": "sha256:a3c6b854530d98d62a92e301860dd488f73b525ccbf672adeb45382bbb7edb94"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#4",
+      "hash": "sha256:499e75548f906140237ad04885a4b10699beba5fcbc7c856d58421faabe70334"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#5",
+      "hash": "sha256:8124d72d6b0b75bc87c725c6aa1b8dc63237f51ad2f23d53ec5bf1dc0cc45b5a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#7",
+      "hash": "sha256:9a09d9304be7f679beaf07fde9e3b0303105f9ecd1f7e28a6a44531c4534e389"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#8",
+      "hash": "sha256:4870ea68046f69e6fa83e133e1a07ea9af956e791fa28d24b2209ca59819910a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#9",
+      "hash": "sha256:d57491ea6388921624696435be9d3a3ee111546fe40689a49306339fee3a7323"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#10",
+      "hash": "sha256:87e1dd4f5016c21b691273824a05b135351beaedc70bb498e6dc31da185e508b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#11",
+      "hash": "sha256:90a1fec61c56069002f9714ecaa90ce228ca6908104684c6c212aa3db233ce8e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#12",
+      "hash": "sha256:d4a6def1dbcc4cf2ae3b11e78d5902c814bc1fd277f66c8dfcbd8500f611790c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#13",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#14",
+      "hash": "sha256:76d1b3dc105421caf586d101a452ba61af4a36286dfb0ae2f92295bf2c097fa4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#15",
+      "hash": "sha256:af5534f5fb49d784e7b7150f652eb17aec83945fae9735184d2540a75ba30872"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#16",
+      "hash": "sha256:3b81bbd624c23a10ab8188ab01b56b6671af1dc7b0d90e3122649ef86eff6fb0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#17",
+      "hash": "sha256:e3f46e9194a75690094f3b938e30ff2393ae06613a1e598274f1c544bf352089"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#18",
+      "hash": "sha256:7e0d68d596aa7f9fe076b7350605ca9323916b8dff869bd8f97bb97d64041bde"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#19",
+      "hash": "sha256:29cc0f2acf05337a66df758650954e33411f858cb930a3ffa88d86ad1195f3bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#20",
+      "hash": "sha256:a461ccca178d5932462f841c330978c030ba73d5ab52c94f2fc3368fd3f9eba9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#21",
+      "hash": "sha256:52c12b05a3f326c12ae83ad62537063cf2d00cbb89231abdbd980ee4b549adc7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#22",
+      "hash": "sha256:c7fa5d3eab4d333e4de54b43e172260c175897a383b35aaa141734098f257e79"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#23",
+      "hash": "sha256:96e024c36cef39fa07b530f3e3ca513cfe3f0514cc732534e9b9395df9fca9ed"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#24",
+      "hash": "sha256:6ab996881597f749f4ded65ba408c55bd4e2ce88ce2f05fb83ba8b882958b247"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#25",
+      "hash": "sha256:1ce459a91c2c105f649fa45eeac09564c5e96e7bf745f990dc2708cf77e72b02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#26",
+      "hash": "sha256:b86f3f34e761b31938026fbe5d117e3ddd5518c01f21e181af3745bbc1ec6cf3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#27",
+      "hash": "sha256:b748e2c667f7851d03a3c4cfa6e997f77075c9d39678a9bb1ce96caa3029ec4d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#28",
+      "hash": "sha256:f1724c81214ff40802ef120f84ea3a01f109dac0c5640e56165af41cac9d1e37"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#29",
+      "hash": "sha256:a28afb153700b888fea3400444994658d2bd65424f6775eedc68869eacbe3dd7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#30",
+      "hash": "sha256:af32455c4d821e3066e6636c307d41d3df561f0e12cd2f040c7da05e859c2059"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#31",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#32",
+      "hash": "sha256:4e336d457decd1bfca063cceae3dd9848083dfa5d50940277b591852762335e4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#33",
+      "hash": "sha256:d65cab227578a526595cffb9a13901b8ec6aba8595b3845bf2f9fe55cff21139"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#34",
+      "hash": "sha256:a454ce08ca167bee51e6e34e62ea3da266dfc733afdff725504b884631668cc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#35",
+      "hash": "sha256:4824749d250c30ac7d0d3b75dd866d8a845308adcba154f5372cf74980c63d83"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#36",
+      "hash": "sha256:a2f4a9209845616a079b21abb3ff512da16198c92e43fd1a5173284242402c12"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#37",
+      "hash": "sha256:1574c140772b1f46ae95dc50232dcc22c8b240a30311185e1354c00335a95699"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#38",
+      "hash": "sha256:a6844313b2f4deaed134548c7a5eb7f84151998e577bdb10a68436b498403d55"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#39",
+      "hash": "sha256:634e75a61720a39fcfa5a5c61cd10badfeeae890c9dab9d570726641279525bf"
     },
     {
       "content": "blocks",
