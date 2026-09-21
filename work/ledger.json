@@ -86271,7 +86271,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -86287,7 +86287,30 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "ch` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: `nomos-rules` (lib test) generated 1 warning (1 duplicate)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos\\crates\\rules\\nomos-rules)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.13s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-2fa2757b62c715fb.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-b99b1af266eec442.exe)\n     Running tests\\incremental_equivalence.rs (target\\debug\\deps\\incremental_equivalence-07623d3018de3576.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-b0b288d13cbe7361.exe)\n     Running tests\\unchanged_run_economy.rs (target\\debug\\deps\\unchanged_run_economy-a064624f91d48b48.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-02c2da53374a3065.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-0778112353cf1c4b.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_rules\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: 1 warning emitted\n\n",
+        "verified_at": 1789965436,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "985fa21fdc2bfc9281d6dbe15387ca3361fb4561"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
