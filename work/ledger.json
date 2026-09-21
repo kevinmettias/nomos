@@ -87016,6 +87016,107 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P122-A-DECLARED-UNIVERSE-LANDED-AT-HEAD-CLAIMING-A-MIRROR-THAT-WAS-NEVER-WRITTEN",
+      "title": "Backend::ALL reached HEAD unclassified, its doc comment naming a test nobody wrote, and the contract suite is red for every session",
+      "why": "c0b61c1f promoted Backend::ALL in crates/orchestration/nomos-agent-orchestration/src/backend.rs from a test-only constant to a public one, because Declared_Targets now derives the declared package set from it. That makes it a declared universe, and Test_The_Declared_Table_Should_Match_What_Is_Derived fails naming it: a universe nobody classified is the shape OD-COMPLETENESS-001 exists to stop. Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror fails beside it, comparing 25 rows against 26 scanned universes.\n\nSo cargo test -p nomos-contract-tests is red at HEAD for every session in this tree, not only for the crate that moved.\n\nThe classification is not a free choice, because the constant already makes a claim. Its own doc comment says that a variant missing from the array is not a compile error, which is why Test_Every_Variant_Should_Be_Listed exists beside it. That test does not exist. Grepping the whole of crates and tests finds the name once, in the sentence that promises it. The test module beside the constant holds Test_Labels_Should_Be_The_Spellings_The_Cli_Accepts and Test_Labels_Are_Distinct, and neither compares the array against the variants of the enum: a Backend::ALL written as ClaudeCode twice passes both.\n\nSo the universe is unmirrored and is documented as mirrored. Classifying it Unmirrored would leave the doc comment asserting a test that is not there, which is the disagreement the claims test exists to catch rather than a way to satisfy it.\n\nNobody owns the repair. P40-MODEL-ROUTING-RESOLVER reserved backend.rs and is Done, and P40-MODEL-ROUTING-DISPATCH-WIRING is Done; the only P40 item still claimed reserves four assessment files and no source.\n\nThis is also the third instance of the defect OD-LEDGER-040 records, and the cleanest of them. P40-MODEL-ROUTING-RESOLVER reserved backend.rs and declared cargo test -p nomos-agent-orchestration --no-fail-fast, so its predicate did reach the crate its territory names. Crate coverage was satisfied and the change was still invalid, because the check that judges a declared universe lives in nomos-contract-tests, a package the territory does not mention. Unlike the prose instance, the check exists; nothing connected it to the artifact.",
+      "done_when": "Backend::ALL is mirrored in fact, not only in prose. A test named Test_Every_Variant_Should_Be_Listed sits beside the constant and fails when a variant is absent from the array, so the sentence already written in the doc comment becomes true rather than being deleted. It is written so that adding a third variant cannot pass it silently: the match it performs over the variants is exhaustive and carries no wildcard arm, so a new variant stops it compiling until somebody names it, and that is checked by reasoning stated in the test rather than assumed.\n\nProven in the direction that matters rather than by the test passing: the test must fail against an array that omits a variant. Demonstrate it against a deliberately broken copy of the array and restore the file byte-identically, because a test asserting a property that already holds is the one shape that passes without judging anything.\n\nUNIVERSES gains one row for that path and constant, classified Mirrored and naming that test, so Test_The_Declared_Table_Should_Match_What_Is_Derived and Test_The_Scan_And_The_Table_Should_Name_The_Same_Mirror both pass and the scan and the table agree at 26 and 26. UNMIRRORED_TOTAL does not move, because this closes a hole rather than declaring one.\n\ncargo test --no-fail-fast -p nomos-agent-orchestration -p nomos-contract-tests passes, which is the pair of artifact classes this item touches: the crate source and the declared classification. No snapshot is re-blessed, the added test being inside the crate test module and therefore outside the public surface.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-agent-orchestration/src/backend.rs",
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "tifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling nomos-agent-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-agent-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.10s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_agent_orchestration-3a0ce552fe2a581c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-4bed25c68fec7031.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-24c150586af1f3b8.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-a607f8a6c6b193ae.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-3c911e86e159609b.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-b99899d2aaee75cb.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-242fbb4135dee1fd.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-89d2ac5c8d6e8458.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-18e6d3c0a6e0ca7c.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-0269dbf5e980f3c6.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-ab686358288d9ec9.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-7246452c9567f7b6.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-1b54256f4f2fbbc9.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-1998797d832820bb.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-048e5c43ec96e011.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-f4f655f9f620a7ea.exe)\n   Doc-tests nomos_agent_orchestration\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1790014751,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0f793cc0fcce948a5756c4fa2cf92022d0e63d51"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "OD-HOST-014-WHICH-PRODUCT-OPERATIONS-THE-TRANSPORT-ADMITS",
+      "title": "Five of this workspace's nine product operations are reachable from a wire, and whether the other four join them is undecided",
+      "why": "Measured at 0f793cc0. nomos-api exports thirty Handle_ functions. Twenty-one are repo tooling -- eleven Work_ verbs and ten Spec_ verbs -- and OD-HOST-007 decided a transport does not project those, structurally rather than advisorily. Nine are product operations an end-user repository would ask: the four Gate verbs, Correction_Run, Check_Run, Workflow_Run, Agent_Execute and Agent_Judge_Role.\n\nFive of the nine are served. ServedMethod::REGISTRY names GatePlan, GateRun, GateExplain, GateCompare and Correction, and nomos-mcp projects exactly that registry through ServedTool::REGISTRY. The other four -- Check_Run, Workflow_Run, Agent_Execute, Agent_Judge_Role -- are real, tested, canonical application seams that no wire caller and no MCP client can reach.\n\nThis is a decision rather than an implementation, and the governing record says so in as many words. OD-HOST-007 decided that a registry which is merely short today, with nothing stopping a later increment from lengthening it, would be the absence-as-boundary OD-CONNECTOR-001 refuses; and that a later transport making the opposite case must make it explicitly rather than by widening a registry nobody is watching. The one widening since then, Correction, came through P62-TRANSPORT-MCP-CORRECTION-SURFACE-2 as its own item, and it had to edit the ADMITTED allow-list in tests/contract/tests/boundaries/transport_registry.rs as well as the registry -- so the exclusion really is structural and a widening really is a visible edit in three places.\n\nWhat makes the four unlike the five already admitted is not obvious in either direction, which is why this needs deciding rather than assuming. Check_Run judges a tree the way Gate_Run does and is plainly the same kind of question an end-user repository asks. Workflow_Run executes a sequence that can contain a Gate body and an Agent body, so admitting it admits, transitively, an operation that starts subprocesses. Agent_Execute and Agent_Judge_Role start a subprocess by design, spend money against a ceiling, and Agent_Judge_Role reads a crate's README row and committed surface snapshot -- which is this repository's own development artifact in every repository that has one, and may be a product operation, a repo-tooling operation wearing a product's clothes, or both depending on the reader.",
+      "done_when": "A governing record decides, per operation and by name, whether the transport admits Check_Run, Workflow_Run, Agent_Execute and Agent_Judge_Role, and states the reason that decides each rather than a single reason applied four times.\n\nIt states what the admitting criterion is, now that there is more than one operation on either side of the line. OD-HOST-007's criterion was a repository-development verb against an end-user verb, and that criterion does not separate these four from the five already served: all nine are product operations by it. Whatever separates them, or whatever concludes that nothing does, is what this record has to say.\n\nIt answers the question an agent operation raises that no operation already served does: a wire caller reaching Agent_Execute starts a subprocess on the host and spends against a ceiling, and Correction_Run, the most side-effecting operation currently admitted, stages and optionally commits a change but starts no agent. Whether that difference is a reason to refuse, a reason to admit with a stated condition, or not a difference that matters, is decided rather than left for the implementing item to discover.\n\nIt says what Agent_Judge_Role reads, and whether reading a repository's own README row and committed surface snapshot makes it a repo-tooling verb under OD-HOST-007's exclusion even though it lives beside the product handlers and carries no repo-tooling mark.\n\nIt names what an admitting increment must edit, so that the structural exclusion stays structural: ServedMethod::REGISTRY, ServedTool::REGISTRY, and the ADMITTED allow-list in tests/contract/tests/boundaries/transport_registry.rs, which P62-TRANSPORT-MCP-CORRECTION-SURFACE-2 measured as the three places one widening really touches.\n\nIt does not build the widening. Admitting an operation is its own item with its own territory, judged against this record, the same way the transport and the correction surface each were.\n\nThe record is registered rather than only written, both projections are re-rendered from a tree publishing exactly the records its commit publishes, and cargo test -p nomos-contract-tests passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-014.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "claude-external-review-reconciliation",
+        "acquired_at": 1790014618,
+        "lease_expires_at": 1790025418
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

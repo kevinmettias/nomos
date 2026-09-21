@@ -91,6 +91,19 @@ pub(crate) const UNIVERSES: &[Universe] = &[
             by: "Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables",
         },
     },
+    // `Backend::ALL` arrived here already claiming this standing: its doc comment said a
+    // variant missing from the array is why `Test_Every_Variant_Should_Be_Listed` exists
+    // beside it, and that test did not. `P122` wrote it rather than reclassifying the
+    // universe, because the row and the claim are two spellings of one thing and the claim
+    // was the one already committed.
+    Universe {
+        path: "crates/orchestration/nomos-agent-orchestration/src/backend.rs",
+        name: "ALL",
+        kind: UniverseKind::Constant,
+        standing: Standing::Mirrored {
+            by: "Test_Every_Variant_Should_Be_Listed",
+        },
+    },
     // ---- mirrored for other reasons ----
     //
     // `OD-COMPLETENESS-002`: this row named `Test_A_Rule_Nobody_Declared_Should_Fail_The_Run`,
