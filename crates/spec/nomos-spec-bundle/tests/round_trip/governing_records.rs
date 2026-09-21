@@ -40,7 +40,7 @@ struct Rebuilt
 /// text that produced it.
 fn Rebuilt_From_A_Fresh_Seed() -> Rebuilt
 {
-    use crate::populated::Reimported;
+    use crate::populated::Rebuilt_From_Bundle_Text;
     use nomos_spec_bundle::Export;
     use nomos_spec_store::SpecificationStore;
 
@@ -52,7 +52,7 @@ fn Rebuilt_From_A_Fresh_Seed() -> Rebuilt
         .expect("Export ran over the store the seed filled")
         .Write()
         .expect("Write serializes the records the bundle carries");
-    let rebuilt = Reimported(&first);
+    let rebuilt = Rebuilt_From_Bundle_Text(&first);
 
     return Rebuilt {
         store: rebuilt,

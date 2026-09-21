@@ -132,13 +132,13 @@ fn A_Round_Trip_Submission() -> Submission
         submitted_by: "the fixture".to_owned(),
         submitted_through: "test".to_owned(),
         values: vec![
-            Value(Answer { field: "title", value: "A submission survives a round trip" }, Origin::Submitted),
-            Value(Answer { field: "goal", value: "what was first asked" }, Origin::Submitted),
+            Answered_Value(Answer { field: "title", value: "A submission survives a round trip" }, Origin::Submitted),
+            Answered_Value(Answer { field: "goal", value: "what was first asked" }, Origin::Submitted),
             // Supersedes the line above for reading, and never replaces it in storage.
-            Value(Answer { field: "goal", value: "what it became on being asked" }, Origin::Clarified),
-            Value(Answer { field: "behaviour", value: "it exports and imports unchanged" }, Origin::Submitted),
-            Value(Answer { field: "acceptance", value: "the bundle is byte-identical" }, Origin::Submitted),
-            Value(Answer { field: "invariants", value: "none" }, Origin::Submitted),
+            Answered_Value(Answer { field: "goal", value: "what it became on being asked" }, Origin::Clarified),
+            Answered_Value(Answer { field: "behaviour", value: "it exports and imports unchanged" }, Origin::Submitted),
+            Answered_Value(Answer { field: "acceptance", value: "the bundle is byte-identical" }, Origin::Submitted),
+            Answered_Value(Answer { field: "invariants", value: "none" }, Origin::Submitted),
         ],
         gaps: vec![A_Gap()],
     };
@@ -155,7 +155,7 @@ struct Answer<'a>
 }
 
 /// One attributed field value.
-fn Value(answer: Answer<'_>, origin: Origin) -> FieldValue
+fn Answered_Value(answer: Answer<'_>, origin: Origin) -> FieldValue
 {
     return FieldValue {
         field: answer.field.to_owned(),
@@ -185,7 +185,7 @@ pub(crate) fn Rebuilt_From(bundle: &Bundle) -> SpecificationStore
 }
 
 /// A store rebuilt from written bundle bytes and nothing else.
-pub(crate) fn Reimported(written: &str) -> SpecificationStore
+pub(crate) fn Rebuilt_From_Bundle_Text(written: &str) -> SpecificationStore
 {
     let bundle = Bundle::Parse(written).expect("Parse inverts Write of the fixture's own bytes");
 

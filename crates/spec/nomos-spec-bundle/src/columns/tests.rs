@@ -2,7 +2,7 @@
 
 use super::*;
 
-fn Schema(columns: &[&str]) -> Vec<String>
+fn Schema_Column_Names(columns: &[&str]) -> Vec<String>
 {
     return columns.iter().map(|column| return (*column).to_owned()).collect();
 }
@@ -12,7 +12,7 @@ fn Test_A_Fully_Declared_Table_Should_Pass()
 {
     let declared = &[("uid", Carried::Surrogate), ("path", Carried::Field("path"))];
 
-    assert!(Compare_Schema_To_Declaration("t", &Schema(&["uid", "path"]), declared).is_ok());
+    assert!(Compare_Schema_To_Declaration("t", &Schema_Column_Names(&["uid", "path"]), declared).is_ok());
 }
 
 /// The failure the guard exists for: a column joins the schema and nothing carries it.
@@ -21,7 +21,7 @@ fn Test_An_Undeclared_Column_Should_Be_Refused()
 {
     let declared = &[("uid", Carried::Surrogate)];
 
-    let refusal = Compare_Schema_To_Declaration("t", &Schema(&["uid", "note"]), declared)
+    let refusal = Compare_Schema_To_Declaration("t", &Schema_Column_Names(&["uid", "note"]), declared)
         .expect_err("an undeclared column must be refused");
 
     assert!(
@@ -36,7 +36,7 @@ fn Test_A_Declaration_The_Schema_Dropped_Should_Be_Refused()
 {
     let declared = &[("uid", Carried::Surrogate), ("gone", Carried::Field("gone"))];
 
-    let refusal = Compare_Schema_To_Declaration("t", &Schema(&["uid"]), declared)
+    let refusal = Compare_Schema_To_Declaration("t", &Schema_Column_Names(&["uid"]), declared)
         .expect_err("a stale declaration must be refused");
 
     assert!(
