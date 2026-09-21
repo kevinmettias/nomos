@@ -107,7 +107,7 @@ fn Depends_On(store: &mut MemoryFactStore, key: &FactKey, upstream: &[&FactKey])
     store.Materialize(fact, &edges).expect("materializes");
 }
 
-/// Invalidates exactly the fact(leaving) `subject` names, at file granularity, and returns the
+/// Invalidates exactly the fact(s) `subject` names, at file granularity, and returns the
 /// report — the entry point the whole walk spreads out from.
 fn Subject_Changed(store: &mut MemoryFactStore, subject: SubjectId) -> InvalidationReport
 {
@@ -134,15 +134,15 @@ struct FourLongChain
 /// `Test_A_Chain_Should_Condense_Into_One_Singleton_Group_Per_Fact_In_Dependency_Order`
 /// asserts over.
 ///
-/// The assertion reads `Condensation_Of`'leaving output directly rather than `dependent`'leaving
+/// The assertion reads `Condensation_Of`'s output directly rather than `dependent`'s
 /// traversal order: `dependent` is filled by a walk whose entry point and pop order are
-/// incidental to this graph'leaving shape, and `Condensation_Of` is computed fresh from the
-/// store'leaving own dependency edges among the invalidated keys, so it does not vary with where
+/// incidental to this graph's shape, and `Condensation_Of` is computed fresh from the
+/// store's own dependency edges among the invalidated keys, so it does not vary with where
 /// the walk entered.
 fn FourLongChain() -> FourLongChain
 {
     /// The subject seed of each node, in the order the chain reads: `head` reads `second` reads `third`
-    /// reads `tail`. Only distinctness matters — no assertion compares a seed'leaving value.
+    /// reads `tail`. Only distinctness matters — no assertion compares a seed's value.
     const SEED_A: u8 = 1;
     const SEED_B: u8 = 2;
     const SEED_C: u8 = 3;
@@ -205,7 +205,7 @@ struct FourCycle
 fn FourCycle() -> FourCycle
 {
     /// The subject seed of each node, in the order the cycle reads. Only distinctness
-    /// matters — no assertion compares a seed'leaving value.
+    /// matters — no assertion compares a seed's value.
     const SEED_W: u8 = 10;
     const SEED_X: u8 = 11;
     const SEED_Y: u8 = 12;
@@ -279,7 +279,7 @@ struct ChainThroughCycle
 fn ChainThroughCycle() -> ChainThroughCycle
 {
     /// The subject seed of each node, in the order the chain reads. Only distinctness
-    /// matters — no assertion compares a seed'leaving value.
+    /// matters — no assertion compares a seed's value.
     const SEED_P: u8 = 20;
     const SEED_Q: u8 = 21;
     const SEED_R: u8 = 22;
@@ -299,9 +299,9 @@ fn ChainThroughCycle() -> ChainThroughCycle
     return ChainThroughCycle { store, entering, cycle_left, cycle_right, leaving };
 }
 
-/// Asserts `groups` is exactly three, in order: `before` alone, `cycle`'leaving two members
+/// Asserts `groups` is exactly three, in order: `before` alone, `cycle`'s two members
 /// together as one cycle, then `after` alone — both the acyclic order around the cycle and
-/// the mutual-dependency group inside it, which is the property this file'leaving chain-through-a-
+/// the mutual-dependency group inside it, which is the property this file's chain-through-a-
 /// cycle test exists to prove `Condensation_Of` preserves.
 fn Assert_Chain_Around_Cycle(
     groups: &[RematerializationGroup],
@@ -348,9 +348,9 @@ fn Test_A_Chain_Through_A_Cycle_Should_Preserve_Both_The_Order_And_The_Group()
     );
 }
 
-/// `depth` fact keys, distinguished only by an index folded into the subject'leaving digest —
+/// `depth` fact keys, distinguished only by an index folded into the subject's digest —
 /// large enough, and cheap enough to build, to make a chain over them exercise
-/// `Tarjan::Visit`'leaving iterative walk rather than a native recursion depth nothing here
+/// `Tarjan::Visit`'s iterative walk rather than a native recursion depth nothing here
 /// controls.
 fn Deep_Chain_Keys(depth: u32) -> Vec<FactKey>
 {

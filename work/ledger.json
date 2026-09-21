@@ -86463,7 +86463,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -86477,7 +86477,28 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis"
+        ],
+        "exit_code": 0,
+        "output_tail": ".. ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.93s\n\n\nrunning 4 tests\ntest Test_A_Fact_Payloads_Digest_Should_Match_Nomos_Models_Own_Content_Digest ... ok\ntest Test_A_Guarantee_Digest_Should_Match_Nomos_Models_Own_Digest_Of_Parts ... ok\ntest Test_Different_Payloads_Should_Not_Share_Nomos_Models_Digest ... ok\ntest Test_An_Input_Digest_Should_Match_Nomos_Models_Own_Digest_Of_Parts ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 2 tests\ntest Test_An_Unrecorded_Dependency_Edge_Leaves_A_Stale_Downstream_Value_That_Disagrees_With_A_Clean_Rebuild ... ok\ntest Test_Incremental_Recomputation_After_A_Change_Agrees_With_A_Clean_Rebuild ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: field `derived` is never read\n   --> crates\\substrate\\nomos-analysis\\src\\fact\\memory_store\\tests.rs:118:5\n    |\n114 | struct TwoFactStore\n    |        ------------ field in this struct\n...\n118 |     derived: FactKey,\n    |     ^^^^^^^\n    |\n    = note: `#[warn(dead_code)]` on by default\n\nwarning: `nomos-analysis` (lib test) generated 1 warning\n   Compiling nomos-analysis v0.1.0 (F:\\repos\\nomos\\crates\\substrate\\nomos-analysis)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.03s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-76b497faff3719b1.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-2a4a394b38860690.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-2109f7b522717ec5.exe)\n     Running tests\\nomos_model_seam.rs (target\\debug\\deps\\nomos_model_seam-d563a6550bae8d00.exe)\n     Running tests\\recomputation_equivalence.rs (target\\debug\\deps\\recomputation_equivalence-36b4170462748efc.exe)\n   Doc-tests nomos_analysis\n",
+        "verified_at": 1789965216,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b64a0c2cf599f99c7c41aab45c6a71862c4ce88b"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
