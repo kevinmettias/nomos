@@ -84,5 +84,24 @@ pub(crate) const SNAPSHOT_GOLDEN: &str = "1fb5fb67d666b0bb983f3b71e7e09f93";
 /// bundle build for the first time under the current schema, and its bytes now include the
 /// domain/range/cardinality `SpecificationBundle`'s `RelationType` carries per
 /// `OD-SPEC-012` decision 6 — a real encoding change this constant had not yet seen.
-pub(crate) const BUNDLE_GOLDEN: &str = "6d4589efb6920ec2294231ef235b63cf";
+///
+/// Moved a third time by `P103-REPEATED-TEXT` (`6803c249`), and this one moved for the
+/// simplest reason a bundle's bytes can move: a bundle declares the schema version it was
+/// exported from. [`nomos_spec_bundle::Header`] carries `schema_version`, that migration
+/// added migration 8 (`repeated-text-declarations`) to a list that held seven, and the header
+/// is the first covered line of every bundle. So the digest had to move, and a digest that
+/// had *not* moved would have been the defect -- it would mean a bundle exported under a new
+/// schema was indistinguishable from one exported under the old.
+///
+/// Attributed rather than assumed, because a golden re-pinned to whatever the code now emits
+/// is a golden that has stopped pinning anything. `cargo test -p nomos-integration-tests
+/// --test determinism Bundle` passes at `9a7f3a35`, that commit's parent, producing exactly
+/// the value this constant held before; it fails at `6803c249` producing exactly the value it
+/// holds now. One commit, one cause, and the cause is the intended consequence of adding a
+/// declared table rather than a corruption of what was already there.
+///
+/// Nothing else in the fixture changed: `P103-REPEATED-TEXT` touched no file under
+/// `tests/integration`, and the new table is empty in this fixture, so not one record line
+/// differs. The whole move is the header's version field.
+pub(crate) const BUNDLE_GOLDEN: &str = "21b4117f8b5ec2bb8c54a2036dc5fff4";
 pub(crate) const PROJECTION_GOLDEN: &str = "9cecf39961bbd638111f82382eafd643";
