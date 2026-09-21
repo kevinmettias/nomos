@@ -9,11 +9,20 @@
 # candidates, selection rationale, usage, cost, latency, retries, and fallback
 # lineage."
 #
-# ModelExecutionTelemetry carries all thirteen named fields, but nothing in this
-# workspace emits one -- there is no model-assisted check, fix, or workflow step to
-# record telemetry for. Every registered rule is mechanical (MODEL-ROUTE-012's own
-# assessment), and ModelExecutionProfile's own doc comment already names that nothing
-# outside nomos-model-package references a profile yet.
+# ModelExecutionTelemetry still carries all thirteen named fields and nothing emits one.
+# What changed is why that is a gap. The old entry said nothing outside nomos-model-package
+# referenced a profile, so there was no model-assisted step to record telemetry for;
+# P40-MODEL-ROUTING-DISPATCH-WIRING made that false. A workflow agent step now resolves a
+# declared profile against a declared package set and dispatches to what answers, which is
+# a model-assisted workflow step in the requirement's own terms.
+#
+# So the absence is sharper than it was rather than smaller. Selected_Dispatch is the one
+# place in this workspace where a requested profile becomes an effective one -- it holds
+# the requested selector, the effort, the declared set it resolved against, and, through
+# ProfileResolution::Resolved, the other targets that also satisfied the selector, which is
+# the rejected-candidates field by another name. It records none of it and returns a
+# DispatchConfig. Every remaining field of the thirteen -- usage, cost, latency, retries,
+# fallback lineage -- has no producer anywhere.
 verdict: Partial
 site: crates/packages/nomos-model-package/src/model_execution_telemetry.rs#ModelExecutionTelemetry
-gap: crates/packages/nomos-model-package/src/model_execution_profile.rs#ModelExecutionProfile
+gap: crates/orchestration/nomos-agent-orchestration/src/backend_selection.rs#Selected_Dispatch

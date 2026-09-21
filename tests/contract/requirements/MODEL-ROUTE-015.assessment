@@ -8,10 +8,20 @@
 # executor-controlled disposition, mapping quality of Exact, Approximate, Unsupported,
 # or ExecutorControlled, package/version, rationale, and limitations."
 #
-# MappingQuality and EffortMappingRecord carry the full named shape, but nothing in this
-# workspace resolves an effort request against a real backend -- OD-PACKAGE-011 already
-# measured that nothing registers a model backend or executor implementation anywhere
-# in this workspace, so there is no real resolution for this type to be emitted from.
+# MappingQuality and EffortMappingRecord carry the full named shape, and the old entry's
+# reason for Partial is now false twice over. It said nothing registers a model backend or
+# executor implementation anywhere in this workspace, so no effort request could be
+# resolved; P40-MODEL-ROUTING-DISPATCH-WIRING declares two -- an AgentExecutorPackage and a
+# ModelBackendPackage, through Declared_Targets -- and an effort request really is resolved
+# against them.
+#
+# The requirement's trigger therefore fires now and its obligation does not. DispatchConfig
+# is the resolved shape: Selected_Dispatch carries the profile's canonical effort into it
+# unchanged, which is decision 6's "effort is carried, never mapped", and hands it to a
+# backend. No EffortMappingRecord is constructed at that point or any other. Nothing
+# records that Claude Code's disposition is executor-controlled while Ollama's is opaque --
+# a distinction Declared_Targets now states as ModelSelection and MappingQuality has a
+# variant for -- and nothing names the package version either declaration carries.
 verdict: Partial
 site: crates/packages/nomos-model-package/src/effort_mapping_record.rs#EffortMappingRecord
-gap: crates/packages/nomos-model-package/src/model_execution_profile.rs#ModelExecutionProfile
+gap: crates/orchestration/nomos-agent-orchestration/src/dispatch_config.rs#DispatchConfig

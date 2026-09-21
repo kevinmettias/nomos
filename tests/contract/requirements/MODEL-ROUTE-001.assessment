@@ -8,12 +8,22 @@
 # smallest explicit assignment shall override inherited defaults subject to organization
 # and repository policy constraints."
 #
-# One of five referencing surfaces is real: GateCommand::model is a genuine, tested field
-# a gate can carry a profile through. The other four are not -- rules/checks
-# (nomos_contracts::RuleId), phases, workflows and agent task classes have no structured
-# type anywhere in this workspace to hold a reference at all, named in
-# ModelExecutionProfile's own doc comment. The second sentence (override precedence) has
-# no resolver anywhere to carry it out.
+# Two of five referencing surfaces are real now. GateCommand::model was already a genuine
+# typed field a gate carries a profile through. Workflows became the second under
+# P40-MODEL-ROUTING-DISPATCH-WIRING: a workflow step is a Body::Agent carrying an
+# AgentBody, whose profile field is what selects the backend that answers it, replacing
+# the two per-backend variants that made the variant itself the choice.
+#
+# Three are still absent, and they are the gap rather than the reference this wiring
+# closed. Rules and checks declare through nomos_rules::RuleDescriptor, which has no field
+# to hold a profile; phases and agent task classes have no structured type either --
+# nomos_agent_contracts::TaskEnvelope carries goal, effort and tools, and the profile that
+# decides what runs it rides beside the envelope rather than in it.
+#
+# The second sentence is untouched. Selected_Dispatch attempts a named preference ahead of
+# a resolution, which is a precedence between two things a caller stated; it is not the
+# inheritance MODEL-ROUTE-001 names, and nothing in this workspace holds an organization
+# or repository policy for a smaller assignment to override.
 verdict: Partial
 site: crates/orchestration/nomos-gate-orchestration/src/gate_command.rs#GateCommand
-gap: crates/packages/nomos-model-package/src/model_execution_profile.rs#ModelExecutionProfile
+gap: crates/rules/nomos-rules/src/rule_descriptor.rs#RuleDescriptor

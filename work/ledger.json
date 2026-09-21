@@ -86031,7 +86031,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P40-MODEL-ROUTING-DISPATCH-WIRING",
         "P114-TRACE-STALE-SITES-FROM-P112-PLACEMENT"
@@ -86050,7 +86050,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "requirement_trace",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "It_Is_Given ... ok\ntest committed::Test_Every_Gap_Should_Resolve ... ok\ntest committed::Test_Every_Named_Record_Should_Exist_And_Be_Registered ... ok\ntest committed::Test_Every_Assessment_Should_Name_A_Site_That_Exists ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-a7d1f0df04e0b29f.exe)\n",
+        "verified_at": 1790014469,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c0b61c1f48599e18889e241dd22f5268f829893c"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
