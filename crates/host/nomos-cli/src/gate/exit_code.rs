@@ -22,8 +22,17 @@ pub(crate) enum ExitCode
 {
     /// The plan was composed and reported, or `run` judged the tree and nothing it found
     /// can fail a build.
+    ///
+    /// For `steps`, the narrowest of the three: every step the workflow declares ran on this
+    /// host and every one of them passed. A run that covered only part of the set is
+    /// [`Contradictory`](Self::Contradictory) instead, because a clean result over a subset
+    /// would claim something the run never established.
     Ok = 0,
-    /// `run` found at least one finding that can fail a build.
+    /// `run` found at least one finding that can fail a build, or a step `steps` executed
+    /// exited non-zero.
+    ///
+    /// A failed step takes precedence over an incomplete set: the gate said no, and that is
+    /// actionable whether or not the rest of the steps were reachable from here.
     Violations = 1,
     /// The command line was wrong.
     Usage = 2,
@@ -49,6 +58,15 @@ pub(crate) enum ExitCode
     /// `Indeterminate` nor from `run` -- both sides were judged -- but the same claim as
     /// the three above, one layer further in: what `compare` needed in order to answer was
     /// never assembled.
+    ///
+    /// `steps` reaches it for two more, and both are the same claim again. A workflow that
+    /// could not be read leaves the step set unknown, so there was nothing to execute. And an
+    /// execution that ran every step it could, with all of them passing, still reports this
+    /// when any step was unavailable on this host or refused by the reader: the run did not
+    /// cover the set it claims to be an execution of. That is `OD-GATE-016`'s shape one layer
+    /// out -- a run whose claim is incomplete is `Indeterminate` rather than clean -- and
+    /// `OD-GATE-033` forbids the alternative by name, because a subset reported as clean is
+    /// what `OD-GATE-001` and `OD-GATE-020` are about.
     Contradictory = 5,
     /// `run` found no source under the tree, or no fact was materialized for any of it, so
     /// nothing was judged. Also `GateRunOutcome::Indeterminate`; a clean result here would

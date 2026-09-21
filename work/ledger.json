@@ -86541,11 +86541,14 @@
           "crates/host/nomos-cli/src/gate/parsing.rs",
           "crates/host/nomos-cli/src/gate/report.rs",
           "crates/host/nomos-cli/src/gate/exit_code.rs",
-          "tests/contract/surface/nomos-cli.txt"
+          "tests/contract/surface/nomos-cli.txt",
+          "crates/substrate/nomos-ledger/src/gate_unknown.rs",
+          "crates/host/nomos-cli/src/gate/report/steps.rs",
+          "crates/host/nomos-cli/src/gate/tests/invocation.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -86559,11 +86562,54 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "eck_orchestration_seam-6fb95f50087f263b.exe)\n     Running tests\\composer_std_seam.rs (target\\debug\\deps\\composer_std_seam-639d64fa780399b7.exe)\n     Running tests\\contracts_seam.rs (target\\debug\\deps\\contracts_seam-ff2e657e0d1e61ca.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-0d60657fde4b7446.exe)\n     Running tests\\gate_orchestration_seam.rs (target\\debug\\deps\\gate_orchestration_seam-ded4c2694e7c824a.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-f270af0016642e07.exe)\n     Running tests\\lang_go_seam.rs (target\\debug\\deps\\lang_go_seam-e3bcee870b052d17.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-851007efe6bd3756.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-5d444830202ddde4.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-e7f7db71f310ca63.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-056f34bc09f04fdd.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-74a07e13930ce6f0.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-39f2458f043dd406.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-47151b607b277da1.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-6be6116540c584d7.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-7079377312ee0ae6.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-44e245940928f9d8.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-946c2af88fccfaf4.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-0c422db6980ca079.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-4ff0f5ba759c0339.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-73d4d2c1b39b0556.exe)\n",
+        "verified_at": 1789964102,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "73d15619cc4796542d96030554f202eb0a6359bd"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "crates/substrate/nomos-ledger/src/gate_unknown.rs"
+          ],
+          "widened_at": 1789963701
+        },
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "crates/host/nomos-cli/src/gate/report/steps.rs"
+          ],
+          "widened_at": 1789963777
+        },
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "crates/host/nomos-cli/src/gate/tests/invocation.rs"
+          ],
+          "widened_at": 1789963815
+        }
+      ]
     }
   ]
 }

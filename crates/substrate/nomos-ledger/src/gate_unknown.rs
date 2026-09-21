@@ -141,10 +141,10 @@ impl GateUnknown
                  predicate is the defect this module exists to close"
             ),
             Self::GuardOutsideSubset { step, guard } => format!(
-                "the gate's `{step}` step is guarded by `{guard}`, which this reader does                  not implement. Which legs run it is therefore unknown, and an executor                  that guessed would run a step on the wrong host or drop it silently"
+                "the gate's `{step}` step is guarded by `{guard}`, which this reader does not implement. Which legs run it is therefore unknown, and an executor that guessed would run a step on the wrong host or drop it silently"
             ),
             Self::DidNotRun { step, cause } => format!(
-                "the gate's `{step}` step was admitted here but did not exit on its own                  ({cause}), so this execution says nothing about what it would have found"
+                "the gate's `{step}` step was admitted here but did not exit on its own ({cause}), so this execution says nothing about what it would have found"
             ),
         };
     }

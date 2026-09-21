@@ -1,5 +1,7 @@
 //! What `nomos gate` was asked to do -- which verb, over which command.
 
+use std::path::PathBuf;
+
 use super::{FindingQuery, GateCommand};
 
 /// What `nomos gate` was asked to do -- which verb, over which command.
@@ -50,5 +52,23 @@ pub enum Invocation
     {
         depending: String,
         depended: String,
+    },
+    /// Execute the canonical gate's own step set on this host, and report every step.
+    ///
+    /// The one verb whose subject is the gate itself rather than a tree the gate judges, so
+    /// it carries no [`GateCommand`]: no scope to narrow and no rules to select, because the
+    /// step set is read out of `.github/workflows/gate.yml` and nothing selects from it.
+    /// `OD-GATE-033` decided that file is the canonical model and that GitHub Actions and a
+    /// local executor both project from it, which is what makes this a second executor
+    /// rather than a second definition.
+    ///
+    /// `host` is the matrix label an execution runs as, not the operating system's own name.
+    /// It is a value rather than a detection so that a person can ask what the other leg
+    /// would do, and so that this crate's own tests can exercise both legs on either
+    /// machine.
+    Steps
+    {
+        root: PathBuf,
+        host: String,
     },
 }

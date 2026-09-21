@@ -17,6 +17,7 @@ mod admits;
 mod baselines;
 mod explain;
 mod run;
+mod steps;
 
 #[cfg(test)]
 mod tests;
@@ -24,6 +25,7 @@ mod tests;
 pub(super) use admits::Render_Admits;
 pub(super) use explain::Render_Explain;
 pub(super) use run::{Render_Plan, Render_Run};
+pub(super) use steps::Render_Steps;
 
 use run::{Render_Check_Unreadable, Render_Run_Contradictory, Render_Run_No_Facts, Render_Run_No_Source};
 

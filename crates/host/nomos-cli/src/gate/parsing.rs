@@ -6,8 +6,8 @@ use nomos_contracts::RuleId;
 use nomos_gate_orchestration::{RuleSelector, ScopeSelector};
 
 /// The flags this group accepts besides `--root`, `--rule` and `--location`.
-const KNOWN_ARGUMENTS: [&str; 8] =
-    ["--root", "--include", "--exclude", "--rule", "--location", "--against", "--from", "--to"];
+const KNOWN_ARGUMENTS: [&str; 9] =
+    ["--root", "--include", "--exclude", "--rule", "--location", "--against", "--from", "--to", "--host"];
 
 pub(super) const USAGE: &str = "usage: nomos gate plan    [--root <path>] [--include <path>]… \
 [--exclude <path>]… [--rule <id>]…\n       \
@@ -15,7 +15,8 @@ pub(super) const USAGE: &str = "usage: nomos gate plan    [--root <path>] [--inc
      nomos gate explain [--root <path>] --rule <id> --location <path>\n       \
      nomos gate compare [--root <path>] --against <path> [--include <path>]… \
 [--exclude <path>]… [--rule <id>]…\n       \
-     nomos gate admits  --from <crate> --to <crate>\n\n\
+     nomos gate admits  --from <crate> --to <crate>\n       \
+     nomos gate steps   [--root <path>] [--host <label>]\n\n\
      plan composes this gate's rule registry and reports what it holds.\n\
      run walks the tree, judges it, and reports a real disposition.\n\
      explain walks the tree, judges it, and reports what one named finding looks like and \
@@ -23,14 +24,18 @@ whether it would block.\n\
      compare walks --root and --against, judges each, and reports which findings were \
 added, removed, or moved between buckets.\n\
      admits answers whether --from may name --to under the declared architecture, before any \
-manifest carries the edge. It walks no tree, so --root does not apply to it: the architecture it answers from is read from the nearest enclosing directory that declares one, and outside a repository that declares none the answer is `not judged`.\n\n\
+manifest carries the edge. It walks no tree, so --root does not apply to it: the architecture it answers from is read from the nearest enclosing directory that declares one, and outside a repository that declares none the answer is `not judged`.\n\
+     steps executes this gate's own step set, read from .github/workflows/gate.yml, and \
+reports what every step did here -- including the ones this host did not run, and why \
+each was not run. It judges no tree.\n\n\
      --include/--exclude narrow which files `run` judges, by path prefix; repeat for \
 several. For plan/run, --rule (repeatable) narrows which rules' findings can fail the \
 build. For explain, --rule names the one rule whose finding to explain -- required, not \
 repeatable -- alongside --location, one of that finding's own locations, also \
 required. For compare, --against names the second tree to judge -- required -- and every \
 other flag narrows both sides alike. For admits, --from and --to name the two crates -- both \
-required, neither repeatable.\n\n\
+required, neither repeatable. For steps, --host names the matrix label to execute as, \
+defaulting to the label this operating system corresponds to.\n\n\
      exit codes: 0 clean (the plan was composed, nothing judged can fail a build, \
 explain's finding was not found or would not block, or admits permitted the edge or could \
 not judge it),\n\
@@ -72,11 +77,37 @@ pub fn Gate_Invocation_From_String_Arguments(arguments: &[String]) -> Result<Inv
     return Verb_Invocation(verb, rest, root);
 }
 
-/// Refuses anything but the three verbs this group implements today.
+/// The matrix label an execution runs as: `--host` when given, and otherwise the label this
+/// operating system corresponds to in the workflow's own matrix.
+///
+/// An operating system the matrix does not name is carried through verbatim rather than
+/// mapped onto one of the two that it is not. Every guarded step is then unavailable and the
+/// run says so, which is the honest answer on a machine no leg of this gate runs on -- and a
+/// better one than silently reporting what a different host would have done.
+fn Host_Label(rest: &[String]) -> String
+{
+    if let Some(named) = Named_Value_From_String_Arguments(rest, "--host")
+    {
+        return named;
+    }
+
+    return match std::env::consts::OS
+    {
+        "linux" => "ubuntu-latest".to_owned(),
+        "windows" => "windows-latest".to_owned(),
+        other => other.to_owned(),
+    };
+}
+
+/// Refuses anything but the verbs this group implements today.
 fn Known_Verb(verb: &str) -> Result<(), String>
 {
-    let is_unknown_verb =
-        verb != "plan" && verb != "run" && verb != "explain" && verb != "compare" && verb != "admits";
+    let is_unknown_verb = verb != "plan"
+        && verb != "run"
+        && verb != "explain"
+        && verb != "compare"
+        && verb != "admits"
+        && verb != "steps";
     if is_unknown_verb
     {
         return Err(format!("unknown verb `{verb}`.\n\n{USAGE}"));
@@ -119,6 +150,11 @@ fn Verb_Invocation(verb: &str, rest: &[String], root: PathBuf) -> Result<Invocat
     if verb == "admits"
     {
         return Admits_Invocation(rest);
+    }
+
+    if verb == "steps"
+    {
+        return Ok(Invocation::Steps { root, host: Host_Label(rest) });
     }
 
     let command = Plan_Or_Run_Command(root, rest);
@@ -292,5 +328,65 @@ mod tests
         assert_eq!(candidate.root, PathBuf::from("after"));
         assert_eq!(baseline.scope.include, ["src".to_owned()]);
         assert_eq!(candidate.scope.include, ["src".to_owned()], "a selector must narrow both sides alike");
+    }
+
+    /// `steps` is a verb of its own, carrying a root and a host and no `GateCommand`.
+    #[test]
+    fn Test_Steps_Should_Parse_With_A_Root_And_A_Host()
+    {
+        let arguments = vec![
+            "steps".to_owned(),
+            "--root".to_owned(),
+            "somewhere".to_owned(),
+            "--host".to_owned(),
+            "windows-latest".to_owned(),
+        ];
+
+        let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("steps is a verb");
+
+        let Invocation::Steps { root, host } = invocation
+        else
+        {
+            panic!("steps must parse as Steps, got {invocation:?}");
+        };
+        assert_eq!(root, PathBuf::from("somewhere"));
+        assert_eq!(host, "windows-latest");
+    }
+
+    /// With no `--host`, the label is this machine's own leg rather than a fixed guess, so a
+    /// run on either supported host answers for that host.
+    #[test]
+    fn Test_Steps_Should_Default_The_Host_To_This_Machines_Own_Leg()
+    {
+        let invocation =
+            Gate_Invocation_From_String_Arguments(&["steps".to_owned()]).expect("steps with no flags is valid");
+
+        let Invocation::Steps { host, .. } = invocation
+        else
+        {
+            panic!("steps must parse as Steps");
+        };
+
+        let expected = match std::env::consts::OS
+        {
+            "linux" => "ubuntu-latest",
+            "windows" => "windows-latest",
+            other => other,
+        };
+        assert_eq!(host, expected);
+    }
+
+    /// The refusal for an unknown verb keeps naming the whole set, so adding a verb without
+    /// adding it to the usage text would show up here.
+    #[test]
+    fn Test_An_Unknown_Verb_Should_Still_Name_Every_Verb_Including_Steps()
+    {
+        let refusal =
+            Gate_Invocation_From_String_Arguments(&["bogus".to_owned()]).expect_err("bogus is not a verb");
+
+        for verb in ["plan", "run", "explain", "compare", "admits", "steps"]
+        {
+            assert!(refusal.contains(verb), "the refusal must name `{verb}`: {refusal}");
+        }
     }
 }

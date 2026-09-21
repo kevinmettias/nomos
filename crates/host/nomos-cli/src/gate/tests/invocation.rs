@@ -21,6 +21,10 @@ fn Root_Of(invocation: &Invocation) -> &PathBuf
         {
             panic!("`admits` has no root; it judges a crate pair rather than a tree")
         }
+        // `steps` carries a root of its own rather than one inside a `GateCommand`: it reads
+        // the workflow under the tree and judges nothing in it, so there is no scope to
+        // narrow and no rules to select for a command to hold.
+        Invocation::Steps { root, .. } => root,
     };
 }
 

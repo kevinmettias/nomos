@@ -63,7 +63,7 @@ mod tests;
 
 pub use invocation::Invocation;
 pub use parsing::Gate_Invocation_From_String_Arguments;
-use report::{Render_Admits, Render_Compare, Render_Explain, Render_Plan, Render_Run};
+use report::{Render_Admits, Render_Compare, Render_Explain, Render_Plan, Render_Run, Render_Steps};
 
 mod exit_code;
 
@@ -79,6 +79,33 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 
 /// Runs the requested verb and renders what it says.
+/// Executes the canonical gate's own step set on this host and reports every step.
+///
+/// The workflow is read through the same [`FileSystem`] port every other verb uses, and the
+/// steps run through the same [`LAUNCHER`] that `work finish` already runs the lint step
+/// with, so this is a second executor of one model rather than a second definition of it --
+/// `OD-GATE-033`'s decision 1, in the one place it has to hold.
+///
+/// A workflow that cannot be read is `Contradictory`, not an empty run: the thing this verb
+/// needed in order to answer was never assembled, which is exactly what that code already
+/// means for every other verb in this group.
+fn Steps_Verb(root: &Path, host: &str, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+{
+    let path = nomos_ledger::Workflow_Path(root);
+
+    let Ok(workflow) = FILE_SYSTEM.Read_To_String(&path)
+    else
+    {
+        writeln!(stderr, "{} could not be read, so the gate's step set is unknown", path.display()).ok();
+        return ExitCode::Contradictory;
+    };
+
+    let steps = nomos_ledger::Derive_Steps(workflow.as_str());
+    let run = nomos_ledger::Run_Gate_Locally(&steps, host, &LAUNCHER, Some(root));
+
+    return Render_Steps(&run, host, stdout);
+}
+
 pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
     return match invocation
@@ -89,6 +116,7 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
             Render_Plan(&outcome, stdout, stderr)
         }
         Invocation::Run(command) => Run_Verb(command, stdout, stderr),
+        Invocation::Steps { root, host } => Steps_Verb(root, host, stdout, stderr),
         Invocation::Compare { baseline, candidate } =>
         {
             Compare_Verb(baseline, candidate, stdout, stderr)
