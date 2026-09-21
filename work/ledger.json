@@ -75503,11 +75503,12 @@
       "territory": {
         "resolution": "File",
         "paths": [
-          "crates/orchestration/nomos-check-orchestration/src/tests.rs"
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests/reuse.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -75522,11 +75523,41 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "--lib"
+        ],
+        "exit_code": 0,
+        "output_tail": "ce_Members ... ok\ntest tests::composition::Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor ... ok\ntest tests::reuse::Test_A_Retained_Cache_Under_The_Production_Selection_Should_Skip_Most_Of_The_Composed_Table ... ok\n\ntest result: ok. 73 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.30s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.55s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-2fa2757b62c715fb.exe)\n",
+        "verified_at": 1790034741,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "aa609d3fa25605626fc56c7453de98c6b8114c24"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-skip-ratio",
+          "added": [
+            "crates/orchestration/nomos-check-orchestration/src/tests/reuse.rs"
+          ],
+          "widened_at": 1790034470
+        }
+      ]
     },
     {
       "id": "P104-THE-GATE-EXIT-CODE-DOC-ENUMERATES-THREE-CAUSES-AND-COMPARE-ADDED-A-FOURTH",

@@ -265,3 +265,75 @@ fn Test_A_Retained_Cache_Should_Skip_A_Rule_Whose_Families_Did_Not_Move()
     Assert_Skip_Repeats_Its_Last_Findings(first, second);
     assert!(matches!(third, CheckOutcome::Judged { .. }), "the edited call must still be judged");
 }
+
+/// The empty selection, which is what every real caller passes and what
+/// `NomosDiagnosticProvider` passes in particular. Named rather than written as `&[]` at the
+/// call, because an empty slice at a call site reads as "no rules" and means the opposite.
+const EVERY_COMPOSED_RULE: &[RuleId] = &[];
+
+/// A retained cache skips a large part of the composed table under the selection production
+/// actually uses, and stops skipping for the rules an edit reaches.
+///
+/// The test above selects `COMPLETENESS_MIRROR` alone and its own doc says why: a rule
+/// reading a policy family would prove less there, since those sections re-materialize on
+/// every call. That is the right choice for the claim it makes, and it leaves the production
+/// claim unmade. This is that claim.
+///
+/// Nothing asserted it before. A regression putting `SyntaxItems` into `changed`
+/// unconditionally would take the skip to nothing and leave the narrow test above, the LSP
+/// suite, and every equivalence test in this workspace green, because skipping a
+/// deterministic rule and re-running it produce identical findings. `Recorded` is the only
+/// observable that tells them apart, and `0c3b1013` established that nothing outside this
+/// crate can distinguish the two -- so a claim not asserted here is asserted nowhere.
+///
+/// Written as inequalities, not as the figures measured when it was first run. The composed
+/// table grows, and a test that fails because somebody added a rule fails for the wrong
+/// reason. What is fixed is the shape: an unchanged call skips part of the table, and an
+/// edit puts rules back.
+///
+/// How much, measured 2026-09-21 and recorded here as a reading rather than as an assertion:
+/// 71 rules cold, 33 on the unchanged call, 71 again after the edit. So the skip is 38 of 71,
+/// and the edit is a *total* invalidation -- editing one of two sources puts the whole table
+/// back in play, not the part of it that reads the edited file. That is worth knowing and is
+/// deliberately not asserted here: whether an edit should invalidate the rules that cannot
+/// see it is a question about the materialization, and pinning today's answer in this test
+/// would freeze it. `0c3b1013`'s own commit message read 71, then plus 19, then plus 68 over
+/// a different table, which is the other reason these are inequalities.
+#[test]
+fn Test_A_Retained_Cache_Under_The_Production_Selection_Should_Skip_Most_Of_The_Composed_Table()
+{
+    let unedited = [
+        Source_File("a.rs", SourceText("pub fn Ok() {}\n")),
+        Source_File("b.rs", SourceText("pub fn Also_Ok() {}\n")),
+    ];
+    let edited = [
+        Source_File("a.rs", SourceText("pub fn Ok() {}\npub fn Newly_Added() {}\n")),
+        Source_File("b.rs", SourceText("pub fn Also_Ok() {}\n")),
+    ];
+
+    let mut fixture = ReassessmentFixture::New();
+
+    let _cold_outcome = fixture.Reassess(&unedited, EVERY_COMPOSED_RULE);
+    let cold = fixture.Recorded();
+    let _unchanged_outcome = fixture.Reassess(&unedited, EVERY_COMPOSED_RULE);
+    let unchanged = fixture.Recorded().saturating_sub(cold);
+    let _edited_outcome = fixture.Reassess(&edited, EVERY_COMPOSED_RULE);
+    let after_edit = fixture.Recorded().saturating_sub(cold).saturating_sub(unchanged);
+
+    assert!(
+        cold > 0,
+        "the cold call recorded no rule invocation at all, so the two comparisons below would \
+         compare nothing -- the empty selection must mean every composed rule, not none"
+    );
+    assert!(
+        unchanged < cold,
+        "a second call over unmoved sources must run strictly fewer rules than the cold one: \
+         cold ran {cold}, unchanged ran {unchanged}. Equal counts mean nothing skipped, which is \
+         what a cache threaded and never consulted looks like"
+    );
+    assert!(
+        after_edit > unchanged,
+        "editing one of the two sources must put more rules back in play than an unchanged call \
+         does: unchanged ran {unchanged}, the edited call ran {after_edit}"
+    );
+}
