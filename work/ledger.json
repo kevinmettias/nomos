@@ -86525,6 +86525,45 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P119-THE-LOCAL-GATE-EXECUTION-HAS-NO-COMMAND-LINE",
+      "title": "The local gate execution is a function nothing calls, so the surface OD-GATE-033 requires to be reachable from a command line is not",
+      "why": "P119-THE-LOCAL-GATE-EXECUTOR-READS-THE-GUARD-THE-DERIVATION-DISCARDS built the ledger half and said in its own done_when that the CLI verb was a separate item. This is that item.\n\nRun_Gate_Locally and Derive_Steps are public in nomos-ledger and tested against the real workflow, and nothing outside that crate's own tests calls either. OD-GATE-033 decision 4 is explicit that this is not enough: the surface must be reachable from the command line rather than present only in prose, because a state that can be read only by someone who already knows it exists is the shape OD-GATE-001 refuses.\n\nThe gate has executed no step since 2026-09-07, so the value of closing this is not theoretical. Until it is closed, the only local signal a session has is the Lint step work finish derives plus whatever its own item predicate names, and every other step of the canonical set is unrun and unreported.\n\nWhat the ledger half measured, and what the verb therefore has to render honestly: on a Linux host twelve of the fifteen steps execute. Determinism is guarded to Windows and is Unavailable. Show toolchain and Portability floor are admitted and still do not run, because their run: bodies are shell scripts the argv subset refuses rather than guesses at. A renderer that showed one skipped count over those three would destroy the distinction the values exist to carry.",
+      "done_when": "A gate verb runs the canonical step set on this host and prints every step with the value it got, in the workflow's own order, naming the steps it did not execute and why each was not executed. Unavailable and Refused are distinguishable in the output by a reader who did not write it.\n\nThe exit code answers the question a caller asks, and the question is not only whether the executed steps passed. An execution in which every executed step exited zero while some step was Unavailable or Refused must not exit zero, because that is the subset-reported-as-clean OD-GATE-033 forbids and OD-GATE-001 is about. What it exits instead is this item's to decide, and nomos-cli::gate::exit_code is where the existing verbs' answers already live.\n\nThe verb is composed into the existing gate invocation rather than added beside it: parsing recognizes it the way it recognizes plan, run, explain, compare and admits, and the refusal for an unknown verb keeps naming the whole set.\n\nA falsifier is performed rather than assumed: with the unexecuted steps omitted from the rendering, a test that reads the printed output must fail, and with the exit code forced to zero over an unavailable step, a second test must fail.\n\nThe predicate is cargo test --no-fail-fast -p nomos-cli. The ledger half is already verified under its own item and is not re-claimed here.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate/invocation.rs",
+          "crates/host/nomos-cli/src/gate/parsing.rs",
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-cli/src/gate/exit_code.rs",
+          "tests/contract/surface/nomos-cli.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
