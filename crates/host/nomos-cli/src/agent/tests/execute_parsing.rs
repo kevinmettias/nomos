@@ -1,7 +1,7 @@
 //! `execute`'s own command line: every spelling each of its flags takes, and every word
 //! each of them refuses.
 
-use super::super::{Backend, Command, Command_From_String_Arguments};
+use super::super::{Command, Command_From_String_Arguments};
 use super::Arguments;
 
 #[test]
@@ -88,14 +88,14 @@ fn Test_An_Unrecognized_Effort_Should_Be_A_Usage_Error()
 
 /// With neither flag, the command carries no preference at all.
 ///
-/// It used to carry `Backend::ClaudeCode`, and that constant was the defect
+/// It used to carry a fixed dispatch target, and that constant was the defect
 /// `OD-PACKAGE-016` decision 9 is about: a dispatch target chosen by this parser rather than
 /// resolved against anything, so a build whose declared set had dropped Claude Code would
 /// still have dispatched to it. `None` here is not a missing value -- it is the absence of a
 /// preference, which is what lets the declared profile resolve and answer for a reason.
 ///
 /// Where the backend now comes from is asserted in `nomos-agent-orchestration`, by
-/// `Test_A_Profile_With_No_Preference_Should_Still_Reach_A_Backend`. This end only has to
+/// `Test_A_Profile_With_No_Preference_Should_Still_Reach_A_Target`. This end only has to
 /// stop choosing.
 // test-data: allow this pins the single, fixed scenario of omitting both flags; there is
 // no second "no backend given" input to tabulate against it.

@@ -1,7 +1,7 @@
 [package]
 name = "nomos-agent-executor-claude-code"
 version = "0.1.0"
-description = "The Claude Code AgentExecutor adapter: dispatches a TaskEnvelope's goal to Claude Code as a subprocess, bounded by OD-EXECUTOR-001's structural capability boundary, and reads back an AgentExecutionOutcome. Renamed from nomos-agent-executor -- OD-EXECUTOR-001's own amendment says why."
+description = "The Claude Code AgentExecutor adapter: dispatches a TaskEnvelope's goal to Claude Code as a subprocess, bounded by OD-EXECUTOR-001's structural capability boundary, and reads back an AgentExecutionOutcome. Answers nomos-agent-contracts' AgentExecutor port and declares its own routing target, so a generic agent path names the port rather than this crate (OD-ROADMAP-005). Renamed from nomos-agent-executor -- OD-EXECUTOR-001's own amendment says why."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -9,6 +9,11 @@ publish.workspace = true
 
 [dependencies]
 nomos-agent-contracts = { workspace = true }
+# PackageId, PackageKind and ContractVersion: the identifiers and versions this crate's own
+# declared routing target states about itself. Moved from `[dev-dependencies]` by the port
+# item -- the declaration ships now, so a manifest calling it test-only would be the
+# narrower claim.
+nomos-contracts = { workspace = true }
 nomos-model-package = { workspace = true }
 nomos-platform = { workspace = true }
 # The dispatch itself, and the bridge from this workspace's launcher onto the
@@ -19,7 +24,6 @@ xvpe-agent-backend-claude-code = { workspace = true }
 serde_json = { workspace = true }
 
 [dev-dependencies]
-nomos-contracts = { workspace = true }
 nomos-ledger = { workspace = true }
 nomos-platform-std = { workspace = true }
 

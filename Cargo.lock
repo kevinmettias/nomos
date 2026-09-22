@@ -948,6 +948,7 @@ dependencies = [
  "nomos-model-package",
  "nomos-scope-verification",
  "serde",
+ "xvpe-agent-execution",
 ]
 
 [[package]]
@@ -971,11 +972,9 @@ name = "nomos-agent-orchestration"
 version = "0.1.0"
 dependencies = [
  "nomos-agent-contracts",
- "nomos-agent-executor-claude-code",
  "nomos-contracts",
  "nomos-corrections",
  "nomos-model",
- "nomos-model-backend-ollama",
  "nomos-model-package",
  "nomos-platform",
  "nomos-platform-std",
@@ -1533,6 +1532,7 @@ version = "0.1.0"
 dependencies = [
  "nomos-analysis",
  "nomos-cap-architecture",
+ "nomos-cap-requirement-trace",
  "nomos-capability",
  "nomos-check-orchestration",
  "nomos-composer-std",
@@ -1830,7 +1830,6 @@ name = "nomos-workflow-orchestration"
 version = "0.1.0"
 dependencies = [
  "nomos-agent-contracts",
- "nomos-agent-executor-claude-code",
  "nomos-agent-orchestration",
  "nomos-analysis",
  "nomos-check-orchestration",
@@ -1839,7 +1838,6 @@ dependencies = [
  "nomos-gate-orchestration",
  "nomos-ledger",
  "nomos-model",
- "nomos-model-backend-ollama",
  "nomos-model-package",
  "nomos-platform",
  "nomos-platform-std",

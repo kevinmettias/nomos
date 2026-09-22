@@ -1,20 +1,38 @@
 pub enum nomos_agent_contracts::ChangeContextSubject
+pub enum nomos_agent_contracts::DispatchPort<'port>
 pub enum nomos_agent_contracts::PortionSubstantiation
 pub enum nomos_agent_contracts::UnsubstantiatedReason
 pub enum variant nomos_agent_contracts::ChangeContextSubject::Scope(Territory)
 pub enum variant nomos_agent_contracts::ChangeContextSubject::Symbol(SubjectId)
 pub enum variant nomos_agent_contracts::ChangeContextSubject::TaskDescription(String)
+pub enum variant nomos_agent_contracts::DispatchPort::Executor(&'port dyn AgentExecutor)
+pub enum variant nomos_agent_contracts::DispatchPort::Model(&'port dyn ModelBackend)
 pub enum variant nomos_agent_contracts::PortionSubstantiation::Substantiated
 pub enum variant nomos_agent_contracts::PortionSubstantiation::Unsubstantiated(UnsubstantiatedReason)
 pub enum variant nomos_agent_contracts::UnsubstantiatedReason::ProducerCannotGround
+pub fn nomos_agent_contracts::AgentExecutor::Execute(&self, task: &TaskEnvelope, root: &Path) -> Result<AgentExecution, DispatchRefusal>
+pub fn nomos_agent_contracts::DispatchRefusal::Of(reason: impl Into<String>) -> Self
+pub fn nomos_agent_contracts::DispatchRefusal::Reason(&self) -> &str
+pub fn nomos_agent_contracts::DispatchRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_agent_contracts::IsolatedWorkingDirectoryError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_agent_contracts::Isolated_Working_Directory(prefix: &str) -> Result<PathBuf, IsolatedWorkingDirectoryError>
+pub fn nomos_agent_contracts::ModelBackend::Answer(&self, task: &TaskEnvelope) -> Result<ModelAnswer, DispatchRefusal>
 pub fn nomos_agent_contracts::PortionSubstantiation::Describe(&self) -> String
 pub fn nomos_agent_contracts::PortionSubstantiation::Is_Substantiated(&self) -> bool
 pub fn nomos_agent_contracts::UnsubstantiatedReason::Describe(&self) -> String
+pub impl nomos_agent_contracts::DispatchRefusal implements core::fmt::Display
 pub impl nomos_agent_contracts::IsolatedWorkingDirectoryError implements core::fmt::Display
+pub struct field nomos_agent_contracts::AgentExecution::denied_tool_uses: Vec<String>
+pub struct field nomos_agent_contracts::AgentExecution::duration_ms: u64
+pub struct field nomos_agent_contracts::AgentExecution::is_error: bool
+pub struct field nomos_agent_contracts::AgentExecution::result: WorkResult
+pub struct field nomos_agent_contracts::AgentExecution::spend: MicroDollars
+pub struct field nomos_agent_contracts::DeclaredTarget::family: String
+pub struct field nomos_agent_contracts::DeclaredTarget::package: ModelRoutePackage
+pub struct field nomos_agent_contracts::DeclaredTarget::port: DispatchPort<'port>
 pub struct field nomos_agent_contracts::IsolatedWorkingDirectoryError::cause: std::io::Error
 pub struct field nomos_agent_contracts::IsolatedWorkingDirectoryError::path: PathBuf
+pub struct field nomos_agent_contracts::ModelAnswer::response: String
 pub struct field nomos_agent_contracts::NomosResolvedChangeContext::applicability: BTreeMap<RuleId, Applicability>
 pub struct field nomos_agent_contracts::NomosResolvedChangeContext::approved_capabilities: Vec<CapabilityId>
 pub struct field nomos_agent_contracts::NomosResolvedChangeContext::permitted_scope: Territory
@@ -44,8 +62,17 @@ pub struct field nomos_agent_contracts::WorkResult::requested_verification: Opti
 pub struct field nomos_agent_contracts::WorkResult::substantiation: Substantiation
 pub struct field nomos_agent_contracts::WorkResult::tests: Vec<VerificationPredicate>
 pub struct field nomos_agent_contracts::WorkResult::unresolved_questions: Vec<String>
+pub struct nomos_agent_contracts::AgentExecution
+pub struct nomos_agent_contracts::DeclaredTarget<'port>
+pub struct nomos_agent_contracts::DispatchRefusal
 pub struct nomos_agent_contracts::IsolatedWorkingDirectoryError
+pub struct nomos_agent_contracts::ModelAnswer
 pub struct nomos_agent_contracts::NomosResolvedChangeContext
 pub struct nomos_agent_contracts::Substantiation
 pub struct nomos_agent_contracts::TaskEnvelope
 pub struct nomos_agent_contracts::WorkResult
+pub trait nomos_agent_contracts::AgentExecutor
+pub trait nomos_agent_contracts::ModelBackend
+
+# re-exports of items declared outside this crate
+pub use xvpe_agent_execution::MicroDollars

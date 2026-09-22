@@ -1,6 +1,6 @@
 //! What `nomos agent` was asked to do.
 
-use super::{Backend, Command};
+use super::Command;
 use crate::arguments::{Name, Named_Value_From_String_Arguments, Required_Value, Usage};
 
 /// Parses `nomos agent` arguments.
@@ -96,18 +96,26 @@ fn Backend_From_String_Arguments(arguments: &[String]) -> Result<Option<String>,
         )),
         (Some(text), None) => match text.as_str()
         {
-            "claude-code" => Ok(Some(text)),
-            other => Err(format!("--executor {other:?} is not one of claude-code.\n\n{}", Usage_Text())),
+            nomos_agent_executor_claude_code::FAMILY => Ok(Some(text)),
+            other => Err(format!(
+                "--executor {other:?} is not one of {}.\n\n{}",
+                nomos_agent_executor_claude_code::FAMILY,
+                Usage_Text()
+            )),
         },
         (None, Some(text)) => match text.as_str()
         {
-            "ollama" => Ok(Some(text)),
-            other => Err(format!("--model-backend {other:?} is not one of ollama.\n\n{}", Usage_Text())),
+            nomos_model_backend_ollama::FAMILY => Ok(Some(text)),
+            other => Err(format!(
+                "--model-backend {other:?} is not one of {}.\n\n{}",
+                nomos_model_backend_ollama::FAMILY,
+                Usage_Text()
+            )),
         },
         // Neither flag names one, so nothing here chooses. `OD-PACKAGE-016` decision 9 and
-        // its wiring item are about this line specifically: it used to answer
-        // `Backend::ClaudeCode`, which is a backend nobody declared and nothing resolved --
-        // a default wearing a decision's clothes. The absence travels to
+        // its wiring item are about this line specifically: it used to answer a dispatch
+        // target directly, which nobody declared and nothing resolved -- a default wearing a
+        // decision's clothes. The absence travels to
         // `nomos_agent_orchestration::Selected_Dispatch`, where the profile resolves against
         // the declared set and answers for a reason.
         (None, None) => Ok(None),

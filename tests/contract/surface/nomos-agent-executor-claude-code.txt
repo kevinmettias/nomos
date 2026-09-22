@@ -1,3 +1,5 @@
+pub const fn nomos_agent_executor_claude_code::ClaudeCodeExecutor::Through(launcher: &'launcher Launcher) -> Self
+pub const nomos_agent_executor_claude_code::FAMILY: &str
 pub const nomos_agent_executor_claude_code::JSON_SCHEMA: &str
 pub const nomos_agent_executor_claude_code::MAXIMUM_SPEND: MicroDollars
 pub const nomos_agent_executor_claude_code::WORK_RESULT_SUBSTANTIATION: Substantiation
@@ -9,15 +11,19 @@ pub enum variant nomos_agent_executor_claude_code::AgentExecutionError::Unresolv
 pub enum variant nomos_agent_executor_claude_code::AgentExecutionError::UnsupportedTools(String)
 pub fn nomos_agent_executor_claude_code::AgentExecutionError::From_Engine(error: xvpe_agent_execution::AgentExecutionError) -> Self
 pub fn nomos_agent_executor_claude_code::AgentExecutionError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_agent_executor_claude_code::ClaudeCodeExecutor::Declared_Target(&self) -> DeclaredTarget<'_>
+pub fn nomos_agent_executor_claude_code::ClaudeCodeExecutor::Execute(&self, task: &TaskEnvelope, root: &Path) -> Result<AgentExecution, DispatchRefusal>
 pub fn nomos_agent_executor_claude_code::Execute_In<Launcher: ProgramLauncher>( task: &TaskEnvelope, launcher: &Launcher, working_directory: &Path, root: &Path, ) -> Result<AgentExecutionOutcome, AgentExecutionError>
 pub fn nomos_agent_executor_claude_code::Execute_Task<Launcher: ProgramLauncher>( task: &TaskEnvelope, launcher: &Launcher, root: &Path, ) -> Result<AgentExecutionOutcome, AgentExecutionError>
 pub impl nomos_agent_executor_claude_code::AgentExecutionError implements core::fmt::Display
+pub impl nomos_agent_executor_claude_code::ClaudeCodeExecutor implements AgentExecutor
 pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::cost: MicroDollars
 pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::denied_tool_uses: Vec<String>
 pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::duration_ms: u64
 pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::is_error: bool
 pub struct field nomos_agent_executor_claude_code::AgentExecutionOutcome::result: WorkResult
 pub struct nomos_agent_executor_claude_code::AgentExecutionOutcome
+pub struct nomos_agent_executor_claude_code::ClaudeCodeExecutor<'launcher, Launcher: ProgramLauncher>
 
 # re-exports of items declared outside this crate
-pub use xvpe_agent_execution::MicroDollars
+pub use nomos_agent_contracts::MicroDollars

@@ -73,7 +73,7 @@ pub fn Handle_Workflow_Run(plan: &WorkflowStepPlan) -> WorkflowRunResponse
     };
     let walked_plan = WorkflowStepPlan { declaration: plan.declaration.clone(), body };
 
-    let declared = nomos_agent_orchestration::Declared_Targets();
+    let declared = crate::agent::Shipped_Targets();
     let platform = Platform {
         launcher: &LAUNCHER,
         filesystem: &FILE_SYSTEM,

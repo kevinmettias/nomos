@@ -43,20 +43,36 @@
 //! is published beside [`JSON_SCHEMA`] for that reason -- the schema says what shape the model
 //! may return, the declaration says what this crate grounded -- and every result built here
 //! carries it.
+//!
+//! # How a generic path reaches this crate
+//!
+//! Through [`ClaudeCodeExecutor`], which implements `nomos-agent-contracts`'
+//! [`nomos_agent_contracts::AgentExecutor`] port over [`Execute_Task`] and declares itself
+//! as the routing target a composition root offers. `OD-ROADMAP-005` decision 2 is why:
+//! until it, `nomos-agent-orchestration` named this crate in its own manifest and called
+//! [`Execute_Task`] from a match arm, so the generic path knew this vendor rather than
+//! knowing an executor. [`Execute_Task`] itself is unchanged and stays public, because a
+//! caller that wants [`AgentExecutionError`]'s structure rather than the port's folded
+//! refusal calls it directly.
 
 #![forbid(unsafe_code)]
 
 mod agent_execution_error;
 mod agent_execution_outcome;
+mod claude_code_executor;
 mod response;
 
 pub use agent_execution_error::AgentExecutionError;
 pub use agent_execution_outcome::AgentExecutionOutcome;
+pub use claude_code_executor::{ClaudeCodeExecutor, FAMILY};
 // The engine's exact money, re-exported so a caller reading `AgentExecutionOutcome::cost`
 // or comparing one against `MAXIMUM_SPEND` can name its type without taking a dependency
 // on the engine crate that declares it. `MAXIMUM_SPEND` below was already this type in
-// this crate's public surface; only the name was missing.
-pub use xvpe_agent_execution::MicroDollars;
+// this crate's public surface; only the name was missing. Taken from
+// `nomos-agent-contracts` rather than from the engine since `OD-ROADMAP-005` decision 2:
+// the port's `AgentExecution::spend` is the same type, and one re-export with one origin is
+// the difference between a shared type and two that happen to agree.
+pub use nomos_agent_contracts::MicroDollars;
 
 use std::path::{Path, PathBuf};
 

@@ -23,7 +23,7 @@ fn Test_A_Failed_Run_Should_Compensate_Its_Completed_Steps_In_Reverse_Order()
     std::fs::write(&path, PHANTOM_FIXTURE).expect("the fixture root Fresh_Root just created holds this file");
     let plan = Unwinding_Plan(&root, Compensation::ExternallyCompensated);
 
-    let run = Ran_Report(&plan, vec![Clean_Claude_Code_Response("second")]);
+    let run = Ran_Report(&plan, vec![Clean_Executor_Answer("second")]);
     let after_compensation = std::fs::read_to_string(&path).expect("the compensated correction left the file readable");
     let _ignored = std::fs::remove_dir_all(&root);
 
@@ -45,12 +45,12 @@ fn Test_A_Self_Compensating_Body_With_No_Compensating_Mode_Should_Be_Reported_As
     let plan = [
         WorkflowStepPlan {
             declaration: Declaring_Compensation(Compensation::SelfCompensating),
-            body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("first")),
+            body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("first")),
         },
         WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Gate(Gate_Body_Over(OVER_THE_PARAMETER_LIMIT)) },
     ];
 
-    let run = Ran_Report(&plan, vec![Clean_Claude_Code_Response("first")]);
+    let run = Ran_Report(&plan, vec![Clean_Executor_Answer("first")]);
 
     assert!(matches!(run.outcome, WorkflowOutcome::Failed { index: 1, .. }), "{:?}", run.outcome);
     let refusal = run.compensations.first().expect("the completed agent step declared a compensation");
@@ -64,11 +64,11 @@ fn Test_A_Self_Compensating_Body_With_No_Compensating_Mode_Should_Be_Reported_As
 fn Test_A_Step_Declaring_No_Compensation_Should_Not_Be_Reported_At_All()
 {
     let plan = [
-        WorkflowStepPlan { declaration: Coherent_Step(), body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("first")) },
+        WorkflowStepPlan { declaration: Coherent_Step(), body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("first")) },
         WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Gate(Gate_Body_Over(OVER_THE_PARAMETER_LIMIT)) },
     ];
 
-    let run = Ran_Report(&plan, vec![Clean_Claude_Code_Response("first")]);
+    let run = Ran_Report(&plan, vec![Clean_Executor_Answer("first")]);
 
     assert!(matches!(run.outcome, WorkflowOutcome::Failed { index: 1, .. }), "{:?}", run.outcome);
     assert!(run.compensations.is_empty(), "nothing declared a compensation, so nothing is reported: {:?}", run.compensations);
@@ -131,7 +131,7 @@ fn Unwinding_Plan(root: &std::path::Path, middle: Compensation) -> Vec<WorkflowS
         },
         WorkflowStepPlan {
             declaration: Declaring_Compensation(middle),
-            body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("second")),
+            body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("second")),
         },
         WorkflowStepPlan { declaration: Coherent_Step(), body: Body::Gate(Gate_Body_Over(OVER_THE_PARAMETER_LIMIT)) },
     ];

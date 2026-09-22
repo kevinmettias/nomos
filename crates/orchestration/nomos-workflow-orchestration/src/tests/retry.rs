@@ -18,9 +18,9 @@ fn Test_A_Retryable_Step_Should_Be_Redispatched_Up_To_Its_Declared_Attempt_Limit
 {
     let plan = [WorkflowStepPlan {
         declaration: Retryable_Step(THREE_ATTEMPTS),
-        body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("flaky")),
+        body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("flaky")),
     }];
-    let answers = vec![Failing_Response("first attempt"), Failing_Response("second attempt"), Clean_Claude_Code_Response("third attempt")];
+    let answers = vec![Failing_Answer("first attempt"), Failing_Answer("second attempt"), Clean_Executor_Answer("third attempt")];
 
     let run = Ran_Report(&plan, answers);
 
@@ -38,13 +38,13 @@ fn Test_A_Retryable_Step_Whose_Every_Attempt_Fails_Should_Stop_The_Run_At_Its_Li
 {
     let plan = [WorkflowStepPlan {
         declaration: Retryable_Step(THREE_ATTEMPTS),
-        body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("never answers")),
+        body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("never answers")),
     }];
     let answers = vec![
-        Failing_Response("first attempt"),
-        Failing_Response("second attempt"),
-        Failing_Response("third attempt"),
-        Clean_Claude_Code_Response("a fourth attempt that must never be dispatched"),
+        Failing_Answer("first attempt"),
+        Failing_Answer("second attempt"),
+        Failing_Answer("third attempt"),
+        Clean_Executor_Answer("a fourth attempt that must never be dispatched"),
     ];
 
     let run = Ran_Report(&plan, answers);
@@ -64,9 +64,9 @@ fn Test_A_Step_Declaring_No_Retry_Should_Never_Be_Redispatched()
 {
     let plan = [WorkflowStepPlan {
         declaration: Coherent_Step(),
-        body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("fails once")),
+        body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("fails once")),
     }];
-    let answers = vec![Failing_Response("the only attempt"), Clean_Claude_Code_Response("a retry that must never happen")];
+    let answers = vec![Failing_Answer("the only attempt"), Clean_Executor_Answer("a retry that must never happen")];
 
     let run = Ran_Report(&plan, answers);
 
@@ -84,7 +84,7 @@ fn Test_An_Uncovered_Retry_Of_A_Non_Idempotent_Side_Effecting_Step_Should_Never_
 {
     let plan = [WorkflowStepPlan {
         declaration: Incoherent_Step(),
-        body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("never runs")),
+        body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("never runs")),
     }];
 
     let run = Ran_Report(&plan, Vec::new());
@@ -102,9 +102,9 @@ fn Test_A_Compensation_Covered_Retry_Of_The_Same_Step_Should_Be_Redispatched()
 {
     let plan = [WorkflowStepPlan {
         declaration: Compensated_Retryable_Step(TWO_ATTEMPTS),
-        body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("flaky")),
+        body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("flaky")),
     }];
-    let answers = vec![Failing_Response("first attempt"), Clean_Claude_Code_Response("second attempt")];
+    let answers = vec![Failing_Answer("first attempt"), Clean_Executor_Answer("second attempt")];
 
     let run = Ran_Report(&plan, answers);
 
@@ -120,9 +120,9 @@ fn Test_The_Outcome_Only_Entry_Point_Should_Honor_A_Retry_Too()
 {
     let plan = [WorkflowStepPlan {
         declaration: Retryable_Step(TWO_ATTEMPTS),
-        body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("flaky")),
+        body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("flaky")),
     }];
-    let answers = vec![Failing_Response("first attempt"), Clean_Claude_Code_Response("second attempt")];
+    let answers = vec![Failing_Answer("first attempt"), Clean_Executor_Answer("second attempt")];
 
     let outcome = Ran_Outcome(&plan, answers);
 

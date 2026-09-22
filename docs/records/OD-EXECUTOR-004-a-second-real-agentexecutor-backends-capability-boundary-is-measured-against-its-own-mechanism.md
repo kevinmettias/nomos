@@ -3,7 +3,7 @@ id: OD-EXECUTOR-004
 type: decision
 title: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - agent
@@ -16,6 +16,8 @@ relations:
   - target: OD-EXECUTOR-002
     type: relates-to
   - target: OD-CONNECTOR-001
+    type: relates-to
+  - target: OD-ROADMAP-005
     type: relates-to
 ---
 
@@ -193,6 +195,54 @@ It does not build the second backend crate itself. This record answers only what
 crate's invocation must omit or bound; the crate is a separate, later increment measured
 against this record's rule the way the first executor was measured against `OD-EXECUTOR-001`'s.
 
+## Amendment: A Port Stands Where This Record Declined A Dispatch Trait
+
+Added at version 2, authorized by `OD-ROADMAP-005` decision 2 and built by
+`P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS`.
+
+**What is superseded, and it is one clause.** This record's "What This Record Does Not Do"
+says it "does not build a dispatch trait, a `plugins/executors/` directory, or any mechanism
+selecting between backends", and rests that on `OD-EXECUTOR-001`'s restraint holding "until a
+real caller needs to choose". `OD-EXECUTOR-005` then found that restraint still unfired,
+because the caller that appeared was choosing between an `AgentExecutor` and a `ModelBackend`
+rather than between two `AgentExecutor`s. That clause is superseded rather than pending. The
+owner required the deferral built, and the reason is sequencing rather than a defect in the
+measurement: an external architecture review read `nomos-agent-orchestration` naming
+`nomos-agent-executor-claude-code` and `nomos-model-backend-ollama` directly as a
+plugin-boundary leak, and `OD-ROADMAP-005` decided the generic path names a port while a
+composition root supplies the concrete pair.
+
+**What was measured, at `9f13b1e7`.**
+`crates/orchestration/nomos-agent-orchestration/Cargo.toml` declared both adapter crates;
+`src/run.rs`'s own `Dispatched_Task` matched a two-variant `Backend` enum declared in that
+crate onto `nomos_agent_executor_claude_code::Execute_Task` and
+`nomos_model_backend_ollama::Execute_Task`; and `src/agent_dispatch_outcome.rs` carried each
+adapter's own `AgentExecutionOutcome` as a variant named for its vendor.
+`crates/orchestration/nomos-workflow-orchestration/Cargo.toml` declared both adapter crates
+too, while no line of Rust in that crate named either -- two dead manifest lines left over
+from the per-backend step bodies `OD-PACKAGE-016` decision 9 had already replaced.
+
+**What was built, and what it deliberately is not.** `nomos-agent-contracts` publishes two
+ports rather than one: `AgentExecutor`, answering an `AgentExecution`, and `ModelBackend`,
+answering a `ModelAnswer`. This record's own measurement is what forced two. It found that
+Ollama's mechanism establishes no denial signal, because there is no tool subsystem absent the
+experimental flags, and no per-call dollar cost, because inference is local. An
+`AgentExecution` carries a work result, a denial list, an error flag, a spend and a duration; a
+`ModelAnswer` carries a response and none of those. One port over both would have had to return
+one shape, and any shape wide enough for both would have reported this record's measured
+absences as measured zeroes.
+
+**The boundary this record decided is untouched, and stays the adapter's own.** A port that
+restated the flags to omit, the freshly created isolated working directory, the `OLLAMA_HOST`
+precondition as its own distinct failure, the wall-clock bound standing in for a dollar bound,
+or stdout-as-content would be governing a boundary by analogy, which is the exact failure this
+record exists to refuse. The `AgentExecutor` port's own doc says so in as many words. Every
+clause of "The Rule" above holds unchanged, and so does every measurement behind it.
+
+**What still has not fired.** A second real `AgentExecutor` still does not exist. The port is
+not evidence that one does; it is a seam a composition root fills, and this build fills the
+executor half of it exactly once. The revisit condition in "Status" below stands as written.
+
 ## Status
 
 Accepted, and its own last named trigger has fired — differently than this record expected.
@@ -213,3 +263,7 @@ bound standing in for a dollar bound, and stdout-as-content are all properties o
 mechanism, not of which package kind names it. Revisit if a second real `AgentExecutor` — not
 a `ModelBackend` — is ever dispatched alongside Claude Code's, or if Codex's authentication is
 repaired and it earns the separate record this one declines to write for it.
+
+Amended to version 2 by `P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS`
+under `OD-ROADMAP-005` decision 2: the clause declining any mechanism selecting between
+backends is superseded, and the boundary this record measured is not.

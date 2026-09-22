@@ -2,7 +2,7 @@
 //! this repository's README row for a crate, and that crate's own manifest path.
 
 use super::super::judge_role::{Crate_Root, Declared_Role};
-use super::super::{Backend, Command, Command_From_String_Arguments, ExitCode, Run};
+use super::super::{Command, Command_From_String_Arguments, ExitCode, Run};
 use super::Arguments;
 use std::path::{Path, PathBuf};
 

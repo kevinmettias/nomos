@@ -13,19 +13,14 @@ pub use commit_intent::CommitIntent;
 pub use correction_body::CorrectionBody;
 pub use gate_body::GateBody;
 
-use nomos_agent_contracts::TaskEnvelope;
-
-/// Which real backend a workflow step's body dispatches through, and the `TaskEnvelope`
-/// it carries -- or, for [`Body::Check`], the tree and rule selection
-/// `nomos_check_orchestration::Run` judges.
+/// Which kind of dispatch a workflow step's body makes, and what it carries -- or, for
+/// [`Body::Check`], the tree and rule selection `nomos_check_orchestration::Run` judges.
 ///
-/// Names both of this workspace's real dispatch targets directly — `ClaudeCode`, the one
-/// real `AgentExecutor`, and `Ollama`, the one real `ModelBackend` — the same shape
-/// `nomos_cli::agent::Backend` already uses for a person's own single call, reused rather
-/// than reinvented. Not a trait generic over either: `OD-EXECUTOR-001` and `OD-EXECUTOR-004`
-/// both decline a shared dispatch trait ahead of a real need, and `OD-PACKAGE-013` settles
-/// `Ollama` as a `ModelBackendPackage` instance dispatched through the same shape rather than
-/// a second `AgentExecutor` — this crate does not reach past either restraint.
+/// [`Body::Agent`] names no backend. It carries a task and the execution profile that
+/// selects what answers it, and `nomos_agent_orchestration::Run_Agent_Task` resolves that
+/// profile against the targets a composition root declared. Two per-backend variants used to
+/// stand here instead, which made the variant a step was written as its own backend
+/// choice.
 ///
 /// `Check` is the same restraint applied to a third dispatch target that shares no trait
 /// with either of the first two: `nomos_check_orchestration::Run` is neither an

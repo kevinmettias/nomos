@@ -38,14 +38,32 @@
 //! a shell command it structurally could not perform. A clean exit with something
 //! to say is the whole of what happened; the text is what it said, not a report
 //! of what it did.
+//!
+//! # How a generic path reaches this crate
+//!
+//! Through [`OllamaModelBackend`], which implements `nomos-agent-contracts`'
+//! [`nomos_agent_contracts::ModelBackend`] port over [`Execute_Task`] and
+//! declares itself as the routing target a composition root offers.
+//! `OD-ROADMAP-005` decision 2 is why: until it,
+//! `nomos-agent-orchestration` named this crate in its own manifest and
+//! called [`Execute_Task`] from a match arm.
+//!
+//! The port's answer is a `ModelAnswer`, and what it does *not* carry is the
+//! point. It has no spend, no duration and no denial list, because this
+//! mechanism establishes none of them -- so a caller holding one cannot ask it
+//! for a cost and be handed a zero. The sibling port an `AgentExecutorPackage`
+//! answers through carries all four, and the two are separate traits rather
+//! than one trait with optional fields for exactly that reason.
 
 #![forbid(unsafe_code)]
 
 mod agent_execution_error;
 mod agent_execution_outcome;
+mod ollama_model_backend;
 
 pub use agent_execution_error::AgentExecutionError;
 pub use agent_execution_outcome::AgentExecutionOutcome;
+pub use ollama_model_backend::{FAMILY, OllamaModelBackend};
 
 use std::path::Path;
 

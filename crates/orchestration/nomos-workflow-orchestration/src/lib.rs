@@ -5,15 +5,19 @@
 //! `OD-WORKFLOW-005` names why this exists ahead of any of `OD-WORKFLOW-002`'s three
 //! named conditions firing, and what it does and does not build. In short:
 //! `nomos_contracts::WorkflowStep` (`OD-WORKFLOW-003`) declares what a step promises but
-//! dispatches nothing on its own; `nomos-agent-executor-claude-code` (`OD-EXECUTOR-001`),
-//! the one real `AgentExecutor`, `nomos-model-backend-ollama` (`OD-PACKAGE-013`), the one
-//! real `ModelBackend`, `nomos-check-orchestration::Run`, `nomos-correction-orchestration::
-//! Run_Correction` and `nomos-gate-orchestration::Run_Gate`, the three canonical
-//! orchestration seams every host already calls, each dispatch their own input but share no
-//! trait. [`Body`] pairs a `WorkflowStep` with a concrete dispatch target the same way
-//! `nomos_cli::agent::Backend` already does for a person's own single call, and [`Run`]
-//! iterates a plan of them in order, giving `WorkflowStep::Is_Coherent` its first real
-//! consumer anywhere in this workspace. Above band 41 because `Body::Gate` depends on
+//! dispatches nothing on its own; `nomos-agent-orchestration::Run_Agent_Task`,
+//! `nomos-check-orchestration::Run`, `nomos-correction-orchestration::Run_Correction` and
+//! `nomos-gate-orchestration::Run_Gate`, the canonical orchestration seams every host
+//! already calls, each dispatch their own input but share no trait. [`Body`] pairs a
+//! `WorkflowStep` with one of them, and [`Run`] iterates a plan of them in order, giving
+//! `WorkflowStep::Is_Coherent` its first real consumer anywhere in this workspace.
+//!
+//! This crate names no agent backend, in its manifest or in its source. It used to declare
+//! both adapter crates as dependencies, left over from the two per-backend bodies
+//! `OD-PACKAGE-016` decision 9 replaced with a declared profile and unread by any line of
+//! Rust here by the end; `OD-ROADMAP-005` decision 2 retired them, so an agent step
+//! carries a profile, the composition root supplies the targets and the ports that answer
+//! them, and `nomos-agent-orchestration` resolves one against the other. Above band 41 because `Body::Gate` depends on
 //! `nomos-gate-orchestration` (41) and a band may not depend on its own band --
 //! `P40-WORKFLOW-CHECK-BODY` and `P40-WORKFLOW-CORRECTION-BODY` already moved this crate up
 //! twice for the identical reason, one dependency at a time.

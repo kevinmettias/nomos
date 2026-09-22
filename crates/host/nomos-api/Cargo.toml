@@ -8,6 +8,10 @@ license.workspace = true
 publish.workspace = true
 
 [dependencies]
+# The two agent ports, and the DeclaredTarget this crate's composition root builds from
+# them. Moved out of `[dev-dependencies]` by the port item: it was test-only while this
+# crate's production surface named no contract type, and `agent.rs` names one now.
+nomos-agent-contracts = { workspace = true }
 nomos-agent-executor-claude-code = { workspace = true }
 nomos-agent-orchestration = { workspace = true }
 nomos-analysis = { workspace = true }
@@ -33,11 +37,6 @@ nomos-workspace-discovery = { workspace = true }
 serde = { workspace = true }
 
 [dev-dependencies]
-# Test-only, deliberately: this crate's production surface names no contract type, which is
-# the own-shape posture its response.rs states. The two agent twins' tests read
-# WORK_RESULT_SUBSTANTIATION and the WorkResult it declares portions of, so the agreement
-# those doc comments state is derived rather than restated.
-nomos-agent-contracts = { workspace = true }
 serde_json = { workspace = true }
 
 [lints]

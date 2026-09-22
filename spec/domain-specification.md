@@ -83,8 +83,8 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 32 | 8 | sha256:332c3b7ae159ba13d0b1d176726607b8369f9b5af249de17d98d9507254ce7bb |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 26 | 8 | sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a |
 | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md | authored | 20 | 6 | sha256:7df87ca12c60f9dd7d6ae9fcaf59727dc8f7784a93c1ea13c4424fb80603050c |
-| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 33 | 9 | sha256:ca00e8c7e822e64b859ccc7162d52ac2108a9c94b9706595f78c21cd21f546ce |
-| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 23 | 7 | sha256:1f668a9c3b8b790d0935f12b8f3350130ac9c388e0f9c0671ef5d57379f74b47 |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 41 | 10 | sha256:7146e94732dbd2d07d750cee7acd09b140c2acd642247016cbf2f348732c1100 |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 30 | 8 | sha256:916a39a52f82246093b826b001599901d077eb7c8411f1f9f3ca26a54919ff0e |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md | authored | 19 | 6 | sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d |
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md@authored | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md | authored | 33 | 10 | sha256:a8a606ac572d71702792163128caae171168c9e6e5f00c3b012b0675b5d7bc8d |
 | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md@authored | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md | authored | 19 | 6 | sha256:2b4a9d2bb3daa50e11f78a921b819c109cbcab767766c84970181f3873081454 |
@@ -198,7 +198,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md@authored | docs/records/OD-PACKAGE-013-ollamas-real-mechanism-is-modelbackendpackages-shape-not-agentexecutorpackages.md | authored | 23 | 7 | sha256:dcc46751eb94d3bee57169f30884a606ccba06f0162d77b4587cb383ee7e499e |
 | docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md@authored | docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md | authored | 18 | 6 | sha256:f17c861d194a9cc9d84cd2a1dd636f2d20cf8f6ce02d03d175153c13487a2288 |
 | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md@authored | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md | authored | 21 | 7 | sha256:ad7db84e0e6c5bd783952fb02f6bde672224a893e8ea7fdf510c2a1ceb6cedd2 |
-| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md@authored | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md | authored | 73 | 21 | sha256:869fcd6c1da5288bad1e3edc4fdafadb040f475c06009c158ed88d8426536f5c |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md@authored | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md | authored | 82 | 22 | sha256:f2262dee896545fccd0c02b1ab984d9bcaa8c9b18b4cb9f9d31481d5188c00b4 |
 | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md@authored | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md | authored | 56 | 14 | sha256:0ffc8479136943b0a3335a0042a996e0a028e3811b1ebcdca9228da7bd7e458c |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
@@ -876,14 +876,16 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#14 | authored | 3 | Ollama (local), v0.23.2 — real, reachable, no external credential |
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#23 | authored | 2 | The Rule |
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#26 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31 | authored | 2 | Amendment: A Port Stands Where This Record Declined A Dispatch Trait |
+| docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#38 | authored | 2 | Status |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#1 | authored | 1 | The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#2 | authored | 2 | Question |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#10 | authored | 2 | The Decision |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#13 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16 | authored | 2 | Amendment: `--backend` Splits Into `--executor` And `--model-backend` |
-| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#22 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#22 | authored | 2 | Amendment: Two Ports, One Per Package Kind, Because This Record Measured Two Kinds |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#28 | authored | 2 | Status |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#1 | authored | 1 | A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#2 | authored | 2 | Question |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#5 | authored | 2 | What Was Measured |
@@ -1948,7 +1950,8 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#58 | authored | 3 | 9. The wiring is a second item, not this one |
 | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#60 | authored | 2 | What This Does And Does Not Invalidate |
 | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#64 | authored | 2 | Alternatives Considered |
-| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#72 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#72 | authored | 2 | Amendment: The Resolver Stays, And Its Reason Does Not |
+| docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#80 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#1 | authored | 1 | An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written |
 | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#7 | authored | 2 | The case, constructed rather than asserted |
@@ -22812,11 +22815,87 @@ against this record's rule the way the first executor was measured against `OD-E
 
 ### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31
 
+*revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Amendment: A Port Stands Where This Record Declined A Dispatch Trait · hash: sha256:4e84dddfb98e8992a8220bed311b111292e54eac74fc2b58d319f31ea6640a3a*
+
+## Amendment: A Port Stands Where This Record Declined A Dispatch Trait
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Amendment: A Port Stands Where This Record Declined A Dispatch Trait · hash: sha256:b317b5dbaa143b70234214cb482529ebd42fc7fc2c1f4f6064051989ca2752c1*
+
+Added at version 2, authorized by `OD-ROADMAP-005` decision 2 and built by
+`P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS`.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#33
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Amendment: A Port Stands Where This Record Declined A Dispatch Trait · hash: sha256:d187401a0cc3cd811c3acc01f6ccafa74158b81ad66e175b0f49d69c5ecca418*
+
+**What is superseded, and it is one clause.** This record's "What This Record Does Not Do"
+says it "does not build a dispatch trait, a `plugins/executors/` directory, or any mechanism
+selecting between backends", and rests that on `OD-EXECUTOR-001`'s restraint holding "until a
+real caller needs to choose". `OD-EXECUTOR-005` then found that restraint still unfired,
+because the caller that appeared was choosing between an `AgentExecutor` and a `ModelBackend`
+rather than between two `AgentExecutor`s. That clause is superseded rather than pending. The
+owner required the deferral built, and the reason is sequencing rather than a defect in the
+measurement: an external architecture review read `nomos-agent-orchestration` naming
+`nomos-agent-executor-claude-code` and `nomos-model-backend-ollama` directly as a
+plugin-boundary leak, and `OD-ROADMAP-005` decided the generic path names a port while a
+composition root supplies the concrete pair.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#34
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Amendment: A Port Stands Where This Record Declined A Dispatch Trait · hash: sha256:d4de1eb1c06ac7afcf59bfdbd210526cbba49dbbb1b20f0f6f6d6aa25ff7165c*
+
+**What was measured, at `9f13b1e7`.**
+`crates/orchestration/nomos-agent-orchestration/Cargo.toml` declared both adapter crates;
+`src/run.rs`'s own `Dispatched_Task` matched a two-variant `Backend` enum declared in that
+crate onto `nomos_agent_executor_claude_code::Execute_Task` and
+`nomos_model_backend_ollama::Execute_Task`; and `src/agent_dispatch_outcome.rs` carried each
+adapter's own `AgentExecutionOutcome` as a variant named for its vendor.
+`crates/orchestration/nomos-workflow-orchestration/Cargo.toml` declared both adapter crates
+too, while no line of Rust in that crate named either -- two dead manifest lines left over
+from the per-backend step bodies `OD-PACKAGE-016` decision 9 had already replaced.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#35
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Amendment: A Port Stands Where This Record Declined A Dispatch Trait · hash: sha256:c9b15ef64cbae7ad0575232a7c6ef5fac1b098505a66c3a173b11866edf455ea*
+
+**What was built, and what it deliberately is not.** `nomos-agent-contracts` publishes two
+ports rather than one: `AgentExecutor`, answering an `AgentExecution`, and `ModelBackend`,
+answering a `ModelAnswer`. This record's own measurement is what forced two. It found that
+Ollama's mechanism establishes no denial signal, because there is no tool subsystem absent the
+experimental flags, and no per-call dollar cost, because inference is local. An
+`AgentExecution` carries a work result, a denial list, an error flag, a spend and a duration; a
+`ModelAnswer` carries a response and none of those. One port over both would have had to return
+one shape, and any shape wide enough for both would have reported this record's measured
+absences as measured zeroes.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#36
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Amendment: A Port Stands Where This Record Declined A Dispatch Trait · hash: sha256:417b5bafac1213f87a1aa3029fb516ff50c565a13c19bc3d726cb8c931a00055*
+
+**The boundary this record decided is untouched, and stays the adapter's own.** A port that
+restated the flags to omit, the freshly created isolated working directory, the `OLLAMA_HOST`
+precondition as its own distinct failure, the wall-clock bound standing in for a dollar bound,
+or stdout-as-content would be governing a boundary by analogy, which is the exact failure this
+record exists to refuse. The `AgentExecutor` port's own doc says so in as many words. Every
+clause of "The Rule" above holds unchanged, and so does every measurement behind it.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#37
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Amendment: A Port Stands Where This Record Declined A Dispatch Trait · hash: sha256:86dcfd7880a6865600594c84b26ffc016f252fe5bfee0ac3ed9256a632a902de*
+
+**What still has not fired.** A second real `AgentExecutor` still does not exist. The port is
+not evidence that one does; it is a seam a composition root fills, and this build fills the
+executor half of it exactly once. The revisit condition in "Status" below stands as written.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#38
+
 *revision: authored · kind: heading · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#39
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:53571eb4c6a0a0d9944962148bcc35448e1224a5e643f60a46b3d8a977954eca*
 
@@ -22832,7 +22911,7 @@ shared-`AgentExecutor`-trait trigger as still unfired for the same reason, and i
 2 split `--backend` into `--executor`/`--model-backend` so a caller names which family it is
 choosing from.
 
-### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#33
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#40
 
 *revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:042627274704c8a52853be054607d958166c7cea41625446d07d7359596adfc4*
 
@@ -22842,6 +22921,14 @@ bound standing in for a dollar bound, and stdout-as-content are all properties o
 mechanism, not of which package kind names it. Revisit if a second real `AgentExecutor` — not
 a `ModelBackend` — is ever dispatched alongside Claude Code's, or if Codex's authentication is
 repaired and it earns the separate record this one declines to write for it.
+
+### docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#41
+
+*revision: authored · kind: prose · heading: A second real AgentExecutor backend's capability boundary is measured against its own mechanism, not inherited from OD-EXECUTOR-001 by analogy / Status · hash: sha256:51bc1d3d5fcef598e64d3ae75229684b7d7a552d900b7ba33960668eba96f2c8*
+
+Amended to version 2 by `P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS`
+under `OD-ROADMAP-005` decision 2: the clause declining any mechanism selecting between
+backends is superseded, and the boundary this record measured is not.
 
 ### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#1
 
@@ -23071,11 +23158,78 @@ existing ones — that is a question for whenever a third real backend exists to
 
 ### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#22
 
+*revision: authored · kind: heading · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment: Two Ports, One Per Package Kind, Because This Record Measured Two Kinds · hash: sha256:955ce02eb7f69eaef2fcb697bd78d9a69bd80900fc7a9025b7f93b4f340f6620*
+
+## Amendment: Two Ports, One Per Package Kind, Because This Record Measured Two Kinds
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#23
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment: Two Ports, One Per Package Kind, Because This Record Measured Two Kinds · hash: sha256:f6196439f065d1db304f3175f11df7d786487f72496d3bb215d6fe52dbdb1f4f*
+
+Added at version 3, authorized by `OD-ROADMAP-005` decision 2 and built by
+`P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS`.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#24
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment: Two Ports, One Per Package Kind, Because This Record Measured Two Kinds · hash: sha256:811d11a1061ca8651e86cbb53cd3387f6d2202b5ee4465faf693747b5b618ed6*
+
+**What is superseded, and it is one clause.** This record's "The Decision" says no
+`AgentExecutor` trait is built and that the plain `match` stays exactly as it is with respect
+to abstraction, because `OD-EXECUTOR-004`'s shared-trait trigger has not fired. That clause is
+superseded rather than pending. It is superseded by an owner's sequencing decision, not by a
+defect: the trigger genuinely has not fired, a second real `AgentExecutor` genuinely does not
+exist, and the mechanism built is not the one this record declined.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#25
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment: Two Ports, One Per Package Kind, Because This Record Measured Two Kinds · hash: sha256:56cd0759ebb62792300255e3d3389320420f53dc8d683b2805ff4488f8afd874*
+
+**The measurement is not merely standing -- it is load-bearing for what was built.** This
+record found that `--backend`'s two values spanned two `PackageKind`s: one produces a bounded
+agent's tool-aware judgment, the other a raw model completion with every `TaskEnvelope` field
+but `goal` ignored. That finding is what decided the port's shape. A single port would have had
+to return one type, and the two honest answers are not one type. So there are **two** ports,
+one per package kind: `nomos_agent_contracts::AgentExecutor` answers an `AgentExecution`
+carrying a work result, a denial list, an error flag, a spend and a duration;
+`nomos_agent_contracts::ModelBackend` answers a `ModelAnswer` carrying a response and nothing
+else. A model backend's answer has no field for a cost, so no caller can ask it for one and be
+handed a zero.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#26
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment: Two Ports, One Per Package Kind, Because This Record Measured Two Kinds · hash: sha256:2fc7cc9f8b711d27cc63db0a15e57539dd24108c5328cdf576fa232b74a7a7aa*
+
+**That guarantee is structural rather than editorial, and a mutation proved it.**
+`model_answer.rs`'s own
+`Test_A_Model_Answer_Carries_A_Response_And_Nothing_A_Model_Backend_Cannot_Ground` binds the
+type with every field named and no rest pattern. A `spend` field was added to `ModelAnswer` and
+`cargo test -p nomos-agent-contracts --lib` failed to compile with `E0027`, "pattern does not
+mention field `spend`"; the file was then restored byte-identically and the suite is green. The
+alternatives were weighed and rejected against exactly this: a common core plus a
+backend-named extension keeps the vendor names in the generic path, and a port returning only
+what both truly share returns nothing, because one answers with a schema-validated
+`WorkResult` and never free text while the other answers with free text and no schema.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#27
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment: Two Ports, One Per Package Kind, Because This Record Measured Two Kinds · hash: sha256:c13468c1e7b686493814d7a92ccbd8c02dfab4a1f1b14ea5086bfa6c80d70de1*
+
+**What this amendment does not do.** It does not build an `AgentExecutor` *implementation*
+beside Claude Code's, so `OD-EXECUTOR-004`'s revisit condition is untouched. It does not merge
+`--executor` and `--model-backend`: they stay two flags, each naming a family label a declared
+target answers to, and the crossed spellings are still refused. It does not change what either
+adapter dispatches, what it omits, or how it is bounded. What moved is which crate names which
+crate: `nomos-agent-orchestration` and `nomos-workflow-orchestration` name neither adapter in a
+manifest or in a line of source, and each host's own `agent` module is the composition root
+that offers the pair.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#28
+
 *revision: authored · kind: heading · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#23
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#29
 
 *revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Status · hash: sha256:2dc713fc577fb07d4996b69def9b5c58a0b6ba9bb014bdcfb5e20a5e899a0116*
 
@@ -23085,6 +23239,15 @@ Revisit if a second real `AgentExecutor` — not a `ModelBackend` — is ever di
 Claude Code's. Amended to version 2 by `P14-EXECUTOR-006-OLLAMA-RENAME-AND-BACKEND-FLAG-SPLIT`:
 `--backend` is replaced by `--executor`/`--model-backend`, naming which family a caller
 chooses from rather than presenting one flag whose values silently span two package kinds.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#30
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Status · hash: sha256:77c78db7a24e9c18f2d6df12497742ec91c1ef3aa4ce9bbcae04a86003e111c5*
+
+Amended to version 3 by `P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS`
+under `OD-ROADMAP-005` decision 2: a port per package kind stands where this record declined a
+trait, and the two-kind measurement that decline rested on is what decided there are two ports
+rather than one.
 
 ### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#1
 
@@ -58929,11 +59092,94 @@ invented ranking is a decision the resolver is not entitled to make, and
 
 ### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#72
 
+*revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Amendment: The Resolver Stays, And Its Reason Does Not · hash: sha256:0abcee454e84bc6f9b388618a235a68654e30bd3267433e45c76058b8de2a3c5*
+
+## Amendment: The Resolver Stays, And Its Reason Does Not
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#73
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Amendment: The Resolver Stays, And Its Reason Does Not · hash: sha256:b317b5dbaa143b70234214cb482529ebd42fc7fc2c1f4f6064051989ca2752c1*
+
+Added at version 2, authorized by `OD-ROADMAP-005` decision 2 and built by
+`P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS`.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#74
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Amendment: The Resolver Stays, And Its Reason Does Not · hash: sha256:a127b75251d374c6a4053d7357fdd36e09ec1db85cfdccd187a0402d33bc2720*
+
+**What is superseded.** Decision 1 placed the resolver in `nomos-agent-orchestration` on a
+reason this amendment removes: that it "is the only crate that already depends on
+`nomos-model-package` and on both `nomos-agent-executor-claude-code` and
+`nomos-model-backend-ollama`". That is no longer true of it, and is no longer a reason for
+anything. Decision 3, "`Backend` gains a family name, and that is the only addition to existing
+vocabulary", is superseded with it: the `Backend` enum and its `Label` are gone, because the
+enum was the generic path holding a list of vendors. Decision 5's "carries the others beside
+it" is superseded only in its element type, from that enum to the family labels the
+declarations state.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#75
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Amendment: The Resolver Stays, And Its Reason Does Not · hash: sha256:2abd0fc600b1903541f237c8ecb3eb3695e98fe8f39e33f145b7a16818907b10*
+
+**The resolver did not move, and decision 1's conclusion stands on its other leg.** It must
+still name the resolved shape a dispatch takes and produce it, and `nomos-model-package` is in
+the Provider zone where a provider may not name an agent. So it stays exactly where it was,
+and what changed is what it resolves *to*: a declared target now carries its own family label,
+its own package declaration, and the port that answers it, and a resolution hands back what
+was already there rather than selecting a variant this crate had enumerated.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#76
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Amendment: The Resolver Stays, And Its Reason Does Not · hash: sha256:48e5f232db9c64ebfbdc62190fb8c5c462a66befd63b6b328e0567206e4dfd6e*
+
+**What was measured, at `9f13b1e7`.** `Declared_Targets` in `nomos-agent-orchestration`
+derived the declared set from `Backend::ALL`, so the crate that resolved also decided which
+backends exist. `src/run.rs`'s `Dispatched_Task` matched that enum onto each adapter's own
+`Execute_Task`. Both manifests in `crates/orchestration` declared both adapter crates, and the
+workflow crate's two declarations were already dead: no line of Rust there named either.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#77
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Amendment: The Resolver Stays, And Its Reason Does Not · hash: sha256:0040bef7a63712f68c41e3411dacf564b20aef32a21498d1019cf293cd0c4759*
+
+**What was built.** `nomos_agent_contracts::DeclaredTarget` holds `family`, `package` and a
+`DispatchPort`, which is `Executor` or `Model` -- the two `PackageKind`s that declare a model
+selection, not two vendors. Each adapter states its own declaration and its own `FAMILY`
+constant, the shape `nomos_capability::Registry` already uses when a composition root calls
+`registry.Offer(nomos_lang_rust::Provider_Offer())`, so two hosts offering the same pair are
+two calls rather than two copies of a package declaration that could drift. `Selected_Dispatch`
+and `Resolve_Profile` are unchanged in what they decide.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#78
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Amendment: The Resolver Stays, And Its Reason Does Not · hash: sha256:ee39c9b6ea12d8996ad12109cdd23cb4bb2856f787536699a455b7f6143046f1*
+
+**What this amendment leaves exactly as this record decided it.** Decision 2: the resolver
+resolves against a caller-supplied sequence and discovers nothing, reads no file, and invents
+no availability. Decision 4: the other four selectors come back unresolved by named reason, and
+the match in `Resolve_Profile` still carries no wildcard. Decision 6: effort is carried, never
+mapped. Decision 7: `ResolvedModelExecution` stays unbuilt and the output is the resolved
+dispatch shape. Decision 8: `OD-PACKAGE-012`'s binding question is answered as this record
+answered it, on the four measured counts. Decision 9's wiring landed before this item and is
+untouched by it.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#79
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Amendment: The Resolver Stays, And Its Reason Does Not · hash: sha256:a4434c1fbbc2cc0e5d986573aea6bc0c15dde05a9b172728697b418f72f8fe5d*
+
+**One consequence worth naming, because it reaches a published shape.** A dispatch outcome now
+carries the family that answered. Before the port the variant *was* the vendor, so a caller
+always knew which backend answered; once a profile can resolve a target nobody typed, that is
+knowable only from the declaration that resolved. `nomos-api`'s own response shape carries it
+as a field rather than as a variant tag for the same reason.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#80
+
 *revision: authored · kind: heading · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#73
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#81
 
 *revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Status · hash: sha256:94b945b7acfbbe7bd176f02d7278bbe6c1da4a57d4da756839dace67ef33c372*
 
@@ -58941,6 +59187,15 @@ Accepted. Decides the three questions the declined consumer item surfaced and di
 and pays `OD-PACKAGE-012`'s binding question with the measurement taken against the real types.
 Authorizes one resolver and one addition to existing vocabulary; files the dispatch wiring as a
 dependent item rather than widening its own territory.
+
+### docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#82
+
+*revision: authored · kind: prose · heading: An execution profile resolves against the declared package set into the resolved shape dispatch already takes / Status · hash: sha256:f29742bd7b0032826f6497b0245a16c7f08e0acf4acecc3a11c2e66b801029ba*
+
+Amended to version 2 by `P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS`
+under `OD-ROADMAP-005` decision 2: decision 1's reason and decision 3's addition are
+superseded, the resolver stays where it is on decision 1's other leg, and every other decision
+here stands as written.
 
 ### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#1
 

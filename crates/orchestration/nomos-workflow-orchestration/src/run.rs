@@ -309,20 +309,8 @@ fn Restored_Correction<Fs: FileSystem>(correction: &crate::CorrectionBody, path:
     };
 }
 
-/// The root a [`Body::ClaudeCode`] step resolves `prohibited_changes` against: none.
-///
-/// Every other body that needs one carries its own — `check.root`, `correction.root` — and
-/// a `TaskEnvelope` has no such field, so there is nothing here to pass. Naming the absence
-/// rather than passing a dot is what keeps a step that declares paths to protect from
-/// silently comparing some other checkout's: the executor refuses an undecidable root
-/// instead of resolving it against whatever directory this process happens to be in. Giving
-/// `Body::ClaudeCode` a root of its own, the way `Body::Check` already has, is that change's
-/// own work and reaches this crate's surface snapshot.
-const NO_ROOT: &str = "";
-
-/// Runs `body`'s task through whichever real dispatch target it names, and reports which
-/// one answered. The entire dispatch, not a stand-in for a shared trait — the same
-/// restraint `nomos_cli::agent::Dispatch` already holds for a person's own single call.
+/// Runs `body`'s task through whichever dispatch target its own profile resolves to, and
+/// reports which one answered.
 ///
 /// `Body::Check` and `Body::Correction` never produce a [`DispatchError`]: both seams fold
 /// their own failure taxonomy (an unreadable tree, a contradictory registry, no facts, a
@@ -353,12 +341,11 @@ fn Dispatched_Agent<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
             preferred: None,
             declared: platform.declared,
         },
-        &nomos_agent_orchestration::AgentEnvironment { launcher: platform.launcher },
     );
 
     return match outcome
     {
-        AgentDispatchOutcome::Unavailable(reason) => Err(DispatchError::AgentUnavailable(reason)),
+        AgentDispatchOutcome::Unavailable { reason, .. } => Err(DispatchError::AgentUnavailable(reason)),
         AgentDispatchOutcome::NotSelected(absence) => Err(DispatchError::AgentNotSelected(absence)),
         answered => Ok(StepOutcome::Agent(answered)),
     };

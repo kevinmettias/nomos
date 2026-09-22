@@ -13,6 +13,12 @@ nomos-corrections = { workspace = true }
 nomos-model-package = { workspace = true }
 nomos-scope-verification = { workspace = true }
 serde = { workspace = true }
+# MicroDollars, the engine's exact money. `AgentExecution::spend` is what an
+# `AgentExecutorPackage` measured, and the engine measures money as an integer, so a
+# second money type here would make a reported cost and the ceiling it is bounded by two
+# incomparable kinds of number. Inherited from `[workspace.dependencies]`, so this line
+# adds no second declaration of the crossing revision.
+xvpe-agent-execution = { workspace = true }
 
 [lints]
 workspace = true

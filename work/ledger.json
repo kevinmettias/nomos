@@ -91534,14 +91534,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-agent-port",
-        "acquired_at": 1790054474,
-        "lease_expires_at": 1790066991
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -91584,7 +91580,60 @@
         ],
         "timeout_seconds": 5400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-model-backend-ollama",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--bins",
+          "--test",
+          "integration_seams",
+          "--test",
+          "agent_contracts_seam",
+          "--test",
+          "agent_executor_claude_code_seam",
+          "--test",
+          "model_backend_ollama_seam",
+          "--test",
+          "public_surface",
+          "--test",
+          "boundaries",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "laude_code_seam-96146d97ea5cd566.exe)\n     Running tests\\model_backend_ollama_seam.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/agent-port/wt2-target\\debug\\deps\\model_backend_ollama_seam-d0bd47f12876456a.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/agent-port/wt2-target\\debug\\deps\\nomos_contract_tests-0a97e9be8e6674b7.exe)\n     Running tests\\boundaries\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/agent-port/wt2-target\\debug\\deps\\boundaries-d9c5a227392b8f2c.exe)\n     Running tests\\public_surface\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/agent-port/wt2-target\\debug\\deps\\public_surface-90332d4278c02217.exe)\n     Running tests\\record_citation.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/agent-port/wt2-target\\debug\\deps\\record_citation-3e3dac0fcf2af530.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/agent-port/wt2-target\\debug\\deps\\nomos_model_backend_ollama-9acfb5a4501fd5df.exe)\n     Running tests\\integration_seams.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/agent-port/wt2-target\\debug\\deps\\integration_seams-5fa365d337161748.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/agent-port/wt2-target\\debug\\deps\\nomos_spec_store-8fe606730324a984.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/agent-port/wt2-target\\debug\\deps\\nomos_workflow_orchestration-0adf37ff281b3b40.exe)\n",
+        "verified_at": 1790056802,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -92138,6 +92187,145 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P126-A-FACT-THE-DECLARATION-HOLDS-IS-RESTATED-IN-README-PROSE-THAT-NOTHING-COMPARES",
+      "title": "A fact nomos-architecture.json holds is restated in README prose that nothing compares",
+      "why": "OD-ROADMAP-005 decision 6 supersedes OD-AGENT-004 version 2 decline of generated README tables and authorizes exactly this, in its own words: a fact nomos-architecture.json holds stops being restated in prose that nothing compares. That is checking rather than generating, and the reason is decisive. OD-PACKAGE-004 version 3 then classified the README zone table third column, Owns, as free region -- 72 rows, 216 cells, 142 compared, 72 never read, 33,102 characters -- on the ground that comparing it would need a declared source outside README.md which does not exist. OD-PACKAGE-017 measured the listing as two tables whose split has no declared source either, so the row set stays checked as the union and which table a row belongs in stays unchecked. The owned cells and the row set therefore keep the comparison they already have, the Owns column is neither written nor read, and what this item adds is comparisons over the prose around the table. Measured at c9803c96 against README.md and nomos-architecture.json: the prose states the zone count, which one assertion compared as of today; it calls the excepted package pairs a short named list of the same-zone edges a real crate needs, which nothing compares although all 49 of them are same-zone today; it says nomos-rules declares ZONES, Permits and SAME_ZONE_EDGES, which is false, no such item exists anywhere under crates and OD-RULES-003 moved the declaration to nomos-architecture.json; and it says tests/contract/tests/boundaries.rs compares the tables against the nomos-rules declared ZONES, which is false in both halves, that path does not exist and the comparison is tests/contract/tests/boundaries/readme.rs against nomos-architecture.json. README.md is reserved by a live peer claim, so the two false sentences are recorded here as measured findings and their correction is outside this territory unless the claim frees and this item widens onto it.",
+      "done_when": "cargo test --no-fail-fast -p nomos-contract-tests --test boundaries exits zero, and tests/contract/tests/boundaries/readme.rs carries, for every README prose statement of a fact nomos-architecture.json holds whose authority this suite can reach, one assertion comparing the statement against that authority and one constructed disagreement that exhibits the assertion failing over text or over a payload built for the purpose rather than over the tree as it stands. Every prose statement measured and left uncompared is named in the OD-AGENT-004 amendment with the reason it has no reachable counterpart, the Owns column and the two-table split among them. No assertion this item adds reads a table row, so the Owns column stays unread as OD-PACKAGE-004 version 3 decided. OD-AGENT-004 gains an amendment naming OD-ROADMAP-005 decision 6, stating what was measured and built, that its own central measurement stands -- the checked tables are exactly the artifacts that did not go stale, which is why this increment checks rather than generates -- and that the Owns column is watched by nothing, deliberately. The predicate deliberately does not reach the other obligations of nomos-contract-tests: public_surface, agent_harness, completeness_universes, corpus_gates, requirement_trace and the rest are their own items obligations and no part of this claim.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/boundaries/readme.rs",
+          "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md",
+          "crates/spec/nomos-spec-store/records/OD-AGENT-004.record",
+          "docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-prose-checks",
+        "acquired_at": 1790056340,
+        "lease_expires_at": 1790067140
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-THE-BOARD-CANNOT-SHOW-AN-ITEMS-CONTRACT",
+      "title": "No verb prints an item's why or done_when, so the two fields that are the contract are readable only by parsing the board file",
+      "why": "work show prints an item's title, state, kind, origin, claim history with reasons, and verification line. It prints neither the why nor the done_when. work list is a column per item and says so. So the two fields that decide what an item is and when it is finished are unreachable from the CLI, and the only way to read them is to parse work/ledger.json by hand. Measured directly against a real item. This is not cosmetic. AGENTS.md's loop tells an agent to read the item's full why, done_when, territory and predicate before editing, and the nomos-task skill repeats it; the tool the contract routes to cannot supply them. In a session that dispatched fourteen workers today, every dispatch prompt instructed the worker to read the contract through work show, and every one of those instructions was impossible to follow; the workers that got it right read the JSON themselves and one of them reported the gap. The failure mode is quiet rather than loud: a worker that does not notice works from whatever paraphrase its instructions carried, and a paraphrase of a done_when is exactly the thing this ledger exists to prevent, because the done_when is immutable precisely so that nobody reinterprets it.",
+      "done_when": "An item's why and done_when are readable through a verb, so that AGENTS.md's instruction to read them before editing can be followed without parsing the board file. work show prints both in full, unwrapped and unelided, since a done_when is routinely several hundred words and a truncated contract is worse than none. Its output stays readable when a field is absent. The help text for show stops describing an output that omits the two fields a reader most needs, and any place in AGENTS.md, CLAUDE.md or the skills that tells a reader to get the contract from a verb is true afterwards rather than aspirational. A test asserts that the rendered output of show contains both fields for an item that has them, so the omission cannot return silently. Territory and the verification predicate are already reachable or are added in the same shape if they are not. No change to what an item stores, no schema change, and no new verb: this is a reporting gap in an existing one.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/show.rs",
+          "crates/host/nomos-cli/src/work.rs"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Territory guessed rather than grepped, which is a rule I hold workers to. It reserves crates/substrate/nomos-ledger/src/show.rs, and no such file exists; the show output is rendered under crates/host/nomos-cli/src/work/, where listing.rs carries the state line. Re-authored as -2 against the real site. The defect it names is unchanged and confirmed: work show prints title, state, kind, origin, claim history and verification, and neither why nor done_when."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1790056515
+      },
+      "widened": []
+    },
+    {
+      "id": "P125-THE-BOARD-CANNOT-SHOW-AN-ITEMS-CONTRACT-2",
+      "title": "No verb prints an item's why or done_when, so the two fields that are the contract are readable only by parsing the board file",
+      "why": "work show prints an item's title, state, kind, origin, claim history with reasons, and its verification line, and prints neither the why nor the done_when. Measured directly against a real item; the rendering lives in crates/host/nomos-cli/src/work/listing.rs, whose Print_Claim, Print_History and Print_Verification cover everything the output carries today. work list is a column per item and says so. So the two fields that decide what an item is and when it is finished are unreachable from any verb, and the only way to read them is to parse work/ledger.json by hand. AGENTS.md's loop tells an agent to read the item's full why, done_when, territory and predicate before editing, and the nomos-task skill repeats it; the tool the contract routes to cannot supply them. In a session that dispatched fourteen workers, every dispatch instructed the worker to read the contract through work show and every one of those instructions was impossible to follow. The failure is quiet rather than loud: a worker that does not notice proceeds from whatever paraphrase its instructions carried, and a paraphrase of a done_when is the thing an immutable done_when exists to prevent.",
+      "done_when": "work show prints the item's why and its done_when in full, unwrapped and unelided, so that AGENTS.md's instruction to read the contract before editing can be followed through the verb it routes to. A done_when is routinely several hundred words and a truncated contract is worse than none, so nothing is summarized or line-clipped. The output stays readable when a field is empty and when it is long, and the existing lines keep their order and spelling so a reader's habits and any script reading them still work. The help text for show stops describing an output that omits the two fields a reader most needs. A test over the rendered output asserts both fields are present for an item that has them, so the omission cannot return silently, and it reads the rendering rather than the stored item, because the defect being fixed is in what is printed and not in what is held. Territory and the verification predicate are printed too if they are not already, in the same shape. No change to what an item stores, no schema change, and no new verb: this is a reporting gap in an existing one, and widening the stored shape would be a different item.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/work/listing.rs",
+          "crates/host/nomos-cli/src/work/report.rs",
+          "crates/host/nomos-cli/src/work/report",
+          "crates/host/nomos-cli/src/work/tests",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/work/parse/usage.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75-contract",
+        "acquired_at": 1790056588,
+        "lease_expires_at": 1790067388
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "nomos-75-contract",
+          "added": [
+            "crates/host/nomos-cli/src/work.rs",
+            "crates/host/nomos-cli/src/work/parse/usage.rs"
+          ],
+          "widened_at": 1790056718
+        }
+      ]
     }
   ]
 }

@@ -39,27 +39,29 @@ pub(super) fn Rendered_Workflow_Outcome(outcome: &WorkflowOutcome, stdout: &mut 
 /// The one step's own outcome, rendered.
 /// What an agent step reports, whichever backend its profile resolved to.
 ///
-/// One renderer for both backends now, because the step no longer names one. The two
-/// answered shapes still print what they always printed; the two unanswered ones print why,
-/// and go to `stderr`, because a step that produced no answer is not a result to read.
+/// One renderer for both ports, because the step no longer names a backend. The two
+/// answered shapes still print what they always printed -- an executor's execution and a
+/// model backend's answer are different types, and neither is the other with fields left
+/// empty -- and the two unanswered ones print why, to `stderr`, because a step that produced
+/// no answer is not a result to read.
 fn Rendered_Agent(answer: &nomos_agent_orchestration::AgentDispatchOutcome, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
     use nomos_agent_orchestration::AgentDispatchOutcome;
 
     return match answer
     {
-        AgentDispatchOutcome::ClaudeCode(claude) =>
+        AgentDispatchOutcome::Executed { execution, .. } =>
         {
-            let _ = writeln!(stdout, "assumptions: {:?}", claude.result.assumptions);
-            let _ = writeln!(stdout, "unresolved questions: {:?}", claude.result.unresolved_questions);
+            let _ = writeln!(stdout, "assumptions: {:?}", execution.result.assumptions);
+            let _ = writeln!(stdout, "unresolved questions: {:?}", execution.result.unresolved_questions);
             ExitCode::Ok
         }
-        AgentDispatchOutcome::Ollama(ollama) =>
+        AgentDispatchOutcome::Answered { answer, .. } =>
         {
-            let _ = writeln!(stdout, "{}", ollama.response);
+            let _ = writeln!(stdout, "{}", answer.response);
             ExitCode::Ok
         }
-        AgentDispatchOutcome::Unavailable(reason) =>
+        AgentDispatchOutcome::Unavailable { reason, .. } =>
         {
             let _ = writeln!(stderr, "{reason}");
             ExitCode::Unavailable

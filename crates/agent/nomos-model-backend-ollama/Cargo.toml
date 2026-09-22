@@ -1,7 +1,7 @@
 [package]
 name = "nomos-model-backend-ollama"
 version = "0.1.0"
-description = "The first real ModelBackend adapter (OD-PACKAGE-013): dispatches a TaskEnvelope's goal to a local Ollama model as a subprocess, bounded by OD-EXECUTOR-004's structural capability boundary, and reads back an AgentExecutionOutcome. Independent of nomos-agent-executor-claude-code, the one real AgentExecutor -- structurally parallel, no shared trait, and no longer the same package kind."
+description = "The first real ModelBackend adapter (OD-PACKAGE-013): dispatches a TaskEnvelope's goal to a local Ollama model as a subprocess, bounded by OD-EXECUTOR-004's structural capability boundary, and reads back an AgentExecutionOutcome. Answers nomos-agent-contracts' ModelBackend port and declares its own routing target, so a generic agent path names the port rather than this crate (OD-ROADMAP-005). Independent of nomos-agent-executor-claude-code, the one real AgentExecutor: structurally parallel, a different package kind, and a different port -- its answer carries a response and deliberately no spend, duration or denial list."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -9,6 +9,15 @@ publish.workspace = true
 
 [dependencies]
 nomos-agent-contracts = { workspace = true }
+# PackageId, PackageKind and ContractVersion: the identifiers and versions this crate's own
+# declared routing target states about itself.
+nomos-contracts = { workspace = true }
+# ModelRoutePackage and the vocabulary a declared routing target carries: this crate states
+# its own package kind, version, protocol range and model selection, rather than leaving a
+# composition root to restate them. Both moved here from `[dev-dependencies]` by the port
+# item -- the declaration ships now, so a manifest calling either test-only would be the
+# narrower claim.
+nomos-model-package = { workspace = true }
 nomos-platform = { workspace = true }
 # The dispatch itself, and the bridge from this workspace's launcher onto the
 # surface the engine's adapters take.
@@ -17,9 +26,7 @@ xvpe-agent-execution = { workspace = true }
 xvpe-agent-backend-ollama = { workspace = true }
 
 [dev-dependencies]
-nomos-contracts = { workspace = true }
 nomos-ledger = { workspace = true }
-nomos-model-package = { workspace = true }
 nomos-platform-std = { workspace = true }
 
 [lints]

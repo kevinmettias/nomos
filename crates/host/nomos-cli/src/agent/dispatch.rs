@@ -29,13 +29,11 @@
 //! one instead -- see that crate's own `run` module doc for the fuller account.
 
 use super::{ExitCode, Requested_Dispatch};
-use nomos_agent_orchestration::{AgentDispatchOutcome, AgentEnvironment, BackendAbsence, Run_Agent_Execute};
+use nomos_agent_orchestration::{AgentDispatchOutcome, BackendAbsence, Run_Agent_Execute};
 
 pub(super) fn Execute_Goal(goal: &str, requested: Requested_Dispatch, output: &mut impl std::io::Write, notes: &mut impl std::io::Write) -> ExitCode
 {
-    use nomos_composer_std::LAUNCHER;
-
-    let outcome = Run_Agent_Execute(goal, &requested.Selection(), &AgentEnvironment { launcher: &LAUNCHER });
+    let outcome = Run_Agent_Execute(goal, &requested.Selection());
 
     return Rendered_Dispatch_Outcome(&outcome, output, notes);
 }
@@ -52,27 +50,27 @@ pub(super) fn Rendered_Dispatch_Outcome(outcome: &AgentDispatchOutcome, output: 
 {
     return match outcome
     {
-        AgentDispatchOutcome::ClaudeCode(outcome) =>
+        AgentDispatchOutcome::Executed { execution, .. } =>
         {
             let _ = writeln!(
                 output,
                 "assumptions: {:?}\nunresolved questions: {:?}\ndenied tool uses: {:?}\nis_error: {}  cost_usd: {}.{:06}  duration_ms: {}",
-                outcome.result.assumptions,
-                outcome.result.unresolved_questions,
-                outcome.denied_tool_uses,
-                outcome.is_error,
-                outcome.cost.Whole_Dollars(),
-                outcome.cost.Fractional_Micros(),
-                outcome.duration_ms
+                execution.result.assumptions,
+                execution.result.unresolved_questions,
+                execution.denied_tool_uses,
+                execution.is_error,
+                execution.spend.Whole_Dollars(),
+                execution.spend.Fractional_Micros(),
+                execution.duration_ms
             );
             ExitCode::Ok
         }
-        AgentDispatchOutcome::Ollama(outcome) =>
+        AgentDispatchOutcome::Answered { answer, .. } =>
         {
-            let _ = writeln!(output, "{}", outcome.response);
+            let _ = writeln!(output, "{}", answer.response);
             ExitCode::Ok
         }
-        AgentDispatchOutcome::Unavailable(reason) =>
+        AgentDispatchOutcome::Unavailable { reason, .. } =>
         {
             let _ = writeln!(notes, "{reason}");
             ExitCode::Unavailable

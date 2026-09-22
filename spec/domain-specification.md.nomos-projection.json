@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:1b5b3e95a0c73683dab6a97ad08901fff0850929d67c68df4dcb53caa2f92c92",
-  "inputs_digest": "sha256:09b95d25e750d84806897e853004182331badfd8569ddc8e4be5abf186e3b680",
+  "content_digest": "sha256:483a692e021c13f5aa5dc1df17c72a012ee30852217d58277c4d9a2c2a8af6a3",
+  "inputs_digest": "sha256:51a851d178db64ba48d06b0e82c49361a7229754322f0ecd4b018b0c06aa709c",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2386
+      2389
     ],
     [
       "Source blocks",
-      8620
+      8644
     ]
   ],
   "inputs": [
@@ -388,12 +388,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored",
-      "hash": "sha256:ca00e8c7e822e64b859ccc7162d52ac2108a9c94b9706595f78c21cd21f546ce"
+      "hash": "sha256:7146e94732dbd2d07d750cee7acd09b140c2acd642247016cbf2f348732c1100"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored",
-      "hash": "sha256:1f668a9c3b8b790d0935f12b8f3350130ac9c388e0f9c0671ef5d57379f74b47"
+      "hash": "sha256:916a39a52f82246093b826b001599901d077eb7c8411f1f9f3ca26a54919ff0e"
     },
     {
       "content": "documents",
@@ -963,7 +963,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md@authored",
-      "hash": "sha256:869fcd6c1da5288bad1e3edc4fdafadb040f475c06009c158ed88d8426536f5c"
+      "hash": "sha256:f2262dee896545fccd0c02b1ab984d9bcaa8c9b18b4cb9f9d31481d5188c00b4"
     },
     {
       "content": "documents",
@@ -4328,7 +4328,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31",
-      "hash": "sha256:0e372b505da9da15e5b5969805939335b42d1313826a9c36a3eb84136979c3e4"
+      "hash": "sha256:bd7f798830fa2c7e05a6bb2d9604d1bf25380906ac36d9f3f7a9c128ebabed8a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#38",
+      "hash": "sha256:6c8a67058bc75948355fd8736353c09fd558f851315370d6abb21cb324042505"
     },
     {
       "content": "headings",
@@ -4363,7 +4368,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#22",
-      "hash": "sha256:9609763222cafc4f72d276ce9cc39673e3288db37ee1827ebf93498226fa0646"
+      "hash": "sha256:768fb6fe88451d2f56a7b81fac0c93d8c8e676e3532d1dd69af3830feb0e5559"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#28",
+      "hash": "sha256:9d0216e4cade62c7abd676e357df5344b1daeb1abf11264cf8cb9c4398e98746"
     },
     {
       "content": "headings",
@@ -9688,7 +9698,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#72",
-      "hash": "sha256:d838bd1181784747d2f18e0df77b65edaae4205df9ff6d2fd26a53405515ff03"
+      "hash": "sha256:64fcc1cc912bb5c9afc58046e7d4607654a34da110d92687083925e713424131"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#80",
+      "hash": "sha256:51646144cf9d3313e39ded26056b6299a6d7f442fafc0e4fab7d6f965eb11ed0"
     },
     {
       "content": "headings",
@@ -23853,17 +23868,57 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#31",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:4e84dddfb98e8992a8220bed311b111292e54eac74fc2b58d319f31ea6640a3a"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#32",
-      "hash": "sha256:53571eb4c6a0a0d9944962148bcc35448e1224a5e643f60a46b3d8a977954eca"
+      "hash": "sha256:b317b5dbaa143b70234214cb482529ebd42fc7fc2c1f4f6064051989ca2752c1"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#33",
+      "hash": "sha256:d187401a0cc3cd811c3acc01f6ccafa74158b81ad66e175b0f49d69c5ecca418"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#34",
+      "hash": "sha256:d4de1eb1c06ac7afcf59bfdbd210526cbba49dbbb1b20f0f6f6d6aa25ff7165c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#35",
+      "hash": "sha256:c9b15ef64cbae7ad0575232a7c6ef5fac1b098505a66c3a173b11866edf455ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#36",
+      "hash": "sha256:417b5bafac1213f87a1aa3029fb516ff50c565a13c19bc3d726cb8c931a00055"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#37",
+      "hash": "sha256:86dcfd7880a6865600594c84b26ffc016f252fe5bfee0ac3ed9256a632a902de"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#38",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#39",
+      "hash": "sha256:53571eb4c6a0a0d9944962148bcc35448e1224a5e643f60a46b3d8a977954eca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#40",
       "hash": "sha256:042627274704c8a52853be054607d958166c7cea41625446d07d7359596adfc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md#41",
+      "hash": "sha256:51bc1d3d5fcef598e64d3ae75229684b7d7a552d900b7ba33960668eba96f2c8"
     },
     {
       "content": "blocks",
@@ -23973,12 +24028,47 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#22",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:955ce02eb7f69eaef2fcb697bd78d9a69bd80900fc7a9025b7f93b4f340f6620"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#23",
+      "hash": "sha256:f6196439f065d1db304f3175f11df7d786487f72496d3bb215d6fe52dbdb1f4f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#24",
+      "hash": "sha256:811d11a1061ca8651e86cbb53cd3387f6d2202b5ee4465faf693747b5b618ed6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#25",
+      "hash": "sha256:56cd0759ebb62792300255e3d3389320420f53dc8d683b2805ff4488f8afd874"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#26",
+      "hash": "sha256:2fc7cc9f8b711d27cc63db0a15e57539dd24108c5328cdf576fa232b74a7a7aa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#27",
+      "hash": "sha256:c13468c1e7b686493814d7a92ccbd8c02dfab4a1f1b14ea5086bfa6c80d70de1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#28",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#29",
       "hash": "sha256:2dc713fc577fb07d4996b69def9b5c58a0b6ba9bb014bdcfb5e20a5e899a0116"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#30",
+      "hash": "sha256:77c78db7a24e9c18f2d6df12497742ec91c1ef3aa4ce9bbcae04a86003e111c5"
     },
     {
       "content": "blocks",
@@ -43538,12 +43628,57 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#72",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:0abcee454e84bc6f9b388618a235a68654e30bd3267433e45c76058b8de2a3c5"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#73",
+      "hash": "sha256:b317b5dbaa143b70234214cb482529ebd42fc7fc2c1f4f6064051989ca2752c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#74",
+      "hash": "sha256:a127b75251d374c6a4053d7357fdd36e09ec1db85cfdccd187a0402d33bc2720"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#75",
+      "hash": "sha256:2abd0fc600b1903541f237c8ecb3eb3695e98fe8f39e33f145b7a16818907b10"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#76",
+      "hash": "sha256:48e5f232db9c64ebfbdc62190fb8c5c462a66befd63b6b328e0567206e4dfd6e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#77",
+      "hash": "sha256:0040bef7a63712f68c41e3411dacf564b20aef32a21498d1019cf293cd0c4759"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#78",
+      "hash": "sha256:ee39c9b6ea12d8996ad12109cdd23cb4bb2856f787536699a455b7f6143046f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#79",
+      "hash": "sha256:a4434c1fbbc2cc0e5d986573aea6bc0c15dde05a9b172728697b418f72f8fe5d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#80",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#81",
       "hash": "sha256:94b945b7acfbbe7bd176f02d7278bbe6c1da4a57d4da756839dace67ef33c372"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#82",
+      "hash": "sha256:f29742bd7b0032826f6497b0245a16c7f08e0acf4acecc3a11c2e66b801029ba"
     },
     {
       "content": "blocks",

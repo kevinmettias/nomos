@@ -1,16 +1,16 @@
 //! What one dispatched step reported.
 
-/// What one dispatched step reported — naming each backend's own outcome type directly,
-/// the same no-shared-trait shape [`crate::Body`] already uses, because the two crates'
-/// outcome shapes are not interchangeable: `nomos-agent-executor-claude-code`'s carries
-/// `denied_tool_uses`, `is_error`, `cost` and `duration_ms` that
-/// `nomos-model-backend-ollama`'s honestly does not have.
+/// What one dispatched step reported.
+///
+/// The agent arm carries `nomos_agent_orchestration::AgentDispatchOutcome` whole rather
+/// than a per-backend variant of its own. That type keeps the two answers apart -- an
+/// executor's execution carries a denial list, an error flag, a spend and a duration; a
+/// model backend's answer carries a response and none of those -- so nothing is flattened
+/// by carrying it here, and this crate names no adapter to do it.
 #[derive(Clone, Debug, PartialEq)]
 pub enum StepOutcome
 {
-    /// What `nomos-agent-executor-claude-code::Execute_Task` reported.
-    /// What `nomos-model-backend-ollama::Execute_Task` reported.
-    /// What the backend the step's profile resolved to reported, or why none was selected.
+    /// What the target the step's profile resolved to reported, or why none was selected.
     Agent(nomos_agent_orchestration::AgentDispatchOutcome),
     /// What `nomos-check-orchestration::Run` reported.
     Check(nomos_check_orchestration::CheckOutcome),

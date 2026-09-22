@@ -5,7 +5,7 @@ use serde::Serialize;
 
 /// A serializable twin of [`nomos_agent_orchestration::AgentDispatchOutcome`].
 ///
-/// `ClaudeCode`'s `assumptions`/`unresolved_questions` are
+/// `Executed`'s `assumptions`/`unresolved_questions` are
 /// [`nomos_agent_contracts::WorkResult`]'s own two fields this executor can honestly
 /// populate -- `OD-EXECUTOR-008`'s decision.
 ///
@@ -24,8 +24,15 @@ use serde::Serialize;
 /// than a fact about one result, so carrying it would repeat one sentence on every response;
 /// and nothing here would read it -- no transport serves this shape yet, so a field added
 /// now would be a shape with no caller to check it against, which is the premature-surface
-/// caution this crate's own module doc names. The `Ollama` and `Unavailable` variants
+/// caution this crate's own module doc names. The `Answered` and `Unavailable` variants
 /// project no work result at all, so the criterion above does not reach them.
+///
+/// **The variants are named for the package kind that answered, and each carries the family
+/// that answered it.** They used to be `ClaudeCode` and `Ollama`, which was the same
+/// plugin-boundary leak `OD-ROADMAP-005` decision 2 closed one layer down: a wire shape whose
+/// tag was a vendor. `family` keeps what that tag told a caller -- which backend answered --
+/// and takes it from the declaration that resolved rather than from a match arm, which is the
+/// only place it is knowable once a profile can resolve a backend nobody typed.
 ///
 /// [`Test_This_Shape_Should_Project_Exactly_The_Portions_Its_Executor_Declares_Substantiated`]
 /// derives that agreement from the declaration instead of restating it, so a portion added to
@@ -34,18 +41,25 @@ use serde::Serialize;
 #[serde(rename_all = "snake_case", tag = "backend")]
 pub enum AgentDispatchResponse
 {
-    ClaudeCode
+    /// An `AgentExecutorPackage` answered.
+    Executed
     {
-        assumptions: Vec<String>, unresolved_questions: Vec<String>, denied_tool_uses: Vec<String>,
-        is_error: bool, cost_usd: f64, duration_ms: u64
+        family: String, assumptions: Vec<String>, unresolved_questions: Vec<String>,
+        denied_tool_uses: Vec<String>, is_error: bool, cost_usd: f64, duration_ms: u64
     },
-    Ollama
+    /// A `ModelBackendPackage` answered.
+    ///
+    /// No `denied_tool_uses`, no `is_error`, no `cost_usd` and no `duration_ms`, because the
+    /// port this projects establishes none of them and a zero here would be a number nothing
+    /// measured.
+    Answered
     {
-        response: String
+        family: String, response: String
     },
+    /// The target that was reached did not answer.
     Unavailable
     {
-        reason: String
+        family: String, reason: String
     },
     /// No backend was selected, so nothing was dispatched and there is no backend this
     /// response is about.
@@ -63,10 +77,8 @@ pub enum AgentDispatchResponse
 mod tests
 {
     use super::*;
-    use nomos_agent_contracts::{Substantiation, WorkResult};
-    use nomos_agent_executor_claude_code::{
-        AgentExecutionOutcome, MicroDollars, WORK_RESULT_SUBSTANTIATION,
-    };
+    use nomos_agent_contracts::{AgentExecution, MicroDollars, Substantiation, WorkResult};
+    use nomos_agent_executor_claude_code::WORK_RESULT_SUBSTANTIATION;
     use nomos_agent_orchestration::AgentDispatchOutcome;
     use serde_json::Value;
 
@@ -80,7 +92,7 @@ mod tests
     #[test]
     fn Test_This_Shape_Should_Project_Exactly_The_Portions_Its_Executor_Declares_Substantiated()
     {
-        let wire = Serialized_Claude_Code_Response();
+        let wire = Serialized_Execution_Response();
         // Every field by name, deliberately without a `..`: a seventh portion added to the
         // declaration is a compile error here rather than a portion nothing checks.
         let Substantiation {
@@ -109,16 +121,16 @@ mod tests
         }
     }
 
-    /// The `ClaudeCode` variant of a result that carries this executor's own declaration,
+    /// The `Executed` variant of a result that carries this executor's own declaration,
     /// serialized the way a wire caller would receive it.
     ///
     /// Empty, because the portions the declaration grounds and the values they hold are two
     /// different questions and only the first is this file's: an empty `assumptions` here
     /// means the model produced none, which `String_Array` in the executor's `response.rs`
     /// guarantees by refusing an absent, non-array or non-string field.
-    fn Serialized_Claude_Code_Response() -> Value
+    fn Serialized_Execution_Response() -> Value
     {
-        let outcome = AgentExecutionOutcome {
+        let execution = AgentExecution {
             result: WorkResult {
                 plan: None,
                 claims: Vec::new(),
@@ -130,11 +142,14 @@ mod tests
             },
             denied_tool_uses: Vec::new(),
             is_error: false,
-            cost: MicroDollars::From_Micros(1_000),
+            spend: MicroDollars::From_Micros(1_000),
             duration_ms: 1,
         };
 
-        let response = AgentDispatchResponse::From(AgentDispatchOutcome::ClaudeCode(outcome));
+        let response = AgentDispatchResponse::From(AgentDispatchOutcome::Executed {
+            family: nomos_agent_executor_claude_code::FAMILY.to_owned(),
+            execution,
+        });
         return serde_json::to_value(&response)
             .expect("a derived Serialize over owned strings, a bool, an f64 and a u64 has nothing to refuse");
     }

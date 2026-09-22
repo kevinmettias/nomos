@@ -3,7 +3,7 @@ id: OD-EXECUTOR-005
 type: decision
 title: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - agent
@@ -16,6 +16,8 @@ relations:
   - target: OD-EXECUTOR-004
     type: relates-to
   - target: OD-PACKAGE-013
+    type: relates-to
+  - target: OD-ROADMAP-005
     type: relates-to
 ---
 
@@ -161,6 +163,49 @@ compatibility shim would serve. It does not decide Codex's or Gemini's classific
 whether a third backend would need a third flag rather than a widened enum on one of the two
 existing ones — that is a question for whenever a third real backend exists to measure.
 
+## Amendment: Two Ports, One Per Package Kind, Because This Record Measured Two Kinds
+
+Added at version 3, authorized by `OD-ROADMAP-005` decision 2 and built by
+`P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS`.
+
+**What is superseded, and it is one clause.** This record's "The Decision" says no
+`AgentExecutor` trait is built and that the plain `match` stays exactly as it is with respect
+to abstraction, because `OD-EXECUTOR-004`'s shared-trait trigger has not fired. That clause is
+superseded rather than pending. It is superseded by an owner's sequencing decision, not by a
+defect: the trigger genuinely has not fired, a second real `AgentExecutor` genuinely does not
+exist, and the mechanism built is not the one this record declined.
+
+**The measurement is not merely standing -- it is load-bearing for what was built.** This
+record found that `--backend`'s two values spanned two `PackageKind`s: one produces a bounded
+agent's tool-aware judgment, the other a raw model completion with every `TaskEnvelope` field
+but `goal` ignored. That finding is what decided the port's shape. A single port would have had
+to return one type, and the two honest answers are not one type. So there are **two** ports,
+one per package kind: `nomos_agent_contracts::AgentExecutor` answers an `AgentExecution`
+carrying a work result, a denial list, an error flag, a spend and a duration;
+`nomos_agent_contracts::ModelBackend` answers a `ModelAnswer` carrying a response and nothing
+else. A model backend's answer has no field for a cost, so no caller can ask it for one and be
+handed a zero.
+
+**That guarantee is structural rather than editorial, and a mutation proved it.**
+`model_answer.rs`'s own
+`Test_A_Model_Answer_Carries_A_Response_And_Nothing_A_Model_Backend_Cannot_Ground` binds the
+type with every field named and no rest pattern. A `spend` field was added to `ModelAnswer` and
+`cargo test -p nomos-agent-contracts --lib` failed to compile with `E0027`, "pattern does not
+mention field `spend`"; the file was then restored byte-identically and the suite is green. The
+alternatives were weighed and rejected against exactly this: a common core plus a
+backend-named extension keeps the vendor names in the generic path, and a port returning only
+what both truly share returns nothing, because one answers with a schema-validated
+`WorkResult` and never free text while the other answers with free text and no schema.
+
+**What this amendment does not do.** It does not build an `AgentExecutor` *implementation*
+beside Claude Code's, so `OD-EXECUTOR-004`'s revisit condition is untouched. It does not merge
+`--executor` and `--model-backend`: they stay two flags, each naming a family label a declared
+target answers to, and the crossed spellings are still refused. It does not change what either
+adapter dispatches, what it omits, or how it is bounded. What moved is which crate names which
+crate: `nomos-agent-orchestration` and `nomos-workflow-orchestration` name neither adapter in a
+manifest or in a line of source, and each host's own `agent` module is the composition root
+that offers the pair.
+
 ## Status
 
 Accepted. `OD-EXECUTOR-004`'s shared-`AgentExecutor`-trait trigger has not fired; the evidence
@@ -169,3 +214,8 @@ Revisit if a second real `AgentExecutor` — not a `ModelBackend` — is ever di
 Claude Code's. Amended to version 2 by `P14-EXECUTOR-006-OLLAMA-RENAME-AND-BACKEND-FLAG-SPLIT`:
 `--backend` is replaced by `--executor`/`--model-backend`, naming which family a caller
 chooses from rather than presenting one flag whose values silently span two package kinds.
+
+Amended to version 3 by `P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS`
+under `OD-ROADMAP-005` decision 2: a port per package kind stands where this record declined a
+trait, and the two-kind measurement that decline rested on is what decided there are two ports
+rather than one.

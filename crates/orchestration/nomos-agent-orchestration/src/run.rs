@@ -1,6 +1,6 @@
 //! Assembling a `TaskEnvelope` for one of this workspace's two real dispatch shapes and
-//! dispatching it to a chosen [`Backend`], apart from choosing a platform or rendering the
-//! answer.
+//! dispatching it through whichever port a declared target carries, apart from choosing a
+//! platform or rendering the answer.
 //!
 //! Moved here from `nomos-cli`'s own `agent/dispatch.rs` and `agent/judge_role.rs`, the
 //! same migration `P40-CORRECTIONS-CANONICAL-SEAM` made for `correct.rs`: that module's
@@ -9,56 +9,41 @@
 //! the identical primitive) are [`Run_Agent_Execute`] and [`Run_Agent_Judgment`] now, and
 //! `nomos-cli`'s own `agent` module is a thin renderer over both.
 //!
-//! # A deliberate change from what `dispatch.rs`'s own comment used to defend
+//! # The launcher left, because the port arrived
 //!
-//! The former `Dispatch_Task` this crate's [`Dispatched_Task`] replaces was fixed to
-//! `nomos_platform_std::StdProgramLauncher` rather than generic, and that file's own doc
-//! comment defended the choice as "the same composition-root choice `check.rs` and
-//! `work.rs` make for their own subprocesses" -- correct advice for a CLI-only module with
-//! exactly one caller. It stopped being correct the moment this dispatch needed a second
-//! caller: [`Run_Agent_Execute`] and [`Run_Agent_Judgment`] are generic over
-//! [`nomos_platform::ProgramLauncher`], the identical reason
-//! `nomos_correction_orchestration::Run_Correction` already is, so `nomos-api` can supply
-//! its own `StdProgramLauncher` at its own call site instead of depending on `nomos-cli`'s
-//! choice, or on `nomos-cli` at all.
+//! Every function here used to be generic over [`nomos_platform::ProgramLauncher`] and to
+//! take an `AgentEnvironment` carrying one, because [`Dispatched_Task`] called
+//! `nomos_agent_executor_claude_code::Execute_Task` and
+//! `nomos_model_backend_ollama::Execute_Task` directly and those need a launcher. Neither is
+//! named here since `OD-ROADMAP-005` decision 2: a declared target arrives carrying a port,
+//! the adapter behind that port already holds whatever platform a composition root bound into
+//! it, and dispatching an agent task is no longer a thing this crate needs a platform to do.
+//! `AgentEnvironment` is gone with the parameter, since its one field was that launcher.
 //!
-//! Genericizing also retires a gap `dispatch.rs`'s own `// check-test-coverage:
-//! allow-untested` comments named as unavoidable there: both match arms were untestable in
-//! that file only because they were fixed to a real launcher, so exercising them meant
-//! either depending on which binaries happened to be on the running machine's `PATH` or
-//! risking a real, costly invocation. Now that [`Dispatched_Task`] is generic, this crate's own
-//! tests reach both arms with a scripted [`nomos_platform::ProgramLauncher`] instead -- the
-//! identical fake-launcher shape `nomos_agent_executor_claude_code`'s and
-//! `nomos_model_backend_ollama`'s own `address_tests` already use for the identical reason
-//! -- so no exclusion marker survives the move. What is still never invoked in a test is
-//! the real `claude`/`ollama` subprocess either backend crate's own `Execute_Task` spawns
-//! through whichever launcher a caller supplies; only the substitutable launcher parameter
-//! is.
+//! What is *not* given up is the substitutability the launcher parameter bought. Before, a
+//! test could substitute a scripted launcher under a real adapter; now it substitutes the port
+//! itself, which is a seam one layer further out and reaches the same two arms of the match
+//! below. `test_support` says what that gives up and where the real adapters are still
+//! exercised.
 
 use std::path::Path;
 
-use crate::{AgentDispatchOutcome, AgentEnvironment, Backend, BackendSelection, Selected_Dispatch};
-use nomos_agent_contracts::TaskEnvelope;
+use crate::{AgentDispatchOutcome, BackendSelection, Selected_Dispatch};
+use nomos_agent_contracts::{DispatchPort, TaskEnvelope};
 use nomos_contracts::{Finding, SchemaId};
 use nomos_model_package::EffortLevel;
-use nomos_platform::ProgramLauncher;
 use nomos_rules::RoleSurfacePair;
 use nomos_scope_verification::Territory;
 
-/// Assembles a bare `TaskEnvelope` naming only `goal` and `config.effort`, and dispatches
-/// it to `config.backend`.
+/// Assembles a bare `TaskEnvelope` naming only `goal` and the resolved effort, and dispatches
+/// it through whatever `selection` resolves to.
 ///
-/// `execute` is the only real caller either backend crate has anywhere in this workspace
-/// today, other than their own tests and `nomos_workflow_orchestration`'s own `Body::
-/// ClaudeCode`/`Body::Ollama` dispatch. It renders each backend's own outcome type
-/// directly rather than assembling a `nomos_agent_contracts::WorkResult` --
-/// `OD-CONTRACTS-003` made `WorkResult.plan` representable as absent, but a bare `goal`
-/// carries no `RuleId` or `SubjectId` to give a `Finding` either, since nothing dispatched
-/// it as a rule's judgment; it is a person, asking a question directly.
+/// Renders no `nomos_agent_contracts::WorkResult` of its own -- `OD-CONTRACTS-003` made
+/// `WorkResult.plan` representable as absent, but a bare `goal` carries no `RuleId` or
+/// `SubjectId` to give a `Finding` either, since nothing dispatched it as a rule's judgment;
+/// it is a person, asking a question directly.
 #[must_use]
-pub fn Run_Agent_Execute<Launcher: ProgramLauncher>(
-    goal: &str, selection: &BackendSelection<'_>, environment: &AgentEnvironment<'_, Launcher>,
-) -> AgentDispatchOutcome
+pub fn Run_Agent_Execute(goal: &str, selection: &BackendSelection<'_>) -> AgentDispatchOutcome
 {
     let config = match Selected_Dispatch(selection)
     {
@@ -67,7 +52,7 @@ pub fn Run_Agent_Execute<Launcher: ProgramLauncher>(
     };
     let task = Bare_Task(goal, config.effort);
 
-    return Dispatched_Task(&task, config.backend, environment);
+    return Dispatched_Task(&task, config.family, config.port);
 }
 
 /// A bare `TaskEnvelope` naming only `goal` and `effort`. `scope`, `prohibited_changes`
@@ -77,8 +62,8 @@ pub fn Run_Agent_Execute<Launcher: ProgramLauncher>(
 /// has already declined to make elsewhere. `expected_output_schema` names this call site
 /// rather than a real schema, since nothing here validates a response against one. Named
 /// `Bare_Task` rather than `Execute_Task`, the name this held in `nomos-cli`'s own
-/// `dispatch.rs`, so it is never mistaken for either backend crate's own, differently
-/// shaped, public `Execute_Task`.
+/// `dispatch.rs`, so it is never mistaken for either adapter's own, differently shaped,
+/// public `Execute_Task`.
 fn Bare_Task(goal: &str, effort: EffortLevel) -> TaskEnvelope
 {
     return TaskEnvelope {
@@ -96,7 +81,7 @@ fn Bare_Task(goal: &str, effort: EffortLevel) -> TaskEnvelope
 /// Assembles the judgment `role_surface.rs`'s own module doc says
 /// `Check_Declared_Role_Matches_Surface` cannot reach for itself -- whether `pair`'s
 /// declared role and actual surface agree -- into a `TaskEnvelope` carrying `finding`'s
-/// own summary, and dispatches it to `config.backend`.
+/// own summary, and dispatches it through whatever `selection` resolves to.
 ///
 /// `pair` and `finding` are already built and already judged, the same "already walked"
 /// contract `nomos_correction_orchestration::Run_Correction` holds for the source it is
@@ -104,9 +89,8 @@ fn Bare_Task(goal: &str, effort: EffortLevel) -> TaskEnvelope
 /// running the rule over them, is a composition root's own file-reading concern
 /// (`OD-HOST-002`), not this seam's.
 #[must_use]
-pub fn Run_Agent_Judgment<Launcher: ProgramLauncher>(
+pub fn Run_Agent_Judgment(
     pair: &RoleSurfacePair, finding: &Finding, selection: &BackendSelection<'_>,
-    environment: &AgentEnvironment<'_, Launcher>,
 ) -> AgentDispatchOutcome
 {
     let config = match Selected_Dispatch(selection)
@@ -116,7 +100,7 @@ pub fn Run_Agent_Judgment<Launcher: ProgramLauncher>(
     };
     let task = Judgment_Task(pair, finding, config.effort);
 
-    return Dispatched_Task(&task, config.backend, environment);
+    return Dispatched_Task(&task, config.family, config.port);
 }
 
 /// The judgment `role_surface.rs`'s own module doc says this rule cannot reach itself --
@@ -151,23 +135,16 @@ fn Judgment_Task(pair: &RoleSurfacePair, finding: &Finding, effort: EffortLevel)
 ///
 /// [`Bare_Task`] and [`Judgment_Task`] both name an empty `prohibited_changes`, so no path
 /// resolves against this and the value is never read. It is not a stand-in for the
-/// repository root, and the executor refuses rather than uses it should either task ever
+/// repository root, and an executor refuses rather than uses it should either task ever
 /// declare a path to protect -- which is the point of naming it here rather than passing a
-/// dot. Threading a real root is `AgentEnvironment`'s own change, and reaches this crate's
-/// surface snapshot and `nomos-cli`'s construction of it.
+/// dot. Threading a real root is a change to this crate's own surface and to what a
+/// composition root constructs.
 const NO_ROOT: &str = "";
 
-/// Runs `task` against `backend` and reports whichever of the two outcome shapes it
-/// produces, or why neither could answer. The two crates share no trait --
-/// `OD-EXECUTOR-001`/`OD-EXECUTOR-004` both decline to invent one ahead of a real need, and
-/// `OD-EXECUTOR-005` found that trigger has not fired even once `--executor`/
-/// `--model-backend` replaced `--backend`: there is still only one real `AgentExecutor`, so
-/// this match is the entire dispatch, not a stand-in for a trait either flag's own
-/// vocabulary would need.
-/// Dispatches a task a caller already built, to whatever `selection` resolves to.
+/// Dispatches a task a caller already built, through whatever `selection` resolves to.
 ///
 /// The seam a workflow step reaches, and the reason it exists: before this,
-/// `nomos-workflow-orchestration` matched its own `Body` variant straight to an executor
+/// `nomos-workflow-orchestration` matched its own `Body` variant straight to an adapter
 /// crate, so the variant a step was written as *was* its backend choice and no resolution
 /// happened anywhere. `OD-PACKAGE-016` decision 9's wiring is that a step declares what it
 /// wants and the declared set decides what answers.
@@ -175,12 +152,10 @@ const NO_ROOT: &str = "";
 /// Distinct from [`Run_Agent_Execute`] only in where the task comes from. That one builds a
 /// bare task from a goal, which is what a person at a command line has; this one takes a
 /// whole [`TaskEnvelope`], which is what a workflow step carries. Both resolve the same way,
-/// through the same [`Selected_Dispatch`], so neither can reach a backend the other could
+/// through the same [`Selected_Dispatch`], so neither can reach a target the other could
 /// not.
 #[must_use]
-pub fn Run_Agent_Task<Launcher: ProgramLauncher>(
-    task: &TaskEnvelope, selection: &BackendSelection<'_>, environment: &AgentEnvironment<'_, Launcher>,
-) -> AgentDispatchOutcome
+pub fn Run_Agent_Task(task: &TaskEnvelope, selection: &BackendSelection<'_>) -> AgentDispatchOutcome
 {
     let config = match Selected_Dispatch(selection)
     {
@@ -188,22 +163,32 @@ pub fn Run_Agent_Task<Launcher: ProgramLauncher>(
         Err(absence) => return AgentDispatchOutcome::NotSelected(absence),
     };
 
-    return Dispatched_Task(task, config.backend, environment);
+    return Dispatched_Task(task, config.family, config.port);
 }
 
-fn Dispatched_Task<Launcher: ProgramLauncher>(task: &TaskEnvelope, backend: Backend, environment: &AgentEnvironment<'_, Launcher>) -> AgentDispatchOutcome
+/// Runs `task` through `port` and reports what it answered, or why it answered nothing.
+///
+/// The two arms are the two `PackageKind`s, not two vendors, which is the whole of what
+/// `OD-ROADMAP-005` decision 2 changed here: this function used to match a `Backend` enum
+/// onto `nomos_agent_executor_claude_code::Execute_Task` and
+/// `nomos_model_backend_ollama::Execute_Task`, so the generic path named both adapters and
+/// carried their own outcome types. It names neither now, and the two answers stay apart
+/// because the two ports return different types -- an executor's execution carries a spend and
+/// a denial list, a model backend's answer carries a response, and neither is the other with
+/// fields left empty.
+fn Dispatched_Task(task: &TaskEnvelope, family: &str, port: DispatchPort<'_>) -> AgentDispatchOutcome
 {
-    return match backend
+    return match port
     {
-        Backend::ClaudeCode => match nomos_agent_executor_claude_code::Execute_Task(task, environment.launcher, Path::new(NO_ROOT))
+        DispatchPort::Executor(executor) => match executor.Execute(task, Path::new(NO_ROOT))
         {
-            Ok(outcome) => AgentDispatchOutcome::ClaudeCode(outcome),
-            Err(error) => AgentDispatchOutcome::Unavailable(error.to_string()),
+            Ok(execution) => AgentDispatchOutcome::Executed { family: family.to_owned(), execution },
+            Err(refusal) => AgentDispatchOutcome::Unavailable { family: family.to_owned(), reason: refusal.to_string() },
         },
-        Backend::Ollama => match nomos_model_backend_ollama::Execute_Task(task, environment.launcher)
+        DispatchPort::Model(model) => match model.Answer(task)
         {
-            Ok(outcome) => AgentDispatchOutcome::Ollama(outcome),
-            Err(error) => AgentDispatchOutcome::Unavailable(error.to_string()),
+            Ok(answer) => AgentDispatchOutcome::Answered { family: family.to_owned(), answer },
+            Err(refusal) => AgentDispatchOutcome::Unavailable { family: family.to_owned(), reason: refusal.to_string() },
         },
     };
 }
@@ -211,108 +196,119 @@ fn Dispatched_Task<Launcher: ProgramLauncher>(task: &TaskEnvelope, backend: Back
 #[cfg(test)]
 mod tests
 {
-    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
+    use crate::test_support::{
+        Declared_Executor, Declared_Model, RefusingExecutor, RefusingModel, ScriptedExecutor, ScriptedModel,
+    };
     use crate::ProfileAbsence;
+    use nomos_agent_contracts::DeclaredTarget;
     use nomos_model_package::{ModelExecutionProfile, ModelSelector};
-    use nomos_platform::{Command, ExitOutcome, ProgramOutput};
 
-    struct Scripted
-    {
-        outcome: ExitOutcome,
-        stdout: String,
-    }
-
-    /// Answers from fixed data, so its outputs reproduce byte for byte.
-    impl Strategy for Scripted
-    {
-        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
-        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
-        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
-    }
-
-    impl ProgramLauncher for Scripted
-    {
-        fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
-        {
-            return Ok(ProgramOutput { outcome: self.outcome, stdout: self.stdout.clone(), stderr: String::new() });
-        }
-    }
-
-    struct Unreachable;
-
-    /// Answers from fixed data, so its outputs reproduce byte for byte.
-    impl Strategy for Unreachable
-    {
-        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
-        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
-        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
-    }
-
-    impl ProgramLauncher for Unreachable
-    {
-        fn Run(&self, _command: &Command) -> Result<ProgramOutput, String>
-        {
-            return Err("no such program".to_owned());
-        }
-    }
+    const EXECUTOR_FAMILY: &str = "acme-agent";
+    const MODEL_FAMILY: &str = "acme-model";
 
     #[test]
-    fn Test_Run_Agent_Execute_Should_Reach_Claude_Code_With_A_Scripted_Launcher()
+    fn Test_Run_Agent_Execute_Should_Reach_An_Executor_Port()
     {
-        let launcher = Scripted { outcome: ExitOutcome::Exited { code: 0 }, stdout: Claude_Code_Success_Json() };
+        let executor = ScriptedExecutor { assumption: "PONG".to_owned() };
+        let declared = [Declared_Executor(EXECUTOR_FAMILY, &executor)];
+        let profile = Family_Profile(EXECUTOR_FAMILY);
 
-        let outcome = Run_Agent_Execute("say PONG", &Selecting::Preferring(Backend::ClaudeCode).Selection(), &AgentEnvironment { launcher: &launcher });
+        let outcome = Run_Agent_Execute("say PONG", &Selection(&profile, None, &declared));
 
         match outcome
         {
-            AgentDispatchOutcome::ClaudeCode(outcome) => assert_eq!(outcome.result.assumptions, ["PONG".to_owned()]),
-            other => panic!("expected ClaudeCode, got {other:?}"),
+            AgentDispatchOutcome::Executed { family, execution } =>
+            {
+                assert_eq!(family, EXECUTOR_FAMILY, "the outcome names the family that answered");
+                assert_eq!(execution.result.assumptions, ["PONG".to_owned()]);
+            }
+            other => panic!("expected an execution, got {other:?}"),
         }
     }
 
     #[test]
-    fn Test_Run_Agent_Execute_Should_Reach_Ollama_With_A_Scripted_Launcher()
+    fn Test_Run_Agent_Execute_Should_Reach_A_Model_Backend_Port()
     {
-        let launcher = Scripted { outcome: ExitOutcome::Exited { code: 0 }, stdout: "PONG\n".to_owned() };
+        let model = ScriptedModel { response: "PONG".to_owned() };
+        let declared = [Declared_Model(MODEL_FAMILY, &model)];
+        let profile = Family_Profile(MODEL_FAMILY);
 
-        let outcome = Run_Agent_Execute("say PONG", &Selecting::Preferring(Backend::Ollama).Selection(), &AgentEnvironment { launcher: &launcher });
+        let outcome = Run_Agent_Execute("say PONG", &Selection(&profile, None, &declared));
 
         match outcome
         {
-            AgentDispatchOutcome::Ollama(outcome) => assert_eq!(outcome.response, "PONG"),
-            other => panic!("expected Ollama, got {other:?}"),
+            AgentDispatchOutcome::Answered { family, answer } =>
+            {
+                assert_eq!(family, MODEL_FAMILY);
+                assert_eq!(answer.response, "PONG");
+            }
+            other => panic!("expected an answer, got {other:?}"),
         }
     }
 
-    /// Neither backend can be started at all -- the launcher itself refuses, never a real
-    /// subprocess. Exercised for both backends: `Unavailable` folds both crates' own error
-    /// type down to text, and this proves the fold holds from either arm of [`Dispatched_Task`].
+    /// Neither port can produce anything -- both refuse before any real process exists.
+    /// Exercised for both, because `Unavailable` folds either port's refusal down to text and
+    /// this proves the fold holds from both arms of [`Dispatched_Task`].
     #[test]
-    fn Test_Run_Agent_Execute_Should_Report_Unavailable_When_The_Launcher_Cannot_Start_Either_Backend()
+    fn Test_Run_Agent_Execute_Should_Report_Unavailable_When_Either_Port_Refuses()
     {
-        for backend in [Backend::ClaudeCode, Backend::Ollama]
+        let executor = RefusingExecutor;
+        let model = RefusingModel;
+        let declared = [Declared_Executor(EXECUTOR_FAMILY, &executor), Declared_Model(MODEL_FAMILY, &model)];
+
+        for family in [EXECUTOR_FAMILY, MODEL_FAMILY]
         {
-            let outcome = Run_Agent_Execute("say PONG", &Selecting::Preferring(backend).Selection(), &AgentEnvironment { launcher: &Unreachable });
+            let profile = Family_Profile(family);
 
-            assert!(matches!(outcome, AgentDispatchOutcome::Unavailable(_)), "{backend:?}: {outcome:?}");
+            let outcome = Run_Agent_Execute("say PONG", &Selection(&profile, None, &declared));
+
+            match outcome
+            {
+                AgentDispatchOutcome::Unavailable { family: named, reason } =>
+                {
+                    assert_eq!(named, family, "the refusal names which target was reached");
+                    assert_eq!(reason, "no such program");
+                }
+                other => panic!("{family}: expected Unavailable, got {other:?}"),
+            }
         }
     }
 
     #[test]
-    fn Test_Run_Agent_Judgment_Should_Reach_Claude_Code_With_A_Scripted_Launcher()
+    fn Test_Run_Agent_Judgment_Should_Reach_An_Executor_Port()
     {
-        let launcher = Scripted { outcome: ExitOutcome::Exited { code: 0 }, stdout: Claude_Code_Success_Json() };
+        let executor = ScriptedExecutor { assumption: "PONG".to_owned() };
+        let declared = [Declared_Executor(EXECUTOR_FAMILY, &executor)];
+        let profile = Family_Profile(EXECUTOR_FAMILY);
         let pair = Fixture_Pair();
         let finding = Fixture_Finding();
 
-        let outcome = Run_Agent_Judgment(&pair, &finding, &Selecting::Preferring(Backend::ClaudeCode).Selection(), &AgentEnvironment { launcher: &launcher });
+        let outcome = Run_Agent_Judgment(&pair, &finding, &Selection(&profile, None, &declared));
 
         match outcome
         {
-            AgentDispatchOutcome::ClaudeCode(outcome) => assert_eq!(outcome.result.assumptions, ["PONG".to_owned()]),
-            other => panic!("expected ClaudeCode, got {other:?}"),
+            AgentDispatchOutcome::Executed { execution, .. } =>
+            {
+                assert_eq!(execution.result.assumptions, ["PONG".to_owned()]);
+            }
+            other => panic!("expected an execution, got {other:?}"),
         }
+    }
+
+    /// A whole envelope a caller already built reaches the same two arms, which is what a
+    /// workflow step carries.
+    #[test]
+    fn Test_Run_Agent_Task_Should_Dispatch_An_Envelope_A_Caller_Already_Built()
+    {
+        let model = ScriptedModel { response: "carried".to_owned() };
+        let declared = [Declared_Model(MODEL_FAMILY, &model)];
+        let profile = Family_Profile(MODEL_FAMILY);
+        let task = Bare_Task("carried", EffortLevel::Low);
+
+        let outcome = Run_Agent_Task(&task, &Selection(&profile, None, &declared));
+
+        assert!(matches!(outcome, AgentDispatchOutcome::Answered { ref answer, .. } if answer.response == "carried"), "{outcome:?}");
     }
 
     /// The dispatched goal is traceably the rule's own question, not a paraphrase invented
@@ -344,43 +340,31 @@ mod tests
     }
 
     /// The clause the whole item turns on: with nothing named, a dispatch still reaches a
-    /// backend, and it reaches it because the profile resolved rather than because a default
-    /// was written down. Before this, `nomos_cli::agent::parsing` returned
-    /// `Backend::ClaudeCode` when neither flag was given, which is a backend nothing chose.
+    /// target, and it reaches it because the profile resolved rather than because a default
+    /// was written down.
     #[test]
-    fn Test_A_Profile_With_No_Preference_Should_Still_Reach_A_Backend()
+    fn Test_A_Profile_With_No_Preference_Should_Still_Reach_A_Target()
     {
-        let selecting = Selecting::Resolving(Backend::Ollama.Label());
+        let model = ScriptedModel { response: "resolved".to_owned() };
+        let declared = [Declared_Model(MODEL_FAMILY, &model)];
+        let profile = Family_Profile(MODEL_FAMILY);
 
-        let config = Selected_Dispatch(&selecting.Selection()).expect("the declared set offers the family");
+        let config = Selected_Dispatch(&Selection(&profile, None, &declared)).expect("the declared set offers the family");
 
-        assert_eq!(config.backend, Backend::Ollama);
+        assert_eq!(config.family, MODEL_FAMILY);
     }
 
-    /// Every declared backend is reachable by its own family name with no preference, so the
-    /// resolution is answering rather than one arm of it happening to be first.
-    #[test]
-    fn Test_Every_Declared_Backend_Should_Be_Reachable_By_Family_Alone()
-    {
-        for backend in Backend::ALL
-        {
-            let selecting = Selecting::Resolving(backend.Label());
-
-            let config = Selected_Dispatch(&selecting.Selection()).expect("a declared family resolves");
-
-            assert_eq!(config.backend, backend, "{}", backend.Label());
-        }
-    }
-
-    /// A family nothing declares does not quietly become a backend. This is the falsifier for
+    /// A family nothing declares does not quietly become a target. This is the falsifier for
     /// the clause above: if resolution were bypassed in favour of any default, this would
     /// return that default instead of refusing.
     #[test]
-    fn Test_An_Undeclared_Family_Should_Reach_No_Backend()
+    fn Test_An_Undeclared_Family_Should_Reach_No_Target()
     {
-        let selecting = Selecting::Resolving("no-such-family");
+        let executor = RefusingExecutor;
+        let declared = [Declared_Executor(EXECUTOR_FAMILY, &executor)];
+        let profile = Family_Profile("no-such-family");
 
-        let absence = Selected_Dispatch(&selecting.Selection()).expect_err("nothing declares that family");
+        let absence = Absence_Of(&Selection(&profile, None, &declared));
 
         assert!(
             matches!(absence, crate::BackendAbsence::Unresolved { absence: ProfileAbsence::NoDeclaredTargetOfThatFamily, .. }),
@@ -388,8 +372,7 @@ mod tests
         );
     }
 
-    /// What a preference naming a backend the declared set cannot offer returns, which the
-    /// item required be reported rather than left to be discovered.
+    /// What a preference naming a target the declared set cannot offer returns.
     ///
     /// It fails rather than falling back. `nomos_capability::Selection::Over` does fall back
     /// for a provider preference, and doing that here would run a different backend than the
@@ -397,79 +380,56 @@ mod tests
     #[test]
     fn Test_A_Preference_The_Declared_Set_Cannot_Offer_Should_Fail_Rather_Than_Fall_Back()
     {
-        let profile = ModelExecutionProfile::New(
-            ModelSelector::BackendFamily(Backend::Ollama.Label().to_owned()),
+        let model = RefusingModel;
+        let declared = [Declared_Model(MODEL_FAMILY, &model)];
+        let profile = Family_Profile(MODEL_FAMILY);
+
+        let absence = Absence_Of(&Selection(&profile, Some(EXECUTOR_FAMILY), &declared));
+
+        assert_eq!(absence, crate::BackendAbsence::PreferenceNotDeclared { preferred: EXECUTOR_FAMILY.to_owned() });
+    }
+
+    /// A preference the set does offer is honoured ahead of what the profile would have
+    /// resolved to on its own.
+    #[test]
+    fn Test_A_Declared_Preference_Should_Be_Honoured_Ahead_Of_The_Resolution()
+    {
+        let executor = RefusingExecutor;
+        let model = RefusingModel;
+        let declared = [Declared_Executor(EXECUTOR_FAMILY, &executor), Declared_Model(MODEL_FAMILY, &model)];
+        let profile = Family_Profile(MODEL_FAMILY);
+
+        let config = Selected_Dispatch(&Selection(&profile, Some(EXECUTOR_FAMILY), &declared)).expect("the set offers it");
+
+        assert_eq!(config.family, EXECUTOR_FAMILY);
+    }
+
+    /// The absence a selection reported, or a panic. Written as a match rather than as
+    /// `expect_err`, because that method needs the success type to carry `Debug` and
+    /// [`DispatchConfig`] deliberately does not -- a port is a trait object.
+    fn Absence_Of(selection: &BackendSelection<'_>) -> crate::BackendAbsence
+    {
+        return match Selected_Dispatch(selection)
+        {
+            Err(absence) => absence,
+            Ok(config) => panic!("expected an absence, and it resolved to {}", config.family),
+        };
+    }
+
+    fn Family_Profile(family: &str) -> ModelExecutionProfile
+    {
+        return ModelExecutionProfile::New(
+            ModelSelector::BackendFamily(family.to_owned()),
             EffortLevel::BackendDefault,
         );
-        let declared: Vec<crate::DeclaredTarget> = crate::Declared_Targets()
-            .into_iter()
-            .filter(|target| return target.backend != Backend::ClaudeCode)
-            .collect();
-
-        let absence = Selected_Dispatch(&BackendSelection {
-            profile: &profile,
-            preferred: Some(Backend::ClaudeCode.Label()),
-            declared: &declared,
-        })
-        .expect_err("the set no longer offers the preferred backend");
-
-        assert_eq!(absence, crate::BackendAbsence::PreferenceNotDeclared { preferred: Backend::ClaudeCode.Label().to_owned() });
     }
 
-    fn Claude_Code_Success_Json() -> String
+    fn Selection<'port>(
+        profile: &'port ModelExecutionProfile, preferred: Option<&'port str>,
+        declared: &'port [DeclaredTarget<'port>],
+    ) -> BackendSelection<'port>
     {
-        return r#"{"result": "PONG", "structured_output": {"assumptions": ["PONG"], "unresolved_questions": []}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 500, "permission_denials": []}"#.to_owned();
-    }
-
-    /// A request that reaches exactly `backend`, with the owned parts a
-    /// [`BackendSelection`] borrows kept alive beside it.
-    ///
-    /// Names `backend` as the preference rather than writing a selector that happens to
-    /// resolve to it, because these tests are about what the seam does once a backend is
-    /// chosen. The resolution path is exercised by
-    /// `Test_A_Profile_With_No_Preference_Should_Still_Reach_A_Backend`, which is the one
-    /// that matters for the default a person never typed.
-    struct Selecting
-    {
-        profile: ModelExecutionProfile,
-        declared: Vec<crate::DeclaredTarget>,
-        preferred: Option<String>,
-    }
-
-    impl Selecting
-    {
-        fn Preferring(backend: Backend) -> Self
-        {
-            return Self {
-                profile: ModelExecutionProfile::New(
-                    ModelSelector::BackendFamily(backend.Label().to_owned()),
-                    EffortLevel::BackendDefault,
-                ),
-                declared: crate::Declared_Targets(),
-                preferred: Some(backend.Label().to_owned()),
-            };
-        }
-
-        fn Resolving(family: &str) -> Self
-        {
-            return Self {
-                profile: ModelExecutionProfile::New(
-                    ModelSelector::BackendFamily(family.to_owned()),
-                    EffortLevel::BackendDefault,
-                ),
-                declared: crate::Declared_Targets(),
-                preferred: None,
-            };
-        }
-
-        fn Selection(&self) -> BackendSelection<'_>
-        {
-            return BackendSelection {
-                profile: &self.profile,
-                preferred: self.preferred.as_deref(),
-                declared: &self.declared,
-            };
-        }
+        return BackendSelection { profile, preferred, declared };
     }
 
     fn Fixture_Pair() -> RoleSurfacePair

@@ -11,10 +11,15 @@
 //! `OD-HOST-002`'s own division, and two roots naming the same platform is not the same
 //! thing as one of them borrowing the other's. Before this crate, `nomos-agent-executor-claude-code` and
 //! `nomos-model-backend-ollama` reached this workspace only through `nomos-cli`'s own
-//! `agent` group and through `nomos_workflow_orchestration`'s own `Body::ClaudeCode`/
-//! `Body::Ollama` step dispatch (rendered here as `workflow::AgentExecutionOutcomeResponse`/
+//! `agent` group and through `nomos_workflow_orchestration`'s own per-backend step
+//! dispatch (rendered here as `workflow::AgentExecutionOutcomeResponse`/
 //! `OllamaExecutionOutcomeResponse`); this is the first place this crate can dispatch a
 //! bare agent task, or a role judgment, on its own.
+//!
+//! [`Shipped_Targets`] is this host's composition root for the two adapters, which
+//! `OD-ROADMAP-005` decision 2 moved out of `nomos-agent-orchestration`. That crate names
+//! `nomos_agent_contracts`' `AgentExecutor` and `ModelBackend` ports now; which concrete pair
+//! answers them is decided here.
 //!
 //! [`Handle_Agent_Judge_Role`] reads `root`'s `README.md` row and its committed surface
 //! snapshot itself and runs `nomos_rules::Check_Declared_Role_Matches_Surface` to get the
@@ -28,17 +33,44 @@
 //! workflow step's own outcome, paired with `workflow::AgentExecutionErrorResponse`/
 //! `OllamaExecutionErrorResponse`, which keep each backend's own `Unavailable`/
 //! `Unparseable` structure apart. `nomos_agent_orchestration::AgentDispatchOutcome`
-//! deliberately does not: its own `Unavailable(String)` collapses both backends' error
-//! types to the text either one's `Display` already produces, the identical fold
+//! deliberately does not: its own `Unavailable` collapses either port's refusal to the text
+//! the refusing adapter's `Display` already produces, the identical fold
 //! `nomos-cli`'s own former `Backend_Unavailable` made -- see that crate's own
 //! `AgentDispatchOutcome` doc. A caller of this crate's own bare Agent verb sees exactly
 //! that fold, not a structure this seam does not keep.
 
-use nomos_agent_orchestration::{AgentDispatchOutcome, AgentEnvironment, BackendSelection, Run_Agent_Execute, Run_Agent_Judgment};
-use nomos_agent_executor_claude_code::MicroDollars;
-use nomos_composer_std::LAUNCHER;
+use nomos_agent_contracts::{DeclaredTarget, MicroDollars};
+use nomos_agent_executor_claude_code::ClaudeCodeExecutor;
+use nomos_agent_orchestration::{AgentDispatchOutcome, BackendSelection, Run_Agent_Execute, Run_Agent_Judgment};
+use nomos_composer_std::{LAUNCHER, LauncherType};
+use nomos_model_backend_ollama::OllamaModelBackend;
 use nomos_rules::RoleSurfacePair;
 use std::path::Path;
+
+/// This crate's own `AgentExecutor`, bound to the platform this composition root chose.
+///
+/// A `static` rather than a value built per call, because a [`DeclaredTarget`] borrows the
+/// adapter it names and every caller here wants one that outlives the call.
+static EXECUTOR: ClaudeCodeExecutor<'static, LauncherType> = ClaudeCodeExecutor::Through(&LAUNCHER);
+
+/// This crate's own `ModelBackend`, bound to the same platform.
+static MODEL_BACKEND: OllamaModelBackend<'static, LauncherType> = OllamaModelBackend::Through(&LAUNCHER);
+
+/// Every dispatch target this crate declares, in the order a resolution reads them.
+///
+/// **This is the composition root `OD-ROADMAP-005` decision 2 names, for this host.** The two
+/// adapters are named here and nowhere in `nomos-agent-orchestration` or
+/// `nomos-workflow-orchestration`, which name `nomos_agent_contracts`' two ports instead.
+/// Each adapter states its own family label, package kind, version and model selection; this
+/// function only says which of them this crate offers.
+///
+/// A deliberate twin of `nomos-cli`'s own, not a shared dependency on it: choosing which
+/// adapters a root offers is that root's act, the identical division this module's own
+/// `Role_Surface_Pair` already draws around reading a tree.
+pub(crate) fn Shipped_Targets() -> Vec<DeclaredTarget<'static>>
+{
+    return vec![EXECUTOR.Declared_Target(), MODEL_BACKEND.Declared_Target()];
+}
 
 mod agent_dispatch_response;
 mod agent_judge_role_response;
@@ -51,7 +83,7 @@ pub use agent_judge_role_response::AgentJudgeRoleResponse;
 #[must_use]
 pub fn Handle_Agent_Execute(goal: &str, selection: &BackendSelection<'_>) -> AgentDispatchResponse
 {
-    let outcome = Run_Agent_Execute(goal, selection, &AgentEnvironment { launcher: &LAUNCHER });
+    let outcome = Run_Agent_Execute(goal, selection);
 
     return AgentDispatchResponse::From(outcome);
 }
@@ -76,7 +108,7 @@ pub fn Handle_Agent_Judge_Role(root: &Path, crate_name: &str, selection: &Backen
         return AgentJudgeRoleResponse::NoFinding;
     };
 
-    let outcome = Run_Agent_Judgment(&pair, finding, selection, &AgentEnvironment { launcher: &LAUNCHER });
+    let outcome = Run_Agent_Judgment(&pair, finding, selection);
 
     return AgentJudgeRoleResponse::Dispatched { dispatch: AgentDispatchResponse::From(outcome) };
 }
@@ -145,7 +177,7 @@ fn Crate_Root(root: &Path, crate_name: &str) -> String
 ///
 /// The one place in this workspace where the engine's exact money becomes a float, and it
 /// is here because `cost_usd` is a published field of two `Serialize` response types --
-/// [`AgentDispatchResponse::ClaudeCode`] and [`crate::workflow::AgentExecutionOutcomeResponse`].
+/// [`AgentDispatchResponse::Executed`] and [`crate::workflow::AgentExecutionOutcomeResponse`].
 /// A caller reading that number off a JSON-RPC or MCP reply already has a float, and
 /// changing the field to integer micros would change a shape this workspace publishes
 /// rather than one it merely holds.
@@ -154,7 +186,10 @@ fn Crate_Root(root: &Path, crate_name: &str) -> String
 /// `response.rs`, where it ran on the first line that read the engine's answer and left
 /// every crate between there and here holding a value nothing could compare exactly
 /// against `nomos_agent_executor_claude_code::MAXIMUM_SPEND`, which is the same integer
-/// type the engine enforces the cap with.
+/// type the engine enforces the cap with. Named through `nomos-agent-contracts` since
+/// `OD-ROADMAP-005` decision 2, because the port's own `AgentExecution::spend` is that type
+/// and one re-export with one origin is the difference between a shared type and two that
+/// happen to agree.
 #[expect(
     clippy::cast_precision_loss,
     reason = "a dispatch's cost in micros is far below f64's exact-integer range --               MAXIMUM_SPEND is 1_000_000 micros and 2^53 is nine orders of magnitude above it"
@@ -172,16 +207,17 @@ impl AgentDispatchResponse
     {
         return match outcome
         {
-            AgentDispatchOutcome::ClaudeCode(outcome) => Self::ClaudeCode {
-                assumptions: outcome.result.assumptions,
-                unresolved_questions: outcome.result.unresolved_questions,
-                denied_tool_uses: outcome.denied_tool_uses,
-                is_error: outcome.is_error,
-                cost_usd: Dollars_Of(outcome.cost),
-                duration_ms: outcome.duration_ms,
+            AgentDispatchOutcome::Executed { family, execution } => Self::Executed {
+                family,
+                assumptions: execution.result.assumptions,
+                unresolved_questions: execution.result.unresolved_questions,
+                denied_tool_uses: execution.denied_tool_uses,
+                is_error: execution.is_error,
+                cost_usd: Dollars_Of(execution.spend),
+                duration_ms: execution.duration_ms,
             },
-            AgentDispatchOutcome::Ollama(outcome) => Self::Ollama { response: outcome.response },
-            AgentDispatchOutcome::Unavailable(reason) => Self::Unavailable { reason },
+            AgentDispatchOutcome::Answered { family, answer } => Self::Answered { family, response: answer.response },
+            AgentDispatchOutcome::Unavailable { family, reason } => Self::Unavailable { family, reason },
             // Nothing was selected, so there is no backend this response could be about.
             // Carried as its own variant rather than folded into `Unavailable`, because a
             // wire caller that cannot tell "the backend we chose did not answer" from "we
@@ -195,7 +231,6 @@ impl AgentDispatchResponse
 mod tests
 {
     use super::*;
-    use nomos_agent_orchestration::Backend;
     use nomos_model_package::EffortLevel;
 
     /// A real run over a fixture tree with a real blocking role-mismatch finding reaches a
@@ -247,10 +282,10 @@ mod tests
     fn Test_Handle_Agent_Judge_Role_Should_Report_No_Declared_Role_When_The_Root_Has_No_Readme()
     {
         let profile = nomos_model_package::ModelExecutionProfile::New(
-            nomos_model_package::ModelSelector::BackendFamily(Backend::ClaudeCode.Label().to_owned()),
+            nomos_model_package::ModelSelector::BackendFamily(nomos_agent_executor_claude_code::FAMILY.to_owned()),
             EffortLevel::BackendDefault,
         );
-        let declared = nomos_agent_orchestration::Declared_Targets();
+        let declared = Shipped_Targets();
         let response = Handle_Agent_Judge_Role(
             Path::new("no-such-directory-anywhere-for-nomos-api-agent-test"),
             "nomos-does-not-exist",
@@ -266,7 +301,7 @@ mod tests
     #[test]
     fn Test_Agent_Dispatch_Response_Should_Produce_A_Response_That_Round_Trips_As_Json()
     {
-        let response = AgentDispatchResponse::Unavailable { reason: "fixture".to_owned() };
+        let response = AgentDispatchResponse::Unavailable { family: nomos_agent_executor_claude_code::FAMILY.to_owned(), reason: "fixture".to_owned() };
 
         let json = serde_json::to_string(&response)
             .expect("a derived Serialize over owned data has nothing to refuse");

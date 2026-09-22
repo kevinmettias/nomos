@@ -1,7 +1,6 @@
 //! Why a step's dispatch failed.
 
-/// Why a step's dispatch failed — naming each backend's own error type directly, the
-/// same reason [`super::StepOutcome`] does.
+/// Why a step's dispatch failed.
 ///
 /// `Gate` carries the whole [`nomos_gate_orchestration::GateRunResult`], not a narrower
 /// error type: that crate has no separate error type for a failing run, because
@@ -12,10 +11,7 @@
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum DispatchError
 {
-    /// Why `nomos-agent-executor-claude-code::Execute_Task` could not answer.
-    /// Why `nomos-model-backend-ollama::Execute_Task` could not answer.
-    /// A `Body::Gate` step whose own `GateRunOutcome` was `Failed`.
-    /// The backend this step's profile resolved to could not be started, or did not answer.
+    /// The target this step's profile resolved to could not be started, or did not answer.
     ///
     /// A dispatch error rather than a step outcome, because it stops the run: that is what a
     /// failing agent step did before the two per-backend variants were collapsed, and

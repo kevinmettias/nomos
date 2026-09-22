@@ -3,7 +3,7 @@ id: OD-PACKAGE-016
 type: decision
 title: An execution profile resolves against the declared package set into the resolved shape dispatch already takes
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - package
@@ -28,6 +28,8 @@ relations:
   - target: OD-HOST-002
     type: relates-to
   - target: OD-ROADMAP-001
+    type: relates-to
+  - target: OD-ROADMAP-005
     type: relates-to
 ---
 
@@ -326,9 +328,65 @@ defect the consumer item was written to remove.
 invented ranking is a decision the resolver is not entitled to make, and
 `nomos_capability::Selection` already refused the same move for the same reason.
 
+## Amendment: The Resolver Stays, And Its Reason Does Not
+
+Added at version 2, authorized by `OD-ROADMAP-005` decision 2 and built by
+`P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS`.
+
+**What is superseded.** Decision 1 placed the resolver in `nomos-agent-orchestration` on a
+reason this amendment removes: that it "is the only crate that already depends on
+`nomos-model-package` and on both `nomos-agent-executor-claude-code` and
+`nomos-model-backend-ollama`". That is no longer true of it, and is no longer a reason for
+anything. Decision 3, "`Backend` gains a family name, and that is the only addition to existing
+vocabulary", is superseded with it: the `Backend` enum and its `Label` are gone, because the
+enum was the generic path holding a list of vendors. Decision 5's "carries the others beside
+it" is superseded only in its element type, from that enum to the family labels the
+declarations state.
+
+**The resolver did not move, and decision 1's conclusion stands on its other leg.** It must
+still name the resolved shape a dispatch takes and produce it, and `nomos-model-package` is in
+the Provider zone where a provider may not name an agent. So it stays exactly where it was,
+and what changed is what it resolves *to*: a declared target now carries its own family label,
+its own package declaration, and the port that answers it, and a resolution hands back what
+was already there rather than selecting a variant this crate had enumerated.
+
+**What was measured, at `9f13b1e7`.** `Declared_Targets` in `nomos-agent-orchestration`
+derived the declared set from `Backend::ALL`, so the crate that resolved also decided which
+backends exist. `src/run.rs`'s `Dispatched_Task` matched that enum onto each adapter's own
+`Execute_Task`. Both manifests in `crates/orchestration` declared both adapter crates, and the
+workflow crate's two declarations were already dead: no line of Rust there named either.
+
+**What was built.** `nomos_agent_contracts::DeclaredTarget` holds `family`, `package` and a
+`DispatchPort`, which is `Executor` or `Model` -- the two `PackageKind`s that declare a model
+selection, not two vendors. Each adapter states its own declaration and its own `FAMILY`
+constant, the shape `nomos_capability::Registry` already uses when a composition root calls
+`registry.Offer(nomos_lang_rust::Provider_Offer())`, so two hosts offering the same pair are
+two calls rather than two copies of a package declaration that could drift. `Selected_Dispatch`
+and `Resolve_Profile` are unchanged in what they decide.
+
+**What this amendment leaves exactly as this record decided it.** Decision 2: the resolver
+resolves against a caller-supplied sequence and discovers nothing, reads no file, and invents
+no availability. Decision 4: the other four selectors come back unresolved by named reason, and
+the match in `Resolve_Profile` still carries no wildcard. Decision 6: effort is carried, never
+mapped. Decision 7: `ResolvedModelExecution` stays unbuilt and the output is the resolved
+dispatch shape. Decision 8: `OD-PACKAGE-012`'s binding question is answered as this record
+answered it, on the four measured counts. Decision 9's wiring landed before this item and is
+untouched by it.
+
+**One consequence worth naming, because it reaches a published shape.** A dispatch outcome now
+carries the family that answered. Before the port the variant *was* the vendor, so a caller
+always knew which backend answered; once a profile can resolve a target nobody typed, that is
+knowable only from the declaration that resolved. `nomos-api`'s own response shape carries it
+as a field rather than as a variant tag for the same reason.
+
 ## Status
 
 Accepted. Decides the three questions the declined consumer item surfaced and did not answer,
 and pays `OD-PACKAGE-012`'s binding question with the measurement taken against the real types.
 Authorizes one resolver and one addition to existing vocabulary; files the dispatch wiring as a
 dependent item rather than widening its own territory.
+
+Amended to version 2 by `P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS`
+under `OD-ROADMAP-005` decision 2: decision 1's reason and decision 3's addition are
+superseded, the resolver stays where it is on decision 1's other leg, and every other decision
+here stands as written.

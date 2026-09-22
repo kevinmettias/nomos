@@ -53,10 +53,11 @@ impl Clock for ScriptedClock
 ///
 /// The clockless entry point, so every bounded step in a plan run through this reports
 /// [`StepTiming::Unmeasured`].
-pub(super) fn Ran_Report(plan: &[WorkflowStepPlan], answers: Vec<ProgramOutput>) -> WorkflowRun
+pub(super) fn Ran_Report(plan: &[WorkflowStepPlan], answers: Vec<PortAnswer>) -> WorkflowRun
 {
-    let launcher = Scripted::Of(answers);
-    let declared = nomos_agent_orchestration::Declared_Targets();
+    let launcher = Scripted::Of(Vec::new());
+    let ports = ScriptedPorts::Of(answers);
+    let declared = Declared_Ports(&ports);
     let platform = Test_Platform(&launcher, &declared);
 
     return crate::Run_Unclocked(plan, &platform, &Test_Variant(), Test_Run_Id());
@@ -65,11 +66,12 @@ pub(super) fn Ran_Report(plan: &[WorkflowStepPlan], answers: Vec<ProgramOutput>)
 /// Runs `plan` through [`crate::Run_With_Clock`], measuring each bounded step against
 /// `readings` -- two per attempt, the one taken before the dispatch and the one taken
 /// after it.
-pub(super) fn Ran_Report_With_Clock(plan: &[WorkflowStepPlan], answers: Vec<ProgramOutput>, readings: Vec<i64>) -> WorkflowRun
+pub(super) fn Ran_Report_With_Clock(plan: &[WorkflowStepPlan], answers: Vec<PortAnswer>, readings: Vec<i64>) -> WorkflowRun
 {
-    let launcher = Scripted::Of(answers);
+    let launcher = Scripted::Of(Vec::new());
+    let ports = ScriptedPorts::Of(answers);
     let clock = ScriptedClock::Of(readings);
-    let declared = nomos_agent_orchestration::Declared_Targets();
+    let declared = Declared_Ports(&ports);
     let platform = Test_Platform(&launcher, &declared);
     let clocked = crate::ClockedPlatform { platform: &platform, clock: &clock };
 
@@ -79,7 +81,7 @@ pub(super) fn Ran_Report_With_Clock(plan: &[WorkflowStepPlan], answers: Vec<Prog
 /// The platform both runners above build: `launcher`'s scripted answers, the real standard
 /// filesystem a correction step writes through, this process's own environment, and one
 /// fixed moment.
-fn Test_Platform<'a>(launcher: &'a Scripted, declared: &'a [nomos_agent_orchestration::DeclaredTarget]) -> Platform<'a, Scripted, StdFileSystem, nomos_platform_std::StdEnvironment>
+fn Test_Platform<'a>(launcher: &'a Scripted, declared: &'a [nomos_agent_contracts::DeclaredTarget<'a>]) -> Platform<'a, Scripted, StdFileSystem, nomos_platform_std::StdEnvironment>
 {
     return Platform {
         launcher,

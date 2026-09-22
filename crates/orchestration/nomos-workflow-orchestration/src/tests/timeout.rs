@@ -29,10 +29,10 @@ fn Test_A_Bounded_Step_Whose_Dispatch_Stays_Inside_Its_Bound_Should_Report_It_Ho
 {
     let plan = [WorkflowStepPlan {
         declaration: Bounded_Step(DECLARED_SECONDS),
-        body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("prompt")),
+        body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("prompt")),
     }];
 
-    let run = Ran_Report_With_Clock(&plan, vec![Clean_Claude_Code_Response("answer")], vec![STARTED_AT, FINISHED_AT_THE_BOUND]);
+    let run = Ran_Report_With_Clock(&plan, vec![Clean_Executor_Answer("answer")], vec![STARTED_AT, FINISHED_AT_THE_BOUND]);
 
     let timing = Only_Timing(&run);
     assert_eq!(timing, StepTiming::Honored { declared_seconds: Declared(), elapsed_seconds: u64::from(DECLARED_SECONDS) });
@@ -46,10 +46,10 @@ fn Test_A_Bounded_Step_Whose_Dispatch_Exceeds_Its_Bound_Should_Be_Reported_As_Ti
 {
     let plan = [WorkflowStepPlan {
         declaration: Bounded_Step(DECLARED_SECONDS),
-        body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("prompt")),
+        body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("prompt")),
     }];
 
-    let run = Ran_Report_With_Clock(&plan, vec![Clean_Claude_Code_Response("answer")], vec![STARTED_AT, FINISHED_PAST_THE_BOUND]);
+    let run = Ran_Report_With_Clock(&plan, vec![Clean_Executor_Answer("answer")], vec![STARTED_AT, FINISHED_PAST_THE_BOUND]);
 
     let timing = Only_Timing(&run);
     assert_eq!(timing, StepTiming::Exceeded { declared_seconds: Declared(), elapsed_seconds: OVERRUN_SECONDS });
@@ -65,10 +65,10 @@ fn Test_A_Bounded_Step_That_Failed_Past_Its_Bound_Should_Be_Reported_As_Timed_Ou
 {
     let plan = [WorkflowStepPlan {
         declaration: Bounded_Step(DECLARED_SECONDS),
-        body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("prompt")),
+        body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("prompt")),
     }];
 
-    let run = Ran_Report_With_Clock(&plan, vec![Failing_Response("claude exited 1")], vec![STARTED_AT, FINISHED_PAST_THE_BOUND]);
+    let run = Ran_Report_With_Clock(&plan, vec![Failing_Answer("claude exited 1")], vec![STARTED_AT, FINISHED_PAST_THE_BOUND]);
 
     assert!(matches!(run.outcome, WorkflowOutcome::Failed { index: 0, .. }), "{:?}", run.outcome);
     let attempt = run.attempts.first().expect("the one step was dispatched once");
@@ -83,10 +83,10 @@ fn Test_An_Unbounded_Step_Should_Report_That_There_Was_No_Bound_To_Measure()
 {
     let plan = [WorkflowStepPlan {
         declaration: Coherent_Step(),
-        body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("prompt")),
+        body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("prompt")),
     }];
 
-    let run = Ran_Report_With_Clock(&plan, vec![Clean_Claude_Code_Response("answer")], vec![STARTED_AT, FINISHED_PAST_THE_BOUND]);
+    let run = Ran_Report_With_Clock(&plan, vec![Clean_Executor_Answer("answer")], vec![STARTED_AT, FINISHED_PAST_THE_BOUND]);
 
     assert_eq!(Only_Timing(&run), StepTiming::Unbounded);
 }
@@ -99,10 +99,10 @@ fn Test_A_Bounded_Step_Run_With_No_Clock_Should_Be_Reported_Unmeasured_Rather_Th
 {
     let plan = [WorkflowStepPlan {
         declaration: Bounded_Step(DECLARED_SECONDS),
-        body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("prompt")),
+        body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("prompt")),
     }];
 
-    let run = Ran_Report(&plan, vec![Clean_Claude_Code_Response("answer")]);
+    let run = Ran_Report(&plan, vec![Clean_Executor_Answer("answer")]);
 
     let timing = Only_Timing(&run);
     assert_eq!(timing, StepTiming::Unmeasured { declared_seconds: Declared() });
@@ -117,8 +117,8 @@ fn Test_Each_Attempt_Of_A_Retried_Bounded_Step_Should_Be_Timed_On_Its_Own()
 {
     let mut declaration = Retryable_Step(TWO_ATTEMPTS);
     declaration.timeout = Timeout::Seconds(Declared());
-    let plan = [WorkflowStepPlan { declaration, body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("flaky")) }];
-    let answers = vec![Failing_Response("first attempt"), Clean_Claude_Code_Response("second attempt")];
+    let plan = [WorkflowStepPlan { declaration, body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("flaky")) }];
+    let answers = vec![Failing_Answer("first attempt"), Clean_Executor_Answer("second attempt")];
     let readings = vec![STARTED_AT, FINISHED_PAST_THE_BOUND, STARTED_AT, FINISHED_AT_THE_BOUND];
 
     let run = Ran_Report_With_Clock(&plan, answers, readings);

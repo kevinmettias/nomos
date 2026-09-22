@@ -1,3 +1,5 @@
+pub const fn nomos_model_backend_ollama::OllamaModelBackend::Through(launcher: &'launcher Launcher) -> Self
+pub const nomos_model_backend_ollama::FAMILY: &str
 pub enum nomos_model_backend_ollama::AgentExecutionError
 pub enum variant nomos_model_backend_ollama::AgentExecutionError::Unavailable(String)
 pub enum variant nomos_model_backend_ollama::AgentExecutionError::UnsupportedTools(String)
@@ -5,6 +7,10 @@ pub fn nomos_model_backend_ollama::AgentExecutionError::From_Engine(error: xvpe_
 pub fn nomos_model_backend_ollama::AgentExecutionError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model_backend_ollama::Execute_In<Launcher: ProgramLauncher>( task: &TaskEnvelope, launcher: &Launcher, working_directory: &Path, ) -> Result<AgentExecutionOutcome, AgentExecutionError>
 pub fn nomos_model_backend_ollama::Execute_Task<Launcher: ProgramLauncher>( task: &TaskEnvelope, launcher: &Launcher, ) -> Result<AgentExecutionOutcome, AgentExecutionError>
+pub fn nomos_model_backend_ollama::OllamaModelBackend::Answer(&self, task: &TaskEnvelope) -> Result<ModelAnswer, DispatchRefusal>
+pub fn nomos_model_backend_ollama::OllamaModelBackend::Declared_Target(&self) -> DeclaredTarget<'_>
 pub impl nomos_model_backend_ollama::AgentExecutionError implements core::fmt::Display
+pub impl nomos_model_backend_ollama::OllamaModelBackend implements ModelBackend
 pub struct field nomos_model_backend_ollama::AgentExecutionOutcome::response: String
 pub struct nomos_model_backend_ollama::AgentExecutionOutcome
+pub struct nomos_model_backend_ollama::OllamaModelBackend<'launcher, Launcher: ProgramLauncher>

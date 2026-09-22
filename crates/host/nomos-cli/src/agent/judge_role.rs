@@ -10,13 +10,13 @@
 //! both already built, the identical "already walked" contract
 //! `nomos_correction_orchestration::Run_Correction` holds for the source it is given.
 
-use super::{DispatchConfig, ExitCode};
+use super::ExitCode;
 use nomos_contracts::Finding;
 use nomos_rules::RoleSurfacePair;
 use std::path::Path;
 
 /// `--crate` and `--root` together -- the subject `judge-role` was asked to judge, as
-/// distinct from `DispatchConfig`'s question of how to ask it. `pub(super)` rather than
+/// distinct from the request's own question of how to ask it. `pub(super)` rather than
 /// private: [`Judge_Role`] takes this directly now, grouping its own former `crate_name`
 /// and `root` parameters into the same value this module already builds them into
 /// internally, so [`super::Run`] constructs it at the one real call site.
@@ -38,8 +38,7 @@ pub(super) fn Judge_Role(
     notes: &mut impl std::io::Write,
 ) -> ExitCode
 {
-    use nomos_agent_orchestration::{AgentEnvironment, Run_Agent_Judgment};
-    use nomos_composer_std::LAUNCHER;
+    use nomos_agent_orchestration::Run_Agent_Judgment;
 
     let pair = match Role_Surface_Pair(request, notes)
     {
@@ -53,7 +52,7 @@ pub(super) fn Judge_Role(
         Err(code) => return code,
     };
 
-    let outcome = Run_Agent_Judgment(&pair, &finding, &requested.Selection(), &AgentEnvironment { launcher: &LAUNCHER });
+    let outcome = Run_Agent_Judgment(&pair, &finding, &requested.Selection());
 
     return super::dispatch::Rendered_Dispatch_Outcome(&outcome, output, notes);
 }
@@ -165,7 +164,6 @@ pub(super) fn Crate_Root(root: &Path, crate_name: &str) -> String
 mod tests
 {
     use super::*;
-    use super::super::Backend;
 
     /// `Judge_Role`'s own first step, `Role_Surface_Pair`, fails at `Resolve_Declared_Role`
     /// before this ever reaches `Run_Agent_Judgment` -- a root with no `README.md` at all

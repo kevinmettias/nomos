@@ -10,7 +10,7 @@ use nomos_contracts::{
 use nomos_gate_orchestration::{GateCommand, GateRunOutcome, RuleSelector};
 use nomos_ledger::Territory;
 use nomos_model_package::EffortLevel;
-use nomos_platform::{Clock, Command, ExitOutcome, ProgramLauncher, ProgramOutput};
+use nomos_platform::{Clock, Command, ProgramLauncher, ProgramOutput};
 use nomos_platform_std::StdFileSystem;
 use nomos_workspace::BuildVariant;
 
@@ -148,29 +148,175 @@ impl ProgramLauncher for Scripted
     }
 }
 
-/// `result` also seeds `structured_output.assumptions`, so a test can still correlate
-/// which scripted answer a step received by checking `answer.result.assumptions` --
-/// `OD-EXECUTOR-008`'s decision means `result` itself is no longer read into
-/// `AgentExecutionOutcome` at all.
-fn Clean_Claude_Code_Response(result: &str) -> ProgramOutput
+/// The family label the executor port this file declares answers to. Deliberately not a
+/// shipped backend's label: this crate names no adapter, so a case that only passed because
+/// it happened to spell a real family would be testing a coincidence.
+const EXECUTOR_FAMILY: &str = "harness-agent";
+
+/// The family label the model backend port this file declares answers to.
+const MODEL_FAMILY: &str = "harness-model";
+
+/// One scripted answer for whichever port the next dispatch resolves to.
+///
+/// Replaces the `ProgramOutput`s this file used to queue. Those were subprocess output read
+/// back through a real adapter's own parser, because a step dispatched straight into an
+/// adapter crate and there was no seam closer than the process boundary to substitute at.
+/// `OD-ROADMAP-005` decision 2 put a port there, so a case now says what the backend answered
+/// rather than what a process printed -- and this crate no longer depends on either adapter to
+/// say it.
+#[derive(Clone, Debug)]
+enum PortAnswer
 {
-    return ProgramOutput {
-        outcome: ExitOutcome::Exited { code: 0 },
-        stdout: format!(
-            r#"{{"result": "{result}", "structured_output": {{"assumptions": ["{result}"], "unresolved_questions": []}}, "is_error": false, "total_cost_usd": 0.01, "duration_ms": 10, "permission_denials": []}}"#
-        ),
-        stderr: String::new(),
+    /// An `AgentExecutorPackage` answered, carrying the text as its one assumption so a case
+    /// can still correlate which queued answer a step received.
+    Executed(String),
+    /// A `ModelBackendPackage` answered with this text.
+    Answered(String),
+    /// Whichever port was reached produced nothing, for this reason.
+    Refused(String),
+}
+
+fn Clean_Executor_Answer(result: &str) -> PortAnswer
+{
+    return PortAnswer::Executed(result.to_owned());
+}
+
+fn Clean_Model_Answer(response: &str) -> PortAnswer
+{
+    return PortAnswer::Answered(response.to_owned());
+}
+
+fn Failing_Answer(reason: &str) -> PortAnswer
+{
+    return PortAnswer::Refused(reason.to_owned());
+}
+
+/// Both ports, answering from one queue the case wrote down, consumed one per dispatch in the
+/// order queued -- the identical discipline [`Scripted`] holds for a launcher, and for the
+/// identical reason: a multi-step plan dispatches once per step, and a dispatch with nothing
+/// left queued is a test bug rather than a silently repeated answer.
+struct ScriptedPorts
+{
+    answers: RefCell<VecDeque<PortAnswer>>,
+}
+
+impl ScriptedPorts
+{
+    fn Of(answers: Vec<PortAnswer>) -> Self
+    {
+        return Self { answers: RefCell::new(answers.into_iter().collect()) };
+    }
+
+    fn Next(&self) -> PortAnswer
+    {
+        return self
+            .answers
+            .borrow_mut()
+            .pop_front()
+            .expect("the case queued an answer for every dispatch the plan makes");
+    }
+}
+
+impl nomos_agent_contracts::AgentExecutor for ScriptedPorts
+{
+    fn Execute(
+        &self, _task: &TaskEnvelope, _root: &std::path::Path,
+    ) -> Result<nomos_agent_contracts::AgentExecution, nomos_agent_contracts::DispatchRefusal>
+    {
+        return match self.Next()
+        {
+            PortAnswer::Executed(result) => Ok(Executed_With(&result)),
+            PortAnswer::Refused(reason) => Err(nomos_agent_contracts::DispatchRefusal::Of(reason)),
+            PortAnswer::Answered(response) =>
+            {
+                panic!("a model backend answer {response:?} was queued for an executor dispatch")
+            }
+        };
+    }
+}
+
+impl nomos_agent_contracts::ModelBackend for ScriptedPorts
+{
+    fn Answer(
+        &self, _task: &TaskEnvelope,
+    ) -> Result<nomos_agent_contracts::ModelAnswer, nomos_agent_contracts::DispatchRefusal>
+    {
+        return match self.Next()
+        {
+            PortAnswer::Answered(response) => Ok(nomos_agent_contracts::ModelAnswer { response }),
+            PortAnswer::Refused(reason) => Err(nomos_agent_contracts::DispatchRefusal::Of(reason)),
+            PortAnswer::Executed(result) =>
+            {
+                panic!("an executor execution {result:?} was queued for a model backend dispatch")
+            }
+        };
+    }
+}
+
+/// An execution carrying `result` as its one assumption, and the four measurements an
+/// `AgentExecutorPackage` establishes and a `ModelBackendPackage` does not.
+fn Executed_With(result: &str) -> nomos_agent_contracts::AgentExecution
+{
+    use nomos_agent_contracts::{PortionSubstantiation, Substantiation, UnsubstantiatedReason, WorkResult};
+
+    return nomos_agent_contracts::AgentExecution {
+        result: WorkResult {
+            plan: None,
+            claims: Vec::new(),
+            tests: Vec::new(),
+            requested_verification: None,
+            assumptions: vec![result.to_owned()],
+            unresolved_questions: Vec::new(),
+            substantiation: Substantiation {
+                plan: PortionSubstantiation::Unsubstantiated(UnsubstantiatedReason::ProducerCannotGround),
+                claims: PortionSubstantiation::Unsubstantiated(UnsubstantiatedReason::ProducerCannotGround),
+                tests: PortionSubstantiation::Unsubstantiated(UnsubstantiatedReason::ProducerCannotGround),
+                requested_verification: PortionSubstantiation::Unsubstantiated(
+                    UnsubstantiatedReason::ProducerCannotGround,
+                ),
+                assumptions: PortionSubstantiation::Substantiated,
+                unresolved_questions: PortionSubstantiation::Substantiated,
+            },
+        },
+        denied_tool_uses: Vec::new(),
+        is_error: false,
+        spend: nomos_agent_contracts::MicroDollars::From_Micros(10_000),
+        duration_ms: 10,
     };
 }
 
-fn Clean_Ollama_Response(response: &str) -> ProgramOutput
+/// `ports` as the two declared targets every case in this file resolves against -- the
+/// declaration a composition root supplies, which this crate reads and never writes.
+fn Declared_Ports(ports: &ScriptedPorts) -> Vec<nomos_agent_contracts::DeclaredTarget<'_>>
 {
-    return ProgramOutput { outcome: ExitOutcome::Exited { code: 0 }, stdout: response.to_owned(), stderr: String::new() };
+    use nomos_agent_contracts::{DeclaredTarget, DispatchPort};
+
+    return vec![
+        DeclaredTarget {
+            family: EXECUTOR_FAMILY.to_owned(),
+            package: Harness_Package(EXECUTOR_FAMILY, nomos_contracts::PackageKind::AgentExecutorPackage),
+            port: DispatchPort::Executor(ports),
+        },
+        DeclaredTarget {
+            family: MODEL_FAMILY.to_owned(),
+            package: Harness_Package(MODEL_FAMILY, nomos_contracts::PackageKind::ModelBackendPackage),
+            port: DispatchPort::Model(ports),
+        },
+    ];
 }
 
-fn Failing_Response(stderr: &str) -> ProgramOutput
+fn Harness_Package(family: &str, kind: nomos_contracts::PackageKind) -> nomos_model_package::ModelRoutePackage
 {
-    return ProgramOutput { outcome: ExitOutcome::Exited { code: 1 }, stdout: String::new(), stderr: stderr.to_owned() };
+    return nomos_model_package::ModelRoutePackage {
+        package_id: nomos_contracts::PackageId::New(format!("harness.{family}")),
+        package_kind: kind,
+        package_version: nomos_model_package::PackageVersion::New(1, 0, 0),
+        protocol_range: nomos_model_package::ProtocolRange::New(
+            nomos_contracts::ContractVersion::New(1, 0),
+            nomos_contracts::ContractVersion::New(1, 0),
+        ),
+        model_selection: nomos_model_package::ModelSelection::Opaque,
+    };
 }
 
 /// Runs `plan` through [`Run`] with a launcher scripted to answer its steps in the order
@@ -179,32 +325,33 @@ fn Failing_Response(stderr: &str) -> ProgramOutput
 /// The platform every test in this file needs is the same one — a scripted launcher, the real
 /// standard filesystem, this process's own environment, and one fixed moment — so building it
 /// in a single place is what makes a test's result depend on its plan and its script alone.
-/// A body that declares the family `backend` answers to, rather than naming `backend` itself.
+/// A body that declares the family it wants answered, rather than naming a backend.
 ///
 /// The difference is the item's whole point: a step states what it wants, and
 /// `nomos_agent_orchestration::Run_Agent_Task` decides what answers it against the declared
-/// set. Writing the family the intended backend already labels keeps these tests asserting
-/// the same dispatches they always did, through the resolution rather than around it.
-fn Agent_Step(backend: nomos_agent_orchestration::Backend, task: nomos_agent_contracts::TaskEnvelope) -> Body
+/// set.
+fn Agent_Step(family: &str, task: nomos_agent_contracts::TaskEnvelope) -> Body
 {
     return Body::Agent(crate::AgentBody {
         task,
         profile: nomos_model_package::ModelExecutionProfile::New(
-            nomos_model_package::ModelSelector::BackendFamily(backend.Label().to_owned()),
+            nomos_model_package::ModelSelector::BackendFamily(family.to_owned()),
             nomos_model_package::EffortLevel::BackendDefault,
         ),
     });
 }
 
-fn Ran_Outcome(plan: &[WorkflowStepPlan], answers: Vec<ProgramOutput>) -> WorkflowOutcome
+fn Ran_Outcome(plan: &[WorkflowStepPlan], answers: Vec<PortAnswer>) -> WorkflowOutcome
 {
-    let launcher = Scripted::Of(answers);
+    let launcher = Scripted::Of(Vec::new());
+    let ports = ScriptedPorts::Of(answers);
+    let declared = Declared_Ports(&ports);
     let platform = Platform {
         launcher: &launcher,
         filesystem: &StdFileSystem,
         environment: &nomos_platform_std::StdEnvironment,
         now: nomos_platform::Timestamp::From_Unix_Seconds(0),
-        declared: &nomos_agent_orchestration::Declared_Targets(),
+        declared: &declared,
     };
 
     return Run(plan, &platform, &Test_Variant(), Test_Run_Id());
@@ -215,7 +362,7 @@ fn Ran_Outcome(plan: &[WorkflowStepPlan], answers: Vec<ProgramOutput>) -> Workfl
 /// Asserts rather than reports the `Completed` outcome: the tests reusing this are proving what
 /// a completed run carries, so a refusal or a failure has to stop here with its own message
 /// rather than surfacing later as a puzzling assertion about a step.
-fn Ran_To_Completion(plan: &[WorkflowStepPlan], answers: Vec<ProgramOutput>) -> Vec<StepOutcome>
+fn Ran_To_Completion(plan: &[WorkflowStepPlan], answers: Vec<PortAnswer>) -> Vec<StepOutcome>
 {
     let outcome = Ran_Outcome(plan, answers);
 
@@ -231,7 +378,7 @@ fn Ran_To_Completion(plan: &[WorkflowStepPlan], answers: Vec<ProgramOutput>) -> 
 
 /// The single step a one-body plan completed through [`Run`] — the one-step shape most of the
 /// tests below are about.
-fn Only_Step(body: Body, answers: Vec<ProgramOutput>) -> StepOutcome
+fn Only_Step(body: Body, answers: Vec<PortAnswer>) -> StepOutcome
 {
     let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body }];
     let completed = Ran_To_Completion(&plan, answers);
@@ -301,37 +448,37 @@ fn Test_An_Empty_Plan_Completes_Vacuously()
 #[test]
 fn Test_A_Single_Coherent_Step_Against_Claude_Code_Dispatches_And_Completes()
 {
-    let step = Only_Step(Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("say PONG")), vec![Clean_Claude_Code_Response("PONG")]);
+    let step = Only_Step(Agent_Step(EXECUTOR_FAMILY, Task_Envelope("say PONG")), vec![Clean_Executor_Answer("PONG")]);
 
-    assert!(matches!(step, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::ClaudeCode(answer)) if answer.result.assumptions == ["PONG".to_owned()]));
+    assert!(matches!(step, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::Executed { ref execution, .. }) if execution.result.assumptions == ["PONG".to_owned()]));
 }
 
 #[test]
 fn Test_A_Single_Coherent_Step_Against_Ollama_Dispatches_And_Completes()
 {
-    let step = Only_Step(Agent_Step(nomos_agent_orchestration::Backend::Ollama, Task_Envelope("say PONG")), vec![Clean_Ollama_Response("PONG")]);
+    let step = Only_Step(Agent_Step(MODEL_FAMILY, Task_Envelope("say PONG")), vec![Clean_Model_Answer("PONG")]);
 
-    assert!(matches!(step, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::Ollama(answer)) if answer.response == "PONG"));
+    assert!(matches!(step, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::Answered { ref answer, .. }) if answer.response == "PONG"));
 }
 
 #[test]
 fn Test_A_Two_Step_Sequence_Completes_In_Order()
 {
-    let bodies = [Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("first")), Agent_Step(nomos_agent_orchestration::Backend::Ollama, Task_Envelope("second"))];
+    let bodies = [Agent_Step(EXECUTOR_FAMILY, Task_Envelope("first")), Agent_Step(MODEL_FAMILY, Task_Envelope("second"))];
     let plan: Vec<WorkflowStepPlan> = bodies.into_iter().map(|body| return WorkflowStepPlan { declaration: Coherent_Step(), body }).collect();
 
-    let completed = Ran_To_Completion(&plan, vec![Clean_Claude_Code_Response("first"), Clean_Ollama_Response("second")]);
+    let completed = Ran_To_Completion(&plan, vec![Clean_Executor_Answer("first"), Clean_Model_Answer("second")]);
 
     let first = completed.first().expect("the run above asserted a step for every body");
     let second = completed.get(1).expect("the run above asserted a step for every body");
-    assert!(matches!(first, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::ClaudeCode(answer)) if answer.result.assumptions == ["first".to_owned()]));
-    assert!(matches!(second, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::Ollama(answer)) if answer.response == "second"));
+    assert!(matches!(first, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::Executed { execution, .. }) if execution.result.assumptions == ["first".to_owned()]));
+    assert!(matches!(second, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::Answered { answer, .. }) if answer.response == "second"));
 }
 
 #[test]
 fn Test_An_Incoherent_Step_Is_Refused_Before_Dispatch()
 {
-    let coherent = WorkflowStepPlan { declaration: Incoherent_Step(), body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("never runs")) };
+    let coherent = WorkflowStepPlan { declaration: Incoherent_Step(), body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("never runs")) };
 
     let outcome = Ran_Outcome(&[coherent], Vec::new());
 
@@ -342,11 +489,11 @@ fn Test_An_Incoherent_Step_Is_Refused_Before_Dispatch()
 fn Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions()
 {
     let plan = [
-        WorkflowStepPlan { declaration: Coherent_Step(), body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("first")) },
-        WorkflowStepPlan { declaration: Incoherent_Step(), body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("never runs")) },
+        WorkflowStepPlan { declaration: Coherent_Step(), body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("first")) },
+        WorkflowStepPlan { declaration: Incoherent_Step(), body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("never runs")) },
     ];
 
-    let outcome = Ran_Outcome(&plan, vec![Clean_Claude_Code_Response("first")]);
+    let outcome = Ran_Outcome(&plan, vec![Clean_Executor_Answer("first")]);
 
     let WorkflowOutcome::Refused { completed, index } = outcome
     else
@@ -356,15 +503,15 @@ fn Test_A_Mid_Sequence_Refusal_Preserves_Prior_Completions()
     assert_eq!(index, 1, "the second step is the incoherent one");
     assert_eq!(completed.len(), 1, "only the step before the refusal ran");
     let first = completed.first().expect("the assertion above fixes the length at one");
-    assert!(matches!(first, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::ClaudeCode(answer)) if answer.result.assumptions == ["first".to_owned()]));
+    assert!(matches!(first, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::Executed { execution, .. }) if execution.result.assumptions == ["first".to_owned()]));
 }
 
 #[test]
 fn Test_A_Failed_Dispatch_Stops_The_Run()
 {
-    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("fails")) }];
+    let plan = [WorkflowStepPlan { declaration: Coherent_Step(), body: Agent_Step(EXECUTOR_FAMILY, Task_Envelope("fails")) }];
 
-    let outcome = Ran_Outcome(&plan, vec![Failing_Response("claude exited 1")]);
+    let outcome = Ran_Outcome(&plan, vec![Failing_Answer("claude exited 1")]);
 
     assert!(
         matches!(outcome, WorkflowOutcome::Failed { ref completed, index: 0, ref error }
@@ -380,10 +527,10 @@ fn Test_A_Failed_Dispatch_Stops_The_Run()
 #[test]
 fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
 {
-    let bodies = [Agent_Step(nomos_agent_orchestration::Backend::ClaudeCode, Task_Envelope("fails")), Agent_Step(nomos_agent_orchestration::Backend::Ollama, Task_Envelope("never runs"))];
+    let bodies = [Agent_Step(EXECUTOR_FAMILY, Task_Envelope("fails")), Agent_Step(MODEL_FAMILY, Task_Envelope("never runs"))];
     let plan: Vec<WorkflowStepPlan> = bodies.into_iter().map(|body| return WorkflowStepPlan { declaration: Coherent_Step(), body }).collect();
 
-    let outcome = Ran_Outcome(&plan, vec![Failing_Response("claude exited 1")]);
+    let outcome = Ran_Outcome(&plan, vec![Failing_Answer("claude exited 1")]);
 
     assert!(
         matches!(outcome, WorkflowOutcome::Failed { ref completed, index: 0, .. } if completed.is_empty()),
@@ -400,10 +547,10 @@ fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
 #[test]
 fn Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonical_Seam()
 {
-    let bodies = [Body::Check(Check_Body_Over("pub fn Ok() {}\n")), Agent_Step(nomos_agent_orchestration::Backend::Ollama, Task_Envelope("second"))];
+    let bodies = [Body::Check(Check_Body_Over("pub fn Ok() {}\n")), Agent_Step(MODEL_FAMILY, Task_Envelope("second"))];
     let plan: Vec<WorkflowStepPlan> = bodies.into_iter().map(|body| return WorkflowStepPlan { declaration: Coherent_Step(), body }).collect();
 
-    let completed = Ran_To_Completion(&plan, vec![Clean_Ollama_Response("second")]);
+    let completed = Ran_To_Completion(&plan, vec![Clean_Model_Answer("second")]);
 
     let first = completed.first().expect("the run above asserted a step for every body");
     let second = completed.get(1).expect("the run above asserted a step for every body");
@@ -411,7 +558,7 @@ fn Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonic
         matches!(first, StepOutcome::Check(nomos_check_orchestration::CheckOutcome::Judged { findings, .. }) if findings.is_empty()),
         "{first:?}"
     );
-    assert!(matches!(second, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::Ollama(answer)) if answer.response == "second"));
+    assert!(matches!(second, StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome::Answered { answer, .. }) if answer.response == "second"));
 }
 
 /// `P40-WORKFLOW-CORRECTION-BODY`'s own `done_when`, the committed half: a workflow step

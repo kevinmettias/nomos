@@ -49,7 +49,7 @@ pub struct field nomos_workflow_orchestration::CorrectionBody::root: PathBuf
 pub struct field nomos_workflow_orchestration::CorrectionBody::sources: Vec<SourceFile>
 pub struct field nomos_workflow_orchestration::GateBody::command: GateCommand
 pub struct field nomos_workflow_orchestration::GateBody::sources: Vec<SourceFile>
-pub struct field nomos_workflow_orchestration::Platform::declared: &'a [nomos_agent_orchestration::DeclaredTarget]
+pub struct field nomos_workflow_orchestration::Platform::declared: &'a [nomos_agent_contracts::DeclaredTarget<'a>]
 pub struct field nomos_workflow_orchestration::Platform::environment: &'a Env
 pub struct field nomos_workflow_orchestration::Platform::filesystem: &'a Fs
 pub struct field nomos_workflow_orchestration::Platform::launcher: &'a Launcher
