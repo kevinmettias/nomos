@@ -87330,10 +87330,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-review",
+        "acquired_at": 1790049886,
+        "lease_expires_at": 1790057086
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -87845,14 +87849,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-workflow",
-        "acquired_at": 1790043803,
-        "lease_expires_at": 1790058979
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -87863,7 +87863,28 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-workflow-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "able expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-correction-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-correction-orchestration)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n   Compiling nomos-workflow-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-workflow-orchestration)\nwarning: unused import: `nomos_agent_contracts::TaskEnvelope`\n  --> crates\\orchestration\\nomos-workflow-orchestration\\src\\body.rs:16:5\n   |\n16 | use nomos_agent_contracts::TaskEnvelope;\n   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: constant `NO_ROOT` is never used\n   --> crates\\orchestration\\nomos-workflow-orchestration\\src\\run.rs:321:7\n    |\n321 | const NO_ROOT: &str = \"\";\n    |       ^^^^^^^\n    |\n    = note: `#[warn(dead_code)]` on by default\n\nwarning: `nomos-workflow-orchestration` (lib) generated 2 warnings (run `cargo fix --lib -p nomos-workflow-orchestration` to apply 1 suggestion)\nwarning: `nomos-workflow-orchestration` (lib test) generated 2 warnings (2 duplicates)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.23s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workflow_orchestration-20fcd00aba1e7160.exe)\n   Doc-tests nomos_workflow_orchestration\n",
+        "verified_at": 1790049846,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "85ba6d8ccb5999c6b1a3ccdadc0737cb8b54dfb6"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,

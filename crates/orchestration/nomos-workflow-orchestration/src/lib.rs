@@ -28,26 +28,56 @@
 //! Platform`] and `run::Dispatch`'s own doc for why, and `P40-WORKFLOW-GATE-BODY`'s own
 //! done_when for the requirement it satisfies.
 //!
+//! `WF-012`'s retry, timeout and compensation are honored here, not merely declared:
+//! `P123-WORKFLOW-RETRY-TIMEOUT-COMPENSATION-RUNTIME` built the three halves of that
+//! clause this crate can honor from the declared vocabulary alone, under the standing
+//! override `OD-ROADMAP-001` records. [`Run`] re-dispatches a failed step while its own
+//! `RetryPolicy::Retry` permits another attempt, reports a step that broke its declared
+//! `Timeout::Seconds` as [`StepTiming::Exceeded`] when a clock was supplied to measure it,
+//! and unwinds the completed steps of a failed run in reverse through whichever
+//! compensating mode each body actually supports. What honoring the three did is the
+//! [`WorkflowRun`] that [`Run_Unclocked`] and [`Run_With_Clock`] report; [`Run`] itself
+//! still answers with [`WorkflowOutcome`] alone, unchanged, because two hosts match that
+//! type's three variants field by field.
+//!
 //! # What stays out
 //!
-//! No immutable published artifacts, no branch/merge or bounded parallelism, no
-//! independently versioned or replayable definitions, no retry or compensation runtime, no
-//! shared dispatch trait across any of the five bodies, no `WorkResult` assembly --
+//! No immutable published artifacts (`WF-009`), no branch/merge or bounded parallelism
+//! (`WF-010`), no independently versioned or replayable definitions (`WF-011`), no shared
+//! dispatch trait across any of the five bodies, no `WorkResult` assembly --
 //! `OD-WORKFLOW-005`'s "What This Does Not Build" names each and why, apart from the
 //! check-body, correction-body and gate-body steps and the CLI verb that section named as
 //! later, heavier increments: those are now built, here and in `nomos-cli::workflow`.
+//!
+//! Three of the five declarations that section grouped under "no `WF-012` runtime" are
+//! still read by `Is_Coherent` and by nothing else, and the shape of what stays out is now
+//! narrower than that grouping. No cache runtime: `Cacheability::Cacheable`'s `key_inputs`
+//! name fields of a schema this crate never resolves, and a prior result is never
+//! substituted for a dispatch. No cancellation runtime: `CancellationBehavior` still says
+//! only whether a step's declaration would permit being cut short, and nothing here cuts a
+//! dispatch short -- which is also why a broken `Timeout` is *reported* after the dispatch
+//! ends rather than interrupting it. No deduplication tokens: `Is_Coherent` refuses a
+//! retryable non-idempotent side-effecting step that declares none, so every retry here
+//! runs under a cover the contract already checked, but this crate mints no per-attempt
+//! token and hands none to any dispatch target. And no compensating *step*:
+//! `Compensation::ExternallyCompensated` is reported as owed to whatever assembled the
+//! plan, never composed into one, because wiring one step's failure to another step's
+//! compensating run is a workflow definition's concern that `Compensation`'s own doc
+//! declines to name.
 
 #![forbid(unsafe_code)]
 
 mod body;
 mod run;
 mod workflow_outcome;
+mod workflow_run;
 mod workflow_step_plan;
 
 #[cfg(test)]
 mod tests;
 
 pub use body::{AgentBody, Body, CheckBody, CommitIntent, CorrectionBody, GateBody};
-pub use run::{Platform, Run};
+pub use run::{ClockedPlatform, Platform, Run, Run_Unclocked, Run_With_Clock};
 pub use workflow_outcome::{DispatchError, StepOutcome, WorkflowOutcome};
+pub use workflow_run::{StepAttempt, StepCompensation, StepTiming, WorkflowRun};
 pub use workflow_step_plan::WorkflowStepPlan;

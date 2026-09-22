@@ -14,7 +14,22 @@ use nomos_platform::{Clock, Command, ExitOutcome, ProgramLauncher, ProgramOutput
 use nomos_platform_std::StdFileSystem;
 use nomos_workspace::BuildVariant;
 
-use crate::{Body, CheckBody, CommitIntent, CorrectionBody, DispatchError, GateBody, Platform, Run, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
+use crate::{
+    Body, CheckBody, CommitIntent, CorrectionBody, DispatchError, GateBody, Platform, Run, StepCompensation, StepOutcome, StepTiming, WorkflowOutcome,
+    WorkflowRun, WorkflowStepPlan,
+};
+
+/// The cases for each of the three declarations
+/// `P123-WORKFLOW-RETRY-TIMEOUT-COMPENSATION-RUNTIME` made this crate honor, and the
+/// doubles all three share.
+///
+/// Beside this file rather than in it: this one already carries the dispatch cases for all
+/// five bodies and sits close to the five-hundred-line review trigger, and three more
+/// families of case would push it past one.
+mod compensation;
+mod retry;
+mod support;
+mod timeout;
 
 /// The retry limit [`Incoherent_Step`] declares. The count itself is not what makes that step
 /// incoherent -- `WF-012`'s failure is a retry with neither a deduplication token nor a

@@ -1,32 +1,48 @@
 //! Running an ordered sequence of `WorkflowStepPlan` declarations against a real
 //! `AgentExecutor`, `ModelBackend`, `nomos-check-orchestration::Run`,
-//! `nomos-correction-orchestration::Run_Correction`, or `nomos-gate-orchestration::Run_Gate`.
+//! `nomos-correction-orchestration::Run_Correction`, or `nomos-gate-orchestration::Run_Gate`,
+//! honoring the retry, timeout and compensation each step declares.
 
+mod clocked_platform;
+mod dispatching;
 mod platform;
 
+pub use clocked_platform::ClockedPlatform;
 pub use platform::Platform;
 
-use std::path::Path;
+use dispatching::Dispatching;
+
+use std::time::Duration;
 
 use nomos_analysis::MemoryFactStore;
 use nomos_check_orchestration::RunContext;
-use nomos_contracts::RunId;
-use nomos_correction_orchestration::{CorrectionCommand, CorrectionEnvironment, Run_Correction};
+use nomos_contracts::{Compensation, RetryPolicy, RunId, Timeout};
+use nomos_correction_orchestration::{CorrectionCommand, CorrectionEnvironment, CorrectionOutcome, Run_Correction};
 use nomos_gate_orchestration::{GateEnvironment, GateRunOutcome, Run_Gate};
-use nomos_platform::{Environment, FileSystem, ProgramLauncher};
+use nomos_platform::{Clock, Environment, FileSystem, ProgramLauncher};
 use nomos_workspace::BuildVariant;
 
-use crate::{Body, DispatchError, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
+use crate::{Body, DispatchError, StepAttempt, StepCompensation, StepOutcome, StepTiming, WorkflowOutcome, WorkflowRun, WorkflowStepPlan};
 
 /// Dispatches `plan` in order through `platform`.
 ///
 /// Before dispatching a step, calls `step.declaration.Is_Coherent()`; a step that
 /// declares itself incoherent is refused without its body ever dispatching —
 /// `WorkflowStep::Is_Coherent`'s first real consumer anywhere in this workspace. The
-/// first dispatch failure stops the run -- which now includes a [`Body::Gate`] step whose
-/// own disposition was `Failed`, per `P40-WORKFLOW-GATE-BODY`'s own done_when. Either way,
+/// first dispatch failure that the step's own `RetryPolicy` does not permit another
+/// attempt at stops the run -- which now includes a [`Body::Gate`] step whose own
+/// disposition was `Failed`, per `P40-WORKFLOW-GATE-BODY`'s own done_when. Either way,
 /// every real outcome from the steps that ran before the stop is preserved in the order
 /// they ran. An empty `plan` completes vacuously.
+///
+/// Reports [`WorkflowOutcome`] alone, which is exactly what it always reported. The
+/// retry, timeout and compensation runtime `P123-WORKFLOW-RETRY-TIMEOUT-COMPENSATION-
+/// RUNTIME` added runs here too -- a declaration is honored whichever entry point ran it
+/// -- but what honoring it *did* is the richer [`WorkflowRun`] that
+/// [`Run_Unclocked`] and [`Run_With_Clock`] report and this function drops. Two callers,
+/// `nomos_cli::workflow` and `nomos_api::workflow`, match this outcome's three variants
+/// field by field with no wildcard, so widening it is a breaking change to two crates
+/// that item may not edit; adding beside it is not.
 ///
 /// `variant` exists for a [`Body::Check`], [`Body::Correction`] or [`Body::Gate`] step --
 /// what the *compiling* binary was built as, read through `env!` there and nowhere this
@@ -40,23 +56,257 @@ use crate::{Body, DispatchError, StepOutcome, WorkflowOutcome, WorkflowStepPlan}
 #[must_use]
 pub fn Run<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> WorkflowOutcome
 {
+    return Run_Unclocked(plan, platform, variant, run).outcome;
+}
+
+/// [`Run`], reporting every attempt and every compensation, with no clock to measure a
+/// declared timeout through.
+///
+/// A step declaring `Timeout::Seconds` is reported as [`StepTiming::Unmeasured`] rather
+/// than as having honored its bound: a run that measured nothing must not answer the
+/// question as though it had measured something. A caller that can supply a clock calls
+/// [`Run_With_Clock`] and gets [`StepTiming::Honored`] or [`StepTiming::Exceeded`]
+/// instead.
+#[must_use]
+pub fn Run_Unclocked<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> WorkflowRun
+{
+    return Ran(plan, &Dispatching { platform, variant, run, read_clock: None });
+}
+
+/// [`Run_Unclocked`], measuring each bounded step's dispatch through the clock
+/// `platform` carries.
+///
+/// The clock is read twice per attempt, immediately before and immediately after that
+/// attempt's dispatch, and only the difference is kept -- so a clock that reports fixed
+/// readings makes a timeout case reproduce exactly, which is what lets these cases be
+/// tested at all rather than slept through.
+#[must_use]
+pub fn Run_With_Clock<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment, Clk: Clock>(plan: &[WorkflowStepPlan], platform: &ClockedPlatform<'_, Launcher, Fs, Env, Clk>, variant: &BuildVariant, run: RunId) -> WorkflowRun
+{
+    let read_clock = || return platform.clock.Now();
+
+    return Ran(plan, &Dispatching { platform: platform.platform, variant, run, read_clock: Some(&read_clock) });
+}
+
+/// The one runner both reporting entry points share.
+fn Ran<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], context: &Dispatching<'_, Launcher, Fs, Env>) -> WorkflowRun
+{
     let mut completed = Vec::new();
+    let mut attempts = Vec::new();
 
     for (index, step) in plan.iter().enumerate()
     {
         if !step.declaration.Is_Coherent()
         {
-            return WorkflowOutcome::Refused { completed, index };
+            return WorkflowRun { outcome: WorkflowOutcome::Refused { completed, index }, attempts, compensations: Vec::new() };
         }
 
-        match Dispatch_Body(&step.body, platform, variant, run)
+        match Attempted_Step(step, context, index, &mut attempts)
         {
             Ok(outcome) => completed.push(outcome),
-            Err(error) => return WorkflowOutcome::Failed { completed, index, error },
+            Err(error) =>
+            {
+                let compensations = Compensated(plan, &completed, context);
+
+                return WorkflowRun { outcome: WorkflowOutcome::Failed { completed, index, error }, attempts, compensations };
+            }
         }
     }
 
-    return WorkflowOutcome::Completed { completed };
+    return WorkflowRun { outcome: WorkflowOutcome::Completed { completed }, attempts, compensations: Vec::new() };
+}
+
+/// The attempt a step's first dispatch is, counting from one.
+const FIRST_ATTEMPT: u32 = 1;
+
+/// How many total attempts `RetryPolicy::NoRetry` permits: the first one, and nothing
+/// after it.
+const ATTEMPTS_WITHOUT_RETRY: u32 = 1;
+
+/// Dispatches one step, re-dispatching a failed attempt while its own `RetryPolicy` still
+/// permits one, and appends every attempt to `attempts` in the order it ran.
+///
+/// `WF-012`'s own named failure -- repeating a non-idempotent effect with nothing to tell
+/// two attempts apart -- is not guarded here, because it is already guarded earlier and
+/// better: [`Ran`] refuses an incoherent declaration before this function is ever called,
+/// and `WorkflowStep::Is_Coherent` refuses `RetryPolicy::Retry` on a side-effecting,
+/// non-idempotent step that requires no deduplication token and declares no compensation.
+/// So every step that reaches a second dispatch here reached it under one of those two
+/// covers. Re-checking that would be a second authority for a rule the contract already
+/// owns.
+fn Attempted_Step<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    step: &WorkflowStepPlan, context: &Dispatching<'_, Launcher, Fs, Env>, index: usize, attempts: &mut Vec<StepAttempt>,
+) -> Result<StepOutcome, DispatchError>
+{
+    let allowed = Attempts_Allowed(step.declaration.retry);
+    let mut attempt = FIRST_ATTEMPT;
+
+    loop
+    {
+        let (result, timing) = Timed_Dispatch(&step.body, context, step.declaration.timeout);
+        attempts.push(StepAttempt { index, attempt, failure: result.as_ref().err().cloned(), timing });
+
+        match result
+        {
+            Ok(outcome) => return Ok(outcome),
+            Err(error) if attempt >= allowed => return Err(error),
+            Err(_) => attempt = attempt.saturating_add(1),
+        }
+    }
+}
+
+/// How many total attempts `retry` permits, including the first.
+const fn Attempts_Allowed(retry: RetryPolicy) -> u32
+{
+    return match retry
+    {
+        RetryPolicy::NoRetry => ATTEMPTS_WITHOUT_RETRY,
+        RetryPolicy::Retry { max_attempts, .. } => max_attempts.get(),
+    };
+}
+
+/// Dispatches `body` once, and reports what `timeout` measured over that dispatch.
+///
+/// The bound is measured, not enforced: the dispatch is waited on to its end and the
+/// overrun reported afterward. Cutting a dispatch short needs a cancellation runtime,
+/// which `OD-WORKFLOW-005` declines and this crate still does not build -- and
+/// `CancellationBehavior`, the declaration that would say whether a given step even
+/// permits being cut short, is still read by `Is_Coherent` alone.
+fn Timed_Dispatch<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    body: &Body, context: &Dispatching<'_, Launcher, Fs, Env>, timeout: Timeout,
+) -> (Result<StepOutcome, DispatchError>, StepTiming)
+{
+    let started = context.read_clock.map(|read| return read());
+    let result = Dispatch_Body(body, context.platform, context.variant, context.run);
+    let finished = context.read_clock.map(|read| return read());
+    let elapsed = started.zip(finished).map(|(from, to)| return to.Since(from));
+
+    return (result, Timing_Of(timeout, elapsed));
+}
+
+/// What `timeout` says about a dispatch that took `elapsed`, or that nothing measured it.
+///
+/// Strictly greater, because `Timeout::Seconds`'s own doc is that the step is no longer
+/// waited on *after* that many seconds: a dispatch that took exactly its bound stayed
+/// inside it.
+fn Timing_Of(timeout: Timeout, elapsed: Option<Duration>) -> StepTiming
+{
+    let Timeout::Seconds(declared_seconds) = timeout
+    else
+    {
+        return StepTiming::Unbounded;
+    };
+    let Some(elapsed) = elapsed
+    else
+    {
+        return StepTiming::Unmeasured { declared_seconds };
+    };
+
+    let elapsed_seconds = elapsed.as_secs();
+
+    if elapsed_seconds > u64::from(declared_seconds.get())
+    {
+        return StepTiming::Exceeded { declared_seconds, elapsed_seconds };
+    }
+
+    return StepTiming::Honored { declared_seconds, elapsed_seconds };
+}
+
+/// Compensates `completed` in the reverse of the order those steps ran, and reports what
+/// each step's own `Compensation` declaration did, refused, or owes.
+///
+/// Reverse order because compensation unwinds: a later step's effect may stand on an
+/// earlier step's, so undoing the earlier one first would leave the later one undone
+/// against ground that had already moved.
+fn Compensated<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    plan: &[WorkflowStepPlan], completed: &[StepOutcome], context: &Dispatching<'_, Launcher, Fs, Env>,
+) -> Vec<StepCompensation>
+{
+    let mut compensations = Vec::new();
+
+    for (index, outcome) in completed.iter().enumerate().rev()
+    {
+        let Some(step) = plan.get(index)
+        else
+        {
+            continue;
+        };
+
+        if let Some(compensation) = Compensated_Step(step, outcome, index, context.platform.filesystem)
+        {
+            compensations.push(compensation);
+        }
+    }
+
+    return compensations;
+}
+
+/// What compensating one completed step did, or `None` when its own declaration asked for
+/// nothing at all.
+fn Compensated_Step<Fs: FileSystem>(step: &WorkflowStepPlan, outcome: &StepOutcome, index: usize, filesystem: &Fs) -> Option<StepCompensation>
+{
+    return match step.declaration.compensation
+    {
+        Compensation::None => None,
+        Compensation::ExternallyCompensated => Some(StepCompensation::Owed { index }),
+        Compensation::SelfCompensating => Some(Self_Compensated(&step.body, outcome, index, filesystem)),
+    };
+}
+
+/// Why a body that is not a [`Body::Correction`] cannot honor
+/// `Compensation::SelfCompensating`.
+const NO_COMPENSATING_MODE: &str = "this step's body supports no compensating mode: an agent, check or gate body re-invoked \
+                                    in a compensating mode is the same dispatch again, not the reverse of it";
+
+/// Runs the compensating mode the step's own body actually supports.
+///
+/// [`Body::Correction`] is the one of the four with a mode this crate can reach, and it
+/// reaches it through its own carried source rather than through
+/// `nomos_corrections::CommittedPlan::Rollback`: `Run_Correction` builds that value
+/// internally and hands back `CorrectionOutcome::Committed`, which carries rendered
+/// strings and no `CommittedPlan` at all, so the receiver rollback needs never crosses the
+/// seam. What does cross it is the body's own already-walked `sources` -- the file's
+/// content before the correction wrote it -- which is the exact reverse of the one write a
+/// committed correction performs.
+///
+/// Two things that reverse does not have, named rather than implied: it does not assert
+/// the workspace has not moved since the commit, which `CommittedPlan::Rollback` does
+/// through `Assert_Not_Moved`, so a path a third party edited between the commit and the
+/// failure is overwritten rather than refused; and it restores only the one path the
+/// outcome names, because that is the only path a correction run reports having written.
+fn Self_Compensated<Fs: FileSystem>(body: &Body, outcome: &StepOutcome, index: usize, filesystem: &Fs) -> StepCompensation
+{
+    return match (body, outcome)
+    {
+        (Body::Correction(correction), StepOutcome::Correction(CorrectionOutcome::Committed { path, .. })) =>
+        {
+            Restored_Correction(correction, path, index, filesystem)
+        }
+        (Body::Correction(_), _) => StepCompensation::Compensated { index, restored: Vec::new() },
+        _ => StepCompensation::Refused { index, reason: NO_COMPENSATING_MODE.to_owned() },
+    };
+}
+
+/// Why a correction step's own compensating mode could not put a path back.
+const UNRESTORABLE: &str = "the correction step's own compensating mode could not put back";
+
+/// Why a correction body carries no content for the path its own run committed.
+const NO_CARRIED_SOURCE: &str = "the correction body carries no source for the path its run committed, so there is nothing to put back for";
+
+/// Puts `path` back to the content `correction` carried before its own run wrote it.
+fn Restored_Correction<Fs: FileSystem>(correction: &crate::CorrectionBody, path: &str, index: usize, filesystem: &Fs) -> StepCompensation
+{
+    let Some(source) = correction.sources.iter().find(|source| return source.path == path)
+    else
+    {
+        return StepCompensation::Refused { index, reason: format!("{NO_CARRIED_SOURCE} `{path}`") };
+    };
+
+    return match filesystem.Replace_Atomically(&correction.root.join(path), &source.text)
+    {
+        Ok(()) => StepCompensation::Compensated { index, restored: vec![path.to_owned()] },
+        Err(error) => StepCompensation::Refused { index, reason: format!("{UNRESTORABLE} `{path}`: {error:?}") },
+    };
 }
 
 /// The root a [`Body::ClaudeCode`] step resolves `prohibited_changes` against: none.

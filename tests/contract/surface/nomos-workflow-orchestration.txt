@@ -1,7 +1,10 @@
+pub const fn nomos_workflow_orchestration::StepTiming::Has_Timed_Out(self) -> bool
 pub enum nomos_workflow_orchestration::Body
 pub enum nomos_workflow_orchestration::CommitIntent
 pub enum nomos_workflow_orchestration::DispatchError
+pub enum nomos_workflow_orchestration::StepCompensation
 pub enum nomos_workflow_orchestration::StepOutcome
+pub enum nomos_workflow_orchestration::StepTiming
 pub enum nomos_workflow_orchestration::WorkflowOutcome
 pub enum variant nomos_workflow_orchestration::Body::Agent(AgentBody)
 pub enum variant nomos_workflow_orchestration::Body::Check(CheckBody)
@@ -12,10 +15,17 @@ pub enum variant nomos_workflow_orchestration::CommitIntent::Stage
 pub enum variant nomos_workflow_orchestration::DispatchError::AgentNotSelected(nomos_agent_orchestration::BackendAbsence)
 pub enum variant nomos_workflow_orchestration::DispatchError::AgentUnavailable(String)
 pub enum variant nomos_workflow_orchestration::DispatchError::Gate(nomos_gate_orchestration::GateRunResult)
+pub enum variant nomos_workflow_orchestration::StepCompensation::Compensated { index: usize, restored: Vec<String>, }
+pub enum variant nomos_workflow_orchestration::StepCompensation::Owed { index: usize, }
+pub enum variant nomos_workflow_orchestration::StepCompensation::Refused { index: usize, reason: String, }
 pub enum variant nomos_workflow_orchestration::StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome)
 pub enum variant nomos_workflow_orchestration::StepOutcome::Check(nomos_check_orchestration::CheckOutcome)
 pub enum variant nomos_workflow_orchestration::StepOutcome::Correction(nomos_correction_orchestration::CorrectionOutcome)
 pub enum variant nomos_workflow_orchestration::StepOutcome::Gate(nomos_gate_orchestration::GateRunResult)
+pub enum variant nomos_workflow_orchestration::StepTiming::Exceeded { declared_seconds: NonZeroU32, elapsed_seconds: u64, }
+pub enum variant nomos_workflow_orchestration::StepTiming::Honored { declared_seconds: NonZeroU32, elapsed_seconds: u64, }
+pub enum variant nomos_workflow_orchestration::StepTiming::Unbounded
+pub enum variant nomos_workflow_orchestration::StepTiming::Unmeasured { declared_seconds: NonZeroU32, }
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Completed { completed: Vec<StepOutcome>, }
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Failed { completed: Vec<StepOutcome>, index: usize, error: DispatchError, }
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Refused { completed: Vec<StepOutcome>, index: usize, }
@@ -25,11 +35,15 @@ pub fn nomos_workflow_orchestration::CommitIntent::Is_A_Commit(self) -> bool
 pub fn nomos_workflow_orchestration::CorrectionBody::New(root: PathBuf, sources: Vec<SourceFile>, commit: CommitIntent) -> Self
 pub fn nomos_workflow_orchestration::GateBody::New(sources: Vec<SourceFile>, command: GateCommand) -> Self
 pub fn nomos_workflow_orchestration::Run<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> WorkflowOutcome
+pub fn nomos_workflow_orchestration::Run_Unclocked<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> WorkflowRun
+pub fn nomos_workflow_orchestration::Run_With_Clock<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment, Clk: Clock>(plan: &[WorkflowStepPlan], platform: &ClockedPlatform<'_, Launcher, Fs, Env, Clk>, variant: &BuildVariant, run: RunId) -> WorkflowRun
 pub struct field nomos_workflow_orchestration::AgentBody::profile: ModelExecutionProfile
 pub struct field nomos_workflow_orchestration::AgentBody::task: TaskEnvelope
 pub struct field nomos_workflow_orchestration::CheckBody::root: PathBuf
 pub struct field nomos_workflow_orchestration::CheckBody::selected: Vec<RuleId>
 pub struct field nomos_workflow_orchestration::CheckBody::sources: Vec<SourceFile>
+pub struct field nomos_workflow_orchestration::ClockedPlatform::clock: &'a Clk
+pub struct field nomos_workflow_orchestration::ClockedPlatform::platform: &'a Platform<'a, Launcher, Fs, Env>
 pub struct field nomos_workflow_orchestration::CorrectionBody::commit: CommitIntent
 pub struct field nomos_workflow_orchestration::CorrectionBody::root: PathBuf
 pub struct field nomos_workflow_orchestration::CorrectionBody::sources: Vec<SourceFile>
@@ -40,11 +54,21 @@ pub struct field nomos_workflow_orchestration::Platform::environment: &'a Env
 pub struct field nomos_workflow_orchestration::Platform::filesystem: &'a Fs
 pub struct field nomos_workflow_orchestration::Platform::launcher: &'a Launcher
 pub struct field nomos_workflow_orchestration::Platform::now: Timestamp
+pub struct field nomos_workflow_orchestration::StepAttempt::attempt: u32
+pub struct field nomos_workflow_orchestration::StepAttempt::failure: Option<DispatchError>
+pub struct field nomos_workflow_orchestration::StepAttempt::index: usize
+pub struct field nomos_workflow_orchestration::StepAttempt::timing: StepTiming
+pub struct field nomos_workflow_orchestration::WorkflowRun::attempts: Vec<StepAttempt>
+pub struct field nomos_workflow_orchestration::WorkflowRun::compensations: Vec<StepCompensation>
+pub struct field nomos_workflow_orchestration::WorkflowRun::outcome: WorkflowOutcome
 pub struct field nomos_workflow_orchestration::WorkflowStepPlan::body: Body
 pub struct field nomos_workflow_orchestration::WorkflowStepPlan::declaration: WorkflowStep
 pub struct nomos_workflow_orchestration::AgentBody
 pub struct nomos_workflow_orchestration::CheckBody
+pub struct nomos_workflow_orchestration::ClockedPlatform<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment, Clk: Clock>
 pub struct nomos_workflow_orchestration::CorrectionBody
 pub struct nomos_workflow_orchestration::GateBody
 pub struct nomos_workflow_orchestration::Platform<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
+pub struct nomos_workflow_orchestration::StepAttempt
+pub struct nomos_workflow_orchestration::WorkflowRun
 pub struct nomos_workflow_orchestration::WorkflowStepPlan
