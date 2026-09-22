@@ -23,9 +23,27 @@
 # overlapping paths, never against any externally declared territory/scope, so nothing here
 # would reject an out-of-scope file. `StagedPlan::Assert_Not_Stale` checks staleness and
 # movement but nothing about test/doc presence or which tools produced an edit.
+#
+# The `rule` line below is OD-HOST-015's: a finding from that rule bears on this
+# requirement, because that rule is where this build enforces the part of the requirement
+# one of the sites above satisfies. It is declared for `dependency-direction` and for no
+# other rule because only the first site is a rule's own judgment: `Violations_In` is the
+# function `Check_Dependency_Direction` judges through -- it is the whole of what that entry
+# point reaches -- and every finding it builds carries `RuleId::New(DEPENDENCY_DIRECTION)`,
+# so 'undeclared dependency changes' is rejected by that rule and by that rule's identifier.
+# The other two real sites are not rules at all: `WorkspaceError` is a refusal a substrate
+# crate raises and `Commit` is a corrections-crate gate, and neither produces a Finding any
+# rule identifier names.
+#
+# No line is written for the three clauses this entry calls ungrounded, and their silence is
+# not a claim. A missing `rule` line means nobody declared one and never that no rule bears
+# -- OD-TRACE-001's reading for this whole registry, kept by OD-HOST-015 for the line. The
+# two `gap` lines below are what says those clauses are unsatisfied; the absence of a rule
+# line says nothing at all.
 verdict: Partial
 site: crates/rules/nomos-rules/src/checks/dependency/violations.rs#Violations_In
 site: crates/substrate/nomos-workspace/src/workspace.rs#WorkspaceError
 site: crates/corrections/nomos-corrections/src/validated_plan.rs#Commit
+rule: dependency-direction
 gap: crates/corrections/nomos-corrections/src/correction_plan.rs#New
 gap: crates/corrections/nomos-corrections/src/staged_plan.rs#Assert_Not_Stale

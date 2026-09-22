@@ -3,7 +3,7 @@
 
 use crate::predicates::{
     Divergences_With_No_Record, Partials_With_No_Gap, Unresolved_Gaps, Unresolved_Records,
-    Unresolved_Sites,
+    Unresolved_Rules, Unresolved_Sites,
 };
 use crate::registry::Committed;
 use nomos_contract_tests::Workspace;
@@ -80,6 +80,61 @@ fn Test_Every_Named_Record_Should_Exist_And_Be_Registered()
         "these assessments name a record that does not resolve: {unresolved:#?}.\n\
          A record is registered by its own file under crates/spec/nomos-spec-store/records/ \
          — OD-SPEC-007 — and writing the document alone does not make it governing."
+    );
+}
+
+/// Every rule an entry declares is a rule this build composes.
+///
+/// `OD-HOST-015` decided the `rule` line and put this comparison here: the declared universe
+/// is the set of `rule` lines, its reality is `nomos_rules::DESCRIPTORS`, and
+/// `OD-COMPLETENESS-001` requires a declared universe to have a check against the reality it
+/// claims to enumerate. Below this suite there is no band that can see both — `Capability
+/// Contract` may not name `Rules` — so a dangling line reddens here and deliberately does not
+/// redden `nomos check`.
+///
+/// The reverse direction is deliberately not asserted. `OD-HOST-015` measured fifty-nine of
+/// this build's seventy-one rules as ported code-standards rules bearing on no corpus
+/// requirement at all, so requiring every rule to be named by some entry would demand a
+/// corpus claim that does not exist — the count-not-floor shape `OD-SPEC-007` and
+/// `OD-TRACE-002` both refused.
+#[test]
+fn Test_Every_Declared_Rule_Should_Be_A_Rule_This_Build_Composes()
+{
+    let root = Workspace::Workspace_Root();
+    let assessments = Committed(&root);
+
+    Assert_Some_Entry_Declares_A_Rule(&assessments);
+
+    let dangling = Unresolved_Rules(&assessments);
+
+    assert!(
+        dangling.is_empty(),
+        "these assessments declare a rule this build does not compose: {dangling:#?}.\n\
+         A rule identifier is a `pub const` in nomos-rules, so this is a typo, a rename or \
+         a deletion. The repair is the assessment that names it, never the rule — the \
+         direction a vanished site already takes."
+    );
+}
+
+/// At least one committed entry declares a rule, or the comparison above reads nothing.
+///
+/// A floor on the declared set, not a requirement on any entry. **An entry with no `rule`
+/// line is not thereby saying no rule bears on its requirement** — absence means nobody
+/// declared one, which is `OD-TRACE-001`'s reading for this whole registry and the reason
+/// `OD-TRACE-002` refused a written `Unassessed`. Nothing may read a missing line as a
+/// report that a requirement is unenforced. What is asserted here is only that the guard
+/// above has something to be wrong about.
+fn Assert_Some_Entry_Declares_A_Rule(assessments: &[crate::assessment::Assessment])
+{
+    let declaring = assessments
+        .iter()
+        .filter(|assessment| return !assessment.rules.is_empty())
+        .count();
+
+    assert!(
+        declaring > 0,
+        "no committed assessment declares a rule, so the comparison against \
+         nomos_rules::DESCRIPTORS read nothing and would pass over an empty set"
     );
 }
 

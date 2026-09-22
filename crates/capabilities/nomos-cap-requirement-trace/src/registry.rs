@@ -15,6 +15,7 @@ mod entry_source;
 pub use entry_source::EntrySource;
 
 use crate::assessment::{Assessment, Site, Verdict};
+use nomos_contracts::RuleId;
 use nomos_platform::FileSystem;
 use std::path::Path;
 
@@ -102,6 +103,7 @@ pub fn Parse_Assessment(source: EntrySource<'_>) -> Result<Assessment, String>
         record: read.record,
         sites: read.sites,
         gaps: read.gaps,
+        rules: read.rules,
     });
 }
 
@@ -131,6 +133,7 @@ struct Read
     record: Option<String>,
     sites: Vec<Site>,
     gaps: Vec<Site>,
+    rules: Vec<RuleId>,
 }
 
 /// Every `key: value` line an entry holds, filed under its key.
@@ -166,6 +169,7 @@ fn Read_One(read: &mut Read, line: &str) -> Result<(), String>
         "record" => read.record = Some(Second_Record(read.record.as_deref(), value)?),
         "site" => read.sites.push(Read_Site(value)?),
         "gap" => read.gaps.push(Read_Site(value)?),
+        "rule" => read.rules.push(Another_Rule(&read.rules, value)?),
         other => return Err(format!("unknown key `{other}`")),
     }
 
@@ -225,6 +229,38 @@ fn Second_Record(held: Option<&str>, value: &str) -> Result<String, String>
     }
 
     return Ok(value.to_owned());
+}
+
+/// The rule a line names, refusing an empty identifier and one already named.
+///
+/// `OD-HOST-015` made the line repeatable, one identifier each, the grammar `site` and `gap`
+/// already use -- so a second `rule` line is the mechanism rather than a mistake, and what is
+/// refused instead is the same identifier twice, which says nothing the first line did not
+/// while doubling whatever counts it. An empty identifier is refused the way an empty
+/// `record` line is: a line naming nothing is not a declaration, and a lenient reader would
+/// turn a truncated one into an entry that quietly declared less than its author wrote.
+///
+/// Whether the identifier names a rule this build composes is not asked here and cannot be:
+/// `nomos-architecture.json` grants `Capability Contract` only `Protocol` and `Substrate`, so
+/// this crate cannot see `nomos_rules::DESCRIPTORS`. `OD-HOST-015`'s fourth decision puts that
+/// comparison in `tests/contract`, above both crates, and states the narrower promise that
+/// leaves: a dangling rule line reddens the contract suite and does not redden `nomos check`.
+fn Another_Rule(held: &[RuleId], value: &str) -> Result<RuleId, String>
+{
+    if value.is_empty()
+    {
+        return Err("an empty rule line".to_owned());
+    }
+
+    let rule = RuleId::New(value);
+    if held.contains(&rule)
+    {
+        return Err(format!(
+            "two rule lines naming `{value}`; a second says nothing the first did not"
+        ));
+    }
+
+    return Ok(rule);
 }
 
 /// A `path#symbol` site.

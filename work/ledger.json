@@ -90516,14 +90516,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-reqlines",
-        "acquired_at": 1790052714,
-        "lease_expires_at": 1790063514
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -90536,7 +90532,30 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-requirement-trace",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ify-reqlines-target\\debug\\deps\\contract-3332210bdf1e3766.exe)\n     Running unittests src\\lib.rs (F:/repos/verify-reqlines-target\\debug\\deps\\nomos_contract_tests-b2a13c7253f27233.exe)\n     Running tests\\agent_harness.rs (F:/repos/verify-reqlines-target\\debug\\deps\\agent_harness-2998351f6db6b012.exe)\n     Running tests\\boundaries\\main.rs (F:/repos/verify-reqlines-target\\debug\\deps\\boundaries-92a4ff356d3672d1.exe)\n     Running tests\\completeness_universes\\main.rs (F:/repos/verify-reqlines-target\\debug\\deps\\completeness_universes-2eab8f58748e8fc9.exe)\n     Running tests\\corpus_gates.rs (F:/repos/verify-reqlines-target\\debug\\deps\\corpus_gates-5fc6c569730113d9.exe)\n     Running tests\\crossing_cold.rs (F:/repos/verify-reqlines-target\\debug\\deps\\crossing_cold-955891bd276589df.exe)\n     Running tests\\determinism_declarations.rs (F:/repos/verify-reqlines-target\\debug\\deps\\determinism_declarations-ab84f3ce148d471e.exe)\n     Running tests\\determinism_vocabulary.rs (F:/repos/verify-reqlines-target\\debug\\deps\\determinism_vocabulary-ee154dd7301c3097.exe)\n     Running tests\\public_surface\\main.rs (F:/repos/verify-reqlines-target\\debug\\deps\\public_surface-4b043d90270bbc14.exe)\n     Running tests\\record_citation.rs (F:/repos/verify-reqlines-target\\debug\\deps\\record_citation-e8b29a92e90bbab6.exe)\n     Running tests\\requirement_trace\\main.rs (F:/repos/verify-reqlines-target\\debug\\deps\\requirement_trace-42eca897f526cc97.exe)\n     Running tests\\rule_composition.rs (F:/repos/verify-reqlines-target\\debug\\deps\\rule_composition-7b8fe6b7065225f2.exe)\n     Running tests\\rule_contract_citation.rs (F:/repos/verify-reqlines-target\\debug\\deps\\rule_contract_citation-f864f3dc950c0221.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/verify-reqlines-target\\debug\\deps\\rule_descriptors-93c7b39b1bbd5318.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/verify-reqlines-target\\debug\\deps\\toolchain_floor-496d4d6605ab0a03.exe)\n   Doc-tests nomos_cap_requirement_trace\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1790053726,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -90861,14 +90880,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-tier",
-        "acquired_at": 1790052857,
-        "lease_expires_at": 1790063657
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -90879,7 +90894,28 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Document_Should_Not_Renumber_Its_Rows ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling proc-macro2 v1.0.107\n   Compiling quote v1.0.47\n   Compiling serde_core v1.0.229\n   Compiling serde v1.0.229\n   Compiling once_cell v1.21.4\n   Compiling serde_json v1.0.151\n   Compiling smallvec v1.15.2\n   Compiling memchr v2.8.3\n   Compiling indexmap v2.14.0\n   Compiling ahash v0.8.12\n   Compiling hashbrown v0.14.5\n   Compiling hashlink v0.9.1\n   Compiling rusqlite v0.32.1\n   Compiling syn v3.0.3\n   Compiling serde_derive v1.0.229\n   Compiling serde_yaml_ng v0.10.0\n   Compiling nomos-spec-model v0.1.0 (F:\\repos\\render-tier\\crates\\spec\\nomos-spec-model)\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\render-tier\\crates\\spec\\nomos-spec-store)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.90s\n     Running unittests src\\lib.rs (F:/repos/render-tier-target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/render-tier-target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/render-tier-target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (F:/repos/render-tier-target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/render-tier-target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1790053753,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -91041,10 +91077,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-lock",
+        "acquired_at": 1790053735,
+        "lease_expires_at": 1790064535
+      },
       "verification": {
         "argv": [
           "cargo",

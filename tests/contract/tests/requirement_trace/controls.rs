@@ -8,9 +8,10 @@
 use crate::assessment::{Assessment, Site, Verdict};
 use crate::predicates::{
     Divergences_With_No_Record, Partials_With_No_Gap, Unresolved_Gaps, Unresolved_Records,
-    Unresolved_Sites,
+    Unresolved_Rules, Unresolved_Sites,
 };
 use nomos_contract_tests::Workspace;
+use nomos_contracts::RuleId;
 
 /// The negative control for
 /// [`crate::committed::Test_Every_Assessment_Should_Name_A_Site_That_Exists`].
@@ -48,6 +49,7 @@ fn Naming(requirement: &str, path: &str, symbol: &str) -> Assessment
             symbol: symbol.to_owned(),
         }],
         gaps: Vec::new(),
+        rules: Vec::new(),
     };
 }
 
@@ -91,12 +93,53 @@ fn Test_A_Record_That_Does_Not_Resolve_Should_Be_Reported()
         record: Some("OD-TRACE-001".to_owned()),
         sites: Vec::new(),
         gaps: Vec::new(),
+        rules: Vec::new(),
     };
     assert!(
         Unresolved_Records(&root, &[real]).is_empty(),
         "a registered record must resolve, or the control above proves only that the \
          function always reports something"
     );
+}
+
+/// The negative control for
+/// [`crate::committed::Test_Every_Declared_Rule_Should_Be_A_Rule_This_Build_Composes`], in
+/// all three halves.
+///
+/// A guard that resolved every identifier would pass that test and catch nothing; one that
+/// reported every identifier would pass it too, over a committed set whose one declared line
+/// it would then be wrong about. The third assertion is the one this record insisted on: an
+/// entry that declares nothing is not reported, because absence means nobody declared a rule
+/// and never that no rule bears.
+#[test]
+fn Test_A_Rule_This_Build_Does_Not_Compose_Should_Be_Reported()
+{
+    let invented = Declaring("AGT-003", "a-rule-this-build-does-not-have");
+    assert_eq!(Unresolved_Rules(&[invented]).len(), 1);
+
+    let composed = Declaring("AGT-003", nomos_rules::DEPENDENCY_DIRECTION);
+    assert!(
+        Unresolved_Rules(&[composed]).is_empty(),
+        "a rule this build composes must resolve, or the control above proves only that \
+         the function always reports something"
+    );
+
+    let silent = Naming("AGT-003", "README.md", "Nomos");
+    assert!(
+        Unresolved_Rules(&[silent]).is_empty(),
+        "an entry declaring no rule owes nothing here. Absence of a line means nobody \
+         declared one, never that no rule bears on the requirement — OD-TRACE-001's \
+         reading for this registry, which OD-HOST-015 kept for the line"
+    );
+}
+
+/// A `Met` assessment naming one site and declaring one rule.
+fn Declaring(requirement: &str, rule: &str) -> Assessment
+{
+    return Assessment {
+        rules: vec![RuleId::New(rule)],
+        ..Naming(requirement, "README.md", "Nomos")
+    };
 }
 
 /// The negative control for

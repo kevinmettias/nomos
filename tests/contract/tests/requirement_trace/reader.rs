@@ -24,6 +24,15 @@ fn Test_The_Reader_Should_Refuse_Every_Malformed_Entry()
          refusal below proves only that the reader refuses every Partial"
     );
 
+    let two_rules = "verdict: Met\nsite: README.md#Nomos\n\
+                     rule: dependency-direction\nrule: dependency-completeness\n";
+    assert!(
+        Parse(EntrySource { stem: "CHK-003", text: two_rules }).is_ok(),
+        "two rule lines naming two rules must parse -- OD-HOST-015 made the line \
+         repeatable, one identifier each, the grammar site and gap already use -- or the \
+         two rule refusals below prove only that the reader refuses every rule line"
+    );
+
     for (stem, text, because) in MALFORMED
     {
         assert!(
@@ -108,6 +117,19 @@ const MALFORMED: &[(&str, &str, &str)] = &[
         "CHK-003",
         "verdict: Partial\nsite: README.md#Nomos\ngap: README.md\n",
         "a gap with no symbol, refused the same way a site with no symbol is",
+    ),
+    (
+        "CHK-003",
+        "verdict: Met\nsite: README.md#Nomos\nrule:\n",
+        "an empty rule line, refused the same way an empty record line is -- a line naming \
+         nothing is not a declaration",
+    ),
+    (
+        "CHK-003",
+        "verdict: Met\nsite: README.md#Nomos\nrule: dependency-direction\n\
+         rule: dependency-direction\n",
+        "one rule named twice; the line repeats to name several rules, so a repeat of one \
+         identifier says nothing the first line did not while doubling whatever counts it",
     ),
 ];
 

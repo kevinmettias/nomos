@@ -43,6 +43,7 @@ pub impl nomos_cap_requirement_trace::RequirementTraceFactProduction implements 
 pub struct field nomos_cap_requirement_trace::Assessment::gaps: Vec<Site>
 pub struct field nomos_cap_requirement_trace::Assessment::record: Option<String>
 pub struct field nomos_cap_requirement_trace::Assessment::requirement: String
+pub struct field nomos_cap_requirement_trace::Assessment::rules: Vec<RuleId>
 pub struct field nomos_cap_requirement_trace::Assessment::sites: Vec<Site>
 pub struct field nomos_cap_requirement_trace::Assessment::verdict: Verdict
 pub struct field nomos_cap_requirement_trace::EntrySource::stem: &'a str
