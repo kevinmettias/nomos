@@ -172,7 +172,7 @@ fn Test_Recognized_Sources_Should_Populate_Preferred_Syntax_Provider()
 {
     let sources = vec![SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
 
-    let recognized = Recognized_Sources(&sources);
+    let recognized = Recognized_Sources(&sources, &crate::composition::provider_table::Composed_Syntax_Providers());
 
     assert_eq!(
         recognized.first().expect("one source in, one source out").preferred_syntax_provider,
@@ -188,7 +188,7 @@ fn Test_Recognized_Sources_Should_Leave_An_Unrecognized_Path_With_No_Preferred_P
 {
     let sources = vec![SourceFile::New("readme.md", nomos_model::Subject_Of_Path("readme.md"), "# hi\n")];
 
-    let recognized = Recognized_Sources(&sources);
+    let recognized = Recognized_Sources(&sources, &crate::composition::provider_table::Composed_Syntax_Providers());
 
     assert_eq!(recognized.first().expect("one source in, one source out").preferred_syntax_provider, None);
 }

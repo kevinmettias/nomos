@@ -279,9 +279,10 @@ fn Findings_Over(ingested: &[SourceFile], judged: &[SourceFile]) -> Vec<Finding>
     let registry = crate::composition::Registered().expect("the fixture composition is this crate's own");
     let context = crate::facts::Ingested_Workspace(ingested, &registry, Test_Variant(), &mut None).expect("the fixture is a valid tree");
     let mut store = MemoryFactStore::New();
-    let _written = crate::facts::Materialize_Syntax(ingested, &context, &mut store);
+    let syntax = crate::composition::provider_table::Composed_Syntax_Providers();
+    let _written = crate::facts::Materialize_Syntax(ingested, &context, &mut store, &syntax);
 
-    let judged = crate::run_context::Recognized_Sources(judged);
+    let judged = crate::run_context::Recognized_Sources(judged, &syntax);
     let mut reader = Reader::On(&store, &registry, context);
     return Check_Completeness_Mirrors(&judged, &mut reader);
 }

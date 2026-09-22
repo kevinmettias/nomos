@@ -92164,14 +92164,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-check-composition",
-        "acquired_at": 1790056126,
-        "lease_expires_at": 1790066926
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -92189,7 +92185,35 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "public_surface",
+          "--test",
+          "boundaries"
+        ],
+        "exit_code": 0,
+        "output_tail": "this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: unused import: `Revisions_In`\n  --> tests\\contract\\tests\\boundaries\\lock_pinning.rs:85:65\n   |\n85 | use nomos_contract_tests::{Declared_Revisions, Repository_Root, Revisions_In, XVPE_PREFIX};\n   |                                                                 ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-contract-tests` (test \"boundaries\") generated 1 warning (run `cargo fix --test \"boundaries\"` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.57s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-5db184c714e43495.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-b2a13c7253f27233.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-92a4ff356d3672d1.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-4b043d90270bbc14.exe)\n",
+        "verified_at": 1790057573,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "532d21d1298a9e94a536335e25d5eccd560f0a8b"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -92651,6 +92675,371 @@
           "nomos-corrections"
         ],
         "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-THE-FACT-GRAPH-IS-DIGEST-KEYED-TREES-AND-THE-RANKING-IS-QUADRATIC",
+      "title": "The fact graph is digest-keyed trees, a read clones the whole fact, and provider ranking is quadratic",
+      "why": "An external review measured four bootstrap choices in the analysis substrate and this workspace confirmed each. crates/substrate/nomos-analysis/src/fact/memory_fact_store.rs holds entries, dependents and keys as BTreeMap and BTreeSet over Digest128 rather than over compact interned identifiers, so every lookup compares sixteen-byte keys and every edge set stores them again. FactStore::Current returns an owned MaterializedFact, cloning the payload bytes on the trait surface, while the hot path inside the crate reads through a reference-returning Lookup, so the clone is real where an external caller sits. Per-key history is a Vec pushed on every materialization with nothing that trims or evicts, so within one process the only bound is exit. And crates/substrate/nomos-capability/src/resolution/selection.rs ranks offers by repeated maximal-element selection, which its own doc defends as deliberate because a guarantee is a partial order, at a cost quadratic in provider count. None of the four is urgent at today's scale and all four were named as what must change before the workload the specification targets. No record forbids any of them.",
+      "done_when": "Each of the four is measured before it is changed and after, on the same machine, over a population large enough for the difference to be outside noise, and both numbers are in the commit message; a change whose measurement does not move is reverted rather than kept for tidiness, and that is reported. Fact identities are interned so the hot structures key on a compact identifier while the digest remains the identity a caller sees, with the mapping in one place and no second table that can disagree. A reader can obtain a fact without copying its payload, by reference or by a shared handle, without making the store's internals public and without changing what a fact means. The per-key history gains a stated retention rule that keeps what invalidation and the historical read require and drops the rest, with the rule written where the history is pushed; if the persistence item has already stated one, this adopts it rather than minting a second. Provider ranking stops being quadratic while still honoring the partial order, so no offer that is maximal today becomes non-maximal, proven by a test over a set with genuine incomparabilities rather than a total order. The recomputation-equivalence invariant still holds. At least two of the four changes are proven load-bearing by mutation. Surface snapshots are re-blessed and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis",
+          "crates/substrate/nomos-capability",
+          "tests/contract/surface/nomos-analysis.txt",
+          "tests/contract/surface/nomos-capability.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P123-FACT-STORE-SURVIVES-THE-PROCESS-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-capability"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-A-JUDGMENT-LEAVES-IN-ONE-FORMAT-AND-EVERY-OTHER-CONSUMER-IS-UNSERVED",
+      "title": "A judgment leaves this workspace as SARIF or not at all, so every consumer that reads another interchange format is unserved",
+      "why": "0c05967a built a SARIF 2.1.0 projection and OD-HOST-017 decided where it belongs and that every host emits it. SARIF is one format and it is the one GitHub code scanning reads. Grepping this workspace for graphml, digraph, csv, jsonl and yaml emitters over findings or graphs finds nothing: the only JSONL is the specification bundle's own, by design, and the only graph renderer is the specification's Mermaid projection over records rather than over code. So a consumer that ingests newline-delimited JSON, a spreadsheet, or a graph format reads nothing this workspace produces, and the v14 corpus row that names a run-evidence export beyond SARIF has nothing behind it. The projection's home is being decided by OD-HOST-017's dependent item, so this one follows it rather than racing it.",
+      "done_when": "A judgment can be projected to newline-delimited JSON, one finding per line, and to a delimited tabular form whose columns are named in a header, both deterministic for a given result and both carrying the same information the SARIF projection carries about suppression, baselining and calibration rather than flattening them away. The dependency graph a run already holds can be projected to a graph interchange format, and the commit says which one and why that one; a format chosen because it was easy to emit rather than because a consumer reads it is the wrong answer and the reasoning is recorded. Every projection lives beside the SARIF projection in the same crate and shares its input rather than re-deriving from a host's own rendering, so no second reading of a finding exists. A no-verdict or incomplete-coverage run is representable in each format rather than emitting as clean and empty. No CLI flag is added by this item, because reaching them from a command line is the SARIF move item's own question and the answer must be one flag family rather than two. Each projection is proven by a test that parses its output rather than asserting on a fragment. The surface snapshot is re-blessed and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/export.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/export",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P123-THE-SARIF-PROJECTION-MOVES-TO-THE-SERVICE-THAT-OWNS-THE-JUDGMENT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-EVERY-INVOCATION-STARTS-COLD-BECAUSE-NOTHING-OUTLIVES-A-PROCESS",
+      "title": "Every invocation starts cold, because no process outlives one and nothing holds the workspace between them",
+      "why": "The incremental machinery is real and unreachable across the boundary that matters. 6bb62542 made all twelve non-syntax fact families prove currency, the reassessment cache skips a rule whose declared families did not change, and a reused store over an unchanged tree now writes nothing where it previously rewrote thirty-three facts. Every CLI check and gate invocation still constructs a fresh store, so a person running the gate pays the cold cost every time and none of that work reaches them; only nomos-lsp keeps state, in memory, for as long as an editor session lasts. OD-ANALYSIS-009 declined a persistent store and said no daemon or long-lived-process concept was scheduled by it, and its version 4 amendment at 1ca2459d narrowed what remains to the on-disk half. The store that survives a process is that item's; this is the process that survives an invocation.",
+      "done_when": "A resident service can be started against a root, holds the workspace, fact store and reassessment cache across requests, and answers the canonical operations a client asks without rebuilding what has not changed, so a second request over an unchanged tree is measurably cheaper than the first and both numbers are in the commit message. It answers through the same canonical services every other host calls rather than a second judging path, so a judgment from it and a judgment from a cold invocation agree, proven by a test that runs both over one tree and compares. It notices that the tree changed under it rather than serving a stale answer, and what it watches and how is stated; a change it cannot see is reported as such rather than answered from cache. A client can ask it to stop, and a stopped service leaves nothing that a later cold invocation would mistake for current state. It holds no state its canonical services could not reconstruct, which is OD-HOST-002's rule and the reason a cache is admissible here at all. Concurrency is addressed rather than assumed: two requests against one root either serialize or share safely, and which it is is decided. The crate is registered in the manifests, the zone declaration and the universes table, its surface is blessed, and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-daemon",
+          "tests/contract/surface/nomos-daemon.txt",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "nomos-architecture.json",
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P123-FACT-STORE-SURVIVES-THE-PROCESS-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-daemon",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "boundaries",
+          "--test",
+          "completeness_universes"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-C-SHARP-IS-READ-ON-ITS-FACE-AND-NO-COMPILER-ANSWERS-FOR-IT",
+      "title": "C# is read on its face only, so the questions a parse tree cannot answer have no provider",
+      "why": "9f76f2f6 built nomos-lang-csharp over tree-sitter-c-sharp, declaring Syntactic soundness and Unknown completeness, and its own guarantee records why: a preprocessor conditional holds every branch's declarations at once, nothing in a per-file reading knows which compiles, and an omitted accessibility modifier means different things by enclosing form. Those are exactly the questions a compiler answers and a parse tree cannot. Rust already has the shape: nomos-lang-rust-compiler loads a crate through ra_ap_hir and resolves whether a clone targets a Copy type. C# has no equivalent, so no rule can ask for a resolved symbol, an effective accessibility, a compilation's definition set, or which partial declaration completes which type. The external review named the Roslyn stack as the largest missing language validation because it pressures solutions, projects, build variants, generated source and semantic models at once. ARC-ROADMAP-001 puts the language and provider tier in the near term and names no language, so nothing defers this.",
+      "done_when": "A provider crate answers at least one question about C# that the syntax provider cannot, chosen because a rule would ask it rather than because it was reachable, with the choice argued in the crate doc; the preprocessor conditional that bounds the syntax provider's completeness is the obvious candidate and its resolution would let that provider's guarantee be revisited, which this item states as a consequence rather than performing. The mechanism is named honestly, whether a Roslyn-backed process, a language server, or a parse of project and solution files, with what it requires on the host stated, and a host that lacks it is reported as ProviderUnavailable rather than answered wrongly. The contract it offers against is its own crate under crates/capabilities, one per capability, which OD-ANALYSIS-007 version 2 decided for exactly this shape, and the provider names no contract of its own. Its declared Guarantee is honest on every axis and is proven neither vacuously satisfied nor vacuously failed. Composition into a real run is not performed here and is named as its own item with territory, because the composition root and the rule that would read the fact are other ground. Registration, zone declaration, universes table and surface blessing are complete, and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-csharp-compiler",
+          "crates/capabilities/nomos-cap-csharp-semantics",
+          "tests/contract/surface/nomos-lang-csharp-compiler.txt",
+          "tests/contract/surface/nomos-cap-csharp-semantics.txt",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "nomos-architecture.json",
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P123-CSHARP-JOINS-THE-RUN-AND-THE-WALK-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-csharp-compiler",
+          "-p",
+          "nomos-cap-csharp-semantics",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "boundaries",
+          "--test",
+          "completeness_universes"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-GO-HAS-A-PARSER-AND-A-MANIFEST-READER-AND-NO-TOOL-SPEAKS-FOR-IT",
+      "title": "Go has a parser and a manifest reader, and no tool provider answers for it the way three do for Rust",
+      "why": "Rust is served by six providers across four capability families: syn and an independent scanner for syntax, cargo for dependency edges, clippy for lint diagnostics, cargo-deny for dependency policy, and ra_ap_hir for compiler-backed semantics. Go has two, nomos-lang-go over tree-sitter and nomos-lang-go-modules over go.mod and go.work text, so nomos.cap.lint.diagnostics has no Go provider at all and a Go repository's lint findings cannot enter this workspace as facts. The external review called Go second-language architecture proven and the ecosystem unbuilt, and that is the measurable half of it: the capability contracts exist, the fact families exist, and one language populates them while the other does not. OD-RULES-010 already decides the shape, that a tool provider's output is a fact a native rule judges rather than a finding a tool emits directly, and nomos-lang-rust-clippy is the worked example, so this is population rather than design.",
+      "done_when": "A Go tool provider offers against nomos.cap.lint.diagnostics, turning a real Go linter's output into the same fact shape the Rust lint provider produces, so the rules that already read that family judge a Go repository without being edited; which linter and why is argued in the crate doc, and its output being parsed from a stable machine-readable form rather than from human text is part of that argument. A host without the tool installed is reported as ProviderUnavailable, never as a clean result, and a tool that fails is distinguished from a tool that found nothing, which is the distinction this workspace exists to keep. The provider's declared Guarantee is honest on each axis and proven neither vacuously satisfied nor vacuously failed. It is composed into a real check run so a Go file with a finding actually reports one, proven by a test over a temporary tree, and the Go language package's known-provider list gains it by reference to the provider's own constant rather than by a retyped string. Whether a second provider is also owed for Go's type information is answered rather than left open: either it is built here, or it is named as its own item with the mechanism it would need. Registration, zone declaration, universes table and surface blessing are complete, and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go-lint",
+          "crates/packages/nomos-lang-go-package",
+          "crates/orchestration/nomos-check-orchestration",
+          "tests/contract/surface/nomos-lang-go-lint.txt",
+          "tests/contract/surface/nomos-lang-go-package.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "nomos-architecture.json",
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-go-lint",
+          "-p",
+          "nomos-lang-go-package",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "boundaries",
+          "--test",
+          "completeness_universes"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-A-REPOSITORY-ADOPTING-NOMOS-HAS-NOTHING-TO-RUN-FIRST",
+      "title": "A repository adopting nomos has nothing to run first, because the profile is a function no verb renders",
+      "why": "990abac2 built WorkspaceProfile::Of_Root, which reports per registered language how many sources a root holds, which language manifests sit at it, which repository policy files are present, absent or unreadable, and whether the root carries the marker the walk treats as somebody else's. Nothing calls it: the binary's verb groups are work, spec, check, request, gate, agent, correct and workflow, and none diagnoses a root. So the first-run answer exists as a function and a person adopting this tool has no command to run, no way to learn which providers their host can actually supply, and no starting policy file. The external review named guided onboarding, provider diagnosis and a starter gate together; the profile is the measurement half and this is the half a person touches.",
+      "done_when": "A verb renders the workspace profile for a root in a form a person reads, naming what was found and, as plainly, what was absent, since an absent policy file is the actionable half for somebody adopting the tool. It also reports provider availability rather than only file presence: for each capability the workspace declares, whether a provider on this host can answer, and where one cannot, which tool is missing, so a person learns that a Go linter or a compiler-backed provider is unavailable here rather than discovering it as a silent incompleteness in a later run. It can write a starting policy file for a root that has none, refusing rather than overwriting one that exists, and what it writes is the conservative choice, declaring nothing the repository has not asked for; a starter gate that blocks on findings a new adopter has never seen would teach them to bypass it. The verb changes no judgment and no exit code semantics of any other verb. Its output is proven by a test over a temporary tree with a known shape, asserting on the structure rather than on a fragment of prose. Usage text lists it. No new dependency is added to nomos-cli, and if one is needed that is reported rather than taken quietly. The predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/main.rs",
+          "crates/host/nomos-cli/src/profile.rs",
+          "crates/host/nomos-cli/src/profile",
+          "crates/host/nomos-cli/src/vacuity.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "--bins",
+          "--test",
+          "check_orchestration_seam"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-THE-EFFECTIVE-POLICY-KNOWS-WHAT-DECIDED-EACH-FIELD-AND-NO-HOST-SAYS-SO",
+      "title": "The effective policy records the layer and artifact that decided each field, and no host tells anybody",
+      "why": "dbb2c7c7 built the resolver OD-POLICY-001 decided: ten configuration layers, a field combining by its shape, the phases and approvals pair resolving as one unit, four typed refusals, and a provenance carrying for every field the layer and artifact that decided it, what it overrode and what it rejected. Nothing renders any of it. That item deliberately left GateRunResult unchanged, because three of the nine literals constructing it sit in nomos-cli outside any territory it could hold, and the record names rendering as a dependent item. So a repository can now be told why its gate judged as it did, and has no way to ask. The corpus requirement behind this is an inspection surface for effective configuration, and a locked override that CONFIG-003 requires to stay visible with its reason is visible only inside the resolver.",
+      "done_when": "A gate run carries its effective policy outward, so a host can report for any field the layer and artifact that decided it, what that overrode, and what it rejected with the reason; a field resolved as part of a unit reports the unit and which field's statement decided it, which is what the amendment requires and what a provenance naming only the field would hide. A rejected override is reported as rejected rather than as overridden, because CONFIG-003 requires the rejection visible with its reason and the two are different facts. A layer with no source reads as absent rather than as empty. The rendering is available from a command line and through the canonical service, and the two agree because the second is a projection of the first rather than a second assembly. Adding the field to the run result reaches every literal that constructs one, so the claimant counts them first and reserves or widens accordingly rather than discovering it mid-change. No judgment, disposition or exit code changes; this reports what the resolver already decided. A test asserts a three-layer resolution end to end, from declared contributions through the run to the rendered answer. Surface snapshots are re-blessed and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/gate.rs",
+          "crates/host/nomos-api/src/response",
+          "crates/host/nomos-api/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan",
+          "crates/host/nomos-cli/src/gate",
+          "crates/host/nomos-cli/src/gate.rs",
+          "tests/contract/surface/nomos-api.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins",
+          "--test",
+          "gate_orchestration_seam"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-OD-RULES-034-WHAT-A-RULE-AUTHORING-SURFACE-IS-AT-SEVENTY-RULES",
+      "title": "OD-RULES-034: whether a rule can be authored without writing Rust, measured against the rule population that exists",
+      "why": "Every rule in this workspace is a Rust function compiled into nomos-rules and registered in a descriptor table; adding one costs a function, a descriptor and a registration. The external review named a rule authoring surface as the largest gap against arbitrary rule creation, and also said not to invent a rule intermediate representation before real rules require one, which this workspace's own records agree with. What has changed is the population: there are now roughly seventy descriptors across many families, which is enough to ask the question from evidence rather than from ambition. Nobody has asked it. OD-PACKAGE-008's original field-by-field measurement of what rules share is the right starting point and is about package metadata rather than judgment, so it does not answer this.",
+      "done_when": "A governing record OD-RULES-034 is written and registered that measures the existing rule population rather than reasoning about it: how many of the declared rules are a predicate over one subject with parameters a repository already declares, how many need control flow a declarative form could not express, and how many read more than one fact family, with the counts taken from the descriptor table and the check functions rather than estimated. From that it decides whether a declarative authoring form is owed for the archetype that dominates, and if so what its inputs are and what it may not express, or whether the population does not yet justify one and what observation would change that. It decides where such a form would sit against the existing package and descriptor machinery, so a later increment does not mint a second registration path. It explicitly does not propose a visual editor, a general expression language or a rule intermediate representation ahead of the measurement, and says why each would be premature or not. It names the item that would build whatever it decides, with territory by path, and builds nothing. Both projections are re-rendered per the nomos-spec-change skill, and the predicate passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-034",
+          "crates/spec/nomos-spec-store/records/OD-RULES-034.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
       },
       "verified": null,
       "abandoned": [],

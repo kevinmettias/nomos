@@ -16,12 +16,11 @@ use nomos_contracts::RuleId;
 use nomos_platform::{Environment, FileSystem, ProgramLauncher};
 use nomos_rules::{RequiredFact, SourceFile};
 
+use crate::composed_providers::WorkspacePolicyProvider;
 use crate::facts::{
-    DependencyMaterialization, LintMaterialization, Materialize_Architecture, Materialize_Dependencies,
-    Materialize_Goals_Policy, Materialize_Limits_Policy, Materialize_Lint, Materialize_Naming_Policy,
-    Materialize_Policy, Materialize_Reachability, Materialize_Requirement_Trace, Materialize_Review,
-    Materialize_Scripting_Policy, Materialize_Test_Material_Policy, Materialize_Words_Policy, PolicyMaterialization, ReviewMaterialization,
-    Subprocess,
+    DependencyMaterialization, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
+    Materialize_Policy, Materialize_Policy_Fact, Materialize_Reachability, Materialize_Review,
+    PolicyMaterialization, PolicyReading, ReviewMaterialization, Subprocess, WorkspaceReading,
 };
 
 use super::{CapabilityMaterialization, Is_Rule_Selected, MaterializationEnvironment, MaterializedCapability};
@@ -179,8 +178,8 @@ fn Materialization_Tracking<Launcher: ProgramLauncher, Fs: FileSystem, Env: Envi
     return result;
 }
 
-/// The dependency-edges section: [`Materialize_Dependencies`] when `selected` feeds on it,
-/// an empty result otherwise.
+/// The dependency-edges section: [`Materialize_Dependencies`] through the composed provider
+/// when `selected` feeds on it, an empty result otherwise.
 fn Materialize_Dependency_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
@@ -188,14 +187,16 @@ fn Materialize_Dependency_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env
 {
     if demanded.contains(&RequiredFact::DependencyEdges)
     {
-        return Materialize_Dependencies(env.root, env.context, env.store, Subprocess { launcher: env.launcher, environment: env.environment });
+        let provider = env.providers.dependencies;
+
+        return Materialize_Dependencies(Workspace_Reading(env), provider);
     }
 
     return DependencyMaterialization { sources: Vec::new(), findings: Vec::new() };
 }
 
-/// The lint-diagnostics section: [`Materialize_Lint`] when `selected` feeds on it, an empty
-/// result otherwise.
+/// The lint-diagnostics section: [`Materialize_Lint`] through the composed provider when
+/// `selected` feeds on it, an empty result otherwise.
 fn Materialize_Lint_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
@@ -203,14 +204,16 @@ fn Materialize_Lint_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Envi
 {
     if demanded.contains(&RequiredFact::LintDiagnostics)
     {
-        return Materialize_Lint(env.root, env.context, env.store, Subprocess { launcher: env.launcher, environment: env.environment });
+        let provider = env.providers.lint;
+
+        return Materialize_Lint(Workspace_Reading(env), provider);
     }
 
     return LintMaterialization { sources: Vec::new(), findings: Vec::new() };
 }
 
-/// The dependency-policy section: [`Materialize_Policy`] when `selected` feeds on it, an
-/// empty result otherwise.
+/// The dependency-policy section: [`Materialize_Policy`] through the composed provider when
+/// `selected` feeds on it, an empty result otherwise.
 fn Materialize_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
@@ -218,15 +221,31 @@ fn Materialize_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: En
 {
     if demanded.contains(&RequiredFact::DependencyPolicy)
     {
-        return Materialize_Policy(env.root, env.context, env.store, Subprocess { launcher: env.launcher, environment: env.environment });
+        let provider = env.providers.dependency_policy;
+
+        return Materialize_Policy(Workspace_Reading(env), provider);
     }
 
     return PolicyMaterialization { sources: Vec::new(), findings: Vec::new() };
 }
 
-/// The reachability section: [`Materialize_Reachability`] when `selected` feeds on it --
-/// writes into `env.store` directly and produces no return value of its own, the same shape
-/// the call it wraps already has.
+/// The root, context, store and the two subprocess ports one subprocess-backed provider is
+/// run through, as the three sections above each hand them over.
+fn Workspace_Reading<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    env: &'a mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
+) -> WorkspaceReading<'a, Launcher, Env>
+{
+    return WorkspaceReading {
+        root: env.root,
+        context: env.context,
+        store: env.store,
+        subprocess: Subprocess { launcher: env.launcher, environment: env.environment },
+    };
+}
+
+/// The reachability section: [`Materialize_Reachability`] through the composed provider when
+/// `selected` feeds on it -- writes into `env.store` directly and produces no return value of
+/// its own, the same shape the call it wraps already has.
 fn Materialize_Reachability_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     sources: &[SourceFile],
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
@@ -235,7 +254,7 @@ fn Materialize_Reachability_Section<Launcher: ProgramLauncher, Fs: FileSystem, E
 {
     if demanded.contains(&RequiredFact::Reachability)
     {
-        Materialize_Reachability(sources, env.context, env.store);
+        Materialize_Reachability(sources, env.context, env.store, env.providers.reachability);
     }
 }
 
@@ -257,180 +276,76 @@ fn Policy_Families() -> Vec<RequiredFact>
     ];
 }
 
-/// The one policy section `family` names, over the whole [`RequiredFact`] set so that a new
-/// variant is a compile error here rather than a family that silently materializes nothing.
-/// The six variants that are not repository-declared policies are named as doing nothing
-/// deliberately: `Reachability` is its own section one function up (it reads `sources`,
-/// which the other sections do not), and the remaining five belong to the three sections that
-/// return a value, which [`Materialize_Capabilities`] calls directly.
+/// The composed provider `family` is answered by, over the whole [`RequiredFact`] set so
+/// that a new variant is a compile error here rather than a family that silently
+/// materializes nothing.
+///
+/// This match is the declared table `OD-ROADMAP-003`'s surviving constraint requires a
+/// materialization section to be: one row per family, naming a provider the composition
+/// supplied, reading no store state, no cost and no prior materialization. It replaced eight
+/// section functions that differed only in which provider crate they called, and the
+/// difference moved here because here is where it can be checked -- the six variants that
+/// are not repository-declared policies are named as answering `None` deliberately.
+/// `Reachability` is its own section one function up, because it reads `sources`, which the
+/// policy families do not; the remaining five belong to the three sections that return a
+/// value, which [`Materialize_Capabilities`] calls directly.
+fn Policy_Provider_For<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    env: &MaterializationEnvironment<'_, Launcher, Fs, Env>,
+    family: RequiredFact,
+) -> Option<WorkspacePolicyProvider<Fs>>
+{
+    return match family
+    {
+        RequiredFact::NamingPolicy => Some(env.providers.naming_policy),
+        RequiredFact::LimitsPolicy => Some(env.providers.limits_policy),
+        RequiredFact::ArchitectureDeclaration => Some(env.providers.architecture),
+        RequiredFact::ScriptingPolicy => Some(env.providers.scripting_policy),
+        RequiredFact::GoalsPolicy => Some(env.providers.goals_policy),
+        RequiredFact::WordsPolicy => Some(env.providers.words_policy),
+        RequiredFact::TestMaterialPolicy => Some(env.providers.test_material_policy),
+        RequiredFact::RequirementTrace => Some(env.providers.requirement_trace),
+        RequiredFact::SyntaxItems
+        | RequiredFact::DependencyEdges
+        | RequiredFact::LintDiagnostics
+        | RequiredFact::DependencyPolicy
+        | RequiredFact::Reachability
+        | RequiredFact::ReviewFindings => None,
+    };
+}
+
+/// One repository-declared policy family, materialized through its composed provider when a
+/// selected rule declares it.
+///
+/// Eight families share this one body because, read through a port, they have nothing left
+/// to differ in: each reads one declaration from the repository root and answers at most one
+/// fact. What differs between them is which provider answers, which
+/// [`Policy_Provider_For`] states, and what a rule does when the fact is absent, which is the
+/// rule's own business -- `OD-CAPABILITY-004` makes absence a silent "no override" for seven
+/// of them, while the three dependency rules reading
+/// `nomos.cap.architecture.declaration` report a declaration they could not read rather than
+/// judge against a default that cannot exist. Neither difference is visible here, and neither
+/// ever was: this step's answer for an absent fact has always been the same.
 fn Materialize_Policy_Family<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     demanded: &[RequiredFact],
     family: RequiredFact,
 )
 {
-    match family
+    let Some(provider) = Policy_Provider_For(env, family)
+    else
     {
-        RequiredFact::NamingPolicy => Materialize_Naming_Policy_Section(env, demanded),
-        RequiredFact::LimitsPolicy => Materialize_Limits_Policy_Section(env, demanded),
-        RequiredFact::ArchitectureDeclaration => Materialize_Architecture_Section(env, demanded),
-        RequiredFact::ScriptingPolicy => Materialize_Scripting_Policy_Section(env, demanded),
-        RequiredFact::GoalsPolicy => Materialize_Goals_Policy_Section(env, demanded),
-        RequiredFact::WordsPolicy => Materialize_Words_Policy_Section(env, demanded),
-        RequiredFact::TestMaterialPolicy => Materialize_Test_Material_Policy_Section(env, demanded),
-        RequiredFact::RequirementTrace => Materialize_Requirement_Trace_Section(env, demanded),
-        RequiredFact::SyntaxItems
-        | RequiredFact::DependencyEdges
-        | RequiredFact::LintDiagnostics
-        | RequiredFact::DependencyPolicy
-        | RequiredFact::Reachability
-        | RequiredFact::ReviewFindings => {}
-    }
-}
+        return;
+    };
 
-/// The naming-policy section: [`Materialize_Naming_Policy`] when `selected` feeds on it --
-/// writes into `env.store` directly. `Materialize_Naming_Policy` returns how many facts
-/// landed; this section does not need that count, the same "written but not captured" shape
-/// [`Materialize_Reachability_Section`] already has for the count its own call returns.
-///
-/// Gated on the five naming-convention rules this crate composes today that read `nomos.cap.
-/// naming.policy` through their own `Resolve_Case`; `PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_
-/// SNAKE_CASE` reads the identical capability but is not itself composed into
-/// `crate::run_context::judging::Findings_For_Selected_Rules` yet, so gating on it here would
-/// materialize a fact for a rule that never runs.
-fn Materialize_Naming_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
-    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    demanded: &[RequiredFact],
-)
-{
-    if demanded.contains(&RequiredFact::NamingPolicy)
+    if !demanded.contains(&family)
     {
-        Materialize_Naming_Policy(env.root, env.context, env.store, env.filesystem);
+        return;
     }
-}
 
-/// The limits-policy section: [`Materialize_Limits_Policy`] when `selected` feeds on it.
-///
-/// Gated on the six composed rules that read `nomos.cap.limits.policy` through their own
-/// `Resolve_Limit` -- the four file-size triggers and the two parameter-count caps. Each of
-/// them already has a hardcoded fallback equal to what this repository declares, so
-/// materializing the fact changes no finding here; it changes which repositories the
-/// thresholds belong to.
-fn Materialize_Limits_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
-    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    demanded: &[RequiredFact],
-)
-{
-    if demanded.contains(&RequiredFact::LimitsPolicy)
-    {
-        Materialize_Limits_Policy(env.root, env.context, env.store, env.filesystem);
-    }
-}
-
-/// The architecture section: [`Materialize_Architecture`] when a selected rule declares it.
-///
-/// Unlike every policy section beside it, an absent fact here is not a fallback to a built-in
-/// default. The three dependency rules have no default an architecture could have, so skipping
-/// this makes them report a declaration they could not read rather than judge against an
-/// assumption -- which is the honest answer and the one `OD-RULES-003` asks for.
-fn Materialize_Architecture_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
-    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    demanded: &[RequiredFact],
-)
-{
-    if demanded.contains(&RequiredFact::ArchitectureDeclaration)
-    {
-        Materialize_Architecture(env.root, env.context, env.store, env.filesystem);
-    }
-}
-
-/// The scripting-policy section: [`Materialize_Scripting_Policy`] when `selected` feeds on
-/// it.
-///
-/// One composed rule reads this capability, and unlike every other policy section here its
-/// absence is not a fallback: `Check_Declared_Tooling_Language_For_Scripts` reports nothing
-/// at all without the fact, so before this call existed the rule ran in every check and could
-/// never fire.
-fn Materialize_Scripting_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
-    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    demanded: &[RequiredFact],
-)
-{
-    if demanded.contains(&RequiredFact::ScriptingPolicy)
-    {
-        Materialize_Scripting_Policy(env.root, env.context, env.store, env.filesystem);
-    }
-}
-
-/// The goals-policy section: [`Materialize_Goals_Policy`] when its one rule is selected.
-///
-/// The narrowest gate of the four policy sections, because exactly one rule reads this
-/// capability -- and the first one whose rule takes no sources at all, so there is nothing
-/// here to gate on but the rule's own selection.
-fn Materialize_Goals_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
-    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    demanded: &[RequiredFact],
-)
-{
-    if demanded.contains(&RequiredFact::GoalsPolicy)
-    {
-        Materialize_Goals_Policy(env.root, env.context, env.store, env.filesystem);
-    }
-}
-
-/// The words-policy section: [`Materialize_Words_Policy`] when its one rule is selected.
-///
-/// One rule reads this capability, so the gate is that rule's own selection -- the same
-/// shape [`Materialize_Goals_Policy_Section`] has one function above.
-fn Materialize_Words_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
-    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    demanded: &[RequiredFact],
-)
-{
-    if demanded.contains(&RequiredFact::WordsPolicy)
-    {
-        Materialize_Words_Policy(env.root, env.context, env.store, env.filesystem);
-    }
-}
-
-/// The test-material-policy section: [`Materialize_Test_Material_Policy`] when any selected
-/// rule declares it.
-///
-/// Ten rules read this capability -- the three security checks and the seven rules that read
-/// the shared test-or-example exemption -- so the gate is any one of them being selected,
-/// which is wider than the one-rule gates above. Absence is a fallback to each rule's own
-/// toolchain-fixed clauses, not a Finding: the same "no override" read every other family
-/// carries.
-fn Materialize_Test_Material_Policy_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
-    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    demanded: &[RequiredFact],
-)
-{
-    if demanded.contains(&RequiredFact::TestMaterialPolicy)
-    {
-        Materialize_Test_Material_Policy(env.root, env.context, env.store, env.filesystem);
-    }
-}
-
-/// The requirement-trace section: [`Materialize_Requirement_Trace`] when its one rule is
-/// selected.
-///
-/// One rule reads this capability, so the gate is that rule's own selection -- the same
-/// shape [`Materialize_Goals_Policy_Section`] and [`Materialize_Words_Policy_Section`] each
-/// have one function above.
-fn Materialize_Requirement_Trace_Section<
-    Launcher: ProgramLauncher,
-    Fs: FileSystem,
-    Env: Environment,
->(
-    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
-    demanded: &[RequiredFact],
-)
-{
-    if demanded.contains(&RequiredFact::RequirementTrace)
-    {
-        Materialize_Requirement_Trace(env.root, env.context, env.store, env.filesystem);
-    }
+    Materialize_Policy_Fact(
+        PolicyReading { root: env.root, context: env.context, store: env.store, filesystem: env.filesystem },
+        provider,
+    );
 }
 
 /// The review-finding section: [`Materialize_Review`] when `selected` feeds on it, an

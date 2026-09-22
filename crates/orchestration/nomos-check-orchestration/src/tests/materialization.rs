@@ -70,9 +70,11 @@ fn Assert_Real_Workspace_Sources(sources: &[SourceFile])
 #[test]
 fn Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members()
 {
+    let root = Repository_Root();
+    let context = Ingested_Placeholder();
     let sources = Materialized_Over_This_Repository(|store| {
         let crate::facts::DependencyMaterialization { sources, findings } =
-            crate::facts::Materialize_Dependencies(&Repository_Root(), &Ingested_Placeholder(), store, crate::facts::Subprocess { launcher: &StdProgramLauncher, environment: &StdEnvironment });
+            crate::facts::Materialize_Dependencies(Repository_Reading(&root, &context, store), Real_Providers().dependencies);
         return (sources, findings);
     });
 
@@ -85,9 +87,11 @@ fn Test_Materialize_Dependencies_Should_Return_Real_Workspace_Members()
 #[test]
 fn Test_Materialize_Lint_Should_Return_Real_Workspace_Members()
 {
+    let root = Repository_Root();
+    let context = Ingested_Placeholder();
     let sources = Materialized_Over_This_Repository(|store| {
         let crate::facts::LintMaterialization { sources, findings } =
-            crate::facts::Materialize_Lint(&Repository_Root(), &Ingested_Placeholder(), store, crate::facts::Subprocess { launcher: &StdProgramLauncher, environment: &StdEnvironment });
+            crate::facts::Materialize_Lint(Repository_Reading(&root, &context, store), Real_Providers().lint);
         return (sources, findings);
     });
 
@@ -104,14 +108,37 @@ fn Test_Materialize_Lint_Should_Return_Real_Workspace_Members()
 #[test]
 fn Test_Materialize_Policy_Should_Return_The_Real_Workspace_Fact()
 {
+    let root = Repository_Root();
+    let context = Ingested_Placeholder();
     let sources = Materialized_Over_This_Repository(|store| {
         let crate::facts::PolicyMaterialization { sources, findings } =
-            crate::facts::Materialize_Policy(&Repository_Root(), &Ingested_Placeholder(), store, crate::facts::Subprocess { launcher: &StdProgramLauncher, environment: &StdEnvironment });
+            crate::facts::Materialize_Policy(Repository_Reading(&root, &context, store), Real_Providers().dependency_policy);
         return (sources, findings);
     });
 
     assert_eq!(sources.len(), 1, "IncrementalGranularity::WholeWorkspace materializes exactly one fact: {sources:?}");
     assert_eq!(sources.first().expect("asserted len 1 above").path, "workspace");
+}
+
+/// The caller's root, context and store, with the real subprocess ports -- the reading all
+/// three real-provider proofs above hand their materialization, so each states the provider
+/// it is proving rather than five loose arguments.
+fn Repository_Reading<'a>(
+    root: &'a std::path::Path, context: &'a nomos_analysis::Context, store: &'a mut nomos_analysis::MemoryFactStore,
+) -> crate::facts::WorkspaceReading<'a, StdProgramLauncher, StdEnvironment>
+{
+    return crate::facts::WorkspaceReading {
+        root,
+        context,
+        store,
+        subprocess: crate::facts::Subprocess { launcher: &StdProgramLauncher, environment: &StdEnvironment },
+    };
+}
+
+/// The composed provider table at the real platform's own port types.
+fn Real_Providers() -> crate::composed_providers::ComposedProviders<StdProgramLauncher, nomos_platform_std::StdFileSystem, StdEnvironment>
+{
+    return crate::composition::Composed_Providers();
 }
 
 /// A launcher that counts how many times it was asked to run something, and refuses every

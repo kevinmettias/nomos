@@ -12,15 +12,17 @@
 //! the run table a caller selects through, `materialization` covers the subprocess-backed
 //! capabilities over this repository's own root, `reuse` covers the workspace and store
 //! carried across calls, `overrides` covers the repository-declared policies a real
-//! `standards.json` reaches, and `currency` covers what each family's own materializer does
-//! when its input has not moved since the store last saw it. The fixtures every child shares
-//! live here.
+//! `standards.json` reaches, `currency` covers what each family's own materializer does
+//! when its input has not moved since the store last saw it, and `provider_naming` covers
+//! the one property none of the others can see: which files in this crate are allowed to
+//! name an analysis provider crate at all. The fixtures every child shares live here.
 
 mod composition;
 mod currency;
 mod fact_trail;
 mod materialization;
 mod overrides;
+mod provider_naming;
 mod reuse;
 
 use nomos_model::Subject_Of_Path;

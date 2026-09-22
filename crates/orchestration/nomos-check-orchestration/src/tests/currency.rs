@@ -55,11 +55,12 @@ use nomos_platform::{ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
 use std::path::{Path, PathBuf};
 
-use crate::facts::{Materialize_Architecture, Materialize_Dependencies, Materialize_Goals_Policy};
-use crate::facts::{Materialize_Limits_Policy, Materialize_Lint, Materialize_Naming_Policy};
-use crate::facts::{Materialize_Policy, Materialize_Reachability, Materialize_Requirement_Trace};
-use crate::facts::{Materialize_Scripting_Policy, Materialize_Test_Material_Policy};
-use crate::facts::{Materialize_Words_Policy, Subprocess};
+use crate::composed_providers::{ComposedProviders, WorkspacePolicyProvider};
+use crate::composition::Composed_Providers;
+use crate::facts::{
+    Materialize_Dependencies, Materialize_Lint, Materialize_Policy, Materialize_Policy_Fact, Materialize_Reachability, PolicyReading,
+    Subprocess, WorkspaceReading,
+};
 
 use super::{Repository_Root, Scratch_Directory, Source_File, SourceText, Test_Variant};
 
@@ -127,7 +128,9 @@ fn Assert_Currency_Proven(counts: &FilingCounts, family: &str, expected_cold: u3
 struct PolicyFamilyCase
 {
     family: &'static str,
-    materialize: fn(&Path, &Context, &mut MemoryFactStore, &StdFileSystem) -> usize,
+    /// The composed provider this family's fact comes from -- read off the table rather
+    /// than named here, so a row cannot name a provider the run would not use.
+    provider: WorkspacePolicyProvider<StdFileSystem>,
     /// The file under `root` this family's own provider reads.
     file: &'static str,
     declared: &'static str,
@@ -143,22 +146,22 @@ struct PolicyFamilyCase
 fn Policy_Family_Cases() -> Vec<PolicyFamilyCase>
 {
     return vec![
-        PolicyFamilyCase { family: "naming.policy", materialize: Materialize_Naming_Policy, file: STANDARDS_JSON,
+        PolicyFamilyCase { family: "naming.policy", provider: Fixture_Providers().naming_policy, file: STANDARDS_JSON,
             declared: r#"{"naming":{"function":"lower-snake"}}"#, redeclared: r#"{"naming":{"function":"upper-snake"}}"# },
-        PolicyFamilyCase { family: "limits.policy", materialize: Materialize_Limits_Policy, file: STANDARDS_JSON,
+        PolicyFamilyCase { family: "limits.policy", provider: Fixture_Providers().limits_policy, file: STANDARDS_JSON,
             declared: r#"{"limits":{"file-size-hard-lines":3}}"#, redeclared: r#"{"limits":{"file-size-hard-lines":4}}"# },
-        PolicyFamilyCase { family: "scripting.policy", materialize: Materialize_Scripting_Policy, file: STANDARDS_JSON,
+        PolicyFamilyCase { family: "scripting.policy", provider: Fixture_Providers().scripting_policy, file: STANDARDS_JSON,
             declared: r#"{"scripting":{"tooling_language":"rust","forbidden_extensions":[".sh"]}}"#,
             redeclared: r#"{"scripting":{"tooling_language":"rust","forbidden_extensions":[".bat"]}}"# },
-        PolicyFamilyCase { family: "goals.policy", materialize: Materialize_Goals_Policy, file: STANDARDS_JSON,
+        PolicyFamilyCase { family: "goals.policy", provider: Fixture_Providers().goals_policy, file: STANDARDS_JSON,
             declared: r#"{"goals":["render"]}"#, redeclared: r#"{"goals":["parse"]}"# },
-        PolicyFamilyCase { family: "words.policy", materialize: Materialize_Words_Policy, file: STANDARDS_JSON,
+        PolicyFamilyCase { family: "words.policy", provider: Fixture_Providers().words_policy, file: STANDARDS_JSON,
             declared: r#"{"words":{"approved_abbreviations":["ctx"]}}"#, redeclared: r#"{"words":{"approved_abbreviations":["cfg"]}}"# },
-        PolicyFamilyCase { family: "architecture.declaration", materialize: Materialize_Architecture, file: "nomos-architecture.json",
+        PolicyFamilyCase { family: "architecture.declaration", provider: Fixture_Providers().architecture, file: "nomos-architecture.json",
             declared: FIXTURE_ARCHITECTURE, redeclared: REDECLARED_FIXTURE_ARCHITECTURE },
-        PolicyFamilyCase { family: "test.material.policy", materialize: Materialize_Test_Material_Policy, file: "nomos-test-material.json",
+        PolicyFamilyCase { family: "test.material.policy", provider: Fixture_Providers().test_material_policy, file: "nomos-test-material.json",
             declared: r#"{"fixture_locations":["fixtures/"]}"#, redeclared: r#"{"fixture_locations":["corpora/"]}"# },
-        PolicyFamilyCase { family: "requirement.trace", materialize: Materialize_Requirement_Trace, file: FIXTURE_ASSESSMENT,
+        PolicyFamilyCase { family: "requirement.trace", provider: Fixture_Providers().requirement_trace, file: FIXTURE_ASSESSMENT,
             declared: "verdict: Met\nrecord: OD-FIXTURE-001\nsite: src/lib.rs#Ok\n",
             redeclared: "verdict: Met\nrecord: OD-FIXTURE-001\nsite: src/absent.rs#Gone\n" },
     ];
@@ -199,12 +202,29 @@ fn Assert_Policy_Family_Proves_Currency(case: &PolicyFamilyCase)
     let mut store = MemoryFactStore::New();
     Write_Fixture_File(&root, case.file, case.declared);
 
-    let cold = Filed_By(&mut store, |store| { (case.materialize)(&root, &context, store, &StdFileSystem); });
-    let unmoved = Filed_By(&mut store, |store| { (case.materialize)(&root, &context, store, &StdFileSystem); });
+    let cold = Filed_By(&mut store, |store| { Materialized_Policy(&root, &context, store, case.provider); });
+    let unmoved = Filed_By(&mut store, |store| { Materialized_Policy(&root, &context, store, case.provider); });
     Write_Fixture_File(&root, case.file, case.redeclared);
-    let moved = Filed_By(&mut store, |store| { (case.materialize)(&root, &context, store, &StdFileSystem); });
+    let moved = Filed_By(&mut store, |store| { Materialized_Policy(&root, &context, store, case.provider); });
 
     Assert_Currency_Proven(&FilingCounts { cold, unmoved, moved }, case.family, ONE_FACT);
+}
+
+/// One repository-declared policy family's fact, materialized through the composed provider
+/// `provider` names.
+fn Materialized_Policy(root: &Path, context: &Context, store: &mut MemoryFactStore, provider: WorkspacePolicyProvider<StdFileSystem>)
+{
+    Materialize_Policy_Fact(PolicyReading { root, context, store, filesystem: &StdFileSystem }, provider);
+}
+
+/// The composed provider table, at the port types this file's fixtures supply.
+///
+/// A test is a composition root of its own and may name a concrete launcher and filesystem;
+/// what it may not do is reach past the table for a provider function, so every row and every
+/// call below reads one from here.
+fn Fixture_Providers() -> ComposedProviders<StdProgramLauncher, StdFileSystem, StdEnvironment>
+{
+    return Composed_Providers();
 }
 
 /// How many facts `store` gained while `materialize` ran -- the observable every proof here
@@ -232,9 +252,10 @@ fn Test_The_Reachability_Family_Should_Skip_An_Unchanged_Source_And_File_A_Chang
     let unmoved_source = [Source_File("a.rs", SourceText("pub fn One() -> u8\n{\n    return 1;\n}\n"))];
     let moved_source = [Source_File("a.rs", SourceText("pub fn One() -> u8\n{\n    return 2;\n}\n"))];
 
-    let cold = Filed_By(&mut store, |store| { Materialize_Reachability(&unmoved_source, &context, store); });
-    let unmoved = Filed_By(&mut store, |store| { Materialize_Reachability(&unmoved_source, &context, store); });
-    let moved = Filed_By(&mut store, |store| { Materialize_Reachability(&moved_source, &context, store); });
+    let reachability = Fixture_Providers().reachability;
+    let cold = Filed_By(&mut store, |store| { Materialize_Reachability(&unmoved_source, &context, store, reachability); });
+    let unmoved = Filed_By(&mut store, |store| { Materialize_Reachability(&unmoved_source, &context, store, reachability); });
+    let moved = Filed_By(&mut store, |store| { Materialize_Reachability(&moved_source, &context, store, reachability); });
 
     Assert_Currency_Proven(&FilingCounts { cold, unmoved, moved }, "controlflow.reachability", ONE_FACT);
 }
@@ -286,7 +307,8 @@ fn Test_The_Dependency_Edges_Family_Should_Skip_An_Unchanged_Manifest_And_File_A
 /// above the provider's own answer rather than a refusal's.
 fn Materialized_Edges(root: &Path, context: &Context, store: &mut MemoryFactStore)
 {
-    let materialized = Materialize_Dependencies(root, context, store, Subprocess { launcher: &StdProgramLauncher, environment: &StdEnvironment });
+    let reading = WorkspaceReading { root, context, store, subprocess: Subprocess { launcher: &StdProgramLauncher, environment: &StdEnvironment } };
+    let materialized = Materialize_Dependencies(reading, Fixture_Providers().dependencies);
 
     assert!(materialized.findings.is_empty(), "a real two-member workspace must resolve: {:?}", materialized.findings);
 }
@@ -374,7 +396,9 @@ fn Test_The_Lint_Family_Should_Skip_An_Unchanged_Diagnostic_Stream_And_File_A_Ch
 fn Materialized_Lint(root: &Path, context: &Context, store: &mut MemoryFactStore, stdout: &str)
 {
     let launcher = CannedLauncher { stdout: stdout.to_owned(), stderr: String::new() };
-    let materialized = Materialize_Lint(root, context, store, Subprocess { launcher: &launcher, environment: &StdEnvironment });
+    let providers: ComposedProviders<CannedLauncher, StdFileSystem, StdEnvironment> = Composed_Providers();
+    let reading = WorkspaceReading { root, context, store, subprocess: Subprocess { launcher: &launcher, environment: &StdEnvironment } };
+    let materialized = Materialize_Lint(reading, providers.lint);
 
     assert!(materialized.findings.is_empty(), "a readable clippy stream must not report the provider unavailable: {:?}", materialized.findings);
 }
@@ -417,7 +441,9 @@ fn Test_The_Dependency_Policy_Family_Should_Skip_An_Unchanged_Verdict_Stream_And
 fn Materialized_Dependency_Policy(root: &Path, context: &Context, store: &mut MemoryFactStore, stderr: &str)
 {
     let launcher = CannedLauncher { stdout: String::new(), stderr: stderr.to_owned() };
-    let materialized = Materialize_Policy(root, context, store, Subprocess { launcher: &launcher, environment: &StdEnvironment });
+    let providers: ComposedProviders<CannedLauncher, StdFileSystem, StdEnvironment> = Composed_Providers();
+    let reading = WorkspaceReading { root, context, store, subprocess: Subprocess { launcher: &launcher, environment: &StdEnvironment } };
+    let materialized = Materialize_Policy(reading, providers.dependency_policy);
 
     assert!(materialized.findings.is_empty(), "a readable deny stream must not report the provider unavailable: {:?}", materialized.findings);
 }

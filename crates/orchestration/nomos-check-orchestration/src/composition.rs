@@ -8,9 +8,12 @@
 //! [`crate::Run`] as an argument, the same way `nomos_work_orchestration::Run` takes
 //! `published` as a value rather than deriving it.
 
-use nomos_cap_syntax::Language;
 use nomos_capability::{Registry, RegistryError};
-use nomos_contracts::{CapabilityId, ConfigurationId, Guarantee, ProviderId};
+use nomos_contracts::{CapabilityId, ConfigurationId, Guarantee};
+
+pub(crate) mod provider_table;
+
+pub(crate) use provider_table::Composed_Providers;
 
 /// The capability this run declares and the providers it admits.
 ///
@@ -294,66 +297,6 @@ fn Declare_Requirement_Trace_Capability(registry: &mut Registry) -> Result<(), R
     return Ok(());
 }
 
-/// Which registered `nomos.cap.syntax.items` provider `path` belongs to, if either does --
-/// `OD-CAPABILITY-009`'s corrected fix, and the one function both halves of the pipeline
-/// consult so they cannot independently drift on the answer.
-///
-/// This crate is the caller `OD-CAPABILITY-009` names: the one place that may know
-/// `nomos_lang_rust` and `nomos_lang_go` by name to answer an applicability question no
-/// [`Registry::Resolve`] call could, because by the time `Resolve` is reached the subject is
-/// already the opaque digest [`nomos_contracts::SubjectId`] carries. `crate::run_context`'s own
-/// enrichment step calls this to populate `nomos_rules::SourceFile::preferred_syntax_provider`
-/// before any rule ever sees a source, and
-/// [`crate::facts::dependency_materialization::Materialize_Syntax`]'s write side calls it again over the
-/// identical path to decide which provider's own `Materialize_Syntax_Fact` to run. Both call sites
-/// reach this one function rather than each recomputing `Recognition::Of_Path` for
-/// themselves, so read and write agree on a subject's provider identity by construction.
-#[must_use]
-pub(crate) fn Recognized_Syntax_Provider(path: &str) -> Option<ProviderId>
-{
-    if nomos_lang_rust::Recognition::Of_Path(path) == nomos_lang_rust::Recognition::Recognized
-    {
-        return Some(ProviderId::New(nomos_lang_rust::PROVIDER));
-    }
-
-    if nomos_lang_go::Recognition::Of_Path(path) == nomos_lang_go::Recognition::Recognized
-    {
-        return Some(ProviderId::New(nomos_lang_go::PROVIDER));
-    }
-
-    return None;
-}
-
-/// Which language `path` is written in, or `None` if no registered provider recognizes it.
-///
-/// Sits beside [`Recognized_Syntax_Provider`] and asks the identical question of the
-/// identical crates, because a path's language and the provider that reads it are decided
-/// by one recognition and must not be decided by two. `OD-RULES-014` moved this question
-/// out of eleven private extension tests in `nomos-rules`; splitting it back across two
-/// functions here would restore the same defect one layer up.
-///
-/// It is deliberately not derived from [`Recognized_Syntax_Provider`]'s answer. That
-/// mapping happens to be lossless today, but a provider identity names reading technology
-/// -- `nomos.lang.rust.syn` and `nomos.lang.rust.scan` are one language -- so deriving a
-/// language from it would encode a many-to-one collapse that a third Rust provider would
-/// silently have to be added to. Each language crate declares its own `LANGUAGE`, and this
-/// reads it.
-#[must_use]
-pub(crate) fn Recognized_Language(path: &str) -> Option<Language>
-{
-    if nomos_lang_rust::Recognition::Of_Path(path) == nomos_lang_rust::Recognition::Recognized
-    {
-        return Some(Language::New(nomos_lang_rust::LANGUAGE));
-    }
-
-    if nomos_lang_go::Recognition::Of_Path(path) == nomos_lang_go::Recognition::Recognized
-    {
-        return Some(Language::New(nomos_lang_go::LANGUAGE));
-    }
-
-    return None;
-}
-
 /// The identity of this run's effective policy.
 ///
 /// # Why the registry is the configuration
@@ -450,52 +393,6 @@ mod tests
             DECLARED_CAPABILITY_COUNT,
             "Registered() wires one Declare call per capability; a changed count here means the two drifted"
         );
-    }
-
-    /// [`Recognized_Syntax_Provider`]'s whole contract: a `.rs` path resolves to
-    /// `nomos_lang_rust`'s identity, a `.go` path to `nomos_lang_go`'s, and a path neither
-    /// recognizes resolves to neither.
-    #[test]
-    fn Test_Recognized_Syntax_Provider_Should_Resolve_By_Extension()
-    {
-        assert_eq!(Recognized_Syntax_Provider("a.rs"), Some(ProviderId::New(nomos_lang_rust::PROVIDER)));
-        assert_eq!(Recognized_Syntax_Provider("main.go"), Some(ProviderId::New(nomos_lang_go::PROVIDER)));
-        assert_eq!(Recognized_Syntax_Provider("readme.md"), None);
-    }
-
-    /// [`Recognized_Language`]'s whole contract, and deliberately a separate assertion from
-    /// the provider one above: the two answers come from the same recognition but are not
-    /// the same fact.
-    #[test]
-    fn Test_Recognized_Language_Should_Resolve_By_Extension()
-    {
-        assert_eq!(Recognized_Language("a.rs"), Some(Language::New(nomos_lang_rust::LANGUAGE)));
-        assert_eq!(Recognized_Language("main.go"), Some(Language::New(nomos_lang_go::LANGUAGE)));
-        assert_eq!(Recognized_Language("readme.md"), None);
-    }
-
-    /// The guard `OD-RULES-014` requires, and the one place in this workspace that can hold
-    /// it. A language-restricted rule states its own literal because `nomos-rules` may not
-    /// depend on a language crate, so nothing in that crate can check the literal against
-    /// what the provider actually declares. If the two ever drift the rule simply stops
-    /// firing -- no findings, no reported absence -- which is exactly the silent failure the
-    /// record set out to remove. This crate depends on both sides and fails loudly instead.
-    #[test]
-    fn Test_The_Language_Names_Rules_State_Should_Agree_With_What_The_Language_Crates_Declare()
-    {
-        assert_eq!(nomos_rules::RUST_LANGUAGE, nomos_lang_rust::LANGUAGE);
-        assert_eq!(nomos_rules::RUST_LANGUAGE, nomos_lang_rust_scan::LANGUAGE);
-        assert_eq!(nomos_rules::GO_LANGUAGE, nomos_lang_go::LANGUAGE);
-    }
-
-    /// Both Rust providers are one language, which is the measurement that decided
-    /// `OD-RULES-014`: a provider identity cannot stand in for a language because this
-    /// equality holds while the identities differ.
-    #[test]
-    fn Test_The_Two_Rust_Providers_Should_Declare_One_Language_Under_Two_Identities()
-    {
-        assert_eq!(nomos_lang_rust::LANGUAGE, nomos_lang_rust_scan::LANGUAGE);
-        assert_ne!(nomos_lang_rust::PROVIDER, nomos_lang_rust_scan::PROVIDER);
     }
 
     /// [`Resolved_Configuration`] is documented as a digest of a fully resolved effective

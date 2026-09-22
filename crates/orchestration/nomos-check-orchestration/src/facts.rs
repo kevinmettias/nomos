@@ -12,15 +12,12 @@ mod currency;
 mod dependency_materialization;
 mod policy_materialization;
 
-pub use dependency_materialization::{Subprocess,
+pub use dependency_materialization::{
     DependencyMaterialization, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
     Materialize_Policy, Materialize_Reachability, Materialize_Review, Materialize_Syntax,
-    PolicyMaterialization, ReviewMaterialization,
+    PolicyMaterialization, ReviewMaterialization, Subprocess, WorkspaceReading,
 };
-pub use policy_materialization::{
-    Materialize_Architecture, Materialize_Goals_Policy, Materialize_Limits_Policy, Materialize_Naming_Policy,
-    Materialize_Requirement_Trace, Materialize_Scripting_Policy, Materialize_Test_Material_Policy, Materialize_Words_Policy,
-};
+pub use policy_materialization::{Materialize_Policy_Fact, PolicyReading};
 
 use nomos_analysis::Context;
 use nomos_capability::Registry;

@@ -1,14 +1,15 @@
-//! Materializing `lint.diagnostics` facts through `cargo clippy`, and what that produced.
+//! Materializing `lint.diagnostics` facts through whichever provider the composition
+//! supplies for them, and what that produced.
 
 use nomos_analysis::{Context, MemoryFactStore};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 use nomos_platform::{Environment, ProgramLauncher};
 use nomos_rules::SourceFile;
 
-use std::path::Path;
-
-use super::subprocess::Subprocess;
+use crate::composed_providers::{SubjectFact, SubjectFactsProvider};
 use crate::facts::currency::Materialized_Or_Already_Current;
+
+use super::WorkspaceReading;
 
 /// What materializing `lint.diagnostics` facts produced: the sources a rule can judge them
 /// under, and any finding the materialization itself already raised -- the identical shape
@@ -19,43 +20,30 @@ pub struct LintMaterialization
     pub findings: Vec<Finding>,
 }
 
-/// Runs `cargo clippy --workspace --message-format=json` over `root` through `launcher`,
-/// materializes one `nomos.cap.lint.diagnostics` fact per workspace member, and returns
-/// the subjects a rule can judge them under -- the identical shape
-/// [`super::Materialize_Dependencies`] already has for the identical reason: this
-/// workspace's second provider with I/O of its own.
+/// Runs `provider` over `reading.root`, materializes one `nomos.cap.lint.diagnostics` fact
+/// per workspace member, and returns the subjects a rule can judge them under -- the
+/// identical shape [`super::Materialize_Dependencies`] already has for the identical reason:
+/// this is the second capability whose provider answers many facts from one launch.
 ///
 /// A failure here does not abort the run -- the syntax rules still judge what they always
 /// did -- but it must not silently read as "zero lint findings" either, the same
 /// `NoFacts`-shaped vacuity [`super::Materialize_Syntax`]'s own case exists to catch one
 /// layer over. So a failed materialization returns no lint sources and one synthetic
-/// finding reporting why, rather than nothing at all.
+/// finding reporting which capability could not be answered, rather than nothing at all.
 pub fn Materialize_Lint<Launcher: ProgramLauncher, Env: Environment>(
-    root: &Path,
-    context: &Context,
-    store: &mut MemoryFactStore,
-    subprocess: Subprocess<'_, Launcher, Env>,
+    reading: WorkspaceReading<'_, Launcher, Env>,
+    provider: SubjectFactsProvider<Launcher, Env>,
 ) -> LintMaterialization
 {
+    let context = reading.context;
     let materialized = super::Materialize_Through(
-        || nomos_lang_rust_clippy::Materialize_Workspace(root, Clippy_Production(context), subprocess.launcher, subprocess.environment),
-        store,
+        || return provider(reading.root, context, reading.subprocess.launcher, reading.subprocess.environment),
+        reading.store,
         |facts, store| return Materialized_Lint_Sources(facts, context, store),
         Lint_Capability_Unavailable,
     );
 
     return LintMaterialization { sources: materialized.sources, findings: materialized.findings };
-}
-
-/// The reading context as `nomos_lang_rust_clippy`'s provider takes it.
-fn Clippy_Production(context: &Context) -> nomos_lang_rust_clippy::FactContext
-{
-    return nomos_lang_rust_clippy::FactContext {
-        snapshot: context.snapshot,
-        variant: context.variant,
-        configuration: context.configuration,
-        generation: context.generation,
-    };
 }
 
 /// Every `lint.diagnostics` fact `store` now holds current, as the source list
@@ -65,14 +53,10 @@ fn Clippy_Production(context: &Context) -> nomos_lang_rust_clippy::FactContext
 /// Per member, the identical shape
 /// [`super::dependencies::Materialized_Dependency_Sources`] has for the identical reason: a
 /// member whose diagnostics did not move is not re-filed, while one whose did is.
-/// [`crate::facts::currency`] is the check, and the `cargo clippy` launch it reads from has
+/// [`crate::facts::currency`] is the check, and the provider's own launch it reads from has
 /// already happened by the time it runs -- which is why it decides only whether the write is
 /// redundant and never whether the family is produced.
-fn Materialized_Lint_Sources(
-    facts: Vec<nomos_lang_rust_clippy::DiagnosticsFact>,
-    context: &Context,
-    store: &mut MemoryFactStore,
-) -> Vec<SourceFile>
+fn Materialized_Lint_Sources(facts: Vec<SubjectFact>, context: &Context, store: &mut MemoryFactStore) -> Vec<SourceFile>
 {
     let mut sources = Vec::new();
     for member in facts
@@ -87,12 +71,11 @@ fn Materialized_Lint_Sources(
     return sources;
 }
 
-/// The one finding a failed [`nomos_lang_rust_clippy::Materialize_Workspace`] call
-/// produces -- the identical shape
-/// [`super::dependencies::Dependency_Capability_Unavailable`] already has for the
-/// identical reason: attributed to the whole tree, since a `cargo clippy` failure is
-/// not about any subject this run walked.
-fn Lint_Capability_Unavailable(error: &nomos_lang_rust_clippy::ClippyError) -> Finding
+/// The one finding a refused lint-diagnostics materialization produces -- the identical
+/// shape [`super::dependencies::Dependency_Capability_Unavailable`] already has for the
+/// identical reason: attributed to the whole tree, since the provider's failure is not about
+/// any subject this run walked.
+fn Lint_Capability_Unavailable(error: &str) -> Finding
 {
     return Finding {
         address: None,

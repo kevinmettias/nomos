@@ -22,7 +22,8 @@ use nomos_rules::{RequiredFact, SourceFile, DESCRIPTORS};
 use nomos_workspace::{BuildVariant, Workspace};
 use std::path::Path;
 
-use crate::composition::{Recognized_Language, Recognized_Syntax_Provider, Registered};
+use crate::composed_providers::{ComposedProviders, Recognized_Language, Recognized_Syntax_Provider, SyntaxProvider};
+use crate::composition::{Composed_Providers, Registered};
 use crate::facts::{Ingested_Workspace, Materialize_Syntax};
 use crate::CheckOutcome;
 use crate::SupportingFactTrail;
@@ -146,16 +147,20 @@ pub fn Run_Reassessing<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environme
 {
     let RunContext { variant, root, launcher, filesystem, environment, workspace, store } = context;
 
-    let recognized = Recognized_Sources(sources);
+    let providers = Composed_Providers::<Launcher, Fs, Env>();
+    let recognized = Recognized_Sources(sources, &providers.syntax);
     let sources: &[SourceFile] = &recognized;
 
-    let composed = match Composed_Run(sources, variant, workspace, store)
+    let composition = RunComposition { variant, workspace, store: &mut *store, syntax: &providers.syntax };
+    let composed = match Composed_Run(sources, composition)
     {
         Ok(composed) => composed,
         Err(outcome) => return outcome,
     };
 
-    let run = RunEnvironment { root, launcher, filesystem, environment, registry: &composed.registry, context: composed.context, selected };
+    let run = RunEnvironment {
+        root, launcher, filesystem, environment, providers: &providers, registry: &composed.registry, context: composed.context, selected,
+    };
     let mut state = RunState { store, reassessment, changed: composed.changed };
     let findings = Judged_Over(sources, run, &mut state);
 
@@ -168,29 +173,35 @@ pub fn Run_Reassessing<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environme
 /// five. [`ComposedRun::changed`] already carries the one family those three steps account
 /// for (`RequiredFact::SyntaxItems`); every other family
 /// [`capabilities::Materialize_Capabilities`] writes is appended after this returns.
-fn Composed_Run(
-    sources: &[SourceFile],
-    variant: BuildVariant,
-    workspace: &mut Option<Workspace>,
-    store: &mut MemoryFactStore,
-) -> Result<ComposedRun, CheckOutcome>
+fn Composed_Run(sources: &[SourceFile], composition: RunComposition<'_>) -> Result<ComposedRun, CheckOutcome>
 {
-    let (registry, context) = Composed_Registry_And_Context(sources, variant, workspace)?;
+    let (registry, context) = Composed_Registry_And_Context(sources, composition.variant, composition.workspace)?;
 
-    let materializations_before_syntax = store.Materializations();
-    let Some(facts) = Materialized_Syntax_Facts(sources, &context, store)
+    let materializations_before_syntax = composition.store.Materializations();
+    let Some(facts) = Materialized_Syntax_Facts(sources, &context, composition.store, composition.syntax)
     else
     {
         return Err(CheckOutcome::NoFacts { files: sources.len() });
     };
 
     let mut changed = Vec::new();
-    if store.Materializations() > materializations_before_syntax
+    if composition.store.Materializations() > materializations_before_syntax
     {
         changed.push(RequiredFact::SyntaxItems);
     }
 
     return Ok(ComposedRun { registry, context, facts, changed });
+}
+
+/// The build variant, the workspace and store a run reads and writes, and the composed
+/// syntax offers its first materialization step goes through -- grouped into one value so
+/// [`Composed_Run`] stays within this crate's own parameter-count limit.
+struct RunComposition<'a>
+{
+    variant: BuildVariant,
+    workspace: &'a mut Option<Workspace>,
+    store: &'a mut MemoryFactStore,
+    syntax: &'a [SyntaxProvider],
 }
 
 /// What [`Composed_Run`] assembled: the composed registry, the ingested [`Context`], the
@@ -222,9 +233,9 @@ fn Composed_Registry_And_Context(
 
 /// The syntax facts materialized into `store`, or `None` when there were none to judge --
 /// [`Run`]'s own first early exit, given a name so its body reads as one decision per line.
-fn Materialized_Syntax_Facts(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore) -> Option<usize>
+fn Materialized_Syntax_Facts(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore, syntax: &[SyntaxProvider]) -> Option<usize>
 {
-    let facts = Materialize_Syntax(sources, context, store);
+    let facts = Materialize_Syntax(sources, context, store, syntax);
     if facts == 0
     {
         return None;
@@ -243,6 +254,10 @@ struct RunEnvironment<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Enviro
     launcher: &'a Launcher,
     filesystem: &'a Fs,
     environment: &'a Env,
+    /// Every analysis provider this run materializes through, composed once by
+    /// [`Run_Reassessing`] and read by every section below it. `OD-ROADMAP-005` decision item
+    /// 1: the service receives the providers rather than naming them.
+    providers: &'a ComposedProviders<Launcher, Fs, Env>,
     registry: &'a Registry,
     context: Context,
     selected: &'a [RuleId],
@@ -273,6 +288,7 @@ fn Judged_Over<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(sour
         launcher: environment.launcher,
         filesystem: environment.filesystem,
         environment: environment.environment,
+        providers: environment.providers,
     };
     let capabilities = capabilities::Materialize_Capabilities(sources, &mut materialization_environment, environment.selected, &mut state.changed);
 
@@ -316,6 +332,7 @@ struct MaterializationEnvironment<'a, Launcher: ProgramLauncher, Fs: FileSystem,
     launcher: &'a Launcher,
     filesystem: &'a Fs,
     environment: &'a Env,
+    providers: &'a ComposedProviders<Launcher, Fs, Env>,
 }
 
 /// The `store`, `registry` and `context` `judging::Judged_Findings` reads the
@@ -385,9 +402,9 @@ pub fn Composed_Rules() -> Vec<RuleId>
 }
 
 /// `sources`, each carrying its own resolved [`nomos_rules::SourceFile::preferred_syntax_provider`]
-/// -- `OD-CAPABILITY-009`'s corrected fix, computed once here because this composition root
-/// is the one place in the call chain allowed to know `nomos_lang_rust` and `nomos_lang_go`
-/// by name; `nomos_rules` itself never does. Every rule this crate composes sees only the
+/// -- `OD-CAPABILITY-009`'s corrected fix, computed once here against the composed syntax
+/// offers this run was given; `nomos_rules` never asks the question and this crate no longer
+/// names a provider to answer it. Every rule this crate composes sees only the
 /// enriched copy, so a subject's syntax provider identity is settled before any of them run,
 /// the same "carried rather than derived" reasoning [`SourceFile::subject`] already states
 /// for the field this one sits beside.
@@ -397,14 +414,14 @@ pub fn Composed_Rules() -> Vec<RuleId>
 /// split-composition guarantee against the store rather than against `Run`'s one call shape
 /// -- and a fixture built that way needs the identical enrichment `Run` gives every other
 /// caller, not a second, differently-behaved copy of it.
-pub(crate) fn Recognized_Sources(sources: &[SourceFile]) -> Vec<SourceFile>
+pub(crate) fn Recognized_Sources(sources: &[SourceFile], providers: &[SyntaxProvider]) -> Vec<SourceFile>
 {
     return sources
         .iter()
         .cloned()
         .map(|mut source| {
-            source.preferred_syntax_provider = Recognized_Syntax_Provider(&source.path);
-            source.language = Recognized_Language(&source.path);
+            source.preferred_syntax_provider = Recognized_Syntax_Provider(providers, &source.path).map(|provider| return provider.provider.clone());
+            source.language = Recognized_Language(providers, &source.path);
             return source;
         })
         .collect();

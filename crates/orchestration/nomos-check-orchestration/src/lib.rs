@@ -40,6 +40,7 @@
 #![forbid(unsafe_code)]
 
 mod check_command;
+mod composed_providers;
 mod declared_rules;
 mod composition;
 mod examined;

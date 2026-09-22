@@ -30,9 +30,23 @@ pub use review_materialization::{Materialize_Review, ReviewMaterialization};
 pub use subprocess::Subprocess;
 pub use syntax::{Materialize_Reachability, Materialize_Syntax};
 
-use nomos_analysis::MemoryFactStore;
+use nomos_analysis::{Context, MemoryFactStore};
 use nomos_contracts::Finding;
+use nomos_platform::{Environment, ProgramLauncher};
 use nomos_rules::SourceFile;
+use std::path::Path;
+
+/// The root a provider is run over, the context its facts are filed under, the store they
+/// are filed into and the two subprocess ports it runs through -- grouped into one value so
+/// each `Materialize_*` below names its provider as its own second parameter rather than as
+/// its fifth, the same reason [`Subprocess`] groups the two ports inside it.
+pub struct WorkspaceReading<'a, Launcher: ProgramLauncher, Env: Environment>
+{
+    pub root: &'a Path,
+    pub context: &'a Context,
+    pub store: &'a mut MemoryFactStore,
+    pub subprocess: Subprocess<'a, Launcher, Env>,
+}
 
 /// What materializing `dependency.edges` facts produced: the sources a rule can judge them
 /// under, and any finding the materialization itself already raised (a failed `cargo
@@ -64,23 +78,30 @@ struct Materialized
 /// produces, and the type the caller reads the answer as -- so those are the parameters, and
 /// the sequence lives here once.
 ///
-/// `sources_of` stays the caller's because the two shapes really are different: `cargo
-/// metadata` and `cargo clippy` answer one fact per workspace member, while `cargo deny`
-/// answers exactly one for the whole workspace. Both end as a [`SourceFile`] list because
-/// `run_context::Judged` calls every rule uniformly over one.
+/// `sources_of` stays the caller's because the two shapes really are different, and
+/// `OD-CAPABILITY-008` measured that the difference is principled rather than drift: a
+/// provider answering one fact per workspace member and one answering a single fact for the
+/// whole workspace are two capability granularities, which is why
+/// `crate::composed_providers` gives them two ports rather than one. Both end as a
+/// [`SourceFile`] list because `run_context::Judged` calls every rule uniformly over one.
+///
+/// The error is a rendered `String` rather than each provider's own error type, because
+/// rendering into one finding's summary is the only thing any of the three callers has ever
+/// done with it. `crate::composition::Composed_Providers` is where the rendering happens,
+/// beside the provider whose type it is.
 ///
 /// Private, and deliberately not `pub(super)`: this is the module's own seam between its
 /// children, not something a caller outside it should reach.
-fn Materialize_Through<Answer, ProviderError, Call, Sources, Unavailable>(
+fn Materialize_Through<Answer, Call, Sources, Unavailable>(
     call: Call,
     store: &mut MemoryFactStore,
     sources_of: Sources,
     unavailable: Unavailable,
 ) -> Materialized
 where
-    Call: FnOnce() -> Result<Answer, ProviderError>,
+    Call: FnOnce() -> Result<Answer, String>,
     Sources: FnOnce(Answer, &mut MemoryFactStore) -> Vec<SourceFile>,
-    Unavailable: FnOnce(&ProviderError) -> Finding,
+    Unavailable: FnOnce(&str) -> Finding,
 {
     let materialized = match call()
     {
@@ -101,9 +122,9 @@ mod tests
     use nomos_contracts::RuleId;
     use nomos_platform::Command;
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
+    use crate::composition::provider_table::Composed_Syntax_Providers;
     use nomos_platform_std::StdEnvironment;
     use nomos_workspace::BuildVariant;
-    use std::path::PathBuf;
 
     /// How many sources each test below feeds, all of them recognized: a fresh store must
     /// report a current fact for every one, and every one must still have one after a
@@ -123,7 +144,7 @@ mod tests
             let context = Fixture_Context(&sources);
             let mut store = MemoryFactStore::New();
 
-            let written = Materialize_Syntax(&sources, &context, &mut store);
+            let written = Materialize_Syntax(&sources, &context, &mut store, &Composed_Syntax_Providers());
 
             assert_eq!(written, expected_written, "{path}");
         }
@@ -192,7 +213,7 @@ mod tests
     ) -> SyntaxRunResult
     {
         let context = Reused_Fixture_Context(sources, workspace);
-        let current = Materialize_Syntax(sources, &context, store);
+        let current = Materialize_Syntax(sources, &context, store, &Composed_Syntax_Providers());
 
         return SyntaxRunResult { current, materializations: store.Materializations() };
     }
@@ -217,7 +238,7 @@ mod tests
         let context = Fixture_Context(&sources);
         let mut store = MemoryFactStore::New();
 
-        let written = Materialize_Reachability(&sources, &context, &mut store);
+        let written = Materialize_Reachability(&sources, &context, &mut store, Fixture_Providers().reachability);
 
         assert_eq!(written, 1, "a single well-formed Rust source must materialize exactly one reachability fact");
     }
@@ -250,7 +271,8 @@ mod tests
     {
         let RefusedLaunchFixture { context, mut store } = Refused_Launch_Fixture();
 
-        let materialized = Materialize_Dependencies(&PathBuf::from("."), &context, &mut store, Subprocess { launcher: &RefusingLauncher, environment: &StdEnvironment });
+        let providers = Fixture_Providers();
+        let materialized = Materialize_Dependencies(Refused_Reading(&context, &mut store), providers.dependencies);
 
         Assert_Refused_Launch_Reported(&materialized.sources, &materialized.findings, nomos_rules::DEPENDENCY_DIRECTION);
     }
@@ -263,7 +285,8 @@ mod tests
     {
         let RefusedLaunchFixture { context, mut store } = Refused_Launch_Fixture();
 
-        let materialized = Materialize_Lint(&PathBuf::from("."), &context, &mut store, Subprocess { launcher: &RefusingLauncher, environment: &StdEnvironment });
+        let providers = Fixture_Providers();
+        let materialized = Materialize_Lint(Refused_Reading(&context, &mut store), providers.lint);
 
         Assert_Refused_Launch_Reported(&materialized.sources, &materialized.findings, nomos_rules::LINT_DIAGNOSTICS);
     }
@@ -276,7 +299,8 @@ mod tests
     {
         let RefusedLaunchFixture { context, mut store } = Refused_Launch_Fixture();
 
-        let materialized = Materialize_Policy(&PathBuf::from("."), &context, &mut store, Subprocess { launcher: &RefusingLauncher, environment: &StdEnvironment });
+        let providers = Fixture_Providers();
+        let materialized = Materialize_Policy(Refused_Reading(&context, &mut store), providers.dependency_policy);
 
         Assert_Refused_Launch_Reported(&materialized.sources, &materialized.findings, nomos_rules::DEPENDENCY_POLICY);
     }
@@ -286,6 +310,34 @@ mod tests
     /// the three differ in which materialization they drive and which rule they expect --
     /// the setup and the assertions were pure, identical boilerplate, and a divergence
     /// between the three is still caught here, where each supplies its own expectation.
+    /// The composed provider table, at the port types these tests supply.
+    ///
+    /// A test is a composition root of its own, so it is entitled to name a concrete
+    /// launcher and filesystem the way `crate::composition` names a concrete provider --
+    /// what it must not do is reach past the table for a provider function, which is the
+    /// thing every assertion here now goes through.
+    fn Fixture_Providers() -> crate::composed_providers::ComposedProviders<RefusingLauncher, nomos_platform_std::StdFileSystem, StdEnvironment>
+    {
+        return crate::composition::Composed_Providers();
+    }
+
+    /// The reading the three refused-launch tests each hand their materialization: the
+    /// current directory as a root nothing is ever read from, because the launcher refuses
+    /// before a path is used.
+    fn Refused_Reading<'a>(context: &'a Context, store: &'a mut MemoryFactStore) -> WorkspaceReading<'a, RefusingLauncher, StdEnvironment>
+    {
+        return WorkspaceReading {
+            root: REFUSED_ROOT.as_ref(),
+            context,
+            store,
+            subprocess: Subprocess { launcher: &RefusingLauncher, environment: &StdEnvironment },
+        };
+    }
+
+    /// The root the refused-launch fixtures state, as a constant rather than a `PathBuf`
+    /// built inside a function whose return value borrows from it.
+    const REFUSED_ROOT: &str = ".";
+
     fn Assert_Refused_Launch_Reported(sources: &[SourceFile], findings: &[Finding], expected_rule: &str)
     {
         assert!(sources.is_empty(), "a refused launch must not report workspace members");
