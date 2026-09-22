@@ -82823,14 +82823,26 @@
           "crates/rules/nomos-rules/docs/api/lib.md",
           "tests/contract/surface/nomos-rules.txt",
           "tests/contract/tests/rule_composition.rs",
-          "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md"
+          "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md",
+          "crates/rules/nomos-rules/src/checks/closure_bounds.rs",
+          "crates/rules/nomos-rules/src/checks/closure_bounds/tests.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_text/relaxed.rs",
+          "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
+          "crates/rules/nomos-rules/src/checks/placement.rs",
+          "crates/rules/nomos-rules/src/checks/security_text.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape/go_parameter_count.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p114-clarity",
+        "acquired_at": 1790111593,
+        "lease_expires_at": 1790122393
+      },
       "verification": {
         "argv": [
           "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
@@ -82853,7 +82865,28 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p114-clarity",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/closure_bounds.rs",
+            "crates/rules/nomos-rules/src/checks/closure_bounds/tests.rs",
+            "crates/rules/nomos-rules/src/checks/concurrency_text.rs",
+            "crates/rules/nomos-rules/src/checks/concurrency_text/relaxed.rs",
+            "crates/rules/nomos-rules/src/checks/flakiness_text.rs",
+            "crates/rules/nomos-rules/src/checks/placement.rs",
+            "crates/rules/nomos-rules/src/checks/security_text.rs"
+          ],
+          "widened_at": 1790111959
+        },
+        {
+          "holder": "fable-p114-clarity",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/function_shape/go_parameter_count.rs"
+          ],
+          "widened_at": 1790112038
+        }
+      ]
     },
     {
       "id": "P114-NAMING-TEST-IDENTIFIERS",
@@ -93907,10 +93940,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p128-constant",
+        "acquired_at": 1790111703,
+        "lease_expires_at": 1790122503
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -94277,7 +94314,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -94296,7 +94333,33 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "led; 0 ignored; 0 measured; 0 filtered out; finished in 7.12s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s\n     Running unittests src\\lib.rs (F:/repos/nomos-render-p131-target\\debug\\deps\\nomos_contract_tests-b0cde3716885e4db.exe)\n     Running tests\\record_citation.rs (F:/repos/nomos-render-p131-target\\debug\\deps\\record_citation-538121b0059c9c68.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-render-p131-target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790112380,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "738cd0f5091bcbb32a8c4f301d0d348e1dc8eaf3"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -94317,10 +94380,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p132-opsurface",
+        "acquired_at": 1790111922,
+        "lease_expires_at": 1790122722
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -94378,6 +94445,252 @@
           "public_surface"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P134-A-PREDICATE-DECIDES-ON-TARGET-DIRECTORY-STATE-AND-NAMES-THREE-UNRELATED-TESTS-WHEN-IT-DOES",
+      "title": "Three tests fail on a killed clippy rather than on the code, so a predicate's verdict depends on how warm the target directory is",
+      "why": "Measured by a claimant whose own item was elsewhere, and confirmed here at HEAD. crates/languages/nomos-lang-rust-clippy/src/clippy_error.rs line 25 bounds a clippy run at 600 seconds, and line 129 renders the kill as a reason reading that cargo clippy was still running after that and was killed. On a cold or contended target directory the bound is reached, the lint-diagnostics provider comes back ProviderUnavailable, and three nomos-check-orchestration lib tests fail from that one cause: Test_Materialize_Lint_Should_Return_Real_Workspace_Members at src/tests/materialization.rs line 88 on a direct assertion, Test_The_Registered_Provider_Should_Satisfy_The_Rules_Floor at src/tests/composition.rs line 199 on ProviderUnavailable appearing among findings, and Test_A_Blocking_Finding_Should_Still_Be_Judged_Complete at src/tests/composition.rs line 143 on the claim coming back incomplete. The numbers that session measured: a cold run failed all three after 1807 seconds, the same tests passed in 13.3 seconds once clippy artifacts were warm, and a warm workspace clippy alone is 5.8 seconds. Its work finish failed this way once with the predicate exiting 101 and passed on retry after a warm-up. So a predicate's verdict currently answers how warm this machine's target directory is rather than whether the code is correct, and that is a defect in the verification rather than in what it verifies. The shape is what makes it expensive: the failure names three tests that look unrelated to each other and to whatever the claimant changed, which is exactly the shape that gets misattributed to the change in hand, and every session that meets it pays the diagnosis again. It is also a shared cost rather than one item's, since work finish runs a predicate for every item that reaches it.",
+      "done_when": "A predicate's verdict no longer turns on target-directory state or machine load, and what makes that true is stated rather than tuned into place. One resolution is refused outright, and naming it is half the point of this item: the three tests must not be changed to accept ProviderUnavailable as a passing answer. A test that passes when the provider it exercises could not run is a test whose success condition is produced by the failure it exists to detect, and this repository has paid for that shape repeatedly; an unavailable provider must stay distinguishable from a satisfied floor, and a run that could not reach an answer must remain different from a run whose answer is that nothing is wrong. Subject to that, the claimant is free to decide where the fix belongs, and decides it on measurement rather than preference: the bound itself, whether a killed tool is reported as an absence the caller must handle rather than folded into the findings a judgment reads, whether these tests should be invoking a real external tool at all, or whether the harness must establish its own preconditions before asserting. Whichever is chosen, the reasoning is recorded where the next reader meets it, and if the choice changes what an unavailable provider means to any caller it is a record and not a comment. The three tests still fail when the provider genuinely cannot satisfy what they assert, proven by mutation rather than by argument, with each mutated file restored byte-identically and the restoration verified by hash. The claimant re-measures the timing claims in the why on this machine rather than citing them, and reports what it actually observes, including a finding that the flake does not reproduce, which would be a real result and would change the answer. Every site is re-measured at HEAD before editing, because several sessions are committing to these crates and one may have moved the bound already. No judgment, disposition or exit code changes for a run whose tools all answered. The predicate passes, and it passes twice in a row from a cold target directory, which is the condition that produced the defect and therefore the only run that is evidence.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-clippy/src/clippy_error.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests/materialization.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-lang-rust-clippy",
+          "--lib"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P135-TWO-CONSTANTS-LANDED-AS-AN-ABBREVIATION-AND-BLOCK-EVERY-PREDICATE-THAT-JUDGES-THIS-TREE",
+      "title": "Two constants introduced by the fact-graph commit are blocking abbreviation findings, so every predicate that judges this workspace's own tree fails",
+      "why": "27050a92 introduced LCG_MULTIPLIER and LCG_INCREMENT at crates/substrate/nomos-capability/src/resolution/selection.rs lines 554 and 557, used at line 591 to advance a small generator. This repository's abbreviations rule judges them Blocking, with the reason that LCG contains the word lcg, no vowels, an abbreviation, spell it out. Measured here: nomos check --root . reports six Blocking findings and two are these. The cost is not local. A predicate that runs nomos-cli's real-run tests asserts that this workspace's own tree carries nothing that can fail a build today, so those tests fail for every item whose predicate reaches them, whatever that item changed. It has already happened: the claimant of P128-THE-EFFECTIVE-POLICY committed its work at 20aacc5f and its work finish refused with the predicate exiting 101, on these two findings in a file outside its territory that no work on disk could have satisfied, and that refusal keeps its claim live and keeps three ready items held behind its territory. Two earlier sessions reported the same two findings as the only blocking ones in their own runs and correctly declined to touch a file that was not theirs. 27050a92 was itself finishable because its own predicate did not run those tests, which is why this landed green and is only now visible: the regression is invisible to the item that caused it and visible to every item that follows. Note for whoever claims this that four further Blocking findings exist at the same moment, all no-orphan-modules under crates/connectors/nomos-connector-coderabbit, and they belong to another session's uncommitted work rather than to this item.",
+      "done_when": "Neither constant is judged an abbreviation, and the names say what the value is rather than merely passing the rule: the generator is a linear congruential one and the spelled-out names are the fix the rule's own reason asks for. A name chosen to slip past the check while staying opaque fails this clause, and so does suppressing or waiving the finding, because the rule is right and the code was wrong. nomos check --root . reports zero Blocking findings naming crates/substrate/nomos-capability, confirmed by running it and quoting the count, and the claimant states in the commit message how many Blocking findings remain in the tree and whose they are, since four others belong to a live session and must not be touched or counted as fixed. The constants keep their values exactly: these are the multiplier and increment of a generator, so a changed digit changes every sequence it produces, and the commit says the values were compared before and after rather than assuming a rename cannot touch them. Every reference is renamed with the declarations, including the use site, and the crate's tests pass unchanged, proving no sequence moved. No behaviour changes and no test changes what it asserts. The claimant re-measures at HEAD first, because several sessions are committing and a peer may have corrected it already, in which case say so and name the commit rather than claiming it. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-capability/src/resolution/selection.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-capability",
+          "--lib"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-capability",
+          "--lib"
+        ],
+        "exit_code": 0,
+        "output_tail": ":Test_Applicability_Should_Read_From_Either_Branch ... ok\ntest registry::resolving::tests::Test_Resolve_Requirement_Should_Report_No_Provider_For_A_Declared_But_Unoffered_Capability ... ok\ntest resolution::selection::tests::Test_Standing_Should_Separate_Equivalent_From_Incomparable ... ok\ntest resolution::selection::tests::Test_Standing_Of_Should_Read_How_An_Alternative_Compares_To_The_Chosen_Offer ... ok\ntest resolution::unmet::tests::Test_Describe_Should_Name_What_Is_Missing ... ok\ntest requirement::tests::Test_New_Should_Start_With_No_Preferred_Provider ... ok\ntest resolution::unmet::tests::Test_Remedy_Should_Name_What_Closes_Each_Gap ... ok\ntest requirement::tests::Test_Preferring_Should_Record_The_Named_Provider ... ok\ntest resolution::standing::tests::Test_Is_Decided_Should_Be_True_Only_For_Stronger_Or_Weaker ... ok\ntest resolution::standing::tests::Test_Of_Should_Separate_Stronger_Weaker_And_Equivalent ... ok\ntest resolution::selection::tests::Test_Ranking_Should_Return_Every_Offer_It_Was_Given ... ok\ntest resolution::tests::Test_Offer_Should_Be_Present_Only_When_Satisfied ... ok\ntest resolution::tests::Test_Selection_Should_Be_Present_Only_When_Satisfied ... ok\ntest resolution::unmet::tests::Test_Applicability_Should_Report_Every_Variant_As_A_Missing_Capability ... ok\ntest resolution::selection::tests::Test_Weaker_Should_List_Only_The_Alternatives_Standing_Below_The_Chosen_Offer ... ok\ntest resolution::selection::tests::Test_Ranking_Should_Put_The_Strongest_First_Whatever_The_Names_Are ... ok\ntest resolution::selection::tests::Test_Unranked_Should_List_Alternatives_The_Guarantee_Could_Not_Compare ... ok\ntest resolution::selection::tests::Test_The_Fast_Ranking_Should_Agree_With_A_Scan_Per_Offer ... ok\n\ntest result: ok. 42 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.52s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_capability-d7ad42015ad006ca.exe)\n",
+        "verified_at": 1790111945,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "be9ddb0a31db376aa7690d5eea7581b678214691"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P136-THE-REVIEW-FINDING-SPLIT-LEFT-FOUR-FILES-BEHIND-AND-NOTHING-DECLARES-THEM",
+      "title": "Four files the review-finding split moved are still committed in the connector with no declaration naming them, and they are Blocking for every session",
+      "why": "P126 moved the review-finding capability contract into its own crate, crates/capabilities/nomos-cap-review-finding, and the connector's copies of what moved were never removed. Measured at HEAD on a clean working tree, which matters because the same four findings appeared earlier while the tree was dirty and were twice attributed to a live session's uncommitted work, by two sessions independently and wrongly. They are committed. git ls-tree HEAD lists crates/connectors/nomos-connector-coderabbit/src/contract.rs, src/payload.rs, src/payload/finding_payload.rs and src/payload/payload_refusal.rs, and the committed lib.rs declares only determinism, fetching, fixture, guarantee, identity, provider and translation. So nothing names contract or payload, rustc never parses those four files, and nothing in them compiles, runs or is linted. nomos check --root . judges each one Blocking under no-orphan-modules, which is four of the Blocking findings every session in this tree currently sees, and no-orphan-modules also reddens contract reachability. The file names are the same four the new capability crate carries, so the likely truth is that the move copied rather than moved and the originals were left; that is the claimant's to establish rather than to assume. Worth recording for its own sake: a commit published from a worktree by update-ref leaves the shared working tree's files untouched, so for a while this state was indistinguishable from a deliberate revert of P126, and both sessions reading it concluded somebody was mid-edit. Nobody was.",
+      "done_when": "Nothing under crates/connectors/nomos-connector-coderabbit is unreachable from its crate's module tree, and which of the two available answers applies is established by comparison rather than assumed. For each of the four files the claimant compares it against the file of the same name in crates/capabilities/nomos-cap-review-finding and says whether the content is the same: where the capability crate carries it, the connector's copy is a leftover of the move and is deleted; where it differs in a way the connector still needs, it is declared instead and the commit says what still needs it and why the move left it behind. Deleting is the expected answer and the burden is on keeping. Nothing that any other file references is deleted: the claimant greps for every type and function the four files define before removing them, because a file rustc never parsed cannot be shown unused by the compiler, so the usual safety net is absent here and a grep is the only evidence. nomos check --root . reports zero Blocking no-orphan-modules findings anywhere in the workspace, quoted with the count, and the commit states how many Blocking findings remain and whose they are rather than implying the tree is clean. No behaviour changes: the connector's provider, its guarantee and what it publishes are untouched, and no test changes what it asserts. The claimant re-measures at HEAD before editing, because this is a busy tree and a peer may have corrected it, in which case say so and name the commit. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/connectors/nomos-connector-coderabbit/src/contract.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/payload.rs",
+          "crates/connectors/nomos-connector-coderabbit/src/payload",
+          "crates/connectors/nomos-connector-coderabbit/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-connector-coderabbit",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-connector-coderabbit",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "boundaries"
+        ],
+        "exit_code": 0,
+        "output_tail": "};\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: unused import: `Revisions_In`\n  --> tests\\contract\\tests\\boundaries\\lock_pinning.rs:85:65\n   |\n85 | use nomos_contract_tests::{Declared_Revisions, Repository_Root, Revisions_In, XVPE_PREFIX};\n   |                                                                 ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-contract-tests` (test \"boundaries\") generated 1 warning (run `cargo fix --test \"boundaries\"` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.51s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_connector_coderabbit-f255e2968e4293a8.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-0fdbb1e2809d86e8.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-c72d4b3fb5233886.exe)\n",
+        "verified_at": 1790112307,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "738cd0f5091bcbb32a8c4f301d0d348e1dc8eaf3"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P131-ARC-ROADMAP-001-COUNTS-SIX-ANALYSIS-HAZARDS-AND-NAMES-NONE-OF-THE-FIVE-THAT-ARE-LEFT",
+      "title": "five of the six nomos-analysis performance hazards ARC-ROADMAP-001 counts are named nowhere, so nobody can check whether they are still real",
+      "why": "ARC-ROADMAP-001 What Was Measured reports eight performance claims against crates/substrate/nomos-analysis, six confirmed as real hazards deliberately left for later work and one (the recursive Tarjan::Visit with no depth guard) fixed by P13-TARJAN-ITERATIVE. It enumerates none of the six. OD-ANALYSIS-008 named one of them, traced it to ground, and was closed at version 3 by P131-A-DEFERRED-COST-WAS-PAID-OFF-WITHOUT-ITS-TRIGGER-FIRING-AND-THE-RECORD-STILL-DEFERS-IT because its subject was removed by other work. That closure measured the aggregate rather than assuming it, and found two things. The sentence about the assessed set staying at six entries is about the per-requirement assessments OD-TRACE-001 and OD-TRACE-002 govern and not about hazards at all, so it is untouched. The hazard sentence is a dated reading in a section titled What Was Measured and does not go false when a later commit pays one of the costs it found, so it needed no correction and none was made. What is left is worse than a stale count: five hazards that this repository asserts are real and names nowhere. Searched at that closure and not assumed, across every file under docs/records/, the rendered spec/domain-specification.md and work/ledger.json, the count occurs exactly twice, in ARC-ROADMAP-001 itself and in OD-ROADMAP-004 quoting it, and neither lists a member. OD-ANALYSIS-008 Question said as much when it was written. So no reader can check any of the five against any tree, and no session can retire one, which makes the count permanent by construction rather than by evidence. The enumeration exists only in the external review text the owner holds, which is why this is a separate item and not a widening: recovering it is not a read of this repository.",
+      "done_when": "ARC-ROADMAP-001 no longer asserts a count of live hazards whose members a reader cannot reach. Either each of the six is named, with the one already answered named as answered (OD-ANALYSIS-008, closed at version 3, its clone removed by P13-ANALYSIS-008-TWO-PASS-INVALIDATE without either of its stated triggers firing), or the record states that the members are not recoverable from anything this repository holds and that the count is therefore a reading of a review rather than a claim about the tree. Whichever is chosen, every hazard the amended record still asserts is real is checked against HEAD first and said to be still real for a measured reason, and a hazard found already paid is named as paid together with what paid it. Nothing is inferred from 27050a92 or bb79f7a5 without evidence tying them to a member: that closure measured that they answer a later review of four bootstrap choices, that three of those four are answered at HEAD (key interning and FactSlot addressing, the Current_Borrowed lending read, the one-entry retention rule) and that the fourth, Ranked_Offers, is in crates/substrate/nomos-capability and so is not a claim against nomos-analysis at all. The dated character of the What Was Measured section is preserved rather than rewritten, per that record own version 4 discipline that a measurement which quietly absorbs later work is not a measurement. Both derived projections are re-rendered corpus-unset from a worktree whose registered records are exactly the ones the commit publishes, per .claude/skills/nomos-spec-change, and spec freshness reports both profiles at exit 0. No code changes. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P136-TWO-CONTRACT-TEST-COMMENTS-NAME-A-POPULATION-AND-A-FILE-THE-TREE-NO-LONGER-HAS",
+      "title": "A crossing guard states twelve xvpe packages where the lock holds eleven, and a harness comment names a test file that became a directory",
+      "why": "Measured at HEAD be9ddb0a on 2026-09-22, both sites confirmed by reading the files rather than by citing an earlier report. Two doc comments in nomos-contract-tests assert things the tree contradicts, and neither is reached by any mechanism, so nothing will ever catch them.\n\nFirst. tests/contract/tests/boundaries/lock_pinning.rs line 21, in the section headed Why a lock needs its own guard, says a sibling-development build rewrites Cargo.lock deleting the source line from all twelve xvpe- packages. The committed lock holds eleven. The population changed at 549fd745, P128-NOMOS-PLATFORM-COMPILES-WITHOUT-XVPE, which is OD-ROADMAP-005 decision 4: nomos-platform stopped crossing to xvpe for a clock and declared its own Timestamp, so xvpe-clock left the lock and twelve became eleven. Counted at every Cargo.lock commit either side of it rather than assumed: twelve at d1dca47d and back, eleven at 549fd745 and since. The sentence is present tense about what a build does now, which is what makes it false; the dated measurements in the same file at lines 29 and 30 say twelve of a 2026-09-14 run and are correct as history, so they stand. This is our own build-out staling the prose of the guard that watches the crossing, which is worth saying plainly rather than filing as an anonymous drift.\n\nThe rest of the population was measured and is honest, which is why this item is two lines and not a sweep. OD-PLATFORM-003 line 172 already carries the amendment 549fd745 owed it and records twelve becoming eleven. OD-PLATFORM-004 lines 72 and 142 say twelve inside explicitly dated 2026-09-14 measurements, and D-130 line 149 says twelve inside a table column headed 2026-09-14. All four stand as history under the same principle OD-ROADMAP-005 applies to a superseded clause: a measurement is not made wrong by the tree moving after it. So no record body changes here and no projection is re-rendered, and the four sites in spec/domain-specification.md are those records mirrored and need nothing.\n\nSecond. tests/contract/tests/agent_harness/checks.rs line 178, on Test_The_Harness_Should_Not_Restate_The_Band_Table, says tests/contract/tests/boundaries.rs compares the README rows against the workspace in both directions. That path has not existed since boundaries became a directory; the comparison is tests/contract/tests/boundaries/readme.rs, reached through boundaries/main.rs. Line 506 of the same file names tests/contract/tests/boundaries/lock_pinning.rs correctly, so the file already knows the directory form and one comment was left behind. This is the identical falsehood P126-THE-READMES-CLOSING-SECTION-NAMES-A-TEST-FILE-THAT-DOES-NOT-EXIST-AND-A-CONSTANT-NO-CRATE-DECLARES corrects in README.md. Filed separately rather than folded in because that item reserves README.md alone, an item cannot be edited, and the two would contend for nothing since they share no file.",
+      "done_when": "Neither comment asserts something the tree contradicts. The lock_pinning sentence describes what a sibling-development build does to every xvpe- package without fixing a number, because a count written in prose beside code that computes the same count is a second authority that will stale again the next time the crossing narrows; the number is removed rather than refreshed to eleven, and the commit message says why. The two dated 2026-09-14 sentences at lines 29 and 30 keep their numbers untouched, because they are history and correcting them would make the file lie about what was measured. The agent_harness comment names the file that actually compares the README rows, tests/contract/tests/boundaries/readme.rs, and does not become a second copy of what that file asserts.\n\nNo test changes what it asserts and no behaviour changes: both edits are inside doc comments and the executable content of both files is byte-unchanged, which is shown by the commit diff touching comment lines only. Each site is re-measured at HEAD immediately before editing, because several sessions are committing to this tree and one may have corrected either already, in which case say so and name the commit rather than claiming the correction.\n\nNothing here touches README.md, which is another item's declared ground, and nothing here touches docs/records, whose four twelve-sites were measured as dated history that stands. The commit states plainly that no mechanism reads either comment, so no guard is implied where none exists. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/boundaries/lock_pinning.rs",
+          "tests/contract/tests/agent_harness/checks.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p136-prose",
+        "acquired_at": 1790112256,
+        "lease_expires_at": 1790119456
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 1800
       },
       "verified": null,
       "abandoned": [],

@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:e0503b6411fe35aa45ab05ada48bd6a5186c49f96566982ae2bc210e66ff0014",
-  "inputs_digest": "sha256:3def32a98b1f74e682779e3b022251cb1418cda5277362e53549cfc5e1613146",
+  "content_digest": "sha256:566f6eafe59e5d2107e48d77c1be8af62404e28c01465fd3923b637c95604f23",
+  "inputs_digest": "sha256:5420abb0ea4c8c8cfa539400bbf05d7bdbee4039ca1bd77a2fc6ae4c4a4916fc",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2439
+      2440
     ],
     [
       "Source blocks",
-      8873
+      8887
     ]
   ],
   "inputs": [
@@ -173,7 +173,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored",
-      "hash": "sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272"
+      "hash": "sha256:1ae6d0c83e754c0dabd02e91f6954f5ee3f7f746162dc59f9d1d110aedcc7de3"
     },
     {
       "content": "documents",
@@ -2572,38 +2572,43 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#2",
-      "hash": "sha256:f21c30a92de9b64b650dc13e7d4f659cc8e0a03359735c32632ebfdfb5d00ecc"
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#3",
+      "hash": "sha256:b597770e5362e553459e117bf9b7f760eec40550635a3cf54f38823f08c21ad6"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#4",
-      "hash": "sha256:b4cced4ce86307b10992698b32c1b3464a6f9c15674d5af8348cc13127f3e6ee"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#8",
-      "hash": "sha256:7c0cfef358770f36ca3007fd481a3d6635161f34d6fed42d1b77601506e5b40a"
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#5",
+      "hash": "sha256:0729c7e7f559bb1c35f202ce9d1e655005b63cefde69020001c6bcbf035f45a8"
     },
     {
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#10",
-      "hash": "sha256:03cc94624d845263659b495b4d0cfd9a5c76b78bd589af12d1b282779e04f3d8"
+      "hash": "sha256:ce7f6abf6b25d9c88f5aa6379f85fe6e42d6cab1c0cfc5a3034c20cc5efa11be"
     },
     {
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#13",
-      "hash": "sha256:45004a49187ba17134fe7ee1a191b6816949a28fbbfc003f3861db6304e368c5"
+      "hash": "sha256:c31b5c443f2ecbf1a84078d7480c85b4407a2f48f96f02b7681da507a03d4629"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#17",
-      "hash": "sha256:487997600efca70929034111720545139e4bcaaef5c76333f65f1fd60ba1ceb8"
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#16",
+      "hash": "sha256:0b702aaee8555afb741fa4960236f45d97dc2820bfe3871e52655e792c908720"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#21",
-      "hash": "sha256:22a22ab170d799fdf9007374e583f75759adada2033dae00387d7c0b6b00dfba"
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#20",
+      "hash": "sha256:6c64f7edd58104ae0582fc97c5a58b81118aa7c150b79d205fc2bc591711d847"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#25",
+      "hash": "sha256:f3635d49c71a609243abd640d878f885888fae5a23861524fb911f935a52b37e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#31",
+      "hash": "sha256:412fddfd55f28ad7a6cc8eed33ea8fef1c8022ae15c72283bec6d5ebfa5e523b"
     },
     {
       "content": "headings",
@@ -18113,107 +18118,177 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#2",
-      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+      "hash": "sha256:703a96013ca7b82872694c2080fde4e50dfbc56a58c87ac4d0839a7ec536e0dc"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#3",
-      "hash": "sha256:fc19cd999e6a280bb66348ab6d9f3d75dc844a1315f5e21da7ecfa9de68a70d3"
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#4",
-      "hash": "sha256:15aff610a28e9081dbdb5862a5c1fcd5ea7ea61ca42b6d9d8dca2a51abcc33b4"
+      "hash": "sha256:fc19cd999e6a280bb66348ab6d9f3d75dc844a1315f5e21da7ecfa9de68a70d3"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#5",
-      "hash": "sha256:f23a808e8f3d2020962e91c05525b6ab2756b91e52733a9db8a01bdccaeac88a"
+      "hash": "sha256:15aff610a28e9081dbdb5862a5c1fcd5ea7ea61ca42b6d9d8dca2a51abcc33b4"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#6",
-      "hash": "sha256:c3451a4001419a635ddb11836fb50da4c86335af553f5a5b611f485f39e29adb"
+      "hash": "sha256:0758d2a09b6a133b2bf741ab3a66a5c9e77c5e667c89d1a130ec2575f9ac667a"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#7",
-      "hash": "sha256:1f6c7071785886113c271aec29db469c280f630a87aa096aa3cb1f6deb167f6d"
+      "hash": "sha256:c3451a4001419a635ddb11836fb50da4c86335af553f5a5b611f485f39e29adb"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#8",
-      "hash": "sha256:a7629e03de8b2a85bfff5e7b03bc0ec2cb35a881d135fc85c8b59fe8c813552f"
+      "hash": "sha256:55ece4aaaad58d5ec0b3b483ce60f2f724c20a8f11312a0905b962edc9e7b237"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#9",
-      "hash": "sha256:47dc218d577a3cb0e3bc77afda651c2ee9a1f85ef51c89480cfa456589d4a23a"
+      "hash": "sha256:1f6c7071785886113c271aec29db469c280f630a87aa096aa3cb1f6deb167f6d"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#10",
-      "hash": "sha256:fe30224e08cedd2e1a2b708e98fb3b6b949b2e312194279ab67bae88ca79b31d"
+      "hash": "sha256:a7629e03de8b2a85bfff5e7b03bc0ec2cb35a881d135fc85c8b59fe8c813552f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#11",
-      "hash": "sha256:eba0cf4b8ea1c2d806a2295169bb23ea438cc52ae76dae8dab82895b6fd3cba9"
+      "hash": "sha256:eced797886938a823c5bea7648ee20abd7aab43962ff65f9d4e94b383ad166a7"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#12",
-      "hash": "sha256:1416b58728b0c57d0ac49d05296f3876c57de47bed26eb757ed3c638162b80cc"
+      "hash": "sha256:ca9524aa72545eebe54a043cc31cd64cc8a4e66da8f3c996f9aa3f75e4b8478c"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#13",
-      "hash": "sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658"
+      "hash": "sha256:fe30224e08cedd2e1a2b708e98fb3b6b949b2e312194279ab67bae88ca79b31d"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#14",
-      "hash": "sha256:edb612ef0f2179a68df9903b5f417d9c1c4f248c9a7f25f6cef1b07160590397"
+      "hash": "sha256:eba0cf4b8ea1c2d806a2295169bb23ea438cc52ae76dae8dab82895b6fd3cba9"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#15",
-      "hash": "sha256:b8652aff9a334f3f8fece5c8c712ff6033d9961fa975316bc2c4bfcf4433f66f"
+      "hash": "sha256:1416b58728b0c57d0ac49d05296f3876c57de47bed26eb757ed3c638162b80cc"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#16",
-      "hash": "sha256:01ed0676c7a8b0c8bad530ea4e189f84106a0b468e4ccb615f193caa0b0e7563"
+      "hash": "sha256:b21c34f083f944a8317c5bb99f866d38e2c77a3ce5a1a64810a532456b826658"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#17",
-      "hash": "sha256:f2c0335128fb2bfd65e521269f4737cd08cbf99a974b151f97efd2dc9a052f51"
+      "hash": "sha256:edb612ef0f2179a68df9903b5f417d9c1c4f248c9a7f25f6cef1b07160590397"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#18",
-      "hash": "sha256:f12ae831698a0b871fcfe5302fdb1a95f43dfa5f8262635cebe2119ce6f998a8"
+      "hash": "sha256:b8652aff9a334f3f8fece5c8c712ff6033d9961fa975316bc2c4bfcf4433f66f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#19",
-      "hash": "sha256:c1bbad380841f907bdff7bd8e603947df1957e9794ebe8c8f904502a9519e687"
+      "hash": "sha256:01ed0676c7a8b0c8bad530ea4e189f84106a0b468e4ccb615f193caa0b0e7563"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#20",
-      "hash": "sha256:3619287cdc8bfa04820090806825bac5f182c8d911b98f5280fd0796a3c28ca4"
+      "hash": "sha256:f2c0335128fb2bfd65e521269f4737cd08cbf99a974b151f97efd2dc9a052f51"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#21",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:546c77e83cc24c12d33ceaa7bc01e6d5609a5f95be0eb073f3faad87de1fe394"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#22",
-      "hash": "sha256:177dbd64fa76856edc2db2b2750a1ad30645b8f8e95a647ddc19b76ff0ca8de4"
+      "hash": "sha256:f12ae831698a0b871fcfe5302fdb1a95f43dfa5f8262635cebe2119ce6f998a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#23",
+      "hash": "sha256:668882498038ae59c093ce174b1dcba89001701211da36ef390c111cb62047dc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#24",
+      "hash": "sha256:3619287cdc8bfa04820090806825bac5f182c8d911b98f5280fd0796a3c28ca4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#25",
+      "hash": "sha256:7a0633fcd5bf28a34836c726ea65f1208aa90589ee4c53c5ec2606a6c9f79872"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#26",
+      "hash": "sha256:7b45ff6cfd6be58f7cdc4389db81375e9d2de7fbaa533abc83b51b2847a037a9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#27",
+      "hash": "sha256:e1fe4d155ab3d61a301c4884410e2a1926f510f6751799822a61ae253c4d856b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#28",
+      "hash": "sha256:0f28ff0cad3c1ba515ab46511ba001e9b446d19d195baf3dd5e36a8da76f5f25"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#29",
+      "hash": "sha256:7ead069722033a848d66e18f4a623fedbc4e396122c8507647a164b843a7f11a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#30",
+      "hash": "sha256:7ce70f64fad28d695d1f64867a70f214ccc48fadb2beb1de614f066c8f692857"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#31",
+      "hash": "sha256:05008a93b016596a8963c9b709578e2bc92fefbd04e1c3850ecd3286a3ae2698"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#32",
+      "hash": "sha256:1881b271d51b699d98896c27a3c8e9c06306cf56196267d8a885e6d9ab1d0d92"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#33",
+      "hash": "sha256:8fbee611e083a78a5f9e3ef1bcd94b691e7560cb2ed391cdaab37b5a169c58e2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#34",
+      "hash": "sha256:b0b840a2b12db90103dcea83ae713e20fda3cf1b37fc08f65ce1d2aeda248f31"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#35",
+      "hash": "sha256:bfdbb53d99bfd804621cf2b2c05a743dd48799ad83b3ab340056fbaba4114d4b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#36",
+      "hash": "sha256:0ebed144cd399f7ffd29efb8b3bac85a4bb08d0491541008de1c509e40205ca8"
     },
     {
       "content": "blocks",
