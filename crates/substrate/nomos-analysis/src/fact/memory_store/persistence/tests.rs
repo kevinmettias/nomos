@@ -88,6 +88,88 @@ fn Test_A_Reloaded_Store_Over_An_Unchanged_Tree_Should_Agree_With_A_Clean_Rebuil
     );
 }
 
+/// Two stores holding the same facts write the same bytes, whatever order they were shown
+/// them in.
+///
+/// The running store addresses a fact by a slot, which is a position in one process's
+/// interning table; the file addresses it by digest, because a slot means nothing to the
+/// next process. Nothing makes one process observe its facts in the order another did — a
+/// check run picks up subjects in whatever order its walk reaches them — so a written form
+/// that carried interning order would differ between two stores that hold exactly the same
+/// thing, and two processes could not compare their stores at all.
+///
+/// The two orders below are chosen so they *do* differ: the digests decide the written order
+/// and the control below asserts that the two observation orders disagree with it, because a
+/// fixture whose two orders happened to coincide would assert nothing. Both ends of the
+/// dependents graph are covered too — it is an ordered map keyed on slots, which is the
+/// structure most likely to leak that order.
+#[test]
+fn Test_Two_Stores_Holding_The_Same_Facts_Should_Write_The_Same_Bytes()
+{
+    let observed_upstream_first = Temporary_Directory("deterministic-upstream-first");
+    let observed_downstream_first = Temporary_Directory("deterministic-downstream-first");
+
+    let mut upstream_first = MemoryFactStore::New();
+    Materialize_Pair(&mut upstream_first, INITIAL_PAYLOAD, GenerationId::INITIAL, &Recorded_Edge());
+    Write_Store(&upstream_first, &observed_upstream_first);
+
+    let mut downstream_first = MemoryFactStore::New();
+    downstream_first
+        .Materialize(Downstream_Fact(INITIAL_PAYLOAD, GenerationId::INITIAL), &Recorded_Edge())
+        .expect("a fresh store holds nothing to conflict with");
+    downstream_first
+        .Materialize(Upstream_Fact(INITIAL_PAYLOAD, GenerationId::INITIAL), &[])
+        .expect("the upstream key has not been written yet");
+    Write_Store(&downstream_first, &observed_downstream_first);
+
+    Assert_Wrote_The_Same_Bytes(&observed_upstream_first, &observed_downstream_first);
+}
+
+/// The control the assertion above needs: the two observation orders really are different
+/// orders, so the comparison is between two files that had something to disagree about.
+#[test]
+fn Test_The_Two_Fixture_Keys_Should_Hash_To_Different_Digests()
+{
+    assert_ne!(
+        Upstream_Key().Digest(),
+        Downstream_Key().Digest(),
+        "the two fixture keys hash to one digest, so the two observation orders above are          the same order and the comparison between them asserts nothing"
+    );
+}
+
+fn Assert_Wrote_The_Same_Bytes(first: &Path, second: &Path)
+{
+    let before = std::fs::read(Store_File(first)).expect("the store just written is readable");
+    let after = std::fs::read(Store_File(second)).expect("the store just written is readable");
+
+    assert!(before.len() > 1, "the fixture wrote nothing, so this compares two empty files");
+    assert_eq!(
+        String::from_utf8_lossy(&after),
+        String::from_utf8_lossy(&before),
+        "two stores holding the same facts wrote different bytes, so the written form \
+         carries the order one process was shown them in rather than the order its own \
+         contents have"
+    );
+}
+
+/// A store written, reloaded and written again writes the same bytes.
+///
+/// The narrower half of the same question, and the one a host actually performs: a reload
+/// interns in the file's own order, and writing that store back must not shift anything.
+#[test]
+fn Test_A_Store_Written_Reloaded_And_Written_Again_Should_Write_The_Same_Bytes()
+{
+    let first = Temporary_Directory("deterministic-first");
+    let second = Temporary_Directory("deterministic-second");
+    let mut written = MemoryFactStore::New();
+    Materialize_Pair(&mut written, INITIAL_PAYLOAD, GenerationId::INITIAL, &Recorded_Edge());
+    Write_Store(&written, &first);
+
+    Write_Store(&Reloaded(&first), &second);
+
+    Assert_Wrote_The_Same_Bytes(&first, &second);
+}
+
 #[test]
 fn Test_A_Reloaded_Store_Should_Invalidate_Exactly_What_The_In_Memory_Store_Would()
 {

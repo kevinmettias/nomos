@@ -12,14 +12,20 @@
 // either. `OD-ANALYSIS-009` is the decision that there is a written form at all.
 #[path = "memory_store/persistence.rs"] mod persistence;
 
+// Turning a fact identity into the number this store addresses it by, and back. A sibling
+// for the same reason the two above are: what a caller addresses a fact by is unchanged, and
+// nothing about the interning is reachable from outside this crate.
+#[path = "memory_store/identities.rs"] mod identities;
+
 use std::path::Path;
 use nomos_contracts::SchemaId;
 use crate::PersistenceError;
 use crate::fact_store::sealed;
 use std::collections::BTreeSet;
 use std::collections::BTreeMap;
-use nomos_contracts::Digest128;
 use nomos_contracts::GenerationId;
+use self::identities::FactIdentities;
+use self::identities::FactSlot;
 use crate::Supersession;
 use crate::FactIdentity;
 use crate::FactStore;
@@ -46,9 +52,21 @@ struct Entry
 
 pub struct MemoryFactStore
 {
-    entries: BTreeMap<Digest128, Vec<Entry>>,
-    dependents: BTreeMap<Digest128, BTreeSet<Digest128>>,
-    keys: BTreeMap<Digest128, FactKey>,
+    /// Every fact identity this store has been shown, and the one place a [`FactKey`]
+    /// becomes the [`FactSlot`] the two structures below key on. `identities.rs` carries why
+    /// a digest is not what they key on, and why there is no second table beside it.
+    identities: FactIdentities,
+    /// One key's history per slot, addressed by [`FactSlot::Position`].
+    ///
+    /// A vector rather than a map because a slot *is* a position: the interner mints them
+    /// densely from zero, so a map would be a second way of saying what an index already
+    /// says, and one that could disagree with the interner about which slots exist.
+    entries: Vec<Vec<Entry>>,
+    /// Which facts read each fact, slot to slot. Still an ordered map, because the walk that
+    /// reads it is [`crate::propagation::DependencyPropagation`]'s and a deterministic
+    /// iteration order is what makes two runs over one store agree; what changed is the
+    /// width of the key it compares, from sixteen bytes to a machine word.
+    dependents: BTreeMap<FactSlot, BTreeSet<FactSlot>>,
     materializations: u32,
     /// The strategy `Invalidate` spreads an invalidation with.
     ///
@@ -62,7 +80,7 @@ pub struct MemoryFactStore
     // itself, because a type parameter here would spread into every public signature that
     // names this store; a swappable implementation behind one boxed trait object keeps that
     // seam local to this one field, which is exactly what `With_Propagation` below needs.
-    propagation: Box<dyn DependencyPropagation>,
+    propagation: Box<dyn DependencyPropagation<FactSlot>>,
 }
 
 impl MemoryFactStore
@@ -72,13 +90,39 @@ impl MemoryFactStore
     {
         use crate::propagation::LocalGraphPropagation;
 
+        return Self::Spreading_With(Box::new(LocalGraphPropagation));
+    }
+
+    /// An empty store that spreads an invalidation with `propagation`.
+    ///
+    /// The one place this type's field list is written out, so a field added to it cannot be
+    /// initialized two ways.
+    fn Spreading_With(propagation: Box<dyn DependencyPropagation<FactSlot>>) -> Self
+    {
         return Self {
-            entries: BTreeMap::new(),
+            identities: FactIdentities::New(),
+            entries: Vec::new(),
             dependents: BTreeMap::new(),
-            keys: BTreeMap::new(),
             materializations: 0,
-            propagation: Box::new(LocalGraphPropagation),
+            propagation,
         };
+    }
+
+    /// The slot `key` is addressed by, minting one -- and making room for its history -- the
+    /// first time this store is shown it.
+    ///
+    /// The only thing that mints a slot. A read goes through [`FactIdentities::Slot_Of`]
+    /// instead, which answers nothing for a key the store was never given: minting on a read
+    /// would grow the store by a row per question asked of it.
+    fn Slot_For(&mut self, key: &FactKey) -> FactSlot
+    {
+        let slot = self.identities.Intern(key);
+        if self.entries.len() < self.identities.Count()
+        {
+            self.entries.resize_with(self.identities.Count(), Vec::new);
+        }
+
+        return slot;
     }
 
     /// # Errors
@@ -91,18 +135,16 @@ impl MemoryFactStore
         dependencies: &[Dependency],
     ) -> Result<(), FactError>
     {
-        let digest = fact.Key().Digest();
-        self.Refuse_Backdated(digest, &fact)?;
+        let slot = self.Slot_For(fact.Key());
+        self.Refuse_Backdated(slot, &fact)?;
 
         for dependency in dependencies
         {
-            let read = dependency.key.Digest();
-            self.keys.insert(read, dependency.key.clone());
-            self.dependents.entry(read).or_default().insert(digest);
+            let read = self.Slot_For(&dependency.key);
+            self.dependents.entry(read).or_default().insert(slot);
         }
 
-        self.keys.insert(digest, fact.Key().clone());
-        self.Push_Entry(digest, Entry {
+        self.Push_Entry(slot, Entry {
             fact,
             invalidated_at: None,
             cause: None,
@@ -137,9 +179,18 @@ impl MemoryFactStore
     /// write per materialization forever. That is why the rule is stated here, at the one
     /// place a history grows, rather than at the writer that would otherwise have to decide
     /// it a second time.
-    fn Push_Entry(&mut self, digest: Digest128, entry: Entry)
+    fn Push_Entry(&mut self, slot: FactSlot, entry: Entry)
     {
-        let history = self.entries.entry(digest).or_default();
+        let Some(history) = self.entries.get_mut(slot.Position())
+        else
+        {
+            // Unreachable: every slot reaching here came from `Slot_For`, which grows
+            // `entries` to the interner's own count before it returns. Written as a refusal
+            // rather than an index because a panic on the analysis path is a determinism
+            // defect and not merely a crash -- a replay would have to reach the same panic
+            // at the same step.
+            return;
+        };
         history.push(entry);
 
         let behind = history.len().saturating_sub(RETAINED_HISTORY_ENTRIES);
@@ -188,11 +239,11 @@ impl MemoryFactStore
     /// a generation it was never true at.
     fn Refuse_Backdated(
         &self,
-        digest: Digest128,
+        slot: FactSlot,
         fact: &MaterializedFact,
     ) -> Result<(), FactError>
     {
-        let Some(latest) = self.Latest(digest)
+        let Some(latest) = self.Latest(slot)
         else
         {
             return Ok(());
@@ -220,7 +271,7 @@ impl MemoryFactStore
     {
         return self
             .entries
-            .values()
+            .iter()
             .filter(|history| {
                 return history
                     .last()
@@ -233,14 +284,21 @@ impl MemoryFactStore
     pub fn Dependencies_Of(&self, key: &FactKey) -> Vec<Dependency>
     {
         return self
-            .Latest(key.Digest())
+            .Slot_Held_By(key)
+            .and_then(|slot| return self.Latest(slot))
             .map(|entry| return entry.dependencies.clone())
             .unwrap_or_default();
     }
 
+    /// The slot `key` is addressed by, or nothing if this store was never shown it.
+    fn Slot_Held_By(&self, key: &FactKey) -> Option<FactSlot>
+    {
+        return self.identities.Slot_Of(key);
+    }
+
     pub(crate) fn Lookup(&self, key: &FactKey, at: GenerationId) -> Result<&MaterializedFact, ()>
     {
-        let Some(entry) = self.Latest(key.Digest())
+        let Some(entry) = self.Slot_Held_By(key).and_then(|slot| return self.Latest(slot))
         else
         {
             return Err(());
@@ -260,12 +318,18 @@ impl MemoryFactStore
 
     pub(crate) fn Superseded_At(&self, key: &FactKey) -> Option<GenerationId>
     {
-        return self.Latest(key.Digest()).and_then(|entry| return entry.invalidated_at);
+        return self
+            .Slot_Held_By(key)
+            .and_then(|slot| return self.Latest(slot))
+            .and_then(|entry| return entry.invalidated_at);
     }
 
-    fn Try_Invalidate_One(&mut self, digest: Digest128, from: GenerationId, cause: &str) -> bool
+    fn Try_Invalidate_One(&mut self, slot: FactSlot, from: GenerationId, cause: &str) -> bool
     {
-        let Some(entry) = self.entries.get_mut(&digest).and_then(|history| return history.last_mut())
+        let Some(entry) = self
+            .entries
+            .get_mut(slot.Position())
+            .and_then(|history| return history.last_mut())
         else
         {
             return false;
@@ -281,23 +345,19 @@ impl MemoryFactStore
         return true;
     }
 
-    /// Whether `digest`'s latest entry is already invalidated, without mutating it -- the
+    /// Whether `slot`'s latest entry is already invalidated, without mutating it -- the
     /// read-only half of what [`Self::Try_Invalidate_One`] checks before it mutates, split out
     /// so a walk can decide whether to keep spreading past a node under an immutable
     /// borrow, before any mutation happens. `OD-ANALYSIS-008` is why this exists as its own
     /// method rather than staying folded into `Try_Invalidate_One`.
-    fn Is_Already_Invalidated(&self, digest: Digest128) -> bool
+    fn Is_Already_Invalidated(&self, slot: FactSlot) -> bool
     {
-        return self
-            .entries
-            .get(&digest)
-            .and_then(|history| return history.last())
-            .is_some_and(|entry| return entry.invalidated_at.is_some());
+        return self.Latest(slot).is_some_and(|entry| return entry.invalidated_at.is_some());
     }
 
-    fn Latest(&self, digest: Digest128) -> Option<&Entry>
+    fn Latest(&self, slot: FactSlot) -> Option<&Entry>
     {
-        return self.entries.get(&digest).and_then(|history| return history.last());
+        return self.entries.get(slot.Position()).and_then(|history| return history.last());
     }
 }
 
@@ -308,12 +368,17 @@ impl FactStore for MemoryFactStore
 {
     fn Current(&self, identity: &FactIdentity, at: GenerationId) -> Option<MaterializedFact>
     {
-        return self.Lookup(&identity.key, at).ok().cloned();
+        return self.Current_Borrowed(identity, at).cloned();
+    }
+
+    fn Current_Borrowed(&self, identity: &FactIdentity, at: GenerationId) -> Option<&MaterializedFact>
+    {
+        return self.Lookup(&identity.key, at).ok();
     }
 
     fn Historical(&self, key: &FactKey) -> Option<(MaterializedFact, Supersession)>
     {
-        let entry = self.Latest(key.Digest())?;
+        let entry = self.Slot_Held_By(key).and_then(|slot| return self.Latest(slot))?;
         let invalidated_at = entry.invalidated_at?;
 
         return Some((
@@ -347,15 +412,9 @@ impl MemoryFactStore
     // Accepts the substitute boxed as `dyn DependencyPropagation`, the same trait-object form
     // the `propagation` field stores, so a test can hand in any implementation without adding
     // a generic parameter to `MemoryFactStore`.
-    pub(crate) fn With_Propagation(propagation: Box<dyn DependencyPropagation>) -> Self
+    pub(crate) fn With_Propagation(propagation: Box<dyn DependencyPropagation<FactSlot>>) -> Self
     {
-        return Self {
-            entries: BTreeMap::new(),
-            dependents: BTreeMap::new(),
-            keys: BTreeMap::new(),
-            materializations: 0,
-            propagation,
-        };
+        return Self::Spreading_With(propagation);
     }
 }
 
@@ -373,8 +432,9 @@ mod local_tests
     use super::*;
     use crate::{Dependency, FactPayload, GuaranteeDigest, InputDigest, ReadOutcome};
     use nomos_contracts::{
-        Assurance, BuildVariantId, CapabilityId, ConfigurationId, ContractVersion, EvidenceClass,
-        FactVariant, Guarantee, IncrementalGranularity, ProviderId, SchemaId, SnapshotId, SubjectId,
+        Assurance, BuildVariantId, CapabilityId, ConfigurationId, ContractVersion, Digest128,
+        EvidenceClass, FactVariant, Guarantee, IncrementalGranularity, ProviderId, SchemaId,
+        SnapshotId, SubjectId,
     };
 
     /// The generation the accepted write in the backdating test is made at. It has to be
@@ -464,7 +524,8 @@ mod local_tests
             .expect("Refuse_Backdated finds no entry under this key on a store this test just built");
         assert_eq!(store.Live(), 1);
 
-        store.Try_Invalidate_One(key.Digest(), GenerationId::From_Raw(INVALIDATION_GENERATION), "test");
+        let slot = store.Slot_Held_By(&key).expect("the write above interned this key");
+        store.Try_Invalidate_One(slot, GenerationId::From_Raw(INVALIDATION_GENERATION), "test");
         assert_eq!(store.Live(), 0);
     }
 
@@ -523,8 +584,9 @@ mod local_tests
                 .expect("each write is at a later generation than the one before it");
         }
 
+        let slot = store.Slot_Held_By(&key).expect("the writes above interned this key");
         assert_eq!(
-            store.entries.get(&key.Digest()).map(Vec::len),
+            store.entries.get(slot.Position()).map(Vec::len),
             Some(RETAINED_HISTORY_ENTRIES),
             "the history grew past what the retention rule keeps"
         );

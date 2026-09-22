@@ -18,6 +18,24 @@ pub trait FactStore: sealed::Sealed
 {
     fn Current(&self, identity: &FactIdentity, at: GenerationId) -> Option<MaterializedFact>;
 
+    /// The same answer as [`Self::Current`], lent rather than copied.
+    ///
+    /// A fact carries its payload — a parse result, a finding set, kilobytes of it — so
+    /// `Current` copies the whole thing to answer a question most callers settle by reading
+    /// one field of it. A caller that only reads the fact takes it from here and copies
+    /// nothing; a caller that has to keep it past the borrow uses `Current` and pays for
+    /// what it keeps.
+    ///
+    /// The two answer the same question and are not allowed to drift: `Current` is defined
+    /// as this, cloned. What a fact *is* does not change either — a borrow of the same
+    /// [`MaterializedFact`] is what comes back, not a view onto the store's internals, which
+    /// stay this crate's.
+    fn Current_Borrowed(
+        &self,
+        identity: &FactIdentity,
+        at: GenerationId,
+    ) -> Option<&MaterializedFact>;
+
     fn Historical(&self, key: &FactKey) -> Option<(MaterializedFact, Supersession)>;
 
     fn Invalidate(&mut self, cause: &GenerationCause, from: GenerationId) -> InvalidationReport;

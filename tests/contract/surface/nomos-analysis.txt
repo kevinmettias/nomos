@@ -59,6 +59,7 @@ pub fn nomos_analysis::FactReader::Get(&mut self, identity: &FactIdentity) -> Re
 pub fn nomos_analysis::FactReader::Require( &mut self, capability: &CapabilityId, subject: &SubjectId, inputs: InputDigest, need: &Requirement, ) -> Result<&MaterializedFact, Applicability>
 pub fn nomos_analysis::FactReader::Require_Any( &mut self, capability: &CapabilityId, subject: &SubjectId, inputs: InputDigest, need: &Requirement, ) -> Result<(&MaterializedFact, Applicability), Applicability>
 pub fn nomos_analysis::FactStore::Current(&self, identity: &FactIdentity, at: GenerationId) -> Option<MaterializedFact>
+pub fn nomos_analysis::FactStore::Current_Borrowed( &self, identity: &FactIdentity, at: GenerationId, ) -> Option<&MaterializedFact>
 pub fn nomos_analysis::FactStore::Historical(&self, key: &FactKey) -> Option<(MaterializedFact, Supersession)>
 pub fn nomos_analysis::FactStore::Invalidate(&mut self, cause: &GenerationCause, from: GenerationId) -> InvalidationReport
 pub fn nomos_analysis::GenerationCause::Describe(&self) -> String
@@ -69,6 +70,7 @@ pub fn nomos_analysis::InputDigest::fmt(&self, formatter: &mut core::fmt::Format
 pub fn nomos_analysis::InvalidationReport::Invalidated(&self) -> usize
 pub fn nomos_analysis::InvalidationReport::Report(&self) -> String
 pub fn nomos_analysis::MemoryFactStore::Current(&self, identity: &FactIdentity, at: GenerationId) -> Option<MaterializedFact>
+pub fn nomos_analysis::MemoryFactStore::Current_Borrowed(&self, identity: &FactIdentity, at: GenerationId) -> Option<&MaterializedFact>
 pub fn nomos_analysis::MemoryFactStore::Dependencies_Of(&self, key: &FactKey) -> Vec<Dependency>
 pub fn nomos_analysis::MemoryFactStore::Historical(&self, key: &FactKey) -> Option<(MaterializedFact, Supersession)>
 pub fn nomos_analysis::MemoryFactStore::Invalidate(&mut self, cause: &GenerationCause, from: GenerationId) -> InvalidationReport

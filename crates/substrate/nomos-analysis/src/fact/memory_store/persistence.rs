@@ -6,9 +6,14 @@
 //!
 //! # What is written, and what is rebuilt
 //!
-//! The file carries the three maps the store answers from — its keys, the retained entry of
-//! each key's history, and the dependents graph — together with the count of writes the
-//! store has taken. It does not carry the [`crate::propagation::DependencyPropagation`] the
+//! The file carries what the store answers from — its keys, the retained entry of each
+//! key's history, and the dependents graph — together with the count of writes the store has
+//! taken. It carries all three addressed by *digest*, never by the [`super::identities::FactSlot`]
+//! the running store keys on: a slot is a position in one process's interning table and means
+//! nothing in the next one, which is exactly why the interner keeps the digest beside the key.
+//! A file's own order is digest order for the same reason — written from a sort rather than
+//! from the order this process happened to intern in, so two processes that materialized the
+//! same facts in different orders write the same file. It does not carry the [`crate::propagation::DependencyPropagation`] the
 //! store spreads an invalidation with: a strategy is the composing build's choice, not
 //! state a previous process measured, so a reloaded store takes this build's default. What
 //! is written is what a later process could not recompute without the corpus; what is not
@@ -58,6 +63,7 @@ use nomos_contracts::SubjectId;
 
 use super::Entry;
 use super::MemoryFactStore;
+use super::identities::FactSlot;
 use crate::Component;
 use crate::Dependency;
 use crate::FactKey;
@@ -186,30 +192,36 @@ fn Refuse_Unknown_Schemas(
     return Ok(());
 }
 
-/// Rebuilds the three maps and the write count, once the header has been believed.
+/// Rebuilds the store's structures and its write count, once the header has been believed.
+///
+/// The keys are interned first, because everything else the file carries names a key by its
+/// digest and the running store addresses one by its slot: interning is what turns the
+/// file's vocabulary into this process's. A store rebuilt this way mints slots in the file's
+/// own order, which is digest order, so a reload is as repeatable as the write was.
 fn Store_From_Stored(file: &Path, stored: &StoredStore) -> Result<MemoryFactStore, PersistenceError>
 {
-    use crate::propagation::LocalGraphPropagation;
+    let mut store = MemoryFactStore::New();
+    let slots = Interned_Slots(file, &mut store, &stored.keys)?;
 
-    let keys = Keys_From_Stored(file, &stored.keys)?;
+    let entries = Entries_From_Stored(file, &stored.entries, &store, &slots)?;
+    let dependents = Dependents_From_Stored(file, &stored.dependents, &slots)?;
 
-    return Ok(MemoryFactStore {
-        entries: Entries_From_Stored(file, &stored.entries, &keys)?,
-        dependents: Dependents_From_Stored(&stored.dependents),
-        keys,
-        materializations: stored.materializations,
-        propagation: Box::new(LocalGraphPropagation),
-    });
+    store.entries = entries;
+    store.dependents = dependents;
+    store.materializations = stored.materializations;
+
+    return Ok(store);
 }
 
-/// Rebuilds every key, refusing the file if this build does not address one of them the way
-/// the writing build did.
-fn Keys_From_Stored(
+/// Interns every key the file carries, refusing the file if this build does not address one
+/// of them the way the writing build did.
+fn Interned_Slots(
     file: &Path,
+    store: &mut MemoryFactStore,
     stored: &[StoredKey],
-) -> Result<BTreeMap<Digest128, FactKey>, PersistenceError>
+) -> Result<BTreeMap<Digest128, FactSlot>, PersistenceError>
 {
-    let mut keys = BTreeMap::new();
+    let mut slots = BTreeMap::new();
 
     for written in stored
     {
@@ -223,25 +235,32 @@ fn Keys_From_Stored(
                 recomputed,
             });
         }
-        keys.insert(recomputed, key);
+        slots.insert(recomputed, store.Slot_For(&key));
     }
 
-    return Ok(keys);
+    return Ok(slots);
 }
 
-/// Rebuilds each key's retained history, in the order the file lists it.
+/// Rebuilds each key's retained history, in the order the file lists it, as one row per
+/// interned slot.
 fn Entries_From_Stored(
     file: &Path,
     stored: &[StoredEntry],
-    keys: &BTreeMap<Digest128, FactKey>,
-) -> Result<BTreeMap<Digest128, Vec<Entry>>, PersistenceError>
+    store: &MemoryFactStore,
+    slots: &BTreeMap<Digest128, FactSlot>,
+) -> Result<Vec<Vec<Entry>>, PersistenceError>
 {
-    let mut entries: BTreeMap<Digest128, Vec<Entry>> = BTreeMap::new();
+    let mut entries: Vec<Vec<Entry>> =
+        (0..store.identities.Count()).map(|_| return Vec::new()).collect();
 
     for written in stored
     {
-        let entry = Entry_From_Stored(file, written, keys)?;
-        entries.entry(written.key).or_default().push(entry);
+        let slot = Named_Slot(file, written.key, slots)?;
+        let entry = Entry_From_Stored(file, written, store, slots)?;
+        if let Some(history) = entries.get_mut(slot.Position())
+        {
+            history.push(entry);
+        }
     }
 
     return Ok(entries);
@@ -251,31 +270,55 @@ fn Entries_From_Stored(
 fn Entry_From_Stored(
     file: &Path,
     stored: &StoredEntry,
-    keys: &BTreeMap<Digest128, FactKey>,
+    store: &MemoryFactStore,
+    slots: &BTreeMap<Digest128, FactSlot>,
 ) -> Result<Entry, PersistenceError>
 {
-    let key = Named_Key(file, stored.key, keys)?;
+    let key = Named_Key(file, stored.key, store, slots)?;
 
     return Ok(Entry {
         fact: Fact_From_Stored(stored, key),
         invalidated_at: stored.invalidated_at,
         cause: stored.cause.clone(),
-        dependencies: Dependencies_From_Stored(file, &stored.dependencies, keys)?,
+        dependencies: Dependencies_From_Stored(file, &stored.dependencies, store, slots)?,
     });
 }
 
-/// The key a digest names, or a refusal: a file that references a key it does not carry is
+/// The slot a digest names, or a refusal: a file that references a key it does not carry is
 /// damaged, not merely foreign.
-fn Named_Key<'keys>(
+fn Named_Slot(
     file: &Path,
     digest: Digest128,
-    keys: &'keys BTreeMap<Digest128, FactKey>,
-) -> Result<&'keys FactKey, PersistenceError>
+    slots: &BTreeMap<Digest128, FactSlot>,
+) -> Result<FactSlot, PersistenceError>
 {
-    return keys.get(&digest).ok_or_else(|| {
+    return slots.get(&digest).copied().ok_or_else(|| {
         return PersistenceError::Corrupt {
             file: file.to_path_buf(),
             detail: format!("an entry names key {digest}, which the file does not carry"),
+        };
+    });
+}
+
+/// The key a digest names, read back out of the interner the slots were minted in.
+///
+/// Two refusals rather than one lookup, because they are different damage: the file may name
+/// a key it does not carry, which [`Named_Slot`] refuses, or the interner may not hold a slot
+/// it just minted, which cannot happen and is written as a refusal rather than an index so
+/// that the impossible case cannot panic on the analysis path.
+fn Named_Key<'store>(
+    file: &Path,
+    digest: Digest128,
+    store: &'store MemoryFactStore,
+    slots: &BTreeMap<Digest128, FactSlot>,
+) -> Result<&'store FactKey, PersistenceError>
+{
+    let slot = Named_Slot(file, digest, slots)?;
+
+    return store.identities.Key_Of(slot).ok_or_else(|| {
+        return PersistenceError::Corrupt {
+            file: file.to_path_buf(),
+            detail: format!("key {digest} was interned and then could not be read back"),
         };
     });
 }
@@ -294,7 +337,8 @@ fn Fact_From_Stored(stored: &StoredEntry, key: &FactKey) -> MaterializedFact
 fn Dependencies_From_Stored(
     file: &Path,
     stored: &[StoredDependency],
-    keys: &BTreeMap<Digest128, FactKey>,
+    store: &MemoryFactStore,
+    slots: &BTreeMap<Digest128, FactSlot>,
 ) -> Result<Vec<Dependency>, PersistenceError>
 {
     let mut dependencies = Vec::new();
@@ -302,7 +346,7 @@ fn Dependencies_From_Stored(
     for written in stored
     {
         dependencies.push(Dependency {
-            key: Named_Key(file, written.key, keys)?.clone(),
+            key: Named_Key(file, written.key, store, slots)?.clone(),
             outcome: written.outcome.Outcome(),
         });
     }
@@ -310,42 +354,129 @@ fn Dependencies_From_Stored(
     return Ok(dependencies);
 }
 
-fn Dependents_From_Stored(stored: &[StoredDependents]) -> BTreeMap<Digest128, BTreeSet<Digest128>>
+/// The dependents graph, edge by edge, with every digest resolved to the slot the running
+/// store addresses it by.
+///
+/// An edge naming a key the file does not carry is refused as corruption rather than dropped.
+/// [`super::MemoryFactStore::Materialize`] interns both ends of every edge it records, so no
+/// store this build wrote can carry one; a file that does is damaged, and the alternative —
+/// dropping the edge — would make a reloaded store invalidate less than the store that wrote
+/// it, which is the one disagreement `OD-ANALYSIS-009` asks this not to have.
+fn Dependents_From_Stored(
+    file: &Path,
+    stored: &[StoredDependents],
+    slots: &BTreeMap<Digest128, FactSlot>,
+) -> Result<BTreeMap<FactSlot, BTreeSet<FactSlot>>, PersistenceError>
 {
-    return stored
-        .iter()
-        .map(|written| return (written.read, written.by.iter().copied().collect()))
-        .collect();
+    let mut dependents: BTreeMap<FactSlot, BTreeSet<FactSlot>> = BTreeMap::new();
+
+    for written in stored
+    {
+        let read = Named_Slot(file, written.read, slots)?;
+        let mut by: BTreeSet<FactSlot> = BTreeSet::new();
+        for consumer in &written.by
+        {
+            by.insert(Named_Slot(file, *consumer, slots)?);
+        }
+        dependents.insert(read, by);
+    }
+
+    return Ok(dependents);
 }
 
 fn Stored_From_Store(store: &MemoryFactStore) -> StoredStore
 {
+    let addressed = Addressed_By_Digest(store);
+
     return StoredStore {
         format_version: FORMAT_VERSION,
         key_shape: Understood_Key_Shape(),
         materializations: store.materializations,
-        keys: store.keys.iter().map(|(digest, key)| return Stored_Key(*digest, key)).collect(),
-        entries: Stored_Entries(&store.entries),
-        dependents: store
-            .dependents
-            .iter()
-            .map(|(read, by)| {
-                return StoredDependents { read: *read, by: by.iter().copied().collect() };
-            })
-            .collect(),
+        keys: Stored_Keys(store, &addressed),
+        entries: Stored_Entries(store, &addressed),
+        dependents: Stored_Dependents(store),
     };
 }
 
-fn Stored_Entries(entries: &BTreeMap<Digest128, Vec<Entry>>) -> Vec<StoredEntry>
+/// Every identity the store holds, in digest order.
+///
+/// Sorted rather than taken in the order the store interned them, and that is what keeps the
+/// file a function of what the store holds rather than of the order one process was shown
+/// it: two processes that materialized the same facts in different orders write the same
+/// file, and a store written, reloaded and written again writes the same bytes. A digest is
+/// also the only one of the two addresses that means anything to the next process.
+fn Addressed_By_Digest(store: &MemoryFactStore) -> Vec<(Digest128, FactSlot)>
+{
+    let mut addressed: Vec<(Digest128, FactSlot)> = store
+        .identities
+        .Iter()
+        .filter_map(|(slot, _)| return Some((store.identities.Digest_Of(slot)?, slot)))
+        .collect();
+    addressed.sort_unstable();
+
+    return addressed;
+}
+
+fn Stored_Keys(store: &MemoryFactStore, addressed: &[(Digest128, FactSlot)]) -> Vec<StoredKey>
 {
     let mut written = Vec::new();
 
-    for (digest, history) in entries
+    for (digest, slot) in addressed
     {
+        if let Some(key) = store.identities.Key_Of(*slot)
+        {
+            written.push(Stored_Key(*digest, key));
+        }
+    }
+
+    return written;
+}
+
+fn Stored_Entries(store: &MemoryFactStore, addressed: &[(Digest128, FactSlot)]) -> Vec<StoredEntry>
+{
+    let mut written = Vec::new();
+
+    for (digest, slot) in addressed
+    {
+        let Some(history) = store.entries.get(slot.Position())
+        else
+        {
+            continue;
+        };
         written.extend(history.iter().map(|entry| return Stored_Entry(*digest, entry)));
     }
 
     return written;
+}
+
+/// The dependents graph as digests, in digest order on both ends.
+///
+/// Sorted for the reason [`Addressed_By_Digest`] is: the running store holds these edges in
+/// slot order, which is the order one process interned in, and a file that carried that
+/// order would differ between two processes holding identical stores.
+fn Stored_Dependents(store: &MemoryFactStore) -> Vec<StoredDependents>
+{
+    let mut written: Vec<StoredDependents> = Vec::new();
+
+    for (read, by) in &store.dependents
+    {
+        if let Some(digest) = store.identities.Digest_Of(*read)
+        {
+            written.push(StoredDependents { read: digest, by: Sorted_Digests(store, by) });
+        }
+    }
+    written.sort_unstable_by_key(|edge| return edge.read);
+
+    return written;
+}
+
+fn Sorted_Digests(store: &MemoryFactStore, slots: &BTreeSet<FactSlot>) -> Vec<Digest128>
+{
+    let mut digests: Vec<Digest128> =
+        slots.iter().filter_map(|slot| return store.identities.Digest_Of(*slot)).collect();
+    digests.sort_unstable();
+
+    return digests;
 }
 
 fn Stored_Key(digest: Digest128, key: &FactKey) -> StoredKey
@@ -610,15 +741,32 @@ mod local_tests
     }
 
     #[test]
-    fn Test_Keys_From_Stored_Should_Refuse_A_Key_This_Build_Addresses_Differently()
+    fn Test_Interned_Slots_Should_Refuse_A_Key_This_Build_Addresses_Differently()
     {
         let key = Sample_Key();
         let mut written = Stored_Key(key.Digest(), &key);
         written.digest = Digest128::From_Bytes([SAMPLE_SEED; Digest128::BYTE_LENGTH]);
+        let mut store = MemoryFactStore::New();
 
-        let refused = Keys_From_Stored(Path::new(STORE_FILE_NAME), &[written]);
+        let refused = Interned_Slots(Path::new(STORE_FILE_NAME), &mut store, &[written]);
 
         assert!(matches!(refused, Err(PersistenceError::ForeignKeyDigest { .. })));
+    }
+
+    /// The other half of the same question: a key this build addresses the way the file says
+    /// gets a slot, and the digest the interner answers with is the one the file carried.
+    #[test]
+    fn Test_Interned_Slots_Should_Address_A_Key_The_File_Agrees_About()
+    {
+        let key = Sample_Key();
+        let written = Stored_Key(key.Digest(), &key);
+        let mut store = MemoryFactStore::New();
+
+        let slots = Interned_Slots(Path::new(STORE_FILE_NAME), &mut store, &[written])
+            .expect("this build addresses the key exactly as the file says it does");
+
+        let slot = *slots.get(&key.Digest()).expect("the key was interned under its own digest");
+        assert_eq!(store.identities.Key_Of(slot), Some(&key));
     }
 
     #[test]
@@ -630,12 +778,24 @@ mod local_tests
     }
 
     #[test]
-    fn Test_Named_Key_Should_Refuse_A_Digest_The_File_Does_Not_Carry()
+    fn Test_Named_Slot_Should_Refuse_A_Digest_The_File_Does_Not_Carry()
     {
         let digest = Digest128::From_Bytes([SAMPLE_SEED; Digest128::BYTE_LENGTH]);
         let carries_nothing = BTreeMap::new();
 
-        let refused = Named_Key(Path::new(STORE_FILE_NAME), digest, &carries_nothing);
+        let refused = Named_Slot(Path::new(STORE_FILE_NAME), digest, &carries_nothing);
+
+        assert!(matches!(refused, Err(PersistenceError::Corrupt { .. })));
+    }
+
+    #[test]
+    fn Test_Named_Key_Should_Refuse_A_Digest_The_File_Does_Not_Carry()
+    {
+        let digest = Digest128::From_Bytes([SAMPLE_SEED; Digest128::BYTE_LENGTH]);
+        let carries_nothing = BTreeMap::new();
+        let store = MemoryFactStore::New();
+
+        let refused = Named_Key(Path::new(STORE_FILE_NAME), digest, &store, &carries_nothing);
 
         assert!(matches!(refused, Err(PersistenceError::Corrupt { .. })));
     }
@@ -665,10 +825,38 @@ mod local_tests
     #[test]
     fn Test_Dependents_From_Stored_Should_Rebuild_Every_Row()
     {
-        let read = Digest128::From_Bytes([SAMPLE_SEED; Digest128::BYTE_LENGTH]);
-        let rebuilt = Dependents_From_Stored(&[StoredDependents { read, by: vec![read] }]);
+        let key = Sample_Key();
+        let read = key.Digest();
+        let mut store = MemoryFactStore::New();
+        let slots = Interned_Slots(Path::new(STORE_FILE_NAME), &mut store, &[Stored_Key(read, &key)])
+            .expect("this build addresses the key exactly as the file says it does");
+        let slot = *slots.get(&read).expect("the key was interned under its own digest");
 
-        assert_eq!(rebuilt.get(&read), Some(&BTreeSet::from([read])));
+        let rebuilt = Dependents_From_Stored(
+            Path::new(STORE_FILE_NAME),
+            &[StoredDependents { read, by: vec![read] }],
+            &slots,
+        )
+        .expect("every digest in the row is a key the file carries");
+
+        assert_eq!(rebuilt.get(&slot), Some(&BTreeSet::from([slot])));
+    }
+
+    /// An edge naming a key the file does not carry is corruption, not an edge to drop: a
+    /// reloaded store that quietly lost it would invalidate less than the store that wrote
+    /// it.
+    #[test]
+    fn Test_Dependents_From_Stored_Should_Refuse_An_Edge_Naming_A_Key_The_File_Does_Not_Carry()
+    {
+        let absent = Digest128::From_Bytes([SAMPLE_SEED; Digest128::BYTE_LENGTH]);
+
+        let refused = Dependents_From_Stored(
+            Path::new(STORE_FILE_NAME),
+            &[StoredDependents { read: absent, by: vec![absent] }],
+            &BTreeMap::new(),
+        );
+
+        assert!(matches!(refused, Err(PersistenceError::Corrupt { .. })));
     }
 
     #[test]

@@ -3,8 +3,11 @@
 //! [`DependencyPropagation`] is the mechanism `docs/records/D-130` names as an XVPE
 //! candidate — dirty propagation over a dependents adjacency map — kept free of
 //! fact-identity vocabulary per `docs/records/D-135` and `docs/records/D-138`: its own
-//! signatures name only [`Digest128`] and generic sets, never `FactKey`, `FactIdentity`,
-//! `Component`, `GenerationCause`, `Broadening`, `Supersession` or `GuaranteeDigest`.
+//! signatures name no identity type at all, only a node a caller chooses, never `FactKey`,
+//! `FactIdentity`, `Component`, `GenerationCause`, `Broadening`, `Supersession` or
+//! `GuaranteeDigest`. The node used to be spelled `Digest128`, which was already
+//! domain-neutral but was still *this* workspace's digest; a caller's own type parameter
+//! says the same thing while letting the store address a node however it addresses one.
 //! `D-138` is why this is a module rather than a crate — Nomos needs it before XVPE can
 //! hold it — and why the boundary is drawn here anyway: the later rename-and-move is
 //! mechanical only if the thing being moved never learned the vocabulary of what called
@@ -17,7 +20,6 @@
 
 use std::collections::BTreeMap;
 use std::collections::BTreeSet;
-use nomos_contracts::Digest128;
 
 /// Something that can spread an invalidation outward through a dependency graph.
 ///
@@ -29,13 +31,18 @@ use nomos_contracts::Digest128;
 /// a root to `on_reach`, is a defect in that implementation, not a case a caller must
 /// guard against — this module's own tests check `LocalGraphPropagation` against exactly
 /// those three properties.
-pub(crate) trait DependencyPropagation
+///
+/// `Node` is whatever the caller addresses a graph node by: this module never learns what
+/// one is, which is the whole of what makes it liftable.
+pub(crate) trait DependencyPropagation<Node>
+where
+    Node: Copy + Ord,
 {
     fn Spread(
         &self,
-        dependents: &BTreeMap<Digest128, BTreeSet<Digest128>>,
-        roots: Vec<Digest128>,
-        on_reach: &mut dyn FnMut(Digest128) -> bool,
+        dependents: &BTreeMap<Node, BTreeSet<Node>>,
+        roots: Vec<Node>,
+        on_reach: &mut dyn FnMut(Node) -> bool,
     );
 }
 
@@ -48,21 +55,23 @@ pub(crate) trait DependencyPropagation
 /// opened Phase 5 — not a property of this type.
 pub(crate) struct LocalGraphPropagation;
 
-impl DependencyPropagation for LocalGraphPropagation
+impl<Node> DependencyPropagation<Node> for LocalGraphPropagation
+where
+    Node: Copy + Ord,
 {
     fn Spread(
         &self,
-        dependents: &BTreeMap<Digest128, BTreeSet<Digest128>>,
-        roots: Vec<Digest128>,
-        on_reach: &mut dyn FnMut(Digest128) -> bool,
+        dependents: &BTreeMap<Node, BTreeSet<Node>>,
+        roots: Vec<Node>,
+        on_reach: &mut dyn FnMut(Node) -> bool,
     )
     {
-        let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
+        let mut seen: BTreeSet<Node> = roots.iter().copied().collect();
         let mut frontier = roots;
 
-        while let Some(digest) = frontier.pop()
+        while let Some(node) = frontier.pop()
         {
-            let Some(downstream) = dependents.get(&digest)
+            let Some(downstream) = dependents.get(&node)
             else
             {
                 continue;

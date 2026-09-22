@@ -9,6 +9,7 @@ use nomos_contracts::BuildVariantId;
 use nomos_contracts::CapabilityId;
 use nomos_contracts::ConfigurationId;
 use nomos_contracts::ContractVersion;
+use nomos_contracts::Digest128;
 use nomos_contracts::EvidenceClass;
 use nomos_contracts::FactVariant;
 use nomos_contracts::Guarantee;
@@ -78,21 +79,23 @@ fn Fact_For(key: &FactKey, generation: GenerationId) -> MaterializedFact
 /// does, unchanged.
 struct QueueOrderPropagation;
 
-impl DependencyPropagation for QueueOrderPropagation
+impl<Node> DependencyPropagation<Node> for QueueOrderPropagation
+where
+    Node: Copy + Ord,
 {
     fn Spread(
         &self,
-        dependents: &BTreeMap<Digest128, BTreeSet<Digest128>>,
-        roots: Vec<Digest128>,
-        on_reach: &mut dyn FnMut(Digest128) -> bool,
+        dependents: &BTreeMap<Node, BTreeSet<Node>>,
+        roots: Vec<Node>,
+        on_reach: &mut dyn FnMut(Node) -> bool,
     )
     {
-        let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
-        let mut frontier: VecDeque<Digest128> = roots.into();
+        let mut seen: BTreeSet<Node> = roots.iter().copied().collect();
+        let mut frontier: VecDeque<Node> = roots.into();
 
-        while let Some(digest) = frontier.pop_front()
+        while let Some(node) = frontier.pop_front()
         {
-            let Some(downstream) = dependents.get(&digest)
+            let Some(downstream) = dependents.get(&node)
             else
             {
                 continue;
@@ -118,7 +121,7 @@ struct TwoFactStore
     derived: FactKey,
 }
 
-fn TwoFactStore(propagation: Box<dyn DependencyPropagation>) -> TwoFactStore
+fn TwoFactStore(propagation: Box<dyn DependencyPropagation<FactSlot>>) -> TwoFactStore
 {
     let upstream = Key_For(1);
     // A different subject than `upstream`, so `derived` is reached only by following
@@ -139,7 +142,7 @@ fn TwoFactStore(propagation: Box<dyn DependencyPropagation>) -> TwoFactStore
 /// A store built over `propagation` holding `upstream` alone, and `derived` reading it — the
 /// one edge that reaches `derived`.
 fn Store_With_Edge(
-    propagation: Box<dyn DependencyPropagation>,
+    propagation: Box<dyn DependencyPropagation<FactSlot>>,
     upstream: &FactKey,
     derived: MaterializedFact,
 ) -> MemoryFactStore

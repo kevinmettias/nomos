@@ -12,12 +12,12 @@
 
 use std::collections::BTreeSet;
 use nomos_contracts::IncrementalGranularity;
-use nomos_contracts::Digest128;
 use nomos_contracts::GenerationId;
 use crate::InvalidationReport;
 use crate::GenerationCause;
 
 use super::MemoryFactStore;
+use super::identities::FactSlot;
 
 /// The body of [`super::MemoryFactStore::Invalidate`], which keeps the trait's documentation
 /// and signature.
@@ -55,34 +55,34 @@ fn Invalidate_Named(
     cause: &GenerationCause,
     invalidating: Invalidating<'_>,
     report: &mut InvalidationReport,
-) -> Vec<Digest128>
+) -> Vec<FactSlot>
 {
-    let named: Vec<Digest128> = store
-        .keys
-        .iter()
+    let named: Vec<FactSlot> = store
+        .identities
+        .Iter()
         .filter(|(_, key)| return cause.Is_Naming(key))
-        .map(|(digest, _)| return *digest)
+        .map(|(slot, _)| return slot)
         .collect();
 
-    let mut frontier: Vec<Digest128> = Vec::new();
-    for digest in named
+    let mut frontier: Vec<FactSlot> = Vec::new();
+    for slot in named
     {
-        if !store.Try_Invalidate_One(digest, invalidating.from, invalidating.described)
+        if !store.Try_Invalidate_One(slot, invalidating.from, invalidating.described)
         {
             continue;
         }
-        if let Some(key) = store.keys.get(&digest)
+        if let Some(key) = store.identities.Key_Of(slot)
         {
             report.direct.push(key.clone());
         }
-        frontier.push(digest);
+        frontier.push(slot);
     }
 
     return frontier;
 }
 
 /// Spreads invalidation from `roots` through `store.dependents`, recording each reached
-/// dependent's key into `report`. Returns every digest visited, roots included.
+/// dependent's key into `report`. Returns every slot visited, roots included.
 ///
 /// Two passes, not one, and the split is why this reads `store.dependents` directly rather
 /// than cloning it first (`OD-ANALYSIS-008`, whose cost was `O(the whole store's
@@ -96,16 +96,16 @@ fn Invalidate_Named(
 /// which is exactly why the original clone existed. Only the second pass, after the walk
 /// and its borrow have ended, calls `Try_Invalidate_One` and writes into `report`.
 ///
-/// The split is sound because a digest is visited exactly once per call -- the trait's own
-/// invariant, pinned by `propagation.rs`'s own suite -- so no digest's `Is_Already_Invalidated`
+/// The split is sound because a node is visited exactly once per call -- the trait's own
+/// invariant, pinned by `propagation.rs`'s own suite -- so no node's `Is_Already_Invalidated`
 /// read in the first pass can be stale from a mutation this same call made to a *different*
-/// digest: invalidating one digest's entry never touches another digest's entry.
+/// node: invalidating one slot's entry never touches another slot's entry.
 fn Propagate_To_Dependents(
     store: &mut MemoryFactStore,
-    roots: Vec<Digest128>,
+    roots: Vec<FactSlot>,
     invalidating: Invalidating<'_>,
     report: &mut InvalidationReport,
-) -> BTreeSet<Digest128>
+) -> BTreeSet<FactSlot>
 {
     let walk = Walked_Dependents(store, roots);
 
@@ -119,13 +119,13 @@ fn Propagate_To_Dependents(
 
 /// The first pass of [`Propagate_To_Dependents`]'s walk.
 // Reaches the strategy through `store.propagation` rather than taking it as a parameter, and
-// reads it by shared borrow: the walk only reads `store` (`dependents`, `keys` through
-// `Is_Already_Invalidated`), so the borrow it holds ends with the returned [`Walk`], which is
+// reads it by shared borrow: the walk only reads `store` (`dependents`, and its entries
+// through `Is_Already_Invalidated`), so the borrow it holds ends with the returned [`Walk`], which is
 // owned, and the second pass's `&mut store` is free to start then.
-fn Walked_Dependents(store: &MemoryFactStore, roots: Vec<Digest128>) -> Walk
+fn Walked_Dependents(store: &MemoryFactStore, roots: Vec<FactSlot>) -> Walk
 {
-    let mut seen: BTreeSet<Digest128> = roots.iter().copied().collect();
-    let mut reached: Vec<Digest128> = Vec::new();
+    let mut seen: BTreeSet<FactSlot> = roots.iter().copied().collect();
+    let mut reached: Vec<FactSlot> = Vec::new();
 
     store.propagation.Spread(&store.dependents, roots, &mut |consumer| {
         seen.insert(consumer);
@@ -141,25 +141,25 @@ fn Walked_Dependents(store: &MemoryFactStore, roots: Vec<Digest128>) -> Walk
     return Walk { seen, reached };
 }
 
-/// [`Walked`]'s own result: every digest visited (`seen`, roots included), and, in visit
+/// [`Walked`]'s own result: every slot visited (`seen`, roots included), and, in visit
 /// order, those reached but not yet invalidated (`reached`) -- the frontier the second pass
 /// still has to apply. Named so the two `BTreeSet`/`Vec` results are not told apart only by
 /// position.
 struct Walk
 {
-    seen: BTreeSet<Digest128>,
-    reached: Vec<Digest128>,
+    seen: BTreeSet<FactSlot>,
+    reached: Vec<FactSlot>,
 }
 
 /// One node the first pass decided to keep: invalidated for real, and — if it was live —
 /// named in `report`.
-fn Apply_To_Consumer(store: &mut MemoryFactStore, consumer: Digest128, invalidating: Invalidating<'_>, report: &mut InvalidationReport)
+fn Apply_To_Consumer(store: &mut MemoryFactStore, consumer: FactSlot, invalidating: Invalidating<'_>, report: &mut InvalidationReport)
 {
     if !store.Try_Invalidate_One(consumer, invalidating.from, invalidating.described)
     {
         return;
     }
-    if let Some(key) = store.keys.get(&consumer)
+    if let Some(key) = store.identities.Key_Of(consumer)
     {
         report.dependent.push(key.clone());
     }
@@ -173,15 +173,15 @@ fn Apply_To_Consumer(store: &mut MemoryFactStore, consumer: Digest128, invalidat
 fn Note_Broadening(
     store: &MemoryFactStore,
     requested: IncrementalGranularity,
-    seen: &BTreeSet<Digest128>,
+    seen: &BTreeSet<FactSlot>,
     report: &mut InvalidationReport,
 )
 {
     use crate::Broadening;
 
-    for digest in seen
+    for slot in seen
     {
-        let (Some(key), Some(entry)) = (store.keys.get(digest), store.Latest(*digest))
+        let (Some(key), Some(entry)) = (store.identities.Key_Of(*slot), store.Latest(*slot))
         else
         {
             continue;
@@ -227,8 +227,8 @@ mod tests
     use super::*;
     use crate::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
     use nomos_contracts::{
-        Assurance, BuildVariantId, CapabilityId, ConfigurationId, ContractVersion, EvidenceClass,
-        FactVariant, Guarantee, ProviderId, SchemaId, SnapshotId, SubjectId,
+        Assurance, BuildVariantId, CapabilityId, ConfigurationId, ContractVersion, Digest128,
+        EvidenceClass, FactVariant, Guarantee, ProviderId, SchemaId, SnapshotId, SubjectId,
     };
 
     /// The generation the invalidation under test is applied at. Ahead of the generation the

@@ -93017,16 +93017,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P123-FACT-STORE-SURVIVES-THE-PROCESS-2"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p128-factgraph",
-        "acquired_at": 1790104796,
-        "lease_expires_at": 1790115596
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -93039,7 +93035,30 @@
         ],
         "timeout_seconds": 5400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-capability"
+        ],
+        "exit_code": 0,
+        "output_tail": "ence_Should_Report_What_It_Passed_Over ... ok\ntest Test_Renaming_A_Provider_Should_Not_Change_Which_Offer_Answers ... ok\ntest Test_Two_Equal_Offers_Should_Be_Equivalent_Rather_Than_Incomparable ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: field `derived` is never read\n   --> crates\\substrate\\nomos-analysis\\src\\fact\\memory_store\\tests.rs:121:5\n    |\n117 | struct TwoFactStore\n    |        ------------ field in this struct\n...\n121 |     derived: FactKey,\n    |     ^^^^^^^\n    |\n    = note: `#[warn(dead_code)]` on by default\n\nwarning: `nomos-analysis` (lib test) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_analysis-99a471a44b08213b.exe)\n     Running tests\\fact_identity\\main.rs (target\\debug\\deps\\fact_identity-272553ad39878576.exe)\n     Running tests\\invalidation_order.rs (target\\debug\\deps\\invalidation_order-f9e72280d219ac61.exe)\n     Running tests\\nomos_model_seam.rs (target\\debug\\deps\\nomos_model_seam-7075d2d3553b888e.exe)\n     Running tests\\recomputation_equivalence.rs (target\\debug\\deps\\recomputation_equivalence-9d66ca7e1beadc79.exe)\n     Running tests\\store_cost.rs (target\\debug\\deps\\store_cost-732db3188c5f3d9e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_capability-d7ad42015ad006ca.exe)\n     Running tests\\ranking_at_scale.rs (target\\debug\\deps\\ranking_at_scale-3590e21806492174.exe)\n     Running tests\\resolution_never_says_no.rs (target\\debug\\deps\\resolution_never_says_no-79532acde6c8c6c0.exe)\n     Running tests\\selection_is_decided.rs (target\\debug\\deps\\selection_is_decided-980fcb672896e64f.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_capability\n",
+        "verified_at": 1790107161,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "219c26f0b0a7d4829d5bb349d023e6d2607bdf69"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -93103,12 +93122,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P123-FACT-STORE-SURVIVES-THE-PROCESS-2"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p128-daemon",
+        "acquired_at": 1790106907,
+        "lease_expires_at": 1790121307
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -94141,6 +94164,52 @@
         },
         "revision": "ff888b5150171fdf96f43a496c0c72893e45be01"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P131-TWO-SENTENCES-WENT-FALSE-WHEN-THE-DECLARED-RULE-FORM-AND-THE-FIRST-REGISTER-ENTRY-LANDED",
+      "title": "Two sentences describe mechanisms that changed under them: the debt register is no longer empty and DESCRIPTORS no longer holds only linked functions",
+      "why": "Two commits landed within an hour of each other and each falsified one sentence elsewhere, in the cheapest and least visible finding class this repository has: prose that outlived the mechanism it described. Neither is a code defect and nothing mechanical will ever catch either one. Both were measured by the claimants that caused them, named rather than fixed because neither held the ground, and both are confirmed here at HEAD. First, ff888b51 declared the first entry KNOWN_SERIALIZERS has ever carried, keyed to crates/rules/nomos-rules/src/lib.rs. OD-LEDGER-032 line 115 says the record does not touch OD-LEDGER-007's debt register or KNOWN_SERIALIZERS, which is empty and stays empty. Scoped to that record's own change the clause is defensible, which is why its claimant left it; read as the standing present-tense claim a future reader asking whether the register may hold anything would take it for, it contradicts the code, and here the mechanical authority wins. The sentence after it, that nothing there declares a serializer to silence a search, stays true and is the load-bearing half. Second, 219c26f0 gave RuleJudgment a second arm so a rule can be declared rather than written, and crates/orchestration/nomos-check-orchestration/src/declared_rules.rs line 35 still says every rule in DESCRIPTORS is a linked function this build composes. Three rules are now declared forms interpreted by a linked interpreter. The code is correct and unchanged, since such a form is still a mechanical judgment exactly as OD-RULES-034 says; only the sentence is stale. Its claimant correctly did not widen into that crate to fix it. They are one item because a record amendment forces both derived projections to be re-rendered and that render dominates the cost of either correction alone.",
+      "done_when": "Neither sentence asserts something the tree contradicts. OD-LEDGER-032 no longer characterizes KNOWN_SERIALIZERS in the present tense as a thing that stays empty, and what replaces the clause says only what that record decided, leaving what the register may hold to OD-LEDGER-007, which owns it; the sentence that nothing there declares a serializer to silence a search is kept, because it is true and is what the record was actually claiming. That record's decision, its measurement of red on 26 of the last 30 commits, and its thresholds are untouched: this corrects prose and does not reopen what was decided. The declared_rules.rs sentence names what DESCRIPTORS now holds, which is both linked functions and declared forms interpreted by a linked interpreter, and says it in a way that stays true whichever arm a future rule uses rather than counting the three that exist today. No behaviour changes, no test changes what it asserts, and RuleJudgment::Judges keeps its signature and its one call site. Each site is re-measured at HEAD before editing, because both commits are recent and several sessions are working these files; if a peer has already corrected one, say so and name the commit rather than claiming it. Because a governing record changes, both derived projections go stale and the gate fails on them: diagrams/relations.mmd and spec/domain-specification.md are both re-rendered, corpus-unset, from a worktree whose registered records are exactly the ones this commit publishes, per the procedure in .claude/skills/nomos-spec-change, and spec freshness reports both profiles at exit 0. Rendering only the diagram leaves the other stale and red. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/declared_rules.rs",
+          "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p131-prose",
+        "acquired_at": 1790107069,
+        "lease_expires_at": 1790117869
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,
