@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:cc5c4731f800649fae4eee01c83e6fa6b5fc60d774aa79ce61942a5a4d5ee9a0",
-  "inputs_digest": "sha256:1fc2f7ca50b91872419888be9dca0ba120324b4234a268f735fda470effaa502",
+  "content_digest": "sha256:be8eea2babc2708b8b161cab602d89e0011e786cd51b9eb65b8e0c6dd0267df9",
+  "inputs_digest": "sha256:c3788a62877722d6b7aecd33b480f4ccdb56cc8cd1c1c8d47de6b0a9062bd3a9",
   "sections": [
     [
       "Documents",
-      255
+      258
     ],
     [
       "Sections",
-      2155
+      2202
     ],
     [
       "Source blocks",
-      7663
+      7837
     ]
   ],
   "inputs": [
@@ -637,6 +637,11 @@
     },
     {
       "content": "documents",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md@authored",
+      "hash": "sha256:7a05e7d2b4970db396626604d0d0e0e6dda68dcb9890eeaaa7d120f22d219e88"
+    },
+    {
+      "content": "documents",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored",
       "hash": "sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30"
     },
@@ -977,6 +982,11 @@
     },
     {
       "content": "documents",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md@authored",
+      "hash": "sha256:516ee83533296746248d7fb3d29523f83972d159c0fec6c294b6d8386ab9baaf"
+    },
+    {
+      "content": "documents",
       "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md@authored",
       "hash": "sha256:4264b9448cf95f7bb22780f4a6cd970a7f64828eea993961df2987984417b701"
     },
@@ -994,6 +1004,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md@authored",
       "hash": "sha256:679898fb3515e18e74b3d01fc12b1993228c1941b02d8250e8a1a2b4c780c683"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md@authored",
+      "hash": "sha256:62c6d8750480da8424a5689d32b601a54227446d970e4610b102910dbe001e06"
     },
     {
       "content": "documents",
@@ -6177,6 +6192,71 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#1",
+      "hash": "sha256:e5b8aa16263a7c477f6358b7513b0bb0c2e00f1bbd3f9560c4da96983a75cef8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#2",
+      "hash": "sha256:d069e1ae2c22baeebdc2a95cc7c901d50d3e9a0cc040df29f39513a88663fcb4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#6",
+      "hash": "sha256:db96d858f038d3a4f2b05d63ec7b2d272c7f09498aa150760d50cdcdd1fff6e3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#20",
+      "hash": "sha256:7e835a6bdd8c682ffad67d8d0f7795e96f1636cc75e8eb17c961480e9eb2f49b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#22",
+      "hash": "sha256:3fce3e14517bf86089591172f6241282bb6413d0afae339e676dc40f2dc82209"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#26",
+      "hash": "sha256:0c40114d882a49f41b5bc63d1aab70c917543e96ef86c7e2cc46b5de9e7aa104"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#32",
+      "hash": "sha256:46b74031f1d2ab73600698913253ecf6ab7812d4774dae4c85e1dc8fc34135cc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#34",
+      "hash": "sha256:574815ce26f56cf92c34887e52b1917b72a2e018dbdb5c34bf9c0dbc7ffcce42"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#38",
+      "hash": "sha256:e931b6dd8cfaa985c564144a13310bcd235253b552a09ff101e523c24f395cfd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#42",
+      "hash": "sha256:065e97bfd300da7406133abf52e34c7ab4db013889be8599d2eaa1a94aac789d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#45",
+      "hash": "sha256:f13484f8891db8289d472b95129913b40c5a59c42b80504b38da1138a6ba0ffd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#50",
+      "hash": "sha256:335666a0fd19998e506c845f8f0eebc4f0b9ff135d5646ee47f68ce3e172b1ee"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#55",
+      "hash": "sha256:8c6879924dcd415bef621e147eaf6bf10de2f4eb100e5aee4d5ce27b1e63c2f4"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1",
       "hash": "sha256:b83c25bd2b95b9da20e7382897fc29949ece08f9aca4068545ec8950751b9201"
     },
@@ -9322,6 +9402,101 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#1",
+      "hash": "sha256:2ce3e83b63e965ed4037a20a4d26611cdabbf7124d8791c53e748db1a0154501"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#2",
+      "hash": "sha256:21161a28e5198b0f25fc41f8a31563b558901ad538d17c2b4e424e1bcc3b361f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#6",
+      "hash": "sha256:ec7a3bc181013e6454c138f8fd3a8f09b86825a0ae2a9f7bd4a1460f67f4d136"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#8",
+      "hash": "sha256:50f891a8f856e484608b920b774cd78da1230e7a7d55c772e8614aaa523f46a2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#13",
+      "hash": "sha256:aecbff1743b1d4639f58db927d60ab102a5ecd97f78b652ce1cf2e57b0489c2b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#16",
+      "hash": "sha256:1b608d6a2358be6d98843257b9c152d3939202ada9bc1dbaf604ed3e0b294823"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#20",
+      "hash": "sha256:164c2f5a0408ca12f46ccf6aadf7acf707c88bb06bf8214e2dc9037be16cf4ad"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#23",
+      "hash": "sha256:f7c17addfa77c7630b671ce35150906d3d05f8d469d6745ad7c99b74152b849a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#27",
+      "hash": "sha256:6f543aebf208ab6506b5b9a38b1e544e19ec133b07230ddaa1eaee843fe8dafd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#32",
+      "hash": "sha256:70f2631779ed69b2f241f975681f8835045231c1cbe17eba561d18bccbde30c6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#34",
+      "hash": "sha256:4a1e50496654d43896c6f870205b8e9a2e0ab8b853efb6dc371261d6af54e6cb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#35",
+      "hash": "sha256:a14d1f4f2ad0e2a8f03fac8387b9a3958233ead835ab9d8c24697a1c172c9acb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#43",
+      "hash": "sha256:1c2732404d461eb0ee71726779fbd17509ab55ceaa0610763155c701a72be7f9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#48",
+      "hash": "sha256:ada83a15ffa53dd0cbe7ab0d4b62d0e0ee7f31be7621893eead876f82ab5b3ef"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#52",
+      "hash": "sha256:5dd77ba75c0c9a96ce09e7e19d78bce627dc2f0d3c5d05416692dab20538d477"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#55",
+      "hash": "sha256:a0f831b5f812c933854ac7171edc64b661e328dd82d353f61e731ae2de793fd8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#59",
+      "hash": "sha256:cda1118a4fc46ab7dc76b9eb9f7e2bd0988eb5ace0eb0285c382b10d1d83c142"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#66",
+      "hash": "sha256:0c7bb7a5b9cadd5bbe1a6e2041883106110dd7e747a88346a47461e4d1b97e3e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#68",
+      "hash": "sha256:07b4eae078ead00c27618e6f8c15cf112d11b5fc0df48533115d27214afd77d6"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1",
       "hash": "sha256:bac3317dfb343a2d4721d13db4f1aafc6d868ab307128e6a0260cbf2dc357f96"
     },
@@ -9474,6 +9649,81 @@
       "content": "headings",
       "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#42",
       "hash": "sha256:6e00b0e0227e7dad04d28e6765bc89d4ecd2532e0636a37a527ec974a43a5fb3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#1",
+      "hash": "sha256:c125d97b29f76ca8009af92fbb1446ef727729af727ee84f8bc07e0108c24572"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#2",
+      "hash": "sha256:9f0903386afd784ed018429d312b0ebd0caf87d29416b101f39bf71e1615ea84"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#5",
+      "hash": "sha256:8a0f6a3e5ea3cbca4dccdd9b826bc7999f6c16e709732d4da6185e1ca0aab21a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#16",
+      "hash": "sha256:209f4ad1858f05a227ff1b8189603669fb3e6ff021f56a8d3b491c327f46461d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#20",
+      "hash": "sha256:01970206d01fb670d4f0604cbacb6f319118088d662505c2399367f79d20d25c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#21",
+      "hash": "sha256:ad76ecc33689654aa4628d63bbe42c05e8690ebf6fdab0ba2824c8ef4d244468"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#24",
+      "hash": "sha256:08fe507d82e15340f4928709a565b555d997849bbc68c90a2fb2ef87fc1a4a3e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#27",
+      "hash": "sha256:a46f9ca8036a590842eab26b7308fb8dd67ebcc844ec49c1213120ae57042676"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#30",
+      "hash": "sha256:ce38ede55e39a85da8d5b5d4637a4af018d4f3e7bc24cb2fc6e1425bb033dbfa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#32",
+      "hash": "sha256:c342d99415f5f1ec64f6b68af07eb593924e2e65e73595e7eb1b5e0ee9a0056f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#35",
+      "hash": "sha256:7e9f07c190cad90fae1e584d64bb6f74d9c0bf06216f59bf518c3ce6c3429c1d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#39",
+      "hash": "sha256:288f9eda29a9cffe45abd585788d511bb7118364d9ab3cc08a1599432f936269"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#42",
+      "hash": "sha256:bc4f370aada985a84601a07f6a6426cfe5491c638365e66520e11624baebf2e3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#46",
+      "hash": "sha256:39bec973b8134cb471536b11071a28e26aba4a72d43f37034a81643f18707dfd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#48",
+      "hash": "sha256:ea28871a6d98b726158fe2aba459f7083e9fd097261f755884d6f7eb0866de5b"
     },
     {
       "content": "headings",
@@ -29487,6 +29737,286 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#1",
+      "hash": "sha256:c1958d35e733454dd700c8ec6e56b13830860ac5446bf054f1d0427852da46ca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#3",
+      "hash": "sha256:c2259343c8c974e6e301f9f4c9f9a9ca170a7b5853ad35d6e047f3b07e097d48"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#4",
+      "hash": "sha256:8bc46345120f92b1a8c63e8039eefb0b0d1b40003b1be8621798c970a3810789"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#5",
+      "hash": "sha256:bbe2c3b0f9a7cb5ea362b60ebc0a6880f64f13719e18d48929a8b0b6ca3d8068"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#6",
+      "hash": "sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#7",
+      "hash": "sha256:9c5049b963b3e2be138f20b5c7d5d4be1c169012b2d5af8ebf88b94b66eac59a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#8",
+      "hash": "sha256:457a020935f93773183358ac6cfe0a2c74430dd6562d7a3f5a5e05d959a80123"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#9",
+      "hash": "sha256:2a8280dee39626b5b964963ace41cf48380380bbbbd13d677f66475eb8acd9c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#10",
+      "hash": "sha256:669318c559eb05cc6bfd9b4c00de17b73358fa0c6f34dc3855a0ed0c37a5c421"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#11",
+      "hash": "sha256:3ae974ad422b3cc73720080cc643e44cb990308da31a5c30e5068f6ebed6abaa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#12",
+      "hash": "sha256:1e6681934efb63cc2b61006a263c93fb55f74879d08668c5c6ea0d7ac7ff2820"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#13",
+      "hash": "sha256:b7fa76ecfaeeb89161bb2c346935c86f52b2cb01c8eb2d20621b54cd98a445cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#14",
+      "hash": "sha256:6ea930f4457fb2eb0be90602e54ad479098543638f239a7d5ecbff7f797f0437"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#15",
+      "hash": "sha256:f19e356542ee26bd71b046e38613186a2d1fb1ef0cbb3615f250a2defb0f91a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#16",
+      "hash": "sha256:222a60f0e17298e346e156f1274fcb1bdcb0a7aa171361acec9539cd179b6c4d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#17",
+      "hash": "sha256:b08538bd8f76f53a220deb39468d50aa698f659df066c5baedcc108f276d6592"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#18",
+      "hash": "sha256:1699f7903c99b839396a23553231bb3b09267bec73070cf216adb0a4ab07d2d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#19",
+      "hash": "sha256:c08023566a5ae923ef423691336c91aa31584f3b99270104d8ec8039ef407d64"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#20",
+      "hash": "sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#21",
+      "hash": "sha256:cfedbf4b3a93043855a85560454de5bd6b7509e4a72c8276d657ae2ae84dabf2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#22",
+      "hash": "sha256:de1390e1c1270dbe4a1738d4a4e8dbd7851a90b8fe3e4e540c1005538cc6cdbc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#23",
+      "hash": "sha256:8cd059bfd53c2bc55e858dbaf5f3209cb4307b8610580827b78191a93b39d959"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#24",
+      "hash": "sha256:ed7d383fb69c1203f7d9e1910ff518f4de82baa2eb8730a2001ed8afaf53e6e9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#25",
+      "hash": "sha256:77c0301914503903d4dd567c2fdc8bc4c33f912b97ad35d76a115768a83df6bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#26",
+      "hash": "sha256:2eb6b83561d7a660d3a9cb83e6a5daa9fe07f540ea2a077d62a088d471035f75"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#27",
+      "hash": "sha256:92461a32be3c9659cab35bb17d8ad18d801b4de2995d429b1f88c0d145cd260b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#28",
+      "hash": "sha256:1373c177a23b421df438f1e72aa9bf6094129c57c4cc7fa78b14595426e49369"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#29",
+      "hash": "sha256:b7756999af0386c06627b70e2a2874dc8213825e34493b2d6ad460d8fd14c386"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#30",
+      "hash": "sha256:494581cd9270da89df2ffa47515a9e6b09a0c077066ccb313e5523d486133e3a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#31",
+      "hash": "sha256:0aa956855aa0f9036fdedd7eee56b571eeaee728d85caa1bfe04ff1158a380f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#32",
+      "hash": "sha256:d134270d52a1e664abda9ef8454ad18e97322b4c8c1527526125794cd816e9e2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#33",
+      "hash": "sha256:1ce515a5465190f34aafb5fff637a60fcd72a34ed07be37eedf60bd783d7e420"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#34",
+      "hash": "sha256:97b148fb089a5686b3d4660248e802e8001dcff1fd3700637d089390daa40b5d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#35",
+      "hash": "sha256:0deecdac7666ccd5b4b96288d56390eb989bb37d8a8cd6a9a0b5842783921e99"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#36",
+      "hash": "sha256:af3d91b42e6465e1377c55d6c4485a2ef93b61cff40e8d865f5e379f38c4c7ab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#37",
+      "hash": "sha256:43ffc2f6624b1f1cdbf9639b30bd391cbd3faced9fd76105f3d6711d9f32ebc0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#38",
+      "hash": "sha256:e089052c59aa32a65a62303030111b73ebe1809cc404b8b0a33e27a5d28bd2f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#39",
+      "hash": "sha256:ae093434c808c15cb780f72c1512828e2408563e4fceca7906f50fa14fafbd9c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#40",
+      "hash": "sha256:6d4dabb789caabccadcb16395e7c42c16965e69c03b5a9b48e7dab82d9abf6b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#41",
+      "hash": "sha256:b42460d8dbd6211efe7af75684953c212f602008de0802a60d7b8d302ef82355"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#42",
+      "hash": "sha256:82a5ea76fbe5c8072870c5f86c5e7be56fb585f0a6833d12a2f51e23dcf28827"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#43",
+      "hash": "sha256:e9e3cbb8cf27fcc81b46810e9a59db0ffcdf5135ab325a64a106dcd39a6921ec"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#44",
+      "hash": "sha256:3b4bf8687885c68218e6866053fc64b9fe2fc5686bb059a0d2e4dade45f6a79a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#45",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#46",
+      "hash": "sha256:745777473c6e57e2df4417aea5af6d0cba15c7ce3a65ddd5dc3585d1de47595e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#47",
+      "hash": "sha256:01a58a9251e2114708531b97027eacc21024f6e6ceb11d0530ba5be6c2a95efa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#48",
+      "hash": "sha256:b9a55c9ace8117d767ec9545c6de61868f7e22cb0cccc2b0992dc6d09ca0904c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#49",
+      "hash": "sha256:49402ba23d7883aeb58a61f8f503fb5edbe9172cf98430111143e9147c846c9a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#50",
+      "hash": "sha256:50f7fe341d0cfed6e28159523cb5ae8b858a91e3d202e5c4e76da0dc600b9b9c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#51",
+      "hash": "sha256:077a4f135110ce85bc3ad793493a9d52d8249c0291de9a53bb90f763f3bddbf5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#52",
+      "hash": "sha256:5099f6e3622e0aa1e225a9a31b910869f5b84154b13de4d19524178e3e1587da"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#53",
+      "hash": "sha256:00454ef32efe10866474f33f843f9c98f250300db72beba8d72094cff46fc91a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#54",
+      "hash": "sha256:97fdf77c4efa0c86d19c343ff3505ad8459ee1b6f76a467a6d9c038e24e16e9f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#55",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#56",
+      "hash": "sha256:f74815390864b77e2e1a29bba3e89e48b181b2c215bb7d3cf92624f39ef760aa"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1",
       "hash": "sha256:84c92233c65230ede8aaf2bbb88c77437278652b8a9b50cd6e8e9f906a83853b"
     },
@@ -40827,6 +41357,351 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#1",
+      "hash": "sha256:d0f6ae046be121e0a0f250c20e683312acb7fbe0fcece6201ac03f5126f06858"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#3",
+      "hash": "sha256:78eca5add52050d185d674cfc877c2a916b4b596c0c1ab81547d959fc71e3beb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#4",
+      "hash": "sha256:9b7fff9d7046d7ddb4228d82acbf8ad33d5da8cc7888ba192013d7504bf5ed57"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#5",
+      "hash": "sha256:d5b7fe3a20ce6053bcc353b49d8a536bd720b83d996e4b671aae9014d4aa67b0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#7",
+      "hash": "sha256:870bf4e296556d3ccdb6fe3c6e9f389d5af2d72e8b18c7c1f4c803b60c4b64a9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#8",
+      "hash": "sha256:57fcaa134dfe037f3c6af552249a337b86b31a04886ebe1b5b0809041d8bb14b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#9",
+      "hash": "sha256:72f180849ce642b4334cda974527dcbe7e7eac394f35a0ba4455e68d5c7da45c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#10",
+      "hash": "sha256:c9f8f12084c34d76017c415a751e9091e212b13fc57af15c18938131dcf3c94d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#11",
+      "hash": "sha256:89869814c7d327d8689e1144c5f0cf97d78225e6334b52d33303a8efc82335c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#12",
+      "hash": "sha256:8c8b7542e41bcd484b8251ffef6b1d0a03943535f045a0c7e9092b010001181f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#13",
+      "hash": "sha256:81a358122b1574e1c1046055f725adddcee83b38e7361e9e095a7c4b0eb455ca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#14",
+      "hash": "sha256:76fe3bf03d1ed6bc3386e2ae2bf5b03e28fb9642d6429bb81dba3f4e251c6358"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#15",
+      "hash": "sha256:0f1d1f3509fbdede42141617f8648e3902e5d29fa56e38e3222098968c3be884"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#16",
+      "hash": "sha256:47d0438fe7a9aef5c3b72bc22cdb2796ce830e744b5f662eb77a57a6da671c5b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#17",
+      "hash": "sha256:57c261dbf64e8a89edaa01c9c5c9b58ba1d24bb8b8c324d939b7e608f85f4f17"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#18",
+      "hash": "sha256:9569eee6ac5ee206f6674bb53738a4e6b458873af24e8e1da03e04fcbcc188c9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#19",
+      "hash": "sha256:49ed1bfa3b6aa73ba77b520b0df248eb301b8b49f6d84e65dd7cd7bbc0a1efa9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#20",
+      "hash": "sha256:a3da0959639a848bebd013e7fae8585b6ee2837be22c8c1e6da14c52eb4d1839"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#21",
+      "hash": "sha256:05710787b27cbb7d83797878cfcf02fa9f4ae1bd4425aefdaba5ae24d9e36ff3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#22",
+      "hash": "sha256:a2861129429284cebb1f7e48d9e8f0b3fb6a55174712bfc2db6ddbaef0097095"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#23",
+      "hash": "sha256:0d575dd6be9f189125e84bb5f65b96d420c4a58a7c544d70bd5ef9fc78cccc07"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#24",
+      "hash": "sha256:9592e6ee8dc4641aacb82aa78f263f01b528ad901b1d7493fb27041b3f07bc3e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#25",
+      "hash": "sha256:70b0d1a5c2e45d86d54a12a20c7183d445785bf603106dff6c1d33d3f37f113f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#26",
+      "hash": "sha256:0d0727ffdd70f82554324a80ccf95184ca6e9e52ad81fd2324e8f3ee35f59289"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#27",
+      "hash": "sha256:368b45b1ee53956ed1a85d3a9503385e7bd7d680b10afb171e701dd537aeedc8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#28",
+      "hash": "sha256:e1d20dd79a9e539e50d1c4237860a3b410b2d3c9f4513e19f6cbfc12cf800fed"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#29",
+      "hash": "sha256:bfc54c7e66327837afc3313a76f242242b120ba9ec786136db3bd3c13cabdf39"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#30",
+      "hash": "sha256:0c16548c1a176bb1c4d33cf32035c7d25325ca10cc0371de8347e29f9701d1ca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#31",
+      "hash": "sha256:26ac555ca0c2dd2da36468323c6e761c00cd5c7283136006639430d0ea101a26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#32",
+      "hash": "sha256:de8174923774bc165ca3bae311aa187d69a298e40ca6afa5661fa1a6b2f522e4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#33",
+      "hash": "sha256:733850858d5e982330a31386daab1a46c8caddd3728a00609594e345789904df"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#34",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#35",
+      "hash": "sha256:c71b5ba77bb8e7c26800562ff59b53fc50e4a8b0a48ca4a734b656dec5b55241"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#36",
+      "hash": "sha256:41866640a117d1dfb100fe7e44f618b4de263d10ce27e496c090579faffdc141"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#37",
+      "hash": "sha256:bc354f4b1e7582e6df2a7cad846955dbc2bc9165751062dc109c0a6d499d47ba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#38",
+      "hash": "sha256:b42398b069b1dc52d7644e87bb0d9426e7b68de718efe885c58a80c8496a571d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#39",
+      "hash": "sha256:438afef20a2f758088ddef05eed82f6814264a84aac8dd9859ecaba43cceb40b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#40",
+      "hash": "sha256:f097a5dd0f1567b56aa98ed7f95b3c670b4662f45707715cd37151f9602f8e74"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#41",
+      "hash": "sha256:9cab326c0ffbb3cc42d82aa3701659ba32728d2a42d46c36fb023f481712209e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#42",
+      "hash": "sha256:4833fd2e0debbc36e59591b5eed498200c3cf088e6110fb554c2e5529caf6899"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#43",
+      "hash": "sha256:75ed5c10cde562e431c58dd0b0ae38ba988e3c71fa7965d96f885ac098826306"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#44",
+      "hash": "sha256:25ab6765c8f1de3fa1e6801c4106977cec547f6c4ad1cb5f34bd81b9aba7f7c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#45",
+      "hash": "sha256:d8fd0c74a638676b4378f4d1274bd6d82fecef3bc72ac002b2d870d2342e59b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#46",
+      "hash": "sha256:396f4740d25124779e6328ec402685e0b1d7ede5dde7560fc846fe5ca0e3cfe0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#47",
+      "hash": "sha256:65ed0e4e1a45611bf9a21d2dcda5a841d2436ad2129bbb3f3f5b7ac46e7298d9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#48",
+      "hash": "sha256:ae7ee8d638654f99386e5c7036f669057b6322198f6bc8431b46283c521693e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#49",
+      "hash": "sha256:4354cb61e703db84af458ee9ce4831f4f5e2d79a83c992ed0b4d0244e6cfd981"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#50",
+      "hash": "sha256:7eaa7eb82fd2a0d025d6c98c67e9dc235df20ef605c3ba7ebeb21488c1631f17"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#51",
+      "hash": "sha256:0b4f0b9abad7ace8ed4aaa33b8568eeff746cf2317f91d46357d180f7c48a974"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#52",
+      "hash": "sha256:9ede30e383298ffb74df580cdb471e157547f811268cc7c14bc5872c84d9471c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#53",
+      "hash": "sha256:c4317c992e2e8105c67dbdb38b3a9361d9b283c4d8e9b5b248610389d591bc1a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#54",
+      "hash": "sha256:aa81b51ae0602c1635a855a0319be6a16232f1edf70ef22d932de2d89c664784"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#55",
+      "hash": "sha256:1987f8483c997972e9dc11d805c751ac57a2137eb2deb2cda10383af3d111c98"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#56",
+      "hash": "sha256:e958b699395a013706a9ed17b7cfaefabfb0ff3f856295a51c33200e036e750f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#57",
+      "hash": "sha256:1bf5feaa49cac1f034fc412c16eea43504ae2bbb279d94c85248a11e26930f6e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#58",
+      "hash": "sha256:95d882d04cc7bc6abbe6b9985ea013d8cb980e2cbf50b829f975b3266453ff15"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#59",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#60",
+      "hash": "sha256:b73a823aa0a33019fc086308d98932a3ec70bdfc04a051dbae58ac051d4fda45"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#61",
+      "hash": "sha256:9102a85f25ecf073c5d05866258b4ac63d436d3bcb549eb843b88235755fc98c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#62",
+      "hash": "sha256:f802cae7e4cc789bb5c088abb15a952c86fdc488207f7b74e7fee713b77f4b49"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#63",
+      "hash": "sha256:b18a4277f9cf18a6873dccab6b87af6d5257cd1c46f80d827326d9e5c8655fcf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#64",
+      "hash": "sha256:b9ca17246c95802b1e84ab971735b8e23dba7bb0a17c9e8d1f65ab9b4249a79b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#65",
+      "hash": "sha256:b5924ef44138817f9c54ed3ced442c2a6518c58ab2054f8f49904b169e59a0a5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#66",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#67",
+      "hash": "sha256:1a1a9680bd43594588ea5419c068917c3f6f6714b6fa738e6695d52a3f203c4e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#68",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#69",
+      "hash": "sha256:9eb10a6b587ba72f7eeb6a8c6e234330da68c050d915382f1b6b2a462fb03eb5"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1",
       "hash": "sha256:f4f6a218878ef17be9759ceaa4eb9347fd1ce9a14a065d36b33434c8b5f86856"
     },
@@ -41344,6 +42219,251 @@
       "content": "blocks",
       "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#43",
       "hash": "sha256:2b817d938c6575fe29b74db9987b40d81256f2645573f9bcbf5c361a081e8b3e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#1",
+      "hash": "sha256:e1101969ec797782305194e00fd6f1bf72cc9ca88a02ebfcc586d9c3fae6831b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#3",
+      "hash": "sha256:0153ca2273822babc9413222ca1719b954f6f1411fdb03cf540630de0c3df3d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#4",
+      "hash": "sha256:a85446d7b477322b054545cf42d6653a47642a00cb19119e3919862142b5886a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#6",
+      "hash": "sha256:533e52dfc4d431bf0e4020f134d62717eb8cc5c6c90f11a7dc0a94c8a470bea6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#7",
+      "hash": "sha256:7c96869133ae35c274c13e5373563b32dd78cd2519d70c297e4ea11bdf5227ed"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#8",
+      "hash": "sha256:6a357b6f702397fda68ce7bf8b252f4cee00281498b9f0944d9108f14faaf3b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#9",
+      "hash": "sha256:fee2ba05d840641e8087da0e53348cf4e8d199672ac7a08ac19b22498bcacf03"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#10",
+      "hash": "sha256:359a4aa487e5efc3c3e7ccb2d091591e58d549a5df9e518a3a3251f6c8d9251e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#11",
+      "hash": "sha256:6f5ae41ecee6f4614dd5d773cc95090874ec5af3a9fd61b973029e7606539bf3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#12",
+      "hash": "sha256:c7645bf907c52c2f89ded1c3583c5e64a4a00cd3e587f9a7e45338b83cbabad1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#13",
+      "hash": "sha256:4349be3ab3c887f27a9bf043acc43be53d2ca28ca8dc330fafe4e4da1dd9149a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#14",
+      "hash": "sha256:46156502023a406cdd44160403a88244061ea7d22b84f90d34630f4ec5520589"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#15",
+      "hash": "sha256:ea2156ee5a7424009afffb6de99a46a3cca0702d91cdce78e93e22d3ea40ae23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#16",
+      "hash": "sha256:f4882fa3644d90d252e5d6165d7a77ff733cbdadf0156c4729d913138a3fcb0d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#17",
+      "hash": "sha256:415cfc9a449ead6f2a4727321250ba14460064098af1c6647affcff24cc94a54"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#18",
+      "hash": "sha256:b42de2c2e12ab6313833cb9f6b4c04093bfe611fe37753ff7c1242b39f96c8d4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#19",
+      "hash": "sha256:62553f43c4b822aceb43f62b6c351529c892f9c554a192e3a9fa10a795b16b30"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#20",
+      "hash": "sha256:a1e05bd4c3000ee536cfad8f47837b73c22e9943f35ae1d67b060de2a67a4a16"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#21",
+      "hash": "sha256:ef56554831275d6e32e6f179110b9a14f7ae16bb9e8c87688c01bdaaa7c86ff3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#22",
+      "hash": "sha256:d6fd1a08c4f99c4326ad20621327b6a85ac8c24b85b85177324725dbbb2f8b1a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#23",
+      "hash": "sha256:11b8569316341aef4306eaabf9938aa1114fcc4e1ed98a82d2d154d871fb4455"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#24",
+      "hash": "sha256:4d50c595021450aab49aab9b5d8a0194f05ffa6c4af9a57b73b313763865d733"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#25",
+      "hash": "sha256:e62e2d2c639bf9efd7b9417705d45f8e42057e90c4da54ecd49cb18629531856"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#26",
+      "hash": "sha256:b3026ed71cb3b61deb3a17231b2a34f1bd9c5f67086584739f8d9dac00b0a8aa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#27",
+      "hash": "sha256:990aafe24d53e799079753743eb36bbf7f96d3879aa48f0930790dd949f9ff4e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#28",
+      "hash": "sha256:f67f6c4ff43eea3eaae55427dd8e1989212cd96a58f60e04d3e1a27a737dc600"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#29",
+      "hash": "sha256:19c5cdcfae2705cea9ac6853602e4032a06c74f1e7489544608c65cadc5cc3df"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#30",
+      "hash": "sha256:3e5b7513427bae90a1e6289f457998bff59b7529dff6d144677c49abefc0a7cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#31",
+      "hash": "sha256:1d928ffb4292a6dcd248c2ceaae1aae4a22ac5b558f602f9a3bb34c2efd5bd0a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#32",
+      "hash": "sha256:d51d6ef0809918d8697798837fbf9c97ac826f48616055252e993ec0f8ef5e37"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#33",
+      "hash": "sha256:e97d5e289b013e39fe0c28e3ae4c8965f97810a3e6b33727c9cbb49bbc79701b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#34",
+      "hash": "sha256:6d9448505a727bf1dd6dfefbd1eaa8f50c37b9805bf687710295b8c573b9d81d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#35",
+      "hash": "sha256:141b1ddf5232899fb0c9e28a3729d6774a5c82692170af7ee6721702849270f3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#36",
+      "hash": "sha256:8855d08e4d974f8b0c228a738957f7fa3509a7406ca4212ee00d5fd1a0007b4b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#37",
+      "hash": "sha256:be76ca7e0f8042046cc83a2e6b5be5048ba4fe4269532c27219f822fe61acab0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#38",
+      "hash": "sha256:8ee3bf85f5f2e8be33202fd0fbe0902b5b43783c3dd9fa98293cdeb9a6b06fd5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#39",
+      "hash": "sha256:c5f527985aed24d094246c592faa97769aced407220b581c468a9dd651a834e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#40",
+      "hash": "sha256:7aaf00551db7f658619a1fae5f4afd4c6dd72b0ad2140372e44de83a5c76b960"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#41",
+      "hash": "sha256:8c5e07594d9344379ceaf098e67c8010b7863196b5731c062a47ebd5d121d1e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#42",
+      "hash": "sha256:f31ba05802142687cf001e5d6c1c49e0bf66eebb1de1f72f3dbcaccb3909cfd0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#43",
+      "hash": "sha256:9b27b137a82583da3a1de7aa576b10cda7a7a19367763187a5a78435ba8a38af"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#44",
+      "hash": "sha256:15fd3e4c820d825f70d3cdde088b7ad56ef5807a6477a2698e7085071f8514ef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#45",
+      "hash": "sha256:45f8e0537c0de53c18f5dd5ccaaaba1f5aff5ff6dbc38a3eccef9c7a52ee0ac4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#46",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#47",
+      "hash": "sha256:b581420dda890580ab50eafcfa858a3b01c4a0646a93c116ecc1d242ceba5f5c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#48",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#49",
+      "hash": "sha256:9c70cb2214671bc5313ecf2c3ab78963ef5998380219b5f1cadafecd37da5102"
     },
     {
       "content": "blocks",

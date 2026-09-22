@@ -87924,7 +87924,7 @@
       "claim": {
         "holder": "fable-p123-sarif",
         "acquired_at": 1790043859,
-        "lease_expires_at": 1790054659
+        "lease_expires_at": 1790058914
       },
       "verification": {
         "argv": [

@@ -133,6 +133,7 @@ profile: domain-specification
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md@authored | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md | authored | 18 | 6 | sha256:1f5a1bfd574bfb0b43f9b1b360bd932f8c620d390cb1eb9a0931804fbc9d76db |
 | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md@authored | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md | authored | 25 | 9 | sha256:5a4499b293dcf3cd5427520182b60d4f21d816e6a0f1733e35cfaee37721a099 |
 | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md@authored | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md | authored | 39 | 12 | sha256:af086972c1c5a6fe934fe91f8e0b7dc9bff973d7986240dcbb05a3bdac229496 |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md@authored | docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md | authored | 56 | 13 | sha256:7a05e7d2b4970db396626604d0d0e0e6dda68dcb9890eeaaa7d120f22d219e88 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -201,10 +202,12 @@ profile: domain-specification
 | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md@authored | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md | authored | 20 | 6 | sha256:5f9c67cc4d6f14d07b696b7c2842958e0e79c15eede17749d7e63ce8627f8793 |
 | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md@authored | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md | authored | 41 | 11 | sha256:ca481db57e29583ad6541fcf1a098df4a0450fe3a08a0a6b74856756e523ea1d |
 | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md@authored | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md | authored | 31 | 10 | sha256:0e6efa712278eff244251689c8bf8b4e33630f39419eb66ad7e39d563d402a1d |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md@authored | docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md | authored | 69 | 19 | sha256:516ee83533296746248d7fb3d29523f83972d159c0fec6c294b6d8386ab9baaf |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md@authored | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md | authored | 18 | 7 | sha256:4264b9448cf95f7bb22780f4a6cd970a7f64828eea993961df2987984417b701 |
 | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md | authored | 18 | 6 | sha256:5369feac3ebd7b343b32234f25aa30ba669d4151b15af6d83d2ad37da0f58379 |
 | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md | authored | 25 | 6 | sha256:b6ef5e387b893426688336223754f3b165354a7fbf2e50641d03bdf8e836fd16 |
 | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md@authored | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md | authored | 43 | 12 | sha256:679898fb3515e18e74b3d01fc12b1993228c1941b02d8250e8a1a2b4c780c683 |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md@authored | docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md | authored | 49 | 15 | sha256:62c6d8750480da8424a5689d32b601a54227446d970e4610b102910dbe001e06 |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md@authored | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md | authored | 67 | 12 | sha256:f55068c0987852129b3103770502611bec876fd8c119bc01cd6616b6ecdf7bc6 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md | authored | 69 | 16 | sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a |
 | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
@@ -1246,6 +1249,19 @@ profile: domain-specification
 | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#28 | authored | 3 | 6. What would reopen decisions 3 and 4 |
 | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#31 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#35 | authored | 2 | Alternatives Considered |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#1 | authored | 1 | A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#6 | authored | 2 | What was measured |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#20 | authored | 2 | The decision |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#22 | authored | 3 | 1. The line |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#26 | authored | 3 | 2. Why the assessment owns it |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#32 | authored | 3 | 3. Why not derive it |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#34 | authored | 3 | 4. What a dangling link reports |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#38 | authored | 3 | 5. What a drifted link reports |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#42 | authored | 3 | 6. What the editor carries |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#45 | authored | 2 | What this record does not do |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#50 | authored | 2 | Territory a building item reserves |
+| docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#55 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -1875,6 +1891,25 @@ profile: domain-specification
 | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#22 | authored | 3 | What is actually missing, and it is not this artifact |
 | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#25 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md#30 | authored | 2 | Status |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#1 | authored | 1 | What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#2 | authored | 2 | Question |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#8 | authored | 3 | The registry `nomos-check-orchestration` composes |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#13 | authored | 3 | The rule table, and the registry that derives from it |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#16 | authored | 3 | The package manifest crates |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#20 | authored | 3 | What the hosts serve |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#23 | authored | 3 | The render catalogue and the README |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#27 | authored | 3 | The committed requirement assessments |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#32 | authored | 3 | What no source reaches |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#34 | authored | 2 | The Decision |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#35 | authored | 3 | 1. The view is a host verb over the compositions, in `gate plan`'s shape |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#43 | authored | 3 | 2. A row says one of four things, each with a mechanical witness |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#48 | authored | 3 | 3. What a row says when the corpus is absent, which is what CI has |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#52 | authored | 3 | 4. The verb reproduces no review table, and the mapping stays a person's |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#55 | authored | 3 | 5. The territory a building item would reserve |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#59 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#66 | authored | 2 | Controls |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#68 | authored | 2 | Status |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1 | authored | 1 | Main and dev mean different things, and the distance between them is a decision, not an accident |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#2 | authored | 2 | Question |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#5 | authored | 2 | What main is for |
@@ -1906,6 +1941,21 @@ profile: domain-specification
 | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#34 | authored | 2 | What This Does Not Do |
 | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#39 | authored | 2 | What Would Decide It Differently |
 | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#42 | authored | 2 | Status |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#1 | authored | 1 | The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#2 | authored | 2 | Question |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#16 | authored | 2 | The Criterion, And A Third Disposition |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#20 | authored | 2 | The Placement |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#21 | authored | 3 | `MET` — near-term, fact-producing, both requirements |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#24 | authored | 3 | `MET-COMP` — deferred, consuming, all eight |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#27 | authored | 3 | `PERF-MODE` — near-term, a contract on the product, split by mode |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#30 | authored | 3 | `NFR-PERF` — split, each requirement with the subsystem it binds |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#32 | authored | 3 | `INSTR` — split at the tier boundary the family itself draws |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#35 | authored | 3 | `CAL` — near-term, consuming, behind the rule platform it consumes |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#39 | authored | 3 | `RUNTIME` — three dispositions |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#42 | authored | 2 | What Builds The First Metric-Family Capability |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#46 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#48 | authored | 2 | Status |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1 | authored | 1 | A rule states what it needs and is refused an answer beneath it |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#7 | authored | 2 | The Charge Is Correct |
@@ -35248,6 +35298,584 @@ nothing was listening for the difference.
 **Admit `Workflow_Run` and refuse `Agent_Execute`.** Rejected as incoherent: a step may carry
 an agent body, so the refusal would be reachable through the admission.
 
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#1
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on · hash: sha256:c1958d35e733454dd700c8ec6e56b13830860ac5446bf054f1d0427852da46ca*
+
+# A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#2
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#3
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / Question · hash: sha256:c2259343c8c974e6e301f9f4c9f9a9ca170a7b5853ad35d6e047f3b07e097d48*
+
+`OD-HOST-010` built three of a diagnostic's five walk-outward targets and named the fourth
+-- which corpus requirement (`AGT-007`, `CHK-003`, ...) a finding bears on -- as undecided
+rather than declined. It named two shapes the answer could take, "a `RuleId`-to-requirement-id
+table committed the same way an assessment file is" and a `rule:` field on the assessment
+itself, and left the choice to "a future item should claim once someone decides the shape".
+`crates/host/nomos-lsp/src/lib.rs`'s own module doc says the same, and nobody has decided.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#4
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / Question · hash: sha256:8bc46345120f92b1a8c63e8039eefb0b0d1b40003b1be8621798c970a3810789*
+
+Three facts have changed since that record. First, the join it said did not exist does exist,
+in the weak form of a shared identifier: `OD-GATE-020` put a governing-record citation on
+every `RuleDescriptor`, and `OD-TRACE-001`'s assessment format lets an entry name a governing
+record too, so a `RuleId` can be walked to a record and a record to every assessment naming
+it. Second, `nomos-cap-requirement-trace` exists, and it is the one crate that reads an
+assessment as data rather than as a test fixture -- so a field added to the assessment has a
+reader a host can call. Third, `Finding` still carries no requirement, and `OD-HOST-003`'s
+"carries no direct pointer to a record id yet" is still true for the requirement half.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#5
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / Question · hash: sha256:bbe2c3b0f9a7cb5ea362b60ebc0a6880f64f13719e18d48929a8b0b6ca3d8068*
+
+This record measures the join that exists, decides the mechanism, says which side owns the
+declaration, says what a dangling or drifted link reports, and names the territory a building
+item reserves. It changes no code and edits no assessment.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#6
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491*
+
+## What was measured
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#7
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:9c5049b963b3e2be138f20b5c7d5d4be1c169012b2d5af8ebf88b94b66eac59a*
+
+Measured at `8338c6ec6bbb095cb897675643c82e4bb62d379f`, by a script over
+`crates/rules/nomos-rules/src/rule_descriptor.rs` and `tests/contract/requirements/*.assessment`
+and then re-read by hand.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#8
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:457a020935f93773183358ac6cfe0a2c74430dd6562d7a3f5a5e05d959a80123*
+
+**The descriptor side.** `nomos_rules::DESCRIPTORS` holds 71 descriptors. Fifty-nine cite
+`PORTED_STANDARD` (`"code-standards"`) and one, `NAMING_CONVENTION`, cites
+`WORKSPACE_CONVENTIONS` (`"README.md"`), both at `NO_VERSIONED_RECORD`. Eleven cite a
+versioned governing record, through nine constants, naming eight distinct records:
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#9
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:2a8280dee39626b5b964963ace41cf48380380bbbbd13d677f66475eb8acd9c1*
+
+| record | version cited | descriptors citing it |
+|---|---|---|
+| `D-134` | 2 | `COMPLETENESS_MIRROR` |
+| `OD-RULES-003` | 1 | `DEPENDENCY_DIRECTION`, `DEPENDENCY_COMPLETENESS` |
+| `OD-RULES-023` | 1 | `WRITE_AUTHORITY` |
+| `OD-RULES-010` | 2 | `LINT_DIAGNOSTICS`, `DEPENDENCY_POLICY`, `REVIEW_FINDING` |
+| `OD-CAPABILITY-016` | 1 | `GUARANTEE_DECLARES_ITS_EXERCISER` |
+| `OD-RULES-008` | 2 | `UNREAD_REACHES_FINDING` |
+| `OD-CAPABILITY-010` | 1 | `CROSS_LANGUAGE_CORRESPONDENCE` |
+| `OD-TRACE-001` | 1 | `REQUIREMENT_TRACE_STALENESS` |
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#10
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:669318c559eb05cc6bfd9b4c00de17b73358fa0c6f34dc3855a0ed0c37a5c421*
+
+Every one of the eleven cited versions equals the `version:` its record's own front matter
+declares today, and `Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter` in
+`tests/contract/tests/rule_contract_citation.rs` holds that on every run;
+`Test_Every_Cited_Record_Should_Still_Exist` beside it holds that the record is still on disk.
+That side of the join is drift-guarded.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#11
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:3ae974ad422b3cc73720080cc643e44cb990308da31a5c30e5068f6ebed6abaa*
+
+Two prose counts of the same population have drifted while the mechanical ones held.
+`rule_descriptor.rs`'s own field doc says the versioned citation is "for the eight rules whose
+contract a record decides", and `Descriptor_For`'s doc says the ported standard "is what all
+but eight rules in the table cite"; `OD-GATE-020`'s second amendment reports "seven rules
+citing a versioned governing record, one citing `README.md`, every other rule citing the
+ported standard, and no third shape found". The table holds eleven and one. Neither count is
+wrong about the shape; both are wrong about the number, and nothing reddens. That is the
+reason this record puts nothing about the link in prose that a test does not compare.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#12
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:1e6681934efb63cc2b61006a263c93fb55f74879d08668c5c6ea0d7ac7ff2820*
+
+**The assessment side.** `tests/contract/requirements/` holds 39 assessments: 7 `Met`, 29
+`Partial`, 3 `Diverges`, none `NotBinding`; 106 `site` lines and 33 `gap` lines. Eight carry
+a `record` line, naming five distinct records:
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#13
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:b7fa76ecfaeeb89161bb2c346935c86f52b2cb01c8eb2d20621b54cd98a445cd*
+
+| record | assessments naming it |
+|---|---|
+| `OD-PLATFORM-003` | `AGT-006` (Diverges) |
+| `OD-TRACE-001` | `CAP-002` (Met), `CAP-003` (Met), `EVID-001` (Met) |
+| `OD-CONTRACTS-002` | `CHK-003` (Met) |
+| `OD-PACKAGE-010` | `MODEL-ROUTE-037` (Partial) |
+| `OD-LEDGER-017` | `WORK-LEDGER-001` (Diverges), `WORK-LEDGER-005` (Diverges) |
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#14
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:6ea930f4457fb2eb0be90602e54ad479098543638f239a7d5ecbff7f797f0437*
+
+All eight resolve to a registered record. `Test_Every_Named_Record_Should_Exist_And_Be_Registered`
+in `tests/contract/tests/requirement_trace/committed.rs` holds that, and `Unresolved_Records`
+in `crates/capabilities/nomos-cap-requirement-trace/src/predicates/unresolved.rs` reports the
+same failure as a `ProblemKind::UnresolvedRecord` inside a real `nomos check`. That side is
+drift-guarded too.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#15
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:f19e356542ee26bd71b046e38613186a2d1fb1ef0cbb3615f250a2defb0f91a8*
+
+**The join.** `descriptor.contract_record == assessment.record` holds for exactly one record,
+`OD-TRACE-001`, and produces exactly three pairs: `REQUIREMENT_TRACE_STALENESS` to `CAP-002`,
+to `CAP-003` and to `EVID-001`. One rule of 71 and three assessments of 39. Seven of the eight
+records rules cite are cited by no assessment; four of the five records assessments cite are
+cited by no rule.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#16
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:222a60f0e17298e346e156f1274fcb1bdcb0a7aa171361acec9539cd179b6c4d*
+
+And the three pairs it does produce are wrong. `CAP-002` is about `FactVariant` carrying five
+variants, `CAP-003` about provider selection comparing guarantees, `EVID-001` about
+`EvidenceClass` carrying eight classes. `requirement-trace-staleness` reports a committed
+assessment whose site, gap or record no longer resolves. It bears on none of the three. The
+identifier is shared because the two `record` fields are two different relations: on the
+descriptor it is "The authority this rule's implementation cites." (`rule_descriptor.rs`, the
+`contract_record` field), and on the assessment it is "The governing record carrying the
+reasoning, when one is named." (`crates/capabilities/nomos-cap-requirement-trace/src/assessment.rs`,
+the `record` field) -- for those three entries, the record whose hand audit produced the
+verdict. `OD-TRACE-001` decided the staleness rule's contract and it performed the audit
+behind three verdicts, so it sits on both sides once, and the join reads that coincidence as a
+bearing. A join that is empty over seventy rules and false over the remaining one is not a
+small answer waiting to grow. It is the wrong relation, and no growth in either population
+changes what it means.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#17
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:b08538bd8f76f53a220deb39468d50aa698f659df066c5baedcc108f276d6592*
+
+**What already walks a finding to a record, correctly.** `nomos gate explain` stamps
+`contract_record` and `contract_record_version` onto an explained finding (`GateExplainResponse`
+in `crates/host/nomos-api/src/response/gate_explain_response.rs`, through `Contract_Of` in
+`crates/orchestration/nomos-gate-orchestration/src/finding_query.rs`), and `nomos-lsp`'s
+`GoverningRule` carries the same pair. That is the descriptor half of the join, shipped, and it
+is right as what it is: the record that decided the rule. `AGT-008`'s own assessment already
+counts it as the closed "rule version" clause and cites `OD-HOST-003`'s pointer sentence as
+its remaining gap. Nothing here withdraws it; what is refused is extending it one hop further.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#18
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:1699f7903c99b839396a23553231bb3b09267bec73070cf216adb0a4ab07d2d5*
+
+**What an assessment already names inside a rule.** One assessment of 39 names a site inside
+a rule's own module: `AGT-003` names
+`crates/rules/nomos-rules/src/checks/dependency/violations.rs#Violations_In`, the function
+`Check_Dependency_Direction` judges through, as "the nearest real site for 'undeclared
+dependency changes'". That is what a rule line is for, already stated in a form nothing can
+read back: a `site` is a `path#symbol` and a finding names a `RuleId`, so a walk from a finding
+to that site would have to map a rule to the file its judgment lives in, which no descriptor
+declares (`RuleDescriptor::check` is a `fn` pointer, not a path). `MODEL-ROUTE-001` names
+`rule_descriptor.rs#RuleDescriptor` as a gap for an unrelated reason -- a descriptor has no
+field for a model profile -- and is not a link.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#19
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What was measured · hash: sha256:c08023566a5ae923ef423691336c91aa31584f3b99270104d8ec8039ef407d64*
+
+**What each crate may see.** `nomos-architecture.json`'s `permits` grants `Capability
+Contract` only `Protocol` and `Substrate`, so `nomos-cap-requirement-trace` cannot name
+`nomos-rules` and cannot compare a declared rule identifier against `DESCRIPTORS`. `Rules` may
+name `Capability Contract`, which is how `Check_Requirement_Trace_Staleness` reads the trace
+payload. `Host` may name both, which is how `nomos-lsp` already reads `DESCRIPTORS` (Rules)
+and `nomos_repo_policy::architecture::Discover_Workspace` (Provider) in one crate.
+`Verification` may name everything, which is why `tests/contract/tests/rule_descriptors.rs` is
+already where two rule populations are compared.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#20
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision · hash: sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0*
+
+## The decision
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#21
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision · hash: sha256:cfedbf4b3a93043855a85560454de5bd6b7509e4a72c8276d657ae2ae84dabf2*
+
+**A finding reaches its corpus requirement through `rule` lines the assessment declares. The
+assessment owns the declaration. The descriptor gains no `requirements` field, and the record
+join is refused as a mechanism.**
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#22
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 1. The line · hash: sha256:de1390e1c1270dbe4a1738d4a4e8dbd7851a90b8fe3e4e540c1005538cc6cdbc*
+
+### 1. The line
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#23
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 1. The line · hash: sha256:8cd059bfd53c2bc55e858dbaf5f3209cb4307b8610580827b78191a93b39d959*
+
+An assessment may carry `rule: <identifier>` lines, repeated, one identifier each -- the same
+grammar `site` and `gap` already use -- where the identifier is the string `Finding::rule`
+carries and `RuleDescriptor::id` declares (`dependency-direction`, `requirement-trace-staleness`).
+The line means: a finding from this rule bears on this requirement, because this rule is where
+this build enforces the part of the requirement the entry's own sites satisfy. It is evidence
+about the verdict at a site, never the verdict.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#24
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 1. The line · hash: sha256:ed7d383fb69c1203f7d9e1910ff518f4de82baa2eb8730a2001ed8afaf53e6e9*
+
+The line is optional per entry, and absence means what absence means everywhere in this
+registry: nobody declared one. It does not mean no rule bears. `OD-TRACE-001` chose that
+reading for the whole registry -- "Absence of an entry means nobody looked" -- and `OD-TRACE-002`
+refused to let `Unassessed` be written for the same reason; a `rule: none` would record that
+somebody looked and found nothing, which is a claim this record has no evidence anyone will
+have checked. Fifty-nine of 71 rules are ported code-standards rules, and most bear on no v14
+requirement at all; a mechanism that demanded a line for each would be answering a question
+nobody asked.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#25
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 1. The line · hash: sha256:77c0301914503903d4dd567c2fdc8bc4c33f912b97ad35d76a115768a83df6bb*
+
+The reader is the one that exists. `Read_One` in
+`crates/capabilities/nomos-cap-requirement-trace/src/registry.rs` refuses an unknown key
+today, which is exactly where `rule` is added; `Assessment` gains
+`rules: Vec<nomos_contracts::RuleId>` (`RuleId::New` takes `impl Into<String>`, so a read line
+becomes the kernel's own type rather than a second string spelling of it); an empty identifier
+and a repeated one are refused the way an empty or second record line is.
+`Test_The_Reader_Should_Refuse_Every_Malformed_Entry` in
+`tests/contract/tests/requirement_trace/reader.rs` gains those cases. The contract suite is a
+thin wrapper over that crate's reader, by its own module docs, so there is one grammar to grow.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#26
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 2. Why the assessment owns it · hash: sha256:2eb6b83561d7a660d3a9cb83e6a5daa9fe07f540ea2a077d62a088d471035f75*
+
+### 2. Why the assessment owns it
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#27
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 2. Why the assessment owns it · hash: sha256:92461a32be3c9659cab35bb17d8ad18d801b4de2995d429b1f88c0d145cd260b*
+
+Three reasons, and the first decides it.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#28
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 2. Why the assessment owns it · hash: sha256:1373c177a23b421df438f1e72aa9bf6094129c57c4cc7fa78b14595426e49369*
+
+**A requirement link is an assessment claim.** `OD-TRACE-001`'s whole mechanism is "a declared
+entry committed to this repository, compared against the workspace by this suite, and never
+derived from the corpus at check time" (the `requirement_trace` suite's own module doc).
+Which rule enforces a requirement is a claim about *this build's* relationship to *this
+corpus*, with a verdict beside it -- the same kind of claim a `site` is, and it belongs beside
+the verdict it is evidence for. `DESCRIPTORS` describes a rule for every repository nomos
+judges; `Discover_Workspace`'s own doc says "this predicate corpus is nomos's own, not a
+convention every judged repository is expected to have adopted". A `requirements` field on the
+descriptor would compile nomos's assessment of itself into the product's rule table and ship
+it to every repository, and it would carry no verdict, no site and no hash -- the three things
+`OD-TRACE-001`, `OD-TRACE-002` and `OD-TRACE-005` decided a requirement claim owes. It would be
+a second, weaker place to say what an assessment says.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#29
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 2. Why the assessment owns it · hash: sha256:b7756999af0386c06627b70e2a2874dc8213825e34493b2d6ad460d8fd14c386*
+
+**Grain.** `OD-TRACE-002` made an assessment one file per requirement so two assessors never
+collide, the shape `OD-SPEC-007` chose for registrations. A `rule` line touches one
+assessment. A `requirements` field lives on the one table every rule shares, and `OD-GATE-020`
+measured that table going out of step by hand twice before `OD-RULES-027` folded the judgment
+into it; a per-rule corpus declaration on it would reintroduce the shared edit `OD-SPEC-007`
+spent two items dissolving, on a schedule set by whoever assesses next.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#30
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 2. Why the assessment owns it · hash: sha256:494581cd9270da89df2ffa47515a9e6b09a0c077066ccb313e5523d486133e3a*
+
+**A declared universe must be checkable where it is declared.** `OD-COMPLETENESS-001`: "A
+completeness guard must say what universe it quantifies over, and a declared universe must
+have a check comparing it against the reality it claims to enumerate." A descriptor-side
+`requirements` list would be a declared universe whose reality is the assessment set, and the
+only crate below `tests/contract` that could compare the two is the rule itself -- which reads
+a payload of already-judged problems, not assessments, and has no `FileSystem` port
+(`checks/requirement_trace.rs`'s own doc says so). The declaration would sit where nothing
+near it can check it. An assessment-side `rule` line is a declared universe whose reality is
+`DESCRIPTORS`, and `tests/contract` already compares rule populations against `DESCRIPTORS`
+from above both crates (`Test_Every_Composed_Rule_Should_Have_A_Descriptor`). The check goes
+where the comparison is already possible.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#31
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 2. Why the assessment owns it · hash: sha256:0aa956855aa0f9036fdedd7eee56b571eeaee728d85caa1bfe04ff1158a380f1*
+
+`OD-GATE-020` put `contract_record` on the descriptor because a rule's contract authority is a
+property of the rule, and that decision stands. A requirement is not a property of the rule.
+The field is not extended.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#32
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 3. Why not derive it · hash: sha256:d134270d52a1e664abda9ef8454ad18e97322b4c8c1527526125794cd816e9e2*
+
+### 3. Why not derive it
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#33
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 3. Why not derive it · hash: sha256:1ce515a5465190f34aafb5fff637a60fcd72a34ed07be37eedf60bd783d7e420*
+
+The tempting derivation -- a finding whose `locations` fall inside an assessment's `site`
+path bears on that requirement -- is refused twice. It is the derivation at check time
+`OD-TRACE-001` excludes by name, applied to a link instead of a verdict. And it is wrong on its
+own terms: a `site` is where a requirement is *satisfied*, a finding's location is where a
+rule *fired*, and the two coincide only by accident. `AGT-003`'s site is inside
+`violations.rs`; a `dependency-direction` finding is located at the package whose edge runs
+the wrong way (`OD-HOST-010` measured `violations.rs`'s own `subject_name` as a package name),
+which is never `violations.rs`. Nothing about a location says which requirement a rule
+enforces, and a mechanism that read one as the other would produce links as confidently wrong
+as the three the record join produces.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#34
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 4. What a dangling link reports · hash: sha256:97b148fb089a5686b3d4660248e802e8001dcff1fd3700637d089390daa40b5d*
+
+### 4. What a dangling link reports
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#35
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 4. What a dangling link reports · hash: sha256:0deecdac7666ccd5b4b96288d56390eb989bb37d8a8cd6a9a0b5842783921e99*
+
+A `rule` line naming an identifier no descriptor in this build declares -- a typo, a rule
+renamed, a rule deleted -- is red in `tests/contract`: a committed-set assertion in
+`tests/contract/tests/requirement_trace/committed.rs`, beside
+`Test_Every_Named_Record_Should_Exist_And_Be_Registered`, compares every declared rule
+identifier against `nomos_rules::DESCRIPTORS` and names the assessment and the identifier when
+one does not resolve, with a control that runs the same predicate over a constructed entry,
+the shape `Test_A_Record_That_Does_Not_Resolve_Should_Be_Reported` already has. `tests/contract`
+is above both crates and is where `OD-TRACE-001` put the guard.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#36
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 4. What a dangling link reports · hash: sha256:af3d91b42e6465e1377c55d6c4485a2ef93b61cff40e8d865f5e379f38c4c7ab*
+
+It is deliberately **not** a sixth `ProblemKind` and not a finding from
+`requirement-trace-staleness`, and the reason is the lattice, not a preference. The provider
+cannot see `DESCRIPTORS` (`Capability Contract` reaches `Protocol` and `Substrate` only). The
+rule could, but the payload it reads carries problems the provider already judged, and
+widening `nomos.requirement.trace.v1` to carry raw declarations so the rule can judge them a
+second time is the shape that crate's own `lib.rs` refuses -- "the fact this capability
+answers is the *already-judged* comparison". So a dangling rule line reddens
+`cargo test -p nomos-contract-tests --test requirement_trace` and does not redden
+`nomos check`. That is a narrower promise than the five existing problem kinds make, stated
+rather than hidden. It moves the day the payload gains a declarations section under a second
+schema version, which is a decision about that capability's contract and not this record's.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#37
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 4. What a dangling link reports · hash: sha256:43ffc2f6624b1f1cdbf9639b30bd391cbd3faced9fd76105f3d6711d9f32ebc0*
+
+A renamed rule reads as dangling, and the repair is the assessment, never the rule -- the same
+direction a vanished `site` already takes. Rule identifiers are `pub const` strings in
+`nomos-rules`, so this is rare.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#38
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 5. What a drifted link reports · hash: sha256:e089052c59aa32a65a62303030111b73ebe1809cc404b8b0a33e27a5d28bd2f1*
+
+### 5. What a drifted link reports
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#39
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 5. What a drifted link reports · hash: sha256:ae093434c808c15cb780f72c1512828e2408563e4fceca7906f50fa14fafbd9c*
+
+Nothing, and this is `OD-TRACE-001`'s limit unchanged rather than a new one. A rule that still
+exists, whose finding no longer means what the entry's prose says it means, is what that
+record already excluded: "Semantic drift is meaning, and this workspace has no type for it."
+`Test_A_Historical_Assessment_Whose_Citations_All_Resolve_Should_Not_Be_Reported` in
+`crates/capabilities/nomos-cap-requirement-trace/src/provider.rs` already proves the guard
+cannot see a stale verdict behind citations that resolve, and a rule line is one more citation
+of that kind.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#40
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 5. What a drifted link reports · hash: sha256:6d4dabb789caabccadcb16395e7c42c16965e69c03b5a9b48e7dab82d9abf6b8*
+
+A `rule` line carries no version, and the reason is the measurement above: 60 of 71
+descriptors cite no versioned record, so a version on the line would be `NO_VERSIONED_RECORD`
+for the majority, and the `Unhashed` ambiguity `OD-TRACE-005` took care to name would be the
+common case rather than the transitional one. The eleven rules whose contract is versioned are
+already guarded on the descriptor side by
+`Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter`; when one of those
+records is amended, re-auditing an assessment that names the rule is a person's act, the
+refusal `OD-TRACE-005`'s fifth decision already makes for a drifted hash, applied once more.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#41
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 5. What a drifted link reports · hash: sha256:b42460d8dbd6211efe7af75684953c212f602008de0802a60d7b8d302ef82355*
+
+The reverse direction -- a descriptor no assessment names -- is not asserted, deliberately.
+The declared universe is the set of `rule` lines and its reality is `DESCRIPTORS`; that
+direction is decision 4. `DESCRIPTORS` is itself mirrored against the composed run by
+`Test_Every_Composed_Rule_Should_Have_A_Descriptor`. Requiring every rule to be named by some
+assessment would demand a corpus claim for fifty-nine ported rules that have none, the
+count-not-floor shape both `OD-SPEC-007` and `OD-TRACE-002` refused.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#42
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 6. What the editor carries · hash: sha256:82a5ea76fbe5c8072870c5f86c5e7be56fb585f0a6833d12a2f51e23dcf28827*
+
+### 6. What the editor carries
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#43
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 6. What the editor carries · hash: sha256:e9e3cbb8cf27fcc81b46810e9a59db0ffcdf5135ab325a64a106dcd39a6921ec*
+
+`nomos-lsp`'s `WalkOutward` gains a sixth field, `requirements: Vec<RequirementLink>`, each
+carrying the requirement identifier and `Verdict::Label`'s own word, built by filtering the
+assessments of the repository under check for the finding's `rule`. The assessments are read
+once per `Diagnose` batch through `nomos_cap_requirement_trace::Assessments_In` (already `pub`,
+already taking a `FileSystem`) over `REGISTRY`, the same declaration-reading shape
+`ArchitecturalComponent` already takes from `nomos_repo_policy::architecture::Discover_Workspace`;
+a repository with no `tests/contract/requirements/` -- every repository but this one --
+carries an empty list, honestly, exactly as `Discover_Workspace` reports zero problems for it.
+Nothing is derived from the finding's location, per decision 3, and nothing is cached past the
+batch (`OD-HOST-002`).
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#44
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / The decision / 6. What the editor carries · hash: sha256:3b4bf8687885c68218e6866053fc64b9fe2fc5686bb059a0d2e4dade45f6a79a*
+
+`OD-HOST-010` predicted "a sixth field there is an addition to that one function", meaning
+`Diagnostics_For`. The field is. The declaration it reads is not already in hand the way the
+architecture is, so `Diagnostics_For` gains a parameter, or a context struct carrying both
+declarations, and that is a change to a `pub fn` signature the surface snapshot will see.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#45
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#46
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What this record does not do · hash: sha256:745777473c6e57e2df4417aea5af6d0cba15c7ce3a65ddd5dc3585d1de47595e*
+
+**It edits no assessment and writes no `rule` line.** The one entry whose site already sits
+inside a rule module, `AGT-003`, is the first candidate for a line naming
+`dependency-direction`, and authoring it is the building item's act against the assessment's
+own prose, not this record's.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#47
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What this record does not do · hash: sha256:01a58a9251e2114708531b97027eacc21024f6e6ceb11d0530ba5be6c2a95efa*
+
+**It changes no code.** No reader, no test, no `WalkOutward` field, no dependency edge. The
+territory below is a prediction, and `OD-LEDGER-039`'s `work widen` is how execution corrects
+it.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#48
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What this record does not do · hash: sha256:b9a55c9ace8117d767ec9545c6de61868f7e22cb0cccc2b0992dc6d09ca0904c*
+
+**It does not reopen `OD-HOST-010`.** That record named this decision as owed and named the
+territory it would take; this is the decision, and its follow-up paragraph reads true
+afterwards. It does not amend `OD-GATE-020`: the descriptor's citation is unchanged and its
+meaning is unchanged. It does not touch the supporting-facts gap, `OD-HOST-010`'s other open
+target, which needs a per-finding read trail from `CheckOutcome` and is a different decision.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#49
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / What this record does not do · hash: sha256:49402ba23d7883aeb58a61f8f503fb5edbe9172cf98430111143e9147c846c9a*
+
+**It does not make `nomos check` see a dangling rule line.** Decision 4 says why, and names the
+condition under which that changes.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#50
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / Territory a building item reserves · hash: sha256:50f7fe341d0cfed6e28159523cb5ae8b858a91e3d202e5c4e76da0dc600b9b9c*
+
+## Territory a building item reserves
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#51
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / Territory a building item reserves · hash: sha256:077a4f135110ce85bc3ad793493a9d52d8249c0291de9a53bb90f763f3bddbf5*
+
+Predicted from the acceptance predicate's dependency cone, in the manner
+`.claude/skills/nomos-task/SKILL.md` requires, and validated by running the change:
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#52
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / Territory a building item reserves · hash: sha256:5099f6e3622e0aa1e225a9a31b910869f5b84154b13de4d19524178e3e1587da*
+
+- `crates/capabilities/nomos-cap-requirement-trace/src/assessment.rs` and `src/registry.rs`
+  -- the field and the `rule` key;
+- `tests/contract/surface/nomos-cap-requirement-trace.txt` -- a `pub` field is a surface
+  change;
+- `tests/contract/tests/requirement_trace/reader.rs`, `committed.rs` and `controls.rs` -- the
+  malformed-entry cases, the dangling-rule assertion, and its control;
+- `crates/host/nomos-lsp/src/walk_outward.rs`, a new `src/walk_outward/requirement_link.rs`,
+  `src/lib.rs`, `src/file_diagnostic.rs` and `src/nomos_diagnostic_provider.rs` -- the sixth
+  field, its module, its re-export, the parameter that hands the assessments in, and the read
+  once per batch;
+- `crates/host/nomos-lsp/Cargo.toml` and `Cargo.lock` -- the new dependency on
+  `nomos-cap-requirement-trace`, within `Host`'s own `permits`;
+- `tests/contract/surface/nomos-lsp.txt` -- the new type and the changed signature;
+- each assessment that gains a line, named individually --
+  `tests/contract/requirements/AGT-003.assessment` first;
+- `README.md`, whose `nomos-lsp` row says "Three of `P42-LSP-PROJECTION`'s five walk-outward
+  targets are answered; two are named undecided in `OD-HOST-010`." and reads stale the moment
+  the fourth is answered -- the kind of file `nomos-task` names as invisible to a diff until
+  somebody asks what the change made untrue.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#53
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / Territory a building item reserves · hash: sha256:00454ef32efe10866474f33f843f9c98f250300db72beba8d72094cff46fc91a*
+
+Not reserved, deliberately: `crates/rules/nomos-rules` (no descriptor field, no rule change),
+`crates/contracts/nomos-contracts` (`Finding` is unchanged; the link is walked from a finding,
+not carried on it), `crates/orchestration/nomos-check-orchestration`, and the trace payload's
+schema. A building item that finds itself needing any of them has found a different decision
+than this one.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#54
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / Territory a building item reserves · hash: sha256:97fdf77c4efa0c86d19c343ff3505ad8459ee1b6f76a467a6d9c038e24e16e9f*
+
+The predicate is `cargo test --no-fail-fast -p nomos-contract-tests --test requirement_trace`
+for the assessment half and `cargo test --no-fail-fast -p nomos-lsp` for the editor half, with
+`public_surface` blessed for exactly the two crates above -- scoped to the obligations the item
+claims, per the same skill. If the assessment half and the editor half are worked by two
+sessions, they are two items: the second depends on the first, and the territories above
+split cleanly along the crate line.
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#55
+
+*revision: authored · kind: heading · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#56
+
+*revision: authored · kind: prose · heading: A finding reaches its corpus requirement through a rule line the assessment declares, and the record join that exists today connects one rule to three requirements it does not bear on / Status · hash: sha256:f74815390864b77e2e1a29bba3e89e48b181b2c215bb7d3cf92624f39ef760aa*
+
+Accepted. At `8338c6ec` the record join connects one rule to three assessments through
+`OD-TRACE-001`, and every pair is a coincidence of citation; it is refused as a mechanism. A
+finding reaches its corpus requirement through `rule` lines an assessment declares, read by the
+reader `nomos-cap-requirement-trace` already has, checked against `nomos_rules::DESCRIPTORS`
+from `tests/contract`, and carried by `nomos-lsp` as a sixth walk-outward field. Nothing is
+built here.
+
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 
 *revision: authored · kind: heading · heading: Territory is declared but not enforced, and nothing yet notices the difference · hash: sha256:84c92233c65230ede8aaf2bbb88c77437278652b8a9b50cd6e8e9f906a83853b*
@@ -55157,6 +55785,668 @@ coarser required projection would pay the same cost for a weaker check. The mult
 view the question really wants is a second, unrequired artifact needing aggregation selection
 does not have, and is filed separately.
 
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#1
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built · hash: sha256:d0f6ae046be121e0a0f250c20e683312acb7fbe0fcece6201ac03f5126f06858*
+
+# What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#2
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#3
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Question · hash: sha256:78eca5add52050d185d674cfc877c2a916b4b596c0c1ab81547d959fc71e3beb*
+
+Two external reviews of this repository, at `80e0bbbe` and `bc0aaacf`, each reconstructed by
+hand a table of what Nomos has built: one row per product capability, one word per row —
+built, partial, first increment, designed-but-not-built, not built. The second asked that the
+table come from Nomos itself. Nothing here produces it. `nomos gate plan` prints the rule
+registry, `nomos spec profiles` prints the render catalogue, `README.md` carries the zone table
+under `OD-PROJECT-001`, and `tests/contract/tests/requirement_trace/` counts committed
+assessments. Each is a fragment, each is a different shape, and a reviewer sums them by eye.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#4
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Question · hash: sha256:9b7fff9d7046d7ddb4228d82acbf8ad33d5da8cc7888ba192013d7504bf5ed57*
+
+The cost is not that the table is missing. It is that every review re-derives it and the
+derivations disagree, and that a hand-written "Not built" is an inference from silence —
+which `OD-COMPLETENESS-001` already refuses one scale down, for a guard that passes by not
+looking.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#5
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Question · hash: sha256:d5b7fe3a20ce6053bcc353b49d8a536bd720b83d996e4b671aae9014d4aa67b0*
+
+Three questions, then. Which of the review's rows could a mechanism in this workspace derive
+today, and from which source. Where a derived view lives, given that every candidate placement
+is already governed by a record with a stated criterion. And what a row may honestly say on a
+runner that has no corpus, which is every runner CI has.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#6
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#7
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured · hash: sha256:870bf4e296556d3ccdb6fe3c6e9f389d5af2d72e8b18c7c1f4c803b60c4b64a9*
+
+Measured 2026-09-21 at `8338c6ec`, by reading the compositions and running the committed
+binary read-only from the repository root. Where a figure needs the v14 corpus it says so and
+names the revision it was read at; nothing else here depends on a corpus. Every count the
+item that opened this question carried was re-measured rather than copied, and four of them had
+moved: fifty-six composed rules are seventy-one, sixteen capability identifiers are fourteen
+declared contracts, five render profiles are nineteen, and `OFFERINGS` no longer exists.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#8
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The registry `nomos-check-orchestration` composes · hash: sha256:57fcaa134dfe037f3c6af552249a337b86b31a04886ebe1b5b0809041d8bb14b*
+
+### The registry `nomos-check-orchestration` composes
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#9
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The registry `nomos-check-orchestration` composes · hash: sha256:72f180849ce642b4334cda974527dcbe7e7eac394f35a0ba4455e68d5c7da45c*
+
+`Registered()` in `crates/orchestration/nomos-check-orchestration/src/composition.rs`
+declares **fourteen** capability contracts and offers **seventeen** providers against them,
+pinned by `Test_Registered_Should_Declare_Every_Composed_Capability`. `Registry::Declared()`
+and `Registry::Offers()` are public, and `Resolved_Configuration` already walks both to digest
+the run's effective policy — so every row below is one the binary can already enumerate, and
+no verb prints.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#10
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The registry `nomos-check-orchestration` composes · hash: sha256:c9f8f12084c34d76017c415a751e9091e212b13fc57af15c18938131dcf3c94d*
+
+| Capability | Ceiling (variant, soundness, completeness) | Offers, with the guarantee each declares |
+|---|---|---|
+| `nomos.cap.syntax.items` | Syntactic, Sound, Sound | `nomos-lang-rust` Syntactic Sound Unknown; `nomos-lang-rust-scan` Approximate Unsound Unknown; `nomos-lang-go` Syntactic Sound Sound |
+| `nomos.cap.dependency.edges` | SemanticallyResolved, Sound, Sound | `nomos-lang-rust-cargo` at the ceiling; `nomos-lang-go-modules` SemanticallyResolved Sound Unknown |
+| `nomos.cap.controlflow.reachability` | SemanticallyResolved, Sound, Sound | `nomos-lang-rust` reachability Syntactic Sound Unsound |
+| `nomos.cap.lint.diagnostics` | SemanticallyResolved, Sound, Sound | `nomos-lang-rust-clippy` SemanticallyResolved Sound Unknown |
+| `nomos.cap.dependency.policy` | SemanticallyResolved, Sound, Sound | `nomos-lang-rust-deny` SemanticallyResolved Sound Unknown |
+| `nomos.cap.naming.policy` | Syntactic, Sound, Sound | `nomos-repo-policy` naming, at the ceiling |
+| `nomos.cap.limits.policy` | Syntactic, Sound, Sound | `nomos-repo-policy` limits, at the ceiling |
+| `nomos.cap.scripting.policy` | Syntactic, Sound, Sound | `nomos-repo-policy` scripting, at the ceiling |
+| `nomos.cap.goals.policy` | Syntactic, Sound, Sound | `nomos-repo-policy` goals, at the ceiling |
+| `nomos.cap.words.policy` | Syntactic, Sound, Sound | `nomos-repo-policy` words, at the ceiling |
+| `nomos.cap.test.material.policy` | Syntactic, Sound, Sound | `nomos-repo-policy` test_material, at the ceiling |
+| `nomos.cap.architecture.declaration` | Syntactic, Sound, Sound | `nomos-repo-policy` architecture, at the ceiling |
+| `nomos.cap.review.finding` | RuntimeObserved, Sound, Sound | `nomos-connector-coderabbit` RuntimeObserved Sound Unknown |
+| `nomos.cap.requirement.trace` | Syntactic, Sound, Sound | `nomos-cap-requirement-trace`, at the ceiling |
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#11
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The registry `nomos-check-orchestration` composes · hash: sha256:89869814c7d327d8689e1144c5f0cf97d78225e6334b52d33303a8efc82335c6*
+
+Ten offers sit at their contract's ceiling on all three assurance axes and seven sit below it
+on at least one. That is not a defect column: `OD-CAPABILITY-002` decided a ceiling that
+restates the incumbent's guarantee is a ceiling that silently forbids a better second provider,
+so a gap between offer and ceiling is the contract working. It is recorded because the
+review's adjectives came from here without saying so — "read-only Observed" against the
+CodeRabbit row is `FactVariant::RuntimeObserved`, printed from the offer.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#12
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The registry `nomos-check-orchestration` composes · hash: sha256:8c8b7542e41bcd484b8251ffef6b1d0a03943535f045a0c7e9092b010001181f*
+
+**Twenty `Provider_Offer` functions are exported and seventeen are composed.** The three that
+are not: `nomos.cap.rust.copy_clones` and `nomos.cap.rust.nested_locks`, both declared and
+offered by `crates/languages/nomos-lang-rust-compiler` — this workspace's one compiler-backed
+provider, over `ra_ap_hir` — and `nomos.cap.module.index`, declared by `nomos-lang-rust`'s
+rollup. All three are composed only under `tests/integration`. No rule in `DESCRIPTORS` requires
+any of them, which is the same fact `OD-ANALYSIS-007` records as its open trigger. The review
+wrote "Compiler semantics: Partial, Rust-specific" for this row; the mechanism says something
+more exact — two contracts declared by a member, offered by it, and composed into no run.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#13
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The rule table, and the registry that derives from it · hash: sha256:81a358122b1574e1c1046055f725adddcee83b38e7361e9e095a7c4b0eb455ca*
+
+### The rule table, and the registry that derives from it
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#14
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The rule table, and the registry that derives from it · hash: sha256:76fe3bf03d1ed6bc3386e2ae2bf5b03e28fb9642d6429bb81dba3f4e251c6358*
+
+`nomos_rules::DESCRIPTORS` carries **seventy-one** rules. `nomos gate plan` prints exactly
+those seventy-one with the authority each cites, and the citation classes split fifty-nine
+`code-standards v0`, one `README.md v0`, and eleven versioned records (`D-134`,
+`OD-CAPABILITY-010`, `OD-CAPABILITY-016`, `OD-RULES-003` twice, `OD-RULES-008`,
+`OD-RULES-010` three times, `OD-RULES-023`, `OD-TRACE-001`). The plan's own usage line says what
+it is: "plan composes this gate's rule registry and reports what it holds."
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#15
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The rule table, and the registry that derives from it · hash: sha256:0f1d1f3509fbdede42141617f8648e3902e5d29fa56e38e3222098968c3be884*
+
+`OFFERINGS`, which the item that opened this question names as a source, was deleted by
+`P52-COMPOSED-RULES-BECOME-DECLARATIONS-3`; `OD-GATE-020`'s own amendment records the deletion.
+`nomos-gate-orchestration::Registered()` now types no row of its own and derives every offer
+from `DESCRIPTORS`, and `Test_Registered_Should_Offer_Every_Composed_Rule` holds it against
+`Composed_Rules`, as `Test_Every_Composed_Rule_Should_Have_A_Descriptor` holds the descriptor
+table from the other side. The rule half of the view therefore already exists as a verb, is
+derived rather than typed, and is the shape the rest of this record follows.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#16
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The package manifest crates · hash: sha256:47d0438fe7a9aef5c3b72bc22cdb2796ce830e744b5f662eb77a57a6da671c5b*
+
+### The package manifest crates
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#17
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The package manifest crates · hash: sha256:57c261dbf64e8a89edaa01c9c5c9b58ba1d24bb8b8c324d939b7e608f85f4f17*
+
+Six under `crates/packages`. Three carry a `KNOWN_PROVIDERS` allowlist and each entry is a
+composed offer: `nomos-lang-rust-package` names `nomos-lang-rust` and `nomos-lang-rust-scan`,
+`nomos-lang-go-package` names `nomos-lang-go`, `nomos-tool-package` names
+`nomos-lang-rust-clippy` under `Family::Linter` and `nomos-lang-rust-deny` under
+`Family::PackageManager`. `nomos-model-package` and `nomos-rule-package` enumerate no provider
+by construction — a model backend does not register one, and a rule package names a
+capability rather than a tool. `nomos-package` is the generic core.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#18
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The package manifest crates · hash: sha256:9569eee6ac5ee206f6674bb53738a4e6b458873af24e8e1da03e04fcbcc188c9*
+
+All three allowlists stand in the `UNIVERSES` table under
+`tests/contract/tests/completeness_universes/table.rs` as `Unmirrored`, three of the twelve
+holes `Test_The_Number_Of_Unmirrored_Universes_Should_Be_Declared` counts, and `nomos check`
+reports each as an advisory over this tree. `Check_Package_Conformance` — the check that would
+compare a manifest's declared providers against the registry — is exported and, in its own
+module doc, "Nothing calls this from a real host today."
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#19
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The package manifest crates · hash: sha256:49ed1bfa3b6aa73ba77b520b0df248eb301b8b49f6d84e65dd7cd7bbc0a1efa9*
+
+`Family` closes twelve tool-family labels. Two are occupied by a known provider and ten are
+not. A label with no registrant is a vocabulary term, not an expectation; the last section says
+why that distinction decides what a row may print.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#20
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / What the hosts serve · hash: sha256:a3da0959639a848bebd013e7fae8585b6ee2837be22c8c1e6da14c52eb4d1839*
+
+### What the hosts serve
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#21
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / What the hosts serve · hash: sha256:05710787b27cbb7d83797878cfcf02fa9f4ae1bd4425aefdaba5ae24d9e36ff3*
+
+`nomos-api` exports thirty `Handle_*` functions. `ServedMethod::REGISTRY` names five —
+`GatePlan`, `GateRun`, `GateExplain`, `GateCompare`, `Correction` — `ServedTool::REGISTRY` in
+`nomos-mcp` projects the same five, and `ADMITTED` in
+`tests/contract/tests/boundaries/transport_registry.rs` quantifies that list over the real
+exported surface. `Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` and
+`Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry` are the
+mirrors the `UNIVERSES` table claims for both. Of the twenty-five unserved handlers, twenty-one
+are excluded by `OD-HOST-007` and four are decided by `OD-HOST-014`; the fifth product
+operation that record admits, `Check_Run`, is admitted and not yet served.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#22
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / What the hosts serve · hash: sha256:a2861129429284cebb1f7e48d9e8f0b3fb6a55174712bfc2db6ddbaef0097095*
+
+Three binaries: `nomos` with eight verb groups (`work`, `spec`, `check`, `request`, `gate`,
+`agent`, `correct`, `workflow`), `nomos-mcp`, and `nomos-lsp`. `nomos agent execute` names
+one real `AgentExecutor` (`claude-code`) and one real `ModelBackend` (`ollama`) in its own usage
+text; `nomos workflow run` dispatches exactly one step over five bodies.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#23
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The render catalogue and the README · hash: sha256:0d575dd6be9f189125e84bb5f65b96d420c4a58a7c544d70bd5ef9fc78cccc07*
+
+### The render catalogue and the README
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#24
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The render catalogue and the README · hash: sha256:9592e6ee8dc4641aacb82aa78f263f01b528ad901b1d7493fb27041b3f07bc3e*
+
+`SHIPPED` in `crates/spec/nomos-spec-project/src/catalogue.rs` carries **nineteen** profiles,
+mirrored by `Test_Every_Profile_File_Should_Be_Shipped`; `nomos spec profiles` prints them.
+`OD-PROJECT-002` measured four of the then-eighteen rendering over a store seeded only from
+this repository's records; `relation-families` arrived later and is not re-measured here. Two
+are required and committed. All nineteen select from the store's ten content kinds and nothing
+else — none reads a registry, a descriptor table or an assessment.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#25
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The render catalogue and the README · hash: sha256:70b0d1a5c2e45d86d54a12a20c7183d445785bf603106dff6c1d33d3f37f113f*
+
+`README.md`'s zone table has **sixty-eight** rows for sixty-eight workspace members across
+twelve zones — fourteen `Capability Contract`, fifteen `Provider`, six `Application Service`,
+five `Host`, four `Agent`, three `Repo Tooling` — and
+`Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band` compares it both ways against
+the declared architecture. It is the README's one owned region. It says a crate exists and
+which zone it sits in; it does not say whether anything composes the crate.
+`nomos-lang-rust-compiler` has a row and no offer in any run, and the row cannot tell a reader
+that.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#26
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The render catalogue and the README · hash: sha256:0d0727ffdd70f82554324a80ccf95184ca6e9e52ad81fd2324e8f3ee35f59289*
+
+Two hundred and fifty-four records are registered and two hundred and fifty-four are on disk.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#27
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The committed requirement assessments · hash: sha256:368b45b1ee53956ed1a85d3a9503385e7bd7d680b10afb171e701dd537aeedc8*
+
+### The committed requirement assessments
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#28
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The committed requirement assessments · hash: sha256:e1d20dd79a9e539e50d1c4237860a3b410b2d3c9f4513e19f6cbfc12cf800fed*
+
+**Thirty-nine** files under `tests/contract/requirements/`, read by
+`tests/contract/tests/requirement_trace/` and by the `nomos.cap.requirement.trace` provider.
+Verdicts: seven `Met`, twenty-nine `Partial`, three `Diverges`, no `NotBinding`. `Partial` is
+`OD-TRACE-003`'s verdict, absent from the four `OD-TRACE-001` named, and every `Partial` names a
+gap, held by `Test_Every_Partial_Should_Name_A_Gap`. The identifier prefix is the corpus
+family, and nine families have an entry:
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#29
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The committed requirement assessments · hash: sha256:bfc54c7e66327837afc3313a76f242242b120ba9ec786136db3bd3c13cabdf39*
+
+| Family | Assessed | Met | Partial | Diverges | Family size in the corpus | Unassessed |
+|---|---|---|---|---|---|---|
+| `AGT` | 15 | 1 | 13 | 1 | 18 | 3 |
+| `AGT-EXEC` | 4 | 0 | 4 | 0 | 5 | 1 |
+| `CAP` | 2 | 2 | 0 | 0 | 4 | 2 |
+| `CHK` | 1 | 1 | 0 | 0 | 7 | 6 |
+| `COR-EXEC` | 2 | 2 | 0 | 0 | 8 | 6 |
+| `EVID` | 1 | 1 | 0 | 0 | 2 | 1 |
+| `MODEL-ROUTE` | 10 | 0 | 10 | 0 | 13 | 3 |
+| `WF` | 2 | 0 | 2 | 0 | 11 | 9 |
+| `WORK-LEDGER` | 2 | 0 | 0 | 2 | 6 | 4 |
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#30
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The committed requirement assessments · hash: sha256:0c16548c1a176bb1c4d33cf32035c7d25325ca10cc0371de8347e29f9701d1ca*
+
+The first five columns are read from this repository. The last two are not: they were counted
+under `01_authoring/artifacts/requirements` of the v14 corpus at code-standards `f0d820729`,
+which holds **363** requirement files in **61** families — the same 363 and 61 `OD-TRACE-001`
+recorded. Fifty-two families have no entry at all, so 289 of the 324 unassessed requirements
+belong to families this repository does not name anywhere, and the other 35 sit inside the nine
+above. Without the corpus, the `Unassessed` column cannot be filled and the fifty-two families
+cannot be listed, because a family with no entry and a family that does not exist are the same
+absence. `tests/contract/tests/requirement_trace/main.rs` says this of itself: an assessment is
+"never derived from the corpus at check time."
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#31
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / The committed requirement assessments · hash: sha256:26ac555ca0c2dd2da36468323c6e761c00cd5c7283136006639430d0ea101a26*
+
+Nothing committed enumerates the sixty-one families. `tests/corpus/families/counts.json` is a
+register of ingest content families — table rows, code blocks, domain-model rows — and not of
+requirement families.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#32
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / What no source reaches · hash: sha256:de8174923774bc165ca3bae311aa187d69a298e40ca6afa5661fa1a6b2f522e4*
+
+### What no source reaches
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#33
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What Was Measured / What no source reaches · hash: sha256:733850858d5e982330a31386daab1a46c8caddd3728a00609594e345789904df*
+
+The review's rows named Architecture inference, Program semantics, Complexity, Atlas,
+Feature/test intelligence and Integration materialization, each as not built or designed but
+not built. Measured against every declared list above: no capability contract, descriptor,
+allowlist, served registry, profile, README row or assessment carries any of those names.
+`ARC-ROADMAP-001` names four of them in its deferred tier — "architecture discovery/inference",
+"feature topology and path tracing", "test intelligence built on those models", "Atlas" — as
+prose inside a governing record, which the store holds as blocks and no mechanism reads as a
+list. The corpus families that carry them (`ATL`, `ARC-AN`, `FEAT`, `TEST`, `MET-COMP`) exist
+only where the corpus is mounted. So every one of those rows was a person's mapping from a
+product name to an absence, and the review was right about each of them by knowing the
+repository rather than by reading a source.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#34
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#35
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 1. The view is a host verb over the compositions, in `gate plan`'s shape · hash: sha256:c71b5ba77bb8e7c26800562ff59b53fc50e4a8b0a48ca4a734b656dec5b55241*
+
+### 1. The view is a host verb over the compositions, in `gate plan`'s shape
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#36
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 1. The view is a host verb over the compositions, in `gate plan`'s shape · hash: sha256:41866640a117d1dfb100fe7e44f618b4de263d10ce27e496c090579faffdc141*
+
+Each placement the question lists is decided by the criterion its own governing record already
+states, and three of the four fail it.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#37
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 1. The view is a host verb over the compositions, in `gate plan`'s shape · hash: sha256:bc354f4b1e7582e6df2a7cad846955dbc2bc9165751062dc109c0a6d499d47ba*
+
+**Not a spec render profile.** `OD-PROJECT-001`'s criterion: "A file is a projection output
+exactly when everything it asserts is in the specification store." A capability, an offer, a
+descriptor, an allowlist and an assessment are none of the store's ten content kinds; they are
+facts about `Cargo.toml`, the composition roots and `tests/contract/requirements/`. Rendering
+them would be the "second system wearing the projection system's name" that record refused,
+and putting them in the store to justify the profile would be inventing corpus content to
+satisfy a file format.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#38
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 1. The view is a host verb over the compositions, in `gate plan`'s shape · hash: sha256:b42398b069b1dc52d7644e87bb0d9426e7b68de718efe885c58a80c8496a571d*
+
+**Not a committed projection with a sidecar.** `OD-PROJECT-003` measured that "`--require` only
+changes what happens when an output is *absent*", and that a stale committed output fails the
+freshness step whether or not it was required. The sidecar the step reads is store-fed — its
+`inputs` are store rows hashed by identity — so a workspace-fed body would need a second
+freshness mechanism, which is a second authority for the one question `spec freshness`
+answers. And the view changes on every commit that adds a capability, a rule, a provider or an
+assessment, which is most weeks' commits; that is `OD-PROJECT-003`'s tax paid on the most
+volatile artifact in the tree.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#39
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 1. The view is a host verb over the compositions, in `gate plan`'s shape · hash: sha256:438afef20a2f758088ddef05eed82f6814264a84aac8dd9859ecaba43cceb40b*
+
+**Not a second owned README region.** `OD-AGENT-004`'s rule, as `tests/contract/tests/
+boundaries/readme.rs` restates it: "enumerate a compiled vocabulary only where a test compares
+that enumeration against its authority, otherwise route". A checked table is permitted, and a
+checked table of fourteen contracts, seventeen offers, seventy-one rules, five served methods
+and thirty-nine verdicts is a hundred-odd hand-typed cells that a test would make every
+capability commit re-edit. The zone table earns that cost because membership changes rarely
+and a member's zone is a decision with nothing in the source to infer it from. Every cell of
+this view is in the source. `Test_The_Readme_Should_Not_Relist_A_Vocabulary_It_Routes_To` is the
+test that would then be arguing with the region.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#40
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 1. The view is a host verb over the compositions, in `gate plan`'s shape · hash: sha256:f097a5dd0f1567b56aa98ed7f95b3c670b4662f45707715cd37151f9602f8e74*
+
+**A verb, derived at run time, never a copy.** `gate plan` already is this for the rule half:
+it composes the registry and reports it, and `OD-GATE-020` records what happened when the
+same list was maintained by hand instead — parity went false silently three times and failed
+at the number the record named. The verb sits beside `Plan` in `nomos-gate-orchestration`,
+reads `nomos_check_orchestration::Registered()`, `nomos_rules::DESCRIPTORS`, each package
+crate's `KNOWN_PROVIDERS`, `ServedMethod::REGISTRY` and the requirement-trace registry reader
+over the root it is given, and types no list of its own. Its output is line-oriented like
+`gate plan`'s, so a reviewer runs the binary and reads the answer, which is what the second
+review asked for.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#41
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 1. The view is a host verb over the compositions, in `gate plan`'s shape · hash: sha256:9cab326c0ffbb3cc42d82aa3701659ba32728d2a42d46c36fb023f481712209e*
+
+The verb has two halves and labels them. **What this binary composes** — the contracts, offers,
+rules, allowlists and served methods — is true wherever the binary runs and needs no tree.
+**What this tree declares** — the assessments — is true of the root the verb was handed. A
+line that does not say which half it belongs to is a line a reader will carry to the wrong
+repository.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#42
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 1. The view is a host verb over the compositions, in `gate plan`'s shape · hash: sha256:4833fd2e0debbc36e59591b5eed498200c3cf088e6110fb554c2e5529caf6899*
+
+Under `OD-HOST-014`'s criterion — "An operation that reads the tree it is given, or writes
+inside it, is admitted" — the verb is admissible over the transport. Serving it is a separate
+item, judged there, and this record does not admit it.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#43
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 2. A row says one of four things, each with a mechanical witness · hash: sha256:75ed5c10cde562e431c58dd0b0ae38ba988e3c71fa7965d96f885ac098826306*
+
+### 2. A row says one of four things, each with a mechanical witness
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#44
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 2. A row says one of four things, each with a mechanical witness · hash: sha256:25ab6765c8f1de3fa1e6801c4106977cec547f6c4ad1cb5f34bd81b9aba7f7c6*
+
+The verb prints, for every name a source carries, exactly one of these, and never a fifth:
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#45
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 2. A row says one of four things, each with a mechanical witness · hash: sha256:d8fd0c74a638676b4378f4d1274bd6d82fecef3bc72ac002b2d870d2342e59b1*
+
+- **built** — a composition witnesses it: an offer in `Registered()`, a descriptor in
+  `DESCRIPTORS`, a method in `ServedMethod::REGISTRY`, an entry in a `KNOWN_PROVIDERS`, or an
+  assessment reading `Met`. The row carries the guarantee or citation the source declares and
+  the verb judges nothing about it.
+- **declared and unobserved** — a member declares it as something it provides and no
+  composition takes the offer. Today: the three exported `Provider_Offer` functions
+  `Registered()` never calls, and `Check_Package_Conformance`. The witness is the export; the
+  absence is the composition's.
+- **partial** — an assessment reads `Partial`, and the row carries its gap. This is the only
+  source whose own vocabulary contains the word, and the verb never manufactures it: an offer
+  below its ceiling is built at that guarantee, and five served methods of thirty handlers is
+  a count, not a partial.
+- **unassessed** — no source carries the name. This replaces "not built", which the verb
+  cannot print: "not built" is `OD-COMPLETENESS-001`'s inference from silence, and that record's
+  rule is that "a declared universe must have a check comparing it against the reality it
+  claims to enumerate." There is no declared universe of product capabilities here, so there is
+  no reality against which "not built" could be checked.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#46
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 2. A row says one of four things, each with a mechanical witness · hash: sha256:396f4740d25124779e6328ec402685e0b1d7ede5dde7560fc846fe5ca0e3cfe0*
+
+`Diverges` and `NotBinding` are printed as the verdict words, with the governing record each
+names, because `OD-TRACE-002` already chose those words and a second spelling would be a second
+place for them to be wrong.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#47
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 2. A row says one of four things, each with a mechanical witness · hash: sha256:65ed0e4e1a45611bf9a21d2dcda5a841d2436ad2129bbb3f3f5b7ac46e7298d9*
+
+Two things the verb does not do with these states, because each would be a claim of coverage
+the source does not make. An unserved `Handle_*` is not "declared and unobserved": a handler is
+an export, not an expectation of service, and twenty-one of them are unserved by decision.
+An unoccupied `Family` label is not either: a closed vocabulary names what a registrant may
+say, not what one is expected to exist for.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#48
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 3. What a row says when the corpus is absent, which is what CI has · hash: sha256:ae7ee8d638654f99386e5c7036f669057b6322198f6bc8431b46283c521693e0*
+
+### 3. What a row says when the corpus is absent, which is what CI has
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#49
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 3. What a row says when the corpus is absent, which is what CI has · hash: sha256:4354cb61e703db84af458ee9ce4831f4f5e2d79a83c992ed0b4d0244e6cfd981*
+
+Every build-time row is unchanged; none of it ever needed a corpus. Every assessment row
+prints what is committed — verdict, sites, gap, record — and every family row prints its
+counts of `Met`, `Partial`, `Diverges` and `NotBinding`. The `Unassessed` column prints as
+**uncounted**, in the shape `OD-TRACE-005` gave a run that cannot look: a state the run reports
+as its result, never a zero and never a silence.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#50
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 3. What a row says when the corpus is absent, which is what CI has · hash: sha256:7eaa7eb82fd2a0d025d6c98c67e9dc235df20ef605c3ba7ebeb21488c1631f17*
+
+**The verb never reads the corpus, mounted or not.** `OD-TRACE-001` drew the line: "the corpus
+is required to *author* an entry and to *re-verify* one. It must not be required to *run the
+guard*." A verb whose output changes with an environment variable is a verb whose CI answer and
+local answer differ, which is the one property this view exists to end. The count of what
+nobody has looked at, per family, is a corpus-side fact, and `OD-TRACE-005` already decided
+where corpus-side facts about assessments are computed: the corpus-gated suite under
+`tests/integration`, declared in `corpus_gates.rs`. That suite may print "assessed n of N" per
+family and list the families with no entry; the verb may not, and the sixty-one family sizes
+are never committed to make it possible — a committed size list would be a declared universe
+whose only mirror is corpus-gated, which is `OD-GATE-001`'s hole with a new name.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#51
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 3. What a row says when the corpus is absent, which is what CI has · hash: sha256:0b4f0b9abad7ace8ed4aaa33b8568eeff746cf2317f91d46357d180f7c48a974*
+
+So on CI a family row reads, for example, `AGT: 15 assessed — Met 1, Partial 13, Diverges 1;
+unassessed: uncounted`. The table in this record is what that row becomes when a person
+mounts the corpus and runs the integration suite, and it is dated for that reason.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#52
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 4. The verb reproduces no review table, and the mapping stays a person's · hash: sha256:9ede30e383298ffb74df580cdb471e157547f811268cc7c14bc5872c84d9471c*
+
+### 4. The verb reproduces no review table, and the mapping stays a person's
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#53
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 4. The verb reproduces no review table, and the mapping stays a person's · hash: sha256:c4317c992e2e8105c67dbdb38b3a9361d9b283c4d8e9b5b248610389d591bc1a*
+
+The verb emits rows for names its sources carry: capability identifiers, provider identities,
+rule identifiers, package allowlists, served operations, requirement identifiers and their
+families. It emits no row for "Atlas", "LSP navigation", "Compiler semantics" or any other
+product name, because no source carries one and a mapping compiled into the verb would be the
+hand-written table this record exists to retire, one indirection further from the reader.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#54
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 4. The verb reproduces no review table, and the mapping stays a person's · hash: sha256:aa81b51ae0602c1635a855a0319be6a16232f1edf70ef22d932de2d89c664784*
+
+A reviewer who wants the review's shape writes the mapping — this product name is these
+capability rows — and every cell the mapping points at is then a line the verb printed, checkable
+by running it. What stays a judgment is the mapping, which is the smallest thing that can stay
+one. The three rows this record could not reach any source for are the rows where the mapping
+points at nothing, and the honest cell there is "unassessed", not "not built".
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#55
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 5. The territory a building item would reserve · hash: sha256:1987f8483c997972e9dc11d805c751ac57a2137eb2deb2cda10383af3d111c98*
+
+### 5. The territory a building item would reserve
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#56
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 5. The territory a building item would reserve · hash: sha256:e958b699395a013706a9ed17b7cfaefabfb0ff3f856295a51c33200e036e750f*
+
+Stated so the item is authored against this record rather than by re-deriving it. Territory
+follows the predicate's dependency cone: a verb beside `Plan` moves `nomos-gate-orchestration`'s
+public surface, so `tests/contract/surface/nomos-gate-orchestration.txt` is territory with the
+crate; the CLI renderer is `crates/host/nomos-cli/src/gate.rs` and `crates/host/nomos-cli/src/gate/`,
+which has no snapshot because it is a binary; the API handler is `crates/host/nomos-api/src/lib.rs`,
+one new file under `crates/host/nomos-api/src/response/`, and `tests/contract/surface/nomos-api.txt`.
+If the registry census is exported from where `Registered()` lives instead,
+`crates/orchestration/nomos-check-orchestration` and its snapshot join. Serving the verb is not
+this territory: `OD-HOST-014` names its own three files, and that is a second item.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#57
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 5. The territory a building item would reserve · hash: sha256:1bf5feaa49cac1f034fc412c16eea43504ae2bbb279d94c85248a11e26930f6e*
+
+`README.md` is deliberately not territory. Its Host rows describe the verbs in prose, and
+`OD-AGENT-004` says prose routes rather than restates; no table is added.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#58
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / The Decision / 5. The territory a building item would reserve · hash: sha256:95d882d04cc7bc6abbe6b9985ea013d8cb980e2cbf50b829f975b3266453ff15*
+
+At the time of writing `crates/host/nomos-api` and its snapshot are held by a live claim on the
+board, so a building item queues behind it or lands the orchestration and CLI halves first.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#59
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#60
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What This Record Does Not Do · hash: sha256:b73a823aa0a33019fc086308d98932a3ec70bdfc04a051dbae58ac051d4fda45*
+
+It builds nothing. No verb, no profile, no README row, no assessment, and no change to any
+composition root or allowlist.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#61
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What This Record Does Not Do · hash: sha256:9102a85f25ecf073c5d05866258b4ac63d436d3bcb549eb843b88235755fc98c*
+
+It does not amend `OD-PROJECT-001`. The README keeps one owned region, and the criterion that
+record states is what excluded the second here.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#62
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What This Record Does Not Do · hash: sha256:f802cae7e4cc789bb5c088abb15a952c86fdc488207f7b74e7fee713b77f4b49*
+
+It does not decide the verb's spelling, its group, or its output grammar beyond being
+line-oriented and two-halved. `OD-PROJECT-005` left the same things to its building item for the
+same reason.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#63
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What This Record Does Not Do · hash: sha256:b18a4277f9cf18a6873dccab6b87af6d5257cd1c46f80d827326d9e5c8655fcf*
+
+It does not assess a fortieth requirement, backfill a hash, or move a verdict. The family table
+above is a measurement, not a registry entry, and `OD-TRACE-002`'s floor is untouched.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#64
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What This Record Does Not Do · hash: sha256:b9ca17246c95802b1e84ab971735b8e23dba7bb0a17c9e8d1f65ab9b4249a79b*
+
+It does not decide what the deferred corpus families mean for the roadmap, or whether the two
+compiler-backed contracts should now be composed. Both questions are held by items on the board
+at the time of writing, and this record's counts will move when they land.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#65
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / What This Record Does Not Do · hash: sha256:b5924ef44138817f9c54ed3ced442c2a6518c58ab2054f8f49904b169e59a0a5*
+
+It does not admit the verb over the transport. `OD-HOST-014`'s criterion admits it; admitting is
+a separate act with its own three files.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#66
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#67
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Controls · hash: sha256:1a1a9680bd43594588ea5419c068917c3f6f6714b6fa738e6695d52a3f203c4e*
+
+| Weakening | What it produces |
+|---|---|
+| render the view as a spec profile | a renderer over the workspace under the projection system's name, refusing corpus-unset or fed with invented store content |
+| commit the verb's output beside a sidecar | a file stale on every capability commit, with no freshness mechanism that can read it, which is `OD-PROJECT-003`'s tax for nothing |
+| add the view as a second README table | a hundred-odd hand-typed cells, and a checked-copy rule that makes every capability commit a README edit |
+| print "not built" for a name no source reaches | an inference from silence with no universe to check it against |
+| commit the sixty-one family sizes so `Unassessed` is a number | a declared universe whose only mirror is corpus-gated, the `OD-GATE-001` hole under a new name |
+| let the verb read a mounted corpus | a CI answer and a local answer that differ, for one environment variable |
+| print "partial" for an offer below its ceiling | the verb grading providers, which `OD-CAPABILITY-002` reserved to a provider's own tests |
+| print "declared and unobserved" for an unserved handler or an unoccupied family label | an export or a vocabulary term reported as a broken expectation, twenty-one of them by decision |
+| compile a product-name mapping into the verb | the review's hand-written table, one indirection further from the reader, stale at the next review |
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#68
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#69
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Status · hash: sha256:9eb10a6b587ba72f7eeb6a8c6e234330da68c050d915382f1b6b2a462fb03eb5*
+
+Accepted. The view is a host verb beside `gate plan`, derived at run time from the
+compositions and typed nowhere; a row is built, declared and unobserved, partial, or unassessed,
+each with the source that witnesses it, and "not built" is not a word the verb can print. On a
+corpus-less runner every build-time row is unchanged and every family row counts what is
+committed and reports unassessed as uncounted; the count itself is the corpus-gated suite's to
+give and never the verb's. Measured at `8338c6ec`: fourteen contracts, seventeen offers of
+twenty exported, seventy-one rules, three allowlists, five served methods of thirty handlers,
+nineteen profiles, sixty-eight README rows, thirty-nine assessments in nine of sixty-one
+families, and 324 requirements nobody has looked at.
+
 ### docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1
 
 *revision: authored · kind: heading · heading: Main and dev mean different things, and the distance between them is a decision, not an accident · hash: sha256:f4f6a218878ef17be9759ceaa4eb9347fd1ce9a14a065d36b33434c8b5f86856*
@@ -56090,6 +57380,635 @@ Accepted. `OD-ROADMAP-002` is amended to point here rather than restating any of
 way `OD-ROADMAP-001` points at `OD-ROADMAP-002`. The three areas return to `OD-ROADMAP-001`'s
 licence under the one constraint above, and the four gaps the review named are unpaused for
 items of their own.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#1
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one · hash: sha256:e1101969ec797782305194e00fd6f1bf72cc9ca88a02ebfcc586d9c3fae6831b*
+
+# The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#2
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#3
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / Question · hash: sha256:0153ca2273822babc9413222ca1719b954f6f1411fdb03cf540630de0c3df3d7*
+
+`ARC-ROADMAP-001` sorted the corpus's 61 requirement families into a near-term tier and a
+deferred tier by one criterion — "Treating architecture and feature intelligence as near-term
+work pulls effort into consumer-side algorithms before the substrate they consume (facts,
+applicability, gates, corrections) is production-grade" — and named the families on the
+deferred side by prefix: `ATL`, `ARC`/`ARC-AN`, `FEAT`, `PLACE`, `PLAY`, `DBG` and `TEST`,
+with `EGRAPH` held out of both lists by its constraint 3. It names no family that measures
+anything. Seven families — `MET`, `MET-COMP`, `PERF-MODE`, `NFR-PERF`, `INSTR`, `CAL` and
+`RUNTIME`, 44 requirements between them — appear on neither side, and the record's own
+rounding ("roughly three-quarters of the 363 requirements ... fall on the near-term side;
+the remainder clusters almost exactly onto ...") is where they went unnoticed.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#4
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / Question · hash: sha256:a85446d7b477322b054545cf42d6653a47642a00cb19119e3919862142b5886a*
+
+That is a gap in placement, not in the corpus. `OD-ANALYSIS-004` and `OD-ANALYSIS-006`
+settled how a program-semantics fact and a runtime observation are *expressed* — through the
+five existing epistemic types, never a domain-local substitute — and `OD-ANALYSIS-007`
+settled what would pick the first such capability. None of the three places a corpus family
+and none mentions a metric. So a session reaching for complexity, allocation, latency or any
+other characteristic of a program finds the vocabulary decided and the sequencing undecided.
+The honest answer today is not "deferred"; it is "nobody has said", and that is the state the
+item that reserved this record was written to end.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#5
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#6
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Was Measured · hash: sha256:533e52dfc4d431bf0e4020f134d62717eb8cc5c6c90f11a7dc0a94c8a470bea6*
+
+**Corpus and revision.** Every count below was taken by listing
+`01_authoring/artifacts/requirements/` in the code-standards checkout at
+`f0d820729acfa70a2fa60bd98eb6704fba7cf90b`, whose domain volumes each carry the header line
+`Domain-owned edition v14.19 • 4 August 2026` (line 20 of every file under
+`01_authoring/domain_volumes/`). That directory holds 363 files in 61 prefixes, the
+population `ARC-ROADMAP-001` and `OD-TRACE-001` both describe. This repository was at
+`8338c6ec6bbb095cb897675643c82e4bb62d379f` when the item was claimed.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#7
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Was Measured · hash: sha256:7c96869133ae35c274c13e5373563b32dd78cd2519d70c297e4ea11bdf5227ed*
+
+**The seven families**, every file read in full:
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#8
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Was Measured · hash: sha256:6a357b6f702397fda68ce7bf8b252f4cee00281498b9f0944d9108f14faaf3b2*
+
+| Prefix | Count | Identifiers | Corpus section |
+|---|---|---|---|
+| `MET` | 2 | `MET-006`, `MET-007` — the family's numbering starts at 006; no `MET-001` through `MET-005` exists | `volume-06.7-5-3-evidence-authority-and-metric-aggregation` |
+| `MET-COMP` | 8 | `MET-COMP-001` through `MET-COMP-008` | `volume-03.multidimensional-comparison-projections` |
+| `PERF-MODE` | 6 | `PERF-MODE-001` through `PERF-MODE-006` | `volume-12.10-3-1-operating-mode-performance-and-scale-contracts` |
+| `NFR-PERF` | 4 | `NFR-PERF-001` through `NFR-PERF-004` | `volume-12.10-1-core-non-functional-requirements` |
+| `INSTR` | 6 | `INSTR-001` through `INSTR-006` | `volume-07.7-7-3-runtime-integration-tiers-and-semantic-instrumentation` |
+| `CAL` | 9 | `CAL-001` through `CAL-009` | `volume-08.7-8-3-architecture-decisions-discovered-contracts-and-verification-models` |
+| `RUNTIME` | 9 | `RUNTIME-001` through `RUNTIME-009` | `volume-07.7-7-2-runtime-rule-lifecycle` |
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#9
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Was Measured · hash: sha256:fee2ba05d840641e8087da0e53348cf4e8d199672ac7a08ac19b22498bcacf03*
+
+44 in total, every one at `authority: canonical-normative-record`, `status: normative`,
+`maturity: accepted`.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#10
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Was Measured · hash: sha256:359a4aa487e5efc3c3e7ccb2d091591e58d549a5df9e518a3a3251f6c8d9251e*
+
+**Assessment.** `tests/contract/requirements/` holds 39 `.assessment` files, in the families
+`AGT`, `AGT-EXEC`, `CAP`, `CHK`, `COR-EXEC`, `EVID`, `MODEL-ROUTE`, `WF` and `WORK-LEDGER`.
+None of the 44 is assessed. Under `OD-TRACE-001` each is `Unassessed`, which that record made
+a state rather than a gap, and this record leaves every one of them there.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#11
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Was Measured · hash: sha256:6f5ae41ecee6f4614dd5d773cc95090874ec5af3a9fd61b973029e7606539bf3*
+
+**Prior placement.** No file under `docs/records/` names any identifier in the seven
+families. `ARC-ROADMAP-001` names nine prefixes — the seven deferred ones and `EGRAPH` — and
+three individual requirements (`WF-001`, `IF-001`, `MODEL-ROUTE-037`); none of the seven
+prefixes is among them.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#12
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Was Measured · hash: sha256:c7645bf907c52c2f89ded1c3583c5e64a4a00cd3e587f9a7e45338b83cbabad1*
+
+**What the workspace holds.** `crates/` was grepped for the families' vocabulary, with the
+specification crates' own test corpora set aside (they embed the corpus text and match
+everything):
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#13
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Was Measured · hash: sha256:4349be3ab3c887f27a9bf043acc43be53d2ca28ca8dc330fafe4e4da1dd9149a*
+
+- *metric* — `PackageKind::MetricProvider` in
+  `crates/contracts/nomos-contracts/src/package_kind.rs`, a kind in that closed set
+  documented as "A source of metric observations."; nothing in the workspace declares
+  itself one. Four doc comments in `crates/kernel/nomos-model` say a subject is a thing "a
+  rule, metric or finding can be about". No metric descriptor, no metric value, no type
+  carrying a unit.
+- *complexity*, *characteristic* — nothing.
+- *tradeoff* — `unresolved_tradeoffs: Vec<String>` on `nomos-corrections`'
+  `CorrectionChoice`, a direct transcription of `COR-012`'s five recorded nouns, written by a
+  correction's author as free text; and three doc comments in `nomos-rules` using the word
+  about their own design. No projection.
+- *calibration* — `RuleCalibration { rule, rationale }` and `AdoptionPolicy` under
+  `crates/orchestration/nomos-gate-orchestration/src/policy/rule_calibration.rs`, with a
+  serializable twin in `nomos-api`. Its own doc names its family: `ADOPT-CONFIG-*`'s
+  per-repository "advisory rather than blocking" override, matched by rule alone. That is
+  not `CAL-001`'s `RuleCalibrationCase`, which links findings, dispositions, corrections, run
+  evidence and package versions. The word is shared; the requirement is not.
+- *instrument* — `GateRunProvenance.instrument` and `Instrument_Digest` in the gate crate,
+  and `JudgmentDifference::Instrument`: the digest of the `nomos` build that judged a run,
+  so two runs can say whether the same tool measured them. Not `INSTR`'s instrumentation of a
+  subject program.
+- *`RuntimeObserved`* — one producer and one reader outside test code:
+  `nomos-connector-coderabbit`'s `nomos.cap.review.finding`, whose contract claims the level
+  because "reading one already-posted review comment by its own stable id is a live read of
+  GitHub's current record for it", and `nomos-rules`' `checks/review.rs`, which requires it. A
+  review comment read live is not a subject program executed; nothing produces or reads a
+  characteristic of a program's execution.
+- *`SemanticallyResolved` program code* — `nomos.cap.rust.copy_clones` and
+  `nomos.cap.rust.nested_locks` in `crates/languages/nomos-lang-rust-compiler`, each stating
+  a resolved fact about one site (a `Copy` receiver cloned; a lock guarding a value already
+  behind a lock). Neither is a count, and neither carries a unit.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#14
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Was Measured · hash: sha256:46156502023a406cdd44160403a88244061ea7d22b84f90d34630f4ec5520589*
+
+The nearest thing to a metric is three threshold rules in `nomos-rules` — nesting depth
+(`checks/nesting_depth.rs`), function arity (`checks/function_shape.rs`) and file size
+(`checks/structure.rs`) — each resolving its ceiling from `nomos.cap.limits.policy`
+(`crates/capabilities/nomos-cap-limits-policy`, `OD-RULES-011`). The *limit* is a capability
+fact a repository declares. The *count* is not: each rule computes it privately, compares,
+emits a `Finding`, and discards it. No count is filed under any `FactVariant`, none declares
+a unit, a direction or whether two snapshots of it are comparable, and none can be read by a
+second rule or compared across two runs — `gate compare`
+(`crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs`) diffs finding
+dispositions, not values.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#15
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Was Measured · hash: sha256:ea2156ee5a7424009afffb6de99a46a3cca0702d91cdce78e93e22d3ea40ae23*
+
+`crates/capabilities/` holds thirteen crates now, not the one `OD-ANALYSIS-007`'s version 1
+counted; none produces a metric. `OD-RULES-008` records the first real need for a
+`SemanticallyResolved` program-semantics fact arriving by `OD-ANALYSIS-007`'s first arm — the
+fact a reachability rule's own subject needs — and `OD-ANALYSIS-010` decides its mechanism;
+that is evidence the trigger shape works, and it is the shape this record reuses.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#16
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Criterion, And A Third Disposition · hash: sha256:f4882fa3644d90d252e5d6165d7a77ff733cbdadf0156c4729d913138a3fcb0d*
+
+## The Criterion, And A Third Disposition
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#17
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Criterion, And A Third Disposition · hash: sha256:415cfc9a449ead6f2a4727321250ba14460064098af1c6647affcff24cc94a54*
+
+`ARC-ROADMAP-001`'s criterion is one sentence: consumer-side algorithms wait until the
+substrate they consume is production-grade. Applied to a family that measures, it asks of
+each requirement which side of the fact seam it sits on.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#18
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Criterion, And A Third Disposition · hash: sha256:b42de2c2e12ab6313833cb9f6b4c04093bfe611fe37753ff7c1242b39f96c8d4*
+
+- **The fact-producing half** is anything that states what a measurement *is*: its
+  descriptor, the identity that keeps two observations apart, what a producer must have done
+  to claim a resolution level, and what a reader may not do with it. Under `OD-ANALYSIS-004` a
+  static characteristic of a program — a count, an allocation decided at compile time, a
+  resolved escape — is a program-semantics fact at `Syntactic` or `SemanticallyResolved`;
+  under `OD-ANALYSIS-006` a characteristic only execution shows — an allocation that happened,
+  a latency, a lock held this long — is a `RuntimeObserved` fact keyed by workload and
+  environment; and a modelled alternative is `FactVariant::Predicted`, "Modelled rather than
+  measured." This half is substrate. It sits on the near-term tier under "analysis +
+  incremental fact infrastructure" and "language/provider/capability system", and because it
+  is substrate nothing yet asks for, it is built only when the trigger below fires — exactly
+  as `OD-ANALYSIS-007` holds the first program-semantics producer.
+- **The consuming half** is anything that ranks, compares, visualizes, aggregates or feeds
+  back a measurement: a tradeoff projection, a fitness view, a correction ranker, a
+  calibration loop. A consumer sits on the tier its substrate sits on, and after it. Where the
+  substrate is a metric fact, the consumer is deferred, because that substrate is not merely
+  unbuilt but untriggered. Where the substrate is the near-term rule platform itself —
+  findings, suppressions, baselines, corrections, package versions — the consumer is near-term
+  and sequenced behind the pieces of that platform still landing.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#19
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Criterion, And A Third Disposition · hash: sha256:62553f43c4b822aceb43f62b6c351529c892f9c554a192e3a9fa10a795b16b30*
+
+Two of the 44 fit neither tier, and the corpus says so itself. `RUNTIME-005` marks
+`ActiveRuntimeGuard` "a distinct deferred capability" that "shall not be inferred, enabled,
+or implemented without an explicit product, security, and authorization decision", and names
+the decisions that would lift that. A deferred-tier item is buildable the day its substrate
+is ready; this one is not. So the third disposition is **withheld by the corpus**, with this
+criterion: *the requirement's own text names a decision outside this repository's sequencing
+that must exist before the thing may be built, and substrate readiness does not stand in for
+it.* Nothing this record or `ARC-ROADMAP-001` decides can release a requirement in that
+state. Only the named decision, adopted here as a record, can.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#20
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement · hash: sha256:a1e05bd4c3000ee536cfad8f47837b73c22e9943f35ae1d67b060de2a67a4a16*
+
+## The Placement
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#21
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `MET` — near-term, fact-producing, both requirements · hash: sha256:ef56554831275d6e32e6f179110b9a14f7ae16bb9e8c87688c01bdaaa7c86ff3*
+
+### `MET` — near-term, fact-producing, both requirements
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#22
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `MET` — near-term, fact-producing, both requirements · hash: sha256:d6fd1a08c4f99c4326ad20621327b6a85ac8c24b85b85177324725dbbb2f8b1a*
+
+`MET-006`: "Every metric descriptor shall define unit, subject kinds, aggregation operator,
+weighting, normalization, missing-data behavior, directionality, baseline requirements,
+uncertainty/statistical treatment, and snapshot comparability." That is a capability
+contract's payload schema in the corpus's words — the per-item shape `OD-ANALYSIS-004` leaves
+domain-local, beside the five questions it does not (`FactVariant`, `Guarantee`,
+`EvidenceClass`, `Applicability`, `Observation`). The corpus itself files a metric on the
+fact side: `NFR-PERF-004` lists "metric observations" beside "parsed syntax, semantic
+results, graphs" as things a rule projection reuses across rules, which is what a fact in the
+fact store is.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#23
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `MET` — near-term, fact-producing, both requirements · hash: sha256:11b8569316341aef4306eaabf9938aa1114fcc4e1ed98a82d2d154d871fb4455*
+
+`MET-007`: "A client may not aggregate or blend a metric beyond the descriptor’s declared
+semantics. Non-aggregable metrics must remain at their native granularity or use an
+explicitly named derived metric." Binding on a client, but it is the descriptor's reading
+rule — the reason `MET-006` makes a descriptor declare an aggregation operator at all — the
+same way `Guarantee::Satisfies` is the reading rule that makes a declared `FactVariant`
+worth anything. It has no build of its own and belongs to the contract, not to any consumer.
+Both near-term; neither built until the trigger fires.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#24
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `MET-COMP` — deferred, consuming, all eight · hash: sha256:4d50c595021450aab49aab9b5d8a0194f05ffa6c4af9a57b73b313763865d733*
+
+### `MET-COMP` — deferred, consuming, all eight
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#25
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `MET-COMP` — deferred, consuming, all eight · hash: sha256:e62e2d2c639bf9efd7b9417705d45f8e42057e90c4da54ecd49cb18629531856*
+
+`MET-COMP-001`: "Nomos shall expose MetricTradeoffProjection as the canonical
+renderer-neutral comparison contract for current, historical, observed, derived, or
+predicted alternatives across an explicitly declared ordered set of MetricDescriptors." A
+projection over descriptors none of which exists. `MET-COMP-007` names its consumers — "No
+MetricTradeoffProjection, client visualization, correction ranker, or architecture fitness
+view shall declare a universally best alternative" — and `MET-COMP-005` its views:
+"Pareto-front projections, artifact comparison profiles, tradeoff tables, and bounded
+architecture fitness-neighborhood views". Architecture fitness is the deferred tier's own
+vocabulary (`ARC`/`ARC-AN`); client visualization is the deferred clients'. The whole family
+is deferred: its substrate is untriggered and its named consumers are on the other list.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#26
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `MET-COMP` — deferred, consuming, all eight · hash: sha256:b3026ed71cb3b61deb3a17231b2a34f1bd9c5f67086584739f8d9dac00b0a8aa*
+
+Two notes, so nothing is re-derived when it is built. First, `MET-COMP-002` ("evidence
+classification, provider and configuration provenance, uncertainty") and `MET-COMP-006`
+("Predicted alternatives shall remain distinguishable from observed or verified
+alternatives ... and shall not be represented as a measured outcome") are already answered by
+`EvidenceClass`, `FactKey`'s provider and configuration parts, and the `Predicted` and
+`RuntimeObserved` ends of `FactVariant`; the projection inherits `OD-ANALYSIS-004`'s
+vocabulary rule and mints none of its own. Second, the one entry in `MET-COMP-005`'s list
+that is near-term, "candidate-correction comparisons", does not pull the projection forward.
+`OD-ROADMAP-001` licenses `CorrectionCandidate` ranking now, and `MET-COMP-007`'s
+obligations on a ranker — objective weights, rejected alternatives, unresolved tradeoffs —
+are the nouns `CorrectionChoice` already transcribes from `COR-012`. A ranker over *metric*
+alternatives needs metric facts, and none exist.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#27
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `PERF-MODE` — near-term, a contract on the product, split by mode · hash: sha256:990aafe24d53e799079753743eb36bbf7f96d3879aa48f0930790dd949f9ff4e*
+
+### `PERF-MODE` — near-term, a contract on the product, split by mode
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#28
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `PERF-MODE` — near-term, a contract on the product, split by mode · hash: sha256:f67f6c4ff43eea3eaae55427dd8e1989212cd96a58f60e04d3e1a27a737dc600*
+
+This family is not about a subject repository's characteristics; it is about this product's.
+`PERF-MODE-001`: "Every shipped operating mode shall have an OperatingModeProfile defining
+representative dataset scale, cold and warm latency targets, freshness guarantee,
+cancellation responsiveness, peak and steady-state memory budget, incremental invalidation
+budget, streaming/pagination behavior, approximation or truncation policy, and degraded-mode
+behavior." It is neither producer nor consumer of the metric seam, so the criterion does not
+reach it; `ARC-ROADMAP-001`'s own list does, under "production hardening / continuous
+enforcement". That record verified eight performance claims against
+`crates/substrate/nomos-analysis` and left six "as real hazards deliberately left for later
+work"; a profile per shipped mode is what turns a hazard into a budget with a pass or a fail.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#29
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `PERF-MODE` — near-term, a contract on the product, split by mode · hash: sha256:19c5cdcfae2705cea9ac6853602e4032a06c74f1e7489544608c65cadc5cc3df*
+
+`PERF-MODE-002` lists the initial profiles and splits along the tiers by mode. "active-editor
+incremental check, changed-file check, local gate, repository snapshot analysis, ... workflow
+execution, ... historical comparison" name modes that exist or are near-term — the
+`nomos-lsp` host, `nomos check`, the gate verbs in `nomos-gate-orchestration` (`plan`,
+`run`, `explain`, `compare`), `nomos-workflow-orchestration` — and their profiles are
+near-term with them. "Atlas navigation, large graph query, capture import, ... hosted
+organization dashboard" name deferred modes, and a profile arrives with its mode.
+`PERF-MODE-003` through `PERF-MODE-006` are the family's measurement discipline — targets
+name "hardware/environment class, repository or graph scale, build variants, provider set,
+cache state, concurrency, network assumptions, measurement method, percentile, sample count,
+and acceptance threshold"; freshness is "specified independently from response latency";
+degraded modes "state which guarantees are retained"; release acceptance benchmarks
+"representative profiles" — and go with `PERF-MODE-001`. A benchmark of this product is a
+runtime observation of it, and `PERF-MODE-003`'s identity list is `OD-ANALYSIS-006`'s
+workload-and-environment identity in the corpus's words, so when profiles are measured they
+are keyed as that record says and not by a second scheme.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#30
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `NFR-PERF` — split, each requirement with the subsystem it binds · hash: sha256:3e5b7513427bae90a1e6289f457998bff59b7529dff6d144677c49abefc0a7cd*
+
+### `NFR-PERF` — split, each requirement with the subsystem it binds
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#31
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `NFR-PERF` — split, each requirement with the subsystem it binds · hash: sha256:1d928ffb4292a6dcd248c2ceaae1aae4a22ac5b558f602f9a3bb34c2efd5bd0a*
+
+- `NFR-PERF-001`: "Interactive source/architecture lookup at a debugger stop should be served
+  from indexes and ordinarily complete within 50 ms locally, excluding provider calls." Binds
+  the debugger integration — **deferred**, with `DBG` and "runtime/debug intelligence".
+- `NFR-PERF-002`: "Editing feedback should use changed-region analysis and target sub-second
+  local diagnostics for cached deterministic rules; slower tools must stream status." Binds
+  incremental analysis and the editor host — **near-term**, under "analysis + incremental
+  fact infrastructure".
+- `NFR-PERF-003`: "Atlas/architecture clients shall request semantic-zoom summaries rather
+  than entire huge graphs and support progressive refinement." Binds Atlas — **deferred**.
+- `NFR-PERF-004`: "Rule projections shall reuse parsed syntax, semantic results, graphs, and
+  metric observations across rules and clients." Binds the fact store — **near-term**, and it
+  is the sentence that placed `MET-006` on the fact side above.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#32
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `INSTR` — split at the tier boundary the family itself draws · hash: sha256:d51d6ef0809918d8697798837fbf9c97ac826f48616055252e993ec0f8ef5e37*
+
+### `INSTR` — split at the tier boundary the family itself draws
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#33
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `INSTR` — split at the tier boundary the family itself draws · hash: sha256:e97d5e289b013e39fe0c28e3ae4c8965f97810a3e6b33727c9cbb49bbc79701b*
+
+`INSTR-001`: "Runtime evidence integrations shall identify one descriptive tier: Tier 1
+GenericExternalAdapter, Tier 2 NomosInstrumentationSdk, or Tier 3 NativeRuntimeIntegration.
+Tier shall not substitute for capability guarantee, coverage, provider trust, or evidence
+classification." The second sentence is `OD-ANALYSIS-004`'s rule stated from the corpus's
+side: a tier is a fact about the provider, and three of the four things it may not stand in
+for are already typed here as `Guarantee`, `Coverage` and `EvidenceClass`, which keep their
+authority.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#34
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `INSTR` — split at the tier boundary the family itself draws · hash: sha256:6d9448505a727bf1dd6dfefbd1eaa8f50c37b9805bf687710295b8c573b9d81d*
+
+- **Near-term, fact-producing**: `INSTR-001` (the vocabulary), `INSTR-002` ("Tier 1 adapters
+  may import or stream established profiler, trace, debugger, allocation, build, and compiler
+  outputs, including ETW/EventPipe, perf, pprof, Tracy, DAP, compiler timing reports, and
+  provider-native exports where available") and `INSTR-006` ("Clients and rules shall not
+  treat Tier 1, Tier 2, and Tier 3 evidence as semantically interchangeable merely because
+  they expose similarly named metrics or events"). A Tier 1 adapter is
+  `ARC-CONFORMANCE-001`'s case exactly — a provider already exposes the fact and Nomos
+  composes it — and it is the cheapest producer of a `RuntimeObserved` fact under
+  `OD-ANALYSIS-006`, because a capture is an input a headless run reads, like a tree.
+  `INSTR-006` is a reader's obligation and part of the same contract.
+- **Deferred**: `INSTR-003` and `INSTR-004` (the Tier 2 SDK) and `INSTR-005` (Tier 3
+  native). `INSTR-003`'s content is the deferred tier's own — "semantic spans, feature-stage
+  events, subsystem boundary crossings, test/scenario identity" is `FEAT`, `PLACE` and `TEST`
+  vocabulary — and `INSTR-004` makes the SDK a shipped product surface in its own right
+  ("versioned, low-overhead, opt-in, privacy-aware, offline-capable, and independent of Nomos
+  internal storage, transport, sampling, visualization, and deployment implementations").
+  `INSTR-005`'s "task, replay, scheduling, allocation, subsystem, and causal identities" is
+  runtime/debug intelligence, which `ARC-ROADMAP-001` defers by name.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#35
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `CAL` — near-term, consuming, behind the rule platform it consumes · hash: sha256:141b1ddf5232899fb0c9e28a3729d6774a5c82692170af7ee6721702849270f3*
+
+### `CAL` — near-term, consuming, behind the rule platform it consumes
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#36
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `CAL` — near-term, consuming, behind the rule platform it consumes · hash: sha256:8855d08e4d974f8b0c228a738957f7fa3509a7406ca4212ee00d5fd1a0007b4b*
+
+`CAL-001`: "Nomos shall support a RuleCalibrationCase that preserves links among recurring
+findings, suppressions, false-positive and false-negative dispositions, corrections, run
+evidence, provider coverage, rule interactions, KnowledgeWorkbench claims and decisions,
+motivating defects, examples, counterexamples, and affected RulePackage versions." Every
+noun in that list but two is on the near-term tier and most are built: findings, suppressions
+and baselines (`nomos-gate-orchestration`'s policy modules), corrections
+(`nomos-corrections`), run evidence (`GateRunProvenance`, `compare`), provider coverage
+(`Applicability`, `Coverage`). The case record is the consumer that joins them. So the family
+is near-term — a consumer whose substrate is the near-term tier itself — and sequenced behind
+two things, each until its own condition clears:
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#37
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `CAL` — near-term, consuming, behind the rule platform it consumes · hash: sha256:be76ca7e0f8042046cc83a2e6b5be5048ba4fe4269532c27219f822fe61acab0*
+
+- **`RulePackage`'s lifecycle**, which `OD-ROADMAP-001` licensed and `ARC-ROADMAP-001`
+  constraint 2 brought into scope. `CAL-001`'s "affected RulePackage versions", `CAL-004`'s
+  "resulting RulePackage version" and `CAL-007` ("Historical results shall continue to
+  resolve against the normative version that governed them") have nothing to point at until
+  a package has a version.
+- **`OD-ROADMAP-002`'s gate-policy pause, for as long as it stands.** `CAL-006` ("Canary
+  results shall not silently affect blocking policy") and `CAL-009` ("shall not modify
+  applicability, severity, thresholds, suppressions, gate disposition, or active enforcement
+  without the existing governed review, versioning, publication, and rollout process")
+  describe a loop whose write end is gate policy vocabulary. While that pause stands, the
+  mechanism by which a calibration reaches a threshold or a disposition waits, as that record
+  says, "for the gate to stop selecting twice and to compile into one resolved run plan"; the
+  pause lapses on that record's own terms — its successor landed, or abandoned — and this
+  record adds no wait of its own beyond it. The read end — `CAL-005`'s canary,
+  measuring "false positives, false negatives or known misses where measurable, provider and
+  target coverage, execution cost, latency" against "pinned corpora" — is not paused, and this
+  repository already does it by hand: it runs its own rules over its own tree in CI
+  (`OD-GATE-004`) and over corpora CI cannot see (`OD-GATE-001`), recording none of the
+  measurements `CAL-005` names.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#38
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `CAL` — near-term, consuming, behind the rule platform it consumes · hash: sha256:8ee3bf85f5f2e8be33202fd0fbe0902b5b43783c3dd9fa98293cdeb9a6b06fd5*
+
+`CAL-002` and `CAL-003` are the two nouns not on the near-term tier: KnowledgeWorkbench.
+`CAL-002` keeps the export "without making KnowledgeWorkbench part of deterministic gate
+execution", and `CAL-003` keeps KWB's outputs "claims or proposals" that "shall not modify
+applicability, severity, thresholds, suppressions, or enforcement automatically". That
+crossing is `ARC-ECOSYSTEM-001`'s — its ownership table answers "May a run's own recorded
+observations become KWB knowledge?" with "KWB, only carrying the runs as provenance" — and
+`ARC-ROADMAP-001` constraint 4 keeps ownership there. On this side of the seam an export has
+nothing to carry until a `RuleCalibrationCase` exists, so the two sit where `CAL-001` sits.
+`CAL-008`'s "ObservedFact → GeneralizedClaim → AdoptedNorm → ExecutableEnforcement", with no
+later stage "inferred solely from the existence of an earlier stage", is the principle
+`ARC-CONFORMANCE-001` already states for KWB evidence — KWB provides evidence, Nomos decides
+the claim — and nothing new is built for it.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#39
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `RUNTIME` — three dispositions · hash: sha256:c5f527985aed24d094246c592faa97769aced407220b581c468a9dd651a834e3*
+
+### `RUNTIME` — three dispositions
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#40
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `RUNTIME` — three dispositions · hash: sha256:7aaf00551db7f658619a1fae5f4afd4c6dd72b0ad2140372e44de83a5c76b960*
+
+`RUNTIME-001`: "Runtime-rule execution modes shall be OfflineCaptureEvaluation,
+StreamingObservation, or ActiveRuntimeGuard. These modes are distinct capability, authority,
+performance, and deployment contracts and shall never be inferred from one another."
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#41
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / The Placement / `RUNTIME` — three dispositions · hash: sha256:8c5e07594d9344379ceaf098e67c8010b7863196b5731c062a47ebd5d121d1e7*
+
+- **Near-term, fact-producing**: `RUNTIME-001`, `RUNTIME-002`, `RUNTIME-006`, `RUNTIME-008`,
+  `RUNTIME-009`. `RUNTIME-002`'s mode — "evaluate retained traces, profiles, replays,
+  debugger observations, benchmark artifacts, or allocation captures after execution without
+  altering the observed process" — is the one a Tier 1 adapter feeds and a headless gate run
+  can consume. `RUNTIME-006` ("workload or scenario, observation window, build and source
+  snapshot, build variant, provider and instrumentation mode, warm-up, sampling or tracing
+  policy, hardware and environment, aggregation and statistical method, baseline
+  compatibility, permitted evidence loss, symbolization quality, and enforcement role") is
+  `OD-ANALYSIS-006`'s identity — workload and environment beyond `FactKey`'s nine parts,
+  `BuildVariantId` reused — in the corpus's words. `RUNTIME-008` ("Missing events, dropped
+  samples, incomplete symbolization, incompatible hardware, divergent workloads, insufficient
+  warm-up, unstable variance, or baseline mismatch shall produce explicit evidence
+  limitations or non-pass applicability states rather than a clean result") is that record's
+  `Observation::NotObserved` and `Applicability::PartiallySupported` treatment. `RUNTIME-009`'s
+  examples — "allocation prohibition in a configured hot path, ... latency or queue-depth
+  budget" — are the ones `OD-ANALYSIS-006` already uses. All of it is settled in shape and
+  unbuilt, and it is built when the trigger fires.
+- **Near-term, under `OD-ROADMAP-002`'s gate-policy pause while it stands**: `RUNTIME-007`.
+  "Enforcement roles shall be Observational, Advisory, ReviewRequired, or Blocking. Blocking
+  runtime policy shall require compatible baselines, minimum evidence sufficiency, configured
+  loss limits, and explicit repository or organization authorization." That is a gate policy
+  increment — roles, thresholds, an authorization — and it is bound by that pause exactly as
+  `CAL-006` and `CAL-009` are, and for exactly as long.
+- **Deferred**: `RUNTIME-003`. "StreamingObservation shall evaluate events during execution
+  and may publish findings, alerts, or evidence, but shall not stop, reject, redirect, or
+  mutate application execution unless separately authorized as an ActiveRuntimeGuard." Live
+  evaluation during a subject's execution is a runtime-intelligence shape; nothing on the
+  near-term tier evaluates anything while a subject runs, and the headless loop consumes a
+  capture, not a stream. `RUNTIME-005` places the mode "within the approved product
+  contract", so it is deferred, not withheld.
+- **Withheld by the corpus**: `RUNTIME-004` and `RUNTIME-005`. `RUNTIME-004`'s guard "may
+  stop, reject, throttle, redirect, or otherwise alter execution and therefore requires an
+  explicit guard-capability contract, owner, deployment policy, fail-open/fail-closed
+  behavior, latency and resource budgets, safety analysis, rollback/recovery behavior, and
+  independent authorization", and `RUNTIME-005` withholds it in full: "ActiveRuntimeGuard is
+  a distinct deferred capability and shall not be inferred, enabled, or implemented without
+  an explicit product, security, and authorization decision. [Maturity: Release-scope
+  constraint; Target: Deferred beyond Release 5; Decisions: D-045 and D-050]". Those two
+  decisions are the corpus's, and this repository has adopted neither as a record. Until one
+  is, no substrate readiness and no tier places the guard.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#42
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Builds The First Metric-Family Capability · hash: sha256:f31ba05802142687cf001e5d6c1c49e0bf66eebb1de1f72f3dbcaccb3909cfd0*
+
+## What Builds The First Metric-Family Capability
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#43
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Builds The First Metric-Family Capability · hash: sha256:9b27b137a82583da3a1de7aa576b10cda7a7a19367763187a5a78435ba8a38af*
+
+`OD-ANALYSIS-007`'s trigger has two arms — a rule whose own subject needs the fact "to reach
+a verdict it cannot reach at `Syntactic` or `Approximate` today", or a record of this
+repository "naming a specific claim in this family as something a conformance check must
+make" — and `OD-RULES-008` records the first arm firing for reachability, with
+`OD-ANALYSIS-010` deciding the mechanism. The same two arms pick the first metric-family
+capability, with one adjustment the measurements above force. A metric's *count* is not missing: three rules compute one today and reach their
+verdicts from it. What is missing is the descriptor, and a descriptor is owed at the moment a
+count has two readers who must agree what the number means — the contention criterion
+`OD-CAPABILITY-002` already uses to decide when a contract earns a crate. So, in this family:
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#44
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Builds The First Metric-Family Capability · hash: sha256:15fd3e4c820d825f70d3cdde088b7ad56ef5807a6477a2698e7085071f8514ef*
+
+1. **A second reader of a count.** A rule, a gate verb or a projection that needs a value
+   another rule already computes and cannot get it without recomputing it: `gate compare`
+   asked whether a depth or an arity *rose* between two runs, which is a baseline for a value
+   where today's baseline is for a finding; or a second rule reading a first rule's count.
+   That reader's need names the descriptor `MET-006` requires — which unit, which direction
+   is worse, whether two snapshots are comparable. Until it exists a count read by one rule is
+   that rule's private intermediate, and filing it as a fact would be inferring a need from a
+   wish, which `OD-ANALYSIS-007` already names as the mistake via `D-135`.
+2. **A rule needing a `RuntimeObserved` fact about a subject's execution**, which is
+   `OD-ANALYSIS-006`'s producer arriving through `OD-ANALYSIS-007`'s first arm. `RUNTIME-009`'s "allocation prohibition in
+   a configured hot path" is the candidate the corpus itself offers, and it brings
+   `INSTR-002`'s Tier 1 adapter and `RUNTIME-002`'s offline mode with it, because those are
+   the cheapest way the fact enters.
+3. **A record of this repository naming a characteristic a conformance check must hold this
+   workspace to** — a budget, a ceiling, an allocation-free path — declared as a claim rather
+   than as a rule's threshold. `nomos.cap.limits.policy` is the closest existing thing and is
+   deliberately not this: it carries the limit a repository declares, not a measurement of it.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#45
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What Builds The First Metric-Family Capability · hash: sha256:45f8e0537c0de53c18f5dd5ccaaaba1f5aff5ff6dbc38a3eccef9c7a52ee0ac4*
+
+When any arm fires, the capability takes the shape `OD-ANALYSIS-004` fixed: a domain-local
+payload carrying `MET-006`'s descriptor fields; `FactVariant` at the level the producer
+actually reached (`Syntactic` for a count read from text, `SemanticallyResolved` for one read
+from a resolved model, `RuntimeObserved` for a capture, `Predicted` for a modelled
+alternative); `EvidenceClass`, `Applicability` and `Observation` unchanged; and, for a runtime
+producer, the `None` / `SingleRun` / `NotApplicable` row and the workload-and-environment
+identity `OD-ANALYSIS-006` requires. Which crate it lives in is `OD-CAPABILITY-002`'s
+question, not this record's.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#46
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#47
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / What This Record Does Not Do · hash: sha256:b581420dda890580ab50eafcfa858a3b01c4a0646a93c116ecc1d242ceba5f5c*
+
+- It schedules no crate, names no capability identifier, defines no payload schema and
+  authors no item. It changes no code. Every type it names is unchanged by it.
+- It edits none of `ARC-ROADMAP-001`, `OD-ANALYSIS-004`, `OD-ANALYSIS-006` or
+  `OD-ANALYSIS-007`; it relates to them and reads their criteria onto seven families those
+  records did not reach. `ARC-ROADMAP-001`'s two lists are unchanged. This record says which
+  list each of 44 requirements would appear on, and names the two that appear on neither.
+- It assesses no requirement. `OD-TRACE-001`'s committed set stays at 39 entries and none of
+  the 44 gains one; placing a family on a tier is not a verdict about whether a site meets it.
+- It adopts neither of the corpus decisions `RUNTIME-005` names. Adopting one is a record of
+  its own, and is the only thing that releases `ActiveRuntimeGuard`.
+- It orders the near-term tier only where `OD-ROADMAP-001` and `OD-ROADMAP-002` already do:
+  `CAL` behind `RulePackage`'s lifecycle, and `CAL-006`, `CAL-009` and `RUNTIME-007` behind
+  `OD-ROADMAP-002`'s gate-policy pause for as long as that record holds it. It adds no
+  ordering of its own, and none that outlives its source.
+- It does not restate ownership. Where `CAL-002` and `CAL-003` cross to KnowledgeWorkbench,
+  `ARC-ECOSYSTEM-001` governs, per `ARC-ROADMAP-001` constraint 4.
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#48
+
+*revision: authored · kind: heading · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#49
+
+*revision: authored · kind: prose · heading: The metric and runtime-characteristic families are near-term where they produce a fact and deferred where they consume one / Status · hash: sha256:9c70cb2214671bc5313ecf2c3ab78963ef5998380219b5f1cadafecd37da5102*
+
+Accepted, drawn by `P121-METRIC-FAMILIES-HAVE-NO-ROADMAP-TIER`. It schedules nothing, so
+nothing discharges it as a whole; what would revisit each part is named in place. The
+placement of `MET`, `INSTR-002` and the near-term `RUNTIME` requirements is exercised, not
+reopened, when one of the three trigger arms fires. `CAL`'s sequencing lapses as
+`RulePackage`'s lifecycle lands and as `OD-ROADMAP-002`'s gate-policy pause lapses on its own
+terms, whichever way it does. `RUNTIME-004` and
+`RUNTIME-005` move only by a record adopting a decision `RUNTIME-005` names. And if the tiers
+themselves move, that is an amendment to `ARC-ROADMAP-001`, and this record follows it rather
+than the other way round.
 
 ### docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1
 
