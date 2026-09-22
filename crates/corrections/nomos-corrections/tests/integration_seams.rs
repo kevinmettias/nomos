@@ -11,8 +11,8 @@
 
 use nomos_contracts::{ConfigurationId, Digest128, EvidenceClass, MutationClass, ProviderId, SnapshotId};
 use nomos_corrections::{
-    ChangeSet, CommittedPlan, CorrectionCandidate, CorrectionClass, CorrectionError, CorrectionId, CorrectionPlan, Edit, StagedPlan,
-    ValidatedPlan,
+    ChangeSet, CommittedPlan, Compatibility, CorrectionCandidate, CorrectionClass, CorrectionError, CorrectionId, CorrectionPlan, Edit,
+    Overlap, OverlapClass, ReadWriteResolution, ReadWriteSet, StagedPlan, UnresolvedAccess, ValidatedPlan, WavePartition,
 };
 use nomos_model::{Content_Digest, Evidence};
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet};
@@ -20,6 +20,11 @@ use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet}
 const CONFIGURATION_SEED_BYTE_ROUND_TRIP: u8 = 0x51;
 const CONFIGURATION_SEED_BYTE_STALE: u8 = 0x52;
 const ARBITRARY_DIGEST_BYTE: u8 = 0x53;
+
+/// Input positions of the three plans `Test_Three_Plans_With_One_Conflict_...` hands in.
+const FIRST_PLAN: usize = 0;
+const SECOND_PLAN: usize = 1;
+const THIRD_PLAN: usize = 2;
 
 /// A real workspace built the way a real consumer would: a genuine
 /// `nomos_workspace::BuildVariant` and `nomos_contracts::ConfigurationId`, advanced through
@@ -129,6 +134,50 @@ fn Test_Staging_Against_Stale_Content_Reports_The_Real_Digest_Of_What_Is_There()
         }
         other => panic!("a mismatched prior content must refuse as StaleCandidate, got {other:?}"),
     }
+}
+
+/// One mechanical candidate that adds `path`, wrapped in the plan a caller would submit.
+fn Plan_Adding(path: &str) -> CorrectionPlan
+{
+    let edit = Edit::New(path, None, Some("x".to_owned()));
+    let candidate = CorrectionCandidate::New(format!("add {path}"), ChangeSet::Empty().With(edit), CorrectionClass::Mechanical, vec![]);
+
+    return CorrectionPlan::New(vec![candidate]).expect("one candidate is a valid plan");
+}
+
+/// A caller holding three plans can ask, through nothing but the public API, which may
+/// share a wave and which must wait -- `Compatibility`, `Overlap`, `OverlapClass`,
+/// `WavePartition` and `UnresolvedAccess` are all reachable from outside the crate, and
+/// a declared read is what turns two disjoint edits into a read-write conflict.
+#[test]
+fn Test_Three_Plans_With_One_Conflict_Partition_Into_Two_Waves_Through_The_Public_Api()
+{
+    let reads_a = ReadWriteSet::Declared(ReadWriteResolution::Artifact, vec!["a.rs".to_owned()]);
+    let reading_candidate = CorrectionCandidate::New(
+        "add c after reading a",
+        ChangeSet::Empty().With(Edit::New("c.rs", None, Some("x".to_owned()))),
+        CorrectionClass::Mechanical,
+        vec![],
+    )
+    .With_Read(reads_a);
+    let plans = [
+        Plan_Adding("a.rs"),
+        Plan_Adding("b.rs"),
+        CorrectionPlan::New(vec![reading_candidate]).expect("one candidate is a valid plan"),
+    ];
+
+    let partition: Result<WavePartition, UnresolvedAccess> = WavePartition::Of(&plans);
+    let partition = partition.expect("declared sets are resolved");
+
+    assert_eq!(partition.Waves(), [vec![FIRST_PLAN, SECOND_PLAN], vec![THIRD_PLAN]]);
+    let [first, _, third] = &plans;
+    let judgment = Compatibility::Of(first, third).expect("declared sets are resolved");
+    assert_eq!(
+        judgment,
+        Compatibility::Conflicting {
+            overlaps: vec![Overlap::New(ReadWriteResolution::Artifact, "a.rs", OverlapClass::ReadWrite)],
+        }
+    );
 }
 
 /// `CorrectionId` carries a real `nomos_contracts::Digest128` rather than an opaque token

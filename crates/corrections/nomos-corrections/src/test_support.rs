@@ -1,9 +1,14 @@
 //! Fixtures shared by `committed_plan`, `staged_plan` and `validated_plan`'s own unit
 //! tests -- each built the same base workspace and the same single-candidate plan
-//! independently before this module existed to hold the one copy.
+//! independently before this module existed to hold the one copy -- and, since
+//! `compatibility`, `plan_access` and `wave_partition` arrived, the plans those three
+//! judge against each other, which never touch a workspace at all.
 
-use crate::{ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionError, CorrectionPlan, Edit};
-use nomos_contracts::{ConfigurationId, Digest128, EvidenceClass, ProviderId};
+use crate::{
+    ChangeSet, CorrectionCandidate, CorrectionClass, CorrectionError, CorrectionPlan, DerivedProvenance, Edit, ReadWriteResolution,
+    ReadWriteSet,
+};
+use nomos_contracts::{Assurance, ConfigurationId, Digest128, EvidenceClass, FactVariant, Guarantee, IncrementalGranularity, ProviderId};
 use nomos_model::Evidence;
 use nomos_workspace::{BuildVariant, ChangeSource, Workspace, WorkspaceChangeSet, WorkspaceError};
 
@@ -71,6 +76,47 @@ pub(crate) fn Agent_Judged() -> Evidence
     };
 }
 
+/// One mechanical candidate that sets each of `paths` to `"x"` with no prior content
+/// declared -- so its only read/write set is the artifact-tier floor `New` seeds, naming
+/// exactly `paths`.
+pub(crate) fn Candidate_Writing(paths: &[&str]) -> CorrectionCandidate
+{
+    let change = paths.iter().fold(ChangeSet::Empty(), |change, path| return change.With(Edit::New(*path, None, Some("x".to_owned()))));
+
+    return CorrectionCandidate::New(format!("write {}", paths.join(", ")), change, CorrectionClass::Mechanical, vec![]);
+}
+
+/// `candidate`, declaring it also reads `path` at the artifact tier without writing it.
+pub(crate) fn Reading(candidate: CorrectionCandidate, path: &str) -> CorrectionCandidate
+{
+    return candidate.With_Read(ReadWriteSet::Declared(ReadWriteResolution::Artifact, vec![path.to_owned()]));
+}
+
+/// A plan of exactly `candidate`. One candidate can be neither empty nor in conflict with
+/// a sibling, so the constructor's refusal is not a case these fixtures can reach.
+pub(crate) fn Plan_Of(candidate: CorrectionCandidate) -> CorrectionPlan
+{
+    return CorrectionPlan::New(vec![candidate]).expect("one candidate is a valid plan");
+}
+
+/// A plan of one candidate writing `paths`, the shape every compatibility case starts
+/// from.
+pub(crate) fn Plan_Writing(paths: &[&str]) -> CorrectionPlan
+{
+    return Plan_Of(Candidate_Writing(paths));
+}
+
+/// A dependency-tier set some provider derived, whose guarantee claims `completeness`
+/// and is otherwise sound -- the one axis `plan_access` decides resolution on, varied
+/// while everything else is held fixed.
+pub(crate) fn Derived_Set_With_Completeness(completeness: Assurance) -> ReadWriteSet
+{
+    let guarantee = Guarantee::New(FactVariant::SemanticallyResolved, Assurance::Sound, completeness, IncrementalGranularity::File);
+    let provenance = DerivedProvenance::New(ProviderId::New("nomos-lang-rust"), guarantee, "high", "invalidated when the dependency graph changes");
+
+    return ReadWriteSet::Derived(ReadWriteResolution::Dependency, vec!["nomos-corrections -> nomos-workspace".to_owned()], provenance);
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -102,5 +148,39 @@ mod tests
         let evidence = Agent_Judged();
 
         assert_eq!(evidence.class, EvidenceClass::AgentJudged);
+    }
+
+    #[test]
+    fn Test_Candidate_Writing_Should_Touch_Exactly_The_Given_Paths()
+    {
+        let candidate = Candidate_Writing(&["a.rs", "b.rs"]);
+
+        assert_eq!(candidate.Change().Touched(), std::collections::BTreeSet::from(["a.rs", "b.rs"]));
+        assert!(candidate.Reads().is_empty());
+    }
+
+    #[test]
+    fn Test_Reading_Should_Declare_One_Artifact_Tier_Read()
+    {
+        let candidate = Reading(Candidate_Writing(&["b.rs"]), "a.rs");
+
+        assert_eq!(candidate.Reads(), [ReadWriteSet::Declared(ReadWriteResolution::Artifact, vec!["a.rs".to_owned()])]);
+    }
+
+    #[test]
+    fn Test_Plan_Writing_Should_Hold_One_Candidate()
+    {
+        assert_eq!(Plan_Writing(&["a.rs"]).Candidates().len(), 1);
+    }
+
+    #[test]
+    fn Test_Derived_Set_With_Completeness_Should_Vary_Only_That_Axis()
+    {
+        let sound = Derived_Set_With_Completeness(Assurance::Sound);
+        let unknown = Derived_Set_With_Completeness(Assurance::Unknown);
+
+        assert_eq!(sound.Entries(), unknown.Entries());
+        assert_eq!(sound.Derived_Provenance().map(|provenance| return provenance.Guarantee().completeness), Some(Assurance::Sound));
+        assert_eq!(unknown.Derived_Provenance().map(|provenance| return provenance.Guarantee().completeness), Some(Assurance::Unknown));
     }
 }

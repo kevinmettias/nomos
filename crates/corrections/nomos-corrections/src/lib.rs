@@ -13,6 +13,15 @@
 //! weak, only for the workspace having moved. It only stops being silent about how the
 //! caller says it knows, floored at [`nomos_model::EvidenceClass::AgentJudged`] when
 //! nothing stronger is offered.
+//!
+//! The same boundary holds one level up, between plans. [`Compatibility`] and
+//! [`WavePartition`] answer whether several plans may be staged together and in what
+//! order, computed only from the read and write sets the plans' candidates declare
+//! (`COR-EXEC-001`, `COR-EXEC-003`) -- never by opening a file or diffing content. A plan
+//! whose declared sets cannot be trusted to be complete is refused as
+//! [`UnresolvedAccess`] rather than placed, because unknown independence is not safe
+//! parallelism. Nothing here runs a wave: that is orchestration, and this crate stays the
+//! substrate it computes from.
 #![forbid(unsafe_code)]
 
 mod correction_id;
@@ -20,6 +29,7 @@ mod candidate_label;
 mod change_set;
 mod choice_record;
 mod committed_plan;
+mod compatibility;
 mod correction_choice;
 mod correction_class;
 mod correction_decision;
@@ -27,6 +37,7 @@ mod correction_staging;
 mod edit;
 mod correction_error;
 mod correction_plan;
+mod plan_access;
 mod preview;
 mod ranking_criterion;
 mod read_write_resolution;
@@ -35,11 +46,13 @@ mod staged_plan;
 #[cfg(test)]
 mod test_support;
 mod validated_plan;
+mod wave_partition;
 
 pub use correction_id::{CorrectionCandidate, CorrectionId};
 pub use candidate_label::CandidateLabel;
 pub use change_set::ChangeSet;
 pub use choice_record::ChoiceRecord;
+pub use compatibility::{Compatibility, Overlap, OverlapClass};
 pub use correction_choice::CorrectionChoice;
 pub use correction_class::CorrectionClass;
 pub use correction_decision::{CorrectionDecision, ReviewReason};
@@ -48,9 +61,11 @@ pub use correction_staging::CorrectionStaging;
 pub use edit::Edit;
 pub use correction_error::CorrectionError;
 pub use correction_plan::CorrectionPlan;
+pub use plan_access::UnresolvedAccess;
 pub use preview::Preview;
 pub use ranking_criterion::RankingCriterion;
 pub use read_write_resolution::{DerivedProvenance, ReadWriteResolution, ReadWriteSet};
 pub use rollback_boundary::RollbackBoundary;
 pub use staged_plan::StagedPlan;
 pub use validated_plan::ValidatedPlan;
+pub use wave_partition::WavePartition;

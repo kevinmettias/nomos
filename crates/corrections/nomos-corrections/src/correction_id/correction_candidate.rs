@@ -14,6 +14,7 @@ pub struct CorrectionCandidate
     class: CorrectionClass,
     labels: Vec<CandidateLabel>,
     read_write: Vec<ReadWriteSet>,
+    reads: Vec<ReadWriteSet>,
 }
 
 impl CorrectionCandidate
@@ -51,7 +52,34 @@ impl CorrectionCandidate
             class,
             labels,
             read_write,
+            reads: Vec::new(),
         };
+    }
+
+    /// Adds a set of subjects this candidate reads and does not write -- a manifest it
+    /// consulted for a version, a sibling file whose content its edit assumes.
+    ///
+    /// Every set on [`Self::Read_Write`] is both read and written, because the door
+    /// asserts a path's prior content before replacing it (`StagedPlan`'s staleness check),
+    /// so a read-only claim is the one thing [`Self::With_Read_Write`] cannot say. It is
+    /// declared, never computed: a [`ChangeSet`] knows what its author changed and nothing
+    /// about what its author looked at to decide. `COR-EXEC-003` is what reads it -- a
+    /// plan that writes a subject another plan only reads cannot share a wave with it,
+    /// and without this the read half of that comparison would be empty for every plan.
+    #[must_use]
+    pub fn With_Read(mut self, set: ReadWriteSet) -> Self
+    {
+        self.reads.push(set);
+
+        return self;
+    }
+
+    /// Every read-only set this candidate declares -- empty unless [`Self::With_Read`]
+    /// added one, since nothing here can derive a read from a change.
+    #[must_use]
+    pub fn Reads(&self) -> &[ReadWriteSet]
+    {
+        return &self.reads;
     }
 
     /// Adds a read/write set beyond the artifact-tier floor [`Self::New`] always seeds --
@@ -273,6 +301,40 @@ mod tests
         let carried_provenance = carried.Derived_Provenance().expect("a derived set carries its provenance through unchanged");
         assert_eq!(carried_provenance.Provider(), &ProviderId::New("nomos-lang-rust"));
         assert_eq!(carried_provenance.Confidence(), "high");
+    }
+
+    /// A read is a claim the change cannot make on its own, so a fresh candidate declares
+    /// none -- the read half of `COR-EXEC-003`'s comparison is empty until a caller says
+    /// otherwise, never guessed from the edits.
+    #[test]
+    fn Test_New_Should_Seed_No_Read_Only_Sets()
+    {
+        let candidate = CorrectionCandidate::New("fix a", Change_Setting_A_To("x"), CorrectionClass::Mechanical, vec![]);
+
+        assert!(candidate.Reads().is_empty());
+    }
+
+    #[test]
+    fn Test_With_Read_Should_Add_A_Read_Only_Set_Beside_The_Read_Write_Floor()
+    {
+        let read = ReadWriteSet::Declared(ReadWriteResolution::Artifact, vec!["Cargo.toml".to_owned()]);
+
+        let candidate = CorrectionCandidate::New("fix a", Change_Setting_A_To("x"), CorrectionClass::Mechanical, vec![]).With_Read(read.clone());
+
+        assert_eq!(candidate.Reads(), [read]);
+        assert_eq!(candidate.Read_Write().len(), 1, "a read-only set is not a read/write set: {:?}", candidate.Read_Write());
+    }
+
+    #[test]
+    fn Test_A_Declared_Read_Should_Not_Change_The_Identity()
+    {
+        let change = Change_Setting_A_To("x");
+        let read = ReadWriteSet::Declared(ReadWriteResolution::Artifact, vec!["Cargo.toml".to_owned()]);
+
+        let bare = CorrectionCandidate::New("fix a", change.clone(), CorrectionClass::Mechanical, vec![]);
+        let reading = CorrectionCandidate::New("fix a", change, CorrectionClass::Mechanical, vec![]).With_Read(read);
+
+        assert_eq!(bare.Id(), reading.Id(), "a read is declared metadata, not part of what identifies a correction");
     }
 
     /// The one-edit changeset every test above builds: `a.rs` set to `content`, with no

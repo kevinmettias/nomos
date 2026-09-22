@@ -88191,10 +88191,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-review",
+        "acquired_at": 1790048009,
+        "lease_expires_at": 1790058809
+      },
       "verification": {
         "argv": [
           "cargo",

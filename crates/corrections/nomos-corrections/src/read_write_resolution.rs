@@ -13,7 +13,10 @@ pub use read_write_set::ReadWriteSet;
 /// Touched`] is an `Artifact`-tier answer today (raw file paths, nothing finer), which
 /// this type does not change -- it only gives a caller with something stronger a place to
 /// say so.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+///
+/// Ordered as declared, weakest first, so that a subject keyed by its tier sorts by tier
+/// before spelling -- the order [`crate::Compatibility`] reports overlaps in.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum ReadWriteResolution
 {
     /// A whole file or generated unit, named by path.
