@@ -203,7 +203,8 @@ profile: domain-specification
 | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md@authored | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md | authored | 31 | 10 | sha256:0e6efa712278eff244251689c8bf8b4e33630f39419eb66ad7e39d563d402a1d |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md@authored | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md | authored | 18 | 7 | sha256:4264b9448cf95f7bb22780f4a6cd970a7f64828eea993961df2987984417b701 |
 | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md | authored | 18 | 6 | sha256:5369feac3ebd7b343b32234f25aa30ba669d4151b15af6d83d2ad37da0f58379 |
-| docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md | authored | 24 | 6 | sha256:b8159cff04a7379eb48a47ce46a3da98ad447cc8ccec98c33ab48526d604e57f |
+| docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md | authored | 25 | 6 | sha256:b6ef5e387b893426688336223754f3b165354a7fbf2e50641d03bdf8e836fd16 |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md@authored | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md | authored | 43 | 12 | sha256:679898fb3515e18e74b3d01fc12b1993228c1941b02d8250e8a1a2b4c780c683 |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md@authored | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md | authored | 67 | 12 | sha256:f55068c0987852129b3103770502611bec876fd8c119bc01cd6616b6ecdf7bc6 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md | authored | 69 | 16 | sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a |
 | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
@@ -1893,6 +1894,18 @@ profile: domain-specification
 | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#12 | authored | 2 | The Decision |
 | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#17 | authored | 2 | What This Does Not Do |
 | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#23 | authored | 2 | Status |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#1 | authored | 1 | Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#2 | authored | 2 | Question |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#8 | authored | 3 | The model-routing pause: its successor landed |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#13 | authored | 3 | The gate-policy pause: half its condition was measured harmless, and the other half was abandoned |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#19 | authored | 3 | The capability-orchestration pause: its successor was abandoned and its cost no longer exists |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#24 | authored | 3 | The four gaps the review names, measured |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#27 | authored | 2 | The Decision |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#30 | authored | 3 | The constraint that survives |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#34 | authored | 2 | What This Does Not Do |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#39 | authored | 2 | What Would Decide It Differently |
+| docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#42 | authored | 2 | Status |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1 | authored | 1 | A rule states what it needs and is refused an answer beneath it |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#7 | authored | 2 | The Charge Is Correct |
@@ -55657,6 +55670,426 @@ successor is abandoned rather than built then the pause it justified lapses with
 
 Accepted. `OD-ROADMAP-001` is amended to point here rather than restating any of it, so the
 two do not have to be read against each other to find out which governs.
+
+### docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#25
+
+*revision: authored · kind: prose · heading: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not / Status · hash: sha256:95ca9f8b56df389c01c7c701578c3776cad67335a53656eb1facaf6787d37244*
+
+Amended by `P123-OD-ROADMAP-003-THE-THREE-PAUSES-HAVE-LAPSED`. `OD-ROADMAP-003` records that
+all three pauses set above have lapsed, each on the condition this record gave it: the
+model-routing pause because its named successor landed, the gate-policy and
+capability-orchestration pauses because their shared successor was measured speculative
+rather than deferred, which is the abandonment the last sentence of the previous section
+names. The distinction this record draws is unchanged; what it bound is no longer in flight.
+Read `OD-ROADMAP-003` before reading any of the three pauses as standing.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#1
+
+*revision: authored · kind: heading · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition · hash: sha256:90de70fc16667bceec41be9c104c6bdcd537ad0d8337a17c91445ba56f65972a*
+
+# Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#2
+
+*revision: authored · kind: heading · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#3
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / Question · hash: sha256:c8a64fef0fbe25d5c431ca15b0cf520b176896350ede26e3503ce28a64d9749f*
+
+`OD-ROADMAP-002` paused three areas — new model-routing vocabulary, new gate policy
+increments, and additional one-off capability orchestration — and bound each pause to a
+named successor: "it lapses for each of them when a named successor lands", and, in its own
+closing sentence, "if a successor is abandoned rather than built then the pause it justified
+lapses with it." It set no date.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#4
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / Question · hash: sha256:9ed315ac6e5430bd8850500011c89fc4c9430f0ba902f5cd6eb4a9a996fa57cf*
+
+Seventeen days after it landed, an external review read against this tree at `bc0aaacf`
+lists four things as core gaps: an `ApplicabilityPolicy`, gate-level evidence requirements,
+authoring phases and approvals through `nomos-gate.json`, and composing
+`nomos-lang-rust-compiler` into a real check run. Each of the four falls inside one of the
+three paused areas, and each is closed today by nothing except the pause. Whether the pauses
+still hold was unmeasured: nothing on the board and nothing in the records says either that a
+successor landed or that one was abandoned, so a session meeting one of the four gaps finds a
+standing prohibition with no way to tell whether its condition still exists.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#5
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / Question · hash: sha256:c83ef0eb49d299d76130a27b7d5f8d10da5fc1e582d57cab7101f56e81d5a4ab*
+
+This record measures each pause against its own condition. It answers whether the pause
+holds, not whether the work behind it should be done.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#6
+
+*revision: authored · kind: heading · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#7
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured · hash: sha256:1fb85b3d2d8d24ab9050b4bd58bc475ea4f6dec23bb4605a6be86d3bf62d0867*
+
+Taken at `8338c6ec`, against the files named.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#8
+
+*revision: authored · kind: heading · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The model-routing pause: its successor landed · hash: sha256:fe8c83cdce0396327b868aa298b8e421f0cd167e4f671a39d24fdee76d506835*
+
+### The model-routing pause: its successor landed
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#9
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The model-routing pause: its successor landed · hash: sha256:004d44f802f1dec0546f0f30334c330e9775b5f01b75d876f9303088e7854867*
+
+The pause waited for "a real routing consumer", and explicitly allowed wiring the existing
+vocabulary to one, because "that work reduces the gap this pause exists because of".
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#10
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The model-routing pause: its successor landed · hash: sha256:25d735498a8067ce805761da8a7b92bf4012c5d13c5052c9d6eb3c4cbb5b0232*
+
+That wiring is done, in two items. `P40-MODEL-ROUTING-RESOLVER` built `Resolve_Profile` in
+`crates/orchestration/nomos-agent-orchestration/src/profile_resolution.rs`, which resolves a
+declared `ModelExecutionProfile` against a caller-supplied `DeclaredTarget` set into the
+`DispatchConfig` a dispatch already takes, and answers every selector it cannot resolve with
+a `ProfileAbsence` naming the measured absence rather than a default.
+`P40-MODEL-ROUTING-DISPATCH-WIRING` made the dispatch go through it. `Selected_Dispatch` in
+`backend_selection.rs` attempts a person's named preference against the declared set and
+otherwise calls `Resolve_Profile`. It is reached by three consumers: `Dispatched_Agent` in
+`crates/orchestration/nomos-workflow-orchestration/src/run.rs`, which passes
+`preferred: None` and the platform's declared targets, so a workflow step reaches a backend
+only because its profile resolved; `Requested` in `crates/host/nomos-cli/src/agent.rs`, which
+declares a family label where, as its own doc records, "the line this replaced returned
+`Backend::ClaudeCode` directly"; and `nomos-api`'s `Handle_Agent_Execute` and
+`Handle_Agent_Judge_Role`, which take a `BackendSelection` from their caller. `Agent_Body` in
+`crates/host/nomos-cli/src/workflow/parsing.rs` turns `--executor` and `--model-backend` into
+a `ModelSelector::BackendFamily` the declared set answers, where it used to construct the
+`Body` variant for that backend. Every host supplies the declared set from
+`Declared_Targets()` in `declared_targets.rs`, which derives it from `Backend::ALL` rather
+than listing it beside the enum.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#11
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The model-routing pause: its successor landed · hash: sha256:68df6905a62ebb28d0156016e2b087b7700bc8924483840537e6c13a84d058a1*
+
+`OD-PACKAGE-016` is the record that decided the resolver's shape, its crate, and the one
+addition to vocabulary it authorized, `Backend::Label`. The condition was a real routing
+consumer; there are three.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#12
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The model-routing pause: its successor landed · hash: sha256:4ec62178dc1c17ab45b1172e371f2dba365542f8f10168d8f5513f714564c522*
+
+**Lapsed, by the successor landing.**
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#13
+
+*revision: authored · kind: heading · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The gate-policy pause: half its condition was measured harmless, and the other half was abandoned · hash: sha256:8b9641a3a903a11db500d84d78032cfe4745a7fa1a4f275b7d54de96583fab24*
+
+### The gate-policy pause: half its condition was measured harmless, and the other half was abandoned
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#14
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The gate-policy pause: half its condition was measured harmless, and the other half was abandoned · hash: sha256:b73dc3218ff016c140b938ad9d8841210a86b9f12ce89ac340b8e975a6dd69cd*
+
+The pause waited for two things at once: "for the gate to stop selecting twice and to compile
+into one resolved run plan."
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#15
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The gate-policy pause: half its condition was measured harmless, and the other half was abandoned · hash: sha256:43c44c2bc63b7642a02c9345752213a34447867e3e55f0465c0c0ea07f87b1a9*
+
+*Selecting twice.* `OD-GATE-023`, two days after the pause was set, measured what the double
+selection actually was. `Run_Gate` in
+`crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs` hands
+`command.rules.include` to `nomos_check_orchestration::Run` as its `selected` list, so a
+deselected rule's materialization never runs and its finding never exists. `Reduced_Findings`
+in `gate_environment/reduction.rs` then filters that same finding list by `rules.Is_Included`
+once more, and the plan verb's `Run` in `run.rs` applies the same include list to the
+registry's offers. `RuleSelector` in `policy/rule_selector.rs` carries one field, `include`,
+so the two applications cannot disagree. `OD-GATE-023` called this "a redundant second
+application of one include list, not two mechanisms disagreeing", declined to make it an
+item, and declined `P41-GATE-SELECTION-COLLAPSE` because its defect was already fixed by
+`OD-GATE-017` and its `done_when` — "a gate compiles its policy into a run plan plus a
+result policy" — was the planner under another name. That is still what the tree holds. A
+redundancy a record has judged not to be a defect cannot be the condition keeping a product
+surface closed: nothing will ever stop it, because nothing needs to.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#16
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The gate-policy pause: half its condition was measured harmless, and the other half was abandoned · hash: sha256:4e1d6a83a16c44bffd3b05c2261abcfb2db8f34701722fcbaff28d9242bde89b*
+
+*One resolved run plan.* That is the run planner, and `OD-RULES-009` has declined it across
+eight rounds of the same external review. Its 2026-09-14 amendment did more than decline
+again: it measured the path end to end after `P102` deleted the surface it had been watching,
+and found that "a planner today would schedule an ordering that does not exist, over a choice
+that has no alternatives, using cache state nothing consults. That is speculative
+infrastructure, not deferred infrastructure." `OD-ROADMAP-002` named exactly that case in its
+last sentence — a successor abandoned rather than built — and by its own terms the pause
+lapses with it.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#17
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The gate-policy pause: half its condition was measured harmless, and the other half was abandoned · hash: sha256:e861bc03f47ddfbf8ca545b738e6f263307ad89a72e615302dacbd2bd6102c4f*
+
+The board had already crossed this pause on the same evidence. `OD-GATE-023` re-authored
+`P40-GATE-PHASES-APPROVALS-2` "on its own stated condition having been met", and
+`P40-GATE-PHASES-APPROVALS-5` landed `gate_phase.rs` — `GatePhase`, `PhaseThreshold`,
+`PhaseApproval` — on 2026-09-06, verified 2026-09-07. Phases, thresholds and approvals are the
+three increments `OD-ROADMAP-002` named as paused. They were built two days after the pause
+was set, on a measured decision, and no record said the pause had lapsed. This record says
+so.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#18
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The gate-policy pause: half its condition was measured harmless, and the other half was abandoned · hash: sha256:cca0f4171730d242fb3bb37d78b30345551f8234dced85bdbc3607c39d12adf0*
+
+**Lapsed, by the successor being abandoned.**
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#19
+
+*revision: authored · kind: heading · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The capability-orchestration pause: its successor was abandoned and its cost no longer exists · hash: sha256:46ceab1d620c29c7a791c53c3ce250584a0bf98007507ddcf6457499151d1e15*
+
+### The capability-orchestration pause: its successor was abandoned and its cost no longer exists
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#20
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The capability-orchestration pause: its successor was abandoned and its cost no longer exists · hash: sha256:e0440013bc4503a4c5237ed7b044f92e56c9cc13d5ff3b1eabb2db0d0e8be351*
+
+The pause waited for the run planner, the same artifact, and its stated cost was specific:
+"another branch of the form 'if this rule was selected, call this materializer'", each one "a
+line the planner migration must later delete".
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#21
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The capability-orchestration pause: its successor was abandoned and its cost no longer exists · hash: sha256:904084bd43f5c0cd07d06e55b2b58f1c966950650bed8985f91f347ed0313c7f*
+
+The branch no longer exists to extend.
+`P102-MATERIALIZATION-RESTATES-THE-DEMAND-DESCRIPTORS-ALREADY-DECLARE` replaced every
+hand-written guard of that form with `Demanded_Families` in
+`crates/orchestration/nomos-check-orchestration/src/run_context/capabilities.rs`: the union
+of `RuleDescriptor::requires` over the selected rules, read from `nomos_rules::DESCRIPTORS`
+(`crates/rules/nomos-rules/src/rule_descriptor.rs`). Each section asks
+`demanded.contains(&RequiredFact::X)` and nothing else; the eight repository-declared policy
+families are one row each in `Policy_Families()` and one arm each in
+`Materialize_Policy_Family`, whose match is total over `RequiredFact`, so a new family is a
+compile error until it is placed.
+`Test_A_Rule_Selected_Alone_Should_Demand_The_Family_It_Declares` and
+`Test_The_Demand_Should_Be_The_Union_Of_What_The_Selected_Rules_Declare` in
+`capabilities/demand_tests.rs` pin the derivation. `OD-RULES-027` made the same move one axis
+over, deriving the composed rule set from `DESCRIPTORS`, and `nomos-gate-orchestration`'s
+`Registered` in `composition.rs` does the same for the registry, pinned by
+`Test_Registered_Should_Offer_Every_Composed_Rule`.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#22
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The capability-orchestration pause: its successor was abandoned and its cost no longer exists · hash: sha256:92281cd9756c61cd6ac83b1a494477afd2cac7653ef4d6d4e233ad458c289d43*
+
+So the thing the pause protected — a growing hand-written mapping the planner would later
+have to delete — was deleted by a derivation rather than by a planner, and the planner was
+found speculative in the same fortnight. A new materialization section today is a declared
+row, not a branch.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#23
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The capability-orchestration pause: its successor was abandoned and its cost no longer exists · hash: sha256:a2fdc71ba4585f59c4bbfb1fe4dd2308e1a055b1733144638c0cde43ea570632*
+
+**Lapsed, by the successor being abandoned, and the cost the pause was priced against gone.**
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#24
+
+*revision: authored · kind: heading · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The four gaps the review names, measured · hash: sha256:097b986b48bbfbc456a1f3cc7bb209efe84629f81ce4027bad09ccc4bd3fe346*
+
+### The four gaps the review names, measured
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#25
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The four gaps the review names, measured · hash: sha256:09fbf717106e17902df69a0ed83273e4b330204e15840a98ee9b4eed0ed88d49*
+
+- **`ApplicabilityPolicy`** is named in `ARC-ROADMAP-001`'s list of what a gate object
+  configures and in `crates/orchestration/nomos-gate-orchestration/src/lib.rs`'s own doc as
+  one of two elements "nothing in this workspace defines". No type of that name exists.
+  `P41-APPLICABILITY-IN-THE-PLAN` was declined by `OD-GATE-023` because it asked for
+  applicability *in the plan*, which needs the planner; a policy that does not need the plan
+  was never authored.
+- **Evidence requirements.** `nomos_contracts::Finding` carries an `EvidenceClass`
+  (`crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs`);
+  `GatePolicyFile` in `policy/gate_policy_file.rs` has four fields — `suppressions`,
+  `baseline`, `adoption`, `coverage` — and none reads it. The same `lib.rs` doc names this as
+  the second undefined element.
+- **Phases and approvals through `nomos-gate.json`.** The types exist and `GateCommand`
+  carries `phases` and `approvals`, but `Resolve_Gate_Policy` reads neither from the file,
+  and `crates/host/nomos-cli/src/gate/parsing.rs` passes `phases: Vec::new()`. A phase can be
+  constructed and cannot be authored.
+- **`nomos-lang-rust-compiler`** exports a `Provider_Offer`
+  (`crates/languages/nomos-lang-rust-compiler/src/guarantee.rs`) and `Check_Copy_Clones`
+  (`check.rs`), and no crate under `crates/orchestration` or `crates/host` names it.
+  `crates/orchestration/nomos-check-orchestration/src/composition.rs` offers seventeen
+  providers into the registry, and this one is not among them.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#26
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Was Measured / The four gaps the review names, measured · hash: sha256:3b5a40a57606a9aec1c40f9e0314590eaf1a1bd0717ff5a0451594e0f26bd4c4*
+
+Each is real, and each sits in an area whose pause has lapsed. The first three are gate
+policy increments; the fourth is a provider composition, which the third pause covered as
+wiring a capability in.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#27
+
+*revision: authored · kind: heading · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#28
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / The Decision · hash: sha256:d883ee6e2108b4a4a6cc6ac57cbc5f65fb42d22f3c0ca1bac33fb5507e9720bd*
+
+**All three pauses have lapsed, each on the condition `OD-ROADMAP-002` set for it.** The
+model-routing pause lapsed when its successor landed. The gate-policy and
+capability-orchestration pauses lapsed when their shared successor was found speculative
+rather than deferred, which is abandonment in `OD-ROADMAP-002`'s own terms; the one half of
+the gate condition that was not the planner was measured to be a harmless redundancy rather
+than a defect.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#29
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / The Decision · hash: sha256:8792469c41ded6a1469cbfded63f406831285045db00a6511c0954c8a38dffd0*
+
+`OD-ROADMAP-001` governs the three areas again, as it governs everything `OD-ROADMAP-002` did
+not pause: a component may be built before a consumer exists.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#30
+
+*revision: authored · kind: heading · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / The Decision / The constraint that survives · hash: sha256:d4035ae2993b6c8f645974a382f746f0e9fe3720c15963c2b22d7fa804eb25e3*
+
+### The constraint that survives
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#31
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / The Decision / The constraint that survives · hash: sha256:e9fd8567d8f49f561b8c08a508e1fc9044625f35f04494e0cd2e1455b1a631f1*
+
+What replaced the paused mechanisms is a set of declared tables, and the lapse is conditioned
+on their staying tables. **A new gate policy family, a new provider composition or a new
+materialization section is a declared constant — a `RequiredFact` a rule's descriptor names
+and `Demanded_Families` reads, a `Provider_Offer` the composition root registers, a field
+`Resolve_Gate_Policy` reads off `nomos-gate.json` — and never a condition that consults
+store state, cost or prior materialization.**
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#32
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / The Decision / The constraint that survives · hash: sha256:70d6683ce4cb78ae7ebeb80053af8943d42ee20b4d0d2b7e73401c58bcfdfcba*
+
+This is the line `OD-RULES-027` draws — "the mapping may not grow a *condition*" — and the
+line `OD-RULES-009` guards, stated there of `Demanded_Families`: it "reads no store state, no
+`Materializations`, no cost and never asks whether a fact is already live". The sentence that
+would violate it has the shape *materialize this family unless the store already holds it*,
+*offer this provider when the other one would cost more*, or *this phase applies when the
+last run's disposition was `Failed`*. The moment an entry reads like that it has stopped
+being a declared fact and become the planner, and `OD-RULES-009` is where that has to be
+argued rather than slipped in under this record.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#33
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / The Decision / The constraint that survives · hash: sha256:4cb6958c920f99d1b277423ec537a546ce30af25b25925fadf2d4dc7aeeb5537*
+
+The distinction is checkable at the site. A declared row can be added without reading
+anything but the row; a condition needs an input the table does not have. That is what keeps
+the lapse from becoming a licence to build the planner one branch at a time.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#34
+
+*revision: authored · kind: heading · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#35
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What This Does Not Do · hash: sha256:fec05786852486e96a2f4e08d73a6a95e352143f50f663a6afeeebaf2f498dd3*
+
+**It builds nothing.** `ApplicabilityPolicy`, gate-level evidence requirements, phase and
+approval authoring through `nomos-gate.json`, and composing `nomos-lang-rust-compiler` into a
+real check run are each now unpaused work for an item of its own, with its own territory and
+its own measurement. This record removes the prohibition that stood in their way and decides
+nothing about their shape.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#36
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What This Does Not Do · hash: sha256:e531393886e3e7a50f963a4e80c2bb3049f1d3e414932da8e77bec485e2f973c*
+
+**It does not reopen `OD-RULES-009`.** The planner stays declined on that record's own
+measured reasons. Finding a pause lapsed because the planner was abandoned is the same
+finding read from the other side, not a new argument for or against it.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#37
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What This Does Not Do · hash: sha256:8bf67e1094d23623204adb9834970d55208b2317cb42b8b94135fa9f6b696659*
+
+**It does not withdraw `OD-ROADMAP-002`'s distinction.** Building ahead of a consumer and
+building ahead of a seam are still different questions. What has changed is that the three
+seams it named are no longer in flight: one landed, and two were measured not to be coming.
+The rule binds again on a new named successor, per the next section.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#38
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What This Does Not Do · hash: sha256:e0a3c77a2726174d571e60b061298a04f504826d4b67f9f33529cbd42227b624*
+
+**It does not judge the work the board did under the pause.** Phases and approvals landed on
+`OD-GATE-023`'s measurement, not on this record; this record makes the board and the records
+agree about what that measurement meant.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#39
+
+*revision: authored · kind: heading · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Would Decide It Differently · hash: sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429*
+
+## What Would Decide It Differently
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#40
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Would Decide It Differently · hash: sha256:bdfdfc5a328c1f5e1e956707b29644ba1fd5136e2b5bdf19a1e03d9131fd437b*
+
+A pause is reinstated by a successor mechanism actually being built, which is observable:
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#41
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / What Would Decide It Differently · hash: sha256:8fe57ca56a12589d9b52c4d8ea0bb8053187eae757e293dba6804cd3f0b71e6e*
+
+- **The gate-policy and capability-orchestration pauses return** if any of the three triggers
+  `OD-RULES-009`'s 2026-09-14 amendment names fires: a fact family whose production depends
+  on another family's output, so that an order exists to get wrong; a capability with two
+  installed providers where the choice is not obvious from the requirement alone; or a
+  measured cost that makes materializing an unneeded family expensive enough that skipping it
+  is worth deciding rather than deriving. Any one of those makes the planner deferred rather
+  than speculative again, and work onto `Demanded_Families` or the gate policy reader is once
+  more work onto a mechanism being replaced.
+- **The model-routing pause returns** if `Resolve_Profile`'s output is made transitional — if
+  `ResolvedModelExecution`, which `OD-PACKAGE-016` decision 7 keeps unbuilt, is authorized as
+  the resolver's result and `DispatchConfig` becomes the shape being replaced. New routing
+  vocabulary would then be built ahead of that seam.
+- **The surviving constraint is falsified** the day a row in any of the three tables reads a
+  condition. That is not a reinstated pause; it is the planner arriving without a record, and
+  the remedy is `OD-RULES-009`, not this one.
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#42
+
+*revision: authored · kind: heading · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#43
+
+*revision: authored · kind: prose · heading: Each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition / Status · hash: sha256:2b817d938c6575fe29b74db9987b40d81256f2645573f9bcbf5c361a081e8b3e*
+
+Accepted. `OD-ROADMAP-002` is amended to point here rather than restating any of it, the same
+way `OD-ROADMAP-001` points at `OD-ROADMAP-002`. The three areas return to `OD-ROADMAP-001`'s
+licence under the one constraint above, and the four gaps the review named are unpaused for
+items of their own.
 
 ### docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1
 

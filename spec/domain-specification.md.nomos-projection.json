@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:b4d240e7ce38b622dcdbae93560b9bbc7ee64f6603c2bcf77d18462884e6388f",
-  "inputs_digest": "sha256:1af1362cca5fe1717356e8b857fbb5720ac84ed37915274232a961877875eaeb",
+  "content_digest": "sha256:cc5c4731f800649fae4eee01c83e6fa6b5fc60d774aa79ce61942a5a4d5ee9a0",
+  "inputs_digest": "sha256:1fc2f7ca50b91872419888be9dca0ba120324b4234a268f735fda470effaa502",
   "sections": [
     [
       "Documents",
-      254
+      255
     ],
     [
       "Sections",
-      2143
+      2155
     ],
     [
       "Source blocks",
-      7619
+      7663
     ]
   ],
   "inputs": [
@@ -988,7 +988,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored",
-      "hash": "sha256:b8159cff04a7379eb48a47ce46a3da98ad447cc8ccec98c33ab48526d604e57f"
+      "hash": "sha256:b6ef5e387b893426688336223754f3b165354a7fbf2e50641d03bdf8e836fd16"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md@authored",
+      "hash": "sha256:679898fb3515e18e74b3d01fc12b1993228c1941b02d8250e8a1a2b4c780c683"
     },
     {
       "content": "documents",
@@ -9409,6 +9414,66 @@
       "content": "headings",
       "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#23",
       "hash": "sha256:3be98049387b37ec0ce5059b70793689ffe9451998cae1e0ea5983ac0543c89c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#1",
+      "hash": "sha256:bb7c0d762a1373f4e09817a06ddba9729542579be8368f63021647db25e4689e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#2",
+      "hash": "sha256:f1b48480827096a2fd92eb0539ea59e277f82eb899f59f483ec188bcbe07faa9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#6",
+      "hash": "sha256:d3642dc496528df28dc691f66b8a7ad4e19604f84277f0c665b1d95a49fb8d21"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#8",
+      "hash": "sha256:a070b4fd1936111416c78480f1066d2455ad8bec619e60a2487f3bb0f1362253"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#13",
+      "hash": "sha256:c8e2695c131b69709665328cfbb61dea3b2e8007d41b0e22344025244154d619"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#19",
+      "hash": "sha256:60055f0d5ef53d929a896e0381f724f89ceb7e0937d99fa6f646c5934aef6d6e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#24",
+      "hash": "sha256:2acb28296f6f6d1839cb767845bf4e6d8013e3e035e69af8b3e9d048c7eca13b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#27",
+      "hash": "sha256:615da60ab7bb7093500c3226f1b4f120637c75a7e0ab32d17b2939541249eca3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#30",
+      "hash": "sha256:a8387e2d3651d9ab344572f9856413240cb03718c5c470600999f24d7a3efa0c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#34",
+      "hash": "sha256:0dc0d316704c2dc44ae579d9fb5665f7ce08439516c5482e7e0a220316afcacc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#39",
+      "hash": "sha256:56baae2f4a04d9bc03215973b250d57f0b05de839351fb49692f05900eacb80f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#42",
+      "hash": "sha256:6e00b0e0227e7dad04d28e6765bc89d4ecd2532e0636a37a527ec974a43a5fb3"
     },
     {
       "content": "headings",
@@ -41059,6 +41124,226 @@
       "content": "blocks",
       "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#24",
       "hash": "sha256:cb06e95531b574b85ed80076b14016113bbca8fab2abe12e115969b1c8d4ef0e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#25",
+      "hash": "sha256:95ca9f8b56df389c01c7c701578c3776cad67335a53656eb1facaf6787d37244"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#1",
+      "hash": "sha256:90de70fc16667bceec41be9c104c6bdcd537ad0d8337a17c91445ba56f65972a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#3",
+      "hash": "sha256:c8a64fef0fbe25d5c431ca15b0cf520b176896350ede26e3503ce28a64d9749f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#4",
+      "hash": "sha256:9ed315ac6e5430bd8850500011c89fc4c9430f0ba902f5cd6eb4a9a996fa57cf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#5",
+      "hash": "sha256:c83ef0eb49d299d76130a27b7d5f8d10da5fc1e582d57cab7101f56e81d5a4ab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#7",
+      "hash": "sha256:1fb85b3d2d8d24ab9050b4bd58bc475ea4f6dec23bb4605a6be86d3bf62d0867"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#8",
+      "hash": "sha256:fe8c83cdce0396327b868aa298b8e421f0cd167e4f671a39d24fdee76d506835"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#9",
+      "hash": "sha256:004d44f802f1dec0546f0f30334c330e9775b5f01b75d876f9303088e7854867"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#10",
+      "hash": "sha256:25d735498a8067ce805761da8a7b92bf4012c5d13c5052c9d6eb3c4cbb5b0232"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#11",
+      "hash": "sha256:68df6905a62ebb28d0156016e2b087b7700bc8924483840537e6c13a84d058a1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#12",
+      "hash": "sha256:4ec62178dc1c17ab45b1172e371f2dba365542f8f10168d8f5513f714564c522"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#13",
+      "hash": "sha256:8b9641a3a903a11db500d84d78032cfe4745a7fa1a4f275b7d54de96583fab24"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#14",
+      "hash": "sha256:b73dc3218ff016c140b938ad9d8841210a86b9f12ce89ac340b8e975a6dd69cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#15",
+      "hash": "sha256:43c44c2bc63b7642a02c9345752213a34447867e3e55f0465c0c0ea07f87b1a9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#16",
+      "hash": "sha256:4e1d6a83a16c44bffd3b05c2261abcfb2db8f34701722fcbaff28d9242bde89b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#17",
+      "hash": "sha256:e861bc03f47ddfbf8ca545b738e6f263307ad89a72e615302dacbd2bd6102c4f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#18",
+      "hash": "sha256:cca0f4171730d242fb3bb37d78b30345551f8234dced85bdbc3607c39d12adf0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#19",
+      "hash": "sha256:46ceab1d620c29c7a791c53c3ce250584a0bf98007507ddcf6457499151d1e15"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#20",
+      "hash": "sha256:e0440013bc4503a4c5237ed7b044f92e56c9cc13d5ff3b1eabb2db0d0e8be351"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#21",
+      "hash": "sha256:904084bd43f5c0cd07d06e55b2b58f1c966950650bed8985f91f347ed0313c7f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#22",
+      "hash": "sha256:92281cd9756c61cd6ac83b1a494477afd2cac7653ef4d6d4e233ad458c289d43"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#23",
+      "hash": "sha256:a2fdc71ba4585f59c4bbfb1fe4dd2308e1a055b1733144638c0cde43ea570632"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#24",
+      "hash": "sha256:097b986b48bbfbc456a1f3cc7bb209efe84629f81ce4027bad09ccc4bd3fe346"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#25",
+      "hash": "sha256:09fbf717106e17902df69a0ed83273e4b330204e15840a98ee9b4eed0ed88d49"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#26",
+      "hash": "sha256:3b5a40a57606a9aec1c40f9e0314590eaf1a1bd0717ff5a0451594e0f26bd4c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#27",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#28",
+      "hash": "sha256:d883ee6e2108b4a4a6cc6ac57cbc5f65fb42d22f3c0ca1bac33fb5507e9720bd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#29",
+      "hash": "sha256:8792469c41ded6a1469cbfded63f406831285045db00a6511c0954c8a38dffd0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#30",
+      "hash": "sha256:d4035ae2993b6c8f645974a382f746f0e9fe3720c15963c2b22d7fa804eb25e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#31",
+      "hash": "sha256:e9fd8567d8f49f561b8c08a508e1fc9044625f35f04494e0cd2e1455b1a631f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#32",
+      "hash": "sha256:70d6683ce4cb78ae7ebeb80053af8943d42ee20b4d0d2b7e73401c58bcfdfcba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#33",
+      "hash": "sha256:4cb6958c920f99d1b277423ec537a546ce30af25b25925fadf2d4dc7aeeb5537"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#34",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#35",
+      "hash": "sha256:fec05786852486e96a2f4e08d73a6a95e352143f50f663a6afeeebaf2f498dd3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#36",
+      "hash": "sha256:e531393886e3e7a50f963a4e80c2bb3049f1d3e414932da8e77bec485e2f973c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#37",
+      "hash": "sha256:8bf67e1094d23623204adb9834970d55208b2317cb42b8b94135fa9f6b696659"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#38",
+      "hash": "sha256:e0a3c77a2726174d571e60b061298a04f504826d4b67f9f33529cbd42227b624"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#39",
+      "hash": "sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#40",
+      "hash": "sha256:bdfdfc5a328c1f5e1e956707b29644ba1fd5136e2b5bdf19a1e03d9131fd437b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#41",
+      "hash": "sha256:8fe57ca56a12589d9b52c4d8ea0bb8053187eae757e293dba6804cd3f0b71e6e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#42",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md#43",
+      "hash": "sha256:2b817d938c6575fe29b74db9987b40d81256f2645573f9bcbf5c361a081e8b3e"
     },
     {
       "content": "blocks",

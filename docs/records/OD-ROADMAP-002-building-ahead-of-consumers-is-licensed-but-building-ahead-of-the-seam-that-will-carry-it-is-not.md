@@ -3,7 +3,7 @@ id: OD-ROADMAP-002
 type: decision
 title: Building ahead of consumers is licensed, but building ahead of the seam that will carry it is not
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - roadmap
@@ -21,6 +21,8 @@ relations:
   - target: OD-PACKAGE-011
     type: relates-to
   - target: OD-ANALYSIS-009
+    type: relates-to
+  - target: OD-ROADMAP-003
     type: relates-to
 ---
 
@@ -112,3 +114,11 @@ successor is abandoned rather than built then the pause it justified lapses with
 
 Accepted. `OD-ROADMAP-001` is amended to point here rather than restating any of it, so the
 two do not have to be read against each other to find out which governs.
+
+Amended by `P123-OD-ROADMAP-003-THE-THREE-PAUSES-HAVE-LAPSED`. `OD-ROADMAP-003` records that
+all three pauses set above have lapsed, each on the condition this record gave it: the
+model-routing pause because its named successor landed, the gate-policy and
+capability-orchestration pauses because their shared successor was measured speculative
+rather than deferred, which is the abandonment the last sentence of the previous section
+names. The distinction this record draws is unchanged; what it bound is no longer in flight.
+Read `OD-ROADMAP-003` before reading any of the three pauses as standing.
