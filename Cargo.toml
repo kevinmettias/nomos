@@ -63,6 +63,13 @@ members = [
     # against the same `nomos.cap.syntax.items` contract over `tree-sitter-go` in place of
     # `syn`. `P14-LANG-GO-SYNTAX-PROVIDER`.
     "crates/languages/nomos-lang-go",
+    # The third language, and the one that tests whether the second was a special case: what C#
+    # source says on its face, offered against the same `nomos.cap.syntax.items` contract over
+    # `tree-sitter-c-sharp`. Weaker than its Go peer on exactly one axis -- a `#if` region is a
+    # place declarations exist that it declines to read -- so it declares Sound soundness and
+    # Unknown completeness, and counts the regions into the payload header.
+    # `P123-CSHARP-SYNTAX-PROVIDER-AND-PACKAGE`.
+    "crates/languages/nomos-lang-csharp",
 
     # Zone: Provider — nomos.cap.dependency.edges' one provider. Different shape from its two
     # siblings above: it runs `cargo metadata` and reads the filesystem for itself, the
@@ -251,6 +258,14 @@ members = [
     # `OD-PACKAGE-003`, `OD-PACKAGE-004`, `OD-PACKAGE-005`.
     "crates/packages/nomos-integration-package",
 
+    # Zone: Provider — package manifests. The third consumer of nomos-package's generic core,
+    # and the first whose language-version domain a {major, minor} pair could not have carried:
+    # C#'s LangVersion is a major with an optional minor (7.3 and 12 are both whole versions),
+    # so CsharpVersion is the case the generic unresolved language_versions field exists for. A
+    # seventh peer of the six above -- none of the seven names another.
+    # `OD-PACKAGE-006`, `OD-PACKAGE-007`, `P123-CSHARP-SYNTAX-PROVIDER-AND-PACKAGE`.
+    "crates/packages/nomos-lang-csharp-package",
+
     # Zone: Rules — rules. The first thing here that judges code rather than paperwork. A
     # rule is a pure function from source text to findings: it names no language
     # provider and opens no file, so the caller decides what tree is being judged and a
@@ -437,6 +452,7 @@ nomos-connector-coderabbit = { path = "crates/connectors/nomos-connector-coderab
 nomos-cap-requirement-trace = { path = "crates/capabilities/nomos-cap-requirement-trace" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-go = { path = "crates/languages/nomos-lang-go" }
+nomos-lang-csharp = { path = "crates/languages/nomos-lang-csharp" }
 nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
 nomos-lang-rust-cargo = { path = "crates/languages/nomos-lang-rust-cargo" }
 nomos-lang-rust-clippy = { path = "crates/languages/nomos-lang-rust-clippy" }
@@ -449,6 +465,7 @@ nomos-lang-rust-package = { path = "crates/packages/nomos-lang-rust-package" }
 nomos-model-package = { path = "crates/packages/nomos-model-package" }
 nomos-rule-package = { path = "crates/packages/nomos-rule-package" }
 nomos-lang-go-package = { path = "crates/packages/nomos-lang-go-package" }
+nomos-lang-csharp-package = { path = "crates/packages/nomos-lang-csharp-package" }
 nomos-tool-package = { path = "crates/packages/nomos-tool-package" }
 nomos-integration-package = { path = "crates/packages/nomos-integration-package" }
 nomos-rules = { path = "crates/rules/nomos-rules" }

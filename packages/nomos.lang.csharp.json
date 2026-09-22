@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "package_id": "nomos.lang.csharp",
+  "package_kind": "LanguagePackage",
+  "package_version": { "major": 1, "minor": 0, "patch": 0 },
+  "protocol_range": {
+    "minimum": { "major": 1, "minor": 0 },
+    "maximum": { "major": 1, "minor": 0 }
+  },
+  "language_versions": ["7.3", "12"],
+  "providers": [
+    {
+      "provider_id": "nomos.lang.csharp.tree-sitter",
+      "tool_version": { "major": 0, "minor": 1, "patch": 0 }
+    }
+  ]
+}

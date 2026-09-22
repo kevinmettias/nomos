@@ -49,7 +49,7 @@ pub(crate) struct Universe
 ///
 /// A number somebody chose. Raising it is the deliberate step that adding an unmirrored
 /// universe is meant to cost, and lowering it is what closing one earns.
-pub(crate) const UNMIRRORED_TOTAL: usize = 5;
+pub(crate) const UNMIRRORED_TOTAL: usize = 6;
 
 /// Every declared universe in this workspace, classified by hand.
 ///
@@ -276,6 +276,20 @@ pub(crate) const UNIVERSES: &[Universe] = &[
                    identical risk nomos-lang-rust-package's own row states — bounded the same way, \
                    to additions rather than drift on the one entry it holds today, pulled \
                    from nomos-lang-go's own PROVIDER constant rather than retyped",
+        },
+    },
+    Universe {
+        path: "crates/packages/nomos-lang-csharp-package/src/known_providers.rs",
+        name: "KNOWN_PROVIDERS",
+        kind: UniverseKind::Constant,
+        standing: Standing::Unmirrored {
+            risk: "a second C# provider crate this package could register is not added to this \
+                   list automatically, the identical risk nomos-lang-rust-package's and \
+                   nomos-lang-go-package's own rows state — bounded the same way, to \
+                   additions rather than drift on the one entry it holds today, pulled from \
+                   nomos-lang-csharp's own PROVIDER constant rather than retyped. Narrower \
+                   than either sibling's today, because this workspace has no second C# \
+                   provider of any capability to have been left out",
         },
     },
     Universe {

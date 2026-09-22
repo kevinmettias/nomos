@@ -45,6 +45,8 @@
     "nomos-gate-orchestration": "Application Service",
     "nomos-integration-package": "Provider",
     "nomos-integration-tests": "Verification",
+    "nomos-lang-csharp": "Provider",
+    "nomos-lang-csharp-package": "Provider",
     "nomos-lang-go": "Provider",
     "nomos-lang-go-modules": "Provider",
     "nomos-lang-go-package": "Provider",
@@ -177,6 +179,10 @@
       "nomos-check-orchestration"
     ],
     "nomos-integration-package": [
+      "nomos-package"
+    ],
+    "nomos-lang-csharp-package": [
+      "nomos-lang-csharp",
       "nomos-package"
     ],
     "nomos-lang-go-package": [

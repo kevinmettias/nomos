@@ -1360,6 +1360,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-lang-csharp"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-cap-syntax",
+ "nomos-capability",
+ "nomos-contracts",
+ "nomos-model",
+ "tree-sitter",
+ "tree-sitter-c-sharp",
+]
+
+[[package]]
+name = "nomos-lang-csharp-package"
+version = "0.1.0"
+dependencies = [
+ "nomos-contracts",
+ "nomos-lang-csharp",
+ "nomos-package",
+]
+
+[[package]]
 name = "nomos-lang-go"
 version = "0.1.0"
 dependencies = [
@@ -3107,6 +3129,16 @@ dependencies = [
  "regex-syntax",
  "serde_json",
  "streaming-iterator",
+ "tree-sitter-language",
+]
+
+[[package]]
+name = "tree-sitter-c-sharp"
+version = "0.23.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c1aac67f1ad71de1d6d39708d34811081c26dfa495658de6c14c34200849357c"
+dependencies = [
+ "cc",
  "tree-sitter-language",
 ]
 

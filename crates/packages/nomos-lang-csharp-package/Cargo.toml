@@ -1,0 +1,16 @@
+[package]
+name = "nomos-lang-csharp-package"
+version = "0.1.0"
+description = "The C# LanguagePackage manifest format, wrapping nomos-package's generic core with CsharpVersion resolution and this workspace's one C# syntax provider -- PKG-007's four version domains, kept distinct."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-package = { workspace = true }
+nomos-lang-csharp = { workspace = true }
+
+[lints]
+workspace = true

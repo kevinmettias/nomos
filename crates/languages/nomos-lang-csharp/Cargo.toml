@@ -1,0 +1,26 @@
+[package]
+name = "nomos-lang-csharp"
+version = "0.1.0"
+description = "The third language to read somebody else's code: what C# source says on its face, and a declared Guarantee that says where a conditional region stops it."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-cap-syntax = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-analysis = { workspace = true }
+# The C# grammar, real and sound: every node this crate reads really is in the parse
+# tree tree-sitter built from the file's own bytes. Declared here, not centralized in
+# `[workspace.dependencies]`, matching `nomos-lang-rust`'s own choice for `syn` and
+# `nomos-lang-go`'s for `tree-sitter-go` -- a language provider's parser is that
+# provider's own dependency, not a workspace-wide one a second language would have no
+# use for.
+tree-sitter = "0.25"
+tree-sitter-c-sharp = "0.23"
+
+[lints]
+workspace = true

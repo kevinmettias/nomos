@@ -1,0 +1,25 @@
+pub const fn nomos_lang_csharp_package::CsharpVersion::New(major: u16, minor: Option<u16>) -> Self
+pub const nomos_lang_csharp_package::KNOWN_PROVIDERS: &[&str]
+pub fn nomos_lang_csharp_package::CsharpVersion::Label(self) -> String
+pub fn nomos_lang_csharp_package::CsharpVersion::Of_Label(label: &str) -> Option<Self>
+pub fn nomos_lang_csharp_package::CsharpVersion::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_csharp_package::Is_Known(provider: &str) -> bool
+pub fn nomos_lang_csharp_package::Parse_Manifest(text: &str, at: &str) -> Result<LanguagePackage, ManifestError>
+pub fn nomos_lang_csharp_package::Read_Manifest(path: &Path) -> Result<LanguagePackage, ManifestError>
+pub impl nomos_lang_csharp_package::CsharpVersion implements core::fmt::Display
+pub struct field nomos_lang_csharp_package::CsharpVersion::major: u16
+pub struct field nomos_lang_csharp_package::CsharpVersion::minor: Option<u16>
+pub struct field nomos_lang_csharp_package::LanguagePackage::language_versions: Vec<CsharpVersion>
+pub struct field nomos_lang_csharp_package::LanguagePackage::package_id: PackageId
+pub struct field nomos_lang_csharp_package::LanguagePackage::package_kind: PackageKind
+pub struct field nomos_lang_csharp_package::LanguagePackage::package_version: PackageVersion
+pub struct field nomos_lang_csharp_package::LanguagePackage::protocol_range: ProtocolRange
+pub struct field nomos_lang_csharp_package::LanguagePackage::providers: Vec<ProviderRegistration>
+pub struct nomos_lang_csharp_package::CsharpVersion
+pub struct nomos_lang_csharp_package::LanguagePackage
+
+# re-exports of items declared outside this crate
+pub use nomos_package::PackageVersion
+pub use nomos_package::ProtocolRange
+pub use nomos_package::ProviderRegistration
+pub use reader::ManifestError

@@ -1,0 +1,83 @@
+pub const fn nomos_lang_csharp::Declared_Guarantee() -> Guarantee
+pub const fn nomos_lang_csharp::ItemKind::Label(self) -> &'static str
+pub const nomos_lang_csharp::CSHARP_EXTENSION: &str
+pub const nomos_lang_csharp::LANGUAGE: &str
+pub const nomos_lang_csharp::PROVIDER: &str
+pub const nomos_lang_csharp::SyntaxFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_csharp::SyntaxFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_csharp::SyntaxFactProduction::TRACE: TraceEquivalence
+pub enum nomos_lang_csharp::ItemKind
+pub enum nomos_lang_csharp::Materialization
+pub enum nomos_lang_csharp::Reading
+pub enum nomos_lang_csharp::Recognition
+pub enum nomos_lang_csharp::Visibility
+pub enum variant nomos_lang_csharp::ItemKind::Class
+pub enum variant nomos_lang_csharp::ItemKind::Constructor
+pub enum variant nomos_lang_csharp::ItemKind::Delegate
+pub enum variant nomos_lang_csharp::ItemKind::Enum
+pub enum variant nomos_lang_csharp::ItemKind::EnumMember
+pub enum variant nomos_lang_csharp::ItemKind::Event
+pub enum variant nomos_lang_csharp::ItemKind::Field
+pub enum variant nomos_lang_csharp::ItemKind::Finalizer
+pub enum variant nomos_lang_csharp::ItemKind::Function
+pub enum variant nomos_lang_csharp::ItemKind::Indexer
+pub enum variant nomos_lang_csharp::ItemKind::Interface
+pub enum variant nomos_lang_csharp::ItemKind::Namespace
+pub enum variant nomos_lang_csharp::ItemKind::Operator
+pub enum variant nomos_lang_csharp::ItemKind::Property
+pub enum variant nomos_lang_csharp::ItemKind::Record
+pub enum variant nomos_lang_csharp::ItemKind::Struct
+pub enum variant nomos_lang_csharp::ItemKind::Using
+pub enum variant nomos_lang_csharp::Materialization::Materialized(Box<MaterializedFact>)
+pub enum variant nomos_lang_csharp::Materialization::Unparseable(ParseFailure)
+pub enum variant nomos_lang_csharp::Reading::Parsed(Facts)
+pub enum variant nomos_lang_csharp::Reading::Unparseable(ParseFailure)
+pub enum variant nomos_lang_csharp::Recognition::Recognized
+pub enum variant nomos_lang_csharp::Recognition::Unrecognized { extension: Option<String>, }
+pub enum variant nomos_lang_csharp::Visibility::FileLocal
+pub enum variant nomos_lang_csharp::Visibility::Internal
+pub enum variant nomos_lang_csharp::Visibility::NotApplicable
+pub enum variant nomos_lang_csharp::Visibility::Private
+pub enum variant nomos_lang_csharp::Visibility::PrivateProtected
+pub enum variant nomos_lang_csharp::Visibility::Protected
+pub enum variant nomos_lang_csharp::Visibility::ProtectedInternal
+pub enum variant nomos_lang_csharp::Visibility::Public
+pub enum variant nomos_lang_csharp::Visibility::Unspecified
+pub fn nomos_lang_csharp::Encode_Payload(facts: &Facts) -> Vec<u8>
+pub fn nomos_lang_csharp::Facts::Has_No_Declarations(&self) -> bool
+pub fn nomos_lang_csharp::Item::Qualified_Name(&self) -> String
+pub fn nomos_lang_csharp::ItemKind::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_csharp::Materialize_Syntax_Fact(subject: SubjectId, source: &str, context: FactContext) -> Materialization
+pub fn nomos_lang_csharp::ParseFailure::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_csharp::Provider_Offer() -> ProviderOffer
+pub fn nomos_lang_csharp::Read_Source(source: &str) -> Reading
+pub fn nomos_lang_csharp::Recognition::Of_Path(path: &str) -> Self
+pub fn nomos_lang_csharp::Visibility::Label(&self) -> &'static str
+pub fn nomos_lang_csharp::Visibility::Of_Modifiers(modifiers: &[&str]) -> Self
+pub fn nomos_lang_csharp::Visibility::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_lang_csharp::ItemKind implements core::fmt::Display
+pub impl nomos_lang_csharp::ParseFailure implements core::fmt::Display
+pub impl nomos_lang_csharp::ParseFailure implements std::error::Error
+pub impl nomos_lang_csharp::SyntaxFactProduction implements Strategy
+pub impl nomos_lang_csharp::Visibility implements core::fmt::Display
+pub struct field nomos_lang_csharp::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_csharp::FactContext::generation: GenerationId
+pub struct field nomos_lang_csharp::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_csharp::FactContext::variant: BuildVariantId
+pub struct field nomos_lang_csharp::Facts::items: Vec<Item>
+pub struct field nomos_lang_csharp::Facts::unexpanded: u32
+pub struct field nomos_lang_csharp::Item::documentation: Option<String>
+pub struct field nomos_lang_csharp::Item::kind: ItemKind
+pub struct field nomos_lang_csharp::Item::name: String
+pub struct field nomos_lang_csharp::Item::ordinal: u32
+pub struct field nomos_lang_csharp::Item::scope: Vec<String>
+pub struct field nomos_lang_csharp::Item::shape: Option<String>
+pub struct field nomos_lang_csharp::Item::visibility: Visibility
+pub struct field nomos_lang_csharp::ParseFailure::column: usize
+pub struct field nomos_lang_csharp::ParseFailure::line: usize
+pub struct field nomos_lang_csharp::ParseFailure::message: String
+pub struct nomos_lang_csharp::FactContext
+pub struct nomos_lang_csharp::Facts
+pub struct nomos_lang_csharp::Item
+pub struct nomos_lang_csharp::ParseFailure
+pub struct nomos_lang_csharp::SyntaxFactProduction
