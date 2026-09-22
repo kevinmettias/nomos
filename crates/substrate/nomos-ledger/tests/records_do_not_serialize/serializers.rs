@@ -49,7 +49,55 @@ use census::{Exclusions, Exclusions_Among};
 /// removal — this time with no third open item taking the collision's place, so the
 /// register empties rather than replaces, the state this comment described once before,
 /// between `OD-LEDGER-011` and `OD-LEDGER-028`.
-const KNOWN_SERIALIZERS: &[(&str, &str)] = &[];
+///
+/// # The rules facade, and which of two readings the board actually supports
+///
+/// It did not stay empty this time either. `crates/rules/nomos-rules` was reported on
+/// 2026-09-22 over three open record writers — `P110-B`, `P113` and `P114` — and two
+/// readings of that report were live at once. One was that the search had misfired on a
+/// coincidence of writers that would dissolve the moment any one of them landed. The other
+/// was that `P110-B` alone caused it, by reserving eleven whole crates where the rest
+/// reserve narrow files, so that `Is_Colliding` folded everything up to the crate root.
+///
+/// Both were measured against the real board and both are false. `P126` had already landed
+/// at `e12a4c3`, taking the population from four to three, and the path stayed universal —
+/// so it does not dissolve when a writer finishes. Setting `P110-B` aside in memory leaves
+/// two writers and *two* undeclared universal paths rather than none,
+/// `crates/rules/nomos-rules/src/checks` and `crates/rules/nomos-rules/src/lib.rs` — so it
+/// is not that item's territory doing it either, and re-authoring `P110-B` would have moved
+/// the report to a narrower spelling rather than removed it.
+///
+/// What forces it is the shape `OD-LEDGER-007` already named for seeding: a hand-maintained
+/// universe living in one file. `crates/rules/nomos-rules/src/lib.rs` re-exports every check
+/// this crate publishes, by name, so adding a rule, renaming one or regrouping the modules
+/// rewrites it, and any record writer that does one of those three inherits the reservation.
+///
+/// That is narrower than "the next record writer will reserve it too", and the difference was
+/// measured rather than glossed: `P127` and `P128`, the two record-reserving items still
+/// behind a dependency, reserve nothing in this crate at all. So the coupling is a rule over
+/// the items that touch a rule, not over every writer, and the entry's expiry is stated in
+/// the register's own terms — fewer than two open writers covering the file — rather than as
+/// a promise about who arrives next. The entry is keyed to that file rather than to the crate
+/// `P110-B` names, for the reason `OD-LEDGER-029` records: [`Is_Covering`] is
+/// coarser-reserves-finer, so a crate-keyed entry would count only `P110-B` and read as stale
+/// in the commit that wrote it — reproduced here by mutation before the keying was chosen.
+const KNOWN_SERIALIZERS: &[(&str, &str)] = &[(
+    "crates/rules/nomos-rules/src/lib.rs",
+    "P110-B-A-FINDING-CARRIES-THE-ADDRESS-ITS-RULE-DECLARES, \
+     P113-RULE-REGISTRY-SUBSYSTEM-TAXONOMY and P114-CLARITY-RULE-IDENTITY, all three open. \
+     The file re-exports every check the crate publishes by name, so P113 regrouping the \
+     check modules into subsystems and P114 renaming four check symbols each rewrite it, and \
+     P110-B covers it by reserving crates/rules/nomos-rules whole for a field added to \
+     Finding at the 49 construction sites its own why counts inside this crate. Declared \
+     rather than narrowed because narrowing somebody else's open item is what \
+     P10-SEEDING-SERIALIZES refuses and OD-LEDGER-028 accepted, and because the coupling was \
+     measured to survive both a writer landing and P110-B being set aside. It comes out when \
+     fewer than two open record writers still cover the file — two of the three reaching Done \
+     or Declined — and not merely when the path stops being universal, which P127 or P128 \
+     clearing its dependency would do without dissolving anything. The other way out is the \
+     facade ceasing to be a hand-maintained list of check names, which is the structural \
+     remedy OD-LEDGER-007 defers for the same shape in the specification store.",
+)];
 
 /// How many open record writers reserving one path makes it a serializer.
 ///
@@ -111,9 +159,13 @@ fn A_Concurrent_Pair(document: &LedgerDocument) -> Option<(ItemId, ItemId)>
 /// the whole of its value. Two record writers sharing `crates/host/nomos-cli` are two items
 /// that both change the CLI — ordinary contention, which is what territory is for, and
 /// which resolves itself when one of them finishes. A path reserved by *all* of them is
-/// something a rule forces, and it does not resolve: the next record writer will reserve it
-/// too. That is a structural serializer, and both of the ones in the register arrived
-/// without anybody noticing.
+/// something a rule forces, and it does not resolve when one of them finishes: the rule that
+/// forced it forces it again on the next writer that rule reaches. That is a structural
+/// serializer. The first two arrived without anybody noticing, which is why this assertion
+/// exists; the one the register holds today is the first this assertion found for itself, and
+/// "does not resolve" was measured of it rather than assumed — a writer landing and the
+/// widest territory set aside both left it standing. How far its rule reaches, which is
+/// narrower than every future writer, is in the register's own comment beside the entry.
 ///
 /// Honest over a board with fewer than two writers rather than refusing one.
 /// [`Undeclared_Serializers`] answers "nothing" there, because "reserved by *all* of them"
