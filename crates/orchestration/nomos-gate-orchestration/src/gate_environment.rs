@@ -226,10 +226,17 @@ fn Scoped_Judgment<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     return Scoped_Findings(judged, &command.scope);
 }
 
-/// The three per-finding overrides `policy` resolved to, read against `now`.
+/// What `policy` resolved to for each still-blockable finding, read against `now` -- the
+/// evidence floor first, then the three per-finding overrides.
 fn DispositionPolicies_Of(policy: &GatePolicyFile, now: Timestamp) -> DispositionPolicies<'_>
 {
-    return DispositionPolicies { adoption: &policy.adoption, suppressions: &policy.suppressions, baseline: &policy.baseline, now };
+    return DispositionPolicies {
+        evidence_floor: policy.evidence_floor,
+        adoption: &policy.adoption,
+        suppressions: &policy.suppressions,
+        baseline: &policy.baseline,
+        now,
+    };
 }
 
 /// `reduced`'s disposition once `policy`'s phases have been evaluated over it.

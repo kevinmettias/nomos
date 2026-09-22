@@ -14,6 +14,8 @@ const SUPPRESSED_JUSTIFICATION: &str =
     "suppressed: a declared suppression matches this finding's rule and subject, so the finding is reported and cannot fail the build";
 const BASELINED_JUSTIFICATION: &str =
     "baselined: a declared baseline debt entry accepts this finding's rule and subject within its allowance, so the finding is reported and cannot fail the build";
+const BELOW_EVIDENCE_FLOOR_JUSTIFICATION: &str =
+    "below_evidence_floor: this gate declares an evidence floor above the class backing this finding, so the finding is reported and cannot fail the build";
 
 /// SARIF 2.1.0 §3.35's `suppression` object.
 ///
@@ -41,6 +43,12 @@ impl SarifSuppression
 {
     /// The suppression a finding in `bucket` carries, or `None` for a bucket that blocks.
     ///
+    /// `BelowEvidenceFloor` carries one because the finding was reported and could not fail
+    /// the build, which is exactly what §3.35 describes, and its justification names the floor
+    /// rather than borrowing a neighbour's word: `OD-GATE-034` keeps a policy a person authored
+    /// apart from a mechanical statement about a class of evidence, and a consumer told
+    /// "calibrated" would go looking for a calibration nobody wrote.
+    ///
     /// `BaselineExceeded` is `None` on purpose: `OD-GATE-030` decided a baseline may tolerate
     /// no more than the quantity it adopted, and a scope past its allowance blocks as a whole
     /// -- a suppression on any of its occurrences would tell a consumer the entry still
@@ -53,6 +61,7 @@ impl SarifSuppression
             FindingBucket::Calibrated => Some(Self { kind: EXTERNAL_KIND, justification: CALIBRATED_JUSTIFICATION }),
             FindingBucket::Suppressed => Some(Self { kind: EXTERNAL_KIND, justification: SUPPRESSED_JUSTIFICATION }),
             FindingBucket::Baselined => Some(Self { kind: EXTERNAL_KIND, justification: BASELINED_JUSTIFICATION }),
+            FindingBucket::BelowEvidenceFloor => Some(Self { kind: EXTERNAL_KIND, justification: BELOW_EVIDENCE_FLOOR_JUSTIFICATION }),
         };
     }
 }
@@ -78,6 +87,7 @@ mod tests
             (FindingBucket::Calibrated, "calibrated"),
             (FindingBucket::Suppressed, "suppressed"),
             (FindingBucket::Baselined, "baselined"),
+            (FindingBucket::BelowEvidenceFloor, "below_evidence_floor"),
         ]
         {
             let suppression = SarifSuppression::Of(bucket).expect("a bucket a policy answered carries a suppression");

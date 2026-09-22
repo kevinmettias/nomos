@@ -71,7 +71,7 @@
 mod declared_phases;
 
 use declared_phases::{DeclaredApproval, DeclaredPhase, Phase_Problem, Resolved_Approvals, Resolved_Phases};
-use nomos_contracts::{ConfigurationLayer, RuleId};
+use nomos_contracts::{ConfigurationLayer, EvidenceClass, RuleId};
 use nomos_model::Subject_Of_Path;
 use nomos_platform::{FileSystem, FileSystemError};
 use serde::Deserialize;
@@ -79,8 +79,8 @@ use std::path::Path;
 
 use super::effective_policy::PolicyContribution;
 use super::{
-    AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, CoveragePolicy, RuleCalibration, Suppression, SuppressionDisposition,
-    SuppressionPolicy,
+    AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, CoveragePolicy, EvidenceFloor, RuleCalibration, Suppression,
+    SuppressionDisposition, SuppressionPolicy,
 };
 use crate::{GatePhase, NoVerdict, PhaseApproval};
 
@@ -107,6 +107,8 @@ pub(crate) struct GatePolicyFile
     pub(crate) adoption: AdoptionPolicy,
     /// The coverage floor the file declared.
     pub(crate) coverage: CoveragePolicy,
+    /// The lowest evidence class the file lets a finding block on -- `OD-GATE-034`'s floor.
+    pub(crate) evidence_floor: EvidenceFloor,
     /// The ordered stages the file declared, in the order it declared them.
     pub(crate) phases: Vec<GatePhase>,
     /// The approvals the file declared, each naming one of `phases`.
@@ -134,6 +136,7 @@ impl GatePolicyFile
             baseline: (self.baseline != BaselinePolicy::default()).then(|| return self.baseline.clone()),
             adoption: (self.adoption != AdoptionPolicy::default()).then(|| return self.adoption.clone()),
             coverage: (self.coverage != CoveragePolicy::default()).then_some(self.coverage),
+            evidence_floor: (self.evidence_floor != EvidenceFloor::default()).then_some(self.evidence_floor),
             phases: (!self.phases.is_empty()).then(|| return self.phases.clone()),
             approvals: (!self.approvals.is_empty()).then(|| return self.approvals.clone()),
             ..PolicyContribution::Silent(ConfigurationLayer::Repository, GATE_POLICY_FILE)
@@ -231,6 +234,10 @@ struct DeclaredPolicy
     baseline: Vec<DeclaredDebt>,
     adoption: Vec<DeclaredCalibration>,
     coverage: DeclaredCoverage,
+    /// The lowest class of evidence a finding must carry before this gate lets it block --
+    /// `OD-GATE-034`. An absent key is no floor, which is the state every caller was in
+    /// before it existed, so a repository that never writes it judges exactly as it did.
+    evidence_floor: DeclaredEvidenceFloor,
     /// The ordered stages this file declares, `WF-001`'s "required phases ... thresholds ...
     /// and blocking behavior". An absent key is no phase policy, which is the state every
     /// caller was in before it existed.
@@ -250,6 +257,7 @@ impl DeclaredPolicy
             baseline: BaselinePolicy { debt: self.baseline.into_iter().map(DeclaredDebt::Resolved).collect() },
             adoption: AdoptionPolicy { calibrated: self.adoption.into_iter().map(DeclaredCalibration::Resolved).collect() },
             coverage: self.coverage.Resolved(),
+            evidence_floor: self.evidence_floor.Resolved(),
             phases: Resolved_Phases(self.phases),
             approvals: Resolved_Approvals(self.approvals),
         };
@@ -472,6 +480,53 @@ impl DeclaredCoverage
         {
             Self::Unset => CoveragePolicy::Unset,
             Self::RequireCompleteness => CoveragePolicy::RequireCompleteness,
+        };
+    }
+}
+
+/// The evidence floor, as written.
+///
+/// One spelling per [`EvidenceClass`] beside `unset`, rather than a bare class with an
+/// optional key: `OD-GATE-034` makes "no floor" a state of the field itself, and an author who
+/// writes `"evidence_floor": "unset"` is saying the same thing as one who omits the key --
+/// which is what `GatePolicyFile::Contributed` reads as no statement at all. `serde` refuses
+/// any other spelling with the offending value and the accepted ones beside it.
+#[derive(Debug, Default, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+enum DeclaredEvidenceFloor
+{
+    /// Every class may block -- the state a file that says nothing is in.
+    #[default]
+    Unset,
+    AgentJudged,
+    HumanAsserted,
+    Predicted,
+    Approximate,
+    Derived,
+    Observed,
+    Verified,
+    Authoritative,
+}
+
+impl DeclaredEvidenceFloor
+{
+    /// This spelling as the domain variant.
+    ///
+    /// Exhaustive rather than defaulted, so a class added to [`EvidenceClass`] fails to
+    /// compile here instead of quietly becoming unwritable in a policy file.
+    fn Resolved(self) -> EvidenceFloor
+    {
+        return match self
+        {
+            Self::Unset => EvidenceFloor::Unset,
+            Self::AgentJudged => EvidenceFloor::AtLeast(EvidenceClass::AgentJudged),
+            Self::HumanAsserted => EvidenceFloor::AtLeast(EvidenceClass::HumanAsserted),
+            Self::Predicted => EvidenceFloor::AtLeast(EvidenceClass::Predicted),
+            Self::Approximate => EvidenceFloor::AtLeast(EvidenceClass::Approximate),
+            Self::Derived => EvidenceFloor::AtLeast(EvidenceClass::Derived),
+            Self::Observed => EvidenceFloor::AtLeast(EvidenceClass::Observed),
+            Self::Verified => EvidenceFloor::AtLeast(EvidenceClass::Verified),
+            Self::Authoritative => EvidenceFloor::AtLeast(EvidenceClass::Authoritative),
         };
     }
 }

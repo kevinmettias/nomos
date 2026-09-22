@@ -340,6 +340,8 @@ mod tests
         assert_eq!(FindingBucket::From(FindingDisposition::Calibrated), FindingBucket::Calibrated);
         assert_eq!(FindingBucket::From(FindingDisposition::Suppressed), FindingBucket::Suppressed);
         assert_eq!(FindingBucket::From(FindingDisposition::Baselined), FindingBucket::Baselined);
+        assert_eq!(FindingBucket::From(FindingDisposition::BaselineExceeded), FindingBucket::BaselineExceeded);
+        assert_eq!(FindingBucket::From(FindingDisposition::BelowEvidenceFloor), FindingBucket::BelowEvidenceFloor);
     }
 
     /// A bucket change serializes with both ends, under the names a wire caller reads.

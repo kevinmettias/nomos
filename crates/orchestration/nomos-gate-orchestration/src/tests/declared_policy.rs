@@ -31,6 +31,15 @@ const TOLERATING_POLICY: &str = r#"{
 /// out of the test body so that test reads as the three assertions it is.
 const COVERAGE_FLOOR_POLICY: &str = r#"{ "coverage": "require-completeness" }"#;
 
+/// The one-setting file `Test_A_Declared_Evidence_Floor_Should_Reach_The_Reduction_Without_Losing_A_Finding`
+/// writes.
+///
+/// `authoritative` rather than a class below `Derived`: `OD-GATE-034` measured that no rule in
+/// this workspace yields a finding weaker than `Derived`, so a floor at or below that class is
+/// the identity over every real run and would say nothing about whether the declaration reached
+/// the reduction at all. The strongest class is the one every real finding is below.
+const EVIDENCE_FLOOR_POLICY: &str = r#"{ "evidence_floor": "authoritative" }"#;
+
 /// The name every phase declared below carries, written once so the approval that names it
 /// and the phase it names cannot drift apart.
 const DECLARED_PHASE: &str = "declared";
@@ -152,6 +161,36 @@ fn Test_A_Declared_Coverage_Floor_Should_Reach_The_Disposition()
 
     assert_ne!(result.disposition, GateRunOutcome::Failed, "this fixture must not block, so the floor is what is being observed");
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate, "a declared coverage floor must reach the disposition");
+}
+
+/// A declared evidence floor reaches a real run's reduction, and takes nothing away from it.
+///
+/// Both trees are the same one fixture; only the declared file differs. The unfloored half is
+/// asserted first and is not ceremony: a fixture that stopped producing a blocking finding
+/// would make the floored half pass for the wrong reason, and this is the premise the second
+/// half rests on.
+///
+/// `OD-GATE-034` is explicit that a below-floor finding is never dropped, so the assertion is
+/// an equality between the two runs' populations rather than a check that one bucket is
+/// non-empty: every finding that blocked without the floor is in the floor's own bucket with
+/// it, and none went missing on the way.
+#[test]
+fn Test_A_Declared_Evidence_Floor_Should_Reach_The_Reduction_Without_Losing_A_Finding()
+{
+    let unfloored = Ran_Over(vec![Mirrored_Source(SourcePath("a.rs"))], &Command_At(Root_Without_Policy(RootName("no-evidence-floor"))));
+
+    assert_eq!(unfloored.disposition, GateRunOutcome::Failed, "the fixture must block when no floor is declared, or the floor below proves nothing");
+    assert!(unfloored.findings.below_evidence_floor_findings.is_empty(), "and nothing is floored when nothing declares a floor");
+
+    let root = Root_Declaring(RootName("evidence-floor"), PolicyText(EVIDENCE_FLOOR_POLICY));
+    let floored = Ran_Over(vec![Mirrored_Source(SourcePath("a.rs"))], &Command_At(root));
+
+    assert!(floored.findings.blocking_findings.is_empty(), "a declared floor above every real class must empty the blocking bucket");
+    assert_eq!(
+        floored.findings.below_evidence_floor_findings, unfloored.findings.blocking_findings,
+        "and the findings it took must be exactly the ones that blocked without it, in the bucket the floor moved them to"
+    );
+    assert_ne!(floored.disposition, GateRunOutcome::Failed, "a run whose only blocking findings are under the floor does not fail");
 }
 
 /// Every rule this run's own blocking findings name, so a declared phase can cover all of

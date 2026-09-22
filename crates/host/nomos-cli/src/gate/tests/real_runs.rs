@@ -303,6 +303,7 @@ fn Test_Run_Should_Not_Report_Ok_When_Scoped_To_Nothing()
         baseline: nomos_gate_orchestration::BaselinePolicy::default(),
         adoption: nomos_gate_orchestration::AdoptionPolicy::default(),
         coverage: nomos_gate_orchestration::CoveragePolicy::default(),
+        evidence_floor: nomos_gate_orchestration::EvidenceFloor::default(),
         model: None,
         phases: Vec::new(),
         approvals: Vec::new(),

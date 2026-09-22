@@ -4,7 +4,7 @@ use super::super::ExitCode;
 use super::run::Render_Check_Unreadable;
 use nomos_capability::RegistryError;
 use nomos_check_orchestration::CheckOutcome;
-use nomos_contracts::Finding;
+use nomos_contracts::{EvidenceClass, Finding};
 use nomos_gate_orchestration::{BaselineDebt, Explanation, GateExplainResult, RuleCalibration, Suppression};
 use std::io::Write;
 use std::path::Path;
@@ -80,9 +80,10 @@ fn Report_Explanation(explanation: &Explanation, stdout: &mut impl Write) -> Exi
 
             ExitCode::Ok
         }
-        Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by, contract } =>
+        Explanation::Found { finding, would_block, floored_by, calibrated_by, suppressed_by, baselined_by, contract } =>
         {
             let tolerance = Toleration {
+                floored_by: *floored_by,
                 calibrated_by: calibrated_by.as_ref(),
                 suppressed_by: suppressed_by.as_ref(),
                 baselined_by: baselined_by.as_ref(),
@@ -94,15 +95,22 @@ fn Report_Explanation(explanation: &Explanation, stdout: &mut impl Write) -> Exi
     };
 }
 
-/// The calibration, suppression or baseline note [`Report_Found`] renders alongside a found
-/// explanation's block status -- never more than one at once, since `Explain_Gate` checks
-/// them in that order and stops at the first match, but grouped as a triple rather than
-/// three parameters: what a found explanation was tolerated by is one fact, not three.
+/// The evidence floor, calibration, suppression or baseline note [`Report_Found`] renders
+/// alongside a found explanation's block status -- never more than one at once, since
+/// `Explain_Gate` checks them in that order and stops at the first match, but grouped as one
+/// value rather than four parameters: what kept a found explanation from blocking is one
+/// fact, not four.
 #[derive(Clone, Copy)]
-#[allow(clippy::struct_field_names)] // each field answers "tolerated by ___"; the shared
-                                      // suffix is the point, not an accident to rename away
+#[allow(clippy::struct_field_names)] // each field answers "kept from blocking by ___"; the
+                                      // shared suffix is the point, not an accident to rename away
 struct Toleration<'a>
 {
+    /// The declared floor this finding's evidence fell under, when one did.
+    ///
+    /// `OD-GATE-034`: rendered under its own label, never folded into the three below. A
+    /// reader told "calibrated" about a finding whose evidence was simply too weak under this
+    /// gate would go looking for a calibration nobody wrote.
+    floored_by: Option<EvidenceClass>,
     calibrated_by: Option<&'a RuleCalibration>,
     suppressed_by: Option<&'a Suppression>,
     baselined_by: Option<&'a BaselineDebt>,
@@ -119,9 +127,9 @@ struct FoundExplanation<'a>
     contract: Option<&'a (String, u32)>,
 }
 
-/// Renders one found explanation's finding, block status, and calibration, suppression or
-/// baseline note (if any applies), and reduces it to the [`ExitCode`] a real run would
-/// decide for this one finding.
+/// Renders one found explanation's finding, block status, and evidence-floor, calibration,
+/// suppression or baseline note (if any applies), and reduces it to the [`ExitCode`] a real
+/// run would decide for this one finding.
 fn Report_Found(found: FoundExplanation<'_>, tolerance: Toleration<'_>, stdout: &mut impl Write) -> ExitCode
 {
     let _ = writeln!(stdout, "{}", found.finding.Describe());
@@ -129,6 +137,10 @@ fn Report_Found(found: FoundExplanation<'_>, tolerance: Toleration<'_>, stdout: 
     if let Some((record, version)) = found.contract
     {
         let _ = writeln!(stdout, "contract: {record} v{version}");
+    }
+    if let Some(floor) = tolerance.floored_by
+    {
+        let _ = writeln!(stdout, "below the evidence floor: this gate requires at least {}", floor.Label());
     }
     if let Some(calibration) = tolerance.calibrated_by
     {

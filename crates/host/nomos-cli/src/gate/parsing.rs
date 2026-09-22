@@ -244,6 +244,11 @@ fn Plan_Or_Run_Command(root: PathBuf, rest: &[String]) -> GateCommand
         // No flag authors a non-default CoveragePolicy yet -- see
         // `nomos_gate_orchestration::CoveragePolicy`'s own doc for why.
         coverage: nomos_gate_orchestration::CoveragePolicy::default(),
+        // No flag authors an EvidenceFloor yet, and `OD-GATE-034`'s own first increment
+        // declines to add one -- the same restraint `OD-GATE-016`'s first increment kept for
+        // `CoveragePolicy`, for the reason `OD-GATE-015` gives. A repository states its floor
+        // in `nomos-gate.json`, which `Run_Gate` resolves over this.
+        evidence_floor: nomos_gate_orchestration::EvidenceFloor::default(),
         // No flag authors a ModelExecutionProfile yet -- see
         // `nomos_gate_orchestration::GateCommand::model`'s own doc for why.
         model: None,

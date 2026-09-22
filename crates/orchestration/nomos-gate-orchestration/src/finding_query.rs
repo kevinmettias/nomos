@@ -8,13 +8,13 @@ pub use explanation::Explanation;
 pub use gate_explain_result::GateExplainResult;
 
 use nomos_check_orchestration::CheckOutcome;
-use nomos_contracts::{Finding, RuleId};
+use nomos_contracts::{EvidenceClass, Finding, RuleId};
 use nomos_platform::{Environment, FileSystem, ProgramLauncher, Timestamp};
 use nomos_rules::SourceFile;
 
 use crate::gate_environment::{GateEnvironment, JudgeContext, Judged_Sources};
 use crate::policy::{GatePolicyFile, Resolve_Gate_Policy, Resolved_Gate_Policy};
-use crate::{AdoptionPolicy, BaselinePolicy, GateCommand, SuppressionPolicy};
+use crate::{AdoptionPolicy, BaselinePolicy, EvidenceFloor, GateCommand, SuppressionPolicy};
 
 /// Which finding to explain: the rule that produced it, and one of the locations it names --
 /// the same human-visible `Finding::locations` a reader of `nomos gate run`'s own output
@@ -34,11 +34,11 @@ pub struct FindingQuery
 /// Deliberately independent of `command.scope` and `command.rules`: those narrow a real
 /// run's *disposition* over many findings, and this answers a question about one named
 /// finding as check would produce it right now -- not "what would a scope- or
-/// rule-narrowed `run` currently see". Calibration, suppression and baseline are the three
-/// it does consult, because whether any applies is part of the finding's own explanation,
-/// not part of narrowing which findings a run counts.
+/// rule-narrowed `run` currently see". The evidence floor, calibration, suppression and
+/// baseline are the four it does consult, because whether any applies is part of the finding's
+/// own explanation, not part of narrowing which findings a run counts.
 ///
-/// Those three are taken from the *effective* policy -- the declared `nomos-gate.json` under
+/// Those four are taken from the *effective* policy -- the declared `nomos-gate.json` under
 /// `command.root`, with the caller's own preferred over it -- and not from `command` alone.
 /// Reading `command` alone was a defect rather than a narrower reading: no caller populates
 /// those fields (the CLI hardcodes all three to their defaults and no flag authors them, and
@@ -66,7 +66,13 @@ pub fn Explain_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
     let explanation = Explained_Query(
         &check_outcome,
         query,
-        DispositionPolicies { adoption: &effective.adoption, suppressions: &effective.suppressions, baseline: &effective.baseline, now },
+        DispositionPolicies {
+            evidence_floor: effective.evidence_floor,
+            adoption: &effective.adoption,
+            suppressions: &effective.suppressions,
+            baseline: &effective.baseline,
+            now,
+        },
     );
 
     return GateExplainResult { root: command.root.clone(), check_outcome, explanation };
@@ -99,13 +105,15 @@ fn Effective_Policies<Fs: FileSystem>(command: &GateCommand, filesystem: &Fs) ->
     return resolved.map_or_else(|_| return GatePolicyFile::default(), |effective| return effective.values);
 }
 
-/// The three per-finding overrides [`Explained_Query`] and [`Disposed_Finding`] check,
-/// grouped into one value so [`Explained_Query`] stays within this crate's own
-/// parameter-count limit -- `adoption` checked first (a coarser, rule-wide override), then
-/// `suppressions`, then `baseline`, the same order [`crate::Run_Gate`] reduces by.
+/// What [`Explained_Query`] and [`Disposed_Finding`] check one finding against, grouped into
+/// one value so [`Explained_Query`] stays within this crate's own parameter-count limit --
+/// `evidence_floor` checked first (a fact about the finding's own evidence), then `adoption`
+/// (a coarser, rule-wide override), then `suppressions`, then `baseline`, the same order
+/// [`crate::Run_Gate`] reduces by.
 #[derive(Clone, Copy)]
 struct DispositionPolicies<'a>
 {
+    evidence_floor: EvidenceFloor,
     adoption: &'a AdoptionPolicy,
     suppressions: &'a SuppressionPolicy,
     baseline: &'a BaselinePolicy,
@@ -132,28 +140,50 @@ fn Named_Finding<'a>(findings: &'a [Finding], query: &FindingQuery) -> Option<&'
         .find(|finding| return finding.rule == query.rule && finding.locations.iter().any(|location| return location == &query.location));
 }
 
-/// `finding`, reduced to what a real run would do with it -- blocked, calibrated,
-/// suppressed, or baselined, checked in that order, the same order [`crate::Run_Gate`]
-/// reduces by.
+/// `finding`, reduced to what a real run would do with it -- blocked, floored by this gate's
+/// declared evidence floor, calibrated, suppressed, or baselined, checked in that order, the
+/// same order [`crate::Run_Gate`] reduces by.
+///
+/// The floor is checked first because `Run_Gate`'s own partition checks it first: a finding it
+/// takes never reaches the three matchers, so an `explain` that asked them anyway could report
+/// a calibration as the reason a run's report attributes to the floor.
 fn Disposed_Finding(finding: &Finding, policies: DispositionPolicies<'_>) -> Explanation
 {
-    let DispositionPolicies { adoption, suppressions, baseline, now } = policies;
-    let calibrated_by = adoption.Calibrating(finding).cloned();
-    let suppressed_by = calibrated_by.is_none().then(|| suppressions.Suppressing(finding, now).cloned()).flatten();
-    let baselined_by = (calibrated_by.is_none() && suppressed_by.is_none())
+    let DispositionPolicies { evidence_floor, adoption, suppressions, baseline, now } = policies;
+    let floored_by = Floored_By(finding, evidence_floor);
+    let untaken = floored_by.is_none();
+    let calibrated_by = untaken.then(|| adoption.Calibrating(finding).cloned()).flatten();
+    let suppressed_by = (untaken && calibrated_by.is_none()).then(|| suppressions.Suppressing(finding, now).cloned()).flatten();
+    let baselined_by = (untaken && calibrated_by.is_none() && suppressed_by.is_none())
         .then(|| baseline.Tolerating(finding).cloned())
         .flatten();
-    let would_block = finding.Can_Fail_A_Build() && calibrated_by.is_none() && suppressed_by.is_none() && baselined_by.is_none();
-    let contract = Contract_Of(&finding.rule);
+    let tolerated = calibrated_by.is_some() || suppressed_by.is_some() || baselined_by.is_some();
+    let would_block = finding.Can_Fail_A_Build() && untaken && !tolerated;
 
     return Explanation::Found {
         finding: Box::new(finding.clone()),
         would_block,
+        floored_by,
         calibrated_by,
         suppressed_by,
         baselined_by,
-        contract,
+        contract: Contract_Of(&finding.rule),
     };
+}
+
+/// The floor that keeps `finding` from blocking under `evidence_floor`, if one does.
+///
+/// Asked only of a finding that could otherwise fail a build, for the reason the bucket exists:
+/// an advisory finding is not blocking whatever its evidence class, and reporting the floor as
+/// the reason would attribute to policy what the rule's own wiring already decided.
+fn Floored_By(finding: &Finding, evidence_floor: EvidenceFloor) -> Option<EvidenceClass>
+{
+    if !finding.Can_Fail_A_Build() || evidence_floor.Admits(finding.evidence)
+    {
+        return None;
+    }
+
+    return evidence_floor.Required();
 }
 
 /// `query.rule`'s contract citation, from the same registry `nomos gate plan` builds --

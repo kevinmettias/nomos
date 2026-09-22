@@ -22,7 +22,8 @@ use super::{
     ResolvedField,
 };
 use crate::policy::{
-    AdoptionPolicy, BaselineDebt, BaselinePolicy, CoveragePolicy, GatePolicyFile, RuleCalibration, Suppression, SuppressionPolicy,
+    AdoptionPolicy, BaselineDebt, BaselinePolicy, CoveragePolicy, EvidenceFloor, GatePolicyFile, RuleCalibration, Suppression,
+    SuppressionPolicy,
 };
 use crate::{GatePhase, PhaseApproval};
 
@@ -72,6 +73,7 @@ pub(super) fn Combined(contributions: &[PolicyContribution]) -> EffectivePolicy
     let baseline = Resolved_Baseline(&ordered);
     let adoption = Resolved_Adoption(&ordered);
     let coverage = Resolved_Coverage(&ordered);
+    let evidence_floor = Resolved_Evidence_Floor(&ordered);
     let phase_policy = Resolved_Phase_Policy(&ordered);
 
     return EffectivePolicy {
@@ -80,6 +82,7 @@ pub(super) fn Combined(contributions: &[PolicyContribution]) -> EffectivePolicy
             baseline: baseline.value,
             adoption: adoption.value,
             coverage: coverage.value,
+            evidence_floor: evidence_floor.value,
             phases: phase_policy.phases,
             approvals: phase_policy.approvals,
         },
@@ -88,6 +91,7 @@ pub(super) fn Combined(contributions: &[PolicyContribution]) -> EffectivePolicy
             baseline.field,
             adoption.field,
             coverage.field,
+            evidence_floor.field,
             phase_policy.phases_field,
             phase_policy.approvals_field,
         ],
@@ -174,6 +178,7 @@ fn Contradiction_In(contributions: &[PolicyContribution]) -> Option<PolicyRefusa
     let ordered = Ordered_By_Layer(contributions);
 
     return Whole_Field_Contradiction(&ordered, PolicyField::Coverage, Coverage_Of)
+        .or_else(|| return Whole_Field_Contradiction(&ordered, PolicyField::EvidenceFloor, Evidence_Floor_Of))
         .or_else(|| return Whole_Field_Contradiction(&ordered, PolicyField::Phases, Phases_Of))
         .or_else(|| return Whole_Field_Contradiction(&ordered, PolicyField::Approvals, Approvals_Of))
         .or_else(|| return Suppression_Contradiction(&ordered))
@@ -243,6 +248,12 @@ fn Whole_Field_Refusal(one: &PolicyContribution, other: &PolicyContribution, fie
 fn Coverage_Of(contribution: &PolicyContribution) -> Option<&CoveragePolicy>
 {
     return contribution.coverage.as_ref();
+}
+
+/// The evidence floor `contribution` states, if it states one.
+fn Evidence_Floor_Of(contribution: &PolicyContribution) -> Option<&EvidenceFloor>
+{
+    return contribution.evidence_floor.as_ref();
 }
 
 /// The stages `contribution` states, if it states any.
@@ -577,6 +588,20 @@ fn Resolved_Coverage(ordered: &[&PolicyContribution]) -> Resolution<CoveragePoli
     let value = deciding.and_then(|contribution| return contribution.coverage).unwrap_or_default();
 
     return Resolution { value, field: Overridden_Field(&admitted, PolicyField::Coverage, ordered) };
+}
+
+/// The evidence floor the highest layer that states one decided (`OD-POLICY-001`: override).
+///
+/// An ordinary per-field override and not a unit: `OD-GATE-034` states the floor over
+/// `EvidenceClass`'s own ordering alone, so no other field of this policy addresses a key it
+/// declares and none of them can only be stated together with it.
+fn Resolved_Evidence_Floor(ordered: &[&PolicyContribution]) -> Resolution<EvidenceFloor>
+{
+    let admitted = Admitted(ordered, PolicyField::EvidenceFloor);
+    let deciding = admitted.last().copied();
+    let value = deciding.and_then(|contribution| return contribution.evidence_floor).unwrap_or_default();
+
+    return Resolution { value, field: Overridden_Field(&admitted, PolicyField::EvidenceFloor, ordered) };
 }
 
 /// The resolved field for a value the highest stating layer replaced whole.

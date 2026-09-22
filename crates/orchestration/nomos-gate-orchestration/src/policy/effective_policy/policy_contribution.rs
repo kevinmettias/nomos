@@ -3,7 +3,7 @@
 use nomos_contracts::ConfigurationLayer;
 
 use super::PolicyField;
-use crate::policy::{AdoptionPolicy, BaselinePolicy, CoveragePolicy, SuppressionPolicy};
+use crate::policy::{AdoptionPolicy, BaselinePolicy, CoveragePolicy, EvidenceFloor, SuppressionPolicy};
 use crate::{GatePhase, PhaseApproval};
 
 /// One layer's statement about the gate policy, and the artifact that made it.
@@ -36,6 +36,12 @@ pub struct PolicyContribution
     pub adoption: Option<AdoptionPolicy>,
     /// The coverage floor this artifact states, if it states one.
     pub coverage: Option<CoveragePolicy>,
+    /// The lowest evidence class this artifact lets a finding block on, if it states one.
+    ///
+    /// `OD-GATE-034`'s floor, contributed like any other single value: the highest layer that
+    /// states one decides it, and a layer that leaves it at [`EvidenceFloor::Unset`] has said
+    /// nothing rather than stated no floor.
+    pub evidence_floor: Option<EvidenceFloor>,
     /// The ordered stages this artifact states, if it states any. The deciding field of
     /// [`super::PHASE_POLICY_UNIT`].
     pub phases: Option<Vec<GatePhase>>,
@@ -83,6 +89,7 @@ impl PolicyContribution
             baseline: None,
             adoption: None,
             coverage: None,
+            evidence_floor: None,
             phases: None,
             approvals: None,
             locks: Vec::new(),
@@ -100,6 +107,7 @@ impl PolicyContribution
             PolicyField::Baseline => self.baseline.is_some(),
             PolicyField::Adoption => self.adoption.is_some(),
             PolicyField::Coverage => self.coverage.is_some(),
+            PolicyField::EvidenceFloor => self.evidence_floor.is_some(),
             PolicyField::Phases => self.phases.is_some(),
             PolicyField::Approvals => self.approvals.is_some(),
         };

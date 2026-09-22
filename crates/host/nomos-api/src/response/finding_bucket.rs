@@ -7,7 +7,7 @@ use serde::Serialize;
 ///
 /// A twin rather than a re-export because the type it mirrors does not derive `Serialize`,
 /// for the reason `crate::response`'s own doc gives, and because `OD-GATE-022-A` refuses to
-/// give it one on a caller's behalf. Kept to the same four variants, in the same order, so a
+/// give it one on a caller's behalf. Kept to the same variants, in the same order, so a
 /// mismatch is a compile error in [`FindingBucket::From`] rather than a silent divergence --
 /// the discipline [`super::Disposition`] already uses.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
@@ -30,6 +30,14 @@ pub enum FindingBucket
     /// and collapsing them would report a repository's debt growing past what it adopted as
     /// though a rule had simply started failing.
     BaselineExceeded,
+    /// The gate's declared evidence floor is above the class this finding's evidence carries,
+    /// so it could not block.
+    ///
+    /// Its own variant rather than one of the four above, because `OD-GATE-034` keeps "this
+    /// rule is advisory" and "this finding's evidence was too weak under this gate" apart: the
+    /// other four each say a person authored something about this finding, and this one says
+    /// nobody did.
+    BelowEvidenceFloor,
 }
 
 impl FindingBucket
@@ -43,6 +51,7 @@ impl FindingBucket
             FindingDisposition::Suppressed => Self::Suppressed,
             FindingDisposition::Baselined => Self::Baselined,
             FindingDisposition::BaselineExceeded => Self::BaselineExceeded,
+            FindingDisposition::BelowEvidenceFloor => Self::BelowEvidenceFloor,
         };
     }
 }

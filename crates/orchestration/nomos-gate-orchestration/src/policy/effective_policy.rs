@@ -36,8 +36,9 @@
 //!
 //! A [`PolicyContribution`] states a field or does not, and `OD-POLICY-001` is explicit that a
 //! sentinel is not a statement. The two builders below apply that rule to the two sources this
-//! workspace has: an empty list and `CoveragePolicy::Unset` are absences, which is exactly what
-//! `Preferred_Policy` and `Resolved_Over` already treated them as. `OD-GATE-029` measured that
+//! workspace has: an empty list, `CoveragePolicy::Unset` and `EvidenceFloor::Unset` are
+//! absences, which is exactly what `Preferred_Policy` and `Resolved_Over` already treated the
+//! first two as. `OD-GATE-029` measured that
 //! `nomos-gate.json` cannot tell `"coverage": "unset"` from an omitted key and decided
 //! `AllowPartial` as the spelling that would; that variant is not in the tree, `policy/
 //! coverage_policy.rs` carries two, and building it is not this increment's.
@@ -179,13 +180,14 @@ pub(crate) fn Resolved_Gate_Policy(from_file: Option<&GatePolicyFile>, command: 
 /// applied and this module's own doc carries the reason for.
 fn Stated_By_The_Command(command: &GateCommand) -> PolicyContribution
 {
-    use crate::policy::CoveragePolicy;
+    use crate::policy::{CoveragePolicy, EvidenceFloor};
 
     return PolicyContribution {
         suppressions: (command.suppressions != crate::SuppressionPolicy::default()).then(|| return command.suppressions.clone()),
         baseline: (command.baseline != crate::BaselinePolicy::default()).then(|| return command.baseline.clone()),
         adoption: (command.adoption != crate::AdoptionPolicy::default()).then(|| return command.adoption.clone()),
         coverage: (command.coverage != CoveragePolicy::default()).then_some(command.coverage),
+        evidence_floor: (command.evidence_floor != EvidenceFloor::default()).then_some(command.evidence_floor),
         phases: (!command.phases.is_empty()).then(|| return command.phases.clone()),
         approvals: (!command.approvals.is_empty()).then(|| return command.approvals.clone()),
         ..PolicyContribution::Silent(ConfigurationLayer::CommandLine, CALLER_BUILT_POLICY)

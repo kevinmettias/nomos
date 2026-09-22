@@ -246,6 +246,33 @@ fn Test_Compare_Gate_Runs_Should_Name_A_Disposition_Change_For_The_Same_Finding_
     assert_eq!(change.after, FindingDisposition::Suppressed);
 }
 
+/// A finding a raised evidence floor moved is a disposition change, never a removal.
+///
+/// This is what `FindingDisposition::BelowEvidenceFloor` is for and the whole reason the sixth
+/// bucket needed a variant of its own: `Population_Of` walks the variant list, so a bucket with
+/// no variant would be missing from one side of a comparison, which reads as the finding having
+/// been fixed. `OD-GATE-034` calls that the false causal story, and it would be at its worst
+/// here -- a repository raising its floor would be told its tree got cleaner.
+#[test]
+fn Test_Compare_Gate_Runs_Should_Name_A_Raised_Evidence_Floor_As_A_Change_Rather_Than_A_Removal()
+{
+    let moved = Moved_Finding();
+
+    let baseline = Result_With(BASELINE_RUN, Bucketed_Findings(&moved, FindingDisposition::Blocking));
+    let candidate = Result_With(CANDIDATE_RUN, Bucketed_Findings(&moved, FindingDisposition::BelowEvidenceFloor));
+
+    let compared = Comparison_Of(&baseline, &candidate);
+
+    assert!(compared.removed.is_empty(), "a finding the floor took must not read as removed: {:?}", compared.removed);
+    assert!(compared.added.is_empty(), "{:?}", compared.added);
+    assert_eq!(compared.changed.len(), 1, "{:?}", compared.changed);
+
+    let change = compared.changed.first().expect("asserted len 1 above");
+
+    assert_eq!(change.before, FindingDisposition::Blocking);
+    assert_eq!(change.after, FindingDisposition::BelowEvidenceFloor);
+}
+
 /// The one finding the disposition-change test moves between two buckets.
 fn Moved_Finding() -> Finding
 {
@@ -277,6 +304,7 @@ pub(super) fn Bucketed_Findings(finding: &Finding, bucket: FindingDisposition) -
         FindingDisposition::Suppressed => findings.suppressed_findings.push(finding.clone()),
         FindingDisposition::Baselined => findings.baselined_findings.push(finding.clone()),
         FindingDisposition::BaselineExceeded => findings.baseline_exceeded_findings.push(finding.clone()),
+        FindingDisposition::BelowEvidenceFloor => findings.below_evidence_floor_findings.push(finding.clone()),
     }
 
     return findings;
@@ -370,6 +398,7 @@ fn Empty_Findings() -> GateFindings
         suppressed_findings: Vec::new(),
         baselined_findings: Vec::new(),
         baseline_exceeded_findings: Vec::new(),
+        below_evidence_floor_findings: Vec::new(),
         baseline_populations: Vec::new(),
         suppression_reasons: Default::default(),
     };

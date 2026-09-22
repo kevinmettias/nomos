@@ -210,3 +210,31 @@ fn Test_Render_Run_Should_Report_Violations_When_A_Finding_Blocks()
     assert!(rendered.contains(&finding.Describe()), "{rendered}");
     assert!(rendered.contains("1 finding(s), 1 of which can fail a build"), "{rendered}");
 }
+
+/// A finding this gate's evidence floor kept from blocking is counted on the summary line and
+/// is not counted as failing the build.
+///
+/// `OD-GATE-034`: a bucket the report does not count is a hidden one, and a floor that made
+/// findings disappear from the report would be a way to hide them rather than a statement
+/// about what may block. Both halves are asserted, because a line naming the bucket while
+/// still counting it among what can fail a build would report the run as failing, and a run
+/// that dropped it entirely would report a clean tree.
+#[test]
+fn Test_Render_Run_Should_Count_A_Finding_Below_The_Evidence_Floor_Apart_From_What_Blocks()
+{
+    let finding = Example_Finding(GateCategory::Blocking);
+    let whole = GateFindings { below_evidence_floor_findings: vec![finding.clone()], ..Empty_Findings() };
+    let result = Judged_Run(vec![finding.clone()], whole, GateRunOutcome::Passed);
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+
+    let code = Render_Run(&result, &mut stdout, &mut stderr);
+
+    let rendered = String::from_utf8_lossy(&stdout).into_owned();
+    assert_eq!(code, ExitCode::Ok, "{rendered}");
+    assert!(rendered.contains(&finding.Describe()), "the finding itself must still be printed: {rendered}");
+    assert!(
+        rendered.contains("1 finding(s), 0 of which can fail a build, 1 below the evidence floor"),
+        "the bucket must be counted, and counted apart from what blocks: {rendered}"
+    );
+}

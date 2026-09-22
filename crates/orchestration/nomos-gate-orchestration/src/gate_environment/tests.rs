@@ -137,10 +137,19 @@ fn Unjudgeable_Finding() -> nomos_contracts::Finding
 }
 
 /// A policy set naming nothing, as every test here that is not about a policy reads.
+///
+/// The evidence floor is [`crate::EvidenceFloor::Unset`] along with the rest: a floor is a
+/// policy too, and these tests are about what a reduction does when none is declared.
 fn No_Dispositions<'a>(adoption: &'a crate::AdoptionPolicy, suppressions: &'a crate::SuppressionPolicy, baseline: &'a crate::BaselinePolicy)
     -> DispositionPolicies<'a>
 {
-    return DispositionPolicies { adoption, suppressions, baseline, now: nomos_platform::Timestamp::From_Unix_Seconds(0) };
+    return DispositionPolicies {
+        evidence_floor: crate::EvidenceFloor::Unset,
+        adoption,
+        suppressions,
+        baseline,
+        now: nomos_platform::Timestamp::From_Unix_Seconds(0),
+    };
 }
 
 #[test]

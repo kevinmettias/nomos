@@ -27,6 +27,14 @@ pub struct GateFindings
     /// occurrences inside an exceeded scope are the adopted ones, because nothing a run can see
     /// answers that. These block.
     pub baseline_exceeded_findings: Vec<Finding>,
+    /// Findings the gate's declared evidence floor kept from blocking, their evidence being
+    /// weaker than the class it requires.
+    ///
+    /// `OD-GATE-034`'s own bucket, projected rather than folded into one of the five above: a
+    /// caller that could not tell a weak-evidence finding from a calibrated one would have
+    /// lost the distinction the bucket exists to keep, and a bucket a response does not carry
+    /// is one a caller reads as absent.
+    pub below_evidence_floor_findings: Vec<Finding>,
     /// One entry per baselined scope, with what it accepted and what this run found.
     pub baseline_populations: Vec<BaselinePopulationResponse>,
 }
@@ -41,6 +49,7 @@ impl GateFindings
             suppressed_findings: findings.suppressed_findings,
             baselined_findings: findings.baselined_findings,
             baseline_exceeded_findings: findings.baseline_exceeded_findings,
+            below_evidence_floor_findings: findings.below_evidence_floor_findings,
             baseline_populations: findings.baseline_populations.into_iter().map(BaselinePopulationResponse::From).collect(),
         };
     }
@@ -60,6 +69,7 @@ mod tests
             suppressed_findings: vec![],
             baselined_findings: vec![],
             baseline_exceeded_findings: vec![],
+            below_evidence_floor_findings: vec![],
             baseline_populations: vec![],
             suppression_reasons: Default::default(),
         };
@@ -71,6 +81,7 @@ mod tests
         assert!(response.suppressed_findings.is_empty());
         assert!(response.baselined_findings.is_empty());
         assert!(response.baseline_exceeded_findings.is_empty());
+        assert!(response.below_evidence_floor_findings.is_empty());
         assert!(response.baseline_populations.is_empty());
     }
 }

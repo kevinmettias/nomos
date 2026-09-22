@@ -88,6 +88,9 @@ fn Test_A_Finding_No_Disposition_Names_Should_Carry_No_Reason()
     let findings = Partitioned_Findings(
         &[Finding_Here()],
         DispositionPolicies {
+            // Unset: these tests are about which disposition a matcher recorded, and a floor
+            // that took a finding first would keep every matcher from being asked at all.
+            evidence_floor: crate::EvidenceFloor::Unset,
             adoption: &adoption,
             suppressions: &suppressions,
             baseline: &baseline,
@@ -126,6 +129,9 @@ fn Partitioned_At(seconds: i64) -> crate::GateFindings
     return Partitioned_Findings(
         &[Finding_Here()],
         DispositionPolicies {
+            // Unset: these tests are about which disposition a matcher recorded, and a floor
+            // that took a finding first would keep every matcher from being asked at all.
+            evidence_floor: crate::EvidenceFloor::Unset,
             adoption: &adoption,
             suppressions: &suppressions,
             baseline: &baseline,

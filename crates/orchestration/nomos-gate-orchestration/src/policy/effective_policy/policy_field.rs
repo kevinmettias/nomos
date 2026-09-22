@@ -17,6 +17,7 @@ pub enum PolicyField
     Baseline,
     Adoption,
     Coverage,
+    EvidenceFloor,
     Phases,
     Approvals,
 }
@@ -33,6 +34,7 @@ impl PolicyField
             Self::Baseline => "baseline",
             Self::Adoption => "adoption",
             Self::Coverage => "coverage",
+            Self::EvidenceFloor => "evidence_floor",
             Self::Phases => "phases",
             Self::Approvals => "approvals",
         };

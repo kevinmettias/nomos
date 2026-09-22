@@ -163,6 +163,7 @@ fn Population_Of(findings: &GateFindings) -> Vec<(FindingDisposition, &Finding)>
         (&findings.suppressed_findings, FindingDisposition::Suppressed),
         (&findings.baselined_findings, FindingDisposition::Baselined),
         (&findings.baseline_exceeded_findings, FindingDisposition::BaselineExceeded),
+        (&findings.below_evidence_floor_findings, FindingDisposition::BelowEvidenceFloor),
     ]
     {
         for finding in bucket

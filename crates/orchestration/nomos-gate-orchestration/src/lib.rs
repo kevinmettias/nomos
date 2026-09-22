@@ -15,11 +15,20 @@
 //! `ScopeSelector`, `RuleSelector`, `SuppressionPolicy`, `BaselinePolicy`, `AdoptionPolicy`,
 //! `CoveragePolicy` (where `WF-001`'s unsupported-analysis policy was reached), required
 //! phases, thresholds, approvals and failure disposition each have a real type here now, named
-//! where each was built. Two elements of the two lists above still have none, and saying which
-//! is the part that keeps this paragraph checkable: `ApplicabilityPolicy`, which the
-//! `ARC-ROADMAP-001` quotation names and nothing in this workspace defines, and evidence
-//! requirements, which `nomos_contracts::Finding`'s own `EvidenceClass` classifies but no gate
-//! policy reads. Verified directly, not assumed, at this crate's own start:
+//! where each was built. The two elements of the two lists above that had none are both
+//! answered by `OD-GATE-034`, and neither is answered by a type of its own name.
+//! `ApplicabilityPolicy` **is** `CoveragePolicy` under another name and is retired as a type:
+//! that record measured every reading the name admits -- what a gate does when a rule could
+//! not look, which rules bind which subjects, and deriving the state itself -- and found each
+//! already owned, so a fifth policy type would decide one of them twice. Evidence
+//! requirements, which `nomos_contracts::Finding`'s own `EvidenceClass` classifies, are
+//! [`EvidenceFloor`]: the lowest class a finding must carry before this gate lets it block,
+//! stated over the ordering `EvidenceClass` already publishes and covered by
+//! [`GateRunProvenance::policy`], with a finding below it reported in
+//! [`GateFindings::below_evidence_floor_findings`] rather than dropped or relabelled.
+//! `ARC-ROADMAP-001`'s list is left as it is and this paragraph is the route that resolves the
+//! name, for the three reasons `OD-GATE-034` gives. Verified directly, not assumed, at this
+//! crate's own start:
 //! `nomos-check-orchestration::run::Run` called four rules unconditionally over every source
 //! it was handed -- `Check_Completeness_Mirrors`, `Check_Naming_Convention`, (since
 //! `P13-DEPENDENCY-WIRE-1`) `Check_Dependency_Direction`, and (since
@@ -268,7 +277,7 @@ pub use gate_plan::{
     GateRunProvenance, GateRunResult, NoVerdict,
 };
 pub use policy::{
-    AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, CoveragePolicy, Effective_Gate_Policy, EffectivePolicy,
+    AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, CoveragePolicy, Effective_Gate_Policy, EffectivePolicy, EvidenceFloor,
     FieldProvenance, PHASE_POLICY_UNIT, PolicyContribution, PolicyField, PolicyRefusal, PolicyUnit, RejectedOverride, ResolvedField,
     RuleCalibration, RuleSelector, ScopeSelector, Suppression, SuppressionDisposition, SuppressionPolicy, SuppressionReason,
     SuppressionStatus,

@@ -72,6 +72,13 @@ pub enum GateExplainResponse
         /// Whether this finding, on its own, could fail a build a real `run` reduces it
         /// into.
         would_block: bool,
+        /// The evidence class the gate's declared floor requires, when `would_block` is
+        /// `false` because this finding's evidence is weaker than it.
+        ///
+        /// `OD-GATE-034`, carried as the class's own stable `PascalCase` label rather than as
+        /// a boolean: a caller told only that something kept the finding from blocking cannot
+        /// tell which floor to argue with.
+        floored_by: Option<String>,
         /// The calibration that kept it from blocking, when `would_block` is `false`
         /// because of one.
         calibrated_by: Option<RuleCalibrationResponse>,
@@ -103,7 +110,7 @@ impl GateExplainResponse
         return match explanation
         {
             Explanation::NotFound => Self::NotFound,
-            Explanation::Found { finding, would_block, calibrated_by, suppressed_by, baselined_by, contract } =>
+            Explanation::Found { finding, would_block, floored_by, calibrated_by, suppressed_by, baselined_by, contract } =>
             {
                 let (contract_record, contract_record_version) = match contract
                 {
@@ -114,6 +121,7 @@ impl GateExplainResponse
                 Self::Found {
                     finding,
                     would_block,
+                    floored_by: floored_by.map(|floor| return floor.Label().to_owned()),
                     calibrated_by: calibrated_by.map(RuleCalibrationResponse::From),
                     suppressed_by: Box::new(suppressed_by.map(SuppressionResponse::From)),
                     baselined_by: baselined_by.map(BaselineDebtResponse::From),

@@ -11,7 +11,9 @@ use nomos_contracts::{Finding, RuleId, SubjectId};
 use nomos_platform::Timestamp;
 use std::collections::BTreeMap;
 
-use crate::policy::{AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, RuleCalibration, Suppression, SuppressionPolicy};
+use crate::policy::{
+    AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, EvidenceFloor, RuleCalibration, Suppression, SuppressionPolicy,
+};
 use crate::{
     BaselinePopulation, CoveragePolicy, Disposition_Of_Findings, GateFindings, GateRunOutcome, NoVerdict, RuleSelector, ScopeSelector,
     SuppressionReason,
@@ -70,11 +72,13 @@ pub(super) struct Reduction
 /// not own and must not consume -- `check_outcome` still has to end up in
 /// [`crate::GateRunResult`] afterward. `rules` narrows which findings count before any list is
 /// computed; a finding whose rule is not selected can be neither blocking, calibrated,
-/// suppressed nor baselined, but it still exists in `check_outcome` untouched. `policies.adoption`
-/// splits what remains first -- a coarser, rule-wide override rather than a per-finding one --
+/// suppressed nor baselined, but it still exists in `check_outcome` untouched.
+/// `policies.evidence_floor` splits what remains first -- a fact about the finding's own
+/// evidence rather than a disposition anybody wrote about it -- then `policies.adoption`
+/// splits what cleared the floor, a coarser, rule-wide override rather than a per-finding one,
 /// then `policies.suppressions` splits what calibration did not match, then `policies.baseline`
-/// splits what neither matched: a finding matched by more than one reports as calibrated,
-/// not counted twice. `coverage` is consulted last, over `rules`' own selection rather than
+/// splits what neither matched: a finding matched by more than one reports under the earliest
+/// of the four, not counted twice. `coverage` is consulted last, over `rules`' own selection rather than
 /// any of the four lists it splits into -- calibration, suppression and baseline each answer
 /// "does this blocking finding still block," a question about one finding at a time, while
 /// `coverage` answers "did this run reach a judgment about everything it selected," a
@@ -119,6 +123,7 @@ fn Unjudged() -> Reduction
             suppressed_findings: Vec::new(),
             baselined_findings: Vec::new(),
             baseline_exceeded_findings: Vec::new(),
+            below_evidence_floor_findings: Vec::new(),
             baseline_populations: Vec::new(),
             suppression_reasons: BTreeMap::new(),
         },
@@ -195,14 +200,24 @@ fn Unmatched_Of<Entry: DeclaredEntry>(selected: &[Finding], entries: &[Entry], n
     return unmatched;
 }
 
-/// `selected`, split into the calibrated, suppressed, baselined and still-blocking findings
-/// `policies` implies -- [`Reduced_Findings`]'s own middle section, named so that function
-/// reads as one decision per line.
+/// `selected`, split into the below-floor, calibrated, suppressed, baselined and
+/// still-blocking findings `policies` implies -- [`Reduced_Findings`]'s own middle section,
+/// named so that function reads as one decision per line.
+///
+/// `policies.evidence_floor` is read first, beside `Finding::Can_Fail_A_Build`'s own two
+/// conditions rather than inside it -- `OD-GATE-034`: a `Finding` does not know which gate is
+/// reading it, so the contract type keeps deciding what *can* fail a build and the gate keeps
+/// deciding what does. Calibration, suppression and baseline therefore never see a finding the
+/// floor already took, which is what keeps a raised floor from reading as a waiver somebody
+/// wrote. Under [`EvidenceFloor::Unset`] the floor admits every class and this partition is the
+/// identity it was before the field existed.
 pub(super) fn Partitioned_Findings(selected: &[Finding], policies: DispositionPolicies<'_>) -> GateFindings
 {
     let blockable: Vec<Finding> = selected.iter().filter(|finding| return finding.Can_Fail_A_Build()).cloned().collect();
+    let (admitted, below_evidence_floor_findings): (Vec<Finding>, Vec<Finding>) =
+        blockable.into_iter().partition(|finding| return policies.evidence_floor.Admits(finding.evidence));
     let (calibrated_findings, uncalibrated): (Vec<Finding>, Vec<Finding>) =
-        blockable.into_iter().partition(|finding| return policies.adoption.Calibrating(finding).is_some());
+        admitted.into_iter().partition(|finding| return policies.adoption.Calibrating(finding).is_some());
     let (suppressed_findings, remaining): (Vec<Finding>, Vec<Finding>) =
         uncalibrated.into_iter().partition(|finding| return policies.suppressions.Suppressing(finding, policies.now).is_some());
     let (matched, blocking_findings): (Vec<Finding>, Vec<Finding>) =
@@ -211,13 +226,14 @@ pub(super) fn Partitioned_Findings(selected: &[Finding], policies: DispositionPo
     let suppression_reasons = Recorded_Reasons(selected, policies);
 
     return GateFindings {
+        suppression_reasons,
         blocking_findings,
         calibrated_findings,
         suppressed_findings,
         baselined_findings,
         baseline_exceeded_findings,
+        below_evidence_floor_findings,
         baseline_populations,
-        suppression_reasons,
     };
 }
 
@@ -355,12 +371,14 @@ fn Recorded_Reasons(selected: &[Finding], policies: DispositionPolicies<'_>) -> 
     return reasons;
 }
 
-/// The three per-finding overrides [`Reduced_Findings`] checks, grouped into one value so
-/// [`Reduced_Findings`] stays within this crate's own parameter-count limit -- `adoption`
-/// checked first (a coarser, rule-wide override), then `suppressions`, then `baseline`.
+/// What [`Reduced_Findings`] checks each still-blockable finding against, grouped into one
+/// value so [`Reduced_Findings`] stays within this crate's own parameter-count limit --
+/// `evidence_floor` first (a fact about the finding, not a disposition anybody wrote), then
+/// `adoption` (a coarser, rule-wide override), then `suppressions`, then `baseline`.
 #[derive(Clone, Copy)]
 pub(super) struct DispositionPolicies<'a>
 {
+    pub(super) evidence_floor: EvidenceFloor,
     pub(super) adoption: &'a AdoptionPolicy,
     pub(super) suppressions: &'a SuppressionPolicy,
     pub(super) baseline: &'a BaselinePolicy,
@@ -417,5 +435,177 @@ impl DeclaredEntry for RuleCalibration
     fn Is_Applicable_To(&self, finding: &Finding) -> bool
     {
         return RuleCalibration::Is_Applicable_To(self, finding);
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    //! `OD-GATE-034`'s evidence floor, asserted against [`Partitioned_Findings`] directly.
+    //!
+    //! Beside the code rather than in `super::tests`: the findings a real run over a scratch
+    //! tree produces are all at `EvidenceClass::Derived` or above -- the record measured that
+    //! the population below `Derived` is zero in this workspace today -- so the case the floor
+    //! exists for cannot be produced by walking a tree, and the record names a hand-built
+    //! finding as its own falsifier for exactly that reason.
+
+    use super::{DispositionPolicies, Partitioned_Findings};
+    use crate::policy::{AdoptionPolicy, BaselinePolicy, EvidenceFloor, RuleCalibration, SuppressionPolicy};
+    use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
+    use nomos_platform::Timestamp;
+
+    /// The rule every finding below belongs to.
+    const RULE: &str = "nesting-depth";
+
+    /// The subject seed every finding below belongs to.
+    const SUBJECT_SEED: u8 = 7;
+
+    /// The moment these partitions are judged against. Nothing here declares an expiry, so
+    /// the value decides nothing and is fixed rather than read from a clock.
+    const AT_THE_EPOCH: i64 = 0;
+
+    /// Every evidence class, weakest first.
+    ///
+    /// Spelled out because `EvidenceClass` publishes no list of its own, and kept honest by
+    /// `crate::policy::evidence_floor`'s own ordering test rather than trusted here.
+    const EVERY_CLASS: [EvidenceClass; 8] = [
+        EvidenceClass::AgentJudged,
+        EvidenceClass::HumanAsserted,
+        EvidenceClass::Predicted,
+        EvidenceClass::Approximate,
+        EvidenceClass::Derived,
+        EvidenceClass::Observed,
+        EvidenceClass::Verified,
+        EvidenceClass::Authoritative,
+    ];
+
+    /// `OD-GATE-034`'s own falsifier, written as a test rather than as prose.
+    ///
+    /// A finding at `Blocking`, `Supported` and `AgentJudged` -- one `Finding::Can_Fail_A_Build`
+    /// says can fail a build -- under a gate declaring a floor of `Derived`. It must be out of
+    /// `blocking_findings` and it must still be there to read, in a bucket of its own.
+    ///
+    /// Both halves, because either alone is satisfiable by something wrong. A floor that
+    /// dropped the finding would pass the first assertion, and a floor that did nothing at all
+    /// would pass the second.
+    #[test]
+    fn Test_A_Finding_Below_The_Floor_Should_Not_Block_And_Should_Not_Disappear()
+    {
+        let weak = Finding_With(EvidenceClass::AgentJudged);
+
+        let partitioned = Partitioned_Findings(&[weak.clone()], Under(EvidenceFloor::AtLeast(EvidenceClass::Derived)));
+
+        assert!(partitioned.blocking_findings.is_empty(), "a finding under the floor must not block: {:?}", partitioned.blocking_findings);
+        assert_eq!(partitioned.below_evidence_floor_findings, vec![weak], "and it must still be reported, in a bucket of its own");
+    }
+
+    /// The floor is not a way to relabel a finding as somebody's disposition.
+    ///
+    /// `OD-GATE-034`: a calibration, a suppression and a baseline entry each say a person
+    /// authored something about this finding, and the floor says nobody did. A reader who
+    /// found it filed as calibrated would go looking for a calibration nobody wrote -- so this
+    /// asserts the other four buckets are empty, not merely that the right one is not.
+    #[test]
+    fn Test_A_Below_Floor_Finding_Should_Not_Be_Filed_As_Anybody_Else_Disposition()
+    {
+        let weak = Finding_With(EvidenceClass::Predicted);
+        let adoption =
+            AdoptionPolicy { calibrated: vec![RuleCalibration { rule: RuleId::New(RULE), rationale: "adopting incrementally".to_owned() }] };
+        let policies = DispositionPolicies { adoption: &adoption, ..Under(EvidenceFloor::AtLeast(EvidenceClass::Derived)) };
+
+        let partitioned = Partitioned_Findings(&[weak], policies);
+
+        assert_eq!(partitioned.below_evidence_floor_findings.len(), 1, "the floor took it");
+        assert!(partitioned.calibrated_findings.is_empty(), "and a calibration that also matched must not claim it");
+        assert!(partitioned.suppressed_findings.is_empty());
+        assert!(partitioned.baselined_findings.is_empty());
+        assert!(partitioned.baseline_exceeded_findings.is_empty());
+    }
+
+    /// A finding whose evidence is exactly the floor clears it.
+    ///
+    /// The comparison `OD-GATE-034` states is "at least the floor", so the boundary belongs on
+    /// the blocking side; a strict comparison would silently raise every declared floor by one
+    /// class.
+    #[test]
+    fn Test_A_Finding_At_The_Floor_Should_Still_Block()
+    {
+        let exactly = Finding_With(EvidenceClass::Derived);
+
+        let partitioned = Partitioned_Findings(&[exactly.clone()], Under(EvidenceFloor::AtLeast(EvidenceClass::Derived)));
+
+        assert_eq!(partitioned.blocking_findings, vec![exactly]);
+        assert!(partitioned.below_evidence_floor_findings.is_empty());
+    }
+
+    /// `Unset` migrates nobody: every class still blocks, the weakest included.
+    ///
+    /// The whole vocabulary rather than one class, because a floor that read `Unset` as some
+    /// particular class would agree with this for every class at or above it.
+    #[test]
+    fn Test_An_Unset_Floor_Should_Leave_Every_Class_Blocking()
+    {
+        for class in EVERY_CLASS
+        {
+            let partitioned = Partitioned_Findings(&[Finding_With(class)], Under(EvidenceFloor::Unset));
+
+            assert_eq!(partitioned.blocking_findings.len(), 1, "{} stopped blocking under no floor at all", class.Label());
+            assert!(partitioned.below_evidence_floor_findings.is_empty(), "{}", class.Label());
+        }
+    }
+
+    /// An advisory finding is not reported as floored.
+    ///
+    /// `Finding::gate` is the rule's own wiring truth and the floor does not rewrite it: a
+    /// finding that could never have blocked was not kept from blocking by the floor, and
+    /// filing it here would attribute to policy what the rule already decided.
+    #[test]
+    fn Test_An_Advisory_Finding_Should_Not_Be_Reported_As_Floored()
+    {
+        let advisory = Finding { gate: GateCategory::Advisory, ..Finding_With(EvidenceClass::AgentJudged) };
+
+        let partitioned = Partitioned_Findings(&[advisory], Under(EvidenceFloor::AtLeast(EvidenceClass::Authoritative)));
+
+        assert!(partitioned.below_evidence_floor_findings.is_empty(), "{:?}", partitioned.below_evidence_floor_findings);
+        assert!(partitioned.blocking_findings.is_empty());
+    }
+
+    /// The policies a partition is judged under when `floor` is the only thing stated.
+    ///
+    /// The three matchers are borrowed from process-wide empties rather than from locals,
+    /// because [`DispositionPolicies`] borrows them and every test here states none: one empty
+    /// set of each serves every call and outlives all of them.
+    fn Under(floor: EvidenceFloor) -> DispositionPolicies<'static>
+    {
+        static EMPTY_ADOPTION: std::sync::OnceLock<AdoptionPolicy> = std::sync::OnceLock::new();
+        static EMPTY_SUPPRESSIONS: std::sync::OnceLock<SuppressionPolicy> = std::sync::OnceLock::new();
+        static EMPTY_BASELINE: std::sync::OnceLock<BaselinePolicy> = std::sync::OnceLock::new();
+
+        return DispositionPolicies {
+            evidence_floor: floor,
+            adoption: EMPTY_ADOPTION.get_or_init(AdoptionPolicy::default),
+            suppressions: EMPTY_SUPPRESSIONS.get_or_init(SuppressionPolicy::default),
+            baseline: EMPTY_BASELINE.get_or_init(BaselinePolicy::default),
+            now: Timestamp::From_Unix_Seconds(AT_THE_EPOCH),
+        };
+    }
+
+    /// One blocking, fully-supported finding carrying `evidence`.
+    ///
+    /// Everything but the evidence class is held fixed, so a partition that moved it moved it
+    /// for the one reason these tests are about.
+    fn Finding_With(evidence: EvidenceClass) -> Finding
+    {
+        return Finding {
+            address: None,
+            rule: RuleId::New(RULE),
+            subject: SubjectId::From_Digest(Digest128::From_Bytes([SUBJECT_SEED; Digest128::BYTE_LENGTH])),
+            subject_name: "Example".to_owned(),
+            applicability: Applicability::Supported,
+            evidence,
+            gate: GateCategory::Blocking,
+            summary: "example".to_owned(),
+            locations: vec!["a.rs".to_owned()],
+        };
     }
 }

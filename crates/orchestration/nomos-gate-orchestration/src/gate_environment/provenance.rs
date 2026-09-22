@@ -12,7 +12,7 @@ use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 
 use crate::policy::{BaselineAllowance, BaselineDebt, GatePolicyFile, RuleCalibration, Suppression};
-use crate::{CoveragePolicy, GateCommand, GatePhase, PhaseApproval, PhaseThreshold, SuppressionDisposition};
+use crate::{CoveragePolicy, EvidenceFloor, GateCommand, GatePhase, PhaseApproval, PhaseThreshold, SuppressionDisposition};
 
 /// Every file this run judged, by path and content.
 ///
@@ -61,6 +61,7 @@ pub(super) fn Policy_Digest(policy: &GatePolicyFile) -> Digest128
     parts.extend(Baseline_Parts(&policy.baseline.debt));
     parts.extend(Calibration_Parts(&policy.adoption.calibrated));
     parts.push(Coverage_Tag(policy.coverage).as_bytes().to_vec());
+    parts.extend(Evidence_Floor_Parts(policy.evidence_floor));
     parts.extend(Phase_Parts(&policy.phases));
     parts.extend(Approval_Parts(&policy.approvals));
 
@@ -251,6 +252,28 @@ const fn Coverage_Tag(coverage: CoveragePolicy) -> &'static str
     };
 }
 
+/// The evidence floor this policy declares, as bytes.
+///
+/// Hashed because it decides the judgment: a finding below the floor is out of
+/// `blocking_findings` and therefore out of every phase's count, so two policies differing
+/// only here judge differently. `OD-GATE-031`'s own failure class is a comparison attributing
+/// that difference to the repository, and a floor the digest did not cover would be exactly
+/// that false causal story.
+///
+/// Two parts and a written-out tag rather than a number, for the reason [`Allowance_Parts`]
+/// gives: `Unset` must not be able to collide with any stated class, and adding a variant must
+/// fail to compile here rather than hash to whatever the last arm happened to be. The class
+/// travels as `EvidenceClass::Label`, the stable `PascalCase` name that type publishes for
+/// exactly this, so renaming a Rust identifier cannot silently change a recorded identity.
+fn Evidence_Floor_Parts(floor: EvidenceFloor) -> Vec<Vec<u8>>
+{
+    return match floor
+    {
+        EvidenceFloor::Unset => vec![b"evidence-floor-unset".to_vec()],
+        EvidenceFloor::AtLeast(class) => vec![b"evidence-floor-at-least".to_vec(), class.Label().as_bytes().to_vec()],
+    };
+}
+
 /// Which rules were allowed to count and which paths were in scope, sorted.
 ///
 /// Sorted rather than in authoring order, unlike [`Policy_Digest`], because
@@ -370,6 +393,42 @@ mod tests
             identities.len(),
             declarations.len(),
             "two of these five phase declarations recorded one policy identity, so a comparison across them would blame the repository for their difference"
+        );
+    }
+
+    /// Nine evidence floors, nine policy identities -- `P109-F`'s question asked of the family
+    /// `nomos-gate.json` gained last.
+    ///
+    /// A floor decides which findings reach `blocking_findings`, and therefore what every
+    /// phase counts, so any two of these judge differently and `OD-GATE-031` requires a
+    /// comparison across them to be refused rather than to blame the repository for their
+    /// difference.
+    ///
+    /// Counted as a set rather than pair by pair, for the reason the phase test above gives: a
+    /// digest covering the field's presence but not the class it names would still differ on
+    /// the pairs that vary in presence, so one named pair could pass while the omission stayed.
+    #[test]
+    fn Test_Every_Declared_Evidence_Floor_Should_Move_The_Policy_Digest()
+    {
+        let declarations = [
+            ("floor-unset", r#"{ "evidence_floor": "unset" }"#),
+            ("floor-agent-judged", r#"{ "evidence_floor": "agent-judged" }"#),
+            ("floor-human-asserted", r#"{ "evidence_floor": "human-asserted" }"#),
+            ("floor-predicted", r#"{ "evidence_floor": "predicted" }"#),
+            ("floor-approximate", r#"{ "evidence_floor": "approximate" }"#),
+            ("floor-derived", r#"{ "evidence_floor": "derived" }"#),
+            ("floor-observed", r#"{ "evidence_floor": "observed" }"#),
+            ("floor-verified", r#"{ "evidence_floor": "verified" }"#),
+            ("floor-authoritative", r#"{ "evidence_floor": "authoritative" }"#),
+        ];
+
+        let identities: BTreeSet<Digest128> =
+            declarations.iter().map(|(name, policy)| return Declared_Policy_Digest(RootName(name), PolicyText(policy))).collect();
+
+        assert_eq!(
+            identities.len(),
+            declarations.len(),
+            "two of these nine evidence floors recorded one policy identity, so a comparison across them would blame the repository for their difference"
         );
     }
 

@@ -67,6 +67,7 @@ pub(crate) fn Empty_Gate_Findings() -> GateFindings
         suppressed_findings: Vec::new(),
         baselined_findings: Vec::new(),
         baseline_exceeded_findings: Vec::new(),
+        below_evidence_floor_findings: Vec::new(),
         baseline_populations: Vec::new(),
     };
 }

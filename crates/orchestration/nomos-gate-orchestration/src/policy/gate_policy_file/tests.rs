@@ -10,8 +10,8 @@
 
 use super::{GatePolicyError, GatePolicyFile, Resolve_Gate_Policy, GATE_POLICY_FILE};
 use crate::policy::Resolved_Gate_Policy;
-use crate::{BaselineAllowance, CoveragePolicy, GateCommand, GatePhase, PhaseApproval, PhaseThreshold, SuppressionDisposition};
-use nomos_contracts::RuleId;
+use crate::{BaselineAllowance, CoveragePolicy, EvidenceFloor, GateCommand, GatePhase, PhaseApproval, PhaseThreshold, SuppressionDisposition};
+use nomos_contracts::{EvidenceClass, RuleId};
 use nomos_model::Subject_Of_Path;
 use nomos_platform_std::StdFileSystem;
 use std::path::PathBuf;
@@ -37,7 +37,7 @@ const DECLARED_EXPIRY_SECONDS: i64 = 1000;
 /// assertion that the number in the file reaches the type a run judges with.
 const DECLARED_PHASE_TOLERANCE: usize = 2;
 
-/// A policy file with every one of the six policy families non-default.
+/// A policy file with every one of the seven policy families non-default.
 const EVERY_POLICY_FAMILY: &str = r#"{
     "suppressions": [
         {
@@ -55,6 +55,7 @@ const EVERY_POLICY_FAMILY: &str = r#"{
         { "rule": "deprecation", "rationale": "adopting incrementally" }
     ],
     "coverage": "require-completeness",
+    "evidence_floor": "derived",
     "phases": [
         { "name": "naming", "rules": [ "naming-convention" ], "threshold": { "max-blocking-findings": 2 } },
         { "name": "dependencies", "rules": [ "dependency-direction" ] }
@@ -236,6 +237,7 @@ fn Test_A_Declared_File_Should_Resolve_Every_Policy_Family()
     assert_eq!(resolved.baseline.debt.len(), 1);
     assert_eq!(resolved.adoption.calibrated.len(), 1);
     assert_eq!(resolved.coverage, CoveragePolicy::RequireCompleteness);
+    assert_eq!(resolved.evidence_floor, EvidenceFloor::AtLeast(EvidenceClass::Derived));
     assert_eq!(resolved.suppressions.suppressions.first().expect("one entry").disposition, SuppressionDisposition::FalsePositiveDisposition);
     assert_eq!(resolved.approvals.len(), 1);
     assert_eq!(
@@ -398,6 +400,92 @@ fn Test_A_Policy_A_Caller_Built_Should_Win_Over_The_File()
     let silent_file = GatePolicyFile::default();
 
     assert_eq!(Resolved_Values(&silent_file, &stated).coverage, CoveragePolicy::RequireCompleteness);
+}
+
+/// `OD-GATE-034`'s floor, declared and resolved through the one reader.
+///
+/// The spellings are `EvidenceClass`'s own variant names in `kebab-case`, so the file states a
+/// class rather than a number, and the resolution is asserted for the class the file wrote
+/// rather than for "something non-default": a reader mapping every spelling to one class would
+/// pass an assertion that only checked the field had moved.
+#[test]
+fn Test_A_Declared_Evidence_Floor_Should_Resolve_To_The_Class_It_Names()
+{
+    let declared = [
+        ("agent-judged", EvidenceClass::AgentJudged),
+        ("human-asserted", EvidenceClass::HumanAsserted),
+        ("predicted", EvidenceClass::Predicted),
+        ("approximate", EvidenceClass::Approximate),
+        ("derived", EvidenceClass::Derived),
+        ("observed", EvidenceClass::Observed),
+        ("verified", EvidenceClass::Verified),
+        ("authoritative", EvidenceClass::Authoritative),
+    ];
+
+    for (spelling, class) in declared
+    {
+        let root = Root_With_Policy(ScratchName("evidence-floor"), &format!(r#"{{ "evidence_floor": "{spelling}" }}"#));
+
+        let resolved = Resolve_Gate_Policy(&root, &StdFileSystem)
+            .expect("Root_With_Policy wrote this file, so it is present and readable")
+            .expect("a floor naming one of the eight classes is a shape this reader accepts");
+
+        assert_eq!(resolved.evidence_floor, EvidenceFloor::AtLeast(class), "the file wrote `{spelling}`");
+    }
+}
+
+/// A file that names no floor leaves a run in the state every caller was in before the key
+/// existed -- `Unset` migrates nobody.
+#[test]
+fn Test_A_File_Naming_No_Evidence_Floor_Should_Resolve_To_No_Floor()
+{
+    let root = Root_With_Policy(ScratchName("no-evidence-floor"), r#"{ "coverage": "require-completeness" }"#);
+
+    let resolved = Resolve_Gate_Policy(&root, &StdFileSystem)
+        .expect("Root_With_Policy wrote this file, so it is present and readable")
+        .expect("one stated key of a shape this reader accepts");
+
+    assert_eq!(resolved.evidence_floor, EvidenceFloor::Unset, "an absent key is no floor, not the weakest one");
+}
+
+/// A class this vocabulary does not have is refused rather than read as no floor.
+///
+/// The direction matters: a misspelling read as `Unset` would leave a repository that meant to
+/// require mechanical evidence blocking on everything, and told nothing about it.
+#[test]
+fn Test_An_Evidence_Floor_Spelling_No_Class_Has_Should_Be_Refused()
+{
+    let root = Root_With_Policy(ScratchName("unknown-evidence-class"), r#"{ "evidence_floor": "mechanical" }"#);
+
+    assert!(matches!(Resolve_Gate_Policy(&root, &StdFileSystem), Err(GatePolicyError::Malformed(_))));
+}
+
+/// The floor keeps the precedence every other field has: a caller's own wins, a caller's
+/// silence takes the file's.
+///
+/// `OD-GATE-034` requires `Resolved_Over`'s precedence to be unchanged by the new field, and
+/// this is the same pair of assertions
+/// `Test_A_Policy_A_Caller_Built_Should_Win_Over_The_File` makes about `coverage`, asked of the
+/// floor.
+#[test]
+fn Test_A_Caller_Built_Evidence_Floor_Should_Win_Over_The_File()
+{
+    let from_file = GatePolicyFile { evidence_floor: EvidenceFloor::AtLeast(EvidenceClass::Derived), ..GatePolicyFile::default() };
+    let silent = GateCommand { evidence_floor: EvidenceFloor::Unset, ..GateCommand::default() };
+
+    assert_eq!(
+        Resolved_Values(&from_file, &silent).evidence_floor,
+        EvidenceFloor::AtLeast(EvidenceClass::Derived),
+        "a caller stating no floor takes the file's"
+    );
+
+    let stated = GateCommand { evidence_floor: EvidenceFloor::AtLeast(EvidenceClass::Verified), ..GateCommand::default() };
+
+    assert_eq!(
+        Resolved_Values(&from_file, &stated).evidence_floor,
+        EvidenceFloor::AtLeast(EvidenceClass::Verified),
+        "and a caller that built one wins over the file"
+    );
 }
 
 /// The values `from_file` and `command` resolve to, as `crate::Run_Gate` resolves them.

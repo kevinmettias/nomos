@@ -31,7 +31,10 @@
 //! out. That is what declining to invent an argument surface ahead of a second real case
 //! (`OD-PACKAGE-006`, `OD-RULES-005`, `OD-RULES-006`) is for.
 
-use crate::{AdoptionPolicy, BaselinePolicy, CoveragePolicy, GatePhase, PhaseApproval, RuleSelector, ScopeSelector, SuppressionPolicy};
+use crate::{
+    AdoptionPolicy, BaselinePolicy, CoveragePolicy, EvidenceFloor, GatePhase, PhaseApproval, RuleSelector, ScopeSelector,
+    SuppressionPolicy,
+};
 use nomos_model_package::ModelExecutionProfile;
 use std::path::PathBuf;
 
@@ -81,6 +84,14 @@ pub struct GateCommand
     /// `suppressions`, `baseline` and `adoption`. Left at [`CoveragePolicy::Unset`],
     /// [`crate::Run_Gate`] fills it in from the `nomos-gate.json` under `root`.
     pub coverage: CoveragePolicy,
+    /// The lowest class of evidence a finding must carry before this run lets it block --
+    /// `OD-GATE-034`'s floor, read in the partition beside `Finding::Can_Fail_A_Build`'s own
+    /// two conditions rather than inside it. Read by [`crate::Run_Gate`] and
+    /// [`crate::Explain_Gate`] only, the same asymmetry as `scope`, `rules`, `suppressions`,
+    /// `baseline`, `adoption` and `coverage`. Left at [`EvidenceFloor::Unset`],
+    /// [`crate::Run_Gate`] fills it in from the `nomos-gate.json` under `root`, and a run
+    /// under neither source judges exactly as it did before this field existed.
+    pub evidence_floor: EvidenceFloor,
     /// `MODEL-ROUTE-001`'s declared reference: what an agent-assisted operation running
     /// under this command should use, when one is selected. Read by nothing yet -- now the
     /// only field of this struct in that state, since `suppressions`, `baseline`, `adoption`

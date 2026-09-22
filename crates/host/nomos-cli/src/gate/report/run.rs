@@ -69,7 +69,12 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
 }
 
 /// One line per finding, then the counts a reader checks the report against: how many were
-/// found, how many of those can fail a build, and how each of the other three were reduced.
+/// found, how many of those can fail a build, and how each of the other four were reduced.
+///
+/// The below-floor count is on the line rather than under it: `OD-GATE-034` puts a finding
+/// this gate's declared evidence floor would not let block into a bucket of its own, and a
+/// bucket the report does not count is a hidden one -- which would make the floor a way to
+/// make findings disappear instead of a way to say what may block.
 fn Report_Judged_Findings(findings: &[Finding], result: &GateRunResult, stdout: &mut impl Write)
 {
     let _ = writeln!(stdout, "run: {}", result.run);
@@ -81,11 +86,12 @@ fn Report_Judged_Findings(findings: &[Finding], result: &GateRunResult, stdout: 
 
     let _ = writeln!(
         stdout,
-        "\n{} finding(s), {} of which can fail a build, {} calibrated, {} suppressed, {} baselined",
+        "\n{} finding(s), {} of which can fail a build, {} below the evidence floor, {} calibrated, {} suppressed, {} baselined",
         findings.len(),
         // Both, because both failed the build. Counted together and explained apart: the
         // report below says which of them is a tolerance that ran out of room.
         result.findings.blocking_findings.len().saturating_add(result.findings.baseline_exceeded_findings.len()),
+        result.findings.below_evidence_floor_findings.len(),
         result.findings.calibrated_findings.len(),
         result.findings.suppressed_findings.len(),
         result.findings.baselined_findings.len()

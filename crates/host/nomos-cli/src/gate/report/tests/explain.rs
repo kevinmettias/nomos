@@ -3,7 +3,7 @@
 use super::super::{ExitCode, Render_Explain};
 use super::Example_Finding;
 use nomos_check_orchestration::{CheckOutcome, Claim, Examined, SupportingFactTrail};
-use nomos_contracts::{Finding, GateCategory};
+use nomos_contracts::{EvidenceClass, Finding, GateCategory};
 use nomos_gate_orchestration::{Explanation, GateExplainResult};
 use std::path::PathBuf;
 
@@ -29,6 +29,7 @@ fn Explained_As_Found(finding: &Finding) -> Explanation
     return Explanation::Found {
         finding: Box::new(finding.clone()),
         would_block: true,
+        floored_by: None,
         calibrated_by: None,
         suppressed_by: None,
         baselined_by: None,
@@ -90,4 +91,39 @@ fn Test_Render_Explain_Should_Report_Would_Block_For_A_Found_Blocking_Finding()
     assert_eq!(code, ExitCode::Violations, "{rendered}");
     assert!(rendered.contains("would block: true"), "{rendered}");
     assert!(rendered.contains(&finding.Describe()), "{rendered}");
+}
+
+/// A finding this gate's evidence floor kept from blocking cites the floor, under a label of
+/// its own.
+///
+/// `OD-GATE-034`: a reader told "calibrated" about a finding whose evidence was simply too
+/// weak under this gate would go looking for a calibration nobody wrote, so the floor's line
+/// names the class it requires and borrows none of the other three labels.
+#[test]
+fn Test_Render_Explain_Should_Cite_The_Evidence_Floor_That_Moved_A_Finding()
+{
+    let finding = Example_Finding(GateCategory::Blocking);
+    let floored = Explanation::Found {
+        finding: Box::new(finding.clone()),
+        would_block: false,
+        floored_by: Some(EvidenceClass::Derived),
+        calibrated_by: None,
+        suppressed_by: None,
+        baselined_by: None,
+        contract: None,
+    };
+    let result = Judged_Explain(vec![finding], floored);
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+
+    let code = Render_Explain(&result, &mut stdout, &mut stderr);
+
+    let rendered = String::from_utf8_lossy(&stdout).into_owned();
+    assert_eq!(code, ExitCode::Ok, "a finding under the floor does not fail the build: {rendered}");
+    assert!(rendered.contains("would block: false"), "{rendered}");
+    assert!(
+        rendered.contains("below the evidence floor: this gate requires at least Derived"),
+        "the floor that moved it must be citable: {rendered}"
+    );
+    assert!(!rendered.contains("calibrated by"), "and must not borrow another label: {rendered}");
 }

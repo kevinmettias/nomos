@@ -21,4 +21,17 @@ pub enum FindingDisposition
     /// transition a comparison should show rather than absorb. Distinct from
     /// [`Self::Baselined`] because it did not hold.
     BaselineExceeded,
+    /// This gate's declared evidence floor is above the class this finding's evidence
+    /// carries, so it could not block.
+    ///
+    /// Distinct from [`Self::Blocking`] because it did not block, and distinct from
+    /// [`Self::Calibrated`], [`Self::Suppressed`] and [`Self::Baselined`] because no person
+    /// authored a disposition about it: `OD-GATE-034` keeps "this rule is advisory" and "this
+    /// finding's evidence was too weak under this gate" apart, and a comparison that folded
+    /// them together would report a raised floor as somebody having written a waiver.
+    ///
+    /// A finding arriving here when a floor is raised is a real transition, which is the whole
+    /// reason it has a variant: without one it would be missing from one side of a comparison,
+    /// which reads as *removed*.
+    BelowEvidenceFloor,
 }
