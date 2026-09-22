@@ -90815,13 +90815,17 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P125-SUPPORTING-FACT-TRAIL",
         "P125-REQUIREMENT-RULE-LINES"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-75-walk",
+        "acquired_at": 1790060678,
+        "lease_expires_at": 1790064278
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -93698,14 +93702,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p128-commitrace",
-        "acquired_at": 1790059191,
-        "lease_expires_at": 1790066391
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -93718,7 +93718,30 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "a66-07278fb4b33b\\scratchpad\\commitrace\\finish\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-lang-go v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\cf28f48c-0f02-40a7-ba66-07278fb4b33b\\scratchpad\\commitrace\\finish\\crates\\languages\\nomos-lang-go)\n   Compiling nomos-lang-rust-scan v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\cf28f48c-0f02-40a7-ba66-07278fb4b33b\\scratchpad\\commitrace\\finish\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-rules v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\cf28f48c-0f02-40a7-ba66-07278fb4b33b\\scratchpad\\commitrace\\finish\\crates\\rules\\nomos-rules)\n   Compiling nomos-ledger v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\cf28f48c-0f02-40a7-ba66-07278fb4b33b\\scratchpad\\commitrace\\finish\\crates\\substrate\\nomos-ledger)\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n   Compiling nomos-check-orchestration v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\cf28f48c-0f02-40a7-ba66-07278fb4b33b\\scratchpad\\commitrace\\finish\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\cf28f48c-0f02-40a7-ba66-07278fb4b33b\\scratchpad\\commitrace\\finish\\tests\\contract)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 34.51s\n     Running tests\\agent_harness.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/commitrace/finish-target\\debug\\deps\\agent_harness-c19e09bf18a0ebdb.exe)\n",
+        "verified_at": 1790060732,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -93739,7 +93762,9 @@
           "crates/rules/nomos-rules/src/checks/rust_text.rs",
           "crates/rules/nomos-rules/src/checks.rs",
           "crates/rules/nomos-rules/src/lib.rs",
-          "tests/contract/surface/nomos-rules.txt"
+          "tests/contract/surface/nomos-rules.txt",
+          "crates/rules/nomos-rules/src/checks/rust_text",
+          "crates/rules/nomos-rules/docs/api/lib.md"
         ],
         "patterns": []
       },
@@ -93767,7 +93792,16 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p129-declared",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/rust_text",
+            "crates/rules/nomos-rules/docs/api/lib.md"
+          ],
+          "widened_at": 1790060744
+        }
+      ]
     },
     {
       "id": "P128-A-GUARD-SHIPPED-CARRYING-THE-CLASS-OF-DEFECT-IT-WAS-WRITTEN-TO-STOP-2",

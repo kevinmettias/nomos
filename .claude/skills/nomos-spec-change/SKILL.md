@@ -107,7 +107,8 @@ your own, which must be on disk or the projection is stale the instant you commi
 Construct that tree rather than waiting for one:
 
 ```
-git worktree add --detach <scratch>/render HEAD
+PARENT=$(git rev-parse HEAD)              # captured once, and reused by the commit below
+git worktree add --detach <scratch>/render "$PARENT"
 cp docs/records/<your-record>.md          <scratch>/render/docs/records/
 cp crates/spec/nomos-spec-store/records/<ID>.record <scratch>/render/crates/spec/nomos-spec-store/records/
 cd <scratch>/render
@@ -151,6 +152,12 @@ git hash-object <scratch>/render/spec/domain-specification.md    # the bytes you
 
 Equal for all four halves, or somebody wrote over you: re-copy from the worktree and stage
 again. Never repair the file by hand.
+
+That closes the window that was open **before** it ran, and says nothing about the one it opens
+itself. A peer can write over the file, or re-stage it, in the second after the comparison
+passes — measured on 2026-09-21, when a peer re-staged HEAD's copy of
+`spec/domain-specification.md` over a worker's, in the shared index and the working tree both,
+in exactly that gap.
 
 **Between the `git add` and the commit**, use a **bare** `git commit -F <message>`. A trailing
 pathspec re-reads the working tree at commit time and ignores the index, so it commits the
@@ -196,6 +203,87 @@ Two things follow that surprise people:
   The worktree is byte-for-byte what CI checks out; the shared tree would answer about a record
   set nobody will publish. Do not wait for the shared tree instead — a session that lapses
   leaves its unlanded records stranded there, and no one else can clear them.
+
+### That form is for a quiet tree, and one reading says whether you have one
+
+Stage, assert, bare commit is the form for a tree nobody else is publishing into. Take this
+reading when you are ready to publish, before you stage anything:
+
+```
+git rev-parse HEAD                 # against the $PARENT you rendered from
+git diff --cached --name-only      # anything here was staged by somebody else
+```
+
+- **HEAD has moved.** Your render answers about a record set that is no longer the one your
+  commit would publish, so re-render: `git -C <scratch>/render checkout --detach <new parent>`,
+  rebuild, render both profiles. No commit form fixes this one.
+- **The staged list is not empty.** A peer has the shared index open, a bare commit would carry
+  their files, and unstaging writes an index they are in the middle of using. Take the next
+  subsection.
+- **Neither.** Quiet, and that form is the whole procedure: its windows are the seconds
+  between your own commands, and nobody is writing the index inside them. Measured here at
+  `f76ca17e` — twenty-two modified files in the tree and an empty staged list, so a dirty
+  working tree is not contention; an index somebody else has staged into is.
+
+Making every commit pay for the next subsection would be its own defect: four more commands, a
+second index to get wrong, and on a quiet tree it protects against nothing.
+
+### Under contention, build the commit without touching the index or the tree
+
+Both remaining windows are the shared index and the shared working tree, so use neither. Read
+the captured parent into a private index, set each rendered blob into it by hash, write the
+commit object, and move the branch with a compare-and-swap:
+
+```
+export GIT_INDEX_FILE=<scratch>/commit-index      # a private index; the shared one is never opened
+rm -f "$GIT_INDEX_FILE"
+git read-tree "$PARENT"                           # the revision you rendered from, captured once
+for half in diagrams/relations.mmd diagrams/relations.mmd.nomos-projection.json \
+            spec/domain-specification.md spec/domain-specification.md.nomos-projection.json; do
+  git update-index --add --cacheinfo "100644,$(git hash-object -w "<scratch>/render/$half"),$half"
+done
+git update-index --add --cacheinfo "100644,$(git hash-object -w work/ledger.json),work/ledger.json"
+TREE=$(git write-tree)
+unset GIT_INDEX_FILE
+NEW=$(git commit-tree "$TREE" -p "$PARENT" -F <message file>)
+git update-ref refs/heads/dev "$NEW" "$PARENT"    # exit 0, or the branch did not move at all
+```
+
+`--add` because a half the parent's tree does not carry is refused without it, and 100644
+because that is the mode all four halves have. The ledger blob is taken from the working tree in
+the same breath: `OD-LEDGER-018` settles that a ledger commit publishes the whole board and that
+what it carries is not yours to prevent. Measured under a peer who had landed a commit, staged
+their own file, and overwritten the specification in the shared tree — the commit carried the
+four halves and the ledger, carried nothing of theirs, kept their record amendment, and left
+their staging where it was.
+
+Three things about it, each measured in a throwaway repository before it was written here:
+
+**The parent is captured once and used twice**, for the `read-tree` and for the expected value
+of the swap. Reading HEAD a second time for the parent is the silent failure, and the swap does
+not catch it: a tree built at one revision with a parent taken at a later one publishes a revert
+of everything between, at exit 0, because the expected value *is* current. Measured — a peer's
+record amendment disappeared from a commit whose own diff showed one deletion and no conflict.
+That is what `6adbd1d7` repaired.
+
+**A rejected swap means re-render, not retry.** It is loud: `cannot lock ref ... is at <x> but
+expected <y>`, exit 128, branch unmoved. It means HEAD moved while you were publishing, which is
+the first bullet above — capture the parent again, re-point the worktree, render again. Pointing
+the same blobs at the new value is the double read with extra steps.
+
+**The shared index and working tree are exactly as you left them**, which is the point and looks
+alarming afterwards: `git status --short` still shows the peer's staged file and shows your own
+committed paths as modified, because the index still holds the pre-commit entries. Do not repair
+that by re-staging. Check what you published instead, which reads neither:
+
+```
+git rev-parse HEAD:spec/domain-specification.md                  # the blob the commit holds
+git hash-object <scratch>/render/spec/domain-specification.md    # the bytes you rendered
+```
+
+Then copy the four halves into the working tree, so the next session stages your bytes rather
+than the ones you superseded. That copy races like every other, and the commit does not depend
+on it.
 
 Every edit to a record body changes the store, so **render after the last word is written**, not
 before. A record you touch again is a diagram you render again.
