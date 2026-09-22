@@ -22,17 +22,30 @@
 //! now reaches every family without one line here changing -- which is the shape it was
 //! built in.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 
 use nomos_contracts::{Finding, RuleId};
 use nomos_rules::{RequiredFact, RuleDescriptor, SubjectKind, DESCRIPTORS};
 
-/// A rule's most recent real findings, and the check that tells a later call whether they
-/// are still good.
+use crate::{FactRead, SupportingFacts};
+
+/// A rule's most recent real findings, the reduced trail of what that same invocation read,
+/// and the check that tells a later call whether both are still good.
+///
+/// The trail is held here rather than only for the duration of a call because
+/// `OD-HOST-016`'s decision 4 measured what happens otherwise: the one caller that reuses
+/// findings across calls -- an editor session, through
+/// [`Run_Reassessing`](super::Run_Reassessing) -- is the caller whose findings were mostly
+/// produced by rules that performed no read in the call it is looking at, so a trail that
+/// lived only for the call would be empty for nearly every finding it actually shows.
+/// Reusing the trail with the findings it belongs to is what stops the mechanism from being
+/// worst exactly where it is wanted most.
 #[derive(Default)]
 pub struct RuleReassessmentCache
 {
     findings_by_rule: BTreeMap<RuleId, Vec<Finding>>,
+    reads_by_rule: BTreeMap<RuleId, Vec<FactRead>>,
+    raised_by_materialization: BTreeSet<RuleId>,
     recorded: u32,
 }
 
@@ -41,7 +54,67 @@ impl RuleReassessmentCache
     #[must_use]
     pub fn New() -> Self
     {
-        return Self { findings_by_rule: BTreeMap::new(), recorded: 0 };
+        return Self {
+            findings_by_rule: BTreeMap::new(),
+            reads_by_rule: BTreeMap::new(),
+            raised_by_materialization: BTreeSet::new(),
+            recorded: 0,
+        };
+    }
+
+    /// Which facts backed `rule`'s judgment in the last call that reached one, in the four
+    /// shapes `OD-HOST-016` decided.
+    ///
+    /// [`SupportingFacts::NotFactBacked`] is answered first and from the descriptor alone,
+    /// so a rule that structurally cannot read a fact never reports as a rule that read
+    /// none. A rule this cache has a trail for answers [`SupportingFacts::Read`] even when
+    /// that trail is empty or is all misses, because "asked and got nothing" is a judgment
+    /// made with evidence about an absence and is not the same claim as having asked
+    /// nothing.
+    #[must_use]
+    pub fn Supporting_Facts(&self, rule: &str) -> SupportingFacts
+    {
+        if Judges_Source_Text(rule)
+        {
+            return SupportingFacts::NotFactBacked;
+        }
+
+        if let Some(reads) = self.reads_by_rule.get(&RuleId::New(rule))
+        {
+            return SupportingFacts::Read(reads.clone());
+        }
+
+        if self.raised_by_materialization.contains(&RuleId::New(rule))
+        {
+            return SupportingFacts::RaisedByMaterialization;
+        }
+
+        return SupportingFacts::Unrecorded;
+    }
+
+    /// The reduced trail this cache holds for `rule`, whatever its descriptor says.
+    ///
+    /// Crate-private and test-only beside [`Self::Supporting_Facts`] because the two answer
+    /// different questions: that one answers what may honestly be said about a finding, and
+    /// this one answers what was observed, which is what a check of the declaration against
+    /// reality has to read and what nothing else has any use for. Publishing both would offer
+    /// a caller two answers to one question and would let the raw observation be mistaken for
+    /// the honest claim.
+    #[cfg(test)]
+    pub(crate) fn Observed_Reads(&self, rule: &str) -> Option<&[FactRead]>
+    {
+        return self.reads_by_rule.get(&RuleId::New(rule)).map(Vec::as_slice);
+    }
+
+    /// Records which rules raised a finding while a capability was materialized in this
+    /// call, so a finding of theirs is answered as [`SupportingFacts::RaisedByMaterialization`]
+    /// rather than as an unrecorded one.
+    ///
+    /// Replaced rather than accumulated: materialization runs on every call, so this is a
+    /// fact about the call in hand and not something a later call inherits.
+    pub(crate) fn Note_Materialization_Raised(&mut self, findings: &[Finding])
+    {
+        self.raised_by_materialization = findings.iter().map(|finding| return finding.rule.clone()).collect();
     }
 
     /// `rule`'s findings from its last real invocation under this cache, reusable this call
@@ -66,11 +139,12 @@ impl RuleReassessmentCache
         return Some(prior);
     }
 
-    /// Records what a real invocation of `rule` found, for [`Self::Reusable`] to read back
-    /// on a later call.
-    pub(crate) fn Record(&mut self, rule: &str, findings: Vec<Finding>)
+    /// Records what a real invocation of `rule` found and what that same invocation read,
+    /// for [`Self::Reusable`] and [`Self::Supporting_Facts`] to read back on a later call.
+    pub(crate) fn Record(&mut self, rule: &str, findings: Vec<Finding>, reads: Vec<FactRead>)
     {
         self.findings_by_rule.insert(RuleId::New(rule), findings);
+        self.reads_by_rule.insert(RuleId::New(rule), reads);
         self.recorded = self.recorded.saturating_add(1);
     }
 
@@ -138,6 +212,22 @@ fn Judges_A_Source(descriptor: &RuleDescriptor) -> bool
     return matches!(descriptor.subject, SubjectKind::SourceText | SubjectKind::SourceFacts);
 }
 
+/// Whether `rule`'s descriptor declares it judges source text alone, so no fact was ever
+/// involved in what it says.
+///
+/// Derived from [`DESCRIPTORS`] rather than from the rule having read nothing, which is
+/// `OD-HOST-016`'s own distinction: a rule that read nothing because its family was absent
+/// and a rule that reads nothing because it judges text are the same silence and different
+/// claims. A rule no descriptor describes is not one of them, and answers `false` so it
+/// falls through to whatever this cache actually observed.
+fn Judges_Source_Text(rule: &str) -> bool
+{
+    return DESCRIPTORS
+        .iter()
+        .find(|descriptor| return descriptor.id == rule)
+        .is_some_and(|descriptor| return matches!(descriptor.subject, SubjectKind::SourceText));
+}
+
 /// `descriptor.requires`, or `[RequiredFact::SyntaxItems]` when it names none.
 ///
 /// A rule with no required family still judges its subject's own text directly -- every
@@ -195,7 +285,7 @@ mod tests
         for descriptor in DESCRIPTORS.iter().filter(|descriptor| return Judges_A_Source(descriptor))
         {
             let mut cache = RuleReassessmentCache::New();
-            cache.Record(descriptor.id, Vec::new());
+            cache.Record(descriptor.id, Vec::new(), Vec::new());
 
             assert!(
                 cache.Reusable(descriptor.id, &changed).is_none(),
@@ -234,7 +324,7 @@ mod tests
             .expect("this workspace composes at least one whole-workspace rule");
 
         let mut cache = RuleReassessmentCache::New();
-        cache.Record(workspace.id, Vec::new());
+        cache.Record(workspace.id, Vec::new(), Vec::new());
 
         assert!(
             cache.Reusable(workspace.id, &changed).is_some(),
@@ -253,7 +343,7 @@ mod tests
         let declared = descriptor.requires.first().expect("these declare at least one family");
 
         let mut cache = RuleReassessmentCache::New();
-        cache.Record(descriptor.id, Vec::new());
+        cache.Record(descriptor.id, Vec::new(), Vec::new());
 
         assert!(cache.Reusable(descriptor.id, &[*declared]).is_none(), "{}", descriptor.id);
     }

@@ -277,7 +277,7 @@ fn Judged_Over<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(sour
 
     let judge_environment = JudgeEnvironment { store: state.store, registry: environment.registry, context: environment.context };
     let reassessment = Reassessment { selected: environment.selected, cache: state.reassessment, changed: &state.changed };
-    return judging::Judged_Findings(sources, capabilities, judge_environment, reassessment);
+    return judging::Judged_Findings(sources, capabilities, &judge_environment, reassessment);
 }
 
 /// What [`capabilities::Materialize_Capabilities`] produced: one [`MaterializedCapability`]

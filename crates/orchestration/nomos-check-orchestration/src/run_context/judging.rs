@@ -19,6 +19,8 @@ use nomos_rules::{
     DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, LINT_DIAGNOSTICS, REVIEW_FINDING, WRITE_AUTHORITY,
 };
 
+use crate::examined::{FactRead, Reduced};
+
 use super::{CapabilityMaterialization, Is_Rule_Selected, JudgeEnvironment, Reassessment};
 
 /// Every finding [`Rule_Findings`] produces over `sources` and `capabilities`' own source
@@ -28,12 +30,14 @@ use super::{CapabilityMaterialization, Is_Rule_Selected, JudgeEnvironment, Reass
 /// than judged) -- unconditionally, since each such finding already carries its own rule
 /// and a caller that did not select it would never have triggered the materialization
 /// that raises it.
-pub(super) fn Judged_Findings(sources: &[SourceFile], capabilities: CapabilityMaterialization, env: JudgeEnvironment<'_>, reassessment: Reassessment<'_>) -> Vec<Finding>
+pub(super) fn Judged_Findings(sources: &[SourceFile], capabilities: CapabilityMaterialization, env: &JudgeEnvironment<'_>, reassessment: Reassessment<'_>) -> Vec<Finding>
 {
-    let mut reader = Reader::On(env.store, env.registry, env.context);
+    let Reassessment { selected, cache, changed } = reassessment;
 
-    let mut findings = Rule_Findings(sources, &capabilities, &mut reader, reassessment);
-    findings.extend(Capability_Findings(capabilities));
+    let mut findings = Rule_Findings(sources, &capabilities, env, Reassessment { selected, cache: &mut *cache, changed });
+    let raised = Capability_Findings(capabilities);
+    cache.Note_Materialization_Raised(&raised);
+    findings.extend(raised);
 
     return findings;
 }
@@ -72,9 +76,9 @@ pub(super) fn Judged_Findings(sources: &[SourceFile], capabilities: CapabilityMa
 /// broken.rs`, deliberately-invalid corpus content) was fixed directly rather than composed
 /// around, since it cost one line. All five are composed below with their two already-wired
 /// siblings.
-fn Rule_Findings(sources: &[SourceFile], capabilities: &CapabilityMaterialization, reader: &mut Reader<'_, '_>, reassessment: Reassessment<'_>) -> Vec<Finding>
+fn Rule_Findings(sources: &[SourceFile], capabilities: &CapabilityMaterialization, env: &JudgeEnvironment<'_>, reassessment: Reassessment<'_>) -> Vec<Finding>
 {
-    return Findings_For_Selected_Rules(Judged { sources, capabilities }, reader, reassessment);
+    return Findings_For_Selected_Rules(Judged { sources, capabilities }, env, reassessment);
 }
 
 /// Runs every `DESCRIPTORS` entry `reassessment.selected` names, in table order, and collects
@@ -83,7 +87,7 @@ fn Rule_Findings(sources: &[SourceFile], capabilities: &CapabilityMaterializatio
 /// reused instead of running its closure again. See
 /// `crate::run_context::rule_reassessment_cache`'s own module doc for which rules that is,
 /// today.
-fn Findings_For_Selected_Rules(judged: Judged<'_>, reader: &mut Reader<'_, '_>, reassessment: Reassessment<'_>) -> Vec<Finding>
+fn Findings_For_Selected_Rules(judged: Judged<'_>, env: &JudgeEnvironment<'_>, reassessment: Reassessment<'_>) -> Vec<Finding>
 {
     let Reassessment { selected, cache, changed } = reassessment;
 
@@ -101,23 +105,56 @@ fn Findings_For_Selected_Rules(judged: Judged<'_>, reader: &mut Reader<'_, '_>, 
             continue;
         }
 
-        let rule_findings = Judged_By(descriptor, &judged, reader);
-        cache.Record(descriptor.id, rule_findings.clone());
+        let Judgment { findings: rule_findings, reads } = Judged_By(descriptor, &judged, env);
+        cache.Record(descriptor.id, rule_findings.clone(), reads);
         findings.extend(rule_findings);
     }
 
     return findings;
 }
 
-/// One descriptor's own judgment: its rule's callable, over the sources that rule reads.
+/// One descriptor's own judgment: its rule's callable, over the sources that rule reads, and
+/// the reduced trail of what that call read to reach it.
 ///
 /// Named rather than inlined because the two halves are each one call and the composition
 /// is the step worth naming -- which slice a rule is judged over is this module's own
 /// decision ([`Judged_Sources`] says why), and running the rule is the table's.
-fn Judged_By(descriptor: &RuleDescriptor, judged: &Judged<'_>, reader: &mut Reader<'_, '_>) -> Vec<Finding>
+///
+/// # Why the reader is built here and not once for the run
+///
+/// It was built once for the run until `OD-HOST-016`, which measured what that cost: a
+/// `nomos_analysis::Reader` holds a store, a registry, a context and a trail, and only the
+/// trail is per-reader, so one reader shared across every rule made the trail a flat list
+/// for the whole call that no finding could be attributed to -- and the crate never called
+/// `Reader::Into_Dependencies` at all, so the whole accumulation was dropped unread while
+/// `nomos_analysis::Reader`'s own `Trail::Note` had already paid for collecting it.
+///
+/// Building one per descriptor is behaviour-preserving by construction. The same reads are
+/// made against the same store through the same registry at the same context, and resolve
+/// the same way; what changes is only which trail they land on.
+fn Judged_By(descriptor: &RuleDescriptor, judged: &Judged<'_>, env: &JudgeEnvironment<'_>) -> Judgment
 {
     let sources = Judged_Sources(descriptor.id, judged);
-    return descriptor.check.Judges(sources, reader);
+    let mut reader = Reader::On(env.store, env.registry, env.context.clone());
+
+    let findings = descriptor.check.Judges(sources, &mut reader);
+    let reads = Reduced(&reader.Into_Dependencies(), env.store, env.context.generation);
+
+    return Judgment { findings, reads };
+}
+
+/// What one rule's call produced: what it found, and the reduced trail of what it read to
+/// find it.
+///
+/// Named rather than returned as a positional pair, the same reason
+/// [`CapabilityMaterialization`]'s own halves are named one layer up: a caller reads which
+/// is which without re-deriving it from [`Judged_By`]'s body.
+struct Judgment
+{
+    /// What the rule found.
+    findings: Vec<Finding>,
+    /// The distinct provenance tuples behind the reads that call made.
+    reads: Vec<FactRead>,
 }
 
 /// The sources `rule` is judged over: a capability family's own materialized slice for the

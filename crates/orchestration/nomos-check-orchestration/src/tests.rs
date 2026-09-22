@@ -18,6 +18,7 @@
 
 mod composition;
 mod currency;
+mod fact_trail;
 mod materialization;
 mod overrides;
 mod reuse;

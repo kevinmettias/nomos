@@ -11,9 +11,14 @@
 
 mod check_outcome;
 mod claim;
+mod fact_read;
+mod supporting_facts;
 
 pub use check_outcome::CheckOutcome;
 pub use claim::{Claim, Claim_Of};
+pub use fact_read::FactRead;
+pub(crate) use fact_read::Reduced;
+pub use supporting_facts::SupportingFacts;
 
 /// How much of the world this run actually saw.
 ///

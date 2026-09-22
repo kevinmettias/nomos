@@ -55,7 +55,7 @@ mod tests;
 pub use check_command::CheckCommand;
 pub use declared_rules::Declared_Rules;
 pub use composition::{Registered, Resolved_Configuration};
-pub use examined::{Claim, Claim_Of, CheckOutcome, Examined};
+pub use examined::{Claim, Claim_Of, CheckOutcome, Examined, FactRead, SupportingFacts};
 pub use package_conformance::{Check_Package_Conformance, DeclaredPackage, PACKAGE_CONFORMANCE};
 pub use rule_resolution::{Resolve_Rules, RuleResolution};
 pub use rule_resolution_error::RuleResolutionError;

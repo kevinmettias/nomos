@@ -2,6 +2,7 @@ pub const nomos_check_orchestration::PACKAGE_CONFORMANCE: &str
 pub enum nomos_check_orchestration::CheckOutcome
 pub enum nomos_check_orchestration::Claim
 pub enum nomos_check_orchestration::RuleResolutionError
+pub enum nomos_check_orchestration::SupportingFacts
 pub enum variant nomos_check_orchestration::CheckOutcome::Contradictory(RegistryError)
 pub enum variant nomos_check_orchestration::CheckOutcome::Judged { findings: Vec<Finding>, examined: Examined, claim: Claim, }
 pub enum variant nomos_check_orchestration::CheckOutcome::NoFacts { files: usize, }
@@ -11,6 +12,10 @@ pub enum variant nomos_check_orchestration::Claim::Complete
 pub enum variant nomos_check_orchestration::Claim::Incomplete
 pub enum variant nomos_check_orchestration::RuleResolutionError::Disagreed { unimplemented: Vec<RuleId>, undeclared: Vec<RuleId>, contradicted: Vec<RuleId>, }
 pub enum variant nomos_check_orchestration::RuleResolutionError::NothingDeclared
+pub enum variant nomos_check_orchestration::SupportingFacts::NotFactBacked
+pub enum variant nomos_check_orchestration::SupportingFacts::RaisedByMaterialization
+pub enum variant nomos_check_orchestration::SupportingFacts::Read(Vec<FactRead>)
+pub enum variant nomos_check_orchestration::SupportingFacts::Unrecorded
 pub fn nomos_check_orchestration::Check_Package_Conformance(packages: &[DeclaredPackage<'_>], registry: &Registry) -> Vec<Finding>
 pub fn nomos_check_orchestration::Claim::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_check_orchestration::Claim_Of(findings: &[Finding]) -> Claim
@@ -20,6 +25,7 @@ pub fn nomos_check_orchestration::Registered() -> Result<Registry, RegistryError
 pub fn nomos_check_orchestration::Resolve_Rules(declared: &[RulePackage], registered: &[RuleId]) -> Result<RuleResolution, RuleResolutionError>
 pub fn nomos_check_orchestration::Resolved_Configuration(registry: &Registry) -> ConfigurationId
 pub fn nomos_check_orchestration::RuleReassessmentCache::New() -> Self
+pub fn nomos_check_orchestration::RuleReassessmentCache::Supporting_Facts(&self, rule: &str) -> SupportingFacts
 pub fn nomos_check_orchestration::Run<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( sources: &[SourceFile], context: RunContext<'_, Launcher, Fs, Env>, selected: &[RuleId], ) -> CheckOutcome
 pub fn nomos_check_orchestration::Run_Reassessing<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( sources: &[SourceFile], context: RunContext<'_, Launcher, Fs, Env>, selected: &[RuleId], reassessment: &mut RuleReassessmentCache, ) -> CheckOutcome
 pub impl nomos_check_orchestration::Claim implements core::fmt::Display
@@ -28,6 +34,13 @@ pub struct field nomos_check_orchestration::DeclaredPackage::manifest_path: &'a 
 pub struct field nomos_check_orchestration::DeclaredPackage::providers: &'a [ProviderRegistration]
 pub struct field nomos_check_orchestration::Examined::facts: usize
 pub struct field nomos_check_orchestration::Examined::files: usize
+pub struct field nomos_check_orchestration::FactRead::capability: CapabilityId
+pub struct field nomos_check_orchestration::FactRead::evidence: Option<EvidenceClass>
+pub struct field nomos_check_orchestration::FactRead::guarantee: Option<Guarantee>
+pub struct field nomos_check_orchestration::FactRead::outcome: ReadOutcome
+pub struct field nomos_check_orchestration::FactRead::provider: ProviderId
+pub struct field nomos_check_orchestration::FactRead::provider_version: ContractVersion
+pub struct field nomos_check_orchestration::FactRead::reads: usize
 pub struct field nomos_check_orchestration::RuleResolution::mechanical: Vec<RuleId>
 pub struct field nomos_check_orchestration::RuleResolution::model_judged: Vec<RuleId>
 pub struct field nomos_check_orchestration::RunContext::environment: &'a Env
@@ -40,6 +53,7 @@ pub struct field nomos_check_orchestration::RunContext::workspace: &'a mut Optio
 pub struct nomos_check_orchestration::CheckCommand
 pub struct nomos_check_orchestration::DeclaredPackage<'a>
 pub struct nomos_check_orchestration::Examined
+pub struct nomos_check_orchestration::FactRead
 pub struct nomos_check_orchestration::RuleReassessmentCache
 pub struct nomos_check_orchestration::RuleResolution
 pub struct nomos_check_orchestration::RunContext<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
