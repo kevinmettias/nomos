@@ -3,7 +3,7 @@ id: OD-WORKFLOW-002
 type: decision
 title: The workflow tier's second increment has not arrived since RunId's first consumer shipped
 status: accepted
-version: 4
+version: 5
 authority: canonical-normative-record
 tags:
   - workflow
@@ -135,11 +135,16 @@ Any of:
 - **`ModelBackend`/`AgentExecutor` infrastructure reaches a real executor**
   (`ARC-ROADMAP-001`'s own near-term item, distinct from this tier), giving `WF-006`'s
   "API-hosted, subscription-agent, human, and recorded-replay executors" a first real
-  instance to check a shared task/result protocol against.
+  instance to check a shared task/result protocol against. **Fired**, under the narrowing the
+  `OD-WORKFLOW-004` amendment below states; the version 5 amendment at the end of this record
+  is where that is measured.
 
 Until one of those arrives, the workflow tier stands exactly where `OD-WORKFLOW-001` left
 it: one real consumer, one real "one execution," and an engine with nothing yet to check its
-shape against.
+shape against. That sentence was true when it was written and is not the current reading: a
+real execution increment exists under the user's override, which the `OD-WORKFLOW-005`
+amendment below records, and condition 3 has since fired, which the version 5 amendment
+below records.
 
 ## Amendment (OD-WORKFLOW-003)
 
@@ -180,7 +185,39 @@ direct, session-specific instruction to this workspace's workflow tier rather th
 condition this record names. This record's own three conditions are not superseded and are
 not retired -- they remain the honest triggers for the increment *after* this one, the same
 distinction `OD-WORKFLOW-005` itself draws between a narrow, explicit override and a general
-retirement of the caution this record's survey discipline still holds.
+retirement of the caution this record's survey discipline still holds. That re-check was dated
+to its own measurement and no longer holds for condition 3, which the version 5 amendment
+below corrects; what it says about the override is unchanged.
+
+## Amendment (OD-WORKFLOW-004, version 2)
+
+**Condition 3 is fired.** Measured at `a50bf332` by
+`P123-OD-WORKFLOW-004-SAYS-THE-EXECUTOR-HAS-NO-REAL-WORKRESULT-AND-IT-HAS-HAD-ONE-SINCE-FE0FAC58`,
+which found that the narrowing the `OD-WORKFLOW-004` amendment above made -- satisfied only
+when a real executor also constructs a real `WorkResult`, not merely when one exists -- has
+been met since `fe0fac58`. `crates/agent/nomos-agent-executor-claude-code/src/response.rs`
+builds one from the schema-validated answer and from nothing else, under `OD-EXECUTOR-008`;
+`OD-EXECUTOR-011` later made it say which of its absences it carries; and it reaches a workflow
+step's outcome through `nomos_agent_orchestration::AgentDispatchOutcome::Executed`.
+`OD-WORKFLOW-004` version 2 holds that measurement in full and it is deliberately not copied
+here.
+
+**What firing does and does not license.** `ARC-ROADMAP-001`'s own reading governs and this
+record adopts it rather than writing a second one: a met condition makes an increment available
+for an item of its own, with its own territory and its own measurement, and is not a licence to
+build and not a schedule. One of the four executor kinds `WF-006` names has a real instance, so
+the protocol is instantiated and not yet demonstrated to be *shared*.
+
+**Conditions 1 and 2 are not decided here.** `OD-WORKFLOW-004` version 2 measured that both of
+the greps its own version 1 rested them on now answer differently -- `Run_Gate` has a third real
+caller, `Dispatched_Gate` in `nomos-workflow-orchestration`, and `GateCommand` carries declared
+`phases` and per-phase `approvals` -- and declined to judge either against what this record's
+conditions actually ask, which is a second *consumption pattern* for `RunId` and structure
+`WF-ORDER-*` can be checked against. Both conditions stay open, and both are worth an item that
+reserves this record.
+
+Nothing else here is changed, and `OD-ROADMAP-001`'s override is not reopened, widened, or read
+onto the workflow tier.
 
 ## Status
 
@@ -193,4 +230,9 @@ actually answering. Amended again by `OD-WORKFLOW-004` to narrow condition 3's w
 `nomos-agent-executor`'s arrival satisfied its letter without satisfying its substance.
 Amended a third time by `OD-WORKFLOW-005` to record that a real execution increment was built
 under the user's own override before any of the three conditions fired; the rest of this
-record's survey stands.
+record's survey stands. Amended a fourth time, at version 5, by `OD-WORKFLOW-004`'s own version
+2, which found condition 3 fired at `a50bf332` under the narrowing that record made to it, and
+withdrew rather than replaced what this record's earlier amendments said about conditions 1 and
+2. This record's title is version 1's question and version 1's answer, and it is left as
+written: what has arrived since is recorded in the amendments, each dated to the record that
+made it.

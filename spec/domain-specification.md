@@ -202,7 +202,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md@authored | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md | authored | 56 | 14 | sha256:0ffc8479136943b0a3335a0042a996e0a028e3811b1ebcdca9228da7bd7e458c |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
-| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 35 | 11 | sha256:bba6e6b5f62b007c956218eebf7481b6890c759f30131be10fc545c564ccf868 |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 21 | 7 | sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md | authored | 40 | 8 | sha256:54dd8e341f63882f74fca31d11cc939e8bfec1033fe8ba3e6fcbf6a156689166 |
 | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md@authored | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md | authored | 85 | 18 | sha256:2abc66bb472507d0bf4f2c040530b440a47a4fed7def8473531083f874de3df2 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
@@ -218,7 +218,6 @@ profile: domain-specification
 | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md@authored | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md | authored | 43 | 12 | sha256:679898fb3515e18e74b3d01fc12b1993228c1941b02d8250e8a1a2b4c780c683 |
 | docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md@authored | docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md | authored | 49 | 15 | sha256:62c6d8750480da8424a5689d32b601a54227446d970e4610b102910dbe001e06 |
 | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md@authored | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md | authored | 28 | 7 | sha256:63a8457f1df3d1c4ae5e22a2051333aac43426b8618a6dd792e5a7dc4aa024dd |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md@authored | docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md | authored | 59 | 16 | sha256:902a048df10030bcf6dc04bcc5efac962d78c0b199e122f7ea7e787693fecefc |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md@authored | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md | authored | 67 | 12 | sha256:f55068c0987852129b3103770502611bec876fd8c119bc01cd6616b6ecdf7bc6 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md | authored | 69 | 16 | sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a |
 | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
@@ -275,9 +274,9 @@ profile: domain-specification
 | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md@authored | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md | authored | 21 | 8 | sha256:20584da07fdc54fcdca104e7137bc67b265954ba3734fc8b2d17a9036b2806b1 |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 24 | 8 | sha256:397fcafaea1e57df681cd4fe9f235f3994dfe990cfab99487fc72a91f797ec84 |
-| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md | authored | 22 | 10 | sha256:47936683a1dbd0100ff750e1a221706c5b7051604dde5d774c375f1d0313774b |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md | authored | 27 | 11 | sha256:1d2ebb790f9c4a5daf0adc02cb500289eb018869b3fc1cb88c52550cb2ad4e00 |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md@authored | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md | authored | 15 | 6 | sha256:e067ed756ffd159cb17a6fdc76092fd0f3ff664bcc77349204ce572497711c6e |
-| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md@authored | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md | authored | 14 | 7 | sha256:5f24f0f0ce8ef0275150de96e69cd897a7273861b87ec2f80769fb30cb24155d |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md@authored | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md | authored | 30 | 8 | sha256:346ffb02070c643fc97226b6aacc1b608789274d42e91b79aed544847edef206 |
 | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md@authored | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md | authored | 31 | 8 | sha256:d82290588f438e17ce2c6be5d7768fb5c705ef9be9e02256ef9066b3760ad983 |
 
 ## Sections
@@ -1994,10 +1993,6 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#15 | authored | 2 | Why The Test Was Deleted Rather Than Widened |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#18 | authored | 2 | What This Costs |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#20 | authored | 2 | Consequences |
-| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#22 | authored | 2 | Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards |
-| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#24 | authored | 3 | What was measured |
-| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#27 | authored | 3 | What moved, and what did not |
-| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#31 | authored | 3 | What it cost, which is not what the section above says it costs |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1 | authored | 1 | A local patch override is a development convenience and never the governing form of the XVPE crossing |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#6 | authored | 2 | Decision |
@@ -2162,22 +2157,6 @@ profile: domain-specification
 | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#19 | authored | 2 | What This Does Not Do |
 | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#25 | authored | 2 | Consequences |
 | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#27 | authored | 2 | Status |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#1 | authored | 1 | The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#2 | authored | 2 | Question |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#6 | authored | 2 | What Is Not Being Claimed |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#10 | authored | 2 | The Decision |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#12 | authored | 3 | 1. A run history, so a baselined finding can be told from one reintroduced |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#17 | authored | 3 | 2. Branch, join, bounded parallelism, and a definition a run can be replayed against |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#22 | authored | 3 | 3. A scheduler that runs the waves the correction substrate already computes |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#25 | authored | 3 | 4. A process that outlives an invocation |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#30 | authored | 3 | 5. Six pieces with no deferral in the way |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#33 | authored | 3 | 6. One remaining gap is a question rather than a piece |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#36 | authored | 2 | The Two Refused On Measurement Are Decided, Not Superseded |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#38 | authored | 3 | The demand planner: the requirement is satisfied because the gap is answered, not open |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#44 | authored | 3 | Rules loaded from package files: the requirement is satisfied for the same reason |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#48 | authored | 2 | What This Does Not Do |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#56 | authored | 2 | Consequences |
-| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#58 | authored | 2 | Status |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1 | authored | 1 | A rule states what it needs and is refused an answer beneath it |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#7 | authored | 2 | The Charge Is Correct |
@@ -2676,20 +2655,22 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#15 | authored | 2 | Amendment (OD-WORKFLOW-003) |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#17 | authored | 2 | Amendment (OD-WORKFLOW-004) |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#19 | authored | 2 | Amendment (OD-WORKFLOW-005) |
-| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#21 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#21 | authored | 2 | Amendment (OD-WORKFLOW-004, version 2) |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#26 | authored | 2 | Status |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#1 | authored | 1 | WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#2 | authored | 2 | Question |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#6 | authored | 2 | What Was Measured |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#9 | authored | 2 | The Decision |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#12 | authored | 2 | What This Does Not Do |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#14 | authored | 2 | Status |
-| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#1 | authored | 1 | The first real agent executor is not yet a real instance of WF-006's task/result protocol |
-| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#2 | authored | 2 | Question |
-| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#4 | authored | 2 | What Was Measured |
-| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#7 | authored | 2 | The Finding |
-| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#9 | authored | 2 | What This Does Not Do |
-| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#11 | authored | 2 | Amendment to OD-WORKFLOW-002 |
-| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#13 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#1 | authored | 1 | The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#2 | authored | 2 | Question |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#4 | authored | 2 | What Was Measured |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#7 | authored | 2 | The Finding |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#11 | authored | 2 | What This Does Not Do |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#13 | authored | 2 | Amendment to OD-WORKFLOW-002 |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#16 | authored | 2 | Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` |
+| docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#29 | authored | 2 | Status |
 | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#1 | authored | 1 | The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger |
 | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#2 | authored | 2 | Question |
 | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#5 | authored | 2 | What Was Measured |
@@ -60666,135 +60647,6 @@ That is a real cost, accepted deliberately rather than discovered later.
   workspace-wide would mean touching 33 implementors and 559 use-sites for no behavioural
   change.
 
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#22
-
-*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards · hash: sha256:1288a87ba1e45c743dc9354eea4dcb1bc6759d9763e62c37ad0a14578691c36a*
-
-## Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#23
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards · hash: sha256:1835c16425e59a8f8c421d129e81ab2759ce541fbef96e2125cf50d1a152386b*
-
-`OD-ROADMAP-005` decision 4 authorizes this and states its own bound: this record is superseded
-only where its retirement of `AGT-006`'s no-dependency clause reaches `nomos-platform` itself.
-Everything above stands, and the reasoning that produced it was never the objection.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#24
-
-*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What was measured · hash: sha256:8a1f64f2f25048a02b74220dac0a038766c2b805c9bc809def51b3a5b69edf34*
-
-### What was measured
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#25
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What was measured · hash: sha256:ba501320a2b2e20f28431f8210913922b475f4b2491a4485272bc56db9b854a9*
-
-At `53de19a4`, and unchanged at `a50bf332`:
-`crates/platform/nomos-platform/src/clock/timestamp.rs` re-exported `xvpe_clock::Timestamp` and
-the crate's manifest named `xvpe-clock`. So the ports crate every band above depends on could
-not compile without the engine it is a port *to*. An external architecture review of `dev`
-called that a reverse boundary leak, and it is one: the seam this crate exists to be had a
-dependency running through it the wrong way, and every band above inherited it.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#26
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What was measured · hash: sha256:36c1575806839c121dc672ecd7f5c6b7d5d40ae91f830fc7a08134ec031e0faa*
-
-The consumer census over `crates/` and `tests/` is what decided the returning type's surface,
-rather than a reading of the one being replaced: 88 files name `Timestamp`;
-`Timestamp::From_Unix_Seconds` is called 153 times and `Timestamp::Plus` once as an associated
-function; the value methods are `Unix_Seconds` 19 times, `Plus` 10 and `Since` 4; no `const` or
-`static` of the type exists, nothing keys a map or a set by it, and no crate implements a trait
-for it. `nomos-platform` was the only crate in the workspace naming `xvpe-clock`, and neither
-`README.md` nor `nomos-architecture.json` mentioned it, so nothing outside that one manifest
-asserted the arrangement being undone.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#27
-
-*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:2f80fba18514b12f6ac170b7a2baa60bb09d4c91c259a71e4073ed565f78ba40*
-
-### What moved, and what did not
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#28
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:641f2f25eee921ea95c24d8c4744eaf975907665d4897e520e8c7e42bc934f46*
-
-The declaration moved, and nothing else. `nomos_platform::Timestamp` is the same path with the
-same operations, so no consumer was edited and none learned -- which is what the seam bought on
-the way down, bought again on the way back. The ledger's wire format never moved in either
-direction: it was always this workspace's own, `timestamp_serde` still holds it, and
-`Test_A_Timestamp_Should_Serialize_As_A_Bare_Number_Of_Seconds` still asserts the bytes every
-committed ledger carries.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#29
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:1ac233e92706012bbdcc0db594308a3d831d15cfa50120bfd42a5d0242c2aa80*
-
-**The crossing is untouched.** It stays adopted and stays pinned at
-`82a3c8fccf4ef7f3759f36d3f320a91d0f96341c`, declared once in `[workspace.dependencies]` and
-inherited by the eight members that name an `xvpe-` crate, which is one fewer than before.
-`nomos-platform-xvpe` is still the adapter and still the narrowest crate that must reach XVPE.
-Nothing here makes XVPE a peer again: Nomos remains an application over it, which is what this
-record decided and what `OD-ROADMAP-005` decision 4 repeats in terms.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#30
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:db7f1b00aa8b68dd113a07acc06a885869a1adcea8cb944178f863fc55ab667b*
-
-**A conversion in the adapter was considered and refused.** Naming `xvpe-clock` in
-`nomos-platform-xvpe` and converting between the two declarations would have kept them joined,
-and it was the smaller edit to `Cargo.lock` -- one insertion and one deletion rather than 112
-deletions. It buys nothing. No caller converts, and an adapter carrying a dependency and
-conversions nothing calls is exactly the claim about the future this crate's own module
-documentation refuses. The lock was going to change either way, because it records a per-member
-dependency array and a move is an edit to two of them, so the argument from lock stability did
-not survive being measured.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#31
-
-*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:d23de6eb184835e2bd39af8985f6aceccce31e3ae8149e8f892dfaf683b85843*
-
-### What it cost, which is not what the section above says it costs
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#32
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:259b59449c5ade48222bb102d00551eaf184bd459588dc44836304edbae8b2c4*
-
-**`What This Costs` is wrong, and was already wrong before this amendment.** It says this
-workspace no longer builds standalone and requires XVPE checked out beside it, because the
-dependency is a path dependency across repositories. Neither clause is true. Every `xvpe-`
-dependency is a git source pinned to a revision, so the workspace resolves XVPE from what that
-revision pins and needs no sibling directory to build. `AGENTS.md` says so in its operating
-hazards, `OD-PLATFORM-004` made the local substitution opt-in and denied it any authority, and
-`Test_The_Committed_Lock_Should_Pin_Every_Crossing_Package_To_That_Revision` is what keeps the
-committed form honest. The path-dependency arrangement that paragraph describes stopped being
-the governing one when the crossing was pinned, and the sentence was left behind.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#33
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:24e6a3ca3bfb5f587ec3eb8c80fb371456e77d5cd1d6f1dae34abfbe0633d34b*
-
-What the crossing does cost, stated the way that paragraph meant to state it: a build that has
-not fetched the pinned revision cannot compile the members that name it, and a revision bump is
-a decision taken once in the root manifest rather than a refresh. That is unchanged here.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#34
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:eed398b2c41570b674e990503fb33f55614e288e1b0cd1a61f5cb6259a699a41*
-
-What *this* change cost is one number. `Cargo.lock` lost 112 lines: the package blocks for
-`xvpe-clock` itself and for `web-time`, `js-sys`, `wasm-bindgen` with its three macro crates,
-`rustversion`, `slab` and the three `futures` crates, all of which `xvpe-clock` alone pulled
-into this workspace. Twelve `xvpe-` packages in the committed lock became eleven, and all
-eleven still carry a `git+` source at the one revision the manifests declare.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#35
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:b4aa14803d4d2379a4c4cf8edb23f6668b602126da30ce1a0886aa1cb23e03f7*
-
-Checked 2026-09-21 against the crate's manifest and module documentation, the committed lock before and after the change, `cargo tree -p nomos-platform`, and the blessed surface snapshot at `tests/contract/surface/nomos-platform.txt`.
-
 ### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1
 
 *revision: authored · kind: heading · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing · hash: sha256:288502a603678c890ddc4fd3f236c936d24acd17e2abd9a3ed385dc894e54af9*
@@ -66848,531 +66700,6 @@ no code and amends nothing by itself.
 
 Accepted. The bound is the enumeration above: eight pieces, each against a named clause of a
 named record at a stated version, with every measurement those records made left standing.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#1
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements · hash: sha256:db122fa36e5f0d43f10ba51f959fffb71bb95a2bdf8dea0682e0dff22eb8359b*
-
-# The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#2
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
-
-## Question
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#3
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Question · hash: sha256:288365a8865cf40d5b5e2200041b383cc9eff0654b9b985c04bb77722d020655*
-
-An external architecture review of `dev` at `bc0aaacf` named thirteen core gaps. A triage
-measured each against the tree on 2026-09-21: several were stale, two dissolved under
-measurement, and eleven were built or decided over that day. `OD-ROADMAP-005` separately
-superseded eight deferrals for a different set of the same review's claims and bounded the
-override it recorded.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#4
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Question · hash: sha256:c7ef5266a29df099c60dea594b3a178107ec200242b1d61293bf8cfc4b9a1c54*
-
-What is left is a list nobody has authorized. Some of it is ordinary work that no record
-stands in front of. Some of it cannot be started at all without a record moving, because each
-piece sits behind a deferral that was correct when it was written and has never been revisited.
-And two of the review's remaining claims are not deferred work at all — they were refused on
-measurement rather than on sequencing, which a directive to build does not answer.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#5
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Question · hash: sha256:1a684eda4d47583e66b237eca6987deaadd17cf6fdea6d8b4b754b5c14551035*
-
-The owner has now required the remainder addressed. What that needs from this record is the
-same thing `OD-ROADMAP-005` needed: **bounds**. Which deferral each piece supersedes, by clause
-and by version. Which pieces have nothing in their way and are listed only so the set is
-complete. Which of the review's claims are already answered rather than open. Without them,
-each implementation reads as an agent building against an accepted record that says not to, and
-a later reader reconciling the same review finds records saying wait and a tree saying
-otherwise, with nothing to say which is current.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#6
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What Is Not Being Claimed · hash: sha256:effdef3bf2c276c54bfc6d0b88a2a7d8e2efd8534cd0f12e93c5429fc30b90d0*
-
-## What Is Not Being Claimed
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#7
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What Is Not Being Claimed · hash: sha256:2625ab19606fc16bd157475cc3b4f6643ab4eb580c5cb52759e1fbb4a615c834*
-
-**None of the deferrals below was wrong on its own evidence, and this record does not say
-otherwise.** `OD-GATE-022` really did find that both cases its own compare doc names are
-same-process cases answerable with no store at all. `OD-WORKFLOW-005` really did build a
-sequential engine and really did scope it by explicit subtraction. `OD-ANALYSIS-009` really did
-find that no caller had asked `Run` to be invoked twice in one process. Those measurements are
-left standing and are cited by the items that now supersede them rather than deleted.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#8
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What Is Not Being Claimed · hash: sha256:77b0873f84df0e997f44297f1121a5dae6b457336712e4d195b58cb19f7e84bb*
-
-**So the override is about *when*, not about whether the reasoning held.** The precedent is
-`OD-ROADMAP-001`, which retired a population-of-zero caution for a named cluster on exactly
-this footing, and whose own amendment states the scope of that licence precisely: "This record
-answers whether a component may be built before anything consumes it."
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#9
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What Is Not Being Claimed · hash: sha256:675cb1a9d467be2577aff6c7d46af67efbbadec613f428f05b1d5629ba301569*
-
-**A supersession is not a re-measurement.** Every clause moved below was read in the version on
-disk at the revision this record was written against, and nothing else in those records is
-touched. Where this record states a measurement of its own it re-took it; where it reports what
-another record or commit measured, it says whose measurement it is.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#10
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
-
-## The Decision
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#11
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision · hash: sha256:43aa868c1dd8f9c4fb977b257961055c3736e80cc78a94028354608fe434b81b*
-
-**Build the pieces below. Each names the deferral it supersedes, by clause and version, and the
-item that acts on it — or states that no record stands in its way.**
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#12
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:853596bac631202be9dfab4bc33552a76de0d0c73f9b3d680d834d97449fefd4*
-
-### 1. A run history, so a baselined finding can be told from one reintroduced
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#13
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:ea53d5076381fe460bc2dcb8c5928e4737ded763677854f24a779a061c39bc2a*
-
-Supersedes `OD-GATE-022` v1 in two clauses and no others. The decision section's bound on a
-first compare increment, "it does not serialize `GateRunResult` and does not persist a run
-history", loses its second half only; and the closing clause of that record's "What this record
-does not do", "It does not build or schedule a persisted run-history store", is superseded
-outright. Everything else in `OD-GATE-022` stands: a compare caller may still re-derive both
-runs in one process, and its finding that both motivating cases its own compare doc names are
-same-process cases is untouched. `RunId` remains the key that record already named for a store
-if one were built; what changes is that one now is.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#14
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:a5a386ff9b4fb5eec27d377572b5f1e6ea54511a7c87bb032355d1e9c8da82f8*
-
-`OD-GATE-030` v2 is the second consumer that record's own text said it was adding without
-scheduling. It names three things that would make continuity provable, in order, and says that
-only the third — a history of the states between — separates persistence from reintroduction;
-it also says in as many words that `OD-GATE-022` owns that deferral and that it does not
-schedule it. This record schedules it.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#15
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:2437389e72452240c2ca9516df4a0d98af27674225291985898d20dcd7656c9b*
-
-`OD-GATE-030`'s floor does not move and is not up for reinterpretation by the item that builds
-this: a finding whose history cannot be established is reported as undetermined and never as
-persistent, no occurrence inside an exceeded population is attributed, and the counting bound
-the baseline already applies remains a bound on capacity rather than a claim about history.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#16
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:f769d07321297cb2e013905cd91a816fa9e7ccf93e8f422590b6616f50ef9f0e*
-
-The item is `P128-A-BASELINED-FINDING-CANNOT-BE-TOLD-FROM-ONE-REINTRODUCED`.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#17
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:bcd50c052c6671f778fa160469694291b5b150e07395a1ffd180133e65a22356*
-
-### 2. Branch, join, bounded parallelism, and a definition a run can be replayed against
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#18
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:5f440c082d32d0bf8822b6811c0657ea8f7eef78507d5e5e523992d795761d81*
-
-Supersedes `OD-WORKFLOW-005` v2's "What This Does Not Build" in exactly four clauses: no
-immutable published artifacts (`WF-009`); no branch/merge semantics or bounded parallelism
-(`WF-010`), whose reason was that `Run` is one ordered sequence; no independently versioned
-workflow definitions with pinned historical replay (`WF-011`); and the **cache** half of that
-section's `WF-012` clause, so that a runtime may substitute a prior result for a dispatch where
-`Cacheability` permits it.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#19
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:b73a4f4eab79c07ac3c0b24cd3a07997c7dec30d82722b67fbd41b9b949fb896*
-
-The **cancellation** half of that same clause is not superseded and stays out, for the reason
-that clause itself gives: nothing in this workspace can cut a dispatch in flight, and
-`CancellationBehavior` is the declaration that would say whether a step even permits it. The
-rest of that section is untouched — no deduplication token minted, no compensating step
-composed into another step's run, no shared dispatch trait, no `WorkResult` assembly — and so
-is everything the record's version 2 amendment already corrected about what the retry, timeout
-and compensation runtime closed at `29bc3e20`.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#20
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:13041b284da776ee812e98e2b54e228a515f596f21e26c6e662369ff250a5fab*
-
-Also supersedes `OD-WORKFLOW-002` v4's "What This Does Not Do" clause, as `OD-WORKFLOW-003`
-narrowed it — no execution engine, no `WF-009`, `WF-010` or `WF-011` — to whatever of it
-survived `OD-WORKFLOW-005` building the sequential engine. `OD-WORKFLOW-002`'s three named
-conditions are **not** retired and none is claimed to have fired: they remain the honest
-triggers for the increment after this one, which is exactly the distinction `OD-WORKFLOW-005`'s
-own amendment to that record drew between a narrow override and a general retirement.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#21
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:84b025d2e1c0635a6d1cfa74e8cd3c390a79946a89a4fd7de83feae0d16f7aae*
-
-The item is `P128-THE-WORKFLOW-ENGINE-RUNS-A-LINE-AND-CANNOT-BRANCH-JOIN-OR-REPLAY`.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#22
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 3. A scheduler that runs the waves the correction substrate already computes · hash: sha256:d1702884daf911ba9589b5f1bc47c6a0d4096375061a00696639769ea7120bf5*
-
-### 3. A scheduler that runs the waves the correction substrate already computes
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#23
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 3. A scheduler that runs the waves the correction substrate already computes · hash: sha256:d65b2d9150c31648032112d4261aa0e5e1c970945b5fae3948229af9a99420b4*
-
-Supersedes nothing, and is listed so the set is complete. `OD-ROADMAP-001`'s decision list
-already superseded `OD-CORRECTIONS-001`'s conclusion that candidate generation,
-classification and ranking, `COR-005`'s rerun-and-compare half and oscillation detection wait
-for a real trigger, and the compatibility and wave substrate was built. What is missing is a
-consumer: the computation exists and nothing runs it. No record stands in the way of giving it
-one.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#24
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 3. A scheduler that runs the waves the correction substrate already computes · hash: sha256:49af04c53b0af23102c017a1655c7cad079e4c24eec8d08d4f6e714ed6b27022*
-
-The item is `P128-NOTHING-RUNS-A-WAVE-SO-THE-CORRECTION-SUBSTRATE-HAS-NO-SCHEDULER`.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#25
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:ca365a92e2c4d95e044b1b7a0b137cfc5dfa0ac3c5193374900654ce5a4a49a3*
-
-### 4. A process that outlives an invocation
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#26
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:f54fab07c477f8dace3e2e8f7691c3bc6b589602da7a98a219ddc446492292cd*
-
-Supersedes `OD-ANALYSIS-009` v4's `Decision` clause "no daemon or long-lived-process concept is
-scheduled by this record", **and that clause only**. The two clauses standing beside it in the
-same sentence — no persistent or cross-invocation fact store, and no caller-supplied-store
-parameter — are deliberately not moved here. That record's version 4 amendment narrows what
-remains of them to the on-disk half, names the three things that half still owes, and names
-`P123-FACT-STORE-SURVIVES-THE-PROCESS-2` as the item that answers it. That item is live and
-this record does not reach into it.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#27
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:caaf7a53794617f77c9123de00132313865561dddba3b217a5223522a80f8df7*
-
-The two are not the same artifact and must not be collapsed: the store is the thing that
-survives a process, and this is the process that survives an invocation. The item depends on
-the store item rather than replacing it.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#28
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:aad488cab3d5fd7864257ff150970ef211f408b6b8bfd8103d16a8cd33a0ca9b*
-
-`OD-ANALYSIS-009`'s four revisit conditions are not retired, and `OD-HOST-002`'s rule that a
-resident cache may hold no state its canonical services could not reconstruct is the condition
-under which a resident process is admissible at all rather than a detail of how it is built.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#29
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:24eed0ddf9f1f184c3cdb3fbc9a560e0c616094a7a882bdcc51706e19c9faf7e*
-
-The item is `P128-EVERY-INVOCATION-STARTS-COLD-BECAUSE-NOTHING-OUTLIVES-A-PROCESS`.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#30
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 5. Six pieces with no deferral in the way · hash: sha256:3cdaf318d4618017b83fb0a441dc687b915eddb4a27a084cd535510c5d128f31*
-
-### 5. Six pieces with no deferral in the way
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#31
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 5. Six pieces with no deferral in the way · hash: sha256:68b7cd9c9e713ce2be0367c24bc95943f42840dad53a9537af82f700551d9404*
-
-Each is required work and each is listed only so the set is complete. None supersedes anything,
-and each is on the board with its own item, its own territory and its own predicate:
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#32
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 5. Six pieces with no deferral in the way · hash: sha256:4b78c024be682798c18d5a497addcd05fb5bca65ed66a1853ef0980ba9a8ac17*
-
-- the digest-keyed fact graph, the owning read on the store's trait surface, the unbounded
-  per-key history and the quadratic provider ranking, at
-  `P128-THE-FACT-GRAPH-IS-DIGEST-KEYED-TREES-AND-THE-RANKING-IS-QUADRATIC`;
-- a second interchange format beside SARIF, at
-  `P128-A-JUDGMENT-LEAVES-IN-ONE-FORMAT-AND-EVERY-OTHER-CONSUMER-IS-UNSERVED`;
-- a compiler-backed provider for C#, at
-  `P128-C-SHARP-IS-READ-ON-ITS-FACE-AND-NO-COMPILER-ANSWERS-FOR-IT`;
-- tool providers for Go, at
-  `P128-GO-HAS-A-PARSER-AND-A-MANIFEST-READER-AND-NO-TOOL-SPEAKS-FOR-IT`;
-- a first verb for a repository adopting this tool, at
-  `P128-A-REPOSITORY-ADOPTING-NOMOS-HAS-NOTHING-TO-RUN-FIRST`;
-- a rendering of the effective policy's provenance, at
-  `P128-THE-EFFECTIVE-POLICY-KNOWS-WHAT-DECIDED-EACH-FIELD-AND-NO-HOST-SAYS-SO`.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#33
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 6. One remaining gap is a question rather than a piece · hash: sha256:bb20340f038c8d4e49652ac1ce0275adf180950baaf2ea37e8a930ad4504b15e*
-
-### 6. One remaining gap is a question rather than a piece
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#34
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 6. One remaining gap is a question rather than a piece · hash: sha256:b2926e62fc576bef9154002b4acf693b0ccac046d971b28ac5be30f4efca58c8*
-
-Whether a rule can be authored without writing Rust is the review's largest remaining claim
-about the rule tier, and it is a decision rather than an implementation: it needs a
-measurement against the rule population that now exists, and the review itself also said not to
-invent a rule intermediate representation before real rules require one. This record does not
-answer it. `P128-OD-RULES-034-WHAT-A-RULE-AUTHORING-SURFACE-IS-AT-SEVENTY-RULES` is where it is
-answered.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#35
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 6. One remaining gap is a question rather than a piece · hash: sha256:a7ee4525462bfc19697d7c9262b985a82b1dabb360a412da7a8e617971e4143f*
-
-`nomos-platform` compiling without XVPE is also on this board and is **not** authorized here:
-`OD-ROADMAP-005` decision 4 already authorizes and bounds it, and restating it would create a
-second authority for one piece.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#36
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded · hash: sha256:856b9d51942a764e24f07282982d1349212aff6aada7c30e9ddedfc0392b141f*
-
-## The Two Refused On Measurement Are Decided, Not Superseded
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#37
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded · hash: sha256:a4184a42ec7b524850a9aa7132c3912748ca64d097e0e945f61c02e36fb0067b*
-
-Both of these were refused because somebody measured the thing and found the gap answered, not
-because a sequencing condition had not arrived. Superseding a deferral that does not exist
-would produce an item to build an artifact with nothing for it to do, and **a directive to
-build does not make an inert artifact useful.** So each is decided here, with its reason.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#38
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:1a5e4022843e7d1f16ca41a830a5fd84be32b0171d5d5678a8b583e38038485c*
-
-### The demand planner: the requirement is satisfied because the gap is answered, not open
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#39
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:79e04f27c300c46a4dc3dd3deec73e0b0f6b17291480ba9cf586de869dad684f*
-
-`OD-RULES-009`'s latest round found that a planner today "would schedule an ordering that does
-not exist, over a choice that has no alternatives, using cache state nothing consults", called
-that speculative rather than deferred infrastructure, and named three things that would change
-it. Those three were checked 2026-09-14. **They are re-checked here at `66292b7f` rather than
-quoted, because a quoted trigger is worth nothing without the check.** None has fired:
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#40
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:1099c68874028b184388ec893e811259cc0e3ef9cfb6e39a65659a0b18bd3651*
-
-- **No fact family's production depends on another family's output.** The only reads of the
-  store anywhere under `nomos-check-orchestration`'s materialization are two currency checks,
-  each asking whether the fact about to be written is the one the store is already serving under
-  that identity. No section takes another section's fact as its input, so there is still no
-  order to get wrong.
-- **No capability has two installed providers whose choice is not decided by the requirement.**
-  The composition root declares fourteen capabilities against seventeen offers. Twelve
-  capabilities have exactly one offer each. Syntax has three: the Rust parser strictly dominates
-  the Rust scanner on every axis they differ on, and the Go provider is partitioned by subject
-  through a path recognition the composition root computes before anything is digested into a
-  `SubjectId` and attaches to the requirement, which is `OD-CAPABILITY-009`'s answer rather than
-  a choice anybody schedules. Dependency has two, and the second never clears the requirement's
-  own floor, so ranking never sees two comparable offers. Two further providers have been built
-  since the last check — a C# syntax provider and a compiler-backed Rust provider — and neither
-  is offered by any composition root, an uncomposed state this workspace already declares and
-  guards rather than leaves silent.
-- **No measured cost makes skipping an undemanded family worth deciding rather than deriving.**
-  Demand is still a union over `nomos_rules::DESCRIPTORS` that reads no cache state, no provider
-  cost and no structure between families. The only measurement taken in this area since the last
-  check moved the cost the other way rather than up: `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY`
-  records, in its own commit message, that every non-syntax family now proves its fact current
-  before filing it, where the eleven non-syntax families previously wrote unconditionally.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#41
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:8e963ac694849af6704e30af4a76e670a0ecf7b0fa7aafe10705efcdeb2e8bc8*
-
-So the owner's requirement is **already satisfied for this gap**, because the gap is answered
-rather than open. What the review wanted from a planner — that materialization does only the
-work the selected rules demand, from one authority rather than a hand-written second one — is
-what `Demanded_Families` does by derivation. Building a planner beside it would add a mechanism
-with no ordering to sequence, no alternative to arbitrate and no cache state to consult, and it
-would be a second statement of the rule-to-fact relation for the first to drift against, which
-is the defect that removal was made to fix.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#42
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:dd5a47635e33d0003320594fe1a3e2b826bfbb6cfa490ed013ae93692e29a328*
-
-`OD-ROADMAP-001` does not license it. That record's own amendment says what its licence answers:
-whether a component may be built before anything **consumes** it. A planner's problem is not a
-missing consumer; it is a missing decision. Those are different populations of zero and only the
-first is covered.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#43
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:a63844f23256fd7d41f2495412f376f8c2e6d729cdbf945395cd0b384d46f026*
-
-`OD-RULES-009`'s three conditions stand exactly as that record states them, this record retires
-none of them, and none of its earlier rounds is reopened.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#44
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / Rules loaded from package files: the requirement is satisfied for the same reason · hash: sha256:c88891d13648d1da133b2e4bdf14b2543106c30737190e41b0e16ef4abb3e616*
-
-### Rules loaded from package files: the requirement is satisfied for the same reason
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#45
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / Rules loaded from package files: the requirement is satisfied for the same reason · hash: sha256:86abd104860a2d3cf914a88b442ea448956189877f1ab57a949dcdf948f68a64*
-
-`OD-RULES-022` decided that composition resolves a **declaration** against a linked
-**implementation**, that the two are different artifacts owned by different layers, and — in its
-own words — that "a manifest cannot conjure a function, and this record does not pretend
-otherwise." Measured at `66292b7f` rather than assumed: the declaration side is built and
-derives every rule package from `nomos_rules::DESCRIPTORS`; the resolution step is built and
-refuses in both directions, an unmatched mechanical declaration and an unmatched registration
-alike; and no caller anywhere in this workspace reads a rule-package manifest from disk, nor is
-there one on disk to read.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#46
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / Rules loaded from package files: the requirement is satisfied for the same reason · hash: sha256:defe81bacc6533c75965a2f3a8fab47f5214bdd605965b45b63e5c312a841470*
-
-So a rule package file would buy one of two things and neither is the thing the review wanted.
-For a rule this build links, it is a second source of declarations beside the one every side
-already derives from — precisely the duplicated authority this repository files records about.
-For a rule this build does not link, it is a declaration with no function behind it, which
-resolution refuses if it claims to be mechanical, and which contributes no finding to a
-deterministic run if it declares itself model-judged. The second is a truthful thing for a
-declaration to be, and it is inert.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#47
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / Rules loaded from package files: the requirement is satisfied for the same reason · hash: sha256:639d7c090ca349644aa599db3d3109a30fac68d89d310b9bf1f285842b3b83c2*
-
-The owner's requirement is therefore **already satisfied for this gap too**. The question that
-is genuinely open is not where a declaration is stored but whether a rule can be authored
-without writing Rust, and that is section 6's question, answered by
-`P128-OD-RULES-034-WHAT-A-RULE-AUTHORING-SURFACE-IS-AT-SEVENTY-RULES` and not here.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#48
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
-
-## What This Does Not Do
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#49
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:afd93478c5fdbb278c2272482c7a56433036bac96acb68fe735a46959541d1c3*
-
-**It builds nothing.** Every piece above is an item on `work/ledger.json` carrying its own
-territory and its own verification predicate. This record moves no code.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#50
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:2d0da22a73212e7718be34ddc170e3b84df007f6032a6215b15ad3977ee2035e*
-
-**It does not reopen `OD-ROADMAP-005`'s eight pieces**, which are decided, bounded and in
-flight, and it does not restate the one of them that is also on this board.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#51
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:b4c75b88396073d8999d93e8056bbaaf919e9432d1635b67308f86c036853334*
-
-**It does not touch `ARC-ROADMAP-001`'s deferred tier.** Atlas, architecture discovery and
-feature topology stay where that record puts them, and nothing here is evidence about any of
-them.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#52
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:bf2d8931fab1a253eb53a5b8031e6a054cd33ac68a52b83c8b52fc0350d68a01*
-
-**It does not retire a trigger in any record it names.** `OD-WORKFLOW-002`'s three conditions,
-`OD-ANALYSIS-009`'s four revisit conditions and `OD-RULES-009`'s three all stand as their
-records state them. A superseded clause is a clause this record moves past; a trigger is a
-measurement that has not fired, and the two are not the same thing.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#53
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:ccc90a6f835b0804769add0ab319eef1d75687d60ad00806008679e80ad0a27b*
-
-**It does not widen a superseded clause into its record.** Each supersession above is bounded to
-the sentence quoted, in the version stated, and a piece that turns out to need a second clause of
-the same record is a new question rather than an extension of this one.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#54
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:930a268402a1284672f0b2a6ad4427bb6b83138814fb2c8281853ac628edd2de*
-
-**It does not leave a superseded record to correct itself.** Each record named above stays false
-in one clause until an item amends it, and — measured on the board at the time of writing — none
-of the three items in sections 1, 2 and 4 reserves any path under `docs/records/` or
-`crates/spec/nomos-spec-store/records/`, so none of them can make that repair inside its own
-territory. The amendment is therefore a follow-on item that reserves the record, authored by
-whoever lands the piece. That is not a novelty: it is the shape
-`P123-OD-WORKFLOW-005-SAYS-THE-RETRY-AND-COMPENSATION-RUNTIME-IS-UNBUILT-AND-IT-LANDED` already
-took, for a record whose building item reserved no record territory and whose claimant could
-measure the staleness and not repair it.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#55
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:c180299bc56360994851222f2c1f8cbf1ce8e26f59b5dba964d1d80a6c900758*
-
-**It does not promise an order.** These pieces contend for shared files in a tree several
-sessions work at once. Which lands first is a coordination outcome, and an item blocked on a
-peer's claim waits rather than reaching in.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#56
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
-
-## Consequences
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#57
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Consequences · hash: sha256:7ec6c7fd5d1c9e556c0f4cb94589bfa1d8faa199e1f78ce34cb77a990b71ff9e*
-
-The items named above are on the board as required work, each carrying its own territory,
-predicate and `done_when`. Three of them are unblocked by this record landing. Two of the
-review's remaining claims are closed here as answered rather than scheduled, and the reason is
-recorded so a later reconciliation of the same review finds a decision rather than an omission.
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#58
-
-*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
-
-## Status
-
-### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#59
-
-*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Status · hash: sha256:4a8f83d780647bd0eb3b937ac65b5d3f3cbc6407671ccaff2ac980a70e1b93b9*
-
-Accepted. The bound is the enumeration above: four pieces against a named clause of a named
-record at a stated version, six with nothing in their way, one question routed to its own
-decision item, and two claims closed as answered rather than open — with every measurement
-those records made left standing, and the two re-measurements this record needed taken rather
-than quoted.
 
 ### docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1
 
@@ -83303,7 +82630,7 @@ Any of:
 
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#13
 
-*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Would Decide The Next Increment · hash: sha256:b437a9790d20c92b6173d203ea86c67cfe6abce64c59f19d1a5ffdc58841d749*
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Would Decide The Next Increment · hash: sha256:6c5c097526d6cc70e663da4e420014cd2e1071433960bcad44e9eb7105975958*
 
 - **A second real caller of `Run_Gate` appears**, distinct from `nomos-cli` and `nomos-api`,
   giving `RunId` a genuine second consumption pattern to check a broader identity contract
@@ -83314,15 +82641,20 @@ Any of:
 - **`ModelBackend`/`AgentExecutor` infrastructure reaches a real executor**
   (`ARC-ROADMAP-001`'s own near-term item, distinct from this tier), giving `WF-006`'s
   "API-hosted, subscription-agent, human, and recorded-replay executors" a first real
-  instance to check a shared task/result protocol against.
+  instance to check a shared task/result protocol against. **Fired**, under the narrowing the
+  `OD-WORKFLOW-004` amendment below states; the version 5 amendment at the end of this record
+  is where that is measured.
 
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#14
 
-*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Would Decide The Next Increment · hash: sha256:dd75f393b04f4a103de410e79fd3850661a0295a3fd4cad847ee0e900e07a745*
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Would Decide The Next Increment · hash: sha256:f540c1845efd4f086a5500c2b54595b3e811242865e3b1ac624f5814ae8ac95b*
 
 Until one of those arrives, the workflow tier stands exactly where `OD-WORKFLOW-001` left
 it: one real consumer, one real "one execution," and an engine with nothing yet to check its
-shape against.
+shape against. That sentence was true when it was written and is not the current reading: a
+real execution increment exists under the user's override, which the `OD-WORKFLOW-005`
+amendment below records, and condition 3 has since fired, which the version 5 amendment
+below records.
 
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#15
 
@@ -83377,7 +82709,7 @@ one exists. Conditions 1 and 2, and every other finding in this record, are unch
 
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#20
 
-*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-005) · hash: sha256:a0c415bc1a406205be05a53147e336ac64a2e68b119e8283a90c4a656934f70a*
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-005) · hash: sha256:d13ba32b3fcffe256a21bc5da81afeb9d492746ffcf3a3fda598f4ae56778253*
 
 None of the three conditions above has fired -- `OD-WORKFLOW-005` re-checked all three
 directly against the tree that shipped `nomos-agent-executor-ollama` and found condition 3
@@ -83387,17 +82719,69 @@ direct, session-specific instruction to this workspace's workflow tier rather th
 condition this record names. This record's own three conditions are not superseded and are
 not retired -- they remain the honest triggers for the increment *after* this one, the same
 distinction `OD-WORKFLOW-005` itself draws between a narrow, explicit override and a general
-retirement of the caution this record's survey discipline still holds.
+retirement of the caution this record's survey discipline still holds. That re-check was dated
+to its own measurement and no longer holds for condition 3, which the version 5 amendment
+below corrects; what it says about the override is unchanged.
 
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#21
+
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-004, version 2) · hash: sha256:479c18346ab8ad966d62b3616f8c8135a248d98661068416118c38214950f422*
+
+## Amendment (OD-WORKFLOW-004, version 2)
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#22
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-004, version 2) · hash: sha256:b2c95b91e5bfaac1059426f353338f045200b12961941b4e3fb7ca8fdc9905c7*
+
+**Condition 3 is fired.** Measured at `a50bf332` by
+`P123-OD-WORKFLOW-004-SAYS-THE-EXECUTOR-HAS-NO-REAL-WORKRESULT-AND-IT-HAS-HAD-ONE-SINCE-FE0FAC58`,
+which found that the narrowing the `OD-WORKFLOW-004` amendment above made -- satisfied only
+when a real executor also constructs a real `WorkResult`, not merely when one exists -- has
+been met since `fe0fac58`. `crates/agent/nomos-agent-executor-claude-code/src/response.rs`
+builds one from the schema-validated answer and from nothing else, under `OD-EXECUTOR-008`;
+`OD-EXECUTOR-011` later made it say which of its absences it carries; and it reaches a workflow
+step's outcome through `nomos_agent_orchestration::AgentDispatchOutcome::Executed`.
+`OD-WORKFLOW-004` version 2 holds that measurement in full and it is deliberately not copied
+here.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#23
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-004, version 2) · hash: sha256:999a47ba35ec07426ef3b086a9a3d29e90d092e692734ec95901db1e17cf516a*
+
+**What firing does and does not license.** `ARC-ROADMAP-001`'s own reading governs and this
+record adopts it rather than writing a second one: a met condition makes an increment available
+for an item of its own, with its own territory and its own measurement, and is not a licence to
+build and not a schedule. One of the four executor kinds `WF-006` names has a real instance, so
+the protocol is instantiated and not yet demonstrated to be *shared*.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#24
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-004, version 2) · hash: sha256:3635cf5913dea48290273efc6992ff436d5703a91f96d4d07e93d2aad4580086*
+
+**Conditions 1 and 2 are not decided here.** `OD-WORKFLOW-004` version 2 measured that both of
+the greps its own version 1 rested them on now answer differently -- `Run_Gate` has a third real
+caller, `Dispatched_Gate` in `nomos-workflow-orchestration`, and `GateCommand` carries declared
+`phases` and per-phase `approvals` -- and declined to judge either against what this record's
+conditions actually ask, which is a second *consumption pattern* for `RunId` and structure
+`WF-ORDER-*` can be checked against. Both conditions stay open, and both are worth an item that
+reserves this record.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#25
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment (OD-WORKFLOW-004, version 2) · hash: sha256:bdfadabe04e7f303dd04d8894f89fd8e77b544bebe457938eca82604b172f47a*
+
+Nothing else here is changed, and `OD-ROADMAP-001`'s override is not reopened, widened, or read
+onto the workflow tier.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#26
 
 *revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#22
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#27
 
-*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:9e6f2bae69b23a01f0db6a0e2d9664ba65d5b199624f8a077e1a04ca9bed45e1*
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:52bea04968345b9a52453700671ba5ab9c657c9b09a87a430762ebfcc145abd1*
 
 Accepted. Re-surveys the workflow tier against the live tree and the v14 corpus a second
 time, after `OD-WORKFLOW-001`'s first increment shipped, and finds no genuine second
@@ -83408,7 +82792,12 @@ actually answering. Amended again by `OD-WORKFLOW-004` to narrow condition 3's w
 `nomos-agent-executor`'s arrival satisfied its letter without satisfying its substance.
 Amended a third time by `OD-WORKFLOW-005` to record that a real execution increment was built
 under the user's own override before any of the three conditions fired; the rest of this
-record's survey stands.
+record's survey stands. Amended a fourth time, at version 5, by `OD-WORKFLOW-004`'s own version
+2, which found condition 3 fired at `a50bf332` under the narrowing that record made to it, and
+withdrew rather than replaced what this record's earlier amendments said about conditions 1 and
+2. This record's title is version 1's question and version 1's answer, and it is left as
+written: what has arrived since is recorded in the amendments, each dated to the record that
+made it.
 
 ### docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#1
 
@@ -83590,21 +82979,21 @@ is amended to narrow its "does not build `WorkflowStep`" clause to the engine qu
 actually answering; its survey of the execution-engine tier is otherwise unchanged and this
 record does not reopen it.
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#1
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#1
 
-*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol · hash: sha256:dca467dd01bf05f2ad7cae3415ab934fdc76b7bcd43800f6fd2f746a836667e4*
+*revision: authored · kind: heading · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one · hash: sha256:bd73754ebf534f1ea115e2aa2931d72dbf18c239f930a1dd744f999dde24e374*
 
-# The first real agent executor is not yet a real instance of WF-006's task/result protocol
+# The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#2
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#2
 
-*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+*revision: authored · kind: heading · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
 
 ## Question
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#3
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#3
 
-*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / Question · hash: sha256:763b1fd812510daf933b611a515153524175850ad83629cab55cd60633217290*
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Question · hash: sha256:763b1fd812510daf933b611a515153524175850ad83629cab55cd60633217290*
 
 `OD-WORKFLOW-002` (v2) named three conditions that would decide the workflow tier's next real
 increment. The third read: "`ModelBackend`/`AgentExecutor` infrastructure reaches a real
@@ -83617,22 +83006,24 @@ not only at the letter of its wording, had not been checked against the live tre
 record -- the same discipline `OD-WORKFLOW-002` itself insisted on rather than trusting that
 time passing answers the question.
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#4
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#4
 
-*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+*revision: authored · kind: heading · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
 
 ## What Was Measured
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#5
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#5
 
-*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / What Was Measured · hash: sha256:883e41b0ca293e1f04857f19bd7bc1ff8a2173b44d04c3fd3fa4e059a57b64c2*
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / What Was Measured · hash: sha256:bb6511b8f5570aa8216e771a395f4c8503df29f426cf9de490862ad6b214fe3c*
 
-Read directly from the live tree, not assumed from either record's own prior description of
-it:
+**Measured at version 1, and dated to the tree of that day.** Every bullet below was true
+where it was written, and three of them are no longer true. The amendment at the end of this
+record re-measures each of those three at `a50bf332` rather than rewriting the bullet here, so
+what changed can be checked against what it said.
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#6
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#6
 
-*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / What Was Measured · hash: sha256:29b67f63989dfbbe04ac566bcf31ad6b713ed8047b51f84e991852a46a7ed3e8*
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / What Was Measured · hash: sha256:29b67f63989dfbbe04ac566bcf31ad6b713ed8047b51f84e991852a46a7ed3e8*
 
 - `nomos-agent-executor`'s own module doc (`crates/agent/nomos-agent-executor/src/lib.rs`)
   states plainly: "It does not assemble a `nomos_agent_contracts::WorkResult`." `Execute`
@@ -83667,74 +83058,278 @@ it:
   `crates/orchestration/nomos-check-orchestration/src` still returns zero matches in either;
   `Gate` still has no phase concept.
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#7
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#7
 
-*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / The Finding · hash: sha256:b2ec4aa8b7784c9edabcf052da47b8624bf30212b1b531fe2256919d3346b773*
+*revision: authored · kind: heading · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / The Finding · hash: sha256:b2ec4aa8b7784c9edabcf052da47b8624bf30212b1b531fe2256919d3346b773*
 
 ## The Finding
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#8
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#8
 
-*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / The Finding · hash: sha256:cf9024ef0254542d68df0d970650a73d89f8e62076bc23758fcb041b922ed93a*
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / The Finding · hash: sha256:e7df9e45d555e312e8bc05c653853d866cc260f613cbf2c0f1030938443143f5*
 
-**Condition 3 is satisfied at the letter of `OD-WORKFLOW-002`'s wording and not at its
-substance.** A real executor exists, but it produces no real result in the `WorkResult` shape
-the protocol names, no second executor kind exists to demonstrate the protocol is actually
-*shared* rather than merely used once, and none of `WF-006`'s other three named kinds has any
-trace anywhere in this workspace. Reading the condition as fired on the strength of one
-tool-dispatching, result-less executor would license starting the `WF-009`..`012` engine on
-evidence that cannot yet answer the question that engine exists to serve. Conditions 1 and 2
-remain exactly as unfired as `OD-WORKFLOW-002` found them. **No genuine second increment for
-the workflow tier has arrived.**
+**Condition 3 is fired, at the substance of its wording and not only at its letter.**
+`crates/agent/nomos-agent-executor-claude-code/src/response.rs` builds a real
+`nomos_agent_contracts::WorkResult` out of the schema-validated answer and out of nothing
+else, and that result reaches a workflow step's outcome, so `WF-006`'s task/result protocol
+has a real instance on both of its halves rather than only on the task side. What version 1
+of this record found absent is present, and has been since `fe0fac58`; what version 1 found
+singular is still singular. Exactly one of the four executor kinds `WF-006` names --
+subscription-agent -- has a real instance, so the protocol is **instantiated and not yet
+demonstrated to be shared**, and a condition that asked for a first instance is not a
+condition that asked for a second.
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#9
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#9
 
-*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / The Finding · hash: sha256:4ef25aa0fc482eb219099d2dfbef65fdeb9dbc44cfed9c4f2eb4bdba54282e2f*
+
+**A fired condition is not a licence to build.** That is `ARC-ROADMAP-001`'s own reading of
+every condition it replaced a tier with, and this record adopts it rather than restating a
+second one: a met condition makes an increment available for an item of its own, with its own
+territory and its own measurement. What follows from this finding is only that the workflow
+tier's next increment no longer waits on condition 3.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#10
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / The Finding · hash: sha256:b88240ffc76cdfc5260ad37cf5d001aa6b5de94dc3541a1132ff6b60f7c70f07*
+
+**Conditions 1 and 2 are not carried forward.** Version 1 re-verified both and reported them
+unfired. Both of the greps it rested them on now answer differently, which the amendment
+measures; whether either condition is fired is a question this record does not answer at
+version 2, because answering it needs a measurement this amendment did not take.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#11
+
+*revision: authored · kind: heading · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
 
 ## What This Does Not Do
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#10
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#12
 
-*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / What This Does Not Do · hash: sha256:5068add186ed535464ad90f5c06466c8f2084327d0817377ae3031689fe55ae1*
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / What This Does Not Do · hash: sha256:7e20574f5bf59e037a611111818b2fcfdaa33f547b56cad4678f6f03b5e09f41*
 
-It does not build `WorkResult` construction for `nomos-agent-executor` or any CLI caller --
-`OD-CONTRACTS-003` already named that as a separate, unanswered question, and it stays
-unanswered here. It does not build `WorkflowStep`, any part of the `WF-009`..`012` engine, or
-a phase concept for `Gate`. It does not add a second executor kind, real or stubbed, to
-demonstrate sharing -- inventing one to satisfy this record's own question would repeat the
-"no invented shape ahead of a real case" mistake `OD-WORKFLOW-002` itself already declined to
-make. It does not reopen `OD-CONTRACTS-003`, `OD-EXECUTOR-001`, or `OD-WORKFLOW-001`.
+It does not build `WorkResult` construction for anything. The construction it measures was
+built by other items, under `OD-EXECUTOR-008` and `OD-EXECUTOR-011`, and what
+`OD-CONTRACTS-003` left open is still open: `claims`, `plan`, `tests` and
+`requested_verification` have no honest, general mapping from unstructured text, and this
+record does not give them one. It does not build `WorkflowStep`, any part of the
+`WF-009`..`012` engine, or a phase concept for `Gate`. It does not add a second executor
+kind, real or stubbed, to demonstrate sharing -- inventing one to satisfy this record's own
+question would repeat the "no invented shape ahead of a real case" mistake `OD-WORKFLOW-002`
+itself already declined to make. It does not decide conditions 1 or 2. It does not reopen
+`OD-CONTRACTS-003`, `OD-EXECUTOR-001`, `OD-WORKFLOW-001`, or `OD-ROADMAP-001`'s override.
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#11
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#13
 
-*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / Amendment to OD-WORKFLOW-002 · hash: sha256:1a5404ee0df3025616b1e4703f8b71d3f7beca77990c0b0df1d2b9ecfd224306*
+*revision: authored · kind: heading · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment to OD-WORKFLOW-002 · hash: sha256:1a5404ee0df3025616b1e4703f8b71d3f7beca77990c0b0df1d2b9ecfd224306*
 
 ## Amendment to OD-WORKFLOW-002
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#12
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#14
 
-*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / Amendment to OD-WORKFLOW-002 · hash: sha256:0713337a4bdecfe62ac8101f7e685a8fea404bc9aa1f66ca4ba7f9e51f6d1b4d*
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment to OD-WORKFLOW-002 · hash: sha256:0507f4f8dd8bfe961f8d59ea352c6154fa1853c1e691f144cdd0915b0e4d4a50*
 
-`OD-WORKFLOW-002`'s condition 3 is narrowed by this record to require a real executor that
-also constructs a real `WorkResult` -- not merely a real executor -- before the trigger counts
-as fired. `OD-WORKFLOW-002` is amended in place (version bumped, a relation added, an
-amendment section appended) to carry this narrower wording, the same way `OD-WORKFLOW-003`
-already amended it once for a different clause.
+**At version 1.** `OD-WORKFLOW-002`'s condition 3 is narrowed by this record to require a real
+executor that also constructs a real `WorkResult` -- not merely a real executor -- before the
+trigger counts as fired. `OD-WORKFLOW-002` is amended in place (version bumped, a relation
+added, an amendment section appended) to carry this narrower wording, the same way
+`OD-WORKFLOW-003` already amended it once for a different clause.
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#13
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#15
 
-*revision: authored · kind: heading · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment to OD-WORKFLOW-002 · hash: sha256:de253b17e8a4fbbe9272d4af048c5c28a9d46a2a57ef8059cb425f61eddf978d*
+
+**At version 2.** `OD-WORKFLOW-002` is amended again, in the same shape, to record that
+condition 3 under that narrower wording is now fired, and to withdraw the reading that no
+condition has fired. The measurement stays here and is not copied there, and that record's own
+conditions 1 and 2 are left undecided rather than judged in passing.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#16
+
+*revision: authored · kind: heading · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:d9c75e7f663b5b5c15054556482e8268eb7d0cdee471bc582404d1b0695f8e45*
+
+## Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58`
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#17
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:416f93f0d07a8df8547ff8c10120fec70d1f4323827756ea72925667a4dc7182*
+
+Corrected at version 2 by
+`P123-OD-WORKFLOW-004-SAYS-THE-EXECUTOR-HAS-NO-REAL-WORKRESULT-AND-IT-HAS-HAD-ONE-SINCE-FE0FAC58`,
+measured at `a50bf332` against the tree read directly rather than against any record's own
+description of it.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#18
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:19bb18441fe2cbe14726e3fcb12f0315525828c1fb54c2e65bc9221aca108b05*
+
+**The convention this amendment follows is `OD-ANALYSIS-007`'s**: version 1's words are quoted
+below so the correction can be checked against them rather than taken on trust, and nothing in
+version 1's `Question` or `What Was Measured` is rewritten. It departs from that record in one
+respect, deliberately, because version 1 stated its finding in its *title*: the title, the
+`#` heading and this file's own name are corrected in place, and the registration under
+`crates/spec/nomos-spec-store/records/` moved with them. A title is the one sentence a reader
+who checks nothing else still reads, so a false one cannot be left standing beside its own
+correction the way a dated measurement can.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#19
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:5ca5a87b68bd0ce4bbdc424962b6d0968f2013651674f1d72aaa07028f3c99a9*
+
+**What version 1 said.** Its title: "The first real agent executor is not yet a real instance
+of WF-006's task/result protocol". This file's own name said it more plainly still:
+`OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md`.
+Its finding: "**Condition 3 is satisfied at the letter of `OD-WORKFLOW-002`'s wording and not
+at its substance.** A real executor exists, but it produces no real result in the `WorkResult`
+shape the protocol names, no second executor kind exists to demonstrate the protocol is
+actually *shared* rather than merely used once, and none of `WF-006`'s other three named kinds
+has any trace anywhere in this workspace." And: "Conditions 1 and 2 remain exactly as unfired
+as `OD-WORKFLOW-002` found them. **No genuine second increment for the workflow tier has
+arrived.**" The measurement under it: "Grepped across the whole workspace (`crates
+--include=*.rs`) for every real `WorkResult` construction site: exactly two, both inside
+`nomos-agent-contracts`' own `#[cfg(test)]` module".
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#20
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:c1fa1b1f522caab127e3df984b0ba3a4742fe89632f2058cdf5fb8eaff883a94*
+
+**The construction site, and when it landed.** `Work_Result` in
+`crates/agent/nomos-agent-executor-claude-code/src/response.rs` returns
+`WorkResult { plan: None, claims: Vec::new(), tests: Vec::new(), requested_verification: None,
+assumptions, unresolved_questions, substantiation }`, with the two populated fields read off
+the schema-validated answer and refused rather than coerced when the answer does not carry
+them. It landed at `fe0fac58`, whose own message is "P42: the Claude Code executor returns a
+real WorkResult, not a vendor string" and whose first line of body names the decision it
+implements: `OD-EXECUTOR-008`. `git log -S WorkResult` over that one file names exactly two
+commits, `fe0fac58` and `9b3e9683`. The crate version 1 named, `nomos-agent-executor`, no
+longer exists under that name; the path above is where its successor lives.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#21
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:4c25795950c069eb3e430d6e5c8e04977065172d36792098a1c8e942bdf96601*
+
+**What refined it.** `OD-EXECUTOR-011` decided that a `WorkResult` must say which absence it
+carries, and `crates/agent/nomos-agent-executor-claude-code/src/lib.rs` now publishes
+`WORK_RESULT_SUBSTANTIATION` beside `JSON_SCHEMA`: `plan`, `claims`, `tests` and
+`requested_verification` are declared `Unsubstantiated(ProducerCannotGround)` and `assumptions`
+and `unresolved_questions` `Substantiated`. So the result version 1 could not find is not only
+real but self-describing -- an empty `assumptions` means the dispatch produced none, and the
+four empty portions say why they are empty rather than leaving a consumer to read a comment.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#22
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:b1face74a57514c91db4d44ffdd5dad8afcd76185fc63b33c180169a72f22654*
+
+**How it reaches a workflow step's outcome.** `nomos_agent_contracts::AgentExecution` carries
+it as `result`; `nomos_agent_orchestration::AgentDispatchOutcome::Executed { family, execution }`
+carries that; and `crates/orchestration/nomos-workflow-orchestration/src/workflow_outcome/step_outcome.rs`
+declares `StepOutcome::Agent(nomos_agent_orchestration::AgentDispatchOutcome)`, which is a
+workflow step's own outcome. That crate's own tests assert through the whole chain, on
+`execution.result.assumptions`, rather than on a rendered string.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#23
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:226d7d87f9e7141d93ee5c238f78ea8154f44d1b820f3ad6f1349fe3920ae8e8*
+
+**The protocol is a declared port now, and it has exactly one real implementation.**
+`nomos-agent-contracts` declares `AgentExecutor`, whose whole surface is
+`Execute(&TaskEnvelope, &Path) -> Result<AgentExecution, DispatchRefusal>`, and `ModelBackend`
+beside it -- one port per `PackageKind`, which is `OD-EXECUTOR-005`'s measurement and
+`OD-ROADMAP-005`'s wiring. `impl AgentExecutor for` has exactly one non-test occurrence in the
+workspace: `ClaudeCodeExecutor`, in
+`crates/agent/nomos-agent-executor-claude-code/src/claude_code_executor.rs`. The other three
+are fakes -- two in `nomos-agent-orchestration`'s `#[cfg(test)] mod test_support`, one in
+`nomos-workflow-orchestration`'s own tests. Version 1's count of production `WorkResult`
+constructors has moved from zero to one, and one is still all there is.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#24
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:7750b61c9d8a8b73149427936d016747e21b0a7b2cfd1fd1273836c3a8e46198*
+
+**The three kinds that still have no instance.** Re-grepped across `crates/`: "API-hosted",
+"subscription-agent" and "recorded-replay" appear in exactly one place,
+`crates/contracts/nomos-contracts/src/workflow_step.rs`'s module doc quoting `WF-006`'s list,
+which is the same hit version 1 found and is still not an implementation. Nothing implements
+an API-hosted, a human or a recorded-replay executor. `nomos-model-backend-ollama` is not a
+second kind of the four: `OD-EXECUTOR-005` decided it is a `ModelBackendPackage`, it answers
+with a `ModelAnswer` and not an `AgentExecution`, and `AgentDispatchOutcome`'s own doc states
+the two shapes are deliberately not interchangeable, so a caller cannot ask it for a
+`WorkResult` at all.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#25
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:c7f93a640931b16446151bb925fb283a99e564d9cc7c494ab4dab971c7c151e0*
+
+**`OD-EXECUTOR-003`'s own mechanism is still unbuilt, and it is a different thing from what
+fired this condition.** That record decided the first real `WorkResult` would be `judge-role`'s
+verdict carrying one real `Finding`, copied field by field from the finding
+`Check_Declared_Role_Matches_Surface` already produced. No `Finding` is placed in a
+`WorkResult` anywhere: `Work_Result` sets `claims: Vec::new()` on every invocation and
+`WORK_RESULT_SUBSTANTIATION` declares `claims` unsubstantiated for a reason the type now
+carries. What condition 3 asked for is a first real instance of the protocol, which exists;
+what `OD-EXECUTOR-003` asked for is a richer result than this executor can ground, which does
+not.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#26
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:cac6e783615b3413f837bf0ae4c465cdf8d7f01aab9bf240bfa3816a06aadd3b*
+
+**Two of version 1's other bullets have also moved, and this amendment reports them without
+deciding them.** `nomos_gate_orchestration::Run_Gate` has a third real caller,
+`Dispatched_Gate` in `crates/orchestration/nomos-workflow-orchestration/src/run.rs`, which is
+neither `nomos-cli` nor `nomos-api` and threads a `RunId` through it. And a word-boundary grep
+for `phase` over `crates/orchestration/nomos-gate-orchestration/src` no longer returns nothing:
+`GateCommand` carries `phases: Vec<GatePhase>` and `approvals: Vec<PhaseApproval>`, resolved
+from the `nomos-gate.json` under `root` and judged in the order given. Neither observation
+settles its condition. Condition 1 asks for a genuine second *consumption pattern* for `RunId`
+-- persistence, comparison, or lookup by id -- and a third call site is not by itself a second
+pattern. Condition 2 asks for structure `WF-ORDER-*` can be checked against, and that family's
+text lives in a corpus outside this repository which this item did not read. So version 1's
+claim about conditions 1 and 2 is **withdrawn rather than replaced**, and version 2 asserts
+nothing about either.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#27
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:c21b1afa7236885a9d90e6a9f7400426aebc55d50b8158cf388a22211ae3b1be*
+
+**Two follow-ups this measurement identified, named and not scheduled.** Conditions 1 and 2
+need the audit the paragraph above declines to give them, against `WF-ORDER-*`'s own corpus
+text and against what `RunId`'s consumers actually do with it. And `OD-WORKFLOW-005`'s version
+2 attributes this construction to `OD-EXECUTOR-003`, where `fe0fac58`'s own message and
+`OD-EXECUTOR-008`'s own text both name `OD-EXECUTOR-008`; repairing that sentence belongs to an
+item reserving that record and not to this one. `work/ledger.json` is where work is scheduled,
+and nothing here claims either.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#28
+
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Amendment: The WorkResult Version 1 Found Missing Has Existed Since `fe0fac58` · hash: sha256:b72edd55a36f306752ca4ac030a3a589b6d30307b020079b4a1862582d9646a6*
+
+**What this amendment does not do.** It does not reopen `OD-ROADMAP-001`'s override, widen it,
+or read the workflow tier into it. It does not re-measure version 1's `Question`, which is
+dated history about why this record was written. It does not schedule the workflow tier's next
+increment or name what it should be -- a fired condition makes one available for an item of its
+own, and that item is not authored here.
+
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#29
+
+*revision: authored · kind: heading · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md#14
+### docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md#30
 
-*revision: authored · kind: prose · heading: The first real agent executor is not yet a real instance of WF-006's task/result protocol / Status · hash: sha256:f4001ed28bf30c1bb9e04e36083daed237393465a15e0a1f45991b13d0c44b38*
+*revision: authored · kind: prose · heading: The first real agent executor is a real instance of WF-006's task/result protocol, and it is still the only one / Status · hash: sha256:cbde47383c7492490f4e748fe43cc1cf5d18c5f8664c76c82431b0ed2fd76ff9*
 
-Accepted. Re-checks `OD-WORKFLOW-002`'s third named condition against the live tree after
-`nomos-agent-executor`'s arrival, finds it fired only at the letter and not the substance of
-its own wording, and sharpens the condition's text with the evidence this audit found rather
-than either declaring victory or leaving a now-misleading condition unchanged.
+Accepted at version 2. Version 1 re-checked `OD-WORKFLOW-002`'s third named condition against
+the live tree after the first real `AgentExecutor` arrived, found it fired only at the letter
+of its wording, and sharpened the condition's text rather than declaring victory. That finding
+was true at the revision it measured and stopped being true at `fe0fac58`, where the Claude
+Code executor began returning a real `WorkResult` under `OD-EXECUTOR-008`; `OD-EXECUTOR-011`
+later made that result say which of its absences it carries, and the result reaches a workflow
+step's outcome through `AgentDispatchOutcome::Executed`. Condition 3 is fired. The protocol has
+one real instance and three of `WF-006`'s four named kinds still have none, so what is
+established is that the protocol is instantiated, not that it is shared. Conditions 1 and 2 are
+open questions this record does not answer.
 
 ### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#1
 

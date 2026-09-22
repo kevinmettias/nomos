@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:aae76a19ed8653039b5e50d3d7770a292eb0874f0581a13956e4ffbe4867bbc3",
-  "inputs_digest": "sha256:61caadf2ab667370b454b1f1dd600bc1fccad94261940c1d6235b41538420895",
+  "content_digest": "sha256:c0efb9db1ef200b71c96196b33506c6fe4f02d3a8898a6be31b3aca732eefa4a",
+  "inputs_digest": "sha256:8dbb1f2021c1cc27866a80aad1b156b70e8d39c9179108a9fbb2039a8b562f33",
   "sections": [
     [
       "Relations",
-      2168
+      2148
     ],
     [
       "Decisions",
-      261
+      260
     ]
   ],
   "inputs": [
@@ -585,11 +585,6 @@
       "content": "relations",
       "identity": "ARC-ROADMAP-001 relates-to OD-ROADMAP-005",
       "hash": "sha256:11624b3676225e3f91bab6f694c382b2880b1a9c361382cf9eccdce5d3c29c29"
-    },
-    {
-      "content": "relations",
-      "identity": "ARC-ROADMAP-001 relates-to OD-ROADMAP-006",
-      "hash": "sha256:94cdd007e4b61d9449218f5d3bdfbda7658aa413bc9ef190ee51e555176258ff"
     },
     {
       "content": "relations",
@@ -1753,11 +1748,6 @@
     },
     {
       "content": "relations",
-      "identity": "OD-ANALYSIS-009 relates-to OD-ROADMAP-006",
-      "hash": "sha256:1ab24ea5beae2c297e20b155a2d035d29578334d96d80bae99427839954bfd9a"
-    },
-    {
-      "content": "relations",
       "identity": "OD-ANALYSIS-009 relates-to OD-RULES-009",
       "hash": "sha256:520266132a2a8fde41d82941747099d87d0c14821015ee8d45623727e4e94574"
     },
@@ -2205,11 +2195,6 @@
       "content": "relations",
       "identity": "OD-CAPABILITY-009 relates-to OD-CAPABILITY-006",
       "hash": "sha256:b7e5c429c0593acc979c86117f099c8e8bcbcfac8a36c64ff068ba8555b1d323"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-CAPABILITY-009 relates-to OD-ROADMAP-006",
-      "hash": "sha256:7948851045bf0976d1a498d6084f865ea088fb33cba3a9eda7a634fdf8c21f16"
     },
     {
       "content": "relations",
@@ -3483,6 +3468,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-EXECUTOR-008 relates-to OD-WORKFLOW-004",
+      "hash": "sha256:30dd7d787d51a1ac2233b528e3eeb9fb216de8e4a89428b2b57592a8928f3797"
+    },
+    {
+      "content": "relations",
       "identity": "OD-EXECUTOR-009 relates-to ARC-ECOSYSTEM-001",
       "hash": "sha256:18926992edb80841638e182b999282145b360d4eb4355d875d0202a1e0259e66"
     },
@@ -3555,6 +3545,11 @@
       "content": "relations",
       "identity": "OD-EXECUTOR-011 relates-to OD-EXECUTOR-008",
       "hash": "sha256:5290b0f5ed0327846b11ca3ed98300de91289dc581574acc7ed526d94258113e"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-EXECUTOR-011 relates-to OD-WORKFLOW-004",
+      "hash": "sha256:437102322e43b420622bd84bcd2dc4adc725ac2cb43b196833fee58a349cfd88"
     },
     {
       "content": "relations",
@@ -4428,11 +4423,6 @@
     },
     {
       "content": "relations",
-      "identity": "OD-GATE-022 relates-to OD-ROADMAP-006",
-      "hash": "sha256:1ef5c75d6a4eb5b369cf430d617606676aee88607be58d6d85953310a2f50f38"
-    },
-    {
-      "content": "relations",
       "identity": "OD-GATE-022 relates-to OD-WORKFLOW-001",
       "hash": "sha256:debb18c040c63150dd231ce31368fe2249c96e356c67f5a9cd4bbda863ec909b"
     },
@@ -4620,11 +4610,6 @@
       "content": "relations",
       "identity": "OD-GATE-030 relates-to OD-GATE-034",
       "hash": "sha256:8a4875aac73641aa9c76dd5cf8fe5fd06c5a492c03989f04b9f6d6dc44511573"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-GATE-030 relates-to OD-ROADMAP-006",
-      "hash": "sha256:1f01edac1144f5464f18f1e64f34372c3310f3fd2191817d008862d4c721d820"
     },
     {
       "content": "relations",
@@ -4895,11 +4880,6 @@
       "content": "relations",
       "identity": "OD-HOST-002 relates-to OD-POLICY-001",
       "hash": "sha256:a15ae8342c62ed3e90cb375c7ac5ac7c772de47be292ff9adb1579fe2659f1a1"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-HOST-002 relates-to OD-ROADMAP-006",
-      "hash": "sha256:c68b83225cac934d560ed1ee056ae56c01e6f6b562dd2a4b92101c2dae670e02"
     },
     {
       "content": "relations",
@@ -8393,11 +8373,6 @@
     },
     {
       "content": "relations",
-      "identity": "OD-ROADMAP-001 relates-to OD-ROADMAP-006",
-      "hash": "sha256:7ab3bef923938b85dbe0eb819726842ef4a880f418f4ebee3d8da2f5cc71be10"
-    },
-    {
-      "content": "relations",
       "identity": "OD-ROADMAP-001 relates-to OD-RULES-022",
       "hash": "sha256:1202c017833ca8b57c62dd90aefa806c7dcba3e5c5f705b76cf125f3f2cde2c7"
     },
@@ -8630,71 +8605,6 @@
       "content": "relations",
       "identity": "OD-ROADMAP-005 relates-to OD-ROADMAP-001",
       "hash": "sha256:ae8e0de24acf49441b6c08c9f290f506a055be800d357d1d7bceb4b0755f7d05"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-005 relates-to OD-ROADMAP-006",
-      "hash": "sha256:4757ab22aa6d675c3d3daf0bbe47eca6e4c398d27660c0def9a193f9a9b8dd7c"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-006 relates-to ARC-ROADMAP-001",
-      "hash": "sha256:1910fb8ee8def5577a81ad7729437fbc60399d80cb850b88ad647bb08ddfc1e6"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-006 relates-to OD-ANALYSIS-009",
-      "hash": "sha256:22b43c41e085767c45eab91caed9e748cdb27fcff13c669852b734264854a7bd"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-006 relates-to OD-CAPABILITY-009",
-      "hash": "sha256:bec10cb66e3e0fe3fbcfd3164bbe200c2e8fa64547a0370162b981480e80359e"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-006 relates-to OD-GATE-022",
-      "hash": "sha256:02011ec55cc40d398dedcd85d4c04c40d5f16e6a613df43ef0cbc64d11a526ec"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-006 relates-to OD-GATE-030",
-      "hash": "sha256:b1a3300c1f280669379714c63b67959626555b13e87db724090e1625c687b40a"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-006 relates-to OD-HOST-002",
-      "hash": "sha256:237003e75e7f6e18d194f88cb2baf0a52fe4204018156e99d6e4ffd8547a53cc"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-006 relates-to OD-ROADMAP-001",
-      "hash": "sha256:1ae6da34d320346d86fea699c57c46847abb85a0a726eaefb501546954001886"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-006 relates-to OD-ROADMAP-005",
-      "hash": "sha256:d9069e00c659fa01451c4d9f0056762d3b25decd690319408fd741b36dd133c1"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-006 relates-to OD-RULES-009",
-      "hash": "sha256:2124ed16f3a81e122d0ca7ff6986cd9045b8008e674f63dbe1a6057599304c7a"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-006 relates-to OD-RULES-022",
-      "hash": "sha256:f2a532b4ab7f61022697c94653a07b4d38cc013b6d183bcc46c5a80240ec9298"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-006 relates-to OD-WORKFLOW-002",
-      "hash": "sha256:c67910c6e22162defdfa6c36c9e9b0c736e38bbbc6a0abc88174b41628cb6c99"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-ROADMAP-006 relates-to OD-WORKFLOW-005",
-      "hash": "sha256:90636baa1974249708976a1cbfc084913995f9876ac5df9cacb95b90809f806d"
     },
     {
       "content": "relations",
@@ -9208,11 +9118,6 @@
     },
     {
       "content": "relations",
-      "identity": "OD-RULES-009 relates-to OD-ROADMAP-006",
-      "hash": "sha256:691ddd00948d14cc2034a365fe8052ded5e890aead64f559fd40cc7853e8877d"
-    },
-    {
-      "content": "relations",
       "identity": "OD-RULES-009 relates-to OD-RULES-007",
       "hash": "sha256:9d0c93af90b396918b29c5c8b344c78e5c8817fea653c947574f1b4f3c70482f"
     },
@@ -9590,11 +9495,6 @@
       "content": "relations",
       "identity": "OD-RULES-022 relates-to OD-ROADMAP-001",
       "hash": "sha256:2e9d480da571e7ae3119aa4d12b0ed18e4bfd2ce359e09629c591a371b9be2ca"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-RULES-022 relates-to OD-ROADMAP-006",
-      "hash": "sha256:7897d0bf1c05b433f5d75971d5e918c7d058b0aea6ee1c0207cf2af88fd90f9b"
     },
     {
       "content": "relations",
@@ -10713,11 +10613,6 @@
     },
     {
       "content": "relations",
-      "identity": "OD-WORKFLOW-002 relates-to OD-ROADMAP-006",
-      "hash": "sha256:c20f62a15c5ef0bfaa22d686f7c9416131c044380488dcdb361e86654fd39ba5"
-    },
-    {
-      "content": "relations",
       "identity": "OD-WORKFLOW-002 relates-to OD-WORKFLOW-001",
       "hash": "sha256:41b9f285beba38dd33f70432d2e1514cbba60c964aef475dd26756c03b213f99"
     },
@@ -10783,6 +10678,16 @@
     },
     {
       "content": "relations",
+      "identity": "OD-WORKFLOW-004 relates-to OD-EXECUTOR-008",
+      "hash": "sha256:cada9c80b6e7553d64d7cdcff66dd100702e787d368a24e785a2ee0707fc0e85"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-WORKFLOW-004 relates-to OD-EXECUTOR-011",
+      "hash": "sha256:e1fe358ef094703fd1041305c11aeb4bcf7fc6767f434e8759d64e08ea00d46d"
+    },
+    {
+      "content": "relations",
       "identity": "OD-WORKFLOW-004 relates-to OD-WORKFLOW-001",
       "hash": "sha256:dbbc93ac53be3541481c1d45b616e9f0ea84697565228ea14445ed2e8623fc01"
     },
@@ -10820,11 +10725,6 @@
       "content": "relations",
       "identity": "OD-WORKFLOW-005 relates-to OD-ROADMAP-001",
       "hash": "sha256:f0b3755bd1b73d0113e425485ecf5c55bb568c79e830e06ec1da2389b827be41"
-    },
-    {
-      "content": "relations",
-      "identity": "OD-WORKFLOW-005 relates-to OD-ROADMAP-006",
-      "hash": "sha256:567395777ad046bfd462e1a03b7bcedd0c8f7d9de5c435f89a68d92b4388f59d"
     },
     {
       "content": "relations",
@@ -11858,11 +11758,6 @@
     },
     {
       "content": "nodes",
-      "identity": "OD-ROADMAP-006",
-      "hash": "sha256:85a6132612bd4658490c3de4564cbc70ef0c2b38b7eb4cd09ba126c586d67099"
-    },
-    {
-      "content": "nodes",
       "identity": "OD-RULES-001",
       "hash": "sha256:fcc23659ed826576f9ac176a2bc0e59b4782fa2029448e3570ff400bf821d63b"
     },
@@ -12154,7 +12049,7 @@
     {
       "content": "nodes",
       "identity": "OD-WORKFLOW-004",
-      "hash": "sha256:f15be1ae9ce9a0e59a64e0982d227bdd8eda09d287455f54d02d1e850a4bd252"
+      "hash": "sha256:4782c9d0b4cc7bc528478221634e1bbf590b867cd9415eb5d538890a1f9b78e6"
     },
     {
       "content": "nodes",
