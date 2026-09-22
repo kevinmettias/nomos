@@ -16,7 +16,7 @@ profile: domain-specification
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 80 | 16 | sha256:516e6bdb8000bb760e2fdfcfc587246e75d436f7bc10ac0d645921f0f3d2bae5 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 31 | 8 | sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802 |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 79 | 20 | sha256:c62ee3e0e635fc25025f167d474d7f17da201db16879588cf150b7a584371839 |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 89 | 21 | sha256:2f4765b15b59d34af0ba065197f3b43452bc2b8cfd2164b0b93c0abfc210a9bf |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
@@ -364,7 +364,8 @@ profile: domain-specification
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#60 | authored | 3 | The decision |
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#65 | authored | 3 | What this amendment does not do |
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#72 | authored | 3 | Consistency with `OD-ROADMAP-005` |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#77 | authored | 2 | Status |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#77 | authored | 2 | Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#86 | authored | 2 | Status |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1 | authored | 1 | The specification is a database with an enforced preservation ledger |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#2 | authored | 2 | Context |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#6 | authored | 2 | Decision |
@@ -5604,11 +5605,101 @@ The remedy for those is a capability decision, not a roadmap decision.
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#77
 
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review · hash: sha256:0c9a22c0fdd3c9e511543f4f98c40f968e065a5c8f77be77707ea4cd4a2e3825*
+
+## Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#78
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review · hash: sha256:036fc2a9446ce632664d48f9a1cce161572566f4ff403d115a301515b3e81b86*
+
+"What Was Measured" above reports eight performance claims against
+`crates/substrate/nomos-analysis`, six of them confirmed as real hazards left for later work
+and one — the recursive `Tarjan::Visit` — fixed by `P13-TARJAN-ITERATIVE`. It enumerates none
+of the six, and neither does anything else this repository holds.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#79
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review · hash: sha256:70c7324cd91502e96d871614eb4be898e347615977588fb28bea1e5d47cf9d7a*
+
+**Measured rather than assumed.** The phrase occurs in three record bodies: here, where it
+originates; in `OD-ROADMAP-004`, which quotes it to argue that a profile per shipped mode is
+what turns a hazard into a budget; and in `OD-ANALYSIS-008`, whose closing amendment quotes it
+to tell this "six" apart from the unrelated "six" in the corpus paragraph above. None of the
+three names a member, and the two occurrences in `spec/domain-specification.md` are those
+bodies projected. `P131-A-DEFERRED-COST-WAS-PAID-OFF-WITHOUT-ITS-TRIGGER-FIRING-AND-THE-RECORD-STILL-DEFERS-IT`
+searched the same ground at its closure and found the count twice rather than three times;
+that is not a disagreement, because the third occurrence is in the body that closure wrote.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#80
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review · hash: sha256:f18ac227faa91f3df94ae3f2c7b32c145ee6db830ced29dc9fb2ee68e7a42162*
+
+The count above is of record *bodies* and not of occurrences, and that is deliberate rather
+than incidental: this amendment quotes the phrase as well, so an occurrence count would have
+been falsified by the act of publishing it. That is the same trap one step on from the one
+described in the previous paragraph, and it is why the two numbers differ. An artifact that
+counts something and sits inside the space being searched joins the population it measures.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#81
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review · hash: sha256:5ba2798d49c2a4b259b5ee93004efe9cc93892e626c7d19d2290ef26381bc0e3*
+
+**One of the six is named, and it is answered.** `OD-ANALYSIS-008` carved one out — `Invalidate`
+cloning the whole dependents map on every call — traced it to ground, and is `closed` at
+version 3, because `P13-ANALYSIS-008-TWO-PASS-INVALIDATE` removed its subject without either
+of the triggers that record deferred it behind ever firing. That is the only member of the six
+this repository can put a name to.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#82
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review · hash: sha256:e43f0438f333f213bfd6685b0e6fdccb5a06f073fc09d7ef92f087d24796144b*
+
+**The other five are not recoverable from anything here.** They exist as an enumeration only in
+the external review text the owner holds, which is not an artifact this repository can be read
+against. So no session can check one, retire one, or say whether it is still real, and a count
+nobody can decompose is permanent by construction rather than by evidence.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#83
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review · hash: sha256:99de6993db8cb4c9e4a9c6a994840adb72185fdd482b34057e29d3331524d6a7*
+
+**What this record therefore stops asserting.** Not the measurement. The sentence in "What Was
+Measured" stays exactly as written, because it is dated, and a measurement is not made wrong by
+work that lands after it; rewriting it would be the very thing version 4's discipline forbids,
+a measurement quietly absorbing later work. What stops is the reading that five live hazards
+stand against `nomos-analysis` today and that somebody could go and check them. The count is a
+reading of a review — evidence about what two reviewers said, and not a backlog.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#84
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review · hash: sha256:5e7222d6252ad97b41b641e4b2692c2ddfa911da776faaa84dfcc82835008802*
+
+**Nothing here is inferred from the performance work that has since landed.** `27050a92` and
+`bb79f7a5` are tied to no member, and `OD-ANALYSIS-008`'s closure measured why: they answer a
+*later* external review of four bootstrap choices in the analysis substrate, three of which are
+answered at `HEAD` — key interning with `FactSlot` addressing, `FactStore::Current_Borrowed` as
+a lending read beside the owning `Current`, and the one-entry retention rule — while the fourth,
+the quadratic ranking, is `Ranked_Offers` in `crates/substrate/nomos-capability` and so is not a
+claim against `nomos-analysis` at all. A commit that improves this substrate is not evidence
+that it paid off a hazard nobody can name.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#85
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review · hash: sha256:47b831d72b89134c7453c89f82365df3f6cb885f58cdf4b069cdc007e586f3a3*
+
+**What would decide it differently.** The owner producing the review text, or any of the five
+being independently rediscovered and recorded by measurement against the tree. Either gives a
+member a name, and a named member can be checked, retired or confirmed. Until then this record
+asserts a number it cannot decompose, and says so rather than leaving a reader to find out.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#86
+
 *revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#78
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#87
 
 *revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:46b1e90810340bc991be682a32f1ca8c6f1d2994032dc1b1d9be520cad85d2bf*
 
@@ -5626,7 +5717,7 @@ this record's prior text erased that carve-out by compressing "installation" and
 "activation" into one XVPE-owned phrase. Package installation mechanism is unchanged as
 XVPE's; nothing else about either record's ownership table moves.
 
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#79
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#88
 
 *revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:a926a67415d3eef78b6f1343b7bb04f78d132883e62ead255489397e21dd6c04*
 
@@ -5641,6 +5732,17 @@ does not produce rather than by any sequencing decision, which is `OD-RULES-024`
 read one tier up. Read the amendment above before reading either list as a standing
 prohibition, and `OD-ROADMAP-004` for the seven metric and runtime families neither list
 sorted.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#89
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:90531d18e834b997ad1801242f6ff2a76fbfe10350145b79201e4098bfb92c13*
+
+Amended to version 5 by `P131-ARC-ROADMAP-001-COUNTS-SIX-ANALYSIS-HAZARDS-AND-NAMES-NONE-OF-THE-FIVE-THAT-ARE-LEFT`,
+which searched every record body, the rendered specification and the board for an enumeration of
+the six `nomos-analysis` hazards this record counts, found none, and recorded that one is named
+and answered (`OD-ANALYSIS-008`, closed at version 3) while the other five exist only in an
+external review this repository does not hold. The "What Was Measured" sentence is unchanged; what
+the amendment retires is the reading that the five are a checkable backlog.
 
 ### docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1
 

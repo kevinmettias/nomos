@@ -3,7 +3,7 @@ id: ARC-ROADMAP-001
 type: architecture
 title: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence
 status: accepted
-version: 4
+version: 5
 authority: canonical-normative-record
 tags:
   - roadmap
@@ -532,6 +532,60 @@ override: an owner asked for the deferred tier, and the answer is that five of t
 asked for are held back by a fact nobody produces rather than by a boundary anybody can lift.
 The remedy for those is a capability decision, not a roadmap decision.
 
+## Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review
+
+"What Was Measured" above reports eight performance claims against
+`crates/substrate/nomos-analysis`, six of them confirmed as real hazards left for later work
+and one — the recursive `Tarjan::Visit` — fixed by `P13-TARJAN-ITERATIVE`. It enumerates none
+of the six, and neither does anything else this repository holds.
+
+**Measured rather than assumed.** The phrase occurs in three record bodies: here, where it
+originates; in `OD-ROADMAP-004`, which quotes it to argue that a profile per shipped mode is
+what turns a hazard into a budget; and in `OD-ANALYSIS-008`, whose closing amendment quotes it
+to tell this "six" apart from the unrelated "six" in the corpus paragraph above. None of the
+three names a member, and the two occurrences in `spec/domain-specification.md` are those
+bodies projected. `P131-A-DEFERRED-COST-WAS-PAID-OFF-WITHOUT-ITS-TRIGGER-FIRING-AND-THE-RECORD-STILL-DEFERS-IT`
+searched the same ground at its closure and found the count twice rather than three times;
+that is not a disagreement, because the third occurrence is in the body that closure wrote.
+
+The count above is of record *bodies* and not of occurrences, and that is deliberate rather
+than incidental: this amendment quotes the phrase as well, so an occurrence count would have
+been falsified by the act of publishing it. That is the same trap one step on from the one
+described in the previous paragraph, and it is why the two numbers differ. An artifact that
+counts something and sits inside the space being searched joins the population it measures.
+
+**One of the six is named, and it is answered.** `OD-ANALYSIS-008` carved one out — `Invalidate`
+cloning the whole dependents map on every call — traced it to ground, and is `closed` at
+version 3, because `P13-ANALYSIS-008-TWO-PASS-INVALIDATE` removed its subject without either
+of the triggers that record deferred it behind ever firing. That is the only member of the six
+this repository can put a name to.
+
+**The other five are not recoverable from anything here.** They exist as an enumeration only in
+the external review text the owner holds, which is not an artifact this repository can be read
+against. So no session can check one, retire one, or say whether it is still real, and a count
+nobody can decompose is permanent by construction rather than by evidence.
+
+**What this record therefore stops asserting.** Not the measurement. The sentence in "What Was
+Measured" stays exactly as written, because it is dated, and a measurement is not made wrong by
+work that lands after it; rewriting it would be the very thing version 4's discipline forbids,
+a measurement quietly absorbing later work. What stops is the reading that five live hazards
+stand against `nomos-analysis` today and that somebody could go and check them. The count is a
+reading of a review — evidence about what two reviewers said, and not a backlog.
+
+**Nothing here is inferred from the performance work that has since landed.** `27050a92` and
+`bb79f7a5` are tied to no member, and `OD-ANALYSIS-008`'s closure measured why: they answer a
+*later* external review of four bootstrap choices in the analysis substrate, three of which are
+answered at `HEAD` — key interning with `FactSlot` addressing, `FactStore::Current_Borrowed` as
+a lending read beside the owning `Current`, and the one-entry retention rule — while the fourth,
+the quadratic ranking, is `Ranked_Offers` in `crates/substrate/nomos-capability` and so is not a
+claim against `nomos-analysis` at all. A commit that improves this substrate is not evidence
+that it paid off a hazard nobody can name.
+
+**What would decide it differently.** The owner producing the review text, or any of the five
+being independently rediscovered and recorded by measurement against the tree. Either gives a
+member a name, and a named member can be checked, retired or confirmed. Until then this record
+asserts a number it cannot decompose, and says so rather than leaving a reader to find out.
+
 ## Status
 
 Accepted, drawn by `P13-CORE-ROADMAP-RECONCILIATION-3`. It schedules no item and orders
@@ -559,3 +613,10 @@ does not produce rather than by any sequencing decision, which is `OD-RULES-024`
 read one tier up. Read the amendment above before reading either list as a standing
 prohibition, and `OD-ROADMAP-004` for the seven metric and runtime families neither list
 sorted.
+
+Amended to version 5 by `P131-ARC-ROADMAP-001-COUNTS-SIX-ANALYSIS-HAZARDS-AND-NAMES-NONE-OF-THE-FIVE-THAT-ARE-LEFT`,
+which searched every record body, the rendered specification and the board for an enumeration of
+the six `nomos-analysis` hazards this record counts, found none, and recorded that one is named
+and answered (`OD-ANALYSIS-008`, closed at version 3) while the other five exist only in an
+external review this repository does not hold. The "What Was Measured" sentence is unchanged; what
+the amendment retires is the reading that the five are a checkable backlog.

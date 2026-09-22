@@ -89969,16 +89969,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT-2"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-evidence",
-        "acquired_at": 1790112765,
-        "lease_expires_at": 1790128563
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -89995,7 +89991,34 @@
         ],
         "timeout_seconds": 5400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins",
+          "--test",
+          "gate_orchestration_seam"
+        ],
+        "exit_code": 0,
+        "output_tail": "   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: field `stderr` is never read\n  --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:33:9\n   |\n29 | pub struct Ran\n   |            --- field in this struct\n...\n33 |     pub stderr: String,\n   |         ^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: field `0` is never read\n  --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:58:25\n   |\n58 | pub struct FileName<'a>(&'a str);\n   |            --------     ^^^^^^^\n   |            |\n   |            field in this struct\n   |\n   = help: consider removing this field\n\nwarning: associated items `New`, `With`, and `Root` are never used\n   --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:86:12\n    |\n82  | impl Tree\n    | --------- associated items in this implementation\n...\n86  |     pub fn New(name: &str) -> Self\n    |            ^^^\n...\n97  |     pub fn With<'a>(self, name: impl Into<FileName<'a>>, text: &str) -> Self\n    |            ^^^^\n...\n110 |     pub fn Root(&self) -> String\n    |            ^^^^\n\nwarning: type `Requested_Dispatch` should have an upper camel case name\n   --> crates\\host\\nomos-cli\\src\\agent.rs:162:19\n    |\n162 | pub(super) struct Requested_Dispatch\n    |                   ^^^^^^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `RequestedDispatch`\n    |\n    = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-cli` (test \"gate_orchestration_seam\") generated 3 warnings\nwarning: `nomos-cli` (bin \"nomos\") generated 1 warning\nwarning: `nomos-cli` (bin \"nomos\" test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.67s\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-853236780f479c43.exe)\n     Running tests\\gate_orchestration_seam.rs (target\\debug\\deps\\gate_orchestration_seam-c37f087279d484db.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-9d632cbe7dfc73c7.exe)\n",
+        "verified_at": 1790115633,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -94612,14 +94635,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p133-deadsurface",
-        "acquired_at": 1790112683,
-        "lease_expires_at": 1790123483
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -94635,7 +94654,33 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "public_surface"
+        ],
+        "exit_code": 0,
+        "output_tail": "les\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-work-orchestration v0.1.0 (F:\\repos\\nomos-p133-finish\\crates\\orchestration\\nomos-work-orchestration)\n   Compiling nomos-agent-executor-claude-code v0.1.0 (F:\\repos\\nomos-p133-finish\\crates\\agent\\nomos-agent-executor-claude-code)\n   Compiling nomos-model-backend-ollama v0.1.0 (F:\\repos\\nomos-p133-finish\\crates\\agent\\nomos-model-backend-ollama)\n   Compiling nomos-spec-orchestration v0.1.0 (F:\\repos\\nomos-p133-finish\\crates\\orchestration\\nomos-spec-orchestration)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos-p133-finish\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-agent-orchestration v0.1.0 (F:\\repos\\nomos-p133-finish\\crates\\orchestration\\nomos-agent-orchestration)\n   Compiling nomos-workspace-discovery v0.1.0 (F:\\repos\\nomos-p133-finish\\crates\\orchestration\\nomos-workspace-discovery)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos-p133-finish\\tests\\contract)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos-p133-finish\\crates\\orchestration\\nomos-gate-orchestration)\n   Compiling nomos-correction-orchestration v0.1.0 (F:\\repos\\nomos-p133-finish\\crates\\orchestration\\nomos-correction-orchestration)\n   Compiling nomos-workflow-orchestration v0.1.0 (F:\\repos\\nomos-p133-finish\\crates\\orchestration\\nomos-workflow-orchestration)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 16.47s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-29904a77b33eae9e.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-07e3554c8fbc3442.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-83c1bdd924f9ab49.exe)\n",
+        "verified_at": 1790115607,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
