@@ -16,7 +16,7 @@ profile: domain-specification
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 80 | 16 | sha256:516e6bdb8000bb760e2fdfcfc587246e75d436f7bc10ac0d645921f0f3d2bae5 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 31 | 8 | sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802 |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 79 | 20 | sha256:c62ee3e0e635fc25025f167d474d7f17da201db16879588cf150b7a584371839 |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 29 | 12 | sha256:b333cce918ab3abd2faaf20b50cbd64be30d8c5b15c3eb5f81c63e6ed9562723 |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
@@ -138,6 +138,7 @@ profile: domain-specification
 | docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md@authored | docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md | authored | 56 | 13 | sha256:7a05e7d2b4970db396626604d0d0e0e6dda68dcb9890eeaaa7d120f22d219e88 |
 | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md@authored | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md | authored | 92 | 24 | sha256:0ce8b873e26fc707ad0594a76922e8ccf0fa5c374c5867d74543afd06d69e593 |
 | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md@authored | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md | authored | 70 | 20 | sha256:6f3ba575cf275a392d61250afb410d11d511d942bdd507ce4ab113c34ba43130 |
+| docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md@authored | docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md | authored | 44 | 10 | sha256:56a3258a10da8f6d0b85a5520d8493fb9e231e069994260adeed8d832c22c490 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -350,15 +351,7 @@ profile: domain-specification
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#22 | authored | 3 | 4. Ecosystem ownership is `ARC-ECOSYSTEM-001`'s, unrepeated here |
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#24 | authored | 3 | 5. "Gate" here means the product object, not `OD-GATE-004`'s CI step |
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#26 | authored | 2 | What This Record Does Not Do |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#28 | authored | 2 | Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#31 | authored | 3 | How this was measured |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#35 | authored | 3 | The near-term tier, item by item |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#50 | authored | 3 | Whether the condition the deferral rested on still holds |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#56 | authored | 3 | What each deferred item actually waits on |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#60 | authored | 3 | The decision |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#65 | authored | 3 | What this amendment does not do |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#72 | authored | 3 | Consistency with `OD-ROADMAP-005` |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#77 | authored | 2 | Status |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#28 | authored | 2 | Status |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1 | authored | 1 | The specification is a database with an enforced preservation ledger |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#2 | authored | 2 | Context |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#6 | authored | 2 | Decision |
@@ -1344,6 +1337,16 @@ profile: domain-specification
 | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#56 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#63 | authored | 2 | What Would Decide It Differently |
 | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#69 | authored | 2 | Status |
+| docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#1 | authored | 1 | A host names an orchestration crate for an operation it renders, and never for how those crates compose each other |
+| docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#18 | authored | 2 | The Decision |
+| docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#24 | authored | 2 | What This Rule Does Not Forbid |
+| docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#31 | authored | 2 | What This Rule Does Not Decide |
+| docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#34 | authored | 2 | What This Costs |
+| docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#37 | authored | 2 | Status Of The Tree Against This Rule |
+| docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#41 | authored | 2 | What Would Decide It Differently |
+| docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#43 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -4960,512 +4963,11 @@ depend on rather than duplicate.
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#28
 
-*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` · hash: sha256:1c5d037474b1d11f13c7878a3c07099753a826124b38cbe943bdd1cccac2ea0d*
-
-## Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4`
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#29
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` · hash: sha256:061a0b0140c2f36c30e21c616ac1da801587ce231cc167ddaa06a817e0dfb653*
-
-Added at version 4 by `P125-WHETHER-THE-DEFERRED-TIER-STILL-HOLDS`. Nothing above is
-rewritten, and the boundary above is quoted rather than edited so the change can be checked
-against it.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#30
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` · hash: sha256:38029d732c4e8ed09a02cbb48e3570f6c52e84304b519c96e9847032b05cf5d9*
-
-This record's boundary rested on one stated reason: "Treating architecture and feature
-intelligence as near-term work pulls effort into consumer-side algorithms before the
-substrate they consume (facts, applicability, gates, corrections) is production-grade." That
-was measured when the near-term tier was substantially unbuilt. A person has since asked for
-architecture and feature intelligence, Atlas, feature topology, placement analysis, runtime
-and debug intelligence and test intelligence to be built, every one of which sits on the
-deferred tier. Building them against a standing boundary would be a session overriding an
-architecture decision by doing the work, which is the move this repository refuses everywhere
-else. So the condition was re-measured rather than assumed, and the answer below is not the
-answer being asked for.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#31
-
-*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / How this was measured · hash: sha256:397631ee0a76e2b771a600ac6bb4997ef8d33b9df46c52f1685e7d7b2a36aae6*
-
-### How this was measured
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#32
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / How this was measured · hash: sha256:e3779153b8e94aa66fd7f111f2543d50427c454053e0bc52c9ef5a236e4bb341*
-
-Every row was taken against the tree at `53de19a4`, read through `git show` rather than off
-the working tree, which carried three live sessions' uncommitted work at the time. Two numbers
-are live runs of the committed-era binary rather than reads: `gate plan --root .`, and a
-`check` scoped to `crates/kernel/nomos-store`. The three corpus variables were unset, as CI
-has them.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#33
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / How this was measured · hash: sha256:6a493e0f3a399ebe71717676904f49af550fbd93c2118af180cfa15f5aefa12a*
-
-The words are this record's own item's — built, partial, absent. One further state
-`OD-PROJECT-007` already coined is used where it fits: **declared and unobserved**, a member
-exporting something no composition takes. That record's caution is the one this measurement is
-most exposed to, and it was applied on purpose. A crate existing is not evidence a thing is
-built; the question asked of every row is what reaches it.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#34
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / How this was measured · hash: sha256:5fe206b1d3f3cd87c0e07a529d8f4fe3f3d0bdad395575cf902dca8fabf59415*
-
-One commit landed from a peer session between the measurement and this amendment, `dbb2c7c7`,
-and it touches the item most exposed to it. It gives gate policy a declared layering and an
-effective policy naming what decided each field, which is a real advance on item 6 and is not
-folded into that row, because the row was taken at `53de19a4` and a measurement that quietly
-absorbs later work is not a measurement. Both gaps that row names were re-checked against
-`dbb2c7c7` directly and both survive it: no type named `ApplicabilityPolicy` exists there
-either, and `EvidenceClass` still appears in the gate crate's policy modules only in test
-fixtures. No other row is reached by that commit.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#35
-
-*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:e424ca1fe7d51725ea61ef8cecd4d2f4b70fc24fb57536818ff0e62d73c076bc*
-
-### The near-term tier, item by item
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#36
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:719d2c89469a38dd4705aa7b98a1b56719b3c8b7196ed4b7a8e347294a4410f6*
-
-**1. Stable kernel and identities — built.** `nomos-model` carries identity, subject,
-evidence, transition and digest as separate modules; `nomos-store` carries the
-content-addressed document store with an explicit write authority. Sixty-nine blessed surface
-snapshots under `tests/contract/surface/` hold those surfaces still, and a widened surface
-reddens a gate step rather than passing. The one qualification worth writing down: the root
-manifest sets `publish = false`, so every surface is stable against this repository's own
-snapshots and against no external consumer.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#37
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:4aabf6dbb014102c2cf84bff73318ed7e6a157ebd8103bd204e5494dc97c4b12*
-
-**2. Analysis and incremental fact infrastructure — partial.** `FactKey`, `InputDigest`,
-`GenerationCause`, `MaterializedFact`, `Supersession`, dependency propagation, guarantee
-broadening and an `InvalidationReport` are all real and all exercised. The gap is one line:
-`MemoryFactStore` is the only implementation of `FactStore` in the workspace. Nothing writes a
-fact anywhere a second process could read it, so incrementality is real within one run and
-does not exist between two. Every reuse figure this workspace quotes is a second-pass figure
-inside a single process.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#38
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:ca36ce49b21312647f1933191f08881945caf0d0a00cee42891d996e95fac986*
-
-**3. The language, provider and capability system — built, with four offers composed into
-nothing.** `Registered()` in `nomos-check-orchestration`'s composition root declares fourteen
-capabilities and takes seventeen offers against them, over three languages. Against that,
-twenty-one `Provider_Offer` functions are exported across `crates/languages`,
-`crates/repository`, `crates/connectors` and `crates/capabilities`, so four are declared and
-unobserved: `nomos-lang-csharp`'s syntax offer, both of `nomos-lang-rust-compiler`'s, and
-`nomos-lang-rust`'s `nomos.cap.module.index` rollup, which is offered only inside its own
-crate's tests. The compiler-backed provider is the sharpest case, because it is the only
-provider in this workspace backed by a real semantic engine and no crate under
-`crates/orchestration` or `crates/host` names it. The capability system is built; two of its
-most capable providers are not wired to anything.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#39
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:d5fa3b3c4f9fb4468dc0e2d6289df0499b83cb73ae681cc54ba5c8b0160f48d1*
-
-**4. Deterministic rules — built.** `DESCRIPTORS` in `nomos-rules` holds seventy-one entries,
-each naming its subject kind, the fact families it requires and the record it cites. Run
-directly, `gate plan --root .` prints `rules: 71` and exits 0. Determinism is a gate step in
-its own right over eight crates.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#40
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:58b0373438eda32454125395df3169526a65cf06eb7e5ae8355fd83de8bacdfb*
-
-**5. Applicability and truthful coverage — built.** `Applicability` carries eleven variants,
-deliberately has no `Default` and deliberately has no `is_pass`; `Claim` rolls a run up to
-complete or incomplete off those variants rather than off a finding count. Run directly, a
-`check` over `crates/kernel/nomos-store` answered "14 file(s) examined, 14 with a syntax fact,
-2 finding(s), 0 of which can fail a build", then "claim: incomplete" with
-"ProviderUnavailable: 2". A run that could not materialize two capabilities said so instead of
-reporting clean. This is the item with the least distance between what the record promised and
-what the tree does.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#41
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:58b8f306750019321437bf3d2827bb84084acfbea21833839d9ee18c82ae32a0*
-
-**6. First-class gates, the product object — partial.** Of the twelve elements this record's
-own constraint 5 enumerates, ten have a real type with a real reader: `ScopeSelector`,
-`RuleSelector`, `SuppressionPolicy`, `BaselinePolicy`, `AdoptionPolicy`, `CoveragePolicy`,
-phases, thresholds, approvals and failure disposition, with all four verbs — plan, run,
-explain, compare — reachable. Two have none. `ApplicabilityPolicy` appears nowhere in the
-workspace except inside the quotation of this record in `nomos-gate-orchestration`'s own
-module doc; no type of that name exists. Evidence requirements are the second:
-`nomos_contracts::Finding` carries an `EvidenceClass`, and within the whole gate crate that
-type appears only in test fixtures, so no policy reads it. The gate crate's own doc says both
-of these about itself, which is why this row is a confirmation rather than a discovery.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#42
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:a16aa3d88c25ba11fa4d824a9667d1fcd553a6b0c00c5f45c06f11036545ca49*
-
-**7. Baselines, suppressions and adoption — built.** `GatePolicyFile` holds six fields —
-suppressions, baseline, adoption, coverage, phases, approvals — `Resolve_Gate_Policy` reads
-them off a `nomos-gate.json` under the run's root, and `Run_Gate` calls it. An end-user
-repository can author all six. The CLI is a narrower surface than the file:
-`crates/host/nomos-cli/src/gate/parsing.rs` still constructs every policy at its default and
-passes `phases: Vec::new()`, so a phase is authorable through the file and not through argv.
-That is a host gap rather than a missing product object.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#43
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:bc44817efd301afed9909397c93a7f1d317ce1e57d17808066d8567daacf2ccc*
-
-**8. Corrections — partial.** The preview, stage, validate, commit and rollback lifecycle is
-real, and `nomos-correction-orchestration` is a seam both hosts call rather than a CLI module.
-What is partial is reach: `CorrectionFamily::ALL` holds two entries against seventy-one rules,
-so 2 of 71 rules can have a fix proposed for them at all, and nothing ranks candidates.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#44
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:ab6d31645ea48060c206ff2eff29ec468176d8d2cc2f8929fa5ce53d0b3691cd*
-
-**9. Headless workflow orchestration — partial.** `Run` takes an ordered slice of step plans,
-`Is_Coherent` gets its first real consumer, retry, timeout and compensation are honored rather
-than merely declared, and four `Body` variants cover five dispatch targets. Its only caller
-outside its own tests composes exactly one step per invocation, by that module's own statement,
-and nothing in the workspace parses a workflow definition. So the tier can execute a sequence
-and no person can author one. The crate's own doc lists what stays out — published artifacts,
-branch and merge, versioned replayable definitions, cache and cancellation runtime — and that
-list is accurate.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#45
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:95a25e1388097afd008cbea798b20a66af336eb96faed980f05026c33047ce41*
-
-**10. The application-service boundary — partial, and being reopened as this is written.**
-`nomos-api` exports thirty `Handle_*` functions, which is a real convergence point. There is no
-operation-surface crate beneath the hosts, so each host still assembles the product itself:
-`nomos-cli` names twenty-six `nomos-*` crates, eight of them orchestration crates, and
-`nomos-api` names twenty-two. `IF-001`'s canonical application service per user-visible query
-or action is satisfied for the verbs `nomos-api` covers and not by a boundary the hosts depend
-on. `OD-ROADMAP-005` authorizes building exactly that surface as its third piece, which is the
-strongest available evidence that this item is not finished.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#46
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:27b1d22f246c58b87c3cdf2ed45a1319b86ab47f250b4a7f233b06c04838e813*
-
-**11. CLI, API and MCP projections — partial.** Four binaries ship: `nomos`, `nomos-lsp`,
-`nomos-mcp`, `nomos-surface-provenance`. `nomos-api-transport` serves a closed `ServedMethod`
-registry of six operations and `nomos-mcp` publishes the same six as tools over XVPE's
-catalogue contract, never naming a handler. Six of thirty handlers is deliberate and
-`OD-HOST-007` and `OD-HOST-014` decide it, so it is not a shortfall — but three of the unserved
-handlers are product-side rather than repo tooling: agent execute, agent judge role, and
-workflow run reach no remote client. An LSP projection exists that this record's list never
-named.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#47
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:24e59a07b22b4e0b20eddcb49950caffe858c28b4c7f0191bc3cf21f331f9803*
-
-**12. Model backend and agent executor infrastructure — partial, and being reopened as this
-is written.** The task envelope, `WorkResult`, substantiation, `PrepareChangeContext`'s
-resolved form, profile resolution answering an unresolvable selector with a measured
-`ProfileAbsence`, one real executor and one real model backend, and three real routing
-consumers are all there. What is not there is any abstraction over them: the workspace contains
-no trait named `AgentExecutor` or `ModelBackend`, and in fact no `pub trait` at all in
-`crates/agent`, `nomos-agent-orchestration` or `nomos-model-package`. `Backend` is a closed
-two-variant enum. `OD-ROADMAP-005` authorizes the port as its second piece.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#48
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:f6729674eba9ecee8defe9d997ecf4a6dda01bcdc41d01372f1572258f0365e3*
-
-**13. Production hardening and continuous enforcement — absent, in the product sense.** This is
-the one row with no product-side evidence at all, and it is the row the deferral's own wording
-turns on. What exists is self-application: a fifteen-step CI gate whose `Rules` step runs
-`gate run --root .`, which is this repository enforcing itself and which this record's
-constraint 5 already distinguishes from the product. Against the product reading: the root
-manifest sets `publish = false`; no type named `OperatingModeProfile` exists, and that phrase
-occurs in this repository only inside a specification test fixture; there is no benchmark, no
-latency, memory, freshness or invalidation budget, and no degraded-mode behaviour anywhere;
-three corpora that carry this workspace's strongest scale claims live outside it and CI has
-none of them, which `tests/contract/tests/corpus_gates.rs` declares rather than hides; and no
-repository other than this one is under continuous enforcement by this product.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#49
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The near-term tier, item by item · hash: sha256:e718c08055f1814a911ef2e426d14f4347894bbce243256d95d4af12c34747b6*
-
-Four built, eight partial, one absent.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#50
-
-*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / Whether the condition the deferral rested on still holds · hash: sha256:23e2826a90a519325ab926d07a9e455c5485edef347b9b1406be9b45d322b371*
-
-### Whether the condition the deferral rested on still holds
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#51
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / Whether the condition the deferral rested on still holds · hash: sha256:1db09c88dfdc262b0078bc4d71ff0abd713ed23736181a55f86324cc332fef62*
-
-**It no longer decides, and that is the finding rather than a hedge.** The condition has two
-halves and at this revision they answer in opposite directions.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#52
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / Whether the condition the deferral rested on still holds · hash: sha256:f4999efaf36dab58cc7046e3e39448f7e3cc915dfe189fedf016c8906e20ca91*
-
-Read as "before the substrate is built", it is false. Facts, applicability, gates and
-corrections each have a real type, a real reader and a real run, and one of the four —
-applicability and truthful coverage — is fully built by any reading.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#53
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / Whether the condition the deferral rested on still holds · hash: sha256:15a970e70b3cb6815c46141c10023d26062eeee23f2f85addedd4a1e0a105d99*
-
-Read as "before the substrate is production-grade", it is true, and item 13 is why. The one
-near-term item that would turn the other twelve into a product is the one item with no
-product-side evidence at all. A fact store that does not survive a process, two of seventy-one
-rules with a correction, a gate missing two of the twelve elements this record itself
-enumerated, and a workflow tier nobody can author a plan for are each a distance from
-production-grade that nothing here has closed.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#54
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / Whether the condition the deferral rested on still holds · hash: sha256:82874918f473874912526e7434ce3d7712a9247eb89b4f21ec22702ec54cfdbc*
-
-So a session checking this record's stated reason against the tree finds it half true, and the
-record offers no second test. That is not a boundary a reader can act on. It is a prohibition
-whose justification each session must re-derive from scratch, which is precisely the cost
-`OD-ROADMAP-001` retired for a different caution, and the reason this amendment was owed.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#55
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / Whether the condition the deferral rested on still holds · hash: sha256:5f127605c9ee843974131bec5d11f03a6e1c85b1d17947b9151235539a4fb874*
-
-Replacing the test is not the same as lifting the prohibition, and the next section is why the
-two come apart here.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#56
-
-*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / What each deferred item actually waits on · hash: sha256:79c0e387f5e626dc8a36c697d096b4e99297b903ad676c24299054e0103584ec*
-
-### What each deferred item actually waits on
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#57
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / What each deferred item actually waits on · hash: sha256:6bdf668d4e4c9569aaf8c06d9bbb9781a03ed2836c89b6989b83f2a1255db6eb*
-
-`OD-RULES-024` is both the precedent and the caution. Architecture drift was asked for, was
-wanted, and could not be built, because it needed an observed call-graph or data-flow fact this
-workspace does not produce; that record's version 2 amendment records that the *declared* half
-now exists as `nomos.cap.architecture.declaration` and that the observed half still does not.
-Applied to each deferred item at `53de19a4`, naming the substrate fact it would consume and
-whether anything produces it:
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#58
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / What each deferred item actually waits on · hash: sha256:a4af4111b716ebbd23195d884cd633002dcfecc9129776fab967eadaa7c68179*
-
-- **Architecture discovery and inference** consumes an observed graph finer than package
-  granularity — module reaches module, function calls function. Nothing produces it.
-  `DependencyPayload` carries `package` and a list of edges, which is Cargo-level and nothing
-  finer; `ReachabilityPayload` carries flagged sites within one file. The declared half exists
-  and the observed half does not, exactly as `OD-RULES-024` v2 states.
-- **Feature topology and path tracing** consumes a correspondence between a named feature and
-  the code that realizes it. Nothing produces it, and nothing has decided what such a fact
-  would be. No capability contract, descriptor, payload, `RequiredFact` variant or provider in
-  this workspace carries the word.
-- **Placement analysis** consumes the same observed graph as architecture discovery, plus a
-  cohesion or coupling measure, which is a metric fact. Neither is produced. `OD-ROADMAP-004`
-  places the metric-consuming half deferred in its own right, on the ground that its substrate
-  is untriggered rather than merely unbuilt, so this item fails twice over.
-- **Runtime and debug intelligence** consumes a `FactVariant::RuntimeObserved` fact about a
-  program's execution. The vocabulary exists and `OD-ANALYSIS-006` settled it; the producer
-  does not. Exactly one offer in this workspace declares `RuntimeObserved`,
-  `nomos-connector-coderabbit`, and what it observed is a posted review comment rather than an
-  execution. Part of this item is further out of reach than a missing fact:
-  `OD-ROADMAP-004` records `RUNTIME-005`'s `ActiveRuntimeGuard` as **withheld by the corpus**,
-  needing a product, security and authorization decision outside this repository's sequencing,
-  and nothing this record decides can release it.
-- **Test intelligence** is, in this record's own words, "built on those models", so it inherits
-  the two absences above. It also needs one of its own: a fact linking a test to what it
-  covers. Nothing produces it. `nomos.cap.test_material.policy` classifies whether material is
-  test material; it says nothing about what that material exercises.
-- **Atlas** consumes a queryable surface and facts that survive the process that made them. The
-  surface half is produced: six served operations behind one dispatch, an MCP catalogue and a
-  JSON transport. The persistence half is not, per item 2. Its content is the five items above.
-- **Desktop, web and mobile** consume the same surface, the same missing persistence, and a
-  delivery story that item 13 does not have.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#59
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / What each deferred item actually waits on · hash: sha256:c24c4a3c0f27f60b0591afcdcf8dbe50ef243b843142297775d67722969dfe32*
-
-**Five of the nine deferred items fail `OD-RULES-024`'s test outright**, and they fail it for a
-reason no amount of production hardening will touch. The other four are clients whose content
-is the five that do. Not one of the nine is waiting on the tier.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#60
-
-*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The decision · hash: sha256:6b667cec8f5e0ec6a00ec5092fce24851ac8b86f93b2b36fa91fc084eb77b0c6*
-
-### The decision
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#61
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The decision · hash: sha256:bce8f426ab067cf1936769755eef85ae41bcbbd388ceb411f239bd8fca1eb1ef*
-
-**The two-tier boundary is replaced by a per-item condition.** The two lists above stay as
-drawn and stay accurate about where each item sits today; what is withdrawn is the single
-shared reason, which has stopped being readable off the tree. In its place each deferred item
-carries its own condition, and the conditions fall into four kinds:
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#62
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The decision · hash: sha256:2f573f51d0f95f7a30ae463a91abecfcdbae22126c3cb604967abe1fc8e6d19e*
-
-1. **A missing capability decision** — architecture discovery and inference, feature topology
-   and path tracing, placement analysis, runtime and debug intelligence, and test intelligence.
-   The condition is that the fact the item consumes is decided and provided. This is a
-   capability question of the weight `OD-RULES-010` and `OD-CAPABILITY-010` were, and
-   `OD-RULES-024` is explicit that it is not a detail a rule's own implementation may invent on
-   the way past.
-2. **Withheld by the corpus** — the `ActiveRuntimeGuard` half of runtime intelligence. Its
-   condition is the named external decision `OD-ROADMAP-004` describes, and substrate readiness
-   does not stand in for it.
-3. **Content-dependent** — Atlas. Its condition is that at least one item in the first kind
-   produces a fact worth showing, and that a fact survives the process that made it.
-4. **Delivery** — desktop, web and mobile. Their condition is near-term item 13, production
-   hardening and continuous enforcement, which is the one near-term item this amendment reports
-   as absent.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#63
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The decision · hash: sha256:39a91279d346f8872021fd9af0f4767b3505714dddfedbe5480175d932031cbf*
-
-**No deferred item's condition is met at `53de19a4`.** The practical effect is that the
-deferred tier does not move today — but it now waits on nine things a session can check rather
-than on one thing it has to re-argue, each lapsing on its own evidence the way
-`OD-ROADMAP-002`'s three pauses did under `OD-ROADMAP-003`.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#64
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / The decision · hash: sha256:6889ea82d87388bcec8bee10612278e5cf44a2c936785123aae2f1d0fc2b3162*
-
-A condition being met makes an item available for an item of its own, with its own territory
-and its own measurement. It is not a licence to build, and it is not a schedule.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#65
-
-*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / What this amendment does not do · hash: sha256:518ff38ee5ad8785190cf84f0f9168d9561000936111c40d575718f1b8b17636*
-
-### What this amendment does not do
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#66
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / What this amendment does not do · hash: sha256:e7caf64d5907762b62f9f1bfe75f7ec57fe2bddf7d2e75fa454d384277398f36*
-
-**It schedules no implementation and authors no building item.** It moves no item to the
-near-term tier, because no item's condition is met.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#67
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / What this amendment does not do · hash: sha256:07904d054329d07563926b93766d3d2b975c0b2d5e519d95685df496782e168c*
-
-**It does not decide any of the missing capabilities.** Naming that an observed call-graph
-fact, a feature-correspondence fact and a test-coverage fact are what five deferred items
-consume is not designing any of them, and `OD-RULES-024`'s refusal to design them inside a
-consumer stands.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#68
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / What this amendment does not do · hash: sha256:6a42591b3b4f6977504c4a292b7394b423a56edd38cceb0b83acbfc74a2308a6*
-
-**It does not withdraw the properties the deferred items are for.** Every one of them remains
-real and wanted. What this amendment says is that five of them are undecided as unready rather
-than deferred as unwanted, which is `OD-RULES-024`'s own distinction.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#69
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / What this amendment does not do · hash: sha256:aabbc555843e6d42e2f1ce7cc69f93a801643aba4c815c14902240e02762b733*
-
-**It does not retire near-term item 13 or turn it into a deferred item.** Production hardening
-stays near-term; the amendment reports it as absent, which is a measurement and not a
-reclassification.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#70
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / What this amendment does not do · hash: sha256:e45e5266127af0262849045bec4b365f8fbe3cb63dc92825c085f39bea97b297*
-
-**It does not reopen constraints 1, 3, 4 or 5, or `OD-ROADMAP-001`'s supersession of
-constraint 2.** `EGRAPH` stays where constraint 3 put it. Ecosystem ownership stays
-`ARC-ECOSYSTEM-001`'s.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#71
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / What this amendment does not do · hash: sha256:2862db749267778f1e780b6d4f7868c62501ef31474eaf7705ffb52f026bd6a7*
-
-**It does not stand beside this record as a second sequencing authority.** It is an amendment
-to the record that drew the boundary, for the reason `OD-AGENT-001` gives about restating an
-authority rather than routing to it, which applies to a roadmap as much as to an agent file.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#72
-
-*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / Consistency with `OD-ROADMAP-005` · hash: sha256:68341de20b189030d1bfa79337a23f4c4ff75f47fb4ef56db7b165126981fd95*
-
-### Consistency with `OD-ROADMAP-005`
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#73
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / Consistency with `OD-ROADMAP-005` · hash: sha256:5fd553c5f14858490d14e25654aa0d632fc02f174259ded4ccaf0c254b7e4a05*
-
-`OD-ROADMAP-005` landed one commit before this amendment was authored and bears on it in both
-directions, so the relationship is stated rather than left to be inferred.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#74
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / Consistency with `OD-ROADMAP-005` · hash: sha256:a7e7614218f45a23e63b6db3ef62713ee5dfa5cb05644f18605c2df902071c62*
-
-It is evidence for the measurement above. Three of the eight pieces it authorizes are
-near-term-tier items of this record — the provider composition root is item 3, the operation
-surface is item 10, the agent port is item 12 — which is an independent reading that those
-three are not finished, arrived at by a different route than this one.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#75
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / Consistency with `OD-ROADMAP-005` · hash: sha256:2629a6e3b4012d5853b06fd7fa511c970836a545a17a51e9675a2376c17beb0c*
-
-It is also the shape this amendment follows. That record answers an owner instruction by
-bounding it: naming the clause of each record it supersedes, at a stated version, leaving every
-measurement those records made standing, and licensing no scope beyond its enumeration. This
-amendment does the same to one clause of one record — the single shared reason this record's
-tier rested on — and leaves the rest of it standing.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#76
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: The Tier Is Replaced By A Per-Item Condition, Measured Item By Item At `53de19a4` / Consistency with `OD-ROADMAP-005` · hash: sha256:80077dcaeb571f49fb51b177016e6423cdd2a8d2861264aeaa8b24cedab2d303*
-
-The two do not overlap. `OD-ROADMAP-005` supersedes eight named deferrals in other records and
-its own text is careful that it does not touch this record's two-tier boundary; this amendment
-touches only that boundary and supersedes none of its eight. And nothing here is that kind of
-override: an owner asked for the deferred tier, and the answer is that five of the six things
-asked for are held back by a fact nobody produces rather than by a boundary anybody can lift.
-The remedy for those is a capability decision, not a roadmap decision.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#77
-
 *revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#78
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#29
 
 *revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:46b1e90810340bc991be682a32f1ca8c6f1d2994032dc1b1d9be520cad85d2bf*
 
@@ -5482,22 +4984,6 @@ clause: that adoption keeps package *activation semantics* on Nomos's side of th
 this record's prior text erased that carve-out by compressing "installation" and
 "activation" into one XVPE-owned phrase. Package installation mechanism is unchanged as
 XVPE's; nothing else about either record's ownership table moves.
-
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#79
-
-*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:a926a67415d3eef78b6f1343b7bb04f78d132883e62ead255489397e21dd6c04*
-
-Amended to version 4 by `P125-WHETHER-THE-DEFERRED-TIER-STILL-HOLDS`, which re-measured the
-near-term tier item by item at `53de19a4` — four built, eight partial, one absent — and found
-the single shared reason the two-tier boundary rested on no longer readable off the tree: the
-substrate is built as mechanism and is not production-grade, and the condition's two halves now
-answer in opposite directions. The tier is replaced by a per-item condition, one per deferred
-item, in four kinds; no deferred item's condition is met at that revision, so nothing moves and
-nothing is scheduled. Five of the nine deferred items are held back by a fact this workspace
-does not produce rather than by any sequencing decision, which is `OD-RULES-024`'s own finding
-read one tier up. Read the amendment above before reading either list as a standing
-prohibition, and `OD-ROADMAP-004` for the seven metric and runtime families neither list
-sorted.
 
 ### docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1
 
@@ -39248,6 +38734,404 @@ about the whole product surface; a transport admission is refused as this questi
 and left available as its own item; a CLI-local rendering is refused as a second rendering of
 a finding. The building item is named in decision 8 with its territory, and
 `nomos-architecture.json` is deliberately absent from it.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#1
+
+*revision: authored · kind: heading · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other · hash: sha256:11f208dd009b12643a17064a8230d763abac3fb6aca2d28e8c5f13bd7e8380e4*
+
+# A host names an orchestration crate for an operation it renders, and never for how those crates compose each other
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#2
+
+*revision: authored · kind: heading · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#3
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / Question · hash: sha256:b83a2f4084b4356a75d7ff69aef7c69437b4da7138681fd662d6ecef19d70c5f*
+
+An external architecture review of `dev` at `bc0aaac` asked, in its thirteenth section, that
+this workspace establish a rule: an orchestration crate may coordinate domain services, but a
+host should not need to know the internal orchestration graph. It observed that the
+orchestration crates now compose each other while the hosts also name several of them
+directly, and read the result as trending toward a mesh rather than a layer.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#4
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / Question · hash: sha256:4a4e0b4918c3e51f072271be0187a18bf9efad47b0c420c79f86f8b4a2bf21c0*
+
+`OD-ROADMAP-005` decision item 8 authorizes the rule and bounds it: the one piece of that set
+whose output is a record rather than code, superseding nothing.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#5
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / Question · hash: sha256:740599930bf63c0cc9804035117fa5b9afa89d1da610e93319cfb839538f39e3*
+
+No record states it. The three nearest each decide a different question on its own
+`OD-PACKAGE-015` third-clause trigger -- `OD-HOST-001` that choosing a platform, running a verb
+and rendering its outcome are three crates; `OD-HOST-011` that the response twin stays and no
+contracts crate is extracted; `OD-HOST-012` that the repo-tooling handlers keep their present
+home. Between them they govern what a host *builds*, what it *returns* and what it *holds*.
+None of them governs what it may *know*.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#6
+
+*revision: authored · kind: heading · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#7
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Was Measured · hash: sha256:4b23e52b9bdbccedcfe0817e02aff7f52de85b3eb0eff6e76be0cea4aa3c87d2*
+
+Measured 2026-09-21 at `53de19a4`, from every workspace member's own production
+`[dependencies]` and from `nomos-architecture.json`. The edges are named rather than counted,
+because the review's claim is about a shape and a shape is not visible in a total.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#8
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Was Measured · hash: sha256:1dbf95335176bb0967499f1364971cb1442aad7e8ab116834c5df645facf5a93*
+
+**Every host edge into an orchestration crate.** Eight crates in this workspace have a name
+ending in `-orchestration` or are `nomos-workspace-discovery`. The six crates under
+`crates/host/` reach them twenty-two times:
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#9
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Was Measured · hash: sha256:642f6a8fea257410f95f15660951219b7ad46c94b8c83d9fc9365970f40f93d4*
+
+| Crate under `crates/host/` | Orchestration crates it names |
+|---|---|
+| `nomos-cli` | `nomos-work-orchestration`, `nomos-check-orchestration`, `nomos-spec-orchestration`, `nomos-gate-orchestration`, `nomos-correction-orchestration`, `nomos-workflow-orchestration`, `nomos-agent-orchestration`, `nomos-workspace-discovery` |
+| `nomos-api` | the same eight |
+| `nomos-api-transport` | `nomos-check-orchestration`, `nomos-correction-orchestration`, `nomos-gate-orchestration` |
+| `nomos-lsp` | `nomos-check-orchestration`, `nomos-correction-orchestration`, `nomos-workspace-discovery` |
+| `nomos-mcp` | none -- it reaches everything through `nomos-api-transport` |
+| `nomos-surface-provenance` | none |
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#10
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Was Measured · hash: sha256:09df236965209472f55e3c1c5778df4f6c2f6529b3b027b4f10fae6f5157a769*
+
+The population is the directory rather than the zone, so the table is complete in both
+directions and the two rows that contribute nothing are named rather than dropped. Five of the
+six are `Host` in `nomos-architecture.json`; `nomos-surface-provenance` is `Repo Tooling`
+there, and `OD-PROJECT-004` decided where it sits physically. Every one of the twenty-two
+edges above is drawn by a `Host`-zone crate.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#11
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Was Measured · hash: sha256:490e75b087e6933116dee34209e78123d37c7512e9e58f9e5954fa303dd3fb0f*
+
+**Every edge among the orchestration crates. There are six, and all six are real.**
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#12
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Was Measured · hash: sha256:882b3c693c65ce3a9f2e0e4271532f461c99008cc0eda91a37044e935b84708f*
+
+| From | To |
+|---|---|
+| `nomos-correction-orchestration` | `nomos-check-orchestration` |
+| `nomos-gate-orchestration` | `nomos-check-orchestration` |
+| `nomos-workflow-orchestration` | `nomos-agent-orchestration` |
+| `nomos-workflow-orchestration` | `nomos-check-orchestration` |
+| `nomos-workflow-orchestration` | `nomos-correction-orchestration` |
+| `nomos-workflow-orchestration` | `nomos-gate-orchestration` |
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#13
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Was Measured · hash: sha256:92458b1c543671a33e5f535640bd6c27afd315adcc85740b06bedea3c3b210e2*
+
+`nomos-check-orchestration`, `nomos-agent-orchestration`, `nomos-work-orchestration`,
+`nomos-spec-orchestration` and `nomos-workspace-discovery` name no orchestration crate at all.
+The graph is two levels deep and acyclic, which is what `OD-RULES-020` already measured when
+it replaced the number line.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#14
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Was Measured · hash: sha256:a7fae5bf5bf6f391c42f880de8928728779d4f4e8bfa5532eee2d73318aafc1c*
+
+**What the zone model permits, and the asymmetry that falls out of it.** All six edges above
+are same-zone: `members` puts both ends of each in `Application Service`, and `permits` does
+not grant that zone to itself. Each of the six is therefore listed individually in
+`exceptions`, and both directions of that list are mechanically checked -- see
+`tests/contract/tests/boundaries/graph.rs`, whose
+`Test_Dependencies_Should_Run_Strictly_Downward` refuses an edge that is neither a permitted
+crossing nor a named exception, and whose
+`Test_Every_Same_Zone_Edge_Should_Be_A_Real_Dependency` refuses a named exception with no
+dependency behind it. `Check_Dependency_Direction` makes the same judgment over a real run
+from the same declaration.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#15
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Was Measured · hash: sha256:01fe88103d742098bed5331a9fa0b519e6434de7d889c9fc6243e173fea971e2*
+
+Every one of the twenty-two host edges is cross-zone. `Host` permits `Application Service`,
+`Repo Tooling` and `Specification` outright, so not one host edge is named anywhere, no count
+of them is declared, and no check can fail on one however it came to be there. **The
+composition graph is fully enumerated and checked in both directions; the reach into it from
+above is granted wholesale.** That asymmetry, not the number eight, is what the review saw.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#16
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Was Measured · hash: sha256:a68972477868f9e9153f2b04a9cd13f82442359f46b04d2a4ae2a3b98ad8d13f*
+
+**Whether any host reaches an orchestration crate it renders no outcome for. Exactly one
+does.** `nomos-lsp` names `nomos-correction-orchestration` at a single site,
+`crates/host/nomos-lsp/src/walk_outward/available_correction.rs`, for `CorrectionFamily::Of`
+-- a lookup against that crate's own declaration of which rules it composes a correction for.
+The module documents that it never invokes `Run_Correction`, and the LSP surfaces no
+correction operation and renders no correction outcome. Every other host edge is answered by
+an operation that host offers: `nomos-cli` has seven verb modules against seven orchestration
+crates and reaches the eighth, `nomos-workspace-discovery`, for the shared walk `OD-HOST-008`
+put beneath every composition root; `nomos-api` declares thirty `Handle_*` entry points across
+the same seven families and reaches the walk the same way.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#17
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Was Measured · hash: sha256:f31e8eba050d3322eb48c00435e0bcf8c7bede46f0cde8fd2a23e2f38c84e2dc*
+
+**One near miss, named so the next measurement does not read it as a violation.**
+`nomos-api-transport` names its three orchestration crates for their *request* vocabulary only
+-- `CheckCommand`, `CorrectionCommand`, `GateCommand`, `FindingQuery`, `RuleSelector`,
+`ScopeSelector` -- and names no orchestration outcome type at all, because every answer it
+returns is a `nomos_api` response serialized. Each of the three answers a method it serves,
+and the twin it renders instead is `OD-HOST-011`'s own decision.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#18
+
+*revision: authored · kind: heading · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#19
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / The Decision · hash: sha256:cf87789f6440815213ccdee7dc6c2c0e0f70bbf1c8d7d4bbdf18115709a591b9*
+
+**A host may name an orchestration crate when the host itself offers an operation that crate
+answers and renders that operation's outcome. It may not name one for any reason that is a
+fact about how the orchestration crates compose each other.**
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#20
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / The Decision · hash: sha256:1da3ef15d7c65ddff76720bb22130b463c9b7bdb530e10bba814c538cbe42530*
+
+**The test is removal.** Delete any edge from the composition graph above. If a host's
+justification for any of its own edges changes, that host was holding the graph.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#21
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / The Decision · hash: sha256:29b25e5b0270cbbb44593ff58e96320cc7fd4f85ba870fddf049b0fd54acdaf5*
+
+Applied at `53de19a4`: deleting `nomos-workflow-orchestration` into
+`nomos-gate-orchestration` leaves `nomos-cli` naming `nomos-gate-orchestration` for exactly
+the reason it already did, which is that `gate.rs` renders `nomos gate`. All six deletions
+leave both large hosts unchanged. **So eight is not a mesh. It is seven operations and one
+shared walk**, and the count the review read as coupling is the count of operations the host
+offers. The rule is about what a host knows, and a count cannot see that.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#22
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / The Decision · hash: sha256:ecd64e0e3af1a913c0ead82023e108339d2cc26922f1d7a55fe06b72b47a0fe5*
+
+**What the rule forbids, stated so it can be checked by hand:**
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#23
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / The Decision · hash: sha256:d35dd09accfcdd08e857fabd318d186d5e286caf382862516e294bea79961b88*
+
+1. **Naming an orchestration crate the host surfaces no operation for.** The edge has no
+   host-side reason, so whatever reason it has is a fact about the other side.
+2. **Reaching past a composing crate to one it already composes, to perform by hand what the
+   composition performs.** A host calling `nomos-check-orchestration` and then
+   `nomos-gate-orchestration` over one tree to assemble one answer has re-derived the
+   composition rather than asked for it.
+3. **Reading one orchestration crate's declaration in order to describe a different service's
+   behaviour.** The host is then answering a question about the graph.
+4. **Ordering or sequencing host-side calls because of what one of those crates composes.**
+   A host that must call two in an order the orchestration crates already imply holds the
+   graph in its control flow rather than in its manifest.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#24
+
+*revision: authored · kind: heading · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Rule Does Not Forbid · hash: sha256:4ed89fbf05f9e2e389c6bf947aa9407b8a533a5e8a329118a4a78b25dd3233b1*
+
+## What This Rule Does Not Forbid
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#25
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Rule Does Not Forbid · hash: sha256:3e53cbdcc5e754aa61d1ca3acc748105bf6d81bc4c54c939d9c66702ab3dfa77*
+
+**A host naming a platform composer.** `nomos-composer-std` is how a host chooses an
+implementation of the ports without naming one per port; `OD-HOST-001` settled that
+composition is the host's job and `OD-RULES-028` settled the zone that keeps a host away from
+`nomos-platform-std` directly. Nothing here touches it.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#26
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Rule Does Not Forbid · hash: sha256:63aabb6949125eb93985e51281061c0fdef5ff901b939bfb9b0c957cdbf4b294*
+
+**A host rendering an orchestration outcome type.** That is the third of `OD-HOST-001`'s three
+crates and the whole reason the seam exists. A host that names `WorkOutcome` or `CheckOutcome`
+and prints it is doing precisely what it is for.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#27
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Rule Does Not Forbid · hash: sha256:b26a9b2155d2ffa365574b1c81be6562a741266036d3718026feeaf8f665b2d6*
+
+**A host parsing its own arguments.** `OD-HOST-001` kept `argv` parsing and exit codes out of
+the orchestration band deliberately, and a second adapter constructs a command from whatever
+its own transport carries.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#28
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Rule Does Not Forbid · hash: sha256:b5f62a952641a358f8940fca04dc6fadbd103ebc69e75dbdb8a3a11fdbea7d14*
+
+**A host naming many orchestration crates.** The permitted count is the count of operations it
+renders, and nothing here caps it. A host offering twenty verbs may name twenty crates.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#29
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Rule Does Not Forbid · hash: sha256:9224fb811fc71e701a3136b623d3a487b0e566bc2ac18492815b0221ceb8eb19*
+
+**An orchestration crate composing another.** The six edges stand. They are declared, checked
+in both directions, and `OD-RULES-020` decided that a named same-zone edge is the correct way
+to carry exactly this. This record narrows none of them and adds none.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#30
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Rule Does Not Forbid · hash: sha256:bd2bc77d28cc5eb63788910661f9670da061bd4618e5369ea9cdc47c0306163b*
+
+**The response twin.** `OD-HOST-011` stands as written; a twin is not knowledge of the graph.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#31
+
+*revision: authored · kind: heading · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Rule Does Not Decide · hash: sha256:1e9511ad615c4d87a54a02f7f67772b156cc040f7109e1e9e684c2d77341107b*
+
+## What This Rule Does Not Decide
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#32
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Rule Does Not Decide · hash: sha256:63be9132a4239f5b12f8ab330c8657a5210d0cca28db49dd05701e4db8a2d230*
+
+**Whether a host should depend on one operation surface instead of several.** That is piece 3
+of `OD-ROADMAP-005`, and this record does not design it, name its crate, or pre-empt its
+shape. The two questions are separable on purpose: this one says what a host may *know*, that
+one decides what a host *depends on*. A host could satisfy this rule with twenty-two edges and
+break it with one.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#33
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Rule Does Not Decide · hash: sha256:fa361894819cf46894cba39ff9048557068670ef73b7d6bb7c602942b5d1189d*
+
+Nor would that item, if it lands, make this rule vacuous. The same question is then asked of
+the surface itself, and the answer is the same sentence with a different subject.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#34
+
+*revision: authored · kind: heading · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Costs · hash: sha256:50e8d3d1d6c4a24186d6e6a0bd26f4a9d0b928104cf0c665f864e60eda7c8cd4*
+
+## What This Costs
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#35
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Costs · hash: sha256:5829f1e28908330d41c74ebbff24a83e04a019f526901f6b91522193bc1cfdc3*
+
+**Nothing mechanical holds it, and this record says so rather than implying otherwise.** The
+three checks named in the measurement judge whether an edge is *permitted*. `Host` permits
+`Application Service` unconditionally, so a host edge cannot fail any of them however it was
+justified. What this rule turns on -- whether the host renders an outcome for the crate it
+names -- is semantic, and no declaration in this workspace carries it. So the rule is held by
+review, and it will be broken quietly before it is broken loudly. That is a real cost, and it
+is why the trigger below is stated as something observable rather than as a preference.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#36
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What This Costs · hash: sha256:dd206437dc2f9b45e29567e9987b7d6250a2ac4e0dfbc8767accba11f4ba4c0d*
+
+**It forbids the cheapest answer to a cross-service question and supplies no replacement.**
+When a host needs a fact only another service holds, reaching the crate that holds it is one
+line. This rule says no, and deliberately does not say what to do instead, because the thing
+to do instead belongs to the item that decides what a host depends on.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#37
+
+*revision: authored · kind: heading · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / Status Of The Tree Against This Rule · hash: sha256:fddfdd83acb96a3b3e6ab71ede612e08f84cada161ed1382b1d36924672770c2*
+
+## Status Of The Tree Against This Rule
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#38
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / Status Of The Tree Against This Rule · hash: sha256:7706af990b9694b2ed6b5a2a6c9913f95d75e2fb8411e8b41c1e89efd146c5d3*
+
+**One live violation, and it is not an accident.** `nomos-lsp` naming
+`nomos-correction-orchestration` for `CorrectionFamily::Of` fails the first forbidden form
+above: the LSP offers no correction operation, so the edge is justified by what a different
+service's pipeline contains. It is stated here rather than left for the next reviewer to
+rediscover, because a rule with a known population of violations is a decision and a rule that
+pretends it is already satisfied is not.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#39
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / Status Of The Tree Against This Rule · hash: sha256:9deb5e467d91173bcbc662306b9b65775a5a0a6b8b78876f3670cf93cd8f9859*
+
+**The repair is not the state that preceded it.** That module used to carry a literal array of
+the same rule identifiers, and `P73-LSP-CORRECTION-FAMILY-DUPLICATED-2` replaced the copy with
+a lookup against the declaration -- a real improvement, made for a real reason, which is that
+a third family composed over there would have left the copy stale with nothing failing.
+Restoring the copy would trade a stated edge for an unstated one and satisfy this rule by
+making the workspace worse.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#40
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / Status Of The Tree Against This Rule · hash: sha256:612e876bfd88150ee12afb388a6c49800d2025803530d8b2a27173b23e9f3e1a*
+
+**Where it goes instead is not this record's to say.** Which rules a correction family covers
+is a claim about what the product can do rather than about how a pipeline is assembled, and
+this record neither assigns it a home nor holds it open against anything else --
+`OD-ROADMAP-005` is explicit that a piece needing a further change is a new item and, where it
+reaches another record, a new question for the owner. Until it moves, the edge is a measured
+exception with its reason written down.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#41
+
+*revision: authored · kind: heading · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Would Decide It Differently · hash: sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429*
+
+## What Would Decide It Differently
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#42
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / What Would Decide It Differently · hash: sha256:7973a1bb19eafed86d9f904bae86aec3ad15c040517516a9645bf6958f444c97*
+
+- **A second host edge that fails the removal test.** One is a stated exception with a
+  history; two is evidence the rule is not being held, and the question then is whether it
+  earns a mechanism or should be dropped rather than left as advice nobody follows.
+- **A change inside an orchestration crate's composition that forces a host edit.** This is
+  the falsifier. It would prove a host was already holding the graph somewhere the edge list
+  above could not see, which is the one thing a dependency measurement cannot rule out.
+- **A host whose orchestration edge count exceeds the operations it renders.** Both large
+  hosts are seven operations plus one walk today. An eighth edge with no eighth operation is
+  the first forbidden form arriving again, and it is countable without reading any code.
+- **An application operation surface landing while the hosts keep their direct edges.** Then
+  either that surface does not carry what a host needs, or the separation is being paid for
+  twice, and both are worth reopening for.
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#43
+
+*revision: authored · kind: heading · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#44
+
+*revision: authored · kind: prose · heading: A host names an orchestration crate for an operation it renders, and never for how those crates compose each other / Status · hash: sha256:787af66bd5f50f83aaa0140d7a7e8f230796b369a3849c46dcad6862e186ac1b*
+
+Accepted. The rule the review asked for, stated at the altitude it asked for and with no
+mechanism decided. Measured at `53de19a4`: twenty-two host edges into eight crates, six edges
+among the orchestration crates, all six named in `exceptions` while every host edge is granted
+by zone without being named, and one host edge -- `nomos-lsp` into
+`nomos-correction-orchestration` -- that the rule forbids today.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 
