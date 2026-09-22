@@ -202,7 +202,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md@authored | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md | authored | 56 | 14 | sha256:0ffc8479136943b0a3335a0042a996e0a028e3811b1ebcdca9228da7bd7e458c |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
-| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 35 | 11 | sha256:bba6e6b5f62b007c956218eebf7481b6890c759f30131be10fc545c564ccf868 |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 21 | 7 | sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md | authored | 40 | 8 | sha256:54dd8e341f63882f74fca31d11cc939e8bfec1033fe8ba3e6fcbf6a156689166 |
 | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md@authored | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md | authored | 85 | 18 | sha256:2abc66bb472507d0bf4f2c040530b440a47a4fed7def8473531083f874de3df2 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
@@ -218,6 +218,7 @@ profile: domain-specification
 | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md@authored | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md | authored | 43 | 12 | sha256:679898fb3515e18e74b3d01fc12b1993228c1941b02d8250e8a1a2b4c780c683 |
 | docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md@authored | docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md | authored | 49 | 15 | sha256:62c6d8750480da8424a5689d32b601a54227446d970e4610b102910dbe001e06 |
 | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md@authored | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md | authored | 28 | 7 | sha256:63a8457f1df3d1c4ae5e22a2051333aac43426b8618a6dd792e5a7dc4aa024dd |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md@authored | docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md | authored | 59 | 16 | sha256:902a048df10030bcf6dc04bcc5efac962d78c0b199e122f7ea7e787693fecefc |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md@authored | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md | authored | 67 | 12 | sha256:f55068c0987852129b3103770502611bec876fd8c119bc01cd6616b6ecdf7bc6 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md | authored | 69 | 16 | sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a |
 | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
@@ -1993,10 +1994,6 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#15 | authored | 2 | Why The Test Was Deleted Rather Than Widened |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#18 | authored | 2 | What This Costs |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#20 | authored | 2 | Consequences |
-| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#22 | authored | 2 | Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards |
-| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#24 | authored | 3 | What was measured |
-| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#27 | authored | 3 | What moved, and what did not |
-| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#31 | authored | 3 | What it cost, which is not what the section above says it costs |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1 | authored | 1 | A local patch override is a development convenience and never the governing form of the XVPE crossing |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#6 | authored | 2 | Decision |
@@ -2161,6 +2158,22 @@ profile: domain-specification
 | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#19 | authored | 2 | What This Does Not Do |
 | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#25 | authored | 2 | Consequences |
 | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#27 | authored | 2 | Status |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#1 | authored | 1 | The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#2 | authored | 2 | Question |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#6 | authored | 2 | What Is Not Being Claimed |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#10 | authored | 2 | The Decision |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#12 | authored | 3 | 1. A run history, so a baselined finding can be told from one reintroduced |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#17 | authored | 3 | 2. Branch, join, bounded parallelism, and a definition a run can be replayed against |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#22 | authored | 3 | 3. A scheduler that runs the waves the correction substrate already computes |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#25 | authored | 3 | 4. A process that outlives an invocation |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#30 | authored | 3 | 5. Six pieces with no deferral in the way |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#33 | authored | 3 | 6. One remaining gap is a question rather than a piece |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#36 | authored | 2 | The Two Refused On Measurement Are Decided, Not Superseded |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#38 | authored | 3 | The demand planner: the requirement is satisfied because the gap is answered, not open |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#44 | authored | 3 | Rules loaded from package files: the requirement is satisfied for the same reason |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#48 | authored | 2 | What This Does Not Do |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#56 | authored | 2 | Consequences |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#58 | authored | 2 | Status |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1 | authored | 1 | A rule states what it needs and is refused an answer beneath it |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#7 | authored | 2 | The Charge Is Correct |
@@ -60649,135 +60662,6 @@ That is a real cost, accepted deliberately rather than discovered later.
   workspace-wide would mean touching 33 implementors and 559 use-sites for no behavioural
   change.
 
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#22
-
-*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards · hash: sha256:1288a87ba1e45c743dc9354eea4dcb1bc6759d9763e62c37ad0a14578691c36a*
-
-## Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#23
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards · hash: sha256:1835c16425e59a8f8c421d129e81ab2759ce541fbef96e2125cf50d1a152386b*
-
-`OD-ROADMAP-005` decision 4 authorizes this and states its own bound: this record is superseded
-only where its retirement of `AGT-006`'s no-dependency clause reaches `nomos-platform` itself.
-Everything above stands, and the reasoning that produced it was never the objection.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#24
-
-*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What was measured · hash: sha256:8a1f64f2f25048a02b74220dac0a038766c2b805c9bc809def51b3a5b69edf34*
-
-### What was measured
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#25
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What was measured · hash: sha256:ba501320a2b2e20f28431f8210913922b475f4b2491a4485272bc56db9b854a9*
-
-At `53de19a4`, and unchanged at `a50bf332`:
-`crates/platform/nomos-platform/src/clock/timestamp.rs` re-exported `xvpe_clock::Timestamp` and
-the crate's manifest named `xvpe-clock`. So the ports crate every band above depends on could
-not compile without the engine it is a port *to*. An external architecture review of `dev`
-called that a reverse boundary leak, and it is one: the seam this crate exists to be had a
-dependency running through it the wrong way, and every band above inherited it.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#26
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What was measured · hash: sha256:36c1575806839c121dc672ecd7f5c6b7d5d40ae91f830fc7a08134ec031e0faa*
-
-The consumer census over `crates/` and `tests/` is what decided the returning type's surface,
-rather than a reading of the one being replaced: 88 files name `Timestamp`;
-`Timestamp::From_Unix_Seconds` is called 153 times and `Timestamp::Plus` once as an associated
-function; the value methods are `Unix_Seconds` 19 times, `Plus` 10 and `Since` 4; no `const` or
-`static` of the type exists, nothing keys a map or a set by it, and no crate implements a trait
-for it. `nomos-platform` was the only crate in the workspace naming `xvpe-clock`, and neither
-`README.md` nor `nomos-architecture.json` mentioned it, so nothing outside that one manifest
-asserted the arrangement being undone.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#27
-
-*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:2f80fba18514b12f6ac170b7a2baa60bb09d4c91c259a71e4073ed565f78ba40*
-
-### What moved, and what did not
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#28
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:641f2f25eee921ea95c24d8c4744eaf975907665d4897e520e8c7e42bc934f46*
-
-The declaration moved, and nothing else. `nomos_platform::Timestamp` is the same path with the
-same operations, so no consumer was edited and none learned -- which is what the seam bought on
-the way down, bought again on the way back. The ledger's wire format never moved in either
-direction: it was always this workspace's own, `timestamp_serde` still holds it, and
-`Test_A_Timestamp_Should_Serialize_As_A_Bare_Number_Of_Seconds` still asserts the bytes every
-committed ledger carries.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#29
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:1ac233e92706012bbdcc0db594308a3d831d15cfa50120bfd42a5d0242c2aa80*
-
-**The crossing is untouched.** It stays adopted and stays pinned at
-`82a3c8fccf4ef7f3759f36d3f320a91d0f96341c`, declared once in `[workspace.dependencies]` and
-inherited by the eight members that name an `xvpe-` crate, which is one fewer than before.
-`nomos-platform-xvpe` is still the adapter and still the narrowest crate that must reach XVPE.
-Nothing here makes XVPE a peer again: Nomos remains an application over it, which is what this
-record decided and what `OD-ROADMAP-005` decision 4 repeats in terms.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#30
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:db7f1b00aa8b68dd113a07acc06a885869a1adcea8cb944178f863fc55ab667b*
-
-**A conversion in the adapter was considered and refused.** Naming `xvpe-clock` in
-`nomos-platform-xvpe` and converting between the two declarations would have kept them joined,
-and it was the smaller edit to `Cargo.lock` -- one insertion and one deletion rather than 112
-deletions. It buys nothing. No caller converts, and an adapter carrying a dependency and
-conversions nothing calls is exactly the claim about the future this crate's own module
-documentation refuses. The lock was going to change either way, because it records a per-member
-dependency array and a move is an edit to two of them, so the argument from lock stability did
-not survive being measured.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#31
-
-*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:d23de6eb184835e2bd39af8985f6aceccce31e3ae8149e8f892dfaf683b85843*
-
-### What it cost, which is not what the section above says it costs
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#32
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:259b59449c5ade48222bb102d00551eaf184bd459588dc44836304edbae8b2c4*
-
-**`What This Costs` is wrong, and was already wrong before this amendment.** It says this
-workspace no longer builds standalone and requires XVPE checked out beside it, because the
-dependency is a path dependency across repositories. Neither clause is true. Every `xvpe-`
-dependency is a git source pinned to a revision, so the workspace resolves XVPE from what that
-revision pins and needs no sibling directory to build. `AGENTS.md` says so in its operating
-hazards, `OD-PLATFORM-004` made the local substitution opt-in and denied it any authority, and
-`Test_The_Committed_Lock_Should_Pin_Every_Crossing_Package_To_That_Revision` is what keeps the
-committed form honest. The path-dependency arrangement that paragraph describes stopped being
-the governing one when the crossing was pinned, and the sentence was left behind.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#33
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:24e6a3ca3bfb5f587ec3eb8c80fb371456e77d5cd1d6f1dae34abfbe0633d34b*
-
-What the crossing does cost, stated the way that paragraph meant to state it: a build that has
-not fetched the pinned revision cannot compile the members that name it, and a revision bump is
-a decision taken once in the root manifest rather than a refresh. That is unchanged here.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#34
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:eed398b2c41570b674e990503fb33f55614e288e1b0cd1a61f5cb6259a699a41*
-
-What *this* change cost is one number. `Cargo.lock` lost 112 lines: the package blocks for
-`xvpe-clock` itself and for `web-time`, `js-sys`, `wasm-bindgen` with its three macro crates,
-`rustversion`, `slab` and the three `futures` crates, all of which `xvpe-clock` alone pulled
-into this workspace. Twelve `xvpe-` packages in the committed lock became eleven, and all
-eleven still carry a `git+` source at the one revision the manifests declare.
-
-### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#35
-
-*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:b4aa14803d4d2379a4c4cf8edb23f6668b602126da30ce1a0886aa1cb23e03f7*
-
-Checked 2026-09-21 against the crate's manifest and module documentation, the committed lock before and after the change, `cargo tree -p nomos-platform`, and the blessed surface snapshot at `tests/contract/surface/nomos-platform.txt`.
-
 ### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1
 
 *revision: authored · kind: heading · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing · hash: sha256:288502a603678c890ddc4fd3f236c936d24acd17e2abd9a3ed385dc894e54af9*
@@ -66831,6 +66715,531 @@ no code and amends nothing by itself.
 
 Accepted. The bound is the enumeration above: eight pieces, each against a named clause of a
 named record at a stated version, with every measurement those records made left standing.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#1
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements · hash: sha256:db122fa36e5f0d43f10ba51f959fffb71bb95a2bdf8dea0682e0dff22eb8359b*
+
+# The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#2
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#3
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Question · hash: sha256:288365a8865cf40d5b5e2200041b383cc9eff0654b9b985c04bb77722d020655*
+
+An external architecture review of `dev` at `bc0aaacf` named thirteen core gaps. A triage
+measured each against the tree on 2026-09-21: several were stale, two dissolved under
+measurement, and eleven were built or decided over that day. `OD-ROADMAP-005` separately
+superseded eight deferrals for a different set of the same review's claims and bounded the
+override it recorded.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#4
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Question · hash: sha256:c7ef5266a29df099c60dea594b3a178107ec200242b1d61293bf8cfc4b9a1c54*
+
+What is left is a list nobody has authorized. Some of it is ordinary work that no record
+stands in front of. Some of it cannot be started at all without a record moving, because each
+piece sits behind a deferral that was correct when it was written and has never been revisited.
+And two of the review's remaining claims are not deferred work at all — they were refused on
+measurement rather than on sequencing, which a directive to build does not answer.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#5
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Question · hash: sha256:1a684eda4d47583e66b237eca6987deaadd17cf6fdea6d8b4b754b5c14551035*
+
+The owner has now required the remainder addressed. What that needs from this record is the
+same thing `OD-ROADMAP-005` needed: **bounds**. Which deferral each piece supersedes, by clause
+and by version. Which pieces have nothing in their way and are listed only so the set is
+complete. Which of the review's claims are already answered rather than open. Without them,
+each implementation reads as an agent building against an accepted record that says not to, and
+a later reader reconciling the same review finds records saying wait and a tree saying
+otherwise, with nothing to say which is current.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#6
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What Is Not Being Claimed · hash: sha256:effdef3bf2c276c54bfc6d0b88a2a7d8e2efd8534cd0f12e93c5429fc30b90d0*
+
+## What Is Not Being Claimed
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#7
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What Is Not Being Claimed · hash: sha256:2625ab19606fc16bd157475cc3b4f6643ab4eb580c5cb52759e1fbb4a615c834*
+
+**None of the deferrals below was wrong on its own evidence, and this record does not say
+otherwise.** `OD-GATE-022` really did find that both cases its own compare doc names are
+same-process cases answerable with no store at all. `OD-WORKFLOW-005` really did build a
+sequential engine and really did scope it by explicit subtraction. `OD-ANALYSIS-009` really did
+find that no caller had asked `Run` to be invoked twice in one process. Those measurements are
+left standing and are cited by the items that now supersede them rather than deleted.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#8
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What Is Not Being Claimed · hash: sha256:77b0873f84df0e997f44297f1121a5dae6b457336712e4d195b58cb19f7e84bb*
+
+**So the override is about *when*, not about whether the reasoning held.** The precedent is
+`OD-ROADMAP-001`, which retired a population-of-zero caution for a named cluster on exactly
+this footing, and whose own amendment states the scope of that licence precisely: "This record
+answers whether a component may be built before anything consumes it."
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#9
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What Is Not Being Claimed · hash: sha256:675cb1a9d467be2577aff6c7d46af67efbbadec613f428f05b1d5629ba301569*
+
+**A supersession is not a re-measurement.** Every clause moved below was read in the version on
+disk at the revision this record was written against, and nothing else in those records is
+touched. Where this record states a measurement of its own it re-took it; where it reports what
+another record or commit measured, it says whose measurement it is.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#10
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#11
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision · hash: sha256:43aa868c1dd8f9c4fb977b257961055c3736e80cc78a94028354608fe434b81b*
+
+**Build the pieces below. Each names the deferral it supersedes, by clause and version, and the
+item that acts on it — or states that no record stands in its way.**
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#12
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:853596bac631202be9dfab4bc33552a76de0d0c73f9b3d680d834d97449fefd4*
+
+### 1. A run history, so a baselined finding can be told from one reintroduced
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#13
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:ea53d5076381fe460bc2dcb8c5928e4737ded763677854f24a779a061c39bc2a*
+
+Supersedes `OD-GATE-022` v1 in two clauses and no others. The decision section's bound on a
+first compare increment, "it does not serialize `GateRunResult` and does not persist a run
+history", loses its second half only; and the closing clause of that record's "What this record
+does not do", "It does not build or schedule a persisted run-history store", is superseded
+outright. Everything else in `OD-GATE-022` stands: a compare caller may still re-derive both
+runs in one process, and its finding that both motivating cases its own compare doc names are
+same-process cases is untouched. `RunId` remains the key that record already named for a store
+if one were built; what changes is that one now is.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#14
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:a5a386ff9b4fb5eec27d377572b5f1e6ea54511a7c87bb032355d1e9c8da82f8*
+
+`OD-GATE-030` v2 is the second consumer that record's own text said it was adding without
+scheduling. It names three things that would make continuity provable, in order, and says that
+only the third — a history of the states between — separates persistence from reintroduction;
+it also says in as many words that `OD-GATE-022` owns that deferral and that it does not
+schedule it. This record schedules it.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#15
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:2437389e72452240c2ca9516df4a0d98af27674225291985898d20dcd7656c9b*
+
+`OD-GATE-030`'s floor does not move and is not up for reinterpretation by the item that builds
+this: a finding whose history cannot be established is reported as undetermined and never as
+persistent, no occurrence inside an exceeded population is attributed, and the counting bound
+the baseline already applies remains a bound on capacity rather than a claim about history.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#16
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:f769d07321297cb2e013905cd91a816fa9e7ccf93e8f422590b6616f50ef9f0e*
+
+The item is `P128-A-BASELINED-FINDING-CANNOT-BE-TOLD-FROM-ONE-REINTRODUCED`.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#17
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:bcd50c052c6671f778fa160469694291b5b150e07395a1ffd180133e65a22356*
+
+### 2. Branch, join, bounded parallelism, and a definition a run can be replayed against
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#18
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:5f440c082d32d0bf8822b6811c0657ea8f7eef78507d5e5e523992d795761d81*
+
+Supersedes `OD-WORKFLOW-005` v2's "What This Does Not Build" in exactly four clauses: no
+immutable published artifacts (`WF-009`); no branch/merge semantics or bounded parallelism
+(`WF-010`), whose reason was that `Run` is one ordered sequence; no independently versioned
+workflow definitions with pinned historical replay (`WF-011`); and the **cache** half of that
+section's `WF-012` clause, so that a runtime may substitute a prior result for a dispatch where
+`Cacheability` permits it.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#19
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:b73a4f4eab79c07ac3c0b24cd3a07997c7dec30d82722b67fbd41b9b949fb896*
+
+The **cancellation** half of that same clause is not superseded and stays out, for the reason
+that clause itself gives: nothing in this workspace can cut a dispatch in flight, and
+`CancellationBehavior` is the declaration that would say whether a step even permits it. The
+rest of that section is untouched — no deduplication token minted, no compensating step
+composed into another step's run, no shared dispatch trait, no `WorkResult` assembly — and so
+is everything the record's version 2 amendment already corrected about what the retry, timeout
+and compensation runtime closed at `29bc3e20`.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#20
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:13041b284da776ee812e98e2b54e228a515f596f21e26c6e662369ff250a5fab*
+
+Also supersedes `OD-WORKFLOW-002` v4's "What This Does Not Do" clause, as `OD-WORKFLOW-003`
+narrowed it — no execution engine, no `WF-009`, `WF-010` or `WF-011` — to whatever of it
+survived `OD-WORKFLOW-005` building the sequential engine. `OD-WORKFLOW-002`'s three named
+conditions are **not** retired and none is claimed to have fired: they remain the honest
+triggers for the increment after this one, which is exactly the distinction `OD-WORKFLOW-005`'s
+own amendment to that record drew between a narrow override and a general retirement.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#21
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:84b025d2e1c0635a6d1cfa74e8cd3c390a79946a89a4fd7de83feae0d16f7aae*
+
+The item is `P128-THE-WORKFLOW-ENGINE-RUNS-A-LINE-AND-CANNOT-BRANCH-JOIN-OR-REPLAY`.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#22
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 3. A scheduler that runs the waves the correction substrate already computes · hash: sha256:d1702884daf911ba9589b5f1bc47c6a0d4096375061a00696639769ea7120bf5*
+
+### 3. A scheduler that runs the waves the correction substrate already computes
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#23
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 3. A scheduler that runs the waves the correction substrate already computes · hash: sha256:d65b2d9150c31648032112d4261aa0e5e1c970945b5fae3948229af9a99420b4*
+
+Supersedes nothing, and is listed so the set is complete. `OD-ROADMAP-001`'s decision list
+already superseded `OD-CORRECTIONS-001`'s conclusion that candidate generation,
+classification and ranking, `COR-005`'s rerun-and-compare half and oscillation detection wait
+for a real trigger, and the compatibility and wave substrate was built. What is missing is a
+consumer: the computation exists and nothing runs it. No record stands in the way of giving it
+one.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#24
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 3. A scheduler that runs the waves the correction substrate already computes · hash: sha256:49af04c53b0af23102c017a1655c7cad079e4c24eec8d08d4f6e714ed6b27022*
+
+The item is `P128-NOTHING-RUNS-A-WAVE-SO-THE-CORRECTION-SUBSTRATE-HAS-NO-SCHEDULER`.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#25
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:ca365a92e2c4d95e044b1b7a0b137cfc5dfa0ac3c5193374900654ce5a4a49a3*
+
+### 4. A process that outlives an invocation
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#26
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:f54fab07c477f8dace3e2e8f7691c3bc6b589602da7a98a219ddc446492292cd*
+
+Supersedes `OD-ANALYSIS-009` v4's `Decision` clause "no daemon or long-lived-process concept is
+scheduled by this record", **and that clause only**. The two clauses standing beside it in the
+same sentence — no persistent or cross-invocation fact store, and no caller-supplied-store
+parameter — are deliberately not moved here. That record's version 4 amendment narrows what
+remains of them to the on-disk half, names the three things that half still owes, and names
+`P123-FACT-STORE-SURVIVES-THE-PROCESS-2` as the item that answers it. That item is live and
+this record does not reach into it.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#27
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:caaf7a53794617f77c9123de00132313865561dddba3b217a5223522a80f8df7*
+
+The two are not the same artifact and must not be collapsed: the store is the thing that
+survives a process, and this is the process that survives an invocation. The item depends on
+the store item rather than replacing it.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#28
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:aad488cab3d5fd7864257ff150970ef211f408b6b8bfd8103d16a8cd33a0ca9b*
+
+`OD-ANALYSIS-009`'s four revisit conditions are not retired, and `OD-HOST-002`'s rule that a
+resident cache may hold no state its canonical services could not reconstruct is the condition
+under which a resident process is admissible at all rather than a detail of how it is built.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#29
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:24eed0ddf9f1f184c3cdb3fbc9a560e0c616094a7a882bdcc51706e19c9faf7e*
+
+The item is `P128-EVERY-INVOCATION-STARTS-COLD-BECAUSE-NOTHING-OUTLIVES-A-PROCESS`.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#30
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 5. Six pieces with no deferral in the way · hash: sha256:3cdaf318d4618017b83fb0a441dc687b915eddb4a27a084cd535510c5d128f31*
+
+### 5. Six pieces with no deferral in the way
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#31
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 5. Six pieces with no deferral in the way · hash: sha256:68b7cd9c9e713ce2be0367c24bc95943f42840dad53a9537af82f700551d9404*
+
+Each is required work and each is listed only so the set is complete. None supersedes anything,
+and each is on the board with its own item, its own territory and its own predicate:
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#32
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 5. Six pieces with no deferral in the way · hash: sha256:4b78c024be682798c18d5a497addcd05fb5bca65ed66a1853ef0980ba9a8ac17*
+
+- the digest-keyed fact graph, the owning read on the store's trait surface, the unbounded
+  per-key history and the quadratic provider ranking, at
+  `P128-THE-FACT-GRAPH-IS-DIGEST-KEYED-TREES-AND-THE-RANKING-IS-QUADRATIC`;
+- a second interchange format beside SARIF, at
+  `P128-A-JUDGMENT-LEAVES-IN-ONE-FORMAT-AND-EVERY-OTHER-CONSUMER-IS-UNSERVED`;
+- a compiler-backed provider for C#, at
+  `P128-C-SHARP-IS-READ-ON-ITS-FACE-AND-NO-COMPILER-ANSWERS-FOR-IT`;
+- tool providers for Go, at
+  `P128-GO-HAS-A-PARSER-AND-A-MANIFEST-READER-AND-NO-TOOL-SPEAKS-FOR-IT`;
+- a first verb for a repository adopting this tool, at
+  `P128-A-REPOSITORY-ADOPTING-NOMOS-HAS-NOTHING-TO-RUN-FIRST`;
+- a rendering of the effective policy's provenance, at
+  `P128-THE-EFFECTIVE-POLICY-KNOWS-WHAT-DECIDED-EACH-FIELD-AND-NO-HOST-SAYS-SO`.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#33
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 6. One remaining gap is a question rather than a piece · hash: sha256:bb20340f038c8d4e49652ac1ce0275adf180950baaf2ea37e8a930ad4504b15e*
+
+### 6. One remaining gap is a question rather than a piece
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#34
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 6. One remaining gap is a question rather than a piece · hash: sha256:b2926e62fc576bef9154002b4acf693b0ccac046d971b28ac5be30f4efca58c8*
+
+Whether a rule can be authored without writing Rust is the review's largest remaining claim
+about the rule tier, and it is a decision rather than an implementation: it needs a
+measurement against the rule population that now exists, and the review itself also said not to
+invent a rule intermediate representation before real rules require one. This record does not
+answer it. `P128-OD-RULES-034-WHAT-A-RULE-AUTHORING-SURFACE-IS-AT-SEVENTY-RULES` is where it is
+answered.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#35
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 6. One remaining gap is a question rather than a piece · hash: sha256:a7ee4525462bfc19697d7c9262b985a82b1dabb360a412da7a8e617971e4143f*
+
+`nomos-platform` compiling without XVPE is also on this board and is **not** authorized here:
+`OD-ROADMAP-005` decision 4 already authorizes and bounds it, and restating it would create a
+second authority for one piece.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#36
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded · hash: sha256:856b9d51942a764e24f07282982d1349212aff6aada7c30e9ddedfc0392b141f*
+
+## The Two Refused On Measurement Are Decided, Not Superseded
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#37
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded · hash: sha256:a4184a42ec7b524850a9aa7132c3912748ca64d097e0e945f61c02e36fb0067b*
+
+Both of these were refused because somebody measured the thing and found the gap answered, not
+because a sequencing condition had not arrived. Superseding a deferral that does not exist
+would produce an item to build an artifact with nothing for it to do, and **a directive to
+build does not make an inert artifact useful.** So each is decided here, with its reason.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#38
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:1a5e4022843e7d1f16ca41a830a5fd84be32b0171d5d5678a8b583e38038485c*
+
+### The demand planner: the requirement is satisfied because the gap is answered, not open
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#39
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:79e04f27c300c46a4dc3dd3deec73e0b0f6b17291480ba9cf586de869dad684f*
+
+`OD-RULES-009`'s latest round found that a planner today "would schedule an ordering that does
+not exist, over a choice that has no alternatives, using cache state nothing consults", called
+that speculative rather than deferred infrastructure, and named three things that would change
+it. Those three were checked 2026-09-14. **They are re-checked here at `66292b7f` rather than
+quoted, because a quoted trigger is worth nothing without the check.** None has fired:
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#40
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:1099c68874028b184388ec893e811259cc0e3ef9cfb6e39a65659a0b18bd3651*
+
+- **No fact family's production depends on another family's output.** The only reads of the
+  store anywhere under `nomos-check-orchestration`'s materialization are two currency checks,
+  each asking whether the fact about to be written is the one the store is already serving under
+  that identity. No section takes another section's fact as its input, so there is still no
+  order to get wrong.
+- **No capability has two installed providers whose choice is not decided by the requirement.**
+  The composition root declares fourteen capabilities against seventeen offers. Twelve
+  capabilities have exactly one offer each. Syntax has three: the Rust parser strictly dominates
+  the Rust scanner on every axis they differ on, and the Go provider is partitioned by subject
+  through a path recognition the composition root computes before anything is digested into a
+  `SubjectId` and attaches to the requirement, which is `OD-CAPABILITY-009`'s answer rather than
+  a choice anybody schedules. Dependency has two, and the second never clears the requirement's
+  own floor, so ranking never sees two comparable offers. Two further providers have been built
+  since the last check — a C# syntax provider and a compiler-backed Rust provider — and neither
+  is offered by any composition root, an uncomposed state this workspace already declares and
+  guards rather than leaves silent.
+- **No measured cost makes skipping an undemanded family worth deciding rather than deriving.**
+  Demand is still a union over `nomos_rules::DESCRIPTORS` that reads no cache state, no provider
+  cost and no structure between families. The only measurement taken in this area since the last
+  check moved the cost the other way rather than up: `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY`
+  records, in its own commit message, that every non-syntax family now proves its fact current
+  before filing it, where the eleven non-syntax families previously wrote unconditionally.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#41
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:8e963ac694849af6704e30af4a76e670a0ecf7b0fa7aafe10705efcdeb2e8bc8*
+
+So the owner's requirement is **already satisfied for this gap**, because the gap is answered
+rather than open. What the review wanted from a planner — that materialization does only the
+work the selected rules demand, from one authority rather than a hand-written second one — is
+what `Demanded_Families` does by derivation. Building a planner beside it would add a mechanism
+with no ordering to sequence, no alternative to arbitrate and no cache state to consult, and it
+would be a second statement of the rule-to-fact relation for the first to drift against, which
+is the defect that removal was made to fix.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#42
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:dd5a47635e33d0003320594fe1a3e2b826bfbb6cfa490ed013ae93692e29a328*
+
+`OD-ROADMAP-001` does not license it. That record's own amendment says what its licence answers:
+whether a component may be built before anything **consumes** it. A planner's problem is not a
+missing consumer; it is a missing decision. Those are different populations of zero and only the
+first is covered.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#43
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:a63844f23256fd7d41f2495412f376f8c2e6d729cdbf945395cd0b384d46f026*
+
+`OD-RULES-009`'s three conditions stand exactly as that record states them, this record retires
+none of them, and none of its earlier rounds is reopened.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#44
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / Rules loaded from package files: the requirement is satisfied for the same reason · hash: sha256:c88891d13648d1da133b2e4bdf14b2543106c30737190e41b0e16ef4abb3e616*
+
+### Rules loaded from package files: the requirement is satisfied for the same reason
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#45
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / Rules loaded from package files: the requirement is satisfied for the same reason · hash: sha256:86abd104860a2d3cf914a88b442ea448956189877f1ab57a949dcdf948f68a64*
+
+`OD-RULES-022` decided that composition resolves a **declaration** against a linked
+**implementation**, that the two are different artifacts owned by different layers, and — in its
+own words — that "a manifest cannot conjure a function, and this record does not pretend
+otherwise." Measured at `66292b7f` rather than assumed: the declaration side is built and
+derives every rule package from `nomos_rules::DESCRIPTORS`; the resolution step is built and
+refuses in both directions, an unmatched mechanical declaration and an unmatched registration
+alike; and no caller anywhere in this workspace reads a rule-package manifest from disk, nor is
+there one on disk to read.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#46
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / Rules loaded from package files: the requirement is satisfied for the same reason · hash: sha256:defe81bacc6533c75965a2f3a8fab47f5214bdd605965b45b63e5c312a841470*
+
+So a rule package file would buy one of two things and neither is the thing the review wanted.
+For a rule this build links, it is a second source of declarations beside the one every side
+already derives from — precisely the duplicated authority this repository files records about.
+For a rule this build does not link, it is a declaration with no function behind it, which
+resolution refuses if it claims to be mechanical, and which contributes no finding to a
+deterministic run if it declares itself model-judged. The second is a truthful thing for a
+declaration to be, and it is inert.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#47
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / Rules loaded from package files: the requirement is satisfied for the same reason · hash: sha256:639d7c090ca349644aa599db3d3109a30fac68d89d310b9bf1f285842b3b83c2*
+
+The owner's requirement is therefore **already satisfied for this gap too**. The question that
+is genuinely open is not where a declaration is stored but whether a rule can be authored
+without writing Rust, and that is section 6's question, answered by
+`P128-OD-RULES-034-WHAT-A-RULE-AUTHORING-SURFACE-IS-AT-SEVENTY-RULES` and not here.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#48
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#49
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:afd93478c5fdbb278c2272482c7a56433036bac96acb68fe735a46959541d1c3*
+
+**It builds nothing.** Every piece above is an item on `work/ledger.json` carrying its own
+territory and its own verification predicate. This record moves no code.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#50
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:2d0da22a73212e7718be34ddc170e3b84df007f6032a6215b15ad3977ee2035e*
+
+**It does not reopen `OD-ROADMAP-005`'s eight pieces**, which are decided, bounded and in
+flight, and it does not restate the one of them that is also on this board.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#51
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:b4c75b88396073d8999d93e8056bbaaf919e9432d1635b67308f86c036853334*
+
+**It does not touch `ARC-ROADMAP-001`'s deferred tier.** Atlas, architecture discovery and
+feature topology stay where that record puts them, and nothing here is evidence about any of
+them.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#52
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:bf2d8931fab1a253eb53a5b8031e6a054cd33ac68a52b83c8b52fc0350d68a01*
+
+**It does not retire a trigger in any record it names.** `OD-WORKFLOW-002`'s three conditions,
+`OD-ANALYSIS-009`'s four revisit conditions and `OD-RULES-009`'s three all stand as their
+records state them. A superseded clause is a clause this record moves past; a trigger is a
+measurement that has not fired, and the two are not the same thing.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#53
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:ccc90a6f835b0804769add0ab319eef1d75687d60ad00806008679e80ad0a27b*
+
+**It does not widen a superseded clause into its record.** Each supersession above is bounded to
+the sentence quoted, in the version stated, and a piece that turns out to need a second clause of
+the same record is a new question rather than an extension of this one.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#54
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:930a268402a1284672f0b2a6ad4427bb6b83138814fb2c8281853ac628edd2de*
+
+**It does not leave a superseded record to correct itself.** Each record named above stays false
+in one clause until an item amends it, and — measured on the board at the time of writing — none
+of the three items in sections 1, 2 and 4 reserves any path under `docs/records/` or
+`crates/spec/nomos-spec-store/records/`, so none of them can make that repair inside its own
+territory. The amendment is therefore a follow-on item that reserves the record, authored by
+whoever lands the piece. That is not a novelty: it is the shape
+`P123-OD-WORKFLOW-005-SAYS-THE-RETRY-AND-COMPENSATION-RUNTIME-IS-UNBUILT-AND-IT-LANDED` already
+took, for a record whose building item reserved no record territory and whose claimant could
+measure the staleness and not repair it.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#55
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:c180299bc56360994851222f2c1f8cbf1ce8e26f59b5dba964d1d80a6c900758*
+
+**It does not promise an order.** These pieces contend for shared files in a tree several
+sessions work at once. Which lands first is a coordination outcome, and an item blocked on a
+peer's claim waits rather than reaching in.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#56
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#57
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Consequences · hash: sha256:7ec6c7fd5d1c9e556c0f4cb94589bfa1d8faa199e1f78ce34cb77a990b71ff9e*
+
+The items named above are on the board as required work, each carrying its own territory,
+predicate and `done_when`. Three of them are unblocked by this record landing. Two of the
+review's remaining claims are closed here as answered rather than scheduled, and the reason is
+recorded so a later reconciliation of the same review finds a decision rather than an omission.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#58
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#59
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Status · hash: sha256:4a8f83d780647bd0eb3b937ac65b5d3f3cbc6407671ccaff2ac980a70e1b93b9*
+
+Accepted. The bound is the enumeration above: four pieces against a named clause of a named
+record at a stated version, six with nothing in their way, one question routed to its own
+decision item, and two claims closed as answered rather than open — with every measurement
+those records made left standing, and the two re-measurements this record needed taken rather
+than quoted.
 
 ### docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1
 

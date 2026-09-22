@@ -90220,14 +90220,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-prose",
-        "acquired_at": 1790057988,
-        "lease_expires_at": 1790065188
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -90243,7 +90239,33 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "os-lang-rust-clippy)\n   Compiling nomos-lang-go-modules v0.1.0 (F:\\repos\\nomos-p123\\crates\\languages\\nomos-lang-go-modules)\n   Compiling nomos-workspace v0.1.0 (F:\\repos\\nomos-p123\\crates\\substrate\\nomos-workspace)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos-p123\\crates\\rules\\nomos-rules)\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-corrections v0.1.0 (F:\\repos\\nomos-p123\\crates\\corrections\\nomos-corrections)\n   Compiling nomos-agent-contracts v0.1.0 (F:\\repos\\nomos-p123\\crates\\agent\\nomos-agent-contracts)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos-p123\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-agent-orchestration v0.1.0 (F:\\repos\\nomos-p123\\crates\\orchestration\\nomos-agent-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos-p123\\tests\\contract)\n   Compiling nomos-correction-orchestration v0.1.0 (F:\\repos\\nomos-p123\\crates\\orchestration\\nomos-correction-orchestration)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos-p123\\crates\\orchestration\\nomos-gate-orchestration)\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling nomos-workflow-orchestration v0.1.0 (F:\\repos\\nomos-p123\\crates\\orchestration\\nomos-workflow-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 20.15s\n     Running unittests src\\lib.rs (F:\\repos\\nomos-p123-target\\debug\\deps\\nomos_contract_tests-c021028aed9add55.exe)\n     Running tests\\record_citation.rs (F:\\repos\\nomos-p123-target\\debug\\deps\\record_citation-5395456b84195f45.exe)\n     Running unittests src\\lib.rs (F:\\repos\\nomos-p123-target\\debug\\deps\\nomos_workflow_orchestration-1488e721e3880d5b.exe)\n",
+        "verified_at": 1790058567,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -92736,12 +92758,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P128-OD-ROADMAP-006-THE-REMAINING-REVIEW-GAPS-ARE-REQUIRED-AND-FIVE-DEFERRALS-ARE-NAMED"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p128-scheduler",
+        "acquired_at": 1790058650,
+        "lease_expires_at": 1790069450
+      },
       "verification": {
         "argv": [
           "cargo",
