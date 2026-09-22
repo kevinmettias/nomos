@@ -12,7 +12,7 @@ use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 
 use crate::policy::{BaselineAllowance, BaselineDebt, GatePolicyFile, RuleCalibration, Suppression};
-use crate::{CoveragePolicy, GateCommand, SuppressionDisposition};
+use crate::{CoveragePolicy, GateCommand, GatePhase, PhaseApproval, PhaseThreshold, SuppressionDisposition};
 
 /// Every file this run judged, by path and content.
 ///
@@ -51,14 +51,18 @@ pub(super) fn Source_Digest(walked: Option<&[SourceFile]>) -> Digest128
 /// Authoring order rather than sorted, unlike [`Selection_Digest`], and the difference is
 /// not a style choice: `SuppressionPolicy::Suppressing` and `BaselinePolicy::Tolerating`
 /// both take the *first* entry that applies, so reordering two entries that match the same
-/// finding changes which one wins. An identity that ignored order would call two genuinely
-/// different policies the same.
+/// finding changes which one wins. `Evaluated_Phases` is the strongest case of it -- it
+/// judges phases in declared order and stops at the first that fails unapproved, so two
+/// files listing the same stages in a different order genuinely judge differently. An
+/// identity that ignored order would call two genuinely different policies the same.
 pub(super) fn Policy_Digest(policy: &GatePolicyFile) -> Digest128
 {
     let mut parts = Suppression_Parts(&policy.suppressions.suppressions);
     parts.extend(Baseline_Parts(&policy.baseline.debt));
     parts.extend(Calibration_Parts(&policy.adoption.calibrated));
     parts.push(Coverage_Tag(policy.coverage).as_bytes().to_vec());
+    parts.extend(Phase_Parts(&policy.phases));
+    parts.extend(Approval_Parts(&policy.approvals));
 
     return Digest_Of_Owned(&parts);
 }
@@ -177,6 +181,66 @@ fn Calibration_Parts(entries: &[RuleCalibration]) -> Vec<Vec<u8>>
     return parts;
 }
 
+/// Every field of one declared phase that decides what it judges, in policy order.
+///
+/// `P109-F`'s own question asked of the family `nomos-gate.json` gained last: a phase's name,
+/// the rules it admits and the number it tolerates each change what `Evaluated_Phases`
+/// decides, so two runs under two phase declarations were judged under different policy and a
+/// comparison must not report them as comparable. The name is hashed because an approval
+/// matches on it, so renaming a stage changes which approval applies.
+fn Phase_Parts(phases: &[GatePhase]) -> Vec<Vec<u8>>
+{
+    let mut parts: Vec<Vec<u8>> = Vec::new();
+
+    for phase in phases
+    {
+        parts.push(b"phase".to_vec());
+        parts.push(phase.name.as_bytes().to_vec());
+        // The marker separates a name from the list that follows it, the same way
+        // `Selection_Digest` separates its own three lists rather than relying on what
+        // happens to come next.
+        parts.push(b"phase-rules".to_vec());
+        parts.extend(phase.rules.iter().map(|rule| return rule.As_Str().as_bytes().to_vec()));
+        parts.extend(Threshold_Parts(phase.threshold));
+    }
+
+    return parts;
+}
+
+/// How much one phase tolerates, as bytes.
+///
+/// Two parts and a written-out tag rather than a number, for the reason [`Allowance_Parts`]
+/// gives one field over: `AnyBlockingFinding` must not be able to collide with any
+/// `MaxBlockingFindings` count, and adding a variant must fail to compile here rather than
+/// hash to whatever the last arm happened to be.
+fn Threshold_Parts(threshold: PhaseThreshold) -> Vec<Vec<u8>>
+{
+    return match threshold
+    {
+        PhaseThreshold::AnyBlockingFinding => vec![b"threshold-any-blocking-finding".to_vec()],
+        PhaseThreshold::MaxBlockingFindings { max } => vec![b"threshold-max-blocking-findings".to_vec(), max.to_be_bytes().to_vec()],
+    };
+}
+
+/// Every field of one approval that decides which phase it passes, in policy order.
+///
+/// The rationale is hashed beside the phase name for the reason `Suppression`'s own is: it is
+/// display material, and the inconsistency of hashing one and not the other is what showed
+/// the allowance omission `P109-F` repaired to be an omission rather than a decision.
+fn Approval_Parts(approvals: &[PhaseApproval]) -> Vec<Vec<u8>>
+{
+    let mut parts: Vec<Vec<u8>> = Vec::new();
+
+    for approval in approvals
+    {
+        parts.push(b"approval".to_vec());
+        parts.push(approval.phase.as_bytes().to_vec());
+        parts.push(approval.rationale.as_bytes().to_vec());
+    }
+
+    return parts;
+}
+
 /// A coverage floor as a stable tag, exhaustive for the same reason [`Disposition_Tag`] is.
 const fn Coverage_Tag(coverage: CoveragePolicy) -> &'static str
 {
@@ -254,4 +318,85 @@ fn Digest_Of_Owned(parts: &[Vec<u8>]) -> Digest128
     let borrowed: Vec<&[u8]> = parts.iter().map(|part| return part.as_slice()).collect();
 
     return nomos_model::Digest_Of_Parts(&borrowed);
+}
+
+#[cfg(test)]
+mod tests
+{
+    //! Beside the code rather than with the other provenance tests in
+    //! `super::super::tests`: that file sits at this workspace's own 500-line review trigger,
+    //! and these read a resolved policy rather than a run, so they need none of its fixtures.
+
+    use super::Policy_Digest;
+    use nomos_contracts::Digest128;
+    use nomos_platform_std::StdFileSystem;
+    use std::collections::BTreeSet;
+    use std::path::PathBuf;
+
+    /// A scratch root's own name, distinct from the policy text it declares.
+    #[derive(Clone, Copy)]
+    struct RootName<'a>(&'a str);
+
+    /// A `nomos-gate.json` body, distinct from the root's name.
+    #[derive(Clone, Copy)]
+    struct PolicyText<'a>(&'a str);
+
+    /// Five phase declarations, five policy identities -- `P109-F`'s own question, asked of
+    /// the two families `nomos-gate.json` gained last.
+    ///
+    /// A phase's name, the rules it admits, the number it tolerates and whether an approval
+    /// covers it each change what `Evaluated_Phases` decides, so any two of these were judged
+    /// under different policy and a comparison must not report them as comparable. Each
+    /// differs from the first in exactly one of the four.
+    ///
+    /// Counted as a set rather than pair by pair: a digest covering only some of the four
+    /// would still differ on the pairs that vary in the rest, so a single named pair could
+    /// pass while the omission stayed.
+    #[test]
+    fn Test_Every_Declared_Phase_Difference_Should_Move_The_Policy_Digest()
+    {
+        let declarations = [
+            ("phase-plain", r#"{ "phases": [ { "name": "one", "rules": [ "naming-convention" ] } ] }"#),
+            ("phase-renamed", r#"{ "phases": [ { "name": "two", "rules": [ "naming-convention" ] } ] }"#),
+            ("phase-other-rule", r#"{ "phases": [ { "name": "one", "rules": [ "dependency-direction" ] } ] }"#),
+            ("phase-tolerant", r#"{ "phases": [ { "name": "one", "rules": [ "naming-convention" ], "threshold": { "max-blocking-findings": 2 } } ] }"#),
+            ("phase-approved", r#"{ "phases": [ { "name": "one", "rules": [ "naming-convention" ] } ], "approvals": [ { "phase": "one", "rationale": "accepted" } ] }"#),
+        ];
+
+        let identities: BTreeSet<Digest128> =
+            declarations.iter().map(|(name, policy)| return Declared_Policy_Digest(RootName(name), PolicyText(policy))).collect();
+
+        assert_eq!(
+            identities.len(),
+            declarations.len(),
+            "two of these five phase declarations recorded one policy identity, so a comparison across them would blame the repository for their difference"
+        );
+    }
+
+    /// The policy digest of what `policy` declares at a root of its own.
+    ///
+    /// Resolved rather than run, unlike every provenance test in `super::super::tests`:
+    /// [`Policy_Digest`] reads the resolved policy alone, so five real runs would spend five
+    /// check runs to observe a value that depends on nothing a run does. That a run digests
+    /// *that* policy is what `Test_Two_Policies_Over_One_Source_Should_Differ_In_The_Policy_Alone`
+    /// establishes.
+    fn Declared_Policy_Digest(name: RootName<'_>, policy: PolicyText<'_>) -> Digest128
+    {
+        let root = Scratch_Root(name);
+        std::fs::write(root.join("nomos-gate.json"), policy.0).expect("the directory create_dir_all just returned Ok for is where this writes");
+        let resolved = crate::policy::Resolve_Gate_Policy(&root, &StdFileSystem)
+            .expect("the line above wrote this file, so it is present and readable")
+            .expect("every fixture here declares the shape the reader parses, so it resolves");
+
+        return Policy_Digest(&resolved);
+    }
+
+    /// A tree of this module's own, named after `name` so two fixtures never share one.
+    fn Scratch_Root(name: RootName<'_>) -> PathBuf
+    {
+        let root = std::env::temp_dir().join(format!("nomos-gate-provenance-{}-{}", name.0, std::process::id()));
+        std::fs::create_dir_all(&root).expect("the scratch root sits under std::env::temp_dir(), which every platform this runs on provides");
+
+        return root;
+    }
 }

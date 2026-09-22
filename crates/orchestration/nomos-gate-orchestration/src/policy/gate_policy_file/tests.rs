@@ -1,4 +1,4 @@
-//! What `nomos-gate.json` must mean once it is read: the four policies it resolves, the
+//! What `nomos-gate.json` must mean once it is read: the policy families it resolves, the
 //! refusals it owes the author who wrote a contradictory entry, and the precedence a
 //! caller-constructed policy keeps over the file.
 //!
@@ -9,7 +9,8 @@
 //! order and have the compiler accept both.
 
 use super::{GatePolicyError, GatePolicyFile, Resolve_Gate_Policy, GATE_POLICY_FILE};
-use crate::{BaselineAllowance, CoveragePolicy, GateCommand, SuppressionDisposition};
+use crate::{BaselineAllowance, CoveragePolicy, GateCommand, GatePhase, PhaseApproval, PhaseThreshold, SuppressionDisposition};
+use nomos_contracts::RuleId;
 use nomos_model::Subject_Of_Path;
 use nomos_platform_std::StdFileSystem;
 use std::path::PathBuf;
@@ -31,8 +32,12 @@ const ACCEPTED_OCCURRENCES: u32 = 3;
 /// fixture file states and the assertion below reads back.
 const DECLARED_EXPIRY_SECONDS: i64 = 1000;
 
-/// A policy file with every one of the four policies non-default.
-const ALL_FOUR_POLICIES: &str = r#"{
+/// The number of blocking findings the first declared phase below tolerates, read back by the
+/// assertion that the number in the file reaches the type a run judges with.
+const DECLARED_PHASE_TOLERANCE: usize = 2;
+
+/// A policy file with every one of the six policy families non-default.
+const EVERY_POLICY_FAMILY: &str = r#"{
     "suppressions": [
         {
             "rule": "naming-convention",
@@ -48,7 +53,14 @@ const ALL_FOUR_POLICIES: &str = r#"{
     "adoption": [
         { "rule": "deprecation", "rationale": "adopting incrementally" }
     ],
-    "coverage": "require-completeness"
+    "coverage": "require-completeness",
+    "phases": [
+        { "name": "naming", "rules": [ "naming-convention" ], "threshold": { "max-blocking-findings": 2 } },
+        { "name": "dependencies", "rules": [ "dependency-direction" ] }
+    ],
+    "approvals": [
+        { "phase": "naming", "rationale": "reviewed with the owning team" }
+    ]
 }"#;
 
 /// The quantity `OD-GATE-030` v2 requires an author to be able to state, read off the file.
@@ -118,12 +130,18 @@ fn Test_An_Entry_Accepting_Zero_Occurrences_Should_Be_Refused()
 /// not on the literals -- a test reading the source would have to re-derive what the
 /// wrapping renders to, which is the defect restated rather than caught.
 ///
-/// All three, because they are three separately written sentences and a fix applied to
+/// Every one of them, because each is a separately written sentence and a fix applied to
 /// one leaves the others rendering collapsed with nothing to say so. The phrase each case
 /// must carry is asserted beside the spacing for the same reason: a fixture whose
 /// disposition spelling `serde` does not know is refused by `serde` instead, and a
 /// single-spaced parse error would satisfy a spacing assertion while proving nothing
 /// about the refusal it was written for.
+///
+/// That second assertion is what makes this table the phase families' own linkage test as
+/// well: each of the last four cases is refused by a rule
+/// `crate::policy::gate_policy_file::declared_phases` states and `serde` cannot, so a phrase
+/// arriving here at all proves [`Resolve_Gate_Policy`] consults it rather than resolving a
+/// declaration the types cannot act on.
 #[test]
 fn Test_Every_Refusal_Sentence_Should_Render_As_Single_Spaced_Prose()
 {
@@ -142,6 +160,26 @@ fn Test_Every_Refusal_Sentence_Should_Render_As_Single_Spaced_Prose()
             "single-spaced-zero-count",
             r#"{ "baseline": [ { "rule": "todo-format", "path": "src/legacy.rs", "rationale": "adopted", "accepted_occurrence_count": 0 } ] }"#,
             "accepts zero occurrences",
+        ),
+        (
+            "single-spaced-phase-without-rules",
+            r#"{ "phases": [ { "name": "empty", "rules": [] } ] }"#,
+            "names no rules",
+        ),
+        (
+            "single-spaced-zero-threshold",
+            r#"{ "phases": [ { "name": "naming", "rules": [ "naming-convention" ], "threshold": { "max-blocking-findings": 0 } } ] }"#,
+            "zero blocking findings",
+        ),
+        (
+            "single-spaced-repeated-phase-name",
+            r#"{ "phases": [ { "name": "one", "rules": [ "naming-convention" ] }, { "name": "one", "rules": [ "dependency-direction" ] } ] }"#,
+            "two phases are named",
+        ),
+        (
+            "single-spaced-unmatched-approval",
+            r#"{ "phases": [ { "name": "naming", "rules": [ "naming-convention" ] } ], "approvals": [ { "phase": "nameing", "rationale": "typo" } ] }"#,
+            "matches no phase this file declares",
         ),
     ];
 
@@ -185,11 +223,11 @@ fn Test_A_Root_With_No_Policy_File_Should_Resolve_To_Nothing_Rather_Than_Refusin
     assert_eq!(Resolve_Gate_Policy(&root, &StdFileSystem), Ok(None));
 }
 
-/// The end-to-end authoring case: every one of the four policies non-default, from text.
+/// The end-to-end authoring case: every one of the six families non-default, from text.
 #[test]
-fn Test_A_Declared_File_Should_Resolve_All_Four_Policies()
+fn Test_A_Declared_File_Should_Resolve_Every_Policy_Family()
 {
-    let root = Root_With_Policy(ScratchName("all-four"), ALL_FOUR_POLICIES);
+    let root = Root_With_Policy(ScratchName("every-family"), EVERY_POLICY_FAMILY);
 
     let resolved = Resolve_Gate_Policy(&root, &StdFileSystem).expect("Root_With_Policy wrote this file, so it is present and readable").expect("every entry in the fixture declares one of the six dispositions, so it resolves");
 
@@ -198,6 +236,57 @@ fn Test_A_Declared_File_Should_Resolve_All_Four_Policies()
     assert_eq!(resolved.adoption.calibrated.len(), 1);
     assert_eq!(resolved.coverage, CoveragePolicy::RequireCompleteness);
     assert_eq!(resolved.suppressions.suppressions.first().expect("one entry").disposition, SuppressionDisposition::FalsePositiveDisposition);
+    assert_eq!(resolved.approvals.len(), 1);
+    assert_eq!(
+        resolved.phases.iter().map(|phase| return phase.threshold).collect::<Vec<PhaseThreshold>>(),
+        vec![PhaseThreshold::MaxBlockingFindings { max: DECLARED_PHASE_TOLERANCE }, PhaseThreshold::AnyBlockingFinding],
+        "the declared stages resolve in the order the file lists them, and the second names no threshold"
+    );
+}
+
+/// A file naming neither phase family leaves a run in the state every caller was in before
+/// the keys existed -- `OD-GATE-029`: an absent key still means unset.
+#[test]
+fn Test_A_File_Naming_No_Phases_Should_Resolve_To_No_Phase_Policy()
+{
+    let root = Root_With_Policy(ScratchName("no-phases"), r#"{ "coverage": "require-completeness" }"#);
+
+    let resolved = Resolve_Gate_Policy(&root, &StdFileSystem).expect("Root_With_Policy wrote this file, so it is present and readable").expect("a file naming one family and not the others resolves");
+
+    assert!(resolved.phases.is_empty(), "an absent `phases` is no phase policy, not an empty stage");
+    assert!(resolved.approvals.is_empty());
+}
+
+/// The two phase families come from one source, never one each.
+///
+/// A caller that built stages in code keeps its own approvals -- including none -- because an
+/// approval names the phase it covers, and a file's approval addressing a caller's stage would
+/// be an approval for a phase its own source never declared. Asserted in both directions, so
+/// neither half can be the one the precedence happens to agree with.
+#[test]
+fn Test_A_Caller_That_Built_Phases_Should_Keep_Its_Own_Approvals()
+{
+    let from_file = GatePolicyFile {
+        phases: vec![GatePhase { name: "declared".to_owned(), rules: vec![RuleId::New("naming-convention")], threshold: PhaseThreshold::AnyBlockingFinding }],
+        approvals: vec![PhaseApproval { phase: "declared".to_owned(), rationale: "declared in the file".to_owned() }],
+        ..GatePolicyFile::default()
+    };
+    let silent = GateCommand::default();
+
+    let resolved = from_file.Resolved_Over(&silent);
+
+    assert_eq!(resolved.phases.len(), 1, "a command stating no phase takes the file's");
+    assert_eq!(resolved.approvals.len(), 1, "and the approvals that came with them");
+
+    let stated = GateCommand {
+        phases: vec![GatePhase { name: "built".to_owned(), rules: vec![RuleId::New("dependency-direction")], threshold: PhaseThreshold::AnyBlockingFinding }],
+        ..GateCommand::default()
+    };
+
+    let resolved = from_file.Resolved_Over(&stated);
+
+    assert_eq!(resolved.phases.first().expect("the command's own phase").name, "built");
+    assert!(resolved.approvals.is_empty(), "a command stating its own stages states its own approvals too, including none");
 }
 
 /// The property that makes a path authorable at all: the identity this computes is the

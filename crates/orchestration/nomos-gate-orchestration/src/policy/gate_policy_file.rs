@@ -1,4 +1,4 @@
-//! The declared source a real run resolves its four policies from.
+//! The declared source a real run resolves its policies from.
 //!
 //! Every policy type in this module's siblings documented that nothing constructed a
 //! non-empty one, and each was reachable only from a unit test. This is the authoring
@@ -47,9 +47,18 @@
 //! in a tree, and a test that pins a policy must not have it silently replaced by whatever
 //! the working directory happens to contain. [`GatePolicyFile::Resolved_Over`] therefore
 //! fills in only the fields a command left at its default. `Default` already means "unset"
-//! for all four -- `CoveragePolicy::Unset` says so in its own name -- so this reads the same
-//! way `ScopeSelector`'s empty-means-everything already does.
+//! for every family here -- `CoveragePolicy::Unset` says so in its own name -- so this reads
+//! the same way `ScopeSelector`'s empty-means-everything already does.
+//!
+//! # The two phase families are one declaration
+//!
+//! `phases` and `approvals` resolve from one source rather than field by field, because an
+//! approval names the phase it covers -- [`Preferred_Phase_Policy`] says why in code.
+//! [`declared_phases`]' own doc carries the rest of that shape.
 
+mod declared_phases;
+
+use declared_phases::{DeclaredApproval, DeclaredPhase, Phase_Problem, Resolved_Approvals, Resolved_Phases};
 use nomos_contracts::RuleId;
 use nomos_model::Subject_Of_Path;
 use nomos_platform::{FileSystem, FileSystemError};
@@ -60,7 +69,7 @@ use super::{
     AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, CoveragePolicy, RuleCalibration, Suppression, SuppressionDisposition,
     SuppressionPolicy,
 };
-use crate::{GateCommand, NoVerdict};
+use crate::{GateCommand, GatePhase, NoVerdict, PhaseApproval};
 
 /// The file a run resolves its policies from, relative to the run's own root.
 ///
@@ -85,6 +94,10 @@ pub(crate) struct GatePolicyFile
     pub(crate) adoption: AdoptionPolicy,
     /// The coverage floor the file declared.
     pub(crate) coverage: CoveragePolicy,
+    /// The ordered stages the file declared, in the order it declared them.
+    pub(crate) phases: Vec<GatePhase>,
+    /// The approvals the file declared, each naming one of `phases`.
+    pub(crate) approvals: Vec<PhaseApproval>,
 }
 
 impl GatePolicyFile
@@ -97,13 +110,34 @@ impl GatePolicyFile
     #[must_use]
     pub(crate) fn Resolved_Over(&self, command: &GateCommand) -> Self
     {
+        let (phases, approvals) = Preferred_Phase_Policy(command, self);
+
         return Self {
             suppressions: Preferred_Policy(&command.suppressions, &self.suppressions),
             baseline: Preferred_Policy(&command.baseline, &self.baseline),
             adoption: Preferred_Policy(&command.adoption, &self.adoption),
             coverage: if command.coverage == CoveragePolicy::default() { self.coverage } else { command.coverage },
+            phases,
+            approvals,
         };
     }
+}
+
+/// The phases and approvals one source declared: `command`'s when it declared any phase, and
+/// `from_file`'s otherwise.
+///
+/// One decision rather than two [`Preferred_Policy`] calls, for the reason this module's own
+/// doc gives. `phases` alone decides it, because approvals are read only through them --
+/// [`crate::Evaluated_Phases`] iterates the phases and asks each whether an approval names
+/// it, so a source declaring approvals and no phase has declared nothing a run can act on.
+fn Preferred_Phase_Policy(command: &GateCommand, from_file: &GatePolicyFile) -> (Vec<GatePhase>, Vec<PhaseApproval>)
+{
+    if command.phases.is_empty()
+    {
+        return (from_file.phases.clone(), from_file.approvals.clone());
+    }
+
+    return (command.phases.clone(), command.approvals.clone());
 }
 
 /// `stated` when a caller built one, the file's otherwise.
@@ -164,16 +198,30 @@ pub(crate) fn Resolve_Gate_Policy<Fs: FileSystem>(root: &Path, filesystem: &Fs) 
 
     let declared: DeclaredPolicy = serde_json::from_str(&text).map_err(|error| return GatePolicyError::Malformed(error.to_string()))?;
 
-    if let Some(problem) = declared.suppressions.iter().find_map(DeclaredSuppression::Problem)
-    {
-        return Err(GatePolicyError::Malformed(problem));
-    }
-    if let Some(problem) = declared.baseline.iter().find_map(DeclaredDebt::Problem)
+    if let Some(problem) = Problem_In(&declared)
     {
         return Err(GatePolicyError::Malformed(problem));
     }
 
     return Ok(Some(declared.Resolved()));
+}
+
+/// What is wrong with `declared`, if anything -- every refusal this module owes an author,
+/// in the order the families are declared above.
+///
+/// One function rather than a block per family inside [`Resolve_Gate_Policy`], so a family
+/// gaining a refusal has one place to be registered. `serde` owns the refusals that are about
+/// shape -- an unknown key, a spelling no variant has, a count that is not a number -- and
+/// reports each with the offending value, the spellings that would have been accepted and the
+/// line and column it sits at. What is left here is every rule `serde` cannot state.
+fn Problem_In(declared: &DeclaredPolicy) -> Option<String>
+{
+    return declared
+        .suppressions
+        .iter()
+        .find_map(DeclaredSuppression::Problem)
+        .or_else(|| return declared.baseline.iter().find_map(DeclaredDebt::Problem))
+        .or_else(|| return Phase_Problem(&declared.phases, &declared.approvals));
 }
 
 /// [`GATE_POLICY_FILE`]'s own shape, as written.
@@ -191,6 +239,13 @@ struct DeclaredPolicy
     baseline: Vec<DeclaredDebt>,
     adoption: Vec<DeclaredCalibration>,
     coverage: DeclaredCoverage,
+    /// The ordered stages this file declares, `WF-001`'s "required phases ... thresholds ...
+    /// and blocking behavior". An absent key is no phase policy, which is the state every
+    /// caller was in before it existed.
+    phases: Vec<DeclaredPhase>,
+    /// The approvals this file declares, `WF-001`'s "approvals". Each names a phase in
+    /// `phases`, and one that does not is refused rather than stored.
+    approvals: Vec<DeclaredApproval>,
 }
 
 impl DeclaredPolicy
@@ -203,6 +258,8 @@ impl DeclaredPolicy
             baseline: BaselinePolicy { debt: self.baseline.into_iter().map(DeclaredDebt::Resolved).collect() },
             adoption: AdoptionPolicy { calibrated: self.adoption.into_iter().map(DeclaredCalibration::Resolved).collect() },
             coverage: self.coverage.Resolved(),
+            phases: Resolved_Phases(self.phases),
+            approvals: Resolved_Approvals(self.approvals),
         };
     }
 }

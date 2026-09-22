@@ -1,11 +1,12 @@
 //! What a `nomos-gate.json` beside a root adds to a command that never mentioned it: the
 //! declaration `Run_Gate` resolves itself, and the three answers it can give.
 
-use super::{Command_At, Coverage_Debt_Fixture, Ran_Over, Source_File, SourcePath, SourceText};
-use crate::GateRunOutcome;
+use super::{Command_At, Coverage_Debt_Fixture, Mirrored_Source, Ran_Over, Source_File, SourcePath, SourceText};
+use crate::{GateRunOutcome, GateRunResult};
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::RuleId;
 use nomos_rules::NO_SINGLE_LINE_FUNCTION_BODIES;
+use std::collections::BTreeSet;
 use std::path::PathBuf;
 
 /// The policy file `Test_A_Declared_Policy_File_Should_Tolerate_Findings_A_Command_Never_Mentioned`
@@ -30,6 +31,20 @@ const TOLERATING_POLICY: &str = r#"{
 /// out of the test body so that test reads as the three assertions it is.
 const COVERAGE_FLOOR_POLICY: &str = r#"{ "coverage": "require-completeness" }"#;
 
+/// The name every phase declared below carries, written once so the approval that names it
+/// and the phase it names cannot drift apart.
+const DECLARED_PHASE: &str = "declared";
+
+/// The approval entry a declaring fixture writes to cover [`DECLARED_PHASE`].
+const APPROVAL_OF_THE_DECLARED_PHASE: &str = r#"{ "phase": "declared", "rationale": "reviewed and accepted" }"#;
+
+/// The tolerance the exceeded half of the threshold test declares.
+///
+/// One rather than zero, because a threshold of zero is refused to its author as
+/// `any-blocking-finding` under another name, and this test is about the number reaching the
+/// run rather than about that refusal.
+const EXCEEDED_TOLERANCE: usize = 1;
+
 /// A path a fixture names its own tree by, so two fixtures in one test binary cannot share one.
 #[derive(Clone, Copy)]
 struct RootName<'a>(&'a str);
@@ -37,6 +52,14 @@ struct RootName<'a>(&'a str);
 /// The text of a fixture's `nomos-gate.json`, distinct from the name of the tree it sits in.
 #[derive(Clone, Copy)]
 struct PolicyText<'a>(&'a str);
+
+/// A threshold as a declared phase writes it, distinct from the approvals beside it.
+#[derive(Clone, Copy)]
+struct ThresholdText<'a>(&'a str);
+
+/// The approvals a declared file lists, distinct from the threshold above them.
+#[derive(Clone, Copy)]
+struct ApprovalsText<'a>(&'a str);
 
 /// A tree of this test's own, named after `name` and otherwise empty.
 ///
@@ -129,6 +152,84 @@ fn Test_A_Declared_Coverage_Floor_Should_Reach_The_Disposition()
 
     assert_ne!(result.disposition, GateRunOutcome::Failed, "this fixture must not block, so the floor is what is being observed");
     assert_eq!(result.disposition, GateRunOutcome::Indeterminate, "a declared coverage floor must reach the disposition");
+}
+
+/// Every rule this run's own blocking findings name, so a declared phase can cover all of
+/// them.
+///
+/// Read off a real run rather than written into the fixture, because [`Phased_Disposition`]
+/// upgrades a failed run only when every blocking finding is named by some phase: a phase
+/// naming only the rule whoever wrote the fixture had in mind would leave the rest unphased,
+/// which is a different test and one that already exists.
+///
+/// [`Phased_Disposition`]: crate::Phased_Disposition
+fn Blocking_Rules_Of(result: &GateRunResult) -> Vec<String>
+{
+    let named: BTreeSet<&str> = result.findings.blocking_findings.iter().map(|finding| return finding.rule.As_Str()).collect();
+    assert!(!named.is_empty(), "the fixture must produce at least one blocking finding for a phase over it to mean anything");
+
+    return named.into_iter().map(str::to_owned).collect();
+}
+
+/// A policy file declaring one phase named [`DECLARED_PHASE`] over `rules`, tolerating what
+/// `threshold` states, with the approvals `approvals` states.
+fn Declaring_One_Phase(rules: &[String], threshold: ThresholdText<'_>, approvals: ApprovalsText<'_>) -> String
+{
+    let named = rules.iter().map(|rule| return format!("\"{rule}\"")).collect::<Vec<String>>().join(", ");
+    let threshold = threshold.0;
+    let approvals = approvals.0;
+
+    return format!(
+        r#"{{ "phases": [ {{ "name": "{DECLARED_PHASE}", "rules": [ {named} ], "threshold": {threshold} }} ], "approvals": [ {approvals} ] }}"#
+    );
+}
+
+/// The end-to-end case this item exists for: a stage and its approval, both written by a
+/// person in a file, turning a run that fails without them into one that passes.
+///
+/// The discriminator is the file and nothing else. The same sources are judged twice under
+/// the same command, and the only difference between the two runs is a `nomos-gate.json` that
+/// the second tree has and the first does not.
+#[test]
+fn Test_A_Declared_Phase_With_An_Approval_Should_Pass_A_Run_That_Would_Otherwise_Fail()
+{
+    let sources = || return vec![Mirrored_Source(SourcePath("a.rs"))];
+    let unphased = Ran_Over(sources(), &Command_At(Root_Without_Policy(RootName("phase-unphased"))));
+    assert_eq!(unphased.disposition, GateRunOutcome::Failed, "the fixture must fail without a declared phase for this test to observe one");
+
+    let declaration =
+        Declaring_One_Phase(&Blocking_Rules_Of(&unphased), ThresholdText(r#""any-blocking-finding""#), ApprovalsText(APPROVAL_OF_THE_DECLARED_PHASE));
+    let root = Root_Declaring(RootName("phase-approved"), PolicyText(declaration.as_str()));
+
+    let result = Ran_Over(sources(), &Command_At(root));
+
+    assert!(!result.findings.blocking_findings.is_empty(), "the findings must still be real and reported, not hidden by the approval");
+    assert_eq!(result.disposition, GateRunOutcome::Passed, "a declared approval covering every blocking finding must pass the run");
+}
+
+/// The number a file writes is what decides, not the fact that a stage was declared.
+///
+/// Two declarations differing in that number alone: one names this run's own count of
+/// blocking findings and tolerates them, the other names fewer and does not. A threshold that
+/// never reached the run would give one answer to both.
+#[test]
+fn Test_A_Declared_Threshold_Should_Decide_Whether_Its_Phase_Tolerates_The_Findings()
+{
+    let sources = || return vec![Mirrored_Source(SourcePath("a.rs")), Mirrored_Source(SourcePath("b.rs"))];
+    let unphased = Ran_Over(sources(), &Command_At(Root_Without_Policy(RootName("threshold-unphased"))));
+    let rules = Blocking_Rules_Of(&unphased);
+    let counted = unphased.findings.blocking_findings.len();
+    assert!(counted > EXCEEDED_TOLERANCE, "this fixture must produce more than {EXCEEDED_TOLERANCE} blocking finding for two thresholds to differ over it");
+
+    let tolerant = Declaring_One_Phase(&rules, ThresholdText(&format!(r#"{{ "max-blocking-findings": {counted} }}"#)), ApprovalsText(""));
+    let exceeded =
+        Declaring_One_Phase(&rules, ThresholdText(&format!(r#"{{ "max-blocking-findings": {EXCEEDED_TOLERANCE} }}"#)), ApprovalsText(""));
+
+    let tolerated = Ran_Over(sources(), &Command_At(Root_Declaring(RootName("threshold-tolerant"), PolicyText(tolerant.as_str()))));
+    let blocked = Ran_Over(sources(), &Command_At(Root_Declaring(RootName("threshold-exceeded"), PolicyText(exceeded.as_str()))));
+
+    assert_eq!(tolerated.disposition, GateRunOutcome::Passed, "a declared threshold naming this run's own count tolerates it, unapproved");
+    assert_eq!(blocked.disposition, GateRunOutcome::Failed, "and one naming fewer findings than the run produced does not");
 }
 
 /// A policy file that exists and cannot be parsed refuses the run. The check still happened

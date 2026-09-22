@@ -88619,16 +88619,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P123-OD-ROADMAP-003-THE-THREE-PAUSES-HAVE-LAPSED"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-phases",
-        "acquired_at": 1790048311,
-        "lease_expires_at": 1790059111
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88639,7 +88635,28 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "on\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-gate-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.82s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-a1fbaad3e9313179.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-32aeef76e18b0752.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-b58cb804a13b532c.exe)\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1790050150,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3df66fe8d79cdcbdaaf7bc9d30c14ba0991f8bd2"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -89413,6 +89430,49 @@
           "gate_orchestration_seam"
         ],
         "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-OD-WORKFLOW-005-SAYS-THE-RETRY-AND-COMPENSATION-RUNTIME-IS-UNBUILT-AND-IT-LANDED",
+      "title": "OD-WORKFLOW-005 still names the retry and compensation runtime among what it does not build, and that runtime landed",
+      "why": "P123-WORKFLOW-RETRY-TIMEOUT-COMPENSATION-RUNTIME landed at 29bc3e20 and built three of the things OD-WORKFLOW-005's What This Does Not Build section still names as absent: a WF-012 retry runtime, a compensation runtime, and a measured timeout. Its own claimant measured the staleness and could not repair it, because that item reserved no record territory. The record is therefore false at HEAD in a way a reader cannot detect from the record itself, which is the defect class AGENTS.md calls a disagreement between authorities worth an item. What landed, so the amendment does not have to re-derive it: Run keeps its signature and return type, and the richer report arrives through new entry points Run_Unclocked and Run_With_Clock returning a WorkflowRun, because WorkflowOutcome and DispatchError are matched field by field with no wildcard in nomos-api and nomos-cli, so a new variant would break two crates outside that item's territory. Retry honors max_attempts with every attempt recorded in dispatch order; Is_Coherent still refuses an uncovered retryable non-idempotent side-effecting step before any body dispatches. Timeout is measured and not enforced: an exceeded bound is reported beside the dispatch error, exactly at the bound is honored, and with no clock the timing is Unmeasured rather than Honored. Compensation runs on failure only, in reverse completion order, honoring SelfCompensating for a correction body by restoring its own committed source through the FileSystem port, refusing it with a reason for a body that has no compensating mode, and reporting ExternallyCompensated as owed to the assembler. A refused incoherent run is deliberately not compensated.",
+      "done_when": "OD-WORKFLOW-005 is amended, its version raised, so that no sentence in it asserts the absence of something HEAD contains: the retry runtime, the compensation runtime and the timeout measurement are recorded as built, by the item and commit that built them, and what genuinely stays out is restated as it now stands (no branch or merge, no bounded parallelism, no cancellation runtime, no cache runtime, no deduplication-token minting, no compensating-step composition, no published or independently versioned workflow artifact, and no shared dispatch trait); the amendment records the two design consequences a later reader would otherwise rediscover, that the richer report is a second type rather than a new WorkflowOutcome variant because two host crates match those enums exhaustively, and that a correction step's compensation restores its own source rather than calling CommittedPlan::Rollback because the committed outcome carries only rendered strings across the seam; it names the three follow-ups that measurement identified without scheduling them, namely handing the rollback receiver across the correction seam, a timed-out outcome or an overrun that stops a run (which needs host territory), and minting a per-attempt deduplication token so the declaration Is_Coherent demands becomes a mechanism; it does not restate OD-WORKFLOW-002's triggers or reopen OD-ROADMAP-001's override; both projections are re-rendered per the nomos-spec-change skill; and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p123-wf005",
+        "acquired_at": 1790050136,
+        "lease_expires_at": 1790060936
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 1800
       },
       "verified": null,
       "abandoned": [],

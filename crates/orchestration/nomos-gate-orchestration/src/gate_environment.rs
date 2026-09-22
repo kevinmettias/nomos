@@ -140,7 +140,7 @@ pub fn Run_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     let outcome = Scoped_Judgment(walked, command, context);
     let policies = DispositionPolicies_Of(&effective, now);
     let reduced = Reduced_Findings(&outcome, &command.rules, policies, effective.coverage);
-    let disposition = Phased_Outcome(command, &reduced);
+    let disposition = Phased_Outcome(&effective, &reduced);
     let unusable_policy = declared.as_ref().err().map(|error| return error.As_No_Verdict());
 
     return GateRunResult {
@@ -210,14 +210,18 @@ fn DispositionPolicies_Of(policy: &GatePolicyFile, now: Timestamp) -> Dispositio
     return DispositionPolicies { adoption: &policy.adoption, suppressions: &policy.suppressions, baseline: &policy.baseline, now };
 }
 
-/// `reduced`'s disposition once `command.phases` has been evaluated over it.
+/// `reduced`'s disposition once `policy`'s phases have been evaluated over it.
 ///
 /// A phase approval is the one thing that can turn a blocking finding into a passing run, so
 /// it is read here rather than by [`Reduced_Findings`]: that function decides what blocks, and
 /// this one decides what a repository has agreed to live with.
-fn Phased_Outcome(command: &GateCommand, reduced: &Reduction) -> GateRunOutcome
+///
+/// `policy` is the resolved policy rather than the command, so a repository that declared its
+/// stages in `nomos-gate.json` reaches this the same way one that built them in code does --
+/// the single reader `OD-GATE-011` asks for, rather than a second path for the declared form.
+fn Phased_Outcome(policy: &GatePolicyFile, reduced: &Reduction) -> GateRunOutcome
 {
-    let phase_outcomes = Evaluated_Phases(&command.phases, &reduced.findings.blocking_findings, &command.approvals);
+    let phase_outcomes = Evaluated_Phases(&policy.phases, &reduced.findings.blocking_findings, &policy.approvals);
 
-    return Phased_Disposition(reduced.disposition, &command.phases, &phase_outcomes, &reduced.findings.blocking_findings);
+    return Phased_Disposition(reduced.disposition, &policy.phases, &phase_outcomes, &reduced.findings.blocking_findings);
 }

@@ -95,9 +95,16 @@ pub struct GateCommand
     /// `baseline` and `adoption` have already reduced down to still-blocking. Read by
     /// [`crate::Run_Gate`] only, the same asymmetry as every field above. Empty is "no phase
     /// policy," the same behavior every existing caller and CI's own `gate run --root .`
-    /// already have.
+    /// already have. Left empty, [`crate::Run_Gate`] fills it in from the `nomos-gate.json`
+    /// under `root`, the same way `suppressions` is -- see `crate::policy::gate_policy_file`'s
+    /// `declared_phases` for the file's shape and the refusals it owes an author.
     pub phases: Vec<GatePhase>,
     /// Approvals that let a phase named in `phases` pass despite exceeding its own
     /// threshold. Read by [`crate::Run_Gate`] only, the same asymmetry as `phases`.
+    ///
+    /// Resolved from the same source `phases` was, never mixed with it: an approval names the
+    /// phase it covers, so a caller's phases paired with a file's approvals would let an
+    /// approval address a stage its own source never declared. A command stating `phases`
+    /// therefore states its own approvals too, including none.
     pub approvals: Vec<PhaseApproval>,
 }

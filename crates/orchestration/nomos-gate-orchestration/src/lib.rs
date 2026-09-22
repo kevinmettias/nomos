@@ -11,7 +11,7 @@
 //! approvals, and blocking behavior."
 //!
 //! "Most of that is still unbuilt" was true of this crate's own start and was read in the
-//! present tense for the twelve increments below, which is the half of it that went stale:
+//! present tense for the thirteen increments below, which is the half of it that went stale:
 //! `ScopeSelector`, `RuleSelector`, `SuppressionPolicy`, `BaselinePolicy`, `AdoptionPolicy`,
 //! `CoveragePolicy` (where `WF-001`'s unsupported-analysis policy was reached), required
 //! phases, thresholds, approvals and failure disposition each have a real type here now, named
@@ -174,12 +174,14 @@
 //! into [`GateRunResult::disposition`]: a run that would otherwise fail can still pass when
 //! every blocking finding is named by some declared phase and no phase failed unapproved,
 //! and stays failed when a blocking finding belongs to no phase at all -- a phase policy
-//! only ever adds a way to still pass, never a silent way to stop blocking. Deliberately
-//! narrower than `WF-001`'s full shape: no CLI flag or config file constructs a [`GatePhase`]
-//! or [`PhaseApproval`] yet, the same "type and its consultation only" restraint
-//! `P13-GATE-015-SUPPRESSION-FIRST-INCREMENT` above already held, and [`GateRunResult`]
-//! itself carries no per-phase detail -- a caller that needs to see which phase did what
-//! calls [`Evaluated_Phases`] directly over [`GateRunResult::findings`].
+//! only ever adds a way to still pass, never a silent way to stop blocking. At that
+//! increment it was deliberately narrower than `WF-001`'s full shape: no CLI flag or config
+//! file constructed a [`GatePhase`] or [`PhaseApproval`], the same "type and its
+//! consultation only" restraint `P13-GATE-015-SUPPRESSION-FIRST-INCREMENT` above already
+//! held. The config-file half of that is the thirteenth increment below; the flag half still
+//! holds, and [`GateRunResult`] still carries no per-phase detail -- a caller that needs to
+//! see which phase did what calls [`Evaluated_Phases`] directly over
+//! [`GateRunResult::findings`].
 //!
 //! Its twelfth increment, `P41-GATE-PLAN-IS-A-PLAN-3`, gives [`crate::run::Run`] (the
 //! `plan` verb) its first real narrowing: it reads [`GateCommand::rules`] and filters
@@ -189,6 +191,28 @@
 //! introspection wearing the name of a plan" gap this record's own earlier text named.
 //! `root` and `scope` remain unread: `Plan` still reports the registry rather than a walk,
 //! so neither has a file to narrow against -- see [`crate::gate_plan::GatePlan`]'s own doc.
+//!
+//! Its thirteenth increment, `P123-GATE-PHASES-THRESHOLDS-AND-APPROVALS-ARE-AUTHORED-IN-THE-POLICY-FILE`,
+//! gives the eleventh's types the author they lacked: `nomos-gate.json` gains `phases` and
+//! `approvals`, read by the one reader the tenth increment built rather than by a second
+//! encoding beside it (`OD-GATE-011`). A phase names its own `threshold` as a key of its own
+//! entry, because [`GatePhase`] owns one; an absent `threshold` resolves to
+//! [`PhaseThreshold::AnyBlockingFinding`], the strictest of the two variants, so absence
+//! never buys a tolerance nobody wrote (`OD-GATE-029`'s principle, deliberately the opposite
+//! direction from `OD-GATE-030`'s migration reading of an absent occurrence count). An absent
+//! `phases` is still no phase policy at all. Four declarations the types cannot act on are
+//! refused with the offending entry named rather than stored: a phase judging no rules, a
+//! threshold tolerating zero findings, two phases sharing one name, and an approval naming a
+//! phase the file does not declare. [`GateRunProvenance::policy`] covers both families, so
+//! two runs under different stages are not reported as comparable -- `P109-F`'s own question
+//! asked of the families that arrived after it. `OD-ROADMAP-003` is what made this
+//! buildable: it found `OD-ROADMAP-002`'s pause on new gate policy increments lapsed, and its
+//! surviving constraint is what this increment is shaped by -- every row is a declared
+//! constant the reader reads off the file, and never a condition consulting store state, cost
+//! or a prior run. No CLI flag and no transport field is added, so the restraint
+//! `P101-THE-HEADLESS-SURFACES-STILL-STOP-AT-THREE-GATE-VERBS` records is untouched: a
+//! repository authors its stages in a file, and `crates/host/nomos-cli/src/gate/parsing.rs`
+//! still passes `phases: Vec::new()`.
 //!
 //! # What no increment is
 //!
