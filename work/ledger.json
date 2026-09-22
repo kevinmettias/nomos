@@ -92528,10 +92528,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p128-auth",
+        "acquired_at": 1790057670,
+        "lease_expires_at": 1790068470
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -92935,10 +92939,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p128-firstrun",
+        "acquired_at": 1790057681,
+        "lease_expires_at": 1790068481
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -92979,10 +92987,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p128-provenance",
+        "acquired_at": 1790057716,
+        "lease_expires_at": 1790068516
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -93022,10 +93034,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p128-studio",
+        "acquired_at": 1790057704,
+        "lease_expires_at": 1790068504
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -93040,6 +93056,149 @@
           "record_citation"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-NOMOS-PLATFORM-COMPILES-WITHOUT-XVPE",
+      "title": "nomos-platform compiles without XVPE, so the ports crate every band above it depends on is independent of the engine it is a port to",
+      "why": "OD-ROADMAP-005 decision 4 authorizes this and bounds it: nomos-platform compiles without XVPE, superseding OD-PLATFORM-003 v1 only where that record's retirement of AGT-006's no-dependency clause reaches nomos-platform itself. The crossing stays adopted and stays pinned, nomos-platform-xvpe stays the adapter, and XVPE does not become a peer again -- Nomos remains an application over it. What moves is the clock type and nothing else.\n\nThe defect, measured at 53de19a4 and unchanged at 532d21d1: crates/platform/nomos-platform/src/clock/timestamp.rs re-exports xvpe_clock::Timestamp and the crate's manifest names xvpe-clock, so the ports crate every other band depends on cannot compile without the engine it is a port to. An external architecture review of dev called this a reverse boundary leak.\n\nThe consumer census at 53de19a4 over crates/ and tests/, which is what decides the type's surface: 88 files name Timestamp; Timestamp::From_Unix_Seconds is called 153 times and Timestamp::Plus once as an associated function; the value methods are Unix_Seconds 19 times, Plus 10 and Since 4; no const or static of the type exists, nothing keys a map or a set by it, and no crate implements a trait for it. nomos-platform is the only crate in the workspace that names xvpe-clock, and neither README.md nor nomos-architecture.json mentions it, so nothing outside the platform crate asserts the arrangement being undone.\n\nTwo shapes were built and measured rather than argued. Moving xvpe-clock to nomos-platform-xvpe does not leave Cargo.lock byte-identical as was supposed: measured, it is one insertion and one deletion, because the lock records a per-member dependency array and a move is an edit to two of them. It would also add a dependency and conversions no caller has, which nomos-platform's own crate doc refuses in terms -- a trait nothing implements and nothing calls is a claim about the future. Dropping the dependency outright was measured at 112 deleted lock lines, being the package blocks for xvpe-clock, web-time, js-sys, wasm-bindgen with its three macro crates, rustversion, slab and the three futures crates, all of which xvpe-clock alone pulled in. The second shape is what this item lands, and the lock cost is the honest one rather than the small one.\n\nMeasured stale in passing, and repaired here because the amendment is owed anyway: OD-PLATFORM-003's cost paragraph says this workspace no longer builds standalone and requires XVPE checked out beside it because the dependency is a path dependency across repositories. Cargo.toml adopts every xvpe crate as a git source pinned to revision 82a3c8fccf4ef7f3759f36d3f320a91d0f96341c, and AGENTS.md states the workspace needs no sibling directory to build. Both clauses of that sentence are false.",
+      "done_when": "nomos-platform declares its own Timestamp in crates/platform/nomos-platform/src/clock/timestamp.rs, carrying the surface the census found -- From_Unix_Seconds, Unix_Seconds, Plus and Since, with the Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd and Ord derives -- and crates/platform/nomos-platform/Cargo.toml names no xvpe- dependency.\n\ncargo tree -p nomos-platform names no xvpe crate at all.\n\nThe consumer path nomos_platform::Timestamp is unchanged and so is the ledger wire format module nomos_platform::timestamp_serde, so no file outside this item's territory is edited to make the change compile: cargo check --workspace --all-targets exits zero with the platform crate as the only crate touched.\n\nCargo.lock changes only by the removal of xvpe-clock and the packages it alone pulled in, and every xvpe- package remaining in it still carries a git source pinned to the one revision the manifests declare. Measured at authoring: 112 deleted lines, twelve package blocks gone, eleven xvpe- packages left, all pinned, which is the condition tests/contract/tests/boundaries/lock_pinning.rs judges. A landing count other than that is a difference to explain rather than to accept.\n\ntests/contract/surface/nomos-platform.txt is re-blessed: the re-export line for Timestamp gives way to the struct and its four functions, and no other crate's snapshot moves.\n\nOD-PLATFORM-003 is amended to version 2 in the commit that lands this, as OD-ROADMAP-005 requires of every superseded record, stating what was measured, that OD-ROADMAP-005 authorized it, what moved, that the crossing and the adapter are untouched, and correcting the cost paragraph that claims a path dependency and a required sibling checkout.\n\nBoth required projections are re-rendered from a worktree holding exactly the registered records this commit publishes, and nomos spec freshness --into . --require diagram-set --require domain-specification exits zero there.\n\nWhat the predicate deliberately does not reach, and whose those obligations are instead. The surface snapshot is judged by cargo test -p nomos-contract-tests --test public_surface, which is that package's own standing obligation and goes red on peers' unblessed snapshots in the shared tree; it is run by hand in a clean worktree and reported. Projection freshness is the gate's Required projections step, which work finish deliberately does not run, and is likewise run by hand in the render worktree. Naming either here would make this item's verification answer for somebody else's red.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "Cargo.lock",
+          "crates/platform/nomos-platform",
+          "tests/contract/surface/nomos-platform.txt",
+          "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-platform-clock",
+        "acquired_at": 1790057624,
+        "lease_expires_at": 1790068424
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-platform-xvpe",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 1200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P127-THE-CHECK-SERVICE-RECEIVES-ITS-PROVIDERS-FROM-A-COMPOSITION-ROOT",
+      "title": "The composed provider table moves out of the check service into the hosts that compose it, and the three superseded records are amended",
+      "why": "OD-ROADMAP-005 decision item 1 authorizes nomos-check-orchestration to stop naming the capability, language and repository provider crates directly and to receive them from a composition root. P127-THE-CHECK-SERVICE-MATERIALIZES-THROUGH-DECLARED-PROVIDER-PORTS (done, a50bf332) built the half that fits inside the crate: five declared ports, one per granularity OD-CAPABILITY-008 measured as genuinely distinct, and one module -- src/composition.rs with its one submodule src/composition/provider_table.rs -- that names a provider crate, guarded by src/tests/provider_naming.rs. This item is the other half, and it was split off rather than dropped because every path it needs was held by a live peer claim on 2026-09-21: Cargo.lock by P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS and then by P128-NOMOS-PLATFORM-COMPILES-WITHOUT-XVPE, and all of crates/host/nomos-lsp by P125-WALK-OUTWARD-CARRIES-FIVE-ANSWERS. OD-ROADMAP-005 says an item blocked on a peer claim waits and does not reach in.\n\nThe design is built and does not need re-deriving. crate::composed_providers::ComposedProviders already exists as one value holding thirteen rows at five port types; crate::composition::Composed_Providers already constructs it; crate::run_context::Run_Reassessing already calls that constructor once and threads the value through RunEnvironment and MaterializationEnvironment to every materialization step. What this item changes is where the constructor lives. The table and its adapters move out of nomos-check-orchestration into the composition roots, ComposedProviders and its port types become that crate public surface, and RunContext -- the value every host already builds -- gains the field the table arrives in. Run and Run_Reassessing keep their shape; nothing else in the call chain moves.\n\nCargo.lock is territory because a workspace member dependency list is recorded in it, so moving fifteen dependencies out of one manifest and into the hosts rewrites it. nomos-architecture.json is not territory: Host is already permitted to reach Provider, measured against the declaration on 2026-09-21, so this item declares no new edge.\n\nWhat the design gives up, which belongs in the amendment and not only here. Naming the provider at the materialization site was doing two jobs: it declared the set, and it priced additions to it, because adding a provider was an edit to the service crate that somebody reviewed there. The port keeps the first and drops the second -- once a root supplies the set, a provider is a row at the root and the friction that made anyone ask what a provider costs goes with it. Do not invent a mechanism for the second and do not widen scope to compensate: OD-ROADMAP-005 authorizes the composition move and nothing more. State the cost plainly, and name the observable condition that would make it need answering, in the same shape the amended records use for their own triggers. The condition already exists in OD-RULES-009 own 2026-09-14 amendment and in OD-ROADMAP-003 What Would Decide It Differently: a measured cost that makes materializing an unneeded family expensive enough that skipping it is worth deciding rather than deriving. The first real candidate is a compiler front end that loads a whole crate, and the measurement that fires it is wall time for a run with and without that row.\n\nOD-ROADMAP-003 also carries a constraint this item must preserve rather than move: a new provider composition or materialization section is a declared constant and never a condition consulting store state, cost or prior materialization. The table is a struct literal and Policy_Provider_For is a total match over RequiredFact; moving both to a root must not turn either into a choice.",
+      "done_when": "crates/orchestration/nomos-check-orchestration/Cargo.toml names no language provider, no repository policy provider and no connector crate: the fifteen dependencies measured at a50bf332 are gone from its dependencies table, and the ones its own tests still need are dev-dependencies or gone. Cargo.lock records that move. The crate builds and its tests pass with no provider crate in its library dependency graph.\n\nEvery composition root that calls Run supplies the provider set as a value: nomos-cli, nomos-api and nomos-lsp each construct a ComposedProviders and hand it in, and a reader of any one of them can see which providers that host composes without opening the service crate. No host obtains the set by calling a constructor that lives in nomos-check-orchestration, because that would be the same defect one crate over.\n\nThe three properties the service already keeps, still hold and are still proven by the tests that prove them today: a rule consumes facts resolved through a capability rather than calling a provider, so no crate under crates/rules gains a provider dependency; a capability whose provider refuses still reports which capability could not be answered, as the three ProviderUnavailable findings; and Composed_Rules, which nomos-gate-orchestration derives its own table from, returns the same rule list.\n\nOD-CAPABILITY-008, OD-HOST-004 and OD-PACKAGE-014 each gain an amendment naming OD-ROADMAP-005 as the authorization, stating what was measured and what was built, saying which clause is now superseded rather than pending, leaving that clause own measurement standing, and stating what the move gives up along with the observable condition under which that cost would need answering. Each version is bumped. Both derived projections are re-rendered from the record set the commit publishes, and nomos spec freshness exits 0.\n\nThe item predicate exits 0 with no test disabled, ignored, weakened or deleted to get there, and the gate lint step work finish runs first is green.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-gate-orchestration",
+          "crates/orchestration/nomos-correction-orchestration",
+          "crates/orchestration/nomos-workflow-orchestration",
+          "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+          "crates/host/nomos-cli/Cargo.toml",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/check",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/vacuity.rs",
+          "crates/host/nomos-cli/src/workflow/parsing.rs",
+          "crates/host/nomos-cli/tests/composer_std_seam.rs",
+          "crates/host/nomos-cli/tests/gate_orchestration_seam.rs",
+          "crates/host/nomos-cli/tests/workspace_seam.rs",
+          "crates/host/nomos-cli/tests/capability_seam.rs",
+          "crates/host/nomos-cli/tests/check_orchestration_seam.rs",
+          "crates/host/nomos-api/Cargo.toml",
+          "crates/host/nomos-api/src/check.rs",
+          "crates/host/nomos-api/src/check",
+          "crates/host/nomos-api/src/lib.rs",
+          "crates/host/nomos-api/src/workflow.rs",
+          "crates/host/nomos-lsp",
+          "crates/host/nomos-surface-provenance/src/machine.rs",
+          "tests/integration",
+          "Cargo.lock",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/contract/surface/nomos-lsp.txt",
+          "tests/contract/surface/nomos-api.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/surface/nomos-correction-orchestration.txt",
+          "tests/contract/surface/nomos-workflow-orchestration.txt",
+          "docs/records/OD-CAPABILITY-008-whether-the-provider-convention-needs-a-declared-trait-or-registrys-compile-time-offer-construction-already-closes-the-gap.md",
+          "docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md",
+          "docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P127-THE-CHECK-SERVICE-MATERIALIZES-THROUGH-DECLARED-PROVIDER-PORTS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-correction-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "run_seam",
+          "--test",
+          "capability_composition",
+          "--test",
+          "public_surface",
+          "--test",
+          "boundaries",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 5400
       },
       "verified": null,
       "abandoned": [],
