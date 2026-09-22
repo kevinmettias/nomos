@@ -92754,7 +92754,9 @@
           "crates/contracts/nomos-contracts/src/workflow_step",
           "crates/contracts/nomos-contracts/src/lib.rs",
           "tests/contract/surface/nomos-workflow-orchestration.txt",
-          "tests/contract/surface/nomos-contracts.txt"
+          "tests/contract/surface/nomos-contracts.txt",
+          "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md",
+          "crates/spec/nomos-spec-store/records/OD-WORKFLOW-005.record"
         ],
         "patterns": []
       },
@@ -92784,7 +92786,22 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p128-engine",
+          "added": [
+            "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md"
+          ],
+          "widened_at": 1790059051
+        },
+        {
+          "holder": "fable-p128-engine",
+          "added": [
+            "crates/spec/nomos-spec-store/records/OD-WORKFLOW-005.record"
+          ],
+          "widened_at": 1790059063
+        }
+      ]
     },
     {
       "id": "P128-NOTHING-RUNS-A-WAVE-SO-THE-CORRECTION-SUBSTRATE-HAS-NO-SCHEDULER",
@@ -93553,14 +93570,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "The predicate cannot establish this item's done_when, and the defect is in the predicate rather than the work. It names nomos check --root F:/repos/nomos, an absolute path to the shared tree, so it judges every session's uncommitted files rather than the tree carrying this change; measured 2026-09-22, that tree carries two Blocking findings from a peer's undeclared orphan modules under nomos-analysis, which a rename in nomos-check-orchestration cannot clear. Diagnosing it also corrected two mistakes of my own worth recording here. First, I reported that work finish runs the gate lint step against the shared tree even when invoked from a worktree; a peer traced the code and it is false. Finish_Item passes working_directory as None, which nomos-platform-std spawns with no current_dir, so every step inherits the invoking process's cwd, and NOMOS_WORK_DIR redirects only which board file is read. Verified directly: the worktree does not contain the untracked nomos-cli profile test that reddens the shared tree, and clippy exits 0 there. Second, I read one finish as a lost transition when its exit code had been eaten by a pipe to tail; the item had simply failed its predicate. The work itself is committed at bba02515 and the self-check exits 0 over a tree carrying it. Re-authored with a predicate that judges the tree the finish runs in."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-review",
-        "acquired_at": 1790058830,
-        "lease_expires_at": 1790066030
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "F:/repos/nomos/target/debug/nomos.exe",
@@ -93571,9 +93588,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-review",
+          "reason": "Releasing so the item can be declined: its predicate names an absolute foreign root. It runs the check over F:/repos/nomos, the shared tree, rather than over the tree the finish runs in, so it measures every other session's uncommitted work as well as this change. Two blocking findings from a peer's undeclared orphan modules under nomos-analysis stand there now, and no rename in this crate can clear them.",
+          "abandoned_at": 1790060508
+        }
+      ],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "fable-review",
+        "declined_at": 1790060508
+      },
       "widened": []
     },
     {
@@ -93590,10 +93616,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p128-adapter",
+        "acquired_at": 1790059211,
+        "lease_expires_at": 1790066411
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -93649,6 +93679,144 @@
         "timeout_seconds": 2700
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-THE-COMMIT-PROCEDURE-IS-DEFEATED-BY-A-PEER-COMMIT-BETWEEN-THE-RENDER-AND-THE-REF-UPDATE",
+      "title": "The commit procedure is defeated by a peer landing between the render and the ref update, and reading HEAD twice silently reverts them",
+      "why": "966d8745 wrote the render-and-commit procedure into the nomos-spec-change skill after three workers lost a projection: stage, compare the staged blob against the render worktree by object hash, then a bare commit, never a trailing pathspec. A worker following it hit two failures it does not cover, both measured. First, a peer had staged their own files into the shared .git/index, so a bare commit would have swept them, and between that worker's git add and its hash assertion passing, a peer re-staged HEAD's spec/domain-specification.md over its own copy in both the shared index and the working tree. The procedure's assertion cannot close a window that reopens after the assertion. Second, and worse because it is silent, that worker built its commit's tree from HEAD at one moment and took the parent from a later git rev-parse HEAD. A peer commit landed in between, one that amended a record and re-rendered the specification, so the published projection was rendered from a record set lacking that amendment and dropped the peer's work; it was repaired at 6adbd1d7. The skill's rule, render from the record set your commit publishes, is true at the moment of rendering and is defeated by anything landing between the render and the ref update. Nothing in the procedure catches either, and the post-commit diff cannot, because the working tree holds the peer's bytes too.",
+      "done_when": "The procedure states what to do when the shared index and working tree cannot be trusted for the duration of a commit, and the answer is written as commands that have been run rather than described: building the commit without touching either, by reading the tree into a private GIT_INDEX_FILE, setting each rendered blob with update-index cacheinfo, commit-tree, and update-ref with the captured parent as the expected old value so the update is a compare-and-swap that fails rather than clobbers. It states that the parent commit is captured ONCE and the same value used for building the tree and for the ref update, because taking it twice publishes a revert of whatever landed between, and it says what to do when the compare-and-swap is rejected, which is to re-render rather than retry the update. It keeps the simpler git add and bare commit form for a quiet tree and says how a session decides which it is, rather than making every commit pay for the contended case. The existing hash comparison is kept and described honestly as closing the window before the assertion and not the one after it. Every command in the new text is executed by the claimant against a throwaway repository or this one before it is written down, and the report says which. Nothing about what a projection contains or who owns it changes. If the claimant concludes a record is owed rather than a procedure, that is argued rather than assumed, noting that the claimant of e0e2334a found OD-LEDGER-018 already routes the staging half to the contract by name. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-spec-change/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p128-commitrace",
+        "acquired_at": 1790059191,
+        "lease_expires_at": 1790066391
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P129-A-DECLARED-TEXT-RULE-FORM-IS-A-SECOND-JUDGMENT-ARM-IN-THE-ONE-DESCRIPTOR-TABLE",
+      "title": "A rule of the dominant archetype is declared rather than written, as a second judgment arm in the one descriptor table",
+      "why": "OD-RULES-034, landed at f76ca17e, censused the rule population rather than estimating it and decided this. The real numbers: DESCRIPTORS names 71 composed rules, the crate exports 87 Check_* functions under 86 identifiers, and the sixteen exported-but-uncomposed ones each carry a measured reason checked both ways. Of the 71, sixty-five are a predicate over one subject and exactly four relate several; forty-five judge one file's raw text; and the dominant archetype, a per-line predicate over raw text, is forty-four of seventy-one. The decisive evidence is that this crate has already built the answer by extraction and never decided it: Finding_For_Line has twenty-two call sites, Code_Prefix twenty-one, Resolve_Declared_Fixture_Locations twelve, Resolve_Limit eight, and each engine's own doc names the duplication that preceded it, ten rule modules having built one finding shape by hand and eleven copies of one line split having preceded another. The record decides a declarative form scoped to that archetype alone, names its eight inputs as parameters existing engines already take, and states what it may not express. It also re-measured OD-RULES-007's six triggers at 71 and found the rule-IR question still unfired, because the redundancy the extractions removed was in authoring rather than in fact acquisition or judgment scheduling.",
+      "done_when": "A rule of the dominant archetype can be declared rather than written, through a form carrying the eight inputs OD-RULES-034 names, each of which an existing engine already takes as a parameter. RuleJudgment gains a second arm so a descriptor holds either a linked function pointer or a static declared form, both const-constructible, so DESCRIPTORS stays a const table and no second registration path exists; RuleJudgment::Judges keeps its signature and its one call site, so orchestration needs no change, and crates/orchestration/nomos-check-orchestration is deliberately not territory because needing it would be evidence the seam was chosen wrongly. Every refusal the record names is a stated refusal rather than an empty render: a declaration names a detector from a closed vocabulary and never contains one, and a form cannot express a relation between subjects, a judgment over a materialized payload, block or scope state, or anything about which rules run. The falsifier the record names is the acceptance test: one existing rule already built on the shared construct engine is re-declared through the form and produces byte-identical findings against this tree, compared as bytes rather than as counts. The declared and linked arms are proven indistinguishable to every consumer that reads a descriptor, including the derivation that builds a RulePackage from DESCRIPTORS, since a declared form interpreted by a linked interpreter is still a mechanical judgment. No manifest-loaded form is built, which the record leaves undecided and names its own trigger for. At least two load-bearing guards are proven by mutation with the file restored byte-identically. The surface snapshot is re-blessed and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor",
+          "crates/rules/nomos-rules/src/checks/rust_text.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p129-declared",
+        "acquired_at": 1790059936,
+        "lease_expires_at": 1790070736
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-A-GUARD-SHIPPED-CARRYING-THE-CLASS-OF-DEFECT-IT-WAS-WRITTEN-TO-STOP-2",
+      "title": "The provider-naming guard shipped with an abbreviation, and the self-check exits 1 on any tree carrying it",
+      "why": "a50bf332 added crates/orchestration/nomos-check-orchestration/src/tests/provider_naming.rs, the guard that keeps provider crate identifiers out of every file but the composition module, and named a helper in it Relative_To_Src. The abbreviations rule judges that identifier as an abbreviation and reports it Blocking, so nomos check over a tree carrying it exits 1: measured at e7a577be, 1962 files examined, 55 findings, exactly one of which could fail a build, and it was this one. The commit is mine and so is the repair, which is committed at bba02515 and verified by a self-check exiting 0. What remains is the ledger transition, and this item exists because its predecessor's predicate named an absolute path to the shared tree and so measured peers' uncommitted work rather than this change. The irony of the finding is worth keeping: the file is a guard written to stop one class of defect from returning, and it shipped carrying a different one, because its author ran the crate's tests and the contract suite and not the product's own check over the repository.",
+      "done_when": "The helper is spelled without an abbreviation at both its definition and its one call site, in the one file that names it; nothing else is renamed, because nothing else carried the finding; the guard still fails when a provider identifier appears outside the composition module, which the crate's library tests re-run; and nomos check over the tree the finish runs in exits 0 with zero findings that can fail a build, so the predicate judges this change rather than whatever every other session happens to have on disk in the shared tree at that moment.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration/src/tests/provider_naming.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "F:/repos/nomos/target/debug/nomos.exe",
+          "check",
+          "--root",
+          "."
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "F:/repos/nomos/target/debug/nomos.exe",
+          "check",
+          "--root",
+          "."
+        ],
+        "exit_code": 0,
+        "output_tail": " can exhibit its axes) — crates/repository/nomos-repo-policy/src/scripting/guarantee.rs\n[Advisory] guarantee-declares-its-exerciser: Declared_Guarantee (this guarantee declaration names no exerciser: add `Exercised by ` followed by a backticked test name, or by `nothing` and the reason no test can exhibit its axes) — crates/repository/nomos-repo-policy/src/test_material/guarantee.rs\n[Advisory] guarantee-declares-its-exerciser: Declared_Guarantee (this guarantee declaration names no exerciser: add `Exercised by ` followed by a backticked test name, or by `nothing` and the reason no test can exhibit its axes) — crates/repository/nomos-repo-policy/src/words/guarantee.rs\n[Advisory] guarantee-declares-its-exerciser: Declared_Guarantee (this guarantee declaration names no exerciser: add `Exercised by ` followed by a backticked test name, or by `nothing` and the reason no test can exhibit its axes) — tests/integration/src/surface.rs\n[Advisory] unread-reaches-finding: tests/corpus/analysis/gamma/broken.rs (this source's reachability could not be judged: no admitted provider answered for it (DependencyUnavailable)) — tests/corpus/analysis/gamma/broken.rs\n[Advisory] data-names-stay-lower-snake: tests/corpus/analysis/gamma/broken.rs (this file's data names could not be judged: no admitted provider answered for it (DependencyUnavailable)) — tests/corpus/analysis/gamma/broken.rs\n[Advisory] abbreviations: tests/corpus/analysis/gamma/broken.rs (this file's abbreviations could not be judged: no admitted provider answered for it (DependencyUnavailable)) — tests/corpus/analysis/gamma/broken.rs\n[Advisory] single-letter-names: tests/corpus/analysis/gamma/broken.rs (this file's single-letter names could not be judged: no admitted provider answered for it (DependencyUnavailable)) — tests/corpus/analysis/gamma/broken.rs\n\n1945 file(s) examined, 1944 with a syntax fact, 459 finding(s), 0 of which can fail a build\nclaim: incomplete\n  Supported: 452\n  DependencyUnavailable: 7\n",
+        "verified_at": 1790060603,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bba02515080771172949d95ada6eb560e7f87e36"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
