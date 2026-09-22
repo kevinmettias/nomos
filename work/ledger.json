@@ -88437,7 +88437,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory and measurement both short, found by executing the change in an isolated worktree before claiming. The why says fifteen lines across seven member manifests; the population is sixteen lines across eight, and the eighth is tests/contract/Cargo.toml, which carries its own xvpe-primitives pin and which this item never reserved. The omission was not cosmetic: it is what made the guard look already-correct. With only the seven moved, the pinning guard went on passing, because tests/contract is itself a workspace member and its surviving pin was still a declared revision for a members-only reader to find. Moving the eighth is what exposes the guard as blind, and the item that cannot reserve that file cannot demonstrate its own done_when. The work itself is done and proven in the worktree and is carried to the replacement unchanged."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -88456,7 +88460,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "fable-review",
+        "declined_at": 1790049703
+      },
       "widened": []
     },
     {
@@ -89143,7 +89150,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "The item cannot be executed inside its territory, and its why carried a false measurement that the territory could not repair. A claimant measured three things and abandoned without editing the tree; all three are confirmed independently. First, the why asserts that nomos-cli already depends on serde_json. It does not: crates/host/nomos-cli/Cargo.toml names neither serde_json nor nomos-api in dependencies or dev-dependencies, nothing in the workspace re-exports serde_json, and crates/host/nomos-cli/tests/request_submit.rs records the deliberate posture that a serde_json dependency in this crate would be a second reason to touch its manifest. The item forbids adding a dependency and does not reserve Cargo.toml, so both the call and the test that parses its output are out of reach. Second, the edge the item needs is forbidden architecture, not a missing line: nomos-architecture.json puts nomos-cli and nomos-api both in zone Host, Host's permits list does not include Host, and the only named exception into nomos-api is from nomos-api-transport, so nomos-cli naming nomos-api fails the downward-dependency boundary test and this repository's own Check_Dependency_Direction. Permitting it is an architectural decision that wants a record and edits to nomos-architecture.json and README, none of it in territory. Third, neither verb produces what the projection consumes: SarifLog::Of_Gate_Run takes a nomos_api::GateRunResponse and Of_Check_Run a nomos_api::CheckResponse, while nomos-cli renders nomos-gate-orchestration's and nomos-check-orchestration's own outcomes, so even with the dependency the CLI would have to judge the tree a second time through a nomos-api handler or convert between two hosts' response types. The question of which host may emit the projection is a decision rather than an implementation, so it is authored as one: P123-OD-HOST-017-WHICH-HOST-EMITS-THE-SARIF-PROJECTION. The claimant's measurement of what does work inside the territory, the parser conventions and the FileSystem port's Replace_Atomically, is carried into that item's why so the next claimant does not re-derive it. Nothing was written to the tree and no build was spent."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -89171,7 +89182,10 @@
         }
       ],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "fable-triage",
+        "declined_at": 1790049575
+      },
       "widened": []
     },
     {
@@ -89214,6 +89228,149 @@
           "nomos-contracts",
           "-p",
           "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-OD-HOST-017-WHICH-HOST-EMITS-THE-SARIF-PROJECTION",
+      "title": "OD-HOST-017: which host may emit the SARIF projection, when a host may not name the host that holds it",
+      "why": "Commit 0c05967a put the SARIF 2.1.0 projection in nomos-api, where the response types it reads live, citing OD-HOST-002. Nothing calls it outside that crate's tests, so the export the corpus requires and every CI consumer ingests is unreachable. The obvious wiring is refused by declared architecture rather than by an absent line, measured at 0c05967a: nomos-architecture.json puts nomos-cli and nomos-api both in zone Host, Host's permits list does not include Host, and the only named exception into nomos-api is nomos-api-transport, so nomos-cli naming nomos-api fails the boundary suite's downward-dependency test and nomos_rules::Check_Dependency_Direction over a real run. nomos-cli also declares neither nomos-api nor serde_json, and crates/host/nomos-cli/tests/request_submit.rs records a deliberate posture against the latter. Nor does either CLI verb hold what the projection consumes: it renders the orchestration outcomes directly, while Of_Gate_Run and Of_Check_Run take nomos-api's own response types, so a CLI that called them would either judge the tree twice or convert between two hosts' projections. An earlier capability item, P123-A-SARIF-LOG-IS-UNREACHABLE-FROM-A-COMMAND-LINE, was declined for exactly this, having asserted a dependency that does not exist. What a claimant measured as workable, carried here so it is not re-derived: the check and gate parsers can grow a valued flag through crate::arguments::Named_Value_From_String_Arguments with Required_Value(value, Name, Usage) for the refusal, check/parsing.rs refuses any unknown argument by prefix so a new flag must join that guard, gate/parsing.rs keeps KNOWN_ARGUMENTS and each group keeps its own USAGE constant, main.rs names no command type so a CLI-owned invocation can wrap the orchestration command without touching it, and production code in both verbs reaches the disk only through nomos_platform::FileSystem, whose Replace_Atomically and FileSystemError::Path give an unwritable destination a refusal that names the path.",
+      "done_when": "A governing record OD-HOST-017 is written and registered that decides which host emits the SARIF projection, weighing at least these four against the zone rule rather than against convenience: a named Host exception letting nomos-cli reach nomos-api, and what else that admits, since an exception is a standing permission and not a one-off; admitting a SARIF-emitting operation to nomos-api-transport and nomos-mcp instead, which already reach nomos-api legitimately and whose admission criterion OD-HOST-014 states as what a call causes on the host, a projection of a judgment causing nothing new; moving the projection or a response conversion to a zone Host may reach, and whether that contradicts the OD-HOST-002 reasoning that put it beside the response types; and a CLI that renders the log from its own outcome types, which would be a second rendering of a finding and is what OD-HOST-002 exists to refuse. It states which it chooses and why the others are refused, names the capability item that follows with its territory by path including nomos-architecture.json and README.md if the choice reaches them, and records that nomos-cli declares neither nomos-api nor serde_json today so the chosen route's manifest cost is part of the decision rather than a surprise for its implementer; it builds nothing; both projections are re-rendered per the nomos-spec-change skill; and the predicate passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-017",
+          "crates/spec/nomos-spec-store/records/OD-HOST-017.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P124-SIXTEEN-MANIFEST-LINES-PIN-THE-XVPE-CROSSING-SEPARATELY-2",
+      "title": "Sixteen manifest lines pin the XVPE crossing separately, and the guard that catches a partial bump cannot see the declaring site",
+      "why": "Sixteen dependency lines across eight manifests each spell the XVPE crossing in full, git URL and forty-character revision: nomos-platform, nomos-platform-xvpe, nomos-agent-executor-claude-code, nomos-model-backend-ollama, nomos-api-transport, nomos-lsp, nomos-mcp, and tests/contract, whose own dev-dependency on xvpe-primitives exists so that this workspace's Strategy declaration and XVPE's can be compared in one place. The root manifest's workspace.dependencies table already holds every nomos crate and no xvpe one, so a revision bump is sixteen edits that must agree, and the only thing that catches a partial bump is Test_Every_Manifest_Should_Pin_The_Crossing_To_One_Revision in tests/contract/tests/boundaries/lock_pinning.rs, after the fact. That guard reads workspace member manifests only, so declaring the crossing once in the root table empties its Declared_Revisions and turns it red for the opposite of its own reason; it has to read the root table as the declaring site while still reading every member, because inheriting is a convention and a member may re-pin at any time. Measured 2026-09-21 at 8fc9be23: sixteen lines, eight manifests, one revision, twelve xvpe packages in Cargo.lock at that revision. OD-PLATFORM-003 and OD-PLATFORM-004 govern that the crossing is a pinned git revision and that a local override carries no authority; neither prescribes where the pin is spelled. AGENTS.md states the crossing in three lines and is held to a line budget by its own harness test, so correcting it is a replacement rather than an addition.",
+      "done_when": "Every xvpe crate is declared exactly once, in the root manifest's workspace.dependencies table, with its git URL and revision; all eight manifests name each one with workspace = true and carry no URL or revision of their own; every comment that explained a dependency at its former pin site is kept beside the inheriting line; Cargo.lock is byte-identical before and after and cargo metadata still resolves all twelve xvpe packages at the one revision; lock_pinning.rs reads the root manifest as the declaring site and still reads every member, its revision scan is a function over text so the two-revision case can be exhibited rather than only asserted, and a new negative control shows that a member re-pinning locally is seen as a second revision while an inheriting member adds none; the previous version of that guard is shown to fail over the moved manifests, so the change to it is load-bearing rather than incidental; AGENTS.md's crossing paragraph is corrected within the same line count its harness budget allows; and cargo test --no-fail-fast -p nomos-contract-tests --test boundaries passes.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "Cargo.toml",
+          "crates/platform/nomos-platform/Cargo.toml",
+          "crates/platform/nomos-platform-xvpe/Cargo.toml",
+          "crates/agent/nomos-agent-executor-claude-code/Cargo.toml",
+          "crates/agent/nomos-model-backend-ollama/Cargo.toml",
+          "crates/host/nomos-api-transport/Cargo.toml",
+          "crates/host/nomos-lsp/Cargo.toml",
+          "crates/host/nomos-mcp/Cargo.toml",
+          "tests/contract/Cargo.toml",
+          "tests/contract/tests/boundaries/lock_pinning.rs",
+          "AGENTS.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-GATE-034-EVIDENCE-FLOOR-FIRST-INCREMENT",
+      "title": "A gate states the lowest evidence class a finding must carry to block, and a finding below it is reported in a bucket of its own",
+      "why": "OD-GATE-034, landed at 13d207c1, decides two things an external review of bc0aaacf named as gate gaps. The first needs no code: ApplicabilityPolicy is CoveragePolicy under another name and the name is retired as a type, because every reading of it already has an owner and a fifth type would decide one of them twice. The second is this item. A gate may state the lowest EvidenceClass a finding must carry to block, over the ordering EvidenceClass already publishes, and nomos_contracts::Finding has carried that class since it was written while no gate policy read it. The record measured the corpus over all 363 statements and found the phrase nowhere, so the floor is derived from EVID-001's eight classes and the prohibitions around WF-001 rather than from a requirement that asks for it by name, and it is built under OD-ROADMAP-003's lapse of OD-ROADMAP-002's pause on new gate policy increments, whose surviving constraint it satisfies: a declared constant, never a condition consulting store state, cost or prior materialization. The population below Derived is zero today and the record names its own falsifier; the territory below is the record's own, by path.",
+      "done_when": "A gate declares an evidence floor in nomos-gate.json, Unset or a named EvidenceClass, read by the one existing reader through Resolve_Gate_Policy with Resolved_Over's precedence unchanged, and Unset migrates nobody; a finding whose evidence is below the floor does not block, judged as finding.evidence at least the floor over EvidenceClass's existing Ord and read in the partition beside the other two conditions rather than inside Finding::Can_Fail_A_Build, so the contract type keeps deciding what can fail a build and the gate keeps deciding what does; a below-floor finding is reported in a sixth GateFindings bucket with its own FindingDisposition variant, never relabelled Advisory and never filed as calibrated, suppressed or baselined, because each of those says something the floor does not; phase thresholds follow blocking by construction and no second threshold floor is introduced; the floor is covered by Policy_Digest so two runs under different floors are not reported as comparable; nomos gate run counts the new bucket and nomos gate explain can cite the floor that moved a finding into it, since a bucket the report does not count is a hidden one; the crate doc's paragraph admitting the two gaps is rewritten to cite OD-GATE-034 for both, including the applicability half this item does not build; a test states a floor above a fixture finding's class and asserts it neither blocks nor disappears, and the record's own falsifier is written as a test rather than as prose; the surface snapshot is re-blessed; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/policy/evidence_floor.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_command.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/provenance.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare/finding_disposition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query/explanation.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/host/nomos-cli/src/gate/report/run.rs",
+          "crates/host/nomos-cli/src/gate/report/explain.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins",
+          "--test",
+          "gate_orchestration_seam"
         ],
         "timeout_seconds": 5400
       },
