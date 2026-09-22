@@ -90614,14 +90614,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-counts",
-        "acquired_at": 1790053122,
-        "lease_expires_at": 1790060322
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -90637,7 +90633,33 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "3\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-repo-policy v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\repository\\nomos-repo-policy)\n   Compiling nomos-lang-rust-cargo v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\languages\\nomos-lang-rust-cargo)\n   Compiling nomos-lang-rust-clippy v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\languages\\nomos-lang-rust-clippy)\n   Compiling nomos-lang-rust-deny v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-lang-go-modules v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\languages\\nomos-lang-go-modules)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-lang-go v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\languages\\nomos-lang-go)\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n   Compiling nomos-workspace v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\substrate\\nomos-workspace)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\rules\\nomos-rules)\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos-render-p123\\tests\\contract)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 17.99s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790053699,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -90916,14 +90938,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-host-orchestration-rule",
-        "acquired_at": 1790053256,
-        "lease_expires_at": 1790064056
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -90938,6 +90956,109 @@
           "record_citation"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": ") = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.23s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/host-rule/render-target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/host-rule/render-target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/host-rule/render-target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790053652,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-A-CLOSED-RECORDS-STATUS-STILL-SAYS-THE-WORK-WAITS",
+      "title": "OD-ANALYSIS-007's Status says composing waits on a pause, in a record whose own amendment says it does not",
+      "why": "P121-OD-ANALYSIS-007-TRIGGER-HAS-FIRED-3 corrected the amendment at 0f743f35 so the capability-orchestration pause is stated in the past and OD-ROADMAP-003 is cited as having retired it. Its done_when scoped the correction to the amendment and said no other text changes, so the Status section below was deliberately left, and its worker flagged it rather than widening. That section still reads, in the present tense, that composing either compiler-backed capability into Run waits on OD-ROADMAP-002's capability-orchestration pause and on the records that decide whether it has lifted. The sentence is not false, because OD-ROADMAP-003 is one of those records, but it is weaker than the corrected paragraph six lines above it and it sits in a section whose last sentence says no revisit condition remains. A reader who stops at Status, which is what a reader checking whether a question is settled does, is told the work waits when the record's own body says it does not.",
+      "done_when": "OD-ANALYSIS-007's Status section no longer states in the present tense that composing either capability into Run waits on OD-ROADMAP-002's pause. It says what the corrected amendment says, that the pause governed at OD-ROADMAP-002's own version and OD-ROADMAP-003 recorded its lapse, and it stays consistent with the closing sentence that no revisit condition remains. The amendment section is not re-edited, no new amendment is added, the version does not change because no decision changes, and nothing outside the Status section moves. Both required projections are re-rendered from the record set the commit publishes and nomos spec freshness with both --require flags exits 0 in that tree, and git show HEAD of spec/domain-specification.md after the commit carries the corrected Status.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75-status",
+        "acquired_at": 1790053561,
+        "lease_expires_at": 1790064361
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-A-LOCK-THAT-BINDS-DOWNWARD-CANNOT-EXPRESS-THE-ONE-CASE-THE-CORPUS-NAMES-FOR-IT",
+      "title": "A locked override binds downward while the layer the corpus names for it sits second from the bottom, so an organization can lock nothing",
+      "why": "OD-POLICY-001's second refusal case is \"a lower layer stating a field a higher layer has locked, per CONFIG-003\", and its layer order runs Default, Organization, Repository, Workspace, User, Workflow, Gate, CommandLine, Environment, TemporaryRunOverride, lowest precedence first. Those two sentences cannot both serve the case CONFIG-003 is about. Organization sits second from the bottom, so every layer that could state a field is higher than it, and an organization lock forbids nothing whatsoever. An organization policy a repository may not weaken is the entire reason a configuration system has locks, and this one cannot express it. The resolver built at dbb2c7c7 implements the record faithfully and its own test locks from Workflow, a layer with no source in this workspace, which is the tell: the only layers that can usefully lock under the present rule are ones nothing contributes at. Its claimant flagged this at the site rather than resolving it, correctly, because a resolver may not answer a corpus question for itself. Two things keep this from being a defect in either the record or the code. OD-POLICY-001 says in as many words that no source which could carry a lock exists today, and that it does not decide which fields a higher layer may lock beyond the fact that a contribution may carry one. So the mechanism is unreachable rather than wrong, and the question is what it should mean before a source arrives that makes the answer load-bearing.",
+      "done_when": "OD-POLICY-001 is amended, its version raised, deciding which direction a lock binds, read against CONFIG-003's own text in the domain volume rather than against the record's paraphrase of it. At minimum it settles whether a lock binds upward, so a lower layer may forbid every higher layer from restating a field, which is what an organization policy means wherever one exists and which the present order makes the only useful reading; or binds downward as the current sentence says, in which case the record states plainly which layers can usefully lock and why an organization is not among them; or whether the layer order itself is what is wrong, and Organization belongs above Repository rather than below it, in which case the amendment weighs that against the specificity principle the rest of the order follows and against every field whose resolution the reorder would change. Whichever it decides, it states what a rejected override reads as in an effective policy under that direction, since CONFIG-003 requires the rejection to stay visible with its reason and dbb2c7c7 already keeps it in a rejected list rather than ending the resolution. It names the code the answer reaches if the answer is not the one already built, with its territory by path, and it does not build it. It does not reopen the ten layers themselves unless the third reading is chosen, and it does not decide which fields may be locked, which the record already defers to a source that would use one. Both projections are re-rendered per the nomos-spec-change skill, and the predicate passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
       },
       "verified": null,
       "abandoned": [],
