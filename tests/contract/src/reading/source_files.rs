@@ -263,31 +263,54 @@ fn Test_Only_Modules(files: &[PathBuf]) -> Vec<PathBuf>
 /// direction that flatters: the module is counted as production, and whatever strategy or
 /// fact it declares is reported as the crate's own rather than as an example of it.
 ///
-/// One spelling is deliberately outside this: `#[cfg(test)] #[path = "…"] mod tests;` written
-/// as a single line, where the attribute and the item share it. Nothing in this workspace
-/// uses it — a census of all fifteen `#[cfg(test)]`-plus-attribute declaration sites found the
-/// marker alone on its own line in every one — and the path a scan reads is not a pattern it
-/// should guess at.
+/// The attributes a declaration shares its own line with are read too, and a census is why
+/// they had to be. That census said no `#[cfg(test)]`-plus-attribute site in this workspace
+/// put the attribute and the item on one line, so the spelling was left deliberately
+/// unread — and then `6bb62542` wrote `#[path = "currency/tests.rs"] mod tests;` as one line
+/// in `nomos-check-orchestration`'s `facts/currency.rs`. The declaration was invisible, the
+/// split-out `facts/currency/tests.rs` stayed in the scan, and the `MaterializedFact` its
+/// fixture builds was reported as that crate's own production: the determinism check named
+/// a crate that constructs no fact anywhere in its crate proper, and CI's Test step was red
+/// for every session in the tree.
+///
+/// So a line is peeled of the attributes it begins with before what remains is asked
+/// whether it declares a module. Where the line breaks fall between a marker, a `#[path]`
+/// and the `mod x;` they govern is no longer part of the answer, which is the property that
+/// generalizes: a module declared `#[cfg(test)]` in a parent file is test material wherever
+/// its own file lives, however its parent chose to lay the declaration out.
 fn Test_Only_In(file: &Path) -> Vec<PathBuf>
 {
-    let mut excluded = Vec::new();
     let Ok(text) = std::fs::read_to_string(file)
     else
     {
-        return excluded;
+        return Vec::new();
     };
+    let mut excluded = Vec::new();
     let mut above: Vec<&str> = Vec::new();
     for line in text.lines()
     {
-        let line = line.trim();
-        if let Some(name) = Declared_Module(line).filter(|_| return Marks_Test_Only(&above))
+        let item = Extend_Attribute_Run(&mut above, line.trim());
+        excluded.extend(Test_Only_Homes(file, item, &above));
+        if !Keeps_The_Run_Alive(item)
         {
-            excluded.extend(Homes_Of(file, name, Path_Attribute(&above)));
+            above.clear();
         }
-        Extend_Attribute_Run(&mut above, line);
     }
 
     return excluded;
+}
+
+/// The paths one line's `mod <name>;` points at, when the attributes above it mark it
+/// test-only, and nothing when either half of that is missing.
+fn Test_Only_Homes(file: &Path, item: &str, above: &[&str]) -> Vec<PathBuf>
+{
+    let Some(name) = Declared_Module(item).filter(|_| return Marks_Test_Only(above))
+    else
+    {
+        return Vec::new();
+    };
+
+    return Homes_Of(file, name, Path_Attribute(above));
 }
 
 /// Whether a run of attribute lines marks the item below it as test-only.
@@ -299,34 +322,84 @@ fn Marks_Test_Only(above: &[&str]) -> bool
     return above.iter().any(|line| return *line == MARKER);
 }
 
-/// Extends the run of attribute lines above a declaration, or clears it.
+/// Peels the `#[…]` attributes a line begins with into the run above the item below them,
+/// and returns whatever is left of that line.
 ///
-/// A blank line, a comment and a bare attribute all keep the run alive; a line of anything
-/// else ends it, so one item's own signature is never read as the next item's attributes.
-/// Blank lines and comments belong in the run because Rust attaches the attribute to the item
-/// regardless of either — the gap is not a separator in the grammar, and treating it as one
-/// here would read a real declaration as production.
-fn Extend_Attribute_Run<'a>(above: &mut Vec<&'a str>, line: &'a str)
+/// Peeling rather than asking whether the whole line *is* an attribute is what lets a
+/// declaration be read when it shares its line with the attributes governing it. What the
+/// run means is unchanged: it is still every attribute standing between the last item and
+/// the next one, in source order, and [`Marks_Test_Only`] still asks only whether the
+/// marker is among them.
+fn Extend_Attribute_Run<'line>(above: &mut Vec<&'line str>, line: &'line str) -> &'line str
 {
-    if line.is_empty() || line.starts_with("//") || Is_An_Attribute_Alone(line)
+    let mut rest = line;
+    while let Some((attribute, after)) = Leading_Attribute(rest)
     {
-        above.push(line);
-        return;
+        above.push(attribute);
+        rest = after;
     }
 
-    above.clear();
+    return rest;
 }
 
-/// Whether a line is one `#[…]` attribute and nothing else.
+/// The `#[…]` attribute a line begins with and what follows it, or `None` for a line that
+/// does not begin with one.
 ///
-/// The closing `]` is required as well as the opening `#[`, and requiring it is the whole
-/// point: the one-line spelling `#[path = "x.rs"] mod tests;` also begins with `#[`, and
-/// reading it as a bare attribute would attach its path to whichever declaration came next,
-/// excluding a module that attribute never named. Over-exclusion is the direction that
-/// flatters, so the guard is written to miss a spelling rather than to invent one.
-fn Is_An_Attribute_Alone(line: &str) -> bool
+/// A line beginning `#[` whose bracket never closes on it is not peeled at all, which is the
+/// under-excluding direction and deliberately so: an exclusion assembled out of an attribute
+/// nobody attached would drop a production module from the scan, and a module missing from
+/// the crate proper is a claim about the crate that nothing else would contradict.
+fn Leading_Attribute(line: &str) -> Option<(&str, &str)>
 {
-    return line.starts_with("#[") && line.ends_with(']');
+    if !line.starts_with("#[")
+    {
+        return None;
+    }
+    let close = Closing_Bracket(line)?;
+    let attribute = line.get(..=close)?;
+    let after = line.get(close.saturating_add(1)..)?;
+
+    return Some((attribute, after.trim_start()));
+}
+
+/// The index of the `]` that closes the `[` a line's leading attribute opens.
+///
+/// Counted rather than searched for, because an attribute may carry brackets of its own —
+/// `#[expect(clippy::indexing_slicing, reason = "…")]` carries none but nothing stops the
+/// next one — and the first `]` in the line would then end the attribute early, handing the
+/// caller a remainder that begins mid-attribute. `None` is an attribute this line does not
+/// close, which a multi-line attribute is and which this scan does not read.
+fn Closing_Bracket(line: &str) -> Option<usize>
+{
+    let mut depth = 0_u32;
+    for (index, character) in line.char_indices()
+    {
+        depth = match character
+        {
+            '[' => depth.saturating_add(1),
+            ']' => depth.saturating_sub(1),
+            _ => depth,
+        };
+        if character == ']' && depth == 0
+        {
+            return Some(index);
+        }
+    }
+
+    return None;
+}
+
+/// Whether what is left of a line, once its attributes are peeled off it, leaves the run
+/// above the next item intact.
+///
+/// A line that held nothing but attributes, a blank line and a comment all do, because Rust
+/// attaches an attribute to the item below it regardless of any of the three — the gap is
+/// not a separator in the grammar, and treating it as one here would read a real declaration
+/// as production. Anything else is an item's own text, and one item's text is never the next
+/// item's attributes.
+fn Keeps_The_Run_Alive(item: &str) -> bool
+{
+    return item.is_empty() || item.starts_with("//");
 }
 
 /// The `#[path = "…"]` a run of attribute lines carries, if it carries one.
@@ -618,7 +691,7 @@ mod tests;
     #[test]
     fn Test_A_Test_Module_Behind_A_Path_Attribute_Should_Still_Be_Excluded()
     {
-        let root = Temporary_Root();
+        let root = Temporary_Root("path-attribute");
         Write_File(&root, "src/lib.rs", DECLARING_FILE);
         Write_File(&root, &format!("src/{TEST_MODULE}"), "pub fn Helper_Inside_Tests() {}\n");
         Write_File(&root, &format!("src/{PRODUCTION_MODULE}"), "pub fn Real() {}\n");
@@ -637,12 +710,97 @@ mod tests;
         );
     }
 
+    /// The shape `6bb62542` wrote and this scan could not read: the marker alone on its line,
+    /// and the `#[path]` sharing a line with the declaration it governs.
+    ///
+    /// The declaring file is `currency.rs` rather than a crate root, because a `#[path]` is
+    /// resolved from the declaring file's own directory and that is the resolution the real
+    /// defect ran through.
+    const SHARED_LINE_DECLARING_FILE: &str = r#"
+pub fn Materialized_Or_Already_Current() {}
+
+#[cfg(test)]
+#[path = "currency/tests.rs"] mod tests;
+"#;
+
+    /// Where that declaration's own file sits, and where the module it names sits.
+    const SHARED_LINE_DECLARING_MODULE: &str = "currency.rs";
+    const SHARED_LINE_TEST_MODULE: &str = "currency/tests.rs";
+
+    /// What the split-out test module builds. A construction rather than a mention, because
+    /// construction is the predicate `fact_domain.rs` applies to whatever survives this scan,
+    /// and it is the fixture's construction that was read as a crate's production.
+    const FIXTURE_CONSTRUCTION: &str = "return Fact_Built_By_Hand {";
+
+    /// The production text that must survive, so that a scan excluding everything cannot pass
+    /// this test by being wrong in the other direction.
+    const PRODUCTION_TEXT: &str = "pub fn Real() {}\n";
+
+    /// The defect this file's own documentation now names, exercised end to end rather than
+    /// against the crates this workspace happens to hold today.
+    ///
+    /// The fixture lives in a file of its own and the only thing saying so is a `#[cfg(test)]`
+    /// in the parent — with the `#[path]` and the `mod tests;` on one line, which is the part
+    /// the scan could not read. What it therefore handed `fact_domain.rs` was a fixture's
+    /// construction presented as the crate's production, and that is what this asserts against:
+    /// the text a caller reads the crate by, not the list of files, because the list is one
+    /// step short of the thing that went wrong.
+    ///
+    /// Reverting `Extend_Attribute_Run` to a whole-line test fails this test's first assertion.
+    #[test]
+    fn Test_A_Fixture_In_A_Test_Module_Sharing_Its_Attributes_Line_Should_Not_Reach_A_Caller()
+    {
+        let root = Temporary_Root("shared-line");
+        Write_File(&root, &format!("src/{SHARED_LINE_DECLARING_MODULE}"), SHARED_LINE_DECLARING_FILE);
+        Write_File(&root, &format!("src/{SHARED_LINE_TEST_MODULE}"), &Fixture_Module());
+        Write_File(&root, &format!("src/{PRODUCTION_MODULE}"), PRODUCTION_TEXT);
+
+        let crate_proper = Crate_Proper_Text(&root.join("src"));
+
+        assert!(
+            !crate_proper.contains(FIXTURE_CONSTRUCTION),
+            "a fixture in a test module whose `#[path]` shares a line with the declaration was \
+             handed to a caller as the crate proper: {crate_proper}"
+        );
+        assert!(
+            crate_proper.contains(PRODUCTION_TEXT.trim_end()),
+            "the scan excluded the crate's production too, so its verdict above says nothing: \
+             {crate_proper}"
+        );
+    }
+
+    /// A test module whose only content is a fixture that builds something.
+    fn Fixture_Module() -> String
+    {
+        return format!("fn Fixture()\n{{\n    {FIXTURE_CONSTRUCTION} }};\n}}\n");
+    }
+
+    /// The text a caller reads a crate by: every file this scan keeps, with every inline test
+    /// module in it blanked — the two steps `fact_domain.rs` runs before it asks whether a
+    /// crate constructs a fact.
+    fn Crate_Proper_Text(root: &Path) -> String
+    {
+        return Source_Files(root)
+            .iter()
+            .filter_map(|file| return std::fs::read_to_string(file).ok())
+            .map(|text| return Without_Test_Modules(&text))
+            .collect();
+    }
+
     /// A directory this test owns, named so that no other test and no earlier run of the suite
     /// can share it.
-    fn Temporary_Root() -> PathBuf
+    ///
+    /// The purpose is part of the name because two tests in one process share a process id, and
+    /// a tree one of them wrote would otherwise be inside the scan the other measures. Cleared
+    /// on the way out for the same reason a run cannot inherit: a stale file left by an earlier
+    /// run at this process id would be in the scan too.
+    fn Temporary_Root(purpose: &str) -> PathBuf
     {
-        return std::env::temp_dir()
-            .join(format!("nomos-test-only-modules-{}", std::process::id()));
+        let root = std::env::temp_dir()
+            .join(format!("nomos-test-only-modules-{purpose}-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+
+        return root;
     }
 
     /// One file under `root`, with whatever directories its path names created first.

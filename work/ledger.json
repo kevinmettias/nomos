@@ -89901,14 +89901,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-strategy",
-        "acquired_at": 1790051022,
-        "lease_expires_at": 1790058222
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -89921,7 +89917,30 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "stration-5db184c714e43495.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-38d3334bc5351fad.exe)\n     Running tests\\incremental_equivalence.rs (target\\debug\\deps\\incremental_equivalence-8ed1893b8d29d8ec.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-f12ee0ab169e3e7c.exe)\n     Running tests\\unchanged_run_economy.rs (target\\debug\\deps\\unchanged_run_economy-f89249e6aac5f2eb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-b2a13c7253f27233.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2998351f6db6b012.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-92a4ff356d3672d1.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-2eab8f58748e8fc9.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-5fc6c569730113d9.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-955891bd276589df.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ab84f3ce148d471e.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-ee154dd7301c3097.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-4b043d90270bbc14.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-e8b29a92e90bbab6.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-42eca897f526cc97.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-7b8fe6b7065225f2.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-f864f3dc950c0221.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-93c7b39b1bbd5318.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-496d4d6605ab0a03.exe)\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1790051906,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -90104,6 +90123,149 @@
           "record_citation"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-THE-SARIF-PROJECTION-MOVES-TO-THE-SERVICE-THAT-OWNS-THE-JUDGMENT",
+      "title": "The SARIF projection moves to the service that owns the judgment, and the command line emits it",
+      "why": "OD-HOST-017, landed at f7bc0327, decides that an interchange projection belongs to the service that owns the judgment and that every host emits it, and it names this item with the territory reproduced below. The projection landed at 0c05967a in nomos-api, citing OD-HOST-002 for sitting beside the response types it reads, and nothing has called it outside that crate's tests since, so the one export GitHub code scanning and most CI consumers ingest is unreachable. The record's decisive measurement is that the premise of that placement is false: nomos-api is not the canonical service its own lib.rs claims to be. OD-HOST-002 defines a canonical service as a library any client can call directly rather than a rendering one client already produced, and nomos-cli and nomos-lsp declare no nomos-api at all, each projecting an orchestration outcome directly, while three of the four inputs the projection reads carry doc comments declaring themselves twins of gate-orchestration and check-orchestration types. The record refuses the other three routes on their own grounds: a Host exception from the CLI would admit all thirty handlers including the twenty-one OD-HOST-007 excluded structurally and the two OD-HOST-014 refused, and would make the CLI judge the tree twice or abandon its own root; serving it over the transport and MCP is admissible under OD-HOST-014's criterion and stays available as its own later item, but no JSON-RPC method writes the file a CI job ingests, so it would settle the placement by not asking it; and rendering SARIF from the CLI's own outcome types is the second rendering of a finding OD-HOST-002 exists to refuse. The measured cost of the chosen route is zero manifest edits: nomos-gate-orchestration already declares serde and serde_json in dependencies, and nomos-cli already declares nomos-gate-orchestration.",
+      "done_when": "The SARIF projection and its sixteen object types live in nomos-gate-orchestration, which is Application Service and so nameable by every Host with no exception, and nomos-api keeps no copy of them; nothing about the projected document changes, proven by the existing tests moving with it and still passing, including the one asserting the specification's required document properties and the one proving two responses differing only in finding order project identically; the projection reads the judgment the service owns rather than another host's rendering of it, so the twin response types are no longer in its path; nomos-api re-exports or calls it rather than redeclaring it, and the false claim in nomos-api's own lib.rs that its responses are the canonical answers all three hosts project is corrected, because two hosts declare no dependency on it; nomos gate run and nomos check accept one flag, spelled the same way for both verbs, that writes the log to a path the caller names or to standard output when it names none, calling the moved projection and rendering no finding a second time; the human report is unchanged when the flag is absent and the flag changes no exit code, because a gate's disposition is its judgment and not a property of how it was printed; an unwritable path is refused with the path named through nomos_platform::FileSystem rather than std::fs, and the run's own exit code survives; a test runs a verb over a temporary tree and parses the emitted document rather than asserting on a fragment; neither manifest gains a dependency, and if either must, that is recorded as evidence against the record's reachability argument rather than done quietly; nomos-architecture.json is not edited, because the chosen route is the only one of the four that changes no permits or exceptions entry; README's two crate-table rows name where the projection now lives; both surface snapshots are re-blessed; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/sarif.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/sarif",
+          "crates/orchestration/nomos-gate-orchestration/Cargo.toml",
+          "crates/host/nomos-api/src/lib.rs",
+          "crates/host/nomos-api/src/sarif.rs",
+          "crates/host/nomos-api/src/sarif",
+          "crates/host/nomos-cli/src/gate.rs",
+          "crates/host/nomos-cli/src/gate",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/check",
+          "crates/host/nomos-cli/Cargo.toml",
+          "tests/contract/surface/nomos-api.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins",
+          "--test",
+          "gate_orchestration_seam"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P124-THE-ZONE-COUNT-IN-PROSE-IS-TRUE-AND-UNGUARDED",
+      "title": "The zone count README states in prose is true today and nothing compares it against the declaration",
+      "why": "README.md's zones paragraph opens by saying crates are ordered into twelve named zones. Measured 2026-09-21 at e0197368: nomos-architecture.json declares exactly twelve components, so the sentence is true today, and nothing checks it. tests/contract/tests/boundaries/readme.rs holds four tests. One asserts the zone rows in both directions, that no crate is listed twice, that every member is listed and that every listing is a member; two compare the listed item kinds and origins against the enums; one forbids relisting a vocabulary the README routes to rather than lists. None reads the prose number. So a thirteenth component would leave that word stale silently, which is the failure this whole suite exists to prevent, one sentence above the rows it does guard. This is the same class the XVPE pinning guard was just corrected for under P124-SIXTEEN-MANIFEST-LINES: a guard whose universe is narrower than the claim beside it does not fail, it stops noticing. OD-COMPLETENESS-001 states the rule and its second corollary names the remedy, that a guard whose universe is derived owes nothing further. The number's authority is readable, unlike the three vocabularies the relisting test forbids, whose authority is private to a binary crate and which were therefore removed rather than compared: Declared_Architecture in tests/contract/tests/boundaries/bands.rs already reads nomos-architecture.json for the rows in this very file. So the remedy here is a comparison rather than a removal, and OD-AGENT-004's rule decides which of the two applies, because it distinguishes a fact another artifact checks, which prose routes to, from a fact the prose itself is the authority for.",
+      "done_when": "tests/contract/tests/boundaries/readme.rs asserts that the count the zones paragraph states in prose equals the number of components nomos-architecture.json declares, read through the same Declared_Architecture the row assertions in that suite already use rather than through a second reader; the comparison is spelled so that it fails when the declaration gains or loses a component while the prose does not follow, and the number-word-to-integer mapping it needs is a function over text so a constructed disagreement can exhibit the failure rather than the assertion being believed because it passes over a tree that already satisfies it; the assertion works against README.md as written, so no prose edit is required and none is made; and cargo test --no-fail-fast -p nomos-contract-tests --test boundaries passes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/boundaries/readme.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-review",
+        "acquired_at": 1790051648,
+        "lease_expires_at": 1790058848
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-FACT-STORE-SURVIVES-THE-PROCESS-2",
+      "title": "The fact store survives process exit, and nothing it wrote under one binary is served under another that means something else by it",
+      "why": "Every CLI check and gate invocation constructs MemoryFactStore::New, so the per-subject currency checks P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY landed at 6bb62542 across all twelve non-syntax families, the demand union and the reassessment cache buy nothing across the process boundary that is the case a person running the gate actually has. Only nomos-lsp keeps a store, in memory, on NomosDiagnosticProvider's fields. OD-ANALYSIS-009 is at version 4 after 1ca2459d, which closed the in-process gap its own amendment had argued should come first, marked that argument spent, and recorded that spending it removes a reason to wait and supplies no reason to build. The honest statement of what is left, measured by that item's claimant and corrected against an earlier and wrong phrasing of mine: FactStore has exactly one implementor and it is BTreeMaps in memory; MemoryFactStore pushes an entry per Materialize onto a per-key Vec with nothing that trims, ages or evicts, so the process's exit is the only bound; and while FactKey already carries contract_version and variant among its nine components, so a changed build variant within one process yields a miss rather than a stale serve, no key has ever had to survive the binary that wrote it. Nothing serializes a key or a fact, nothing validates one read back from another process, and nothing decides what a stored entry means when FactKey's own shape moved between the write and the read. That last question is the whole of the difficulty and it is why this is a capability item rather than a cache.",
+      "done_when": "nomos-analysis can write a MemoryFactStore to a directory and read it back, and a reloaded store followed by a run over an unchanged tree agrees with a clean recomputation, proven by a test of the same shape as the existing recomputation equivalence test; a reloaded store followed by an edit invalidates exactly what the in-memory store would, proven; the serialized form carries its own version, and a store written under a FactKey shape the reading build does not understand is refused wholesale rather than partially read, because a key whose components moved does not mean what its bytes say and a per-entry rescue would decide that silently; a payload schema the reading build does not know is refused rather than misread; a corrupt, truncated or unreadable file is reported as such and never served, and the refusal names the file; the store gains a stated retention rule for its per-key history that keeps the entries invalidation and the historical read need and drops the rest, with the rule written where the history is pushed and proven by a test that the kept set is sufficient; any dependency added is declared in the workspace table the root manifest already carries rather than spelled in the member, and no new external crate is introduced if one already present will do; OD-ANALYSIS-009 is amended, its version raised, to record the decision this item makes and cite the code that makes it, without disturbing the amendments at versions 3 and 4; no host is wired to read or write a persisted store by this item, because which hosts may share one is a separate question about where a cache lives; both projections are re-rendered per the nomos-spec-change skill; the public surface snapshot is re-blessed; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis",
+          "Cargo.toml",
+          "Cargo.lock",
+          "tests/contract/surface/nomos-analysis.txt",
+          "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 5400
       },
       "verified": null,
       "abandoned": [],
