@@ -3,7 +3,7 @@ id: OD-AGENT-004
 type: decision
 title: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - agent
@@ -20,6 +20,14 @@ relations:
   - target: OD-PLATFORM-002
     type: relates-to
   - target: OD-RULES-009
+    type: relates-to
+  - target: OD-ROADMAP-005
+    type: relates-to
+  - target: OD-PACKAGE-004
+    type: relates-to
+  - target: OD-PACKAGE-017
+    type: relates-to
+  - target: OD-PROJECT-001
     type: relates-to
 ---
 
@@ -276,6 +284,180 @@ Version 1's three triggers stand, the third now having fired once. A fourth is a
 group whose exit-code comparison passes while the text a user is shown is wrong**, which
 would mean the comparison is reading something other than that text.
 
+## Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing
+
+`OD-ROADMAP-005` decision 6 supersedes version 1's decline of generated README tables and
+compacted manifest commentary. What it authorizes is narrower than what the review asked for
+and it says so in its own words: **a fact `nomos-architecture.json` holds stops being restated
+in prose that nothing compares.** That is checking rather than generating, and the override is
+explicit that the reason is this record's own measurement rather than a compromise struck
+around it — "The measurement that decline rested on stays true and is the reason the increment
+is a projection or a check rather than a rewrite."
+
+So version 1's finding is not weakened here. It is the thing being built on, and it still
+reads the same way: one port change on 2026-09-05, fifteen stale restatements the next day,
+every one of them in unchecked module prose and none in `README.md` or `Cargo.toml`. The two
+artifacts the review called bloated are the two that did not go stale, because something
+compares them, and generating the tables would delete that comparison's subject. What was
+missing was never a generator. It was the rest of the file: the sentences *around* the table
+state facts the same declaration holds, and nothing read them.
+
+### What was measured
+
+2026-09-21 at `18db19c5`, against `README.md`, `nomos-architecture.json` and every assertion
+under `tests/contract/tests/boundaries/` that opens either. The declaration holds five keys —
+`components`, `members`, `permits`, `exceptions` and `authorities` — and each prose sentence
+was put to `OD-PACKAGE-004` version 3's first two questions: name the declared source as a
+path and a field, then read the comparison rather than its description.
+
+| What the prose states | The declared fact, measured | Compared before | Compared now |
+|---|---|---|---|
+| crates are ordered into twelve named zones | `components`, 12 of them | yes, since earlier the same day | unchanged |
+| the declaration names a set of zones, the zones each may depend on, and a short named list of the same-zone edges a real crate needs | `components`, `permits`, `exceptions`; 49 excepted edges, none of them crossing a component | no | yes |
+| six crates, spelled in backticks in the paragraphs around the two tables | `members`; all six placed | no | yes |
+| four rows below are marked `[repo tooling]`, and the four crates it names | the marks live in `Owns`; `Repo Tooling` holds three members and these are four | no | no, deliberately |
+| the specification system sits beside the kernel rather than above it, so nothing in the product may name it | `permits`; `Specification` is reachable from `Host` and `Verification` and from nothing else | no | no, deliberately |
+| `nomos-rules` declares `ZONES`, `Permits` and `SAME_ZONE_EDGES` | false — no such item exists anywhere under `crates/` | no | no; the correction is another item's |
+| `tests/contract/tests/boundaries.rs` compares the tables against the `nomos-rules` declared `ZONES` | false in both halves — that path does not exist, and the comparison is `tests/contract/tests/boundaries/readme.rs` against `nomos-architecture.json` | no | no; an item is on the board for it |
+
+### What is compared now
+
+Two assertions were added to `tests/contract/tests/boundaries/readme.rs`, beside the
+zone-count assertion that landed there earlier the same day. Both compare a sentence against
+the declaration, both read the prose rather than a table row, and neither was believed until
+it had been made to fail in a scratch worktree with the tree restored byte-identically
+afterwards.
+
+- **`Test_Every_Crate_The_Readmes_Prose_Names_Should_Be_One_The_Declaration_Places`.** Every
+  backticked `nomos-*` token in the prose is a crate `members` places. Made to fail by
+  renaming one of them to a crate this workspace does not have, which turned it red naming
+  that crate; the rows stayed green throughout, because a crate named in a sentence is in no
+  row. One direction, and that is a decision: the other — every declared member appears in the
+  prose — is the *table's* claim, held by `Assert_Every_Member_Is_Listed`, and a paragraph is
+  not an enumeration.
+- **`Test_The_Excepted_Pairs_Should_Be_The_Same_Zone_Edges_The_Prose_Calls_Them`.** Two
+  disagreements, because it has two subjects. Appending a `Host`-to-`Substrate` pair to
+  `exceptions` turned it red on the declaration. Rewriting the sentence's own words turned it
+  red on the missing subject, which is the half that matters: an assertion pinning the
+  declaration without opening the file it is about would be the shape version 3 of
+  `OD-PACKAGE-004` names in `transport_registry.rs`, cited by a check and read by none.
+
+Four controls stand beside them and each one fails when the guard it names is removed, which
+is the only evidence that any of them discriminates:
+`Test_A_Prose_Naming_A_Crate_That_Does_Not_Exist_Should_Read_As_Naming_It`,
+`Test_A_Crate_Named_Only_In_A_Table_Row_Should_Not_Be_Read_As_Prose`,
+`Test_A_Fenced_Blocks_Body_Should_Not_Be_Read_As_Prose` and
+`Test_An_Excepted_Pair_Naming_A_Package_No_Component_Places_Should_Be_Found`.
+
+Two of the four were rewritten after failing to discriminate, and that is worth recording
+because both failures had the remedy's shape. The fence control originally put a command
+synopsis between two delimiters and passed with its guard deleted, since two fences are six
+backticks and the spans after a balanced pair never move; what moves is the reading *inside*
+the block, which returns the gaps between spans instead of the spans. The unplaced-package
+control originally carried a pair with one unplaced end, which a plain equality catches
+anyway; only a pair with *both* ends unplaced compares an absence against an absence and reads
+as agreement.
+
+### What is deliberately left alone, and why
+
+**The `Owns` column is watched by nothing, and `OD-PACKAGE-004` version 3 decided that
+deliberately.** 72 rows, 216 cells, 33,905 characters in the third column and not one of them
+empty, measured here at `18db19c5`. That record rejected a check over the column on a stated
+ground rather than deferring one: comparing it needs a declared source outside `README.md`,
+which would be either the same prose in a second file — the second authority `OD-AGENT-001`
+and this record refuse — or a shorter derived fact that would not be that column. It rejected
+a non-emptiness check in the same breath, because a check that cannot tell a true description
+from a placeholder must not be presented as one that watches the column.
+
+Nothing this increment adds reads it. `Prose_Of` drops every table row before any assertion
+looks, and `Test_A_Crate_Named_Only_In_A_Table_Row_Should_Not_Be_Read_As_Prose` goes red if
+that stops being true. What is given up is real and is stated there rather than softened here:
+an `Owns` cell that becomes false will not be reported by anything.
+
+Two assertions reach that column incidentally and neither is a check over it, both re-measured
+here rather than taken from the record that named them.
+`Test_Band_Zero_Should_Be_Described_In_One_Place` requires `README.md` to contain
+`OD-CONTRACTS-001`, and the file's single occurrence of that identifier — still exactly one —
+sits inside the `nomos-contracts` row's `Owns` cell, so a mechanism that rewrote the column
+would be told it had described band zero in the wrong number of places rather than that it had
+deleted thirty-three thousand characters.
+`Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` quotes the four `[repo tooling]` marks
+in its own module doc and in its failure message and never opens `README.md` at all: the file
+names that document twice, in prose, and opens `crates/host/nomos-api-transport/src` and
+`tests/contract/surface/nomos-api.txt`. Cited by a check, read by none.
+
+**Which of the two tables a row belongs in.** `OD-PACKAGE-017` measured the listing as two
+tables separated by a blank line, two lines of a person's prose and a repeated header, and
+found the split has no declared source: `members` is a flat map from crate to zone, and
+`nomos-spec-orchestration` is a `Specification` crate in the first table while the six
+`nomos-spec-*` crates in the second are `Specification` as well. So the row set stays compared
+as the union of both tables, which is what `Zone_Row`'s reading has always done, and which
+table a row belongs in is asserted nowhere. Naming that is the honest outcome, exactly as the
+`Owns` column is.
+
+**The `[repo tooling]` paragraph.** The only counterpart for "marked" is in the free column,
+and the declaration is not a counterpart for it: `Repo Tooling` holds three members —
+`nomos-ledger`, `nomos-surface-provenance` and `nomos-work-orchestration` — while four rows
+carry the mark, `nomos-spec-orchestration` being marked and zoned `Specification`. That is not
+a defect in either. The mark says which product a crate serves, and `ARC-ECOSYSTEM-001` is
+already the record that a shared zone does not decide product ownership. Comparing the sentence
+against the marks would compare two hand-authored copies inside one file, neither of them an
+authority, while making the free column watched.
+
+**"The specification system sits beside the kernel rather than above it ... nothing in the
+product may name it."** `permits` holds the fact this sentence is about, and the sentence is
+true of it today: `Specification` appears in the permits of `Host` and `Verification` and
+nowhere else. It is left uncompared because "the kernel" and "the product" are not terms the
+declaration has and do not line up with its components — the analysis kernel's own crates sit
+in `Substrate`, `Capability Contract`, `Provider` and `Rules` at once. A comparison would have
+to author that grouping in the test, which is the second authority this record refuses, and
+`OD-ROADMAP-005` states in as many words that its override "does not grant a zone permission
+by fiat".
+
+**The paths the prose names.** 17 path-shaped tokens, of which 9 deliberately do not exist:
+two are the territory-normalization examples, and `README.projection.md` and
+`spec/architecture.md` are documents the same paragraph says are not committed here. An
+existence check would need a hand-authored exclusion list, which is the mechanism whose
+failure this record's own history is about.
+
+**"`tests/contract` asserts against that one declaration rather than a second copy of its
+own."** True, and not mechanically separable: the suite names `nomos-architecture.json` in ten
+places, every one of them a message or a doc, and no reading tells a second parser from a
+sentence that names the file.
+
+**"neither is among the four that render without one."** Its authority is
+`nomos-spec-project`'s profile set, which this suite does not depend on. Reaching it is a
+manifest change and a `Cargo.lock` change rather than a check, and that is a design question
+for whichever item wants it.
+
+### Two sentences are false, and the correction is not in this increment
+
+`README.md` was held by a live claim for the whole of the increment, so both are recorded here
+as measurements rather than repaired:
+
+- The Layout paragraph says `nomos-rules` declares `ZONES`, `Permits` and `SAME_ZONE_EDGES`.
+  No such item exists anywhere under `crates/`; `OD-RULES-003`'s third prerequisite moved the
+  declaration out of every crate into `nomos-architecture.json` at the repository root, with
+  `nomos-cap-architecture` carrying the contract and `nomos-repo-policy` reading the file. This
+  is named in `P123-A-CRATE-DOC-AND-ITS-RECORD-DISAGREE-ABOUT-WHICH-OVERRIDE-LICENSED-THE-WORKFLOW-RUNTIME-2`'s
+  own `done_when` and is that item's to correct.
+- The closing section says `tests/contract/tests/boundaries.rs` compares the tables against the
+  `nomos-rules` declared `ZONES`. Both halves are false: that path has not existed since the
+  file became a directory, and the comparison is `tests/contract/tests/boundaries/readme.rs`
+  against `nomos-architecture.json`. No item named it, so one was authored for it.
+
+Both are version 1's finding once more and at a finer grain than version 2 measured it. The
+prose that went stale is the prose nothing compares, and it went stale inside the file this
+record's own measurement called correct — because that file is correct *where it is checked*,
+which is four sentences of it and not the document.
+
+### What would decide this differently
+
+Version 1's three triggers and version 2's fourth stand. A fifth is added: **a sentence stating
+a fact the declaration holds, added to `README.md` and left uncompared while a comparison for
+it was available.** That is the failure this amendment is the remedy for, and it recurs by
+writing rather than by anything breaking, so nothing will report it.
+
 ## Status
 
 Accepted. Decided on a natural experiment rather than on a principle: one port change on
@@ -301,3 +483,15 @@ than it was measured: that file is correct where it is checked, and its unchecke
 vocabularies had gone stale like any other unchecked prose. No version bump for either: the
 decision is untouched and the amendment's own coverage section is what moved, which is that
 section saying what is true rather than what was true when the debt was counted.
+
+Amended to version 3 by
+`P126-A-FACT-THE-DECLARATION-HOLDS-IS-RESTATED-IN-README-PROSE-THAT-NOTHING-COMPARES`, on
+`OD-ROADMAP-005` decision 6 superseding version 1's decline of generated README tables. The
+version bump is because the decline moves, not because the measurement does: what the override
+authorizes is that a fact `nomos-architecture.json` holds stops being restated in prose that
+nothing compares, and it authorizes it *on this record's own evidence* — the checked tables are
+exactly the artifacts that did not go stale, which is why the increment checks rather than
+generates. Two comparisons were added over the prose around the zone tables and seven further
+sentences were measured and deliberately left uncompared, each with its reason. The table's
+`Owns` column is not among what moved and is watched by nothing, which `OD-PACKAGE-004`
+version 3 decided deliberately and on a stated ground rather than leaving owed.

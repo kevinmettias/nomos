@@ -3,12 +3,12 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:6c7727602ba82042e110d327ced89a0036945f8b79de5e32061ba54c8202f38b",
-  "inputs_digest": "sha256:709adfc26c41de24507b5f193816810fb63b4af427120f8c7ede9d0ab9c4a04a",
+  "content_digest": "sha256:a5b7bddf171e5787663dc256e3b13a1b95b256b7927309475c072b0a45fbec6e",
+  "inputs_digest": "sha256:d2f53e56a4a40eb4e91b65ff8b190952fd5c42d18e24eef66b642adb25187a0b",
   "sections": [
     [
       "Relations",
-      2142
+      2144
     ],
     [
       "Decisions",
@@ -1370,6 +1370,11 @@
       "content": "relations",
       "identity": "OD-AGENT-004 relates-to OD-PLATFORM-002",
       "hash": "sha256:a94fb651056f273e85c8c0129ffb2e5735b39a4ca483559d8a164a0efb8fbd45"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-AGENT-004 relates-to OD-PROJECT-001",
+      "hash": "sha256:244d372e6bba2e6fd8ab4fe1ecb4f35bfb742dbb4df380a7a5f250bbe7afb353"
     },
     {
       "content": "relations",
@@ -8015,6 +8020,11 @@
       "content": "relations",
       "identity": "OD-PROJECT-001 relates-to OD-AGENT-001",
       "hash": "sha256:b73dc838a5fafe2cb108a2e0efae62cad87a17b8fafe97a0309ef2a5d86853bb"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PROJECT-001 relates-to OD-AGENT-004",
+      "hash": "sha256:02c69c40148c83682946a4aa0e3d686ea0086077d3f3a8c9f657204a2eac07fe"
     },
     {
       "content": "relations",

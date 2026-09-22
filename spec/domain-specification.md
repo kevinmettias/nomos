@@ -32,7 +32,7 @@ profile: domain-specification
 | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md@authored | docs/records/OD-AGENT-001-an-agent-instruction-file-routes-to-authority-rather-than-restating-it.md | authored | 25 | 7 | sha256:df7c81eebf78e5affa6d79c9cad7dcc1cdd53f098c2877d29349fa98e78e7c20 |
 | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md@authored | docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md | authored | 21 | 7 | sha256:8810daf833c1feccd5957668eeff0785f8149ba4bae604c0601bf7829fc91f81 |
 | docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md@authored | docs/records/OD-AGENT-003-a-skill-routes-to-a-contract-step-or-cites-it-where-a-citation-is-checked.md | authored | 15 | 5 | sha256:9f320881faa41b945d440f86e3851dad8c56f5564b27d481fa52b9a4c8fd84aa |
-| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md@authored | docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md | authored | 54 | 12 | sha256:3f44d73fb8b994899afca50dc1f5e3eee0026a5361028c469e34f023d42d59da |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md@authored | docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md | authored | 82 | 17 | sha256:df8796a22216e22092c316975223473ed2ec802a2a0eefd8ed99eaccb088df2a |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md@authored | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md | authored | 28 | 8 | sha256:233727e11f1527ac6f184ca58502da78c2b49fc046da967d3aa1bcfc5e461fe9 |
 | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md@authored | docs/records/OD-ANALYSIS-002-the-dependent-half-of-invalidation-had-no-producer-because-every-capability-was-a-leaf.md | authored | 29 | 8 | sha256:55ea370b1cb9b75ebda1c74c4d85624f03528107808718d4943e6e25bcd5d561 |
 | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md@authored | docs/records/OD-ANALYSIS-003-a-mutual-dependency-inside-an-invalidation-is-a-shape-of-the-graph-and-condensation-names-it-rather-than-sorting-it-away.md | authored | 26 | 8 | sha256:d3ae25e96ff37b5a8bee583bbfff827ddd125845ee968619d863300a96185557 |
@@ -463,7 +463,12 @@ profile: domain-specification
 | docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#33 | authored | 3 | What is compared after this amendment, and what is not |
 | docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#40 | authored | 3 | Two further copies, found by the same measurement |
 | docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#49 | authored | 3 | What would decide this differently |
-| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#51 | authored | 2 | Status |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#51 | authored | 2 | Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#54 | authored | 3 | What was measured |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#57 | authored | 3 | What is compared now |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#62 | authored | 3 | What is deliberately left alone, and why |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#72 | authored | 3 | Two sentences are false, and the correction is not in this increment |
+| docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#78 | authored | 2 | Status |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#1 | authored | 1 | The snapshot in a fact key is a third answer, and it defeats the other two |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#2 | authored | 2 | Question |
 | docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#4 | authored | 2 | What Was Found |
@@ -8756,11 +8761,293 @@ would mean the comparison is reading something other than that text.
 
 ### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#51
 
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing · hash: sha256:c2444e5aeff1d5393811402c73ef3dca827ec410024c48727ca3d1cdf3ac192c*
+
+## Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#52
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing · hash: sha256:362f4bb8f8b6373fb63d8de29033f2df304d387e57c6e4a3938772d15101846a*
+
+`OD-ROADMAP-005` decision 6 supersedes version 1's decline of generated README tables and
+compacted manifest commentary. What it authorizes is narrower than what the review asked for
+and it says so in its own words: **a fact `nomos-architecture.json` holds stops being restated
+in prose that nothing compares.** That is checking rather than generating, and the override is
+explicit that the reason is this record's own measurement rather than a compromise struck
+around it — "The measurement that decline rested on stays true and is the reason the increment
+is a projection or a check rather than a rewrite."
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#53
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing · hash: sha256:60d7618c03e616981b212e0c974961039a376627babe1bf3a3a2bdf17e35d9f7*
+
+So version 1's finding is not weakened here. It is the thing being built on, and it still
+reads the same way: one port change on 2026-09-05, fifteen stale restatements the next day,
+every one of them in unchecked module prose and none in `README.md` or `Cargo.toml`. The two
+artifacts the review called bloated are the two that did not go stale, because something
+compares them, and generating the tables would delete that comparison's subject. What was
+missing was never a generator. It was the rest of the file: the sentences *around* the table
+state facts the same declaration holds, and nothing read them.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#54
+
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What was measured · hash: sha256:8a1f64f2f25048a02b74220dac0a038766c2b805c9bc809def51b3a5b69edf34*
+
+### What was measured
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#55
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What was measured · hash: sha256:556e07b35b397c25dfb6aeac7f93fbdec7bcf2405c686d91eabc1430ebd75a08*
+
+2026-09-21 at `18db19c5`, against `README.md`, `nomos-architecture.json` and every assertion
+under `tests/contract/tests/boundaries/` that opens either. The declaration holds five keys —
+`components`, `members`, `permits`, `exceptions` and `authorities` — and each prose sentence
+was put to `OD-PACKAGE-004` version 3's first two questions: name the declared source as a
+path and a field, then read the comparison rather than its description.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#56
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What was measured · hash: sha256:72a40d1b8b9c0fa6dee12500f694adc1de626d3f498880117d90642ef697f20c*
+
+| What the prose states | The declared fact, measured | Compared before | Compared now |
+|---|---|---|---|
+| crates are ordered into twelve named zones | `components`, 12 of them | yes, since earlier the same day | unchanged |
+| the declaration names a set of zones, the zones each may depend on, and a short named list of the same-zone edges a real crate needs | `components`, `permits`, `exceptions`; 49 excepted edges, none of them crossing a component | no | yes |
+| six crates, spelled in backticks in the paragraphs around the two tables | `members`; all six placed | no | yes |
+| four rows below are marked `[repo tooling]`, and the four crates it names | the marks live in `Owns`; `Repo Tooling` holds three members and these are four | no | no, deliberately |
+| the specification system sits beside the kernel rather than above it, so nothing in the product may name it | `permits`; `Specification` is reachable from `Host` and `Verification` and from nothing else | no | no, deliberately |
+| `nomos-rules` declares `ZONES`, `Permits` and `SAME_ZONE_EDGES` | false — no such item exists anywhere under `crates/` | no | no; the correction is another item's |
+| `tests/contract/tests/boundaries.rs` compares the tables against the `nomos-rules` declared `ZONES` | false in both halves — that path does not exist, and the comparison is `tests/contract/tests/boundaries/readme.rs` against `nomos-architecture.json` | no | no; an item is on the board for it |
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#57
+
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is compared now · hash: sha256:1c0e0d1a0630361c9fa5ac88e4a1cbfcd40f075f53c2b283553111975b2c40fb*
+
+### What is compared now
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#58
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is compared now · hash: sha256:fe578950f1d785115f2d8b8215faa077b1b0042fb9adc6a94e8ae0487a73b6b1*
+
+Two assertions were added to `tests/contract/tests/boundaries/readme.rs`, beside the
+zone-count assertion that landed there earlier the same day. Both compare a sentence against
+the declaration, both read the prose rather than a table row, and neither was believed until
+it had been made to fail in a scratch worktree with the tree restored byte-identically
+afterwards.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#59
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is compared now · hash: sha256:b46434b9c9f76e963e10be0b29388af33975a8c26654c50670af2db81aaba7cd*
+
+- **`Test_Every_Crate_The_Readmes_Prose_Names_Should_Be_One_The_Declaration_Places`.** Every
+  backticked `nomos-*` token in the prose is a crate `members` places. Made to fail by
+  renaming one of them to a crate this workspace does not have, which turned it red naming
+  that crate; the rows stayed green throughout, because a crate named in a sentence is in no
+  row. One direction, and that is a decision: the other — every declared member appears in the
+  prose — is the *table's* claim, held by `Assert_Every_Member_Is_Listed`, and a paragraph is
+  not an enumeration.
+- **`Test_The_Excepted_Pairs_Should_Be_The_Same_Zone_Edges_The_Prose_Calls_Them`.** Two
+  disagreements, because it has two subjects. Appending a `Host`-to-`Substrate` pair to
+  `exceptions` turned it red on the declaration. Rewriting the sentence's own words turned it
+  red on the missing subject, which is the half that matters: an assertion pinning the
+  declaration without opening the file it is about would be the shape version 3 of
+  `OD-PACKAGE-004` names in `transport_registry.rs`, cited by a check and read by none.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#60
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is compared now · hash: sha256:581c49e5e6840bfb895b2c60ddee8c8786274c8fcadf5505f4ac8fa7d14f509a*
+
+Four controls stand beside them and each one fails when the guard it names is removed, which
+is the only evidence that any of them discriminates:
+`Test_A_Prose_Naming_A_Crate_That_Does_Not_Exist_Should_Read_As_Naming_It`,
+`Test_A_Crate_Named_Only_In_A_Table_Row_Should_Not_Be_Read_As_Prose`,
+`Test_A_Fenced_Blocks_Body_Should_Not_Be_Read_As_Prose` and
+`Test_An_Excepted_Pair_Naming_A_Package_No_Component_Places_Should_Be_Found`.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#61
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is compared now · hash: sha256:a529b6870f9147d47a65ba96c8aa2220cbe19e6699e808dba97d96db17086b6f*
+
+Two of the four were rewritten after failing to discriminate, and that is worth recording
+because both failures had the remedy's shape. The fence control originally put a command
+synopsis between two delimiters and passed with its guard deleted, since two fences are six
+backticks and the spans after a balanced pair never move; what moves is the reading *inside*
+the block, which returns the gaps between spans instead of the spans. The unplaced-package
+control originally carried a pair with one unplaced end, which a plain equality catches
+anyway; only a pair with *both* ends unplaced compares an absence against an absence and reads
+as agreement.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#62
+
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is deliberately left alone, and why · hash: sha256:9ce380f070cb60e838cc21dbae35bdb5bb4cc9c4566493496faaeb9a2c81afbc*
+
+### What is deliberately left alone, and why
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#63
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is deliberately left alone, and why · hash: sha256:1303028c1753d13b228badec952d3630e67e3f701729c68af32822d9a94b10d8*
+
+**The `Owns` column is watched by nothing, and `OD-PACKAGE-004` version 3 decided that
+deliberately.** 72 rows, 216 cells, 33,905 characters in the third column and not one of them
+empty, measured here at `18db19c5`. That record rejected a check over the column on a stated
+ground rather than deferring one: comparing it needs a declared source outside `README.md`,
+which would be either the same prose in a second file — the second authority `OD-AGENT-001`
+and this record refuse — or a shorter derived fact that would not be that column. It rejected
+a non-emptiness check in the same breath, because a check that cannot tell a true description
+from a placeholder must not be presented as one that watches the column.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#64
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is deliberately left alone, and why · hash: sha256:6aa77b0b334dcf13a2461e78b2fd9880a4f66e85da718b6e6487ef10e5ed715a*
+
+Nothing this increment adds reads it. `Prose_Of` drops every table row before any assertion
+looks, and `Test_A_Crate_Named_Only_In_A_Table_Row_Should_Not_Be_Read_As_Prose` goes red if
+that stops being true. What is given up is real and is stated there rather than softened here:
+an `Owns` cell that becomes false will not be reported by anything.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#65
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is deliberately left alone, and why · hash: sha256:34500f5f6d374d208a9ebf099ce34d2aabef95fea0a63671226ebf406fd8e121*
+
+Two assertions reach that column incidentally and neither is a check over it, both re-measured
+here rather than taken from the record that named them.
+`Test_Band_Zero_Should_Be_Described_In_One_Place` requires `README.md` to contain
+`OD-CONTRACTS-001`, and the file's single occurrence of that identifier — still exactly one —
+sits inside the `nomos-contracts` row's `Owns` cell, so a mechanism that rewrote the column
+would be told it had described band zero in the wrong number of places rather than that it had
+deleted thirty-three thousand characters.
+`Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` quotes the four `[repo tooling]` marks
+in its own module doc and in its failure message and never opens `README.md` at all: the file
+names that document twice, in prose, and opens `crates/host/nomos-api-transport/src` and
+`tests/contract/surface/nomos-api.txt`. Cited by a check, read by none.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#66
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is deliberately left alone, and why · hash: sha256:8a7b846f026bf20f40bd818e321c181ff3228eb3a02b7453799cb8f0aa811ffc*
+
+**Which of the two tables a row belongs in.** `OD-PACKAGE-017` measured the listing as two
+tables separated by a blank line, two lines of a person's prose and a repeated header, and
+found the split has no declared source: `members` is a flat map from crate to zone, and
+`nomos-spec-orchestration` is a `Specification` crate in the first table while the six
+`nomos-spec-*` crates in the second are `Specification` as well. So the row set stays compared
+as the union of both tables, which is what `Zone_Row`'s reading has always done, and which
+table a row belongs in is asserted nowhere. Naming that is the honest outcome, exactly as the
+`Owns` column is.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#67
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is deliberately left alone, and why · hash: sha256:abfcbdd3d84840fd566bbbe7670e6fe4c948fc3e56bc6b7d418366a37904f14a*
+
+**The `[repo tooling]` paragraph.** The only counterpart for "marked" is in the free column,
+and the declaration is not a counterpart for it: `Repo Tooling` holds three members —
+`nomos-ledger`, `nomos-surface-provenance` and `nomos-work-orchestration` — while four rows
+carry the mark, `nomos-spec-orchestration` being marked and zoned `Specification`. That is not
+a defect in either. The mark says which product a crate serves, and `ARC-ECOSYSTEM-001` is
+already the record that a shared zone does not decide product ownership. Comparing the sentence
+against the marks would compare two hand-authored copies inside one file, neither of them an
+authority, while making the free column watched.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#68
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is deliberately left alone, and why · hash: sha256:0bf20a258640608d4a8bc6447df54b2b22d8c389b80dabe917ea470817bcf521*
+
+**"The specification system sits beside the kernel rather than above it ... nothing in the
+product may name it."** `permits` holds the fact this sentence is about, and the sentence is
+true of it today: `Specification` appears in the permits of `Host` and `Verification` and
+nowhere else. It is left uncompared because "the kernel" and "the product" are not terms the
+declaration has and do not line up with its components — the analysis kernel's own crates sit
+in `Substrate`, `Capability Contract`, `Provider` and `Rules` at once. A comparison would have
+to author that grouping in the test, which is the second authority this record refuses, and
+`OD-ROADMAP-005` states in as many words that its override "does not grant a zone permission
+by fiat".
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#69
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is deliberately left alone, and why · hash: sha256:977860896945a533f71f5586a8a2a15bdb7dd2bf2d2c637bc6242653cecf06c2*
+
+**The paths the prose names.** 17 path-shaped tokens, of which 9 deliberately do not exist:
+two are the territory-normalization examples, and `README.projection.md` and
+`spec/architecture.md` are documents the same paragraph says are not committed here. An
+existence check would need a hand-authored exclusion list, which is the mechanism whose
+failure this record's own history is about.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#70
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is deliberately left alone, and why · hash: sha256:eaff8efde57b6cc19dfc937556e48d2ecd721aae166259d8477d761542a20d18*
+
+**"`tests/contract` asserts against that one declaration rather than a second copy of its
+own."** True, and not mechanically separable: the suite names `nomos-architecture.json` in ten
+places, every one of them a message or a doc, and no reading tells a second parser from a
+sentence that names the file.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#71
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What is deliberately left alone, and why · hash: sha256:4da26d2415d05fa148fc7fcb481b2c79275fe7eb43917b52a71c8ffa175dd41c*
+
+**"neither is among the four that render without one."** Its authority is
+`nomos-spec-project`'s profile set, which this suite does not depend on. Reaching it is a
+manifest change and a `Cargo.lock` change rather than a check, and that is a design question
+for whichever item wants it.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#72
+
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / Two sentences are false, and the correction is not in this increment · hash: sha256:d539c32329ca38c811df160b3eae44b05e88669ddc0ddcb14988efddbb1a4473*
+
+### Two sentences are false, and the correction is not in this increment
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#73
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / Two sentences are false, and the correction is not in this increment · hash: sha256:0d25c2d6dd4d3b4a131f8728c08a24caf1f332197aac96d5c7cd4578adc7ec74*
+
+`README.md` was held by a live claim for the whole of the increment, so both are recorded here
+as measurements rather than repaired:
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#74
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / Two sentences are false, and the correction is not in this increment · hash: sha256:4a73a5d76a31036d100a49955178d7f95b72b6115912bed758b8fd7199a185b9*
+
+- The Layout paragraph says `nomos-rules` declares `ZONES`, `Permits` and `SAME_ZONE_EDGES`.
+  No such item exists anywhere under `crates/`; `OD-RULES-003`'s third prerequisite moved the
+  declaration out of every crate into `nomos-architecture.json` at the repository root, with
+  `nomos-cap-architecture` carrying the contract and `nomos-repo-policy` reading the file. This
+  is named in `P123-A-CRATE-DOC-AND-ITS-RECORD-DISAGREE-ABOUT-WHICH-OVERRIDE-LICENSED-THE-WORKFLOW-RUNTIME-2`'s
+  own `done_when` and is that item's to correct.
+- The closing section says `tests/contract/tests/boundaries.rs` compares the tables against the
+  `nomos-rules` declared `ZONES`. Both halves are false: that path has not existed since the
+  file became a directory, and the comparison is `tests/contract/tests/boundaries/readme.rs`
+  against `nomos-architecture.json`. No item named it, so one was authored for it.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#75
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / Two sentences are false, and the correction is not in this increment · hash: sha256:64c09487a36f5cc36fd4879d1376af4fea4fadd449c5089e45224f1cda857da6*
+
+Both are version 1's finding once more and at a finer grain than version 2 measured it. The
+prose that went stale is the prose nothing compares, and it went stale inside the file this
+record's own measurement called correct — because that file is correct *where it is checked*,
+which is four sentences of it and not the document.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#76
+
+*revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What would decide this differently · hash: sha256:74079d113a21192bf895a9922b56ea6d0e4b8e1ac6475821dd0ee5109aa25926*
+
+### What would decide this differently
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#77
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Amendment, Version 3: The Prose Around The Checked Table Is Compared Where The Declaration Holds The Fact, And The `Owns` Column Is Watched By Nothing / What would decide this differently · hash: sha256:b990c10b551504fb22673d15486e16ff5a567d52e2fbba42e509b3503a70352d*
+
+Version 1's three triggers and version 2's fourth stand. A fifth is added: **a sentence stating
+a fact the declaration holds, added to `README.md` and left uncompared while a comparison for
+it was available.** That is the failure this amendment is the remedy for, and it recurs by
+writing rather than by anything breaking, so nothing will report it.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#78
+
 *revision: authored · kind: heading · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#52
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#79
 
 *revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Status · hash: sha256:c0ac4ea0ebfaa46a73db63d6b3359f0c7832218c78ef1b0435be71cfcd084192*
 
@@ -8769,7 +9056,7 @@ Accepted. Decided on a natural experiment rather than on a principle: one port c
 none in the two artifacts the review called bloated. The remedy is routing what is checked
 elsewhere, not writing less.
 
-### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#53
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#80
 
 *revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Status · hash: sha256:386eea5124672cdf852bef91bff6e51524bddf682e865ef94678ef58e80dd9df*
 
@@ -8781,7 +9068,7 @@ can see into. The rule extends to the text a command prints, and is stated there
 condition — enumerate only where a test compares, otherwise route — with the five printed
 vocabularies that do not yet meet it named rather than left implied.
 
-### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#54
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#81
 
 *revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Status · hash: sha256:0313615064bc0f18ce07f71698cc887139e73b8eeb5671f180320c87cc0f2d92*
 
@@ -8795,6 +9082,22 @@ than it was measured: that file is correct where it is checked, and its unchecke
 vocabularies had gone stale like any other unchecked prose. No version bump for either: the
 decision is untouched and the amendment's own coverage section is what moved, which is that
 section saying what is true rather than what was true when the debt was counted.
+
+### docs/records/OD-AGENT-004-whether-architectural-prose-restated-across-readme-cargo-toml-and-module-docs-is-compacted-against-one-source.md#82
+
+*revision: authored · kind: prose · heading: A restated fact goes stale exactly where nothing checks it, so the rule is route-what-is-checked-elsewhere rather than write-less-prose / Status · hash: sha256:76a18618aae189ea3837e266a34124bc97b11c2155689955f7be611ba6230cdd*
+
+Amended to version 3 by
+`P126-A-FACT-THE-DECLARATION-HOLDS-IS-RESTATED-IN-README-PROSE-THAT-NOTHING-COMPARES`, on
+`OD-ROADMAP-005` decision 6 superseding version 1's decline of generated README tables. The
+version bump is because the decline moves, not because the measurement does: what the override
+authorizes is that a fact `nomos-architecture.json` holds stops being restated in prose that
+nothing compares, and it authorizes it *on this record's own evidence* — the checked tables are
+exactly the artifacts that did not go stale, which is why the increment checks rather than
+generates. Two comparisons were added over the prose around the zone tables and seven further
+sentences were measured and deliberately left uncompared, each with its reason. The table's
+`Owns` column is not among what moved and is watched by nothing, which `OD-PACKAGE-004`
+version 3 decided deliberately and on a stated ground rather than leaving owed.
 
 ### docs/records/OD-ANALYSIS-001-the-snapshot-in-a-fact-key-defeats-incremental-reuse.md#1
 

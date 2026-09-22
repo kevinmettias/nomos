@@ -92212,14 +92212,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-prose-checks",
-        "acquired_at": 1790056340,
-        "lease_expires_at": 1790067140
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -92232,7 +92228,30 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "exit_code": 0,
+        "output_tail": " ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: unused import: `Revisions_In`\n  --> tests\\contract\\tests\\boundaries\\lock_pinning.rs:85:65\n   |\n85 | use nomos_contract_tests::{Declared_Revisions, Repository_Root, Revisions_In, XVPE_PREFIX};\n   |                                                                 ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-contract-tests` (test \"boundaries\") generated 1 warning (run `cargo fix --test \"boundaries\"` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.67s\n     Running tests\\boundaries\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/prose-checks/render-target\\debug\\deps\\boundaries-92a4ff356d3672d1.exe)\n",
+        "verified_at": 1790057395,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -92427,6 +92446,213 @@
         },
         "revision": null
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P126-THE-READMES-CLOSING-SECTION-NAMES-A-TEST-FILE-THAT-DOES-NOT-EXIST-AND-A-CONSTANT-NO-CRATE-DECLARES",
+      "title": "The README closing section names a test file that does not exist and a constant no crate declares",
+      "why": "Measured 2026-09-21 at 18db19c5. README.md closing section, under the heading that says the file is hand-authored, asserts: \"What it does not give up is the tables above: tests/contract/tests/boundaries.rs compares them against nomos-rules own declared ZONES in both directions, so a crate that joins the workspace without joining this page fails the gate.\" Both halves of the middle clause are false and the last clause is true. tests/contract/tests/boundaries.rs has not existed since that file became a directory; the comparison is tests/contract/tests/boundaries/readme.rs, reached through boundaries/main.rs. And no item named ZONES exists anywhere under crates: OD-RULES-003s third prerequisite moved the declaration out of every crate into nomos-architecture.json at the repository root, with nomos-cap-architecture carrying the contract, nomos-repo-policy reading the file and tests/contract reaching it through Declared_Architecture in boundaries/bands.rs. This is the same falsehood P123-A-CRATE-DOC-AND-ITS-RECORD-DISAGREE-ABOUT-WHICH-OVERRIDE-LICENSED-THE-WORKFLOW-RUNTIME-2 measured in the Layout paragraph, in a second paragraph that item names nowhere: its done_when says the zones paragraph, and this is the closing section. Filed rather than folded in because an item cannot be edited and because two items writing the same sentences would contend for README.md. It depends on that item so the two corrections are sequenced rather than raced, and it is authored by the session that added the prose comparisons to boundaries/readme.rs under OD-ROADMAP-005 decision 6, which could not correct this because README.md was held by a live claim throughout.",
+      "done_when": "README.md closing section names the file that actually compares the zone tables and the declaration they are compared against, asserting no constant that no crate declares, and the clause saying a crate which joins the workspace without joining this page fails the gate is left standing because it is true. The sentence is not turned into a second copy of what nomos-architecture.json says: it names where the declaration lives and what compares against it, not what it contains. No crate the corrected sentence names in backticks is one nomos-architecture.json does not place, which Test_Every_Crate_The_Readmes_Prose_Names_Should_Be_One_The_Declaration_Places now judges. cargo test --no-fail-fast -p nomos-contract-tests --test boundaries exits zero. The predicate deliberately does not reach the other obligations of nomos-contract-tests: agent_harness, public_surface, completeness_universes and the rest are their own items obligations, and the boundaries target is the one that reads README.md.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P123-A-CRATE-DOC-AND-ITS-RECORD-DISAGREE-ABOUT-WHICH-OVERRIDE-LICENSED-THE-WORKFLOW-RUNTIME-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-OD-ROADMAP-006-THE-REMAINING-REVIEW-GAPS-ARE-REQUIRED-AND-FIVE-DEFERRALS-ARE-NAMED",
+      "title": "OD-ROADMAP-006: the owner requires the review gaps this workspace has not addressed, and the deferrals that stand in the way are named",
+      "why": "An external review of bc0aaacf named thirteen core gaps. A triage measured each against the tree: several were stale, two dissolved under measurement, and eleven were built or decided over 2026-09-21. OD-ROADMAP-005 separately superseded eight deferrals for a different set of the same review's claims. What remains is a list nobody has authorized, and four of its entries cannot be built without a record moving, so they would sit forever behind deferrals that were correct when written. The owner has now required the remainder addressed. Each deferral in the way was taken on a stated condition and each stated what would revisit it: OD-GATE-022-A deferred the run history OD-GATE-030 names as the only thing that makes persistence and reintroduction separable for a baselined finding; OD-WORKFLOW-002 and OD-WORKFLOW-005 left branch, merge, bounded parallelism and versioned replayable definitions out of the workflow tier, the last of these amended at 9bd44333 to record what the retry and compensation runtime closed and what still stays out; OD-ANALYSIS-009 declined a persistent store and said in as many words that no daemon or long-lived-process concept is scheduled by it, a position its version 4 amendment at 1ca2459d narrowed to the on-disk half; and two were refused on measurement rather than sequencing, OD-RULES-009's demand planner and OD-RULES-022's rules loaded from package files on disk. The last two are different in kind from the first three and this record must not flatten them.",
+      "done_when": "A governing record OD-ROADMAP-006 is written and registered that lists the remaining gaps as required work and, for each, either names the deferral it supersedes with the clause and the version, or states that no record stands in the way. It supersedes by name only what it has read: the run-history deferral, the workflow-tier exclusions and the daemon clause. For OD-RULES-009 and OD-RULES-022 it decides rather than supersedes, because both were refused on measurement and a directive to build does not make an inert artifact useful: it states, for each, whether the owner's requirement is satisfied by the gap being answered rather than open, or whether the artifact is to be built anyway under the precedent OD-ROADMAP-001 set for building ahead of consumers, and it gives the reason either way. It restates no measurement it has not re-taken, and where OD-RULES-009's three triggers are quoted they are checked against the tree first. It does not reopen OD-ROADMAP-005's eight, does not touch ARC-ROADMAP-001's deferred tier, and builds nothing. Each superseded clause names the item that acts on it, so a reader arrives at work rather than at a second decision. Both projections are re-rendered per the nomos-spec-change skill, and the predicate passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ROADMAP-006",
+          "crates/spec/nomos-spec-store/records/OD-ROADMAP-006.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-A-BASELINED-FINDING-CANNOT-BE-TOLD-FROM-ONE-REINTRODUCED",
+      "title": "A baselined finding cannot be told from one reintroduced, because no occurrence identity survives a revision and no history records the states between",
+      "why": "OD-GATE-030 decided that a baseline entry is evidence an occurrence existed at a snapshot and that a run must not claim continuity it cannot show, and it named exactly what would make continuity provable, in order: a quantity on the entry, an occurrence identity that survives a revision, and a history of the states between. The first is built and bounds capacity only. The second and third are not, so persistent debt and reintroduced debt remain indistinguishable, which the record itself calls the hiding failure a gate exists to prevent. The parts are already published and unused: nomos-model carries FindingOccurrenceId, whose own doc refuses its use for matching across revisions because it takes the finding's locations and would expire on a reformatting commit, and identity/transition_kind.rs carries ExactContinuity, Recreated, Unresolved and an Is_History_Preserving rule that already decides a tolerance must not survive a recreation. Measured 2026-09-14 and unchanged since: no gate code reads that vocabulary. The record warns that a second Persistent, Reintroduced and Moved vocabulary minted in gate code beside it would be the duplicated authority this repository files records about.",
+      "done_when": "A finding carries an occurrence identity that survives a revision, derived from material that a reformatting commit does not change, and its derivation says which material it takes and why each part is stable; FindingOccurrenceId is either widened to serve this or is left alone with the new identity named beside it and the difference stated, since that type's own doc refuses the role. A run records enough of its own result for a later run to compare against, and what that record is and where it lives is decided in the commit rather than assumed. A baselined finding is then reported through the vocabulary nomos-model already publishes, ExactContinuity, Recreated and Unresolved, with no second vocabulary minted in gate code, and Is_History_Preserving decides whether a tolerance survives. A finding whose history cannot be established is still reported as undetermined rather than as persistent, which is OD-GATE-030's own floor and does not move. The counting bound the baseline already applies is unchanged and a population above its accepted count is still an expansion. Tests prove the three cases apart: an occurrence that persisted across an edit elsewhere, one fixed and reintroduced, and one moved within its file. At least two load-bearing guards are proven by mutation with the file restored byte-identically. Surface snapshots are re-blessed, and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/kernel/nomos-model/src/identity",
+          "crates/kernel/nomos-model/src/identity.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "tests/contract/surface/nomos-model.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P128-OD-ROADMAP-006-THE-REMAINING-REVIEW-GAPS-ARE-REQUIRED-AND-FIVE-DEFERRALS-ARE-NAMED"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-model",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-THE-WORKFLOW-ENGINE-RUNS-A-LINE-AND-CANNOT-BRANCH-JOIN-OR-REPLAY",
+      "title": "The workflow engine runs an ordered line, so it cannot branch, join, bound its own parallelism, or replay a definition it published",
+      "why": "29bc3e20 gave the workflow tier a real retry, timeout and compensation runtime, and 9bd44333 amended OD-WORKFLOW-005 to record what that closed and what still stays out. What stays out is the shape of the engine itself: Run is one ordered loop over a plan, so there is no condition, no branch, no join, no bounded parallelism, and no cache runtime; and a workflow definition is a slice a caller assembles in process, so nothing is published, versioned, or replayable against the definition it ran under. The declared vocabulary is already there and unread for two of these: nomos_contracts::WorkflowStep carries Cacheability and CancellationBehavior that Is_Coherent checks and no runtime honors. The external review named workflow maturity as a core gap and the amendment names each exclusion, so this item is the list that amendment leaves.",
+      "done_when": "A workflow plan can express a branch whose arm is chosen by a condition over what earlier steps produced, and a join that waits for the arms it names, with the outcome reporting which arm ran and why; a plan that branches on a value no step produces is refused before any body dispatches, the way an incoherent declaration already is. Steps that declare no dependence on one another may run under a bound the caller states, and the bound is honored rather than advisory; determinism is preserved in the outcome's ordering so two runs of one plan report the same sequence regardless of completion order, proven by a test. A definition can be published as an immutable artifact carrying its own identity and version, and a later run can be replayed against the definition it ran under rather than against whatever the caller assembles now, with a replay whose definition has moved refused rather than silently run. Cacheability is honored or its exclusion is restated truthfully; CancellationBehavior is left out and said so, because nothing here can cancel a dispatch in flight. The existing sequential path keeps its behavior and its tests unchanged, proven by them passing untouched. WorkflowOutcome and DispatchError are matched exhaustively by two host crates, so either they do not change or those crates are in territory; the claimant measures which and says so. OD-WORKFLOW-005's what-stays-out paragraph is rewritten to what is then true. At least two guards are proven by mutation. The surface snapshot is re-blessed and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workflow-orchestration",
+          "crates/contracts/nomos-contracts/src/workflow_step.rs",
+          "crates/contracts/nomos-contracts/src/workflow_step",
+          "crates/contracts/nomos-contracts/src/lib.rs",
+          "tests/contract/surface/nomos-workflow-orchestration.txt",
+          "tests/contract/surface/nomos-contracts.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P128-OD-ROADMAP-006-THE-REMAINING-REVIEW-GAPS-ARE-REQUIRED-AND-FIVE-DEFERRALS-ARE-NAMED"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-contracts"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-NOTHING-RUNS-A-WAVE-SO-THE-CORRECTION-SUBSTRATE-HAS-NO-SCHEDULER",
+      "title": "Correction compatibility and waves are computed and nothing runs them, so a repository still fixes one family at a time",
+      "why": "fbc1ae64 built the substrate a correction scheduler computes from: Compatibility::Of answers for one pair from declared read and write sets, WavePartition::Of groups a slice into ordered waves refusing rather than guessing when a plan's sets are not known complete, and UnresolvedAccess names the plan and candidate it could not place. Its own commit says nothing runs a wave, and nothing does: nomos-correction-orchestration's Run_Correction still takes the first family that claims a finding, over a two-entry family registry, so a repository with many correctable findings fixes them one family at a time and never learns that two were independent. The external review named the correction scheduler and convergence engine as a core gap and named the transaction lifecycle as the mature half; this is the other half, and it is now computation without a consumer.",
+      "done_when": "A caller can hand the correction service a set of findings and receive plans grouped into the waves the substrate computes, staged and validated wave by wave, with every plan in one wave independent of every other in it by the compatibility judgment rather than by assumption. A wave whose validation fails does not stage the waves after it, and what was already committed is reported rather than silently kept or silently rolled back; which of those two it is is decided in the commit with its reason. A plan the partition refuses is reported with the refusal the substrate already produces and never quietly dropped. Convergence is addressed rather than assumed: the service either reruns the affected scope and compares, so a correction that reintroduces a finding is visible, or states why it does not and what would be needed, and if it does rerun then oscillation between two corrections is detected and stopped rather than looping. The existing single-family path keeps working and its tests pass untouched. The correction type-state chain is unchanged; this item schedules plans and does not alter what a plan is. At least two guards are proven by mutation with the file restored byte-identically. Surface snapshots are re-blessed and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-correction-orchestration",
+          "crates/corrections/nomos-corrections",
+          "tests/contract/surface/nomos-correction-orchestration.txt",
+          "tests/contract/surface/nomos-corrections.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P128-OD-ROADMAP-006-THE-REMAINING-REVIEW-GAPS-ARE-REQUIRED-AND-FIVE-DEFERRALS-ARE-NAMED"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-correction-orchestration",
+          "-p",
+          "nomos-corrections"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,
