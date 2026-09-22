@@ -97,7 +97,7 @@ struct Uncomposed
     /// Why nothing composes it, read from the crate's own documentation and the records and
     /// items that govern it.
     ///
-    /// Never a placeholder. Four entries carrying one sentence repeated four times would make
+    /// Never a placeholder. Entries carrying one sentence repeated between them would make
     /// this list worthless on the day one of them stops being true, which is the only day it
     /// has to work.
     reason: &'static str,
@@ -106,9 +106,11 @@ struct Uncomposed
 /// Every exported offer no composition line takes, and why.
 ///
 /// Classified by hand against each crate's own doc, the record that licensed it and the ledger
-/// item that carries the remaining work, on 2026-09-21. Three of the four are held out by work
-/// that is scheduled and reserved; the fourth is held out by having no consumer to be composed
-/// for. None of the four is uncomposed by omission.
+/// item that carries the remaining work, on 2026-09-21, and narrowed on 2026-09-22 when
+/// `P123-THE-COMPILER-CONTRACTS-LEAVE-THEIR-PROVIDER-AND-ITS-RULES-JOIN-THE-RUN-2` composed the
+/// two compiler offers this list was holding out. One of the remaining entries is held out by
+/// work that is scheduled and reserved; the other is held out by having no consumer to be
+/// composed for. Neither is uncomposed by omission.
 const UNCOMPOSED: &[Uncomposed] = &[
     Uncomposed {
         offer: "nomos_lang_csharp::Provider_Offer",
@@ -124,34 +126,6 @@ const UNCOMPOSED: &[Uncomposed] = &[
                  nothing to name until a CSHARP_LANGUAGE constant exists in nomos-rules. \
                  P123-CSHARP-JOINS-THE-RUN-AND-THE-WALK-2 reserves exactly those paths and is \
                  ready to claim.",
-    },
-    Uncomposed {
-        offer: "nomos_lang_rust_compiler::Provider_Offer",
-        reason: "nomos.cap.rust.copy_clones, this workspace's only offer backed by a real \
-                 compiler semantic engine, and README.md's own row for the crate says \"Not yet \
-                 composed into a real gate run\". What holds it out is the zone rule rather than \
-                 any doubt about the provider: its rule Check_Copy_Clones lives inside the \
-                 provider crate, composing means a nomos-rules descriptor naming the contract, \
-                 and nomos-lang-rust-compiler is zoned Provider, which Permits forbids the Rules \
-                 zone from naming. OD-ANALYSIS-007 version 2 decides that at that moment the \
-                 contract moves to its own crate under crates/capabilities, one crate per \
-                 capability and never one for the family, and \
-                 P123-THE-COMPILER-CONTRACTS-LEAVE-THEIR-PROVIDER-AND-ITS-RULES-JOIN-THE-RUN-2 \
-                 reserves that move. OD-ROADMAP-002 also paused this wiring; OD-ROADMAP-003 \
-                 records that pause as lapsed, so what remains is the crate move and not a \
-                 prohibition.",
-    },
-    Uncomposed {
-        offer: "nomos_lang_rust_compiler::Nested_Locks_Provider_Offer",
-        reason: "nomos.cap.rust.nested_locks, the same crate's second capability \
-                 (P42-SEMANTIC-FACT-FAMILY), held out by the identical zone rule and carried by \
-                 the identical item. A separate entry rather than one shared with copy_clones \
-                 because the two are separate contracts with separate ids, schemas, payloads and \
-                 guarantees: OD-ANALYSIS-007 version 2 measured the family-crate question \
-                 against the one item that reserved such a crate and decided one crate per \
-                 capability, so the two can be composed on different days and this list has to be \
-                 able to say so. It is also the entry that would go stale invisibly under a name \
-                 match, since the crate re-exports it renamed rather than as Provider_Offer.",
     },
     Uncomposed {
         offer: "nomos_lang_rust::rollup::Provider_Offer",
@@ -533,8 +507,8 @@ fn Test_The_Exported_Scan_Should_Read_A_Declaration_And_Not_A_Collection()
         Offer_Declared_By(renamed).as_deref(),
         Some("nomos_lang_rust_compiler::Nested_Locks_Provider_Offer"),
         "an offer re-exported under a different name was not read. Matching the name \
-         Provider_Offer rather than the return type would lose exactly this one, which is one of \
-         the four entries UNCOMPOSED carries"
+         Provider_Offer rather than the return type would lose exactly this spelling, which \
+         UNCOMPOSED carried until the compiler contracts were composed"
     );
     assert_eq!(
         Offer_Declared_By(qualified).as_deref(),
@@ -580,8 +554,8 @@ fn Test_The_Composed_Scan_Should_Read_A_Call_And_Not_A_Comment()
     assert_eq!(
         Offer_Composed_By(renamed).as_deref(),
         Some("nomos_lang_rust_compiler::Nested_Locks_Provider_Offer"),
-        "composing a renamed offer was not read, so the day that entry leaves UNCOMPOSED this \
-         check would go on excusing it"
+        "composing a renamed offer was not read. That entry has since left UNCOMPOSED, which is \
+         the day this check would otherwise have gone on excusing it"
     );
     assert_eq!(
         Offer_Composed_By(prose),
