@@ -91,19 +91,6 @@ pub(crate) const UNIVERSES: &[Universe] = &[
             by: "Test_The_Scanner_And_This_Table_Should_Name_The_Same_Variables",
         },
     },
-    // `Backend::ALL` arrived here already claiming this standing: its doc comment said a
-    // variant missing from the array is why `Test_Every_Variant_Should_Be_Listed` exists
-    // beside it, and that test did not. `P122` wrote it rather than reclassifying the
-    // universe, because the row and the claim are two spellings of one thing and the claim
-    // was the one already committed.
-    Universe {
-        path: "crates/orchestration/nomos-agent-orchestration/src/backend.rs",
-        name: "ALL",
-        kind: UniverseKind::Constant,
-        standing: Standing::Mirrored {
-            by: "Test_Every_Variant_Should_Be_Listed",
-        },
-    },
     // `OD-POLICY-001`'s ten configuration layers. A `Constant` rather than an `Enumeration`
     // because it is a `const` array rather than an `All()` function, and it takes the same
     // exhaustive-match mirror every `All` above it does -- a layer missing from the array is a

@@ -90203,10 +90203,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-prose",
+        "acquired_at": 1790057988,
+        "lease_expires_at": 1790065188
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -90746,17 +90750,13 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [
         "P125-SUPPORTING-FACT-TRAIL",
         "P125-REQUIREMENT-RULE-LINES"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-walk",
-        "acquired_at": 1790055467,
-        "lease_expires_at": 1790067643
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -90770,7 +90770,13 @@
         "timeout_seconds": 2700
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "nomos-75-walk",
+          "reason": "Work is complete and committed at be2e8e00, thirteen paths, README included and clean in the tree. The claim is released rather than finished because work finish is owed and its predicate is red for a reason outside this item: d1dca47d deleted crates/orchestration/nomos-agent-orchestration/src/backend.rs and left its declared row in tests/contract/tests/completeness_universes/table.rs, so Test_Every_Named_Mirror_Should_Exist_In_The_Source and Test_The_Declared_Table_Should_Match_What_Is_Derived fail at pristine HEAD with this item's diff removed. That repair is a judgment about a declared universe, since deleting the row moves a declared total, and it belongs to whoever owns that table. Released now rather than held because a peer item has been waiting on README for close to an hour and the file is landed; re-claim and finish once the table is repaired.",
+          "abandoned_at": 1790057902
+        }
+      ],
       "displaced": [],
       "declined": null,
       "widened": []
@@ -93008,7 +93014,11 @@
           "crates/host/nomos-cli/src/gate",
           "crates/host/nomos-cli/src/gate.rs",
           "tests/contract/surface/nomos-api.txt",
-          "tests/contract/surface/nomos-gate-orchestration.txt"
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare/tests.rs"
         ],
         "patterns": []
       },
@@ -93042,7 +93052,18 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p128-provenance",
+          "added": [
+            "crates/orchestration/nomos-gate-orchestration/src/gate_plan.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/gate_compare/tests.rs"
+          ],
+          "widened_at": 1790058005
+        }
+      ]
     },
     {
       "id": "P128-OD-RULES-034-WHAT-A-RULE-AUTHORING-SURFACE-IS-AT-SEVENTY-RULES",
@@ -93226,6 +93247,69 @@
         "timeout_seconds": 5400
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-A-DELETED-FILES-UNIVERSE-ROW-OUTLIVED-IT-AND-REDDENS-THE-SUITE-FOR-EVERY-SESSION",
+      "title": "A deleted file's declared universe row outlived it, and the contract suite is red for every session",
+      "why": "d1dca47d deleted crates/orchestration/nomos-agent-orchestration/src/backend.rs, because the port it landed replaced the two-variant Backend enum whose ALL array that file declared, and it left that file's row in tests/contract/tests/completeness_universes/table.rs. Two tests fail for every session as a result, measured 2026-09-21 at be2e8e00: Test_The_Declared_Table_Should_Match_What_Is_Derived reports the row as declared but no longer derived, and Test_Every_Named_Mirror_Should_Exist_In_The_Source reports its mirror Test_Every_Variant_Should_Be_Listed as naming a test that does not exist, since that test was deleted with the file. The commit is mine and the repair is mine. It is red repo-wide rather than locally: a peer session's committed item cannot reach Done because its own predicate runs nomos-contract-tests, and a peer proved the failure is not theirs by reproducing it at pristine HEAD with their diff removed. Measured before authoring: the universe was removed rather than moved, since no Backend enum and no ALL array survives anywhere in the agent crates; the only site in the workspace naming Test_Every_Variant_Should_Be_Listed is the stale row itself, so no record cites it and record_citation is green; and the row's standing is Mirrored, so UNMIRRORED_TOTAL at six counts unmirrored universes and does not move when a mirrored row is removed. This is the class the work of today has repeatedly found, a declaration outliving the thing it described, and this instance was written by my own port commit.",
+      "done_when": "The row for crates/orchestration/nomos-agent-orchestration/src/backend.rs is removed from UNIVERSES together with the comment block that explains that one universe's standing, because a comment about a row that no longer exists is the same staleness one level out; UNMIRRORED_TOTAL is unchanged at six and the reason is stated, namely that the removed row was Mirrored rather than Unmirrored; no other row, total or test is edited, so the repair removes a declaration whose subject is gone and adds no classification of anything else; and cargo test --no-fail-fast -p nomos-contract-tests --test completeness_universes --test record_citation passes, with the derivation test reporting neither an unclassified nor a vanished identity.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "completeness_universes",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "ed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.89s\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-2eab8f58748e8fc9.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-e8b29a92e90bbab6.exe)\n",
+        "verified_at": 1790058020,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "66292b7f5c47e14034be56e69b20a72982d92588"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
