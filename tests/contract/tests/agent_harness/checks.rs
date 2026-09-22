@@ -3,14 +3,14 @@ use nomos_ledger::{LedgerDocument, LedgerItem};
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 use crate::readers::{
-    Board, Crossing_Counts, Declared_Skill_Name, Gate_Run_Commands, Harness_Files, Imports,
-    Ledger_Verb_Lines, Missing_Paths, Named_Items, Named_Paths, Read_Harness_File,
-    Read_Repo_File, Restated_Gate_Commands, Restated_Ledger_Verb_Lines, Restated_Rows,
-    Skill_Directories,
+    Board, Checked_Out_Paths, Crossing_Counts, Declared_Skill_Name, Gate_Run_Commands,
+    Harness_Files, Imports, Ledger_Verb_Lines, Missing_Paths, Named_Items, Named_Paths,
+    Read_Harness_File, Read_Repo_File, Restated_Gate_Commands, Restated_Ledger_Verb_Lines,
+    Restated_Rows, Skill_Directories,
 };
 use crate::{
-    ADAPTER, ADAPTER_LINE_BUDGET, CONTRACT, CONTRACT_LINE_BUDGET, GATE_WORKFLOW,
-    LEDGER_VERB_REFERENCE, ROUTED_AUTHORITIES, TEMPORARY_HAZARDS,
+    ADAPTER, ADAPTER_LINE_BUDGET, CONTRACT, CONTRACT_LINE_BUDGET, DELIBERATELY_ABSENT_PATHS,
+    GATE_WORKFLOW, LEDGER_VERB_REFERENCE, ROUTED_AUTHORITIES, TEMPORARY_HAZARDS,
 };
 
 /// The harness files every agent looks for by name at the repository root.
@@ -74,30 +74,103 @@ fn Test_The_Contract_Should_Stay_Inside_Its_Line_Budget()
     );
 }
 
-/// A route to a file somebody moved is a route to nothing.
+/// A route to a file somebody moved is a route to nothing, and so is a route to a file only
+/// this machine has.
 ///
 /// This is the half of correctness a machine can check. It runs over the skills too, so a
 /// path named inside a procedure is held to the same standard as one in the contract.
+///
+/// Judged against the checkout rather than the disk, and the two answers differ only where it
+/// matters. A path that is real here and in no clone used to pass, which made this a report
+/// about one workstation rather than about the repository. A path that is absent by design is
+/// admitted by name through `DELIBERATELY_ABSENT_PATHS` and by nothing else, so the third
+/// state -- an untracked file quietly satisfying a route -- has no spelling left.
 #[test]
 fn Test_Every_Path_The_Harness_Names_Should_Exist()
 {
-    let root = Workspace::Workspace_Root();
+    let broken = Routes_A_Fresh_Checkout_Cannot_Follow();
+
+    assert!(
+        broken.is_empty(),
+        "the harness routes to paths a fresh checkout does not have: {broken:#?}.\n\
+         A path that has moved and a path that was never committed fail the same way here, \
+         because somebody cloning this repository cannot tell them apart either. A path that \
+         is absent by design belongs in DELIBERATELY_ABSENT_PATHS, where a second check holds \
+         it to being absent and to still being named."
+    );
+}
+
+/// Every route the harness states that a fresh checkout cannot follow, less the paths declared
+/// absent by design.
+fn Routes_A_Fresh_Checkout_Cannot_Follow() -> Vec<String>
+{
+    let checkout = Checked_Out_Paths();
+    let declared: BTreeSet<&str> =
+        DELIBERATELY_ABSENT_PATHS.iter().map(|(path, _)| return *path).collect();
     let mut broken = Vec::new();
 
     for (name, text) in Harness_Files()
     {
-        for missing in Missing_Paths(&text, &root)
+        let unfollowable = Missing_Paths(&text, &checkout)
+            .into_iter()
+            .filter(|missing| return !declared.contains(missing.as_str()));
+
+        for missing in unfollowable
         {
-            broken.push(format!("{name} names {missing}, which is not in the tree"));
+            broken.push(format!("{name} names {missing}, which a fresh checkout does not have"));
         }
     }
 
-    assert!(
-        broken.is_empty(),
-        "the harness routes to paths that do not exist: {broken:#?}.\n\
-         A path that has moved is the failure this check exists for; a path that is real \
-         but uncommitted is the other one, and CI is where it shows."
-    );
+    return broken;
+}
+
+/// A declared absence that has stopped being either absent or named is a stale exemption.
+///
+/// This is the direction that keeps `DELIBERATELY_ABSENT_PATHS` from growing into the blanket
+/// that would answer the machine-dependence question by dropping the question the route check
+/// was added for. An entry whose file has since been committed fails, because the exemption
+/// would then be covering a path that is really there -- and would go on covering it silently
+/// if the file were removed again. An entry no harness file names fails, because an exemption
+/// that outlives its sentence is a line nobody will ever have a reason to delete. An entry
+/// citing a record the tree does not carry fails, because an absence by design has to be
+/// somebody's decision and not this list's own assertion.
+#[test]
+fn Test_Every_Deliberately_Absent_Path_Should_Still_Be_Absent_And_Still_Be_Named()
+{
+    let checkout = Checked_Out_Paths();
+    let named: BTreeSet<String> =
+        Harness_Files().iter().flat_map(|(_, text)| return Named_Paths(text)).collect();
+
+    for (path, record) in DELIBERATELY_ABSENT_PATHS
+    {
+        assert!(
+            !checkout.contains(*path),
+            "{path} is declared deliberately absent and a fresh checkout has it. While the \
+             declaration stands, the route check cannot report that file going away again."
+        );
+        assert!(
+            named.contains(*path),
+            "{path} is declared deliberately absent and no harness file names it any more, so \
+             the exemption has outlived the sentence it was written for."
+        );
+        assert!(
+            Record_Carried_By(record, &checkout),
+            "{path} is declared deliberately absent on the authority of {record}, and the \
+             record set carries no such record."
+        );
+    }
+}
+
+/// Whether the record set carries the record an entry cites.
+///
+/// By identifier rather than by file name: a record's slug is part of its path and moves when
+/// the record is reworded, so matching the whole name would make a rewording look like a
+/// missing authority.
+fn Record_Carried_By(record: &str, checkout: &BTreeSet<String>) -> bool
+{
+    let prefix = format!("docs/records/{record}-");
+
+    return checkout.iter().any(|entry| return entry.starts_with(prefix.as_str()));
 }
 
 /// The band table is checked where it lives, and nowhere else may hold a copy.

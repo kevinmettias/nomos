@@ -1,7 +1,7 @@
 use crate::readers::{
-    Board, Crossing_Counts, Declared_Skill_Name, Gate_Run_Commands, Imports, Ledger_Verb_Lines,
-    Missing_Paths, Named_Items, Restated_Gate_Commands, Restated_Ledger_Verb_Lines,
-    Restated_Rows,
+    Board, Checkout_Entries, Crossing_Counts, Declared_Skill_Name, Gate_Run_Commands, Imports,
+    Ledger_Verb_Lines, Missing_Paths, Named_Items, Restated_Gate_Commands,
+    Restated_Ledger_Verb_Lines, Restated_Rows,
 };
 
 /// Every check above passes over a file that says nothing, so each is shown failing.
@@ -12,6 +12,7 @@ use crate::readers::{
 fn Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It()
 {
     Assert_The_Route_Check_Reports_A_Broken_Link();
+    Assert_The_Route_Check_Reports_A_Path_Only_This_Machine_Has();
     Assert_The_Band_Check_Reports_A_Pasted_Row();
     Assert_The_Import_Check_Reports_An_Adapter_That_Imports_Nothing();
     Assert_The_Skill_Name_Reader_Reports_A_Manifest_Without_Front_Matter();
@@ -22,20 +23,47 @@ fn Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It()
 }
 
 /// Shown reporting a link to nowhere, and shown not reporting a command or a real path.
+///
+/// Against a checkout written here rather than against the tree. The reader's subject is what
+/// a fresh checkout carries, and a control that reached for the real one would be asserting
+/// over the same machine-dependent state the reader was changed to stop trusting.
 pub(crate) fn Assert_The_Route_Check_Reports_A_Broken_Link()
 {
-    use nomos_contract_tests::Workspace;
-
-    let root = Workspace::Workspace_Root();
+    let checkout = Checkout_Entries("README.md\0");
 
     assert!(
-        !Missing_Paths("routes to `docs/records/there-is-no-such-record.md`", &root).is_empty(),
-        "a named path that is not in the tree was not reported, so the routing check would \
-         accept a link to anywhere"
+        !Missing_Paths("routes to `docs/records/there-is-no-such-record.md`", &checkout).is_empty(),
+        "a named path the checkout does not carry was not reported, so the routing check \
+         would accept a link to anywhere"
     );
     assert!(
-        Missing_Paths("run `cargo fmt` and read `README.md`", &root).is_empty(),
+        Missing_Paths("run `cargo fmt` and read `README.md`", &checkout).is_empty(),
         "a command span or a real path was mistaken for a broken route"
+    );
+}
+
+/// Shown reporting a path that is on this disk and not in the checkout, which is the whole of
+/// the defect the reader was changed for.
+///
+/// Over `README.md` against a checkout that does not list it. That file is on the disk of
+/// every tree this will ever run in, so a reader still answering from the disk reports it
+/// present and fails here -- on every machine, rather than only on one that happens to be
+/// missing an ignored file. The polarity is the point: a control written over a path that is
+/// absent from both would pass without the fix and prove nothing.
+pub(crate) fn Assert_The_Route_Check_Reports_A_Path_Only_This_Machine_Has()
+{
+    let checkout = Checkout_Entries("docs/records/OD-AGENT-001-a-record.md\0");
+
+    assert!(
+        !Missing_Paths("read `README.md`", &checkout).is_empty(),
+        "a path the checkout does not list was not reported, and that file is on the disk of \
+         every tree this runs in. The reader is still answering from the disk, which is what \
+         let an ignored file stand in for a committed one."
+    );
+    assert!(
+        Missing_Paths("read `docs/records`", &checkout).is_empty(),
+        "a directory the checkout holds a file under was reported missing, so every routing \
+         line naming a directory would read as a broken route"
     );
 }
 

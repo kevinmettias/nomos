@@ -138,6 +138,29 @@ const LEDGER_VERB_REFERENCE: &str = "README.md";
 /// entry here fails, so the list cannot be emptied to silence a warning that is still true.
 const TEMPORARY_HAZARDS: &[(&str, &str)] = &[];
 
+/// Every path the harness names that a fresh checkout deliberately does not have, and the
+/// record that decided the absence.
+///
+/// Declared rather than derived, for the reason `TEMPORARY_HAZARDS` above is: whether a file
+/// is absent *by design* is a question about meaning, and the absence cannot answer it. An
+/// absence by design and an absence by accident are the same absence on disk, which is why
+/// [`checks::Test_Every_Path_The_Harness_Names_Should_Exist`] needs to be told and cannot
+/// work it out.
+///
+/// What is derived is the other direction, and it is what stops this from becoming the
+/// blanket exemption that answers the new question by no longer asking the old one. An entry
+/// whose file has since been committed fails, so the list cannot be used to cover a path that
+/// is really there. An entry no harness file names any more fails, so an exemption cannot
+/// outlive the sentence it was written for. An entry citing a record the tree does not carry
+/// fails, so the authority has to be a real one.
+///
+/// `.cargo/xvpe-local.toml` is the first entry and the reason the list exists.
+/// `OD-PLATFORM-004` decides that the local XVPE override is opt-in and never the governing
+/// form, and `.gitignore` ignores `/.cargo/` whole so the name cannot be recreated. The
+/// contract names the file in order to say it is not there, and that sentence is correct: it
+/// was the check that could not tell a deliberate absence from a route to nothing.
+const DELIBERATELY_ABSENT_PATHS: &[(&str, &str)] = &[(".cargo/xvpe-local.toml", "OD-PLATFORM-004")];
+
 /// `OD-LEDGER-023`'s half of `P11-NEXT-WORK`'s `done_when`: once selection gains an
 /// authority, the contract stops instructing the agent to pick and names the thing that
 /// picks instead.

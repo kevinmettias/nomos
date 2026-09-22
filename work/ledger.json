@@ -78372,14 +78372,20 @@
           "crates/host/nomos-surface-provenance",
           "crates/agent/nomos-agent-contracts",
           "tests/contract/tests/boundaries",
-          "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md"
+          "docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md",
+          "tests/contract/Cargo.toml",
+          "tests/contract/surface/nomos-contracts.txt"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-finding-address",
+        "acquired_at": 1790035090,
+        "lease_expires_at": 1790045890
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -78397,7 +78403,16 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-finding-address",
+          "added": [
+            "tests/contract/Cargo.toml",
+            "tests/contract/surface/nomos-contracts.txt"
+          ],
+          "widened_at": 1790038160
+        }
+      ]
     },
     {
       "id": "P109-F-A-POLICY-DIGEST-IGNORES-THE-ALLOWANCE-THAT-DECIDES-THE-JUDGMENT",
@@ -87013,11 +87028,14 @@
         "resolution": "File",
         "paths": [
           "tests/contract/tests/agent_harness.rs",
-          "AGENTS.md"
+          "AGENTS.md",
+          "tests/contract/tests/agent_harness/readers.rs",
+          "tests/contract/tests/agent_harness/checks.rs",
+          "tests/contract/tests/agent_harness/controls.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -87032,11 +87050,43 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "t checks::Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open ... ok\ntest controls::Test_Every_Check_Here_Should_Fail_On_A_Fixture_That_Breaks_It ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.58s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2998351f6db6b012.exe)\n",
+        "verified_at": 1790039165,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f6be436d49886078cf34e1b432f7ed23a1bf2b2c"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "tests/contract/tests/agent_harness/readers.rs",
+            "tests/contract/tests/agent_harness/checks.rs",
+            "tests/contract/tests/agent_harness/controls.rs"
+          ],
+          "widened_at": 1790038196
+        }
+      ]
     },
     {
       "id": "P121-TWO-SNAPSHOTS-THE-PATH-ATTRIBUTE-REPAIR-MOVED-ARE-OWNED-BY-NOBODY-AND-REDDEN-THE-WHOLE-CONTRACT-SUITE",

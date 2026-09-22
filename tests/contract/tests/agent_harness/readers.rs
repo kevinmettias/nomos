@@ -278,12 +278,82 @@ pub(crate) fn Named_Path(span: &str) -> Option<String>
     return named.then(|| return candidate.to_owned());
 }
 
-/// The paths a text names that are not in the tree rooted at `root`.
-pub(crate) fn Missing_Paths(text: &str, root: &Path) -> Vec<String>
+/// Every path a fresh checkout of this repository has: each tracked file, and every
+/// directory that holds one.
+///
+/// Derived from git rather than from the disk, because the disk is one developer's machine.
+/// `.gitignore` puts whole directories outside the tree -- `/.cargo/` among them -- so a file
+/// left in one satisfies an existence check here and in no checkout anywhere. A check that
+/// cannot tell those apart reports the state of a workstation and calls it the state of the
+/// repository, which is `OD-GATE-001`'s defect arriving from the far side: not a test that
+/// skipped, but one that passed on evidence the repository does not carry.
+///
+/// The index rather than `HEAD`. An item that adds a file the harness routes to can stage it
+/// and be judged honestly in the same run, where judging the last commit would refuse the
+/// work until after the commit that does it.
+///
+/// # Panics
+///
+/// Panics if git cannot produce the list. A guard that cannot see its subject fails loudly:
+/// falling back to the disk would restore the exact defect this exists to remove, and the
+/// fallback would be invisible, because it agrees with the old answer everywhere except the
+/// one case worth catching.
+pub(crate) fn Checked_Out_Paths() -> BTreeSet<String>
+{
+    let root = Workspace::Workspace_Root();
+    let output = std::process::Command::new("git")
+        .args(["ls-files", "-z"])
+        .current_dir(&root)
+        .output()
+        .unwrap_or_else(|error| panic!("cannot run git to list the checked-out files: {error}"));
+
+    assert!(
+        output.status.success(),
+        "git could not list the tracked files in {} ({}).\n\
+         This reader judges what a fresh checkout has rather than what this disk has, so \
+         without git there is nothing honest left to check.",
+        root.display(),
+        String::from_utf8_lossy(&output.stderr).trim()
+    );
+
+    return Checkout_Entries(&String::from_utf8_lossy(&output.stdout));
+}
+
+/// Every tracked path in a NUL-separated `git ls-files -z` listing, with every directory
+/// along the way.
+///
+/// The directories are entries in their own right because the harness routes to directories
+/// as well as to files -- `tests/contract` and `docs/records` are both rows in the contract's
+/// own table -- and once they are here the lookup is set membership and nothing else.
+///
+/// Separated from the command that produces the listing so the controls can exercise it over
+/// a checkout they write themselves. A control that had to reach for the real tree would be
+/// asserting against the same machine-dependent state this reader exists to stop trusting.
+pub(crate) fn Checkout_Entries(listing: &str) -> BTreeSet<String>
+{
+    let mut entries = BTreeSet::new();
+
+    for file in listing.split('\0').filter(|entry| return !entry.is_empty())
+    {
+        entries.insert(file.to_owned());
+        let mut directory = file;
+
+        while let Some((parent, _)) = directory.rsplit_once('/')
+        {
+            entries.insert(parent.to_owned());
+            directory = parent;
+        }
+    }
+
+    return entries;
+}
+
+/// The paths a text names that a fresh checkout does not have.
+pub(crate) fn Missing_Paths(text: &str, checkout: &BTreeSet<String>) -> Vec<String>
 {
     return Named_Paths(text)
         .into_iter()
-        .filter(|relative| return !root.join(relative).exists())
+        .filter(|relative| return !checkout.contains(relative))
         .collect();
 }
 
