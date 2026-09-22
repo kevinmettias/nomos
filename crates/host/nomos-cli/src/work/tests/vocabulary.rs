@@ -1,9 +1,13 @@
-//! The two closed vocabularies `add` accepts, compared in both directions against
-//! the words the printed usage text advertises for them.
+//! The two closed vocabularies `add` accepts, compared in both directions against the words
+//! the printed usage text advertises for them -- and the one flag `list` takes, compared
+//! against both the usage text and the operating contract that sends every session to the
+//! verb.
 
 use super::Added;
+use super::Arguments;
 use super::{Alternatives_After, FlagAlternatives, Sorted_Words};
 use super::super::parse::Usage_Text;
+use super::super::{ListingScope, WorkCommand, Work_Command_From_String_Arguments};
 use nomos_ledger::{ItemKind, ItemOrigin};
 
 /// Every kind an item can declare.
@@ -160,4 +164,84 @@ fn Assert_Each_Origin_Parses_Back(listed: &[String])
 
         assert_eq!(item.origin, *named, "--origin {spelling} does not parse to the origin spelled for it here");
     }
+}
+
+/// The flag `AGENTS.md` step 2 offers is the flag this command line takes, and the printed
+/// usage text advertises the same one.
+///
+/// `OD-AGENT-004` version 2 again, with the enumerating document outside this crate. The
+/// operating contract sends every session to `nomos work list` before it does anything else,
+/// and since `OD-LEDGER-041` that listing is bounded -- so the sentence naming the way past
+/// the bound is load-bearing, because a spelling nobody can reach is not a bound but a hole.
+/// The authority for the spelling is private to this binary crate, which is why
+/// `tests/contract/tests/boundaries/readme.rs` routes to this vocabulary rather than restating
+/// it. The comparison therefore lives here, the one place both halves are in reach.
+///
+/// Three assertions, failing for three reasons a reader has to tell apart: the contract names
+/// no flag at all, it names one this command line does not take, or it names one the printed
+/// usage text has never heard of.
+#[test]
+fn Test_The_Contracts_Step_Two_Should_Offer_The_Flag_This_Command_Line_Takes()
+{
+    let step = Contract_Step("2.");
+    let offered = Flags_In(&step);
+
+    assert!(
+        !offered.is_empty(),
+        "AGENTS.md step 2 names no flag, so a session the loop sends there is shown a bounded \
+         listing and no way past it:\n{step}"
+    );
+
+    for flag in &offered
+    {
+        assert_eq!(
+            Work_Command_From_String_Arguments(&Arguments(&format!("list {flag}")))
+                .expect("`list` takes no argument that can be wrong"),
+            WorkCommand::List { state: None, scope: ListingScope::Whole },
+            "AGENTS.md step 2 offers `{flag}`, and `nomos work list {flag}` does not answer \
+             with the whole board"
+        );
+        assert!(
+            Usage_Text().contains(flag.as_str()),
+            "AGENTS.md step 2 offers `{flag}` and the printed usage text does not:\n{}",
+            Usage_Text()
+        );
+    }
+}
+
+/// One numbered step of `AGENTS.md`'s loop, `marker` being the step's own `2.` opening.
+///
+/// Read out of the committed contract rather than out of a fixture, because the claim is about
+/// the file a session actually opens. A step runs from its marker to the next line that is
+/// neither the marker nor one of its indented continuations.
+fn Contract_Step(marker: &str) -> String
+{
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../AGENTS.md");
+    let contract = std::fs::read_to_string(&path)
+        .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
+    let step: Vec<&str> = contract
+        .lines()
+        .skip_while(|line| return !line.starts_with(marker))
+        .take_while(|line| return line.starts_with(marker) || line.starts_with("   "))
+        .collect();
+
+    assert!(!step.is_empty(), "AGENTS.md carries no step opening `{marker}`");
+
+    return step.join("\n");
+}
+
+/// Every `--flag` a text offers inside a code span.
+///
+/// Code spans rather than bare words, and one word rather than several: the contract writes
+/// prose about the board too, and a sentence that happens to contain two dashes is not an
+/// offer of a flag.
+fn Flags_In(text: &str) -> Vec<String>
+{
+    return text
+        .split('`')
+        .skip(1)
+        .step_by(2)
+        .filter(|span| return span.starts_with("--") && span.split_whitespace().count() == 1)
+        .map(|span| return (*span).to_owned())
+        .collect();
 }

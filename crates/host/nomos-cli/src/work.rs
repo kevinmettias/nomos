@@ -26,10 +26,10 @@ mod tests;
 pub use parse::Work_Command_From_String_Arguments;
 
 pub(crate) use exit_code::ExitCode;
-pub(crate) use nomos_work_orchestration::{ClaimRequest, EndingRequest, WorkCommand};
+pub(crate) use nomos_work_orchestration::{ClaimRequest, EndingRequest, ListingScope, WorkCommand};
 
 use listing::{
-    Listed_As, Listing_Label, Nothing_Listed, Print_Claim, Print_History, Print_Listing,
+    Bounds, Listed_As, Listing_Label, Nothing_Listed, Print_Claim, Print_History, Print_Listing,
 };
 use report::{
     Amendment_Note, Blocking_Refusal, Code_For_Refusal, Ended, Print_Blocked, Report_Claim,
@@ -191,9 +191,9 @@ fn Render_Outcome(command: &WorkCommand, outcome: WorkOutcome, directory: &Path,
 {
     return match (command, outcome)
     {
-        (WorkCommand::List { state }, WorkOutcome::List(result)) =>
+        (WorkCommand::List { state, scope }, WorkOutcome::List(result)) =>
         {
-            Render_List(state.as_deref(), result, output)
+            Render_List(Bounds { state: state.as_deref(), scope: *scope }, result, output)
         }
         (WorkCommand::Show { item }, WorkOutcome::Show(result)) => Render_Show(item, result, output),
         (WorkCommand::Add { item, amending }, WorkOutcome::Add(result)) =>
@@ -227,7 +227,7 @@ fn Render_Outcome(command: &WorkCommand, outcome: WorkOutcome, directory: &Path,
 }
 
 fn Render_List(
-    state: Option<&str>,
+    bounds: Bounds<'_>,
     result: Result<BoardView, LedgerError>,
     output: &mut impl std::io::Write,
 ) -> ExitCode
@@ -238,16 +238,25 @@ fn Render_List(
         Err(error) => return Report_Error(&error, output),
     };
 
-    Print_Board(&document, state, now, output);
+    Print_Board(&document, bounds, now, output);
 
     return ExitCode::Ok;
 }
 
-/// Every item in `state`'s bucket, or the "nothing" line when none matched -- and, on the
-/// unfiltered board only, the one line naming which item to claim next.
+/// Every item `bounds` admits, or the "nothing" line when none was -- and, on the unfiltered
+/// board only, how many rows the bound withheld and the one line naming which item to claim
+/// next.
+///
+/// `document` is the whole board at every step, and that is a constraint rather than an
+/// incidental argument. [`Listing_Label`] reads a dependency's terminal state to decide
+/// whether the row above it reads `ready`, `waiting` or `stranded`, and [`Print_Next`] runs
+/// `Eligible_Items` over every item to say which one to claim -- so the bound governs what is
+/// *printed* and never what is *read*. `OD-LEDGER-023` is why: what to work on next is
+/// computed from the board rather than read off it, and a computation needs the whole board
+/// present. A view does not, which is the whole of what `OD-LEDGER-041` asked for here.
 fn Print_Board(
     document: &LedgerDocument,
-    state: Option<&str>,
+    bounds: Bounds<'_>,
     now: nomos_platform::Timestamp,
     output: &mut impl std::io::Write,
 )
@@ -255,7 +264,7 @@ fn Print_Board(
     let mut shown = 0_u32;
     for item in &document.items
     {
-        let Some(label) = Listed_As(document, item, state, now)
+        let Some(label) = Listed_As(document, item, bounds, now)
         else
         {
             continue;
@@ -265,15 +274,47 @@ fn Print_Board(
     }
     if shown == 0
     {
-        Nothing_Listed(state, output);
+        Nothing_Listed(bounds, output);
     }
     // Only on the unfiltered board. `--state` asks for one bucket's rows, and a summary
     // naming an item outside that bucket would contradict the very filter the caller asked
     // for -- `--state lapsed` is not the place to also learn what is `Ready` elsewhere.
-    if state.is_none()
+    if bounds.state.is_none()
     {
+        Print_Withheld(document, bounds.scope, output);
         Print_Next(document, now, output);
     }
+}
+
+/// How many rows the default's bound left out, and the flag that prints them.
+///
+/// A bound nobody is told about is indistinguishable from a board that has lost its history,
+/// and `OD-LEDGER-041` keeps that history precisely so it can still be read -- so the line
+/// that hides it also says how to ask for it.
+///
+/// Counted off the document rather than off the loop above. Under [`ListingScope::Live`] with
+/// no `--state` those are the same number, and this one cannot later be made wrong by a
+/// filter's own exclusions being added into it.
+///
+/// Silent under [`ListingScope::Whole`], and silent on a board with nothing ended: neither
+/// withheld anything, and a line reporting zero is a line every reader has to stop and check.
+fn Print_Withheld(document: &LedgerDocument, scope: ListingScope, output: &mut impl std::io::Write)
+{
+    if scope != ListingScope::Live
+    {
+        return;
+    }
+
+    let withheld = document.items.iter().filter(|item| return item.state.Is_Finished()).count();
+    if withheld == 0
+    {
+        return;
+    }
+
+    let _ = writeln!(
+        output,
+        "{withheld} ended items not shown; `nomos work list --all` prints the whole board"
+    );
 }
 
 /// The one line that answers "which one": the first item [`nomos_ledger::Eligible_Items`]

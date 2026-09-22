@@ -19,7 +19,7 @@ use nomos_ledger::{
 };
 use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
 
-use crate::{ClaimRequest, EndingRequest, Run, WorkCommand, WorkOutcome};
+use crate::{ClaimRequest, EndingRequest, ListingScope, Run, WorkCommand, WorkOutcome};
 
 /// The lease every claim below asks for: a minute, chosen because it is longer than any
 /// test in this file could run, so an expired lease is never the reason an assertion here
@@ -162,7 +162,7 @@ fn Test_List_Should_Read_An_Empty_Board()
     let mut ledger = Scratch_Ledger("list-empty");
 
     let outcome = Run(
-        &WorkCommand::List { state: None },
+        &WorkCommand::List { state: None, scope: ListingScope::Live },
         &mut ledger,
         &Unreached,
         Territory::Empty,

@@ -30,10 +30,10 @@ an item.
 
 1. `git log --oneline -5` and `git status`. Other sessions are working this tree right now,
    so any state described to you may already be false.
-2. Read the board. `nomos work list` names the item to claim next on its `next:` line,
-   computed from the whole board rather than picked by eye — add one if it names none, and
-   an item that reserves nothing is refused, because it would exclude nobody while looking
-   like work.
+2. Read the board. `nomos work list` prints the live board and names the item to claim next
+   on its `next:` line, computed from every item rather than picked by eye — `--all` adds the
+   rows that have ended. Add one if it names none; an item that reserves nothing is refused,
+   because it would exclude nobody while looking like work.
 3. Claim it. **Exit 0 is the only thing that means you have it.** The listing column is a
    snapshot and means nothing seconds later.
 4. Read only the authorities your item needs.

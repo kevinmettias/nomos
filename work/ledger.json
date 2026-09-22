@@ -90478,14 +90478,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-trail",
-        "acquired_at": 1790052710,
-        "lease_expires_at": 1790065292
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -90500,7 +90496,32 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "il2-target\\debug\\deps\\unchanged_run_economy-f89249e6aac5f2eb.exe)\n     Running unittests src\\lib.rs (F:/repos/verify-trail2-target\\debug\\deps\\nomos_contract_tests-b2a13c7253f27233.exe)\n     Running tests\\agent_harness.rs (F:/repos/verify-trail2-target\\debug\\deps\\agent_harness-2998351f6db6b012.exe)\n     Running tests\\boundaries\\main.rs (F:/repos/verify-trail2-target\\debug\\deps\\boundaries-92a4ff356d3672d1.exe)\n     Running tests\\completeness_universes\\main.rs (F:/repos/verify-trail2-target\\debug\\deps\\completeness_universes-2eab8f58748e8fc9.exe)\n     Running tests\\corpus_gates.rs (F:/repos/verify-trail2-target\\debug\\deps\\corpus_gates-5fc6c569730113d9.exe)\n     Running tests\\crossing_cold.rs (F:/repos/verify-trail2-target\\debug\\deps\\crossing_cold-955891bd276589df.exe)\n     Running tests\\determinism_declarations.rs (F:/repos/verify-trail2-target\\debug\\deps\\determinism_declarations-ab84f3ce148d471e.exe)\n     Running tests\\determinism_vocabulary.rs (F:/repos/verify-trail2-target\\debug\\deps\\determinism_vocabulary-ee154dd7301c3097.exe)\n     Running tests\\public_surface\\main.rs (F:/repos/verify-trail2-target\\debug\\deps\\public_surface-4b043d90270bbc14.exe)\n     Running tests\\record_citation.rs (F:/repos/verify-trail2-target\\debug\\deps\\record_citation-e8b29a92e90bbab6.exe)\n     Running tests\\requirement_trace\\main.rs (F:/repos/verify-trail2-target\\debug\\deps\\requirement_trace-42eca897f526cc97.exe)\n     Running tests\\rule_composition.rs (F:/repos/verify-trail2-target\\debug\\deps\\rule_composition-7b8fe6b7065225f2.exe)\n     Running tests\\rule_contract_citation.rs (F:/repos/verify-trail2-target\\debug\\deps\\rule_contract_citation-f864f3dc950c0221.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/verify-trail2-target\\debug\\deps\\rule_descriptors-93c7b39b1bbd5318.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/verify-trail2-target\\debug\\deps\\toolchain_floor-496d4d6605ab0a03.exe)\n   Doc-tests nomos_analysis\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1790055244,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -91615,14 +91636,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-listing-default",
-        "acquired_at": 1790055103,
-        "lease_expires_at": 1790065903
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -91649,7 +91666,44 @@
         ],
         "timeout_seconds": 1500
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--bins",
+          "--test",
+          "work_orchestration_seam",
+          "--test",
+          "list_tells_the_truth",
+          "--test",
+          "public_surface",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "mos\" test) generated 6 warnings (3 duplicates) (run `cargo fix --bin \"nomos\" --tests` to apply 3 suggestions)\nwarning: `nomos-api` (lib test) generated 5 warnings (run `cargo fix --lib -p nomos-api --tests` to apply 2 suggestions)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.94s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos_api-3682c00f16a70bd0.exe)\n     Running unittests src\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos-08cd46061b84875b.exe)\n     Running tests\\list_tells_the_truth.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\list_tells_the_truth-c13e483ca93cb03f.exe)\n     Running tests\\work_orchestration_seam.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\work_orchestration_seam-070369b1c89ed0bc.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos_contract_tests-0a97e9be8e6674b7.exe)\n     Running tests\\agent_harness.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\agent_harness-3abe3ab2b53909e0.exe)\n     Running tests\\public_surface\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\public_surface-90332d4278c02217.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos_work_orchestration-56998d3a591ad42b.exe)\n",
+        "verified_at": 1790055242,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,

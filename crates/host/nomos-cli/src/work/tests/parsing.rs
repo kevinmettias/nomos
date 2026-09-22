@@ -2,7 +2,7 @@
 //! which take the same words from being one verb.
 
 use super::Added;
-use super::super::{ClaimRequest, EndingRequest, ItemId, LedgerItem, Territory, WorkCommand, Work_Command_From_String_Arguments};
+use super::super::{ClaimRequest, EndingRequest, ItemId, LedgerItem, ListingScope, Territory, WorkCommand, Work_Command_From_String_Arguments};
 use super::Arguments;
 use super::super::parse::{Parse_Duration, Usage_Text};
 use nomos_ledger::{DEFAULT_LEASE, ItemState};
@@ -371,5 +371,43 @@ fn Test_Finish_Should_Work_Command_From_String_Arguments()
             item: ItemId::New("T-1"),
             holder: "agent-a".to_owned(),
         }
+    );
+}
+
+/// The default and the way past it, at the parser.
+///
+/// Both halves in one case because the pair is the claim: a default that bounds and no
+/// spelling that unbounds it would be the archive `OD-LEDGER-041` refused, and a flag that
+/// exists while the default is still the whole board would be the same listing with one more
+/// argument.
+#[test]
+fn Test_List_Should_Default_To_The_Live_Board_And_Take_All_For_The_Whole_One()
+{
+    assert_eq!(
+        Work_Command_From_String_Arguments(&Arguments("list"))
+            .expect("`list` takes no argument that can be wrong"),
+        WorkCommand::List { state: None, scope: ListingScope::Live }
+    );
+    assert_eq!(
+        Work_Command_From_String_Arguments(&Arguments("list --all"))
+            .expect("`list --all` takes no argument that can be wrong"),
+        WorkCommand::List { state: None, scope: ListingScope::Whole }
+    );
+}
+
+/// `--all` and `--state` are read independently, because they bound different things: one
+/// says how much of the board, the other which bucket out of it.
+#[test]
+fn Test_List_Should_Read_The_State_Filter_And_The_Scope_Independently()
+{
+    assert_eq!(
+        Work_Command_From_String_Arguments(&Arguments("list --state done"))
+            .expect("`list --state done` takes no argument that can be wrong"),
+        WorkCommand::List { state: Some("done".to_owned()), scope: ListingScope::Live }
+    );
+    assert_eq!(
+        Work_Command_From_String_Arguments(&Arguments("list --state done --all"))
+            .expect("`list --state done --all` takes no argument that can be wrong"),
+        WorkCommand::List { state: Some("done".to_owned()), scope: ListingScope::Whole }
     );
 }

@@ -7,17 +7,25 @@
 
 use nomos_ledger::{ItemId, LedgerItem, Territory};
 
-use crate::{ClaimRequest, EndingRequest};
+use crate::{ClaimRequest, EndingRequest, ListingScope};
 
 /// What to do.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum WorkCommand
 {
-    /// Show items, optionally filtered by state.
+    /// Show items, bounded by how much of the board to draw from and optionally filtered
+    /// by state.
     List
     {
         /// Only items in this state.
         state: Option<String>,
+        /// How much of the board the rows are drawn from when no state was named.
+        ///
+        /// It governs the unfiltered listing and only that one. A `state` is itself a bound,
+        /// and the one the caller actually asked for: `--state done` wants terminal rows, so
+        /// a scope applied on top of it would answer a question with none of the rows it
+        /// named. `OD-LEDGER-041`.
+        scope: ListingScope,
     },
     /// Report one item, including what has happened to it.
     Show

@@ -5,7 +5,11 @@
 //! nothing in this file decides anything, it only says.
 
 /// Every verb and what it takes.
-pub(super) const VERBS: &str = "\x20 list     [--state ready|waiting|held|lapsed|snagged|stranded|claimed|blocked|done|declined]\n\
+pub(super) const VERBS: &str = "\x20 list     [--state ready|waiting|held|lapsed|snagged|stranded|claimed|blocked|done|declined] [--all]\n\
+     \x20          the live board by default: every item that has not ended. `--all` prints \
+     the whole board, the finished and the declined with it, and a bounded listing says at \
+     its foot how many rows that would add. `--state` names one bucket and answers with it \
+     whether or not that bucket has ended. `OD-LEDGER-041`.\n\
      \x20          `ready` means claimable now. An item nothing can claim is reported as \
      `waiting` (a dependency is unfinished), `held` (somebody holds overlapping territory), \
      `lapsed` (its holder's lease ran out, so `takeover` applies), `snagged` (independence \

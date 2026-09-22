@@ -9,7 +9,7 @@ use nomos_ledger::{
 
 use crate::arguments::{Named_Value_From_String_Arguments, Named_Values_From_String_Arguments};
 
-use super::{ClaimRequest, EndingRequest, WorkCommand};
+use super::{ClaimRequest, EndingRequest, ListingScope, WorkCommand};
 
 mod usage;
 
@@ -84,8 +84,38 @@ fn Parse_List(named: &[String]) -> WorkCommand
 {
     return WorkCommand::List {
         state: Named_Value_From_String_Arguments(named, "--state"),
+        scope: Listing_Scope(named),
     };
 }
+
+/// How much of the board `list` was asked for: the live board, unless [`ALL`] says otherwise.
+///
+/// `OD-LEDGER-041` decided both halves. The whole board stays in the file, because the claim
+/// check reads a dependency's terminal state in order to answer its dependent; the default
+/// *listing* answers with what a session can still act on, because 98.7 per cent of the rows
+/// it printed were items nobody could take and the operating contract sends every session to
+/// it before anything else.
+///
+/// A bare flag rather than another `--state` value. `--state` names one of the words a row can
+/// carry, and "all" is not one of them: admitting it would make `--state all` a sibling of
+/// `--state done` and leave the usage text promising a state no item is ever in.
+///
+/// Read here rather than through [`crate::arguments`]. Every helper there answers about a flag
+/// that takes a value, and this is the only flag in the group that takes none -- a shared
+/// predicate with one caller is a second place for the same answer to live before it is a
+/// saving.
+fn Listing_Scope(named: &[String]) -> ListingScope
+{
+    if named.iter().any(|argument| return argument == ALL)
+    {
+        return ListingScope::Whole;
+    }
+
+    return ListingScope::Live;
+}
+
+/// The flag that asks `list` for every row, the ones that have ended included.
+const ALL: &str = "--all";
 
 fn Parse_Show(named: &[String]) -> Result<WorkCommand, String>
 {

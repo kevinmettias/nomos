@@ -3,33 +3,84 @@
 use nomos_ledger::{Claim_Refusal, ClaimRefusal, ItemState, LedgerDocument, LedgerItem, VerificationRecord};
 use nomos_platform::Timestamp;
 
-/// The label this item lists under, or nothing when the filter excludes it.
+use super::ListingScope;
+
+/// What a listing prints of the board it was handed.
+///
+/// One value rather than two parameters, because both answer the same question -- which rows
+/// -- from opposite ends, and a caller holding them apart would have to remember which one
+/// wins. Carried together, the precedence is stated once, in [`Listed_As`], and every caller
+/// gets it.
+#[derive(Clone, Copy)]
+pub(super) struct Bounds<'a>
+{
+    /// Only items whose label is this word, when a caller named one.
+    pub state: Option<&'a str>,
+    /// How much of the board to draw rows from when no word was named.
+    pub scope: ListingScope,
+}
+
+/// The label this item lists under, or nothing when `bounds` leaves it out.
+///
+/// The label is computed first, out of the whole `document`, whether or not the row survives.
+/// That ordering is the invariant this function carries: a bound decides which rows are
+/// printed and never what a printed row is called, so no item's word can change because some
+/// other item was withheld. `OD-LEDGER-023`.
+///
+/// A named `state` wins outright over `scope`. It is itself a bound, and the one the caller
+/// actually asked for -- `--state done` wants terminal rows, and narrowing it further by scope
+/// would answer that question with none of them.
 pub(super) fn Listed_As(
     document: &LedgerDocument,
     item: &LedgerItem,
-    state: Option<&str>,
+    bounds: Bounds<'_>,
     now: Timestamp,
 ) -> Option<&'static str>
 {
     let label = Listing_Label(document, item, now);
-    if state.is_some_and(|wanted| return !label.eq_ignore_ascii_case(wanted))
-    {
-        return None;
-    }
 
-    return Some(label);
+    return match bounds.state
+    {
+        Some(wanted) => label.eq_ignore_ascii_case(wanted).then_some(label),
+        None => Admitted_By(item, bounds.scope).then_some(label),
+    };
+}
+
+/// Whether `scope` admits `item` onto an unfiltered listing.
+///
+/// Terminality is read off the item's own state rather than off its label, and the two agree:
+/// `Claim_Refusal` answers `NotClaimable` for every `Done` and `Declined` item, so
+/// [`Listing_Label`] falls through to the state word for exactly these. The state is what this
+/// asks because it is what the bound means -- an item that has ended -- and
+/// `nomos_ledger::ItemState::Is_Finished` is where that is already decided, for `decline` and
+/// for the claim check both.
+fn Admitted_By(item: &LedgerItem, scope: ListingScope) -> bool
+{
+    return match scope
+    {
+        ListingScope::Whole => true,
+        ListingScope::Live => !item.state.Is_Finished(),
+    };
 }
 
 /// What to say when the listing printed nothing.
 ///
-/// An empty result and a filter that matched nothing look identical otherwise, and the
-/// user's next action differs.
-pub(super) fn Nothing_Listed(state: Option<&str>, output: &mut impl std::io::Write)
+/// Three cases rather than two, and the third is the one the bound added. An empty board, a
+/// filter that matched nothing, and a board whose every item has ended look identical
+/// otherwise, and the reader's next action differs in each: nothing to do, ask for another
+/// bucket, or ask for the whole board. The third names the flag, because a caller who has just
+/// been shown nothing is exactly the one who cannot tell a bounded answer from an empty one.
+pub(super) fn Nothing_Listed(bounds: Bounds<'_>, output: &mut impl std::io::Write)
 {
-    let _ = match state
+    let _ = match (bounds.state, bounds.scope)
     {
-        Some(wanted) => writeln!(output, "no items are {wanted}"),
-        None => writeln!(output, "the ledger has no items"),
+        (Some(wanted), _) => writeln!(output, "no items are {wanted}"),
+        (None, ListingScope::Live) => writeln!(
+            output,
+            "nothing on the board is live; `nomos work list --all` prints every item, \
+             including the ones that have ended"
+        ),
+        (None, ListingScope::Whole) => writeln!(output, "the ledger has no items"),
     };
 }
 
@@ -261,6 +312,7 @@ fn State_Label(state: &ItemState) -> &'static str
 mod tests
 {
     use super::*;
+    use super::super::ListingScope;
     use nomos_ledger::{ItemId, ItemKind, ItemOrigin, Territory};
 
     /// The moment a listing is read, one second after the item it names was declined. Named
@@ -300,6 +352,11 @@ mod tests
         );
     }
 
+    /// The bounds an unfiltered call carries under each scope, named so a case below reads as
+    /// the question it asks rather than as a struct literal.
+    const LIVE: Bounds<'static> = Bounds { state: None, scope: ListingScope::Live };
+    const WHOLE: Bounds<'static> = Bounds { state: None, scope: ListingScope::Whole };
+
     #[test]
     fn Test_Listed_As_Should_Report_The_Items_Label_When_No_Filter_Is_Given()
     {
@@ -307,7 +364,7 @@ mod tests
         let item = document.items.first().expect("the fixture has an item");
 
         assert_eq!(
-            Listed_As(&document, item, None, Timestamp::From_Unix_Seconds(0)),
+            Listed_As(&document, item, WHOLE, Timestamp::From_Unix_Seconds(0)),
             Some("ready")
         );
     }
@@ -319,9 +376,59 @@ mod tests
         let item = document.items.first().expect("the fixture has an item");
 
         assert_eq!(
-            Listed_As(&document, item, Some("claimed"), Timestamp::From_Unix_Seconds(0)),
+            Listed_As(
+                &document,
+                item,
+                Bounds { state: Some("claimed"), scope: ListingScope::Whole },
+                Timestamp::From_Unix_Seconds(0)
+            ),
             None,
             "a ready item filtered by `--state claimed` must not be listed"
+        );
+    }
+
+    /// The default's bound, at the one function that applies it.
+    #[test]
+    fn Test_Listed_As_Should_Exclude_An_Item_That_Has_Ended_From_The_Live_Scope()
+    {
+        let mut ended = Item_For_Id("T-1");
+        ended.state = ItemState::Done;
+        let document = Board_With(ended);
+        let item = document.items.first().expect("the fixture has an item");
+
+        assert_eq!(
+            Listed_As(&document, item, LIVE, Timestamp::From_Unix_Seconds(0)),
+            None,
+            "a Done item is not on the live board"
+        );
+        assert_eq!(
+            Listed_As(&document, item, WHOLE, Timestamp::From_Unix_Seconds(0)),
+            Some("done"),
+            "and the whole board is the scope that reaches it, or the bound is a hole"
+        );
+    }
+
+    /// A named state answers with its own rows, whatever the scope beside it says.
+    ///
+    /// Without this, the default bound would quietly make `--state done` and `--state declined`
+    /// answer nothing -- two of the ten words the usage text promises a row can carry.
+    #[test]
+    fn Test_Listed_As_Should_Answer_A_Terminal_Filter_Under_The_Live_Scope()
+    {
+        let mut ended = Item_For_Id("T-1");
+        ended.state = ItemState::Done;
+        let document = Board_With(ended);
+        let item = document.items.first().expect("the fixture has an item");
+
+        assert_eq!(
+            Listed_As(
+                &document,
+                item,
+                Bounds { state: Some("done"), scope: ListingScope::Live },
+                Timestamp::From_Unix_Seconds(0)
+            ),
+            Some("done"),
+            "`--state done` asks for terminal rows and must not be narrowed by the default scope"
         );
     }
 
@@ -330,19 +437,34 @@ mod tests
     {
         let mut output = Vec::new();
 
-        Nothing_Listed(Some("blocked"), &mut output);
+        Nothing_Listed(Bounds { state: Some("blocked"), scope: ListingScope::Live }, &mut output);
 
         assert_eq!(String::from_utf8(output).unwrap(), "no items are blocked\n");
     }
 
     #[test]
-    fn Test_Nothing_Listed_Should_Say_The_Ledger_Is_Empty_When_No_Filter_Was_Given()
+    fn Test_Nothing_Listed_Should_Say_The_Ledger_Is_Empty_When_The_Whole_Board_Was_Asked_For()
     {
         let mut output = Vec::new();
 
-        Nothing_Listed(None, &mut output);
+        Nothing_Listed(WHOLE, &mut output);
 
         assert_eq!(String::from_utf8(output).unwrap(), "the ledger has no items\n");
+    }
+
+    /// An empty live board is not an empty ledger, and saying so would send a reader away from
+    /// work that is on the board behind a flag nothing had told them about.
+    #[test]
+    fn Test_Nothing_Listed_Should_Name_The_Flag_When_The_Live_Board_Is_Empty()
+    {
+        let mut output = Vec::new();
+
+        Nothing_Listed(LIVE, &mut output);
+
+        let said = String::from_utf8(output).expect("Nothing_Listed writes only str into the buffer");
+        assert!(said.contains("live"), "{said}");
+        assert!(said.contains("--all"), "{said}");
+        assert!(!said.contains("the ledger has no items"), "{said}");
     }
 
     #[test]

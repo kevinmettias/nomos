@@ -1,12 +1,15 @@
+pub enum nomos_work_orchestration::ListingScope
 pub enum nomos_work_orchestration::WorkCommand
 pub enum nomos_work_orchestration::WorkOutcome
+pub enum variant nomos_work_orchestration::ListingScope::Live
+pub enum variant nomos_work_orchestration::ListingScope::Whole
 pub enum variant nomos_work_orchestration::WorkCommand::Abandon(EndingRequest)
 pub enum variant nomos_work_orchestration::WorkCommand::Add { item: Box<LedgerItem>, amending: Territory, }
 pub enum variant nomos_work_orchestration::WorkCommand::Audit
 pub enum variant nomos_work_orchestration::WorkCommand::Claim(ClaimRequest)
 pub enum variant nomos_work_orchestration::WorkCommand::Decline(EndingRequest)
 pub enum variant nomos_work_orchestration::WorkCommand::Finish { item: ItemId, holder: String, }
-pub enum variant nomos_work_orchestration::WorkCommand::List { state: Option<String>, }
+pub enum variant nomos_work_orchestration::WorkCommand::List { state: Option<String>, scope: ListingScope, }
 pub enum variant nomos_work_orchestration::WorkCommand::Renew(ClaimRequest)
 pub enum variant nomos_work_orchestration::WorkCommand::Show { item: ItemId, }
 pub enum variant nomos_work_orchestration::WorkCommand::TakeOver(ClaimRequest)

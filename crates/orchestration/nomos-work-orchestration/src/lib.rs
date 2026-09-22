@@ -32,6 +32,7 @@
 #![forbid(unsafe_code)]
 
 mod claim_request;
+mod listing_scope;
 mod work_command;
 mod ending_request;
 mod board_view;
@@ -41,6 +42,7 @@ mod run;
 mod tests;
 
 pub use claim_request::ClaimRequest;
+pub use listing_scope::ListingScope;
 pub use work_command::WorkCommand;
 pub use ending_request::EndingRequest;
 pub use board_view::{BoardView, ShowView, WorkOutcome};

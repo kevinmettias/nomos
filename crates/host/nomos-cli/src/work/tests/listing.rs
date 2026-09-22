@@ -1,6 +1,8 @@
 //! What `nomos work list` and `show` print, held against the board they print it from.
 
-use super::super::{ItemId, LedgerDocument, LedgerItem, Listing_Label, Territory};
+use super::super::{
+    Bounds, ItemId, LedgerDocument, LedgerItem, ListingScope, Listing_Label, Print_Board, Territory,
+};
 use super::{Alternatives_After, FlagAlternatives, Sorted_Words};
 use super::super::parse::Usage_Text;
 use nomos_ledger::{ItemKind, ItemOrigin, ItemState};
@@ -222,5 +224,178 @@ fn Test_The_Listed_States_Should_Be_Every_Word_The_Listing_Can_Print()
         Sorted_Words(listed.into_iter()),
         Sorted_Words(observed.iter().map(|word| return (*word).to_owned())),
         "the usage text and the listing disagree about what an item can be called"
+    );
+}
+
+/// The board every bound below is drawn from: two items that have ended, and two live ones
+/// that each depend on one of them.
+///
+/// The dependencies are the point rather than scenery. `T-2` reads `ready` only because `T-1`
+/// is on the board and `Done`, and `T-4` reads `stranded` only because `T-3` is on the board
+/// and `Declined` -- so a bound that removed the ended items *from the document* instead of
+/// from the output would change what the two surviving rows are called. That is the mutation
+/// [`Test_The_Default_Listing_Should_Label_And_Choose_Next_Over_The_Whole_Board`] performs.
+fn A_Board_Half_Ended() -> LedgerDocument
+{
+    return LedgerDocument {
+        schema_version: nomos_ledger::SCHEMA_VERSION,
+        items: vec![
+            Done("T-1"),
+            Waiting("T-2", ItemId::New("T-1")),
+            Declined("T-3"),
+            Waiting("T-4", ItemId::New("T-3")),
+        ],
+    };
+}
+
+/// The same board with every ended item taken out of the document rather than out of the
+/// output: the naive fix this change must not be, built here so a test can run it.
+fn Pruned(document: &LedgerDocument) -> LedgerDocument
+{
+    return LedgerDocument {
+        schema_version: document.schema_version,
+        items: document
+            .items
+            .iter()
+            .filter(|item| return !item.state.Is_Finished())
+            .cloned()
+            .collect(),
+    };
+}
+
+/// What `nomos work list` prints for `document` under `bounds`.
+fn Printed(document: &LedgerDocument, bounds: Bounds<'_>) -> String
+{
+    let mut output = Vec::new();
+
+    Print_Board(document, bounds, Timestamp::From_Unix_Seconds(LISTING_NOW), &mut output);
+
+    return String::from_utf8(output).expect("Print_Board writes only str into the buffer");
+}
+
+/// The word printed in `item`'s claimability column, or nothing when no row named it.
+///
+/// `None` and a row with no label are different failures and this keeps them apart: the rows
+/// are `<id> <label> ...`, so a row that named the item at all yields its second word.
+fn Label_In<'a>(printed: &'a str, item: &str) -> Option<&'a str>
+{
+    return printed
+        .lines()
+        .find(|line| return line.starts_with(item))
+        .and_then(|line| return line.split_whitespace().nth(1));
+}
+
+/// The default answers with the live board, which is the whole of what `OD-LEDGER-041` asked
+/// for: 1,464 of the 1,486 rows it measured were items nobody could act on, printed by the
+/// command `AGENTS.md` step 2 sends every session to first.
+#[test]
+fn Test_The_Default_Listing_Should_Print_Only_The_Items_That_Have_Not_Ended()
+{
+    let printed = Printed(&A_Board_Half_Ended(), Bounds { state: None, scope: ListingScope::Live });
+
+    assert_eq!(Label_In(&printed, "T-2"), Some("ready"), "{printed}");
+    assert_eq!(Label_In(&printed, "T-4"), Some("stranded"), "{printed}");
+    assert_eq!(Label_In(&printed, "T-1"), None, "a Done item is not on the live board:\n{printed}");
+    assert_eq!(
+        Label_In(&printed, "T-3"),
+        None,
+        "a Declined item is not on the live board:\n{printed}"
+    );
+}
+
+/// The control the bound is only honest with: every row is still reachable, by a spelling a
+/// reader can find. A bound with no way past it would be the archive `OD-LEDGER-041` refused,
+/// arrived at through the renderer instead of through the file.
+#[test]
+fn Test_The_Whole_Board_Should_Stay_Reachable_By_The_Scope_That_Asks_For_It()
+{
+    let printed = Printed(&A_Board_Half_Ended(), Bounds { state: None, scope: ListingScope::Whole });
+
+    assert_eq!(Label_In(&printed, "T-1"), Some("done"), "{printed}");
+    assert_eq!(Label_In(&printed, "T-3"), Some("declined"), "{printed}");
+    assert_eq!(Label_In(&printed, "T-2"), Some("ready"), "{printed}");
+    assert_eq!(Label_In(&printed, "T-4"), Some("stranded"), "{printed}");
+}
+
+/// Every label and the `next:` line are computed over the whole document, and the bound
+/// governs only which rows are printed. `OD-LEDGER-023`.
+///
+/// The second half is the mutation, performed rather than described: the same rendering over a
+/// document the ended items were pruned from. `T-2` stops being `ready` and `T-4` stops being
+/// `stranded` -- both become `waiting`, because a dependency that is not on the board at all is
+/// reported as unmet -- and the `next:` line stops naming anything. So the four assertions
+/// above it would fail on the naive fix, and pass here only because the document reaching the
+/// listing is still whole.
+#[test]
+fn Test_The_Default_Listing_Should_Label_And_Choose_Next_Over_The_Whole_Board()
+{
+    let whole = A_Board_Half_Ended();
+    let bounds = Bounds { state: None, scope: ListingScope::Live };
+
+    let printed = Printed(&whole, bounds);
+
+    assert_eq!(Label_In(&printed, "T-2"), Some("ready"), "{printed}");
+    assert_eq!(Label_In(&printed, "T-4"), Some("stranded"), "{printed}");
+    assert!(printed.contains("next: T-2 "), "{printed}");
+
+    let pruned = Printed(&Pruned(&whole), bounds);
+
+    assert_eq!(
+        Label_In(&pruned, "T-2"),
+        Some("waiting"),
+        "pruning the document must change this row, or the assertion above it proves nothing:\n{pruned}"
+    );
+    assert_eq!(
+        Label_In(&pruned, "T-4"),
+        Some("waiting"),
+        "a declined dependency that is no longer on the board reads as merely unfinished, \
+         which is the OD-LEDGER-020 distinction the bound must not cost:\n{pruned}"
+    );
+    assert!(
+        pruned.contains("next: nothing is eligible"),
+        "pruning the document must empty the eligible set, or the `next:` assertion above \
+         proves nothing:\n{pruned}"
+    );
+}
+
+/// The bounded listing says what it withheld and how to see it.
+///
+/// A spelling nobody can discover is not a bound but a hole, and this is the channel a reader
+/// meets without having gone looking: it is printed by the command they already ran.
+#[test]
+fn Test_A_Bounded_Listing_Should_Report_How_Many_Rows_It_Withheld_And_The_Flag_That_Prints_Them()
+{
+    let printed = Printed(&A_Board_Half_Ended(), Bounds { state: None, scope: ListingScope::Live });
+
+    assert!(printed.contains("2 ended items not shown"), "{printed}");
+    assert!(printed.contains("--all"), "{printed}");
+}
+
+/// A listing that withheld nothing must not say it did, or the count stops being read.
+#[test]
+fn Test_An_Unbounded_Listing_Should_Not_Report_Withholding_Anything()
+{
+    let printed = Printed(&A_Board_Half_Ended(), Bounds { state: None, scope: ListingScope::Whole });
+
+    assert!(!printed.contains("not shown"), "{printed}");
+}
+
+/// A `--state` naming a bucket that has ended answers with it, default scope or not.
+///
+/// Two of the ten words the usage text promises name terminal rows. A bound that swallowed
+/// them would leave the help text describing filters that answer nothing.
+#[test]
+fn Test_A_Terminal_State_Filter_Should_Answer_Without_Asking_For_The_Whole_Board()
+{
+    let printed = Printed(
+        &A_Board_Half_Ended(),
+        Bounds { state: Some("declined"), scope: ListingScope::Live },
+    );
+
+    assert_eq!(Label_In(&printed, "T-3"), Some("declined"), "{printed}");
+    assert_eq!(Label_In(&printed, "T-2"), None, "a filter still excludes what it excluded:\n{printed}");
+    assert!(
+        !printed.contains("next:"),
+        "a filtered listing carries no `next:` line, which this bound does not change:\n{printed}"
     );
 }

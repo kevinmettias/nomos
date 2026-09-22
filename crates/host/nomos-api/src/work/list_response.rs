@@ -2,7 +2,7 @@
 
 use nomos_ledger::LedgerDocument;
 use nomos_platform::Timestamp;
-use nomos_work_orchestration::WorkCommand;
+use nomos_work_orchestration::{ListingScope, WorkCommand};
 use serde::Serialize;
 use std::path::Path;
 
@@ -19,7 +19,13 @@ use std::path::Path;
 #[must_use]
 pub fn Handle_Work_List(directory: &Path) -> ListResponse
 {
-    let outcome = super::Run_Empty_Territory_Command(directory, WorkCommand::List { state: None });
+    // `ListingScope::Whole`, because this response carries the document rather than rendered
+    // rows: the scope bounds what a *listing* prints, and a caller handed the whole board as
+    // JSON would be told a different thing by a value saying it had been narrowed.
+    let outcome = super::Run_Empty_Territory_Command(
+        directory,
+        WorkCommand::List { state: None, scope: ListingScope::Whole },
+    );
 
     let nomos_work_orchestration::WorkOutcome::List(listed) = outcome
     else
