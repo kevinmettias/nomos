@@ -91370,14 +91370,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-offers",
-        "acquired_at": 1790054384,
-        "lease_expires_at": 1790065184
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -91388,7 +91384,28 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "rs:45:17\n   |\n45 | use std::path::{Path, PathBuf};\n   |                 ^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-contract-tests` (test \"boundaries\") generated 1 warning (run `cargo fix --test \"boundaries\"` to apply 1 suggestion)\nwarning: `nomos-contract-tests` (test \"crossing_cold\") generated 1 warning (run `cargo fix --test \"crossing_cold\"` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.98s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-b2a13c7253f27233.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2998351f6db6b012.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-92a4ff356d3672d1.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-2eab8f58748e8fc9.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-5fc6c569730113d9.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-955891bd276589df.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ab84f3ce148d471e.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-ee154dd7301c3097.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-4b043d90270bbc14.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-e8b29a92e90bbab6.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-42eca897f526cc97.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-7b8fe6b7065225f2.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-f864f3dc950c0221.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-93c7b39b1bbd5318.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-496d4d6605ab0a03.exe)\n   Doc-tests nomos_contract_tests\n",
+        "verified_at": 1790055115,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7e1f1e0c26dc13764d369ad4e95b9c6122d33651"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -91562,6 +91579,75 @@
           "nomos-spec-store"
         ],
         "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P126-THE-BOARD-LISTING-DEFAULTS-TO-THE-LIVE-BOARD",
+      "title": "The board listing defaults to the live board, with the whole history behind a flag",
+      "why": "OD-LEDGER-041 refused an append-only archive of terminal items on three grounds -- an archived item is indistinguishable from one that never existed to the claim check, two files make validity depend on which one was read, and the clone saving does not exist -- and named the increment that is owed instead: make the listing default to the live board and put the whole history behind a flag, with AGENTS.md step 2 reading whichever spelling survives. OD-ROADMAP-005 decision item 7 lists this piece as authorized and notes it supersedes nothing. Measured at 53de19a4 on 2026-09-21 against the real board: nomos work list with no filter printed 1522 lines and 245952 bytes, of which 1498 rows were items in a terminal state that nobody can act on, and AGENTS.md step 2 sends every session to exactly that command before it does anything else. The constraint the same record states is OD-LEDGER-023: Eligible_Items computes what to work on next by running Claim_Refusal over the whole board, and that refusal reads a dependency's terminal state in order to tell a dependent it is waiting rather than stranded -- so a fix that filtered the document before it reached the listing would silently corrupt the next line and the state labels while looking correct.",
+      "done_when": "1. nomos work list with no argument prints only items that have not reached a terminal state, so the row count on the real board falls from 1521 to the live coordination set. 2. The whole board stays reachable by a stated flag, --all, which is named in the printed usage text, in AGENTS.md step 2, and at the foot of every bounded listing beside the count of rows it withheld. 3. The next line and every state label are still computed over the whole document: Listing_Label and Eligible_Items both receive the unfiltered board, and a test renders the same bounded listing a second time over a document whose terminal items were pruned and asserts that the labels and the next line change, so the assertions that they do not would fail if the document were filtered instead of the output. 4. A --state naming a terminal bucket still answers with its rows without --all, so none of the words the usage text promises becomes a filter that answers nothing. 5. AGENTS.md step 2 names a flag the parser actually takes and the usage text also advertises, compared by a test rather than by eye, and AGENTS.md stays inside the line budget tests/contract/tests/agent_harness asserts. 6. The public surface snapshot for nomos-work-orchestration is blessed from the real surface rather than hand-written, and the declared predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "AGENTS.md",
+          "crates/host/nomos-api/src/work/list_response.rs",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/work/listing.rs",
+          "crates/host/nomos-cli/src/work/parse.rs",
+          "crates/host/nomos-cli/src/work/parse/usage.rs",
+          "crates/host/nomos-cli/src/work/tests/listing.rs",
+          "crates/host/nomos-cli/src/work/tests/parsing.rs",
+          "crates/host/nomos-cli/src/work/tests/vocabulary.rs",
+          "crates/host/nomos-cli/tests/work_orchestration_seam.rs",
+          "crates/orchestration/nomos-work-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-work-orchestration/src/listing_scope.rs",
+          "crates/orchestration/nomos-work-orchestration/src/run.rs",
+          "crates/orchestration/nomos-work-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-work-orchestration/src/work_command.rs",
+          "tests/contract/surface/nomos-work-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-listing-default",
+        "acquired_at": 1790055103,
+        "lease_expires_at": 1790065903
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--bins",
+          "--test",
+          "work_orchestration_seam",
+          "--test",
+          "list_tells_the_truth",
+          "--test",
+          "public_surface",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 1500
       },
       "verified": null,
       "abandoned": [],
