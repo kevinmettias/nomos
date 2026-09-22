@@ -54,15 +54,30 @@ pub(crate) enum Group
     Agent,
     Correct,
     Workflow,
+    Profile,
 }
 
 #[cfg(test)]
 impl Group
 {
     /// Every group, for a test to walk without hand-maintaining a second list.
-    pub(crate) const ALL: [Self; 8] =
-        [Self::Work, Self::Spec, Self::Check, Self::Request, Self::Gate, Self::Agent, Self::Correct, Self::Workflow];
+    pub(crate) const ALL: [Self; DECLARED_GROUP_COUNT] = [
+        Self::Work,
+        Self::Spec,
+        Self::Check,
+        Self::Request,
+        Self::Gate,
+        Self::Agent,
+        Self::Correct,
+        Self::Workflow,
+        Self::Profile,
+    ];
 }
+
+/// How many groups this binary dispatches to -- shared by [`Group::ALL`] and [`NAMES`], so
+/// the two cannot come to disagree about the size of the set while agreeing about its
+/// contents.
+const DECLARED_GROUP_COUNT: usize = 9;
 
 /// Every group's on-argv spelling, paired with the [`Group`] `Stance_Of` reads.
 ///
@@ -71,7 +86,7 @@ impl Group
 /// can route to it at all. That is what makes this module the entry point every group's
 /// dispatch actually passes through, and not merely a place a stance happens to be written
 /// down beside the code it describes.
-pub(crate) const NAMES: [(&str, Group); 8] = [
+pub(crate) const NAMES: [(&str, Group); DECLARED_GROUP_COUNT] = [
     ("work", Group::Work),
     ("spec", Group::Spec),
     ("check", Group::Check),
@@ -80,6 +95,7 @@ pub(crate) const NAMES: [(&str, Group); 8] = [
     ("agent", Group::Agent),
     ("correct", Group::Correct),
     ("workflow", Group::Workflow),
+    ("profile", Group::Profile),
 ];
 
 /// The group named on argv, if [`NAMES`] spells it.
@@ -155,6 +171,16 @@ pub(crate) fn Stance_Of(group: Group) -> Stance
         },
         Group::Workflow => Stance::Guarded {
             decided_in: "workflow::Workflow_Sources / nomos_check_orchestration::Run",
+        },
+        Group::Profile => Stance::NotApplicable {
+            because: "profile reports what a root holds rather than judging it; a directory \
+                      that is walked and turns out to hold nothing profiles as a tree with \
+                      nothing in it, which is a true answer and the one somebody adopting \
+                      this tool from an empty directory needs to read. A root that could not \
+                      be walked at all is a different answer already -- \
+                      nomos_workspace_discovery::ProfileRefusal, rendered as a non-zero code \
+                      -- so there is no clean-run claim here for an unexamined world to \
+                      masquerade as",
         },
     };
 }
@@ -293,6 +319,32 @@ mod tests
 
         assert_ne!(code.Value(), 0, "an empty tree must not report the same code as a clean run");
         assert_eq!(code, crate::gate::ExitCode::Vacuous);
+    }
+
+    /// `profile` is declared [`Stance::NotApplicable`], and unlike `work`'s and `request`'s
+    /// that declaration is checkable rather than only readable: this group *does* take a
+    /// caller-chosen root, and what makes it not-applicable is that an empty one is a true
+    /// answer rather than a vacuous one. So the claim is driven -- an empty directory must
+    /// report this group's own `Ok`, and must still render a profile, because "nothing is
+    /// here" is what somebody adopting this tool from an empty directory came to find out.
+    #[test]
+    fn Test_Profile_Should_Report_An_Empty_Root_Rather_Than_Refuse_It()
+    {
+        assert!(matches!(Stance_Of(Group::Profile), Stance::NotApplicable { .. }));
+
+        let empty = std::env::temp_dir().join("nomos-cli-vacuity-guard-empty-profile-tree");
+        let _ignored = std::fs::remove_dir_all(&empty);
+        std::fs::create_dir_all(&empty).expect("creates an empty directory");
+
+        let command = crate::profile::ProfileCommand { root: empty.clone(), write_gate_policy: false };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let code = crate::profile::Run(&command, &mut stdout, &mut stderr);
+
+        let _ignored = std::fs::remove_dir_all(&empty);
+
+        assert_eq!(code, crate::profile::ExitCode::Ok);
+        assert!(!stdout.is_empty(), "an empty root still has a profile to render");
     }
 
     /// `correct phantom-mirrors` walks a caller-chosen tree exactly as `check` and

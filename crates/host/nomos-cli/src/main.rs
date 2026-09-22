@@ -22,6 +22,7 @@ mod arguments;
 mod check;
 mod correct;
 mod gate;
+mod profile;
 mod request;
 mod spec;
 mod vacuity;
@@ -59,6 +60,7 @@ fn main() -> std::process::ExitCode
         Some((vacuity::Group::Agent, rest)) => Run_Agent_Group(rest),
         Some((vacuity::Group::Correct, rest)) => Run_Correct_Group(rest),
         Some((vacuity::Group::Workflow, rest)) => Run_Workflow_Group(rest),
+        Some((vacuity::Group::Profile, rest)) => Run_Profile_Group(rest),
         None => Usage(),
     };
 
@@ -188,6 +190,21 @@ fn Run_Workflow_Group(rest: &[String]) -> i32
     return workflow::Run(&command, &mut stdout, &mut stderr).Value();
 }
 
+/// The profile group: what a root holds before anything judges it, and what this host can
+/// answer for it.
+fn Run_Profile_Group(rest: &[String]) -> i32
+{
+    let mut stdout = std::io::stdout();
+    let mut stderr = std::io::stderr();
+    let Ok(command) = profile::Profile_Command_From_String_Arguments(rest).inspect_err(|message| eprintln!("{message}"))
+    else
+    {
+        return profile::ExitCode::Usage.Value();
+    };
+
+    return profile::Run(&command, &mut stdout, &mut stderr).Value();
+}
+
 /// What the binary answers when it was not told which group it is being asked for.
 fn Usage() -> i32
 {
@@ -200,7 +217,8 @@ fn Usage() -> i32
          gate     compose this gate's rule registry and report what it holds\n  \
          agent    dispatch a task to the first real AgentExecutor\n  \
          correct  build and commit a real correction for one real finding\n  \
-         workflow dispatch one step of an ordered WorkflowStep sequence"
+         workflow dispatch one step of an ordered WorkflowStep sequence\n  \
+         profile  report what a root holds and what this host can answer for it"
     );
 
     return work::ExitCode::Usage.Value();

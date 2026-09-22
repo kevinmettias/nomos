@@ -92529,12 +92529,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-review",
+        "acquired_at": 1790060946,
+        "lease_expires_at": 1790068146
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -93124,14 +93128,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p128-firstrun",
-        "acquired_at": 1790057681,
-        "lease_expires_at": 1790068481
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -93145,7 +93145,31 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "--bins",
+          "--test",
+          "check_orchestration_seam"
+        ],
+        "exit_code": 0,
+        "output_tail": " ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling nomos-cli v0.1.0 (F:\\repos\\nomos-p128-firstrun\\crates\\host\\nomos-cli)\nwarning: field `stderr` is never read\n  --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:33:9\n   |\n29 | pub struct Ran\n   |            --- field in this struct\n...\n33 |     pub stderr: String,\n   |         ^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: `nomos-cli` (test \"check_orchestration_seam\") generated 1 warning\nwarning: type `Requested_Dispatch` should have an upper camel case name\n   --> crates\\host\\nomos-cli\\src\\agent.rs:162:19\n    |\n162 | pub(super) struct Requested_Dispatch\n    |                   ^^^^^^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `RequestedDispatch`\n    |\n    = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-cli` (bin \"nomos\") generated 1 warning\nwarning: `nomos-cli` (bin \"nomos\" test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.28s\n     Running unittests src\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/firstrun/target\\debug\\deps\\nomos-ba11fd8f1932b33c.exe)\n     Running tests\\check_orchestration_seam.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/firstrun/target\\debug\\deps\\check_orchestration_seam-206852b2887ebbdb.exe)\n",
+        "verified_at": 1790060989,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "bba02515080771172949d95ada6eb560e7f87e36"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
