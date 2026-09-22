@@ -3,7 +3,7 @@ id: OD-HOST-011
 type: decision
 title: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - host
@@ -60,11 +60,17 @@ every public field's name and shape a compatibility surface, so a field rename i
 orchestration crate would become a wire break. The twin is what currently keeps those two
 questions separable.
 
-**One transport consumes the surface today, and it consumes a seventh of it.**
-`nomos-api-transport::ServedMethod` is a closed enum of four variants -- `GatePlan`,
-`GateRun`, `GateExplain`, `Correction` -- against `nomos-api`'s twenty-nine handlers. A shared
-contract layer's whole value is agreement among several consumers; there is one, and it does
-not use most of what exists.
+**One transport consumes the surface today, and it consumes a small part of it.**
+`nomos-api-transport::ServedMethod` is a closed enum whose members are exactly the operations
+`ServedMethod::REGISTRY` declares, and what decides membership is what a call causes on the
+host rather than a size written down here.
+`Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` and
+`Test_The_Registry_Assertion_Should_Have_Subjects_On_Both_Sides`, in
+`tests/contract/tests/boundaries/transport_registry.rs`, compare that registry against
+`nomos-api`'s own blessed surface in both directions, so the mechanical authority for the set
+is there and not in this sentence. Measured 2026-09-21: six served operations against
+`nomos-api`'s thirty exported handlers. A shared contract layer's whole value is agreement
+among several consumers; there is one, and it does not use most of what exists.
 
 ## The Decision
 
@@ -99,12 +105,28 @@ argues for exactly this test in the same document.
 
 ## What This Does Not Decide
 
-Whether `nomos-api` should hold twenty-nine handlers at all -- `OD-HOST-012` takes that up.
-Whether the transport's four-method surface should grow. Neither depends on this answer.
+Whether `nomos-api` should hold as many handlers as it does at all -- `OD-HOST-012` takes
+that up. Whether the transport's served surface should grow. Neither depends on this answer.
 
 ## Status
 
-Accepted. Measured against a one-transport, four-method reality; the review's five-layer chain
-was checked and two of its layers do not exist. Revisit on a second transport that would depend
-on a contracts crate without depending on `nomos-api`, or on the first twin that stops being a
-mechanical transcription.
+Accepted. Measured against a one-transport reality in which the transport serves a small part
+of `nomos-api`'s surface; the review's five-layer chain was checked and two of its layers do
+not exist. Revisit on a second transport that would depend on a contracts crate without
+depending on `nomos-api`, or on the first twin that stops being a mechanical transcription.
+
+## Amendment, Version 2: A Restated Registry Size Is A Second Authority, And `f0052c39` Made It False
+
+Version 1 called `ServedMethod` "a closed enum of four variants", listed them, and set them
+against "twenty-nine handlers". `f0052c39` admitted `nomos.check.run` under `OD-HOST-014`'s
+criterion, so `ServedMethod::REGISTRY` is six entries; `nomos-api` exports thirty handlers.
+Both numbers are incidental to this record's argument, which turns on there being *one*
+consumer of that surface and not on how much of it that consumer uses.
+
+The repair is not a newer number. A record restating a quantity a test already asserts has
+minted a second authority for it, and the second one is what goes stale, because nothing
+renders a record from the code. So the measurement now names the closed set and what decides
+membership in it, cites the checks that hold the registry against `nomos-api`'s blessed
+surface, and states its one remaining count as a dated measurement.
+
+Amended by `P123-FOUR-HOST-RECORDS-FROZE-A-REGISTRY-SIZE-INTO-PROSE-AND-A-SIXTH-OPERATION-MADE-THEM-FALSE`.

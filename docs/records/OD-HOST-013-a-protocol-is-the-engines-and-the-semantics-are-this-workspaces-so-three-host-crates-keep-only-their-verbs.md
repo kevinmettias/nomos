@@ -3,7 +3,7 @@ id: OD-HOST-013
 type: decision
 title: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - host
@@ -59,11 +59,15 @@ The three protocol implementations moved to XVPE on 2026-09-11, into four crates
 
 ## What each crate here kept
 
-- **`nomos-api-transport`** — `ServedMethod` (the four admitted verbs), the three parameter
-  types, and `NomosApiService`, which is the dispatch into `nomos_api::Handle_*`. It is an
+- **`nomos-api-transport`** — `ServedMethod` (the admitted verbs, which are exactly what
+  `ServedMethod::REGISTRY` declares), a parameter type per admitted operation, and
+  `NomosApiDispatch`, which is the dispatch into `nomos_api::Handle_*`. It is an
   `xvpe_remote_call::RemoteCallStrategy`.
-- **`nomos-mcp`** — `ServedTool`: which four tools exist, the sentence each publishes and the
-  JSON Schema each accepts. It is an `xvpe_remote_call::ToolCatalogStrategy`, and `src/main.rs`
+- **`nomos-mcp`** — `ServedTool`: which tools exist, which is `ServedMethod` projected rather
+  than a second list of its own --
+  `Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry` holds
+  the two equal by name and in order -- the sentence each publishes and the JSON Schema each
+  accepts. It is an `xvpe_remote_call::ToolCatalogStrategy`, and `src/main.rs`
   hands it to the engine's `Serve_Tools` over this process's own pipes.
 - **`nomos-lsp`** — the walk, the judgement, `Diagnostics_For`, `WalkOutward`, and
   `severity::Severity_Of`. That last one is the clearest case for the line this record draws:
@@ -127,3 +131,21 @@ quietly under-quantified.
   vocabulary, and sees generic implementations.
 - `tests/contract/tests/boundaries/mcp_registry.rs` still holds: `nomos-mcp` depends on
   `nomos-api-transport` and no other workspace member.
+
+## Amendment, Version 2: Two Kept-Surface Entries Named A Size And A Type That Are Both Wrong
+
+Version 1's account of what each crate kept said `ServedMethod` is "the four admitted verbs"
+and `ServedTool` is "which four tools exist", and named the transport's dispatch
+`NomosApiService`. The dispatch is `NomosApiDispatch` and always was, so that half was wrong
+when written. The two counts were right when written and were made false by `f0052c39`, which
+admitted `nomos.check.run` and took both registries to six.
+
+The division this section draws is untouched: the transport keeps the verbs and the dispatch,
+`nomos-mcp` keeps the catalogue, `nomos-lsp` keeps the judgement. What is removed is the size,
+which this record never needed and which no test renders back into it. The entries now name the
+registry that declares the set, and cite
+`Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry` as the
+mechanical authority for the second registry being a projection of the first rather than a copy
+that can drift from it.
+
+Amended by `P123-FOUR-HOST-RECORDS-FROZE-A-REGISTRY-SIZE-INTO-PROSE-AND-A-SIXTH-OPERATION-MADE-THEM-FALSE`.
