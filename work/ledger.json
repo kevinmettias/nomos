@@ -88214,10 +88214,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-review",
+        "acquired_at": 1790049045,
+        "lease_expires_at": 1790059845
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -89016,6 +89020,90 @@
           "nomos-spec-store"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P121-A-TEST-CONSTANT-CLAIMS-A-DISTINCTION-NOTHING-ASSERTS",
+      "title": "A lint test constant claims two diagnostics are distinguishable and nothing asserts the distinction",
+      "why": "SECOND_DIAGNOSTIC_LINE in crates/rules/nomos-rules/src/checks/lint.rs declares in its own doc that the second member's diagnostic is filed lower in its file than the first's so the two are distinguishable if the relay ever mixed them up. Test_Multiple_Diagnostics_On_One_Member_Should_Each_Become_A_Finding asserts only findings.len(), so a relay that produced two findings from the same diagnostic, or swapped their files and lines, passes. The constant makes a claim the suite does not check, which is the unenforced-declaration class this workspace has closed four times and P12-UNENFORCED-DECLARATION names. It was invisible until P121-A-LINT-FINDING-DROPS-THE-LINE-IT-READ made a finding's location carry its line at 9bae4312: before that commit the location was the file alone and the line could not have been asserted from a finding at all, so the constant had no way to be load-bearing. The two diagnostics in Two_Member_Diagnostics differ in both file and line, so both halves of the distinction are assertable now and neither is asserted.",
+      "done_when": "Test_Multiple_Diagnostics_On_One_Member_Should_Each_Become_A_Finding asserts each of the two findings' locations, not only how many there are, so that a relay swapping the two diagnostics or producing two findings from one of them fails the test. SECOND_DIAGNOSTIC_LINE is read by that assertion and is therefore load-bearing for the claim its doc makes; the first diagnostic's line in Two_Member_Diagnostics is named by a constant of the same shape rather than left a bare literal, so the assertion spells no magic number and the two fixture rows are symmetric. The distinction is proved rather than asserted on trust: the test is run once with the two diagnostics' lines deliberately swapped in the fixture and observed to fail, and the fixture is then restored byte-identically, with the observed failure text quoted in the commit message. No production code changes -- Finding_For_Diagnostic, Summary_Of and Findings_Of are untouched -- and no other test changes. cargo test --no-fail-fast -p nomos-rules passes and cargo clippy -p nomos-rules --all-targets is clean.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/lint.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75",
+        "acquired_at": 1790049070,
+        "lease_expires_at": 1790056270
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-A-SARIF-LOG-IS-UNREACHABLE-FROM-A-COMMAND-LINE",
+      "title": "A gate or check run emits its SARIF log from a command line, so the export reaches the pipeline it was built for",
+      "why": "P123-SARIF-PROJECTION-OF-A-GATE-RUN landed at 0c05967a and built the projection: nomos_api::SarifLog::Of_Gate_Run(&response) and Of_Check_Run(&root, &response) produce a SARIF 2.1.0 log, deterministic, with suppressed, baselined and calibrated findings kept and marked rather than dropped, and a no-verdict run reported as executionSuccessful false. That item's own done_when forbade it to add a flag, so nothing calls either function outside the crate's tests. The projection deliberately does not serialize, so a host spends its own serde_json on it, which nomos-cli already depends on. This is the same shape OD-GATE-033 complained about one tier up, a canonical function no command line reaches, and it is what keeps a gate run out of GitHub code scanning, Azure DevOps and every other consumer that ingests SARIF. An external review of bc0aaacf named the missing export family; the projection half is closed and this is the half that makes it usable.",
+      "done_when": "nomos gate run and nomos check accept a flag that writes a SARIF 2.1.0 log, spelled once and the same way for both verbs, to a path the caller names or to standard output when it names none, by calling nomos_api::SarifLog rather than by any second rendering of a finding; the human-readable report is unchanged when the flag is absent, and the flag changes no exit code, because a gate's disposition is its judgment and not a property of how it was printed; an unwritable path is refused with the path named and the run's own exit code preserved; the emitted document is the projection's own bytes, proven by a test that runs the verb over a temporary tree and parses the result rather than asserting on a fragment; the flag appears in the verb's usage text and in README.md's own account of the verb if that file describes it; no new dependency is added to any Cargo.toml; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/check",
+          "crates/host/nomos-cli/src/gate",
+          "crates/host/nomos-cli/src/check.rs",
+          "crates/host/nomos-cli/src/gate.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p123-sarifcli",
+        "acquired_at": 1790049188,
+        "lease_expires_at": 1790059988
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "gate_orchestration_seam",
+          "--test",
+          "check_orchestration_seam",
+          "--bins"
+        ],
+        "timeout_seconds": 2700
       },
       "verified": null,
       "abandoned": [],

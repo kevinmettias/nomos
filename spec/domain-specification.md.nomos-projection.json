@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:a0272d672d128a69bc5b4e9a808ea79c129e7b0fdfe07c34b6f1ce444741de87",
-  "inputs_digest": "sha256:ace0e8b639624abfd9bab91f91f454f54d9cd0d172fb65c444d2d9800442a0ee",
+  "content_digest": "sha256:4a108594a98039ae8e3fa4bf95ce5fbcf08ea9830997f7e5a157f1bd198d788b",
+  "inputs_digest": "sha256:9d4105e186e87e1d657b9f69af37c93030a65b5e1d6042c66417815a3faa789e",
   "sections": [
     [
       "Documents",
-      259
+      260
     ],
     [
       "Sections",
-      2217
+      2234
     ],
     [
       "Source blocks",
-      7897
+      7955
     ]
   ],
   "inputs": [
@@ -954,6 +954,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored",
       "hash": "sha256:54dd8e341f63882f74fca31d11cc939e8bfec1033fe8ba3e6fcbf6a156689166"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md@authored",
+      "hash": "sha256:f30a6e902a1b22b97164c42910babfbc29d345ff54a05445ad3ed64b47b75420"
     },
     {
       "content": "documents",
@@ -9189,6 +9194,91 @@
       "content": "headings",
       "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#30",
       "hash": "sha256:241581a64804b9f17ff7f7ab33c3560090939cf94afad7ec49727b3e2415e0a6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#1",
+      "hash": "sha256:95be264dbbe7e308518a7824941b63fdadd4ae968f2a8f88650764003ad12632"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#2",
+      "hash": "sha256:df280d7edb38f1f0330a1c1ed94d974e0ef13de6b64d3af89315122b1cac99a4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#6",
+      "hash": "sha256:e9a46d766510393f8753df185dfb0ca32b6e1c97a4367f166c7ddf4fabb8d638"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#7",
+      "hash": "sha256:999ac9afca547355fb32c8ce44b3e2f8cd17d7a134313744f26ea1ffa45c09f8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#12",
+      "hash": "sha256:27e593fe5b30e05e8f890a8de820942029dec5afe2d92cd0d3710f88308bc60c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#19",
+      "hash": "sha256:f89a90765336f65a4c011344f8f99d5e883db27b2bf2ca59415a53e64738bd2a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#23",
+      "hash": "sha256:6073cc49fd31f2c364cbfc7dda489ca0edad6346841421e9974e14bce4c82d1a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#27",
+      "hash": "sha256:0f6067e237e5727ed1eece742efd0e6db6d535b23375e435302151880b2e6958"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#28",
+      "hash": "sha256:1065776bc05b9370b9971bc1866711f398fd57a2f36b3c9201bf7f99b3fd0ef5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#32",
+      "hash": "sha256:0a24900fd1729351a45850d424de6abfcfc96304eb3445efc8215534fcd0659f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#34",
+      "hash": "sha256:363d4d67a4b282d8f26f6349e14f6685e30b74d11b63596b27caafa7a0f9770d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#40",
+      "hash": "sha256:0c5a85eb45d9a4e180aa34c2ea14c9e9b28bca0c12ebd56553cfa6c5e4d4a91f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#44",
+      "hash": "sha256:c8d90cf20f8e4f5b5724ba72a72ab27b93afc6d1bf9b833e44b975d565c2b6ef"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#49",
+      "hash": "sha256:f50480e57d8dd13277957ef4aa597ff11507fb317982cf72f6e609d2fa407f97"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#53",
+      "hash": "sha256:c5e6c3701e41de53759778dca61ea9fa7087c11dbdf390fdc85bcd4fd999c031"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#55",
+      "hash": "sha256:5bdfc70c72b763c60ed55b79ec8be5c047ada53637d6d838deb6044e09a3ab1f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#57",
+      "hash": "sha256:03d430f6b10eb815e38cab8fc32b1745486c13ec17289ce5d9ac8d923a3e43db"
     },
     {
       "content": "headings",
@@ -40664,6 +40754,296 @@
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#40",
       "hash": "sha256:400a20bb52cb9de5fa6e312b4b7633fce93182593c52b9dc5bc6b25821fd7762"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#1",
+      "hash": "sha256:ee5a7d24b03bed8f93a0b9518892cc483ef0cb0d45dfb429d4f8bebb5069e026"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#3",
+      "hash": "sha256:76fe2285ec9d68ae4d14be4fe3f43bcd6548097b41ef9f2d1c27fae24dc81db9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#4",
+      "hash": "sha256:4928fdd37370512ad2ff8e4a36cdd33902000fb5d2c9af7a229877140d0d20f0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#5",
+      "hash": "sha256:09265078699d3408d053d122b64a38684e5d35b45d5ab881e4508c1497957469"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#7",
+      "hash": "sha256:058fab354ee10acfa7aec620e0b8a6e0bd3926fbc530d15db35e63bea990f0af"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#8",
+      "hash": "sha256:245b789df5613a66cf3e58c71fa57b212d11e4d661c359cf3e1ffa5b9f81dc89"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#9",
+      "hash": "sha256:513906d44d77eacb261105f1ba566a5760530617b62da436ea63324e5d22c3a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#10",
+      "hash": "sha256:7a610aa9437652d7f5e062e2779acbfdb3001c24f0740c5ed2bf45b7ba273c9e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#11",
+      "hash": "sha256:bc32673f4c3c48eb0316bd6c4b24765dff72a03486a18e38a97621c0de359fa2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#12",
+      "hash": "sha256:8ce3b963983fcc4d2346de8a1970eccf10ed8bab0aa87fd22e05d8d4e87b3902"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#13",
+      "hash": "sha256:b82db63a864ddad494d8e88d27ae47c4b4ff9a381a11aa158ab31f0d1d711515"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#14",
+      "hash": "sha256:27ca0a4cfd3c26a5afe94dfa261bc65d7e2f5052bab79f2ec2a78ec26400a7b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#15",
+      "hash": "sha256:b86479ab49de3c7379fda2f54d750230a46af534a3f3d04beef8e64142211566"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#16",
+      "hash": "sha256:7b0bf271505b3c4a90a395595d0377a172bca22fbc9a8f19aae1215d1f46edd5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#17",
+      "hash": "sha256:78e24fefdfe6b0460c5b05a5e362817f0a1d3e4bd571e51a72b3ea39634aae47"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#18",
+      "hash": "sha256:cbc25895d9bd38b6b9c617904a7dd121867f7aa73f671491788e66cb514b6b62"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#19",
+      "hash": "sha256:a13789411f5bf67600440cccf24413d5fed88ff5b43b382316ee3c783e4e0ebc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#20",
+      "hash": "sha256:c38ad5fca200b40dde08ff56a43d5d351d34b5cc203f46f654ab8ff5ab6b0889"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#21",
+      "hash": "sha256:1bfefa8347c6a401899c191d26d5c88df4644c49ce10eef04bcf3806173b0045"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#22",
+      "hash": "sha256:0cefb19f14b58159bc04a5199e1e6bb0b606db6b4e3ad2f386b7e383f9bc9aee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#23",
+      "hash": "sha256:667fe56fdaa79d944151227f99648a0de484c8d5ce089d792cc19a14820a7a32"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#24",
+      "hash": "sha256:95567912bb01a535bb41534b976906675cac55355825b5d0131d314e472ea6eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#25",
+      "hash": "sha256:ab806263983dede2944aad50567efb97ad9ccac5401bbb9430a54152e53041d8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#26",
+      "hash": "sha256:d39b3d6f4bcdb7c5dff2fd85b957ae702151876000a42e3a522a0c6e384c9285"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#27",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#28",
+      "hash": "sha256:4194329f1cfd41a584f3f3f010262daadea184be5db2f6d593c8113be3bf0e0e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#29",
+      "hash": "sha256:23e7cc029491c97d0cb7d502a8316179b7a06f6f58064d83b5ba35a0ca32ee0b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#30",
+      "hash": "sha256:dc947456b49c4288c205f94d5ebb63cdf26b1a13e374c010aa898bde781deff6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#31",
+      "hash": "sha256:f601c6598139953ffddcbe5bb003495536db1b1716a930c2d4bca79016824eb5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#32",
+      "hash": "sha256:c27df9e4079347491bd1dd771cd6da486c48ed043959c183ed3d4a678bf100c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#33",
+      "hash": "sha256:95da9673d53a9072cc6796ceb41a3cad8c13c95a8f0735ec3af83fd28b8a38b0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#34",
+      "hash": "sha256:fb665f6128bf799d06524a1f68bb30e976c7f631f670849b8ad4b19d9986b172"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#35",
+      "hash": "sha256:9e236775f192db749f5303299e03f5d74b80c9ebc0dc87c2885102a2772aa26f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#36",
+      "hash": "sha256:52d9204851dc3158bcfc817ea6b017941d36de7866d3e47c5d0dd278427f0891"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#37",
+      "hash": "sha256:b49092b8465b7a5569838e8a9bbc0ae1abcbf9b92bb5976643663fa821277c9c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#38",
+      "hash": "sha256:f7377f34ebabee36860ef0579aaffc26b73c0629a607a7140163def898b3dee4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#39",
+      "hash": "sha256:99b5f3bc284f59442a7dccbb80d2c5b6a57d18c565a6dcc2fac058139be8956b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#40",
+      "hash": "sha256:640dce204b2df92213da9d0bcfbdfdaa206dade124a6db2770eb855b91076854"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#41",
+      "hash": "sha256:b8e48ddbd70cb2555bc060c94006048a6c8cb3e6a7106c07a1ca589009a75295"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#42",
+      "hash": "sha256:83ff7141bb343521542b333687e72b18354115106c543a86b7310d6ab2924f2d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#43",
+      "hash": "sha256:00d5f189b87e8ebc80c559d4ec97f4b66beab9b1ecb1cb07aedee87e8546baf2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#44",
+      "hash": "sha256:3198a3430c9af41a30e5f0513021ec38ff7db7552e8f223f25dc9a94825db0f6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#45",
+      "hash": "sha256:d625a450c62f6becafa27170a7188208d464504c232d82d2004e93331021491d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#46",
+      "hash": "sha256:199d38de4aa1a3578bbde1987aafea1f3215879a02a2b82b4b6884c87b49a381"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#47",
+      "hash": "sha256:8fd07aef258c90af85af71507dc94795cd7b9a5bbd830b0c4b95be012238496f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#48",
+      "hash": "sha256:a6f42ba3588615a64935996aa83ff482a73af59d52307c69397c09efdc57c4ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#49",
+      "hash": "sha256:6b240b163e372eecc09b74b92f34c3ecec866349296c13804a2b7ef67975781e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#50",
+      "hash": "sha256:8445412d6a1629a553623c94d6deea3f44379b96c2bc583d1a09625c3d2393b5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#51",
+      "hash": "sha256:db9b2c47964bda1c3e9b8d3348e38c59502cd8152adf091a0af4d8d3135cdfa8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#52",
+      "hash": "sha256:a2a0fa882fbf7b2185b41a1117a0ee0282b79f11010ca830317c5cb2412d8b62"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#53",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#54",
+      "hash": "sha256:357c219c61511620a41ac398766b8d53f4d16e3a4e73884b0df3bd659807d9ee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#55",
+      "hash": "sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#56",
+      "hash": "sha256:46d58afa8fe2bff2ea546ee2e709da989b4ab371edebff326c2f41a5574fe03f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#57",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#58",
+      "hash": "sha256:b25f9df24884120a5f05f8c03f8e8c3b09dce986c9ee1e422e33228fa9d4daa8"
     },
     {
       "content": "blocks",

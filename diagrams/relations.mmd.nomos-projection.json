@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:24b4ef323233413e6ed885c05dc993153c0921e9debe88cdf91a5dc51259ad04",
-  "inputs_digest": "sha256:5705f888ecd380e102540d2c5e9cbce9214e0af524f378feb739dca16e41c3f7",
+  "content_digest": "sha256:d82291ddd45548a01ca0234e01d7b032976ca28e93d205503158c400533694d2",
+  "inputs_digest": "sha256:9c695ccbfaba51e5d3cff6bce8edb57c3ab039691bdca4b33b1014baec2a3f8f",
   "sections": [
     [
       "Relations",
-      1924
+      1954
     ],
     [
       "Decisions",
-      251
+      252
     ]
   ],
   "inputs": [
@@ -530,6 +530,11 @@
       "content": "relations",
       "identity": "ARC-ROADMAP-001 relates-to OD-PACKAGE-012",
       "hash": "sha256:4348b91f8f05aeae54d43eb6f72a03834676c001e03d3994b312c02d1ccb1274"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-POLICY-001",
+      "hash": "sha256:7050d563c026eca78af8a76fa754c69a7f056a0052af1aec22bc906124f7b891"
     },
     {
       "content": "relations",
@@ -2588,6 +2593,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-CONTRACTS-001 relates-to OD-POLICY-001",
+      "hash": "sha256:62f90fd5929878b35c84e4182883f053b31b8afbee911a0361f37c39ec95af36"
+    },
+    {
+      "content": "relations",
       "identity": "OD-CONTRACTS-001 relates-to OD-RULES-030",
       "hash": "sha256:1955636be304df96280f111c1487f93fb8b20c9b40af5178ea9f51815272115c"
     },
@@ -3823,6 +3833,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-011 relates-to OD-POLICY-001",
+      "hash": "sha256:145ebc5819901f2afa155480347315c86116f6d6b912f62ecffe9340ae0f5def"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-011 relates-to OD-RULES-009",
       "hash": "sha256:26c6a95d3fe4e766eff79728533975225c4ae450566df4ec0b69ac457b627e77"
     },
@@ -3933,6 +3948,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-015 relates-to OD-POLICY-001",
+      "hash": "sha256:78fa4b8f68ddeae4ba84848e6df246a21c4a2330eadb7cc313d3e996d2801945"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-015 relates-to OD-RULES-026",
       "hash": "sha256:cc526cf1a2c9e768501bd10743f723ea1cd7b7eb9051de7587d2817b7ff871b5"
     },
@@ -4025,6 +4045,11 @@
       "content": "relations",
       "identity": "OD-GATE-018 relates-to OD-CONTRACTS-001",
       "hash": "sha256:207a6f2ff7d2fc3924dec79443f7cbe2bf255e76f303d992d1bb28389f629c45"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-GATE-018 relates-to OD-POLICY-001",
+      "hash": "sha256:b93eeec88fee1fa7e798e1a19c86ab43a434e59e7cf5e1b4550e48fadb288028"
     },
     {
       "content": "relations",
@@ -4263,6 +4288,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-GATE-029 relates-to OD-POLICY-001",
+      "hash": "sha256:1c0fceb6e15397a96bb7514ae8249fe19ee02c83702f10f1e225b349789e083c"
+    },
+    {
+      "content": "relations",
       "identity": "OD-GATE-030 affects OD-GATE-015",
       "hash": "sha256:911e77f69e43587563a5f327bb28911918840351228bdd52b947bf74d89dc24d"
     },
@@ -4445,6 +4475,11 @@
       "content": "relations",
       "identity": "OD-HOST-002 relates-to OD-PACKAGE-016",
       "hash": "sha256:e69309815a03eeaeed521a4a021839d759ae352938ae7327b673f8f724b56917"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-002 relates-to OD-POLICY-001",
+      "hash": "sha256:a15ae8342c62ed3e90cb375c7ac5ac7c772de47be292ff9adb1579fe2659f1a1"
     },
     {
       "content": "relations",
@@ -4685,6 +4720,11 @@
       "content": "relations",
       "identity": "OD-HOST-009 relates-to OD-HOST-004",
       "hash": "sha256:91a56fab773dcfa6ebb8b2121ea1df7a461b43422c8073ff243756390f703f1a"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-HOST-009 relates-to OD-POLICY-001",
+      "hash": "sha256:a9c2c8b2eec656d4536a4a5475a695c91e9a7ff2f44a6a91753752937373d963"
     },
     {
       "content": "relations",
@@ -6778,6 +6818,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PACKAGE-011 relates-to OD-POLICY-001",
+      "hash": "sha256:14afc1bfb80c4b985cf3b3af9c6e419cf84b2afa664240cc7eaa80519e956a50"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PACKAGE-011 relates-to OD-ROADMAP-001",
       "hash": "sha256:24dff571866b9665fd0059b3063108ac533e3d0b307045f8bbb20109a167d22c"
     },
@@ -6978,6 +7023,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PACKAGE-016 relates-to OD-POLICY-001",
+      "hash": "sha256:e4ddc8a21304021a612f421641c3b0799ad87047ee0a1c23534d51e4d82f0c83"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PACKAGE-016 relates-to OD-ROADMAP-001",
       "hash": "sha256:bd294f7ee5196aec0d3dc81f7c6c7507da45a1c1f6829e46bd82819b23dd9dd2"
     },
@@ -7100,6 +7150,81 @@
       "content": "relations",
       "identity": "OD-PLATFORM-004 relates-to OD-PLATFORM-003",
       "hash": "sha256:3dbe83f11c37d463a465bafa93862871b5d0a8e43e6c63e31847fb47d5d659e5"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:fa16ff61e436177de12e11bb222babac8920548e831a9bb63ca959d52f8451c5"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-CONTRACTS-001",
+      "hash": "sha256:8fc15ac6a9ea221350316c73b8d9567798bbfb3158ada63b09a78cec6fb14cd7"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-GATE-011",
+      "hash": "sha256:db723b052907fe93a745746caf01024dd3756dc1750db47d4352fb1726a65656"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-GATE-015",
+      "hash": "sha256:76ccebde59a257a1a444327e71a8f053092e62d8c592f3d55e893ac950f334bf"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-GATE-018",
+      "hash": "sha256:e61145344fa1e7706a7a19159193236442ee942492e3e1285fd6375bbe0148d0"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-GATE-029",
+      "hash": "sha256:1a17b10bbf0c6a90b5add3b99f9fd69ffe4ca8e8cedd93ed5333f65f560c3cf0"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-HOST-002",
+      "hash": "sha256:b6481fbdb572a4ad127bf1aed5da48e9f43075ced252380e0ad447805bedc254"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-HOST-009",
+      "hash": "sha256:8ae7b533e7a57ab96d36557b92e481a0c147ab24d39d936e1c63b6153051cb8a"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-PACKAGE-011",
+      "hash": "sha256:3174a1958aa98b29e09b6fc60aefecd37559750fb2dd993d8e3fdc641ed0ad8e"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-PACKAGE-016",
+      "hash": "sha256:95d3cbb5e02a70100edc61675459bebad7bd0a5aa62fce12a42c20161540b033"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-ROADMAP-001",
+      "hash": "sha256:825f245f8adecba53b7f1f09f434824c7bd30284edabbdb72bb2808e7617157b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-ROADMAP-002",
+      "hash": "sha256:51847e35b89ce6c06097c79f56901108ac703386d3ac657d18194d0fd1113287"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-ROADMAP-003",
+      "hash": "sha256:1dd8cc86e5301c563eec48bcc725816336e0f17e6ef624db0fdf1ffac9c04d75"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-RULES-011",
+      "hash": "sha256:d0a2162b7274b92baaee4c7d521ca72150debb079eb2008ccf9c2f2a7c450668"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-POLICY-001 relates-to OD-RULES-029",
+      "hash": "sha256:411fb7e06701e0c0d2bbbfc9121fb4a7774727c9d4a51d565a287b6c90512001"
     },
     {
       "content": "relations",
@@ -7418,6 +7543,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-ROADMAP-001 relates-to OD-POLICY-001",
+      "hash": "sha256:0b9f5699cdd1335abcfc4d8ce3cc91520de5a78bedf67cccf9c75bc12fcdadd8"
+    },
+    {
+      "content": "relations",
       "identity": "OD-ROADMAP-001 relates-to OD-ROADMAP-002",
       "hash": "sha256:04d898fb4630ed78062f2795de2bd753fc3fd2f238035bd064fcb10a68594fe7"
     },
@@ -7478,6 +7608,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-ROADMAP-002 relates-to OD-POLICY-001",
+      "hash": "sha256:f423c1066a56746008cb8d606b1b0aa91a7adb66f1cd0fa6d2f6ac9df419e0f8"
+    },
+    {
+      "content": "relations",
       "identity": "OD-ROADMAP-002 relates-to OD-ROADMAP-001",
       "hash": "sha256:436de83122a2a6ad79c0fec6bc961ce52cd2591ffcaeec7425321637e3eb8499"
     },
@@ -7505,6 +7640,11 @@
       "content": "relations",
       "identity": "OD-ROADMAP-003 relates-to OD-PACKAGE-016",
       "hash": "sha256:eb7dd37e6d2f9097141dedb54a0eafe4d2d090f16f5e30a9c5dfad3f0280143b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ROADMAP-003 relates-to OD-POLICY-001",
+      "hash": "sha256:c5b01b52ee6d8f651aee8db3bc7c127e35dbdc369884748521768316ffb36696"
     },
     {
       "content": "relations",
@@ -8168,6 +8308,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RULES-011 relates-to OD-POLICY-001",
+      "hash": "sha256:5c05ebddaf6698f25366b3f9456231f053205c688f78e059bee96d0a9ba8ccf1"
+    },
+    {
+      "content": "relations",
       "identity": "OD-RULES-011 relates-to OD-RULES-001",
       "hash": "sha256:e071d21f762d7e232c0940c237d0ef8e62440795242ae5658b4b1b7ced4dc9fa"
     },
@@ -8580,6 +8725,11 @@
       "content": "relations",
       "identity": "OD-RULES-029 relates-to OD-GATE-026",
       "hash": "sha256:3396daf53a052a918458b56793bb0972f07eddc7ab542e56e123cafb70c04bf5"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-029 relates-to OD-POLICY-001",
+      "hash": "sha256:b5052de8713c7525eb75f3222d6782b033b0498867eac14f932f950e2540e242"
     },
     {
       "content": "relations",
@@ -10530,6 +10680,11 @@
       "content": "nodes",
       "identity": "OD-PLATFORM-004",
       "hash": "sha256:891d71090e3099b5402fe9338d813810491ddeda2c0a05da2ac6ef9adb44ee22"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-POLICY-001",
+      "hash": "sha256:d0992981eaa81484eec67b76b33b8f66a61cb38278c8964cd2c53074ee5211ea"
     },
     {
       "content": "nodes",

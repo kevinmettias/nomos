@@ -106,6 +106,7 @@ graph LR
     arc_roadmap_001 -->|"relates-to"| od_package_010["OD-PACKAGE-010"]
     arc_roadmap_001 -->|"relates-to"| od_package_011["OD-PACKAGE-011"]
     arc_roadmap_001 -->|"relates-to"| od_package_012["OD-PACKAGE-012"]
+    arc_roadmap_001 -->|"relates-to"| od_policy_001["OD-POLICY-001"]
     arc_roadmap_001 -->|"relates-to"| od_project_007["OD-PROJECT-007"]
     arc_roadmap_001 -->|"relates-to"| od_roadmap_001["OD-ROADMAP-001"]
     arc_roadmap_001 -->|"relates-to"| od_roadmap_002["OD-ROADMAP-002"]
@@ -517,6 +518,7 @@ graph LR
     od_contracts_001 -->|"relates-to"| od_contracts_006
     od_contracts_001 -->|"relates-to"| od_gate_003
     od_contracts_001 -->|"relates-to"| od_gate_018["OD-GATE-018"]
+    od_contracts_001 -->|"relates-to"| od_policy_001
     od_contracts_001 -->|"relates-to"| od_rules_030["OD-RULES-030"]
     od_contracts_001 -->|"relates-to"| od_workflow_001
     od_contracts_001 -->|"relates-to"| od_workflow_003["OD-WORKFLOW-003"]
@@ -764,6 +766,7 @@ graph LR
     od_gate_011 -->|"relates-to"| od_gate_020
     od_gate_011 -->|"relates-to"| od_gate_033
     od_gate_011 -->|"relates-to"| od_host_011["OD-HOST-011"]
+    od_gate_011 -->|"relates-to"| od_policy_001
     od_gate_011 -->|"relates-to"| od_rules_009
     od_gate_011 -->|"relates-to"| od_rules_019["OD-RULES-019"]
     od_gate_012 -->|"relates-to"| od_gate_006
@@ -786,6 +789,7 @@ graph LR
     od_gate_015 -->|"relates-to"| od_gate_014
     od_gate_015 -->|"relates-to"| od_gate_016
     od_gate_015 -->|"relates-to"| od_gate_029
+    od_gate_015 -->|"relates-to"| od_policy_001
     od_gate_015 -->|"relates-to"| od_rules_026
     od_gate_016 -->|"relates-to"| arc_roadmap_001
     od_gate_016 -->|"relates-to"| od_completeness_004
@@ -805,6 +809,7 @@ graph LR
     od_gate_017 -->|"relates-to"| od_rules_022["OD-RULES-022"]
     od_gate_017 -->|"relates-to"| od_rules_027["OD-RULES-027"]
     od_gate_018 -->|"relates-to"| od_contracts_001
+    od_gate_018 -->|"relates-to"| od_policy_001
     od_gate_020 -->|"relates-to"| od_capability_010
     od_gate_020 -->|"relates-to"| od_gate_011
     od_gate_020 -->|"relates-to"| od_host_010
@@ -852,6 +857,7 @@ graph LR
     od_gate_029 -->|"relates-to"| od_completeness_004
     od_gate_029 -->|"relates-to"| od_gate_015
     od_gate_029 -->|"relates-to"| od_gate_016
+    od_gate_029 -->|"relates-to"| od_policy_001
     od_gate_030 -->|"affects"| od_gate_015
     od_gate_030 -->|"relates-to"| od_gate_022
     od_gate_030 -->|"relates-to"| od_gate_028
@@ -889,6 +895,7 @@ graph LR
     od_host_002 -->|"relates-to"| od_host_010
     od_host_002 -->|"relates-to"| od_host_011
     od_host_002 -->|"relates-to"| od_package_016
+    od_host_002 -->|"relates-to"| od_policy_001
     od_host_002 -->|"relates-to"| od_workflow_001
     od_host_003 -->|"affected_by"| od_host_013
     od_host_003 -->|"relates-to"| od_analysis_009
@@ -937,6 +944,7 @@ graph LR
     od_host_008 -->|"relates-to"| od_platform_002
     od_host_009 -->|"relates-to"| od_capability_013
     od_host_009 -->|"relates-to"| od_host_004
+    od_host_009 -->|"relates-to"| od_policy_001
     od_host_009 -->|"relates-to"| od_rules_011
     od_host_010 -->|"relates-to"| od_capability_012
     od_host_010 -->|"relates-to"| od_gate_020
@@ -1355,6 +1363,7 @@ graph LR
     od_package_011 -->|"relates-to"| od_package_010
     od_package_011 -->|"relates-to"| od_package_012
     od_package_011 -->|"relates-to"| od_package_016
+    od_package_011 -->|"relates-to"| od_policy_001
     od_package_011 -->|"relates-to"| od_roadmap_001
     od_package_011 -->|"relates-to"| od_roadmap_002
     od_package_011 -->|"relates-to"| od_rules_010
@@ -1395,6 +1404,7 @@ graph LR
     od_package_016 -->|"relates-to"| od_package_011
     od_package_016 -->|"relates-to"| od_package_012
     od_package_016 -->|"relates-to"| od_package_013
+    od_package_016 -->|"relates-to"| od_policy_001
     od_package_016 -->|"relates-to"| od_roadmap_001
     od_package_016 -->|"relates-to"| od_roadmap_003
     od_platform_001 -->|"relates-to"| arc_harness_001
@@ -1420,6 +1430,21 @@ graph LR
     od_platform_004 -->|"relates-to"| d_130
     od_platform_004 -->|"relates-to"| od_gate_028
     od_platform_004 -->|"relates-to"| od_platform_003
+    od_policy_001 -->|"relates-to"| arc_roadmap_001
+    od_policy_001 -->|"relates-to"| od_contracts_001
+    od_policy_001 -->|"relates-to"| od_gate_011
+    od_policy_001 -->|"relates-to"| od_gate_015
+    od_policy_001 -->|"relates-to"| od_gate_018
+    od_policy_001 -->|"relates-to"| od_gate_029
+    od_policy_001 -->|"relates-to"| od_host_002
+    od_policy_001 -->|"relates-to"| od_host_009
+    od_policy_001 -->|"relates-to"| od_package_011
+    od_policy_001 -->|"relates-to"| od_package_016
+    od_policy_001 -->|"relates-to"| od_roadmap_001
+    od_policy_001 -->|"relates-to"| od_roadmap_002
+    od_policy_001 -->|"relates-to"| od_roadmap_003
+    od_policy_001 -->|"relates-to"| od_rules_011
+    od_policy_001 -->|"relates-to"| od_rules_029
     od_project_001 -->|"relates-to"| d_128
     od_project_001 -->|"relates-to"| d_129
     od_project_001 -->|"relates-to"| od_agent_001
@@ -1483,6 +1508,7 @@ graph LR
     od_roadmap_001 -->|"relates-to"| od_package_011
     od_roadmap_001 -->|"relates-to"| od_package_012
     od_roadmap_001 -->|"relates-to"| od_package_016
+    od_roadmap_001 -->|"relates-to"| od_policy_001
     od_roadmap_001 -->|"relates-to"| od_roadmap_002
     od_roadmap_001 -->|"relates-to"| od_roadmap_003
     od_roadmap_001 -->|"relates-to"| od_roadmap_004
@@ -1495,12 +1521,14 @@ graph LR
     od_roadmap_002 -->|"relates-to"| od_analysis_009
     od_roadmap_002 -->|"relates-to"| od_gate_017
     od_roadmap_002 -->|"relates-to"| od_package_011
+    od_roadmap_002 -->|"relates-to"| od_policy_001
     od_roadmap_002 -->|"relates-to"| od_roadmap_001
     od_roadmap_002 -->|"relates-to"| od_roadmap_003
     od_roadmap_002 -->|"relates-to"| od_roadmap_004
     od_roadmap_003 -->|"affects"| od_roadmap_002
     od_roadmap_003 -->|"relates-to"| od_gate_023
     od_roadmap_003 -->|"relates-to"| od_package_016
+    od_roadmap_003 -->|"relates-to"| od_policy_001
     od_roadmap_003 -->|"relates-to"| od_roadmap_001
     od_roadmap_003 -->|"relates-to"| od_roadmap_002
     od_roadmap_003 -->|"relates-to"| od_rules_009
@@ -1633,6 +1661,7 @@ graph LR
     od_rules_011 -->|"relates-to"| od_host_009
     od_rules_011 -->|"relates-to"| od_package_008
     od_rules_011 -->|"relates-to"| od_package_015
+    od_rules_011 -->|"relates-to"| od_policy_001
     od_rules_011 -->|"relates-to"| od_rules_001
     od_rules_011 -->|"relates-to"| od_rules_010
     od_rules_011 -->|"relates-to"| od_rules_014
@@ -1716,6 +1745,7 @@ graph LR
     od_rules_028 -->|"relates-to"| od_project_004
     od_rules_028 -->|"relates-to"| od_rules_020
     od_rules_029 -->|"relates-to"| od_gate_026
+    od_rules_029 -->|"relates-to"| od_policy_001
     od_rules_029 -->|"relates-to"| od_project_004
     od_rules_029 -->|"relates-to"| od_rules_003
     od_rules_029 -->|"relates-to"| od_rules_011
@@ -2108,6 +2138,7 @@ graph LR
     od_platform_002
     od_platform_003
     od_platform_004
+    od_policy_001
     od_project_001
     od_project_002
     od_project_003
