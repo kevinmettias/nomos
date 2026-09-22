@@ -322,6 +322,15 @@ pub(crate) const UNIVERSES: &[Universe] = &[
             by: "Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry",
         },
     },
+    // ---- what a client may ask the resident service ----
+    Universe {
+        path: "crates/host/nomos-daemon/src/resident_request.rs",
+        name: "ResidentRequest::All",
+        kind: UniverseKind::Enumeration,
+        standing: Standing::Mirrored {
+            by: "Test_Every_Request_Should_Be_Matched_Exhaustively",
+        },
+    },
     // ---- OD-RULES-020's dependency model is no longer a constant of this workspace's ----
     // ---- own, so it is no longer a declared universe here ----
     //

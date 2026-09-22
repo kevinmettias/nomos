@@ -43,6 +43,7 @@
     "nomos-contracts": "Protocol",
     "nomos-correction-orchestration": "Application Service",
     "nomos-corrections": "Agent",
+    "nomos-daemon": "Host",
     "nomos-gate-orchestration": "Application Service",
     "nomos-integration-package": "Provider",
     "nomos-integration-tests": "Verification",

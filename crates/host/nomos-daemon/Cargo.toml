@@ -1,0 +1,36 @@
+[package]
+name = "nomos-daemon"
+version = "0.1.0"
+description = "A resident service: one root's workspace, fact store and reassessment cache held across requests, so a second request pays only for what moved."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+# The seam this crate is resident over. `Run_Reassessing` is `Run`'s own pipeline handed a
+# cache the caller keeps, and it is the only thing here that judges anything: this crate
+# composes no rule, reads no fact and reaches no verdict of its own.
+nomos-check-orchestration = { workspace = true }
+# The one walk every composition root shares, supplied with the same extension set
+# `nomos-cli::check` supplies -- a resident that walked a narrower tree than a cold
+# invocation would disagree with it for a reason that has nothing to do with residency.
+# `OD-HOST-008`.
+nomos-workspace-discovery = { workspace = true }
+# `MemoryFactStore`, one of the three values a resident holds across requests, and the one
+# whose `Materializations` delta is what "cheaper" is measured in.
+nomos-analysis = { workspace = true }
+# `Workspace` and `BuildVariant`: the held workspace whose own `Apply` diff decides what
+# moved, and the variant this build was compiled as. `Change` is read for its content
+# digest, so the comparison a reading reports is the workspace's own rather than a second
+# digest this crate invents.
+nomos-workspace = { workspace = true }
+# The platform this host composes: the launcher a provider's subprocess runs through, the
+# filesystem a repository-declared policy is read through, the environment a provider reads
+# `CARGO` from, and the one-level directory read that tells a root apart from a file.
+nomos-composer-std = { workspace = true }
+# `SourceFile`, the shape the shared walk answers in and the shape the seam takes.
+nomos-rules = { workspace = true }
+
+[lints]
+workspace = true

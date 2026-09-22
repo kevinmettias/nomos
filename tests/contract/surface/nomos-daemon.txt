@@ -1,0 +1,33 @@
+pub const fn nomos_daemon::Resident::Answered(&self) -> usize
+pub const fn nomos_daemon::ResidentRequest::All() -> &'static [Self]
+pub const fn nomos_daemon::ResidentRequest::Label(self) -> &'static str
+pub enum nomos_daemon::ResidentAnswer
+pub enum nomos_daemon::ResidentRefusal
+pub enum nomos_daemon::ResidentRequest
+pub enum variant nomos_daemon::ResidentAnswer::Forgotten { released_facts: usize, }
+pub enum variant nomos_daemon::ResidentAnswer::Judged { outcome: CheckOutcome, reading: TreeReading, cost: ResidencyCost, }
+pub enum variant nomos_daemon::ResidentAnswer::Observed { reading: TreeReading, }
+pub enum variant nomos_daemon::ResidentAnswer::Stopped(StopReport)
+pub enum variant nomos_daemon::ResidentRefusal::AlreadyStopped
+pub enum variant nomos_daemon::ResidentRefusal::RootIsNotWalkable { root: PathBuf, }
+pub enum variant nomos_daemon::ResidentRequest::Forget
+pub enum variant nomos_daemon::ResidentRequest::Judge
+pub enum variant nomos_daemon::ResidentRequest::Observe
+pub enum variant nomos_daemon::ResidentRequest::Stop
+pub fn nomos_daemon::Resident::Answer(&mut self, request: ResidentRequest) -> Result<ResidentAnswer, ResidentRefusal>
+pub fn nomos_daemon::Resident::Root(&self) -> &Path
+pub fn nomos_daemon::Resident::Start(root: &Path) -> Result<Self, ResidentRefusal>
+pub fn nomos_daemon::ResidentRefusal::fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result
+pub fn nomos_daemon::TreeReading::Moved(&self) -> bool
+pub impl nomos_daemon::ResidentRefusal implements std::error::Error
+pub impl nomos_daemon::ResidentRefusal implements std::fmt::Display
+pub struct field nomos_daemon::ResidencyCost::live_facts: usize
+pub struct field nomos_daemon::ResidencyCost::materializations: u32
+pub struct field nomos_daemon::StopReport::answered: usize
+pub struct field nomos_daemon::StopReport::released_facts: usize
+pub struct field nomos_daemon::TreeReading::changed: Vec<String>
+pub struct field nomos_daemon::TreeReading::watched: usize
+pub struct nomos_daemon::ResidencyCost
+pub struct nomos_daemon::Resident
+pub struct nomos_daemon::StopReport
+pub struct nomos_daemon::TreeReading

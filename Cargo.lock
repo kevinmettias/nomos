@@ -1278,6 +1278,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-daemon"
+version = "0.1.0"
+dependencies = [
+ "nomos-analysis",
+ "nomos-check-orchestration",
+ "nomos-composer-std",
+ "nomos-rules",
+ "nomos-workspace",
+ "nomos-workspace-discovery",
+]
+
+[[package]]
 name = "nomos-gate-orchestration"
 version = "0.1.0"
 dependencies = [

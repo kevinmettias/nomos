@@ -411,6 +411,14 @@ members = [
     # own. `P42-LSP-PROJECTION`.
     "crates/host/nomos-lsp",
 
+    # Zone: Host — host. The process that outlives an invocation: one root's workspace, fact
+    # store and reassessment cache held across requests, so a second request files only what
+    # moved. A library crate, not a binary, and for a sharper reason than nomos-api's: what
+    # this workspace serves over a wire is nomos-api-transport's by OD-HOST-013, and a Host
+    # may not name another Host, so a transport host composes a Resident rather than this
+    # crate growing one. `P128-EVERY-INVOCATION-STARTS-COLD-BECAUSE-NOTHING-OUTLIVES-A-PROCESS`.
+    "crates/host/nomos-daemon",
+
     # Assertions about the workspace itself: dependency bands, the contracts
     # allowlist, and module reachability.
     "tests/contract",
@@ -500,6 +508,7 @@ nomos-workspace-discovery = { path = "crates/orchestration/nomos-workspace-disco
 nomos-api = { path = "crates/host/nomos-api" }
 nomos-api-transport = { path = "crates/host/nomos-api-transport" }
 nomos-lsp = { path = "crates/host/nomos-lsp" }
+nomos-daemon = { path = "crates/host/nomos-daemon" }
 nomos-integration-tests = { path = "tests/integration" }
 nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
 nomos-spec-store = { path = "crates/spec/nomos-spec-store" }
