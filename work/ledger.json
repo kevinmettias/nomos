@@ -87779,14 +87779,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-policy",
-        "acquired_at": 1790043937,
-        "lease_expires_at": 1790058975
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -87802,7 +87798,33 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "ments_Behind_Should_Narrow_By_Revision ... ok\n\ntest result: ok. 136 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.82s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.65s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790048986,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "9bae4312d6f4862e5e3195c4153db526686559d2"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -88309,14 +88331,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-review",
-        "acquired_at": 1790048846,
-        "lease_expires_at": 1790059646
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88332,7 +88350,33 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "tch` expression is unreachable, as all arms diverge\n\n   Compiling nomos-spec-store v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\project-004\\render\\crates\\spec\\nomos-spec-store)\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n   Compiling nomos-rules v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\project-004\\render\\crates\\rules\\nomos-rules)\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-check-orchestration v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\project-004\\render\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\project-004\\render\\tests\\contract)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.43s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790049000,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [
         {
           "holder": "fable-review-effortlevel",
@@ -88935,6 +88979,45 @@
         },
         "revision": null
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P121-A-FINDING-CANNOT-NAME-THE-FACT-THAT-BACKED-IT",
+      "title": "A finding cannot name the fact that backed it, the second target OD-HOST-010 left undecided",
+      "why": "OD-HOST-010 named two of a diagnostic's five walk-outward targets as undecided rather than declined, and built the other three. OD-HOST-015 has since decided the requirement link; this is the other one, still open. Its measurement stands at 8338c6ec: CheckOutcome::Judged carries findings, examined and claim, and no fact store or per-finding read trail; Reader::On is built once per Judged_Findings call and shared across every rule in one run, so even its own Into_Dependencies trail is a flat list for the whole run rather than attributable to one finding; and RuleDescriptor names the capability family a rule reads through RequiredFact but never the Requirement floor the rule's own internal Require call states, which is private to each Check_ function. So a caller outside a rule cannot reconstruct the FactKey a judgment resolved, and the Guarantee an installed provider actually offered for it is unreachable from a Finding. OD-HOST-003 named the same gap as state family 8 before nomos-check-orchestration had a caller-callable Run, and OD-HOST-002 as family 4; three records have now named it and none has decided it. An external review of bc0aaacf reached the same conclusion from outside, which is evidence the gap is visible in the product rather than only in the records.",
+      "done_when": "A registered governing record OD-HOST-016 re-measures, at a named revision, what a caller can learn today about the fact behind one finding: what CheckOutcome carries, how many Readers a run builds and what Into_Dependencies attributes them to, what RuleDescriptor declares against what each Check_ function's own Requirement states, and whether any rule already reaches a Guarantee it could report. It decides the mechanism, or refuses one with the reason, among at least these: a Reader built per rule so a read trail is attributable, CheckOutcome widened with a per-finding trail, RuleDescriptor carrying each rule's Requirement floor beside its RequiredFact, and a FactKey-reconstruction capability. It says what a walk-outward answer may honestly claim when a rule read several facts or none, and what it reports for a finding whose rule reached no fact at all, so that an absent trail is not read as a judgment made without evidence. It states which of OD-ANALYSIS-009's open question about a persistent fact store it depends on, if any, and the territory a building item would reserve. No code changes. Both required projections are re-rendered from the record set the commit publishes and nomos spec freshness with both --require flags exits 0 in that tree, and git show HEAD of spec/domain-specification.md after the commit carries the new record.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-016",
+          "crates/spec/nomos-spec-store/records/OD-HOST-016.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75-factprov",
+        "acquired_at": 1790049023,
+        "lease_expires_at": 1790059823
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,

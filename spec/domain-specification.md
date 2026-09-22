@@ -74,6 +74,7 @@ profile: domain-specification
 | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md@authored | docs/records/OD-CONTRACTS-003-work-result-plan-becomes-optional-so-a-judgment-only-agent-response-is-representable.md | authored | 15 | 6 | sha256:ab9189d05ec02e249414c7a358c58dc965d46acbb87964ef26bd2fea4379fe87 |
 | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md@authored | docs/records/OD-CONTRACTS-004-task-envelope-gains-an-effort-field-so-an-agent-executor-can-read-one-real-model-routing-signal.md | authored | 16 | 6 | sha256:eeea4b8c691ee0ca6bf5a71335c2d8c5b5335b8cdf217d2ac7fdc9a1f578ee88 |
 | docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md@authored | docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md | authored | 16 | 6 | sha256:c6fc5672b5319e9f6ccd43df0120f2fa7e51f3fc22ebd463b20b8651485eeaea |
+| docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md@authored | docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md | authored | 31 | 8 | sha256:ee1eeab670713626ca403a5b052b2e6e8554c4d218b9c05bf8ead98de6bb5be4 |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md@authored | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md | authored | 28 | 9 | sha256:a91dd75d56e4bce49e2a0d37621e02d0ee2ba9fa0fcaab509dbe114813bad215 |
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md | authored | 14 | 6 | sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
@@ -769,6 +770,14 @@ profile: domain-specification
 | docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#8 | authored | 2 | Applying it |
 | docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#13 | authored | 2 | What This Does Not Do |
 | docs/records/OD-CONTRACTS-005-a-type-is-admitted-to-the-protocol-kernel-only-when-an-independent-peer-must-read-it-without-linking-nomos.md#15 | authored | 2 | Status |
+| docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#1 | authored | 1 | EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either |
+| docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#2 | authored | 2 | Question |
+| docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#15 | authored | 2 | The Decision |
+| docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#20 | authored | 2 | Why The Two Other Homes Are Refused |
+| docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#23 | authored | 2 | What Would Decide It Differently |
+| docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#26 | authored | 2 | What This Does Not Decide |
+| docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#30 | authored | 2 | Status |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#1 | authored | 1 | Corrections has real staging machinery and zero real callers |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#2 | authored | 2 | Question |
 | docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#4 | authored | 2 | What Was Measured |
@@ -18805,6 +18814,283 @@ abstract rule; this record is its first systematic application, not its replacem
 
 Accepted. `WorkflowStep`, the knowledge-context types, `PackageKind`, and `Finding` with its
 reporting vocabulary each pass the sharpened admission test; no type moves.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#1
+
+*revision: authored · kind: heading · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either · hash: sha256:e7fedb8349689fad3383294a784236482c56d4198c85cc7b234d3fdc33f9dbfc*
+
+# EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#2
+
+*revision: authored · kind: heading · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#3
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / Question · hash: sha256:c283ce4bcac68c23bcfe91356036839a391dcd80b805f0c7fcbbb6bae067d26c*
+
+`nomos-agent-contracts` depends on `nomos-model-package` for one symbol. `TaskEnvelope`
+carries `effort: EffortLevel`, added by `OD-CONTRACTS-004` to give `MODEL-ROUTE-004`'s
+six-value enumeration its first real reader, and the crate's only other mention of that
+dependency is a doc comment naming `ModelExecutionProfile`. So the agent protocol's envelope
+links a package-manifest crate in order to name a six-value enum, and every site that builds
+an envelope spells the type by that crate's path.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#4
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / Question · hash: sha256:1efd00133c0892dea37b794384e6f0e5bbbe4e97972624920586cde38f05c7fe*
+
+An external review of `bc0aaac` called the enum protocol vocabulary and asked that it move
+down into a neutral contract crate, on the argument that this is the kind of small ownership
+mistake that becomes painful later when twenty schemas import the package layer to obtain one
+enum.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#5
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / Question · hash: sha256:7a560fd225f0e705b168cd10e9f60b7e7e10e04840125d9dd018c62bbd8a9f56*
+
+`OD-CONTRACTS-005` is the test that decides admission to `nomos-contracts`, and it had never
+been applied to this type: `OD-CONTRACTS-004` chose the existing type without asking the
+question, because its subject was the field and not the field's home.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#6
+
+*revision: authored · kind: heading · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#7
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What Was Measured · hash: sha256:1777f6c2f4d4f2ae820d6e1661c48c7733005cb99f35cca2dffa897fcd3cfbaf*
+
+Checked 2026-09-21 at `0104d0b7`, against the code rather than against what the types say
+about themselves.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#8
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What Was Measured · hash: sha256:12c7d1a59c0a025ee1024af0f127626e6d86c457346f0afcd8120f7e3e51dc03*
+
+**The edge the review objects to is a permitted one.** `nomos-architecture.json` places
+`nomos-agent-contracts` in `Agent` and `nomos-model-package` in `Provider`, and `permits`
+grants `Agent` exactly `Protocol`, `Substrate` and `Provider`. An agent contract naming a
+provider crate is the declared shape, not a crossing that slipped through.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#9
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What Was Measured · hash: sha256:9376f0ee30f20ad85f6132a7c0d23901e8dd78509cda8763b1797cd0c1796d54*
+
+**No system outside this workspace reads the enum's serialized form.** Three places could
+carry it and none does.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#10
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What Was Measured · hash: sha256:188e218faf5b225243e918996bfe94513c6d86372a5510f557fa79606c418225*
+
+- *The transport does not serve the operations that would carry it.* `ServedMethod` names
+  `GatePlan`, `GateRun`, `GateExplain`, `GateCompare` and `Correction`. `OD-HOST-014` refuses
+  `Agent_Execute` and `Agent_Judge_Role` deliberately and on a stated criterion -- they start a
+  subprocess and spend against a ceiling, which a transport may not hand an unauthenticated
+  caller -- so their absence is a decision rather than a frontier.
+- *No caller supplies an effort through the host at all.* `Handle_Agent_Execute` takes a goal
+  and a backend selection; effort is not a parameter of it, and no request type anywhere
+  deserializes one. The value is constructed inside this workspace, by the command line's own
+  parser.
+- *Nothing serializes a `TaskEnvelope` in production.* The two `serde_json::to_string` calls
+  on the agent path both serialize a response. The envelope's `Serialize` and `Deserialize`
+  derives are exercised by tests and by nothing else.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#11
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What Was Measured · hash: sha256:f20beaa4cd9cce633765b9884e49c2910ac640e0cb7efbd77387ebdc027aeb7b*
+
+**The backend adapters translate rather than transmit.** The Claude Code adapter maps the six
+values onto that program's own `--effort` vocabulary, `Minimal` and `Low` both onto `low` and
+`BackendDefault` onto the flag being omitted, which is `OD-CONTRACTS-004`'s own decision. What
+crosses to the external program is a flag word, never this enum's serialized form.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#12
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What Was Measured · hash: sha256:29638ceb74011b6ad09df4a30a36592a8f667ccdbb586e5caebdef5db27e9e73*
+
+**The manifest does not carry it either.** `ModelExecutionProfile` holds a selector and an
+effort and derives no serde implementation at all, and the manifest reader in
+`nomos-model-package` parses no effort field. So the package-format argument for keeping the
+type where it is -- that its serialized form is part of a manifest a package author writes --
+is not available, and is not made below.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#13
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What Was Measured · hash: sha256:21f30291dac6f9f373178c9d0ee04e863a4f20f3a2795beb9985a6ba812203d4*
+
+**The claim that it is wire vocabulary is prospective, and the type says so itself.**
+`TaskEnvelope`'s own doc calls it the wire-crossing shape a peer executor *would* need to see
+the requested effort in. That is a statement about a peer that does not exist, which is not
+the same kind of fact as a wire that is served today, and this record does not read it as one.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#14
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What Was Measured · hash: sha256:878443bc78ff2a3e33429311dd744a9b18854fa3ab883799a4adc031df0c00d3*
+
+**Where the consumers actually are.** Outside `nomos-model-package`, fifteen files name the
+type: the command line's parser and its tests, the Claude Code adapter and its tests, the
+resolver and dispatch in `nomos-agent-orchestration`, the envelope itself, and the host
+handlers. Inside `nomos-model-package`, three further types name it -- the execution profile,
+the effort mapping record and the executor exposure -- so the crate that owns it is also the
+crate with the most uses of it that are not the envelope's.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#15
+
+*revision: authored · kind: heading · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#16
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / The Decision · hash: sha256:d83a3d26096e7f358c9b60e59ac23c9d9f4cfce97c4ff8a5bec090288b704cd7*
+
+**`EffortLevel` stays in `nomos-model-package`. It is not admitted to `nomos-contracts`, and
+no crate is created for it.**
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#17
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / The Decision · hash: sha256:9c45bb6c004d5826f6aefdcfd0bca95c5aa692115b262410e223e1304beaf376*
+
+`OD-CONTRACTS-005`'s test asks whether a system that has never linked this workspace must
+construct or interpret the type's serialized form correctly in order to agree with Nomos about
+what happened. Measured above, no such system exists and none is served: the two operations
+that would carry an effort across a boundary are refused by `OD-HOST-014` for a reason
+unrelated to this type, and the one shape that would carry it is serialized nowhere.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#18
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / The Decision · hash: sha256:f1d63a6c2ad4d1b190cb8adb712cc4dfb8c92e841f81138e8b13696375047506*
+
+The test is not satisfied by a prospective peer either, and the difference from the types
+`OD-CONTRACTS-005` did admit is the reason. `WorkflowStep` and `PackageKind` were admitted
+although their peers do not exist yet, because each is itself the thing a peer must agree
+about: a step is the unit a peer executor performs, a package kind is the label a peer
+reimplements. `EffortLevel` is not such a thing. It is a field of `TaskEnvelope`, and the
+parties that must agree about a field are exactly the parties that must agree about the shape
+carrying it -- so the question of where the field lives is settled by where the envelope
+lives, and the envelope is in `nomos-agent-contracts`, not in the kernel. This workspace has
+already decided that the agent envelope is the `Agent` zone's own contract rather than
+protocol every peer speaks, and admitting one of its fields to the kernel while leaving the
+shape outside it would assert the opposite one field at a time.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#19
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / The Decision · hash: sha256:2926f9611894c97cb5346f29dd655cf1de4d9541c60e3747eae6fd10d2522e16*
+
+That is `OD-CONTRACTS-001`'s worked example applied unchanged: `SyntaxPayload` was admitted one
+band up rather than into the kernel, because the parties who must agree about it are one
+capability's own providers rather than every peer that speaks to Nomos.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#20
+
+*revision: authored · kind: heading · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / Why The Two Other Homes Are Refused · hash: sha256:91592f9520f5d4c6fe14efce8b7413975c824c940ba7f73f8debc4e78279d724*
+
+## Why The Two Other Homes Are Refused
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#21
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / Why The Two Other Homes Are Refused · hash: sha256:58624d46ad1fbc285ae0c50051100eb7cb9becc2b76aceecec59c3a08906e143*
+
+**`nomos-agent-contracts`, the crate that owns the envelope, cannot hold it.** Three of the
+enum's consumers are `nomos-model-package`'s own types, and `permits` grants `Provider` only
+`Protocol`, `Substrate` and `Capability Contract`. A provider naming an agent crate is
+refused, which is the same constraint `OD-PACKAGE-016` reasoned from when it placed the
+dispatch resolver in an application service rather than in the package crate. Moving the type
+down to the envelope would make the package layer unable to name its own profile's field.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#22
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / Why The Two Other Homes Are Refused · hash: sha256:68fdbf181d641e6e61fb23710c37d00b1f9d6085008bf2e9d41ea314af9fed14*
+
+**`nomos-package` is structurally available and semantically wrong.** It sits in `Provider`
+beside `nomos-model-package`, which already names it under a declared exception, so both
+consumers could reach it. But its subject is the language-agnostic core of an installable-unit
+manifest, and effort is execution policy that no manifest in this workspace declares. Putting
+it there would widen that crate's subject to hold one type that has nothing to do with
+manifests, which is the ownership mistake the review objects to, relocated rather than fixed.
+`OD-PACKAGE-015` refuses a new crate for the same reason it refuses most: a crate extracted
+now would have no independent versioning, enforce no isolation a module does not, and have no
+consumer that does not already depend on its siblings.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#23
+
+*revision: authored · kind: heading · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What Would Decide It Differently · hash: sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429*
+
+## What Would Decide It Differently
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#24
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What Would Decide It Differently · hash: sha256:46f6321d913229f4f4ea62b3307d8b6b062eb0186b69b8397cbf3e0a60976545*
+
+Each of these is a fact that can be observed, not a judgement that can be re-argued.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#25
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What Would Decide It Differently · hash: sha256:340dbeb1dafa5d0f3a24455e730a6a625e91cb0409239e52cc9f7b435ddd5073*
+
+- **An agent operation admitted to the transport.** If `OD-HOST-014`'s criterion is met --
+  most plausibly by an authorization mechanism for the spend it refuses today -- then a caller
+  that never linked this workspace constructs an envelope, and `OD-CONTRACTS-005`'s test must
+  be re-applied to every field type the envelope carries rather than to this one alone.
+- **A production site that serializes a `TaskEnvelope`.** Would turn the envelope's own
+  prospective claim into a measured one and reopen this record on its own terms, whether or
+  not a transport serves it.
+- **A consumer of the enum that needs neither the envelope nor the package layer.** Would be
+  the second independent party `OD-CAPABILITY-002`'s contention criterion asks about, and
+  would put the crate boundary back in front of `OD-PACKAGE-015`'s three clauses.
+- **A published schema that names the six values.** If any surface publishes a JSON Schema
+  carrying `effort`, the label becomes a protocol commitment in exactly the sense that
+  admitted `PackageKind`, and this record's central measurement is falsified.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#26
+
+*revision: authored · kind: heading · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What This Does Not Decide · hash: sha256:0199cb5522f4507ce6de1bc6526822163dde86b3f0f74e48f8710eea11a6b569*
+
+## What This Does Not Decide
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#27
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What This Does Not Decide · hash: sha256:1f6412ba78c37e98e1b98e7e41077441f345897d1a12216c91efedbc6d107e3f*
+
+Whether `nomos-agent-contracts` should depend on `nomos-model-package` at all for anything
+else, or whether the envelope's other seven fields sit in the right crates. Only the eighth
+was asked about here.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#28
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What This Does Not Decide · hash: sha256:d8d6fb15ecf436573576b7374decafb94f3c22d9f99de76af202ccd75c98588d*
+
+Whether `EffortLevel`'s six values are the right ones, or whether the Claude Code mapping's
+two approximations should be represented differently. `OD-CONTRACTS-004` owns both, and
+neither depends on where the type lives.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#29
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / What This Does Not Decide · hash: sha256:b3fab534c485252b667e69d355cf817ca7a09c613ee44111a801d960629ea586*
+
+Whether `ModelExecutionProfile` should gain serde derives so that a profile can be declared in
+a manifest. That is the package layer's own question, and if it is answered yes, the fourth
+trigger above is how it reaches this record.
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#30
+
+*revision: authored · kind: heading · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CONTRACTS-006-whether-effortlevel-passes-the-kernel-admission-test-or-stays-a-provider-zone-type.md#31
+
+*revision: authored · kind: prose · heading: EffortLevel fails the kernel admission test because nothing outside this workspace reads its serialized form, and the envelope that would carry it is not kernel protocol either / Status · hash: sha256:01a3e9c45a0ce8884c776c766c5e60b5f8521e253737c23b2f84cb3aba65767d*
+
+Accepted. No code moves under this record: it applies `OD-CONTRACTS-005`'s test to one type,
+answers that the type fails it today, names the two alternative homes and why each is refused,
+and states four observable conditions under which the question is asked again.
 
 ### docs/records/OD-CORRECTIONS-001-corrections-has-real-staging-machinery-and-zero-real-callers.md#1
 
