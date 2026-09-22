@@ -3,12 +3,12 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:1975072be5fef97bf3117dd2d36019afd3327dc40ba9ff460f2b84293db7fe09",
-  "inputs_digest": "sha256:1237882ec2bd682c9c831e8960f5bacac3762f76476544a6bd886165b422896a",
+  "content_digest": "sha256:59219b73d62cb1de6fb4341b2ae663a41b326ff222c0facc52915c7a87e3e85b",
+  "inputs_digest": "sha256:44230a66540faf579faa2c74670d7f0d495092cb1c6c59f083ac08c0d1ce3bb3",
   "sections": [
     [
       "Relations",
-      2100
+      2102
     ],
     [
       "Decisions",
@@ -1340,6 +1340,11 @@
       "content": "relations",
       "identity": "OD-AGENT-004 relates-to OD-HOST-001",
       "hash": "sha256:0a79f861e230deb73155e28db685d100fa2ae5caae326ede6b130d339f78d6d1"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-AGENT-004 relates-to OD-PACKAGE-004",
+      "hash": "sha256:7a4adfd1ca12069ceb0b615dc5e21549af033f8a90f79596ee3d68ab5d20de2a"
     },
     {
       "content": "relations",
@@ -7065,6 +7070,11 @@
       "content": "relations",
       "identity": "OD-PACKAGE-004 relates-to ARC-ECOSYSTEM-001",
       "hash": "sha256:84a6bdb52805e1a2883e2b4f4f5f4735dd23d27ca4063360aa822e40110d07b4"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-PACKAGE-004 relates-to OD-AGENT-004",
+      "hash": "sha256:c8cf180cca504972fc84b28ef0167b35dd84a28cdc7497fee9ef0e0d7f196b33"
     },
     {
       "content": "relations",

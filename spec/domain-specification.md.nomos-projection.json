@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:3e2bff24e45db5ffc7902367759641ad4a280079d21a7d508be5685a2f1fdd4c",
-  "inputs_digest": "sha256:5714e93b5ee36df6f1390691127dad1c4b68e4286bf9514862599d41741608ff",
+  "content_digest": "sha256:2dc96f19bd7c94560223596f77f63571c733d2e034104d789e068adc3ad9650f",
+  "inputs_digest": "sha256:0590414781549955c163bac52db30a98e90efed2e771deea117a6f53178a1252",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2329
+      2339
     ],
     [
       "Source blocks",
-      8372
+      8410
     ]
   ],
   "inputs": [
@@ -898,7 +898,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored",
-      "hash": "sha256:e94d0c54e1e8ac358fc301df5119ab588054e69c32c0b4abf3420717a7959610"
+      "hash": "sha256:48034d63425616e72f3584f23ead8a2c3e23f9843c1fcb9e1f6da2e7e0221073"
     },
     {
       "content": "documents",
@@ -8983,7 +8983,57 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#26",
-      "hash": "sha256:1dbb117fd03316471b866b58579f9ef9a59a4d02ac1cf0c03d24969a73686f12"
+      "hash": "sha256:bf64205ac512475c1817efa886c6a214620aeb0634a29096122adaca3a560e6e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#28",
+      "hash": "sha256:baf8f1e64c5856afcee3119e1a6de92dafe0799f15c6962bcaaaf83e79f5211b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#35",
+      "hash": "sha256:d07b08b3495798979e880162d6a57c66ffa205e49599089537d9cb625ec3de00"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#38",
+      "hash": "sha256:6ac9c8d82853529ae4759425b0c20a068c2a011a81ca0e6587bed939afcb6400"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#43",
+      "hash": "sha256:2bf2299dd298a1526ac9df0c273c8e7c87e24b49dd347395283be6b7854fbf72"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#47",
+      "hash": "sha256:9afd76138e9a2f1be224ddf2b6d5cf00d8b4e5594420d11b8e4f48e1fc7c5e9f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#50",
+      "hash": "sha256:f3e3f89369162b64747b5261e51979d6e1662c08c2993ada11301df4fb8a957d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#53",
+      "hash": "sha256:907e62c4795f934d8d6f9f971b93afa645ddbf8a2028316cd83aadeb52702574"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#60",
+      "hash": "sha256:8d321de8228a4840b08ce9fd69b1530c730de7999212c7816361dd1f6c68263b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#62",
+      "hash": "sha256:6c3df4672098a9604aeba8e5b6b365bcd2914368fae95ff257f3f288d265c187"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#64",
+      "hash": "sha256:5f9f614ee2fdd78d8eafcb147e902b666c7397396a743ee96934be40ea3c6af5"
     },
     {
       "content": "headings",
@@ -40903,12 +40953,202 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#26",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:0a2cc94047780dd5b0570238e0c9eb415e9aae7874870998dd68aa561d57b170"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#27",
-      "hash": "sha256:35b60042fa77dd3c1c40a372c31e9ab917c6d39bcf7f93cf8c89c24f980f6505"
+      "hash": "sha256:2941bcd444c3583a2195a9a66b52f3726bbd38f4dc2ac24d80d663e5806e2d04"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#28",
+      "hash": "sha256:80bc7e0de0e0ff4cbf443b2de6c76c674e4eb3a12022969937137e8ad2f34e27"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#29",
+      "hash": "sha256:bd83e9916a146f7ef0c1cfcdb42b2e645426f9cbfdbbf1c3b7529e095577ff34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#30",
+      "hash": "sha256:a4b719c6515d9367fcc907376a4021a9912e91625f54def783132b1cbdd2ba8b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#31",
+      "hash": "sha256:ff1d68d3db97a2352c2b7c71e0f065fcb949fa5b244687c3ecefa6e4da85532f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#32",
+      "hash": "sha256:f46400a69efdd3361c99f9d3f7d4312b69e0df7b7f74e179f5e4b469d8edd2f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#33",
+      "hash": "sha256:030890d34b749b0443ab4ea4cac284176345046dcb797b637c50adc6b48dc921"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#34",
+      "hash": "sha256:9739d326cd20a9d2f1d74596c3e8e05898aa11b705eba7a0f13fe46e1a0e7ec2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#35",
+      "hash": "sha256:2571444fe439e29623f66dd3b9dfde024213e411ec24b9b938035d7c569419af"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#36",
+      "hash": "sha256:d0a4d47f93c154ff37d3d4c67f956171c10347e474c71cdce5a75a3bed73b1f5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#37",
+      "hash": "sha256:7c7d9a8c3c40edeaeb7e0f29bd886ba385ea8bab3ee97ed8b4539890565bd548"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#38",
+      "hash": "sha256:551e0d552ea46f4dc49853b838eb88e58524917cfda3bb748b281deaee75c68a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#39",
+      "hash": "sha256:8926b3c7fe6ca6208b493e36015da266ae2383e0fa0419b5326e119eb1f82e8b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#40",
+      "hash": "sha256:9d11b739d2697cdc69bb04691a68d1a9b8ee1f31be1f401a10b420b9de051ade"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#41",
+      "hash": "sha256:11f8a5ec752d93af631815c2c886f0ad71d3114a74bf7564167a7e7c2399f10f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#42",
+      "hash": "sha256:c6bc8e1f9bd2342f177d87529f39626c5a1565e366953ba99e7cec5667aaa703"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#43",
+      "hash": "sha256:174c3f4e203a24499621f02061c25d664f5d1bc4462356b87ef9e8bc5a1b34b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#44",
+      "hash": "sha256:cf35a72f586f80a50b11d7bad2aae7f939f5bab413a778993cacc40348db5c47"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#45",
+      "hash": "sha256:242108bfe5181d5be076cf7cd3b178712e27aacf266b1859087f96ba8f274ca4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#46",
+      "hash": "sha256:6315ce37f7ffab9153601eeed09ebe3411431b7cdbfeb9e536848160cade3008"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#47",
+      "hash": "sha256:959175042a9fbdb9086fee677906f47b74e4e50f9d0da43da5a4d9ac4a327529"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#48",
+      "hash": "sha256:71e5e15fe37bc28da5db55267bee84bd73933977854c5409c07e8e2799e2a416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#49",
+      "hash": "sha256:16c5d3525aa4a60140fff3f9d647ee20640f8080abb6a3e8d4ca77412065d05e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#50",
+      "hash": "sha256:53afd73cd0a65e03cdef07793634fbb9e459c8fd90d6795cebabb60038ee9a40"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#51",
+      "hash": "sha256:b404735ca3388041849df9a86279666948a2a7b7f9c9bd6be24e778632fcbb06"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#52",
+      "hash": "sha256:6da593288ec5e215efda75457ca64911fb52748123ece91508d1542edaae309e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#53",
+      "hash": "sha256:f2c147940ee57b3436b78c9738e7038c1b3688936a3a3ef7ef9a73c3a647be41"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#54",
+      "hash": "sha256:91c259c6193960e619aebb32c60732cdd95b258ce87f551af6f3334dac6a3292"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#55",
+      "hash": "sha256:8eefa0a21cc4d1eedfe847bf11ececb7f5e5f5edac53dc3a969f802f04d31562"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#56",
+      "hash": "sha256:438e58a4626c71480c6a76008b27520a0104f47fbc960d9e26558f2b85a8ef1e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#57",
+      "hash": "sha256:f4ae7679318eb61214f59df2a65936a6d752dc8db70b704c019e4bc5a066bbc9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#58",
+      "hash": "sha256:570a6466845f7cfcd0d11e2e7e8e5f94556f99676b6cf326e37206a5020a480e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#59",
+      "hash": "sha256:a651f89054ef8f22d70d07cf1720abe3ea9a4f466cad0aaa14cc022b64e97ee9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#60",
+      "hash": "sha256:23776860c14089d5eeba54f319b7b50dd6a4c22c73317b1fb233c516cd819df6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#61",
+      "hash": "sha256:1bc4c84b6ebb5783bffe92fbb7617f4c6ca99d108f844c85a481f6ab98222bff"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#62",
+      "hash": "sha256:cde21a938ad35d9972d78aeb8967b9b6190d89eb1805f535c1d7632a90322ebf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#63",
+      "hash": "sha256:08e52e17ca303d4141bf886136f1ee3bbcf45a3f9aa2425ee19e3c0b0add681b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#64",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#65",
+      "hash": "sha256:9df310b90b714376afb63a4df5843e160a1433366e6492da287fa58b1622a44e"
     },
     {
       "content": "blocks",

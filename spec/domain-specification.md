@@ -185,7 +185,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
 | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md@authored | docs/records/OD-PACKAGE-002-the-plan-proposed-a-suffix-and-the-corpus-answered-the-proposal.md | authored | 62 | 10 | sha256:352ad99a23d033b9a5b6637077e352c64aa3ef73e3248b65f1fb00b6ef080a53 |
 | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md@authored | docs/records/OD-PACKAGE-003-an-integration-package-materializes-a-peers-connection-not-the-content-that-crosses-it.md | authored | 42 | 10 | sha256:353b96edd0e3cd1cd8ffaa0fa1f645769af77bc91429d1e32caa3326e8887a6e |
-| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md | authored | 27 | 9 | sha256:e94d0c54e1e8ac358fc301df5119ab588054e69c32c0b4abf3420717a7959610 |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md@authored | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md | authored | 65 | 19 | sha256:48034d63425616e72f3584f23ead8a2c3e23f9843c1fcb9e1f6da2e7e0221073 |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md@authored | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md | authored | 32 | 10 | sha256:a45ac49574962ff1012b371f9aea9eb2f8fc2a06a11e707f2b1679a355acc555 |
 | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md@authored | docs/records/OD-PACKAGE-006-whether-known-providers-needs-a-self-registering-mechanism-or-stays-hand-maintained.md | authored | 22 | 8 | sha256:82a815c8ebfef4326291f80714ff16665a00d6311bcc2ac44be6c1c55f769609 |
 | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md@authored | docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md | authored | 25 | 8 | sha256:ef42dde80754c3356dc02c5381de8581d104bef842cf1222901f92d33236c7ca |
@@ -1807,7 +1807,17 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#17 | authored | 2 | What This Costs If Left As Read Today |
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#19 | authored | 2 | What This Is Not |
 | docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#24 | authored | 2 | Controls |
-| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#26 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#26 | authored | 2 | Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#28 | authored | 3 | What the check actually reads |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#35 | authored | 3 | The description column has no declared source, and that is not an oversight of the check |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#38 | authored | 3 | The column is not entirely unconstrained, and what constrains it is not a description check |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#43 | authored | 3 | Decision: the `Owns` column is free region |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#47 | authored | 3 | Why reclassifying protects the column rather than abandoning it |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#50 | authored | 3 | What would move the column back to owned |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#53 | authored | 3 | The general rule the instance illustrates |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#60 | authored | 3 | Controls |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#62 | authored | 3 | What this does not change |
+| docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#64 | authored | 2 | Status |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#1 | authored | 1 | A materialized asset's publication scope decides whether it may leave the machine, and an undeclared asset defaults to local |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#2 | authored | 2 | Question |
 | docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#7 | authored | 2 | The Three Scopes |
@@ -54150,19 +54160,385 @@ adds the first instance that does.
 
 ### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#26
 
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares · hash: sha256:0a2cc94047780dd5b0570238e0c9eb415e9aae7874870998dd68aa561d57b170*
+
+## Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#27
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares · hash: sha256:2941bcd444c3583a2195a9a66b52f3726bbd38f4dc2ac24d80d663e5806e2d04*
+
+The table above classifies `README.md` as `Composed` and names its regions as "the band/crate
+table, checked bidirectionally against `tests/contract/tests/boundaries.rs`" and "one free
+region, the prose, that carries no check". That sentence is true about the intent and wrong
+about the reach. The table it names has three columns; the check it names reads two of them.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#28
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / What the check actually reads · hash: sha256:80bc7e0de0e0ff4cbf443b2de6c76c674e4eb3a12022969937137e8ad2f34e27*
+
+### What the check actually reads
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#29
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / What the check actually reads · hash: sha256:bd83e9916a146f7ef0c1cfcdb42b2e645426f9cbfdbbf1c3b7529e095577ff34*
+
+`Zone_Row` in `tests/contract/tests/boundaries/readme.rs` is the whole of the reading, and it
+is eighteen lines:
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#30
+
+*revision: authored · kind: code · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / What the check actually reads · hash: sha256:a4b719c6515d9367fcc907376a4021a9912e91625f54def783132b1cbdd2ba8b*
+
+```rust
+fn Zone_Row(architecture: &ArchitecturePayload, line: &str) -> Option<(String, String)>
+{
+    let mut cells = line.split('|').map(str::trim);
+    if cells.next() != Some("")
+    {
+        return None;
+    }
+
+    let (Some(zone_text), Some(name)) = (cells.next(), cells.next())
+    else
+    {
+        return None;
+    };
+    let component = architecture.components.iter().find(|component| return *component == zone_text)?;
+    let name = name.strip_prefix('`').and_then(|rest| rest.strip_suffix('`'))?;
+
+    return Some((name.to_owned(), component.clone()));
+}
+```
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#31
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / What the check actually reads · hash: sha256:ff1d68d3db97a2352c2b7c71e0f065fcb949fa5b244687c3ecefa6e4da85532f*
+
+Three calls to `cells.next()`: one for the empty string before the opening delimiter, one for
+the zone, one for the backticked crate name. The iterator is then dropped and the row is
+returned as a two-tuple, so no caller could reach a third cell even if it wanted to. Everything
+built on that reading inherits its reach.
+`Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band` asserts three things over those
+pairs — no crate listed twice, every declared member listed, every listing a real member at its
+declared component — and all three are quantified over `(crate, zone)` alone.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#32
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / What the check actually reads · hash: sha256:f46400a69efdd3361c99f9d3f7d4312b69e0df7b7f74e179f5e4b469d8edd2f4*
+
+Measured on 2026-09-21 at `53de19a4`, by re-running `Zone_Row`'s own reading over `README.md`
+against `nomos-architecture.json`:
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#33
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / What the check actually reads · hash: sha256:030890d34b749b0443ab4ea4cac284176345046dcb797b637c50adc6b48dc921*
+
+| | |
+|---|---|
+| rows the reading matches | 71 |
+| crates `nomos-architecture.json` declares in `members` | 71 |
+| cells those rows carry | 213 |
+| cells the check compares | 142 — the zone and the crate name |
+| cells the check never reads | 71 — the `Owns` column |
+| text in the unread column | 4,227 words, 31,715 characters, roughly 366 rendered lines at 95 columns |
+| rows whose `Owns` cell is empty | 0 |
+| longest single `Owns` cell | 1,304 characters, `nomos-mcp` |
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#34
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / What the check actually reads · hash: sha256:9739d326cd20a9d2f1d74596c3e8e05898aa11b705eba7a0f13fe46e1a0e7ec2*
+
+A third of the table's cells and the overwhelming majority of its bytes are inside the region
+this record called owned and outside everything that holds it.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#35
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The description column has no declared source, and that is not an oversight of the check · hash: sha256:2571444fe439e29623f66dd3b9dfde024213e411ec24b9b938035d7c569419af*
+
+### The description column has no declared source, and that is not an oversight of the check
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#36
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The description column has no declared source, and that is not an oversight of the check · hash: sha256:d0a4d47f93c154ff37d3d4c67f956171c10347e474c71cdce5a75a3bed73b1f5*
+
+`nomos-architecture.json` holds five keys — `components`, `members`, `permits`, `exceptions`
+and `authorities` — and `members` is a flat map from crate name to zone name. There is no
+per-crate description in it, nor in any other declaration this repository carries. The `Owns`
+column is therefore not a restatement of a declared source that somebody forgot to compare; it
+is the only statement of what it says. `OD-PROJECT-001` kept this file hand-authored "on the
+condition that the part of it a machine can check is checked", and the part a machine can check
+is exactly the part `nomos-architecture.json` declares.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#37
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The description column has no declared source, and that is not an oversight of the check · hash: sha256:7c7d9a8c3c40edeaeb7e0f29bd886ba385ea8bab3ee97ed8b4539890565bd548*
+
+That settles what went wrong above, and it is narrower than it looks. `Composed` scopes
+regeneration "to the region tied to a declared source of truth, and never touches the region
+that is not" — so a column with no declared source was never in the owned region by this
+record's own definition. Version 1 did not widen the class. It named the region in the units of
+the artifact, a table, rather than in the units of the comparison, a cell, and a table is wider
+than its checked columns.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#38
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The column is not entirely unconstrained, and what constrains it is not a description check · hash: sha256:551e0d552ea46f4dc49853b838eb88e58524917cfda3bb748b281deaee75c68a*
+
+### The column is not entirely unconstrained, and what constrains it is not a description check
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#39
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The column is not entirely unconstrained, and what constrains it is not a description check · hash: sha256:8926b3c7fe6ca6208b493e36015da266ae2383e0fa0419b5326e119eb1f82e8b*
+
+Two assertions read `README.md` as one string rather than as a table, and reach the third
+column incidentally:
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#40
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The column is not entirely unconstrained, and what constrains it is not a description check · hash: sha256:9d11b739d2697cdc69bb04691a68d1a9b8ee1f31be1f401a10b420b9de051ade*
+
+- `Test_Band_Zero_Should_Be_Described_In_One_Place`, in
+  `tests/contract/tests/boundaries/band_zero.rs`, requires `README.md` to contain
+  `OD-CONTRACTS-001` and not to contain the phrase `authoritative statement of Nomos`.
+  `README.md` names that record **exactly once**, and the one occurrence is inside the `Owns`
+  cell of the `nomos-contracts` row.
+- `Test_The_Readme_Should_Not_Relist_A_Vocabulary_It_Routes_To` requires five words to be absent
+  from the file entirely.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#41
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The column is not entirely unconstrained, and what constrains it is not a description check · hash: sha256:11f8a5ec752d93af631815c2c886f0ad71d3114a74bf7564167a7e7c2399f10f*
+
+So a mechanism that rewrote the `Owns` column would redden a band-zero check, and would be told
+it had described band 0 in the wrong number of places rather than that it had deleted 31,715
+characters of reasoning. A whole-file phrase constraint is not a region check: it cannot name
+which region broke it, it happens to cover one of seventy-one cells, and its failure reports a
+different defect from the one that occurred. It is a reason to preserve the column, not evidence
+that the column is watched.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#42
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The column is not entirely unconstrained, and what constrains it is not a description check · hash: sha256:c6bc8e1f9bd2342f177d87529f39626c5a1565e366953ba99e7cec5667aaa703*
+
+The near miss worth naming is `tests/contract/tests/boundaries/transport_registry.rs`. Its
+reasoning leans on the four `[repo tooling]` marks that live in `Owns` cells —
+`Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` quotes the mark in its own doc and in
+its failure message — and it never opens `README.md` at all. Those marks are cited by a check
+and read by none.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#43
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / Decision: the `Owns` column is free region · hash: sha256:174c3f4e203a24499621f02061c25d664f5d1bc4462356b87ef9e8bc5a1b34b8*
+
+### Decision: the `Owns` column is free region
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#44
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / Decision: the `Owns` column is free region · hash: sha256:cf35a72f586f80a50b11d7bad2aae7f939f5bab413a778993cacc40348db5c47*
+
+Reclassified, not deferred, and not left owed. `README.md`'s owned region is the zone cell, the
+crate-name cell and the set of rows. The `Owns` column is free region, on the same footing as
+the prose around the table.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#45
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / Decision: the `Owns` column is free region · hash: sha256:242108bfe5181d5be076cf7cd3b178712e27aacf266b1859087f96ba8f274ca4*
+
+| Part of the table | Region | What a regenerating mechanism may do |
+|---|---|---|
+| column 1, the zone | owned | write it, from `members` in `nomos-architecture.json` |
+| column 2, the backticked crate name | owned | write it, from the same declaration |
+| the set of rows | owned | add a row for a declared member and remove a row for a crate that is gone — the two directions `Assert_Every_Member_Is_Listed` and `Assert_Every_Listing_Is_A_Member` already compare |
+| column 3, `Owns` | free | preserve it byte for byte, including the four `[repo tooling]` marks. Never write it, never normalize it, never reflow it. |
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#46
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / Decision: the `Owns` column is free region · hash: sha256:6315ce37f7ffab9153601eeed09ebe3411431b7cdbfeb9e536848160cade3008*
+
+Adding a row is the corner where the two regions meet, and it has one honest answer: a
+mechanism adding a row writes the two owned cells and leaves the `Owns` cell empty for a person,
+because it has nothing to write there and inventing a description is the failure this record
+exists to prevent. An empty `Owns` cell leaves every check green, since no check reads it, so it
+is a marker for a person rather than a defect a gate will report. That is the cost of this
+decision stated rather than hidden.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#47
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / Why reclassifying protects the column rather than abandoning it · hash: sha256:959175042a9fbdb9086fee677906f47b74e4e50f9d0da43da5a4d9ac4a327529*
+
+### Why reclassifying protects the column rather than abandoning it
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#48
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / Why reclassifying protects the column rather than abandoning it · hash: sha256:71e5e15fe37bc28da5db55267bee84bd73933977854c5409c07e8e2799e2a416*
+
+The objection to calling it free is that it tells a later generator the column does not matter.
+It says the opposite. In the class table above, free region is the region "nothing but its human
+author ever writes"; owned region is the region regeneration writes. The dangerous state is the
+one this amendment corrects — a column named owned, so a mechanism believes it is entitled to
+write it, and compared by nothing, so the loss is silent and every check stays green. Naming it
+free withdraws the entitlement, which is the stronger of the two protections and the one the
+evidence supports: two items were editing these descriptions by hand while this amendment was
+being written, which is what a maintained free region looks like from outside.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#49
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / Why reclassifying protects the column rather than abandoning it · hash: sha256:16c5d3525aa4a60140fff3f9d647ee20640f8080abb6a3e8d4ca77412065d05e*
+
+What the decision gives up is real and is not hidden. Nothing will detect an `Owns` cell that
+has become false, so a description can drift the way `OD-PROJECT-001` found the whole table had
+drifted, and no run will say so. That cost is what HEAD already carries; this amendment neither
+creates nor closes it. What it ends is the false statement that something is watching.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#50
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / What would move the column back to owned · hash: sha256:53afd73cd0a65e03cdef07793634fbb9e459c8fd90d6795cebabb60038ee9a40*
+
+### What would move the column back to owned
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#51
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / What would move the column back to owned · hash: sha256:b404735ca3388041849df9a86279666948a2a7b7f9c9bd6be24e778632fcbb06*
+
+One thing, and it is stateable: a declared source of truth for a crate's description, outside
+`README.md`, that something compares the column against in both directions. Naming that source
+is a design question rather than a detail, which is why it is not named here as owed work. The
+content is 4,227 words of prose carrying emphasis, backticked identifiers and record citations,
+so a declaration holding it would be either the same prose in a second file — the second
+authority `OD-AGENT-001` and `OD-AGENT-004` refuse, able to disagree with the copy nobody reads
+— or a shorter derived fact, which would not be this column. Until somebody answers that, free
+is the truthful classification and owed-with-no-comparator is not.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#52
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / What would move the column back to owned · hash: sha256:6da593288ec5e215efda75457ca64911fb52748123ece91508d1542edaae309e*
+
+A presence check — every row's `Owns` cell is non-empty — is cheap, is available, and is
+deliberately not required here. It would catch a wholesale blanking and nothing else, and a
+check that cannot tell a true description from a placeholder must not be presented as one that
+watches the column. If it is ever built, it belongs to a `Composed` mechanism's own safety rail
+rather than to this record's ownership table, and it does not make the column owned.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#53
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The general rule the instance illustrates · hash: sha256:f2c147940ee57b3436b78c9738e7038c1b3688936a3a3ef7ef9a73c3a647be41*
+
+### The general rule the instance illustrates
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#54
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The general rule the instance illustrates · hash: sha256:91c259c6193960e619aebb32c60732cdd95b258ce87f551af6f3334dac6a3292*
+
+**A `Composed` asset's owned region is exactly what some check actually compares against a
+declared source, in the units that check reads. A region named owned and compared by nothing is
+free in effect whatever a record says about it, because the only thing "owned" ever buys is a
+mechanism's permission to write.**
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#55
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The general rule the instance illustrates · hash: sha256:8eefa0a21cc4d1eedfe847bf11ececb7f5e5f5edac53dc3a969f802f04d31562*
+
+A later `Composed` asset is classified by applying that rather than by copying `README.md`'s
+answer. Three questions, in order, asked of the candidate region at the granularity a mechanism
+would write it:
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#56
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The general rule the instance illustrates · hash: sha256:438e58a4626c71480c6a76008b27520a0104f47fbc960d9e26558f2b85a8ef1e*
+
+1. **Name the declared source.** Which file, and which key in it, holds the truth this region
+   restates? If the answer cannot be given as a path and a field, the region is free and there
+   is nothing further to ask.
+2. **Read the comparison rather than its description.** Which test opens both the region and
+   that source and fails when they disagree? Read the function body. The owned region ends
+   exactly where the reading stops — `Zone_Row`'s third `cells.next()` is that boundary here,
+   and this record, the test's own module doc and the test's name all described a wider one.
+3. **Construct the disagreement.** Make the region wrong on purpose and watch the comparison go
+   red. A comparison that stays green over a deliberately wrong region was not comparing that
+   region. `Test_A_Stated_Count_That_Disagrees_Should_Be_Read_As_A_Different_Number` is what
+   this looks like when it is built in rather than performed once and forgotten.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#57
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The general rule the instance illustrates · hash: sha256:f4ae7679318eb61214f59df2a65936a6d752dc8db70b704c019e4bc5a066bbc9*
+
+A region that fails any of the three is free region, and a mechanism must not write it.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#58
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The general rule the instance illustrates · hash: sha256:570a6466845f7cfcd0d11e2e7e8e5f94556f99676b6cf326e37206a5020a480e*
+
+Two corollaries the instance also pays for:
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#59
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / The general rule the instance illustrates · hash: sha256:a651f89054ef8f22d70d07cf1720abe3ea9a4f466cad0aaa14cc022b64e97ee9*
+
+- **State a region in the comparison's units, never the artifact's.** "The table" was the error;
+  "the zone cell and the crate-name cell" is the same claim at a granularity that cannot quietly
+  widen. A file, a table or a section is almost always wider than whatever compares it.
+- **A whole-file constraint is not a region check.** It binds a free region without owning it,
+  it cannot say which region broke it, and a mechanism writing the owned region can break it
+  from outside. `band_zero.rs` over `README.md` is the worked case.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#60
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / Controls · hash: sha256:23776860c14089d5eeba54f319b7b50dd6a4c22c73317b1fb233c516cd819df6*
+
+### Controls
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#61
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / Controls · hash: sha256:1bc4c84b6ebb5783bffe92fbb7617f4c6ca99d108f844c85a481f6ab98222bff*
+
+| Weakening | What it produces |
+|---|---|
+| name a `Composed` asset's owned region by the artifact it sits in — the table, the section, the file | the region is wider than the comparison again, and the difference is exactly the part a mechanism may destroy with every check green |
+| read a whole-file phrase constraint as a check over a region | a column believed watched by an assertion that reaches one of its seventy-one cells and reports a different defect when it fires |
+| let a mechanism fill a new row's `Owns` cell rather than leaving it empty | a description nobody wrote, indistinguishable from seventy-one somebody did, in the one column no check can tell apart |
+| leave a column named owned until a check for it exists | the state this amendment corrects, held open for as long as there is no source of truth to build the check against, which is indefinitely |
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#62
+
+*revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / What this does not change · hash: sha256:cde21a938ad35d9972d78aeb8967b9b6190d89eb1805f535c1d7632a90322ebf*
+
+### What this does not change
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#63
+
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Amendment, Version 3: A Composed Asset's Owned Region Is Declared At The Granularity Something Compares / What this does not change · hash: sha256:08e52e17ca303d4141bf886136f1ee3bbcf45a3f9aa2425ee19e3c0b0add681b*
+
+No code, no check and no test is touched by this amendment, and none is owed by it. The three
+classes, the default to `UserOwned` and the other three assets' classifications stand as
+written; `README.md` is still `Composed`, and what moves is where the seam inside it falls.
+`OD-AGENT-004`'s decline of generated README tables is strengthened rather than reopened: the
+owned cells are checked *because* they are authored, and the free column cannot be generated at
+all, having no declared source to generate from. A mechanism that reaches this table therefore
+checks it — comparing the two owned cells and the row set against `nomos-architecture.json`, and
+leaving the `Owns` column alone — rather than writing it.
+
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#64
+
 *revision: authored · kind: heading · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#27
+### docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md#65
 
-*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Status · hash: sha256:35b60042fa77dd3c1c40a372c31e9ab917c6d39bcf7f93cf8c89c24f980f6505*
+*revision: authored · kind: prose · heading: An asset's ownership class decides what regeneration does to it, and an undeclared asset defaults to user-owned / Status · hash: sha256:9df310b90b714376afb63a4df5843e160a1433366e6492da287fa58b1622a44e*
 
 Accepted. Four real assets are classified against the model; a fifth kind of generated file, if
 this repository grows one, is measured against this table rather than invented against a blank
 page. Amended to version 2 by `P13-PACKAGE-REFINE`, which noted `GeneratedOwned`'s
 single-producer framing as an open question for a future multi-producer asset, without
-changing the three classes or any of the four current assets' classifications.
+changing the three classes or any of the four current assets' classifications. Amended to
+version 3 by `P125-A-COMPOSED-FILES-OWNED-REGION-IS-AMBIGUOUS-BY-COLUMN`, which narrowed
+`README.md`'s owned region from the band/crate table to the zone cell, the crate-name cell
+and the set of rows — the units `Zone_Row` actually compares — reclassified the `Owns`
+column as free region, and stated the general rule that a `Composed` asset's owned region
+is declared at the granularity something compares. No class, no default and no other
+asset's classification changed, and no check was built.
 
 ### docs/records/OD-PACKAGE-005-a-materialized-assets-publication-scope-decides-whether-it-may-leave-the-machine-and-an-undeclared-asset-defaults-to-local.md#1
 

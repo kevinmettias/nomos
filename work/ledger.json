@@ -91139,6 +91139,41 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P125-THE-FACT-FIVE-DEFERRED-ITEMS-WAIT-ON",
+      "title": "Five deferred items share one unmet condition, a graph fact nothing decides, and deciding it is the only thing that moves any of them",
+      "why": "ARC-ROADMAP-001 v4 replaced the two-tier boundary with a per-item condition and reported that no deferred item's condition is met at 53de19a4. Five of the nine conditions are the same kind: architecture discovery and inference, feature topology and path tracing, placement analysis, runtime and debug intelligence, and test intelligence each wait on the fact they consume being decided and provided. Atlas is downstream of all five by that amendment's own third kind, which makes this the single condition whose resolution moves the most. OD-RULES-024 measured the same gap from the rule side two versions ago and declined to invent it: architecture drift needs an observed graph finer than package-level dependency edges, module reaching module, type flowing into type, function calling function, and the finest adjacency this workspace declares is eleven zones. It states plainly that this is a materialization question of the weight OD-RULES-010 and OD-CAPABILITY-010 were, not a detail a rule's implementation may invent on the way past, and it recorded a clean baseline so a later rule is measured against a known starting point. Nobody has decided it since. So the largest remaining gap the external review named is blocked on one undecided capability, and the decision is a record rather than a build.",
+      "done_when": "A registered governing record decides what graph fact this workspace produces, or refuses to decide it with a stated reason, measured rather than designed from the requirement text. It reports what the existing capabilities actually carry at a named revision, in particular what nomos.cap.dependency.edges and nomos.cap.controlflow.reachability each answer and at what grain, and what nomos.cap.syntax.items payload carries, so the gap between them and a call, data or module graph is a measured distance rather than an assertion. It names which of the five deferred items each candidate fact would unblock and which it would not, so the decision is weighed against its real consumers rather than against the largest one. It decides at minimum the grain, whether the fact is one capability or several, what a provider must have resolved for a claim at each FactVariant level it offers, and how incremental invalidation works for a fact whose inputs are the whole crate rather than one file, since IncrementalGranularity is declared per capability and a whole-graph fact is the first that cannot be per-file. It states what a rule in the Rules zone may read without naming the Provider zone, the constraint OD-RULES-024 surfaced and left open. It applies OD-ANALYSIS-004's vocabulary rule so the family introduces no epistemic type of its own, and it schedules no crate and builds nothing. Both required projections are re-rendered from the record set the commit publishes and nomos spec freshness with both --require flags exits 0 in that tree.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-018",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-018.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
