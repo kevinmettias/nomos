@@ -55,7 +55,7 @@ fn Test_Only_The_Composition_Module_Should_Name_A_Provider_Crate()
     let mut offenders: Vec<String> = Vec::new();
     for source in &sources
     {
-        let relative = Relative_To_Src(source);
+        let relative = Relative_To_The_Source_Directory(source);
         if COMPOSITION_MODULE.contains(&relative.as_str()) || Is_Test_Only(&relative)
         {
             continue;
@@ -111,7 +111,7 @@ fn Collect_Sources(directory: &Path, found: &mut Vec<PathBuf>)
 
 /// `source`'s path relative to `src/`, with forward slashes so a row above reads the same on
 /// every platform.
-fn Relative_To_Src(source: &Path) -> String
+fn Relative_To_The_Source_Directory(source: &Path) -> String
 {
     let root = Source_Root();
     let relative = source.strip_prefix(&root).expect("every scanned file sits under this crate's own src/");
