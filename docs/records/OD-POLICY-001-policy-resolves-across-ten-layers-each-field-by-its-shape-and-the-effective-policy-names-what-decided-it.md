@@ -3,7 +3,7 @@ id: OD-POLICY-001
 type: decision
 title: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - policy
@@ -333,9 +333,14 @@ decide, so today a higher layer can only supersede.
 **Refuse — three cases, and declaration order never resolves any of them.** First, one key
 stated twice within one layer with different values, whether by two artifacts of that layer or
 one artifact twice: `MODEL-ROUTE-023`'s rule for equal-specificity selectors, applied to every
-field. Second, a lower layer stating a field a higher layer has locked, per `CONFIG-003`: the
-override is rejected and kept visible with its reason; a lock is something a contribution may
-carry, and no source that could carry one exists today. Third, an artifact that is present and
+field. Second, a *higher* layer stating a field a *lower* layer has locked, per `CONFIG-003`
+(amendment, version 3): the override is rejected and kept visible with its reason; a lock is
+something a contribution may carry, and no source that could carry one exists today. **A lock
+binds upward, against the layers that outrank the locking one**, because authority and
+precedence are two axes and the corpus keeps them apart — version 2 had this sentence the
+other way round, which left `Organization`, the layer `CONFIG-003` exists for, able to forbid
+nothing. The amendment below carries the measurement and refuses the two alternative readings.
+Third, an artifact that is present and
 cannot be read as its declared shape refuses the run rather than reading as empty, which is
 what every reader already does and `Resolve_Gate_Policy`'s own doc says why.
 
@@ -450,6 +455,25 @@ so a reader of `approvals` alone sees that a file's approvals lost to a caller's
 only `phases` was compared. A refused companion appears in no effective policy at all, because
 a run that refuses reaches none.
 
+**Amendment, version 3: what a rejected override reads as, now that a lock binds upward.** A
+locked field's entry carries the value the resolution settled on, the provenance that decided
+it, and, in its rejected list, every *higher* layer that stated the field anyway — each with
+its own layer and artifact, and a reason naming the layer and artifact that locked it.
+**Rejected is not overridden, and the two lists stay separate**: a rejected statement was
+forbidden rather than outranked, and a report that filed it as overridden would tell its
+author their value lost a precedence contest it was never admitted to. So a field an
+organization locked and a repository stated reads "coverage: `Organization`,
+`<the organization artifact>`; rejected: `Repository`, `nomos-gate.json`, refused because
+`Organization` locked this field", and never "coverage: `Organization`, overrode
+`Repository`". Rejection does not end the resolution — that is the one refusal case of the
+three that does not — and the resolver continues down the admitted contributions, which is
+`MODEL-ROUTE-005`'s own narrative in volume 06: "A rejected higher-precedence candidate
+remains in the resolution ledger with its rejection reason; the resolver then considers the
+next candidate." Where the locking contribution states the field, it is that next candidate;
+where it locks without stating, the field falls to the next admitted layer and, if there is
+none, to `Default`, and the effective policy names the lock as why nothing above it
+contributed. This record still does not decide which fields a layer may lock.
+
 `GateRunProvenance.policy` stays what it is: a digest of the effective *values*, so that
 `gate compare` attributes a difference between two runs to what judged them and not to which
 layer happened to say it. Provenance rides beside the digest, never inside it; two runs judged
@@ -550,9 +574,10 @@ effective policy and the unit are built.
 - **It does not restate, reorder or amend `MODEL-ROUTE-005` or `ExecutionScope`.** The
   eleven-position ladder is the model-execution profile's own order, and nothing here touches
   `nomos-model-package`.
-- **It does not decide a retraction spelling for merged entries**, nor which fields a higher
-  layer may lock beyond the fact that a contribution may carry a lock. Both wait for a source
-  that would use them.
+- **It does not decide a retraction spelling for merged entries**, nor which fields a locking
+  layer may lock beyond the fact that a contribution may carry a lock (amendment, version 3:
+  version 2 wrote "a higher layer" here, which the direction below reverses). Both wait for a
+  source that would use them.
 - **It does not decide rendering.** What a report prints for an overridden or rejected
   contribution is the second item's, subject only to the three states of a layer being
   distinguishable in it.
@@ -585,7 +610,9 @@ effective policy and the unit are built.
 - **A repository that can declare more than one gate.** That separates the `Gate` layer from
   `Repository` and gives `nomos-gate.json` a per-gate shape this record did not have to decide.
 - **An organization source.** That activates `CONFIG-003`'s lock and the refuse rule's second
-  case, both of which are declared here with no instance to check them against.
+  case, both of which are declared here with no instance to check them against. It is also the
+  first real test of the direction version 3 gives that lock: under version 2's direction an
+  organization source would have activated nothing at all, which is how the defect was found.
 - **A merged field whose order is its meaning.** `components` is the only ordered list today
   and is overridden whole for that reason; a second one that must merge would need a rule
   keyed union cannot express.
@@ -593,6 +620,181 @@ effective policy and the unit are built.
   A deciding field exists because approvals address phases and phases address nothing of
   theirs. Two fields each addressing keys the other declares could not be resolved by
   designating one of them, and would reopen the unit rule rather than add an instance to it.
+
+## Amendment: A Lock Binds Upward, Because Authority And Precedence Are Two Axes The Corpus Keeps Apart
+
+Added at version 3 by `P123-A-LOCK-THAT-BINDS-DOWNWARD-CANNOT-EXPRESS-THE-ONE-CASE-THE-CORPUS-NAMES-FOR-IT`,
+in `ARC-ROADMAP-001`'s convention: a named amendment section that quotes the superseded
+sentence rather than leaving it to be diffed. It departs from that convention in one way, and
+the departure is deliberate. `ARC-ROADMAP-001` rewrites nothing above its own heading; this
+amendment does correct decision 3's second refusal case at its own site, because that list is
+read in place by anyone asking what the resolver refuses, and a reader arriving there has no
+reason to scroll to find out that the sentence means its opposite. Everything else above
+stands, and the superseded sentence is quoted here in full so the correction can be checked
+against it.
+
+**What version 2 said.** "Second, a lower layer stating a field a higher layer has locked, per
+`CONFIG-003`: the override is rejected and kept visible with its reason; a lock is something a
+contribution may carry, and no source that could carry one exists today."
+
+**The contradiction, in this record's own two sentences.** Decision 1 orders the layers
+`Default`, `Organization`, `Repository`, `Workspace`, `User`, `Workflow`, `Gate`,
+`CommandLine`, `Environment`, `TemporaryRunOverride`, lowest precedence first. `Organization`
+is therefore second from the bottom, and the only layer beneath it is `Default`, which states
+nothing anyone authored. Under version 2's direction a lock forbids the layers *below* the
+locking one, so an organization lock forbids `Default` and nothing else — that is, nothing.
+`CONFIG-003` exists so that an organization can bind a repository it does not trust to
+restrain itself, and version 2's rule could not express the one case its own citation names.
+This is not a defect in the resolver: the claimant of
+`P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT-2` built the rule as written, flagged it at
+`PolicyContribution::locks` as "a corpus question and not one a resolver may answer for
+itself", and named the answer without taking it — "until a record decides that authority and
+precedence are two axes". This amendment is that record.
+
+**What `CONFIG-003` actually says, and which node it is.** Read as its own text rather than
+through this record's paraphrase, in two places that agree byte for byte. In the specification
+store, `nomos spec record --id CONFIG-003` answers that it is an **artifact node**
+(`canonical-normative-record`), not a requirement node — the standing this record's
+measurement section already established for the whole `CONFIG-*` family. In the v14 corpus its
+authored source is `01_authoring/source_records/config-003.md`, which names
+`01_authoring/domain_volumes/04-checks-gates-corrections-and-governance.md` line 186, one of
+the five lines of section 7.14, "Configuration precedence and effective policy". The line
+reads, whole: "CONFIG-003 Security and organization policy may prohibit lower-level overrides.
+Rejected overrides shall remain visible with reason." `US-CONFIG-003` was **not** what was
+read and is a different node — a reviewer's user story about comparing effective
+configurations between runs, branches, repositories, environments, build variants or
+organizations, with its own acceptance file, and it says nothing about locks. The lock's
+acceptance is `US-CONFIG-002-AC-02`, "security and organization policy may prohibit
+lower-layer overrides", under the administrator story whose statement is "deterministic
+precedence, merge-versus-replace behavior, **and override restrictions** for typed
+configuration fields" — three things, not one, and the third is the lock.
+
+**"Lower-level" is lower in authority, and the corpus says so where this record took its
+order from.** The decisive evidence is not `CONFIG-003`'s own wording, which "level" leaves
+ambiguous on its own. It is that the corpus applies the same word to the same layers in the
+same passage that supplies `MODEL-ROUTE-005`'s ladder, and there the layers doing the
+prohibiting sit at the *bottom* of the precedence order:
+
+- Volume 06's routing narrative: "Organization and repository policy may cap or prohibit
+  lower-level choices, but those constraints are applied as validation and rejection rules
+  rather than as an undocumented alternative ordering."
+- Volume 02's engine description: "Higher-authority organization or repository constraints may
+  reject or cap a lower-level value but may not create client-specific ordering."
+- `MODEL-ROUTE-005` itself: "The first valid value for each profile field wins after
+  higher-authority policy constraints, compatibility checks, and explicit merge semantics are
+  applied" — and its ladder puts `organization profile` tenth of eleven, above only
+  `backend default`.
+- `MODEL-ROUTE-001`: "The smallest explicit assignment shall override inherited defaults
+  **subject to organization and repository policy constraints**."
+- The volume 06 glossary's `ModelRoutingSelector`: scope precedence runs down to "organization
+  profile, then backend default, **subject to higher-authority policy caps and prohibitions**."
+
+So the corpus calls organization policy *higher-authority* in the same breath as it places the
+organization profile second from the bottom of precedence. Precedence is specificity — the
+narrowest explicit assignment wins — and authority is breadth of governance, which runs the
+other way. A lock is an authority statement, and authority binds against precedence, not with
+it. `MODEL-ROUTE-005`'s agreement with this record's layer order at every shared name was
+decision 1's evidence that the listing is a precedence order; the same passage is now the
+evidence that a lock stated there binds upward. One reading of one passage, used twice.
+
+**So: a contribution's lock forbids every layer that outranks it from stating the locked
+field.** A lower, higher-authority layer restrains the higher-precedence ones. What each layer
+may lock is untouched: this record still does not decide it, and still waits for a source that
+would use one.
+
+**Why the second reading is refused.** Version 2's direction — a lock binds downward — is not
+incoherent. It is expressible, and it even has an effect the override rule alone does not
+have: a layer could lock a field while stating nothing, forbidding every layer beneath it and
+driving the field to `Default`. But nothing in the corpus asks for a veto into the default,
+and the layers that could usefully hold one under that direction are `Repository`, `Workspace`,
+`User`, `Workflow`, `Gate`, `CommandLine` and `Environment` — the ones `CONFIG-003` does not
+name — while `Organization`, the one it does, can hold nothing at all. A rule under which the
+cited authority is the single party excluded from the mechanism is not a reading of that
+citation. And downward locking would have to be argued past volume 06's own clause that these
+constraints "are applied as validation and rejection rules rather than as an undocumented
+alternative ordering", which presupposes that they cut across the ordering rather than run
+with it.
+
+**The honesty check the item proposed, and what it actually measured.** The item asked whether
+choosing the second reading would force the record to say that the only useful locks come from
+layers with no source, taking
+`Test_A_Locked_Field_Should_Reject_A_Lower_Layers_Statement_And_Keep_It_Visible` — which locks
+from `Workflow` — as the tell. Run against this record's own table of which layers have a
+source on this host, that check does not come out the way it was posed, and it is recorded
+here rather than quietly dropped. `Workflow` **is** an observable source: the table names
+`GateBody.command`, a workflow step's own `GateCommand`, "a real source that reaches the
+resolver unlabelled". So the second reading does not reduce to locks from nowhere, and the
+check did not change the answer.
+
+What it did surface is worse for the second reading than the missing source would have been.
+That test's fixture has a `Workflow` lock refusing a `Repository` statement, and on this host
+both artifacts are written by the same author: `nomos-gate.json` and the workflow step that
+runs the gate are files of the one repository. Under the second reading the documented case
+for `CONFIG-003` — a security and organization mechanism — is a repository forbidding itself,
+in a contest precedence already settles, and the lock's only added effect is to make the losing
+statement read as "rejected" instead of "overridden". Under the direction decided here that
+fixture is not the documented case at all: it locks from above and must therefore reject
+nothing, and the documented case becomes an `Organization` lock refusing a `Repository`
+statement, which is `CONFIG-003`'s sentence with no reinterpretation left in it.
+
+**Why the third reading is refused, and what it would have cost.** Moving `Organization` above
+`Repository` would make version 2's downward lock work by reordering. It is refused on the
+corpus's own terms and on this record's. Volume 06 forbids exactly that construction:
+constraints are "applied as validation and rejection rules rather than as an undocumented
+alternative ordering". `MODEL-ROUTE-005` puts `repository profile` above `organization
+profile`, so the reorder would break the agreement at a shared name that decision 1 offered as
+its only evidence that the listing is a precedence order at all — the reorder would saw
+through the branch the whole order sits on. It also contradicts the specificity principle the
+rest of the order follows, under which a narrower, more local statement outranks a broader
+one, and `MODEL-ROUTE-001` states that principle in the same sentence that subordinates it to
+organization constraints, which is precisely the two-axis shape. The measured cost is
+asymmetric in an instructive way: on this host the reorder would change **no** field's
+resolution, because `Organization` has no source and contributes nothing to compare against
+`Repository`, so it buys nothing observable today and spends decision 1's entire evidentiary
+basis to buy it. The ten layers and their order are therefore untouched by this amendment.
+
+**The code this answer reaches, and its territory.** The direction decided here is not the one
+built at `dbb2c7c7`, so this amendment names the work and does not do it. The change is a rank
+comparison and the prose around it, all inside one module:
+
+- `crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/resolution.rs` —
+  `Locking` selects a contribution whose `layer` is greater than the offered contribution's;
+  under this amendment it is the lesser. Its doc, "The higher-layer contribution that locks
+  `field` against `offered_by`", inverts with it. `Admitted` and `Rejections_For` need no
+  change of shape: they already filter and report through `Locking`, which is why this is one
+  comparison rather than a rewrite.
+- `crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_contribution.rs` —
+  the `locks` field doc, which today reads "Fields this artifact forbids a *lower* layer from
+  stating" and carries the paragraph deferring this question to a record. Both are replaced by
+  the rule and a citation of this version.
+- `crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_refusal.rs` —
+  `LockedOverride`'s doc and `Locked_Sentence`'s prose, which tells an author "a locked field
+  may not be overridden from a lower layer".
+- `crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/rejected_override.rs` —
+  the doc paragraph that states the direction.
+- `crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/tests.rs` —
+  `Test_A_Locked_Field_Should_Reject_A_Lower_Layers_Statement_And_Keep_It_Visible`, whose
+  fixture and whose name both state the superseded direction. It becomes an `Organization` lock
+  refusing a `Repository` statement, and it owes a falsifier on the opposite side — a lock
+  stated from a higher layer must reject nothing — because a single-sided fixture cannot tell
+  a rank comparison from its inverse.
+- this record, through `--amends`, and for a reason worth naming rather than discovering at the
+  gate: renaming that test moves a name this record cites, and `tests/contract/tests/record_citation.rs`
+  resolves every cited test name verbatim. The rename and the citation land together or the
+  record goes red.
+
+`tests/contract/surface/nomos-gate-orchestration.txt` is deliberately **not** territory, and
+that is measured rather than assumed: the snapshot carries signatures, its two lock-bearing
+lines are the `PolicyContribution::locks` field and the `PolicyRefusal::LockedOverride`
+variant with its three named members, and neither encodes a direction. No public shape moves. The
+predicate is that crate's own suite, `cargo test --no-fail-fast -p nomos-gate-orchestration`,
+which is the scope of the claim and nothing wider.
+
+**What this amendment does not do.** It does not reopen the ten layers or their order. It does
+not decide which fields a layer may lock, or which layers may carry a lock at all — a source
+that would use one is still what decides both. It does not give `Organization` a source. It
+does not change the other two refusal cases, the unit rule, or anything decision 3 says about
+shape. And it builds nothing: the item above is where the comparison is inverted.
 
 ## Status
 
@@ -623,3 +825,19 @@ quoted rather than re-derived. The ten layers, the three refusal cases and the `
 relationship are untouched. The item that builds the resolver is
 `P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT-2`, the id decision 6 names having been
 declined for the clause this amendment corrects.
+
+Amended to version 3 by
+`P123-A-LOCK-THAT-BINDS-DOWNWARD-CANNOT-EXPRESS-THE-ONE-CASE-THE-CORPUS-NAMES-FOR-IT`, which
+reverses the direction of decision 3's second refusal case: a lock binds **upward**, so a
+contribution forbids every layer that outranks it from stating the locked field, because
+authority and precedence are two axes and the corpus names organization policy
+higher-authority at the same position it ranks the organization second from the bottom of
+precedence. Version 2's downward rule left `Organization` — the layer `CONFIG-003` is written
+for — able to forbid nothing. A rejected override now reads as a statement that was forbidden
+rather than outranked, kept in the field's rejected list with the locking layer and artifact
+in its reason, while the resolution continues down the admitted contributions instead of
+ending. The ten layers, their order, the other two refusal cases, the unit rule and every
+question about which fields may be locked are untouched. The direction is not the one built at
+`dbb2c7c7`; the amendment names the rank comparison in
+`crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/resolution.rs` and
+the four files around it as the work, and does not do it.
