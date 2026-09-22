@@ -91316,14 +91316,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-review",
-        "acquired_at": 1790054096,
-        "lease_expires_at": 1790061296
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -91340,7 +91336,34 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries",
+          "--test",
+          "crossing_cold",
+          "--test",
+          "public_surface"
+        ],
+        "exit_code": 0,
+        "output_tail": " |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: unused import: `Path`\n  --> tests\\contract\\tests\\crossing_cold.rs:45:17\n   |\n45 | use std::path::{Path, PathBuf};\n   |                 ^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: unused import: `Revisions_In`\n  --> tests\\contract\\tests\\boundaries\\lock_pinning.rs:85:65\n   |\n85 | use nomos_contract_tests::{Declared_Revisions, Repository_Root, Revisions_In, XVPE_PREFIX};\n   |                                                                 ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-contract-tests` (test \"crossing_cold\") generated 1 warning (run `cargo fix --test \"crossing_cold\"` to apply 1 suggestion)\nwarning: `nomos-contract-tests` (test \"boundaries\") generated 1 warning (run `cargo fix --test \"boundaries\"` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.53s\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-92a4ff356d3672d1.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-955891bd276589df.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-4b043d90270bbc14.exe)\n",
+        "verified_at": 1790055501,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "966d874563ce02c603c87da1a9aa86a45778915b"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -91799,6 +91822,45 @@
         ],
         "patterns": []
       },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75-project007",
+        "acquired_at": 1790055510,
+        "lease_expires_at": 1790066310
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-THE-EDITOR-SEAM-RE-DERIVES-EVERY-FACT-ON-EVERY-JUDGEMENT",
+      "title": "A second judgement in the editor seam re-derives every source's fact instead of the one that moved, and its own test has been red at HEAD for nobody",
+      "why": "Test_A_Second_Judgement_Should_Re_Derive_A_Fact_Only_For_The_Source_That_Moved in crates/host/nomos-lsp/src/nomos_diagnostic_provider/tests.rs fails at HEAD, and its assertion names the defect: the cold judgement should have paid for one syntax fact per source on top of a per-call cost of zero, and paid for twelve instead, against an expected two. It was found by a worker building something else, which isolated it properly by reverting its own diff and re-running at a pristine revision, and I confirmed it independently at HEAD with nothing of mine in the tree. So it is nobody's in-flight work; it is a red test the workspace has been carrying. The property it asserts is the whole reason NomosDiagnosticProvider holds a workspace, a fact store and a reassessment cache across calls: an editor re-judges on every save, and a seam that re-derives every fact each time makes incremental reuse a claim rather than a mechanism. OD-ANALYSIS-009's amendment argued from that reuse being real. Nothing else in the workspace exercises a second call over an unmoved tree, so this test is the only place the property is observed, which is why its failing has cost nothing visible and why leaving it red costs more than it appears to.",
+      "done_when": "A second judgement over a tree where one source moved re-derives that source's fact and reuses the rest, and the test that asserts it passes for the reason it names rather than by having its expected number raised to match the observed one. The cause is identified and stated: what makes the per-source cost twelve rather than two, whether the reuse never worked or regressed, and when, established by checking the assertion against earlier revisions rather than by reasoning about the code. If the cause is that the test's expectation was wrong about the workspace rather than the workspace wrong about reuse, that is an acceptable finding and the test is corrected with the evidence in the commit message, but the default assumption is the opposite and the evidence must be shown either way. A mutation proves the restored property: breaking the reuse, by discarding the retained store or the reassessment cache between calls, makes the test fail, and the file is restored byte-identically afterwards. No other test's expectation is edited to accommodate the change, and if one must be, that is reported rather than absorbed. cargo test --no-fail-fast -p nomos-lsp passes and cargo clippy --workspace --all-targets is clean.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-lsp/src/nomos_diagnostic_provider",
+          "crates/host/nomos-lsp/src/nomos_diagnostic_provider.rs"
+        ],
+        "patterns": []
+      },
       "state": "Ready",
       "depends_on": [],
       "blocked": null,
@@ -91809,9 +91871,9 @@
           "test",
           "--no-fail-fast",
           "-p",
-          "nomos-spec-store"
+          "nomos-lsp"
         ],
-        "timeout_seconds": 2400
+        "timeout_seconds": 2700
       },
       "verified": null,
       "abandoned": [],
