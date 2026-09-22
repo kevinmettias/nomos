@@ -240,6 +240,17 @@ members = [
     # `OD-CAPABILITY-013`, `P47-TOOLPROVIDER-HAS-NO-PACKAGE-2`.
     "crates/packages/nomos-tool-package",
 
+    # Zone: Provider — package manifests. The first IntegrationPackage manifest maturity:
+    # identity, PackageKind (restricted to IntegrationPackage), PKG-007's first two version
+    # domains reused from nomos-package unchanged, and a list of materialization intents in
+    # place of the third and fourth -- each a source, a repository-relative target,
+    # OD-PACKAGE-004's ownership class and OD-PACKAGE-005's publication scope, with each
+    # record's own default for an undeclared one. Declares placements and performs no write;
+    # the materializer is a separate, mechanism-owned concern. A sixth peer of the five above
+    # -- none of the six names another.
+    # `OD-PACKAGE-003`, `OD-PACKAGE-004`, `OD-PACKAGE-005`.
+    "crates/packages/nomos-integration-package",
+
     # Zone: Rules — rules. The first thing here that judges code rather than paperwork. A
     # rule is a pure function from source text to findings: it names no language
     # provider and opens no file, so the caller decides what tree is being judged and a
@@ -439,6 +450,7 @@ nomos-model-package = { path = "crates/packages/nomos-model-package" }
 nomos-rule-package = { path = "crates/packages/nomos-rule-package" }
 nomos-lang-go-package = { path = "crates/packages/nomos-lang-go-package" }
 nomos-tool-package = { path = "crates/packages/nomos-tool-package" }
+nomos-integration-package = { path = "crates/packages/nomos-integration-package" }
 nomos-rules = { path = "crates/rules/nomos-rules" }
 nomos-corrections = { path = "crates/corrections/nomos-corrections" }
 nomos-agent-contracts = { path = "crates/agent/nomos-agent-contracts" }

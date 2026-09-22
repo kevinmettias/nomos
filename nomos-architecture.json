@@ -43,6 +43,7 @@
     "nomos-correction-orchestration": "Application Service",
     "nomos-corrections": "Agent",
     "nomos-gate-orchestration": "Application Service",
+    "nomos-integration-package": "Provider",
     "nomos-integration-tests": "Verification",
     "nomos-lang-go": "Provider",
     "nomos-lang-go-modules": "Provider",
@@ -174,6 +175,9 @@
     ],
     "nomos-gate-orchestration": [
       "nomos-check-orchestration"
+    ],
+    "nomos-integration-package": [
+      "nomos-package"
     ],
     "nomos-lang-go-package": [
       "nomos-lang-go",

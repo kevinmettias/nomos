@@ -1,0 +1,16 @@
+[package]
+name = "nomos-integration-package"
+version = "0.1.0"
+description = "The IntegrationPackage manifest format: wraps nomos-package's generic core rather than depending on a sibling package crate, and declares OD-PACKAGE-003's materialization intents -- a source, a repository-relative target, OD-PACKAGE-004's ownership class and OD-PACKAGE-005's publication scope -- without performing a single write."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-package = { workspace = true }
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

@@ -1320,6 +1320,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-integration-package"
+version = "0.1.0"
+dependencies = [
+ "nomos-contracts",
+ "nomos-package",
+ "serde_json",
+]
+
+[[package]]
 name = "nomos-integration-tests"
 version = "0.1.0"
 dependencies = [

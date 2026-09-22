@@ -87546,14 +87546,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-intpkg",
-        "acquired_at": 1790043554,
-        "lease_expires_at": 1790054354
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -87564,7 +87560,28 @@
         ],
         "timeout_seconds": 2400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-integration-package"
+        ],
+        "exit_code": 0,
+        "output_tail": "his_Build_Understands_Is_Refused ... ok\ntest Test_A_Missing_Field_Is_Refused ... ok\ntest Test_A_Manifest_Declaring_Every_Field_Resolves ... ok\ntest Test_A_Package_Kind_Not_Defined_At_All_Is_Refused ... ok\ntest Test_An_Empty_Intents_List_Is_Refused ... ok\ntest Test_A_Missing_Intent_Field_Is_Refused_At_Its_Indexed_Position ... ok\ntest Test_An_Ownership_Class_Of_The_Wrong_Type_Is_Refused_Rather_Than_Defaulted ... ok\ntest Test_A_Wrong_Type_Field_Is_Refused ... ok\ntest Test_A_Target_Climbing_Above_The_Repository_Root_Is_Refused ... ok\ntest Test_An_Unknown_Publication_Scope_Label_Is_Refused ... ok\ntest Test_An_Absolute_Target_Is_Refused ... ok\ntest Test_A_Publication_Scope_Of_The_Wrong_Type_Is_Refused_Rather_Than_Defaulted ... ok\ntest Test_An_Undeclared_Ownership_Class_Defaults_To_User_Owned ... ok\ntest Test_An_Undeclared_Publication_Scope_Defaults_To_Local ... ok\ntest Test_An_Unknown_Ownership_Class_Label_Is_Refused ... ok\ntest Test_A_ToolProvider_Kind_Is_Refused ... ok\ntest Test_A_Missing_File_Is_Refused_As_Unreadable ... ok\ntest Test_Text_That_Is_Not_Json_Is_Refused ... ok\ntest Test_A_Target_That_Descends_Before_Climbing_Is_Accepted_As_Spelled ... ok\ntest Test_An_Inverted_Protocol_Range_Is_Refused ... ok\ntest Test_The_Self_Fixture_Should_Resolve_To_The_Four_Placed_Rows ... ok\n\ntest result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.26s\n     Running unittests src\\lib.rs (F:/repos/verify-intpkg-target\\debug\\deps\\nomos_integration_package-56f110131c8a91f5.exe)\n     Running tests\\manifest.rs (F:/repos/verify-intpkg-target\\debug\\deps\\manifest-6cb659db489f8406.exe)\n   Doc-tests nomos_integration_package\n",
+        "verified_at": 1790044896,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -87845,14 +87862,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-waves",
-        "acquired_at": 1790043833,
-        "lease_expires_at": 1790054633
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -87863,7 +87876,28 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-corrections"
+        ],
+        "exit_code": 0,
+        "output_tail": "\ntest wave_partition::tests::Test_Of_Should_Give_A_Chain_Of_Conflicts_One_Wave_Each ... ok\ntest wave_partition::tests::Test_Of_Should_Partition_No_Plans_Into_No_Waves ... ok\ntest wave_partition::tests::Test_Of_Should_Let_A_Later_Plan_Rejoin_An_Earlier_Wave_When_It_Conflicts_With_Nothing ... ok\ntest wave_partition::tests::Test_Of_Should_Place_A_Plan_After_Its_Latest_Conflicting_Predecessor ... ok\ntest wave_partition::tests::Test_Of_Should_Put_Pairwise_Compatible_Plans_In_One_Wave ... ok\ntest wave_partition::tests::Test_Of_Should_Put_Three_Plans_With_One_Conflict_Into_Two_Waves ... ok\ntest wave_partition::tests::Test_Of_Should_Refuse_When_Any_Plans_Set_Is_Unresolved_And_Name_Its_Position ... ok\ntest wave_partition::tests::Test_Of_Should_Separate_A_Read_Write_Conflict_Too ... ok\ntest wave_partition::tests::Test_Wave_Of_Should_Report_None_For_A_Position_The_Input_Did_Not_Have ... ok\n\ntest result: ok. 131 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 4 tests\ntest Test_A_Correction_Ids_Digest_Round_Trips_A_Real_Digest128 ... ok\ntest Test_Staging_Against_Stale_Content_Reports_The_Real_Digest_Of_What_Is_There ... ok\ntest Test_The_Full_Lifecycle_Round_Trips_A_Real_Workspace_Through_The_Public_Api ... ok\ntest Test_Three_Plans_With_One_Conflict_Partition_Into_Two_Waves_Through_The_Public_Api ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on build directory\n   Compiling nomos-corrections v0.1.0 (F:\\repos\\nomos\\crates\\corrections\\nomos-corrections)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.00s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_corrections-a2903062bdf80bb9.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-376eebbda30c6c72.exe)\n   Doc-tests nomos_corrections\n",
+        "verified_at": 1790044905,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1fb8661c0e03c39247473033b2384f719a413296"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -87923,14 +87957,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-profile",
-        "acquired_at": 1790043887,
-        "lease_expires_at": 1790054687
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -87941,7 +87971,28 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-workspace-discovery"
+        ],
+        "exit_code": 0,
+        "output_tail": "test tests::Test_Read_Sources_Should_Only_Recognize_The_Extensions_It_Was_Given ... ok\ntest tests::Test_Read_Sources_Should_Not_Descend_Into_A_Nested_Repository_Root ... ok\ntest workspace_profile::tests::Test_Of_Root_Should_Not_Report_A_Nested_Manifest_As_The_Roots ... ok\ntest workspace_profile::tests::Test_Of_Root_Should_Report_A_Directory_Of_A_Policy_Files_Name_As_Present_But_Unreadable ... ok\ntest tests::Test_Walked_Sources_Should_Discover_A_Go_File_Alongside_A_Rust_One ... ok\ntest workspace_profile::tests::Test_Of_Root_Should_Report_Which_Manifests_Are_Present ... ok\ntest tests::Test_Read_Sources_Should_Skip_Target_And_Git_Directories ... ok\ntest workspace_profile::tests::Test_Of_Root_Should_Be_Deterministic_For_A_Given_Tree ... ok\ntest workspace_profile::tests::Test_Of_Root_Should_Count_Sources_Per_Registered_Extension ... ok\n\ntest result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on build directory\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling nomos-workspace-discovery v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-workspace-discovery)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.24s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_workspace_discovery-76d25afb82515f6b.exe)\n   Doc-tests nomos_workspace_discovery\n",
+        "verified_at": 1790044903,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "1fb8661c0e03c39247473033b2384f719a413296"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -88095,14 +88146,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-review-ledger-archive",
-        "acquired_at": 1790044281,
-        "lease_expires_at": 1790055081
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88119,7 +88166,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-review-ledger-archive",
+          "reason": "A dispatched worker held this claim and died on a session rate limit before writing anything; no record, no registration and no projection was produced, so the item is untouched and returns to the board for the same session to work directly.",
+          "abandoned_at": 1790047898
+        }
+      ],
       "displaced": [],
       "declined": null,
       "widened": []
@@ -88138,14 +88191,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-review-project-004",
-        "acquired_at": 1790044312,
-        "lease_expires_at": 1790055112
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88162,7 +88211,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-review-project-004",
+          "reason": "A dispatched worker held this claim and died on a session rate limit before writing anything; no record, no registration and no projection was produced, so the item is untouched and returns to the board for the same session to work directly.",
+          "abandoned_at": 1790047898
+        }
+      ],
       "displaced": [],
       "declined": null,
       "widened": []
@@ -88182,14 +88237,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-review-effortlevel",
-        "acquired_at": 1790044328,
-        "lease_expires_at": 1790055128
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88206,7 +88257,13 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-review-effortlevel",
+          "reason": "A dispatched worker held this claim and died on a session rate limit before writing anything; no record, no registration and no projection was produced, so the item is untouched and returns to the board for the same session to work directly.",
+          "abandoned_at": 1790047898
+        }
+      ],
       "displaced": [],
       "declined": null,
       "widened": []
