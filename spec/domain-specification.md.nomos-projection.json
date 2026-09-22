@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:fb418dbc159962f3f265b02970349fcd7c8cc537c3ac13355b787088f993c3d1",
-  "inputs_digest": "sha256:42c0af55ba958912f315ccdf687fe4d7bb0fed67282fa3e2abab0bd0bf79030d",
+  "content_digest": "sha256:c3f6591c550ff8303638e030eb41abc76502f9ad6518272878b79d477fa49ff3",
+  "inputs_digest": "sha256:9c09b1b5dfa53c9ab5ae9fdff44dd45869b0998d178626accfb3a50d554aba0f",
   "sections": [
     [
       "Documents",
-      268
+      270
     ],
     [
       "Sections",
-      2396
+      2428
     ],
     [
       "Source blocks",
-      8693
+      8819
     ]
   ],
   "inputs": [
@@ -983,7 +983,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored",
-      "hash": "sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc"
+      "hash": "sha256:bba6e6b5f62b007c956218eebf7481b6890c759f30131be10fc545c564ccf868"
     },
     {
       "content": "documents",
@@ -1059,6 +1059,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md@authored",
       "hash": "sha256:63a8457f1df3d1c4ae5e22a2051333aac43426b8618a6dd792e5a7dc4aa024dd"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md@authored",
+      "hash": "sha256:902a048df10030bcf6dc04bcc5efac962d78c0b199e122f7ea7e787693fecefc"
     },
     {
       "content": "documents",
@@ -1209,6 +1214,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md@authored",
       "hash": "sha256:93292451f2a6cee3903cec80729f1f4a648933089166dd3a055febcb80d71eba"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md@authored",
+      "hash": "sha256:a7aae0f562a885695f97bd2fe9beb2b97a2cf8c2d0a34315302531b7a3a3d667"
     },
     {
       "content": "documents",
@@ -9912,6 +9922,26 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#22",
+      "hash": "sha256:5cde04dd05328b5f0b8eed8237213fb7b856b5acb28bbc26ae844a38abd73c30"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#24",
+      "hash": "sha256:fe6b8181ded6e9a54ba0d4d6a3fc438f6921c415e0ce20fe25ef4e68110fe7c5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#27",
+      "hash": "sha256:79af9ce8096c037e82b9e6d735e6caee9d6a3b7f35222acb58276285aaed745b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#31",
+      "hash": "sha256:7c3ee75c016ad35944c283528873b3c02c158788f4fcd9fd2815d8f05afdff63"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1",
       "hash": "sha256:d8193a6265ded5d3592a51ba1f740a57275f1aff62b638506079e88972b5a748"
     },
@@ -10729,6 +10759,86 @@
       "content": "headings",
       "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#27",
       "hash": "sha256:8e13296b7ef248c760fa49417acd293ceff0c97ed6e486a90431fae3902db45f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#1",
+      "hash": "sha256:be6bf2a77619a9006303ddb9a3ef8199f9bfe0d395e0140fed4622e6387368a7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#2",
+      "hash": "sha256:9d44b11103d0c35be7f9b9dd691bd1853d15587115616c2f8b845a818169470a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#6",
+      "hash": "sha256:df3ec9539e29d1e25771bd4b6fa434d25ea195afef8cbb409741ed55fa1b64a2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#10",
+      "hash": "sha256:8b07110fe0926fbe4ad4b0315cd67c1b6c41ad5ce9988dbb401a24b966f49d35"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#12",
+      "hash": "sha256:8082e05b3c729f676d9d697840267ebac8195e2990665d725e3622f9d99b2b87"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#17",
+      "hash": "sha256:d22d75e4e07dd5b0ed7f05888707638886440b744471a424aa4f4099d7c44264"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#22",
+      "hash": "sha256:82258118ac04d81606dbc8ef9794f5f92c950b6b591e5acbbb3ac15e5f840780"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#25",
+      "hash": "sha256:728dfd78cddfae3a47634c4e4d691b740d55d0010ac45d8db002f370ac66219a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#30",
+      "hash": "sha256:6b9af9c061ee8ea6022ffd1cb4eaafd080d829698b4bb2490b2ae2d8b105f596"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#33",
+      "hash": "sha256:5f67476331cdce6979771e3d0a6d3af2e882d38bcc31289baae5490db5563930"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#36",
+      "hash": "sha256:a190a6192f5ccf581b6966e7150e04888b1cef0befe5a9a432dc9d3a421d87d2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#38",
+      "hash": "sha256:671f1e4d2051728075740d9e01e1b5ff01fb4274e28ac6e15da81133f0782ccf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#44",
+      "hash": "sha256:1856877d2f12f67a5f5192ec817501e33f635fd847a09c595d354ee41d53ac7d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#48",
+      "hash": "sha256:a806e5ec4e9f98e9093ae1a18773c88017d25cc1a37b705497de6d8ada6dbdce"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#56",
+      "hash": "sha256:85474bf7c63f57c6779bafc8ea743ed68b08fcbc63f919d2139982f22853bd94"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#58",
+      "hash": "sha256:aa30f466ec6b40efd6d9b3e082311bc7a483c039cac0e0d9202c13d8f131a295"
     },
     {
       "content": "headings",
@@ -11899,6 +12009,66 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#27",
       "hash": "sha256:a9f74e17bb0dbb0c06dabfed2215e558def968b5acc0407398b8f6d0686ef4d1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#1",
+      "hash": "sha256:1045af89d57b404dfc797120e05045876ad793116315bd212e01c718b8780f36"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#2",
+      "hash": "sha256:2244bfb6dc8185d398ff78a86cbbee2675b98ba14a8eab6befb835c4be54e934"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#5",
+      "hash": "sha256:af6e6054adb00d907bb85adee57870530e583010fc3be574b3024db52d08a446"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#9",
+      "hash": "sha256:93bb13af0cc71a1366810b60bfcc9e3cc0c49477048b8c844433f5141bc1fb01"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#20",
+      "hash": "sha256:965f58a38211435a0d77cf41738ef8e1bebc5e81a174b1cdc18d3cdb2529a37f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#23",
+      "hash": "sha256:f613d2b948b79da962e3d8b8e8fb2718456e6261d7993e8f0ab65e0135f34c30"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#28",
+      "hash": "sha256:f5ce4bec39c35a89caf1aed0f784c1d77da369bea2d82d3272bbf2b12da9f47b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#31",
+      "hash": "sha256:05fd1b0faf20e80f3e107329c72060ef70954e12c72689cdd2cc12ad9d9e2674"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#36",
+      "hash": "sha256:a2dc25d5b4ac52a611ad555efb222ecdaa451ad89f919476afeafcdb88b8ba2c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#40",
+      "hash": "sha256:b8064095d3b6270985bec5215f25183092c3b4b86658888ab52197663ddd0af8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#45",
+      "hash": "sha256:35933de0a09ff2c3139999744afb005d4d7084fd613fd77ecd830853ab8eb940"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#51",
+      "hash": "sha256:298c929d605a98df57d76f591d1f083644afaa6375bfd289b227d570ad20a855"
     },
     {
       "content": "headings",
@@ -44487,6 +44657,76 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#22",
+      "hash": "sha256:1288a87ba1e45c743dc9354eea4dcb1bc6759d9763e62c37ad0a14578691c36a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#23",
+      "hash": "sha256:1835c16425e59a8f8c421d129e81ab2759ce541fbef96e2125cf50d1a152386b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#24",
+      "hash": "sha256:8a1f64f2f25048a02b74220dac0a038766c2b805c9bc809def51b3a5b69edf34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#25",
+      "hash": "sha256:ba501320a2b2e20f28431f8210913922b475f4b2491a4485272bc56db9b854a9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#26",
+      "hash": "sha256:36c1575806839c121dc672ecd7f5c6b7d5d40ae91f830fc7a08134ec031e0faa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#27",
+      "hash": "sha256:2f80fba18514b12f6ac170b7a2baa60bb09d4c91c259a71e4073ed565f78ba40"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#28",
+      "hash": "sha256:641f2f25eee921ea95c24d8c4744eaf975907665d4897e520e8c7e42bc934f46"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#29",
+      "hash": "sha256:1ac233e92706012bbdcc0db594308a3d831d15cfa50120bfd42a5d0242c2aa80"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#30",
+      "hash": "sha256:db7f1b00aa8b68dd113a07acc06a885869a1adcea8cb944178f863fc55ab667b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#31",
+      "hash": "sha256:d23de6eb184835e2bd39af8985f6aceccce31e3ae8149e8f892dfaf683b85843"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#32",
+      "hash": "sha256:259b59449c5ade48222bb102d00551eaf184bd459588dc44836304edbae8b2c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#33",
+      "hash": "sha256:24e6a3ca3bfb5f587ec3eb8c80fb371456e77d5cd1d6f1dae34abfbe0633d34b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#34",
+      "hash": "sha256:eed398b2c41570b674e990503fb33f55614e288e1b0cd1a61f5cb6259a699a41"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#35",
+      "hash": "sha256:b4aa14803d4d2379a4c4cf8edb23f6668b602126da30ce1a0886aa1cb23e03f7"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1",
       "hash": "sha256:288502a603678c890ddc4fd3f236c936d24acd17e2abd9a3ed385dc894e54af9"
     },
@@ -47599,6 +47839,301 @@
       "content": "blocks",
       "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#28",
       "hash": "sha256:2bca5ebea0909c2f25bce538749650f1c0976858cd3b4b9e3e67ae3fd6f925e9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#1",
+      "hash": "sha256:db122fa36e5f0d43f10ba51f959fffb71bb95a2bdf8dea0682e0dff22eb8359b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#3",
+      "hash": "sha256:288365a8865cf40d5b5e2200041b383cc9eff0654b9b985c04bb77722d020655"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#4",
+      "hash": "sha256:c7ef5266a29df099c60dea594b3a178107ec200242b1d61293bf8cfc4b9a1c54"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#5",
+      "hash": "sha256:1a684eda4d47583e66b237eca6987deaadd17cf6fdea6d8b4b754b5c14551035"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#6",
+      "hash": "sha256:effdef3bf2c276c54bfc6d0b88a2a7d8e2efd8534cd0f12e93c5429fc30b90d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#7",
+      "hash": "sha256:2625ab19606fc16bd157475cc3b4f6643ab4eb580c5cb52759e1fbb4a615c834"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#8",
+      "hash": "sha256:77b0873f84df0e997f44297f1121a5dae6b457336712e4d195b58cb19f7e84bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#9",
+      "hash": "sha256:675cb1a9d467be2577aff6c7d46af67efbbadec613f428f05b1d5629ba301569"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#10",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#11",
+      "hash": "sha256:43aa868c1dd8f9c4fb977b257961055c3736e80cc78a94028354608fe434b81b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#12",
+      "hash": "sha256:853596bac631202be9dfab4bc33552a76de0d0c73f9b3d680d834d97449fefd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#13",
+      "hash": "sha256:ea53d5076381fe460bc2dcb8c5928e4737ded763677854f24a779a061c39bc2a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#14",
+      "hash": "sha256:a5a386ff9b4fb5eec27d377572b5f1e6ea54511a7c87bb032355d1e9c8da82f8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#15",
+      "hash": "sha256:2437389e72452240c2ca9516df4a0d98af27674225291985898d20dcd7656c9b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#16",
+      "hash": "sha256:f769d07321297cb2e013905cd91a816fa9e7ccf93e8f422590b6616f50ef9f0e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#17",
+      "hash": "sha256:bcd50c052c6671f778fa160469694291b5b150e07395a1ffd180133e65a22356"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#18",
+      "hash": "sha256:5f440c082d32d0bf8822b6811c0657ea8f7eef78507d5e5e523992d795761d81"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#19",
+      "hash": "sha256:b73a4f4eab79c07ac3c0b24cd3a07997c7dec30d82722b67fbd41b9b949fb896"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#20",
+      "hash": "sha256:13041b284da776ee812e98e2b54e228a515f596f21e26c6e662369ff250a5fab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#21",
+      "hash": "sha256:84b025d2e1c0635a6d1cfa74e8cd3c390a79946a89a4fd7de83feae0d16f7aae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#22",
+      "hash": "sha256:d1702884daf911ba9589b5f1bc47c6a0d4096375061a00696639769ea7120bf5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#23",
+      "hash": "sha256:d65b2d9150c31648032112d4261aa0e5e1c970945b5fae3948229af9a99420b4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#24",
+      "hash": "sha256:49af04c53b0af23102c017a1655c7cad079e4c24eec8d08d4f6e714ed6b27022"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#25",
+      "hash": "sha256:ca365a92e2c4d95e044b1b7a0b137cfc5dfa0ac3c5193374900654ce5a4a49a3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#26",
+      "hash": "sha256:f54fab07c477f8dace3e2e8f7691c3bc6b589602da7a98a219ddc446492292cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#27",
+      "hash": "sha256:caaf7a53794617f77c9123de00132313865561dddba3b217a5223522a80f8df7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#28",
+      "hash": "sha256:aad488cab3d5fd7864257ff150970ef211f408b6b8bfd8103d16a8cd33a0ca9b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#29",
+      "hash": "sha256:24eed0ddf9f1f184c3cdb3fbc9a560e0c616094a7a882bdcc51706e19c9faf7e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#30",
+      "hash": "sha256:3cdaf318d4618017b83fb0a441dc687b915eddb4a27a084cd535510c5d128f31"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#31",
+      "hash": "sha256:68b7cd9c9e713ce2be0367c24bc95943f42840dad53a9537af82f700551d9404"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#32",
+      "hash": "sha256:4b78c024be682798c18d5a497addcd05fb5bca65ed66a1853ef0980ba9a8ac17"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#33",
+      "hash": "sha256:bb20340f038c8d4e49652ac1ce0275adf180950baaf2ea37e8a930ad4504b15e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#34",
+      "hash": "sha256:b2926e62fc576bef9154002b4acf693b0ccac046d971b28ac5be30f4efca58c8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#35",
+      "hash": "sha256:a7ee4525462bfc19697d7c9262b985a82b1dabb360a412da7a8e617971e4143f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#36",
+      "hash": "sha256:856b9d51942a764e24f07282982d1349212aff6aada7c30e9ddedfc0392b141f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#37",
+      "hash": "sha256:a4184a42ec7b524850a9aa7132c3912748ca64d097e0e945f61c02e36fb0067b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#38",
+      "hash": "sha256:1a5e4022843e7d1f16ca41a830a5fd84be32b0171d5d5678a8b583e38038485c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#39",
+      "hash": "sha256:79e04f27c300c46a4dc3dd3deec73e0b0f6b17291480ba9cf586de869dad684f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#40",
+      "hash": "sha256:1099c68874028b184388ec893e811259cc0e3ef9cfb6e39a65659a0b18bd3651"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#41",
+      "hash": "sha256:8e963ac694849af6704e30af4a76e670a0ecf7b0fa7aafe10705efcdeb2e8bc8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#42",
+      "hash": "sha256:dd5a47635e33d0003320594fe1a3e2b826bfbb6cfa490ed013ae93692e29a328"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#43",
+      "hash": "sha256:a63844f23256fd7d41f2495412f376f8c2e6d729cdbf945395cd0b384d46f026"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#44",
+      "hash": "sha256:c88891d13648d1da133b2e4bdf14b2543106c30737190e41b0e16ef4abb3e616"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#45",
+      "hash": "sha256:86abd104860a2d3cf914a88b442ea448956189877f1ab57a949dcdf948f68a64"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#46",
+      "hash": "sha256:defe81bacc6533c75965a2f3a8fab47f5214bdd605965b45b63e5c312a841470"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#47",
+      "hash": "sha256:639d7c090ca349644aa599db3d3109a30fac68d89d310b9bf1f285842b3b83c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#48",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#49",
+      "hash": "sha256:afd93478c5fdbb278c2272482c7a56433036bac96acb68fe735a46959541d1c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#50",
+      "hash": "sha256:2d0da22a73212e7718be34ddc170e3b84df007f6032a6215b15ad3977ee2035e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#51",
+      "hash": "sha256:b4c75b88396073d8999d93e8056bbaaf919e9432d1635b67308f86c036853334"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#52",
+      "hash": "sha256:bf2d8931fab1a253eb53a5b8031e6a054cd33ac68a52b83c8b52fc0350d68a01"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#53",
+      "hash": "sha256:ccc90a6f835b0804769add0ab319eef1d75687d60ad00806008679e80ad0a27b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#54",
+      "hash": "sha256:930a268402a1284672f0b2a6ad4427bb6b83138814fb2c8281853ac628edd2de"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#55",
+      "hash": "sha256:c180299bc56360994851222f2c1f8cbf1ce8e26f59b5dba964d1d80a6c900758"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#56",
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#57",
+      "hash": "sha256:7ec6c7fd5d1c9e556c0f4cb94589bfa1d8faa199e1f78ce34cb77a990b71ff9e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#58",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#59",
+      "hash": "sha256:4a8f83d780647bd0eb3b937ac65b5d3f3cbc6407671ccaff2ac980a70e1b93b9"
     },
     {
       "content": "blocks",
@@ -51859,6 +52394,271 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#28",
       "hash": "sha256:762a828b7a3c260a73282f117fa2021aeade05df94aa949887390bc4e495bd43"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#1",
+      "hash": "sha256:a3144f6f1280599ea39c9ead57f937e4563b1140d39cce24c80b25b5dd93628e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#3",
+      "hash": "sha256:9a1e3570d82435b554e95fc8a33a3609916c0f686ed62648ecb5e9838899c680"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#4",
+      "hash": "sha256:fe3b410223bf9dc8b3420b39d6a6897db66e2ed5d9876eb38182cadbed03e465"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#5",
+      "hash": "sha256:571e4ec33e6a6bb2fd6ff4be538256a401de191f0f38b3a124507ef6fa3e0e6b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#6",
+      "hash": "sha256:0eb2198a43dde5b08dd45787bffca916b32340b6f4348f9686a29a8fe8e90525"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#7",
+      "hash": "sha256:77f8b45fc33b44c306dc9cd9900dec376ef42fa88ab80b9674cc147eaccaa8eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#8",
+      "hash": "sha256:d6606a8026c531993d0081203d08ec88b4054a45222651fd8b3814eca5cac4bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#9",
+      "hash": "sha256:f66dccbd07fd06d21718eb91b9b9536f1e675681091895b27aeff08dcf7e69d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#10",
+      "hash": "sha256:9087317cb5beb38083bc545702b36cc6e5a817f90e011db34f93c8b0c469c2fe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#11",
+      "hash": "sha256:d59854009f8e3c36f6b0a9fbc045a40eece56185a3dd35d938093b6f324c529b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#12",
+      "hash": "sha256:75d408e44d91ca370b8b5c4f745fe44da10b9bc65e91ff793a30dbb44444945f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#13",
+      "hash": "sha256:1df995adf933a29f5287753682bf9e358696b0806a502065719a9cd81f68cf07"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#14",
+      "hash": "sha256:d1684368ea4df22bf640d9f7e5f169e0cbb1a5649d39ce9c7278a56c170ad873"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#15",
+      "hash": "sha256:d10b3a7f93ccb56516f7e6f4cd3e5ef4fca239eb5cbdb7a70dccf6865700e072"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#16",
+      "hash": "sha256:5fc458b13913646c67547eba2de4de5599c00c5b5c06f5e97ee808234b38ee4f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#17",
+      "hash": "sha256:d5a5c0b3d6bc621be11839f207dca9f68dd60fcdb8de37b95f408ca6339e8570"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#18",
+      "hash": "sha256:2d29f735385d9a5449a7fa95604e8a5f16f9dc5b576055c78f2347f32b511d2e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#19",
+      "hash": "sha256:2690b9f6d2deb2866c1c8d1a786ae7c90f47f06d61d7edcb34de676f8f530339"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#20",
+      "hash": "sha256:ca249e5dc99d7900cdc1bc5298beb152ad5591aeeea0ebf3661ce5171ba78930"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#21",
+      "hash": "sha256:2f258c7d5212d1f74c8554decb67c5eeb6e02d7323577d2cece722e688116199"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#22",
+      "hash": "sha256:5f1306437cb5f7b607ca2ad03ee63dcb8baa87284ef8e434b342bde9cf9a1c5c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#23",
+      "hash": "sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#24",
+      "hash": "sha256:87a411a73ab023fda33922d0088ae7c2ad39964940ce9c7219a33b98b4043988"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#25",
+      "hash": "sha256:ba4311b63bd627a28b2371ba5aca58363caa0ab98ae78494624f262675697995"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#26",
+      "hash": "sha256:c8f63270a9fb2b896561f6305dc037e6afc8705f1e0cd1c4d97fe238c2c43ec8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#27",
+      "hash": "sha256:d942a76827e07f9f71bc576bb8395178e3821b78c42b182a7bbba379084360eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#28",
+      "hash": "sha256:0307c2a997d34cc534b3e9edddf6bd5f22f8c15e6d022538f4f9cc243223178c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#29",
+      "hash": "sha256:27116ec8d1f3cad6620844f12abbc88f90a046fac8b281a53fb91a8ceededba1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#30",
+      "hash": "sha256:3f0a90ce21b4f0be3622f80d43f03e092a5082e626ecd7fbc879c87fabf751ce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#31",
+      "hash": "sha256:6dcc40ce2138c0b237a9b0e9e40c6b56bdce241402e62581567d26f8673c2634"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#32",
+      "hash": "sha256:c5c5ebc9a735eae6224c975cc5d617648d8c11d0390a013dfcf9177bb40fc4a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#33",
+      "hash": "sha256:6fc9f98d5bb63aeb2de8c5a9c181b8ab681e64ca83ff191a8bd6921e484ae1b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#34",
+      "hash": "sha256:b68c4730bd5b97caae95c5f6418003cbfee0b2801329a314e1fba22d9132e482"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#35",
+      "hash": "sha256:5bf59a3946cf76c39caa9197e8b3d79188d06818747a7af3f4992a2bd5e07d3f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#36",
+      "hash": "sha256:ec87b737a1acdcd9e748eb9972eb7027f40b6124511107d6a1347fc94f71b923"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#37",
+      "hash": "sha256:fb30a54d70004bbfd6a327444b1932eb1bf08a74695acaea1b0096c38b49ed93"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#38",
+      "hash": "sha256:a887d858a44f28a9cdee4a8fe72681edf0dd335080e074745234ddf1c8260a30"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#39",
+      "hash": "sha256:70e9edb3fbd0768df6a199b440529d28f7a9d576d58c43032a1b10be07b925b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#40",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#41",
+      "hash": "sha256:cff80199eea69cc4c609ade3f099f0936e07c7055ed41fc995320798bb9be6c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#42",
+      "hash": "sha256:d05ef07d56cd22e5e1f10e0a795d0ca68435b0fba3dde702fd9a7f966a6b99e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#43",
+      "hash": "sha256:7e008e2dbe5d7fba38c55579f71fae9effa3a05a488684f541a8ff02c80c00f5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#44",
+      "hash": "sha256:35abf0b839ee008721100891628800b71f052e7a2a8c30745ee263f2e97a7dfc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#45",
+      "hash": "sha256:fac7c3550d64c7702fc19bba03d3de054b45df06317d4e3def8c00a5cecc3a4a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#46",
+      "hash": "sha256:e5c34bec6876cc6903d11c21b5bd0c4f24716b1d905a49177d132749a2e97960"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#47",
+      "hash": "sha256:c8430a63d1531f858ed17ba01bf68ab10c70c220a431e4623a723064f5847ae4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#48",
+      "hash": "sha256:480997e7b5e179ac9aec86415d3de3d267ef858db2c906969f2ef1611a119363"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#49",
+      "hash": "sha256:d9d0ae53ffc852eb422813bce9a4de7cb45943347829f0407e95c0cacea82b4c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#50",
+      "hash": "sha256:03a44aec0e50b88732a77893ed77f9e45992d8bcf77763b3a58e56406f0214e4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#51",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#52",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#53",
+      "hash": "sha256:b3429be86547c5e00c0fb1eb222ae38c3332f8fddc141a27de00ccf220c062be"
     },
     {
       "content": "blocks",

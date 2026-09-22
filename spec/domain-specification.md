@@ -202,7 +202,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md@authored | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md | authored | 56 | 14 | sha256:0ffc8479136943b0a3335a0042a996e0a028e3811b1ebcdca9228da7bd7e458c |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
-| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 21 | 7 | sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 35 | 11 | sha256:bba6e6b5f62b007c956218eebf7481b6890c759f30131be10fc545c564ccf868 |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md | authored | 40 | 8 | sha256:54dd8e341f63882f74fca31d11cc939e8bfec1033fe8ba3e6fcbf6a156689166 |
 | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md@authored | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md | authored | 85 | 18 | sha256:2abc66bb472507d0bf4f2c040530b440a47a4fed7def8473531083f874de3df2 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
@@ -218,6 +218,7 @@ profile: domain-specification
 | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md@authored | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md | authored | 43 | 12 | sha256:679898fb3515e18e74b3d01fc12b1993228c1941b02d8250e8a1a2b4c780c683 |
 | docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md@authored | docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md | authored | 49 | 15 | sha256:62c6d8750480da8424a5689d32b601a54227446d970e4610b102910dbe001e06 |
 | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md@authored | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md | authored | 28 | 7 | sha256:63a8457f1df3d1c4ae5e22a2051333aac43426b8618a6dd792e5a7dc4aa024dd |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md@authored | docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md | authored | 59 | 16 | sha256:902a048df10030bcf6dc04bcc5efac962d78c0b199e122f7ea7e787693fecefc |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md@authored | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md | authored | 67 | 12 | sha256:f55068c0987852129b3103770502611bec876fd8c119bc01cd6616b6ecdf7bc6 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md | authored | 69 | 16 | sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a |
 | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
@@ -248,6 +249,7 @@ profile: domain-specification
 | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md@authored | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md | authored | 29 | 9 | sha256:c7d51d0052bf5bf9d6198fe75095c23e3079efba7af49973d3e12360dbae7606 |
 | docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md@authored | docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md | authored | 28 | 6 | sha256:178c45747a9bfc80be65983afb89cd9b8caa6f49345f3e8dd5a8c01080a90d4b |
 | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md@authored | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md | authored | 28 | 8 | sha256:93292451f2a6cee3903cec80729f1f4a648933089166dd3a055febcb80d71eba |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md@authored | docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md | authored | 53 | 12 | sha256:a7aae0f562a885695f97bd2fe9beb2b97a2cf8c2d0a34315302531b7a3a3d667 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 52 | 13 | sha256:5e4290d3ee59d8a31ed54db9a8101edfe3af703650bf304bed6dff68755ced63 |
@@ -1993,6 +1995,10 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#15 | authored | 2 | Why The Test Was Deleted Rather Than Widened |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#18 | authored | 2 | What This Costs |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#20 | authored | 2 | Consequences |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#22 | authored | 2 | Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#24 | authored | 3 | What was measured |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#27 | authored | 3 | What moved, and what did not |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#31 | authored | 3 | What it cost, which is not what the section above says it costs |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1 | authored | 1 | A local patch override is a development convenience and never the governing form of the XVPE crossing |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#6 | authored | 2 | Decision |
@@ -2157,6 +2163,22 @@ profile: domain-specification
 | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#19 | authored | 2 | What This Does Not Do |
 | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#25 | authored | 2 | Consequences |
 | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#27 | authored | 2 | Status |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#1 | authored | 1 | The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#2 | authored | 2 | Question |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#6 | authored | 2 | What Is Not Being Claimed |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#10 | authored | 2 | The Decision |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#12 | authored | 3 | 1. A run history, so a baselined finding can be told from one reintroduced |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#17 | authored | 3 | 2. Branch, join, bounded parallelism, and a definition a run can be replayed against |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#22 | authored | 3 | 3. A scheduler that runs the waves the correction substrate already computes |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#25 | authored | 3 | 4. A process that outlives an invocation |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#30 | authored | 3 | 5. Six pieces with no deferral in the way |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#33 | authored | 3 | 6. One remaining gap is a question rather than a piece |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#36 | authored | 2 | The Two Refused On Measurement Are Decided, Not Superseded |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#38 | authored | 3 | The demand planner: the requirement is satisfied because the gap is answered, not open |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#44 | authored | 3 | Rules loaded from package files: the requirement is satisfied for the same reason |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#48 | authored | 2 | What This Does Not Do |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#56 | authored | 2 | Consequences |
+| docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#58 | authored | 2 | Status |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1 | authored | 1 | A rule states what it needs and is refused an answer beneath it |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#7 | authored | 2 | The Charge Is Correct |
@@ -2391,6 +2413,18 @@ profile: domain-specification
 | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#18 | authored | 2 | A lexical matcher was tried and does not work |
 | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#22 | authored | 2 | What this record does not do |
 | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#27 | authored | 2 | Status |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#1 | authored | 1 | A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#5 | authored | 2 | Method |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#9 | authored | 2 | The census |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#20 | authored | 2 | Why OD-PACKAGE-008 is the right starting point and does not answer this |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#23 | authored | 2 | The decision |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#28 | authored | 2 | What the form may not express |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#31 | authored | 2 | Where it sits |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#36 | authored | 2 | The three things this record was told not to propose |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#40 | authored | 2 | What this record does not do |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#45 | authored | 2 | The item that would build it |
+| docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#51 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -60647,6 +60681,135 @@ That is a real cost, accepted deliberately rather than discovered later.
   workspace-wide would mean touching 33 implementors and 559 use-sites for no behavioural
   change.
 
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#22
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards · hash: sha256:1288a87ba1e45c743dc9354eea4dcb1bc6759d9763e62c37ad0a14578691c36a*
+
+## Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#23
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards · hash: sha256:1835c16425e59a8f8c421d129e81ab2759ce541fbef96e2125cf50d1a152386b*
+
+`OD-ROADMAP-005` decision 4 authorizes this and states its own bound: this record is superseded
+only where its retirement of `AGT-006`'s no-dependency clause reaches `nomos-platform` itself.
+Everything above stands, and the reasoning that produced it was never the objection.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#24
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What was measured · hash: sha256:8a1f64f2f25048a02b74220dac0a038766c2b805c9bc809def51b3a5b69edf34*
+
+### What was measured
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#25
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What was measured · hash: sha256:ba501320a2b2e20f28431f8210913922b475f4b2491a4485272bc56db9b854a9*
+
+At `53de19a4`, and unchanged at `a50bf332`:
+`crates/platform/nomos-platform/src/clock/timestamp.rs` re-exported `xvpe_clock::Timestamp` and
+the crate's manifest named `xvpe-clock`. So the ports crate every band above depends on could
+not compile without the engine it is a port *to*. An external architecture review of `dev`
+called that a reverse boundary leak, and it is one: the seam this crate exists to be had a
+dependency running through it the wrong way, and every band above inherited it.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#26
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What was measured · hash: sha256:36c1575806839c121dc672ecd7f5c6b7d5d40ae91f830fc7a08134ec031e0faa*
+
+The consumer census over `crates/` and `tests/` is what decided the returning type's surface,
+rather than a reading of the one being replaced: 88 files name `Timestamp`;
+`Timestamp::From_Unix_Seconds` is called 153 times and `Timestamp::Plus` once as an associated
+function; the value methods are `Unix_Seconds` 19 times, `Plus` 10 and `Since` 4; no `const` or
+`static` of the type exists, nothing keys a map or a set by it, and no crate implements a trait
+for it. `nomos-platform` was the only crate in the workspace naming `xvpe-clock`, and neither
+`README.md` nor `nomos-architecture.json` mentioned it, so nothing outside that one manifest
+asserted the arrangement being undone.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#27
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:2f80fba18514b12f6ac170b7a2baa60bb09d4c91c259a71e4073ed565f78ba40*
+
+### What moved, and what did not
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#28
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:641f2f25eee921ea95c24d8c4744eaf975907665d4897e520e8c7e42bc934f46*
+
+The declaration moved, and nothing else. `nomos_platform::Timestamp` is the same path with the
+same operations, so no consumer was edited and none learned -- which is what the seam bought on
+the way down, bought again on the way back. The ledger's wire format never moved in either
+direction: it was always this workspace's own, `timestamp_serde` still holds it, and
+`Test_A_Timestamp_Should_Serialize_As_A_Bare_Number_Of_Seconds` still asserts the bytes every
+committed ledger carries.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#29
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:1ac233e92706012bbdcc0db594308a3d831d15cfa50120bfd42a5d0242c2aa80*
+
+**The crossing is untouched.** It stays adopted and stays pinned at
+`82a3c8fccf4ef7f3759f36d3f320a91d0f96341c`, declared once in `[workspace.dependencies]` and
+inherited by the eight members that name an `xvpe-` crate, which is one fewer than before.
+`nomos-platform-xvpe` is still the adapter and still the narrowest crate that must reach XVPE.
+Nothing here makes XVPE a peer again: Nomos remains an application over it, which is what this
+record decided and what `OD-ROADMAP-005` decision 4 repeats in terms.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#30
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:db7f1b00aa8b68dd113a07acc06a885869a1adcea8cb944178f863fc55ab667b*
+
+**A conversion in the adapter was considered and refused.** Naming `xvpe-clock` in
+`nomos-platform-xvpe` and converting between the two declarations would have kept them joined,
+and it was the smaller edit to `Cargo.lock` -- one insertion and one deletion rather than 112
+deletions. It buys nothing. No caller converts, and an adapter carrying a dependency and
+conversions nothing calls is exactly the claim about the future this crate's own module
+documentation refuses. The lock was going to change either way, because it records a per-member
+dependency array and a move is an edit to two of them, so the argument from lock stability did
+not survive being measured.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#31
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:d23de6eb184835e2bd39af8985f6aceccce31e3ae8149e8f892dfaf683b85843*
+
+### What it cost, which is not what the section above says it costs
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#32
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:259b59449c5ade48222bb102d00551eaf184bd459588dc44836304edbae8b2c4*
+
+**`What This Costs` is wrong, and was already wrong before this amendment.** It says this
+workspace no longer builds standalone and requires XVPE checked out beside it, because the
+dependency is a path dependency across repositories. Neither clause is true. Every `xvpe-`
+dependency is a git source pinned to a revision, so the workspace resolves XVPE from what that
+revision pins and needs no sibling directory to build. `AGENTS.md` says so in its operating
+hazards, `OD-PLATFORM-004` made the local substitution opt-in and denied it any authority, and
+`Test_The_Committed_Lock_Should_Pin_Every_Crossing_Package_To_That_Revision` is what keeps the
+committed form honest. The path-dependency arrangement that paragraph describes stopped being
+the governing one when the crossing was pinned, and the sentence was left behind.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#33
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:24e6a3ca3bfb5f587ec3eb8c80fb371456e77d5cd1d6f1dae34abfbe0633d34b*
+
+What the crossing does cost, stated the way that paragraph meant to state it: a build that has
+not fetched the pinned revision cannot compile the members that name it, and a revision bump is
+a decision taken once in the root manifest rather than a refresh. That is unchanged here.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#34
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:eed398b2c41570b674e990503fb33f55614e288e1b0cd1a61f5cb6259a699a41*
+
+What *this* change cost is one number. `Cargo.lock` lost 112 lines: the package blocks for
+`xvpe-clock` itself and for `web-time`, `js-sys`, `wasm-bindgen` with its three macro crates,
+`rustversion`, `slab` and the three `futures` crates, all of which `xvpe-clock` alone pulled
+into this workspace. Twelve `xvpe-` packages in the committed lock became eleven, and all
+eleven still carry a `git+` source at the one revision the manifests declare.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#35
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:b4aa14803d4d2379a4c4cf8edb23f6668b602126da30ce1a0886aa1cb23e03f7*
+
+Checked 2026-09-21 against the crate's manifest and module documentation, the committed lock before and after the change, `cargo tree -p nomos-platform`, and the blessed surface snapshot at `tests/contract/surface/nomos-platform.txt`.
+
 ### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1
 
 *revision: authored · kind: heading · heading: A local patch override is a development convenience and never the governing form of the XVPE crossing · hash: sha256:288502a603678c890ddc4fd3f236c936d24acd17e2abd9a3ed385dc894e54af9*
@@ -66700,6 +66863,531 @@ no code and amends nothing by itself.
 
 Accepted. The bound is the enumeration above: eight pieces, each against a named clause of a
 named record at a stated version, with every measurement those records made left standing.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#1
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements · hash: sha256:db122fa36e5f0d43f10ba51f959fffb71bb95a2bdf8dea0682e0dff22eb8359b*
+
+# The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#2
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#3
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Question · hash: sha256:288365a8865cf40d5b5e2200041b383cc9eff0654b9b985c04bb77722d020655*
+
+An external architecture review of `dev` at `bc0aaacf` named thirteen core gaps. A triage
+measured each against the tree on 2026-09-21: several were stale, two dissolved under
+measurement, and eleven were built or decided over that day. `OD-ROADMAP-005` separately
+superseded eight deferrals for a different set of the same review's claims and bounded the
+override it recorded.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#4
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Question · hash: sha256:c7ef5266a29df099c60dea594b3a178107ec200242b1d61293bf8cfc4b9a1c54*
+
+What is left is a list nobody has authorized. Some of it is ordinary work that no record
+stands in front of. Some of it cannot be started at all without a record moving, because each
+piece sits behind a deferral that was correct when it was written and has never been revisited.
+And two of the review's remaining claims are not deferred work at all — they were refused on
+measurement rather than on sequencing, which a directive to build does not answer.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#5
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Question · hash: sha256:1a684eda4d47583e66b237eca6987deaadd17cf6fdea6d8b4b754b5c14551035*
+
+The owner has now required the remainder addressed. What that needs from this record is the
+same thing `OD-ROADMAP-005` needed: **bounds**. Which deferral each piece supersedes, by clause
+and by version. Which pieces have nothing in their way and are listed only so the set is
+complete. Which of the review's claims are already answered rather than open. Without them,
+each implementation reads as an agent building against an accepted record that says not to, and
+a later reader reconciling the same review finds records saying wait and a tree saying
+otherwise, with nothing to say which is current.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#6
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What Is Not Being Claimed · hash: sha256:effdef3bf2c276c54bfc6d0b88a2a7d8e2efd8534cd0f12e93c5429fc30b90d0*
+
+## What Is Not Being Claimed
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#7
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What Is Not Being Claimed · hash: sha256:2625ab19606fc16bd157475cc3b4f6643ab4eb580c5cb52759e1fbb4a615c834*
+
+**None of the deferrals below was wrong on its own evidence, and this record does not say
+otherwise.** `OD-GATE-022` really did find that both cases its own compare doc names are
+same-process cases answerable with no store at all. `OD-WORKFLOW-005` really did build a
+sequential engine and really did scope it by explicit subtraction. `OD-ANALYSIS-009` really did
+find that no caller had asked `Run` to be invoked twice in one process. Those measurements are
+left standing and are cited by the items that now supersede them rather than deleted.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#8
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What Is Not Being Claimed · hash: sha256:77b0873f84df0e997f44297f1121a5dae6b457336712e4d195b58cb19f7e84bb*
+
+**So the override is about *when*, not about whether the reasoning held.** The precedent is
+`OD-ROADMAP-001`, which retired a population-of-zero caution for a named cluster on exactly
+this footing, and whose own amendment states the scope of that licence precisely: "This record
+answers whether a component may be built before anything consumes it."
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#9
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What Is Not Being Claimed · hash: sha256:675cb1a9d467be2577aff6c7d46af67efbbadec613f428f05b1d5629ba301569*
+
+**A supersession is not a re-measurement.** Every clause moved below was read in the version on
+disk at the revision this record was written against, and nothing else in those records is
+touched. Where this record states a measurement of its own it re-took it; where it reports what
+another record or commit measured, it says whose measurement it is.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#10
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#11
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision · hash: sha256:43aa868c1dd8f9c4fb977b257961055c3736e80cc78a94028354608fe434b81b*
+
+**Build the pieces below. Each names the deferral it supersedes, by clause and version, and the
+item that acts on it — or states that no record stands in its way.**
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#12
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:853596bac631202be9dfab4bc33552a76de0d0c73f9b3d680d834d97449fefd4*
+
+### 1. A run history, so a baselined finding can be told from one reintroduced
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#13
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:ea53d5076381fe460bc2dcb8c5928e4737ded763677854f24a779a061c39bc2a*
+
+Supersedes `OD-GATE-022` v1 in two clauses and no others. The decision section's bound on a
+first compare increment, "it does not serialize `GateRunResult` and does not persist a run
+history", loses its second half only; and the closing clause of that record's "What this record
+does not do", "It does not build or schedule a persisted run-history store", is superseded
+outright. Everything else in `OD-GATE-022` stands: a compare caller may still re-derive both
+runs in one process, and its finding that both motivating cases its own compare doc names are
+same-process cases is untouched. `RunId` remains the key that record already named for a store
+if one were built; what changes is that one now is.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#14
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:a5a386ff9b4fb5eec27d377572b5f1e6ea54511a7c87bb032355d1e9c8da82f8*
+
+`OD-GATE-030` v2 is the second consumer that record's own text said it was adding without
+scheduling. It names three things that would make continuity provable, in order, and says that
+only the third — a history of the states between — separates persistence from reintroduction;
+it also says in as many words that `OD-GATE-022` owns that deferral and that it does not
+schedule it. This record schedules it.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#15
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:2437389e72452240c2ca9516df4a0d98af27674225291985898d20dcd7656c9b*
+
+`OD-GATE-030`'s floor does not move and is not up for reinterpretation by the item that builds
+this: a finding whose history cannot be established is reported as undetermined and never as
+persistent, no occurrence inside an exceeded population is attributed, and the counting bound
+the baseline already applies remains a bound on capacity rather than a claim about history.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#16
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 1. A run history, so a baselined finding can be told from one reintroduced · hash: sha256:f769d07321297cb2e013905cd91a816fa9e7ccf93e8f422590b6616f50ef9f0e*
+
+The item is `P128-A-BASELINED-FINDING-CANNOT-BE-TOLD-FROM-ONE-REINTRODUCED`.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#17
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:bcd50c052c6671f778fa160469694291b5b150e07395a1ffd180133e65a22356*
+
+### 2. Branch, join, bounded parallelism, and a definition a run can be replayed against
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#18
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:5f440c082d32d0bf8822b6811c0657ea8f7eef78507d5e5e523992d795761d81*
+
+Supersedes `OD-WORKFLOW-005` v2's "What This Does Not Build" in exactly four clauses: no
+immutable published artifacts (`WF-009`); no branch/merge semantics or bounded parallelism
+(`WF-010`), whose reason was that `Run` is one ordered sequence; no independently versioned
+workflow definitions with pinned historical replay (`WF-011`); and the **cache** half of that
+section's `WF-012` clause, so that a runtime may substitute a prior result for a dispatch where
+`Cacheability` permits it.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#19
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:b73a4f4eab79c07ac3c0b24cd3a07997c7dec30d82722b67fbd41b9b949fb896*
+
+The **cancellation** half of that same clause is not superseded and stays out, for the reason
+that clause itself gives: nothing in this workspace can cut a dispatch in flight, and
+`CancellationBehavior` is the declaration that would say whether a step even permits it. The
+rest of that section is untouched — no deduplication token minted, no compensating step
+composed into another step's run, no shared dispatch trait, no `WorkResult` assembly — and so
+is everything the record's version 2 amendment already corrected about what the retry, timeout
+and compensation runtime closed at `29bc3e20`.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#20
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:13041b284da776ee812e98e2b54e228a515f596f21e26c6e662369ff250a5fab*
+
+Also supersedes `OD-WORKFLOW-002` v4's "What This Does Not Do" clause, as `OD-WORKFLOW-003`
+narrowed it — no execution engine, no `WF-009`, `WF-010` or `WF-011` — to whatever of it
+survived `OD-WORKFLOW-005` building the sequential engine. `OD-WORKFLOW-002`'s three named
+conditions are **not** retired and none is claimed to have fired: they remain the honest
+triggers for the increment after this one, which is exactly the distinction `OD-WORKFLOW-005`'s
+own amendment to that record drew between a narrow override and a general retirement.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#21
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 2. Branch, join, bounded parallelism, and a definition a run can be replayed against · hash: sha256:84b025d2e1c0635a6d1cfa74e8cd3c390a79946a89a4fd7de83feae0d16f7aae*
+
+The item is `P128-THE-WORKFLOW-ENGINE-RUNS-A-LINE-AND-CANNOT-BRANCH-JOIN-OR-REPLAY`.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#22
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 3. A scheduler that runs the waves the correction substrate already computes · hash: sha256:d1702884daf911ba9589b5f1bc47c6a0d4096375061a00696639769ea7120bf5*
+
+### 3. A scheduler that runs the waves the correction substrate already computes
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#23
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 3. A scheduler that runs the waves the correction substrate already computes · hash: sha256:d65b2d9150c31648032112d4261aa0e5e1c970945b5fae3948229af9a99420b4*
+
+Supersedes nothing, and is listed so the set is complete. `OD-ROADMAP-001`'s decision list
+already superseded `OD-CORRECTIONS-001`'s conclusion that candidate generation,
+classification and ranking, `COR-005`'s rerun-and-compare half and oscillation detection wait
+for a real trigger, and the compatibility and wave substrate was built. What is missing is a
+consumer: the computation exists and nothing runs it. No record stands in the way of giving it
+one.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#24
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 3. A scheduler that runs the waves the correction substrate already computes · hash: sha256:49af04c53b0af23102c017a1655c7cad079e4c24eec8d08d4f6e714ed6b27022*
+
+The item is `P128-NOTHING-RUNS-A-WAVE-SO-THE-CORRECTION-SUBSTRATE-HAS-NO-SCHEDULER`.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#25
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:ca365a92e2c4d95e044b1b7a0b137cfc5dfa0ac3c5193374900654ce5a4a49a3*
+
+### 4. A process that outlives an invocation
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#26
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:f54fab07c477f8dace3e2e8f7691c3bc6b589602da7a98a219ddc446492292cd*
+
+Supersedes `OD-ANALYSIS-009` v4's `Decision` clause "no daemon or long-lived-process concept is
+scheduled by this record", **and that clause only**. The two clauses standing beside it in the
+same sentence — no persistent or cross-invocation fact store, and no caller-supplied-store
+parameter — are deliberately not moved here. That record's version 4 amendment narrows what
+remains of them to the on-disk half, names the three things that half still owes, and names
+`P123-FACT-STORE-SURVIVES-THE-PROCESS-2` as the item that answers it. That item is live and
+this record does not reach into it.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#27
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:caaf7a53794617f77c9123de00132313865561dddba3b217a5223522a80f8df7*
+
+The two are not the same artifact and must not be collapsed: the store is the thing that
+survives a process, and this is the process that survives an invocation. The item depends on
+the store item rather than replacing it.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#28
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:aad488cab3d5fd7864257ff150970ef211f408b6b8bfd8103d16a8cd33a0ca9b*
+
+`OD-ANALYSIS-009`'s four revisit conditions are not retired, and `OD-HOST-002`'s rule that a
+resident cache may hold no state its canonical services could not reconstruct is the condition
+under which a resident process is admissible at all rather than a detail of how it is built.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#29
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 4. A process that outlives an invocation · hash: sha256:24eed0ddf9f1f184c3cdb3fbc9a560e0c616094a7a882bdcc51706e19c9faf7e*
+
+The item is `P128-EVERY-INVOCATION-STARTS-COLD-BECAUSE-NOTHING-OUTLIVES-A-PROCESS`.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#30
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 5. Six pieces with no deferral in the way · hash: sha256:3cdaf318d4618017b83fb0a441dc687b915eddb4a27a084cd535510c5d128f31*
+
+### 5. Six pieces with no deferral in the way
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#31
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 5. Six pieces with no deferral in the way · hash: sha256:68b7cd9c9e713ce2be0367c24bc95943f42840dad53a9537af82f700551d9404*
+
+Each is required work and each is listed only so the set is complete. None supersedes anything,
+and each is on the board with its own item, its own territory and its own predicate:
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#32
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 5. Six pieces with no deferral in the way · hash: sha256:4b78c024be682798c18d5a497addcd05fb5bca65ed66a1853ef0980ba9a8ac17*
+
+- the digest-keyed fact graph, the owning read on the store's trait surface, the unbounded
+  per-key history and the quadratic provider ranking, at
+  `P128-THE-FACT-GRAPH-IS-DIGEST-KEYED-TREES-AND-THE-RANKING-IS-QUADRATIC`;
+- a second interchange format beside SARIF, at
+  `P128-A-JUDGMENT-LEAVES-IN-ONE-FORMAT-AND-EVERY-OTHER-CONSUMER-IS-UNSERVED`;
+- a compiler-backed provider for C#, at
+  `P128-C-SHARP-IS-READ-ON-ITS-FACE-AND-NO-COMPILER-ANSWERS-FOR-IT`;
+- tool providers for Go, at
+  `P128-GO-HAS-A-PARSER-AND-A-MANIFEST-READER-AND-NO-TOOL-SPEAKS-FOR-IT`;
+- a first verb for a repository adopting this tool, at
+  `P128-A-REPOSITORY-ADOPTING-NOMOS-HAS-NOTHING-TO-RUN-FIRST`;
+- a rendering of the effective policy's provenance, at
+  `P128-THE-EFFECTIVE-POLICY-KNOWS-WHAT-DECIDED-EACH-FIELD-AND-NO-HOST-SAYS-SO`.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#33
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 6. One remaining gap is a question rather than a piece · hash: sha256:bb20340f038c8d4e49652ac1ce0275adf180950baaf2ea37e8a930ad4504b15e*
+
+### 6. One remaining gap is a question rather than a piece
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#34
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 6. One remaining gap is a question rather than a piece · hash: sha256:b2926e62fc576bef9154002b4acf693b0ccac046d971b28ac5be30f4efca58c8*
+
+Whether a rule can be authored without writing Rust is the review's largest remaining claim
+about the rule tier, and it is a decision rather than an implementation: it needs a
+measurement against the rule population that now exists, and the review itself also said not to
+invent a rule intermediate representation before real rules require one. This record does not
+answer it. `P128-OD-RULES-034-WHAT-A-RULE-AUTHORING-SURFACE-IS-AT-SEVENTY-RULES` is where it is
+answered.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#35
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Decision / 6. One remaining gap is a question rather than a piece · hash: sha256:a7ee4525462bfc19697d7c9262b985a82b1dabb360a412da7a8e617971e4143f*
+
+`nomos-platform` compiling without XVPE is also on this board and is **not** authorized here:
+`OD-ROADMAP-005` decision 4 already authorizes and bounds it, and restating it would create a
+second authority for one piece.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#36
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded · hash: sha256:856b9d51942a764e24f07282982d1349212aff6aada7c30e9ddedfc0392b141f*
+
+## The Two Refused On Measurement Are Decided, Not Superseded
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#37
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded · hash: sha256:a4184a42ec7b524850a9aa7132c3912748ca64d097e0e945f61c02e36fb0067b*
+
+Both of these were refused because somebody measured the thing and found the gap answered, not
+because a sequencing condition had not arrived. Superseding a deferral that does not exist
+would produce an item to build an artifact with nothing for it to do, and **a directive to
+build does not make an inert artifact useful.** So each is decided here, with its reason.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#38
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:1a5e4022843e7d1f16ca41a830a5fd84be32b0171d5d5678a8b583e38038485c*
+
+### The demand planner: the requirement is satisfied because the gap is answered, not open
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#39
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:79e04f27c300c46a4dc3dd3deec73e0b0f6b17291480ba9cf586de869dad684f*
+
+`OD-RULES-009`'s latest round found that a planner today "would schedule an ordering that does
+not exist, over a choice that has no alternatives, using cache state nothing consults", called
+that speculative rather than deferred infrastructure, and named three things that would change
+it. Those three were checked 2026-09-14. **They are re-checked here at `66292b7f` rather than
+quoted, because a quoted trigger is worth nothing without the check.** None has fired:
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#40
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:1099c68874028b184388ec893e811259cc0e3ef9cfb6e39a65659a0b18bd3651*
+
+- **No fact family's production depends on another family's output.** The only reads of the
+  store anywhere under `nomos-check-orchestration`'s materialization are two currency checks,
+  each asking whether the fact about to be written is the one the store is already serving under
+  that identity. No section takes another section's fact as its input, so there is still no
+  order to get wrong.
+- **No capability has two installed providers whose choice is not decided by the requirement.**
+  The composition root declares fourteen capabilities against seventeen offers. Twelve
+  capabilities have exactly one offer each. Syntax has three: the Rust parser strictly dominates
+  the Rust scanner on every axis they differ on, and the Go provider is partitioned by subject
+  through a path recognition the composition root computes before anything is digested into a
+  `SubjectId` and attaches to the requirement, which is `OD-CAPABILITY-009`'s answer rather than
+  a choice anybody schedules. Dependency has two, and the second never clears the requirement's
+  own floor, so ranking never sees two comparable offers. Two further providers have been built
+  since the last check — a C# syntax provider and a compiler-backed Rust provider — and neither
+  is offered by any composition root, an uncomposed state this workspace already declares and
+  guards rather than leaves silent.
+- **No measured cost makes skipping an undemanded family worth deciding rather than deriving.**
+  Demand is still a union over `nomos_rules::DESCRIPTORS` that reads no cache state, no provider
+  cost and no structure between families. The only measurement taken in this area since the last
+  check moved the cost the other way rather than up: `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY`
+  records, in its own commit message, that every non-syntax family now proves its fact current
+  before filing it, where the eleven non-syntax families previously wrote unconditionally.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#41
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:8e963ac694849af6704e30af4a76e670a0ecf7b0fa7aafe10705efcdeb2e8bc8*
+
+So the owner's requirement is **already satisfied for this gap**, because the gap is answered
+rather than open. What the review wanted from a planner — that materialization does only the
+work the selected rules demand, from one authority rather than a hand-written second one — is
+what `Demanded_Families` does by derivation. Building a planner beside it would add a mechanism
+with no ordering to sequence, no alternative to arbitrate and no cache state to consult, and it
+would be a second statement of the rule-to-fact relation for the first to drift against, which
+is the defect that removal was made to fix.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#42
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:dd5a47635e33d0003320594fe1a3e2b826bfbb6cfa490ed013ae93692e29a328*
+
+`OD-ROADMAP-001` does not license it. That record's own amendment says what its licence answers:
+whether a component may be built before anything **consumes** it. A planner's problem is not a
+missing consumer; it is a missing decision. Those are different populations of zero and only the
+first is covered.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#43
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / The demand planner: the requirement is satisfied because the gap is answered, not open · hash: sha256:a63844f23256fd7d41f2495412f376f8c2e6d729cdbf945395cd0b384d46f026*
+
+`OD-RULES-009`'s three conditions stand exactly as that record states them, this record retires
+none of them, and none of its earlier rounds is reopened.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#44
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / Rules loaded from package files: the requirement is satisfied for the same reason · hash: sha256:c88891d13648d1da133b2e4bdf14b2543106c30737190e41b0e16ef4abb3e616*
+
+### Rules loaded from package files: the requirement is satisfied for the same reason
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#45
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / Rules loaded from package files: the requirement is satisfied for the same reason · hash: sha256:86abd104860a2d3cf914a88b442ea448956189877f1ab57a949dcdf948f68a64*
+
+`OD-RULES-022` decided that composition resolves a **declaration** against a linked
+**implementation**, that the two are different artifacts owned by different layers, and — in its
+own words — that "a manifest cannot conjure a function, and this record does not pretend
+otherwise." Measured at `66292b7f` rather than assumed: the declaration side is built and
+derives every rule package from `nomos_rules::DESCRIPTORS`; the resolution step is built and
+refuses in both directions, an unmatched mechanical declaration and an unmatched registration
+alike; and no caller anywhere in this workspace reads a rule-package manifest from disk, nor is
+there one on disk to read.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#46
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / Rules loaded from package files: the requirement is satisfied for the same reason · hash: sha256:defe81bacc6533c75965a2f3a8fab47f5214bdd605965b45b63e5c312a841470*
+
+So a rule package file would buy one of two things and neither is the thing the review wanted.
+For a rule this build links, it is a second source of declarations beside the one every side
+already derives from — precisely the duplicated authority this repository files records about.
+For a rule this build does not link, it is a declaration with no function behind it, which
+resolution refuses if it claims to be mechanical, and which contributes no finding to a
+deterministic run if it declares itself model-judged. The second is a truthful thing for a
+declaration to be, and it is inert.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#47
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / The Two Refused On Measurement Are Decided, Not Superseded / Rules loaded from package files: the requirement is satisfied for the same reason · hash: sha256:639d7c090ca349644aa599db3d3109a30fac68d89d310b9bf1f285842b3b83c2*
+
+The owner's requirement is therefore **already satisfied for this gap too**. The question that
+is genuinely open is not where a declaration is stored but whether a rule can be authored
+without writing Rust, and that is section 6's question, answered by
+`P128-OD-RULES-034-WHAT-A-RULE-AUTHORING-SURFACE-IS-AT-SEVENTY-RULES` and not here.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#48
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#49
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:afd93478c5fdbb278c2272482c7a56433036bac96acb68fe735a46959541d1c3*
+
+**It builds nothing.** Every piece above is an item on `work/ledger.json` carrying its own
+territory and its own verification predicate. This record moves no code.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#50
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:2d0da22a73212e7718be34ddc170e3b84df007f6032a6215b15ad3977ee2035e*
+
+**It does not reopen `OD-ROADMAP-005`'s eight pieces**, which are decided, bounded and in
+flight, and it does not restate the one of them that is also on this board.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#51
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:b4c75b88396073d8999d93e8056bbaaf919e9432d1635b67308f86c036853334*
+
+**It does not touch `ARC-ROADMAP-001`'s deferred tier.** Atlas, architecture discovery and
+feature topology stay where that record puts them, and nothing here is evidence about any of
+them.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#52
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:bf2d8931fab1a253eb53a5b8031e6a054cd33ac68a52b83c8b52fc0350d68a01*
+
+**It does not retire a trigger in any record it names.** `OD-WORKFLOW-002`'s three conditions,
+`OD-ANALYSIS-009`'s four revisit conditions and `OD-RULES-009`'s three all stand as their
+records state them. A superseded clause is a clause this record moves past; a trigger is a
+measurement that has not fired, and the two are not the same thing.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#53
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:ccc90a6f835b0804769add0ab319eef1d75687d60ad00806008679e80ad0a27b*
+
+**It does not widen a superseded clause into its record.** Each supersession above is bounded to
+the sentence quoted, in the version stated, and a piece that turns out to need a second clause of
+the same record is a new question rather than an extension of this one.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#54
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:930a268402a1284672f0b2a6ad4427bb6b83138814fb2c8281853ac628edd2de*
+
+**It does not leave a superseded record to correct itself.** Each record named above stays false
+in one clause until an item amends it, and — measured on the board at the time of writing — none
+of the three items in sections 1, 2 and 4 reserves any path under `docs/records/` or
+`crates/spec/nomos-spec-store/records/`, so none of them can make that repair inside its own
+territory. The amendment is therefore a follow-on item that reserves the record, authored by
+whoever lands the piece. That is not a novelty: it is the shape
+`P123-OD-WORKFLOW-005-SAYS-THE-RETRY-AND-COMPENSATION-RUNTIME-IS-UNBUILT-AND-IT-LANDED` already
+took, for a record whose building item reserved no record territory and whose claimant could
+measure the staleness and not repair it.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#55
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / What This Does Not Do · hash: sha256:c180299bc56360994851222f2c1f8cbf1ce8e26f59b5dba964d1d80a6c900758*
+
+**It does not promise an order.** These pieces contend for shared files in a tree several
+sessions work at once. Which lands first is a coordination outcome, and an item blocked on a
+peer's claim waits rather than reaching in.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#56
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#57
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Consequences · hash: sha256:7ec6c7fd5d1c9e556c0f4cb94589bfa1d8faa199e1f78ce34cb77a990b71ff9e*
+
+The items named above are on the board as required work, each carrying its own territory,
+predicate and `done_when`. Three of them are unblocked by this record landing. Two of the
+review's remaining claims are closed here as answered rather than scheduled, and the reason is
+recorded so a later reconciliation of the same review finds a decision rather than an omission.
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#58
+
+*revision: authored · kind: heading · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ROADMAP-006-the-owner-requires-the-reviews-remaining-gaps-so-three-deferrals-are-superseded-by-name-and-two-refusals-stand.md#59
+
+*revision: authored · kind: prose · heading: The owner requires the review's remaining gaps, so three deferrals are superseded by name and two refusals stand on their measurements / Status · hash: sha256:4a8f83d780647bd0eb3b937ac65b5d3f3cbc6407671ccaff2ac980a70e1b93b9*
+
+Accepted. The bound is the enumeration above: four pieces against a named clause of a named
+record at a stated version, six with nothing in their way, one question routed to its own
+decision item, and two claims closed as answered rather than open — with every measurement
+those records made left standing, and the two re-measurements this record needed taken rather
+than quoted.
 
 ### docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1
 
@@ -74964,6 +75652,537 @@ measured the way `OD-RULES-031` measured one.
 Accepted. 5 answered, 42 unanswered inside the domain, 214 outside; 2 of the 5 pairs sit on
 rules xvpe declares nobody enforces; 14 rules cite the shared ancestor and Nomos answers one
 of them; and the lexical shortcut is recorded as tried and refused. No code moves here.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#1
+
+*revision: authored · kind: heading · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust · hash: sha256:a3144f6f1280599ea39c9ead57f937e4563b1140d39cce24c80b25b5dd93628e*
+
+# A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#2
+
+*revision: authored · kind: heading · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#3
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Question · hash: sha256:9a1e3570d82435b554e95fc8a33a3609916c0f686ed62648ecb5e9838899c680*
+
+Every rule this workspace ships is a Rust function compiled into `nomos-rules` and named in
+one `const` table, so authoring one costs a function, a descriptor row and, when the rule
+looks at a construct nothing else looks at, a detector. An external review named a rule
+authoring surface as the largest gap against arbitrary rule creation, and in the same breath
+said not to invent a rule intermediate representation before real rules require one.
+`OD-RULES-007` already holds the second half and is open on it.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#4
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Question · hash: sha256:fe3b410223bf9dc8b3420b39d6a6897db66e2ed5d9876eb38182cadbed03e465*
+
+What has changed is that the population is now large enough to ask the first half from
+evidence. Nobody has. This record asks it by counting, and the counting is the point: the
+question "is a declarative form owed" has no answer that does not begin with what the rules
+actually are.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#5
+
+*revision: authored · kind: heading · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Method · hash: sha256:571e4ec33e6a6bb2fd6ff4be538256a401de191f0f38b3a124507ef6fa3e0e6b*
+
+## Method
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#6
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Method · hash: sha256:0eb2198a43dde5b08dd45787bffca916b32340b6f4348f9686a29a8fe8e90525*
+
+Every count below is taken from `crates/rules/nomos-rules` at the revision this record lands
+on, by a command a later reader can re-run.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#7
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Method · hash: sha256:77f8b45fc33b44c306dc9cd9900dec376ef42fa88ab80b9674cc147eaccaa8eb*
+
+- The table's size is `awk '/^pub const DESCRIPTORS/,/^\];/' src/rule_descriptor.rs | grep -c
+  'Descriptor_For('`.
+- The per-rule columns — subject kind, required families, judgment function — are parsed out of
+  the same slice of that file, one row per `Descriptor_For(`, because the table states all three
+  on one line per rule.
+- The exported population is `grep -c '^pub fn nomos_rules::Check_'
+  tests/contract/surface/nomos-rules.txt`, the committed surface snapshot, which is also the
+  list `Test_Every_Exported_Rule_Is_Composed_Or_Accounted_For` reads.
+- Rule identifiers are the distinct string values of the `pub const <NAME>: &str = "..."`
+  declarations under `src/checks/`.
+- Whether a required family is read per source or once for the whole workspace is not in the
+  table, so it was taken from the reads themselves: a whole-workspace fact is required at
+  `nomos_model::Subject_Of_Path("")` and a per-source fact at `&source.subject`, and grepping
+  both partitions the fourteen families cleanly.
+- Shared-engine use is the call-site count of each engine under `src/`, excluding its own
+  declaration and every `tests.rs`.
+- Judgment locality — whether a rule judges one subject or relates several — is not mechanical
+  in general, so all seventy-one entry-point bodies were read. A detector for the mechanical
+  half of it (an entry that builds an index or a tree over all `sources` before judging) agrees
+  with that reading exactly and names the same four rules, which is why the reading is reported
+  rather than the detector.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#8
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Method · hash: sha256:d6606a8026c531993d0081203d08ec88b4054a45222651fd8b3814eca5cac4bb*
+
+One measurement was attempted and discarded rather than reported: a transitive call cone per
+rule, to size each judgment. Shared helper names (`Payload_Of`, `Violations_In`, `Findings_In`)
+occur in several modules, so a name-keyed cone attributes one module's body to another rule and
+sums to twice the crate. Nothing below depends on it.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#9
+
+*revision: authored · kind: heading · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The census · hash: sha256:f66dccbd07fd06d21718eb91b9b9536f1e675681091895b27aeff08dcf7e69d0*
+
+## The census
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#10
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The census · hash: sha256:9087317cb5beb38083bc545702b36cc6e5a817f90e011db34f93c8b0c469c2fe*
+
+**The real total is seventy-one, not seventy, and the exported population is eighty-seven.**
+`DESCRIPTORS` names seventy-one rules. The crate exports eighty-seven `Check_*` functions under
+eighty-six distinct rule identifiers — the one function with no identifier of its own is
+`Check_Function_Arity_Policy`, a shared engine two identified rules call. The sixteen exported
+functions the table does not name are not a gap: each carries a stated, measured reason in
+`ACCOUNTED_FOR`, which `Test_Every_Exported_Rule_Is_Composed_Or_Accounted_For` checks in both
+directions. Two doc comments inside the crate still say sixty-nine and seventy; they are stale,
+and no test compares either against the table.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#11
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The census · hash: sha256:d59854009f8e3c36f6b0a9fbc045a40eece56185a3dd35d938093b6f324c529b*
+
+**Subject kind.** Thirty-eight rules declare `SubjectKind::SourceFacts`, thirty-one
+`SubjectKind::SourceText`, two `SubjectKind::Workspace`.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#12
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The census · hash: sha256:75d408e44d91ca370b8b5c4f745fe44da10b9bc65e91ff793a30dbb44444945f*
+
+**Fact arity is small and has a ceiling of three.** Thirty-one rules require no materialized
+family at all, twenty-six require one, twelve require two, and two require three. No rule
+requires four. `Test_A_Source_Text_Rule_Should_Require_No_Fact` and
+`Test_A_Fact_Reading_Rule_Should_Require_At_Least_One_Fact` already keep the zero-and-nonzero
+ends honest.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#13
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The census · hash: sha256:1df995adf933a29f5287753682bf9e358696b0806a502065719a9cd81f68cf07*
+
+**Fourteen families are declared and the distribution is long-tailed.** `SyntaxItems` is
+required by seventeen rules and `TestMaterialPolicy` by fourteen; `LimitsPolicy` by six,
+`NamingPolicy` by five, `DependencyEdges` and `ArchitectureDeclaration` by three each. The
+remaining eight families — `LintDiagnostics`, `DependencyPolicy`, `Reachability`, `GoalsPolicy`,
+`WordsPolicy`, `ScriptingPolicy`, `ReviewFindings`, `RequirementTrace` — are each required by
+exactly one rule.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#14
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The census · hash: sha256:d1684368ea4df22bf640d9f7e5f169e0cbb1a5649d39ce9c7278a56c170ad873*
+
+**Subject material splits three ways, and the raw-text half is the largest.** Partitioning the
+families by how they are read: six are per-source material (`SyntaxItems`, `DependencyEdges`,
+`LintDiagnostics`, `Reachability`, `ReviewFindings`, `DependencyPolicy`) and eight are read once
+for the whole workspace. Twenty-four rules read at least one per-source material fact and judge
+a decoded payload. Two judge one whole-workspace payload and read no source. The other
+forty-five take one file's raw text as their subject material — thirty-one requiring nothing,
+fourteen requiring only a whole-workspace policy fact that parameterizes a text scan rather than
+supplying its material.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#15
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The census · hash: sha256:d10b3a7f93ccb56516f7e6f4cd3e5ef4fca239eb5cbdb7a70dccf6865700e072*
+
+**Sixty-five of seventy-one are a predicate over one subject.** Four relate several:
+`COMPLETENESS_MIRROR` and `GUARANTEE_DECLARES_ITS_EXERCISER` build a workspace-wide name set
+before judging any item against it, `CROSS_LANGUAGE_CORRESPONDENCE` resolves a declared
+correspondence against an index of every file's structs, and `NO_ORPHAN_MODULES` walks a module
+tree outward from roots. Two are the whole-workspace payload rules. The remaining sixty-five —
+forty-four over raw text, twenty-one over a per-source payload — judge each file against a norm
+and never against another file. That includes the three dependency rules, which read one
+workspace-wide architecture declaration and then judge each member against it: a per-subject
+predicate with a declared parameter, not a relation between subjects.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#16
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The census · hash: sha256:5fc458b13913646c67547eba2de4de5599c00c5b5c06f5e97ee808234b38ee4f*
+
+**Thirty of seventy-one take a parameter a repository declares.** That is the count of rules
+requiring at least one of the eight policy families `OD-RULES-011` made reachable; forty-one
+take none. Within the forty-five raw-text rules the split is thirty-one compiled-in against
+fourteen declared. The engines that resolve the declared half are already shared and already
+few: `Resolve_Limit` has eight call sites, `Resolve_Case` seven,
+`Resolve_Declared_Fixture_Locations` twelve.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#17
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The census · hash: sha256:d5a5c0b3d6bc621be11839f207dca9f68dd60fcdb8de37b95f408ca6339e8570*
+
+**The dominant archetype is already served by parameterized engines, written by extraction
+rather than by design.** Counted as call sites under `src/`: `Finding_For_Line` 22,
+`Code_Prefix` 21, `Resolve_Declared_Fixture_Locations` 12, `Resolve_Limit` 8,
+`Unjustified_Construct_Findings_In` 7, `Resolve_Case` 7, `Finding_For_Source` 7,
+`Judged_Sources` 5, `For_Each_Line_Number` 5, `Relay_Findings` 4, `Findings_For_Threshold` 4,
+`Judged_Members` 3, and four more at two each. Each was extracted after the duplication was
+real and reported: `finding_shape`'s own doc names ten rule modules that built the same finding
+by hand, `code_prefix`'s names eleven copies of one line split, `declaration_scan`'s names two
+rules driving the same brace-delimited scan, and `Unjustified_Construct_Findings_In`'s names the
+six functions it replaced and states the shape in one sentence — "a construct-matching
+predicate, an unless-locally-justified predicate, and one finding message."
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#18
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The census · hash: sha256:2d29f735385d9a5449a7fa95604e8a5f16f9dc5b576055c78f2347f32b511d2e*
+
+**The gate is uniform and two-thirds compiled in.** Twenty-three entry-point bodies gate on
+`SourceFile::Is_Written_In`, thirteen on a self-exemption. The self-exemption is nine
+independent predicates over nine private path literals, one per module, and `closure_bounds`'s
+own doc says why it is not a policy fact: a rule's detector constants spell out the syntax the
+rule looks for, and "no repository declaration could or should make that judgeable."
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#19
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The census · hash: sha256:2690b9f6d2deb2866c1c8d1a786ae7c90f47f06d61d7edcb34de676f8f530339*
+
+**Contract authority, re-measured.** Fifty-nine rules cite `PORTED_STANDARD`, eleven cite a
+versioned governing record, and one cites `WORKSPACE_CONVENTIONS`.
+`Test_Every_Descriptor_Should_Cite_A_Real_Authority` keeps the pairing honest.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#20
+
+*revision: authored · kind: heading · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Why OD-PACKAGE-008 is the right starting point and does not answer this · hash: sha256:ca249e5dc99d7900cdc1bc5298beb152ad5591aeeea0ebf3661ce5171ba78930*
+
+## Why OD-PACKAGE-008 is the right starting point and does not answer this
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#21
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Why OD-PACKAGE-008 is the right starting point and does not answer this · hash: sha256:2f258c7d5212d1f74c8554decb67c5eeb6e02d7323577d2cece722e688116199*
+
+`OD-PACKAGE-008` did the field-by-field comparison this record's method imitates — it read four
+real rules against `ARCH-002`'s contents list rather than generalizing from one — and its
+conclusions about `identity/version`, `required canonical capabilities` and `applicability
+semantics` are the reason `nomos-rule-package` has the shape it has. It does not answer this
+question, and the reason is structural rather than a matter of age. Every field it measured is
+*metadata about* a judgment: who decides the rule, at what version, against which capabilities,
+with what evidence class, how completely. None of them is the judgment. `RulePackage` carries a
+`Judgment` that says whether a linked implementation exists, and nothing anywhere in that
+manifest says what one does. An authoring surface is a decision about that missing thing, so no
+amount of re-reading a manifest schema produces it.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#22
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Why OD-PACKAGE-008 is the right starting point and does not answer this · hash: sha256:5f1306437cb5f7b607ca2ad03ee63dcb8baa87284ef8e434b342bde9cf9a1c5c*
+
+One of its numbers has moved far enough to be worth writing down where a later reader will find
+it. At version 4 it read contract citation as 3-of-4 and called three independent rules
+converging on the same citation shape "materially more evidence for that field's stability". At
+seventy-one it is 11-of-71: the versioned citation is the exception and the ported standard is
+the rule. That is an observation for a holder of `OD-PACKAGE-008`, not an amendment here.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#23
+
+*revision: authored · kind: heading · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The decision · hash: sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0*
+
+## The decision
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#24
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The decision · hash: sha256:87a411a73ab023fda33922d0088ae7c2ad39964940ce9c7219a33b98b4043988*
+
+**A declarative authoring form is owed, and it is owed for exactly one archetype: a per-line
+predicate over one file's raw text.** Forty-four rules are that shape, sixty-two per cent of the
+table and the largest single group by every axis above. They share a gate, a traversal, a
+finding constructor and — for seven of them already — a whole engine. Authoring one today means
+writing a function whose body is the same fifteen lines the last one had, and this crate's own
+history is a record of noticing that four separate times and extracting a helper each time. The
+form is the fifth extraction, taken one level further: instead of a function that calls the
+engine, a declaration the engine reads.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#25
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The decision · hash: sha256:ba4311b63bd627a28b2371ba5aca58363caa0ab98ae78494624f262675697995*
+
+**Its inputs are read off the engines that already exist, not invented.** A declared text rule
+states:
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#26
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The decision · hash: sha256:c8f63270a9fb2b896561f6305dc037e6afc8705f1e0cd1c4d97fe238c2c43ec8*
+
+1. its **rule identifier** and its **contract citation**, the two fields the descriptor already
+   carries and `Test_Every_Descriptor_Should_Cite_A_Real_Authority` already checks;
+2. its **language**, naming what `SourceFile::Is_Written_In` compares, or none;
+3. its **test-material sensitivity** — whether `Is_Test_Or_Example_Source` excludes a subject,
+   resolved from the repository-declared locations `Resolve_Declared_Fixture_Locations` reads,
+   per `OD-RULES-011`;
+4. its **self-exemption**, the implementation files whose own text necessarily spells out what
+   the rule looks for, stated as a field because nine rules already carry one privately and it
+   cannot be derived;
+5. its **detector**, named from a closed vocabulary the interpreter owns, never written in the
+   declaration;
+6. its **justification clause**, optional, naming the local-justification detector the same way
+   — this is the half `Unjustified_Construct_Findings_In` already takes;
+7. its **message**, the one sentence the finding carries;
+8. its **parameter**, optional, naming a policy key and a default, which is what `Resolve_Limit`
+   and `Resolve_Case` already take.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#27
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The decision · hash: sha256:d942a76827e07f9f71bc576bb8395178e3821b78c42b182a7bbba379084360eb*
+
+Eight fields, and every one of them is a parameter some engine in the crate takes today. That
+is the test this record applies to the whole proposal: a field with no existing caller would be
+a field measured against nothing.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#28
+
+*revision: authored · kind: heading · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / What the form may not express · hash: sha256:0307c2a997d34cc534b3e9edddf6bd5f22f8c15e6d022538f4f9cc243223178c*
+
+## What the form may not express
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#29
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / What the form may not express · hash: sha256:27116ec8d1f3cad6620844f12abbc88f90a046fac8b281a53fb91a8ceededba1*
+
+A form that silently cannot say something is worse than no form, so each of these is a refusal
+the interpreter states rather than a case it renders empty.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#30
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / What the form may not express · hash: sha256:3f0a90ce21b4f0be3622f80d43f03e092a5082e626ecd7fbc879c87fabf751ce*
+
+- **The detector itself.** This is the important one. The forty-four detectors are `fn(&str) ->
+  bool` over a comment-and-literal-aware prefix of one line, and they are not one shape:
+  `Has_Unsafe_Construct` is a substring test, `Credential_Match_In` returns the text it matched
+  so the summary can quote it, `Bounded_Fields_In` parses a declared numeric range out of a
+  documentation comment, and `Narrowest_That_Holds` computes integer widths. A declaration names
+  one of them; it does not contain one. A rule needing a detector the vocabulary does not have
+  is a Rust change, and the form says so rather than approximating.
+- **A relation between subjects.** The four cross-subject rules are out of scope by
+  construction, and a form offering a per-file loop would render a mirror rule as a rule that
+  finds nothing — the exact failure this workspace already ranks `Blocking` when a mirror claim
+  resolves to nothing.
+- **A judgment over a materialized payload.** The twenty-one per-source payload rules are also
+  out of scope, and deliberately so even though they look adjacent: their recurring families are
+  already parameterized end to end — six casing rules through `Resolve_Case` and one `Case`
+  vocabulary, two arity rules through `FunctionArityPolicy` — so a declared form over them would
+  re-parameterize what `OD-RULES-011` already parameterized, and buy a second way to say it.
+- **Block or scope context.** `NESTING_DEPTH` and `NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS`
+  carry brace state across lines. The form's traversal is one line at a time plus the
+  justification look-back the engine already does, and nothing wider.
+- **Anything about which rules run.** Selection is `OD-HOST-004`'s question and `OD-RULES-022`'s
+  resolution step, and a form that declared its own applicability would be a second answer to it.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#31
+
+*revision: authored · kind: heading · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Where it sits · hash: sha256:6dcc40ce2138c0b237a9b0e9e40c6b56bdce241402e62581567d26f8673c2634*
+
+## Where it sits
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#32
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Where it sits · hash: sha256:c5c5ebc9a735eae6224c975cc5d617648d8c11d0390a013dfcf9177bb40fc4a6*
+
+**`RuleJudgment` is the seam, and there is no second table.** It is a newtype over a `fn`
+pointer today because `DESCRIPTORS` is a `const` and a `fn` pointer is the only callable a
+`const` can hold — `OD-RULES-027` decided that, and it is what lets the run derive its table
+instead of writing a second copy. A declared form carries data, which a bare `fn` pointer
+cannot, so the temptation is a separate list of declared rules beside the table. That is exactly
+the accretion `OD-GATE-020` measured going silently out of step twice, and this record refuses
+it.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#33
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Where it sits · hash: sha256:6fc9f98d5bb63aeb2de8c5a9c181b8ab681e64ca83ff191a8bd6921e484ae1b1*
+
+`RuleJudgment` becomes two arms instead of one — a linked `fn` pointer, or a `&'static`
+reference to a declared form — and both are `const`-constructible, so the table stays a `const`
+table and `DESCRIPTORS` stays the whole declaration of a rule. `RuleJudgment::Judges` keeps its
+signature, which matters more than it looks: it is called from exactly one place in the whole
+workspace, `run_context/judging.rs`, so the run needs no change at all.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#34
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Where it sits · hash: sha256:b68c4730bd5b97caae95c5f6418003cbfee0b2801329a314e1fba22d9132e482*
+
+Nothing in `nomos-rule-package` changes either, and that is a conclusion rather than an
+omission. `Judgment::Mechanical` means a linked implementation decides the rule and resolution
+refuses the package if none is registered; a declared form interpreted by a linked interpreter
+is precisely that, so a declared rule is mechanical and `declared_rules.rs`, which already
+derives every `RulePackage` from `DESCRIPTORS`, keeps deriving them correctly with no new arm.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#35
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Where it sits · hash: sha256:5bf59a3946cf76c39caa9197e8b3d79188d06818747a7af3f4992a2bd5e07d3f*
+
+**The form decided here is compile-time, and the manifest-loaded one is not decided.** A
+declaration a repository ships and this build loads at run time cannot be `&'static`, so it
+would make the composed rule set a run-time construction rather than a `const` — a real change
+to `OD-RULES-027`'s decision, and one nothing in this population demands, because every rule
+measured above is one this workspace itself ships. The observation that would decide it is a
+repository outside this workspace needing a rule this workspace does not ship, which is a fact
+about a consumer and not about the table.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#36
+
+*revision: authored · kind: heading · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The three things this record was told not to propose · hash: sha256:ec87b737a1acdcd9e748eb9972eb7027f40b6124511107d6a1347fc94f71b923*
+
+## The three things this record was told not to propose
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#37
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The three things this record was told not to propose · hash: sha256:fb30a54d70004bbfd6a327444b1932eb1bf08a74695acaea1b0096c38b49ed93*
+
+**A visual editor is premature, and it is not on this path at all.** The surface decided above
+has eight fields, every one of them a scalar or a name from a closed vocabulary, and there is
+one author. A form-filling interface over eight fields is worth less than the literal it would
+produce, and it would be a second authoring path beside the one this record names — the thing
+the seam above exists to prevent. The observation that would change it is not a rule count: it
+is somebody authoring rules who cannot read the repository's own declarations.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#38
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The three things this record was told not to propose · hash: sha256:a887d858a44f28a9cdee4a8fe72681edf0dd335080e074745234ddf1c8260a30*
+
+**A general expression language is premature, and the census says precisely why.** It would be
+the answer to the detector gap, and the detector gap is real: naming a detector from a closed
+vocabulary means a rule needing a new one still costs Rust. But the four detectors quoted above
+are a substring test, a matcher that returns its match, a documentation-comment parser and an
+integer-width computation, and an expression language general enough to hold the last two is a
+programming language. One that held only the first would let a declaration be written for the
+other three and silently fail to mean them, which is the failure mode this record forbids by
+name. A closed vocabulary that refuses is the honest version of the same offer. The observation
+that would change it is two or more new rules whose detectors differ only in a literal the
+vocabulary cannot parameterize.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#39
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The three things this record was told not to propose · hash: sha256:70e9edb3fbd0768df6a199b440529d28f7a9d576d58c43032a1b10be07b925b8*
+
+**A rule intermediate representation stays premature, and `OD-RULES-007` stays open.** That
+record named six triggers at a population of four and asked to be re-measured rather than
+reaffirmed by count. Re-measured at seventy-one: five do not fire. The sixth — "a reusable
+subworkflow or procedure two or more rules genuinely share, the way `nomos-proto`'s sixteen
+duplicated driver loops did before extraction" — fires in its observation and not in its
+conclusion, and the distinction is the whole of this record's argument. Seven rules share
+`Unjustified_Construct_Findings_In`; four share `Findings_For_Threshold`; ten rule modules built
+`finding_shape` by hand before it existed; eleven copies of one line split preceded
+`code_prefix`. Every one of those extractions landed as an ordinary Rust helper inside one
+crate, and no planner needs to see any of them: the redundancy each removed was in *authoring*,
+not in fact acquisition or in judgment scheduling. A declared form removes authoring redundancy
+without making judgment structure visible to anything that schedules; an intermediate
+representation is defined by doing the second. So the trigger that fired argues for this
+record's decision and not for that record's, and `OD-RULES-007`'s own six conditions are left
+where they are.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#40
+
+*revision: authored · kind: heading · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / What this record does not do · hash: sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4*
+
+## What this record does not do
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#41
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / What this record does not do · hash: sha256:cff80199eea69cc4c609ade3f099f0936e07c7055ed41fc995320798bb9be6c3*
+
+It does not build the form, the interpreter, the detector vocabulary or the second
+`RuleJudgment` arm. It does not convert any existing rule.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#42
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / What this record does not do · hash: sha256:d05ef07d56cd22e5e1f10e0a795d0ca68435b0fba3dde702fd9a7f966a6b99e0*
+
+It does not amend `OD-RULES-007` or `OD-PACKAGE-008`. Both are re-measured against the
+population above and neither is edited, because amending a record is the work of an item that
+holds it.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#43
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / What this record does not do · hash: sha256:7e008e2dbe5d7fba38c55579f71fae9effa3a05a488684f541a8ff02c80c00f5*
+
+It does not decide the detector vocabulary's membership. Which detectors a declaration may name
+is a list to be read off the forty-four rules when one is built, not a list to guess at here.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#44
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / What this record does not do · hash: sha256:35abf0b839ee008721100891628800b71f052e7a2a8c30745ee263f2e97a7dfc*
+
+It does not repair the two stale rule counts in `nomos-rules`' own doc comments, and does not
+propose a test that would compare them against the table.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#45
+
+*revision: authored · kind: heading · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The item that would build it · hash: sha256:fac7c3550d64c7702fc19bba03d3de054b45df06317d4e3def8c00a5cecc3a4a*
+
+## The item that would build it
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#46
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The item that would build it · hash: sha256:e5c34bec6876cc6903d11c21b5bd0c4f24716b1d905a49177d132749a2e97960*
+
+`P129-A-DECLARED-TEXT-RULE-FORM-IS-A-SECOND-JUDGMENT-ARM-IN-THE-ONE-DESCRIPTOR-TABLE`.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#47
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The item that would build it · hash: sha256:c8430a63d1531f858ed17ba01bf68ab10c70c220a431e4623a723064f5847ae4*
+
+Its `done_when` is that one existing rule already on `Unjustified_Construct_Findings_In` is
+re-declared through the form and produces byte-identical findings against this workspace's own
+tree, that the declaration names a detector from the vocabulary and cannot express one inline,
+and that `DESCRIPTORS` remains a `const` table with no second list beside it. The identical-
+findings comparison is the falsifier: a form that changed what a rule reports would be a new
+rule wearing an old identifier.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#48
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The item that would build it · hash: sha256:480997e7b5e179ac9aec86415d3de3d267ef858db2c906969f2ef1611a119363*
+
+Territory, by path:
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#49
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The item that would build it · hash: sha256:d9d0ae53ffc852eb422813bce9a4de7cb45943347829f0407e95c0cacea82b4c*
+
+- `crates/rules/nomos-rules/src/rule_descriptor/rule_judgment.rs`
+- `crates/rules/nomos-rules/src/rule_descriptor/declared_form.rs`
+- `crates/rules/nomos-rules/src/rule_descriptor.rs`
+- `crates/rules/nomos-rules/src/checks/rust_text.rs`
+- `crates/rules/nomos-rules/src/checks.rs`
+- `crates/rules/nomos-rules/src/lib.rs`
+- `tests/contract/surface/nomos-rules.txt`
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#50
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / The item that would build it · hash: sha256:03a44aec0e50b88732a77893ed77f9e45992d8bcf77763b3a58e56406f0214e4*
+
+The surface snapshot is territory because `RuleJudgment` is a public type and a second arm moves
+it. `crates/orchestration/nomos-check-orchestration` is deliberately not territory: the run
+calls a rule through `RuleJudgment::Judges` at one site, and an item that needed to widen into
+that crate would be evidence this seam was chosen wrongly.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#51
+
+*revision: authored · kind: heading · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#52
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
+
+### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#53
+
+*revision: authored · kind: prose · heading: A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust / Status · hash: sha256:b3429be86547c5e00c0fb1eb222ae38c3332f8fddc141a27de00ccf220c062be*
+
+Revisit if the first declared rule cannot state something its function stated — which would mean
+the eight fields were read off the engines and still generalized past what forty-four rules
+show, rather than a reason to add a ninth.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
