@@ -93122,16 +93122,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P123-FACT-STORE-SURVIVES-THE-PROCESS-2"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p128-daemon",
-        "acquired_at": 1790106907,
-        "lease_expires_at": 1790120798
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -93149,7 +93145,35 @@
         ],
         "timeout_seconds": 5400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-daemon",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "boundaries",
+          "--test",
+          "completeness_universes"
+        ],
+        "exit_code": 0,
+        "output_tail": "s expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: unused import: `Revisions_In`\n  --> tests\\contract\\tests\\boundaries\\lock_pinning.rs:85:65\n   |\n85 | use nomos_contract_tests::{Declared_Revisions, Repository_Root, Revisions_In, XVPE_PREFIX};\n   |                                                                 ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-contract-tests` (test \"boundaries\") generated 1 warning (run `cargo fix --test \"boundaries\"` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.49s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-66492b6d684ed8c8.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-c7150b6300af0b3e.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-c7098f4ad0cf29de.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_daemon-d064a293ac9cddc8.exe)\n",
+        "verified_at": 1790111358,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c7b2f764e53fe427f338ec12745da4e16ab8ae00"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
