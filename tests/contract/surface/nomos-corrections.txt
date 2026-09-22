@@ -4,6 +4,7 @@ pub const fn nomos_corrections::CommittedPlan::Base(&self) -> SnapshotId
 pub const fn nomos_corrections::CommittedPlan::Mutation_Class() -> MutationClass
 pub const fn nomos_corrections::CommittedPlan::Rollback_Boundary() -> RollbackBoundary
 pub const fn nomos_corrections::Compatibility::Is_Compatible(&self) -> bool
+pub const fn nomos_corrections::ConvergenceTrail::New() -> Self
 pub const fn nomos_corrections::CorrectionCandidate::Change(&self) -> &ChangeSet
 pub const fn nomos_corrections::CorrectionCandidate::Class(&self) -> CorrectionClass
 pub const fn nomos_corrections::CorrectionCandidate::Id(&self) -> CorrectionId
@@ -24,6 +25,7 @@ pub const fn nomos_corrections::ReviewReason::Label(self) -> &'static str
 pub const fn nomos_corrections::RollbackBoundary::Label(self) -> &'static str
 pub const fn nomos_corrections::StagedPlan::Base(&self) -> SnapshotId
 pub const fn nomos_corrections::StagedPlan::Mutation_Class() -> MutationClass
+pub const fn nomos_corrections::StateSignature::Digest(&self) -> Digest128
 pub const fn nomos_corrections::UnresolvedAccess::Candidate(&self) -> CorrectionId
 pub const fn nomos_corrections::UnresolvedAccess::Completeness(&self) -> Assurance
 pub const fn nomos_corrections::UnresolvedAccess::Plan(&self) -> usize
@@ -98,6 +100,8 @@ pub fn nomos_corrections::ChangeSet::With(mut self, edit: Edit) -> Self
 pub fn nomos_corrections::CommittedPlan::Evidence(&self) -> &Evidence
 pub fn nomos_corrections::CommittedPlan::Rollback(self, live: &mut Workspace) -> Result<SnapshotId, CorrectionError>
 pub fn nomos_corrections::Compatibility::Of(first: &CorrectionPlan, second: &CorrectionPlan) -> Result<Self, UnresolvedAccess>
+pub fn nomos_corrections::ConvergenceTrail::Observe(&mut self, signature: StateSignature) -> Option<usize>
+pub fn nomos_corrections::ConvergenceTrail::Rounds(&self) -> usize
 pub fn nomos_corrections::CorrectionCandidate::Description(&self) -> &str
 pub fn nomos_corrections::CorrectionCandidate::Labels(&self) -> &[CandidateLabel]
 pub fn nomos_corrections::CorrectionCandidate::New( description: impl Into<String>, change: ChangeSet, class: CorrectionClass, labels: Vec<CandidateLabel>, ) -> Self
@@ -141,6 +145,8 @@ pub fn nomos_corrections::ReadWriteSet::Entries(&self) -> &[String]
 pub fn nomos_corrections::ReviewReason::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::RollbackBoundary::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::StagedPlan::Validate(&self, live: &Workspace) -> Result<ValidatedPlan, CorrectionError>
+pub fn nomos_corrections::StateSignature::Of(observations: &[String]) -> Self
+pub fn nomos_corrections::StateSignature::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::UnresolvedAccess::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_corrections::ValidatedPlan::Commit(self, live: &mut Workspace, evidence: Evidence) -> Result<CommittedPlan, CorrectionError>
 pub fn nomos_corrections::WavePartition::Of(plans: &[CorrectionPlan]) -> Result<Self, UnresolvedAccess>
@@ -158,6 +164,7 @@ pub impl nomos_corrections::RankingCriterion implements core::fmt::Display
 pub impl nomos_corrections::ReadWriteResolution implements core::fmt::Display
 pub impl nomos_corrections::ReviewReason implements core::fmt::Display
 pub impl nomos_corrections::RollbackBoundary implements core::fmt::Display
+pub impl nomos_corrections::StateSignature implements core::fmt::Display
 pub impl nomos_corrections::UnresolvedAccess implements core::fmt::Display
 pub impl nomos_corrections::UnresolvedAccess implements std::error::Error
 pub struct field nomos_corrections::ChoiceRecord::objective_weights: Vec<(RankingCriterion, u32)>
@@ -168,6 +175,7 @@ pub struct field nomos_corrections::ChoiceRecord::verification_obligations: Vec<
 pub struct nomos_corrections::ChangeSet
 pub struct nomos_corrections::ChoiceRecord
 pub struct nomos_corrections::CommittedPlan
+pub struct nomos_corrections::ConvergenceTrail
 pub struct nomos_corrections::CorrectionCandidate
 pub struct nomos_corrections::CorrectionChoice
 pub struct nomos_corrections::CorrectionId(Digest128)
@@ -179,6 +187,7 @@ pub struct nomos_corrections::Overlap
 pub struct nomos_corrections::Preview
 pub struct nomos_corrections::ReadWriteSet
 pub struct nomos_corrections::StagedPlan
+pub struct nomos_corrections::StateSignature
 pub struct nomos_corrections::UnresolvedAccess
 pub struct nomos_corrections::ValidatedPlan
 pub struct nomos_corrections::WavePartition

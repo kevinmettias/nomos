@@ -41,17 +41,43 @@
 //! it; a host needing to know whether a correction family exists for one finding --
 //! `nomos-lsp` asks exactly that, per diagnostic -- reads that list rather than keeping a
 //! copy of it that this crate's own build would never notice going stale.
+//!
+//! [`Run_Correction_Waves`] is the second entry point, and the consumer
+//! `nomos-corrections`' `Compatibility` and `WavePartition` were built for and did not
+//! have. [`Run_Correction`] takes the first family that claims anything, so a tree with
+//! twenty correctable findings is corrected one run at a time and never learns the twenty
+//! were independent; this one takes every claim every family recognizes, hands the plans
+//! to the substrate's partition, and stages, validates and commits them wave by wave, with
+//! independence computed from declared read and write sets rather than assumed. It also
+//! carries `COR-005`'s rerun-and-compare half and `COR-006`'s repeated-state detection --
+//! see [`schedule`]'s own module doc for what it reruns through and why, and what it
+//! deliberately does not decide. Neither entry point is built on the other, and
+//! [`Run_Correction`] is unchanged.
 
 #![forbid(unsafe_code)]
 
 mod correction_command;
 mod correction_family;
 mod correction_outcome;
+mod correction_schedule;
 mod phantom_mirror;
+mod plan_outcome;
 mod run;
+mod schedule;
+mod schedule_halt;
+#[cfg(test)]
+mod test_support;
 mod trailing_whitespace;
+mod wave_report;
+mod wave_scheduling;
 
 pub use correction_command::CorrectionCommand;
 pub use correction_family::CorrectionFamily;
 pub use correction_outcome::CorrectionOutcome;
+pub use correction_schedule::CorrectionSchedule;
+pub use plan_outcome::PlanOutcome;
 pub use run::{CorrectionEnvironment, Run_Correction};
+pub use schedule::Run_Correction_Waves;
+pub use schedule_halt::ScheduleHalt;
+pub use wave_report::WaveReport;
+pub use wave_scheduling::WaveScheduling;

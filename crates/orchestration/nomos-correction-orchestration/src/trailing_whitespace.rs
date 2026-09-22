@@ -51,14 +51,37 @@ pub(crate) struct TrailingWhitespaceClaim<'a>
 #[must_use]
 pub(crate) fn Trailing_Whitespace_Claim(findings: &[Finding]) -> Option<TrailingWhitespaceClaim<'_>>
 {
+    return Every_Trailing_Whitespace_Claim(findings).into_iter().next();
+}
+
+/// Every file any blocking `no-trailing-whitespace` finding in `findings` names, in
+/// ascending path order, and how many such findings name each.
+///
+/// [`Trailing_Whitespace_Claim`]'s whole population rather than its first entry.
+/// [`crate::run`]'s pipeline proposes one candidate per run and needs only the first;
+/// [`crate::schedule`] schedules every independent correction at once and needs all of
+/// them. One recognizer answers both, so a file the scheduler claims is exactly a file
+/// the single-family path would have claimed had it looked past the first.
+#[must_use]
+pub(crate) fn Every_Trailing_Whitespace_Claim(findings: &[Finding]) -> Vec<TrailingWhitespaceClaim<'_>>
+{
     let mut paths: Vec<&str> = findings.iter().filter_map(File_Path_Of).collect();
     paths.sort_unstable();
     paths.dedup();
-    let path = *paths.first()?;
 
-    let line_count = findings.iter().filter(|finding| return File_Path_Of(finding) == Some(path)).count();
+    return paths
+        .into_iter()
+        .map(|path| return TrailingWhitespaceClaim {
+            path,
+            line_count: Flagged_Lines(findings, path),
+        })
+        .collect();
+}
 
-    return Some(TrailingWhitespaceClaim { path, line_count });
+/// How many blocking `no-trailing-whitespace` findings in `findings` name `path`.
+fn Flagged_Lines(findings: &[Finding], path: &str) -> usize
+{
+    return findings.iter().filter(|finding| return File_Path_Of(finding) == Some(path)).count();
 }
 
 /// The file a blocking `no-trailing-whitespace` finding names, or `None` if `finding` is

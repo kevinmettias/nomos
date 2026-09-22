@@ -1,6 +1,13 @@
+pub const fn nomos_correction_orchestration::CorrectionSchedule::Halt(&self) -> Option<&ScheduleHalt>
+pub const fn nomos_correction_orchestration::CorrectionSchedule::Rounds(&self) -> usize
+pub const fn nomos_correction_orchestration::CorrectionSchedule::Scheduled(&self) -> usize
+pub const fn nomos_correction_orchestration::CorrectionSchedule::Unschedulable(&self) -> Option<&UnresolvedAccess>
+pub const fn nomos_correction_orchestration::ScheduleHalt::Wave(&self) -> usize
 pub const nomos_correction_orchestration::CorrectionFamily::ALL: [Self; 2]
 pub enum nomos_correction_orchestration::CorrectionFamily
 pub enum nomos_correction_orchestration::CorrectionOutcome
+pub enum nomos_correction_orchestration::PlanOutcome
+pub enum nomos_correction_orchestration::ScheduleHalt
 pub enum variant nomos_correction_orchestration::CorrectionFamily::PhantomMirror
 pub enum variant nomos_correction_orchestration::CorrectionFamily::TrailingWhitespace
 pub enum variant nomos_correction_orchestration::CorrectionOutcome::Clean
@@ -12,14 +19,35 @@ pub enum variant nomos_correction_orchestration::CorrectionOutcome::Refused(Stri
 pub enum variant nomos_correction_orchestration::CorrectionOutcome::Staged { path: String, summary: String, preview: Vec<u8>, }
 pub enum variant nomos_correction_orchestration::CorrectionOutcome::UnreadableRoot
 pub enum variant nomos_correction_orchestration::CorrectionOutcome::UnreadableWorkspaceState
+pub enum variant nomos_correction_orchestration::PlanOutcome::Committed { path: String, summary: String, base: String, after_snapshot: String, }
+pub enum variant nomos_correction_orchestration::PlanOutcome::Refused { path: String, reason: String, }
+pub enum variant nomos_correction_orchestration::PlanOutcome::Staged { path: String, summary: String, }
+pub enum variant nomos_correction_orchestration::ScheduleHalt::Refused { wave: usize, position: usize, reason: String, }
+pub enum variant nomos_correction_orchestration::ScheduleHalt::Repeated { wave: usize, round: usize, }
 pub fn nomos_correction_orchestration::CorrectionFamily::Of(rule: &RuleId) -> Option<Self>
 pub fn nomos_correction_orchestration::CorrectionFamily::Rule(self) -> RuleId
+pub fn nomos_correction_orchestration::CorrectionSchedule::Committed(&self) -> Vec<&str>
+pub fn nomos_correction_orchestration::CorrectionSchedule::Unbuilt(&self) -> &[String]
+pub fn nomos_correction_orchestration::CorrectionSchedule::Waves(&self) -> &[WaveReport]
+pub fn nomos_correction_orchestration::PlanOutcome::Path(&self) -> &str
 pub fn nomos_correction_orchestration::Run_Correction<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(walked: Option<Vec<SourceFile>>, environment: CorrectionEnvironment<'_, Launcher, Fs, Env>, command: &CorrectionCommand) -> CorrectionOutcome
+pub fn nomos_correction_orchestration::Run_Correction_Waves<Fs: FileSystem, Rejudge: FnMut(&[String]) -> Vec<Finding>>(findings: &[Finding], scheduling: WaveScheduling<'_, Fs>, rejudge: Rejudge) -> CorrectionSchedule
+pub fn nomos_correction_orchestration::WaveReport::Cleared(&self) -> &[String]
+pub fn nomos_correction_orchestration::WaveReport::Introduced(&self) -> &[String]
+pub fn nomos_correction_orchestration::WaveReport::Outcomes(&self) -> &[PlanOutcome]
+pub fn nomos_correction_orchestration::WaveReport::Positions(&self) -> &[usize]
 pub struct field nomos_correction_orchestration::CorrectionCommand::commit: bool
 pub struct field nomos_correction_orchestration::CorrectionCommand::root: PathBuf
 pub struct field nomos_correction_orchestration::CorrectionEnvironment::environment: &'a Env
 pub struct field nomos_correction_orchestration::CorrectionEnvironment::filesystem: &'a Fs
 pub struct field nomos_correction_orchestration::CorrectionEnvironment::launcher: &'a Launcher
 pub struct field nomos_correction_orchestration::CorrectionEnvironment::variant: BuildVariant
+pub struct field nomos_correction_orchestration::WaveScheduling::commit: bool
+pub struct field nomos_correction_orchestration::WaveScheduling::filesystem: &'a Fs
+pub struct field nomos_correction_orchestration::WaveScheduling::root: &'a Path
+pub struct field nomos_correction_orchestration::WaveScheduling::variant: BuildVariant
 pub struct nomos_correction_orchestration::CorrectionCommand
 pub struct nomos_correction_orchestration::CorrectionEnvironment<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
+pub struct nomos_correction_orchestration::CorrectionSchedule
+pub struct nomos_correction_orchestration::WaveReport
+pub struct nomos_correction_orchestration::WaveScheduling<'a, Fs: FileSystem>

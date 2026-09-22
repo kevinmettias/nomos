@@ -92890,16 +92890,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P128-OD-ROADMAP-006-THE-REMAINING-REVIEW-GAPS-ARE-REQUIRED-AND-FIVE-DEFERRALS-ARE-NAMED"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p128-scheduler",
-        "acquired_at": 1790058650,
-        "lease_expires_at": 1790069450
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -92912,7 +92908,30 @@
         ],
         "timeout_seconds": 5400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-correction-orchestration",
+          "-p",
+          "nomos-corrections"
+        ],
+        "exit_code": 0,
+        "output_tail": "mos-p128-scheduler\\crates\\languages\\nomos-lang-go-modules)\n   Compiling nomos-lang-rust-clippy v0.1.0 (F:\\repos\\nomos-p128-scheduler\\crates\\languages\\nomos-lang-rust-clippy)\n   Compiling nomos-workspace v0.1.0 (F:\\repos\\nomos-p128-scheduler\\crates\\substrate\\nomos-workspace)\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos-p128-scheduler\\crates\\rules\\nomos-rules)\n   Compiling nomos-corrections v0.1.0 (F:\\repos\\nomos-p128-scheduler\\crates\\corrections\\nomos-corrections)\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos-p128-scheduler\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-correction-orchestration v0.1.0 (F:\\repos\\nomos-p128-scheduler\\crates\\orchestration\\nomos-correction-orchestration)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 29.58s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/scheduler/wt-target\\debug\\deps\\nomos_correction_orchestration-3aeb52730401ae6a.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/scheduler/wt-target\\debug\\deps\\nomos_corrections-0133cea6d3868436.exe)\n     Running tests\\integration_seams.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/scheduler/wt-target\\debug\\deps\\integration_seams-3a94b1c6408b0fec.exe)\n   Doc-tests nomos_correction_orchestration\n   Doc-tests nomos_corrections\n",
+        "verified_at": 1790061221,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
