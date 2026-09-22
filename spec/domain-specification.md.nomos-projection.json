@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:9e129cad8ae3ee0fa2b25512b43e1a917f8894f72b9dc3ec8efaf0942acf9e90",
-  "inputs_digest": "sha256:fa83d38bb8c8b270aba56706aee5619b38eb86ebc78de1b7325d750a3a991238",
+  "content_digest": "sha256:d1baec3ea247f78d3ec7d4946b4dc148f1abc0729cd1cdff9707a0bdd41f43e3",
+  "inputs_digest": "sha256:2324e8ad5dfa9631a3d23763eb9817544bae8c56bbb7a9fe4ed85365ab055af4",
   "sections": [
     [
       "Documents",
-      262
+      263
     ],
     [
       "Sections",
-      2255
+      2279
     ],
     [
       "Source blocks",
-      8041
+      8133
     ]
   ],
   "inputs": [
@@ -649,6 +649,11 @@
       "content": "documents",
       "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md@authored",
       "hash": "sha256:7a05e7d2b4970db396626604d0d0e0e6dda68dcb9890eeaaa7d120f22d219e88"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md@authored",
+      "hash": "sha256:0ce8b873e26fc707ad0594a76922e8ccf0fa5c374c5867d74543afd06d69e593"
     },
     {
       "content": "documents",
@@ -6384,6 +6389,126 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#55",
       "hash": "sha256:8c6879924dcd415bef621e147eaf6bf10de2f4eb100e5aee4d5ce27b1e63c2f4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#1",
+      "hash": "sha256:c60417a4008077cf5a13ba7fbfe3bafe0ff570971ca986a151d9abd2cba6582b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#2",
+      "hash": "sha256:79bd70eb95c4014418d803b8ca341990d0d11e2864f080a1f237f9bf0ca9b67a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#6",
+      "hash": "sha256:5906347302cfa91988f6bf24b01c8b6acef2e74f8cc97b1837f39212d0b11ebf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#8",
+      "hash": "sha256:59270a2f463fd09b5b989bd782dfdad29f200fa3106aaa5893b14ea161b6efb8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#12",
+      "hash": "sha256:aa28617e88a958a96ae21a04aa09a9a772cee8542cfdc129621eb6b074ca1962"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#18",
+      "hash": "sha256:1290c2e1e354529b4b7b7a16d52def44df4bf7c515145998307ccf2201e0d3b4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#22",
+      "hash": "sha256:b546ffbe0d94974c40ef931f2f9786464dd010da3abdf12862813de8e78c274a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#30",
+      "hash": "sha256:3f833bea7e2ce118119f54ca1f91c06b8045bddc97a847ffbd0bce69aca40ee9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#34",
+      "hash": "sha256:46c11f8ac7c5b991e35c0e5bae5f5462818153b791fc799463aea4530ebb87af"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#37",
+      "hash": "sha256:0414b3c552a9d185cf65b6cf6b8c0cd3506df0e5aeb54ca5d230abbcee2bc740"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#40",
+      "hash": "sha256:47fb57fc0826f97e6c1c47efaf0ccf276954845a37909c4086eaef345060849c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#42",
+      "hash": "sha256:d9ef3303b079ec6d80b0c99b0d585a6730f39d8b764218d23521332f9fa7bcdd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#44",
+      "hash": "sha256:0be750ce89712d04035ee8f6f5cb6b0fad8bc788f44a6aa960460bca8b659a2e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#47",
+      "hash": "sha256:b0f3a0bdb552dfa4103af40e6f7d18e3b905a950a507d98c4a60ba176774ee93"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#52",
+      "hash": "sha256:4151ca721584dc6ed95316fddb39de8cb9b60b5fbec058f84bd74d1deae19344"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#56",
+      "hash": "sha256:797b2bf04343353e713a524bef2efdb791dc49a8297f3db3808c1a84c13cfb61"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#59",
+      "hash": "sha256:5fa5ce4f4d5584c864bebbaf961e8a079c0edf446b838debd91b3dbd628863e7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#65",
+      "hash": "sha256:4d4e53c0acfbf930a130e858cfc00d70d6736291600c7b94061e40291f2daa15"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#68",
+      "hash": "sha256:cb5d36e89ecca54f2e7fd37e991c948cc6865892a94473f917b091fecf2aa665"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#71",
+      "hash": "sha256:1a49ba46abbf81396f9395f5dd5987ceb702ebd4879155e21806b5488b99250d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#74",
+      "hash": "sha256:0a024958c34e908ec1e8233ff46f9f1464984535ddd9a8daf60f5941f076b420"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#77",
+      "hash": "sha256:b67c25ef4778136d425ddd7f65e4b7f5331aad936949601544007b60f835ab25"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#83",
+      "hash": "sha256:437cbfab8cda6e98c734c8eda94ab894044cfb4940aa088c4e3d82026a1bc00a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#91",
+      "hash": "sha256:8b725241fdf44d8a6df289d375b23191576904127b0281df756469333966d29b"
     },
     {
       "content": "headings",
@@ -30744,6 +30869,466 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md#56",
       "hash": "sha256:f74815390864b77e2e1a29bba3e89e48b181b2c215bb7d3cf92624f39ef760aa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#1",
+      "hash": "sha256:2f9bfbefa6845ee1e0bcd012dcb89ea08fce7e197045d4d6448d87f39a6fb28f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#3",
+      "hash": "sha256:7efec74bb6a76c06f649a49db9e970045a8d2d709df7ec3d23a8667a346a93e2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#4",
+      "hash": "sha256:0efdfde4316f970b6c393cc45b9b5b2596183fe80755db90617d877810c0c6a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#5",
+      "hash": "sha256:f4d82d5ade8b283edbe03fbc09707e7e1f48e4fb2a1895bfc72c07cf146ee7be"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#6",
+      "hash": "sha256:9a212157fad51ad3a55e6328efa5dbbee24b07dd5d7d9660c07639de53900491"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#7",
+      "hash": "sha256:11340dcc957fcdd60dbc3980f53f5f84a826221cca78378315d55b5fd9fd4ef1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#8",
+      "hash": "sha256:374a6d3ca2b1ea817c7209606065234750b6d9f906e5bb27df9cfd9c9a8dd262"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#9",
+      "hash": "sha256:eff744f5ecdb2a3f03251504610217f2d01d17fb18b30bbd022adda78213818a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#10",
+      "hash": "sha256:f4374533a844e9dd62031b5701517eacbb0ab2063c8e4707f450196d36ee12ac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#11",
+      "hash": "sha256:c2b586b13e27d93226f11dfc16bb496ef0630d6a470b82c3fa0697856f998668"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#12",
+      "hash": "sha256:3b41dff683adc9f8913ceccf4c0d27ad5aad4c99147d24ce3a1f637f4fd40f09"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#13",
+      "hash": "sha256:98103c8b8efe70910cd36bb02f0b6bd12e6461c73e63b218995b5c634544ae67"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#14",
+      "hash": "sha256:7946012a4fb990d3aee05def188f872f2c6e8897e5539e958e5bc3063b1f1b3d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#15",
+      "hash": "sha256:1e9e333c0438d191c00343d146515142f94a90b696309606541357f5720d35d4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#16",
+      "hash": "sha256:c99593d31c18ec6ff89c43c796b10c5c441b78c64fa130477d681715830b12b9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#17",
+      "hash": "sha256:aac0bf630b45eed4ab1f4fed973e825f68502299be43f6a7365423fb7e64a80d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#18",
+      "hash": "sha256:fc20d2b1405ac5c04827fa1a7b97954e2505b2cf67f16a241d56d47880b5bba2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#19",
+      "hash": "sha256:754891f537886f8cca635a56c687c427de0ca501314fedea8919dad6b567a122"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#20",
+      "hash": "sha256:8552db1bc283d69103725c8bb6e1a5c96422d74fe9495ee94faa82875703b2d4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#21",
+      "hash": "sha256:c4ecbc310a9e716e63b8e73fddd4c1027ff24210710d30cadd4c22e63b65b113"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#22",
+      "hash": "sha256:4ef5554679166c82bf69657e0bcfdb1a9fda7ac8a4c3252df71ab85cca905b5a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#23",
+      "hash": "sha256:b95ee895944080fc44fc111035080d3b5250c752d251a142abb79c2ca3a632bf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#24",
+      "hash": "sha256:9ac19922a4797817b549cb5a8ebc418600ddc604a7f5bc85ae69003eb6956776"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#25",
+      "hash": "sha256:700729d956a6acac9fd3370f7e5eb7921e3c20e5ea4a1ecc58456b696a6cbcf2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#26",
+      "hash": "sha256:e908d235352cd6c7899804e5a40648edb1b634cac26278a673a54a0aad95823b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#27",
+      "hash": "sha256:5402d4a1faf3526819039efff260965483994d5be02e06152577935f8840d358"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#28",
+      "hash": "sha256:490f6d60a123fd268b72a49d16ddcd3f5b4c7ef406aa4b8c179600097d258b9e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#29",
+      "hash": "sha256:8c3a2c44d146ad0367aefbd024c6c0cab7ec01553da4febbcb9a17205a3a8da5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#30",
+      "hash": "sha256:2320daecf206d2029c04aa38611a0344d042bb7d7e8bea2735ab1421aa345de7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#31",
+      "hash": "sha256:1ce94caa7229212e33b4a281171bf3d534f5e3e9778c7d92424ee6f34ef56550"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#32",
+      "hash": "sha256:51d993582f8ef191b71636f4d72bd7c9543b8f27b6c31b64aae3ec8be1a2992d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#33",
+      "hash": "sha256:455ebb29a0243885b5fc6b67749f9bba2004e05ba817a322a63d860f2a661114"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#34",
+      "hash": "sha256:6127453e6229ab2b39ea771c8707164ac4571794b2c76933c53907a6c673e5d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#35",
+      "hash": "sha256:fb78ad120d1348bd5c19f1af1f072e82392f49614b3a535383627d92758d6159"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#36",
+      "hash": "sha256:0d55968c2cf780bc9481343504375a1cf9a4262013393b6f71effa9d5797da2a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#37",
+      "hash": "sha256:58a55e34f41eda0d5f2afa90c9abb1cf19032ca5b3aba6c321d3aa773ec9e019"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#38",
+      "hash": "sha256:54028fcfc496f31a151c8d6a5989bbe61ba5b1f5f846e2629ae4e7fef90dc837"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#39",
+      "hash": "sha256:f539ee46e458e17a4eb0d100b864faa6a0e3ab589a7b0f1194f4d2b102abc17f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#40",
+      "hash": "sha256:6b0b7b27e8371a6e55239b568fe25ce0eeb2065f604570601d11e16a831fb0d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#41",
+      "hash": "sha256:d9b54b9dab7ccc855a392ad54eede948931b94916edf25ee4c3805b9152af57d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#42",
+      "hash": "sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#43",
+      "hash": "sha256:45ed8715d16d6013989ba8137f19cc2da5fc9c9046e204d2cd2a9a72e22b216d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#44",
+      "hash": "sha256:de1d0ca48bb6fa66786c749f59e18cac402cad1d43a51d1655507a0021ecccdc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#45",
+      "hash": "sha256:b094816c028ab20ae977089558ba7ea57df81b14129cd8b3c7df762332048240"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#46",
+      "hash": "sha256:e51f30a4ae83d8d783712ba06bb0cb7aff741e21c16ad7861af09b98ffd22969"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#47",
+      "hash": "sha256:6848672a951723d536ea33e52363c70b7b0d4df38c51540955410cbd371960cb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#48",
+      "hash": "sha256:10ae6ed1cfffad9758fbb96da576d5bc0adeb9b853665f476cb2390fc417ebef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#49",
+      "hash": "sha256:7fbd0828865ce17669502e695a30c91c698e7edf29f0e487fff9d1b3794a9892"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#50",
+      "hash": "sha256:e26ff95c96db05ae94abf7ce04dae477a1cdc3ca324c33b9ee661fa17b630558"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#51",
+      "hash": "sha256:2081c9beacba56518a881bf47010fa14e52f61246792dd1bd7d0b5b6f9eb42db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#52",
+      "hash": "sha256:cb8437bb959701b332f462f9eb0e0b85f5677e9a3983c5a042102b8e6ad73049"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#53",
+      "hash": "sha256:26a743c7c69122a0a3a16cc3aab647c71079710828bd494bcc30ccd4b5db8b3a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#54",
+      "hash": "sha256:e5544c7408d63de18b6a76398ccc36fa58d6df5db7baa3a47200ccb0dbdb8c5d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#55",
+      "hash": "sha256:2d5508903369a62d3186031fd4a3fac0f90a1b3f7e63684fc8247d5a8dbabf35"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#56",
+      "hash": "sha256:17c500ca3baaaef485bff624ce8f053305d18996f04bbcb87cf2d9400e64be43"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#57",
+      "hash": "sha256:b3f6e0722134944832c0ff40d354635b1215f5cbd842f0340d0c60cdbc1d5c28"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#58",
+      "hash": "sha256:ab4deeb4107766103366c8e615e269261bf944a6003c580f906b801bf868f4b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#59",
+      "hash": "sha256:c9a7f9ffca4a408d7e33771f7205e7c922380bb69a4f6a8cceddfcf030ca8639"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#60",
+      "hash": "sha256:658bd58da1d2fee3ac2c135f3db7edb3ca7f049ff3fe1d21f162a5dc53088aa5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#61",
+      "hash": "sha256:caccc8e946cc012729688597c7ac6077d005f4f6288d8eb98a76866b725b97eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#62",
+      "hash": "sha256:a72433e743d067d8016a3b2ba39205ab0883502928e525893605b4bd79e6c144"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#63",
+      "hash": "sha256:95049c63eb70b1112bbea7ae5c20c446e8724f46b050bfe4202c85174c131d20"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#64",
+      "hash": "sha256:f7f70f1ab47393e2739ed65c9ba6b8ebbd13e72e662c678ffc5b1fd0a05a5b37"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#65",
+      "hash": "sha256:9d9afe4711a1afe12a81e8442e85c7882529a5096a37aea123f282d02844d5b0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#66",
+      "hash": "sha256:dcde758216f20e5f9f2f7e61a0b87b10391f04d5591c78c2c0ec9e6cb61cadc7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#67",
+      "hash": "sha256:e6adc31670cbe9d38d8024a8abb01a1c8fb8e61a61d1b07509e8b6bf465cee51"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#68",
+      "hash": "sha256:1e51d771f2f909a542a09e917d402de9e622cf2e18956051a4b0583685b93ca9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#69",
+      "hash": "sha256:3b594da5bfca93f9b7ee80a1eded0758a0fd1ce024536c22003d3d940b1564ac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#70",
+      "hash": "sha256:c6b2577269196ef9700ebb6fb1b91b87bf1399b258ce3c57c70d4ab4003c2a7f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#71",
+      "hash": "sha256:fedde044b624adf6eda2460125c06a018def5c7e9238fd7d874ec2bb056a627c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#72",
+      "hash": "sha256:b1ddfafc78c07819039f3cbae5937da504209bfb8a5713b331ff0de0c8bbfc4b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#73",
+      "hash": "sha256:72a99b055833d6ca683aefed8c516dafe66aff305be8b3ba138a5c6a667d6331"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#74",
+      "hash": "sha256:cf243322e4f26f20881e342730a4e0f2936a956e7e76470b21c4630af7f52075"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#75",
+      "hash": "sha256:e189b32e89f82f1a99e71ce63b4d16fec8e1b565df76404dedf1e51b520ace69"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#76",
+      "hash": "sha256:a940a15c649bf40846adf04479ed6dd855767dbec43cb99cb9f6051b1a04d782"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#77",
+      "hash": "sha256:77c1e58d2d86ab4da95ff36cefb6086e3a90d906e361a090a635c108cebd5dd4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#78",
+      "hash": "sha256:a4ac2b496e95229607629d196367c908de7b85e006a747f5339badfc4ac51cfb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#79",
+      "hash": "sha256:911f00d165d0b150d8217720eab66e2e5f8e3766fcdf2fc9e00c17d1816a28ac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#80",
+      "hash": "sha256:4424b373aa4bdd9fb1a3088b3e2f5ab606226ec6b68e9ac41c23a0d8772e7836"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#81",
+      "hash": "sha256:86af907bb56c76d4625ab97687f2da59467690ddbad8a3eefb8bb5dfdacdee3a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#82",
+      "hash": "sha256:7ce8456f03d66709db71562584de1b404c018c4474e3732b75a973d9311aa7c8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#83",
+      "hash": "sha256:50f7fe341d0cfed6e28159523cb5ae8b858a91e3d202e5c4e76da0dc600b9b9c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#84",
+      "hash": "sha256:b42edf30ac92c6ecc49207c66add1b73196b4a5cb71e492f039440f2e0d1ca76"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#85",
+      "hash": "sha256:e91ffd01bf8bf9b92305e38e9b5e2ba752011148b96884f7a16b6efaed77c106"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#86",
+      "hash": "sha256:be01f24c6f8a1d00de21b9afebb65be94ff8d3c839721ac0f0d0ac4af8c90c77"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#87",
+      "hash": "sha256:d5ab9f8b5a3771ba82e497b1223b75e43ea81efb01f7382f17e981e7c41ad7cc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#88",
+      "hash": "sha256:b305293facdea6d625f0195c6be63c53144b9a8bd98b3d4ec73d76021d82cc76"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#89",
+      "hash": "sha256:1d3a8407fa8ddffaf0822ebe05659075989c840a70820dc2a80231ff6ef71067"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#90",
+      "hash": "sha256:ec91d87ad6fb3139e66350076053f09b65ac74c0429660815d17e7229501af7e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#91",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#92",
+      "hash": "sha256:3a4934244d4f3e0f1d6de159845c6ae8657171b6d00a9bfee825e811c5439783"
     },
     {
       "content": "blocks",

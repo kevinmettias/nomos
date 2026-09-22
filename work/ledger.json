@@ -89111,14 +89111,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-factprov",
-        "acquired_at": 1790049023,
-        "lease_expires_at": 1790059823
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -89129,7 +89125,28 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "ensus_Should_Narrow_To_One_Table ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n   Compiling proc-macro2 v1.0.107\n   Compiling quote v1.0.47\n   Compiling serde_core v1.0.229\n   Compiling serde v1.0.229\n   Compiling once_cell v1.21.4\n   Compiling serde_json v1.0.151\n   Compiling smallvec v1.15.2\n   Compiling memchr v2.8.3\n   Compiling indexmap v2.14.0\n   Compiling ahash v0.8.12\n   Compiling hashbrown v0.14.5\n   Compiling hashlink v0.9.1\n   Compiling rusqlite v0.32.1\n   Compiling syn v3.0.3\n   Compiling serde_derive v1.0.229\n   Compiling serde_yaml_ng v0.10.0\n   Compiling nomos-spec-model v0.1.0 (F:\\repos\\render-factprov\\crates\\spec\\nomos-spec-model)\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\render-factprov\\crates\\spec\\nomos-spec-store)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.28s\n     Running unittests src\\lib.rs (F:/repos/render-factprov-target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/render-factprov-target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/render-factprov-target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (F:/repos/render-factprov-target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/render-factprov-target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1790050366,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -89270,7 +89287,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "done_when would require an implementer to break behavior that landed while this item sat ready. It says every field combines by the shape OD-POLICY-001 assigns it 'and by no per-layer or per-caller exception'. P123-GATE-PHASES-THRESHOLDS-AND-APPROVALS-ARE-AUTHORED-IN-THE-POLICY-FILE landed at 54e88f78 with Preferred_Phase_Policy, which resolves phases and approvals as one decision keyed on whether the caller stated a phase, because Evaluated_Phases reaches an approval only through the phase that names it, so pairing a caller's phases with a file's approvals would let an approval address a stage its own source never declared. An implementer obeying this item's done_when would resolve the two independently and reintroduce exactly that defect, and would be right to do so on the item as written. The clause cannot be corrected in place, because there is no work edit verb. Re-authored as -2, which names the coupled pair, requires the existing coupling to be preserved rather than flattened, and depends on P123-OD-POLICY-001-HAS-NO-RULE-FOR-TWO-FIELDS-THAT-RESOLVE-TOGETHER so the record decides the rule before code implements one. Territory, predicate and every other clause are unchanged. No claim was ever taken on this item and nothing was written to the tree under it."
+        }
+      },
       "depends_on": [
         "P123-GATE-PHASES-THRESHOLDS-AND-APPROVALS-ARE-AUTHORED-IN-THE-POLICY-FILE"
       ],
@@ -89291,7 +89312,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "fable-triage",
+        "declined_at": 1790050338
+      },
       "widened": []
     },
     {
@@ -89409,7 +89433,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stranded by the decline of P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT, whose done_when would have required an implementer to break the phases-and-approvals coupling that landed at 54e88f78. The dependency was real rather than inherited: this item's floor is declared in nomos-gate.json and read through Resolve_Gate_Policy and Resolved_Over, which that item re-homes under a layer resolver, and the two items' territories overlap in five files, so the order matters. A declined dependency is reported as DependencyUnmet, which Is_Retryable calls retryable, so leaving it would present a dead end as a queue. The complaint is intact and OD-GATE-034 still names this work. Re-authored as -2, unchanged in kind, territory, done_when and predicate, depending on P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT-2 instead. No claim was ever taken and nothing was written to the tree under this item."
+        }
+      },
       "depends_on": [
         "P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT"
       ],
@@ -89434,7 +89462,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "fable-triage",
+        "declined_at": 1790050364
+      },
       "widened": []
     },
     {
@@ -89473,6 +89504,151 @@
           "record_citation"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-OD-POLICY-001-HAS-NO-RULE-FOR-TWO-FIELDS-THAT-RESOLVE-TOGETHER",
+      "title": "OD-POLICY-001 resolves every field on its own, and the gate already has a pair that must resolve together",
+      "why": "OD-POLICY-001, landed at a7f98a40, decides that a field combines by its shape: override for a single value, keyed union for a set, refusal for a same-layer contradiction, a locked override or an unreadable artifact. Every case is per field. P123-GATE-PHASES-THRESHOLDS-AND-APPROVALS-ARE-AUTHORED-IN-THE-POLICY-FILE landed at 54e88f78 with a rule that is not: Preferred_Phase_Policy in crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs resolves phases and approvals as one decision, keyed on whether the caller stated any phase, and its own doc gives the reason. Evaluated_Phases reaches an approval only through the phase it names, so a source declaring approvals and no phase has declared nothing a run can act on, and pairing a caller's phases with a file's approvals would let an approval address a stage its own source never declared. Resolving the two independently is therefore not a simplification of the existing behavior, it is a defect the existing code was written to avoid. OD-POLICY-001's model cannot express it, so an implementer of its resolver has no rule to follow and will either preserve the coupling as an undocumented exception or flatten it and reintroduce the defect. This is a gap found by execution rather than a disagreement about intent.",
+      "done_when": "OD-POLICY-001 is amended, its version raised, to decide how a set of fields that cannot be resolved independently combines across layers: at minimum whether such a set is declared as a unit with one field designated as the one whose statement decides for all of them (which is what the gate does today), or whether the coupling is expressed some other way, with the reason; what an effective policy's provenance carries for each field of a resolved unit, since one field's statement decided every field in it and a provenance naming only the field it sits on would hide that; and what refuses, if a layer states one field of a unit and a higher layer states another. The phases and approvals pair is named as the one real instance and cited by path and by the commit that introduced it, with its own reason quoted rather than re-derived; the amendment does not reopen the ten layers, the three refusal cases or the ExecutionScope relationship, and does not restate OD-GATE-011; it names the item that implements the resolver so a reader arrives at the code rather than at a second decision; both projections are re-rendered per the nomos-spec-change skill; and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT-2",
+      "title": "Policy resolves across declared layers into an effective policy that names what decided each field",
+      "why": "OD-POLICY-001, landed at a7f98a40, decides the ten configuration layers Nomos policy resolves across, that a field combines by its shape (override for a single value, keyed union for a set, refusal for a same-layer contradiction or a locked override or an unreadable artifact), and that an effective policy carries a provenance per field rather than a merged blob. It builds nothing and names this item, with the territory reproduced below from the record's own proposal. Measured at that commit: the only precedence rule in the workspace is GatePolicyFile::Resolved_Over, two levels deep, and nothing records which of the two decided a field, so a repository cannot be told why its gate judged as it did. ConfigurationLayer does not exist. OD-ROADMAP-003 records the pause on new gate policy increments as lapsed, and the constraint that survives it is satisfied here, because a resolved field is read off declared contributions and consults no store state, cost or prior materialization. One thing this item must not simplify, found by execution after the record was written: Preferred_Phase_Policy (54e88f78) resolves phases and approvals as one decision keyed on whether the caller stated a phase, because an approval is reachable only through the phase it names, and resolving them independently would let an approval address a stage its own source never declared. The record has no rule for a coupled pair, which is why this item depends on the amendment that decides one.",
+      "done_when": "nomos-contracts publishes ConfigurationLayer with the ten layers OD-POLICY-001 names, in the record's own order, beside KnowledgeSourceRole, with a Label and a declared-universe mirror the completeness scanner accepts; nomos-gate-orchestration resolves a set of layer-labelled contributions into an effective policy in which every field carries the layer and the artifact that decided it, what it overrode, and what it rejected; each field combines by the shape OD-POLICY-001 assigns it, with the one documented exception the amendment decides: the phases and approvals pair keeps resolving as a unit exactly as Preferred_Phase_Policy resolves it today, and a test proves a caller's phases never pair with a file's approvals; a layer with no source is reported absent rather than as an empty contribution, and a sentinel value is not a statement of a field; each of the record's three refusal cases is a typed refusal naming the offending key or artifact, and declaration order resolves none of them; the nomos-gate.json reader is re-homed under the resolver so it contributes at the Repository layer rather than resolving on its own, with Resolved_Over's two-level behavior preserved as the CommandLine-over-Repository case it always was, and every refusal the declared-phase reader already produces preserved; GateRunProvenance.policy stays a digest of the effective values, covering the phase and approval parts 54e88f78 added, so a comparison still attributes a difference to what judged a run and not to which layer said it; the other four repository policy readers are untouched; a test resolves a field stated at three layers and asserts the winner, the provenance and the overridden contributions; no host is wired by this item, because rendering the provenance is the dependent item the record names; both surface snapshots are re-blessed; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts/src/configuration_layer.rs",
+          "crates/contracts/nomos-contracts/src/lib.rs",
+          "tests/contract/surface/nomos-contracts.txt",
+          "crates/orchestration/nomos-gate-orchestration/src/policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_run_result.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P123-OD-POLICY-001-HAS-NO-RULE-FOR-TWO-FIELDS-THAT-RESOLVE-TOGETHER"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-GATE-034-EVIDENCE-FLOOR-FIRST-INCREMENT-2",
+      "title": "A gate states the lowest evidence class a finding must carry to block, and a finding below it is reported in a bucket of its own",
+      "why": "OD-GATE-034, landed at 13d207c1, decides two things an external review of bc0aaacf named as gate gaps. The first needs no code: ApplicabilityPolicy is CoveragePolicy under another name and the name is retired as a type, because every reading of it already has an owner and a fifth type would decide one of them twice. The second is this item. A gate may state the lowest EvidenceClass a finding must carry to block, over the ordering EvidenceClass already publishes, and nomos_contracts::Finding has carried that class since it was written while no gate policy read it. The record measured the corpus over all 363 statements and found the phrase nowhere, so the floor is derived from EVID-001's eight classes and the prohibitions around WF-001 rather than from a requirement that asks for it by name, and it is built under OD-ROADMAP-003's lapse of OD-ROADMAP-002's pause on new gate policy increments, whose surviving constraint it satisfies: a declared constant, never a condition consulting store state, cost or prior materialization. The population below Derived is zero today and the record names its own falsifier; the territory below is the record's own, by path.",
+      "done_when": "A gate declares an evidence floor in nomos-gate.json, Unset or a named EvidenceClass, read by the one existing reader through Resolve_Gate_Policy with Resolved_Over's precedence unchanged, and Unset migrates nobody; a finding whose evidence is below the floor does not block, judged as finding.evidence at least the floor over EvidenceClass's existing Ord and read in the partition beside the other two conditions rather than inside Finding::Can_Fail_A_Build, so the contract type keeps deciding what can fail a build and the gate keeps deciding what does; a below-floor finding is reported in a sixth GateFindings bucket with its own FindingDisposition variant, never relabelled Advisory and never filed as calibrated, suppressed or baselined, because each of those says something the floor does not; phase thresholds follow blocking by construction and no second threshold floor is introduced; the floor is covered by Policy_Digest so two runs under different floors are not reported as comparable; nomos gate run counts the new bucket and nomos gate explain can cite the floor that moved a finding into it, since a bucket the report does not count is a hidden one; the crate doc's paragraph admitting the two gaps is rewritten to cite OD-GATE-034 for both, including the applicability half this item does not build; a test states a floor above a fixture finding's class and asserts it neither blocks nor disappears, and the record's own falsifier is written as a test rather than as prose; the surface snapshot is re-blessed; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/policy/evidence_floor.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_command.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/provenance.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare/finding_disposition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query/explanation.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/host/nomos-cli/src/gate/report/run.rs",
+          "crates/host/nomos-cli/src/gate/report/explain.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "--lib",
+          "--bins",
+          "--test",
+          "gate_orchestration_seam"
+        ],
+        "timeout_seconds": 5400
       },
       "verified": null,
       "abandoned": [],
