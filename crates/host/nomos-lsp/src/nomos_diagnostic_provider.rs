@@ -2,9 +2,11 @@
 //! being asked twice.
 
 use crate::build_variant::Host_Variant;
+use crate::walk_outward::WalkContext;
 use crate::Diagnostics_For;
 use crate::sources::Walked_Sources;
 use nomos_analysis::MemoryFactStore;
+use nomos_cap_requirement_trace::Assessment;
 use nomos_composer_std::{ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use nomos_rules::SourceFile;
 use nomos_workspace::Workspace;
@@ -97,17 +99,40 @@ impl DiagnosticProviderStrategy for NomosDiagnosticProvider
 
         let outcome = Run_Judgment(self, root, &sources);
 
-        let nomos_check_orchestration::CheckOutcome::Judged { findings, .. } = outcome else { return Vec::new(); };
+        let nomos_check_orchestration::CheckOutcome::Judged { findings, supporting_facts, .. } = outcome else { return Vec::new(); };
 
-        // Read once for the whole batch rather than per finding: it is one file, and the
-        // architectural component every diagnostic carries is resolved against it. A
+        // Read once for the whole batch rather than per finding: each is one file or one
+        // directory, and every diagnostic in the batch is walked against the same answer. A
         // declaration this root does not have is an empty one, and every finding then simply
-        // carries no component -- the same answer `ArchitecturalComponent::Of` gives a path it
-        // cannot place, rather than a failure that would cost the reader its diagnostics.
+        // carries no component and no requirement link -- the same answers
+        // `ArchitecturalComponent::Of` and `RequirementLink::Declared_For` give when nothing
+        // was declared, rather than a failure that would cost the reader its diagnostics.
         let architecture = nomos_repo_policy::architecture::Discover_Workspace(root, &FILE_SYSTEM).unwrap_or_default();
+        let assessments = Committed_Assessments(root);
+        let context = WalkContext { architecture: &architecture, trail: &supporting_facts, assessments: &assessments };
 
-        return findings.iter().flat_map(|finding| return Diagnostics_For(&architecture, finding)).collect();
+        return findings.iter().flat_map(|finding| return Diagnostics_For(&context, finding)).collect();
     }
+}
+
+/// The assessments the repository under `root` commits, or none when it commits no registry.
+///
+/// `OD-HOST-015`'s sixth decision: read once per batch through the reader that capability
+/// already has, over `nomos_cap_requirement_trace::REGISTRY`, the same declaration-reading
+/// shape the architectural component already takes. Every repository but this one keeps no
+/// `tests/contract/requirements/` at all, and one that does may still hold an entry this build
+/// cannot parse -- either way the honest answer here is the empty set, because a link nobody
+/// declared and a registry nobody wrote are the same absence from a diagnostic's side, and
+/// neither is worth costing a reader the diagnostics themselves.
+///
+/// What is *not* silently absorbed is a malformed entry going uncounted: the reader refuses
+/// rather than skips, so a typo cannot quietly shrink the set behind this call, and
+/// `tests/contract`'s own `requirement_trace` suite is what reports it for this repository.
+fn Committed_Assessments(root: &Path) -> Vec<Assessment>
+{
+    let registry = root.join(nomos_cap_requirement_trace::REGISTRY);
+
+    return nomos_cap_requirement_trace::Assessments_In(&registry, &FILE_SYSTEM).unwrap_or_default();
 }
 
 /// The outcome `nomos_check_orchestration::Run_Reassessing` reaches over `sources` under

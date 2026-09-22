@@ -27,7 +27,7 @@ fn Test_Diagnostics_For_Should_Translate_A_Real_Run_Result()
 
     let _ignored = std::fs::remove_dir_all(&root);
 
-    let nomos_check_orchestration::CheckOutcome::Judged { findings, .. } = outcome
+    let nomos_check_orchestration::CheckOutcome::Judged { findings, supporting_facts, .. } = outcome
     else
     {
         panic!("expected a judged outcome: {outcome:?}");
@@ -35,7 +35,9 @@ fn Test_Diagnostics_For_Should_Translate_A_Real_Run_Result()
     assert_eq!(findings.len(), 1, "one line carries trailing whitespace: {findings:?}");
 
     let only_finding = findings.first().expect("asserted len 1 above");
-    let diagnostics = nomos_lsp::Diagnostics_For(&nomos_cap_architecture::ArchitecturePayload::default(), only_finding);
+    let architecture = nomos_cap_architecture::ArchitecturePayload::default();
+    let context = nomos_lsp::WalkContext { architecture: &architecture, trail: &supporting_facts, assessments: &[] };
+    let diagnostics = nomos_lsp::Diagnostics_For(&context, only_finding);
     let only = diagnostics.first().expect("one location, one diagnostic");
 
     Assert_One_Translation(only);
@@ -111,6 +113,12 @@ fn Assert_One_Translation(only: &xvpe_diagnostics::SourceDiagnostic)
     let data: serde_json::Value = serde_json::from_str(carried).expect("walk-outward data is a document");
     assert_eq!(At(&data, &["governing_rule", "rule"]), Some(nomos_rules::NO_TRAILING_WHITESPACE));
     assert_eq!(At(&data, &["available_correction", "family"]), Some(nomos_rules::NO_TRAILING_WHITESPACE));
+    // Answered from the trail a real run carried back, and answered structurally: this rule's
+    // descriptor is `SubjectKind::SourceText`, so no fact was involved and none could have
+    // been. That is a different claim from `Unrecorded`, which is what the same trail answers
+    // for a rule that does read facts, and the distinction is the whole reason the field is a
+    // word rather than a list that happens to be empty.
+    assert_eq!(At(&data, &["supporting_facts", "answer"]), Some("NotFactBacked"));
 }
 
 /// The string at the end of `path` in `data`, read through `Value::get` rather than `Value`'s own

@@ -24,29 +24,35 @@
 //! translation ([`file_diagnostic::Diagnostics_For`]) from [`nomos_contracts::Finding`] to
 //! `xvpe_diagnostics::SourceDiagnostic`, never a second judgment.
 //!
-//! # What "walk outward from a diagnostic" answers today, and what it does not
+//! # What "walk outward from a diagnostic" answers
 //!
 //! [`walk_outward::WalkOutward`] is attached to every diagnostic's own detail -- the
-//! standard per-diagnostic extension point. Three of the five targets the ledger
-//! item's own `done_when` named have a real, mechanical answer, carried there: which rule
+//! standard per-diagnostic extension point. All five targets the ledger item's own
+//! `done_when` named have a real, mechanical answer, carried there: which rule
 //! governs a finding ([`walk_outward::GoverningRule`], read straight off
 //! `nomos_rules::DESCRIPTORS`), which architectural component it belongs to
 //! ([`walk_outward::ArchitecturalComponent`], read off the architecture the repository under
-//! check declares, when the location is a `crates/...` path), and which correction is available
+//! check declares, when the location is a `crates/...` path), which correction is available
 //! ([`walk_outward::AvailableCorrection`], the two rule ids `nomos-correction-orchestration`
-//! composes today). Evidence strength and applicability were already directly on
-//! [`nomos_contracts::Finding`] and are carried through unchanged.
+//! composes today), which facts the finding's rule read
+//! ([`walk_outward::SupportingFacts`], the trail `nomos_check_orchestration::CheckOutcome`
+//! now carries back on the run itself), and which corpus requirements it bears on
+//! ([`walk_outward::RequirementLink`], the `rule` lines an assessment declares, read through
+//! `nomos_cap_requirement_trace::Assessments_In`). Evidence strength and applicability were
+//! already directly on [`nomos_contracts::Finding`] and are carried through unchanged.
 //!
-//! Two targets are not answered: which fact backed one specific judgment (`CheckOutcome`
-//! exposes findings, not the fact store a judgment read from, and reconstructing the exact
-//! key a rule's own internal `Reader::Require` call used is not something a caller outside
-//! that rule can do without duplicating its own private `Requirement`), and which corpus
-//! requirement (`AGT-007`, `CHK-003`, ...) a finding bears on (`tests/contract/requirements/
-//! *.assessment` is hand-authored prose keyed on no `RuleId`, and `requirement_trace`'s own
-//! module doc states it is never derived from the corpus at check time). Both are named in
-//! full, with the concrete evidence behind each, in `docs/records/OD-HOST-010-*.md` --
-//! cited here rather than restated, the same rule `AGENTS.md` states for this crate's own
-//! doc and every governing record in this workspace.
+//! The last two were open until recently, and how they were closed matters more than that
+//! they were. `OD-HOST-010` named both as undecided rather than declined, with the concrete
+//! evidence behind each; `OD-HOST-016` decided the supporting fact and `OD-HOST-015` the
+//! requirement link, and each is read here from the mechanism its own building item shipped
+//! rather than reconstructed. Neither refused answer was quietly adopted: a per-finding fact
+//! answer, a `FactKey` rebuilt from outside a rule, and a requirement derived from a finding's
+//! location are all still refused, by those records and by name. Cited here rather than
+//! restated, the same rule `AGENTS.md` states for this crate's own doc and every governing
+//! record in this workspace.
+//!
+//! Each of the five says "I do not know" in its own vocabulary, and the vocabularies are
+//! deliberately not the same. `walk_outward`'s own module doc is where that is stated.
 //!
 //! # The `LintDiagnostic` contract is unchanged
 //!
@@ -65,4 +71,7 @@ mod walk_outward;
 
 pub use file_diagnostic::Diagnostics_For;
 pub use nomos_diagnostic_provider::NomosDiagnosticProvider;
-pub use walk_outward::{ArchitecturalComponent, AvailableCorrection, GoverningRule, WalkOutward};
+pub use walk_outward::{
+    ArchitecturalComponent, AvailableCorrection, FactRead, GoverningRule, RequirementLink, SupportingFacts, WalkContext,
+    WalkOutward,
+};

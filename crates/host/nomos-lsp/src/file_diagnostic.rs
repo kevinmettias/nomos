@@ -8,8 +8,7 @@
 
 use crate::location::Location;
 use crate::severity::Severity_Of;
-use crate::walk_outward::WalkOutward;
-use nomos_cap_architecture::ArchitecturePayload;
+use crate::walk_outward::{WalkContext, WalkOutward};
 use nomos_contracts::Finding;
 use xvpe_diagnostics::SourceDiagnostic;
 
@@ -24,18 +23,24 @@ const PRODUCER: &str = "nomos";
 /// rules that excludes from ever surfacing as a buffer diagnostic (`nomos.cap.goals.policy`'s
 /// own workspace-level rule among them) as an honest, structural limit rather than a bug
 /// this function could fix.
+///
+/// Everything the walk outward reads arrives through `context`, in one parameter rather than
+/// one per answer. `OD-HOST-015` and `OD-HOST-016` each predicted their own building item
+/// would add a parameter here; `OD-HOST-016`'s seventh decision resolved that collision in
+/// favour of a context struct, so a sixth walk-outward answer is a field on
+/// [`WalkContext`] and not a further change to this signature.
 #[must_use]
-pub fn Diagnostics_For(architecture: &ArchitecturePayload, finding: &Finding) -> Vec<SourceDiagnostic>
+pub fn Diagnostics_For(context: &WalkContext<'_>, finding: &Finding) -> Vec<SourceDiagnostic>
 {
     return finding
         .locations
         .iter()
-        .map(|raw| return Diagnostic_For_Location(architecture, finding, raw))
+        .map(|raw| return Diagnostic_For_Location(context, finding, raw))
         .collect();
 }
 
 /// One judgement for one of `finding`'s own locations.
-fn Diagnostic_For_Location(architecture: &ArchitecturePayload, finding: &Finding, raw: &str) -> SourceDiagnostic
+fn Diagnostic_For_Location(context: &WalkContext<'_>, finding: &Finding, raw: &str) -> SourceDiagnostic
 {
     let location = Location::Parse(raw);
 
@@ -51,18 +56,18 @@ fn Diagnostic_For_Location(architecture: &ArchitecturePayload, finding: &Finding
         None => judgement,
     };
 
-    return Carrying_Walk_Outward(judgement, architecture, finding);
+    return Carrying_Walk_Outward(judgement, context, finding);
 }
 
-/// `judgement` with the walk-outward document `finding` carries under `architecture` attached,
+/// `judgement` with the walk-outward document `finding` carries under `context` attached,
 /// or `judgement` unchanged when there is none to attach.
 ///
 /// A serialization failure is not reachable over `WalkOutward`, which is a plain derived
 /// `Serialize` over owned data: a finding still reaches the reader without its walk-outward
 /// extras rather than being dropped for the sake of them.
-fn Carrying_Walk_Outward(judgement: SourceDiagnostic, architecture: &ArchitecturePayload, finding: &Finding) -> SourceDiagnostic
+fn Carrying_Walk_Outward(judgement: SourceDiagnostic, context: &WalkContext<'_>, finding: &Finding) -> SourceDiagnostic
 {
-    let extras = WalkOutward::Of(architecture, finding);
+    let extras = WalkOutward::Of(context, finding);
     return match serde_json::to_string(&extras)
     {
         Ok(walked) => judgement.Carrying(walked),
@@ -74,6 +79,8 @@ fn Carrying_Walk_Outward(judgement: SourceDiagnostic, architecture: &Architectur
 mod tests
 {
     use super::*;
+    use nomos_cap_architecture::ArchitecturePayload;
+    use nomos_check_orchestration::SupportingFactTrail;
     use nomos_contracts::{Applicability, Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
     use xvpe_diagnostics::DiagnosticSeverity;
 
@@ -101,7 +108,8 @@ mod tests
             locations: REPORTED_LINES.iter().map(|line| return format!("a.rs:{line}")).collect(),
         };
 
-        let diagnostics = Diagnostics_For(&Declaring(), &finding);
+        let declared = Declared::New();
+        let diagnostics = Diagnostics_For(&declared.Context(), &finding);
 
         assert_eq!(diagnostics.len(), REPORTED_LINES.len(), "{diagnostics:?}");
         let first = diagnostics.first().expect("asserted one diagnostic per reported line above");
@@ -128,7 +136,9 @@ mod tests
             locations: Vec::new(),
         };
 
-        assert!(Diagnostics_For(&Declaring(), &finding).is_empty());
+        let declared = Declared::New();
+
+        assert!(Diagnostics_For(&declared.Context(), &finding).is_empty());
     }
 
     #[test]
@@ -159,6 +169,15 @@ mod tests
         assert_eq!(Field_At(&document, &["governing_rule", "rule"]), Some(nomos_rules::COMPLETENESS_MIRROR));
         assert_eq!(Field_At(&document, &["architectural_component", "crate_name"]), Some("nomos-spec-store"));
         assert_eq!(Field_At(&document, &["available_correction", "family"]), Some(nomos_rules::COMPLETENESS_MIRROR));
+        // All five walk-outward answers reach the document, and the two newest reach it in
+        // their own vocabulary for not knowing rather than as a missing key: a word for the
+        // fact trail, a list for the requirement links.
+        assert_eq!(Field_At(&document, &["supporting_facts", "answer"]), Some("Unrecorded"));
+        assert_eq!(
+            document.get("requirements").and_then(serde_json::Value::as_array).map(Vec::len),
+            Some(0),
+            "no assessment was declared, so the key is an empty list and not absent: {document}"
+        );
     }
 
     /// The two free-form facts a fixture `COMPLETENESS_MIRROR` finding carries: what the rule
@@ -200,22 +219,54 @@ mod tests
             locations: vec![fixture.location.to_owned()],
         };
 
-        let diagnostics = Diagnostics_For(&Declaring(), &finding);
+        let declared = Declared::New();
+        let diagnostics = Diagnostics_For(&declared.Context(), &finding);
         return diagnostics.into_iter().next().expect("the fixture locates itself exactly once");
     }
 
-    /// A declaration placing the one crate these fixtures name, so a location under `crates/`
-    /// resolves to something. The component is this repository's own word because the finding
-    /// is this repository's own file; nothing in this module supplied it.
-    fn Declaring() -> ArchitecturePayload
+    /// What a repository under check declared, owned here so a [`WalkContext`] can borrow it
+    /// the way `Diagnose` borrows what it read once for a whole batch.
+    struct Declared
     {
-        return ArchitecturePayload {
-            components: vec!["Specification".to_owned()],
-            membership: vec![nomos_cap_architecture::Membership {
-                package: "nomos-spec-store".to_owned(),
-                component: "Specification".to_owned(),
-            }],
-            ..ArchitecturePayload::default()
-        };
+        architecture: ArchitecturePayload,
+        trail: SupportingFactTrail,
+        assessments: Vec<nomos_cap_requirement_trace::Assessment>,
+    }
+
+    impl Declared
+    {
+        /// A declaration placing the one crate these fixtures name, so a location under
+        /// `crates/` resolves to something. The component is this repository's own word because
+        /// the finding is this repository's own file; nothing in this module supplied it.
+        ///
+        /// The trail and the assessments are empty, which is the honest state of a run whose
+        /// caller kept no trail and a repository that committed no assessment -- and what every
+        /// walk below is therefore asserted against. Which word each of those absences produces
+        /// belongs to `walk_outward`'s own modules and is asserted there.
+        fn New() -> Self
+        {
+            return Self {
+                architecture: ArchitecturePayload {
+                    components: vec!["Specification".to_owned()],
+                    membership: vec![nomos_cap_architecture::Membership {
+                        package: "nomos-spec-store".to_owned(),
+                        component: "Specification".to_owned(),
+                    }],
+                    ..ArchitecturePayload::default()
+                },
+                trail: SupportingFactTrail::New(),
+                assessments: Vec::new(),
+            };
+        }
+
+        /// What this declaration looks like to a walk.
+        fn Context(&self) -> WalkContext<'_>
+        {
+            return WalkContext {
+                architecture: &self.architecture,
+                trail: &self.trail,
+                assessments: &self.assessments,
+            };
+        }
     }
 }

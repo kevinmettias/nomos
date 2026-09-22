@@ -1,7 +1,7 @@
 pub const nomos_lsp::NomosDiagnosticProvider::SCOPE: ReproducibilityScope
 pub const nomos_lsp::NomosDiagnosticProvider::STRENGTH: DeterminismStrength
 pub const nomos_lsp::NomosDiagnosticProvider::TRACE: TraceEquivalence
-pub fn nomos_lsp::Diagnostics_For(architecture: &ArchitecturePayload, finding: &Finding) -> Vec<SourceDiagnostic>
+pub fn nomos_lsp::Diagnostics_For(context: &WalkContext<'_>, finding: &Finding) -> Vec<SourceDiagnostic>
 pub fn nomos_lsp::NomosDiagnosticProvider::Diagnose(&mut self, root: &Path) -> Vec<SourceDiagnostic>
 pub fn nomos_lsp::NomosDiagnosticProvider::New() -> Self
 pub impl nomos_lsp::NomosDiagnosticProvider implements DiagnosticProviderStrategy
@@ -9,19 +9,40 @@ pub impl nomos_lsp::NomosDiagnosticProvider implements Strategy
 pub struct field nomos_lsp::ArchitecturalComponent::component: String
 pub struct field nomos_lsp::ArchitecturalComponent::crate_name: String
 pub struct field nomos_lsp::AvailableCorrection::family: String
+pub struct field nomos_lsp::FactRead::capability: String
+pub struct field nomos_lsp::FactRead::degraded_by: Option<&'static str>
+pub struct field nomos_lsp::FactRead::evidence: Option<EvidenceClass>
+pub struct field nomos_lsp::FactRead::guarantee: Option<Guarantee>
+pub struct field nomos_lsp::FactRead::outcome: &'static str
+pub struct field nomos_lsp::FactRead::provider: String
+pub struct field nomos_lsp::FactRead::provider_version: ContractVersion
+pub struct field nomos_lsp::FactRead::reads: usize
 pub struct field nomos_lsp::GoverningRule::contract_record: &'static str
 pub struct field nomos_lsp::GoverningRule::contract_record_version: u32
 pub struct field nomos_lsp::GoverningRule::required_facts: Vec<String>
 pub struct field nomos_lsp::GoverningRule::rule: String
 pub struct field nomos_lsp::GoverningRule::subject_kind: &'static str
+pub struct field nomos_lsp::RequirementLink::requirement: String
+pub struct field nomos_lsp::RequirementLink::verdict: &'static str
+pub struct field nomos_lsp::SupportingFacts::answer: &'static str
+pub struct field nomos_lsp::SupportingFacts::reads: Vec<FactRead>
+pub struct field nomos_lsp::WalkContext::architecture: &'a ArchitecturePayload
+pub struct field nomos_lsp::WalkContext::assessments: &'a [Assessment]
+pub struct field nomos_lsp::WalkContext::trail: &'a SupportingFactTrail
 pub struct field nomos_lsp::WalkOutward::applicability: &'static str
 pub struct field nomos_lsp::WalkOutward::architectural_component: Option<ArchitecturalComponent>
 pub struct field nomos_lsp::WalkOutward::available_correction: Option<AvailableCorrection>
 pub struct field nomos_lsp::WalkOutward::can_fail_a_build: bool
 pub struct field nomos_lsp::WalkOutward::evidence: &'static str
 pub struct field nomos_lsp::WalkOutward::governing_rule: Option<GoverningRule>
+pub struct field nomos_lsp::WalkOutward::requirements: Vec<RequirementLink>
+pub struct field nomos_lsp::WalkOutward::supporting_facts: SupportingFacts
 pub struct nomos_lsp::ArchitecturalComponent
 pub struct nomos_lsp::AvailableCorrection
+pub struct nomos_lsp::FactRead
 pub struct nomos_lsp::GoverningRule
 pub struct nomos_lsp::NomosDiagnosticProvider
+pub struct nomos_lsp::RequirementLink
+pub struct nomos_lsp::SupportingFacts
+pub struct nomos_lsp::WalkContext<'a>
 pub struct nomos_lsp::WalkOutward

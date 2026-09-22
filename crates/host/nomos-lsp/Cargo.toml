@@ -31,6 +31,12 @@ nomos-cap-architecture = { workspace = true }
 # diagnostic carries is resolved against the repository's own declaration, so this host
 # reads it the same way it already composes a platform.
 nomos-repo-policy = { workspace = true }
+# `Assessments_In`, `Assessment` and `REGISTRY`: the one reader that takes a committed
+# assessment as data rather than as a test fixture, which is what lets a diagnostic reach the
+# corpus requirements its rule is declared to enforce (`OD-HOST-015`). Read, never judged --
+# the verdict a link carries is the entry's own word, and whether a declared identifier names
+# a rule this build composes is `tests/contract`'s comparison and not this crate's.
+nomos-cap-requirement-trace = { workspace = true }
 nomos-rules = { workspace = true }
 nomos-composer-std = { workspace = true }
 nomos-workspace = { workspace = true }

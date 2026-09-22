@@ -83,64 +83,90 @@ fn Test_A_Root_That_Cannot_Be_Walked_Should_Report_Nothing()
     assert!(judged.is_empty(), "a root that is not a directory yields no judgement");
 }
 
-/// Two sources, three judgements, and one file edited between the second and the third.
+/// Two sources, four judgements: cold, unchanged, one source moved, then both moved.
 ///
-/// # Why three and not two
+/// # Why four and not two
 ///
 /// A second unchanged judgement answering what the first answered is consistent with a
 /// provider that reused everything and with one that recomputed everything, which is the
 /// same vacuity `tests/incremental_equivalence.rs` states about its own comparisons. The
 /// third judgement is what separates them, because only a provider that really kept the
-/// store can charge for one source and not the other.
+/// store can charge for one source and not the other. The fourth is what lets the third be
+/// read without pinning a number: it moves both sources, so the fixture measures what one
+/// source costs instead of this test declaring it.
 ///
-/// # Why the assertion is arithmetic over deltas rather than three pinned numbers
+/// # Why the assertions are relations and never a fact count
 ///
-/// [`nomos_analysis::MemoryFactStore::Materializations`] counts every store write, and most
-/// of them are not the syntax family: the dependency, lint and policy providers run their
-/// own subprocess against `root` and write again on every call, so an unchanged judgement
-/// here costs something rather than nothing. That per-call cost is the second delta, and
-/// subtracting it is what leaves the part this test is actually about. Pinning the three
-/// totals instead would make this test fail the day a family is added, for a reason that
-/// has nothing to do with reuse.
+/// [`nomos_analysis::MemoryFactStore::Materializations`] counts every store write, and a
+/// judgement of this fixture writes three different kinds: one fact per source per per-source
+/// family, and one per whole-workspace family. How many of each there are is a property of
+/// what is composed, not of reuse, so every assertion below is a relation between the deltas
+/// and none of them names a total.
+///
+/// This test used to subtract instead, and that arithmetic is what made it red. It read the
+/// second delta as a *per-call cost* -- the doc it carried said "the dependency, lint and
+/// policy providers run their own subprocess against `root` and write again on every call, so
+/// an unchanged judgement here costs something rather than nothing" -- and recovered the
+/// per-source cost as `cold - unchanged`. That was true until `6bb62542`
+/// (`P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY`) gave every family the currency check only
+/// the syntax family had, after which an unchanged judgement writes nothing at all and the
+/// subtraction returns the whole cold total. Measured with this test's own body byte-identical
+/// at both revisions: at `6bb62542^` cold 12, unchanged 10, edited 11, so `cold - unchanged`
+/// was 2 and the test passed; at `6bb62542` cold 12, unchanged 0, edited 2, so it read 12 and
+/// failed. The reuse was not broken by that commit -- it was made total, and the test's model
+/// of it went stale.
+///
+/// The second thing the subtraction hid is why the number it produced must not simply be
+/// raised. Before `6bb62542` the reachability family was rewritten on every call, so it sat
+/// inside the per-call term and one moved source cost exactly one write. It now proves
+/// currency like the rest, so one moved source costs one write *per per-source family* --
+/// two today, `nomos.cap.syntax.items` and `nomos.cap.controlflow.reachability`. Writing `2`
+/// here would pin a family count this test has no business asserting and would go red the day
+/// a third per-source family is composed, which is the failure the old doc already refused.
 #[test]
 fn Test_A_Second_Judgement_Should_Re_Derive_A_Fact_Only_For_The_Source_That_Moved()
 {
     let root = Root("nomos-lsp-provider-selective-invalidation");
     let mut provider = NomosDiagnosticProvider::New();
 
-    let counted = Counted_By_Judging_Three_Times(&root, &mut provider);
+    let counted = Counted_By_Judging_Four_Times(&root, &mut provider);
 
     let _ignored = std::fs::remove_dir_all(&root);
-    Assert_Only_The_Moved_Source_Was_Charged(counted);
+    Assert_Only_The_Moved_Source_Was_Charged(&counted);
 }
 
-/// The syntax facts one cold judgement of the two-source fixture is expected to pay for: one
-/// per source. Named rather than written as `2` at the assertion, because the number is the
-/// fixture's own shape rather than a value that means only itself.
+/// How many sources the fixture holds, which is also the ratio the last judgement must cost
+/// over the one before it. Named rather than written as `2` at the assertion, because the
+/// number is the fixture's own shape rather than a value that means only itself.
 const SOURCES_IN_THE_FIXTURE: u32 = 2;
 
-/// The syntax facts one edit to one of those sources is expected to re-derive.
-const SOURCES_EDITED_BY_THE_FIXTURE: u32 = 1;
-
-/// What judging one fixture three times cost, in
-/// [`nomos_analysis::MemoryFactStore::Materializations`] writes: the cold judgement's own total,
-/// the extra an unchanged re-judgement cost on top of it, and the extra a third cost on top of
-/// both after one source was edited.
+/// What judging one fixture four times cost, in
+/// [`nomos_analysis::MemoryFactStore::Materializations`] writes: the cold judgement's own
+/// total, and then each later judgement's own extra over the one before it.
+///
+/// Each field after the first is a delta against the running total at the moment the
+/// judgement before it finished, so they are independent of one another and none of them
+/// contains another's cost.
 struct MaterializationCounts
 {
     cold: u32,
     unchanged: u32,
-    edited: u32,
+    one_source_moved: u32,
+    both_sources_moved: u32,
 }
 
-/// Writes the two-source fixture under `root`, judges it three times through `provider` -- cold,
-/// unchanged, and once more after `a.rs` gained an item -- and returns the three counts the
-/// assertions above compare.
+/// Writes the two-source fixture under `root` and judges it four times through `provider` --
+/// cold, unchanged, once after `a.rs` gained an item, and once more after both sources did --
+/// returning the four counts the assertions above compare.
 ///
-/// The cold judgement's own emptiness is asserted here rather than handed back: a count read off
-/// a tree nothing ever judged is a number about nothing, and this is the only place that can say
-/// so while the judgement itself is still in hand.
-fn Counted_By_Judging_Three_Times(root: &std::path::Path, provider: &mut NomosDiagnosticProvider) -> MaterializationCounts
+/// Every edit writes content the fixture has not held before. A source rewritten with the
+/// bytes it already carries has not moved, and a judgement of it would be a third unchanged
+/// call wearing an edit's name.
+///
+/// The cold judgement's own emptiness is asserted here rather than handed back: a count read
+/// off a tree nothing ever judged is a number about nothing, and this is the only place that
+/// can say so while the judgement itself is still in hand.
+fn Counted_By_Judging_Four_Times(root: &std::path::Path, provider: &mut NomosDiagnosticProvider) -> MaterializationCounts
 {
     std::fs::write(root.join("a.rs"), "pub fn Ok() {}\n").expect("the fresh root above was just created");
     std::fs::write(root.join("b.rs"), "pub fn Fine() {}\n").expect("the fresh root above was just created");
@@ -150,41 +176,61 @@ fn Counted_By_Judging_Three_Times(root: &std::path::Path, provider: &mut NomosDi
     let cold = provider.store.Materializations();
 
     let _ignored = provider.Diagnose(root);
-    let unchanged = provider.store.Materializations().saturating_sub(cold);
+    let after_unchanged = provider.store.Materializations();
+    let unchanged = after_unchanged.saturating_sub(cold);
 
     std::fs::write(root.join("a.rs"), "pub fn Ok() {}\npub fn Added() {}\n").expect("the fresh root above was just created");
     let _ignored = provider.Diagnose(root);
-    let edited = provider.store.Materializations().saturating_sub(cold).saturating_sub(unchanged);
+    let after_one = provider.store.Materializations();
+    let one_source_moved = after_one.saturating_sub(after_unchanged);
 
-    return MaterializationCounts { cold, unchanged, edited };
+    std::fs::write(root.join("a.rs"), "pub fn Ok() {}\npub fn Added() {}\npub fn Third() {}\n").expect("the fresh root above was just created");
+    std::fs::write(root.join("b.rs"), "pub fn Fine() {}\npub fn Also_Fine() {}\n").expect("the fresh root above was just created");
+    let _ignored = provider.Diagnose(root);
+    let both_sources_moved = provider.store.Materializations().saturating_sub(after_one);
+
+    return MaterializationCounts { cold, unchanged, one_source_moved, both_sources_moved };
 }
 
-/// The three claims the counts make, in the order the fixture establishes them: an unchanged
-/// re-judgement is cheaper than the cold one, the cold one paid for one syntax fact per source
-/// beyond that per-call cost, and the edit re-derived exactly one of them.
-fn Assert_Only_The_Moved_Source_Was_Charged(counted: MaterializationCounts)
+/// The four claims the counts make, in the order the fixture establishes them.
+///
+/// Together they are the whole of this test's name. Nothing is charged for a tree that did not
+/// move; a source that did move is charged; each moved source is charged the same, so no
+/// unmoved source was charged alongside it; and the cold judgement paid for something no edit
+/// ever re-derives, which is the whole-workspace half of the store.
+///
+/// Each is a discriminator rather than an example. A provider that kept nothing fails the
+/// first, one that wrongly reused a moved source's facts fails the second, one that re-derived
+/// every source on any edit fails the third, and one that re-derived the workspace facts on an
+/// edit fails the fourth.
+fn Assert_Only_The_Moved_Source_Was_Charged(counted: &MaterializationCounts)
 {
-    let per_source = counted.cold.saturating_sub(counted.unchanged);
-    let after_edit = counted.edited.saturating_sub(counted.unchanged);
-
+    assert_eq!(
+        counted.unchanged, 0,
+        "an unchanged second judgement wrote {} facts against a cold {}: every family proves its \
+         fact current before filing since 6bb62542, so an unmoved tree must file nothing at all",
+        counted.unchanged, counted.cold
+    );
     assert!(
-        counted.unchanged < counted.cold,
-        "an unchanged second judgement cost {} against a cold {}: reuse that charges the same \
-         as a cold run is a cache nothing is reading",
-        counted.unchanged,
-        counted.cold
+        counted.one_source_moved > 0,
+        "moving one source re-derived nothing, so the store is being reused for a subject whose \
+         bytes changed -- the diagnostics an editor sees would be the ones from before the edit"
     );
     assert_eq!(
-        per_source,
-        SOURCES_IN_THE_FIXTURE,
-        "the cold judgement should have paid for one syntax fact per source on top of the per-call cost of {}, and paid for {per_source} instead",
-        counted.unchanged
+        counted.both_sources_moved,
+        counted.one_source_moved.saturating_mul(SOURCES_IN_THE_FIXTURE),
+        "moving one of {SOURCES_IN_THE_FIXTURE} sources cost {}, so moving both must cost exactly \
+         {SOURCES_IN_THE_FIXTURE} times that and cost {} instead: the two judgements disagree \
+         about what one source is worth, which is what charging for an unmoved source looks like",
+        counted.one_source_moved,
+        counted.both_sources_moved
     );
-    assert_eq!(
-        after_edit,
-        SOURCES_EDITED_BY_THE_FIXTURE,
-        "editing one of two sources should re-derive one syntax fact and reuse the other's, and re-derived {after_edit} on top of the per-call cost of {}",
-        counted.unchanged
+    assert!(
+        counted.cold > counted.both_sources_moved,
+        "the cold judgement cost {} and moving every source in the fixture cost {}: a cold run \
+         must also pay for the whole-workspace facts, and no edit to a source may re-derive one",
+        counted.cold,
+        counted.both_sources_moved
     );
 }
 
@@ -288,15 +334,17 @@ fn Judged_By_Run(root: &std::path::Path) -> Vec<SourceDiagnostic>
 {
     let sources = Walked_Sources(root).expect("a directory that was just written walks");
 
-    let nomos_check_orchestration::CheckOutcome::Judged { findings, .. } = Run_Over(root, &sources)
+    let nomos_check_orchestration::CheckOutcome::Judged { findings, supporting_facts, .. } = Run_Over(root, &sources)
     else
     {
         panic!("a walked tree with two readable sources must reach a judgement");
     };
 
     let architecture = nomos_repo_policy::architecture::Discover_Workspace(root, &FILE_SYSTEM).unwrap_or_default();
+    let assessments = Committed_Assessments(root);
+    let context = WalkContext { architecture: &architecture, trail: &supporting_facts, assessments: &assessments };
 
-    return findings.iter().flat_map(|finding| return Diagnostics_For(&architecture, finding)).collect();
+    return findings.iter().flat_map(|finding| return Diagnostics_For(&context, finding)).collect();
 }
 
 /// The outcome [`nomos_check_orchestration::Run`] reaches over `sources` under `root`, with a
@@ -320,4 +368,122 @@ fn Run_Over(root: &std::path::Path, sources: &[SourceFile]) -> nomos_check_orche
         },
         &[],
     );
+}
+
+/// The requirement identifier the fixture registry below assesses. Any real identifier would
+/// do; what matters is that nothing but that registry could have put it in a diagnostic.
+const FIXTURE_REQUIREMENT: &str = "AGT-001";
+
+/// What a judged diagnostic carries for the two answers that are read from outside this crate.
+///
+/// Both are threaded through [`WalkContext`], and a mistake in that threading has exactly one
+/// symptom: a payload that is still well-formed and still says something, but says it about an
+/// empty declaration. An empty registry answers `[]` and a fresh trail answers `Unrecorded` --
+/// so a `Diagnose` that built its context from neither would look identical to one that read a
+/// repository declaring nothing. This is the falsifier for that, over a real run: the registry
+/// is real, the trail is the one the run returned, and neither answer is reachable from the
+/// empty version of its input.
+#[test]
+fn Test_A_Judged_Diagnostic_Should_Carry_The_Declarations_Of_The_Repository_Under_Check()
+{
+    let root = Root("nomos-lsp-provider-walk-outward-declarations");
+    Write_Fixture_Declaring_A_Requirement(&root);
+
+    let judged = NomosDiagnosticProvider::New().Diagnose(&root);
+
+    let _ignored = std::fs::remove_dir_all(&root);
+
+    let walked: Vec<serde_json::Value> = judged
+        .iter()
+        .filter_map(|diagnostic| return diagnostic.detail.as_ref())
+        .map(|detail| return serde_json::from_str(detail).expect("walk-outward data is a document"))
+        .collect();
+    assert!(!walked.is_empty(), "the fixture produced no diagnostic carrying walk-outward data, so nothing below is about a real judgement");
+
+    Assert_A_Requirement_Link_Reached_The_Editor(&walked);
+    Assert_A_Real_Read_Trail_Reached_The_Editor(&walked);
+}
+
+/// Writes a fixture tree under `root` holding two real violations and one committed assessment
+/// declaring the rule that reports the first.
+///
+/// Two sources, because the two violations are judged by rules of different kinds and the pair
+/// is the point: `a.rs` carries trailing whitespace, whose rule judges source text and can
+/// therefore never have read a fact, while `b.rs` carries a naming violation whose rule does
+/// read one. One batch then shows both answers, which no single-source fixture can.
+///
+/// The entry is written in the registry's own grammar, at the path
+/// `nomos_cap_requirement_trace::REGISTRY` names, so what is exercised is the reader this
+/// provider actually calls rather than a shape constructed in memory.
+fn Write_Fixture_Declaring_A_Requirement(root: &std::path::Path)
+{
+    std::fs::write(root.join("a.rs"), "pub fn Ok() -> u32 \n{\n    return 1;\n}\n").expect("the fresh root above was just created");
+    std::fs::write(root.join("b.rs"), "pub fn poorly_named_export() -> u32\n{\n    let BadLocal = 1;\n    return BadLocal;\n}\n")
+        .expect("the fresh root above was just created");
+
+    let registry = root.join(nomos_cap_requirement_trace::REGISTRY);
+    std::fs::create_dir_all(&registry).expect("the fresh root above was just created");
+    let entry = format!("verdict: Met\nsite: a.rs#Ok\nrule: {}\n", nomos_rules::NO_TRAILING_WHITESPACE);
+    std::fs::write(registry.join(format!("{FIXTURE_REQUIREMENT}.assessment")), entry).expect("the registry directory was just created");
+}
+
+/// The fixture's one declared link reached a diagnostic, carrying the entry's own verdict.
+fn Assert_A_Requirement_Link_Reached_The_Editor(walked: &[serde_json::Value])
+{
+    let declared: Vec<&serde_json::Value> = walked
+        .iter()
+        .filter_map(|document| return document.get("requirements"))
+        .filter_map(serde_json::Value::as_array)
+        .flatten()
+        .filter(|link| return link.get("requirement").and_then(serde_json::Value::as_str) == Some(FIXTURE_REQUIREMENT))
+        .collect();
+
+    assert!(
+        !declared.is_empty(),
+        "no diagnostic reached {FIXTURE_REQUIREMENT}, so the committed registry under this root was never read: {walked:?}"
+    );
+    for link in declared
+    {
+        assert_eq!(
+            link.get("verdict").and_then(serde_json::Value::as_str),
+            Some("Met"),
+            "the link must carry the entry's own verdict, not one reached here: {link}"
+        );
+    }
+}
+
+/// One batch carried both a trail the run really recorded and a structural absence, kept apart.
+///
+/// `Unrecorded` is what a fresh trail answers for every fact-reading rule, and `NotFactBacked`
+/// is answered from the descriptor whether or not a trail exists -- so neither on its own would
+/// fail if the context had been built from `SupportingFactTrail::New()`. A `Read` answer cannot
+/// be produced that way at all, which is why it is asserted first; the second assertion is what
+/// keeps the structural answer from quietly becoming the only one a batch ever shows.
+fn Assert_A_Real_Read_Trail_Reached_The_Editor(walked: &[serde_json::Value])
+{
+    let answers: Vec<&str> = walked
+        .iter()
+        .filter_map(|document| return document.get("supporting_facts"))
+        .filter_map(|facts| return facts.get("answer"))
+        .filter_map(serde_json::Value::as_str)
+        .collect();
+
+    assert!(
+        answers.contains(&"Read"),
+        "no diagnostic carried a trail this run recorded, so the context was built from an empty one: {answers:?}"
+    );
+    assert!(
+        answers.contains(&"NotFactBacked"),
+        "the fixture's source-text violation lost its structural answer, so one batch no longer shows two of the four shapes: {answers:?}"
+    );
+
+    let tuples: usize = walked
+        .iter()
+        .filter_map(|document| return document.get("supporting_facts"))
+        .filter(|facts| return facts.get("answer").and_then(serde_json::Value::as_str) == Some("Read"))
+        .filter_map(|facts| return facts.get("reads"))
+        .filter_map(serde_json::Value::as_array)
+        .map(Vec::len)
+        .sum();
+    assert!(tuples > 0, "a `Read` answer reached the editor carrying no tuples at all, which is not what this run observed: {walked:?}");
 }
