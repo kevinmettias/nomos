@@ -132,6 +132,13 @@ fn Findings_Of(source: &SourceFile, payload: &DiagnosticsPayload) -> Vec<Finding
     return payload.diagnostics.iter().map(|diagnostic| return Finding_For_Diagnostic(source, diagnostic)).collect();
 }
 
+/// One diagnostic, relayed as a `Finding` located at `file:line`.
+///
+/// The line is [`LintDiagnostic::line`], a plain `u32` the tool always reports, and
+/// `path:line` is the spelling `concurrency_text.rs`, `formatting.rs` and `error_text.rs`
+/// already file their own locations in and `nomos-lsp`'s `Location::Parse` reads, so an
+/// editor gets the line this fact already carried rather than the whole file.
+/// `OD-HOST-010` measured this rule dropping it.
 fn Finding_For_Diagnostic(source: &SourceFile, diagnostic: &LintDiagnostic) -> Finding
 {
     return Finding {
@@ -143,7 +150,7 @@ fn Finding_For_Diagnostic(source: &SourceFile, diagnostic: &LintDiagnostic) -> F
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Advisory,
         summary: Summary_Of(diagnostic),
-        locations: vec![diagnostic.file.clone()],
+        locations: vec![format!("{}:{}", diagnostic.file, diagnostic.line)],
     };
 }
 
@@ -229,7 +236,8 @@ mod tests
     }
 
     /// Every field a relayed lint finding must carry: the reporting member, the fact's own
-    /// applicability, evidence and gate, the diagnostic's message, and the file it names.
+    /// applicability, evidence and gate, the diagnostic's message, and the file and line it
+    /// names.
     fn Assert_One_Relayed_Diagnostic(findings: &[Finding])
     {
         assert_eq!(findings.len(), 1, "{findings:?}");
@@ -239,7 +247,7 @@ mod tests
         assert_eq!(found.evidence, EvidenceClass::Derived);
         assert_eq!(found.gate, GateCategory::Advisory);
         assert!(found.summary.contains("needless_return"), "{}", found.summary);
-        assert_eq!(found.locations, vec!["crates/capabilities/nomos-cap-syntax/src/lib.rs".to_owned()]);
+        assert_eq!(found.locations, vec![format!("crates/capabilities/nomos-cap-syntax/src/lib.rs:{FIRST_DIAGNOSTIC_LINE}")]);
     }
 
     #[test]
