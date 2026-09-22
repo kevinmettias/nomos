@@ -4,6 +4,8 @@ use nomos_analysis::{Context, MemoryFactStore};
 use nomos_platform::FileSystem;
 use std::path::Path;
 
+use crate::facts::currency::Materialized_Or_Already_Current;
+
 /// Reads `root`'s own `standards.json` through `filesystem` and writes the one `nomos.cap.
 /// naming.policy` fact it declares into `store`.
 ///
@@ -11,8 +13,10 @@ use std::path::Path;
 /// already decided an absent optional capability is silently "no override" from whichever
 /// caller reads it (`nomos_rules::Resolve_Case`), so a materialization that cannot produce
 /// the fact simply leaves the store without one, the same way an unmaterialized syntax fact
-/// for one file does not abort judging the rest. Returns `1` if the fact landed in `store`,
-/// `0` if it did not.
+/// for one file does not abort judging the rest. Returns `1` once `store` holds a current fact for this
+/// family -- whether this call wrote it, or [`crate::facts::currency`]'s own check found the
+/// store already serving one byte-for-byte identical to it -- and `0` for a reason it does
+/// not.
 pub fn Materialize_Naming_Policy<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
 {
     let production = Naming_Production(context);
@@ -23,7 +27,7 @@ pub fn Materialize_Naming_Policy<Fs: FileSystem>(root: &Path, context: &Context,
         return 0;
     };
 
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
+    return usize::from(Materialized_Or_Already_Current(fact.fact, context, store));
 }
 
 /// The reading context as `nomos_repo_policy::naming`'s provider takes it -- the same

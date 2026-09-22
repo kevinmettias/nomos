@@ -4,6 +4,8 @@ use nomos_analysis::{Context, MemoryFactStore};
 use nomos_platform::FileSystem;
 use std::path::Path;
 
+use crate::facts::currency::Materialized_Or_Already_Current;
+
 /// Reads `root`'s own `tests/contract/requirements/` through `filesystem` and writes the
 /// one `nomos.cap.requirement.trace` fact it declares into `store`.
 ///
@@ -11,14 +13,16 @@ use std::path::Path;
 /// produce a fact: [`nomos_cap_requirement_trace::Materialize_Workspace`] is infallible by
 /// its own design, because a missing `tests/contract/requirements/` directory is this
 /// capability's ordinary case (every repository this rule judges except this one, today)
-/// rather than a read failure — see that function's own module doc. Returns `1` if the fact
-/// landed in `store`, `0` if it did not.
+/// rather than a read failure — see that function's own module doc. Returns `1` once `store` holds a current fact for this
+/// family -- whether this call wrote it, or [`crate::facts::currency`]'s own check found the
+/// store already serving one byte-for-byte identical to it -- and `0` for a reason it does
+/// not.
 pub fn Materialize_Requirement_Trace<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
 {
     let production = Requirement_Trace_Production(context);
     let fact = nomos_cap_requirement_trace::Materialize_Workspace(root, production, filesystem);
 
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
+    return usize::from(Materialized_Or_Already_Current(fact.fact, context, store));
 }
 
 /// The reading context as `nomos_cap_requirement_trace`'s provider takes it, at the same

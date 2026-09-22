@@ -8,6 +8,7 @@
 //! [`crate::CheckOutcome::Contradictory`], so there is no longer an intermediate `ExitCode`
 //! for this module to produce).
 
+mod currency;
 mod dependency_materialization;
 mod policy_materialization;
 

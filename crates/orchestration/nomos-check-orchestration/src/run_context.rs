@@ -90,10 +90,13 @@ pub struct RunContext<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Enviro
 /// submitted path's content against what it already holds, so an unmoved file is
 /// `Redundant` and the generation only advances when something genuinely did) and the
 /// store's own generation-scoped history, instead of starting from an empty tree and an
-/// empty store every time. This function still ingests and materializes every source in
-/// `sources` on every call -- reuse buys correctness of carrying state across calls, not yet
-/// a skipped recomputation for a subject nothing touched. The five are grouped into
-/// [`RunContext`] so this function stays within this crate's own parameter-count limit.
+/// empty store every time. This function still ingests every source in `sources` and still
+/// runs every provider a selection demands on every call; what it no longer does is *file* a
+/// fact the store is already serving -- `Materialize_Syntax` since
+/// `P40-INCREMENTAL-SKIP-UNCHANGED-SUBJECTS` and every other family since
+/// `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY`, both through `crate::facts::currency`. The
+/// five are grouped into [`RunContext`] so this function stays within this crate's own
+/// parameter-count limit.
 ///
 /// Writes nothing and never exits: [`CheckOutcome`] is the whole answer, the same
 /// division `nomos_work_orchestration::Run` draws around [`nomos_work_orchestration`]'s own
@@ -123,11 +126,15 @@ pub fn Run<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
 /// names a family that changed since it was recorded -- see `rule_reassessment`'s own
 /// module doc for exactly which rules that covers today, and why it stops there.
 ///
-/// `context.store` decides which families this call is even judged against a currency
-/// check for: `Materialize_Syntax`'s own well before this crate had a second entry point,
-/// so a source whose bytes did not move since `store` last saw it never re-parses, on
-/// either function. What only this function adds is skipping the *rule* on top of that,
-/// for a rule the syntax family is the only thing it reads.
+/// The currency check itself is not this function's own and never was: every family
+/// `crate::facts` materializes proves its fact is current before filing it, on [`Run`] as
+/// much as here, and `crate::facts::currency` is where that is decided.
+/// `Materialize_Syntax`'s own check came first and is still the only one that runs before its
+/// provider does, so a source whose bytes did not move never re-parses. What only this
+/// function adds is skipping the *rule* on top of that, for any rule none of whose declared
+/// families moved -- which, since
+/// `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY`, is no longer just the rules reading syntax
+/// alone.
 #[must_use]
 pub fn Run_Reassessing<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     sources: &[SourceFile],

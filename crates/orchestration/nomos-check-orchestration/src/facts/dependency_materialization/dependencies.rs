@@ -9,6 +9,7 @@ use std::path::Path;
 
 use super::subprocess::Subprocess;
 use super::DependencyMaterialization;
+use crate::facts::currency::Materialized_Or_Already_Current;
 
 /// Runs `cargo metadata` over `root` through `launcher`, materializes one
 /// `nomos.cap.dependency.edges` fact per workspace member, and returns the subjects a rule
@@ -35,7 +36,7 @@ pub fn Materialize_Dependencies<Launcher: ProgramLauncher, Env: Environment>(
     let materialized = super::Materialize_Through(
         || nomos_lang_rust_cargo::Materialize_Workspace(root, Cargo_Production(context), subprocess.launcher, subprocess.environment),
         store,
-        Materialized_Dependency_Sources,
+        |facts, store| return Materialized_Dependency_Sources(facts, context, store),
         Dependency_Capability_Unavailable,
     );
 
@@ -53,18 +54,26 @@ fn Cargo_Production(context: &Context) -> nomos_lang_rust_cargo::FactContext
     };
 }
 
-/// Every `dependency.edges` fact the store accepted, as the source list
-/// [`nomos_rules::Check_Dependency_Direction`] can judge -- one per workspace member
-/// `store.Materialize` did not refuse.
+/// Every `dependency.edges` fact `store` now holds current, as the source list
+/// [`nomos_rules::Check_Dependency_Direction`] can judge -- one per workspace member whose
+/// fact this call filed, plus every member whose fact the store was already serving
+/// byte-for-byte.
+///
+/// Per member, not per workspace: `nomos_lang_rust_cargo` answers one fact per member, so a
+/// manifest edit under one member leaves every other member's fact untouched and only the
+/// edited one is re-filed. [`crate::facts::currency`] is the check, and its own doc is why a
+/// skipped write here is not the demand planner `OD-RULES-009` declines -- the `cargo
+/// metadata` call this reads from has already happened.
 fn Materialized_Dependency_Sources(
     facts: Vec<nomos_lang_rust_cargo::PackageFact>,
+    context: &Context,
     store: &mut MemoryFactStore,
 ) -> Vec<SourceFile>
 {
     let mut sources = Vec::new();
     for package in facts
     {
-        if store.Materialize(package.fact, &[]).is_ok()
+        if Materialized_Or_Already_Current(package.fact, context, store)
         {
             let source = SourceFile::New(package.path, package.subject, String::new());
             sources.push(source);

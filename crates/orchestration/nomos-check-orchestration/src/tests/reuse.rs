@@ -108,13 +108,24 @@ fn Assert_Second_Call_Still_Judged(second: &CheckOutcome, source_count: usize)
 /// [`Test_A_Store_And_Workspace_Reused_With_No_Change_Between_Two_Calls_Should_Still_Be_Judged`],
 /// below, is the test that exercises the skip itself, over the zero-change case this one
 /// does not reach.
+///
+/// `REQUIREMENT_TRACE_STALENESS` rides beside `NAMING_CONVENTION`, and it is here for what
+/// `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY` changed. Both selected rules read a
+/// non-syntax family, but the naming one judges a source and so is re-judged by the edit
+/// anyway; the requirement-trace one judges the whole workspace, reads a family whose fact the
+/// reused call does **not** re-file, and is not re-judged at all. So the reused half of this
+/// comparison now answers partly from a fact carried over rather than one produced, which is
+/// exactly the state a currency check creates and exactly what equivalence has to survive. A
+/// check that skipped a write it should have made shows up here as a disagreement with the
+/// clean recomputation -- `OD-ANALYSIS-005`'s property, and the reason this is the test
+/// `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY` names.
 #[test]
 fn Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomputation()
 {
     let unedited = Source_File("a.rs", SourceText("pub fn Ok() {}\n"));
     let edited = Source_File("a.rs", SourceText("pub fn Ok() {}\npub fn Also_Ok() {}\n"));
     let untouched = Source_File("b.rs", SourceText("pub fn Untouched() {}\n"));
-    let selected = [RuleId::New(nomos_rules::NAMING_CONVENTION)];
+    let selected = [RuleId::New(nomos_rules::NAMING_CONVENTION), RuleId::New(nomos_rules::REQUIREMENT_TRACE_STALENESS)];
 
     let mut workspace = None;
     let mut store = MemoryFactStore::New();
@@ -235,10 +246,13 @@ fn Assert_Skip_Repeats_Its_Last_Findings(first: CheckOutcome, second: CheckOutco
 /// behavioural claim. This is that claim, run.
 ///
 /// `COMPLETENESS_MIRROR` is the rule under test because `DESCRIPTORS` gives it exactly one
-/// required family, `RequiredFact::SyntaxItems`. A rule reading a policy family as well would
-/// prove less here: those sections re-materialize on every call, so their family would appear
-/// in `changed` every time and the skip could never be observed -- which is a real property
-/// of the current materialization worth knowing, and not this test's subject.
+/// required family, `RequiredFact::SyntaxItems`. When this was written, a rule reading a
+/// policy family would have proven less here: those sections re-filed their fact on every
+/// call, so their family appeared in `changed` every time and the skip could never be
+/// observed. `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY` closed that, and
+/// `crate::run_context::tests` is where a policy-declaring rule's own skip is now counted.
+/// The narrow selection stays because the claim here is about the mechanism rather than about
+/// which families reach it.
 ///
 /// The count comes from `RuleReassessmentCache::Recorded` rather than from comparing
 /// findings, for the reason that method's own doc gives: a rule whose output does not change
@@ -274,10 +288,9 @@ const EVERY_COMPOSED_RULE: &[RuleId] = &[];
 /// A retained cache skips a large part of the composed table under the selection production
 /// actually uses, and stops skipping for the rules an edit reaches.
 ///
-/// The test above selects `COMPLETENESS_MIRROR` alone and its own doc says why: a rule
-/// reading a policy family would prove less there, since those sections re-materialize on
-/// every call. That is the right choice for the claim it makes, and it leaves the production
-/// claim unmade. This is that claim.
+/// The test above selects `COMPLETENESS_MIRROR` alone and its own doc says why. That is the
+/// right choice for the claim it makes, and it leaves the production claim unmade. This is
+/// that claim.
 ///
 /// Nothing asserted it before. A regression putting `SyntaxItems` into `changed`
 /// unconditionally would take the skip to nothing and leave the narrow test above, the LSP
@@ -291,14 +304,27 @@ const EVERY_COMPOSED_RULE: &[RuleId] = &[];
 /// reason. What is fixed is the shape: an unchanged call skips part of the table, and an
 /// edit puts rules back.
 ///
-/// How much, measured 2026-09-21 and recorded here as a reading rather than as an assertion:
-/// 71 rules cold, 33 on the unchanged call, 71 again after the edit. So the skip is 38 of 71,
-/// and the edit is a *total* invalidation -- editing one of two sources puts the whole table
-/// back in play, not the part of it that reads the edited file. That is worth knowing and is
-/// deliberately not asserted here: whether an edit should invalidate the rules that cannot
-/// see it is a question about the materialization, and pinning today's answer in this test
-/// would freeze it. `0c3b1013`'s own commit message read 71, then plus 19, then plus 68 over
-/// a different table, which is the other reason these are inequalities.
+/// How much, measured twice and recorded here as a reading rather than as an assertion.
+///
+/// Before `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY`: 71 rules cold, 33 on the unchanged
+/// call, 71 again after the edit. So the skip was 38 of 71, and the edit was a *total*
+/// invalidation -- editing one of two sources put the whole table back in play, not the part
+/// of it that reads the edited file.
+///
+/// After it, measured 2026-09-21: 71 cold, **0** on the unchanged call, 69 after the edit. The
+/// unchanged call now runs no rule closure at all, because no family reports itself changed
+/// when nothing it reads has moved -- which, over this repository's own root and with the
+/// empty selection, includes the three subprocess families, so a second `cargo metadata`,
+/// `cargo clippy` and `cargo deny` each produced the payload the store was already serving.
+/// (That those three answer at all over this root is `super::materialization`'s claim, not
+/// this one's; a family whose provider refused would also be absent from `changed`.) And the
+/// edit is no longer total: two of the seventy-one stay skipped, the whole-workspace rules
+/// whose own families a source edit cannot reach.
+///
+/// Both readings are deliberately not asserted. Whether an edit should invalidate the rules
+/// that cannot see it is a question about the materialization, and pinning today's answer in
+/// this test would freeze it. `0c3b1013`'s own commit message read 71, then plus 19, then plus
+/// 68 over a different table, which is the other reason these are inequalities.
 #[test]
 fn Test_A_Retained_Cache_Under_The_Production_Selection_Should_Skip_Most_Of_The_Composed_Table()
 {

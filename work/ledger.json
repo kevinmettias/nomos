@@ -88163,16 +88163,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P121-INTEGRATION-PACKAGE-MANIFEST"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-csharp",
-        "acquired_at": 1790048294,
-        "lease_expires_at": 1790059094
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88192,7 +88188,37 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-csharp",
+          "-p",
+          "nomos-lang-csharp-package",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "boundaries",
+          "--test",
+          "completeness_universes"
+        ],
+        "exit_code": 0,
+        "output_tail": "m-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-b2a13c7253f27233.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-92a4ff356d3672d1.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-2eab8f58748e8fc9.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_csharp-befa80d61cd728ab.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_lang_csharp_package-a62850fb50b8dece.exe)\n",
+        "verified_at": 1790050707,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3b79707fd221518fb428f2dda0a049c7e2b8061e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -88215,7 +88241,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Split, because one of its two obligations can be done now and the other cannot. This item reserved docs/records/OD-ANALYSIS-009 to amend it alongside building an on-disk fact store, and reserved Cargo.lock for the dependency that might need, which a live peer item holds, so it has sat held. Meanwhile the record itself was measured stale in both halves of its version-3 trigger amendment: it cites Run_Server and Recheck_And_Publish at crates/host/nomos-lsp/src/server.rs, a file that does not exist since the server mechanics moved into XVPE, and it calls the per-call construction of a workspace and store a real, concrete, immediately buildable gap when NomosDiagnosticProvider has held all three as struct fields since P105, so the amendment's own argument for closing the nearer gap first is spent. A record that sends a reader to a deleted file and to build what exists should not wait on a manifest lock. Because an amends reservation is exclusive, the correction cannot be authored while this item is open. Declined and split: P123-OD-ANALYSIS-009-SENDS-A-READER-TO-A-DELETED-FILE-AND-TO-BUILD-WHAT-EXISTS corrects the record and explicitly does not decide persistence, and P123-FACT-STORE-SURVIVES-THE-PROCESS-2 builds the store and amends the Decision, depending on the correction so the two never race on one record. No claim was ever taken and nothing was written to the tree under this item."
+        }
+      },
       "depends_on": [
         "P121-INTEGRATION-PACKAGE-MANIFEST"
       ],
@@ -88236,7 +88266,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "fable-triage",
+        "declined_at": 1790050718
+      },
       "widened": []
     },
     {
@@ -88743,14 +88776,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-currency",
-        "acquired_at": 1790048336,
-        "lease_expires_at": 1790059136
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88761,7 +88790,28 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "n loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.50s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_check_orchestration-2fa2757b62c715fb.exe)\n     Running tests\\capability_composition.rs (target\\debug\\deps\\capability_composition-b99b1af266eec442.exe)\n     Running tests\\incremental_equivalence.rs (target\\debug\\deps\\incremental_equivalence-07623d3018de3576.exe)\n     Running tests\\run_seam.rs (target\\debug\\deps\\run_seam-b0b288d13cbe7361.exe)\n     Running tests\\unchanged_run_economy.rs (target\\debug\\deps\\unchanged_run_economy-a064624f91d48b48.exe)\n   Doc-tests nomos_check_orchestration\n",
+        "verified_at": 1790050690,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "3b79707fd221518fb428f2dda0a049c7e2b8061e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -89333,10 +89383,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-host017",
+        "acquired_at": 1790050483,
+        "lease_expires_at": 1790061283
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -89525,10 +89579,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-coupling",
+        "acquired_at": 1790050450,
+        "lease_expires_at": 1790061250
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -89649,6 +89707,45 @@
           "gate_orchestration_seam"
         ],
         "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-OD-ANALYSIS-009-SENDS-A-READER-TO-A-DELETED-FILE-AND-TO-BUILD-WHAT-EXISTS",
+      "title": "OD-ANALYSIS-009's trigger amendment cites a file that was deleted and names a gap that is closed",
+      "why": "OD-ANALYSIS-009 is at version 3 and its amendment recording that trigger 1 fired is stale in both of its halves, measured at HEAD rather than reported. First, it sends a reader to a file that does not exist: it cites Run_Server at crates/host/nomos-lsp/src/server.rs:32 and Recheck_And_Publish at server.rs:122, and crates/host/nomos-lsp/src holds no server.rs at all, because the server mechanics moved into XVPE and that crate's own lib.rs dates the move. The one seam left is NomosDiagnosticProvider. Second, the gap the amendment calls a real, concrete, immediately buildable one is closed: it says Recheck_And_Publish constructs a workspace of None and a fresh MemoryFactStore inline on every call, discarding the reuse P14-ANALYSIS-009-STORE-WORKSPACE-REUSE-FIRST-INCREMENT built, and at HEAD crates/host/nomos-lsp/src/nomos_diagnostic_provider.rs declares workspace, store and reassessment as struct fields whose own doc says they are reused across every judgement. The initializers survive in New, once per provider, not once per call. This matters beyond tidiness because that amendment's argument is that the nearer in-process gap should be closed before anything in the record's own subject is built, and a spent argument left standing reads as a live reason to wait. A peer session measured it first while working OD-HOST-016 and does not hold this record; it was re-measured here before authoring.",
+      "done_when": "OD-ANALYSIS-009 is amended, its version raised, so that neither half of its trigger amendment misleads: every path and item it cites exists at the commit the amendment is written against, with NomosDiagnosticProvider named in place of the deleted server.rs and the move to XVPE recorded as why the old citation went stale rather than silently rewritten; and the in-process reuse gap is recorded as closed, by the item and the code that closed it, so the amendment's own argument for waiting is marked spent rather than left standing. It states what remains genuinely unbuilt in this record's subject, which is the on-disk half: no store survives process exit, no key stops a stale entry being served across a build variant or contract version, and no retention rule bounds the per-key history. It does NOT decide the persistence question, does not weigh whether to build it, and does not restate the Decision section: that question belongs to P123-FACT-STORE-SURVIVES-THE-PROCESS, which reserves this same record and must be named here as the item that answers it. Both projections are re-rendered per the nomos-spec-change skill, and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 1800
       },
       "verified": null,
       "abandoned": [],

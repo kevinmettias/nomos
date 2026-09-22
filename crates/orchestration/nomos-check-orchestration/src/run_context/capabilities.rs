@@ -42,14 +42,34 @@ use super::{CapabilityMaterialization, Is_Rule_Selected, MaterializationEnvironm
 /// [`Materialize_Naming_Policy`] skips its own subprocess launch or filesystem read entirely,
 /// not merely its finding's place in a later disposition.
 ///
-/// Each call also names, into `changed`, the family it just wrote to at all -- every one of
-/// them does, unconditionally, whenever `selected` triggers it at all: none of them has
-/// `Materialize_Syntax`'s own currency check yet.
+/// Each call also names, into `changed`, the family it actually wrote to.
 /// `crate::run_context::rule_reassessment_cache::RuleReassessmentCache` reads `changed` to
 /// decide which rules are still safe to reuse; a family missing from it because this function
 /// forgot to report it would let a stale rule's prior findings stand in for a real one, which
 /// is why every section below is wrapped rather than only the ones a caller might expect to
 /// benefit.
+///
+/// # Which families prove their fact is current
+///
+/// All of them, as of `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY`. Until that item, only
+/// `Materialize_Syntax` checked currency and every other section wrote unconditionally
+/// whenever `selected` triggered it, so eleven families reported themselves *changed* on
+/// every call they were selected for and every rule declaring one was re-judged on every call
+/// over a reused store. `P40-INCREMENTAL-DEMAND-DRIVEN-RECOMPUTE-2` was declined on exactly
+/// that measurement. Every write below now routes through `crate::facts::currency`, whose own
+/// doc carries the argument -- including why a per-subject currency check is not the demand
+/// planner `OD-RULES-009` declines and `OD-ROADMAP-003` conditions its lapse on: demand still
+/// decides whether a family is produced, and currency decides only whether the write is
+/// redundant.
+///
+/// What is still paid on every demanded call, and what no reading of `changed` should be
+/// taken to deny: the provider itself. `Materialize_Syntax` alone skips a subject's *parse*,
+/// because a caller can rebuild a syntax key from the source bytes it already holds. Every
+/// other provider here files with an empty `semantic_inputs` and states why, so its check can
+/// only run once the provider has answered -- the subprocess still launches, the policy file
+/// is still read, the reachability parse still happens. Skipping those needs each provider to
+/// publish a digest of its own inputs, which is territory in the provider crates and not in
+/// this one.
 pub(super) fn Materialize_Capabilities<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     sources: &[SourceFile],
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
@@ -93,6 +113,14 @@ pub(super) fn Materialize_Capabilities<Launcher: ProgramLauncher, Fs: FileSystem
 /// cost, no dependency structure between families, and never asks whether a fact is already
 /// materialized -- the line this module's own documentation draws, and the point past which
 /// it would become the demand planner `OD-RULES-009` has declined across eight rounds.
+///
+/// `crate::facts::currency` does ask the store a question, and this is the function that
+/// keeps that from being the same thing. The forbidden sentence `OD-ROADMAP-003` names is
+/// *materialize this family unless the store already holds it* -- a **demand** conditioned on
+/// store state, which would be a line in this function's own body. There is none: a family
+/// any selected descriptor declares is demanded, its section runs, and its provider answers
+/// in full. Only the write of an answer identical to one the store is already serving is
+/// skipped, one subject at a time, after the production has happened.
 fn Demanded_Families(selected: &[RuleId]) -> Vec<RequiredFact>
 {
     let mut demanded: Vec<RequiredFact> = Vec::new();
@@ -117,9 +145,23 @@ fn Demanded_Families(selected: &[RuleId]) -> Vec<RequiredFact>
 }
 
 /// Runs `section`, and records `family` into `changed` if `env.store` gained a new
-/// materialization while it ran -- the one signal available today for "did this family just
-/// change," since a skipped section (its own gating rule not selected) writes nothing and a
-/// run one writes unconditionally.
+/// materialization while it ran.
+///
+/// The counter is the signal because it now answers the question: a section skipped for want
+/// of a selected rule writes nothing, and a section that ran writes only what
+/// `crate::facts::currency` found the store was not already serving. Before
+/// `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY` every section but the syntax one wrote
+/// unconditionally, so this wrapper reported eleven families as changed on every call they
+/// were selected for -- sound, since it can only over-report, and worth nothing to a caller
+/// reusing a store.
+///
+/// It still over-reports in one direction that is worth naming: a family is recorded as
+/// changed when *any* of its subjects moved, so one edited workspace member puts every rule
+/// reading `nomos.cap.lint.diagnostics` back in play rather than the ones that read the
+/// edited member. `changed` is a list of families and not of subjects, and narrowing it is a
+/// question about what a rule closure can be given rather than about this wrapper --
+/// `P40-INCREMENTAL-DEMAND-DRIVEN-RECOMPUTE-2`'s decline says why: a rule reads the whole
+/// source list and returns one `Vec<Finding>`, not a per-subject partial result.
 fn Materialization_Tracking<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment, Answer>(
     env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
     changed: &mut Vec<RequiredFact>,

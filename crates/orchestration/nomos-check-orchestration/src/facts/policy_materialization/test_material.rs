@@ -5,6 +5,8 @@ use nomos_analysis::{Context, MemoryFactStore};
 use nomos_platform::FileSystem;
 use std::path::Path;
 
+use crate::facts::currency::Materialized_Or_Already_Current;
+
 /// Reads `root`'s own `nomos-test-material.json` through `filesystem` and writes the one
 /// `nomos.cap.test.material.policy` fact it declares into `store`.
 ///
@@ -13,8 +15,10 @@ use std::path::Path;
 /// (`tests/`, `examples/`, `_test.go`, …) and reads this capability for a repository's own
 /// additions to them. So an absent fact is not a missing threshold or a silent rule — it is
 /// the fixed clauses with nothing added, which is a perfectly good answer and the one every
-/// check gave before this call existed. Returns `1` if the fact landed in `store`, `0` if it
-/// did not.
+/// check gave before this call existed. Returns `1` once `store` holds a current fact for this
+/// family -- whether this call wrote it, or [`crate::facts::currency`]'s own check found the
+/// store already serving one byte-for-byte identical to it -- and `0` for a reason it does
+/// not.
 pub fn Materialize_Test_Material_Policy<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
 {
     let production = Test_Material_Production(context);
@@ -25,7 +29,7 @@ pub fn Materialize_Test_Material_Policy<Fs: FileSystem>(root: &Path, context: &C
         return 0;
     };
 
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
+    return usize::from(Materialized_Or_Already_Current(fact.fact, context, store));
 }
 
 /// The reading context as `nomos_repo_policy::test_material`'s provider takes it, at the same

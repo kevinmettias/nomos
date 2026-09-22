@@ -4,6 +4,8 @@ use nomos_analysis::{Context, MemoryFactStore};
 use nomos_platform::FileSystem;
 use std::path::Path;
 
+use crate::facts::currency::Materialized_Or_Already_Current;
+
 /// Reads `root`'s own `nomos-architecture.json` through `filesystem` and writes the one
 /// `nomos.cap.architecture.declaration` fact it declares into `store`.
 ///
@@ -14,8 +16,10 @@ use std::path::Path;
 ///
 /// Unlike every policy section beside it, an absent fact here is not a fallback. The three
 /// dependency rules report a declaration they cannot read rather than judging against a
-/// remembered default, because there is no default an architecture could have. Returns `1` if
-/// the fact landed in `store`, `0` if it did not.
+/// remembered default, because there is no default an architecture could have. Returns `1` once `store` holds a current fact for this
+/// family -- whether this call wrote it, or [`crate::facts::currency`]'s own check found the
+/// store already serving one byte-for-byte identical to it -- and `0` for a reason it does
+/// not.
 pub fn Materialize_Architecture<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
 {
     let production = Architecture_Production(context);
@@ -26,7 +30,7 @@ pub fn Materialize_Architecture<Fs: FileSystem>(root: &Path, context: &Context, 
         return 0;
     };
 
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
+    return usize::from(Materialized_Or_Already_Current(fact.fact, context, store));
 }
 
 /// The reading context as `nomos_repo_policy::architecture`'s provider takes it, at the same

@@ -4,6 +4,8 @@ use nomos_analysis::{Context, MemoryFactStore};
 use nomos_platform::FileSystem;
 use std::path::Path;
 
+use crate::facts::currency::Materialized_Or_Already_Current;
+
 /// Reads `root`'s own `standards.json` through `filesystem` and writes the one `nomos.cap.
 /// limits.policy` fact it declares into `store`.
 ///
@@ -14,8 +16,10 @@ use std::path::Path;
 ///
 /// Worth knowing what this does and does not buy on *this* repository: `standards.json`
 /// declares exactly the numbers those fallbacks already carry, so no finding here moves.
-/// What moves is that the thresholds are read rather than assumed. Returns `1` if the fact
-/// landed in `store`, `0` if it did not.
+/// What moves is that the thresholds are read rather than assumed. Returns `1` once `store` holds a current fact for this
+/// family -- whether this call wrote it, or [`crate::facts::currency`]'s own check found the
+/// store already serving one byte-for-byte identical to it -- and `0` for a reason it does
+/// not.
 pub fn Materialize_Limits_Policy<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
 {
     let production = Limits_Production(context);
@@ -26,7 +30,7 @@ pub fn Materialize_Limits_Policy<Fs: FileSystem>(root: &Path, context: &Context,
         return 0;
     };
 
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
+    return usize::from(Materialized_Or_Already_Current(fact.fact, context, store));
 }
 
 /// The reading context as `nomos_repo_policy::limits`'s provider takes it, at the same

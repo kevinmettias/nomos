@@ -9,6 +9,7 @@ use nomos_rules::SourceFile;
 use std::path::Path;
 
 use super::subprocess::Subprocess;
+use crate::facts::currency::Materialized_Or_Already_Current;
 
 /// What materializing the `dependency.policy` fact produced: the sources a rule can judge
 /// it under, and any finding the materialization itself already raised -- the identical
@@ -39,7 +40,7 @@ pub fn Materialize_Policy<Launcher: ProgramLauncher, Env: Environment>(
     let materialized = super::Materialize_Through(
         || nomos_lang_rust_deny::Materialize_Workspace(root, Deny_Production(context), subprocess.launcher, subprocess.environment),
         store,
-        Materialized_Policy_Sources,
+        |fact, store| return Materialized_Policy_Sources(fact, context, store),
         Policy_Capability_Unavailable,
     );
 
@@ -58,14 +59,21 @@ fn Deny_Production(context: &Context) -> nomos_lang_rust_deny::FactContext
 }
 
 /// The one `dependency.policy` fact as the (at most one-element) source list `Check_
-/// Dependency_Policy` can judge -- empty if `store.Materialize` refused it, one entry
-/// otherwise, the same shape
+/// Dependency_Policy` can judge -- empty if the write was refused, one entry once `store`
+/// holds the fact current, whether this call filed it or [`crate::facts::currency`] found the
+/// store already serving one byte-for-byte identical to it. The same shape
 /// [`super::lint_materialization::Materialized_Lint_Sources`] has for a list rather than a
 /// single value: `crate::run_context::Judged` calls every rule uniformly over a source list, and a
 /// whole-workspace capability's own list just never holds more than one.
-fn Materialized_Policy_Sources(fact: nomos_lang_rust_deny::PolicyFact, store: &mut MemoryFactStore) -> Vec<SourceFile>
+///
+/// A whole-workspace capability has exactly one subject, so its currency check is
+/// all-or-nothing where the two per-member families beside it are per subject. That is this
+/// capability's own declared `IncrementalGranularity::WholeWorkspace` ceiling showing through
+/// rather than a second policy: a `cargo deny` verdict is not attributable to one member, so
+/// there is no finer subject for a check to be current about.
+fn Materialized_Policy_Sources(fact: nomos_lang_rust_deny::PolicyFact, context: &Context, store: &mut MemoryFactStore) -> Vec<SourceFile>
 {
-    if store.Materialize(fact.fact, &[]).is_err()
+    if !Materialized_Or_Already_Current(fact.fact, context, store)
     {
         return Vec::new();
     }

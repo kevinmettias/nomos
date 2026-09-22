@@ -11,10 +11,13 @@
 //! Split by subject, one child module each: `composition` covers the direct `Run` seam and
 //! the run table a caller selects through, `materialization` covers the subprocess-backed
 //! capabilities over this repository's own root, `reuse` covers the workspace and store
-//! carried across calls, and `overrides` covers the repository-declared policies a real
-//! `standards.json` reaches. The fixtures every child shares live here.
+//! carried across calls, `overrides` covers the repository-declared policies a real
+//! `standards.json` reaches, and `currency` covers what each family's own materializer does
+//! when its input has not moved since the store last saw it. The fixtures every child shares
+//! live here.
 
 mod composition;
+mod currency;
 mod materialization;
 mod overrides;
 mod reuse;

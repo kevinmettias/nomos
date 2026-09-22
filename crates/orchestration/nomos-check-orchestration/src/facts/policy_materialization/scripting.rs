@@ -4,6 +4,8 @@ use nomos_analysis::{Context, MemoryFactStore};
 use nomos_platform::FileSystem;
 use std::path::Path;
 
+use crate::facts::currency::Materialized_Or_Already_Current;
+
 /// Reads `root`'s own `standards.json` through `filesystem` and writes the one `nomos.cap.
 /// scripting.policy` fact it declares into `store`.
 ///
@@ -12,7 +14,10 @@ use std::path::Path;
 /// has no prior default to fall back to -- the rule never existed before the capability did
 /// -- so an absent fact makes it report nothing rather than report against an assumption.
 /// Without this materialization the rule ran in every real check and could never fire.
-/// Returns `1` if the fact landed in `store`, `0` if it did not.
+/// Returns `1` once `store` holds a current fact for this
+/// family -- whether this call wrote it, or [`crate::facts::currency`]'s own check found the
+/// store already serving one byte-for-byte identical to it -- and `0` for a reason it does
+/// not.
 pub fn Materialize_Scripting_Policy<Fs: FileSystem>(root: &Path, context: &Context, store: &mut MemoryFactStore, filesystem: &Fs) -> usize
 {
     let production = Scripting_Production(context);
@@ -23,7 +28,7 @@ pub fn Materialize_Scripting_Policy<Fs: FileSystem>(root: &Path, context: &Conte
         return 0;
     };
 
-    return usize::from(store.Materialize(fact.fact, &[]).is_ok());
+    return usize::from(Materialized_Or_Already_Current(fact.fact, context, store));
 }
 
 /// The reading context as `nomos_repo_policy::scripting`'s provider takes it, at the same

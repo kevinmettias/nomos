@@ -8,6 +8,19 @@
 //! SUBJECTS` already made safe for a syntax fact, extended from "skip re-deriving a fact"
 //! to "skip re-running the rule that reads it," for exactly the rules where that is honest
 //! today. See [`Effective_Requires`] for why it stops at exactly those rules.
+//!
+//! # Which rules that covers, and what widened it
+//!
+//! Nothing in this file decides that. A rule is reusable when no family it reads appears in
+//! the `changed` list `crate::run_context::capabilities`' own `Materialization_Tracking`
+//! built, so which rules can be skipped is settled by which families can report themselves
+//! *unchanged*. Until `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY` only one could --
+//! `nomos.cap.syntax.items` -- and every rule declaring any other family was re-judged on
+//! every call however little had moved. `P40-INCREMENTAL-DEMAND-DRIVEN-RECOMPUTE-2` was
+//! declined on that measurement and named the remedy: give the other materializers the
+//! currency check syntax already had. `crate::facts::currency` is that check, so this cache
+//! now reaches every family without one line here changing -- which is the shape it was
+//! built in.
 
 use std::collections::BTreeMap;
 
@@ -79,9 +92,10 @@ impl RuleReassessmentCache
 /// Two independent reasons, and the second is the one that was quietly lost. A rule is stale
 /// when a family it declared changed, which is [`Effective_Requires`] and is what this cache
 /// was built on. It is *also* stale when the text it judges changed, and for a rule whose
-/// subject is a walked source that is every `SyntaxItems` change, because
-/// `crate::facts::Materialize_Syntax` writes that family unconditionally for every source on
-/// every call.
+/// subject is a walked source that is every `SyntaxItems` change, because a source whose
+/// bytes moved always produces a new syntax fact: `crate::facts::Materialize_Syntax`'s own
+/// currency check is keyed on a digest of those very bytes, so a moved source can never be
+/// found already current and skipped.
 ///
 /// [`Effective_Requires`] supplies the second reason only for a rule declaring no family at
 /// all, and that was enough while every source-text rule declared nothing. It stopped being
@@ -129,8 +143,9 @@ fn Judges_A_Source(descriptor: &RuleDescriptor) -> bool
 /// A rule with no required family still judges its subject's own text directly -- every
 /// [`nomos_rules::SubjectKind::SourceText`] rule composed in this crate does exactly that --
 /// so a change to that text has to invalidate it too, and every such change already shows up
-/// as a new syntax materialization: `crate::facts::Materialize_Syntax` writes that family
-/// unconditionally on every call, for every source. Declaring the dependency here rather
+/// as a new syntax materialization: `crate::facts::Materialize_Syntax` skips a subject only
+/// when the store already holds a fact keyed on that subject's own current bytes, so moved
+/// bytes are always a write. Declaring the dependency here rather
 /// than widening [`DESCRIPTORS`] itself keeps that table's own claim exact: a source-text
 /// rule truly needs no fact *materialized* to be judged, which is a different statement from
 /// what tells this cache the rule has gone stale.

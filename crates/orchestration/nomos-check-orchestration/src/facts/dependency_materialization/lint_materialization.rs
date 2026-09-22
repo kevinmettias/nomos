@@ -8,6 +8,7 @@ use nomos_rules::SourceFile;
 use std::path::Path;
 
 use super::subprocess::Subprocess;
+use crate::facts::currency::Materialized_Or_Already_Current;
 
 /// What materializing `lint.diagnostics` facts produced: the sources a rule can judge them
 /// under, and any finding the materialization itself already raised -- the identical shape
@@ -39,7 +40,7 @@ pub fn Materialize_Lint<Launcher: ProgramLauncher, Env: Environment>(
     let materialized = super::Materialize_Through(
         || nomos_lang_rust_clippy::Materialize_Workspace(root, Clippy_Production(context), subprocess.launcher, subprocess.environment),
         store,
-        Materialized_Lint_Sources,
+        |facts, store| return Materialized_Lint_Sources(facts, context, store),
         Lint_Capability_Unavailable,
     );
 
@@ -57,18 +58,26 @@ fn Clippy_Production(context: &Context) -> nomos_lang_rust_clippy::FactContext
     };
 }
 
-/// Every `lint.diagnostics` fact the store accepted, as the source list
-/// [`nomos_rules::Check_Lint_Diagnostics`] can judge -- one per workspace member
-/// `store.Materialize` did not refuse.
+/// Every `lint.diagnostics` fact `store` now holds current, as the source list
+/// [`nomos_rules::Check_Lint_Diagnostics`] can judge -- one per workspace member whose fact
+/// this call filed, plus every member whose fact the store was already serving byte-for-byte.
+///
+/// Per member, the identical shape
+/// [`super::dependencies::Materialized_Dependency_Sources`] has for the identical reason: a
+/// member whose diagnostics did not move is not re-filed, while one whose did is.
+/// [`crate::facts::currency`] is the check, and the `cargo clippy` launch it reads from has
+/// already happened by the time it runs -- which is why it decides only whether the write is
+/// redundant and never whether the family is produced.
 fn Materialized_Lint_Sources(
     facts: Vec<nomos_lang_rust_clippy::DiagnosticsFact>,
+    context: &Context,
     store: &mut MemoryFactStore,
 ) -> Vec<SourceFile>
 {
     let mut sources = Vec::new();
     for member in facts
     {
-        if store.Materialize(member.fact, &[]).is_ok()
+        if Materialized_Or_Already_Current(member.fact, context, store)
         {
             let source = SourceFile::New(member.path, member.subject, String::new());
             sources.push(source);

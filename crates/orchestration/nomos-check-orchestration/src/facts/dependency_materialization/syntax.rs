@@ -6,6 +6,7 @@ use nomos_lang_rust::{FactContext, Materialization};
 use nomos_rules::SourceFile;
 
 use crate::composition::Recognized_Syntax_Provider;
+use crate::facts::currency::Materialized_Or_Already_Current;
 
 /// Produces one syntax fact per source and returns how many sources now have a current
 /// one -- whether this call wrote it or [`Is_Already_Current`] found the store already held
@@ -205,7 +206,7 @@ fn Go_Production(context: &Context) -> nomos_lang_go::FactContext
 }
 
 /// Produces one `nomos.cap.controlflow.reachability` fact per source and returns how many
-/// were written.
+/// sources now have a current one.
 ///
 /// The identical shape [`Materialize_Syntax`] has: pure, per-source, no I/O --
 /// `nomos_lang_rust::reachability::Materialize_Reachability_Fact` takes only a subject, source text and this
@@ -215,10 +216,25 @@ fn Go_Production(context: &Context) -> nomos_lang_go::FactContext
 /// which one a caller is actually asking about, the same reason
 /// [`super::Materialize_Dependencies`] stayed a second, separate step rather than a
 /// generalization of the first.
+///
+/// # Skipping a subject the store already has current
+///
+/// `P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY`: the write goes through
+/// [`crate::facts::currency`], so a source whose reachability answer has not moved since the
+/// reused store last saw it is not filed a second time -- and the count returned is
+/// [`Materialize_Syntax`]'s own coverage meaning, not a newly-written count.
+///
+/// This check runs *after* the provider has read the source, unlike [`Is_Already_Current`]
+/// one function up, which runs before the parse. That is not an oversight and it is the one
+/// difference between the two: `nomos_lang_rust`'s own `reachability::Reachability_Inputs`
+/// -- the digest it files this fact's `semantic_inputs` under, and the only thing a caller
+/// could rebuild the key from without reading the source -- is crate-private to that
+/// provider. Publishing it would let this step skip the read as well, and needs territory in
+/// `crates/languages/nomos-lang-rust` that this crate's own item does not hold.
 pub fn Materialize_Reachability(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore) -> usize
 {
     let production = Rust_Production(context);
-    let mut written = 0_usize;
+    let mut current = 0_usize;
 
     for source in sources
     {
@@ -229,15 +245,13 @@ pub fn Materialize_Reachability(sources: &[SourceFile], context: &Context, store
             continue;
         };
 
-        // No dependency edges: a reachability fact is a leaf, the identical reasoning
-        // Materialize_Syntax gives for its own fact.
-        if store.Materialize(*fact, &[]).is_ok()
+        if Materialized_Or_Already_Current(*fact, context, store)
         {
-            written = written.saturating_add(1);
+            current = current.saturating_add(1);
         }
     }
 
-    return written;
+    return current;
 }
 
 /// The reading context as `nomos_lang_rust`'s own provider takes it.
