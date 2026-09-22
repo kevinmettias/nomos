@@ -79919,18 +79919,20 @@
           "crates/substrate/nomos-ledger/src/store/claiming.rs",
           "crates/substrate/nomos-ledger/src/store/document.rs",
           "crates/substrate/nomos-ledger/src/store/file.rs",
-          "crates/substrate/nomos-ledger/src/store/reservation.rs"
+          "crates/substrate/nomos-ledger/src/store/reservation.rs",
+          "crates/substrate/nomos-ledger/src/gate_unknown.rs",
+          "crates/substrate/nomos-ledger/src/gate/step_derivation.rs"
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "Unsatisfiable as written, and superseded by P111-EIGHT-PHASE-SUBSTRATE-LEDGER-2. Its done_when demands zero eight-phase findings with no new waiver and no in-code allow marker. Twelve of the sixteen are fixed at 63c640fe; the remaining four are a Send bound std::thread::scope requires, proven by mutation, and the only spelling that clears them is the in-code marker this item forbids. The successor carries the same territory and the decision the fourth needs."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-a5",
-        "acquired_at": 1789497627,
-        "lease_expires_at": 1789544624
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "C:\\Python314\\python.exe",
@@ -79940,9 +79942,24 @@
         "timeout_seconds": 1800
       },
       "verified": null,
-      "abandoned": [],
-      "displaced": [],
-      "declined": null,
+      "abandoned": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "reason": "Twelve of the sixteen remaining findings are fixed and committed at 63c640fe. The other four are check-closure-bounds on interleaving.rs 211/213/252/254, and no code change clears them: deleting the Send bound fails to compile, because Interleave_Two_Writers hands both closures to std::thread::scope spawn. The check wants an in-code rust-closure allow marker, which this item's own done_when forbids, so the item cannot reach zero as written.",
+          "abandoned_at": 1790041768
+        }
+      ],
+      "displaced": [
+        {
+          "holder": "nomos-a5",
+          "acquired_at": 1789497627,
+          "lease_expires_at": 1789544624
+        }
+      ],
+      "declined": {
+        "holder": "claude-external-review-reconciliation",
+        "declined_at": 1790041777
+      },
       "widened": [
         {
           "holder": "nomos-a5",
@@ -79961,6 +79978,14 @@
             "crates/substrate/nomos-ledger/src/store/reservation.rs"
           ],
           "widened_at": 1789522837
+        },
+        {
+          "holder": "claude-external-review-reconciliation",
+          "added": [
+            "crates/substrate/nomos-ledger/src/gate_unknown.rs",
+            "crates/substrate/nomos-ledger/src/gate/step_derivation.rs"
+          ],
+          "widened_at": 1790039945
         }
       ]
     },
@@ -87286,6 +87311,42 @@
         },
         "revision": "644c479693434323cf8894c1e8482911caf45aae"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P111-EIGHT-PHASE-SUBSTRATE-LEDGER-2",
+      "title": "A bound the compiler requires is counted as a campaign finding, and every spelling that clears it is forbidden",
+      "why": "Measured 2026-09-21 while working the campaign item this supersedes. Twelve of its sixteen remaining findings are fixed at 63c640fe. The other four are check-closure-bounds on tests/exclusion_holds/interleaving.rs at 211, 213, 252 and 254, and they are not a style question: deleting the Send bound from the first fails to compile, with the message that the closure cannot be sent between threads safely, because Interleave_Two_Writers hands both closures to std::thread::scope spawn. The file was restored byte-identically, verified by sha256.\n\nThree spellings exist and the campaign forbids two. A waiver already sits in suppressions.json, and the campaign predicate counts a waived finding as outstanding, by design and for good reason. A code change cannot remove a bound the compiler demands. The third is the in-code allow marker the check itself asks for, and the comments beside all four sites record that it was refused because check-closure-bounds is not one of the safety-critical checks an in-code marker still argues under this repository safety-only policy.\n\nThat refusal is the sentence worth re-reading. check-closure-bounds sits in the concurrency, ownership and unsafe phase, which is the subject the safety-only policy exists for, so whether the policy admits it is undecided rather than settled against. The same pattern is already live in a second place, crates/platform/nomos-platform-std/src/launcher/drain.rs, where the identical comment excuses check-lifetime-discipline. So this is a class, not one file, and the next territory to meet it will rediscover it.",
+      "done_when": "OD-GATE-018 is amended and states, in a form a reader can check, whether an in-code allow marker is admitted for a check in the concurrency, ownership and unsafe phase when the bound it reports is one the compiler requires. The answer is given either way, with its reason, and it names the sites measured so far: interleaving.rs at 211, 213, 252 and 254, and the launcher drain in nomos-platform-std.\n\nIt states what the campaign expects for a finding no code change can clear, so a later territory meeting the same wall reads an answer rather than making a second discovery.\n\nIt does not weaken the rule for a finding a code change could clear. Whatever it admits is bounded by the mutation proof it names: a bound whose removal still compiles is outside the exception, and the record says so.\n\nBoth required projections are re-rendered from a tree holding exactly the amending commit record set. Whether the four sites then change is a separate item, because this one decides and does not implement.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,
