@@ -88608,12 +88608,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P121-INTEGRATION-PACKAGE-MANIFEST"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-checkrun",
+        "acquired_at": 1790051260,
+        "lease_expires_at": 1790062060
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -89390,14 +89394,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-host017",
-        "acquired_at": 1790050483,
-        "lease_expires_at": 1790061283
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -89413,7 +89413,33 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "Should_Read_The_Record_Out_For_Editing ... ok\n\ntest result: ok. 136 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.91s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.59s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790051448,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -89707,12 +89733,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P123-OD-POLICY-001-HAS-NO-RULE-FOR-TWO-FIELDS-THAT-RESOLVE-TOGETHER"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p124-effective",
+        "acquired_at": 1790051364,
+        "lease_expires_at": 1790062164
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -89844,7 +89874,8 @@
           "tests/contract/tests/determinism_declarations.rs",
           "crates/orchestration/nomos-check-orchestration/src/facts/currency.rs",
           "crates/orchestration/nomos-check-orchestration/src/facts/currency/tests.rs",
-          "crates/orchestration/nomos-check-orchestration/src/lib.rs"
+          "crates/orchestration/nomos-check-orchestration/src/lib.rs",
+          "tests/contract/src/reading/source_files.rs"
         ],
         "patterns": []
       },
@@ -89872,7 +89903,15 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p123-strategy",
+          "added": [
+            "tests/contract/src/reading/source_files.rs"
+          ],
+          "widened_at": 1790051236
+        }
+      ]
     },
     {
       "id": "P123-CSHARP-JOINS-THE-RUN-AND-THE-WALK-2",
@@ -89964,6 +90003,55 @@
       "title": "The workflow crate says its runtime was built under a standing override its own record says does not reach the workflow tier",
       "why": "Two authorities disagree about why the retry, timeout and compensation runtime was allowed to be built, measured at HEAD. crates/orchestration/nomos-workflow-orchestration/src/lib.rs says P123-WORKFLOW-RETRY-TIMEOUT-COMPENSATION-RUNTIME built it \"under the standing override OD-ROADMAP-001 records\". OD-WORKFLOW-005, at both version 1 and version 2, explicitly does not claim OD-ROADMAP-001 covers the workflow tier; its own title says the increment is built under the user's standing override rather than a fired trigger, which is a different claim about a different authority. One of the two is wrong and a reader cannot tell which. AGENTS.md says a disagreement between authorities is a defect worth an item, and neither of these is the mechanical one, so it cannot be settled by preferring a check. Two smaller drifts in the same crate's prose, both confirmed, ride along because they are the same edit and the same reader: README.md line 107 says this crate dispatches to \"four real dispatch targets\" where its own lib.rs says five, and run.rs lines 312 and 319 carry doc comments naming Body::ClaudeCode, a variant OD-PACKAGE-016 replaced, so a reader following the doc looks for a variant that is not there.",
       "done_when": "The workflow crate's doc and its governing record agree about which authority licensed the runtime increment, decided by reading OD-ROADMAP-001's own scope text against OD-WORKFLOW-005's, and the one that is wrong is corrected rather than both being softened into agreement; if the crate doc is wrong it names the authority the record names, and if the record is wrong it is amended with its version raised; the reasoning is recorded wherever the correction lands, so the next reader sees why one authority rather than the other governs this increment. OD-ROADMAP-001's own scope is not widened, narrowed or reopened by this item: if the honest answer is that neither authority covers the workflow tier and the increment rests on something else, that is stated as a finding and a decision item is named for it rather than settled here. README.md's row for this crate names the same number of dispatch targets as the crate's own doc, counted rather than copied. The two doc comments in run.rs name the variant that exists. The public surface does not move, no test changes behavior, and if the correction reaches a record then both projections are re-rendered per the nomos-spec-change skill; and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workflow-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "README.md",
+          "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Superseded by -2, which folds in two further README sentences a peer session measured and flagged rather than claimed, both confirmed here. This item already reserved README.md to correct one stale row, so a worker holding the file would have had two known-false sentences open in front of it with no authority to touch them, which is how a third item for the same file gets filed a week later. Unchanged in kind, territory and predicate; the done_when gains the two sentences and the why gains their measurement. No claim was ever taken and nothing was written to the tree under this item."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-triage",
+        "declined_at": 1790051405
+      },
+      "widened": []
+    },
+    {
+      "id": "P123-A-CRATE-DOC-AND-ITS-RECORD-DISAGREE-ABOUT-WHICH-OVERRIDE-LICENSED-THE-WORKFLOW-RUNTIME-2",
+      "title": "Three README sentences and a crate doc assert things this tree left behind, and one of them contradicts its own record",
+      "why": "Four prose assertions in this repository are false at HEAD, each measured rather than reported. First, and the only one that is a disagreement rather than a drift: crates/orchestration/nomos-workflow-orchestration/src/lib.rs says P123-WORKFLOW-RETRY-TIMEOUT-COMPENSATION-RUNTIME built its runtime \"under the standing override OD-ROADMAP-001 records\", while OD-WORKFLOW-005 at both versions explicitly does not claim that override reaches the workflow tier, its own title saying the increment rests on the user's standing override rather than a fired trigger. One of the two is wrong and a reader cannot tell which; AGENTS.md calls a disagreement between authorities a defect worth an item, and neither of these is the mechanical one. Second, README.md's row for that crate says it dispatches to four real targets where the crate's own doc says five. Third, README.md's zones paragraph says nomos-rules declares ZONES, Permits and SAME_ZONE_EDGES and that tests/contract asserts against that one declaration: grepping nomos-rules finds no such constant, only past-tense doc comments at checks/dependency.rs and checks/dependency/completeness.rs describing the table that used to be there, because OD-RULES-024 removed every component and crate name of this workspace from that crate. The sentence is right that there is one declaration and wrong about where it lives: it is nomos-architecture.json at the repository root, with nomos-cap-architecture carrying the contract, nomos-repo-policy's architecture module reading the file, and tests/contract reaching it through Declared_Architecture in boundaries/bands.rs. Fourth, README.md's repo-tooling paragraph says OD-PROJECT-004 decided where those four crates belong physically; that record is at version 2 and its own text now says crates/repo-tooling/ does not exist, the four sit exactly where version 1 measured them, and what it decides is ownership rather than placement. The four crate names in that paragraph are still correct. A peer session measured the third and fourth while amending OD-PROJECT-004 and flagged them rather than claiming a third item for two sentences; both were re-measured here before this item was authored.",
+      "done_when": "The workflow crate's doc and its governing record agree about which authority licensed the runtime increment, decided by reading OD-ROADMAP-001's own scope text against OD-WORKFLOW-005's, and the one that is wrong is corrected rather than both being softened into agreement; the reasoning is recorded wherever the correction lands. OD-ROADMAP-001's scope is not widened, narrowed or reopened: if the honest answer is that neither authority covers the workflow tier and the increment rests on something else, that is stated as a finding and a decision item is named for it rather than settled here. README.md's row for the workflow crate names the same number of dispatch targets as the crate's own doc, counted rather than copied. README.md's zones paragraph names the file that actually declares the zones and the crates that carry, read and check it, without asserting a constant that no crate declares, and without turning the sentence into a second copy of what nomos-architecture.json says. README.md's repo-tooling paragraph describes what OD-PROJECT-004 version 2 decides rather than what version 1 proposed, leaving the four crate names as they are. The two doc comments in run.rs name the variant that exists rather than the one OD-PACKAGE-016 replaced. The public surface does not move, no test changes behavior, and if any correction reaches a record then both projections are re-rendered per the nomos-spec-change skill; and the predicate passes.",
       "kind": "Correction",
       "origin": "Required",
       "territory": {

@@ -137,6 +137,7 @@ profile: domain-specification
 | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md@authored | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md | authored | 39 | 12 | sha256:af086972c1c5a6fe934fe91f8e0b7dc9bff973d7986240dcbb05a3bdac229496 |
 | docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md@authored | docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md | authored | 56 | 13 | sha256:7a05e7d2b4970db396626604d0d0e0e6dda68dcb9890eeaaa7d120f22d219e88 |
 | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md@authored | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md | authored | 92 | 24 | sha256:0ce8b873e26fc707ad0594a76922e8ccf0fa5c374c5867d74543afd06d69e593 |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md@authored | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md | authored | 70 | 20 | sha256:6f3ba575cf275a392d61250afb410d11d511d942bdd507ce4ab113c34ba43130 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -1313,6 +1314,26 @@ profile: domain-specification
 | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#77 | authored | 2 | What this record does not do |
 | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#83 | authored | 2 | Territory a building item reserves |
 | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#91 | authored | 2 | Status |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#1 | authored | 1 | An interchange projection belongs to the service that owns the judgment, and every host emits it |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#8 | authored | 3 | The zone rule, and the three tests that hold it |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#13 | authored | 3 | What holds the projection, and what it says about itself |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#18 | authored | 3 | What the CLI holds, and what a route costs it |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#20 | authored | 3 | What each candidate home already declares |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#22 | authored | 3 | What an admitting increment on the wire costs |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#24 | authored | 2 | The Decision |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#25 | authored | 3 | 1. What decides is what the projection is, not which host wants it first |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#28 | authored | 3 | 2. The projection moves to `nomos-gate-orchestration`, and every host emits it from there |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#33 | authored | 3 | 3. `nomos-api` keeps its reach and stops being the owner |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#35 | authored | 3 | 4. The first emitter is `nomos-cli`, and the route costs it no manifest edit |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#39 | authored | 3 | 5. A named Host exception letting `nomos-cli` reach `nomos-api` is refused |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#43 | authored | 3 | 6. Admitting a SARIF-emitting operation to the transport and MCP is refused as this question's answer, and stays available as its own item |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#47 | authored | 3 | 7. A CLI that rendered the log from its own outcome types is refused |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#49 | authored | 3 | 8. The capability item that follows, and what it reserves |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#56 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#63 | authored | 2 | What Would Decide It Differently |
+| docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#69 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -37831,6 +37852,648 @@ of 56 construction sites; a descriptor-side `Requirement` field and a `FactKey`-
 capability are both refused with their reasons. `OD-HOST-010`'s two undecided targets are now
 both decided, neither of them built, and `P42-LSP-PROJECTION`'s five walk-outward targets have
 five answers on the board.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#1
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it · hash: sha256:5dc7f9f8292174a9677fb467eced874feefbc7cf8ff9bfac62eeba11b5e11903*
+
+# An interchange projection belongs to the service that owns the judgment, and every host emits it
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#2
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#3
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / Question · hash: sha256:33eda22715e1f7a9fedf5a0f8b524451f13b5b21ec91b44546e428f47eeb5e67*
+
+Commit `0c05967a` built the SARIF 2.1.0 projection this workspace had none of, and put it in
+`nomos-api` beside the two response types it reads. Nothing outside that crate's own tests
+calls it. So the one export GitHub code scanning, Azure DevOps and most CI consumers ingest
+-- and the one a v14 corpus row requires -- exists and is unreachable.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#4
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / Question · hash: sha256:89cf5f5a01cc60e2fbb79ed50ac2582e01e84389b631d5a6eca7eb11b5627d5f*
+
+The obvious repair was authored as a flag on `nomos gate run`
+(`P123-A-SARIF-LOG-IS-UNREACHABLE-FROM-A-COMMAND-LINE`) and declined, because it is refused
+by declared architecture rather than by an absent line: `nomos-cli` and `nomos-api` are both
+zone Host, and Host does not permit Host.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#5
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / Question · hash: sha256:4e31e8ed548249f200aa97fdc274cf274532069605782a589701fff642083fa5*
+
+So the question is not how to wire a flag. It is **which host may emit the projection when a
+host may not name the host that holds it**, and there are four answers that differ mostly in
+what else each one permits.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#6
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#7
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured · hash: sha256:a88e470ce8ced03a4581b5796a3b5486585891d7e02e63f6569721ba5315a572*
+
+Taken at `3b79707f`. `nomos-architecture.json` is dirty in the shared tree with one peer's
+C# provider rows; that change reaches nothing below and every figure here holds at `HEAD`
+too.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#8
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / The zone rule, and the three tests that hold it · hash: sha256:7f0cd2e44d396cff43f857d860ea49ba6f1c8a8c30e7999f77c1a8682a2bdf2b*
+
+### The zone rule, and the three tests that hold it
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#9
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / The zone rule, and the three tests that hold it · hash: sha256:19ee0cfb363684300c7ad3aab73ddb24d981b96fe609cda44902aac28d1dfdd3*
+
+`nomos-architecture.json`'s top-level keys are `components`, `members`, `permits`,
+`exceptions` and `authorities`.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#10
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / The zone rule, and the three tests that hold it · hash: sha256:7d90e071410ceeea81583146cead9925dd076c486dbc8e286c4ae5116289f167*
+
+- `members` places `nomos-cli`, `nomos-api`, `nomos-api-transport`, `nomos-mcp` and
+  `nomos-lsp` all in zone `Host`.
+- `permits.Host` lists nine components -- Protocol, Substrate, Specification, Capability
+  Contract, Provider, Rules, Agent, Application Service, Repo Tooling -- and does **not**
+  list `Host`. A Host crate may not name a Host peer.
+- `exceptions` names `nomos-api-transport` -> `nomos-api` and `nomos-mcp` ->
+  `nomos-api-transport`, and carries no entry at all for `nomos-cli`.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#11
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / The zone rule, and the three tests that hold it · hash: sha256:7619505b0b78adef4c4917b47e2bfb2f87d64e84da132527737fdcf486baea19*
+
+Two things enforce that from the one declaration, which is `OD-RULES-020`'s own doing:
+`Test_Dependencies_Should_Run_Strictly_Downward` in
+`tests/contract/tests/boundaries/graph.rs`, and `nomos_rules::Check_Dependency_Direction`
+(`crates/rules/nomos-rules/src/checks/dependency/violations.rs`) over a real check run, so
+this repository's own self-check reports the identical edge. A third makes an exception
+non-free: `Test_Every_Same_Zone_Edge_Should_Be_A_Real_Dependency` requires every declared
+exception to be a real direct dependency, in both directions, so an exception cannot be
+declared ahead of the manifest edit it licenses nor kept after it lapses.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#12
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / The zone rule, and the three tests that hold it · hash: sha256:4999e54859f86b86a70afa80253421064d725c8f40295faa82c462fa9046eaf1*
+
+Both judgments skip a dev-dependency -- `Is_Dev_Dependency` in the rule, `Is_Not_Dev` in
+`tests/contract/src/workspace.rs` for the test. A dev-only edge would therefore escape both
+and produce nothing a caller can run, so it is not a fifth route.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#13
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / What holds the projection, and what it says about itself · hash: sha256:b7b07d46482b6771c9b4e4bc1d4a49793fa06fec5ec1f30cfe00eab6570fe42a*
+
+### What holds the projection, and what it says about itself
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#14
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / What holds the projection, and what it says about itself · hash: sha256:1bf9c8bad010fd6ddf4a29dd5b6fd9db48a7afcb5eefd44abd8e0e40c0d47478*
+
+`SarifLog` is public in `nomos-api`'s blessed surface -- three entries in
+`tests/contract/surface/nomos-api.txt`, for the type and its two projection functions. No
+crate outside `nomos-api` names it; the only other mentions in the workspace are that
+crate's own module declaration and re-export. Only `nomos-api-transport` may name
+`nomos-api`, and `nomos-mcp` reaches it through the transport rather than directly.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#15
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / What holds the projection, and what it says about itself · hash: sha256:08f68f00c64c36042eb79d98226eff20b0597d6755dc0f4b788e793f162f2293*
+
+`crates/host/nomos-api/src/sarif.rs` places itself by `OD-HOST-002` and states the premise
+in `lib.rs`: the two response types are "the canonical answers all three hosts project".
+Measured, that premise does not hold.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#16
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / What holds the projection, and what it says about itself · hash: sha256:372831a4d1b3d709e336e3b6a648db2497d684f78dbd28f47cb77b9fa1e012e9*
+
+- `nomos-cli` declares `nomos-check-orchestration`, `nomos-gate-orchestration` and
+  `nomos-workspace-discovery`, and no `nomos-api`. `nomos-lsp` declares
+  `nomos-check-orchestration` and no `nomos-api`. Neither may name it, so neither projects
+  those responses; each projects an orchestration outcome directly. One host and its client
+  project them.
+- The responses are not the canonical answer either. `Handle_Gate_Run` calls
+  `nomos_gate_orchestration::Run_Gate`, holds the `GateRunResult` it returns, and hands back
+  `GateRunResponse::From(result)`. `Handle_Check_Run` does the same with
+  `CheckResponse::From(outcome)` over a `nomos_check_orchestration::CheckOutcome`.
+  `OD-HOST-011` already reasons about that twinning.
+- Three of the four things the projection reads are declared twins of the judging services'
+  own types. `FindingBucket`'s own doc says "a serializable twin of
+  `nomos_gate_orchestration::FindingDisposition`"; `NoVerdictResponse`'s says the same of
+  `nomos_gate_orchestration::NoVerdict`, and `CheckOutcomeResponse`'s of
+  `nomos_check_orchestration::CheckOutcome`. Only the fourth, `nomos_contracts::Finding` and
+  its `GateCategory`, comes from a zone every crate may reach. So the projection consumes
+  nothing of `nomos-api`'s own except the twins `nomos-api` made.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#17
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / What holds the projection, and what it says about itself · hash: sha256:567cb394028e3801e3a37f07d006d12371017920f2b31b9eda94d9b9a7d96c3e*
+
+`OD-HOST-002`'s own definition is what settles this. A canonical service there is "a library
+crate any client can call directly -- `nomos-ledger`, `nomos-work-orchestration`,
+`nomos-capability`, `nomos-analysis`, `nomos-contracts`, `nomos-spec-store`, and their kind
+-- not a rendering one particular client already produced". `nomos-api` is a surface, and no
+peer host may call it. Placing the projection there makes it state one surface holds and no
+other client can reconstruct, which is the condition that record was written to refuse, not
+the remedy it prescribes.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#18
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / What the CLI holds, and what a route costs it · hash: sha256:3940197bd40365e52ba8f49e293936d65bb9834cf4f8fda61818d6dbb2a71ff6*
+
+### What the CLI holds, and what a route costs it
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#19
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / What the CLI holds, and what a route costs it · hash: sha256:397d08e8901d3100a66b4097324a9b18065b5fbae569d6f7f418076052176d82*
+
+- `crates/host/nomos-cli/Cargo.toml` declares neither `nomos-api` nor `serde_json`, in
+  `[dependencies]` or `[dev-dependencies]`.
+- `crates/host/nomos-cli/tests/request_submit.rs` records the posture in its own prose:
+  `Test_Into_Should_Render_The_Accepted_Submission_With_A_Freshness_Stamp` asserts a
+  projection sidecar by substring rather than parsing it, because "a dependency on
+  `serde_json` in this crate's tests would be a second reason to touch `Cargo.toml`".
+- Neither verb holds what the projection consumes. `crates/host/nomos-cli/src/gate.rs`
+  renders what `nomos_gate_orchestration::Run_Gate` returned and
+  `crates/host/nomos-cli/src/check.rs` renders a `nomos_check_orchestration::CheckOutcome`,
+  while `SarifLog::Of_Gate_Run` takes a `nomos_api::GateRunResponse` and `Of_Check_Run` a
+  `nomos_api::CheckResponse`.
+- `sarif.rs` states that `serde_json` stays a dev-dependency of `nomos-api` and that nothing
+  there serializes, so a caller supplies the serializer -- "the projection costs a host no
+  dependency it did not already have". Under this placement the one host a CI job actually
+  runs is the one host that cannot pay for it.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#20
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / What each candidate home already declares · hash: sha256:5236fb386b62144f2bc84ef5bb13a37ea8e39f6847613435f1d303d83ecccbd1*
+
+### What each candidate home already declares
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#21
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / What each candidate home already declares · hash: sha256:be6efda4fe923be4a26a8d2b727387d590f887aed92234f39f673a4c31096137*
+
+- `nomos-api-transport` declares `nomos-api` and `serde_json`; `nomos-mcp` declares
+  `serde_json` and `nomos-api-transport`. A wire-side emitter costs no manifest edit.
+- `nomos-gate-orchestration` declares `serde` **and** `serde_json` in `[dependencies]`, not
+  as dev-dependencies, and declares `nomos-check-orchestration` under the one named
+  exception into it. Its `GateRunResult` carries `run`, `root`, `check_outcome`, `findings`,
+  `disposition` and `no_verdict`, every field public -- the whole of what `GateRunResponse`
+  carries, one conversion earlier.
+- `nomos-check-orchestration` declares neither `serde` nor `serde_json`, and may not name
+  `nomos-gate-orchestration`: that exception runs one way only.
+- `nomos-cli` already declares both orchestration crates, and every Host may name an
+  Application Service under `permits` with no exception at all.
+- `nomos-workflow-orchestration` is the only other crate that reaches both judgments; its
+  exceptions name all four Application Services.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#22
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / What an admitting increment on the wire costs · hash: sha256:0e17a6a22117dc0c2b480d0b09992de0a3029b206551656865d6dc8ef62544e5*
+
+### What an admitting increment on the wire costs
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#23
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Was Measured / What an admitting increment on the wire costs · hash: sha256:8c15fb338500fcbf879c6ca1cb30b8fafd4c8dbe5aa855d18afe314ad30747c2*
+
+`OD-HOST-014`'s decision 5 names three places: `ServedMethod::REGISTRY` in
+`nomos-api-transport` (five entries today), `ServedTool::REGISTRY` in `nomos-mcp`, which
+projects it, and the `ADMITTED` array in
+`tests/contract/tests/boundaries/transport_registry.rs`. A served method is also a
+projection of `nomos_contracts::OperationName`, which by its own doc is the only
+authoritative name an operation has.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#24
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#25
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 1. What decides is what the projection is, not which host wants it first · hash: sha256:8a1f8005342de62627ce462eb7d1563fc036b43d07ac6f09c2b8899f36174995*
+
+### 1. What decides is what the projection is, not which host wants it first
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#26
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 1. What decides is what the projection is, not which host wants it first · hash: sha256:71b5c65a16c5efbe0e9fa4a2700793d700e4dee0660d47d8437e59f41c7b1913*
+
+`OD-HOST-013` answered this shape of question for a protocol -- "what decides is what the
+thing *is*, not who currently calls it" -- and `OD-CAPABILITY-015` answered it for a zone
+label, refusing to reason from the edge to the label because that reasoning empties the edge
+of meaning. Neither is about a projection. Both state the criterion this record applies to
+one.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#27
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 1. What decides is what the projection is, not which host wants it first · hash: sha256:21402643862ade4e2db97cc29621ddd801b0ec70bf4512d84ee0a3afb623d281*
+
+A SARIF log is the interchange rendering of a judgment, and every property it carries is
+derived from what a run found and what a policy did about it: `level` from a finding's own
+`GateCategory` and applicability, `suppressions` from the bucket a gate reduced the finding
+into, `invocation.executionSuccessful` and its notifications from whether the run reached a
+verdict and why not. The last two vocabularies are the judging services' own, as the
+twinning above measures. So the log is the judging service's projection. It belongs where
+the judgment is, not beside one surface's twin of it.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#28
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 2. The projection moves to `nomos-gate-orchestration`, and every host emits it from there · hash: sha256:5dde823eb02bf1013a6d0c1a68341638a51110ec8bcc4e0a97cdfe4e04ce0e98*
+
+### 2. The projection moves to `nomos-gate-orchestration`, and every host emits it from there
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#29
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 2. The projection moves to `nomos-gate-orchestration`, and every host emits it from there · hash: sha256:eb925e72888861e6978f29a15f0e5c41b741126f9a16258c6a8fe323546c54d5*
+
+Application Service is a zone every Host may name under `permits` with no exception, so the
+move makes the projection reachable by `nomos-cli`, `nomos-api`, `nomos-api-transport`,
+`nomos-mcp` through the transport, `nomos-lsp`, and any later host, without an architectural
+decision being taken for each one.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#30
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 2. The projection moves to `nomos-gate-orchestration`, and every host emits it from there · hash: sha256:99065dd752a214d749ece7d21d20972336bf921d4bf75c1734dae5ade95df225*
+
+`nomos-gate-orchestration` rather than `nomos-check-orchestration`, and that is forced
+rather than preferred: the projection needs both judgments, `GateFindings` is
+gate-orchestration's own type, and the exception into check-orchestration runs one way, so
+the check crate cannot name its own reducer. A check run's log stays the degenerate case the
+existing `Of_Check_Run` already describes -- no policy applied, so no bucket on a result --
+and it is projected by the crate that owns the bucket vocabulary the gate case needs.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#31
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 2. The projection moves to `nomos-gate-orchestration`, and every host emits it from there · hash: sha256:a7cf1e0b9d2f7706979917c05df876417388f26462e907661348448b80110e7d*
+
+Not `nomos-workflow-orchestration`, the only other crate that reaches both: a step sequencer
+is not what an interchange projection is, and every host would then need a workflow
+dependency to emit a gate log.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#32
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 2. The projection moves to `nomos-gate-orchestration`, and every host emits it from there · hash: sha256:3b8730b99091f35ca827a8f31fc4afbec1ffaa35abcb0aaae393778cc207d0d8*
+
+Not a new crate in a lower zone. Its zone would have to be argued under
+`OD-CAPABILITY-015`'s criterion, and a SARIF document model is not Protocol vocabulary, a
+substrate, or a capability contract; and the one property a new crate would buy -- a home two
+Application Services can share -- is a property a named exception already supplies.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#33
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 3. `nomos-api` keeps its reach and stops being the owner · hash: sha256:e140a496c8a9aa5243c989bbfb215dc3ae7348163f422a6f8a391d632af981c4*
+
+### 3. `nomos-api` keeps its reach and stops being the owner
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#34
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 3. `nomos-api` keeps its reach and stops being the owner · hash: sha256:93e61829b70ed86c36b01d0516c707ac2c8fd1db93c4008e914dc72a87e42384*
+
+Exactly one projection exists after the move. `nomos-api` projects from the `GateRunResult`
+and `CheckOutcome` its own handlers already hold before they convert, rather than from its
+twins, and `nomos_api::SarifLog` stays namable by whatever spelling the building item
+chooses -- a re-export or nothing at all. What is refused is a second copy: two projections
+of one judgment is the state decision 7 refuses one host lower down, and it is no better
+between two hosts.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#35
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 4. The first emitter is `nomos-cli`, and the route costs it no manifest edit · hash: sha256:587b0821e4f537722b9d0b314a97b522f0e023ce7b7fca7dc3cb11cf8b741cd9*
+
+### 4. The first emitter is `nomos-cli`, and the route costs it no manifest edit
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#36
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 4. The first emitter is `nomos-cli`, and the route costs it no manifest edit · hash: sha256:75d266c2444cfec95f01f39373de5ba57f917b0f2e18671121f98909b27e3f2a*
+
+The consumer the corpus row and every CI system stand for is a file a command wrote. So the
+first emitter is the command line, and that is the whole reason the placement question had to
+be answered rather than worked around.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#37
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 4. The first emitter is `nomos-cli`, and the route costs it no manifest edit · hash: sha256:58e85106eb96ecc7cbf99d409164b0b62b36057007992270d5ebe4efab508f74*
+
+The measured cost is part of the decision. `nomos-cli` declares neither `nomos-api` nor
+`serde_json` today, and this route needs neither: it already declares
+`nomos-gate-orchestration`, and that crate declares `serde` and `serde_json` in production,
+so the projection can hand a host serialized bytes and the CLI writes them through
+`nomos_platform::FileSystem`.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#38
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 4. The first emitter is `nomos-cli`, and the route costs it no manifest edit · hash: sha256:41c4d05df47eab072556e0e7b12976e80222fa45a0612d9d39aac068947363de*
+
+That does reverse the "a caller chooses the serializer" clause in `nomos-api`'s `sarif.rs`.
+The clause is not an independent commitment; it is a consequence of a placement in a crate
+whose `serde_json` is a dev-dependency, and its effect where it stands is that the host
+which most needs the export cannot pay for it.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#39
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 5. A named Host exception letting `nomos-cli` reach `nomos-api` is refused · hash: sha256:981d8d994be590fb94b678a1d3b4e6fcc36730bd3ba929fed5a50ca4671347b8*
+
+### 5. A named Host exception letting `nomos-cli` reach `nomos-api` is refused
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#40
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 5. A named Host exception letting `nomos-cli` reach `nomos-api` is refused · hash: sha256:b88279a0be1b9bc2ff3d7c8211d771ab2da224c9678b0ee05880de2261bcb957*
+
+An exception is a standing permission at crate grain, not a licence for one call, and six
+things follow from granting this one:
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#41
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 5. A named Host exception letting `nomos-cli` reach `nomos-api` is refused · hash: sha256:c436de6f1e9d0c8a20267bccf100a8c57bcab43852a5ac05f86f544e27c7bcf6*
+
+1. It admits `nomos-cli` to all thirty `Handle_*` functions, including the twenty-one
+   repo-tooling handlers `OD-HOST-007` excluded from the wire structurally rather than
+   advisorily, and the two `OD-HOST-014` refused for spending money outside the tree.
+2. Its natural consequence is that the CLI becomes a client of `nomos-api`. That is a
+   decision about the whole product surface, and taking it as a side effect of one export is
+   deciding it by not asking it.
+3. Nothing would then say which of two composition roots a new verb must use. `OD-HOST-002`
+   built `nomos-cli` and `nomos-api` as deliberate peers over one set of orchestration
+   crates; an edge between them leaves two legal paths to every answer and no rule choosing.
+4. A CLI that called `Handle_Gate_Run` for the log and its own `Run_Gate` for the human
+   report would walk and judge the tree twice in one process. The alternative is abandoning
+   its own composition root, which is not a flag.
+5. It reasons from the edge to the label, which `OD-CAPABILITY-015` refuses and
+   `OD-HOST-013` refuses in its own domain.
+6. It cannot be a paper exception.
+   `Test_Every_Same_Zone_Edge_Should_Be_A_Real_Dependency` requires the real edge, so the
+   declaration, `nomos-api` and `serde_json` all land in the CLI's manifest in one commit.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#42
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 5. A named Host exception letting `nomos-cli` reach `nomos-api` is refused · hash: sha256:099a2d9270668e9fa2f2d08b5155fe6fdd3b004cec19cc7b434b87cd46899eee*
+
+`nomos-api-transport` -> `nomos-api` and `nomos-mcp` -> `nomos-api-transport` are not
+precedent for it. Those two are a layering of surfaces, each strictly above the next, which
+is what a same-zone exception is for. A composition root reaching a sibling surface is a
+different shape.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#43
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 6. Admitting a SARIF-emitting operation to the transport and MCP is refused as this question's answer, and stays available as its own item · hash: sha256:337e2926fbac77ab8cc1c64f005bb0ba5a333682fcf984128fb7ea324e66019d*
+
+### 6. Admitting a SARIF-emitting operation to the transport and MCP is refused as this question's answer, and stays available as its own item
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#44
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 6. Admitting a SARIF-emitting operation to the transport and MCP is refused as this question's answer, and stays available as its own item · hash: sha256:3155dafb84e30a3c0580423330a8cca4a3ba85bc7946c38ace69d248cc453756*
+
+`OD-HOST-014`'s criterion admits it. A projection of a judgment already made causes nothing
+on the host that the served `nomos.gate.run` does not already cause, and it costs no manifest
+edit anywhere. It is refused here, and not because it is wrong:
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#45
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 6. Admitting a SARIF-emitting operation to the transport and MCP is refused as this question's answer, and stays available as its own item · hash: sha256:3c65c133629fa5c4c4f48095eb02f2c447f715a5671f5884081eeae8707caeaa*
+
+- It does not answer the question. `nomos-cli` still could not emit, and no JSON-RPC method
+  produces a file in a CI job without a client this workspace does not ship.
+- It would settle the placement question by not asking it. The projection would stay owned
+  by a surface, and the next host to want it -- `nomos-lsp`, a connector -- would meet the
+  identical refusal.
+- It spends a public commitment, a new `OperationName` and three registry edits, on an
+  export whose first real consumer is a file on disk.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#46
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 6. Admitting a SARIF-emitting operation to the transport and MCP is refused as this question's answer, and stays available as its own item · hash: sha256:f1a22f83cfb4ff31f454b555a5f75f3edb45c9a7adc67868ba3bcf0d9bb2702d*
+
+Once the projection lives where decision 2 puts it, admitting it is a registry edit and no
+architectural decision, and `OD-HOST-014`'s criterion is the whole of what decides it.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#47
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 7. A CLI that rendered the log from its own outcome types is refused · hash: sha256:e63952895444c9b945eb9dfe81b3c5371931859d220a59166b3f4aae8d7893f1*
+
+### 7. A CLI that rendered the log from its own outcome types is refused
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#48
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 7. A CLI that rendered the log from its own outcome types is refused · hash: sha256:9cb011618c09c24de06fe605962ceb249399b2cf7fecf17b0cf77be123aa18a4*
+
+It is a second rendering of a finding, which is what `OD-HOST-002` exists to refuse. Three
+further consequences make it worse than the one that already exists: the corpus requirement
+would be satisfied by whichever emitter a test happened to read; the level and suppression
+derivation would be duplicated over a vocabulary that is the gate's, so the compile-time
+arity guard `Bucketed_Findings` keeps against a sixth bucket would protect one copy and not
+the other; and the host that most needs the export would be the one holding the copy nothing
+governs.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#49
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 8. The capability item that follows, and what it reserves · hash: sha256:055ec51ecf61b728fe459dd3045340b9a6a5c10d916334d73ab9b1ebf232e7ea*
+
+### 8. The capability item that follows, and what it reserves
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#50
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 8. The capability item that follows, and what it reserves · hash: sha256:23772e98e8c75f65103fbf169ce09ea23e519fcd5316686834a30fc5e6714cc0*
+
+`P123-THE-SARIF-PROJECTION-MOVES-TO-THE-SERVICE-THAT-OWNS-THE-JUDGMENT`, a Capability item.
+Its territory by path:
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#51
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 8. The capability item that follows, and what it reserves · hash: sha256:e3ccfc3780f3e4c1b7765c0fdaafa891137c829538eba6d9c6fd3fd67df06a71*
+
+- `crates/orchestration/nomos-gate-orchestration/src/lib.rs`
+- `crates/orchestration/nomos-gate-orchestration/src/sarif.rs`
+- `crates/orchestration/nomos-gate-orchestration/src/sarif`
+- `crates/orchestration/nomos-gate-orchestration/Cargo.toml`
+- `crates/host/nomos-api/src/lib.rs`
+- `crates/host/nomos-api/src/sarif.rs`
+- `crates/host/nomos-api/src/sarif`
+- `crates/host/nomos-cli/src/gate.rs`
+- `crates/host/nomos-cli/src/gate`
+- `crates/host/nomos-cli/src/check.rs`
+- `crates/host/nomos-cli/src/check`
+- `crates/host/nomos-cli/Cargo.toml`
+- `tests/contract/surface/nomos-api.txt`
+- `tests/contract/surface/nomos-gate-orchestration.txt`
+- `README.md`
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#52
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 8. The capability item that follows, and what it reserves · hash: sha256:177326518452eb709da3a238d0cbafd9719a2e828460e37afbbc5636c7cc58f4*
+
+Each `lib.rs` is reserved because a `pub` item in a private module is reachable by nobody,
+and the snapshot beside it is the oracle for that rather than the modifier. Both snapshots
+are reserved because three entries leave one crate and arrive in the other, so a blessing is
+owed on both sides.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#53
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 8. The capability item that follows, and what it reserves · hash: sha256:941f2c7c593026fc17ddf554b927c5e744948fba1d53c9a05840c170cc96255d*
+
+`README.md` is reached for its crate-table rows for `nomos-api` and
+`nomos-gate-orchestration`, which state what each crate holds, and **not** for verb usage:
+that file documents no verb's flags, and its `Running the gate` section deliberately
+reproduces no commands.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#54
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 8. The capability item that follows, and what it reserves · hash: sha256:715e6dcf062264ca34b7f12868f4ec0f172466a223f2557c7a5ad03eeb1293a4*
+
+`nomos-architecture.json` is **not** territory, and that is a property of the choice rather
+than an omission. This is the only one of the four routes that needs no edit to `permits` or
+`exceptions`, because every edge it draws is a Host naming an Application Service, which
+`permits` has always allowed.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#55
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / The Decision / 8. The capability item that follows, and what it reserves · hash: sha256:fbecd51c92d3a72d6048b6706fd23056058c15e969edc98edc3eb2a556239f93*
+
+Both manifests are reserved although the measured cost of this route is zero for each. A diff
+that touches either is evidence against the reachability argument in decision 4, and owes the
+report `AGENTS.md` asks for rather than a widening.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#56
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#57
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What This Record Does Not Do · hash: sha256:3723630d661c6b3c10ffc4dd0f1b649ec6dc96f0e93ac739e901a8b7d47ef726*
+
+It builds nothing and moves nothing. Every path in decision 8 is a reservation for an item
+that does not exist yet.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#58
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What This Record Does Not Do · hash: sha256:2219fed49d171fd4c596fa0fd8743a8d8e4657be4b39e7af09b9bb4d2a3b14d2*
+
+It does not spell the flag, write its usage text, or choose between `--format sarif` and a
+dedicated `--sarif <path>`. That is the building item's, decided with the parser conventions
+a previous claimant measured and the declined item carried forward: a valued flag through
+`crate::arguments::Named_Value_From_String_Arguments` with `Required_Value(value, Name,
+Usage)` for the refusal, `gate/parsing.rs`'s `KNOWN_ARGUMENTS` and each verb group's own
+`USAGE` constant, `check/parsing.rs`'s prefix guard that refuses any unrecognized argument,
+`main.rs` naming no command type so a CLI-owned invocation can wrap an orchestration command
+without touching it, and production code in both verbs reaching the disk only through
+`nomos_platform::FileSystem`, whose `Replace_Atomically` and `FileSystemError::Path` give an
+unwritable destination a refusal that names the path.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#59
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What This Record Does Not Do · hash: sha256:cc244e668478676aded3e3f5c86a2637c81b993772f18da8e97b507eb6097538*
+
+It does not admit any operation to the transport or to MCP. Decision 6 refuses that as this
+question's answer and leaves it to an item of its own, judged against `OD-HOST-014`.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#60
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What This Record Does Not Do · hash: sha256:783ac69b17d4e2acc7c5d54552f2cc1018957839da1d318ac2d1f9ae41f27d7b*
+
+It does not decide whether `nomos-api`'s response twins become one serializable contract
+layer. `OD-HOST-011` holds that question. This record narrows it by one case instead of
+answering it: a thing that was placed beside the twins turns out to belong beneath them.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#61
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What This Record Does Not Do · hash: sha256:4faffaa4d58eb77d6c25373639d8464ccf685507f2ef2b53bbe0b1cec9ccf172*
+
+It does not amend `OD-HOST-002` and does not revisit its decision. What it corrects is a
+reading of that record in `nomos-api`'s own module documentation, and the correction is taken
+from the decision `OD-HOST-002` made rather than against it.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#62
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What This Record Does Not Do · hash: sha256:256eacd70c3d57aa4ed391312a3e88cc0e0ce861aa3977999e7d733631311ef7*
+
+It does not decide whether any other interchange export exists or where -- GraphML, CSV and
+the JSONL the spec bundle already emits. Decision 1's criterion decides the next one when
+somebody writes it.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#63
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Would Decide It Differently · hash: sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429*
+
+## What Would Decide It Differently
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#64
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Would Decide It Differently · hash: sha256:3cb0d410624e1e9c6908f93e0350c0608e0b0f16ee5e6ea32551c917a39e4d5b*
+
+**A measured external client that can only be served over the wire.** Decision 6 is refused
+for being a partial answer rather than a wrong one. A real consumer speaking JSON-RPC or MCP
+makes the transport admission the answer to its own question, and it was always available on
+`OD-HOST-014`'s criterion.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#65
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Would Decide It Differently · hash: sha256:aeda7babb6a9547c82b8adc54434dd6ffcc8bc029034676dc382cacdb94cf27d*
+
+**A second judging service whose outcome a SARIF log must carry and which
+`nomos-gate-orchestration` may not name.** The home in decision 2 is forced by the one-way
+exception into `nomos-check-orchestration`. A second judgment with no legal path to it
+reopens the shared-home-in-a-lower-zone alternative, and `OD-CAPABILITY-015`'s criterion is
+then what decides that crate's zone.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#66
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Would Decide It Differently · hash: sha256:cc358ead3090b800b7413428d60e4ad38b99b3c8237e75b6fc72c3e760d0c207*
+
+**`OD-HOST-011` resolving the twins into one serializable contract layer below zone Host.**
+The projection would then have a home that is neither a surface nor a reducer, and decision
+2's crate is the best answer available today rather than the only conceivable one.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#67
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Would Decide It Differently · hash: sha256:24c2057a439d647d76e89f6f41cad79027964afe18988a3e42d90dc7d8d3e12c*
+
+**A deliberate decision that `nomos-cli` becomes a client of `nomos-api` for every verb.**
+That is the decision decision 5 refuses to take as a side effect of an export. Taken
+deliberately, on its own evidence, the exception becomes ordinary and decision 5 is moot.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#68
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / What Would Decide It Differently · hash: sha256:1adc31f05571c375707867301dee5c09412c5df5000f3c879f1bdc654e5fd41f*
+
+**An implementer finding that the move costs `nomos-cli` a manifest edit after all.** The
+reachability claim in decision 4 is measured from two manifests and a zone table, and a
+manifest edit contradicts it. It does not reinstate any refused route on its own, but it
+does mean this record's cheapest-route argument was wrong about the thing it claimed to have
+measured.
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#69
+
+*revision: authored · kind: heading · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#70
+
+*revision: authored · kind: prose · heading: An interchange projection belongs to the service that owns the judgment, and every host emits it / Status · hash: sha256:f04ccf8064ef28c172caaa2bad645bed7066ee8721c7a8c6a25e92470f98a536*
+
+Accepted. The SARIF projection is the judging service's and belongs in
+`nomos-gate-orchestration`, where every host reaches it through a permitted zone crossing and
+none needs an exception. `nomos-cli` is the first emitter, at no manifest cost. A Host
+exception for `nomos-cli` is refused as a standing permission whose real content is a decision
+about the whole product surface; a transport admission is refused as this question's answer
+and left available as its own item; a CLI-local rendering is refused as a second rendering of
+a finding. The building item is named in decision 8 with its territory, and
+`nomos-architecture.json` is deliberately absent from it.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 

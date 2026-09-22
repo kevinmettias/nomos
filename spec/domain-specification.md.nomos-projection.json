@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5b2b89d062c7e05b397a1712679d289406e5d796698086ab58e9ade245ea53b4",
-  "inputs_digest": "sha256:9a41f38fabd5a6cc500fbe480bbdafcad7ed14e90137fb9dc780237fc4644d90",
+  "content_digest": "sha256:3d3e55e6876bca9b3ad41aba2ae516debe4548fe9d0bac17477a760c179aed7d",
+  "inputs_digest": "sha256:e9a482715e280b93f1f09eed41e1c6f0226ff366d7a41ad787cd801c46a3b2d3",
   "sections": [
     [
       "Documents",
-      263
+      264
     ],
     [
       "Sections",
-      2280
+      2300
     ],
     [
       "Source blocks",
-      8153
+      8223
     ]
   ],
   "inputs": [
@@ -654,6 +654,11 @@
       "content": "documents",
       "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md@authored",
       "hash": "sha256:0ce8b873e26fc707ad0594a76922e8ccf0fa5c374c5867d74543afd06d69e593"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md@authored",
+      "hash": "sha256:6f3ba575cf275a392d61250afb410d11d511d942bdd507ce4ab113c34ba43130"
     },
     {
       "content": "documents",
@@ -6509,6 +6514,106 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#91",
       "hash": "sha256:8b725241fdf44d8a6df289d375b23191576904127b0281df756469333966d29b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#1",
+      "hash": "sha256:191b3d601e7f58625bc6a6b8a176e2df707ac68320d687280c41f34d88c6a51e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#2",
+      "hash": "sha256:0acd41a6416aef769201bab87a5a948fad7c4f57c6350cb55c92c3d76bbb7213"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#6",
+      "hash": "sha256:96562e997fe7ebca02fc82e3586f9b0c7bb1d7c6ad060f797829fd14b37bfe92"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#8",
+      "hash": "sha256:25da434853f91bbea3faad7bcf690df0dacdf2467dc75c77a8864817be59cf81"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#13",
+      "hash": "sha256:d39dfd4ee30cc3aa59474d8af299b85d733d7f7414bb81dcbd933b64dd44fc15"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#18",
+      "hash": "sha256:8841fe8dffef1a2c2db782dd866ff6ce98932fae163918caabd5cc7912e394fe"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#20",
+      "hash": "sha256:2402a2f5ffd9ca5e4db6e48c303b333b074a756d4f9e4f4cceae4a2126089bfb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#22",
+      "hash": "sha256:9caa0352a6ccd9938a8108f010c8c4e9a540d231b58bb6744d7940a92fb50e64"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#24",
+      "hash": "sha256:9632354ab8e923b90a23c0548c1420fef3a5bd1dc36c131fe1f622a1fe1aa480"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#25",
+      "hash": "sha256:5f808eb8181ae7fd749e96af8f29645b1357ae050d53c5a2a9954ae4fa8e1589"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#28",
+      "hash": "sha256:93917e13e782b336bfcd46598a06e4bb57ce5932a2ac4d64752edb09ce1e7bc9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#33",
+      "hash": "sha256:386009298fff0d15f052e0c25cf5d6a41e300a9066b8e0c7b652ca20887bf4f2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#35",
+      "hash": "sha256:caf9c4652b25d8c45d3c4842f06299184e6d83ab0fe6b8d26054687844bdfae9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#39",
+      "hash": "sha256:58176999705cff3d53482bc89921f7f6daed08850e2255f0e036dd522169d91d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#43",
+      "hash": "sha256:3e199e5455893d28305b9b6ad051ab290d3b71e2dc6a35da2e17f18c0faca694"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#47",
+      "hash": "sha256:dd38f91fbca065ac03439089407c8d01e6ce596e1554b6f047cec588a3d8b39f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#49",
+      "hash": "sha256:03a0381b75a32b2241d2657a41740ba2627e3d40f7745c78b2e4da9962954da7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#56",
+      "hash": "sha256:624e0e3f7b2f8e7651ca42216e9f2ee26181a8e2ca7b21c40cbcf41d44c8e71f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#63",
+      "hash": "sha256:c29733ff8aabf34128d88a3879d4b741537ca410dc5db41de15938d67630aa29"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#69",
+      "hash": "sha256:9f68757268cd4e8ce474870e8d3d12f330082710f3871fa1a2096e06e2670237"
     },
     {
       "content": "headings",
@@ -31334,6 +31439,356 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#92",
       "hash": "sha256:3a4934244d4f3e0f1d6de159845c6ae8657171b6d00a9bfee825e811c5439783"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#1",
+      "hash": "sha256:5dc7f9f8292174a9677fb467eced874feefbc7cf8ff9bfac62eeba11b5e11903"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#3",
+      "hash": "sha256:33eda22715e1f7a9fedf5a0f8b524451f13b5b21ec91b44546e428f47eeb5e67"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#4",
+      "hash": "sha256:89cf5f5a01cc60e2fbb79ed50ac2582e01e84389b631d5a6eca7eb11b5627d5f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#5",
+      "hash": "sha256:4e31e8ed548249f200aa97fdc274cf274532069605782a589701fff642083fa5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#7",
+      "hash": "sha256:a88e470ce8ced03a4581b5796a3b5486585891d7e02e63f6569721ba5315a572"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#8",
+      "hash": "sha256:7f0cd2e44d396cff43f857d860ea49ba6f1c8a8c30e7999f77c1a8682a2bdf2b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#9",
+      "hash": "sha256:19ee0cfb363684300c7ad3aab73ddb24d981b96fe609cda44902aac28d1dfdd3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#10",
+      "hash": "sha256:7d90e071410ceeea81583146cead9925dd076c486dbc8e286c4ae5116289f167"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#11",
+      "hash": "sha256:7619505b0b78adef4c4917b47e2bfb2f87d64e84da132527737fdcf486baea19"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#12",
+      "hash": "sha256:4999e54859f86b86a70afa80253421064d725c8f40295faa82c462fa9046eaf1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#13",
+      "hash": "sha256:b7b07d46482b6771c9b4e4bc1d4a49793fa06fec5ec1f30cfe00eab6570fe42a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#14",
+      "hash": "sha256:1bf9c8bad010fd6ddf4a29dd5b6fd9db48a7afcb5eefd44abd8e0e40c0d47478"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#15",
+      "hash": "sha256:08f68f00c64c36042eb79d98226eff20b0597d6755dc0f4b788e793f162f2293"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#16",
+      "hash": "sha256:372831a4d1b3d709e336e3b6a648db2497d684f78dbd28f47cb77b9fa1e012e9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#17",
+      "hash": "sha256:567cb394028e3801e3a37f07d006d12371017920f2b31b9eda94d9b9a7d96c3e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#18",
+      "hash": "sha256:3940197bd40365e52ba8f49e293936d65bb9834cf4f8fda61818d6dbb2a71ff6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#19",
+      "hash": "sha256:397d08e8901d3100a66b4097324a9b18065b5fbae569d6f7f418076052176d82"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#20",
+      "hash": "sha256:5236fb386b62144f2bc84ef5bb13a37ea8e39f6847613435f1d303d83ecccbd1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#21",
+      "hash": "sha256:be6efda4fe923be4a26a8d2b727387d590f887aed92234f39f673a4c31096137"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#22",
+      "hash": "sha256:0e17a6a22117dc0c2b480d0b09992de0a3029b206551656865d6dc8ef62544e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#23",
+      "hash": "sha256:8c15fb338500fcbf879c6ca1cb30b8fafd4c8dbe5aa855d18afe314ad30747c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#24",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#25",
+      "hash": "sha256:8a1f8005342de62627ce462eb7d1563fc036b43d07ac6f09c2b8899f36174995"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#26",
+      "hash": "sha256:71b5c65a16c5efbe0e9fa4a2700793d700e4dee0660d47d8437e59f41c7b1913"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#27",
+      "hash": "sha256:21402643862ade4e2db97cc29621ddd801b0ec70bf4512d84ee0a3afb623d281"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#28",
+      "hash": "sha256:5dde823eb02bf1013a6d0c1a68341638a51110ec8bcc4e0a97cdfe4e04ce0e98"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#29",
+      "hash": "sha256:eb925e72888861e6978f29a15f0e5c41b741126f9a16258c6a8fe323546c54d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#30",
+      "hash": "sha256:99065dd752a214d749ece7d21d20972336bf921d4bf75c1734dae5ade95df225"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#31",
+      "hash": "sha256:a7cf1e0b9d2f7706979917c05df876417388f26462e907661348448b80110e7d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#32",
+      "hash": "sha256:3b8730b99091f35ca827a8f31fc4afbec1ffaa35abcb0aaae393778cc207d0d8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#33",
+      "hash": "sha256:e140a496c8a9aa5243c989bbfb215dc3ae7348163f422a6f8a391d632af981c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#34",
+      "hash": "sha256:93e61829b70ed86c36b01d0516c707ac2c8fd1db93c4008e914dc72a87e42384"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#35",
+      "hash": "sha256:587b0821e4f537722b9d0b314a97b522f0e023ce7b7fca7dc3cb11cf8b741cd9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#36",
+      "hash": "sha256:75d266c2444cfec95f01f39373de5ba57f917b0f2e18671121f98909b27e3f2a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#37",
+      "hash": "sha256:58e85106eb96ecc7cbf99d409164b0b62b36057007992270d5ebe4efab508f74"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#38",
+      "hash": "sha256:41c4d05df47eab072556e0e7b12976e80222fa45a0612d9d39aac068947363de"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#39",
+      "hash": "sha256:981d8d994be590fb94b678a1d3b4e6fcc36730bd3ba929fed5a50ca4671347b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#40",
+      "hash": "sha256:b88279a0be1b9bc2ff3d7c8211d771ab2da224c9678b0ee05880de2261bcb957"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#41",
+      "hash": "sha256:c436de6f1e9d0c8a20267bccf100a8c57bcab43852a5ac05f86f544e27c7bcf6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#42",
+      "hash": "sha256:099a2d9270668e9fa2f2d08b5155fe6fdd3b004cec19cc7b434b87cd46899eee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#43",
+      "hash": "sha256:337e2926fbac77ab8cc1c64f005bb0ba5a333682fcf984128fb7ea324e66019d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#44",
+      "hash": "sha256:3155dafb84e30a3c0580423330a8cca4a3ba85bc7946c38ace69d248cc453756"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#45",
+      "hash": "sha256:3c65c133629fa5c4c4f48095eb02f2c447f715a5671f5884081eeae8707caeaa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#46",
+      "hash": "sha256:f1a22f83cfb4ff31f454b555a5f75f3edb45c9a7adc67868ba3bcf0d9bb2702d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#47",
+      "hash": "sha256:e63952895444c9b945eb9dfe81b3c5371931859d220a59166b3f4aae8d7893f1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#48",
+      "hash": "sha256:9cb011618c09c24de06fe605962ceb249399b2cf7fecf17b0cf77be123aa18a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#49",
+      "hash": "sha256:055ec51ecf61b728fe459dd3045340b9a6a5c10d916334d73ab9b1ebf232e7ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#50",
+      "hash": "sha256:23772e98e8c75f65103fbf169ce09ea23e519fcd5316686834a30fc5e6714cc0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#51",
+      "hash": "sha256:e3ccfc3780f3e4c1b7765c0fdaafa891137c829538eba6d9c6fd3fd67df06a71"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#52",
+      "hash": "sha256:177326518452eb709da3a238d0cbafd9719a2e828460e37afbbc5636c7cc58f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#53",
+      "hash": "sha256:941f2c7c593026fc17ddf554b927c5e744948fba1d53c9a05840c170cc96255d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#54",
+      "hash": "sha256:715e6dcf062264ca34b7f12868f4ec0f172466a223f2557c7a5ad03eeb1293a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#55",
+      "hash": "sha256:fbecd51c92d3a72d6048b6706fd23056058c15e969edc98edc3eb2a556239f93"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#56",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#57",
+      "hash": "sha256:3723630d661c6b3c10ffc4dd0f1b649ec6dc96f0e93ac739e901a8b7d47ef726"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#58",
+      "hash": "sha256:2219fed49d171fd4c596fa0fd8743a8d8e4657be4b39e7af09b9bb4d2a3b14d2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#59",
+      "hash": "sha256:cc244e668478676aded3e3f5c86a2637c81b993772f18da8e97b507eb6097538"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#60",
+      "hash": "sha256:783ac69b17d4e2acc7c5d54552f2cc1018957839da1d318ac2d1f9ae41f27d7b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#61",
+      "hash": "sha256:4faffaa4d58eb77d6c25373639d8464ccf685507f2ef2b53bbe0b1cec9ccf172"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#62",
+      "hash": "sha256:256eacd70c3d57aa4ed391312a3e88cc0e0ce861aa3977999e7d733631311ef7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#63",
+      "hash": "sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#64",
+      "hash": "sha256:3cb0d410624e1e9c6908f93e0350c0608e0b0f16ee5e6ea32551c917a39e4d5b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#65",
+      "hash": "sha256:aeda7babb6a9547c82b8adc54434dd6ffcc8bc029034676dc382cacdb94cf27d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#66",
+      "hash": "sha256:cc358ead3090b800b7413428d60e4ad38b99b3c8237e75b6fc72c3e760d0c207"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#67",
+      "hash": "sha256:24c2057a439d647d76e89f6f41cad79027964afe18988a3e42d90dc7d8d3e12c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#68",
+      "hash": "sha256:1adc31f05571c375707867301dee5c09412c5df5000f3c879f1bdc654e5fd41f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#69",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#70",
+      "hash": "sha256:f04ccf8064ef28c172caaa2bad645bed7066ee8721c7a8c6a25e92470f98a536"
     },
     {
       "content": "blocks",
