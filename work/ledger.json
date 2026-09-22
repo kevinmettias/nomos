@@ -90467,7 +90467,14 @@
           "tests/contract/surface/nomos-analysis.txt",
           "tests/contract/surface/nomos-check-orchestration.txt",
           "crates/host/nomos-api/src/check.rs",
-          "crates/host/nomos-cli/src/check/report.rs"
+          "crates/host/nomos-cli/src/check/report.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/tests.rs",
+          "crates/host/nomos-api/src/response/check_outcome_response.rs",
+          "crates/host/nomos-cli/src/gate/report/tests.rs",
+          "crates/host/nomos-cli/src/gate/report/tests/explain.rs",
+          "crates/host/nomos-cli/src/gate/report/tests/verdicts.rs",
+          "tests/integration/tests/calibration.rs"
         ],
         "patterns": []
       },
@@ -90477,7 +90484,7 @@
       "claim": {
         "holder": "nomos-75-trail",
         "acquired_at": 1790052710,
-        "lease_expires_at": 1790065105
+        "lease_expires_at": 1790065292
       },
       "verification": {
         "argv": [
@@ -90497,7 +90504,21 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "nomos-75-trail",
+          "added": [
+            "crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/gate_environment/tests.rs",
+            "crates/host/nomos-api/src/response/check_outcome_response.rs",
+            "crates/host/nomos-cli/src/gate/report/tests.rs",
+            "crates/host/nomos-cli/src/gate/report/tests/explain.rs",
+            "crates/host/nomos-cli/src/gate/report/tests/verdicts.rs",
+            "tests/integration/tests/calibration.rs"
+          ],
+          "widened_at": 1790054492
+        }
+      ]
     },
     {
       "id": "P125-REQUIREMENT-RULE-LINES",
@@ -90814,10 +90835,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-75-verb",
+        "acquired_at": 1790054840,
+        "lease_expires_at": 1790065640
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -91198,14 +91223,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-graphfact",
-        "acquired_at": 1790054096,
-        "lease_expires_at": 1790064896
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -91216,7 +91237,28 @@
         ],
         "timeout_seconds": 2400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "lumes_Should_Answer_282_258_And_234 ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.83s\n     Running unittests src\\lib.rs (F:/repos/render-graphfact-target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/render-graphfact-target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/render-graphfact-target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (F:/repos/render-graphfact-target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/render-graphfact-target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1790054976,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -91284,10 +91326,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-render",
+        "acquired_at": 1790054766,
+        "lease_expires_at": 1790065566
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -91460,10 +91506,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-75-miscount",
+        "acquired_at": 1790054867,
+        "lease_expires_at": 1790065667
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -91473,6 +91523,45 @@
           "nomos-spec-store"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-A-CONTIGUOUS-SPAN-CANNOT-NAME-THE-ONE-OWNED-REGION-THE-RECORD-WORKED-OUT",
+      "title": "The materializer expresses an owned region as one span and the record defines the worked example per column, so the one real Composed asset is not materializable",
+      "why": "Two halves of the same question were answered hours apart and do not meet. OD-PACKAGE-004 v3, at 5299b2a6, defines a Composed asset's owned region at the granularity something compares, and its worked example is README's band table: columns one and two owned because a boundaries assertion compares them against the declared architecture, column three free because nothing reads it, and the set of rows owned because both directions are already compared. That is an owned region interleaved with free region, cell by cell, within one table. nomos-materialization, at 38fe4f9d, expresses an owned region as a marker pair bounding ONE CONTIGUOUS SPAN, and its own doc records the limit honestly: a marker pair cannot name a per-cell region, and the crate cannot detect a placer that declares one anyway, because it knows nothing about tables or columns. Its author declined to teach it, on the correct ground that a column-aware splicer is format-aware and the first thing such a mechanism wants to know is which package kind it serves, which is the generic-mechanism test OD-PACKAGE-003 sets. So a placer that wrapped README's table in markers and asked for it to be written would have column three inside the span and would lose it, which is the exact 31,715 characters the record exists to protect, and nothing in either the record or the crate would refuse. The gap is not a defect in either piece; it is that nobody has said which of the two gives.",
+      "done_when": "A registered governing record states whether a per-cell or otherwise non-contiguous owned region is materializable in this ecosystem, and settles the mismatch rather than describing it. It decides among at least these, on measured grounds rather than preference: that an owned region is contiguous by definition and a region that is not is not materializable, in which case it says what a package may declare for README's table and what happens to a placer that declares one anyway; that the intent gains a way to express a non-contiguous region, in which case it names the shape and answers why that does not make the mechanism format-aware, which is the objection that stopped the first implementation; or that the asset is simply not a materialization target, in which case it says what OD-PACKAGE-004's classification of it is then for. It states, either way, what refuses and where, because today nothing refuses and the loss would be silent, which is the property that record was amended to end. It applies OD-PACKAGE-003's test that the mechanism must not learn what a crate, a rule or a package kind is, and says how its answer survives that test. It names whether any real placement in this repository needs the answer today, or whether the only affected asset is one nothing places, so a reader knows whether this is urgent or latent. No code changes. Both required projections are re-rendered from the record set the commit publishes and nomos spec freshness with both --require flags exits 0 in that tree.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-017",
+          "crates/spec/nomos-spec-store/records/OD-PACKAGE-017.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75-span",
+        "acquired_at": 1790054653,
+        "lease_expires_at": 1790065453
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2400
       },
       "verified": null,
       "abandoned": [],

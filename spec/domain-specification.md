@@ -62,6 +62,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md | authored | 22 | 6 | sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md@authored | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md | authored | 27 | 7 | sha256:cae971023f2e38fc400fcb48c0f851cf958af99faf124d0caaba5d34226ee492 |
 | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md@authored | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md | authored | 28 | 7 | sha256:8ba17cb0d7430c3eefb01799b45969f1782123108e58aa782f87beca01bd0e71 |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md@authored | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md | authored | 69 | 18 | sha256:871db338d39dd503e1f4117f04eab7616d135aa320ba89e74c2e9aec3d494c7a |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ea548df7de6d318f3946ffc3c153f837e4289c5b25045352897d0221c1c1d3f7 |
@@ -685,6 +686,24 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#18 | authored | 2 | What A Future Bundled Contract Must Satisfy |
 | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#22 | authored | 2 | What Is Owed |
 | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#25 | authored | 2 | What This Does Not Decide |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#1 | authored | 1 | The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#2 | authored | 2 | Question |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#6 | authored | 2 | What Was Measured |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#8 | authored | 3 | The three existing facts, and the distance from each to a graph |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#13 | authored | 3 | Whether the engine for a graph is already linked, which changes what is being decided |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#17 | authored | 3 | The five consumers are not one consumer, measured one at a time |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#20 | authored | 3 | How a whole-crate fact is invalidated today, which is not by its declared granularity |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#26 | authored | 3 | What a rule in the Rules zone may read |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#29 | authored | 2 | The Decision |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#31 | authored | 3 | 1. The grain is declaration to declaration, and the endpoints are the pair the syntax fact already produces |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#36 | authored | 3 | 2. One capability, not several |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#39 | authored | 3 | 3. What a provider must have resolved at each level it offers |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#43 | authored | 3 | 4. Incremental invalidation: `Project` granularity, and a declared edge per file read |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#49 | authored | 3 | 5. Which deferred item each candidate fact unblocks, and which it does not |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#53 | authored | 3 | 6. What a rule in the Rules zone may read, which `OD-RULES-024` surfaced and left open |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#58 | authored | 2 | What Is Refused, And On What Trigger |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#61 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#68 | authored | 2 | Status |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1 | authored | 1 | A completeness guard is only as complete as the universe it quantifies over |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#2 | authored | 2 | Question |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#5 | authored | 2 | The Shape, Which Is Not The One The Item Assumed |
@@ -16732,6 +16751,712 @@ its fixture obligations are that record's, and are untouched.
 *revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What This Does Not Decide · hash: sha256:5e43a6d9b3f847894a0e7b4773ebb2752ff63e03e8cce3ed4feeb2f15009f2e0*
 
 Checked 2026-09-14 against the bundled crates this adjudication reaches and `nomos-rules`' own edges onto them.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#1
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright · hash: sha256:9bf1bcb9cf7ee70f8812e5024d0b9b6585a450f7c8507cc276a3e77ca4e0c718*
+
+# The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#2
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#3
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Question · hash: sha256:5706202d6514d1ffef4c5ba1d4b1281e07e186ec8e3584de5095228f7e8f64e6*
+
+`ARC-ROADMAP-001` version 4 replaced its two-tier boundary with a per-item condition and
+reported that no deferred item's condition is met. Five of the nine conditions are the same
+kind — architecture discovery and inference, feature topology and path tracing, placement
+analysis, runtime and debug intelligence, and test intelligence — and that record states the
+condition once: "The condition is that the fact the item consumes is decided and provided."
+Atlas is its third kind, "Content-dependent", whose own condition is "that at least one item
+in the first kind produces a fact worth showing". So six of the nine deferred items stand
+behind a fact nobody has decided.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#4
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Question · hash: sha256:4b13c10dce31338c77f3aa21db7efdc43fd01239fed0e5389637f968eed5203b*
+
+`OD-RULES-024` measured the same gap from the rule side and declined to close it inside a
+rule: architecture drift "presupposes an observed graph finer than package-level dependency
+edges — module reaches module, type flows into type, function calls function — and this
+workspace materializes none of them," and it is "a materialization question of the same
+weight `OD-RULES-010`'s `ToolProvider` instances answered for lint and dependency-policy
+facts, not a detail to invent inside `architecture_drift.rs`." Its version 2 amendment
+recorded that the *declared* half arrived as `nomos.cap.architecture.declaration` and that
+"the observed call-graph or data-flow fact it would be judged against does not."
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#5
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Question · hash: sha256:0bd49ba614cc492eb6439c46271866bccc29dc956b6936c8d977139bd8f46aa0*
+
+Nobody has decided it since. The question is what that fact is — its grain, whether it is one
+capability or several, what a provider must have resolved to claim each level it offers, and
+how a fact whose inputs are a whole crate is invalidated — decided from what this workspace
+actually carries rather than from the words the requirement is written in.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#6
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#7
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured · hash: sha256:197ec835fcf71d13727090e9fa81cf5c248fe4770a19adb62256d2857c15804e*
+
+Every reading below was taken against the tree at `9f13b1e7`, from the files named.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#8
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / The three existing facts, and the distance from each to a graph · hash: sha256:4e7c439ebc26969d22eb744a0680ca2c957328f46f1d6f2c6c9994d73c53b558*
+
+### The three existing facts, and the distance from each to a graph
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#9
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / The three existing facts, and the distance from each to a graph · hash: sha256:ee0228f757e954792fdb871d2f8b519f63b2c1178845843ada4f037ed7d1c5ea*
+
+**`nomos.cap.dependency.edges` is package grain and has no sub-package endpoint.**
+`crates/capabilities/nomos-cap-dependency/src/dependency_kind/dependency_payload.rs` declares
+`DependencyPayload` with two fields, `package: String` and `edges: Vec<DependencyEdge>`; the
+edge in `dependency_edge.rs` carries `target: String`, a `DependencyKind` and `optional: bool`,
+and its own doc fixes the target as "The dependency's own package name, as Cargo resolved it".
+The contract's summary is "One package's own first-party dependency edges — every other
+workspace member it names as a dependency". Nothing in the payload names a module, a type, a
+function, or a file. The distance from here to "module reaches module" is not a refinement of
+this fact; it is a different endpoint vocabulary.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#10
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / The three existing facts, and the distance from each to a graph · hash: sha256:78c980ee363aff71db0ed60db1d86a3b7615856d713edcaa9b25c6824b6c1321*
+
+**`nomos.cap.controlflow.reachability` is one path inside one function in one file.** Its
+contract summarises itself as "Whether a control-flow path forward from a fact-read failure —
+a match arm binding an `Err` from a capability read — reaches a `Finding` construction before
+the enclosing function returns", and `arm_shape/reachability_payload.rs` carries "One file's
+full set of flagged reachability sites". `reachability_site.rs` states the scope in its own
+field doc: "Tier-1's canonical subject is a control-flow edge inside one function body in one
+file; a fully qualified path through enclosing `impl`/`mod` blocks is real information a sound
+provider should carry, and is not attempted here." The site names its enclosing function
+*unqualified*, so two same-named functions in one crate are indistinguishable in the payload.
+This fact cannot be widened into a graph without changing what its own endpoints mean.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#11
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / The three existing facts, and the distance from each to a graph · hash: sha256:5274c3fa01c479376d153dc226190eb5e0958951737061de83ffba8973d9b69b*
+
+**`nomos.cap.syntax.items` carries the endpoint vocabulary and, on purpose, no edges.**
+`payload_item.rs` declares `PayloadItem` with `ordinal`, `kind`, `visibility`,
+`qualified_name`, `documentation` and `shape` — a name qualified by syntactic nesting, and a
+coarse shape — and nothing naming a type a signature refers to. The ceiling in
+`nomos-cap-syntax/src/contract.rs` says why it may not grow one: "[`FactVariant::Syntactic`] is
+the ceiling because the capability is about what a file says on its face. A compiler-backed
+provider that resolves names is answering a different question and belongs behind a different
+contract." `OD-GATE-002` made the same stance for the surface reader — "The derivation is a
+source-level reading, not rustdoc's resolution" — and did not reverse it. So the fact that
+already holds the right endpoint names is precisely the fact that may not resolve them.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#12
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / The three existing facts, and the distance from each to a graph · hash: sha256:a1cf670ef22bc396077c606296ea8b1ad2b7a9bc1ec820c0258ede2dd8cbe2cb*
+
+**The finest declared adjacency is no longer a constant in a rule.** `OD-RULES-024` version 1
+measured "`SAME_ZONE_EDGES` is the finest declared adjacency this workspace has" over eleven
+zones. Neither `SAME_ZONE_EDGES` nor a `ZONES` constant exists in `crates/` at this revision;
+the declaration moved to `nomos-architecture.json`, read through
+`nomos.cap.architecture.declaration`, and it now declares twelve components, seventy-two
+members and twenty-nine package-pair exceptions. The number changed and the grain did not: the
+finest *declared* adjacency is still a component-to-component permission over whole packages,
+and there is still nothing observed below it.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#13
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / Whether the engine for a graph is already linked, which changes what is being decided · hash: sha256:ba04c71d4e6b0c64aac0fa5a899b405ca0362d2a58eedfd674bb49bff6dbee68*
+
+### Whether the engine for a graph is already linked, which changes what is being decided
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#14
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / Whether the engine for a graph is already linked, which changes what is being decided · hash: sha256:4bef2b0f6c9219968837600f5cd999eee448a1f581a1de8f529d493f4c9c271c*
+
+It is. `crates/languages/nomos-lang-rust-compiler` depends on `ra_ap_hir`, `ra_ap_ide_db`,
+`ra_ap_load-cargo`, `ra_ap_project_model` and `ra_ap_syntax`, and `src/reading.rs` loads a real
+Cargo project with a discovered sysroot and hands back a `RootDatabase` with every file of the
+one crate under the root. Its own module doc states that the loader was factored out for
+exactly the reason that matters here: "[`Load_Crate`] is that shared part, factored out so
+`crate::nested_lock_reading::Discover_Nested_Locks` asks the same loaded [`Semantics`] a
+different question rather than re-solving sysroot discovery a second time."
+`Test_Discover_Crate_Should_Find_Exactly_The_Real_Clone_On_Copy_Call` holds that this load
+resolves for real against a fixture crate, and the two questions already asked of it —
+`Type::is_copy` on a resolved call expression, and a resolved generic argument read through a
+type alias — are name resolution and type resolution, which is what a reference edge needs.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#15
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / Whether the engine for a graph is already linked, which changes what is being decided · hash: sha256:69cf0747253a7eea70e94445632327f791693fca440af80254ddf85e4d8ec69a*
+
+This is the difference between designing a capability and widening an offer, and it decides
+the mechanism question by `ARC-CONFORMANCE-001`'s own test rather than by preference. That
+record states: "The test for native analysis is that no provider exposes the fact, never that
+writing it natively would be convenient," and "A capability whose fact *is* obtainable from
+`rustc`, Clippy or `rust-analyzer` fails the test regardless of how easy it would be to write a
+native check for it instead." A resolved reference edge between two Rust declarations is
+obtainable from `rust-analyzer`, and `rust-analyzer`'s engine is already a dependency of this
+workspace. A native re-derivation of it fails the test.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#16
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / Whether the engine for a graph is already linked, which changes what is being decided · hash: sha256:c614ed274a2058a9a1b96296ce54954ff010b58826832eaec22d26cd79916c6b*
+
+`OD-ANALYSIS-010` declined a compiler integration for `nomos.cap.controlflow.reachability` and
+was explicit that the decline is fact-specific, reserving the opposite answer for a fact like
+this one: "nothing here forecloses a future rule whose own subject genuinely needs a fact only
+a real compiler frontend can produce — generic instantiation, trait resolution, or
+borrow-checker output, none of which this candidate's own scope touches." A reference graph
+needs the first two, so that reservation is what this record spends rather than a boundary it
+crosses.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#17
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / The five consumers are not one consumer, measured one at a time · hash: sha256:020d4780b4518ac0d4f31bd0d5c4f2002ef5185aac5d13a3236349955e753acb*
+
+### The five consumers are not one consumer, measured one at a time
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#18
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / The five consumers are not one consumer, measured one at a time · hash: sha256:559387703074f04a3940eca5134563ca9da04f9657b75d72d5f534312eb422eb*
+
+- **Architecture discovery and inference** wants reachability among the repository's own
+  structural units: `OD-RULES-024`'s "module reaches module, type flows into type, function
+  calls function", judged against the declaration `nomos.cap.architecture.declaration` already
+  carries. Every one of those three is a projection of a declaration-to-declaration edge onto
+  one or other end's owner.
+- **Placement analysis** wants the same edges *and* a number over them — a cohesion or coupling
+  measure. `ARC-ROADMAP-001` version 4 already places that half elsewhere: "`OD-ROADMAP-004`
+  places the metric-consuming half deferred in its own right, on the ground that its substrate
+  is untriggered rather than merely unbuilt, so this item fails twice over."
+- **Test intelligence** wants "a fact linking a test to what it covers", and
+  `nomos.cap.test.material.policy` is measurably not it: its contract summarises itself as "A
+  repository's own fixture locations -- repository-relative directory prefixes under which its
+  test material lives", which classifies where test material sits and says nothing about what
+  it exercises. A static edge from a `#[test]` function to a function it names is a different
+  claim from coverage, and it is an over-approximation of one: it includes what the test can
+  reach and cannot say what a run touched.
+- **Feature topology and path tracing** wants a correspondence between a named feature and the
+  code that realizes it. The endpoint on the feature side has no referent anywhere in this
+  workspace: no capability id, no `RequiredFact` variant and no payload type carries it. The
+  fourteen `RequiredFact` variants in
+  `crates/rules/nomos-rules/src/rule_descriptor/required_fact.rs` are `SyntaxItems`,
+  `DependencyEdges`, `LintDiagnostics`, `DependencyPolicy`, `Reachability`, `NamingPolicy`,
+  `LimitsPolicy`, `ScriptingPolicy`, `GoalsPolicy`, `WordsPolicy`, `TestMaterialPolicy`,
+  `ReviewFindings`, `RequirementTrace` and `ArchitectureDeclaration`, and seventeen capability
+  ids are declared in library code under `crates/capabilities`, `crates/languages` and
+  `crates/connectors`. None of either set names a feature.
+- **Runtime and debug intelligence** wants an execution observed rather than a reference
+  resolved. `OD-ANALYSIS-006` settled that vocabulary and `ARC-ROADMAP-001` version 4 records
+  that the one `RuntimeObserved` offer in this workspace observed a posted review comment
+  rather than an execution.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#19
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / The five consumers are not one consumer, measured one at a time · hash: sha256:becb61b3c5fab576ddcf691ca386d8bc0ec954b2ac68ee9f8c1dfede9b85f1a7*
+
+Treating these as one consumer is what a record claiming a single capability serves all five
+would do, and it is the false-coverage failure `OD-COMPLETENESS-001` and `OD-RULES-023`
+declined to ship.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#20
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / How a whole-crate fact is invalidated today, which is not by its declared granularity · hash: sha256:69f1eeb0383bdeaa4efaf499216ee5c6eafe583e9687c0b19dc575eaa9ac1002*
+
+### How a whole-crate fact is invalidated today, which is not by its declared granularity
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#21
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / How a whole-crate fact is invalidated today, which is not by its declared granularity · hash: sha256:d59affcf9c96e1ad981df0bcf5a95a457ce198d3d4fe1a0d42380d62f5cb8681*
+
+`IncrementalGranularity` is declared per capability and reported by the store; it does not
+decide what an invalidation reaches. In
+`crates/substrate/nomos-analysis/src/fact/memory_store/invalidation.rs`, the walk selects the
+facts a cause hits through `cause.Is_Naming(key)` and nothing else, and
+`crates/substrate/nomos-analysis/src/generation_cause.rs` defines that predicate by identity:
+`SubjectChanged` matches `key.subject == *subject`, `SnapshotReplaced` matches
+`differing.contains(&key.subject)`. `Test_Is_Naming_Should_Match_Only_The_Subject_A_Change_Names`
+holds exactly that. Granularity enters the walk once, in `Note_Broadening`, which records a
+`Broadening` on the report — its own comment says the caller "is entitled to know which
+provider did that and to how many facts" — and `Broadened_To`'s only caller outside
+`Test_Broadened_To_Should_Take_The_Coarser_Granularity` is that line.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#22
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / How a whole-crate fact is invalidated today, which is not by its declared granularity · hash: sha256:7bf82856e54ca0d5fc4fae7bd6d46c259b8260f73bb1fc44ef0d1d9b78e5efb9*
+
+Two routes to a whole-crate answer exist in this workspace and they differ in whether an edit
+inside the crate reaches the fact.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#23
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / How a whole-crate fact is invalidated today, which is not by its declared granularity · hash: sha256:376cd141e6e5f71cbc4efbf1a39fcc01b85355ab63e6365f19e2d4630af94242*
+
+**The derived route reaches it.** `nomos.cap.module.index`, in
+`crates/languages/nomos-lang-rust/src/rollup/`, is this workspace's one non-leaf fact. It
+declares `IncrementalGranularity::Project` and its module doc states the consequence rather
+than hiding it: "[`IncrementalGranularity::Project`] makes the engine broaden a file-granular
+cause and record on [`nomos_analysis::InvalidationReport::broadened`] that it did — the cost of
+the rollup, stated rather than absorbed." Its edges are observed, not asserted: "A hand-written
+edge list is a *claim* about what was read; this is a record of it, and the two diverge the
+first time a read is added and the list is not. That includes the reads that found nothing: a
+member with no fact is still an edge, because the day the parser does have something for it,
+this rollup is stale and only the edge knows." `Materialize_Index` passes the reader's observed
+dependencies to `store.Materialize`, and `Index_Key` digests the members into
+`semantic_inputs`.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#24
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / How a whole-crate fact is invalidated today, which is not by its declared granularity · hash: sha256:4ae0c7c1aa9384979b41432a3b254e1a2e8940ee0e3cfd6f899c1fef6a509f79*
+
+**The leaf route does not reach it, silently.** `nomos-lang-rust-compiler`'s
+`src/fact_context.rs` keys its crate-wide fact at `nomos_model::Subject_Of_Path(&root…)` with
+`semantic_inputs: InputDigest::Of(&[])`, and says both things plainly: "`semantic_inputs` is
+empty, deliberately … this provider's real input is a real compiler frontend's own analysis of
+every file reachable from `root`, which no caller has independently", and `Materialize_Crate`
+produces "a leaf: nothing here reads another fact this or any other provider produced."
+`nomos-lang-rust-deny` does the same at `Subject_Of_Path("")`. A `SubjectId` is a content digest
+of a normalized path (`crates/kernel/nomos-model/src/path.rs`) with no containment relation, so
+a cause naming an edited file's subject does not name a fact keyed at the crate root, and a
+`SnapshotReplaced` carrying that file in `differing` does not either. Editing a file inside the
+crate leaves the crate-wide fact reading as current.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#25
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / How a whole-crate fact is invalidated today, which is not by its declared granularity · hash: sha256:72156423e1193d3d308dfa959bb13f654d2ebd348b75a038eb4e2cbee50f2925*
+
+One further measurement bounds how alarming that is today and must not be mistaken for a
+defence of it: every construction of `GenerationCause` in this workspace is under `#[cfg(test)]`
+or in a `tests/` directory. Nothing in the product drives invalidation at all yet, so the leaf
+route's gap is latent rather than observed.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#26
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / What a rule in the Rules zone may read · hash: sha256:f1cce352977c32d3a35ad97b47d4be3c7deac9d42507e460397dfa25e11f2359*
+
+### What a rule in the Rules zone may read
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#27
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / What a rule in the Rules zone may read · hash: sha256:629af85270a3ac8d446958c7dee2a068aa6a57275f5048c85c530e6127e0b001*
+
+`nomos-architecture.json` places `nomos-rules` in `Rules`, and `Rules` permits exactly
+`Protocol`, `Substrate` and `Capability Contract` — never `Provider`, which is where every
+`nomos-lang-*` crate sits, `nomos-lang-rust-compiler` included. `nomos-rules`'s own manifest
+holds that line by construction and says so per dependency: "nomos-cap-dependency and not
+nomos-lang-rust-cargo … this crate names a capability contract and lets the registry choose who
+answers it, never the provider that does the answering." Its reading module reaches
+`nomos_analysis::{FactReader, InputDigest, MaterializedFact}`, `nomos_capability::Requirement`
+and the `nomos_cap_*` payload types, and nothing else.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#28
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / What a rule in the Rules zone may read · hash: sha256:06d78a36590d03622705c4ebc9d0e8af5832082abbfe40715222b554b90d39a2*
+
+`OD-ANALYSIS-007`'s amendment already derived the consequence for a contract housed beside its
+provider: "the moment a descriptor in `nomos-rules` names either capability, a second party is
+naming the contract from a zone that cannot see the file it lives in."
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#29
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#30
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision · hash: sha256:cf140ff42d7e51fd1c7e5bace5a931277a21be15dd07594f2251764618d2f20f*
+
+**One capability is decided. It is `nomos.cap.reference.edges`: the resolved references among
+one crate's own declarations.** The name deliberately parallels `nomos.cap.dependency.edges`,
+because the two answer the same shape of question at two grains — that one between packages, as
+Cargo resolves them; this one between declarations, as a resolved semantic model binds them —
+and a consumer that needs both is joining edge sets rather than reconciling two vocabularies.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#31
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 1. The grain is declaration to declaration, and the endpoints are the pair the syntax fact already produces · hash: sha256:4ee69660ef3d10fa8ebb8c64e0f968db822b681fed94607f1db74f2b9cbef454*
+
+### 1. The grain is declaration to declaration, and the endpoints are the pair the syntax fact already produces
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#32
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 1. The grain is declaration to declaration, and the endpoints are the pair the syntax fact already produces · hash: sha256:26c8b40df2c056cad6887585a174b4c78d0f8d455b180fbaf9595d1e47c21997*
+
+An edge names a source declaration, a target declaration and the kind of reference. Each
+endpoint is the pair `nomos.cap.syntax.items` already writes: the `SubjectId` of the file the
+declaration is written in, and its name qualified by nesting in the shape
+`PayloadItem::qualified_name` carries.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#33
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 1. The grain is declaration to declaration, and the endpoints are the pair the syntax fact already produces · hash: sha256:bb12ba474b02bfad5392c0196cfe02e79807d1c119603d866dd941f2282569c8*
+
+Declaration grain rather than module, type or function grain, for a reason that is a property
+of the lattice and not a preference. Module-to-module, type-to-type and function-to-function
+reachability are each a projection of declaration-grain edges onto one or other endpoint's
+owner, and every projection is computable from the edges; no edge set at a coarser grain
+recovers a finer one. Choosing module grain would decide, inside the fact, which of
+`OD-RULES-024`'s three readings architecture drift is allowed to make.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#34
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 1. The grain is declaration to declaration, and the endpoints are the pair the syntax fact already produces · hash: sha256:3989ca5fb7bb32563e9ada14cfaba2f8f4f34029f16e0c42db95735bacb9d34f*
+
+The edge kind is domain-local vocabulary and belongs in the payload, which `OD-ANALYSIS-004`
+permits explicitly — "its own per-item record shape … is free to be domain-local, exactly as
+`SyntaxPayload` is". This record does not enumerate the kinds; a provider states the kinds it
+distinguishes, and a kind it cannot distinguish is reported as an unresolved reference rather
+than collapsed into a neighbouring one.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#35
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 1. The grain is declaration to declaration, and the endpoints are the pair the syntax fact already produces · hash: sha256:e07d23dd27441fa2b73baefe9abe72efc513322bc0834360664ce64e8fbafaf8*
+
+**The scope is one crate, and the cross-crate half is already answered by another fact.**
+`Load_Crate` already restricts to files under the analyzed root, for the reason its own doc
+gives — the filter "is what makes this reader answer for the one crate it was asked about
+rather than for the standard library it had to load to answer honestly". A reference leaving
+the crate is reported as leaving it, naming the package it reaches; which packages may reach
+which is `nomos.cap.dependency.edges`' answer and this capability does not restate it.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#36
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 2. One capability, not several · hash: sha256:b0e3a2d222cabfa3fe264855e709dceb8a2e8642cd68107a5bbf0cade01ab5f7*
+
+### 2. One capability, not several
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#37
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 2. One capability, not several · hash: sha256:42899d9a5f894ce9cf502ca690aec228d3e34a17b50c4818344930a106b7a351*
+
+Calls, type references and module reaches are one traversal of one resolved model, and a
+consumer computing reachability needs all of them or its closure is wrong — a module reaches
+another through a type reference exactly as much as through a call. Splitting them would mint
+three capabilities over one pass, three schemas, and three chances for a consumer to take two
+of the three and report a closure as complete.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#38
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 2. One capability, not several · hash: sha256:39bf35be81d8e653c3f172babd822da0ccff38420836721e33796f78d554e1da*
+
+`OD-CAPABILITY-002`'s criterion is unaffected and is not being reinterpreted: it is per
+contended capability, and it governs *where the contract lives*, which clause 6 below decides on
+a different ground.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#39
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 3. What a provider must have resolved at each level it offers · hash: sha256:ddd8913aeadd05da92bfc46b7a1b15e1d346b1849d4a78c52d9b0f6f916ca2a6*
+
+### 3. What a provider must have resolved at each level it offers
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#40
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 3. What a provider must have resolved at each level it offers · hash: sha256:b8b5eba5254f27c66ab7788d44393d333f64e843062809d7a64185f07de75c5d*
+
+The ceiling is `FactVariant::SemanticallyResolved`, `EvidenceClass` is the producer's to state,
+and no new epistemic type is introduced — `OD-ANALYSIS-004`'s rule applies unchanged, and this
+family answers its five questions with `FactVariant`, `Guarantee`, `EvidenceClass`,
+`Applicability` and `Observation`.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#41
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 3. What a provider must have resolved at each level it offers · hash: sha256:118e26117b7cc89c1c5cb2dc40c8970ba2f0629f23c454bf127f811887b5326b*
+
+- **`Syntactic`.** An edge read from the text: a name written at a reference site matched
+  against declarations the same file declares. Honest only for an unambiguous same-file
+  reference. Every other reference site is reported as an unresolved reference, never omitted
+  and never pointed at a best guess, and the subject is reported
+  `Applicability::PartiallySupported`.
+- **`SemanticallyResolved`.** `OD-ANALYSIS-004`'s obligation applies verbatim: the producer must
+  have "resolved every name occurrence in its subject to the declaration it actually binds —
+  including across module and crate boundaries — and assigned every typed expression its checked
+  or inferred type, not the syntactic annotation where the two differ". For an edge that means
+  the target endpoint is the declaration the reference actually binds, through imports, aliases,
+  generic substitution and trait implementation selection wherever the language decides it
+  statically. A site the language does not decide statically — dynamic dispatch through a trait
+  object, a call through a stored closure, a macro-generated reference the producer could not
+  expand — is reported as an unresolved reference with its source endpoint named, and the
+  subject as `Applicability::PartiallySupported`. Resolving a dynamic site to the trait
+  declaration and filing that as an edge is the overclaim this clause exists to forbid, because
+  a consumer computing reachability cannot tell a real edge from that one once both are in the
+  payload.
+- **`Approximate` and `Predicted`.** No obligation is stated, because no shape of approximate
+  graph evidence has been named by any consumer. A producer offering one owes this record an
+  amendment before it does, and a heuristic name match offered as an edge is the false coverage
+  `OD-RULES-024` declined.
+- **`RuntimeObserved` is not a stronger offer against this capability; it is a different one.**
+  Which target a dispatch actually took at run time and which declaration a reference statically
+  binds are different questions, and `nomos-cap-syntax`'s own ceiling already settled that shape
+  of case: "A compiler-backed provider that resolves names is answering a different question and
+  belongs behind a different contract … letting it offer this one at
+  [`FactVariant::SemanticallyResolved`] would mean two providers of one capability disagreeing
+  about what the capability means." The ceiling therefore sits at `SemanticallyResolved`, and an
+  observed-execution edge set is a capability this record does not decide.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#42
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 3. What a provider must have resolved at each level it offers · hash: sha256:9096f189b56c951bc4810f54bf3a2e764040432e5917b123261c49ab35241c07*
+
+The per-site unresolved case uses `Observation`'s three-state and not an `Option`, for the
+reason `OD-SYNTAX-002` gives and `OD-ANALYSIS-004` repeats: a producer that could not look and a
+producer that looked and found nothing are not the same answer. `Observation` still lives in
+`nomos-cap-syntax`. A graph capability needing the identical shape is the second capability
+`OD-ANALYSIS-004` named as the trigger for considering its promotion; whether the promotion is
+admissible is `OD-CONTRACTS-001`'s band-0 criterion to judge, and this record routes it there
+rather than deciding it.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#43
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 4. Incremental invalidation: `Project` granularity, and a declared edge per file read · hash: sha256:49c16cb14cbae6182c8ad1e65975fd6f9b3238f6cd2f002d53d7eae1226f2fa7*
+
+### 4. Incremental invalidation: `Project` granularity, and a declared edge per file read
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#44
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 4. Incremental invalidation: `Project` granularity, and a declared edge per file read · hash: sha256:a0b09fa2931b30fd558edb0772339a2b107e1bfe686f829c1ac09245ac002041*
+
+The capability declares `IncrementalGranularity::Project`, for the reason `OD-ANALYSIS-010`
+already stated about resolution that crosses files — "a change to a helper function in a
+*different* file can change whether a site in *this* file is sound" — and the reason both
+compiler-backed contracts already give for themselves.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#45
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 4. Incremental invalidation: `Project` granularity, and a declared edge per file read · hash: sha256:4918cb7f8e1d78cf292ad376c1b175850077936308eabb5ba077231003f0064a*
+
+That declaration is necessary and it is not what makes invalidation work, because granularity is
+reported and never applied. **A reference-graph fact is materialized on the derived route, not
+the leaf route.** Concretely: it is keyed at the crate's own subject, and it declares one
+dependency edge per file its provider read, on the per-file fact that file already has —
+`nomos.cap.syntax.items`, which a real run materializes per file anyway. A file edit then
+invalidates that file's syntax fact and reaches the graph fact through the edge, which is the
+mechanism `nomos.cap.module.index` already runs on and the mechanism that leaves
+`nomos.cap.rust.copy_clones` unreached today.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#46
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 4. Incremental invalidation: `Project` granularity, and a declared edge per file read · hash: sha256:d9baba5391930d3ed4b2e74d0bf1dcde5b57a387cbde9db5d77da437da9893db*
+
+Two consequences follow and are stated because an implementer would otherwise have to guess
+them.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#47
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 4. Incremental invalidation: `Project` granularity, and a declared edge per file read · hash: sha256:2166b5ed66904fca29bfb5c3f4d3f1c9a415d6a7f516e487d66e2f4ef2aeea06*
+
+**An edge does not assert that the payload's bytes were consumed.** It asserts that the answer
+is a function of that subject. The rollup already reads edges that way — "a member with no fact
+is still an edge" — and a graph fact's answer is a function of every file's text whether the
+resolved model was reached through `ra_ap_hir` or through those payloads. Declaring the edge
+is therefore honest, and omitting it because the provider did not read the payload is the
+divergence the rollup's doc warns about.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#48
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 4. Incremental invalidation: `Project` granularity, and a declared edge per file read · hash: sha256:44191268a41542af7628959e78f364276d804e838db6e1d2d9e315f971c51777*
+
+**The recomputation cost is a whole crate and is reported, not amortized.** There is no partial
+refresh of a resolved model here, and the `Broadening` the store records on a file-granular
+cause is the statement of that cost, in the rollup's own phrase "stated rather than absorbed". A
+consumer that cannot afford a whole-crate recomputation is entitled to see that on the report
+and decide; it is not entitled to a declared `File` granularity that would be a precision the
+resolution does not have.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#49
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 5. Which deferred item each candidate fact unblocks, and which it does not · hash: sha256:ddfb29b1b1e51915f611f48244d4b1427de3fe23eda4d5601b8a76ee0327bac5*
+
+### 5. Which deferred item each candidate fact unblocks, and which it does not
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#50
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 5. Which deferred item each candidate fact unblocks, and which it does not · hash: sha256:5334dba2816a4a85b96d44ba49e87a2f04fcf94b48e7c4c45fa24dece0ca823f*
+
+Four candidate facts fall out of the five consumers, and this record decides one of them. The
+mapping is stated per item because the items differ.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#51
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 5. Which deferred item each candidate fact unblocks, and which it does not · hash: sha256:3839ee99d945427005b121086c525b6b8afb8e95ddb2fb2b931b6df510ba5271*
+
+| Deferred item | The fact it consumes | What `nomos.cap.reference.edges` does for it |
+|---|---|---|
+| Architecture discovery and inference | a resolved reference graph | **Unblocks it.** Module-to-module and type-to-type reachability are projections of these edges, judged against `nomos.cap.architecture.declaration`, which is the pairing `OD-RULES-024` named and found half-missing. |
+| Placement analysis | the same graph, plus a cohesion or coupling measure | **Necessary and not sufficient.** The metric half is a separate fact this record does not decide, and `OD-ROADMAP-004` holds it deferred on its own ground. |
+| Test intelligence | a test-to-code coverage correspondence | **Does not unblock it.** These edges give a static over-approximation — what a test *can* reach — which is not what a test covered. The coverage fact is undecided. |
+| Feature topology and path tracing | a feature-to-code correspondence | **Does not unblock it.** The feature endpoint has no referent in any artifact this workspace holds, so no observed fact can carry it until something declares what a feature is. |
+| Runtime and debug intelligence | an execution observation | **Does not unblock it**, and it is not in this family: an observed edge is a different capability by clause 3, and `OD-ROADMAP-004` holds the `ActiveRuntimeGuard` half withheld by the corpus regardless. |
+| Atlas | the content of the five above | **Gains one of five.** `ARC-ROADMAP-001` version 4 sets its condition as at least one first-kind item producing a fact worth showing *and* a fact surviving the process that made it; only the first half is touched here. |
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#52
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 5. Which deferred item each candidate fact unblocks, and which it does not · hash: sha256:fcb87239c7725212c07dd0b1ce2de22508c8b2541719de6cdf10b8bcae94c6c3*
+
+So one deferred item is unblocked as far as a decision can unblock it, one is half-unblocked,
+and three are not. A record claiming otherwise would be the shape `OD-COMPLETENESS-001` and
+`OD-RULES-023` both declined.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#53
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 6. What a rule in the Rules zone may read, which `OD-RULES-024` surfaced and left open · hash: sha256:30140b26eee54e9a9a16dc4038c4c556666c30642986208b1522c402caa59447*
+
+### 6. What a rule in the Rules zone may read, which `OD-RULES-024` surfaced and left open
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#54
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 6. What a rule in the Rules zone may read, which `OD-RULES-024` surfaced and left open · hash: sha256:9aa00468973df3ee0ce0c9eb49a36ee50d878347e34655d5499b99c7317a0882*
+
+A rule may read this fact, and the two conditions that make that true are decided here rather
+than left to whoever builds it.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#55
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 6. What a rule in the Rules zone may read, which `OD-RULES-024` surfaced and left open · hash: sha256:23b86dae98ad3f54b6aeaf69f00bb34a91871ca49d6a39f9c0134c9d9539dfce*
+
+**The contract and payload live in a crate in the `Capability Contract` zone**, named for the
+capability the way the policy contracts already are, and not beside its provider — even though
+`OD-CAPABILITY-002`'s contention trigger has not fired. The ground is the zone rule, not
+contention: `Permits` gives `Rules` only `Protocol`, `Substrate` and `Capability Contract`, and
+a descriptor in `nomos-rules` naming a contract housed in a `Provider` crate is a zone crossing
+regardless of how many parties have named it. This is `OD-ANALYSIS-007`'s amendment applied to a
+capability that does not exist yet instead of to two that do.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#56
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 6. What a rule in the Rules zone may read, which `OD-RULES-024` surfaced and left open · hash: sha256:86dc05dd3d90cff2b163975d470cec8f2fa459c14830cc89e46e3384643cdfda*
+
+**No provider-specific type crosses the payload.** An endpoint is a `SubjectId` and a qualified
+name string — vocabulary `Protocol` and `Capability Contract` already hold — never an
+`ra_ap_hir` handle, a `DefId`, or any opaque identifier only the producing provider can
+interpret. An opaque endpoint would be readable only by something that could name the provider,
+which is the boundary `Permits` exists to forbid, and it would also make two providers of this
+capability unable to answer the same question comparably.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#57
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / The Decision / 6. What a rule in the Rules zone may read, which `OD-RULES-024` surfaced and left open · hash: sha256:1c602d164625d586536a75b87189d302dc67f4205fa7525f6bfbea8cc370e237*
+
+**This settles the constraint for a graph fact and not for representation leakage.**
+`OD-RULES-024`'s open question was what fact carries "provider-specific type" without the
+checking rule having to see the Provider zone. That is a different fact about a different
+subject, and its clean baseline of zero stands unre-measured here.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#58
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Is Refused, And On What Trigger · hash: sha256:0d13039dbf3156717d52bab967fd09fe2d67b4defdfb7fef35b121b4885736aa*
+
+## What Is Refused, And On What Trigger
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#59
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Is Refused, And On What Trigger · hash: sha256:da246a8c8717d7ae269c59507a9f0018f99920e5c5ee878db73549ef93c953bc*
+
+Three facts are named and not decided, each with the condition that would bring it back. None
+is declined as unwanted.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#60
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Is Refused, And On What Trigger · hash: sha256:c09f7836952fc92d8194578df19deacebaa40eeb38d7feb56bb401710588254f*
+
+- **A feature-to-code correspondence.** Refused because the feature endpoint has no referent.
+  The trigger is a declaration: something in a repository has to say what its features are, in
+  the shape `nomos.cap.architecture.declaration` already has for components, before an observed
+  fact can correspond to one. A capability decided before that would be inventing the
+  repository's feature vocabulary on its behalf, which is the half `OD-RULES-029` moved out of
+  the rules and `OD-RULES-003` turns on.
+- **A cohesion or coupling measure.** Refused because `OD-ROADMAP-004` holds the metric family
+  on its own condition and this record does not reach it. The trigger is that record's own.
+- **A test-to-code coverage correspondence.** Refused because it is a different fact from the
+  one decided here and its honest form is an observation of a run rather than a resolution of a
+  reference. The trigger is a rule whose subject needs coverage and cannot be answered by the
+  static over-approximation clause 5 names, which would also say which of the two it needs.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#61
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
+
+## What This Record Does Not Do
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#62
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What This Record Does Not Do · hash: sha256:ef45d67e3c7fab14e582a517741716f7bf311a5dd8da97346213ad6c67e37085*
+
+**It schedules no crate and builds nothing.** No capability crate, no contract, no provider, no
+payload type, no `RequiredFact` variant and no composition entry is created or scheduled here.
+Naming the zone a future contract belongs in is a constraint on whoever builds it, not an item.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#63
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What This Record Does Not Do · hash: sha256:39054728fc61f08931253e149b696823858c8a1aeb411ee76848273461f249eb*
+
+**It does not lift any deferral.** `ARC-ROADMAP-001` version 4 sets the first-kind condition as
+the fact being "decided and provided". This record decides one fact and provides nothing, so
+architecture discovery and inference is half-conditioned rather than available. Amending that
+record is not this record's territory and is a following item's.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#64
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What This Record Does Not Do · hash: sha256:1bbe264498d3279d73abc370b7d8f0a174e4a9e35a382ebb2e0cb9c21f621106*
+
+**It does not amend `OD-RULES-024`.** That record's measurement stands, including its
+representation-leakage baseline, and the number it gave for declared adjacency is updated here
+as a measurement at a later revision rather than corrected as an error.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#65
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What This Record Does Not Do · hash: sha256:3e82dfc7fcf2e2dfbad5714dfa9128d3fb8d8680d7bb7c222b4737ecac639f22*
+
+**It does not decide the mechanism's second provider, or any language but Rust.** The capability
+is language-neutral by construction — its endpoints are a file subject and a qualified name —
+and which engine answers it for which language is a provider's offer, judged by
+`ARC-CONFORMANCE-001`'s test each time, not settled here.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#66
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What This Record Does Not Do · hash: sha256:72a8a1b2181f4244742931423cab3b2b97cac3227143c32bd72b409f08cd91e8*
+
+**It does not fix the leaf route's invalidation gap.** That a crate-wide leaf fact is unreached
+by an edit inside its crate is measured above and left where it was found; deciding whether the
+existing leaf facts move to the derived route is an item with its own territory, and nothing in
+the product drives invalidation today.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#67
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What This Record Does Not Do · hash: sha256:cee6f26884f8aabc6e51cc44b541fde76dd404dcf3d3708bd605b494991d4c86*
+
+**It does not add a `FactVariant` level, reorder the five, or introduce an epistemic type.**
+`OD-ANALYSIS-004`'s vocabulary rule is applied, not extended.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#68
+
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#69
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Status · hash: sha256:af7a3cdc33bf6a153606576ee74364c3908ecf2482d4aa60603cf0b8da07b4a8*
+
+Accepted, drawn by `P125-THE-FACT-FIVE-DEFERRED-ITEMS-WAIT-ON`. The fact five deferred items
+were reported to share is decided as one capability at declaration grain, with its levels, its
+invalidation route and its zone constraint fixed; three sibling facts are refused with named
+triggers, and the per-item mapping records that the one decision moves one deferred item
+outright, half of a second, and none of the remaining three. What would revisit it: a provider
+offering `Approximate` or `Predicted` graph evidence, which clause 3 requires an amendment for;
+a second capability needing `Observation`, which `OD-CONTRACTS-001` judges; and any of the three
+named triggers firing for the refused facts.
 
 ### docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md#1
 

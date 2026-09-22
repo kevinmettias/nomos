@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:10f848457c58f280541e141634140fbb59a91c4718c84eee7c155fd7fa1f78a0",
-  "inputs_digest": "sha256:1e21db1870879f763e052ee5856f936fdce90919ae159429142397378caf14ab",
+  "content_digest": "sha256:bbd53d830ab63e944418704ba9be0a1ad7de497c77d585740c97101a086d7433",
+  "inputs_digest": "sha256:c5932ce763897398d7167adf4aa8bd176c3cc294ae2eb8e39d3c803abd68db59",
   "sections": [
     [
       "Documents",
-      266
+      267
     ],
     [
       "Sections",
-      2340
+      2358
     ],
     [
       "Source blocks",
-      8429
+      8498
     ]
   ],
   "inputs": [
@@ -279,6 +279,11 @@
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md@authored",
       "hash": "sha256:8ba17cb0d7430c3eefb01799b45969f1782123108e58aa782f87beca01bd0e71"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md@authored",
+      "hash": "sha256:871db338d39dd503e1f4117f04eab7616d135aa320ba89e74c2e9aec3d494c7a"
     },
     {
       "content": "documents",
@@ -3369,6 +3374,96 @@
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#25",
       "hash": "sha256:5616f523bc12de849e00f9fffa93966c2d1b9cf6097fd4740ee1d573f2c2313f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#1",
+      "hash": "sha256:549edcb1b91291c8830e21a5f376fe22dc0a727958f4bbe0dded924d95d74a55"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#2",
+      "hash": "sha256:98f8b86122127592e22f1c42d9b06d0ae887fa98b5fe77375958c6d6f3c2ba70"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#6",
+      "hash": "sha256:6651626052fa173632522f3593bc3ab452eec62b36c46976a131e4b42753695d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#8",
+      "hash": "sha256:50c0ab89fb10b37f79e05700557fd912ecbf778648a569cd624c2847b7eddd36"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#13",
+      "hash": "sha256:215d723c45d51c151962714f2bae7d1a968774b2d4791421742a29b5a00074a8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#17",
+      "hash": "sha256:492baefe1f16df45eff3351ff97bbe17b8ffffc6a98572b9b1833c1c6294a5c4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#20",
+      "hash": "sha256:808a45e2ed0678dd81fdf65ee2203bac9f41b6b6b6657111df53146249a64046"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#26",
+      "hash": "sha256:ac1882fe7241de4a6956a7f0ea9b6b7aa35e4df40dd19cbb62916e8801d56160"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#29",
+      "hash": "sha256:e1f042c16ce52c9a73fbeaa31688b9f77746490e0a815806e446c8cdeeb8494a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#31",
+      "hash": "sha256:067d00defedc3b43aa9f2b02e1262863ca9cbb172e20ab76a2e49496af3eea50"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#36",
+      "hash": "sha256:2f10b78ea7d745218a84bae0e916a5939f312fe8dec9673d8ea957dc60d0035d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#39",
+      "hash": "sha256:20c7a4c2bd0d90dc2777ed18ee29405d72ec5409fe8330f5966277d165112952"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#43",
+      "hash": "sha256:058be65b4d2cf4094295337c4570f093fcfd6fb7cb4bdce535cde9b6c311b239"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#49",
+      "hash": "sha256:3a891d036df0a4032b2f6511ca6384defdbfe3a775831a5a0a9435d2489f28bb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#53",
+      "hash": "sha256:6c95936b74c76f8312ecfd9501d56876a1873741fc566be79b2c1630ff183895"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#58",
+      "hash": "sha256:2825dcf94c07398b3be25eeb4df6ebc36c9057202e96aea4ceb99fac085906ce"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#61",
+      "hash": "sha256:80cd08ef0b12d9de5a1212189d8bdfe3e7e852bf7668249b24f021184ea6bd4d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#68",
+      "hash": "sha256:e76d192ad15542690c7a4398a9635ec44aa0f7d6a3a21d2c6ecf6a6616c587ea"
     },
     {
       "content": "headings",
@@ -20409,6 +20504,351 @@
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#28",
       "hash": "sha256:5e43a6d9b3f847894a0e7b4773ebb2752ff63e03e8cce3ed4feeb2f15009f2e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#1",
+      "hash": "sha256:9bf1bcb9cf7ee70f8812e5024d0b9b6585a450f7c8507cc276a3e77ca4e0c718"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#3",
+      "hash": "sha256:5706202d6514d1ffef4c5ba1d4b1281e07e186ec8e3584de5095228f7e8f64e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#4",
+      "hash": "sha256:4b13c10dce31338c77f3aa21db7efdc43fd01239fed0e5389637f968eed5203b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#5",
+      "hash": "sha256:0bd49ba614cc492eb6439c46271866bccc29dc956b6936c8d977139bd8f46aa0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#6",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#7",
+      "hash": "sha256:197ec835fcf71d13727090e9fa81cf5c248fe4770a19adb62256d2857c15804e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#8",
+      "hash": "sha256:4e7c439ebc26969d22eb744a0680ca2c957328f46f1d6f2c6c9994d73c53b558"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#9",
+      "hash": "sha256:ee0228f757e954792fdb871d2f8b519f63b2c1178845843ada4f037ed7d1c5ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#10",
+      "hash": "sha256:78c980ee363aff71db0ed60db1d86a3b7615856d713edcaa9b25c6824b6c1321"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#11",
+      "hash": "sha256:5274c3fa01c479376d153dc226190eb5e0958951737061de83ffba8973d9b69b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#12",
+      "hash": "sha256:a1cf670ef22bc396077c606296ea8b1ad2b7a9bc1ec820c0258ede2dd8cbe2cb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#13",
+      "hash": "sha256:ba04c71d4e6b0c64aac0fa5a899b405ca0362d2a58eedfd674bb49bff6dbee68"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#14",
+      "hash": "sha256:4bef2b0f6c9219968837600f5cd999eee448a1f581a1de8f529d493f4c9c271c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#15",
+      "hash": "sha256:69cf0747253a7eea70e94445632327f791693fca440af80254ddf85e4d8ec69a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#16",
+      "hash": "sha256:c614ed274a2058a9a1b96296ce54954ff010b58826832eaec22d26cd79916c6b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#17",
+      "hash": "sha256:020d4780b4518ac0d4f31bd0d5c4f2002ef5185aac5d13a3236349955e753acb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#18",
+      "hash": "sha256:559387703074f04a3940eca5134563ca9da04f9657b75d72d5f534312eb422eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#19",
+      "hash": "sha256:becb61b3c5fab576ddcf691ca386d8bc0ec954b2ac68ee9f8c1dfede9b85f1a7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#20",
+      "hash": "sha256:69f1eeb0383bdeaa4efaf499216ee5c6eafe583e9687c0b19dc575eaa9ac1002"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#21",
+      "hash": "sha256:d59affcf9c96e1ad981df0bcf5a95a457ce198d3d4fe1a0d42380d62f5cb8681"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#22",
+      "hash": "sha256:7bf82856e54ca0d5fc4fae7bd6d46c259b8260f73bb1fc44ef0d1d9b78e5efb9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#23",
+      "hash": "sha256:376cd141e6e5f71cbc4efbf1a39fcc01b85355ab63e6365f19e2d4630af94242"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#24",
+      "hash": "sha256:4ae0c7c1aa9384979b41432a3b254e1a2e8940ee0e3cfd6f899c1fef6a509f79"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#25",
+      "hash": "sha256:72156423e1193d3d308dfa959bb13f654d2ebd348b75a038eb4e2cbee50f2925"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#26",
+      "hash": "sha256:f1cce352977c32d3a35ad97b47d4be3c7deac9d42507e460397dfa25e11f2359"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#27",
+      "hash": "sha256:629af85270a3ac8d446958c7dee2a068aa6a57275f5048c85c530e6127e0b001"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#28",
+      "hash": "sha256:06d78a36590d03622705c4ebc9d0e8af5832082abbfe40715222b554b90d39a2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#29",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#30",
+      "hash": "sha256:cf140ff42d7e51fd1c7e5bace5a931277a21be15dd07594f2251764618d2f20f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#31",
+      "hash": "sha256:4ee69660ef3d10fa8ebb8c64e0f968db822b681fed94607f1db74f2b9cbef454"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#32",
+      "hash": "sha256:26c8b40df2c056cad6887585a174b4c78d0f8d455b180fbaf9595d1e47c21997"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#33",
+      "hash": "sha256:bb12ba474b02bfad5392c0196cfe02e79807d1c119603d866dd941f2282569c8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#34",
+      "hash": "sha256:3989ca5fb7bb32563e9ada14cfaba2f8f4f34029f16e0c42db95735bacb9d34f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#35",
+      "hash": "sha256:e07d23dd27441fa2b73baefe9abe72efc513322bc0834360664ce64e8fbafaf8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#36",
+      "hash": "sha256:b0e3a2d222cabfa3fe264855e709dceb8a2e8642cd68107a5bbf0cade01ab5f7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#37",
+      "hash": "sha256:42899d9a5f894ce9cf502ca690aec228d3e34a17b50c4818344930a106b7a351"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#38",
+      "hash": "sha256:39bf35be81d8e653c3f172babd822da0ccff38420836721e33796f78d554e1da"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#39",
+      "hash": "sha256:ddd8913aeadd05da92bfc46b7a1b15e1d346b1849d4a78c52d9b0f6f916ca2a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#40",
+      "hash": "sha256:b8b5eba5254f27c66ab7788d44393d333f64e843062809d7a64185f07de75c5d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#41",
+      "hash": "sha256:118e26117b7cc89c1c5cb2dc40c8970ba2f0629f23c454bf127f811887b5326b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#42",
+      "hash": "sha256:9096f189b56c951bc4810f54bf3a2e764040432e5917b123261c49ab35241c07"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#43",
+      "hash": "sha256:49c16cb14cbae6182c8ad1e65975fd6f9b3238f6cd2f002d53d7eae1226f2fa7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#44",
+      "hash": "sha256:a0b09fa2931b30fd558edb0772339a2b107e1bfe686f829c1ac09245ac002041"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#45",
+      "hash": "sha256:4918cb7f8e1d78cf292ad376c1b175850077936308eabb5ba077231003f0064a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#46",
+      "hash": "sha256:d9baba5391930d3ed4b2e74d0bf1dcde5b57a387cbde9db5d77da437da9893db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#47",
+      "hash": "sha256:2166b5ed66904fca29bfb5c3f4d3f1c9a415d6a7f516e487d66e2f4ef2aeea06"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#48",
+      "hash": "sha256:44191268a41542af7628959e78f364276d804e838db6e1d2d9e315f971c51777"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#49",
+      "hash": "sha256:ddfb29b1b1e51915f611f48244d4b1427de3fe23eda4d5601b8a76ee0327bac5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#50",
+      "hash": "sha256:5334dba2816a4a85b96d44ba49e87a2f04fcf94b48e7c4c45fa24dece0ca823f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#51",
+      "hash": "sha256:3839ee99d945427005b121086c525b6b8afb8e95ddb2fb2b931b6df510ba5271"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#52",
+      "hash": "sha256:fcb87239c7725212c07dd0b1ce2de22508c8b2541719de6cdf10b8bcae94c6c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#53",
+      "hash": "sha256:30140b26eee54e9a9a16dc4038c4c556666c30642986208b1522c402caa59447"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#54",
+      "hash": "sha256:9aa00468973df3ee0ce0c9eb49a36ee50d878347e34655d5499b99c7317a0882"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#55",
+      "hash": "sha256:23b86dae98ad3f54b6aeaf69f00bb34a91871ca49d6a39f9c0134c9d9539dfce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#56",
+      "hash": "sha256:86dc05dd3d90cff2b163975d470cec8f2fa459c14830cc89e46e3384643cdfda"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#57",
+      "hash": "sha256:1c602d164625d586536a75b87189d302dc67f4205fa7525f6bfbea8cc370e237"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#58",
+      "hash": "sha256:0d13039dbf3156717d52bab967fd09fe2d67b4defdfb7fef35b121b4885736aa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#59",
+      "hash": "sha256:da246a8c8717d7ae269c59507a9f0018f99920e5c5ee878db73549ef93c953bc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#60",
+      "hash": "sha256:c09f7836952fc92d8194578df19deacebaa40eeb38d7feb56bb401710588254f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#61",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#62",
+      "hash": "sha256:ef45d67e3c7fab14e582a517741716f7bf311a5dd8da97346213ad6c67e37085"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#63",
+      "hash": "sha256:39054728fc61f08931253e149b696823858c8a1aeb411ee76848273461f249eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#64",
+      "hash": "sha256:1bbe264498d3279d73abc370b7d8f0a174e4a9e35a382ebb2e0cb9c21f621106"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#65",
+      "hash": "sha256:3e82dfc7fcf2e2dfbad5714dfa9128d3fb8d8680d7bb7c222b4737ecac639f22"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#66",
+      "hash": "sha256:72a8a1b2181f4244742931423cab3b2b97cac3227143c32bd72b409f08cd91e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#67",
+      "hash": "sha256:cee6f26884f8aabc6e51cc44b541fde76dd404dcf3d3708bd605b494991d4c86"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#68",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#69",
+      "hash": "sha256:af7a3cdc33bf6a153606576ee74364c3908ecf2482d4aa60603cf0b8da07b4a8"
     },
     {
       "content": "blocks",
