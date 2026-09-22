@@ -6,6 +6,15 @@
 // none of it is part of this type's public surface.
 #[path = "memory_store/invalidation.rs"] mod invalidation;
 
+// The written form of this store, and every refusal a build owes a file it did not write,
+// is likewise its own responsibility and likewise a sibling: what a store *is* on disk is a
+// separate question from what it answers in memory, and none of it is public surface
+// either. `OD-ANALYSIS-009` is the decision that there is a written form at all.
+#[path = "memory_store/persistence.rs"] mod persistence;
+
+use std::path::Path;
+use nomos_contracts::SchemaId;
+use crate::PersistenceError;
 use crate::fact_store::sealed;
 use std::collections::BTreeSet;
 use std::collections::BTreeMap;
@@ -21,6 +30,11 @@ use crate::FactKey;
 use crate::Dependency;
 use crate::MaterializedFact;
 use crate::propagation::DependencyPropagation;
+/// How many entries of one key's history the store keeps.
+///
+/// One. [`MemoryFactStore::Push_Entry`] states why, where the history grows.
+const RETAINED_HISTORY_ENTRIES: usize = 1;
+
 #[derive(Clone, Debug)]
 struct Entry
 {
@@ -88,7 +102,7 @@ impl MemoryFactStore
         }
 
         self.keys.insert(digest, fact.Key().clone());
-        self.entries.entry(digest).or_default().push(Entry {
+        self.Push_Entry(digest, Entry {
             fact,
             invalidated_at: None,
             cause: None,
@@ -97,6 +111,74 @@ impl MemoryFactStore
         self.materializations = self.materializations.saturating_add(1);
 
         return Ok(());
+    }
+
+    /// Appends `entry` to its key's history and applies the retention rule.
+    ///
+    /// # The retention rule
+    ///
+    /// **A key's history keeps its newest entry and drops everything behind it.**
+    ///
+    /// Every answer this store gives reaches its entry through [`Self::Latest`], which is
+    /// `history.last()`: [`FactStore::Current`] through [`Self::Lookup`],
+    /// [`FactStore::Historical`], [`Self::Dependencies_Of`], [`Self::Superseded_At`],
+    /// [`Self::Live`], [`Self::Refuse_Backdated`], and the invalidation walk through
+    /// [`Self::Is_Already_Invalidated`] and [`Self::Try_Invalidate_One`]. Nothing inside
+    /// this crate or outside it can address an earlier entry, so one is unreachable rather
+    /// than merely unused.
+    ///
+    /// The historical read is not the exception it sounds like. `Historical` answers from
+    /// the newest entry's own `invalidated_at` and `cause` — supersession is recorded *on*
+    /// the entry it superseded, not as a second entry behind it — so what it needs is
+    /// exactly what is kept.
+    ///
+    /// A store that ends with its process could afford to keep the rest anyway; one that
+    /// outlives it cannot, because an unbounded history is an unbounded file, growing by a
+    /// write per materialization forever. That is why the rule is stated here, at the one
+    /// place a history grows, rather than at the writer that would otherwise have to decide
+    /// it a second time.
+    fn Push_Entry(&mut self, digest: Digest128, entry: Entry)
+    {
+        let history = self.entries.entry(digest).or_default();
+        history.push(entry);
+
+        let behind = history.len().saturating_sub(RETAINED_HISTORY_ENTRIES);
+        if behind > 0
+        {
+            history.drain(..behind);
+        }
+    }
+
+    /// Writes this store into `directory`, creating it if it is not there.
+    ///
+    /// # Errors
+    ///
+    /// Returns a [`PersistenceError`] naming the file, when the directory or the file
+    /// cannot be written.
+    pub fn Write_To_Directory(&self, directory: &Path) -> Result<(), PersistenceError>
+    {
+        return persistence::Write(self, directory);
+    }
+
+    /// Reads back a store written into `directory` by any process, or refuses the file
+    /// whole.
+    ///
+    /// `understood_schemas` is what the reading build can interpret a payload as; a stored
+    /// fact under any other schema is refused rather than served. A file written under a
+    /// format version or a [`FactKey`] shape this build does not know is refused whole
+    /// rather than partly read, because a key whose components moved does not mean what its
+    /// bytes say and a rescue entry by entry would decide that silently.
+    ///
+    /// # Errors
+    ///
+    /// Returns a [`PersistenceError`] naming the file, for every one of those refusals and
+    /// for a file that is missing, unreadable, corrupt or truncated.
+    pub fn Read_From_Directory(
+        directory: &Path,
+        understood_schemas: &[SchemaId],
+    ) -> Result<Self, PersistenceError>
+    {
+        return persistence::Read(directory, understood_schemas);
     }
 
     /// A write into a generation the store has already left.
@@ -313,6 +395,14 @@ mod local_tests
     /// How many writes the counting test makes; one per `Materialize` call above it.
     const EXPECTED_MATERIALIZATIONS: u32 = 2;
 
+    /// How many times the retention tests rewrite one key, each at a later generation than
+    /// the last. More than the rule retains, which is the whole point of writing them.
+    const HISTORY_WRITES: u64 = 4;
+
+    /// The generation the retention tests invalidate at: later than every write above, so
+    /// the invalidation reaches the entry that survived rather than one behind it.
+    const INVALIDATION_AFTER_LAST_WRITE: u64 = 5;
+
     /// The variant component of every key in this module.
     const VARIANT_SEED: u8 = 3;
 
@@ -418,6 +508,146 @@ mod local_tests
             .expect("Refuse_Backdated finds no entry under this key on a store this test just built");
 
         assert_eq!(store.Superseded_At(&key), None);
+    }
+
+    #[test]
+    fn Test_Push_Entry_Should_Keep_Only_What_The_Retention_Rule_Retains()
+    {
+        let key = Key_For(1);
+        let mut store = MemoryFactStore::New();
+
+        for generation in 1..=HISTORY_WRITES
+        {
+            store
+                .Materialize(Fact_For(&key, GenerationId::From_Raw(generation)), &[])
+                .expect("each write is at a later generation than the one before it");
+        }
+
+        assert_eq!(
+            store.entries.get(&key.Digest()).map(Vec::len),
+            Some(RETAINED_HISTORY_ENTRIES),
+            "the history grew past what the retention rule keeps"
+        );
+    }
+
+    /// The retention rule's sufficiency, stated as the property that makes it safe: a store
+    /// that wrote a key many times answers every question it can be asked exactly as one
+    /// that wrote the same final fact once. If a dropped entry were reachable by any read,
+    /// one of these would disagree.
+    #[test]
+    fn Test_A_Trimmed_History_Should_Answer_What_A_Single_Write_Answers()
+    {
+        let key = Key_For(1);
+        let last = GenerationId::From_Raw(HISTORY_WRITES);
+        let dependency = Dependency {
+            key: Key_For(DEPENDENCY_SUBJECT_SEED),
+            outcome: ReadOutcome::Materialized,
+        };
+
+        let mut rewritten = MemoryFactStore::New();
+        for generation in 1..=HISTORY_WRITES
+        {
+            rewritten
+                .Materialize(Fact_For(&key, GenerationId::From_Raw(generation)), &[dependency.clone()])
+                .expect("each write is at a later generation than the one before it");
+        }
+        let mut written_once = MemoryFactStore::New();
+        written_once
+            .Materialize(Fact_For(&key, last), &[dependency])
+            .expect("Refuse_Backdated finds no entry under this key on a store this test just built");
+
+        assert_ne!(
+            rewritten.Materializations(),
+            written_once.Materializations(),
+            "both stores took the same number of writes, so this compares nothing"
+        );
+        Assert_Both_Stores_Answer_Alike(&rewritten, &written_once, &key, last);
+    }
+
+    /// Every read the store offers, asked of both stores, before and after an invalidation.
+    fn Assert_Both_Stores_Answer_Alike(
+        rewritten: &MemoryFactStore,
+        written_once: &MemoryFactStore,
+        key: &FactKey,
+        at: GenerationId,
+    )
+    {
+        assert_eq!(rewritten.Live(), written_once.Live());
+        assert_eq!(rewritten.Dependencies_Of(key), written_once.Dependencies_Of(key));
+        assert_eq!(rewritten.Superseded_At(key), written_once.Superseded_At(key));
+        assert_eq!(
+            rewritten.Current(&key.clone().At(at), at),
+            written_once.Current(&key.clone().At(at), at)
+        );
+        assert_eq!(rewritten.Historical(key), written_once.Historical(key));
+    }
+
+    #[test]
+    fn Test_A_Trimmed_History_Should_Invalidate_And_Read_Historically_Like_A_Single_Write()
+    {
+        let key = Key_For(1);
+        let last = GenerationId::From_Raw(HISTORY_WRITES);
+        let cause = GenerationCause::SubjectChanged {
+            subject: key.subject,
+            granularity: File_Guarantee().incremental,
+        };
+
+        let mut rewritten = MemoryFactStore::New();
+        for generation in 1..=HISTORY_WRITES
+        {
+            rewritten
+                .Materialize(Fact_For(&key, GenerationId::From_Raw(generation)), &[])
+                .expect("each write is at a later generation than the one before it");
+        }
+        let mut written_once = MemoryFactStore::New();
+        written_once
+            .Materialize(Fact_For(&key, last), &[])
+            .expect("Refuse_Backdated finds no entry under this key on a store this test just built");
+
+        let after = GenerationId::From_Raw(INVALIDATION_AFTER_LAST_WRITE);
+        assert_eq!(
+            rewritten.Invalidate(&cause, after).direct,
+            written_once.Invalidate(&cause, after).direct
+        );
+        Assert_Both_Stores_Answer_Alike(&rewritten, &written_once, &key, last);
+    }
+
+    #[test]
+    fn Test_Write_To_Directory_Should_Leave_A_Store_Behind_For_Another_Process()
+    {
+        let directory = Temporary_Directory("write");
+        let mut store = MemoryFactStore::New();
+        store
+            .Materialize(Fact_For(&Key_For(1), GenerationId::From_Raw(1)), &[])
+            .expect("Refuse_Backdated finds no entry under this key on a store this test just built");
+
+        store.Write_To_Directory(&directory).expect("a fresh temporary directory is writable");
+
+        assert!(persistence::Store_File(&directory).exists());
+    }
+
+    #[test]
+    fn Test_Read_From_Directory_Should_Refuse_A_Directory_Holding_No_Store()
+    {
+        let directory = Temporary_Directory("absent");
+        let _ = std::fs::remove_dir_all(&directory);
+
+        let refused = MemoryFactStore::Read_From_Directory(&directory, &[]);
+
+        assert!(matches!(refused, Err(PersistenceError::Unreadable { .. })));
+    }
+
+    fn Temporary_Directory(name: &str) -> std::path::PathBuf
+    {
+        let mut path = std::env::temp_dir();
+        path.push(format!("nomos-analysis-store-{name}-{}", std::process::id()));
+        if path.exists()
+        {
+            std::fs::remove_dir_all(&path).expect("the previous run's synthetic directory is removable");
+        }
+        std::fs::create_dir_all(&path).expect("test needs a temporary directory");
+
+        return path;
     }
 
     #[test]

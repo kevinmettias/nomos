@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:c3f6591c550ff8303638e030eb41abc76502f9ad6518272878b79d477fa49ff3",
-  "inputs_digest": "sha256:9c09b1b5dfa53c9ab5ae9fdff44dd45869b0998d178626accfb3a50d554aba0f",
+  "content_digest": "sha256:2c8e474de8c1b5538d32db0fb00b66a81f71e991ee634d936f568fd96ef9579b",
+  "inputs_digest": "sha256:c0981d6fbee7ddea537ec0e2aedc11308883afc0b53e5f6339efd4de1f71a099",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2428
+      2429
     ],
     [
       "Source blocks",
-      8819
+      8829
     ]
   ],
   "inputs": [
@@ -178,7 +178,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored",
-      "hash": "sha256:c218a0e3bcaaf03e21f566d1fa336427f086e410c27c64e9a0232305afd93500"
+      "hash": "sha256:bac9e061f9c1d816276e74fa1a3d88d45058fb8c6c8b9509165e0de6013720cb"
     },
     {
       "content": "documents",
@@ -2648,7 +2648,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#41",
-      "hash": "sha256:b7be8b3e98797013720ce2446d6c946dc59baed7bef433f1849b7a25c603c7ca"
+      "hash": "sha256:7c19460bf4bb0780cb3673ff61f92a2c0cdd8236b5264299811ff37e7381c14f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#50",
+      "hash": "sha256:e921eb57baacbd50356680048fc790aacfb169e69aa6c573dde3325218e392ee"
     },
     {
       "content": "headings",
@@ -18363,17 +18368,67 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#41",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:c8c633d476b91269e329d4b1512480ad4ea1e5d9ac3a2c0e49426f066922316c"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#42",
-      "hash": "sha256:a67022dd6ae4e38ef1647923430d827dba287d5780be3081d8c2cd8850762486"
+      "hash": "sha256:b4c616a0dfe395f4dbd8b311a1b09e4b34c6ef9b6c7e366b43c00928ec683a04"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#43",
+      "hash": "sha256:04a0f13ad6ec62004749dc567e00601e82749ddc8fcac5963c065af31ca47be9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#44",
+      "hash": "sha256:d1d9fc806ed0d26ac58409d289b30d8e2181c7f44eb89705c315786c632662a2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#45",
+      "hash": "sha256:78f9d9d6da7b5e1081f2aa73bdc9203720cd36312a6a8b055d731cb36f0bceea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#46",
+      "hash": "sha256:8e8db2c65a7a3bd8021d4c6dd6a73b4bb3100510fde51bdf841f9b740081ebda"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#47",
+      "hash": "sha256:82e104f7b3d55670bf5fcfd3dadd6d3d551fb61ec94d01945dedbcde5c75d2f0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#48",
+      "hash": "sha256:92b5b87d53f49b53de4c85cf36872fbf0d25ccbf08e9a1241026dbe891a58a8c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#49",
+      "hash": "sha256:4a8c5f1062d6225d43f418e6d6de764038e42af64e0266237943ce22fcbf89dc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#50",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#51",
+      "hash": "sha256:a67022dd6ae4e38ef1647923430d827dba287d5780be3081d8c2cd8850762486"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#52",
       "hash": "sha256:723a62ba8628f64cda299f34b93e8a8cb1bbbffc6480d18d336d72cd6eaa5412"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#53",
+      "hash": "sha256:87a0367c6656cd4abf3edd15408fb02c87fb388374256d45b846327def0313ab"
     },
     {
       "content": "blocks",

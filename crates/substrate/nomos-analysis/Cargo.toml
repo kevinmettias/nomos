@@ -11,6 +11,12 @@ publish.workspace = true
 nomos-contracts = { workspace = true }
 nomos-model = { workspace = true }
 nomos-capability = { workspace = true }
+# The on-disk fact store's serialized form, and nothing else. Both are already in the
+# workspace table and in the lock, so this adds an edge rather than a crate: `OD-ANALYSIS-009`
+# names why a store that survives a process needs a written form at all, and why the form is
+# mirrored by this crate's own private types rather than derived onto its public vocabulary.
+serde = { workspace = true }
+serde_json = { workspace = true }
 
 [lints]
 workspace = true

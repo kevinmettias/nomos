@@ -90428,14 +90428,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-persist",
-        "acquired_at": 1790058437,
-        "lease_expires_at": 1790069237
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -90453,7 +90449,35 @@
         ],
         "timeout_seconds": 5400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "1.0 (F:\\repos\\nomos-render-p123\\crates\\languages\\nomos-lang-rust-cargo)\n   Compiling nomos-lang-rust-deny v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\rules\\nomos-rules)\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: field `derived` is never read\n   --> crates\\substrate\\nomos-analysis\\src\\fact\\memory_store\\tests.rs:118:5\n    |\n114 | struct TwoFactStore\n    |        ------------ field in this struct\n...\n118 |     derived: FactKey,\n    |     ^^^^^^^\n    |\n    = note: `#[warn(dead_code)]` on by default\n\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos-render-p123\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos-render-p123\\tests\\contract)\nwarning: `nomos-analysis` (lib test) generated 1 warning\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 12.27s\n     Running unittests src\\lib.rs (F:/repos/nomos-render-p123-target\\debug\\deps\\nomos_analysis-c24f9ddd0f222976.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-render-p123-target\\debug\\deps\\nomos_contract_tests-506540668328ab65.exe)\n     Running tests\\record_citation.rs (F:/repos/nomos-render-p123-target\\debug\\deps\\record_citation-18d52bdb3b972b41.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-render-p123-target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790061141,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0e951dc3533d3bd02c10937644d8c513d8ed6b30"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,

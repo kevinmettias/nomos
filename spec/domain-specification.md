@@ -41,7 +41,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 42 | 9 | sha256:a7a3620d599955e63ca9bcc81b52866cf77cf156c8bb930391ee67daedaa3040 |
 | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md | authored | 28 | 6 | sha256:6579da56c92d14e1728834c5596fbf6a5062c7de8020223ea5bb75dd969f650c |
 | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md | authored | 22 | 8 | sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272 |
-| docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 43 | 9 | sha256:c218a0e3bcaaf03e21f566d1fa336427f086e410c27c64e9a0232305afd93500 |
+| docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 53 | 10 | sha256:bac9e061f9c1d816276e74fa1a3d88d45058fb8c6c8b9509165e0de6013720cb |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md | authored | 16 | 6 | sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a |
 | docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md@authored | docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md | authored | 39 | 10 | sha256:0659127bd83ac1811095bbc0260811d6746be26549907654ed8854b1d9c27460 |
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md@authored | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md | authored | 18 | 6 | sha256:05eb45335e03a5d62b2c97bb0815702e51852b67c101e91b9c3b852491e0967a |
@@ -540,7 +540,8 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#15 | authored | 2 | A Direct Override Built The First Real Increment, Narrower Than Any Trigger Above |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#21 | authored | 2 | Amendment (P40-FACT-STORE-PERSISTENCE-2): The First Trigger Fired, And It Asks For Something Narrower Than This Record's Subject |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#28 | authored | 2 | Amendment (P123-OD-ANALYSIS-009-SENDS-A-READER-TO-A-DELETED-FILE-AND-TO-BUILD-WHAT-EXISTS): Both Halves Of The Trigger-1 Amendment Went Stale, One By A Move And One By Being Built |
-| docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#41 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#41 | authored | 2 | Amendment (P123-FACT-STORE-SURVIVES-THE-PROCESS-2): The On-Disk Half Is Built, And What A Store Means To A Build That Did Not Write It Is Now Decided |
+| docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#50 | authored | 2 | Status |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1 | authored | 1 | The sound control-flow reachability tier is a crate-local call resolver, not a compiler or language-server integration |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#2 | authored | 2 | Question |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#4 | authored | 2 | What Was Measured |
@@ -11997,11 +11998,154 @@ unchanged and deliberately not reweighed here.
 
 ### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#41
 
+*revision: authored · kind: heading · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P123-FACT-STORE-SURVIVES-THE-PROCESS-2): The On-Disk Half Is Built, And What A Store Means To A Build That Did Not Write It Is Now Decided · hash: sha256:c8c633d476b91269e329d4b1512480ad4ea1e5d9ac3a2c0e49426f066922316c*
+
+## Amendment (P123-FACT-STORE-SURVIVES-THE-PROCESS-2): The On-Disk Half Is Built, And What A Store Means To A Build That Did Not Write It Is Now Decided
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#42
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P123-FACT-STORE-SURVIVES-THE-PROCESS-2): The On-Disk Half Is Built, And What A Store Means To A Build That Did Not Write It Is Now Decided · hash: sha256:b4c616a0dfe395f4dbd8b311a1b09e4b34c6ef9b6c7e366b43c00928ec683a04*
+
+**This supersedes the `Decision` section above for the on-disk half, and for nothing else.**
+That section declined "no persistent or cross-invocation fact store, no caller-supplied-store
+parameter, and no daemon or long-lived-process concept"; the middle clause was already
+overtaken at version 2, and this amendment overtakes the first. The third is untouched: no
+daemon, no long-lived process and no host wired to read or write a persisted store arrives
+with this, because which hosts may share one is a question about where a cache lives and it
+belongs to `P128-EVERY-INVOCATION-STARTS-COLD-BECAUSE-NOTHING-OUTLIVES-A-PROCESS`. The
+`Decision` text is left standing rather than rewritten, the amendments at versions 3 and 4
+with it, so what changed is checkable against what it changed from.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#43
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P123-FACT-STORE-SURVIVES-THE-PROCESS-2): The On-Disk Half Is Built, And What A Store Means To A Build That Did Not Write It Is Now Decided · hash: sha256:04a0f13ad6ec62004749dc567e00601e82749ddc8fcac5963c065af31ca47be9*
+
+**What decided it is the requirement, not a trigger.** No new measurement arrived: triggers
+2 through 4 are where version 4 left them, and the surviving half of trigger 1 — a caller
+needing its `Workspace`/`MemoryFactStore` to survive its own process's *exit* — is still not
+a caller that exists. What exists is the work: this record's own subject is a Required
+capability item on the board, and the item that builds a process outliving an invocation is
+queued behind it and will read what this writes. Version 4's correction is what makes that
+honest rather than circular. It marked the ordering argument for doing the nearer in-process
+work first **spent**, and said in the same breath that spending it "removes a reason to wait
+and supplies no reason to build". The reason to build is this item, recorded here as one,
+the same shape the first override took at version 2 rather than a trigger being read
+generously.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#44
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P123-FACT-STORE-SURVIVES-THE-PROCESS-2): The On-Disk Half Is Built, And What A Store Means To A Build That Did Not Write It Is Now Decided · hash: sha256:d1d9fc806ed0d26ac58409d289b30d8e2181c7f44eb89705c315786c632662a2*
+
+**What was built.** `nomos_analysis::MemoryFactStore` gained
+`Write_To_Directory(&self, directory: &Path)` and
+`Read_From_Directory(directory: &Path, understood_schemas: &[SchemaId])`
+(`crates/substrate/nomos-analysis/src/fact/memory_fact_store.rs`), both delegating to
+`crates/substrate/nomos-analysis/src/fact/memory_store/persistence.rs`, a child of the store's
+own module because it reads and rebuilds fields that are nobody else's business. The
+directory holds one file, `fact-store.json`, written under a scratch name and renamed into
+place so an ordinary write cannot tear it. It carries the store's keys, the retained entry of
+each key's history, the dependents graph, and the count of writes the store has taken. It does
+not carry the `DependencyPropagation` strategy: a strategy is the composing build's choice,
+not state a previous process measured. It *does* carry the dependents graph rather than
+leaving it to be derived from the entries, because `Materialize` adds an edge per dependency
+and never removes one, so deriving it would drop edges the writing store still held and a
+reloaded store would invalidate less than the one that wrote it.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#45
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P123-FACT-STORE-SURVIVES-THE-PROCESS-2): The On-Disk Half Is Built, And What A Store Means To A Build That Did Not Write It Is Now Decided · hash: sha256:78f9d9d6da7b5e1081f2aa73bdc9203720cd36312a6a8b055d731cb36f0bceea*
+
+**Two versions, kept apart, because they move for different reasons.** `FORMAT_VERSION` is
+the written form's own; `Understood_Key_Shape` is the key's, and it is not a hand-maintained
+number — it is `Component::All()`'s labels, this crate's declared mirror of `FactKey`'s
+fields, which `Component::Label`'s exhaustive match and
+`crates/substrate/nomos-analysis/tests/fact_identity/key_identity.rs` already hold in step
+with the key. A component added, removed or renamed therefore changes the shape by itself,
+and **every store written under the old one is refused whole**. That is the decision this
+item exists to make: a key whose components moved does not mean what its bytes say, so there
+is no partial read and no per-entry rescue, because a rescue would decide silently what a
+component's disappearance meant. A moved shape costs a recomputation, deliberately, and no
+migration path is offered. Both checks run over the whole file before one entry is built, so
+"wholesale" is structural rather than promised.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#46
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P123-FACT-STORE-SURVIVES-THE-PROCESS-2): The On-Disk Half Is Built, And What A Store Means To A Build That Did Not Write It Is Now Decided · hash: sha256:8e8db2c65a7a3bd8021d4c6dd6a73b4bb3100510fde51bdf841f9b740081ebda*
+
+**What a build must refuse rather than believe** is `nomos_analysis::PersistenceError`
+(`crates/substrate/nomos-analysis/src/persistence_error.rs`): a file that cannot be written
+or read, one that is corrupt or truncated, a foreign format version, a foreign key shape, a
+key this build addresses by a different digest than the file records, and a payload schema
+the reading build did not declare. Every variant names the file and `File()` returns it
+without a fallback, because a refusal a reader cannot locate is a rumour. The payload
+question is answered by the reader and not by this crate, which holds payload bytes
+opaquely: `understood_schemas` is what the composing build says its providers can interpret,
+and anything else is refused rather than handed on to something that would read the bytes as
+a schema they were not written in.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#47
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P123-FACT-STORE-SURVIVES-THE-PROCESS-2): The On-Disk Half Is Built, And What A Store Means To A Build That Did Not Write It Is Now Decided · hash: sha256:82e104f7b3d55670bf5fcfd3dadd6d3d551fb61ec94d01945dedbcde5c75d2f0*
+
+**The per-key history now has a stated retention rule, and it is one entry.**
+`RETAINED_HISTORY_ENTRIES` and `MemoryFactStore::Push_Entry` carry it at the one place a
+history grows. Every answer the store gives reaches its entry through `Latest`, which is
+`history.last()` — `Current` through `Lookup`, `Historical`, `Dependencies_Of`,
+`Superseded_At`, `Live`, `Refuse_Backdated`, and the invalidation walk's
+`Is_Already_Invalidated` and `Try_Invalidate_One` — so an entry behind the newest is
+unreachable rather than merely unused. The historical read is not the exception it sounds
+like: supersession is recorded *on* the entry it superseded, as that entry's own
+`invalidated_at` and `cause`, so what `Historical` needs is exactly what is kept. A store
+that ends with its process could afford the rest; one that outlives it cannot, because an
+unbounded history is an unbounded file.
+`Test_A_Trimmed_History_Should_Answer_What_A_Single_Write_Answers` and
+`Test_A_Trimmed_History_Should_Invalidate_And_Read_Historically_Like_A_Single_Write` are the
+sufficiency evidence: a store that wrote one key four times answers every read the store
+offers exactly as one that wrote the same final fact once, before and after an invalidation.
+`P128-THE-FACT-GRAPH-IS-DIGEST-KEYED-TREES-AND-THE-RANKING-IS-QUADRATIC` asks for a retention
+rule too; this is the one it adopts rather than a second to mint.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#48
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P123-FACT-STORE-SURVIVES-THE-PROCESS-2): The On-Disk Half Is Built, And What A Store Means To A Build That Did Not Write It Is Now Decided · hash: sha256:92b5b87d53f49b53de4c85cf36872fbf0d25ccbf08e9a1241026dbe891a58a8c*
+
+**Proven, not asserted.** `Test_A_Reloaded_Store_Over_An_Unchanged_Tree_Should_Agree_With_A_
+Clean_Rebuild` and `Test_A_Reloaded_Store_Rematerialized_After_An_Edit_Should_Agree_With_A_
+Clean_Rebuild` are `tests/recomputation_equivalence.rs`'s own invariant —
+`IncrementalResult(S) == CleanRecomputation(S)`, over a graph with a real derived hop whose
+payload is a function of its upstream's — asked of a store that crossed a process boundary.
+`Test_A_Reloaded_Store_Should_Invalidate_Exactly_What_The_In_Memory_Store_Would` compares the
+whole `InvalidationReport` of a reloaded store against the store that wrote it, and
+`Test_A_Reloaded_Store_Whose_Edge_Was_Never_Recorded_Should_Serve_A_Stale_Value` is the
+control that keeps the fixture from agreeing for the wrong reason. They live inside the
+crate rather than in `tests/`, because this item's verification predicate runs the library's
+own tests and a proof it does not run is not a proof it has.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#49
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Amendment (P123-FACT-STORE-SURVIVES-THE-PROCESS-2): The On-Disk Half Is Built, And What A Store Means To A Build That Did Not Write It Is Now Decided · hash: sha256:4a8c5f1062d6225d43f418e6d6de764038e42af64e0266237943ce22fcbf89dc*
+
+**Two dependency decisions, both narrow.** `serde` and `serde_json` are declared in the root
+manifest's workspace table already and inherited with `workspace = true`; no crate was added
+to the lock, only an edge. They are used through private mirror types in
+`persistence.rs` rather than derived onto this crate's public vocabulary, so the written form
+can move without a field rename becoming a silent format change and `Serialize` stays off the
+published surface — `tests/contract/surface/nomos-analysis.txt` shows the difference. And the
+store names `std::fs` rather than `nomos_platform::FileSystem`, which `nomos-ledger` takes
+for the file it owns: the port's surface is text-only and has no operation that creates a
+directory, a store written *to a directory* must create the one it is given, and
+`nomos-platform` was not this item's territory, so widening the port here would have decided
+a platform question inside an analysis one. Which filesystem a persisted store should be
+handed is the same question as which host composes one, and it is left where the rest of
+that question already is.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#50
+
 *revision: authored · kind: heading · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#42
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#51
 
 *revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Status · hash: sha256:a67022dd6ae4e38ef1647923430d827dba287d5780be3081d8c2cd8850762486*
 
@@ -12016,7 +12160,7 @@ rather than merely to be held across calls within one process, on a real multi-a
 workflow plan being composed by a real caller, on a corpus-scale timing measurement, or on
 `ARC-ROADMAP-001`'s near-term tier being internally sequenced.
 
-### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#43
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#52
 
 *revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Status · hash: sha256:723a62ba8628f64cda299f34b93e8a8cb1bbbffc6480d18d336d72cd6eaa5412*
 
@@ -12037,6 +12181,25 @@ revisit conditions above are unchanged; what the correction sharpens is that the
 half of trigger 1 is only the one they already name, a caller needing its
 `Workspace`/`MemoryFactStore` to survive its own process's exit rather than merely to be
 held across calls within one process.
+
+### docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md#53
+
+*revision: authored · kind: prose · heading: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation / Status · hash: sha256:87a0367c6656cd4abf3edd15408fb02c87fb388374256d45b846327def0313ab*
+
+Amended a fourth time, to version 5, by `P123-FACT-STORE-SURVIVES-THE-PROCESS-2`, which
+built the on-disk half and decided the keying question this record's subject asks. A
+`MemoryFactStore` can now be written to a directory and read back by another build; the
+written form carries its own version and, separately, the key shape it was written under;
+a store written under a `FactKey` shape or a format version the reading build does not know
+is refused **whole** rather than partly read, a payload schema the reading build did not
+declare is refused rather than misread, and an unreadable, corrupt or truncated file is
+reported as such, never served, by a refusal that names the file. The per-key history gained
+a stated retention rule of one entry, proven sufficient because every read the store offers
+reaches `Latest`. The `Decision` section's first clause is superseded by that amendment and
+its third is not: no host reads or writes a persisted store yet, and which may share one
+stays `P128-EVERY-INVOCATION-STARTS-COLD-BECAUSE-NOTHING-OUTLIVES-A-PROCESS`'s question.
+Triggers 2 through 4 are unchanged and unfired, and nothing here re-weighs them: what
+decided this was the requirement, recorded as one.
 
 ### docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md#1
 

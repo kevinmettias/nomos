@@ -955,6 +955,8 @@ dependencies = [
  "nomos-capability",
  "nomos-contracts",
  "nomos-model",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

@@ -15,6 +15,12 @@ mod fact_reader;
 mod fact_store;
 mod invalidation_report;
 
+// `PersistenceError` is declared here for the same reason, and for one more: it is not
+// about a fact at all. It is about a file — what a build must refuse rather than believe
+// when a store written by another process is handed to it — so `fact/` would be the wrong
+// folder even if the name fitted. `OD-ANALYSIS-009` is the decision it answers to.
+mod persistence_error;
+
 mod invalidation;
 mod component;
 mod context;
@@ -36,6 +42,7 @@ pub use fact_key::FactKey;
 pub use fact_reader::FactReader;
 pub use fact_store::FactStore;
 pub use identity::InputDigest;
+pub use persistence_error::PersistenceError;
 pub use reader::ReadOutcome;
 pub use reading::{Dependency, Reader};
 pub use store::{Condensation_Of, GenerationCause, RematerializationGroup};

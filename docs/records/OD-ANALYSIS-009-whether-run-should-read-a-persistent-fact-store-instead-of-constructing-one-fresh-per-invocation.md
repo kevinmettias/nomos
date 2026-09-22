@@ -3,7 +3,7 @@ id: OD-ANALYSIS-009
 type: decision
 title: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation
 status: accepted
-version: 4
+version: 5
 authority: canonical-normative-record
 tags:
   - analysis
@@ -374,6 +374,113 @@ on this record is exclusive and this item holds it, and it is authored once this
 Until that item decides otherwise, the `Decision` section above is this record's position,
 unchanged and deliberately not reweighed here.
 
+## Amendment (P123-FACT-STORE-SURVIVES-THE-PROCESS-2): The On-Disk Half Is Built, And What A Store Means To A Build That Did Not Write It Is Now Decided
+
+**This supersedes the `Decision` section above for the on-disk half, and for nothing else.**
+That section declined "no persistent or cross-invocation fact store, no caller-supplied-store
+parameter, and no daemon or long-lived-process concept"; the middle clause was already
+overtaken at version 2, and this amendment overtakes the first. The third is untouched: no
+daemon, no long-lived process and no host wired to read or write a persisted store arrives
+with this, because which hosts may share one is a question about where a cache lives and it
+belongs to `P128-EVERY-INVOCATION-STARTS-COLD-BECAUSE-NOTHING-OUTLIVES-A-PROCESS`. The
+`Decision` text is left standing rather than rewritten, the amendments at versions 3 and 4
+with it, so what changed is checkable against what it changed from.
+
+**What decided it is the requirement, not a trigger.** No new measurement arrived: triggers
+2 through 4 are where version 4 left them, and the surviving half of trigger 1 — a caller
+needing its `Workspace`/`MemoryFactStore` to survive its own process's *exit* — is still not
+a caller that exists. What exists is the work: this record's own subject is a Required
+capability item on the board, and the item that builds a process outliving an invocation is
+queued behind it and will read what this writes. Version 4's correction is what makes that
+honest rather than circular. It marked the ordering argument for doing the nearer in-process
+work first **spent**, and said in the same breath that spending it "removes a reason to wait
+and supplies no reason to build". The reason to build is this item, recorded here as one,
+the same shape the first override took at version 2 rather than a trigger being read
+generously.
+
+**What was built.** `nomos_analysis::MemoryFactStore` gained
+`Write_To_Directory(&self, directory: &Path)` and
+`Read_From_Directory(directory: &Path, understood_schemas: &[SchemaId])`
+(`crates/substrate/nomos-analysis/src/fact/memory_fact_store.rs`), both delegating to
+`crates/substrate/nomos-analysis/src/fact/memory_store/persistence.rs`, a child of the store's
+own module because it reads and rebuilds fields that are nobody else's business. The
+directory holds one file, `fact-store.json`, written under a scratch name and renamed into
+place so an ordinary write cannot tear it. It carries the store's keys, the retained entry of
+each key's history, the dependents graph, and the count of writes the store has taken. It does
+not carry the `DependencyPropagation` strategy: a strategy is the composing build's choice,
+not state a previous process measured. It *does* carry the dependents graph rather than
+leaving it to be derived from the entries, because `Materialize` adds an edge per dependency
+and never removes one, so deriving it would drop edges the writing store still held and a
+reloaded store would invalidate less than the one that wrote it.
+
+**Two versions, kept apart, because they move for different reasons.** `FORMAT_VERSION` is
+the written form's own; `Understood_Key_Shape` is the key's, and it is not a hand-maintained
+number — it is `Component::All()`'s labels, this crate's declared mirror of `FactKey`'s
+fields, which `Component::Label`'s exhaustive match and
+`crates/substrate/nomos-analysis/tests/fact_identity/key_identity.rs` already hold in step
+with the key. A component added, removed or renamed therefore changes the shape by itself,
+and **every store written under the old one is refused whole**. That is the decision this
+item exists to make: a key whose components moved does not mean what its bytes say, so there
+is no partial read and no per-entry rescue, because a rescue would decide silently what a
+component's disappearance meant. A moved shape costs a recomputation, deliberately, and no
+migration path is offered. Both checks run over the whole file before one entry is built, so
+"wholesale" is structural rather than promised.
+
+**What a build must refuse rather than believe** is `nomos_analysis::PersistenceError`
+(`crates/substrate/nomos-analysis/src/persistence_error.rs`): a file that cannot be written
+or read, one that is corrupt or truncated, a foreign format version, a foreign key shape, a
+key this build addresses by a different digest than the file records, and a payload schema
+the reading build did not declare. Every variant names the file and `File()` returns it
+without a fallback, because a refusal a reader cannot locate is a rumour. The payload
+question is answered by the reader and not by this crate, which holds payload bytes
+opaquely: `understood_schemas` is what the composing build says its providers can interpret,
+and anything else is refused rather than handed on to something that would read the bytes as
+a schema they were not written in.
+
+**The per-key history now has a stated retention rule, and it is one entry.**
+`RETAINED_HISTORY_ENTRIES` and `MemoryFactStore::Push_Entry` carry it at the one place a
+history grows. Every answer the store gives reaches its entry through `Latest`, which is
+`history.last()` — `Current` through `Lookup`, `Historical`, `Dependencies_Of`,
+`Superseded_At`, `Live`, `Refuse_Backdated`, and the invalidation walk's
+`Is_Already_Invalidated` and `Try_Invalidate_One` — so an entry behind the newest is
+unreachable rather than merely unused. The historical read is not the exception it sounds
+like: supersession is recorded *on* the entry it superseded, as that entry's own
+`invalidated_at` and `cause`, so what `Historical` needs is exactly what is kept. A store
+that ends with its process could afford the rest; one that outlives it cannot, because an
+unbounded history is an unbounded file.
+`Test_A_Trimmed_History_Should_Answer_What_A_Single_Write_Answers` and
+`Test_A_Trimmed_History_Should_Invalidate_And_Read_Historically_Like_A_Single_Write` are the
+sufficiency evidence: a store that wrote one key four times answers every read the store
+offers exactly as one that wrote the same final fact once, before and after an invalidation.
+`P128-THE-FACT-GRAPH-IS-DIGEST-KEYED-TREES-AND-THE-RANKING-IS-QUADRATIC` asks for a retention
+rule too; this is the one it adopts rather than a second to mint.
+
+**Proven, not asserted.** `Test_A_Reloaded_Store_Over_An_Unchanged_Tree_Should_Agree_With_A_
+Clean_Rebuild` and `Test_A_Reloaded_Store_Rematerialized_After_An_Edit_Should_Agree_With_A_
+Clean_Rebuild` are `tests/recomputation_equivalence.rs`'s own invariant —
+`IncrementalResult(S) == CleanRecomputation(S)`, over a graph with a real derived hop whose
+payload is a function of its upstream's — asked of a store that crossed a process boundary.
+`Test_A_Reloaded_Store_Should_Invalidate_Exactly_What_The_In_Memory_Store_Would` compares the
+whole `InvalidationReport` of a reloaded store against the store that wrote it, and
+`Test_A_Reloaded_Store_Whose_Edge_Was_Never_Recorded_Should_Serve_A_Stale_Value` is the
+control that keeps the fixture from agreeing for the wrong reason. They live inside the
+crate rather than in `tests/`, because this item's verification predicate runs the library's
+own tests and a proof it does not run is not a proof it has.
+
+**Two dependency decisions, both narrow.** `serde` and `serde_json` are declared in the root
+manifest's workspace table already and inherited with `workspace = true`; no crate was added
+to the lock, only an edge. They are used through private mirror types in
+`persistence.rs` rather than derived onto this crate's public vocabulary, so the written form
+can move without a field rename becoming a silent format change and `Serialize` stays off the
+published surface — `tests/contract/surface/nomos-analysis.txt` shows the difference. And the
+store names `std::fs` rather than `nomos_platform::FileSystem`, which `nomos-ledger` takes
+for the file it owns: the port's surface is text-only and has no operation that creates a
+directory, a store written *to a directory* must create the one it is given, and
+`nomos-platform` was not this item's territory, so widening the port here would have decided
+a platform question inside an analysis one. Which filesystem a persisted store should be
+handed is the same question as which host composes one, and it is left where the rest of
+that question already is.
+
 ## Status
 
 Accepted, amended a second time. Trigger 1 (a real long-lived caller) has fired with the
@@ -404,3 +511,18 @@ revisit conditions above are unchanged; what the correction sharpens is that the
 half of trigger 1 is only the one they already name, a caller needing its
 `Workspace`/`MemoryFactStore` to survive its own process's exit rather than merely to be
 held across calls within one process.
+
+Amended a fourth time, to version 5, by `P123-FACT-STORE-SURVIVES-THE-PROCESS-2`, which
+built the on-disk half and decided the keying question this record's subject asks. A
+`MemoryFactStore` can now be written to a directory and read back by another build; the
+written form carries its own version and, separately, the key shape it was written under;
+a store written under a `FactKey` shape or a format version the reading build does not know
+is refused **whole** rather than partly read, a payload schema the reading build did not
+declare is refused rather than misread, and an unreadable, corrupt or truncated file is
+reported as such, never served, by a refusal that names the file. The per-key history gained
+a stated retention rule of one entry, proven sufficient because every read the store offers
+reaches `Latest`. The `Decision` section's first clause is superseded by that amendment and
+its third is not: no host reads or writes a persisted store yet, and which may share one
+stays `P128-EVERY-INVOCATION-STARTS-COLD-BECAUSE-NOTHING-OUTLIVES-A-PROCESS`'s question.
+Triggers 2 through 4 are unchanged and unfired, and nothing here re-weighs them: what
+decided this was the requirement, recorded as one.

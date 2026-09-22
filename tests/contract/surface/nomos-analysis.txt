@@ -16,6 +16,7 @@ pub const nomos_analysis::FactReuse::TRACE: TraceEquivalence
 pub enum nomos_analysis::Component
 pub enum nomos_analysis::FactError
 pub enum nomos_analysis::GenerationCause
+pub enum nomos_analysis::PersistenceError
 pub enum nomos_analysis::ReadOutcome
 pub enum variant nomos_analysis::Component::Configuration
 pub enum variant nomos_analysis::Component::Contract
@@ -34,6 +35,13 @@ pub enum variant nomos_analysis::GenerationCause::ProviderChanged { provider: Pr
 pub enum variant nomos_analysis::GenerationCause::SnapshotReplaced { from: SnapshotId, to: SnapshotId, differing: BTreeSet<SubjectId>, }
 pub enum variant nomos_analysis::GenerationCause::SubjectChanged { subject: SubjectId, granularity: IncrementalGranularity, }
 pub enum variant nomos_analysis::GenerationCause::VariantChanged { variant: BuildVariantId, }
+pub enum variant nomos_analysis::PersistenceError::Corrupt { file: PathBuf, detail: String, }
+pub enum variant nomos_analysis::PersistenceError::ForeignFormat { file: PathBuf, written: u32, understood: u32, }
+pub enum variant nomos_analysis::PersistenceError::ForeignKeyDigest { file: PathBuf, written: Digest128, recomputed: Digest128, }
+pub enum variant nomos_analysis::PersistenceError::ForeignKeyShape { file: PathBuf, written: Vec<String>, understood: Vec<String>, }
+pub enum variant nomos_analysis::PersistenceError::UnknownPayloadSchema { file: PathBuf, schema: SchemaId, }
+pub enum variant nomos_analysis::PersistenceError::Unreadable { file: PathBuf, detail: String, }
+pub enum variant nomos_analysis::PersistenceError::Unwritable { file: PathBuf, detail: String, }
 pub enum variant nomos_analysis::ReadOutcome::Absent
 pub enum variant nomos_analysis::ReadOutcome::Degraded(Applicability)
 pub enum variant nomos_analysis::ReadOutcome::Materialized
@@ -68,6 +76,10 @@ pub fn nomos_analysis::MemoryFactStore::Live(&self) -> usize
 pub fn nomos_analysis::MemoryFactStore::Materializations(&self) -> u32
 pub fn nomos_analysis::MemoryFactStore::Materialize( &mut self, fact: MaterializedFact, dependencies: &[Dependency], ) -> Result<(), FactError>
 pub fn nomos_analysis::MemoryFactStore::New() -> Self
+pub fn nomos_analysis::MemoryFactStore::Read_From_Directory( directory: &Path, understood_schemas: &[SchemaId], ) -> Result<Self, PersistenceError>
+pub fn nomos_analysis::MemoryFactStore::Write_To_Directory(&self, directory: &Path) -> Result<(), PersistenceError>
+pub fn nomos_analysis::PersistenceError::File(&self) -> &Path
+pub fn nomos_analysis::PersistenceError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_analysis::Reader::Dependencies(&self) -> &[Dependency]
 pub fn nomos_analysis::Reader::Get(&mut self, identity: &FactIdentity) -> Result<&MaterializedFact, FactError>
 pub fn nomos_analysis::Reader::Into_Dependencies(self) -> Vec<Dependency>
@@ -83,6 +95,8 @@ pub impl nomos_analysis::GuaranteeDigest implements core::fmt::Display
 pub impl nomos_analysis::InputDigest implements core::fmt::Display
 pub impl nomos_analysis::MemoryFactStore implements FactStore
 pub impl nomos_analysis::MemoryFactStore implements sealed::Sealed
+pub impl nomos_analysis::PersistenceError implements core::fmt::Display
+pub impl nomos_analysis::PersistenceError implements std::error::Error
 pub impl nomos_analysis::Reader implements FactReader
 pub struct field nomos_analysis::Broadening::applied: IncrementalGranularity
 pub struct field nomos_analysis::Broadening::key: FactKey
