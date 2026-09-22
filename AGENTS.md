@@ -41,7 +41,7 @@ an item.
    `done_when`, and do not introduce a second authority for something already governed.
 6. Run the item's predicate yourself, plus the tests your change actually reaches.
 7. Finish through the ledger. Do not hand-edit an item to Done.
-8. Commit the paths you touched — explicitly, never `git add -A`. Re-read the board.
+8. Commit the paths you touched — they go on `git add`, never `git add -A`. Re-read the board.
 
 A decision that outlives your item belongs in a record, not in a comment and not in this
 file. A record is registered by adding a file under
@@ -86,8 +86,8 @@ in-flight work: wait and retry rather than editing their file to unblock yoursel
 a text match reads a refusal as a success. Retryable and fatal are different codes for a
 reason; `README.md` has the table.
 
-**Write commit messages to a file and use `git commit -F`.** The shell here splits long
-prose bodies into arguments and the commit fails after `git add` has already run.
+**Write commit messages to a file and use a bare `git commit -F`.** The shell splits long prose
+into arguments and the commit fails after `git add`; a pathspec commits the tree, not the index.
 
 **A test that cannot find its corpus passes.** Three corpora live outside this repository
 and CI has none of them, so a green run is not evidence a corpus-backed claim was checked.

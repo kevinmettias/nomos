@@ -272,8 +272,44 @@ that never ran.
 
 ## 9. Commit, then re-read the board
 
-Commit the paths you touched, explicitly, including `work/ledger.json`. Write the message
-to a file and use `git commit -F` — the shell here splits long prose bodies into arguments
-and fails after `git add` has already run.
+**Explicit paths go on `git add` and never on `git commit`.** The two are opposite, and the
+form that reads as the careful one is the unsafe one:
+
+```
+git add <the paths you touched> work/ledger.json
+git diff --cached --name-only      # exactly those paths, and nothing else
+git commit -F <message file>       # bare, with no trailing pathspec
+```
+
+A pathspec on `git commit` ignores the index and commits whatever the working tree holds for
+those paths at commit time, so a peer's write to one of *your* files between your `git add`
+and your commit lands in your commit under your message. Measured in a throwaway repository:
+bytes staged, the file then overwritten, and the pathspec commit published the overwrite
+while the bare commit published what was staged.
+
+A bare commit costs the other half, which is why the pathspec form keeps being reached for:
+it carries the whole index, a peer's staged files included — in the same measurement it swept
+in a file somebody else had staged. That is what the assertion above is for. If the staged
+list holds a path you did not put there, do not commit: unstaging it writes an index a peer
+is in the middle of using, and their own commit is usually seconds away, so re-read the list
+instead.
+
+Neither form closes both windows. The rule picks the one whose remaining window a command can
+see.
+
+`work/ledger.json` is the file this decides. Every session writes it and every session commits
+it, and no copy of it exists outside this tree against which a staged blob could be compared,
+so the commit form is the only protection it has. This is not about keeping a peer's
+transitions out of your commit — `OD-LEDGER-018` settles that a ledger commit publishes the
+whole board, that staging it explicitly is correct, and that what it then carries is not
+yours to prevent. It is about publishing the blob you read.
+
+Where a second copy does exist — the render worktree the projections are built in — a staged
+blob can be checked against it by object hash before committing, and
+`.claude/skills/nomos-spec-change/SKILL.md` carries that procedure. Route there rather than
+copying it here; a second copy of a procedure is a second authority.
+
+Write the message to a file: the shell here splits long prose bodies into arguments and fails
+after `git add` has already run.
 
 Then re-read the board. It has changed while you worked.
