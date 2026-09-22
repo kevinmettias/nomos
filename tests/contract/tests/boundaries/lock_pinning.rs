@@ -17,11 +17,10 @@
 //!
 //! # Why a lock needs its own guard
 //!
-//! A sibling-development build rewrites `Cargo.lock`, deleting the `source` line from all
-//! twelve `xvpe-` packages, and reports nothing. `Cargo.lock` is tracked on purpose, so
-//! `.gitignore` cannot protect it the way it protects the override file, and the scoped
-//! `git add` `AGENTS.md` asks for everywhere else is the gesture that would publish the
-//! damage.
+//! A sibling-development build rewrites `Cargo.lock`, deleting the `source` line from every
+//! `xvpe-` package, and reports nothing. `Cargo.lock` is tracked on purpose, so `.gitignore`
+//! cannot protect it the way it protects the override file, and the scoped `git add`
+//! `AGENTS.md` asks for everywhere else is the gesture that would publish the damage.
 //!
 //! # Why this reads the committed lock and not the file on disk
 //!

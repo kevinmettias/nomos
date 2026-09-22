@@ -82835,14 +82835,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p114-clarity",
-        "acquired_at": 1790111593,
-        "lease_expires_at": 1790122393
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
@@ -82861,7 +82857,36 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "C:\\Users\\kmett\\.claude\\tools\\nomos-check-sweep\\nomos-check-sweep.exe",
+          "-exe",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards\\check.exe",
+          "-cwd",
+          "C:\\Users\\kmett\\source\\repos\\kevinmettias\\code-standards",
+          "-checks",
+          "naming-clarity",
+          "-target",
+          "F:/repos/nomos/crates/rules",
+          "-parallel",
+          "1",
+          "-max-waived",
+          "0"
+        ],
+        "exit_code": 0,
+        "output_tail": "CHECK                LIVE   WAIVED     JUDGED  VERDICT\nnaming-clarity          0        0   118 file  OK\n\n1 check(s): 0 live finding(s), 0 waived by the ledger, 0 check(s) not clean\n",
+        "verified_at": 1790112534,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a44b19fc158b0464ef9280f542a4549b75bcd178"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -94670,14 +94695,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p136-prose",
-        "acquired_at": 1790112256,
-        "lease_expires_at": 1790119456
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -94692,7 +94713,32 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "eady_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: unused import: `Revisions_In`\n  --> tests\\contract\\tests\\boundaries\\lock_pinning.rs:84:65\n   |\n84 | use nomos_contract_tests::{Declared_Revisions, Repository_Root, Revisions_In, XVPE_PREFIX};\n   |                                                                 ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-contract-tests` (test \"boundaries\") generated 1 warning (run `cargo fix --test \"boundaries\"` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.48s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-924e341fbb399618.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-c72d4b3fb5233886.exe)\n",
+        "verified_at": 1790112531,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "a44b19fc158b0464ef9280f542a4549b75bcd178"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,

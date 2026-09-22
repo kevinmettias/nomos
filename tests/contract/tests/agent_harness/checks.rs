@@ -175,10 +175,10 @@ fn Record_Carried_By(record: &str, checkout: &BTreeSet<String>) -> bool
 
 /// The band table is checked where it lives, and nowhere else may hold a copy.
 ///
-/// `tests/contract/tests/boundaries.rs` compares the README's rows against the workspace
-/// in both directions. A second copy in a file nobody reviews would be unchecked, and
-/// would go stale exactly the way the README already had when `OD-PROJECT-001` found it:
-/// twenty-two members described by eleven rows.
+/// `tests/contract/tests/boundaries/readme.rs` compares the README's rows against the
+/// workspace in both directions. A second copy in a file nobody reviews would be unchecked,
+/// and would go stale exactly the way the README already had when `OD-PROJECT-001` found
+/// it: twenty-two members described by eleven rows.
 #[test]
 fn Test_The_Harness_Should_Not_Restate_The_Band_Table()
 {
