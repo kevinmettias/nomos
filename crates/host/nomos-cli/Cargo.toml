@@ -69,10 +69,13 @@ nomos-workspace-discovery = { workspace = true }
 nomos-spec-model = { workspace = true }
 nomos-spec-project = { workspace = true }
 nomos-spec-store = { workspace = true }
-# TaskEnvelope, still named directly here for workflow.rs's own Body::ClaudeCode/Body::
-# Ollama construction -- P43-AGENT-CANONICAL-SEAM-2 moved agent.rs's own former direct use
-# of this crate (building a bare TaskEnvelope) into nomos-agent-orchestration, but this
-# dependency survives that move because workflow.rs's own need for it is unrelated.
+# TaskEnvelope, still named directly here for the workflow module's own Body::Agent
+# construction in workflow/parsing.rs -- the two per-backend variants this comment used to
+# name were collapsed into that one by OD-PACKAGE-016 decision 9, which is why a flag now
+# declares a family rather than choosing a backend. P43-AGENT-CANONICAL-SEAM-2 moved
+# agent.rs's own former direct use of this crate (building a bare TaskEnvelope) into
+# nomos-agent-orchestration, but this dependency survives that move because the workflow
+# module's own need for it is unrelated.
 nomos-agent-contracts = { workspace = true }
 # TaskEnvelope.effort's type, since OD-CONTRACTS-004 -- `agent.rs` names a value of it
 # directly rather than depending on nomos-agent-contracts alone to re-export one.

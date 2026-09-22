@@ -21,11 +21,11 @@ xvpe-primitives = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 nomos-contracts = { workspace = true }
-# `Zone`, `ZONES` and `DESCRIPTORS`, which this crate reads to answer "which architectural
-# component" and "which governing rule" without judging anything itself. "Which correction
-# family" is not answered from here: that is `nomos-correction-orchestration`'s own
-# `CorrectionFamily`, below. `COMPLETENESS_MIRROR` and `NO_TRAILING_WHITESPACE` appear in
-# this crate's tests as fixture rule ids and nowhere in what it compiles for a real run.
+# `ArchitecturePayload` and `Component_Of`, which this crate reads to answer "which
+# architectural component" without judging anything itself. The declaration those name is
+# data in `nomos-architecture.json` at the root of the repository under check, not a
+# constant in any crate: `OD-RULES-024` removed the last component and crate name of this
+# workspace from `nomos-rules`, so there is no `ZONES` here to read.
 nomos-cap-architecture = { workspace = true }
 # nomos-repo-policy for the one provider of that contract: the architectural component a
 # diagnostic carries is resolved against the repository's own declaration, so this host
@@ -37,6 +37,12 @@ nomos-repo-policy = { workspace = true }
 # the verdict a link carries is the entry's own word, and whether a declared identifier names
 # a rule this build composes is `tests/contract`'s comparison and not this crate's.
 nomos-cap-requirement-trace = { workspace = true }
+# `DESCRIPTORS`, which answers "which governing rule" without judging anything itself, and
+# `SourceFile`, `RequiredFact` and `SubjectKind`, the shapes the walk and that answer are
+# written in. "Which correction family" is not answered from here: that is
+# `nomos-correction-orchestration`'s own `CorrectionFamily`, below. `COMPLETENESS_MIRROR`
+# and `NO_TRAILING_WHITESPACE` appear in this crate's tests as fixture rule ids and nowhere
+# in what it compiles for a real run.
 nomos-rules = { workspace = true }
 nomos-composer-std = { workspace = true }
 nomos-workspace = { workspace = true }

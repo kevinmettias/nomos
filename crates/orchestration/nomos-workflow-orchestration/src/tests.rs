@@ -25,7 +25,7 @@ use crate::{
 /// doubles all three share.
 ///
 /// Beside this file rather than in it: this one already carries the dispatch cases for all
-/// five bodies and sits close to the five-hundred-line review trigger, and three more
+/// four bodies and sits close to the five-hundred-line review trigger, and three more
 /// families of case would push it past one.
 mod compensation;
 mod definition;
@@ -583,7 +583,7 @@ fn Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonic
 /// `P40-WORKFLOW-CORRECTION-BODY`'s own `done_when`, the committed half: a workflow step
 /// whose body is a correction reaches Preview, Stage, Validate and Commit through
 /// `nomos-correction-orchestration::Run_Correction`, and its outcome is carried in the
-/// same `StepOutcome` shape the other four bodies already use.
+/// same `StepOutcome` shape the other three bodies already use.
 #[test]
 fn Test_A_Correction_Step_Should_Commit_A_Real_Phantom_Claim()
 {
