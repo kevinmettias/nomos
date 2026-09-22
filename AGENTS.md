@@ -53,9 +53,9 @@ governing.
 These are the facts that have no other home. Each is a rule for working here, not an
 architectural claim; where a *why* exists, it is named.
 
-**The XVPE crossing is a pinned revision, not a checkout beside this repository.** Every
-`xvpe-*` dependency names a git source pinned to a revision, so the workspace resolves XVPE
-from what that revision pins and needs no sibling directory to build. A local override does
+**The XVPE crossing is a pinned revision, not a checkout beside this repository.** The root
+manifest declares every `xvpe-*` crate at one revision and each member inherits it, so the
+workspace resolves XVPE from that revision and needs no sibling directory to build. A local override does
 exist and is opt-in: `.cargo/xvpe-local.toml` substitutes a sibling checkout, is deliberately
 not named so cargo cannot discover it, and is never the governing form (`OD-PLATFORM-004`).
 Requesting it rewrites `Cargo.lock`, so the build then answers to whatever that checkout sits

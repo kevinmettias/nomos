@@ -70,7 +70,7 @@ nomos-platform-std = { workspace = true }
 # `Strategy` and its three axes are deliberately separate. A dev dependency here is the
 # one place both can be seen at once, which is what makes their agreement checkable
 # instead of assumed.
-xvpe-primitives = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-primitives = { workspace = true }
 
 
 [lints]

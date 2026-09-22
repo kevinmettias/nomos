@@ -492,6 +492,25 @@ nomos-spec-ingest = { path = "crates/spec/nomos-spec-ingest" }
 nomos-spec-validate = { path = "crates/spec/nomos-spec-validate" }
 nomos-spec-project = { path = "crates/spec/nomos-spec-project" }
 
+# The XVPE crossing, declared once. `D-130`'s surviving clause requires it be adopted by
+# git reference and commit, and `OD-PLATFORM-004` denies a local substitution any
+# authority; neither says where the reference is spelled. It was spelled fifteen times
+# across seven member manifests until a revision bump became fifteen edits that had to
+# agree, caught only afterwards and only by
+# `tests/contract/tests/boundaries/lock_pinning.rs`. Here it is one edit, and that guard
+# reads this table as the declaring site while still reading every member, so a member
+# that re-pins locally is still a second revision and still fails.
+xvpe-agent-backend-claude-code = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-agent-backend-ollama = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-agent-execution = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-clock = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-diagnostics = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-language-server-backend-lsp = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-primitives = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-remote-call = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-remote-call-backend-json = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-subprocess-execution = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+
 serde = { version = "1", default-features = false, features = ["derive", "std"] }
 serde_json = "1"
 # The LSP transport and wire types used to be pinned here. They moved to

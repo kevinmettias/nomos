@@ -17,8 +17,8 @@ description = "The platform port, bridged onto XVPE. Wraps any nomos ProgramLaun
 # what the 2026-09-10 retirement did and did not reach.
 [dependencies]
 nomos-platform = { workspace = true }
-xvpe-subprocess-execution = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
-xvpe-primitives = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-subprocess-execution = { workspace = true }
+xvpe-primitives = { workspace = true }
 
 [lints]
 workspace = true

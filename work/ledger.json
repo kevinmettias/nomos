@@ -88835,7 +88835,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Territory is one crate short of the change, measured by the claimant of the item this one depends on rather than by execution here. Composing the C# provider needs a CSHARP_LANGUAGE constant in crates/rules/nomos-rules/src/lib.rs, mirroring GO_LANGUAGE at line 191 and its arm in the language resolver, because crates/orchestration/nomos-check-orchestration/src/composition.rs:488 asserts nomos_rules::GO_LANGUAGE equals nomos_lang_go::LANGUAGE and a C# twin of that assertion has nothing to name until the constant exists. crates/rules/nomos-rules is not in this item's territory, and nomos-rules is a lower band than the composition root, so the constant cannot be worked around from inside the reserved paths. Re-authored as -2 with crates/rules/nomos-rules and tests/contract/surface/nomos-rules.txt added, and with the claimant's own list of the edit sites carried into the why by symbol rather than by line, since peers' commits move lines. Unchanged in kind, done_when and predicate otherwise. No claim was ever taken and nothing was written to the tree under this item."
+        }
+      },
       "depends_on": [
         "P123-CSHARP-SYNTAX-PROVIDER-AND-PACKAGE",
         "P123-WORKSPACE-PROFILE-FOR-ADOPTION"
@@ -88857,7 +88861,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "fable-triage",
+        "declined_at": 1790050953
+      },
       "widened": []
     },
     {
@@ -89436,7 +89443,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -89452,7 +89459,30 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Source_Or_Manifest_Should_Carry_A_Numeric_Band ... ok\ntest reachability::Test_Every_Source_File_Should_Be_Reachable ... ok\n\ntest result: ok. 46 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.64s\n     Running tests\\boundaries\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\boundaries-92a4ff356d3672d1.exe)\n",
+        "verified_at": 1790051141,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -89601,14 +89631,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-coupling",
-        "acquired_at": 1790050450,
-        "lease_expires_at": 1790061250
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -89624,7 +89650,33 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "os\\render-p123-coupling\\crates\\spec\\nomos-spec-store)\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.52s\n     Running unittests src\\lib.rs (F:/repos/render-p123-coupling-target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (F:/repos/render-p123-coupling-target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (F:/repos/render-p123-coupling-target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790051157,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -89772,6 +89824,176 @@
           "record_citation"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-A-FIXTURE-IN-A-SPLIT-TEST-FILE-READS-AS-A-PRODUCTION-FACT-AND-REDDENS-THE-GATE",
+      "title": "A test fixture in a split-out test file reads as a production fact, so the determinism check reddens the gate for every session",
+      "why": "tests/contract/tests/determinism_declarations.rs's Test_Every_Fact_Producing_Crate_Should_Declare_A_Strategy fails at HEAD, naming nomos-check-orchestration: \"these crates construct facts and declare no Strategy\". It is red for every session and it is CI's own Test step, so it is a gate failure rather than one crate's problem. The cause is a file split, not a new fact producer. 6bb62542 added crates/orchestration/nomos-check-orchestration/src/facts/currency.rs with its tests in a sibling facts/currency/tests.rs, whose `#[cfg(test)]` marker sits in the parent file rather than in the file the scanner reads, so the check's Without_Test_Modules stripper cannot see it and reads the fixture's `MaterializedFact {` literal as a production construction. This is the same blindness this workspace has met before, where a per-file derivation loses what a marker in another file says, and the previous instances were fixed at the scanner rather than by moving code to suit it. Which side is wrong is the claimant's to measure and is not assumed here: either the scanner is blind to a module declared `#[cfg(test)]` in its parent, and every crate that splits a test module out is at the same risk, or nomos-check-orchestration genuinely owes a determinism Strategy because materialization is a reproducibility domain, in which case the fixture is a false witness for a true obligation and both halves need saying.",
+      "done_when": "Test_Every_Fact_Producing_Crate_Should_Declare_A_Strategy passes at HEAD for a reason the claimant measured rather than for the first change that turns it green; the measurement is recorded in the commit message, naming which side was wrong. If the scanner is blind, it learns that a module declared `#[cfg(test)]` in a parent file is test material wherever its own file lives, the fix is stated where the stripper is defined, and a test proves the blindness is closed by exercising a fixture in a split-out file rather than by asserting the current population; that test must fail if the fix is reverted. If instead the crate owes a Strategy, it declares one whose determinism, reproducibility scope and trace equivalence are true of what materialization actually promises rather than chosen to satisfy the check, and the fixture is still excluded so the declaration rests on production code. Either way no `MaterializedFact` literal is moved, renamed or hidden merely to escape a scanner, because that would leave the next split to fail the same way; the whole contract suite passes; and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/determinism_declarations.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/currency.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/currency/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/src/lib.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p123-strategy",
+        "acquired_at": 1790051022,
+        "lease_expires_at": 1790058222
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-CSHARP-JOINS-THE-RUN-AND-THE-WALK-2",
+      "title": "The C# syntax provider is composed into the check run and the shared walk recognizes its extension, so a C# file is judged",
+      "why": "P123-CSHARP-SYNTAX-PROVIDER-AND-PACKAGE landed at 9f76f2f6 and built crates/languages/nomos-lang-csharp and crates/packages/nomos-lang-csharp-package, but could compose neither, because the composition root and the shared walk were other items' territory when it was authored. Until composition lands, a C# file in a tree is neither walked nor judged: Registered_Extensions in crates/orchestration/nomos-workspace-discovery/src/lib.rs names Rust and Go only, and Registered in crates/orchestration/nomos-check-orchestration/src/composition.rs offers no C# provider. OD-HOST-004 says a second provider is composed by hand, one Offer line, and OD-HOST-008 says adding a language costs the walk one edit and no host any. The edit sites, named by that item's claimant by symbol rather than line because peers' commits move lines: composition.rs needs one more registry.Offer of nomos_lang_csharp::Provider_Offer in Registered, a Recognition::Of_Path arm in both Recognized_Syntax_Provider and Recognized_Language, and a C# twin of the test asserting nomos_rules::GO_LANGUAGE equals nomos_lang_go::LANGUAGE, which needs a CSHARP_LANGUAGE constant in nomos-rules and is why this item reserves that crate; facts/dependency_materialization/syntax.rs needs the provider-to-guarantee mapping, the provider match, and Csharp twins of Go_Syntax_Fact and Go_Production; workspace-discovery's Registered_Extensions gains nomos_lang_csharp::CSHARP_EXTENSION with its own test and the module doc that enumerates the constants; workspace_profile/tests.rs's fixtures move once the extension set changes; and tests/capability_composition.rs's offers assertion grows a row.",
+      "done_when": "Registered offers nomos_lang_csharp::Provider_Offer against nomos.cap.syntax.items beside the Rust and Go offers, with no conditional, which is OD-ROADMAP-003's surviving constraint; nomos-rules publishes a CSHARP_LANGUAGE constant beside GO_LANGUAGE with its arm in the language resolver, and the composition test asserting the constant agrees with the provider's own has a C# twin; Registered_Extensions includes the provider's extension constant, and its module doc no longer enumerates only two languages; the syntax materializer maps the new provider to its declared guarantee and produces its facts the way the Go twin does; a check run over a temporary tree holding one C# file with a construct an existing language-independent rule judges reports that finding, proven by a test, and the report says which rule and why that rule was chosen; the package conformance test that reads packages/ from disk covers nomos.lang.csharp.json; nomos-lsp is not edited, and its inheritance of the extension through the shared walk is shown by reading its sources rather than asserted; every touched crate's public surface snapshot is re-blessed; the declared-universe table is updated if a universe moves; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-workspace-discovery",
+          "crates/rules/nomos-rules",
+          "Cargo.lock",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/contract/surface/nomos-workspace-discovery.txt",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P123-A-FIXTURE-IN-A-SPLIT-TEST-FILE-READS-AS-A-PRODUCTION-FACT-AND-REDDENS-THE-GATE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-workspace-discovery",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-OD-WORKFLOW-004-SAYS-THE-EXECUTOR-HAS-NO-REAL-WORKRESULT-AND-IT-HAS-HAD-ONE-SINCE-FE0FAC58",
+      "title": "OD-WORKFLOW-004's finding is in its own title, and the thing it says is absent has existed since fe0fac58",
+      "why": "OD-WORKFLOW-004 is titled that the first real agent executor still has no real WorkResult, so WF-006's trigger is half fired, and its finding says the same. Measured while amending OD-WORKFLOW-005, and confirmed at HEAD: crates/agent/nomos-agent-executor-claude-code/src/response.rs constructs a real WorkResult, landed at fe0fac58 under OD-EXECUTOR-003 and later refined by OD-EXECUTOR-011, and it reaches a workflow step's outcome through AgentDispatchOutcome. A record whose own title states a condition the tree left behind is the worst case of the staleness class, because a reader who checks nothing else still reads the title, and because a half-fired trigger is exactly the kind of thing a later decision cites to justify waiting. The amending item could not reach it: OD-WORKFLOW-005's amendment routes the question here rather than deciding it, because its own done_when forbade restating OD-WORKFLOW-002's triggers.",
+      "done_when": "OD-WORKFLOW-004 is amended, its version raised, so neither its title nor its finding asserts the absence of a WorkResult the tree constructs, with the executor's construction site cited by path and the commit and record that landed and refined it cited by identifier; if the title itself must change, the file is renamed to match, because the H1 must equal the title and the file name is derived from it, and the registration under crates/spec/nomos-spec-store/records is updated to the new path in the same commit; whether WF-006's trigger is now fully fired rather than half fired is answered rather than left implied, and if answering it requires restating what OD-WORKFLOW-002's conditions are, that record is amended too rather than quoted into this one; nothing about OD-ROADMAP-001's override is reopened; both projections are re-rendered per the nomos-spec-change skill, which for a renamed record means checking that no other record's relation still names the old path; and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-A-CRATE-DOC-AND-ITS-RECORD-DISAGREE-ABOUT-WHICH-OVERRIDE-LICENSED-THE-WORKFLOW-RUNTIME",
+      "title": "The workflow crate says its runtime was built under a standing override its own record says does not reach the workflow tier",
+      "why": "Two authorities disagree about why the retry, timeout and compensation runtime was allowed to be built, measured at HEAD. crates/orchestration/nomos-workflow-orchestration/src/lib.rs says P123-WORKFLOW-RETRY-TIMEOUT-COMPENSATION-RUNTIME built it \"under the standing override OD-ROADMAP-001 records\". OD-WORKFLOW-005, at both version 1 and version 2, explicitly does not claim OD-ROADMAP-001 covers the workflow tier; its own title says the increment is built under the user's standing override rather than a fired trigger, which is a different claim about a different authority. One of the two is wrong and a reader cannot tell which. AGENTS.md says a disagreement between authorities is a defect worth an item, and neither of these is the mechanical one, so it cannot be settled by preferring a check. Two smaller drifts in the same crate's prose, both confirmed, ride along because they are the same edit and the same reader: README.md line 107 says this crate dispatches to \"four real dispatch targets\" where its own lib.rs says five, and run.rs lines 312 and 319 carry doc comments naming Body::ClaudeCode, a variant OD-PACKAGE-016 replaced, so a reader following the doc looks for a variant that is not there.",
+      "done_when": "The workflow crate's doc and its governing record agree about which authority licensed the runtime increment, decided by reading OD-ROADMAP-001's own scope text against OD-WORKFLOW-005's, and the one that is wrong is corrected rather than both being softened into agreement; if the crate doc is wrong it names the authority the record names, and if the record is wrong it is amended with its version raised; the reasoning is recorded wherever the correction lands, so the next reader sees why one authority rather than the other governs this increment. OD-ROADMAP-001's own scope is not widened, narrowed or reopened by this item: if the honest answer is that neither authority covers the workflow tier and the increment rests on something else, that is stated as a finding and a decision item is named for it rather than settled here. README.md's row for this crate names the same number of dispatch targets as the crate's own doc, counted rather than copied. The two doc comments in run.rs name the variant that exists. The public surface does not move, no test changes behavior, and if the correction reaches a record then both projections are re-rendered per the nomos-spec-change skill; and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-workflow-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "README.md",
+          "docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
       },
       "verified": null,
       "abandoned": [],

@@ -13,8 +13,8 @@ nomos-platform = { workspace = true }
 # The dispatch itself, and the bridge from this workspace's launcher onto the
 # surface the engine's adapters take.
 nomos-platform-xvpe = { workspace = true }
-xvpe-agent-execution = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
-xvpe-agent-backend-ollama = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-agent-execution = { workspace = true }
+xvpe-agent-backend-ollama = { workspace = true }
 
 [dev-dependencies]
 nomos-contracts = { workspace = true }

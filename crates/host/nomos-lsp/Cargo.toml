@@ -15,9 +15,9 @@ path = "src/main.rs"
 # The engine's provider contract, and the server that speaks the protocol over it. The wire
 # types and the stdio transport are that crate's; nothing here names either, which is what
 # lets every case in this crate be asserted without a client.
-xvpe-diagnostics = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
-xvpe-language-server-backend-lsp = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
-xvpe-primitives = { git = "https://github.com/kevinmettias/xvpe.git", rev = "82a3c8fccf4ef7f3759f36d3f320a91d0f96341c" }
+xvpe-diagnostics = { workspace = true }
+xvpe-language-server-backend-lsp = { workspace = true }
+xvpe-primitives = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 nomos-contracts = { workspace = true }
