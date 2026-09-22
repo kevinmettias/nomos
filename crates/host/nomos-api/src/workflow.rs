@@ -44,19 +44,11 @@ use nomos_gate_orchestration::Fresh_Run_Id;
 use nomos_platform::Clock;
 use nomos_workflow_orchestration::{Body, CheckBody, CommitIntent, CorrectionBody, GateBody, Platform, Run, StepOutcome, WorkflowOutcome, WorkflowStepPlan};
 
-mod agent_execution_error_response;
-mod agent_execution_outcome_response;
 mod dispatch_error_response;
-mod ollama_execution_error_response;
-mod ollama_execution_outcome_response;
 mod step_outcome_response;
 mod workflow_run_response;
 
-pub use agent_execution_error_response::AgentExecutionErrorResponse;
-pub use agent_execution_outcome_response::AgentExecutionOutcomeResponse;
 pub use dispatch_error_response::DispatchErrorResponse;
-pub use ollama_execution_error_response::OllamaExecutionErrorResponse;
-pub use ollama_execution_outcome_response::OllamaExecutionOutcomeResponse;
 pub use step_outcome_response::StepOutcomeResponse;
 pub use workflow_run_response::WorkflowRunResponse;
 
@@ -90,8 +82,8 @@ pub fn Handle_Workflow_Run(plan: &WorkflowStepPlan) -> WorkflowRunResponse
 /// `body`, with a `Check`, `Correction` or `Gate` root re-walked for real -- discarding
 /// whatever `sources` the caller's own value carried, the identical "always re-walk rather
 /// than trust a caller-supplied placeholder" contract `nomos-cli`'s own `workflow.rs` keeps
-/// between parsing a command and dispatching it. `ClaudeCode` and `Ollama` pass through
-/// unchanged: neither names a root this crate could walk.
+/// between parsing a command and dispatching it. `Agent` passes through unchanged: it
+/// names no root this crate could walk.
 ///
 /// Returns the already-final [`WorkflowRunResponse`] instead of a walked [`Body`] when a
 /// named root is not a directory, or when a `Check` body's real walk found no source --

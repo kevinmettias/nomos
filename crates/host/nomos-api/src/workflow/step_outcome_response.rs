@@ -6,8 +6,6 @@ use crate::{check, correction};
 use nomos_workflow_orchestration::StepOutcome;
 use serde::Serialize;
 
-use super::{AgentExecutionOutcomeResponse, OllamaExecutionOutcomeResponse};
-
 /// A serializable twin of [`nomos_workflow_orchestration::StepOutcome`].
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "snake_case", tag = "backend")]

@@ -115,8 +115,8 @@
 //! `Run_Agent_Judgment`, the only major verb family in this workspace that had reached this
 //! point with no orchestration crate of its own -- this crate's own first real caller of
 //! that seam outside its own unit tests and `nomos-cli`. [`agent::AgentDispatchResponse`]
-//! is its own response type, not a reuse of [`workflow::AgentExecutionOutcomeResponse`]/
-//! [`workflow::OllamaExecutionOutcomeResponse`]: see `agent.rs`'s own module doc for why.
+//! is also what a workflow `Agent` step's own outcome renders as, rather than a second,
+//! per-backend projection of it: see `agent.rs`'s own module doc for why.
 //! Its twenty-sixth, [`Handle_Gate_Compare`], gives the Gate its fourth verb here and closes
 //! the set `ARC-ROADMAP-001`'s constraint 5 names -- plan, run, explain and compare -- which
 //! `nomos-cli` had served in full while this crate stopped at three, leaving the only way to
@@ -214,8 +214,5 @@ pub use work::{
     Handle_Work_Renew, Handle_Work_Show, Handle_Work_TakeOver, Handle_Work_Validate, ListResponse,
     ReservationOutcomeResponse, ReservationResponse, ShowResponse, ValidateResponse,
 };
-pub use workflow::{
-    AgentExecutionErrorResponse, AgentExecutionOutcomeResponse, DispatchErrorResponse, Handle_Workflow_Run,
-    OllamaExecutionErrorResponse, OllamaExecutionOutcomeResponse, StepOutcomeResponse, WorkflowRunResponse,
-};
+pub use workflow::{DispatchErrorResponse, Handle_Workflow_Run, StepOutcomeResponse, WorkflowRunResponse};
 

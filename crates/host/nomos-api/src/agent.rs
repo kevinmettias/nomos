@@ -12,9 +12,8 @@
 //! thing as one of them borrowing the other's. Before this crate, `nomos-agent-executor-claude-code` and
 //! `nomos-model-backend-ollama` reached this workspace only through `nomos-cli`'s own
 //! `agent` group and through `nomos_workflow_orchestration`'s own per-backend step
-//! dispatch (rendered here as `workflow::AgentExecutionOutcomeResponse`/
-//! `OllamaExecutionOutcomeResponse`); this is the first place this crate can dispatch a
-//! bare agent task, or a role judgment, on its own.
+//! dispatch; this is the first place this crate can dispatch a bare agent task, or a role
+//! judgment, on its own.
 //!
 //! [`Shipped_Targets`] is this host's composition root for the two adapters, which
 //! `OD-ROADMAP-005` decision 2 moved out of `nomos-agent-orchestration`. That crate names
@@ -28,16 +27,16 @@
 //! and actual surface from a real tree is a composition root's own file-reading concern,
 //! the identical division `sources.rs` already draws for Gate's own walk.
 //!
-//! [`AgentDispatchResponse`] is not [`crate::workflow::AgentExecutionOutcomeResponse`]/
-//! [`crate::workflow::OllamaExecutionOutcomeResponse`] reused: those two exist for a
-//! workflow step's own outcome, paired with `workflow::AgentExecutionErrorResponse`/
-//! `OllamaExecutionErrorResponse`, which keep each backend's own `Unavailable`/
-//! `Unparseable` structure apart. `nomos_agent_orchestration::AgentDispatchOutcome`
-//! deliberately does not: its own `Unavailable` collapses either port's refusal to the text
-//! the refusing adapter's `Display` already produces, the identical fold
-//! `nomos-cli`'s own former `Backend_Unavailable` made -- see that crate's own
-//! `AgentDispatchOutcome` doc. A caller of this crate's own bare Agent verb sees exactly
-//! that fold, not a structure this seam does not keep.
+//! [`AgentDispatchResponse`] is also what a workflow `Agent` step's own outcome renders as:
+//! [`crate::StepOutcomeResponse::Agent`] carries this type, so an agent dispatch has one
+//! projection in this crate rather than a workflow-side pair beside it. There is no
+//! per-backend structure left for either path to keep apart, because
+//! `nomos_agent_orchestration::AgentDispatchOutcome` already folded it: its own
+//! `Unavailable` collapses either port's refusal to the text the refusing adapter's
+//! `Display` already produces, the identical fold `nomos-cli`'s own former
+//! `Backend_Unavailable` made -- see that crate's own `AgentDispatchOutcome` doc. A caller
+//! of this crate's own bare Agent verb, and a caller reading a workflow step's outcome,
+//! sees exactly that fold.
 
 use nomos_agent_contracts::{DeclaredTarget, MicroDollars};
 use nomos_agent_executor_claude_code::ClaudeCodeExecutor;
@@ -176,8 +175,9 @@ fn Crate_Root(root: &Path, crate_name: &str) -> String
 /// `cost` as the dollar figure the wire publishes.
 ///
 /// The one place in this workspace where the engine's exact money becomes a float, and it
-/// is here because `cost_usd` is a published field of two `Serialize` response types --
-/// [`AgentDispatchResponse::Executed`] and [`crate::workflow::AgentExecutionOutcomeResponse`].
+/// is here because `cost_usd` is a published field of a `Serialize` response type --
+/// [`AgentDispatchResponse::Executed`], which a bare Agent verb and a workflow `Agent` step
+/// both answer with.
 /// A caller reading that number off a JSON-RPC or MCP reply already has a float, and
 /// changing the field to integer micros would change a shape this workspace publishes
 /// rather than one it merely holds.

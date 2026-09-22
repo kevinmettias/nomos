@@ -1,7 +1,6 @@
 pub enum nomos_api::AbandonResponse
 pub enum nomos_api::AddResponse
 pub enum nomos_api::AgentDispatchResponse
-pub enum nomos_api::AgentExecutionErrorResponse
 pub enum nomos_api::AgentJudgeRoleResponse
 pub enum nomos_api::AuditResponse
 pub enum nomos_api::BaselineAllowanceResponse
@@ -25,7 +24,6 @@ pub enum nomos_api::ListResponse
 pub enum nomos_api::MarkdownResponse
 pub enum nomos_api::NoVerdictResponse
 pub enum nomos_api::NormativeOutcomeResponse
-pub enum nomos_api::OllamaExecutionErrorResponse
 pub enum nomos_api::OriginResponse
 pub enum nomos_api::PathMatchResponse
 pub enum nomos_api::PreviewResponse
@@ -55,11 +53,6 @@ pub enum variant nomos_api::AgentDispatchResponse::Answered { family: String, re
 pub enum variant nomos_api::AgentDispatchResponse::Executed { family: String, assumptions: Vec<String>, unresolved_questions: Vec<String>, denied_tool_uses: Vec<String>, is_error: bool, cost_usd: f64, duration_ms: u64 }
 pub enum variant nomos_api::AgentDispatchResponse::NotSelected { absence: String }
 pub enum variant nomos_api::AgentDispatchResponse::Unavailable { family: String, reason: String }
-pub enum variant nomos_api::AgentExecutionErrorResponse::ProhibitedChange { path: String, }
-pub enum variant nomos_api::AgentExecutionErrorResponse::Unavailable { reason: String, }
-pub enum variant nomos_api::AgentExecutionErrorResponse::Unparseable { reason: String, }
-pub enum variant nomos_api::AgentExecutionErrorResponse::UnresolvableRoot { root: String, }
-pub enum variant nomos_api::AgentExecutionErrorResponse::UnsupportedTools { capabilities: String, }
 pub enum variant nomos_api::AgentJudgeRoleResponse::Dispatched { dispatch: AgentDispatchResponse }
 pub enum variant nomos_api::AgentJudgeRoleResponse::NoDeclaredRoleOrSurface
 pub enum variant nomos_api::AgentJudgeRoleResponse::NoFinding
@@ -138,8 +131,6 @@ pub enum variant nomos_api::NormativeOutcomeResponse::Gone { from: u32 }
 pub enum variant nomos_api::NormativeOutcomeResponse::Held { block: u32 }
 pub enum variant nomos_api::NormativeOutcomeResponse::Moved { from: u32, to: u32 }
 pub enum variant nomos_api::NormativeOutcomeResponse::Unlocatable
-pub enum variant nomos_api::OllamaExecutionErrorResponse::Unavailable { reason: String, }
-pub enum variant nomos_api::OllamaExecutionErrorResponse::UnsupportedTools { capabilities: String, }
 pub enum variant nomos_api::OriginResponse::Clarified
 pub enum variant nomos_api::OriginResponse::Decided
 pub enum variant nomos_api::OriginResponse::Inferred
@@ -248,12 +239,6 @@ pub struct field nomos_api::AbsenceResponse::expected: String
 pub struct field nomos_api::AbsenceResponse::subject: String
 pub struct field nomos_api::AbsentPath::item: ItemId
 pub struct field nomos_api::AbsentPath::path: String
-pub struct field nomos_api::AgentExecutionOutcomeResponse::assumptions: Vec<String>
-pub struct field nomos_api::AgentExecutionOutcomeResponse::cost_usd: f64
-pub struct field nomos_api::AgentExecutionOutcomeResponse::denied_tool_uses: Vec<String>
-pub struct field nomos_api::AgentExecutionOutcomeResponse::duration_ms: u64
-pub struct field nomos_api::AgentExecutionOutcomeResponse::is_error: bool
-pub struct field nomos_api::AgentExecutionOutcomeResponse::unresolved_questions: Vec<String>
 pub struct field nomos_api::BaselineDebtResponse::allowance: BaselineAllowanceResponse
 pub struct field nomos_api::BaselineDebtResponse::declared_path: Option<String>
 pub struct field nomos_api::BaselineDebtResponse::rationale: String
@@ -342,7 +327,6 @@ pub struct field nomos_api::NodeSummaryResponse::title: String
 pub struct field nomos_api::NormativeMovementResponse::canonical_hash: String
 pub struct field nomos_api::NormativeMovementResponse::outcome: NormativeOutcomeResponse
 pub struct field nomos_api::NormativeMovementResponse::statement_id: String
-pub struct field nomos_api::OllamaExecutionOutcomeResponse::response: String
 pub struct field nomos_api::ProfileOutcomeResponse::profile: Profile
 pub struct field nomos_api::ProfileOutcomeResponse::verdict: VerdictResponse
 pub struct field nomos_api::RecordRelationResponse::relation: String
@@ -390,7 +374,6 @@ pub struct field nomos_api::VacatedResponse::outcome: VacateOutcomeResponse
 pub struct field nomos_api::VacatedResponse::path: PathBuf
 pub struct nomos_api::AbsenceResponse
 pub struct nomos_api::AbsentPath
-pub struct nomos_api::AgentExecutionOutcomeResponse
 pub struct nomos_api::BaselineDebtResponse
 pub struct nomos_api::BaselinePopulationResponse
 pub struct nomos_api::BlockedItem
@@ -408,7 +391,6 @@ pub struct nomos_api::GateRunResponse
 pub struct nomos_api::IdentityChangeResponse
 pub struct nomos_api::NodeSummaryResponse
 pub struct nomos_api::NormativeMovementResponse
-pub struct nomos_api::OllamaExecutionOutcomeResponse
 pub struct nomos_api::ProfileOutcomeResponse
 pub struct nomos_api::RecordRelationResponse
 pub struct nomos_api::RefusalResponse

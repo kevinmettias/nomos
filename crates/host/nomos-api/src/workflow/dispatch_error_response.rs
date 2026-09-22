@@ -5,8 +5,6 @@ use crate::response::GateRunResponse;
 use nomos_workflow_orchestration::DispatchError;
 use serde::Serialize;
 
-use super::{AgentExecutionErrorResponse, OllamaExecutionErrorResponse};
-
 /// A serializable twin of [`nomos_workflow_orchestration::DispatchError`].
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "snake_case", tag = "backend")]
