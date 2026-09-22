@@ -88613,14 +88613,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-gate034",
-        "acquired_at": 1790044315,
-        "lease_expires_at": 1790059041
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88636,7 +88632,33 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "34\\crates\\repository\\nomos-repo-policy)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\render-gate034\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-lang-rust-cargo v0.1.0 (F:\\repos\\render-gate034\\crates\\languages\\nomos-lang-rust-cargo)\n   Compiling nomos-lang-go-modules v0.1.0 (F:\\repos\\render-gate034\\crates\\languages\\nomos-lang-go-modules)\n   Compiling nomos-lang-rust-deny v0.1.0 (F:\\repos\\render-gate034\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-lang-rust-clippy v0.1.0 (F:\\repos\\render-gate034\\crates\\languages\\nomos-lang-rust-clippy)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\render-gate034\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-lang-go v0.1.0 (F:\\repos\\render-gate034\\crates\\languages\\nomos-lang-go)\n   Compiling nomos-workspace v0.1.0 (F:\\repos\\render-gate034\\crates\\substrate\\nomos-workspace)\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\render-gate034\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\render-gate034\\crates\\rules\\nomos-rules)\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\render-gate034\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\render-gate034\\tests\\contract)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.23s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790049454,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -89121,14 +89143,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-sarifcli",
-        "acquired_at": 1790049188,
-        "lease_expires_at": 1790059988
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -89143,6 +89161,61 @@
           "--bins"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "fable-p123-sarifcli",
+          "reason": "Not implementable inside the reserved territory, measured at ee4d6111. (1) crates/host/nomos-cli/Cargo.toml declares neither nomos-api nor serde_json, and no crate in this workspace re-exports serde_json, so calling nomos_api::SarifLog needs two dependencies added to a Cargo.toml the done_when forbids changing and the territory does not reserve. The item why states nomos-cli already depends on serde_json; it does not, and crates/host/nomos-cli/tests/request_submit.rs line 200 records the deliberate refusal to add it even as a dev-dependency. (2) nomos-cli and nomos-api are both zone Host in nomos-architecture.json and no entry in its exceptions names that pair, so the edge fails tests/contract/tests/boundaries/graph.rs Test_Dependencies_Should_Run_Strictly_Downward, and nomos_rules Check_Dependency_Direction makes the identical judgment over a real check run, so this repository own self-check would go red as well. Permitting the edge means editing nomos-architecture.json and deciding an architectural question in a record, both outside the territory. (3) SarifLog::Of_Gate_Run takes nomos_api::GateRunResponse and Of_Check_Run takes nomos_api::CheckResponse, and neither verb produces either: gate.rs reduces nomos-gate-orchestration own outcome and check.rs renders nomos_check_orchestration::CheckOutcome, so even with the dependency a host would have to call nomos_api::Handle_Gate_Run, walking and judging the tree a second time, or write a converter. Only the flag plumbing is feasible here: the check parser can return a CLI-owned invocation without touching main.rs, which names no type. Nothing was edited.",
+          "abandoned_at": 1790049411
+        }
+      ],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT",
+      "title": "Policy resolves across declared layers into an effective policy that names what decided each field",
+      "why": "OD-POLICY-001, landed at a7f98a40, decides the ten configuration layers Nomos policy resolves across, that a field combines by its shape (override for a single value, keyed union for a set, refusal for a same-layer contradiction or a locked override or an unreadable artifact), and that an effective policy carries a provenance per field rather than a merged blob. It builds nothing and names this item, with the territory reproduced below from the record's own proposal. Measured at that commit: the only precedence rule in the workspace is GatePolicyFile::Resolved_Over, two levels deep, and nothing records which of the two decided a field, so a repository cannot be told why its gate judged as it did. ConfigurationLayer does not exist. OD-ROADMAP-003 records the pause on new gate policy increments as lapsed, and the constraint that survives it is satisfied here, because a resolved field is read off declared contributions and consults no store state, cost or prior materialization.",
+      "done_when": "nomos-contracts publishes ConfigurationLayer with the ten layers OD-POLICY-001 names, in the record's own order, beside KnowledgeSourceRole, with a Label and a declared-universe mirror the completeness scanner accepts; nomos-gate-orchestration resolves a set of layer-labelled contributions into an effective policy in which every field carries the layer and the artifact that decided it, what it overrode, and what it rejected; each field combines by the shape OD-POLICY-001 assigns it and by no per-layer or per-caller exception; a layer with no source is reported absent rather than as an empty contribution, and a sentinel value is not a statement of a field; each of the record's three refusal cases is a typed refusal naming the offending key or artifact, and declaration order resolves none of them; the nomos-gate.json reader is re-homed under the resolver so it contributes at the Repository layer rather than resolving on its own, with Resolved_Over's two-level behavior preserved as the CommandLine-over-Repository case it always was; GateRunProvenance.policy stays a digest of the effective values so a comparison still attributes a difference to what judged a run and not to which layer said it; the other four repository policy readers are untouched, as the record's re-homing plan requires; a test resolves a field stated at three layers and asserts the winner, the provenance and the overridden contributions; no host is wired by this item, because rendering the provenance is the dependent item the record names; both surface snapshots are re-blessed; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/contracts/nomos-contracts/src/configuration_layer.rs",
+          "crates/contracts/nomos-contracts/src/lib.rs",
+          "tests/contract/surface/nomos-contracts.txt",
+          "crates/orchestration/nomos-gate-orchestration/src/policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/finding_query.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_run_result.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P123-GATE-PHASES-THRESHOLDS-AND-APPROVALS-ARE-AUTHORED-IN-THE-POLICY-FILE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 5400
       },
       "verified": null,
       "abandoned": [],

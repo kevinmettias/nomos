@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:b1c7a30fbd3ca0fb75c5cf5b537040c0473420169cdc3bf143ca59dd7ca474b8",
-  "inputs_digest": "sha256:2656f7874253e720fe8138bc77ef0790e8c08dac0b0d59b34533df34ad550889",
+  "content_digest": "sha256:9e129cad8ae3ee0fa2b25512b43e1a917f8894f72b9dc3ec8efaf0942acf9e90",
+  "inputs_digest": "sha256:fa83d38bb8c8b270aba56706aee5619b38eb86ebc78de1b7325d750a3a991238",
   "sections": [
     [
       "Documents",
-      261
+      262
     ],
     [
       "Sections",
-      2241
+      2255
     ],
     [
       "Source blocks",
-      7983
+      8041
     ]
   ],
   "inputs": [
@@ -569,6 +569,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md@authored",
       "hash": "sha256:fbd373403646110ce167420a031964ee26ad49e92f21db8c9141e7a498148b4b"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md@authored",
+      "hash": "sha256:76df0f974e8c23df109513ca3b9b765d102f86c48ac955e758c55d16295e5028"
     },
     {
       "content": "documents",
@@ -5754,6 +5759,76 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#42",
       "hash": "sha256:b4b727ec683396612331f67d02444d936f8cf6ae2967b3f84588f0db0acd372c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#1",
+      "hash": "sha256:5e77ef0cfe34aa68416a4458b8effd1495fcc1384fa013acd231af8b67d817e3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#2",
+      "hash": "sha256:0490132b9ef70dfa556729d8bab3d035407766b2d71f3d909baa2e9e0a5ae19c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#7",
+      "hash": "sha256:a5211d9af3b72dc589a441948f48e62c6c8944daaf9cf1bfe84fb51184cc46f1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#10",
+      "hash": "sha256:5350943963c2425729af9c6c03eb24b69db55cfbae343037da5822d64db1c16c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#12",
+      "hash": "sha256:05ff6f18470cf150979d22281faefe5724112fb73ac6be161b03f5f108b0d1e4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#16",
+      "hash": "sha256:6a20958b2cdedcea89d72a19e3af2ec587925f8156be70cec49203e11279ee26"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#19",
+      "hash": "sha256:86ea562feec038450bd4e6dec0c3f53ca01962bc2de93efaf0935dd7c850a1c8"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#31",
+      "hash": "sha256:1b8ef48faabcda7d41b7d6768f50cea98db2ffaf3170ef9cf005ba41738303e7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#32",
+      "hash": "sha256:96688c40edb4acc5fa915fa31de14cb71469550033fc4e867bf424b4d2c89af3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#38",
+      "hash": "sha256:7c44799d820eb8076c51fe56b092c7ec8a685181490ad4f589dacd346683ba60"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#49",
+      "hash": "sha256:f864985427d9145d87eaedff7537d3fcc60c058b1ead4d07b31b24310e22e868"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#53",
+      "hash": "sha256:d1bea9d20345cd913e8f4cfcda584835a5ad2a4782595f9ef3d78476134464e6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#55",
+      "hash": "sha256:f5d0a74fc7e62297169242da4b0d21d36de7fefff628bbec262659ba596a433e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#57",
+      "hash": "sha256:658aa4e8037cc2b9f9d4bc49276de5e984866c4787cd977d5568af91fb55469d"
     },
     {
       "content": "headings",
@@ -28459,6 +28534,296 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#48",
       "hash": "sha256:a6985cf851b1314ab6e71d84e20eb70041ebc859d96c4535a4bd7e8bf04c70ba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#1",
+      "hash": "sha256:34cc74ebb69040f19e66aa8b86e1be5a463e67e1f8e89f940151afa0f544a3eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#3",
+      "hash": "sha256:7768395b96470a5d69621e4e1a21baba8b8223f1dbdf23f2feb812c9455a4949"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#4",
+      "hash": "sha256:5b7b9bf9bb7e1c58989d34ae44bf908f2d92950c4e47d6c75a46015478c55d1d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#5",
+      "hash": "sha256:703e8fc35dce28719bdf2b30038834f77732fa475c2865dab73e4b1beb970032"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#6",
+      "hash": "sha256:bd20696048085e6f9432cb22698f604990c94e734af2c58ca76ae421230a6f7f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#7",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#8",
+      "hash": "sha256:7ecb5abdde14a6556c7ef4e89b04f3cdc7064536116b52be619a1045de0d1f90"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#9",
+      "hash": "sha256:0d69efff07d424b54ef09837ec5b0f24cf62253ababc6df986023ec4951aab80"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#10",
+      "hash": "sha256:14c0dc861b140cd961a5d9e8869acb21f4d0d2f213abadd335e97d549d20eed9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#11",
+      "hash": "sha256:4fa6b5742ab4fea62076ee07507014786e6fbfa23752fe973c5ee73dc44e51f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#12",
+      "hash": "sha256:098073f84300291cf6cac2cd9db4051b64bacb14e800163d934fa1ce523a403a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#13",
+      "hash": "sha256:5c3cdbc345d9f4184979cb39f337d3f5b0b1b776883c05a81a0e0f86b1229488"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#14",
+      "hash": "sha256:e46db75ede90e2fa70af736e7f650829cc6010982164eaf0d7990d7923bbb6b4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#15",
+      "hash": "sha256:f399ab538535e04853f3e587412ce2418a25f10a6be2d64450731cb37e93ea92"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#16",
+      "hash": "sha256:98a59a6e26471209a5bfefdaaf90437d93ec311d6808253583d04f799590c6a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#17",
+      "hash": "sha256:fb9f647f2f835e8733f0f4f5bdf478d442ef2c2c537d4ba49b1725b1ddb48471"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#18",
+      "hash": "sha256:78d9e4ac5e5f07509f4fa0a199b7efb22f5b2236fe842de8a5b34929122efcd5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#19",
+      "hash": "sha256:04876ff4f569d50187b2418034a80742deaa5039741e4cf4bd6e445d3b4b72d4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#20",
+      "hash": "sha256:bb90be77555659037d7dfbfabe96b1f9098eef7306cc0536fb9c922e89c7de14"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#21",
+      "hash": "sha256:b5e6f44fd737becb2a55328bce2aa79e03bb624fd6c944754664151edd1134b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#22",
+      "hash": "sha256:3b4205f6b128f9a4a359b70dbbb61dcdab78667c9306667a570d746de855cf34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#23",
+      "hash": "sha256:0b589bb169190ec42b91c26a28cc53806ed823cb9a6e4183df3b365a27c9fc71"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#24",
+      "hash": "sha256:233afd834ca14eef178ee104d1352f351f32c4e9862a7d597e0e7ee45645a9cc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#25",
+      "hash": "sha256:82cb0a29dd6d18f5dd50bd735cd59882785c8564777f7dcc038d4dc47c8136d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#26",
+      "hash": "sha256:5370cff8bb2b8354e901cf1e473f7de3d859cdbf361b28778712ee2c698d5afc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#27",
+      "hash": "sha256:89be300546ba27d15e5c0c3834dc81d4a3e16ba7c8b455291c773e536770cc59"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#28",
+      "hash": "sha256:a58d44aa98230b9da7c32fb172d8411fa0d540a46a7f4a1353f3828efa64ea1b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#29",
+      "hash": "sha256:ee0e9475a07e73376342cf9eae9865deee633e4e3b1c4537aa5e40cff437d8c5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#30",
+      "hash": "sha256:2b656a78894917f45a38c479c0c4bacb3468054da01195af262019e2e3bfbd6f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#31",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#32",
+      "hash": "sha256:5df4867ec60f8cbf3b82b0291e9ba333046862da6540032ed685bea10f0ff3be"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#33",
+      "hash": "sha256:528466acf1498ecda157cf3201ce4b8da31b6165ba4e9bfffe51eca31aec8fa2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#34",
+      "hash": "sha256:c1520edad638614ae4722f1382c8bb1cfda3d8566b929c381c32eb374db3c702"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#35",
+      "hash": "sha256:58b919bc4653b56874e76d651daa28102e31d09f2589ea45a04c4a6ef5420348"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#36",
+      "hash": "sha256:71be0c3f635be321c37c7020eadbb546045541ab2fec799b36772232e73311cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#37",
+      "hash": "sha256:b7d7fb1b0bb5d1805f36a2ed571d198c3a208849fb7d5d6e4e115547af88e9a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#38",
+      "hash": "sha256:1a2309381800eb4e2a70bdd327b2fdd0d775b00ab4c6cb96a6785a35cd8d63c5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#39",
+      "hash": "sha256:4ea10ca3eb06deb7f37ad89bcf8a8c0d580bbdcb11565d2eb6d3f469705f8fa3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#40",
+      "hash": "sha256:c3c1b3a26819a1b02152fbf6817e58c170a62866468719187d66456d74fbcb02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#41",
+      "hash": "sha256:93a0c9e14029631b9695051f5db6c05c2a14d8523c56abfabd26c22dcca7782b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#42",
+      "hash": "sha256:b35a078420c9cbee43c010460863458eb33aaed8ae700d383376f8441aad354c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#43",
+      "hash": "sha256:4e585fa47c285b2313894a2092bc35844cc1e7c8397ae71ebe629b8491f38f68"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#44",
+      "hash": "sha256:6718d95137d3688fe3bb9e883204b8ea88a59e8c9555025fc0572b907d75157c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#45",
+      "hash": "sha256:1edf027906c0a6b2cbf9e2c6ac4e409ddce56d51ae92acc5db18dbe363914e0c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#46",
+      "hash": "sha256:8f78a46ffc9309d623e9adb29d63489fdd18452b7686bd7ac8533a89acd457be"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#47",
+      "hash": "sha256:be6e4d3fe3cf2f0c3010066f9336dc1a2c022e890bcd7e5490c55eef7ce2a44d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#48",
+      "hash": "sha256:ce4b9aaa175033912060f26d1ea148c7c6a0eb5cda9a1dc7ca83203653774504"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#49",
+      "hash": "sha256:e6d231e90d4914c14152d942dfc5efb1e27ed1631bcc2e11a03dee67156205d8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#50",
+      "hash": "sha256:33e827fe2dd7a145210f6134dd48e67ba49a744efa9955fcfa4d9851e45cd1d9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#51",
+      "hash": "sha256:47649520444391d53cd0081550614b9017f48a03b6a4dd6a7247b55f4fc8aed0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#52",
+      "hash": "sha256:6bf300402a3d0cdc42faaab3f2301c5d3a6bba3b8867ef0b232a45a1a9d8c3db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#53",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#54",
+      "hash": "sha256:f9fe9c9ad208973c5cf5ca926d83cb59cab7bdb2998f9fa5b9604a1958932b60"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#55",
+      "hash": "sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#56",
+      "hash": "sha256:8c727ebcd5957d2f009b3adc3e3466e22383a55a33c0ef43d1f27669e691634b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#57",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#58",
+      "hash": "sha256:e2bdfad50366a561c28b5dcc9ba10abc79ed26defc1637bc021077bd4d1cdac3"
     },
     {
       "content": "blocks",

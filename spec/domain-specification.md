@@ -120,6 +120,7 @@ profile: domain-specification
 | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md@authored | docs/records/OD-GATE-031-a-comparison-attributes-a-difference-to-the-repository-only-when-the-rest-of-the-judgment-was-compatible.md | authored | 31 | 6 | sha256:a6afa613786d72b5021c8eb78a1667996d917658d7c478db9396d478dac8f4ce |
 | docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md@authored | docs/records/OD-GATE-032-a-declared-tolerance-can-name-only-a-finding-whose-subject-is-its-file.md | authored | 33 | 6 | sha256:144fc0a0a362fdfb6b88913446ae17c051ff9c6c72675109af37a715a25a29a9 |
 | docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md@authored | docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md | authored | 48 | 11 | sha256:fbd373403646110ce167420a031964ee26ad49e92f21db8c9141e7a498148b4b |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md@authored | docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md | authored | 58 | 14 | sha256:76df0f974e8c23df109513ca3b9b765d102f86c48ac955e758c55d16295e5028 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:ea9bd1b60948d29ceea5dc07c16b08bc497503bdd16f998e3a690d16a26e268a |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:9625fbf5d3def0f1f0a5cf0c14e5f1da9e421d46c4f4f2b5350c839e6081ea40 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -1162,6 +1163,20 @@ profile: domain-specification
 | docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#36 | authored | 3 | 5. What this record authorizes, and what it does not do |
 | docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#39 | authored | 2 | What This Does And Does Not Invalidate |
 | docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md#42 | authored | 2 | Alternatives Considered |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#1 | authored | 1 | ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#7 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#10 | authored | 3 | Neither name is in the corpus, and neither is the phrase |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#12 | authored | 3 | What the corpus requires of a gate about applicability |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#16 | authored | 3 | What the corpus requires of a gate about evidence |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#19 | authored | 3 | What the workspace has |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#31 | authored | 2 | The Decision |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#32 | authored | 3 | 1. `ApplicabilityPolicy` is `CoveragePolicy` under another name, and `CoveragePolicy` is the name that governs |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#38 | authored | 3 | 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#49 | authored | 3 | 3. The capability item |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#53 | authored | 2 | What This Does Not Do |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#55 | authored | 2 | What Would Decide It Differently |
+| docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#57 | authored | 2 | Status |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -32359,6 +32374,738 @@ computed where it is needed.
 
 **Reporting a host-unavailable subset as clean.** Rejected: the `Portability floor` precedent,
 and `OD-GATE-001`'s defect with one more layer between the reader and the absence.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#1
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has · hash: sha256:34cc74ebb69040f19e66aa8b86e1be5a463e67e1f8e89f940151afa0f544a3eb*
+
+# ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#2
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#3
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / Question · hash: sha256:7768395b96470a5d69621e4e1a21baba8b8223f1dbdf23f2feb812c9455a4949*
+
+`ARC-ROADMAP-001` constraint 5 lists what an end-user repository would configure on the
+product Gate: `ScopeSelector`, `RuleSelector`, `ApplicabilityPolicy`, `CoveragePolicy`,
+`BaselinePolicy`, `SuppressionPolicy`, required phases, evidence requirements, failure
+disposition. Seven of those nine have a real type in `nomos-gate-orchestration` now, each built
+under a record that measured what the corpus asked for first (`OD-GATE-014`, `OD-GATE-015`,
+`OD-GATE-016`, and the phase increments). The crate's own module doc names the two that do not:
+`ApplicabilityPolicy`, "which the `ARC-ROADMAP-001` quotation names and nothing in this
+workspace defines," and evidence requirements, "which `nomos_contracts::Finding`'s own
+`EvidenceClass` classifies but no gate policy reads." An external review at `bc0aaacf`
+repeated both as gate gaps.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#4
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / Question · hash: sha256:5b7b9bf9bb7e1c58989d34ae44bf908f2d92950c4e47d6c75a46015478c55d1d*
+
+Two named gaps are not two pieces of work until something says what each name means.
+`OD-GATE-016` built `CoveragePolicy` for `WF-001`'s "unsupported-analysis policy" and listed
+`ApplicabilityPolicy` beside it in the same quotation without saying what the second would add
+to the first. `EvidenceClass` has an ordering, a `Weaker_Of` and an `Is_Mechanical`, and
+`P12-PROVENANCE-FLOOR` — an item asking that a consumer be able to state a floor over that
+ordering — was declined for reserving two record files against a `done_when` that needed Rust,
+not on the merits. Building either name without deciding what it means would mint either a
+second authority over coverage, which `OD-GATE-011` files defects about, or a policy the corpus
+never asked for.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#5
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / Question · hash: sha256:703e8fc35dce28719bdf2b30038834f77732fa475c2865dab73e4b1beb970032*
+
+It is answerable now rather than paused because `OD-ROADMAP-003` records that each of
+`OD-ROADMAP-002`'s three pauses has lapsed on its own stated condition, and it is answerable
+only in one shape, because that record also states the constraint that survives the lapse.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#6
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / Question · hash: sha256:bd20696048085e6f9432cb22698f604990c94e734af2c58ca76ae421230a6f7f*
+
+So: what does the corpus require of a gate about applicability and about evidence, by
+requirement identifier? Is `ApplicabilityPolicy` `CoveragePolicy` under another name, or a
+distinct policy over per-rule `Applicability` outcomes? What is an evidence requirement policy
+— may a gate state the lowest `EvidenceClass` a finding must carry to block, to count toward a
+threshold, or to be reported, and what does a finding below that floor become? And which
+capability item builds whichever of the two is real?
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#7
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#8
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured · hash: sha256:7ecb5abdde14a6556c7ef4e89b04f3cdc7064536116b52be619a1045de0d1f90*
+
+Re-measured 2026-09-21 at `ee4d6111`, against the v14 corpus's requirement files (363 files
+under `01_authoring/artifacts/requirements`, one per requirement, each carrying a `statement:`
+field in its front matter and a `## Statement` section that repeats it) and against this
+workspace's sources at that revision. Every statement was read in full rather than by its first
+line — a statement wraps, and a first-line pass misses `CHK-003`'s "agent-required" and
+`BASELINE-003`'s "unparseable".
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#9
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured · hash: sha256:0d69efff07d424b54ef09837ec5b0f24cf62253ababc6df986023ec4951aab80*
+
+An earlier pass at `d32ed755` reached the same two decisions. This one corrects it in three
+places, all of which are the same mistake in different clothes — a population taken from one
+spelling of a question: the applicability table omitted `ARCH-ENGINE-005` and
+`ARCH-ENGINE-006`, both of which name a gate outright; `Applicability`'s three predicates were
+described as partitioning its eleven states, which the test cited for it explicitly denies; and
+three source counts were taken from a grep that missed a qualified spelling of the same field.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#10
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / Neither name is in the corpus, and neither is the phrase · hash: sha256:14c0dc861b140cd961a5d9e8869acb21f4d0d2f213abadd335e97d549d20eed9*
+
+### Neither name is in the corpus, and neither is the phrase
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#11
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / Neither name is in the corpus, and neither is the phrase · hash: sha256:4fa6b5742ab4fea62076ee07507014786e6fbfa23752fe973c5ee73dc44e51f4*
+
+Counted over all 363 statements: `ApplicabilityPolicy` in none, `CoveragePolicy` in none,
+"evidence requirement" as a phrase in none, "floor" in none. `EvidenceRequirement` as one word
+occurs in exactly two, `EGRAPH-003` and `EGRAPH-008`. "minimum evidence sufficiency" occurs in
+exactly one, `RUNTIME-007`. The populations the two tables below are drawn from, by substring:
+"unsupported" 9 statements, "applicab" 45, "coverage" 25, "provenance" 21, "evidence" 89. Both
+names under question are therefore this workspace's own vocabulary, written in
+`ARC-ROADMAP-001`'s own list, and not text the corpus obliges anyone to honour.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#12
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the corpus requires of a gate about applicability · hash: sha256:098073f84300291cf6cac2cd9db4051b64bacb14e800163d934fa1ce523a403a*
+
+### What the corpus requires of a gate about applicability
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#13
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the corpus requires of a gate about applicability · hash: sha256:5c3cdbc345d9f4184979cb39f337d3f5b0b1b776883c05a81a0e0f86b1229488*
+
+| Identifier | What it requires of applicability |
+|---|---|
+| `WF-001` | "A gate shall define policy: required phases, thresholds, coverage, unsupported-analysis policy, waivers, approvals, and blocking behavior." The one clause granting a gate a policy here at all. |
+| `ARCH-ENGINE-005` | An unanalyzed file, target, build variant or capability region "is coverage debt, not a clean result", and "no run, gate, report, API response, or agent context may collapse unsupported, unavailable, unparseable, or failed analysis into pass." |
+| `ARCH-ENGINE-006` | A gate, phase, workflow or agent-preparation operation that "evaluates no applicable rules or has no effective providers shall fail or report an explicit no-coverage state." |
+| `ADOPT-CONFIG-004` | A run that evaluates no applicable rules or treats unanalyzed coverage as clean shall not report success. |
+| `CHK-003` | Every run reports evaluated, excluded, unsupported, unavailable, failed, not-applicable and agent-required combinations. |
+| `BASELINE-003` | Scoped gating preserves suppressed, waived, unsupported, unavailable, unparseable, excluded, not-applicable and evaluated states distinctly; "nothing disappears merely because it is outside the blocking scope." |
+| `ARCH-ENGINE-003` | "Silence, NotApplicable, MissingCapability, ProviderUnavailable, Unparseable, and AnalysisFailed are distinct states, not interchangeable gaps." |
+| `RUNTIME-008` | Dropped samples, incompatible hardware, unstable variance and baseline mismatch produce "explicit evidence limitations or non-pass applicability states rather than a clean result." |
+| `CHK-002` | Rules are selected by gate, phase, family, language, severity, provider or package, and "the exact cross-product" runs "after applicability preview." |
+| `PKG-002` | Effective rule applicability is *derived* — from the rule's canonical capability requirements, target language features, verified provider capabilities, installed tools, repository configuration, target context and compatibility-test results; "no manually duplicated language-rule support list shall be authoritative." |
+| `PKG-004` | Every applicability result exposes rule/version, target, required capabilities, selected providers, guarantees and fallbacks, configuration inputs, verification status, resulting state and explanation; "a matrix is a projection of these records, not the source of truth." |
+| `PKG-006` | Provider resolution prefers the strongest compatible guarantee and labels fallback, approximation, partial coverage, unavailable tooling and analysis failure distinctly. |
+| `PKG-012` | A RulePackage's normative contract defines "applicability semantics, severity defaults, accepted exceptions, evidence obligations, and suppression semantics" independently of any provider. |
+| `PKG-015` | The applicability states, by name, "at minimum"; "unsupported or failed analysis shall never be represented as a pass." |
+| `PKG-016`, `PKG-017`, `PKG-018` | One derived compatibility graph, queryable equivalently from either direction; resolution keys include "policy configuration." |
+| `PKG-027` | The canonical states are the protocol truth and the human-readable labels are standardized projections of them. |
+| `CAL-003`, `CAL-009`, `AGT-016` | Knowledge outputs, contract monitoring and knowledge-retrieval failures shall not modify applicability, severity, thresholds, suppressions or gate disposition. |
+| `CONF-003` | RulePackage conformance suites verify applicability. |
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#14
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the corpus requires of a gate about applicability · hash: sha256:e46db75ede90e2fa70af736e7f650829cc6010982164eaf0d7990d7923bbb6b4*
+
+All 45 statements in the "applicab" population were read, and all 9 in the "unsupported" one.
+Those not tabled above are about resolution, projection, invalidation, versioning or agent
+preparation — `PKG-003`, `PKG-021`, `PKG-023`, `PKG-025`, `PKG-029`, `COR-EXEC-007`, `AGT-001`,
+`AGT-007`, `AGT-018`, `RUNTIME-006` and the rest — and not one of them asks a gate to hold a
+policy over applicability outcomes.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#15
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the corpus requires of a gate about applicability · hash: sha256:f399ab538535e04853f3e587412ce2418a25f10a6be2d64450731cb37e93ea92*
+
+Read together, the corpus has two things and not three. It has *applicability resolution* — an
+engine deriving a state per rule and target, `PKG-002` through `PKG-029` — and it has one
+gate-side policy clause about what a gate does with the states that come out, `WF-001`'s
+"unsupported-analysis policy". Around that one clause sits a family of constraints that are not
+policies at all but prohibitions on collapsing: `ARCH-ENGINE-003`, `ARCH-ENGINE-005`,
+`ARCH-ENGINE-006`, `ADOPT-CONFIG-004`, `CHK-003`, `BASELINE-003` and `RUNTIME-008` between them
+forbid a gate to report an unreached judgment as a pass, to lose a state, or to succeed having
+judged nothing. Nothing asks a gate for a second policy *over* applicability outcomes beyond
+what to do when a rule could not look.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#16
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the corpus requires of a gate about evidence · hash: sha256:98a59a6e26471209a5bfefdaaf90437d93ec311d6808253583d04f799590c6a6*
+
+### What the corpus requires of a gate about evidence
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#17
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the corpus requires of a gate about evidence · hash: sha256:fb9f647f2f835e8733f0f4f5bdf478d442ef2c2c537d4ba49b1725b1ddb48471*
+
+| Identifier | What it requires of evidence |
+|---|---|
+| `EVID-001` | Evidence is classified as Authoritative, Verified, Observed, Derived, Approximate, Predicted, AgentJudged or HumanAsserted, "with provenance and intended use," and "classification shall not be reduced to one universal confidence number." |
+| `EVID-002` | Conflicting evidence stays queryable; resolution policies *may* prefer compiler semantics over syntax approximation, runtime observation over static possibility, and declared architecture over inference only where policy marks the declaration authoritative. |
+| `AGT-EXEC-004` | Agent claims of tests, builds, checks or measurements "require attached tool evidence from the corresponding trusted capability. Unsupported claims remain AgentJudged." |
+| `RUNTIME-007` | Enforcement roles are Observational, Advisory, ReviewRequired or Blocking; "blocking runtime policy shall require compatible baselines, minimum evidence sufficiency, configured loss limits, and explicit repository or organization authorization." |
+| `RUNTIME-006` | A runtime applicability and result record identifies, among much else, "permitted evidence loss" and its enforcement role. |
+| `CAL-006` | "Canary results shall not silently affect blocking policy." |
+| `PKG-026` | Rule quality objectives are scoped records "rather than unqualified global thresholds," each naming its metric, population, scope, threshold direction and value, enforcement role and evidence period. |
+| `FIND-012` | `FieldGeometry` classifies its semantic origin, and propagated and predicted values "shall never be rendered as direct violations." |
+| `PLACE-002` | `InsufficientEvidence` is a disposition of its own, and clients "shall not collapse InsufficientEvidence into agreement." |
+| `PKG-012` | Evidence obligations are part of a RulePackage's normative contract. |
+| `CHK-004`, `FIND-001`, `FIND-002`, `FIND-003`, `CAL-002`, `AGT-008` | A finding preserves its exact evidence, its evidence fingerprint and its provider provenance; deduplication keeps multiple providers visible; `EvidenceChanged` is a finding transition; exports and contextualization preserve evidence classification beside applicability and gate disposition. |
+| `EGRAPH-003` | `EvidenceRequirement` identifies "the required evidence type, governing obligation, subject, provider guarantee, scenario or workload, variant, completeness threshold, freshness conditions, and acceptance rule." |
+| `EGRAPH-005`, `EGRAPH-007`, `EGRAPH-008` | `VerificationResult` states include `Insufficient` and `AgentOnly`; the service answers "which claims remain agent-judged"; completion and attestation are computed from explicit required claims and `EvidenceRequirement`s — "absence of a finding, one passing test, or one observed successful run shall not by itself establish completeness." |
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#18
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the corpus requires of a gate about evidence · hash: sha256:78d9e4ac5e5f07509f4fa0a199b7efb22f5b2236fe842de8a5b34929122efcd5*
+
+Read together: the corpus supplies the vocabulary (`EVID-001`), forbids collapsing it to a
+number (`EVID-001`) or presenting the weak end of it as a mechanical result (`AGT-EXEC-004`,
+`FIND-012`, `PLACE-002`), requires a *blocking* policy to state minimum evidence sufficiency in
+the one family that reaches enforcement roles (`RUNTIME-007`, with `RUNTIME-006`'s permitted
+evidence loss beside it), insists that what affects blocking policy be stated rather than
+inferred (`CAL-006`), and names `EvidenceRequirement` only as the evidence graph's completion
+object (`EGRAPH-003`, `EGRAPH-008`) — the graph `ARC-ROADMAP-001` constraint 3 keeps as a
+kernel constraint rather than a kernel construction. No requirement says in so many words that
+a gate shall state a minimum `EvidenceClass`. `RUNTIME-007` says it of a blocking runtime
+policy, and `WF-001`'s "blocking behavior" is the clause under which a gate says the same of
+itself.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#19
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the workspace has · hash: sha256:04876ff4f569d50187b2418034a80742deaa5039741e4cf4bd6e445d3b4b72d4*
+
+### What the workspace has
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#20
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the workspace has · hash: sha256:bb90be77555659037d7dfbfabe96b1f9098eef7306cc0536fb9c922e89c7de14*
+
+**Per-finding applicability already reaches disposition, twice.** `Finding::Can_Fail_A_Build`
+(`crates/contracts/nomos-contracts/src/reporting/finding.rs`) is
+`self.gate.Can_Fail_A_Build() && self.applicability.Is_Evaluated()`, and
+`Test_A_Finding_From_A_Rule_That_Never_Ran_Should_Not_Fail_A_Build` pins that every one of the
+five coverage-debt states fails the second condition. `Partitioned_Findings`
+(`crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs`) filters on
+that predicate first, before calibration, suppression or baseline sees a finding. Per-run,
+`Claim_Of` (`crates/orchestration/nomos-check-orchestration/src/examined/claim.rs`) reports
+`Incomplete` when any selected finding is coverage debt or agent-required, and `CoveragePolicy`
+(`crates/orchestration/nomos-gate-orchestration/src/policy/coverage_policy.rs`, `Unset` or
+`RequireCompleteness`) turns that into `Indeterminate` under `NoVerdict::IncompleteCoverage`.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#21
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the workspace has · hash: sha256:b5e6f44fd737becb2a55328bce2aa79e03bb624fd6c944754664151edd1134b7*
+
+**And the states neither path names are decisions rather than gaps.** `Applicability`'s three
+predicates do not partition its eleven states, and
+`Test_No_State_Should_Answer_Two_Predicates` is a disjointness check whose own doc says so:
+`NotApplicable` and `ConfigurationDisabled` answer none of the three. That is not a hole a
+policy could fill. Neither state is `Is_Evaluated`, so a finding carrying it cannot block;
+neither is coverage debt or agent-required, so neither makes a run's claim incomplete. A rule
+that does not bind a subject and a rule a repository switched off are choices somebody made,
+which is what `OD-GATE-014` and `OD-GATE-017` own by selection, and `OD-ANALYSIS-012` is the
+same discipline one layer down: an empty population is reported apart from a clean one rather
+than collapsed into it. All eleven states are already classified by both paths.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#22
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the workspace has · hash: sha256:3b4205f6b128f9a4a359b70dbbb61dcdab78667c9306667a570d746de855cf34*
+
+**Every widening a per-rule applicability policy could be has already been assigned.**
+`OD-GATE-016`'s "What This Does Not Do" leaves "a minimum-`Applicability` threshold, a per-rule
+or per-scope coverage requirement" to `CoveragePolicy`'s own later widening, and `OD-GATE-029`
+repeats the assignment in its own words — "a minimum-`Applicability` threshold or a per-rule
+coverage requirement is still what `OD-GATE-016` left to real evidence" — while deciding a
+third variant for coverage itself. That variant is decided and
+not yet built: `CoveragePolicy` is two variants at this revision, in the crate and in
+`tests/contract/surface/nomos-gate-orchestration.txt`. `OD-GATE-014` and `OD-GATE-017` own
+which rules bind which subjects by policy — `ScopeSelector` and `RuleSelector` — whose outcome
+is a finding that does not exist, or `ConfigurationDisabled`. Plan-time resolution, the
+`PKG-002` engine's shape, is `P41-APPLICABILITY-IN-THE-PLAN`, declined under `OD-GATE-023`
+because there is no version of it that does not need the planner `OD-RULES-009` declines.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#23
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the workspace has · hash: sha256:0b589bb169190ec42b91c26a28cc53806ed823cb9a6e4183df3b365a27c9fc71*
+
+**`EvidenceClass` is ordered, and the mechanical boundary is a point on that order.**
+`crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs` derives `Ord` over
+the declaration order, weakest first: `AgentJudged`, `HumanAsserted`, `Predicted`,
+`Approximate`, `Derived`, `Observed`, `Verified`, `Authoritative`. `Weaker_Of` is `min`, and
+`Test_Weaker_Of_Should_Never_Exceed_The_Weaker_Input` and `Test_Agent_Judged_Should_Be_The_Floor`
+pin that. `Is_Mechanical` is true for `Approximate` and every class above it —
+`Test_Is_Mechanical_Should_Be_True_For_Measured_And_Derived_Classes` — so "mechanical" is
+exactly "at or above `Approximate`" under the same ordering, not a second axis.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#24
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the workspace has · hash: sha256:233afd834ca14eef178ee104d1352f351f32c4e9862a7d597e0e7ee45645a9cc*
+
+**Every finding carries a class, and no gate policy reads it.** `Finding::evidence` is an
+`EvidenceClass`, not an `Option`. `nomos-gate-orchestration` does not read the field anywhere,
+its own tests included: a search of the crate for `.evidence` returns nothing.
+`Finding::Is_Mechanical` delegates to the class and has exactly one caller, a test in
+`crates/rules/nomos-rules/src/checks/mirror/tests/judgments.rs`; `nomos_model::Evidence::Is_Mechanical`
+delegates the same way and its only caller is its own test. A `Finding` at
+`GateCategory::Blocking`, `Applicability::Supported` and `EvidenceClass::AgentJudged` fails a
+build today, and no configuration can say otherwise.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#25
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the workspace has · hash: sha256:82cb0a29dd6d18f5dd50bd735cd59882785c8564777f7dcc038d4dc47c8136d5*
+
+**Nothing below `Derived` reaches a gate at this revision.** In `crates/rules/`, the `evidence:`
+field is written `Derived` at 59 sites, `Verified` at 4 and `Observed` at 1 — counting both
+spellings, since two of the `Derived` sites are written
+`nomos_contracts::EvidenceClass::Derived` in `crates/rules/nomos-rules/src/checks.rs` and a
+single-spelling grep misses them. The one `Observed` is
+`crates/rules/nomos-rules/src/checks/review.rs`, the review-finding rule, at
+`GateCategory::Advisory`. Workspace-wide, seven `evidence:` sites are written below `Derived`
+and five of them sit inside a `#[cfg(test)]` module. The two that do not are a `WorkflowStep`
+at `AgentJudged` in `crates/host/nomos-cli/src/workflow/composition.rs` and a
+`MaterializedFact` at `Approximate` in
+`crates/languages/nomos-lang-rust-scan/src/fact_context.rs` — a declared step and a fact,
+neither of them a `Finding`. The only `Finding` below `Derived` anywhere in the workspace is a
+fixture at `HumanAsserted` in `crates/kernel/nomos-model/src/identity/finding_occurrence_id.rs`,
+written to prove that a finding's identity ignores its evidence class. `OD-RULES-010`'s chain —
+a provider's fact at `Verified`, the rule's finding at `Derived` — is why every tool-backed
+finding sits at `Derived`. `GateCommand::model`'s own doc says it is read by nothing yet and
+gives the reason: no registered rule yields `Applicability::AgentRequired` today, so the
+producer of the first `AgentJudged` finding is the executor for the subjects
+`OD-CONTRACTS-002` named that state for.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#26
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the workspace has · hash: sha256:5370cff8bb2b8354e901cf1e473f7de3d859cdbf361b28778712ee2c698d5afc*
+
+**A new `GateCommand` field costs no caller an edit.** `GateCommand` derives `Default`, 26 files
+construct one, and all twelve of them that are not test modules do so through struct update
+(`..GateCommand::default()` or `..Default::default()`);
+`crates/host/nomos-cli/src/gate/parsing.rs` is the one that spells `coverage:` at all, and it
+spells `CoveragePolicy::default()`. `OD-GATE-029`'s own count — 49 constructions across 18
+files, four of them stating `RequireCompleteness` and all four tests — counts construction
+expressions rather than files and was taken at that record's own revision, so it is not this
+number disagreeing with itself.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#27
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the workspace has · hash: sha256:89be300546ba27d15e5c0c3834dc81d4a3e16ba7c8b455291c773e536770cc59*
+
+**A bucket is the never-hide mechanism, and it has three readers.** `GateFindings`
+(`crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings.rs`) carries
+`blocking_findings`, `calibrated_findings`, `suppressed_findings`, `baselined_findings` and
+`baseline_exceeded_findings`. The three whose findings could not block are documented as
+"carried rather than dropped" — calibrated and suppressed in those words, baselined by
+reference to them — and the fifth blocks and is still not `blocking_findings`, because
+`OD-GATE-030` refuses attribution inside an exceeded population. `FindingDisposition` (`gate_compare/finding_disposition.rs`) has one variant per
+bucket, and its doc says why that correspondence is load-bearing: `Population_Of` walks the
+list, so a bucket with no variant is invisible to `compare` and reads as *removed*.
+`Explanation::Found` (`finding_query/explanation.rs`) names `calibrated_by`, `suppressed_by` and
+`baselined_by`. `crates/host/nomos-cli/src/gate/report/run.rs` counts the buckets on one line.
+`Policy_Digest` (`gate_environment/provenance.rs`) hashes the suppression, baseline and
+calibration entries and a tag for `coverage`, and is the identity `OD-GATE-031` gives a run's
+resolved policy — so a policy a run judged under that the digest does not cover is a comparison
+attributing a policy change to the repository.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#28
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the workspace has · hash: sha256:a58d44aa98230b9da7c32fb172d8411fa0d540a46a7f4a1353f3828efa64ea1b*
+
+**Phase counting is downstream of blocking, already.** `Phased_Outcome`
+(`gate_environment.rs`) calls `Evaluated_Phases` with `reduced.findings.blocking_findings`, and
+`Judged_Phase` (`crates/orchestration/nomos-gate-orchestration/src/gate_phase.rs`) narrows that
+list by each phase's own rules before applying the phase's threshold. Nothing a phase counts
+was not already blocking.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#29
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the workspace has · hash: sha256:ee0e9475a07e73376342cf9eae9865deee633e4e3b1c4537aa5e40cff437d8c5*
+
+**A new gate policy family must be a declared constant.** `OD-ROADMAP-003`, having recorded the
+three pauses as lapsed, states what survives: a new gate policy family "is a declared constant
+— a `RequiredFact` a rule's descriptor names and `Demanded_Families` reads, a `Provider_Offer`
+the composition root registers, a field `Resolve_Gate_Policy` reads off `nomos-gate.json` — and
+never a condition that consults store state, cost or prior materialization." `Resolve_Gate_Policy`
+and `GatePolicyFile::Resolved_Over` are the reader and the resolution rule that already carry
+`coverage`, and its tests pin the rule: a field left at its default in the command takes the
+file's value, and a field the command states wins over a file that is silent.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#30
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Was Measured / What the workspace has · hash: sha256:2b656a78894917f45a38c479c0c4bacb3468054da01195af262019e2e3bfbd6f*
+
+**`P12-PROVENANCE-FLOOR`'s four clauses, against a gate.** Its second — "a consumer can state an
+evidence floor, and the comparison uses EvidenceClass's existing ordering rather than a second
+notion of strength" — is the one a gate can discharge. Its first and fourth are about a claim
+whose provenance is *absent*, which a `Finding` cannot be, since the field is not optional. Its
+third, self-referential provenance, is the `P10-STAMP-CONSISTENCY` projection shape and is not a
+question a gate reduces. The decline reason itself says where its check belongs — beside
+`mirror.rs` in `nomos-rules`, with a fixture for the self-referential case — and that is a
+different home from this one.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#31
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#32
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 1. `ApplicabilityPolicy` is `CoveragePolicy` under another name, and `CoveragePolicy` is the name that governs · hash: sha256:5df4867ec60f8cbf3b82b0291e9ba333046862da6540032ed685bea10f0ff3be*
+
+### 1. `ApplicabilityPolicy` is `CoveragePolicy` under another name, and `CoveragePolicy` is the name that governs
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#33
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 1. `ApplicabilityPolicy` is `CoveragePolicy` under another name, and `CoveragePolicy` is the name that governs · hash: sha256:528466acf1498ecda157cf3201ce4b8da31b6165ba4e9bfffe51eca31aec8fa2*
+
+Every reading the name admits already has an owner, measured above, and none of them is a
+fifth policy type:
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#34
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 1. `ApplicabilityPolicy` is `CoveragePolicy` under another name, and `CoveragePolicy` is the name that governs · hash: sha256:c1520edad638614ae4722f1382c8bb1cfda3d8566b929c381c32eb374db3c702*
+
+- *What a gate does when a rule could not look* is `WF-001`'s "unsupported-analysis policy."
+  `OD-GATE-016` built it as `CoveragePolicy`, `OD-GATE-029` decided its third variant, and both
+  records assign its every further widening — per rule, per scope, a minimum applicability — to
+  the same type.
+- *Which rules bind which subjects by policy* is `ScopeSelector` and `RuleSelector` under
+  `OD-GATE-014` and `OD-GATE-017`, and its outcome is a deliberate absence the coverage path
+  already excludes from debt.
+- *Deriving the state itself* is `PKG-002` through `PKG-029`: the `Applicability` type,
+  capability resolution, and the declined plan-time form. It is not a gate policy and never
+  was one; a gate consumes its output.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#35
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 1. `ApplicabilityPolicy` is `CoveragePolicy` under another name, and `CoveragePolicy` is the name that governs · hash: sha256:58b919bc4653b56874e76d651daa28102e31d09f2589ea45a04c4a6ef5420348*
+
+The never-collapse family — `ARCH-ENGINE-003`, `ARCH-ENGINE-005`, `ARCH-ENGINE-006`,
+`ADOPT-CONFIG-004`, `CHK-003`, `BASELINE-003`, `RUNTIME-008` — is not a fourth reading. Each of
+those is a prohibition on reporting, discharged by `Finding::Can_Fail_A_Build`, by `Claim_Of`
+and by the buckets, and `OD-COMPLETENESS-004` already settled the report surface that answers
+them. A prohibition is not a policy: there is nothing for a repository to configure in "shall
+not report success."
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#36
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 1. `ApplicabilityPolicy` is `CoveragePolicy` under another name, and `CoveragePolicy` is the name that governs · hash: sha256:71be0c3f635be321c37c7020eadbb546045541ab2fec799b36772232e73311cd*
+
+Per-finding outcomes reach disposition through `Finding::Can_Fail_A_Build`; per-run outcomes
+through `Claim_Of` and `CoveragePolicy`. A type named `ApplicabilityPolicy` would have to decide
+one of those three things a second time, in a second place, and that is the defect class
+`OD-GATE-011` names: two artifacts each independently readable as the authoritative answer to
+the same question. The name is retired as a type. Where a reader meets it, this record is what
+it resolves to.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#37
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 1. `ApplicabilityPolicy` is `CoveragePolicy` under another name, and `CoveragePolicy` is the name that governs · hash: sha256:b7d7fb1b0bb5d1805f36a2ed571d198c3a208849fb7d5d6e4e115547af88e9a6*
+
+**`ARC-ROADMAP-001`'s list is left as it is.** Three reasons, none of them convenience. The list
+is a quotation of concerns an end-user repository would configure, in a boundary record whose
+own "What This Record Does Not Do" says it "does not claim the 363-requirement corpus has been
+reconciled" and is "a structural survey by family and representative title, not a
+per-requirement audit"; two of its nine entries, "required phases" and "evidence requirements,"
+were never type names either, and the concern this one stands for is real — the gate does hold a
+policy over applicability, spelled `CoveragePolicy`. Deleting one word from that sentence would
+edit a published record that `OD-GATE-016` and `nomos-gate-orchestration/src/lib.rs` both quote
+verbatim, leaving two stale quotations of a corrected source and a reader of either with no
+route to the resolution. And the route is what resolves a name, not the deletion: this record
+relates to `ARC-ROADMAP-001`, and the capability item below retires the crate doc's admission by
+citing this record where the admission stands. A later amendment of `ARC-ROADMAP-001` for its
+own reasons may carry the correction; nothing here requires one.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#38
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering · hash: sha256:1a2309381800eb4e2a70bdd327b2fdd0d775b00ab4c6cb96a6785a35cd8d63c5*
+
+### 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#39
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering · hash: sha256:4ea10ca3eb06deb7f37ad89bcf8a8c0d580bbdcb11565d2eb6d3f469705f8fa3*
+
+**A gate may declare the lowest `EvidenceClass` a finding must carry to block.** The comparison
+is `finding.evidence >= floor` under the `Ord` `evidence_class.rs` already derives, weakest
+first. There is no second notion of strength: a gate that wants only mechanical findings to
+block states `Approximate`, because `Is_Mechanical` is that point on the same order and nothing
+else. `EVID-001` forbids reducing the classification to one number, and a floor does not — it
+names a class, and the eight classes stay distinct on both sides of it.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#40
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering · hash: sha256:c3c1b3a26819a1b02152fbf6817e58c170a62866468719187d66456d74fbcb02*
+
+**It is a declared constant, and the constraint `OD-ROADMAP-003` states is why.** The floor is a
+key in `nomos-gate.json`, read by `Resolve_Gate_Policy` and resolved over the command by the
+rule `GatePolicyFile::Resolved_Over` already applies to `coverage`. It may not become a
+condition: not "require `Verified` when the store already holds a stronger fact," not "lower the
+floor when materializing the evidence would cost more," not "apply the floor when the last run
+failed." Each of those reads an input the declaration does not have, and the moment one is
+written the field has stopped being a declared fact and become the planner `OD-RULES-009`
+declines.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#41
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering · hash: sha256:93a0c9e14029631b9695051f5db6c05c2a14d8523c56abfabd26c22dcca7782b*
+
+**Counting toward a phase threshold follows blocking, by construction.** `Judged_Phase` counts a
+phase's share of `blocking_findings` — the list calibration, suppression and baseline have
+already reduced to still-blocking — so a finding under the floor is out of every phase's count
+the moment it is out of the blocking bucket. A second floor for thresholds is refused: it would
+let one finding be blocking to a phase and not to the run, which is the two-encodings shape
+again, one layer down.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#42
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering · hash: sha256:b35a078420c9cbee43c010460863458eb33aaed8ae700d383376f8441aad354c*
+
+**There is no floor for reporting, and a finding below the floor is never dropped.** `CHK-003`,
+`BASELINE-003` and `ARCH-ENGINE-005` require the states a run reached to stay distinct and
+visible, and every policy this crate holds already keeps a finding it could not let block in a
+named bucket. A finding below the floor goes to a bucket of its own in `GateFindings`, disjoint
+from the five that exist, with a `FindingDisposition` variant so `compare` reports a finding that
+moved there when a floor was raised rather than reading it as removed, an `Explanation::Found`
+field naming the floor it fell under, and a count in the CLI's own summary line. It is **not**
+re-labelled `Advisory`: `Finding::gate` is the rule's wiring truth and a policy does not rewrite
+what a rule declared. It is **not** filed as calibrated, suppressed or baselined: those are
+dispositions a person authored, matched by rule or by `rule`/`subject` identity and carrying a
+rationale, and this is a mechanical statement about a class of evidence with no per-finding
+author. A reader who cannot tell "this rule is advisory" from "this finding's evidence was too
+weak under this gate" has lost exactly the distinction the bucket exists to keep, and
+`PLACE-002`'s refusal to let `InsufficientEvidence` collapse into agreement is the corpus saying
+the same thing about its own nearest state.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#43
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering · hash: sha256:4e585fa47c285b2313894a2092bc35844cc1e7c8397ae71ebe629b8491f38f68*
+
+**The floor is consulted where `Can_Fail_A_Build` is, as a third condition of the same kind.**
+`OD-GATE-015` described that predicate as "two conditions, with no suppression hook between them
+and no third condition a baseline or waiver could occupy," and a suppression rightly went
+elsewhere: it is a human disposition about a specific finding. The floor is not. It is a fact
+about the finding itself — its gate category, its applicability, and now its evidence class — so
+`Partitioned_Findings` reads it beside the other two, before calibration, suppression and
+baseline, and the three matchers never see a finding the floor already took. It does **not** go
+into `Finding::Can_Fail_A_Build` in `nomos-contracts`: a `Finding` does not know which gate is
+reading it, and `OD-GATE-016` applied the same discipline when it left that function untouched.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#44
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering · hash: sha256:6718d95137d3688fe3bb9e883204b8ea88a59e8c9555025fc0572b907d75157c*
+
+**Unset means no floor, and migrates nobody.** The representation default is the state every
+existing caller and CI's own `gate run --root .` are in today — every class may block — under the
+same compatibility rule `OD-GATE-029` states for coverage and `OD-COMPLETENESS-004` settled
+before it: a field nobody wrote keeps the behaviour it had. What a *newly authored* gate should
+be given is `OD-GATE-029`'s question and not this record's; it was decided for coverage after
+measuring the authoring surfaces, and the same measurement is owed for the floor before a default
+is chosen. Whether `Unset` and a stated "no floor" are kept apart the way `OD-GATE-029` decided
+`Unset` and `AllowPartial` should be is part of that same later decision.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#45
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering · hash: sha256:1edf027906c0a6b2cbf9e2c6ac4e409ddce56d51ae92acc5db18dbe363914e0c*
+
+**The floor joins the run's identity.** It is covered by `Policy_Digest`, so two runs judged
+under different floors are incomparable under `OD-GATE-031` rather than compared with the
+difference attributed to the repository. A floor the digest did not cover would be exactly the
+false causal story that record exists to stop.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#46
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering · hash: sha256:8f78a46ffc9309d623e9adb29d63489fdd18452b7686bd7ac8533a89acd457be*
+
+**Only findings are floored.** A fact's class is capability resolution's concern — `PKG-006`,
+strongest compatible guarantee — and a rule that judges a fact already carries the weaker of the
+two classes under `OD-RULES-010`'s chain. The gate reads `Finding::evidence` and nothing else.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#47
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering · hash: sha256:be6e4d3fe3cf2f0c3010066f9336dc1a2c022e890bcd7e5490c55eef7ce2a44d*
+
+**What an evidence requirement is not.** `EGRAPH-003`'s `EvidenceRequirement` — a required
+evidence *type* against a governing obligation, with a completeness threshold, freshness
+conditions and an acceptance rule — is the evidence graph's completion object, built for
+`EGRAPH-008`'s attestation and nothing here. If `ARC-ROADMAP-001`'s phrase borrowed that noun,
+this record narrows it at the gate: the half a gate can hold is the floor above, and the graph's
+half stays where constraint 3 put it.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#48
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 2. An evidence requirement is a floor a gate states over `EvidenceClass`'s own ordering · hash: sha256:ce4b9aaa175033912060f26d1ea148c7c6a0eb5cda9a1dc7ca83203653774504*
+
+**The population below the floor is zero today, and the floor is built anyway.** Nothing below
+`Derived` reaches a gate at this revision, so a floor of `Derived` or lower changes no run in
+this workspace. It is built now for the reason `OD-GATE-016` built `CoveragePolicy` before a
+caller had coverage debt to opt into: the cheapest moment to decide what an `AgentJudged` finding
+does to a build is before one exists, and the first will arrive from the `AgentRequired` executor
+with `GateCommand::model` as its route. The falsifier does not wait for that. The crate's own
+tests already build `Finding`s by hand, and a hand-built finding at `Blocking`, `Supported`,
+`AgentJudged` under a `Derived` floor is the case the increment must prove — in the new bucket
+and not in `blocking_findings`, with the comparison then removed and the named test watched to
+fail.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#49
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 3. The capability item · hash: sha256:e6d231e90d4914c14152d942dfc5efb1e27ed1631bcc2e11a03dee67156205d8*
+
+### 3. The capability item
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#50
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 3. The capability item · hash: sha256:33e827fe2dd7a145210f6134dd48e67ba49a744efa9955fcfa4d9851e45cd1d9*
+
+One item builds the floor, named `P123-GATE-034-EVIDENCE-FLOOR-FIRST-INCREMENT` and authored
+against this record. Its territory, by path, is what the measurement above found the change
+reaches — the crate's own seams, the three readers of a bucket, the run identity, the crate doc's
+admission, and the surface snapshot the new type stales:
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#51
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 3. The capability item · hash: sha256:47649520444391d53cd0081550614b9017f48a03b6a4dd6a7247b55f4fc8aed0*
+
+- `crates/orchestration/nomos-gate-orchestration/src/policy/evidence_floor.rs` — new; the policy
+  type, `Unset` or a named `EvidenceClass`, with its own tests
+- `crates/orchestration/nomos-gate-orchestration/src/policy.rs` — the module and re-export
+- `crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs` and
+  `crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file/tests.rs` — the
+  declared spelling and `Resolved_Over`
+- `crates/orchestration/nomos-gate-orchestration/src/gate_command.rs` — the field
+- `crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs`,
+  `crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs`,
+  `crates/orchestration/nomos-gate-orchestration/src/gate_environment/provenance.rs` and
+  `crates/orchestration/nomos-gate-orchestration/src/gate_environment/tests.rs` — the partition,
+  `Policy_Digest`, and the falsifier
+- `crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_findings.rs` — the bucket
+- `crates/orchestration/nomos-gate-orchestration/src/gate_compare.rs` and
+  `crates/orchestration/nomos-gate-orchestration/src/gate_compare/finding_disposition.rs` — the
+  disposition variant and the population walk
+- `crates/orchestration/nomos-gate-orchestration/src/finding_query.rs` and
+  `crates/orchestration/nomos-gate-orchestration/src/finding_query/explanation.rs` — the
+  explanation field
+- `crates/orchestration/nomos-gate-orchestration/src/lib.rs` — the paragraph admitting the two
+  gaps, rewritten to cite this record for both
+- `crates/host/nomos-cli/src/gate/report/run.rs`,
+  `crates/host/nomos-cli/src/gate/report/explain.rs` and the test modules under
+  `crates/host/nomos-cli/src/gate/report/tests/` — the count and the explanation, since a bucket
+  the report does not count is a hidden one
+- `tests/contract/surface/nomos-gate-orchestration.txt` — the snapshot
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#52
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / The Decision / 3. The capability item · hash: sha256:6bf300402a3d0cdc42faaab3f2301c5d3a6bba3b8867ef0b232a45a1a9d8c3db*
+
+Its `done_when` names the falsifier above, states that the field is a declared constant under
+`OD-ROADMAP-003`'s surviving constraint and consults no store state, cost or prior
+materialization, states that no CLI flag authors a floor in this increment — the same absence
+`OD-GATE-016`'s own first increment declined to fill, in its words "no CLI flag or config file
+constructs a `RequireCompleteness` policy", for the reason `OD-GATE-015` gives — and states
+that the crate doc no longer names `ApplicabilityPolicy` as undefined. Its predicate reaches `nomos-gate-orchestration` and `nomos-cli`, which is where its
+obligation lives; the surface snapshot is checked by `nomos-contract-tests` and named in the
+`done_when` rather than covered by the predicate, and the gate's own lint step runs at `finish`
+regardless. Adding the field forces no edit outside these paths, measured above; if execution
+finds one, `work widen` is the repair.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#53
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#54
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What This Does Not Do · hash: sha256:f9fe9c9ad208973c5cf5ca926d83cb59cab7bdb2998f9fa5b9604a1958932b60*
+
+- **It builds nothing.** The type, the bucket, the spelling, the digest and the crate-doc
+  rewrite are the item above. Nothing here is built by authoring it, and the item is not
+  authored here either.
+- **It amends neither `ARC-ROADMAP-001` nor `OD-GATE-016`.** The first is left as it is for the
+  reasons given; the second already assigns `CoveragePolicy`'s widenings and this record adds
+  nothing to that assignment.
+- **It does not decide the authoring default for a new gate's floor**, nor whether `Unset` and a
+  stated absence of a floor are distinguishable. That is `OD-GATE-029`'s question, asked again
+  for this policy once an authoring surface exists to ask it of.
+- **It does not build `AllowPartial`**, which `OD-GATE-029` decided and nothing has built.
+- **It touches neither `Finding::Can_Fail_A_Build`, `EvidenceClass`, `Applicability` nor
+  `Claim`.** Every type the increment reads exists and is unchanged by it.
+- **It does not widen `CoveragePolicy`.** A per-rule or per-scope coverage requirement and a
+  minimum-`Applicability` threshold stay where `OD-GATE-016` and `OD-GATE-029` left them.
+- **It does not build `EGRAPH-003`'s `EvidenceRequirement`**, and it does not decide when the
+  evidence graph is constructed. Constraint 3 of `ARC-ROADMAP-001` owns that.
+- **It does not take up `P12-PROVENANCE-FLOOR`'s other three clauses.** Absent provenance and
+  self-referential provenance are not questions a `Finding` poses to a gate, and that item's own
+  decline reason names the crate they belong in.
+- **It does not floor facts.** What a provider's fact may be materialized at is capability
+  resolution's own question, and the workspace's one below-`Derived` fact —
+  `nomos-lang-rust-scan`'s `Approximate` scan — is evidence that the two questions have
+  different populations.
+- **It does not decide a per-rule floor.** `PKG-012` puts evidence obligations in a RulePackage's
+  contract, and `PKG-026` is the corpus's one statement against unqualified global thresholds —
+  of rule quality objectives rather than of evidence, but near enough that a per-rule floor is
+  the natural next shape. One gate-wide floor is the smallest real instance, the same discipline
+  each of `OD-GATE-015`'s three concerns followed.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#55
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Would Decide It Differently · hash: sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429*
+
+## What Would Decide It Differently
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#56
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / What Would Decide It Differently · hash: sha256:8c727ebcd5957d2f009b3adc3e3466e22383a55a33c0ef43d1f27669e691634b*
+
+- **A corpus revision naming a gate-side applicability policy distinct from
+  unsupported-analysis policy.** Would reopen decision 1 against the new text; nothing in the
+  363 requirements measured here does.
+- **A gate-side need that `CoveragePolicy` cannot express even under the widenings `OD-GATE-016`
+  reserves for it** — for instance a repository wanting a finding judged under a fallback
+  provider not to block. Measure first whether that is a widening of coverage, a widening of this
+  record's floor, or a floor over `Guarantee` rather than over either; only the third would be a
+  new decision.
+- **The first finding below `Derived` reaching a gate from something other than an agent.** Would
+  test whether one gate-wide floor is enough or whether `PKG-012`'s per-rule evidence obligations
+  are needed at the gate; that is a widening of the floor, not a different floor.
+- **A finding arriving without a class** — a peer protocol producing findings the kernel cannot
+  classify. Impossible while `Finding::evidence` is required; if the field ever becomes optional,
+  `P12-PROVENANCE-FLOOR`'s fourth clause revives at the gate, and "absent" must read as
+  unexamined rather than as the weakest class.
+- **A second consumer of the same comparison outside the gate** — `AGT-003`'s validator rejecting
+  "unverifiable claims," say. Two callers of one `>= floor` comparison would put the helper below
+  the gate crate, beside `Weaker_Of`.
+- **A floor that has to read something.** `OD-ROADMAP-003`'s surviving constraint is falsified
+  the day this field cannot be stated without consulting store state, cost or a prior run, and
+  the argument then belongs at `OD-RULES-009` rather than here.
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#57
+
+*revision: authored · kind: heading · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md#58
+
+*revision: authored · kind: prose · heading: ApplicabilityPolicy is CoveragePolicy under another name, and an evidence requirement is a floor a gate states over the ordering EvidenceClass already has / Status · hash: sha256:e2bdfad50366a561c28b5dcc9ba10abc79ed26defc1637bc021077bd4d1cdac3*
+
+Accepted. `ApplicabilityPolicy` is retired as a name for a type; `CoveragePolicy` governs what a
+gate does about applicability, and its widenings stay assigned where `OD-GATE-016` and
+`OD-GATE-029` put them. An evidence requirement is a floor a gate states over `EvidenceClass`'s
+existing ordering, declared as a constant in `nomos-gate.json` under `OD-ROADMAP-003`'s
+surviving constraint, deciding what may block and, through blocking, what a phase counts;
+nothing is dropped below it, and a finding under it is reported in a bucket of its own and
+covered by the run's policy identity. `P123-GATE-034-EVIDENCE-FLOOR-FIRST-INCREMENT` builds it.
+Nothing is built here.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 
