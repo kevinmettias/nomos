@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5c3bd9c764785cfa3c30f450809f8d2191cf2bac8ddefa96773056167fda9fd9",
-  "inputs_digest": "sha256:4fcadd099cf50ea7d1c912c01d1f994c76c7dde309ce1041bdb6720e3701561f",
+  "content_digest": "sha256:d8162b8352945ce10b4aacb7b6551c9f90d8cd7a3081ba8f5f89bb4a9fcb840b",
+  "inputs_digest": "sha256:cc34671ec8b5905140ecdcf2c8dadf242859a3b4ce0091c8d68000d441a2b381",
   "sections": [
     [
       "Documents",
-      270
+      271
     ],
     [
       "Sections",
-      2440
+      2453
     ],
     [
       "Source blocks",
-      8887
+      8938
     ]
   ],
   "inputs": [
@@ -669,6 +669,11 @@
       "content": "documents",
       "identity": "docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md@authored",
       "hash": "sha256:56a3258a10da8f6d0b85a5520d8493fb9e231e069994260adeed8d832c22c490"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md@authored",
+      "hash": "sha256:f7d87338fd41ba36b132fc31b3839d8ceb1ec42c4ac12559c6046e9f7145fe01"
     },
     {
       "content": "documents",
@@ -6959,6 +6964,71 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#43",
       "hash": "sha256:eb6e32e87e6aeabb42102b8703cd637bed4b346597d859337b85681dc5bd7f88"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#1",
+      "hash": "sha256:1f8dd447303e28bfdef5401acd1841715dcb38d25d4eb2b2b57b846a0ba98ef2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#2",
+      "hash": "sha256:0cf6b2376ac78ea129fc08c3a1e8bd31e0a96184bcfe6734629888e172abb97a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#5",
+      "hash": "sha256:e2a12e6b17e5939908279d56bb70825127c32b070078db4d19a56d720ceda2d7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#14",
+      "hash": "sha256:569f58abc539bd1e4743e625319aba5bc58ba561dc69820577d473435754549a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#15",
+      "hash": "sha256:ada788138cec845c5b36836f89a223031efc41c27ea617e7ccfd3ce940b7a937"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#19",
+      "hash": "sha256:ef611ea8afd7c07005f5199495910e1bc0286282be47ba956e3e835bbd39bbdb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#25",
+      "hash": "sha256:72bb0732438806ae4f2347c926e910ab8b819146a646e4192fc3346563b687a2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#30",
+      "hash": "sha256:f7fcc19f8e424f522c384955ee2ff6bac01a3b189c2dda0f415d289faa4611eb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#36",
+      "hash": "sha256:596aa999825a7122f93704bc4915a58fc245cab85f8c431829eefece2262ad41"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#39",
+      "hash": "sha256:6c56026b509b6260d17117711055762e8c83c23e9537a3201f06a74ef9d92c8b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#45",
+      "hash": "sha256:687c1f2337f16603039ce138370f003c69704a939859fc5f75c8dd5e7585217e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#48",
+      "hash": "sha256:46872b17d8f5b82e72214b7ce302ff15f088ba88e3b789b9aa43638984336c24"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#50",
+      "hash": "sha256:e72b8fea9532a8b587e6e16bc177bb76bceda51c96bed4226472246601e44d90"
     },
     {
       "content": "headings",
@@ -34094,6 +34164,261 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#44",
       "hash": "sha256:787af66bd5f50f83aaa0140d7a7e8f230796b369a3849c46dcad6862e186ac1b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#1",
+      "hash": "sha256:7e38a4587cf8ff694dd28d166dc72fc47f86f89714592b828f0d198c1320967b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#3",
+      "hash": "sha256:49e55f1c02db44c17fe1227b0e79705ca092fd7a71d6a68021385f061889d8df"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#4",
+      "hash": "sha256:2516fcfc20ee2edbafa621179376b5110c4f3aeaf03095073c7211e2f0027135"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#6",
+      "hash": "sha256:c887d7a164ffcfb4654640c50ffe0ac6280a34b14d445651ee70554a98a397f3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#7",
+      "hash": "sha256:9efb21aed3ac397c2aad219515b2205ef50c6a9cb380fecb3321daaeef03e47d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#8",
+      "hash": "sha256:d5bc35c56a3741bc8590375f7be9e777b32e1ab642197c639dc5cc5722e2d641"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#9",
+      "hash": "sha256:eb1d3410af32fd8ad4170e0f00c7893ef320dcf0825f38fb629076886717f999"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#10",
+      "hash": "sha256:f04b2dde0a29a4a197d93e2b29414b92bdb6598c18335dfcd0aff1c44822dbdb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#11",
+      "hash": "sha256:2cc4597ec7d7edf51ee0d9850a1c22f598f352e697b8d2072e90dce7d1ff61f0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#12",
+      "hash": "sha256:0c263e8f52e2976b360a3efeaa8b5dd425e0400c1666cfb8a4be8b83a3d6dde4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#13",
+      "hash": "sha256:511521df6be76f5a9c67fd3393c1ce3b38d83450d6a265fc9e7a0f1aea1994c5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#14",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#15",
+      "hash": "sha256:72dcfb39248958dfd9ef8ceccad654fb82f3a9c68bd027748c7ae6f6de536780"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#16",
+      "hash": "sha256:b521a2462e0656dd1166918625ac8b57fa0a8d6c8cbfb07f74d9d45a415bc3d4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#17",
+      "hash": "sha256:0a909829c48ce12525f87feb37a0147e1fa44ca664eaae26dc2bc01db4d186fe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#18",
+      "hash": "sha256:ff70fbd33db6b0a7a3de878fcd4d53a8f46dc2229a22f798923dec45005aca34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#19",
+      "hash": "sha256:c2d2647393b3c2004b91421607cb863b69717390de286b90b44f66436be25dc2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#20",
+      "hash": "sha256:7b7b126de534bb55460960b81ad721a4b9cc57689d98e79c1b2bba1a483a6133"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#21",
+      "hash": "sha256:e51b8db3a7d06a7b8fda9ae027152c680af4813494349b5b858ceb9623560dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#22",
+      "hash": "sha256:cc428f79d7f8b38fda3eeced70a7c2c148912cfc443316af8ce681c898b721cc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#23",
+      "hash": "sha256:9573d73a7d1810208b76fb729692cdd877d73a5dbfd354c0359c2dba16b712a8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#24",
+      "hash": "sha256:acf3617d584360c006164bf3b82d0432637ef3a0047d5d66cc13a68a83efef25"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#25",
+      "hash": "sha256:0f8d6ba9eb0ebf2a693774c2cc5edf6e444fdd337301f215ed629bfdf0dbe198"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#26",
+      "hash": "sha256:054694704b05980ee44e51208690775b1d256c2e861c85cab62ee8acd9f8838a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#27",
+      "hash": "sha256:f9e2f52b151b5b082360b65d45189568d8c9c3ae9e509f925ffde5cab965b271"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#28",
+      "hash": "sha256:d2af68457d2782de5ea1d8f515d0be4381b4b6d18055ab527cec36a3caf4165a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#29",
+      "hash": "sha256:9350b35daba07052612aa888fa537f2aabe3096a7a4a9ad034560c0aaecd5b4a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#30",
+      "hash": "sha256:4843526d9c0389095b421c2a02660d98f882ee631a1603ec36a4dc278ba4481f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#31",
+      "hash": "sha256:f83ebab90e97f8b00e7cf11182192c9a9895e638afc1c776b0d3b9c8e067c688"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#32",
+      "hash": "sha256:ab128196f7a01aa2ca7ebe026aa86327af63a8103120605118890ecb1ca5b2e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#33",
+      "hash": "sha256:0d807f1383b3191952b9f9bafdcfdb178f5d749566e9ef0162f5465e57db0100"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#34",
+      "hash": "sha256:ec90edec0d190930d61be7e3039ba7e772297d8037fab549daf9e32f58189246"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#35",
+      "hash": "sha256:acb6ee6b80992b84bad449defcdfe7ff1163db20a15646380f9ac111a90f4d22"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#36",
+      "hash": "sha256:7088aff7583653daeed970caa2c05d0e65dc6beba7b3110e7c75a883e958be79"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#37",
+      "hash": "sha256:2249a10e16173d846d86a3c5bbe8ab4b7d2b8f9077a7a10033edc400d870a960"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#38",
+      "hash": "sha256:9731110e4b3f56708dcfc5d014a39e43bd529bcd0d41b86225c30c0818c5e607"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#39",
+      "hash": "sha256:31d860e1bdf3cc737ce5704ead113ded9938d6c877658d7832a0cbd16e7bfff7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#40",
+      "hash": "sha256:c034736a6afa6a760535cad6625d2801e9fa7670d09df4bb9ae4101bc1844eac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#41",
+      "hash": "sha256:ba5e88fc3094bd37671e7ab862597dbbb481b8b75cf73d9b5e4b38f6e6818752"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#42",
+      "hash": "sha256:12dfbf8b82936d2180366e3d367490a110c29f24b58ab9f9ae520040944a55d1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#43",
+      "hash": "sha256:601cef6436e7163cb22630003ba00c2585486061306e95b2f6e6a80fe9515134"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#44",
+      "hash": "sha256:e9a964de66552fba67e4d76eca0a89523c3a6a8b549db45d5cf38594fa479054"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#45",
+      "hash": "sha256:e2fa4976513008bc496bb77383620105de51568564c9c03d82cd40a5522d456c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#46",
+      "hash": "sha256:3a63fd059b9055099ef8a737824d8d84fae7c6e3d99d866e906ac07120fa1357"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#47",
+      "hash": "sha256:61de9b125004b1b153c118605a4871d19fee591130eb0abadac5d06e4a44fa9e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#48",
+      "hash": "sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#49",
+      "hash": "sha256:5c544517a5e8cc889f817b933207ca9270e72ec82ec5ff78081e4fc79cabab34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#50",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#51",
+      "hash": "sha256:5c3f9931acd01be1d042ab062de20ca187797611a8b940b658c0a48482e20760"
     },
     {
       "content": "blocks",

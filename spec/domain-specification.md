@@ -140,6 +140,7 @@ profile: domain-specification
 | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md@authored | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md | authored | 124 | 30 | sha256:eaf0966c380a4f2edd5e1faec5edcb807e126c7b1d93e6c24bd7c894c58f67ab |
 | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md@authored | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md | authored | 70 | 20 | sha256:6f3ba575cf275a392d61250afb410d11d511d942bdd507ce4ab113c34ba43130 |
 | docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md@authored | docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md | authored | 44 | 10 | sha256:56a3258a10da8f6d0b85a5520d8493fb9e231e069994260adeed8d832c22c490 |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md@authored | docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md | authored | 51 | 13 | sha256:f7d87338fd41ba36b132fc31b3839d8ceb1ec42c4ac12559c6046e9f7145fe01 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:769ce2801152cca166570d3b88ce2f5bc133a3545afa26e0068652357cca5fa2 |
@@ -1403,6 +1404,19 @@ profile: domain-specification
 | docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#37 | authored | 2 | Status Of The Tree Against This Rule |
 | docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#41 | authored | 2 | What Would Decide It Differently |
 | docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md#43 | authored | 2 | Status |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#1 | authored | 1 | The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#2 | authored | 2 | Question |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#5 | authored | 2 | What Was Measured |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#14 | authored | 2 | The Decision |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#15 | authored | 3 | 1. An operation is one rendered answer, and the membership rule is what the host would otherwise assemble |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#19 | authored | 3 | 2. The surface is its own zone, `Operation Surface`, and Application Service is refused |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#25 | authored | 3 | 3. `profile` joins the surface |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#30 | authored | 3 | 4. The falsifier is two properties and a check, not a crate count |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#36 | authored | 3 | 5. `nomos-lsp`'s correction edge belongs to the surface |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#39 | authored | 2 | What This Record Does Not Authorize |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#45 | authored | 2 | The Items This Triggers |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#48 | authored | 2 | What Would Decide It Differently |
+| docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#50 | authored | 2 | Status |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1 | authored | 1 | Territory is declared but not enforced, and nothing yet notices the difference |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#4 | authored | 2 | What Is Actually Enforced |
@@ -41948,6 +41962,447 @@ mechanism decided. Measured at `53de19a4`: twenty-two host edges into eight crat
 among the orchestration crates, all six named in `exceptions` while every host edge is granted
 by zone without being named, and one host edge -- `nomos-lsp` into
 `nomos-correction-orchestration` -- that the rule forbids today.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#1
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test · hash: sha256:7e38a4587cf8ff694dd28d166dc72fc47f86f89714592b828f0d198c1320967b*
+
+# The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#2
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#3
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / Question · hash: sha256:49e55f1c02db44c17fe1227b0e79705ca092fd7a71d6a68021385f061889d8df*
+
+`OD-ROADMAP-005` decision 3 authorizes "one operation surface the hosts depend on in place of
+assembling the product themselves", superseding `OD-HOST-011` v1's refusal of a contracts crate
+and `OD-HOST-012` v1's decision that repo-tooling handlers keep their present home. It
+authorizes the thing and says nothing about its shape: what one operation is, which of today's
+verbs are operations, where the surface sits against the declared zones, and what would show
+that it had been built rather than merely named.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#4
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / Question · hash: sha256:2516fcfc20ee2edbafa621179376b5110c4f3aeaf03095073c7211e2f0027135*
+
+`OD-HOST-018` is the other half of the same authorization, and it drew the line between them
+itself: that record says what a host may **know**, this one decides what a host **depends on**.
+It is explicit that it "does not design it, name its crate, or pre-empt its shape", and it
+leaves this record one unhomed edge, settled in section 5.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#5
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#6
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What Was Measured · hash: sha256:c887d7a164ffcfb4654640c50ffe0ac6280a34b14d445651ee70554a98a397f3*
+
+Measured 2026-09-22 against `792a7a03`, by reading the dispatch table and the manifests rather
+than by citing `ARC-ROADMAP-001`, which is where the figures in the item that triggered this
+record came from.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#7
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What Was Measured · hash: sha256:9efb21aed3ac397c2aad219515b2205ef50c6a9cb380fecb3321daaeef03e47d*
+
+**The command line dispatches nine groups.** `vacuity::Group` closes the set and `main.rs`
+matches it with no wildcard arm: `work`, `spec`, `check`, `request`, `gate`, `agent`,
+`correct`, `workflow`, `profile`.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#8
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What Was Measured · hash: sha256:d5bc35c56a3741bc8590375f7be9e777b32e1ab642197c639dc5cc5722e2d641*
+
+**The group is the wrong unit, and counting groups gets the answer wrong twice.** The `request`
+group dispatches exactly one command, `submit`, and the service answers it as
+`Handle_Spec_Submit` — a match across group names. Counting groups reports `request` and
+`profile` as unserved. Counting operations reports `profile` and `work widen`. The first census
+is wrong in both directions at once, which is the argument for the unit chosen in section 1.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#9
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What Was Measured · hash: sha256:eb1d3410af32fd8ad4170e0f00c7893ef320dcf0825f38fb629076886717f999*
+
+**The operation census: 32 against 30.** `nomos-api` exports 30 `Handle_` functions. The
+command line offers 32 operations — twelve `work`, nine `spec`, one `request submit`, four
+`gate`, two `agent`, one each for `check`, `correct` and `workflow`, and one `profile`. The
+difference is exactly the two unserved operations, so the two counts corroborate each other
+rather than merely coexisting.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#10
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What Was Measured · hash: sha256:f04b2dde0a29a4a197d93e2b29414b92bdb6598c18335dfcd0aff1c44822dbdb*
+
+**`work widen` has no handler.** The service carries eleven of the twelve ledger verbs. Nothing
+declares the twelfth, and nothing failed when it was added.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#11
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What Was Measured · hash: sha256:2cc4597ec7d7edf51ee0d9850a1c22f598f352e697b8d2072e90dce7d1ff61f0*
+
+**`profile` has no service crate at all.** It is thirteen modules inside `nomos-cli` —
+capability standing, provider standing, offer standing, availability, program search, starter
+policy — computing answers about a workspace entirely within the host.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#12
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What Was Measured · hash: sha256:0c263e8f52e2976b360a3efeaa8b5dd425e0400c1666cfb8a4be8b83a3d6dde4*
+
+**The nine groups' service crates span three zones**, which is the fact the shape turns on.
+`check`, `correct`, `gate`, `workflow` and `agent` reach Application Service crates; `spec` and
+`request` reach `nomos-spec-orchestration`, which is Specification; `work` reaches
+`nomos-work-orchestration`, which is Repo Tooling. `Application Service` permits Protocol,
+Substrate, Capability Contract, Provider, Rules and Agent — **neither Specification nor Repo
+Tooling.**
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#13
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What Was Measured · hash: sha256:511521df6be76f5a9c67fd3393c1ce3b38d83450d6a265fc9e7a0f1aea1994c5*
+
+**The crate counts, as a dated measurement and not as a requirement:** `nomos-cli` names 26
+`nomos-*` crates and `nomos-api` names 23. `ARC-ROADMAP-001` records 22 for `nomos-api`; it has
+moved by one since that record was written, which is the ordinary fate of a count in prose and
+part of the reason the falsifier below is not one.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#14
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#15
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 1. An operation is one rendered answer, and the membership rule is what the host would otherwise assemble · hash: sha256:72dcfb39248958dfd9ef8ceccad654fb82f3a9c68bd027748c7ae6f6de536780*
+
+### 1. An operation is one rendered answer, and the membership rule is what the host would otherwise assemble
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#16
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 1. An operation is one rendered answer, and the membership rule is what the host would otherwise assemble · hash: sha256:b521a2462e0656dd1166918625ac8b57fa0a8d6c8cbfb07f74d9d45a415bc3d4*
+
+**An operation is one answer a host renders for one thing a person asked for**, taking the
+arguments that host parsed and producing one outcome value it renders.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#17
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 1. An operation is one rendered answer, and the membership rule is what the host would otherwise assemble · hash: sha256:0a909829c48ce12525f87feb37a0147e1fa44ca664eaae26dc2bc01db4d186fe*
+
+**An operation belongs to the surface when a host would otherwise have to name a service crate
+to offer it.** The test is stated so that it answers for an operation nobody has written yet:
+take the operation away from the host, and ask what the host would have to name to put it back.
+If the answer includes any crate in Application Service, Specification or Repo Tooling, the
+operation belongs to the surface. If the answer is only the host's own argument parsing, its
+transport, its exit codes and the outcome type it prints, it is host-local.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#18
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 1. An operation is one rendered answer, and the membership rule is what the host would otherwise assemble · hash: sha256:ff70fbd33db6b0a7a3de878fcd4d53a8f46dc2229a22f798923dec45005aca34*
+
+The unit is the operation, not the group and not the crate. Two operations the same service
+answers may sit in different command groups, and one group may hold operations of both kinds.
+The census above is what it costs to forget that.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#19
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 2. The surface is its own zone, `Operation Surface`, and Application Service is refused · hash: sha256:c2d2647393b3c2004b91421607cb863b69717390de286b90b44f66436be25dc2*
+
+### 2. The surface is its own zone, `Operation Surface`, and Application Service is refused
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#20
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 2. The surface is its own zone, `Operation Surface`, and Application Service is refused · hash: sha256:7b7b126de534bb55460960b81ad721a4b9cc57689d98e79c1b2bba1a483a6133*
+
+The surface is a new declared component in `nomos-architecture.json`, named `Operation
+Surface`, holding one crate, `nomos-operations`, under `crates/operations/`.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#21
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 2. The surface is its own zone, `Operation Surface`, and Application Service is refused · hash: sha256:e51b8db3a7d06a7b8fda9ae027152c680af4813494349b5b858ceb9623560dc4*
+
+**Its permits are exactly today's `Host` permits minus `Host`:** Protocol, Substrate,
+Specification, Capability Contract, Provider, Rules, Agent, Application Service, Repo Tooling.
+`Host` gains `Operation Surface`. That is the whole layering change, and it is a component with
+declared permits rather than an entry in `exceptions`.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#22
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 2. The surface is its own zone, `Operation Surface`, and Application Service is refused · hash: sha256:cc428f79d7f8b38fda3eeced70a7c2c148912cfc443316af8ce681c898b721cc*
+
+**Placing the surface in `Application Service` is refused here rather than discovered later.**
+That zone permits neither Specification nor Repo Tooling, so a surface living there could not
+answer the ten spec operations or the twelve work operations without widening Application
+Service's permits to reach both. That widening is not local to the surface: it would also let
+`nomos-check-orchestration` name `nomos-ledger` and `nomos-gate-orchestration` name
+`nomos-spec-store`. Loosening six crates to place one is the wrong trade, and a zone whose
+permits are the union of everything its members happen to need has stopped being a boundary.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#23
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 2. The surface is its own zone, `Operation Surface`, and Application Service is refused · hash: sha256:9573d73a7d1810208b76fb729692cdd877d73a5dbfd354c0359c2dba16b712a8*
+
+**Any arrangement that requires a new entry in `exceptions` is refused by this record.** If an
+implementer finds one necessary, the placement decided here is wrong and the question returns
+here rather than being settled in the exceptions map.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#24
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 2. The surface is its own zone, `Operation Surface`, and Application Service is refused · hash: sha256:acf3617d584360c006164bf3b82d0432637ef3a0047d5d66cc13a68a83efef25*
+
+**The surface is named by the hosts and names no host.** `Host` does not appear in `Host`'s own
+permit list, which is the host-may-not-name-a-host rule as the declaration already carries it,
+and `Host` does not appear in `Operation Surface`'s permits either. The two host-to-host edges
+in the tree, `nomos-api-transport` naming `nomos-api` and `nomos-mcp` naming
+`nomos-api-transport`, are declared exceptions with their own reasons; the surface joins
+neither and needs no third.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#25
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 3. `profile` joins the surface · hash: sha256:0f8d6ba9eb0ebf2a693774c2cc5edf6e444fdd337301f215ed629bfdf0dbe198*
+
+### 3. `profile` joins the surface
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#26
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 3. `profile` joins the surface · hash: sha256:054694704b05980ee44e51208690775b1d256c2e861c85cab62ee8acd9f8838a*
+
+Leaving `profile` unmentioned is the failure this record exists to prevent, so it is decided
+rather than deferred.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#27
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 3. `profile` joins the surface · hash: sha256:f9e2f52b151b5b082360b65d45189568d8c9c3ae9e509f925ffde5cab965b271*
+
+`profile` joins. The membership rule reaches it without special pleading: remove it from
+`nomos-cli` and the host would have to name workspace discovery, the capability registry and the
+gate policy crates to offer it again. Thirteen modules computing capability, provider and offer
+standing are service work that happens to live in a host, which is the exact condition
+`OD-ROADMAP-005` decision 3 names — a host assembling the product itself.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#28
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 3. `profile` joins the surface · hash: sha256:d2af68457d2782de5ea1d8f515d0be4381b4b6d18055ab527cec36a3caf4165a*
+
+**What that classifies next.** The rule turns on whether the host would name a service crate,
+never on whether a verb is first-run, interactive, a convenience, or writes a file. A future
+verb that only formats or re-prints what the host already holds is host-local; one that computes
+an answer from the tree is not. `profile --write-gate-policy` writing a file does not make it
+host-local, because the write is the second half of an answer whose first half is a reading of
+the tree.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#29
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 3. `profile` joins the surface · hash: sha256:9350b35daba07052612aa888fa537f2aabe3096a7a4a9ad034560c0aaecd5b4a*
+
+**`work widen` is a different finding and the membership rule does not settle it.** The service
+already answers eleven of twelve ledger verbs; the twelfth is absent rather than host-local. It
+is evidence for the totality test in section 4 rather than a question for section 1.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#30
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 4. The falsifier is two properties and a check, not a crate count · hash: sha256:4843526d9c0389095b421c2a02660d98f882ee631a1603ec36a4dc278ba4481f*
+
+### 4. The falsifier is two properties and a check, not a crate count
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#31
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 4. The falsifier is two properties and a check, not a crate count · hash: sha256:f83ebab90e97f8b00e7cf11182192c9a9895e638afc1c776b0d3b9c8e067c688*
+
+A count is refused as the acceptance condition, for two recorded reasons. `OD-HOST-018` decided
+that a host may name one service crate per operation it renders and capped nothing — "a host
+offering twenty verbs may name twenty crates" — so a lower count is not by itself evidence of a
+better boundary. `OD-HOST-011` v2 decided that a record restating a quantity a test already
+asserts has minted a second authority for it, "and the second one is what goes stale, because
+nothing renders a record from the code."
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#32
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 4. The falsifier is two properties and a check, not a crate count · hash: sha256:ab128196f7a01aa2ca7ebe026aa86327af63a8103120605118890ecb1ca5b2e8*
+
+So the surface is real when both of these hold, each asserted by a check rather than by this
+record's prose:
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#33
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 4. The falsifier is two properties and a check, not a crate count · hash: sha256:0d807f1383b3191952b9f9bafdcfdb178f5d749566e9ef0162f5465e57db0100*
+
+- **Totality.** Every operation the command line offers is answered by the surface. Both sides
+  of that comparison are closed sets something already enumerates — `vacuity::Group` and its
+  per-group verbs on one side, the surface's own declared operation set on the other — so the
+  comparison is mechanical, and an operation added to either side with no counterpart fails it.
+  `work widen` and `profile` are the two it finds today.
+- **Exclusivity.** Neither large host names a service crate for an operation the surface
+  carries. This is `OD-HOST-018`'s own falsifier — "an application operation surface landing
+  while the hosts keep their direct edges. Then either that surface does not carry what a host
+  needs, or the separation is being paid for twice" — adopted here as the acceptance condition
+  rather than left as something to reopen for.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#34
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 4. The falsifier is two properties and a check, not a crate count · hash: sha256:ec90edec0d190930d61be7e3039ba7e772297d8037fab549daf9e32f58189246*
+
+**The residue a host keeps, named by kind so that it needs no number.** Its own argument parsing
+and exit codes, its transport, the platform composer `nomos-composer-std` per `OD-HOST-001` and
+`OD-RULES-028`, and the outcome types it renders. A host naming those has not failed
+exclusivity.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#35
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 4. The falsifier is two properties and a check, not a crate count · hash: sha256:acb6ee6b80992b84bad449defcdfe7ff1163db20a15646380f9ac111a90f4d22*
+
+Whatever the crate counts become is a consequence of those two properties and not a target. The
+figures in the measurement above are dated evidence about the tree on one day, and this record
+does not ask anybody to move them.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#36
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 5. `nomos-lsp`'s correction edge belongs to the surface · hash: sha256:7088aff7583653daeed970caa2c05d0e65dc6beba7b3110e7c75a883e958be79*
+
+### 5. `nomos-lsp`'s correction edge belongs to the surface
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#37
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 5. `nomos-lsp`'s correction edge belongs to the surface · hash: sha256:2249a10e16173d846d86a3c5bbe8ab4b7d2b8f9077a7a10033edc400d870a960*
+
+`OD-HOST-018` records one live violation — `nomos-lsp` naming `nomos-correction-orchestration`
+for `CorrectionFamily::Of`, an edge justified by what a different service's pipeline contains —
+and says that where it goes instead "belongs to the item that decides what a host depends on".
+That is this record.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#38
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Decision / 5. `nomos-lsp`'s correction edge belongs to the surface · hash: sha256:9731110e4b3f56708dcfc5d014a39e43bd529bcd0d41b86225c30c0818c5e607*
+
+It belongs to the surface. Which rules a correction family covers is an answer about what the
+product can do, so it is an operation under section 1, and the LSP obtains it from the surface
+rather than from the correction service. This records the destination only; it does not repair
+the edge, and the repair is one of the items in section 7 rather than something an implementer
+may fold into another.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#39
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What This Record Does Not Authorize · hash: sha256:31d860e1bdf3cc737ce5704ead113ded9938d6c877658d7832a0cbd16e7bfff7*
+
+## What This Record Does Not Authorize
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#40
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What This Record Does Not Authorize · hash: sha256:c034736a6afa6a760535cad6625d2801e9fa7670d09df4bb9ae4101bc1844eac*
+
+**It is not a second authority beside `OD-HOST-018`.** That rule governs what a host may know
+and is untouched here. A host depending on the surface still has to satisfy it, and, as that
+record says, the same question is then asked of the surface itself and gets the same answer.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#41
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What This Record Does Not Authorize · hash: sha256:ba5e88fc3094bd37671e7ab862597dbbb481b8b75cf73d9b5e4b38f6e6818752*
+
+**It does not re-decide `OD-HOST-014`.** Surface membership is not transport admission. An
+operation may belong to the surface and still be refused the transport on that record's
+criterion of what the operation causes on the host; `agent execute` and `workflow run` are
+refused there today, and joining the surface does not admit them.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#42
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What This Record Does Not Authorize · hash: sha256:12dfbf8b82936d2180366e3d367490a110c29f24b58ab9f9ae520040944a55d1*
+
+**It does not touch `OD-HOST-011`'s response twins.** Whether serialization ever collapses into
+one contract layer still waits on that record's own trigger, a second transport that needs it.
+The surface is a dependency boundary, not a serialization format.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#43
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What This Record Does Not Authorize · hash: sha256:601cef6436e7163cb22630003ba00c2585486061306e95b2f6e6a80fe9515134*
+
+**It does not move logic between service crates, and it adds no orchestration-to-orchestration
+edge.** The six declared edges between service crates stand exactly as `OD-HOST-018` left them.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#44
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What This Record Does Not Authorize · hash: sha256:e9a964de66552fba67e4d76eca0a89523c3a6a8b549db45d5cf38594fa479054*
+
+**It does not authorize a ninth piece.** `OD-ROADMAP-005` is explicit that a piece needing a
+further change is a new item, and, where it reaches another record, a new question for the
+owner.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#45
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Items This Triggers · hash: sha256:e2fa4976513008bc496bb77383620105de51568564c9c03d82cd40a5522d456c*
+
+## The Items This Triggers
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#46
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Items This Triggers · hash: sha256:3a63fd059b9055099ef8a737824d8d84fae7c6e3d99d866e906ac07120fa1357*
+
+Sized so that no single item holds both hosts and the registration files at once, because that
+territory blocks most of the board and this record is the reason several sessions would
+otherwise reach for it.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#47
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / The Items This Triggers · hash: sha256:61de9b125004b1b153c118605a4871d19fee591130eb0abadac5d06e4a44fa9e*
+
+1. **The zone lands empty.** `Operation Surface` is added to the components list with the permits
+   in section 2, and `Host` permits it. Establishes: the boundary checks pass with the zone
+   declared and no member in it. Reserves `nomos-architecture.json` and the boundary tests, and
+   nothing else.
+2. **The crate lands**, declaring its operation set and answering the operations one service
+   already covers. Reserves the new crate and the registration files. Establishes: it compiles,
+   it is zoned `Operation Surface`, and its declared operation set is readable by a test.
+3. **The totality and exclusivity checks land.** Reserves the contract tests. Establishes both
+   properties in section 4 as checks. They fail while the hosts still hold direct edges — which
+   they will — so this item lands them as a measurement of the remaining distance rather than as
+   a green.
+4. **Each host projects the surface, one item per host**, and neither reserves the registration
+   files. Establishes exclusivity for that host.
+5. **`profile`'s computation leaves `nomos-cli` for the surface.** Reserves `nomos-cli`'s profile
+   modules and the surface crate. Establishes that the last operation with no service crate has
+   one.
+6. **`work widen` gains its handler.** The smallest of these, and independent of the rest.
+7. **`nomos-lsp` obtains its correction family from the surface**, closing the violation
+   `OD-HOST-018` recorded.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#48
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What Would Decide It Differently · hash: sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429*
+
+## What Would Decide It Differently
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#49
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / What Would Decide It Differently · hash: sha256:5c544517a5e8cc889f817b933207ca9270e72ec82ec5ff78081e4fc79cabab34*
+
+- **An operation the membership rule cannot classify.** The rule is a question about what a host
+  would name, and it assumes that is always answerable. One that is genuinely ambiguous is
+  evidence the unit in section 1 is wrong.
+- **The zone needing an exception.** Section 2 refuses that in advance; an implementer who finds
+  one necessary has found that the placement is wrong, and the question returns here.
+- **A second transport arriving before the surface.** That is `OD-HOST-011`'s own trigger, and it
+  would merge two questions this record keeps separate.
+- **Exclusivity holding while totality does not.** A surface the hosts depend on that does not
+  answer every operation means the hosts kept something, and what they kept is the real shape.
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#50
+
+*revision: authored · kind: heading · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md#51
+
+*revision: authored · kind: prose · heading: The application operation surface is shaped by what a host would otherwise assemble, and totality over the command line is its test / Status · hash: sha256:5c3f9931acd01be1d042ab062de20ca187797611a8b940b658c0a48482e20760*
+
+Accepted. Checked 2026-09-22 against `792a7a03`: the nine dispatched groups, the 32 operations
+they offer, the 30 handlers that answer them, the three zones their service crates occupy, and
+the `Application Service` permit list that refuses the obvious placement.
 
 ### docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md#1
 
