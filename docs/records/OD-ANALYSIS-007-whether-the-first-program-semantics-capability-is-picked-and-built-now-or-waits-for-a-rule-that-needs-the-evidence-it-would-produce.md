@@ -264,8 +264,15 @@ capability, a second party is naming the contract from a zone that cannot see th
 lives in. At that moment the contract moves to its own crate under `crates/capabilities`, the
 shape the five policy contracts already have — one crate per capability, not one for the
 family — and `Test_A_Capability_Id_Should_Be_Written_In_One_Crate` is what holds the id to one
-home before and after. Until then it does not move. Whether a crate that declares a contract
-and bundles its only provider belongs in `Provider` or in `Capability Contract` is
+home before and after. Until then it does not move. The item that acts on that decision is
+`P123-THE-COMPILER-CONTRACTS-LEAVE-THEIR-PROVIDER-AND-ITS-RULES-JOIN-THE-RUN-2`, and the
+consequence for it is one crate per capability, each named for the capability id:
+`crates/capabilities/nomos-cap-rust-copy-clones` for `nomos.cap.rust.copy_clones` and
+`crates/capabilities/nomos-cap-rust-nested-locks` for `nomos.cap.rust.nested_locks`, which is
+the territory it reserves. The reason is the zone rule just stated — a descriptor in
+`nomos-rules` reading either contract is the second party `OD-CAPABILITY-002` requires, and
+`Permits` forbids the `Rules` zone from naming `Provider`. Whether a crate that declares a
+contract and bundles its only provider belongs in `Provider` or in `Capability Contract` is
 `OD-CAPABILITY-015`'s criterion, not this record's; that the compiler crate is zoned `Provider`
 while `nomos-connector-coderabbit`, the same shape, is zoned `Capability Contract` is recorded
 here as measured and routed there.
@@ -274,17 +281,20 @@ here as measured and routed there.
 `composition.rs` names `nomos_lang_rust_compiler` nowhere, `RequiredFact` has no variant for
 either fact, `README.md`'s row for the crate says "Not yet composed into a real gate run", and
 the only crate depending on it is `tests/integration`, for its determinism declarations. That
-wiring is exactly the "additional one-off capability orchestration" `OD-ROADMAP-002` pauses:
+wiring was exactly the "additional one-off capability orchestration" `OD-ROADMAP-002` paused:
 "A capability may still be built; what waits is wiring it in by extending the hand-written
 mapping", lifted when the run planner it names lands, or lapsing if that successor is abandoned.
-Where that stands is also not this record's. `P41-RUN-PLANNER` is declined under
-`OD-RULES-009`, whose latest amendment finds a planner speculative rather than merely unbuilt
-now that materialization derives its demand "from the union of
-`nomos_rules::RuleDescriptor::requires` over the selected rules", and `OD-RULES-027` finds that
-"The derivation is available, and it is not the planner." Whether that derivation is the
-successor `OD-ROADMAP-002` waits for, or the pause has lapsed with the planner's decline, is a
-question for those records. This record says only that the wiring waits on them, and schedules
-nothing.
+That pause governed at `OD-ROADMAP-002`'s own version and no longer governs. `OD-ROADMAP-003`
+is published and registered, and its title is its finding — "Each of the three pauses
+OD-ROADMAP-002 set has lapsed on its own stated condition" — with "All three pauses have
+lapsed, each on the condition `OD-ROADMAP-002` set for it." said of all three and "Lapsed, by
+the successor being abandoned, and the cost the pause was priced against gone." said of this
+one. It names composing `nomos-lang-rust-compiler` into a real check run among the gaps that
+are "each now unpaused work for an item of its own, with its own territory and its own
+measurement", and says of itself that "This record removes the prohibition that stood in their
+way and decides nothing about their shape." So the wiring is unblocked by `OD-ROADMAP-003`
+rather than waiting on it. It is still somebody else's item to schedule, and this record
+schedules nothing.
 
 ## Status
 

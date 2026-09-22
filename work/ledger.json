@@ -90537,14 +90537,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-pause",
-        "acquired_at": 1790052750,
-        "lease_expires_at": 1790063550
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -90555,7 +90551,28 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.13s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.58s\n     Running unittests src\\lib.rs (F:/repos/render-pause-target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/render-pause-target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/render-pause-target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (F:/repos/render-pause-target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/render-pause-target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1790053219,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -90578,10 +90595,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-counts",
+        "acquired_at": 1790053122,
+        "lease_expires_at": 1790060322
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -90665,10 +90686,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-75-material",
+        "acquired_at": 1790052986,
+        "lease_expires_at": 1790063786
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -90795,6 +90820,44 @@
         ],
         "patterns": []
       },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75-tier",
+        "acquired_at": 1790052857,
+        "lease_expires_at": 1790063657
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-A-COMPOSED-FILES-OWNED-REGION-IS-AMBIGUOUS-BY-COLUMN",
+      "title": "README is Composed with one owned region, and the check that is supposed to hold it watches two of its three columns",
+      "why": "OD-PACKAGE-004 classifies README.md as Composed and says its owned region is the band and crate table, checked bidirectionally against the boundaries test, with its free region being the prose that carries no check. That sentence is wider than its mechanism. Zone_Row in tests/contract/tests/boundaries/readme.rs reads exactly two cells from a row, the zone and the backticked crate name, and returns that pair; the third column, each row's long hand-written description of what the crate owns, is inside the table the record calls owned and is read by nothing. So the owned region is not one region at all. It is two columns that are checked and one that is not, and the unchecked one carries several hundred lines of reasoning. A mechanism told that the table is owned may overwrite it wholesale, which would delete that reasoning while every check stays green, because the checks compare only the two cells the generator would reproduce correctly. Three live items reach this ambiguity from different directions: a generic materializer whose whole job is writing a Composed target's owned region without losing its free region, a piece that generates or checks architecture prose against nomos-architecture.json, and two items editing third-column descriptions.",
+      "done_when": "OD-PACKAGE-004 states a Composed asset's ownership at the granularity its check actually holds, rather than naming a region wider than the mechanism. It records, quoting Zone_Row directly, that README's table is checked at zone and crate-name granularity only and that the description column is unchecked, and it says which of the three columns a regenerating mechanism may write and which it must preserve. It states the general rule the instance illustrates, that a Composed asset's owned region is declared at the granularity something compares, and that a region named as owned but unchecked is free in effect whatever the record says, so a later Composed asset is classified by the same test rather than by precedent. It says explicitly what happens to the unchecked column if nothing ever checks it, either that it is reclassified as free region or that closing the gap is named as owed with the check that would close it, and does not leave it named owned and unwatched. Version is bumped and the amendment is added rather than the earlier text being rewritten as though it had been wrong. No code changes and no check is built here. Both required projections are re-rendered from the record set the commit publishes and nomos spec freshness with both --require flags exits 0 in that tree.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PACKAGE-004-an-assets-ownership-class-decides-what-regeneration-does-to-it-and-an-undeclared-asset-defaults-to-user-owned.md"
+        ],
+        "patterns": []
+      },
       "state": "Ready",
       "depends_on": [],
       "blocked": null,
@@ -90806,6 +90869,50 @@
           "--no-fail-fast",
           "-p",
           "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-A-RULE-STATES-WHAT-A-HOST-MAY-KNOW-OF-THE-ORCHESTRATION-GRAPH",
+      "title": "A rule states what a host may know of the orchestration graph, which no record states today",
+      "why": "OD-ROADMAP-005 decision item 8 authorizes it: the external architecture review of dev at bc0aaac asked in its thirteenth section that this workspace establish a rule that an orchestration crate may coordinate domain services while a host should not need to know the internal orchestration graph, and no record states it. Re-measured 2026-09-21 at 53de19a4. Six orchestration crates compose each other over six edges: correction into check, gate into check, and workflow into agent, check, correction and gate. Every one of those six is a same-zone Application Service edge that permits in nomos-architecture.json does not grant and that exceptions names one by one. Against that, nomos-cli and nomos-api each name eight crates whose names end in -orchestration or are nomos-workspace-discovery, nomos-api-transport names three and nomos-lsp names three: twenty-two host edges in all, every one of them a cross-zone edge Host permits wholesale, none named anywhere and no count of them declared. So the composition graph is enumerated and checked in both directions while the reach into it from above is granted in bulk. The nearest records decide other questions on their own OD-PACKAGE-015 third-clause triggers: OD-HOST-001 that choosing a platform, running a verb and rendering its outcome are three crates, OD-HOST-011 that the response twin stays, OD-HOST-012 that repo-tooling handlers keep their home. This item supersedes nothing and changes no code.",
+      "done_when": "The record exists at docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md and is registered at crates/spec/nomos-spec-store/records/OD-HOST-018.record, since writing the document does not make it governing. The record states the rule at the altitude the review asked for and without deciding a mechanism: a host may name an orchestration crate when it offers an operation that crate answers and renders that outcome, and may not name one for any reason that is a fact about how the orchestration crates compose each other. It carries the 2026-09-21 measurement rather than a characterization: the orchestration edge count for every host crate, all six orchestration-to-orchestration edges by name, which of those the zone model grants by naming and which it grants wholesale, and whether any host reaches an orchestration crate it renders no outcome for. It says what the rule does not forbid, naming at least a host naming a platform composer, a host rendering an orchestration outcome type and a host parsing its own arguments, each already settled by OD-HOST-001. It states that no mechanical check holds the rule and routes to the checks that hold what they do hold rather than restating them. It names an observable reopening trigger rather than a preference. It states the tree status against the rule honestly, including any violation the measurement found and what the record does with it. It does not design, name the crate of, or pre-empt the shape of the application operation surface, which is piece 3 of OD-ROADMAP-005 and belongs to that item. Both projections are re-rendered from the record set this commit publishes and nomos spec freshness --into . --require diagram-set --require domain-specification exits 0 in that tree. The predicate deliberately does not reach the rest of nomos-contract-tests: public_surface, agent_harness, the boundaries suite and the corpus gates are other obligations, this item changes no code and no surface, and the shared tree is red on peer work in that package today.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-018.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-host-orchestration-rule",
+        "acquired_at": 1790053256,
+        "lease_expires_at": 1790064056
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
         ],
         "timeout_seconds": 1800
       },

@@ -39,7 +39,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md@authored | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md | authored | 30 | 7 | sha256:2d1cc618a04047fd179e4d5f24fd112d9fafc6d05fe7710be734b52d3d2dc8e9 |
 | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md@authored | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md | authored | 23 | 7 | sha256:f8ced57db03fbaac9fbbb8a550e6e9561a4d5e651d59adb613370d47e46725be |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 42 | 9 | sha256:a7a3620d599955e63ca9bcc81b52866cf77cf156c8bb930391ee67daedaa3040 |
-| docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md | authored | 28 | 6 | sha256:9cc3a0152adb1cafcdeb952ceee11125e09d7e63082dcc774e61eda9c13c86d1 |
+| docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md | authored | 28 | 6 | sha256:373e8af52b14b8082d5bfc8a3ac40281ee2d307ec08cebffda5075328afb512f |
 | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md | authored | 22 | 8 | sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272 |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 43 | 9 | sha256:c218a0e3bcaaf03e21f566d1fa336427f086e410c27c64e9a0232305afd93500 |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md | authored | 16 | 6 | sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a |
@@ -10253,7 +10253,7 @@ stays beside its provider, as both contract files already say, until a second pa
 
 ### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#25
 
-*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Amendment: The Trigger Has Fired Twice, By Routes Version 1 Did Not Anticipate · hash: sha256:d2b9fc484631bc5a8382826efefc357a2e1974a25be1cebd2e7701865b51fd15*
+*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Amendment: The Trigger Has Fired Twice, By Routes Version 1 Did Not Anticipate · hash: sha256:e52405d0ad1547e7d9989b297ada08b3bc70328fe688fd6390d3e4141e87729f*
 
 Which second party will come first is worth stating, because it is not the one
 `OD-CAPABILITY-002` names. That record's trigger is a second provider. This workspace's zone
@@ -10266,31 +10266,41 @@ capability, a second party is naming the contract from a zone that cannot see th
 lives in. At that moment the contract moves to its own crate under `crates/capabilities`, the
 shape the five policy contracts already have — one crate per capability, not one for the
 family — and `Test_A_Capability_Id_Should_Be_Written_In_One_Crate` is what holds the id to one
-home before and after. Until then it does not move. Whether a crate that declares a contract
-and bundles its only provider belongs in `Provider` or in `Capability Contract` is
+home before and after. Until then it does not move. The item that acts on that decision is
+`P123-THE-COMPILER-CONTRACTS-LEAVE-THEIR-PROVIDER-AND-ITS-RULES-JOIN-THE-RUN-2`, and the
+consequence for it is one crate per capability, each named for the capability id:
+`crates/capabilities/nomos-cap-rust-copy-clones` for `nomos.cap.rust.copy_clones` and
+`crates/capabilities/nomos-cap-rust-nested-locks` for `nomos.cap.rust.nested_locks`, which is
+the territory it reserves. The reason is the zone rule just stated — a descriptor in
+`nomos-rules` reading either contract is the second party `OD-CAPABILITY-002` requires, and
+`Permits` forbids the `Rules` zone from naming `Provider`. Whether a crate that declares a
+contract and bundles its only provider belongs in `Provider` or in `Capability Contract` is
 `OD-CAPABILITY-015`'s criterion, not this record's; that the compiler crate is zoned `Provider`
 while `nomos-connector-coderabbit`, the same shape, is zoned `Capability Contract` is recorded
 here as measured and routed there.
 
 ### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#26
 
-*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Amendment: The Trigger Has Fired Twice, By Routes Version 1 Did Not Anticipate · hash: sha256:46efad8f584cbc4ff3504f1309745de7dc4698f94349e495f6ef770197802531*
+*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Amendment: The Trigger Has Fired Twice, By Routes Version 1 Did Not Anticipate · hash: sha256:42392de3f198c1822cf1e86c1c5937c575e7b6850d7e65fcb7998c8de4de2524*
 
 **Wiring either capability into `Run` is not this record's to schedule.** Neither is composed:
 `composition.rs` names `nomos_lang_rust_compiler` nowhere, `RequiredFact` has no variant for
 either fact, `README.md`'s row for the crate says "Not yet composed into a real gate run", and
 the only crate depending on it is `tests/integration`, for its determinism declarations. That
-wiring is exactly the "additional one-off capability orchestration" `OD-ROADMAP-002` pauses:
+wiring was exactly the "additional one-off capability orchestration" `OD-ROADMAP-002` paused:
 "A capability may still be built; what waits is wiring it in by extending the hand-written
 mapping", lifted when the run planner it names lands, or lapsing if that successor is abandoned.
-Where that stands is also not this record's. `P41-RUN-PLANNER` is declined under
-`OD-RULES-009`, whose latest amendment finds a planner speculative rather than merely unbuilt
-now that materialization derives its demand "from the union of
-`nomos_rules::RuleDescriptor::requires` over the selected rules", and `OD-RULES-027` finds that
-"The derivation is available, and it is not the planner." Whether that derivation is the
-successor `OD-ROADMAP-002` waits for, or the pause has lapsed with the planner's decline, is a
-question for those records. This record says only that the wiring waits on them, and schedules
-nothing.
+That pause governed at `OD-ROADMAP-002`'s own version and no longer governs. `OD-ROADMAP-003`
+is published and registered, and its title is its finding — "Each of the three pauses
+OD-ROADMAP-002 set has lapsed on its own stated condition" — with "All three pauses have
+lapsed, each on the condition `OD-ROADMAP-002` set for it." said of all three and "Lapsed, by
+the successor being abandoned, and the cost the pause was priced against gone." said of this
+one. It names composing `nomos-lang-rust-compiler` into a real check run among the gaps that
+are "each now unpaused work for an item of its own, with its own territory and its own
+measurement", and says of itself that "This record removes the prohibition that stood in their
+way and decides nothing about their shape." So the wiring is unblocked by `OD-ROADMAP-003`
+rather than waiting on it. It is still somebody else's item to schedule, and this record
+schedules nothing.
 
 ### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#27
 
