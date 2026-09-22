@@ -115,6 +115,7 @@ fn Unread_Declaration(sources: &[SourceFile], applicability: Applicability, rule
     };
 
     return vec![Finding {
+        address: None,
         rule: RuleId::New(rule),
         subject: source.subject,
         subject_name: source.path.clone(),
@@ -192,6 +193,7 @@ fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact, rule: &'static str) 
 fn Unread_Finding(source: &SourceFile, applicability: Applicability, rule: &'static str, because: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(rule),
         subject: source.subject,
         subject_name: source.path.clone(),

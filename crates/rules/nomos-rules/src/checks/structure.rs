@@ -205,6 +205,7 @@ fn Line_Count(source: &SourceFile) -> usize
 fn Finding_For_Source_With_Count(source: &SourceFile, rule: &str, line_count: usize, because: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(rule),
         subject: source.subject,
         subject_name: source.path.clone(),

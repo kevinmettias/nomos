@@ -93,6 +93,7 @@ mod tests
     fn Test_Of_Should_Carry_Every_Real_Answer_For_A_Correctable_Rules_Zone_Finding()
     {
         let finding = Finding {
+            address: None,
             rule: RuleId::New(nomos_rules::COMPLETENESS_MIRROR),
             subject: SubjectId::From_Digest(Digest128::From_Bytes([FIRST_FIXTURE_DIGEST_BYTE; Digest128::BYTE_LENGTH])),
             subject_name: "Table::All".to_owned(),
@@ -117,6 +118,7 @@ mod tests
     fn Test_Of_Should_Report_No_Correction_And_No_Component_For_An_Unlocated_Package_Finding()
     {
         let finding = Finding {
+            address: None,
             rule: RuleId::New(nomos_rules::DEPENDENCY_DIRECTION),
             subject: SubjectId::From_Digest(Digest128::From_Bytes([SECOND_FIXTURE_DIGEST_BYTE; Digest128::BYTE_LENGTH])),
             subject_name: "nomos-rules".to_owned(),

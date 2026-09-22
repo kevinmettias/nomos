@@ -87,6 +87,7 @@ fn Agent_Required_Finding(subject: &RoleSurfacePair) -> Finding
     use nomos_model::Subject_Of_Path;
 
     return Finding {
+        address: None,
         rule: RuleId::New(DECLARED_ROLE_MATCHES_SURFACE),
         subject: Subject_Of_Path(&subject.crate_root),
         subject_name: subject.crate_name.clone(),

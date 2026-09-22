@@ -127,6 +127,7 @@ fn Findings_Of(subject: SubjectId, subject_name: &str, payload: &CloneOnCopyPayl
 fn Finding_For(subject: SubjectId, subject_name: &str, finding: &ClonedCopyType) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(COPY_CLONES),
         subject,
         subject_name: subject_name.to_owned(),
@@ -141,6 +142,7 @@ fn Finding_For(subject: SubjectId, subject_name: &str, finding: &ClonedCopyType)
 fn Unread_Finding(subject: SubjectId, subject_name: &str, applicability: Applicability, because: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(COPY_CLONES),
         subject,
         subject_name: subject_name.to_owned(),

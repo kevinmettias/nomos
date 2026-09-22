@@ -35,6 +35,13 @@ serde_json = { workspace = true }
 # is the only place the descriptor table and the composed table can be compared. A dev
 # dependency rather than a real one, because nothing this crate publishes needs it.
 nomos-check-orchestration = { workspace = true }
+# The store and the workspace a real `Run` carries, for `tests/boundaries/findings.rs`
+# alone. Every rule that declares an address reads syntax facts, so that guard's fixture of
+# fact-free rules could not reach the derivation it exists for -- `P110-B`. Named here
+# rather than satisfied with a stub `FactReader`: a stub is a second composition, and a
+# boundary asserted against it would say nothing about the one that ships.
+nomos-analysis = { workspace = true }
+nomos-workspace = { workspace = true }
 # `nomos-model` for `tests/boundaries/findings.rs` alone: it recomputes the two subject
 # derivations `OD-ANALYSIS-011` permits, which needs `Subject_Of_Path` and `Content_Digest`.
 nomos-model = { workspace = true }

@@ -99,6 +99,7 @@ mod tests
     fn Example_Finding(applicability: Applicability, gate: GateCategory) -> Finding
     {
         return Finding {
+            address: None,
             rule: RuleId::New("test-rule"),
             subject: SubjectId::From_Digest(nomos_contracts::Digest128::From_Bytes([FIXTURE_DIGEST_BYTE; nomos_contracts::Digest128::BYTE_LENGTH])),
             subject_name: "Example".to_owned(),

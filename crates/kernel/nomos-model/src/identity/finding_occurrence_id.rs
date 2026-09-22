@@ -288,6 +288,7 @@ mod tests
     fn A_Finding() -> Finding
     {
         return Finding {
+            address: None,
             rule: RuleId::New("file-name-matches-declared-type"),
             subject: Subject_Of(BASE_SUBJECT_SEED),
             subject_name: "src/lib.rs:12".to_owned(),

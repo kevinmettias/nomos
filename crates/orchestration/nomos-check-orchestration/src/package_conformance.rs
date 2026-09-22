@@ -135,6 +135,7 @@ fn Unregistered_Provider_Findings(packages: &[DeclaredPackage<'_>], registered: 
 fn Unregistered_Provider_Finding(manifest_path: &str, provider: &ProviderId) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(PACKAGE_CONFORMANCE),
         subject: Subject_Of_Provider(provider),
         subject_name: provider.As_Str().to_owned(),
@@ -186,6 +187,7 @@ fn Is_Unclaimed_Language_Provider(provider: &ProviderId, declared: &BTreeSet<Pro
 fn Unclaimed_Provider_Finding(provider: &ProviderId, packages: &[DeclaredPackage<'_>]) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(PACKAGE_CONFORMANCE),
         subject: Subject_Of_Provider(provider),
         subject_name: provider.As_Str().to_owned(),

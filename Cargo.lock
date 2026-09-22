@@ -1251,6 +1251,7 @@ dependencies = [
 name = "nomos-contract-tests"
 version = "0.1.0"
 dependencies = [
+ "nomos-analysis",
  "nomos-cap-architecture",
  "nomos-cap-requirement-trace",
  "nomos-cap-syntax",
@@ -1263,6 +1264,7 @@ dependencies = [
  "nomos-platform-std",
  "nomos-repo-policy",
  "nomos-rules",
+ "nomos-workspace",
  "serde_json",
  "xvpe-primitives",
 ]

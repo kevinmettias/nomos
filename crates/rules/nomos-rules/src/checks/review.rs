@@ -141,6 +141,7 @@ fn Findings_Of(source: &SourceFile, payload: &FindingPayload) -> Vec<Finding>
 fn Finding_For_Payload(source: &SourceFile, payload: &FindingPayload) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(REVIEW_FINDING),
         subject: source.subject,
         subject_name: payload.external_id.As_Str().to_owned(),
@@ -168,6 +169,7 @@ fn Summary_Of(payload: &FindingPayload) -> String
 fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(REVIEW_FINDING),
         subject: source.subject,
         subject_name: source.path.clone(),

@@ -446,6 +446,7 @@ mod tests
     fn No_Fact_Finding(source: &SourceFile) -> Finding
     {
         return Finding {
+            address: None,
             rule: nomos_contracts::RuleId::New("example"),
             subject: source.subject,
             subject_name: source.path.clone(),
@@ -477,6 +478,7 @@ mod tests
     fn Relayed_Finding(source: &SourceFile, index: u32) -> Finding
     {
         return Finding {
+            address: None,
             rule: nomos_contracts::RuleId::New("example"),
             subject: source.subject,
             subject_name: format!("{}#{index}", source.path),

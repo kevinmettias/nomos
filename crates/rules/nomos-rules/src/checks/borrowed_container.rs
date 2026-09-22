@@ -141,6 +141,7 @@ fn Borrowed_Container_Finding(source: &SourceFile, line_number: usize, container
     let location = format!("{}:{line_number}", source.path);
 
     return Finding {
+        address: None,
         rule: RuleId::New(PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN),
         subject: source.subject,
         subject_name: location.clone(),

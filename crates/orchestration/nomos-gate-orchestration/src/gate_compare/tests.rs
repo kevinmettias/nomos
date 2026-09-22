@@ -250,6 +250,7 @@ fn Test_Compare_Gate_Runs_Should_Name_A_Disposition_Change_For_The_Same_Finding_
 fn Moved_Finding() -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(nomos_rules::COMPLETENESS_MIRROR),
         subject: SubjectId::From_Digest(FINDING_SUBJECT),
         subject_name: "a.rs".to_owned(),

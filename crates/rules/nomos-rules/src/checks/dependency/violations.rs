@@ -134,6 +134,7 @@ fn Violation_If_Wrong_Direction(architecture: &ArchitecturePayload, source: &Sou
 fn Violation_Finding(source: &SourceFile, violation: &EdgeViolation<'_>) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(super::DEPENDENCY_DIRECTION),
         subject: source.subject,
         subject_name: violation.package.to_owned(),

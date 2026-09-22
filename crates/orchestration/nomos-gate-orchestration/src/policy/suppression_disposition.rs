@@ -103,6 +103,7 @@ mod tests
     fn Finding_For(rule: &str, subject_seed: u8) -> Finding
     {
         return Finding {
+            address: None,
             rule: RuleId::New(rule),
             subject: SubjectId::From_Digest(Digest128::From_Bytes([subject_seed; Digest128::BYTE_LENGTH])),
             subject_name: "Example".to_owned(),

@@ -144,6 +144,7 @@ fn Bound_Finding(source: &SourceFile, rule: &str, bound: &Bound) -> Finding
     };
 
     return Finding {
+        address: None,
         rule: RuleId::New(rule),
         subject: source.subject,
         subject_name: format!("{}:{line_number}", source.path),

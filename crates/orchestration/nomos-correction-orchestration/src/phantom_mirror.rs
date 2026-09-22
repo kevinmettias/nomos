@@ -359,6 +359,7 @@ mod tests
         let PhantomFixture { claimed, path } = fixture;
 
         return Finding {
+            address: None,
             rule: RuleId::New(nomos_rules::COMPLETENESS_MIRROR),
             subject: SubjectId::From_Digest(Content_Digest(path.as_bytes())),
             subject_name: "TABLES".to_owned(),

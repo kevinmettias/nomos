@@ -72,6 +72,7 @@ mod tests
     fn Example_Finding() -> Finding
     {
         return Finding {
+            address: None,
             rule: RuleId::New("check-naming-convention"),
             subject: SubjectId::From_Digest(Digest128::From_Bytes([FINDING_SUBJECT_SEED; Digest128::BYTE_LENGTH])),
             subject_name: "WorkResult".to_owned(),

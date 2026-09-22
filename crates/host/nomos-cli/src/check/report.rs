@@ -269,6 +269,7 @@ mod tests
     fn Finding_With(applicability: Applicability) -> Finding
     {
         return Finding {
+            address: None,
             rule: RuleId::New("completeness-mirror"),
             subject: SubjectId::From_Digest(Digest128::From_Bytes([EXAMPLE_SUBJECT_BYTE; Digest128::BYTE_LENGTH])),
             subject_name: "Example".to_owned(),

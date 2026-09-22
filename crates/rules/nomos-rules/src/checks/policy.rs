@@ -136,6 +136,7 @@ fn Findings_Of(source: &SourceFile, payload: &PolicyPayload) -> Vec<Finding>
 fn Finding_For_Violation(source: &SourceFile, violation: &PolicyViolation) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(DEPENDENCY_POLICY),
         subject: source.subject,
         subject_name: source.path.clone(),
@@ -167,6 +168,7 @@ fn Summary_Of(violation: &PolicyViolation) -> String
 fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(DEPENDENCY_POLICY),
         subject: source.subject,
         subject_name: source.path.clone(),

@@ -214,6 +214,7 @@ fn Function_Naming_Finding(rule: &'static str, path: &str, item: &PayloadItem, s
     let qualified = format!("{path}::{}", item.qualified_name);
 
     return Finding {
+        address: Some(qualified.clone()),
         rule: RuleId::New(rule),
         subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
         subject_name: item.qualified_name.clone(),

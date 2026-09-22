@@ -11,6 +11,7 @@ use super::{SourceFile, Finding, RuleId, COMPLETENESS_MIRROR, SubjectId, Content
 pub(super) fn Unreadable_Finding(source: &SourceFile, because: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(COMPLETENESS_MIRROR),
         subject: SubjectId::From_Digest(Content_Digest(source.text.as_bytes())),
         subject_name: source.path.clone(),
@@ -161,6 +162,7 @@ mod tests
 pub(super) fn Unread_Subject(subject: &Unread<'_>) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(COMPLETENESS_MIRROR),
         subject: subject.inputs,
         subject_name: subject.path.clone(),

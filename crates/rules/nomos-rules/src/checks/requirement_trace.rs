@@ -98,6 +98,7 @@ fn Findings_For(payload: &RequirementTracePayload) -> Vec<Finding>
 fn Finding_For_Problem(problem: &Problem) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(REQUIREMENT_TRACE_STALENESS),
         subject: nomos_model::Subject_Of_Path(""),
         subject_name: format!("{}:{}", Problem_Rank(problem.kind), problem.requirement),

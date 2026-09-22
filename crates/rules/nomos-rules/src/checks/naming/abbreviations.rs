@@ -406,6 +406,7 @@ fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, abbreviation: (
     let qualified = format!("{path}::{}::{name}", item.qualified_name);
 
     return Finding {
+        address: Some(qualified.clone()),
         rule: RuleId::New(ABBREVIATIONS),
         subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
         subject_name: name.to_owned(),

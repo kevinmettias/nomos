@@ -249,9 +249,12 @@ fn Claimed_On(line: &str) -> Option<Claim>
 
 fn Violation_Finding(path: &str, item: &PayloadItem, detail: &str) -> Finding
 {
+    let address = Address_Of(path, item);
+
     return Finding {
+        address: Some(address.clone()),
         rule: RuleId::New(GUARANTEE_DECLARES_ITS_EXERCISER),
-        subject: Subject_Of(path, item),
+        subject: Subject_Of_Address(&address),
         subject_name: item.qualified_name.clone(),
         applicability: Applicability::Supported,
         evidence: EvidenceClass::Derived,
@@ -267,9 +270,12 @@ fn Violation_Finding(path: &str, item: &PayloadItem, detail: &str) -> Finding
 /// reads was not observable, which is neither a pass nor a violation.
 fn Unobserved_Finding(path: &str, item: &PayloadItem) -> Finding
 {
+    let address = Address_Of(path, item);
+
     return Finding {
+        address: Some(address.clone()),
         rule: RuleId::New(GUARANTEE_DECLARES_ITS_EXERCISER),
-        subject: Subject_Of(path, item),
+        subject: Subject_Of_Address(&address),
         subject_name: item.qualified_name.clone(),
         applicability: Applicability::Unparseable,
         evidence: EvidenceClass::Derived,
@@ -279,13 +285,23 @@ fn Unobserved_Finding(path: &str, item: &PayloadItem) -> Finding
     };
 }
 
-fn Subject_Of(path: &str, item: &PayloadItem) -> SubjectId
+/// The string a person would write to address a finding about `item`.
+///
+/// Split from [`Subject_Of_Address`] so the two steps read in the order `OD-GATE-032`
+/// decided them: a rule declares an address, and the subject is the digest of that address.
+/// Computing the composite inside the subject function left it private, which is exactly the
+/// state that made these findings unaddressable.
+fn Address_Of(path: &str, item: &PayloadItem) -> String
+{
+    return format!("{path}::{}", item.qualified_name);
+}
+
+/// The identity of the thing `address` names.
+fn Subject_Of_Address(address: &str) -> SubjectId
 {
     use nomos_model::Content_Digest;
 
-    let qualified = format!("{path}::{}", item.qualified_name);
-
-    return SubjectId::From_Digest(Content_Digest(qualified.as_bytes()));
+    return SubjectId::From_Digest(Content_Digest(address.as_bytes()));
 }
 
 #[cfg(test)]

@@ -86,6 +86,7 @@ fn Materialized_Lint_Sources(
 fn Lint_Capability_Unavailable(error: &nomos_lang_rust_clippy::ClippyError) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(nomos_rules::LINT_DIAGNOSTICS),
         subject: nomos_model::Subject_Of_Path(""),
         subject_name: "workspace".to_owned(),

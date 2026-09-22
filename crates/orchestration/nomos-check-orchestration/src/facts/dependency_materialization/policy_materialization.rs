@@ -81,6 +81,7 @@ fn Materialized_Policy_Sources(fact: nomos_lang_rust_deny::PolicyFact, store: &m
 fn Policy_Capability_Unavailable(error: &nomos_lang_rust_deny::DenyError) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(nomos_rules::DEPENDENCY_POLICY),
         subject: nomos_model::Subject_Of_Path(""),
         subject_name: "workspace".to_owned(),

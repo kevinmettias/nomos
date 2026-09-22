@@ -212,6 +212,7 @@ fn Terse_Lifetime_Finding(source: &SourceFile, line_number: usize, terse: &str) 
     let location = format!("{}:{line_number}", source.path);
 
     return Finding {
+        address: None,
         rule: RuleId::New(LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE),
         subject: source.subject,
         subject_name: location.clone(),
@@ -323,6 +324,7 @@ fn Static_Bound_Finding(source: &SourceFile, line_number: usize) -> Finding
     let location = format!("{}:{line_number}", source.path);
 
     return Finding {
+        address: None,
         rule: RuleId::New(STATIC_BOUNDS_ARE_JUSTIFIED),
         subject: source.subject,
         subject_name: location.clone(),

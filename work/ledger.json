@@ -87330,10 +87330,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "claude-external-review-reconciliation",
+        "acquired_at": 1790041879,
+        "lease_expires_at": 1790052679
+      },
       "verification": {
         "argv": [
           "cargo",

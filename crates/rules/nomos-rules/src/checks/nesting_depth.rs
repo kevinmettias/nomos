@@ -258,6 +258,7 @@ fn Nesting_Finding(source: &SourceFile, breach: &Breach) -> Finding
     let depth = breach.depth;
 
     return Finding {
+        address: None,
         rule: RuleId::New(NESTING_DEPTH),
         subject: source.subject,
         subject_name: location.clone(),

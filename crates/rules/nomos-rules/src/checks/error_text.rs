@@ -234,6 +234,7 @@ fn Judgeable_Error_Message_At<'a>(lines: &[&'a str], index: usize, line: &'a str
 fn Finding_At(source: &SourceFile, rule: &str, line_number: usize, summary: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(rule),
         subject: source.subject,
         subject_name: format!("{}:{line_number}", source.path),

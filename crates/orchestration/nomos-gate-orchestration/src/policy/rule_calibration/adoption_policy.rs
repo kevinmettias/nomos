@@ -54,6 +54,7 @@ mod tests
     fn Finding_For(rule: &str) -> Finding
     {
         return Finding {
+            address: None,
             rule: RuleId::New(rule),
             subject: SubjectId::From_Digest(Digest128::From_Bytes([1; Digest128::BYTE_LENGTH])),
             subject_name: "Example".to_owned(),

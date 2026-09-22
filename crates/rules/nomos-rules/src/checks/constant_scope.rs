@@ -368,6 +368,7 @@ fn Constant_Finding(source: &SourceFile, constant: &Constant) -> Finding
 {
     let line_number = Line_Number(constant.line_index);
     return Finding {
+        address: None,
         rule: RuleId::New(CONSTANTS_ARE_THE_EXCEPTION_TO_FUNCTION_SCOPE_USE),
         subject: source.subject,
         subject_name: format!("{}:{line_number}", source.path),

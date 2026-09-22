@@ -182,6 +182,7 @@ fn Sleep_Finding_At(source: &SourceFile, index: usize, line: &str, vocabulary: &
 
     let line_number = Line_Number(index);
     return Some(Finding {
+        address: None,
         rule: RuleId::New(SLEEP_BASED_SYNCHRONIZATION),
         subject: source.subject,
         subject_name: format!("{}:{line_number}", source.path),
@@ -299,6 +300,7 @@ fn Retry_Finding_At(source: &SourceFile, lines: &[&str], index: usize, line: &st
 
     let line_number = Line_Number(index);
     return Some(Finding {
+        address: None,
         rule: RuleId::New(ZERO_FLAKE_POLICY),
         subject: source.subject,
         subject_name: format!("{}:{line_number}", source.path),

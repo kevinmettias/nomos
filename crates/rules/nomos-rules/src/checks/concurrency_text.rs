@@ -139,6 +139,7 @@ fn Ordering_Finding(context: RuleContext<'_>, variant: Variant<'_>, index: usize
     let variant = variant.0;
 
     return Finding {
+        address: None,
         rule: RuleId::New(rule),
         subject: source.subject,
         subject_name: format!("{}:{line_number}", source.path),

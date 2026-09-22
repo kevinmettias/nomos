@@ -147,6 +147,7 @@ mod tests
     fn Test_Unread_As_This_Rule_Should_Relabel_The_Finding()
     {
         let finding = Finding {
+            address: None,
             rule: RuleId::New(super::super::NAMING_CONVENTION),
             subject: SubjectId::From_Digest(nomos_model::Content_Digest(b"src/lib.rs")),
             subject_name: "src/lib.rs".to_owned(),

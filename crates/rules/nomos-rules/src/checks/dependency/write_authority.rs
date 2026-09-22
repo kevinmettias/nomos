@@ -87,6 +87,7 @@ fn Violation_Finding(source: &SourceFile, declaring: DeclaringPackage<'_>, autho
     let package = declaring.0;
 
     return Finding {
+        address: None,
         rule: RuleId::New(super::WRITE_AUTHORITY),
         subject: source.subject,
         subject_name: package.to_owned(),

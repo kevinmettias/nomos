@@ -251,6 +251,7 @@ fn Extra_Bound_Finding(source: &SourceFile, line_number: usize) -> Finding
     let location = format!("{}:{line_number}", source.path);
 
     return Finding {
+        address: None,
         rule: RuleId::New(CLOSURE_BOUNDS_ARE_MINIMAL),
         subject: source.subject,
         subject_name: location.clone(),
@@ -273,6 +274,7 @@ fn Public_Api_Finding(source: &SourceFile, line_number: usize) -> Finding
     let location = format!("{}:{line_number}", source.path);
 
     return Finding {
+        address: None,
         rule: RuleId::New(CLOSURE_BOUNDS_ARE_MINIMAL),
         subject: source.subject,
         subject_name: location.clone(),
@@ -326,6 +328,7 @@ fn Boxed_Closure_Finding(source: &SourceFile, line_number: usize) -> Finding
     let location = format!("{}:{line_number}", source.path);
 
     return Finding {
+        address: None,
         rule: RuleId::New(BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS),
         subject: source.subject,
         subject_name: location.clone(),

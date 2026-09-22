@@ -126,6 +126,7 @@ fn Findings_Of(subject: SubjectId, subject_name: &str, payload: &NestedLockPaylo
 fn Finding_For(subject: SubjectId, subject_name: &str, finding: &NestedLockFinding) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(NESTED_LOCKS),
         subject,
         subject_name: subject_name.to_owned(),
@@ -140,6 +141,7 @@ fn Finding_For(subject: SubjectId, subject_name: &str, finding: &NestedLockFindi
 fn Unread_Finding(subject: SubjectId, subject_name: &str, applicability: Applicability, because: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(NESTED_LOCKS),
         subject,
         subject_name: subject_name.to_owned(),

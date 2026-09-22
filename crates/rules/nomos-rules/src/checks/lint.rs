@@ -135,6 +135,7 @@ fn Findings_Of(source: &SourceFile, payload: &DiagnosticsPayload) -> Vec<Finding
 fn Finding_For_Diagnostic(source: &SourceFile, diagnostic: &LintDiagnostic) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(LINT_DIAGNOSTICS),
         subject: source.subject,
         subject_name: source.path.clone(),
@@ -161,6 +162,7 @@ fn Summary_Of(diagnostic: &LintDiagnostic) -> String
 fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(LINT_DIAGNOSTICS),
         subject: source.subject,
         subject_name: source.path.clone(),

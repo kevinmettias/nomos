@@ -22,6 +22,7 @@ const SUBJECT_SEED: u8 = 7;
 fn Finding_With(gate: GateCategory, applicability: Applicability) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New("naming-convention"),
         subject: SubjectId::From_Digest(Digest128::From_Bytes([SUBJECT_SEED; Digest128::BYTE_LENGTH])),
         subject_name: "Example".to_owned(),

@@ -123,6 +123,7 @@ fn Incomplete_Judgment() -> CheckOutcome
 fn Unjudgeable_Finding() -> nomos_contracts::Finding
 {
     return nomos_contracts::Finding {
+        address: None,
         rule: RuleId::New("dependency-policy"),
         subject: Subject_Of_Path("a.rs"),
         subject_name: "a.rs".to_owned(),

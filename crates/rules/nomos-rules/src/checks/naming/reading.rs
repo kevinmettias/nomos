@@ -123,6 +123,7 @@ fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<SyntaxPayl
 fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(super::NAMING_CONVENTION),
         subject: source.subject,
         subject_name: source.path.clone(),

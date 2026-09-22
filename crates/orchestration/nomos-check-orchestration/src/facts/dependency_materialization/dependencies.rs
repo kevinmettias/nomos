@@ -85,6 +85,7 @@ fn Materialized_Dependency_Sources(
 fn Dependency_Capability_Unavailable(error: &nomos_lang_rust_cargo::MetadataError) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(nomos_rules::DEPENDENCY_DIRECTION),
         subject: nomos_model::Subject_Of_Path(""),
         subject_name: "workspace".to_owned(),

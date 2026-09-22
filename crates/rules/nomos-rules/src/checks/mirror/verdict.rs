@@ -47,6 +47,7 @@ pub(super) fn Shortcoming_Finding(universe: &DeclaredUniverse, verdict: Judgment
     };
 
     return Finding {
+        address: Some(qualified.clone()),
         rule: RuleId::New(COMPLETENESS_MIRROR),
         subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
         subject_name: universe.name.clone(),

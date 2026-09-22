@@ -85,6 +85,7 @@ fn Test_An_Unchanged_Bucket_And_Reason_Should_Report_No_Change()
 fn Finding_Here() -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New("naming-convention"),
         subject: SubjectId::From_Digest(SUBJECT_DIGEST),
         subject_name: "src/lib.rs".to_string(),

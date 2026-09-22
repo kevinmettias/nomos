@@ -94,6 +94,7 @@ mod tests
     fn Finding_With(applicability: Applicability) -> Finding
     {
         return Finding {
+            address: None,
             rule: RuleId::New("test.rule"),
             subject: nomos_model::Subject_Of_Path("a.rs"),
             subject_name: "a".to_owned(),

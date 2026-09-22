@@ -226,6 +226,7 @@ mod tests
     fn Whitespace_Finding(path: &str, line: usize) -> Finding
     {
         return Finding {
+            address: None,
             rule: RuleId::New(nomos_rules::NO_TRAILING_WHITESPACE),
             subject: SubjectId::From_Digest(Content_Digest(path.as_bytes())),
             subject_name: format!("{path}:{line}"),

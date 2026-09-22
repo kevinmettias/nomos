@@ -233,6 +233,7 @@ struct Detail<'a>(&'a str);
 fn Finding_For(kind: Kind, subject: Subject<'_>, detail: Detail<'_>) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(GOALS_AND_PARTS_LINE_UP),
         subject: nomos_model::Subject_Of_Path(""),
         subject_name: format!("{}:{}:{}", kind.Rank(), DECLARATION_FILE, subject.0),

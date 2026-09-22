@@ -182,6 +182,7 @@ fn Violations_In(payload: &ReachabilityPayload, source: &SourceFile) -> Vec<Find
 fn Violation_For_Site(source: &SourceFile, site: &ReachabilitySite) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(UNREAD_REACHES_FINDING),
         subject: source.subject,
         subject_name: source.path.clone(),
@@ -218,6 +219,7 @@ fn Shape_Description(shape: ArmShape) -> &'static str
 fn Unread_Finding(source: &SourceFile, applicability: Applicability, because: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(UNREAD_REACHES_FINDING),
         subject: source.subject,
         subject_name: source.path.clone(),

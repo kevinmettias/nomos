@@ -60,6 +60,7 @@ struct Reason<'a>(&'a str);
 fn Unparseable_Finding(source: &SourceFile, declaring_name: DeclaringName<'_>, because: Reason<'_>) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(CROSS_LANGUAGE_CORRESPONDENCE),
         subject: source.subject,
         subject_name: source.path.clone(),
@@ -100,6 +101,7 @@ fn Find_Struct<'a>(declaring_source: &SourceFile, declaring: &PayloadItem, targe
 fn Missing_Finding(source: &SourceFile, item: &PayloadItem, target_name: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(CROSS_LANGUAGE_CORRESPONDENCE),
         subject: source.subject,
         subject_name: source.path.clone(),
@@ -162,6 +164,7 @@ fn Missing_Field_Names<'a>(fields: &FieldSets<'a>) -> MissingFields<'a>
 fn Drift_Finding(source: &SourceFile, item: &PayloadItem, target_name: &str, missing: &MissingFields<'_>) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(CROSS_LANGUAGE_CORRESPONDENCE),
         subject: source.subject,
         subject_name: source.path.clone(),

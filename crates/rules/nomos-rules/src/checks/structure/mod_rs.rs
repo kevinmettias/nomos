@@ -43,6 +43,7 @@ struct Because<'a>(&'a str);
 fn Finding_For_Source(source: &SourceFile, rule: Rule<'_>, because: Because<'_>) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(rule.0),
         subject: source.subject,
         subject_name: source.path.clone(),

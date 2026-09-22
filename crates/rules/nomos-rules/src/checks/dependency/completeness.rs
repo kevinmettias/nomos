@@ -83,6 +83,7 @@ pub(super) fn Violations_In(architecture: &ArchitecturePayload, payload: &Depend
 fn Unbound_Package(source: &SourceFile, package: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(super::DEPENDENCY_COMPLETENESS),
         subject: source.subject,
         subject_name: package.to_owned(),
@@ -102,6 +103,7 @@ fn Unbound_Package(source: &SourceFile, package: &str) -> Finding
 fn Violation_For_Package(source: &SourceFile, package: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(super::DEPENDENCY_COMPLETENESS),
         subject: source.subject,
         subject_name: package.to_owned(),

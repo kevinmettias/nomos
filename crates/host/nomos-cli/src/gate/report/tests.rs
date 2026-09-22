@@ -44,6 +44,7 @@ fn Judged_With(fill: u8, provenance: Option<GateRunProvenance>) -> GateRunResult
 fn Example_Finding(gate: GateCategory) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New("unread-reaches-finding"),
         subject: SubjectId::From_Digest(Digest128::From_Bytes([EXAMPLE_SUBJECT_FILL; Digest128::BYTE_LENGTH])),
         subject_name: "Example::Subject".to_owned(),

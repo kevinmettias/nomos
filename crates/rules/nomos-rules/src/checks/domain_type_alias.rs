@@ -297,6 +297,7 @@ fn Alias_Findings_In(source: &SourceFile, aliases: &[Alias]) -> Vec<Finding>
         .map(|alias| {
             let line_number = Line_Number(alias.line_index);
             return Finding {
+                address: None,
                 rule: RuleId::New(DOMAIN_VALUES_ARE_DISTINCT_TYPES),
                 subject: source.subject,
                 subject_name: format!("{}:{line_number}", source.path),

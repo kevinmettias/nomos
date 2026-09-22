@@ -105,6 +105,7 @@ fn Test_A_Finding_No_Disposition_Names_Should_Carry_No_Reason()
 fn Finding_Here() -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New("naming-convention"),
         subject: SubjectId::From_Digest(Digest128::From_Bytes([SUBJECT_SEED; Digest128::BYTE_LENGTH])),
         subject_name: "src/lib.rs".to_string(),

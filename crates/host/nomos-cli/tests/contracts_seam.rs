@@ -65,6 +65,7 @@ fn A_Tree_Claiming_An_Absent_Check() -> Tree
 fn The_Phantom_Claim_Describes() -> String
 {
     let finding = nomos_contracts::Finding {
+        address: None,
         rule: nomos_contracts::RuleId::New("completeness-mirror"),
         subject: nomos_contracts::SubjectId::From_Digest(nomos_contracts::Digest128::From_Bytes(
             [0; nomos_contracts::Digest128::BYTE_LENGTH],

@@ -81,6 +81,7 @@ fn Constant_Violation_Finding(path: &str, item: &PayloadItem) -> Finding
     let qualified = format!("{path}::{}", item.qualified_name);
 
     return Finding {
+        address: Some(qualified.clone()),
         rule: RuleId::New(CONSTANTS_SPLIT_BY_EXPORT),
         subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
         subject_name: name.to_owned(),

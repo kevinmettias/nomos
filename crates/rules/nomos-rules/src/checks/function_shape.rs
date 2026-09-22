@@ -223,6 +223,7 @@ fn Violation_Finding(policy: FunctionArityPolicy, path: &str, item: &PayloadItem
     let qualified = format!("{path}::{}", item.qualified_name);
 
     return Finding {
+        address: Some(qualified.clone()),
         rule: RuleId::New(policy.rule),
         subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
         subject_name: item.qualified_name.clone(),

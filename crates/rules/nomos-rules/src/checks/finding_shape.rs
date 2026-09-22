@@ -41,6 +41,11 @@ pub(in crate::checks) fn Subject_Finding(shape: Finding_Shape<'_>, subject_name:
     use nomos_model::Content_Digest;
 
     return Finding {
+        // The composite the subject digest is taken over, published rather than kept private:
+        // `OD-GATE-032` decided a declared entry names an address a person can write, and this
+        // is the string that addresses exactly this finding. `subject_name` cannot serve --
+        // several symbols share it, so an entry written against it would broaden.
+        address: Some(qualified.to_owned()),
         rule: RuleId::New(shape.rule),
         subject: SubjectId::From_Digest(Content_Digest(qualified.as_bytes())),
         subject_name: subject_name.to_owned(),

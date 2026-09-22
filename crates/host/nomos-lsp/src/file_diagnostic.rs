@@ -90,6 +90,7 @@ mod tests
     fn Test_Diagnostics_For_Should_Produce_One_Diagnostic_Per_Location()
     {
         let finding = Finding {
+            address: None,
             rule: RuleId::New(nomos_rules::NO_TRAILING_WHITESPACE),
             subject: SubjectId::From_Digest(Digest128::From_Bytes([FIXTURE_DIGEST_BYTE; Digest128::BYTE_LENGTH])),
             subject_name: "a.rs:3".to_owned(),
@@ -116,6 +117,7 @@ mod tests
     fn Test_Diagnostics_For_Should_Report_No_Diagnostics_For_An_Unlocated_Finding()
     {
         let finding = Finding {
+            address: None,
             rule: RuleId::New(nomos_rules::GOALS_AND_PARTS_LINE_UP),
             subject: SubjectId::From_Digest(Digest128::From_Bytes([FIXTURE_DIGEST_BYTE; Digest128::BYTE_LENGTH])),
             subject_name: "OFFERINGS".to_owned(),
@@ -187,6 +189,7 @@ mod tests
     fn Only_Diagnostic(fixture: MirrorFinding<'_>) -> SourceDiagnostic
     {
         let finding = Finding {
+            address: None,
             rule: RuleId::New(nomos_rules::COMPLETENESS_MIRROR),
             subject: SubjectId::From_Digest(Digest128::From_Bytes([FIXTURE_DIGEST_BYTE; Digest128::BYTE_LENGTH])),
             subject_name: fixture.subject_name.to_owned(),

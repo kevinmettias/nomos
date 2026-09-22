@@ -138,6 +138,7 @@ fn Procedural_Macro_Finding(source: &SourceFile, line_number: usize) -> Finding
     let location = format!("{}:{line_number}", source.path);
 
     return Finding {
+        address: None,
         rule: RuleId::New(PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS),
         subject: source.subject,
         subject_name: location.clone(),

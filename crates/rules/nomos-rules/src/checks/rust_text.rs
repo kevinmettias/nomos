@@ -165,6 +165,7 @@ fn Lines_Of(source: &SourceFile) -> Vec<&str>
 fn Finding_For_Line(source: &SourceFile, rule: &str, line_number: usize, because: &str) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(rule),
         subject: source.subject,
         subject_name: format!("{}:{line_number}", source.path),

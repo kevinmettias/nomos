@@ -259,6 +259,7 @@ fn Subject() -> SubjectId
 fn Occurrence_At(line: u32) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(RULE),
         subject: Subject(),
         subject_name: "src/deep.rs".to_owned(),

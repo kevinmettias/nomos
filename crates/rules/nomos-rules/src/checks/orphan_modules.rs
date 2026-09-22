@@ -329,6 +329,7 @@ impl<'a> SourceTree<'a>
 fn Orphan_Finding(source: &SourceFile) -> Finding
 {
     return Finding {
+        address: None,
         rule: RuleId::New(NO_ORPHAN_MODULES),
         subject: source.subject,
         subject_name: source.path.clone(),

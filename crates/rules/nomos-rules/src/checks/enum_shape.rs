@@ -285,6 +285,7 @@ fn Variant_Finding(source: &SourceFile, lines: &[&str], variant: &Variant) -> Op
     let summary = Variant_Summary(source, variant, line_number);
 
     return Some(Finding {
+        address: None,
         rule: RuleId::New(NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS),
         subject: source.subject,
         subject_name: format!("{}:{line_number}", source.path),

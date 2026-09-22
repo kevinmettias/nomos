@@ -98,6 +98,28 @@ pub struct Finding
     pub summary: String,
     /// Where to look. Repo-relative, forward slashes. Never identity.
     pub locations: Vec<String>,
+    /// The string a person would write to address this finding in a declared policy, when
+    /// the rule that produced it declares one.
+    ///
+    /// **Authoring and display material. Never identity, and never matched against.**
+    /// `OD-GATE-032` decided that a declared entry resolves an address to a `SubjectId` and
+    /// then compares identities, so a policy still matches on [`Finding::subject`] and this
+    /// field is only what makes such an entry writable. Comparing an authored string against
+    /// a displayed one is the design `OD-GATE-024` retracted, and putting this in the
+    /// comparison would reinstate it.
+    ///
+    /// `None` for the rules that attribute to the file, which is most of them: their subject
+    /// is `nomos_model::Subject_Of_Path`, and the path is already a string a person can
+    /// write, so an address would be a second spelling of one thing. `Some` for a rule that
+    /// subjects its findings to something *inside* a file -- the naming family and its three
+    /// neighbours -- because those digest a qualified name that was assembled privately and
+    /// appeared nowhere a reader could see it. Such a finding could be produced but not
+    /// named, which is the gap this field closes.
+    ///
+    /// Not [`Finding::subject_name`] under another name. That is what to *call* the thing,
+    /// and several symbols can share it; this is the composite the subject digest was taken
+    /// over, so it addresses exactly one. `OD-ANALYSIS-011` carries the derivation.
+    pub address: Option<String>,
 }
 
 impl Finding
@@ -259,6 +281,7 @@ mod tests
     fn Example_Finding(applicability: Applicability, gate: GateCategory) -> Finding
     {
         return Finding {
+            address: None,
             rule: RuleId::New("completeness-mirror"),
             subject: SubjectId::From_Digest(Digest128::From_Bytes([SUBJECT_DIGEST_BYTE; Digest128::BYTE_LENGTH])),
             subject_name: "Table::All".to_owned(),
