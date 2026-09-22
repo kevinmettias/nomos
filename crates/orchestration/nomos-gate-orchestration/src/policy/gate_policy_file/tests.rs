@@ -9,6 +9,7 @@
 //! order and have the compiler accept both.
 
 use super::{GatePolicyError, GatePolicyFile, Resolve_Gate_Policy, GATE_POLICY_FILE};
+use crate::policy::Resolved_Gate_Policy;
 use crate::{BaselineAllowance, CoveragePolicy, GateCommand, GatePhase, PhaseApproval, PhaseThreshold, SuppressionDisposition};
 use nomos_contracts::RuleId;
 use nomos_model::Subject_Of_Path;
@@ -263,6 +264,11 @@ fn Test_A_File_Naming_No_Phases_Should_Resolve_To_No_Phase_Policy()
 /// approval names the phase it covers, and a file's approval addressing a caller's stage would
 /// be an approval for a phase its own source never declared. Asserted in both directions, so
 /// neither half can be the one the precedence happens to agree with.
+///
+/// Through the layered resolution since `OD-POLICY-001`, which is where the coupling is now
+/// declared as `crate::policy::effective_policy::PHASE_POLICY_UNIT`. The assertions are the
+/// ones `GatePolicyFile::Resolved_Over` carried unchanged: what a run judges under did not move
+/// when the rule was re-homed, and this is what says so.
 #[test]
 fn Test_A_Caller_That_Built_Phases_Should_Keep_Its_Own_Approvals()
 {
@@ -273,7 +279,7 @@ fn Test_A_Caller_That_Built_Phases_Should_Keep_Its_Own_Approvals()
     };
     let silent = GateCommand::default();
 
-    let resolved = from_file.Resolved_Over(&silent);
+    let resolved = Resolved_Values(&from_file, &silent);
 
     assert_eq!(resolved.phases.len(), 1, "a command stating no phase takes the file's");
     assert_eq!(resolved.approvals.len(), 1, "and the approvals that came with them");
@@ -283,7 +289,7 @@ fn Test_A_Caller_That_Built_Phases_Should_Keep_Its_Own_Approvals()
         ..GateCommand::default()
     };
 
-    let resolved = from_file.Resolved_Over(&stated);
+    let resolved = Resolved_Values(&from_file, &stated);
 
     assert_eq!(resolved.phases.first().expect("the command's own phase").name, "built");
     assert!(resolved.approvals.is_empty(), "a command stating its own stages states its own approvals too, including none");
@@ -378,18 +384,33 @@ fn Test_A_Misspelled_Key_Should_Refuse_Rather_Than_Be_Ignored()
     assert!(matches!(Resolve_Gate_Policy(&root, &StdFileSystem), Err(GatePolicyError::Malformed(_))));
 }
 
+/// A field the caller built wins over the file's, and a field it left at its default takes the
+/// file's -- the precedence this reader has always had, now one case of the layered resolution.
 #[test]
 fn Test_A_Policy_A_Caller_Built_Should_Win_Over_The_File()
 {
     let from_file = GatePolicyFile { coverage: CoveragePolicy::RequireCompleteness, ..GatePolicyFile::default() };
     let command = GateCommand { coverage: CoveragePolicy::Unset, ..GateCommand::default() };
 
-    assert_eq!(from_file.Resolved_Over(&command).coverage, CoveragePolicy::RequireCompleteness);
+    assert_eq!(Resolved_Values(&from_file, &command).coverage, CoveragePolicy::RequireCompleteness);
 
     let stated = GateCommand { coverage: CoveragePolicy::RequireCompleteness, ..GateCommand::default() };
     let silent_file = GatePolicyFile::default();
 
-    assert_eq!(silent_file.Resolved_Over(&stated).coverage, CoveragePolicy::RequireCompleteness);
+    assert_eq!(Resolved_Values(&silent_file, &stated).coverage, CoveragePolicy::RequireCompleteness);
+}
+
+/// The values `from_file` and `command` resolve to, as `crate::Run_Gate` resolves them.
+///
+/// The file contributes at the `Repository` layer and the command at `CommandLine` above it,
+/// which is the two-level case `GatePolicyFile::Resolved_Over` was before `OD-POLICY-001`
+/// re-homed the rule. Nothing in either fixture states a companion of a unit without its
+/// deciding field, which is the only thing this pair of sources can be refused for.
+fn Resolved_Values(from_file: &GatePolicyFile, command: &GateCommand) -> GatePolicyFile
+{
+    return Resolved_Gate_Policy(Some(from_file), command)
+        .expect("no fixture here states an approval without the phases it would name")
+        .values;
 }
 
 /// A tree of this test's own, named so two tests never share one.

@@ -45,31 +45,44 @@
 //!
 //! A caller that built a policy in code has said something more specific than a file sitting
 //! in a tree, and a test that pins a policy must not have it silently replaced by whatever
-//! the working directory happens to contain. [`GatePolicyFile::Resolved_Over`] therefore
-//! fills in only the fields a command left at its default. `Default` already means "unset"
-//! for every family here -- `CoveragePolicy::Unset` says so in its own name -- so this reads
-//! the same way `ScopeSelector`'s empty-means-everything already does.
+//! the working directory happens to contain. This file therefore does not resolve at all any
+//! more: it *contributes*, through [`GatePolicyFile::Contributed`], at the `Repository` layer
+//! of `crate::policy::effective_policy`, and the precedence is that resolver's one rule rather
+//! than a second one written here. `GatePolicyFile::Resolved_Over` was that second rule, two
+//! levels deep, with two call sites that each re-derived the unreadable case; `OD-POLICY-001`
+//! re-homed it and the values it produced are unchanged, which is what this module's own
+//! precedence tests still assert.
+//!
+//! `Default` already means "unset" for every family here -- `CoveragePolicy::Unset` says so in
+//! its own name -- so a field left at its default states nothing, the same way
+//! `ScopeSelector`'s empty-means-everything already does. That is the mapping
+//! [`GatePolicyFile::Contributed`] performs, and `OD-POLICY-001`'s "a sentinel is not a
+//! statement" is the rule it performs it under.
 //!
 //! # The two phase families are one declaration
 //!
 //! `phases` and `approvals` resolve from one source rather than field by field, because an
-//! approval names the phase it covers -- [`Preferred_Phase_Policy`] says why in code.
-//! [`declared_phases`]' own doc carries the rest of that shape.
+//! approval names the phase it covers. `OD-POLICY-001` version 2 calls that shape a *unit* and
+//! declares this one: `crate::policy::effective_policy::PHASE_POLICY_UNIT` names the fields,
+//! names `phases` as the deciding field, and carries the reason
+//! `Preferred_Phase_Policy` used to state in code here. [`declared_phases`]' own doc carries
+//! the rest of that shape.
 
 mod declared_phases;
 
 use declared_phases::{DeclaredApproval, DeclaredPhase, Phase_Problem, Resolved_Approvals, Resolved_Phases};
-use nomos_contracts::RuleId;
+use nomos_contracts::{ConfigurationLayer, RuleId};
 use nomos_model::Subject_Of_Path;
 use nomos_platform::{FileSystem, FileSystemError};
 use serde::Deserialize;
 use std::path::Path;
 
+use super::effective_policy::PolicyContribution;
 use super::{
     AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, CoveragePolicy, RuleCalibration, Suppression, SuppressionDisposition,
     SuppressionPolicy,
 };
-use crate::{GateCommand, GatePhase, NoVerdict, PhaseApproval};
+use crate::{GatePhase, NoVerdict, PhaseApproval};
 
 /// The file a run resolves its policies from, relative to the run's own root.
 ///
@@ -102,51 +115,30 @@ pub(crate) struct GatePolicyFile
 
 impl GatePolicyFile
 {
-    /// This file's policies, with any that `command` states explicitly winning.
+    /// What this file states, as the `Repository` layer's own contribution.
     ///
-    /// A field left at its default in `command` takes the file's value; a field the caller
-    /// built takes the caller's. See this module's own doc for why that precedence and not
-    /// the reverse.
+    /// A field left at its default states nothing rather than stating the default:
+    /// `OD-POLICY-001`'s "a sentinel is not a statement", which for this file is the rule
+    /// `Preferred_Policy` already applied under another name. The resolver is what decides
+    /// precedence over it; this only says what the file said.
+    ///
+    /// `phases` and `approvals` are mapped the same way and are *not* coupled here. The
+    /// coupling is `crate::policy::effective_policy::PHASE_POLICY_UNIT`, declared once where
+    /// the resolution happens, so that a second source of either field meets the same rule
+    /// rather than one this reader re-derives.
     #[must_use]
-    pub(crate) fn Resolved_Over(&self, command: &GateCommand) -> Self
+    pub(crate) fn Contributed(&self) -> PolicyContribution
     {
-        let (phases, approvals) = Preferred_Phase_Policy(command, self);
-
-        return Self {
-            suppressions: Preferred_Policy(&command.suppressions, &self.suppressions),
-            baseline: Preferred_Policy(&command.baseline, &self.baseline),
-            adoption: Preferred_Policy(&command.adoption, &self.adoption),
-            coverage: if command.coverage == CoveragePolicy::default() { self.coverage } else { command.coverage },
-            phases,
-            approvals,
+        return PolicyContribution {
+            suppressions: (self.suppressions != SuppressionPolicy::default()).then(|| return self.suppressions.clone()),
+            baseline: (self.baseline != BaselinePolicy::default()).then(|| return self.baseline.clone()),
+            adoption: (self.adoption != AdoptionPolicy::default()).then(|| return self.adoption.clone()),
+            coverage: (self.coverage != CoveragePolicy::default()).then_some(self.coverage),
+            phases: (!self.phases.is_empty()).then(|| return self.phases.clone()),
+            approvals: (!self.approvals.is_empty()).then(|| return self.approvals.clone()),
+            ..PolicyContribution::Silent(ConfigurationLayer::Repository, GATE_POLICY_FILE)
         };
     }
-}
-
-/// The phases and approvals one source declared: `command`'s when it declared any phase, and
-/// `from_file`'s otherwise.
-///
-/// One decision rather than two [`Preferred_Policy`] calls, for the reason this module's own
-/// doc gives. `phases` alone decides it, because approvals are read only through them --
-/// [`crate::Evaluated_Phases`] iterates the phases and asks each whether an approval names
-/// it, so a source declaring approvals and no phase has declared nothing a run can act on.
-fn Preferred_Phase_Policy(command: &GateCommand, from_file: &GatePolicyFile) -> (Vec<GatePhase>, Vec<PhaseApproval>)
-{
-    if command.phases.is_empty()
-    {
-        return (from_file.phases.clone(), from_file.approvals.clone());
-    }
-
-    return (command.phases.clone(), command.approvals.clone());
-}
-
-/// `stated` when a caller built one, the file's otherwise.
-///
-/// Generic over the three list-shaped policies rather than written three times, since
-/// "default means the caller said nothing" is one rule and not three.
-fn Preferred_Policy<Policy: Clone + Default + PartialEq>(stated: &Policy, from_file: &Policy) -> Policy
-{
-    return if *stated == Policy::default() { from_file.clone() } else { stated.clone() };
 }
 
 /// Why a policy file that exists could not become a policy.

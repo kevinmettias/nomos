@@ -16,7 +16,7 @@ use nomos_rules::SourceFile;
 use nomos_workspace::BuildVariant;
 use std::path::Path;
 
-use crate::policy::{GatePolicyFile, Resolve_Gate_Policy};
+use crate::policy::{GatePolicyFile, PolicyRefusal, Resolve_Gate_Policy, Resolved_Gate_Policy};
 use crate::{Evaluated_Phases, GateCommand, GateRunOutcome, GateRunProvenance, GateRunResult, Phased_Disposition};
 use reduction::{DispositionPolicies, Reduction, Reduced_Findings, Scoped_Findings};
 
@@ -128,7 +128,8 @@ pub fn Run_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
 {
     let GateEnvironment { variant, launcher, filesystem, environment, now } = environment;
     let declared = Resolve_Gate_Policy(&command.root, filesystem);
-    let effective = Effective_Policy(declared.as_ref().ok().and_then(Option::as_ref), command);
+    let resolved = Resolved_Gate_Policy(declared.as_ref().ok().and_then(Option::as_ref), command);
+    let effective = Effective_Policy(&resolved);
     let provenance = GateRunProvenance {
         source: provenance::Source_Digest(walked.as_deref()),
         policy: provenance::Policy_Digest(&effective),
@@ -141,7 +142,7 @@ pub fn Run_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     let policies = DispositionPolicies_Of(&effective, now);
     let reduced = Reduced_Findings(&outcome, &command.rules, policies, effective.coverage);
     let disposition = Phased_Outcome(&effective, &reduced);
-    let unusable_policy = declared.as_ref().err().map(|error| return error.As_No_Verdict());
+    let unusable_policy = declared.as_ref().err().map(|error| return error.As_No_Verdict()).or_else(|| return Refused_Policy(&resolved));
 
     return GateRunResult {
         root: command.root.clone(),
@@ -159,20 +160,37 @@ pub fn Run_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     };
 }
 
-/// The policy `command` is judged under.
+/// The values `resolved` decided, or every default when the resolution refused.
 ///
-/// A file that resolved to a policy is resolved over the command's own; no file at all, or one
-/// that could not be read, leaves the command's policies standing alone -- which for every
-/// caller that states none is today's behavior exactly. The two failures are one case here and
-/// only here: [`Run_Gate`] reads the cause off the `Err` arm itself, which is what reaches a
-/// caller as [`crate::NoVerdict::MalformedPolicy`].
-fn Effective_Policy(from_file: Option<&GatePolicyFile>, command: &GateCommand) -> GatePolicyFile
+/// A file that resolved to a policy contributes at the `Repository` layer and the command's
+/// own contributes at `CommandLine` above it; no file at all, or one that could not be read,
+/// leaves the command's contribution standing alone -- which for every caller that states none
+/// is today's behavior exactly. `OD-POLICY-001` re-homed that precedence into
+/// `crate::policy::Resolved_Gate_Policy`, which [`crate::Explain_Gate`] now reaches through the
+/// same function rather than through a second copy of the rule.
+///
+/// A refused resolution judges under every default rather than under half a policy, and
+/// [`Refused_Policy`] is what withholds the verdict beside it: a run that passed under a policy
+/// this resolver could not accept would be passing under policy nobody authored, which is the
+/// same argument `Resolve_Gate_Policy`'s own doc makes one level down.
+fn Effective_Policy(resolved: &Result<crate::policy::EffectivePolicy, PolicyRefusal>) -> GatePolicyFile
 {
-    return match from_file
+    return match resolved
     {
-        Some(file) => file.Resolved_Over(command),
-        None => GatePolicyFile::default().Resolved_Over(command),
+        Ok(effective) => effective.values.clone(),
+        Err(_) => GatePolicyFile::default(),
     };
+}
+
+/// Why a resolution refused, as the reason a run reached no verdict.
+///
+/// [`crate::NoVerdict::MalformedPolicy`] rather than a variant of its own: the declared sources
+/// are policy a caller or a file authored, and a statement the resolver cannot accept is
+/// malformed policy in exactly the sense that vocabulary already carries. A refusal naming a
+/// layer no host labels yet would need a rendering this item does not build.
+fn Refused_Policy(resolved: &Result<crate::policy::EffectivePolicy, PolicyRefusal>) -> Option<crate::NoVerdict>
+{
+    return resolved.as_ref().err().map(|refusal| return crate::NoVerdict::MalformedPolicy(refusal.Sentence()));
 }
 
 /// `walked` judged, then narrowed to what `command.scope` admits.

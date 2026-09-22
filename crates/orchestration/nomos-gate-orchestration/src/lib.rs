@@ -268,8 +268,10 @@ pub use gate_plan::{
     NoVerdict,
 };
 pub use policy::{
-    AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, CoveragePolicy, RuleCalibration, RuleSelector, ScopeSelector,
-    Suppression, SuppressionDisposition, SuppressionPolicy, SuppressionReason, SuppressionStatus,
+    AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, CoveragePolicy, Effective_Gate_Policy, EffectivePolicy,
+    FieldProvenance, PHASE_POLICY_UNIT, PolicyContribution, PolicyField, PolicyRefusal, PolicyUnit, RejectedOverride, ResolvedField,
+    RuleCalibration, RuleSelector, ScopeSelector, Suppression, SuppressionDisposition, SuppressionPolicy, SuppressionReason,
+    SuppressionStatus,
 };
 pub use run::Run;
 pub use run_id::Fresh_Run_Id;

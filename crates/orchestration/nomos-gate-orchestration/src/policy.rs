@@ -6,6 +6,7 @@
 
 mod baseline_debt;
 mod coverage_policy;
+mod effective_policy;
 mod gate_policy_file;
 mod rule_calibration;
 mod rule_selector;
@@ -14,6 +15,11 @@ mod suppression_disposition;
 
 pub use baseline_debt::{BaselineAllowance, BaselineDebt, BaselinePolicy};
 pub use coverage_policy::CoveragePolicy;
+pub use effective_policy::{
+    Effective_Gate_Policy, EffectivePolicy, FieldProvenance, PHASE_POLICY_UNIT, PolicyContribution, PolicyField, PolicyRefusal, PolicyUnit,
+    RejectedOverride, ResolvedField,
+};
+pub(crate) use effective_policy::Resolved_Gate_Policy;
 pub(crate) use gate_policy_file::{Resolve_Gate_Policy, GatePolicyFile};
 pub use rule_calibration::{AdoptionPolicy, RuleCalibration};
 pub use rule_selector::RuleSelector;

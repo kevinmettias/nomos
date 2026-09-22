@@ -104,6 +104,18 @@ pub(crate) const UNIVERSES: &[Universe] = &[
             by: "Test_Every_Variant_Should_Be_Listed",
         },
     },
+    // `OD-POLICY-001`'s ten configuration layers. A `Constant` rather than an `Enumeration`
+    // because it is a `const` array rather than an `All()` function, and it takes the same
+    // exhaustive-match mirror every `All` above it does -- a layer missing from the array is a
+    // layer no report could name as absent, which is the honesty the vocabulary exists for.
+    Universe {
+        path: "crates/contracts/nomos-contracts/src/configuration_layer.rs",
+        name: "ALL",
+        kind: UniverseKind::Constant,
+        standing: Standing::Mirrored {
+            by: "Test_Every_Layer_Should_Be_Listed",
+        },
+    },
     // ---- mirrored for other reasons ----
     //
     // `OD-COMPLETENESS-002`: this row named `Test_A_Rule_Nobody_Declared_Should_Fail_The_Run`,

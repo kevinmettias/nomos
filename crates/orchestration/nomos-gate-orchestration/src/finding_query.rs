@@ -13,7 +13,7 @@ use nomos_platform::{Environment, FileSystem, ProgramLauncher, Timestamp};
 use nomos_rules::SourceFile;
 
 use crate::gate_environment::{GateEnvironment, JudgeContext, Judged_Sources};
-use crate::policy::{GatePolicyFile, Resolve_Gate_Policy};
+use crate::policy::{GatePolicyFile, Resolve_Gate_Policy, Resolved_Gate_Policy};
 use crate::{AdoptionPolicy, BaselinePolicy, GateCommand, SuppressionPolicy};
 
 /// Which finding to explain: the rule that produced it, and one of the locations it names --
@@ -72,26 +72,31 @@ pub fn Explain_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
     return GateExplainResult { root: command.root.clone(), check_outcome, explanation };
 }
 
-/// The policy [`Explain_Gate`] answers with: the `nomos-gate.json` under `command.root`, merged
-/// under the caller's own.
+/// The policy [`Explain_Gate`] answers with: the `nomos-gate.json` under `command.root`,
+/// contributing at the `Repository` layer, with the caller's own resolved over it.
 ///
 /// Resolved here rather than taken from `command` alone, because the three policies this answer
-/// is about are the ones a real run would apply, and a run applies the declared file merged under
-/// the caller's own. Read before `filesystem` is handed to the judging, which is the same
-/// ordering `Run_Gate` keeps for the same reason.
+/// is about are the ones a real run would apply, and a run applies what the layered resolution
+/// decided. Read before `filesystem` is handed to the judging, which is the same ordering
+/// `Run_Gate` keeps for the same reason.
 ///
-/// An unreadable file falls back to the caller's policies standing alone, exactly as `Run_Gate`
-/// does. That direction is the safe one here: a policy nobody could read tolerates nothing, so
-/// the answer over-reports blocking rather than claiming a tolerance it could not verify.
-/// `Run_Gate` additionally withholds its verdict in that case; this function has no verdict to
-/// withhold, and reporting one finding as blocking is not a claim about the run.
+/// Through `crate::policy::Resolved_Gate_Policy`, the one function `Run_Gate` also calls.
+/// `OD-GATE-011` names two artifacts answering one question as a defect class, and this
+/// function and `Run_Gate`'s own were exactly that: each called `GatePolicyFile::Resolved_Over`
+/// and wrote its own handling of the unreadable case beside it.
+///
+/// An unreadable file, and a resolution the resolver refuses, both fall back to every default,
+/// exactly as `Run_Gate` does. That direction is the safe one here: a policy nobody could read
+/// tolerates nothing, so the answer over-reports blocking rather than claiming a tolerance it
+/// could not verify. `Run_Gate` additionally withholds its verdict in that case; this function
+/// has no verdict to withhold, and reporting one finding as blocking is not a claim about the
+/// run.
 fn Effective_Policies<Fs: FileSystem>(command: &GateCommand, filesystem: &Fs) -> GatePolicyFile
 {
-    return match Resolve_Gate_Policy(&command.root, filesystem)
-    {
-        Ok(Some(from_file)) => from_file.Resolved_Over(command),
-        Ok(None) | Err(_) => GatePolicyFile::default().Resolved_Over(command),
-    };
+    let declared = Resolve_Gate_Policy(&command.root, filesystem);
+    let resolved = Resolved_Gate_Policy(declared.as_ref().ok().and_then(Option::as_ref), command);
+
+    return resolved.map_or_else(|_| return GatePolicyFile::default(), |effective| return effective.values);
 }
 
 /// The three per-finding overrides [`Explained_Query`] and [`Disposed_Finding`] check,

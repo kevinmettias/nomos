@@ -101,6 +101,7 @@
 extern crate alloc;
 
 mod authority;
+mod configuration_layer;
 mod contract_version;
 mod determinism;
 mod guarantee;
@@ -112,6 +113,7 @@ mod reporting;
 mod workflow_step;
 
 pub use authority::{AuthorityClass, MutationClass, SemanticChangeAuthorityResolution, SemanticChangeClass, UntrustedPromptContent, UntrustedPromptOrigin};
+pub use configuration_layer::ConfigurationLayer;
 pub use contract_version::ContractVersion;
 pub use determinism::{Declaration_Is_Coherent, DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 pub use guarantee::{Assurance, FactVariant, Guarantee, IncrementalGranularity};

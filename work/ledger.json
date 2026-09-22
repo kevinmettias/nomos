@@ -89791,16 +89791,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P123-OD-POLICY-001-HAS-NO-RULE-FOR-TWO-FIELDS-THAT-RESOLVE-TOGETHER"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p124-effective",
-        "acquired_at": 1790051364,
-        "lease_expires_at": 1790062164
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -89813,7 +89809,30 @@
         ],
         "timeout_seconds": 5400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contracts",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "tes\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.14s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contracts-71d6ecb473f133e0.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-a1fbaad3e9313179.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-32aeef76e18b0752.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-b58cb804a13b532c.exe)\n   Doc-tests nomos_contracts\n   Doc-tests nomos_gate_orchestration\n",
+        "verified_at": 1790053408,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0f743f35692e36fb7e858c638a77a57227b03868"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -90858,10 +90877,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-75-column",
+        "acquired_at": 1790053298,
+        "lease_expires_at": 1790064098
+      },
       "verification": {
         "argv": [
           "cargo",

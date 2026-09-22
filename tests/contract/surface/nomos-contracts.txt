@@ -12,6 +12,7 @@ pub const fn nomos_contracts::CancellationBehavior::Is_Cancellable(self) -> bool
 pub const fn nomos_contracts::CancellationBehavior::Label(self) -> &'static str
 pub const fn nomos_contracts::Compensation::Is_Present(self) -> bool
 pub const fn nomos_contracts::Compensation::Label(self) -> &'static str
+pub const fn nomos_contracts::ConfigurationLayer::Label(self) -> &'static str
 pub const fn nomos_contracts::ContractVersion::Can_Read(self, other: Self) -> bool
 pub const fn nomos_contracts::ContractVersion::New(major: u16, minor: u16) -> Self
 pub const fn nomos_contracts::Declaration_Is_Coherent( strength: DeterminismStrength, scope: ReproducibilityScope, trace: TraceEquivalence, ) -> bool
@@ -53,6 +54,7 @@ pub const fn nomos_contracts::TraceEquivalence::Label(self) -> &'static str
 pub const fn nomos_contracts::TraceEquivalence::Weaker_Of(self, other: Self) -> Self
 pub const fn nomos_contracts::UntrustedPromptOrigin::Can_Solely_Authorize() -> bool
 pub const fn nomos_contracts::UntrustedPromptOrigin::Label(self) -> &'static str
+pub const nomos_contracts::ConfigurationLayer::ALL: [Self; 10]
 pub const nomos_contracts::Digest128::BYTE_LENGTH: usize
 pub const nomos_contracts::Digest128::HEX_LENGTH: usize
 pub const nomos_contracts::GenerationId::INITIAL: Self
@@ -65,6 +67,7 @@ pub enum nomos_contracts::AuthorityClass
 pub enum nomos_contracts::Cacheability
 pub enum nomos_contracts::CancellationBehavior
 pub enum nomos_contracts::Compensation
+pub enum nomos_contracts::ConfigurationLayer
 pub enum nomos_contracts::DeterminismStrength
 pub enum nomos_contracts::DisplayLabel
 pub enum nomos_contracts::EnforcementBreach
@@ -113,6 +116,16 @@ pub enum variant nomos_contracts::CancellationBehavior::Uncancellable
 pub enum variant nomos_contracts::Compensation::ExternallyCompensated
 pub enum variant nomos_contracts::Compensation::None
 pub enum variant nomos_contracts::Compensation::SelfCompensating
+pub enum variant nomos_contracts::ConfigurationLayer::CommandLine
+pub enum variant nomos_contracts::ConfigurationLayer::Default
+pub enum variant nomos_contracts::ConfigurationLayer::Environment
+pub enum variant nomos_contracts::ConfigurationLayer::Gate
+pub enum variant nomos_contracts::ConfigurationLayer::Organization
+pub enum variant nomos_contracts::ConfigurationLayer::Repository
+pub enum variant nomos_contracts::ConfigurationLayer::TemporaryRunOverride
+pub enum variant nomos_contracts::ConfigurationLayer::User
+pub enum variant nomos_contracts::ConfigurationLayer::Workflow
+pub enum variant nomos_contracts::ConfigurationLayer::Workspace
 pub enum variant nomos_contracts::DeterminismStrength::None
 pub enum variant nomos_contracts::DeterminismStrength::State
 pub enum variant nomos_contracts::DeterminismStrength::StateTemporal
@@ -224,6 +237,7 @@ pub fn nomos_contracts::Assurance::fmt(&self, formatter: &mut core::fmt::Formatt
 pub fn nomos_contracts::AuthorityClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::CancellationBehavior::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::Compensation::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_contracts::ConfigurationLayer::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::ContractVersion::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::DeterminismStrength::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_contracts::Digest128::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
@@ -257,6 +271,7 @@ pub impl nomos_contracts::Assurance implements core::fmt::Display
 pub impl nomos_contracts::AuthorityClass implements core::fmt::Display
 pub impl nomos_contracts::CancellationBehavior implements core::fmt::Display
 pub impl nomos_contracts::Compensation implements core::fmt::Display
+pub impl nomos_contracts::ConfigurationLayer implements core::fmt::Display
 pub impl nomos_contracts::ContractVersion implements core::fmt::Display
 pub impl nomos_contracts::DeterminismStrength implements core::fmt::Display
 pub impl nomos_contracts::Digest128 implements core::fmt::Debug
