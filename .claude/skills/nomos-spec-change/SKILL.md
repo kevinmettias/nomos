@@ -271,10 +271,10 @@ expected <y>`, exit 128, branch unmoved. It means HEAD moved while you were publ
 the first bullet above — capture the parent again, re-point the worktree, render again. Pointing
 the same blobs at the new value is the double read with extra steps.
 
-**The shared index and working tree are exactly as you left them**, which is the point and looks
-alarming afterwards: `git status --short` still shows the peer's staged file and shows your own
-committed paths as modified, because the index still holds the pre-commit entries. Do not repair
-that by re-staging. Check what you published instead, which reads neither:
+**The shared index and working tree are exactly as you left them**, which is the point while the
+commit is being built and a hazard the second it lands: the index still holds the pre-commit
+entries, so what sits in it now is a staged revert of what you just published. Check what you
+published first, which reads neither the index nor the tree:
 
 ```
 git rev-parse HEAD:spec/domain-specification.md                  # the blob the commit holds
@@ -283,10 +283,72 @@ git hash-object <scratch>/render/spec/domain-specification.md    # the bytes you
 
 Then copy the four halves into the working tree, so the next session stages your bytes rather
 than the ones you superseded. That copy races like every other, and the commit does not depend
-on it.
+on it. Then clear the leftover, which is the subsection below and is not optional.
 
 Every edit to a record body changes the store, so **render after the last word is written**, not
 before. A record you touch again is a diagram you render again.
+
+### The leftover is a staged revert of your own commit, and you clear your own entries only
+
+Measured in a throwaway repository: one tracked file modified, one untracked file added, both
+published through the form above. `git diff --cached` then reported `M` on the first and `D` on
+the second, and `git status --short` showed the added file as staged-deleted and untracked at the
+same time, which is the tell. A peer then ran a bare `git commit` with an unrelated message and
+published both deletions — the added file gone from `HEAD`, the modified file back to its parent
+content — under a message naming neither, its own diff showing two deletions it did not make.
+That is this form leaving an index loaded and the quiet-tree form two subsections up prescribing
+a bare commit, which commits the whole index. It reached a real record on 2026-09-22: `OD-HOST-019`
+and its registration were both untracked before the commit that published them, so both then read
+as staged deletions, and a peer's worker cleared them before anything committed over them.
+
+**The two entries are not one risk, and the deletion is the dangerous one.** A staged modification
+reverts content that is still in the working tree and still at `HEAD`, so publishing it costs a
+revert somebody can read back out of history. A staged deletion of a file that was untracked
+before your commit removes the only tracked copy of something just published: the shared index
+never held an entry for it, and absent reads as deleted. Every record you add is that case — the
+document and its registration were both untracked a minute ago.
+
+**Not with `git add`, and not with `git reset`.** That is what the instruction against re-staging
+was protecting, and the reason has not stopped being true. `git add <path>` stages the *shared
+working tree* at that instant, which is a peer's bytes if they rendered over you — measured, it
+staged a peer's file where `HEAD` held the blob the commit had published. A bare `git reset`
+clears every other session's staged work — measured, an empty staged list where a peer had two
+paths in flight.
+
+`git restore --staged <paths>` is neither. It writes the named entries only, from `HEAD`, and
+leaves every other entry and the entire working tree alone — measured, a peer's two staged paths
+survived it and their next bare commit carried exactly those and nothing of the publisher's. It
+takes the index lock to write, so a peer's concurrent git is refused with exit 128 and a lock
+message rather than interleaved with it.
+
+Name the paths your commit published, and read each one before you name it. The index, `HEAD` and
+the `$PARENT` you captured say which case a path is in; nothing about the path alone does:
+
+```
+for p in <the paths this commit published>; do
+  printf '%s  index=%s  head=%s  parent=%s\n' "$p" \
+    "$(git rev-parse --verify -q ":$p"        || echo absent)" \
+    "$(git rev-parse --verify -q "HEAD:$p")"                   \
+    "$(git rev-parse --verify -q "$PARENT:$p" || echo absent)"
+done
+git restore --staged <the paths that reading authorizes, and no others>
+```
+
+- **Absent from the index and absent from the parent** — the staged deletion. There is no entry
+  there to destroy, so restoring `HEAD`'s takes nothing from anybody.
+- **Index equals `$PARENT`** — the staged revert: the entry this form declined to touch, with
+  nobody having staged over it since.
+- **Index equals `HEAD`** — already right, and there is nothing to do.
+- **Anything else** — not yours. A peer staged their own bytes under a path you published, and a
+  bare commit of theirs is then their commit rather than a revert you left. Leave it and say so.
+
+This authorizes nothing about a staged path your commit did not publish. A peer's live work and
+somebody's abandoned leftover are the same thing to look at — a foreign staged path — and only
+the index, the working tree and `HEAD` read together separate them. You can read that triple for
+the paths you just published, because you know what your commit put at `HEAD`; you cannot read it
+for theirs. That is why the quiet-tree reading sends you to this form rather than telling you to
+unstage them: that bullet is about their entries before you commit, and this subsection is about
+yours after.
 
 ### Rebuild the binary after the last record edit, not merely once in the worktree
 
