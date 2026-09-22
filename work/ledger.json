@@ -91958,6 +91958,43 @@
         "declined_at": 1790055662
       },
       "widened": []
+    },
+    {
+      "id": "P123-THE-GENERAL-COMMIT-RULE-DOES-NOT-DISTINGUISH-ADD-FROM-COMMIT-AND-ONE-OF-THE-TWO-IS-UNSAFE-2",
+      "title": "The rule telling every session to commit explicit paths does not say which command they go on, and the wrong one commits a peer's bytes",
+      "why": "AGENTS.md tells every session to scope a commit to explicit paths because `git add -A` sweeps up work belonging to somebody else, and the nomos-task skill repeats it at its commit step. Neither says whether the paths go on `git add` or on `git commit`, and the two are opposite. Verified in a throwaway repository twice today, once by me and once independently by the claimant of P123-THE-RENDER-PROCEDURES-POST-COMMIT-CHECK-CANNOT-SEE-A-PEERS-WRITE-BETWEEN-THE-STAGE-AND-THE-COMMIT: `git commit -F <msg> -- <paths>` ignores the index and commits the current working-tree content of those paths, so a peer's write to one of your own paths between your `git add` and your commit lands in your commit under your message; a bare `git commit` after `git add` commits what was staged, but carries the whole index including anything a peer staged. Each form closes one of two windows and neither closes both. That claimant grepped the repository and found no committed file prescribing either form: the pathspec commit and the post-commit projection check have been living in session memory rather than in any authority, which is why sessions have been using the unsafe form all day believing it was the careful one. 966d8745 landed the resolution for the projections in the nomos-spec-change skill, stated there as a rule: explicit paths belong on `git add` and never on `git commit`, and a pathspec there is not a stricter reading of the rule but its opposite. That rule is general and its home is not a skill about rendering specifications. The file it matters most for is work/ledger.json, which every session writes and every session commits, and which has no copy outside the shared tree against which a staged blob could be checked, so the commit form is the only thing protecting it.",
+      "done_when": "AGENTS.md's commit rule says which command explicit paths go on, and it lands by replacing text rather than adding any: the file is 119 lines against the budget of 120 that tests/contract/tests/agent_harness.rs line 70 sets as CONTRACT_LINE_BUDGET and Test_The_Contract_Should_Stay_Inside_Its_Line_Budget asserts, so one line is the entire headroom and a sentence that wraps to two exceeds it. Re-measure both numbers before editing rather than trusting this sentence, since peers commit to that file. The existing reason for scoping a commit at all survives the rewrite, and the harness suite stays green. The nomos-task skill's commit step carries the same distinction with the commands beside it, including the staged-list assertion a bare commit needs because it carries the whole index, and it names work/ledger.json as the case where the commit form is the only available protection, since no copy of it exists outside the shared tree to compare a staged blob against. Neither file restates the projection-specific hash comparison that 966d8745 placed in the nomos-spec-change skill, where a render worktree exists to make it possible; a reader who needs it is routed there rather than given a second copy, because a second copy of a procedure is the defect this repository files records about. Whether the general rule also belongs in a governing record is decided rather than assumed: the claimant of 966d8745 argued OD-GATE-005 needs no change because its own text already says the procedure is the answer, and if that reasoning covers the general case then say so and amend nothing. No mechanism is built; that claimant's argument against one, that a check closing one of two windows while reading as done is worse than the rule, is either adopted or answered. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "AGENTS.md",
+          ".claude/skills/nomos-task/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

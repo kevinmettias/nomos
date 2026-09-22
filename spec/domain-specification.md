@@ -137,7 +137,7 @@ profile: domain-specification
 | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md@authored | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md | authored | 29 | 10 | sha256:6ac53a834c76e68a76011715ebb72f409b6ac87804d5e27c775aca56b4aeb691 |
 | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md@authored | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md | authored | 39 | 12 | sha256:af086972c1c5a6fe934fe91f8e0b7dc9bff973d7986240dcbb05a3bdac229496 |
 | docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md@authored | docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md | authored | 56 | 13 | sha256:7a05e7d2b4970db396626604d0d0e0e6dda68dcb9890eeaaa7d120f22d219e88 |
-| docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md@authored | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md | authored | 92 | 24 | sha256:0ce8b873e26fc707ad0594a76922e8ccf0fa5c374c5867d74543afd06d69e593 |
+| docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md@authored | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md | authored | 124 | 30 | sha256:eaf0966c380a4f2edd5e1faec5edcb807e126c7b1d93e6c24bd7c894c58f67ab |
 | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md@authored | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md | authored | 70 | 20 | sha256:6f3ba575cf275a392d61250afb410d11d511d942bdd507ce4ab113c34ba43130 |
 | docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md@authored | docs/records/OD-HOST-018-a-host-names-an-orchestration-crate-for-an-operation-it-renders-and-never-for-how-those-crates-compose-each-other.md | authored | 44 | 10 | sha256:56a3258a10da8f6d0b85a5520d8493fb9e231e069994260adeed8d832c22c490 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
@@ -1347,7 +1347,13 @@ profile: domain-specification
 | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#74 | authored | 2 | What this depends on from `OD-ANALYSIS-009` |
 | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#77 | authored | 2 | What this record does not do |
 | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#83 | authored | 2 | Territory a building item reserves |
-| docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#91 | authored | 2 | Status |
+| docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#91 | authored | 2 | Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap |
+| docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#97 | authored | 3 | The real population, and how it was searched |
+| docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#105 | authored | 3 | Adding the field is a breaking change across crates, and Rust offers no additive shape |
+| docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#111 | authored | 3 | The territory section is short by three paths |
+| docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#117 | authored | 3 | The correction was found in flight, and the ledger carries its evidence |
+| docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#120 | authored | 3 | What this amendment does not do |
+| docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#122 | authored | 2 | Status |
 | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#1 | authored | 1 | An interchange projection belongs to the service that owns the judgment, and every host emits it |
 | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#2 | authored | 2 | Question |
 | docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#6 | authored | 2 | What Was Measured |
@@ -39470,11 +39476,311 @@ obligations, which belong to whoever holds them.
 
 ### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#91
 
+*revision: authored · kind: heading · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap · hash: sha256:3be859939d7737b0465cbf148b7724b17ed431c5eb76d4d095b95bdfda7d0994*
+
+## Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#92
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap · hash: sha256:598efc007493a8d3e4ce7d138a81aa47dd184d8702e2a6f86cd2a6012b67ee52*
+
+Decision 4 priced its own shape with a measurement, and the measurement was wrong. Nothing
+here reopens the decision. The answer is still produced at rule grain; the per-finding answer
+is still refused, for decision 2's measured reason; the descriptor-side `Requirement` field
+and the `FactKey`-reconstruction capability are still refused, for decisions 5 and 6. All four
+refusals stand untouched. **The miscount bears on the cost of the change and not on its
+shape.** What moves is the size of the work, and what a building item must reserve to do it.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#93
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap · hash: sha256:bc020328514c71d03b0e0806fbd91cacb216320feb751b7212ca49c206922b9c*
+
+That distinction is the whole of why this is worth an amendment rather than a corrected
+numeral. A count stated to justify a shape is read by the next person as the size of the work,
+and this one was read that way: `P125-SUPPORTING-FACT-TRAIL` reserved its territory from the
+section below and stopped, mid-implementation, when the compiler named a file that section
+does not contain.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#94
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap · hash: sha256:74fc161bc3387c916b4076b616bab924c010d8aac969b7c3304dcf1b3ceffd78*
+
+**The sentence being corrected**, from decision 4:
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#95
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap · hash: sha256:349d6d9d4290e98da90d42864e670e92726ac057ada9c8537c789d85087f680a*
+
+> It is also cheap, measured rather than assumed: exactly two non-test sites destructure
+> `Judged` exhaustively -- `crates/host/nomos-api/src/check.rs:113` and
+> `crates/host/nomos-cli/src/check/report.rs:147` -- and every other reader already writes
+> `..`.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#96
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap · hash: sha256:f128b7004c61b5af90beea156880fad77054ca323efad8b498698007622a833f*
+
+Three non-test sites destructure it exhaustively, not two. And "every other reader" counts the
+wrong population, because a reader is not what a new field breaks: a site that *constructs*
+the variant by literal must name every field whatever any reader writes, and there are eight
+of those, two of them outside any test.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#97
+
+*revision: authored · kind: heading · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The real population, and how it was searched · hash: sha256:e50c4c33ddee1a95a69da52eca91d1301606118c9eac3721ee52ff6d147ed272*
+
+### The real population, and how it was searched
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#98
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The real population, and how it was searched · hash: sha256:5b881f40419f02213eb98c6b8a3f1f2dea41f71bacc9dc6cc54ca3f260e3f18d*
+
+Measured at `3df66fe8d79cdcbdaaf7bc9d30c14ba0991f8bd2` -- the revision the "What was
+measured" section above names for its own re-verification, so the corrected count is taken
+over exactly the tree the sentence described. Re-measured at `9f13b1e7`, the head of `dev`
+when this amendment was written: the field-complete population is the same fifteen sites, two
+line numbers have moved, and the rest-pattern population has grown by two more readers in
+`run_context/tests.rs` that `f5be5478` added.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#99
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The real population, and how it was searched · hash: sha256:11e75ffac7aa08c212582dd5705427cae8feac6bd511fabee743ba5480a6dc61*
+
+The method, stated because a reader's confidence in a corrected count depends on it, and the
+previous count was presumably taken by one that looked sufficient:
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#100
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The real population, and how it was searched · hash: sha256:a6fe1c8de4d0d95385a360370739afd29aa4782ad281e7b23056ea99fc0f90dd*
+
+1. `git grep -n -w Judged <rev> -- '*.rs'` across the whole workspace -- the bare token rather
+   than the qualified path, so a variant reached through an import or a re-export could not
+   hide behind a spelling. 135 lines.
+2. `git grep -n "use .*CheckOutcome::" <rev> -- '*.rs'` returns nothing, which is what makes
+   that wider net redundant rather than merely reassuring: every use of this variant in the
+   workspace is written `CheckOutcome::Judged` or
+   `nomos_check_orchestration::CheckOutcome::Judged`, so no bare `Judged {` anywhere is this
+   variant. The 74 lines dropped at the next step are prose, the unrelated local
+   `struct Judged<'a>` in `run_context/judging.rs`, the distinct `CheckResponse::Judged` and
+   `CheckOutcomeResponse::Judged` of `nomos-api`, and rule fixtures naming a Rust item
+   `Judged`.
+3. `git grep -n "CheckOutcome::Judged"`, with whole-line comments dropped: **61 code sites.**
+4. Each of the 61 brace-matched forward from the variant name to its closing brace -- which a
+   line-wise grep cannot do, and two of the fifteen below span lines -- then classified on
+   whether that group contains `..`. **46 carry a rest pattern and are unaffected by a new
+   field; 15 are field-complete and break.**
+5. Each of the 15 read in place for whether it is a pattern or a construction, and each file
+   read for where its `#[cfg(test)]` module begins, rather than inferring test status from a
+   file name.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#101
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The real population, and how it was searched · hash: sha256:ef8401d697af4d262e30ab0e358aa7e66a97d0f4281953e447fa53a7addf966b*
+
+The fifteen field-complete sites, at `3df66fe8`:
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#102
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The real population, and how it was searched · hash: sha256:44e3be1fe44b61adddd17891b4005c1322f75459aef1035cb443cb5f6d7d2559*
+
+| site | what it does | test? |
+|---|---|---|
+| `crates/host/nomos-api/src/check.rs:113` | destructures | non-test |
+| `crates/host/nomos-cli/src/check/report.rs:147` | destructures | non-test |
+| `crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs:32` | destructures | non-test |
+| `crates/orchestration/nomos-check-orchestration/src/run_context.rs:342` | constructs | non-test |
+| `crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs:40` | constructs | non-test |
+| `crates/orchestration/nomos-check-orchestration/src/run_context/tests.rs:31` | destructures | test |
+| `crates/orchestration/nomos-check-orchestration/src/tests/composition.rs:43` | destructures | test |
+| `crates/orchestration/nomos-check-orchestration/src/tests/composition.rs:74` | destructures | test |
+| `tests/integration/tests/calibration.rs:171` | destructures | test |
+| `crates/host/nomos-api/src/response/check_outcome_response.rs:145` | constructs | test |
+| `crates/host/nomos-cli/src/gate/report/tests.rs:36` | constructs | test |
+| `crates/host/nomos-cli/src/gate/report/tests/explain.rs:18` | constructs | test |
+| `crates/host/nomos-cli/src/gate/report/tests/verdicts.rs:22` | constructs | test |
+| `crates/host/nomos-cli/src/gate/report/tests/verdicts.rs:46` | constructs | test |
+| `crates/orchestration/nomos-gate-orchestration/src/gate_environment/tests.rs:115` | constructs | test |
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#103
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The real population, and how it was searched · hash: sha256:f5c7b297c5221d0dff2a486796c4bc5c0d30a287daba7bff8e0d39142771d80e*
+
+**Five non-test sites and ten test sites; seven destructurings and eight constructions; twelve
+files; four crates and the integration test tree.** Not two match arms.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#104
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The real population, and how it was searched · hash: sha256:da41dddf9c5427742a1e232de6d0fc70884e5900dbf1e0412520434caf334109*
+
+The miss is one of scope rather than of spelling, which is worth saying because it decides how
+the next census should be taken. The pattern at `reduction.rs:32` is
+`{ findings, examined, claim }` -- byte-identical to the group in both sites decision 4 names.
+Whatever produced the original count did not reach `crates/orchestration/` outside the
+defining crate, or `tests/`; all three sites it missed lie in those two places, and so do both
+files it never names.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#105
+
+*revision: authored · kind: heading · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / Adding the field is a breaking change across crates, and Rust offers no additive shape · hash: sha256:95ef4a0826c26ffb33b12ba1f5b7f0c57bf525929f76c05f6fe42e4ba8e6b4f6*
+
+### Adding the field is a breaking change across crates, and Rust offers no additive shape
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#106
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / Adding the field is a breaking change across crates, and Rust offers no additive shape · hash: sha256:5cd66486e95139c1b1cc3593cb666fd3cbd9aaf4cced146cea24619a6471b43b*
+
+Decision 4 is right that a field beats a second return shape, and its reason is untouched.
+What it implies and should not is that the field is *additive*. It is not, and a later reader
+must not plan as though it were.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#107
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / Adding the field is a breaking change across crates, and Rust offers no additive shape · hash: sha256:22d51fff3574d84218c481712108823c0e9bfd18efb827605b2171373d381565*
+
+`CheckOutcome` carries no `#[non_exhaustive]`, on the enum or on the variant, and
+`tests/contract/surface/nomos-check-orchestration.txt` publishes the variant with its field
+list, so that list is part of what this crate promises. Adding `#[non_exhaustive]` now is not
+an escape either: it forbids precisely what the sites above already do from outside the
+defining crate, which is five of the fifteen.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#108
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / Adding the field is a breaking change across crates, and Rust offers no additive shape · hash: sha256:35a92e16b245feadadcb1bca2e40782d18e90d0ebc34211977b36c0ad50a9e06*
+
+Functional record update does not exist for an enum variant, so
+`CheckOutcome::Judged { trail, ..previous }` is not a shape any construction can take.
+Compiled directly rather than recalled, against `rustc 1.88.0`:
+`error[E0436]: functional record update syntax requires a struct`. There is no default-valued
+field for a variant either. Rust offers nothing here, and the compiler says so by name.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#109
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / Adding the field is a breaking change across crates, and Rust offers no additive shape · hash: sha256:f0b8ea8f595f989765335db6e11fb3941761e782b8e85e52048385501caaeae3*
+
+Nor can an existing field absorb the trail. `reduction.rs:40` constructs all three fields by
+literal, as `findings: admitted, examined, claim`, from a crate that does not define the type
+-- so widening the *type* of any one of the three breaks that same peer file at that same
+line, and every construction in the table with it. There is no cheap edge into this variant.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#110
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / Adding the field is a breaking change across crates, and Rust offers no additive shape · hash: sha256:3b4905c5210584cb651a7aeb1b33f8801e1c9abf7e89a4640c14e6b9c8367374*
+
+The honest price of decision 4, then: one field costs fifteen sites in twelve files across
+four crates and the integration test tree, five of them outside any test, one of them in a
+crate the territory section below does not mention at all.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#111
+
+*revision: authored · kind: heading · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The territory section is short by three paths · hash: sha256:48a1e30e218692100c6339e301e6252f09517f5afeb83b098561205d8e402a4d*
+
+### The territory section is short by three paths
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#112
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The territory section is short by three paths · hash: sha256:fa69b09f5d8c2dff1e9e778963c733bcf8a8b3920f34eea83b8f8f1cb6c5df9e*
+
+`P125-SUPPORTING-FACT-TRAIL` widened its own claim at 2026-09-22 05:21:32Z, holder
+`nomos-75-trail`, and that item's `widened` entry in `work/ledger.json` is the authority for
+what it actually had to reserve. Three of the seven paths it added appear nowhere in the
+"Territory a building item reserves" section below:
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#113
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The territory section is short by three paths · hash: sha256:d13cb5eca486da4e6bfac228e4a1fc2467eb452a3e4848413a1f347e4c17b2de*
+
+- `crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs`
+- `crates/orchestration/nomos-gate-orchestration/src/gate_environment/tests.rs`
+- `tests/integration/tests/calibration.rs`
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#114
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The territory section is short by three paths · hash: sha256:f9471f345ca3052cbeb6cbb26f99a16edf28743cf42d6a3128a8e227628c6f3f*
+
+The other four it added -- `crates/host/nomos-api/src/response/check_outcome_response.rs` and
+the three files under `crates/host/nomos-cli/src/gate/report/tests` -- that section does name,
+in its host bullet. Those four were added to the item because its own reservation had not
+spelled them out as paths, not because this record failed to predict them.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#115
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The territory section is short by three paths · hash: sha256:385b139373dcf972aa45dd4aeb4f652775ea32e3bdc32522de29741d19b547e2*
+
+`crates/orchestration/nomos-gate-orchestration` is also absent from the "Not reserved,
+deliberately" list, and that is the worse half of the omission. That list is written to be
+read as exhaustive about what stays out, so a crate missing from both lists reads as a crate
+the change does not reach rather than as a crate nobody looked at.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#116
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The territory section is short by three paths · hash: sha256:b0421db8ad6d6d84eb65a33ef73d237ad7c75db8f6c56910697ab3553a722617*
+
+So the orchestration half's territory is the section below **plus those three paths**. The
+editor half is unaffected: `nomos-lsp` reads the outcome with a rest pattern at
+`crates/host/nomos-lsp/src/nomos_diagnostic_provider.rs:100`, and its two test readers do the
+same, so nothing in that half's prediction depends on this count.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#117
+
+*revision: authored · kind: heading · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The correction was found in flight, and the ledger carries its evidence · hash: sha256:ab1139a3c13761751dee1bbc813bab9a872647052d6dce05ab0255c0a01f229c*
+
+### The correction was found in flight, and the ledger carries its evidence
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#118
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The correction was found in flight, and the ledger carries its evidence · hash: sha256:b2b63cf7e486229113bf5b4df693c64ea5fbe0177690f77cff58c09830f98524*
+
+`P125-SUPPORTING-FACT-TRAIL` was claimed at 2026-09-22 04:51:50Z by `nomos-75-trail` and was
+already implementing when the miss surfaced; that item's own `why` records that it found
+`reduction.rs` destructuring exhaustively at line 32 and constructing by literal at line 40
+while going to add the field. The prediction was not repaired by editing this record from
+inside that item's territory. It was repaired through the mechanism the "What this record does
+not do" section below already names -- `OD-LEDGER-039`'s `work widen` -- which added the seven
+paths thirty minutes after the claim, at 05:21:32Z; the wrong prediction itself was raised as
+a separate item against this file, which is the item this amendment closes.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#119
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / The correction was found in flight, and the ledger carries its evidence · hash: sha256:acbeb12018cb870ceedfd7532cab4666e40098c35391e8d7adf9a419840e07bc*
+
+That sequence is why this correction carries evidence rather than an assertion about history.
+The ledger holds the claim time, the widening time and the added paths; two commits hold the
+rest. `f5be5478` is the first increment -- the per-rule reader, the reduction, the four shapes
+and the cache -- and it does not widen `CheckOutcome::Judged` at all, which is why the variant
+still carried exactly `findings`, `examined` and `claim` at `9f13b1e7`. `402b2624` is the
+increment that added the field, as `supporting_facts: SupportingFactTrail`, and it is the
+falsifier for the table above rather than a restatement of it: **every one of the twelve files
+that table names appears in that commit.** The eight further paths it touched are the variant's
+own declaration, its new module, the two declaration sites above them, the reassessment cache,
+that item's own test module, the surface snapshot and the ledger -- not one of them a
+field-complete site the table missed, and not one of the twelve absent from it. The sentence
+corrected at the top of this amendment names two of those twelve files; the territory section
+below names nine; the three it names nowhere are exactly the three the widening had to add.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#120
+
+*revision: authored · kind: heading · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / What this amendment does not do · hash: sha256:518ff38ee5ad8785190cf84f0f9168d9561000936111c40d575718f1b8b17636*
+
+### What this amendment does not do
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#121
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap / What this amendment does not do · hash: sha256:da80d9c55da235487f039388abb857f11f7bb02e20067e1d24342bf72aa58a4c*
+
+It changes no code and no decision. It does not move decision 4's choice of a field over a
+second return shape, whose reason is `OD-HOST-002`'s and not the count's -- which is exactly
+why the shape survives its own justification being corrected. It does not amend `OD-HOST-010`,
+`OD-HOST-015` or `OD-ANALYSIS-009`, and it does not repair the stale `server.rs` citation this
+record named above as found evidence, which `OD-ANALYSIS-009`'s own later amendment has since
+done. It reserves one file, this one.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#122
+
 *revision: authored · kind: heading · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#92
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#123
 
 *revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Status · hash: sha256:3a4934244d4f3e0f1d6de159845c6ae8657171b6d00a9bfee825e811c5439783*
 
@@ -39489,6 +39795,29 @@ of 56 construction sites; a descriptor-side `Requirement` field and a `FactKey`-
 capability are both refused with their reasons. `OD-HOST-010`'s two undecided targets are now
 both decided, neither of them built, and `P42-LSP-PROJECTION`'s five walk-outward targets have
 five answers on the board.
+
+### docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md#124
+
+*revision: authored · kind: prose · heading: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused / Status · hash: sha256:e0e787344c52685783bcc2386945294d7b6b75d2e28d7731869121a6858e4cfa*
+
+Amended to version 2 by
+`P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE`, which corrected the
+census decision 4 priced its own shape with and left every decision standing. Three non-test
+sites destructure `CheckOutcome::Judged` exhaustively rather than two, and readers were the
+wrong population to have counted: fifteen sites in twelve files across four crates and the
+integration test tree are field-complete and break on a new field, five of them outside any
+test and eight of them constructions rather than readers, measured at `3df66fe8` and
+re-measured at `9f13b1e7`. Adding the field is therefore a breaking change across crates
+rather than an additive one, and no additive shape exists: the variant is not
+`#[non_exhaustive]`, functional record update does not exist for an enum variant, and all
+three existing fields are themselves constructed by literal in a peer crate, so none of them
+can absorb the trail either. The territory section is short by
+`crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs`, its
+sibling `tests.rs` and `tests/integration/tests/calibration.rs`, per the `work widen`
+`P125-SUPPORTING-FACT-TRAIL` had to take at 2026-09-22 05:21:32Z while already implementing.
+The decision itself is where it was: the answer is still produced at rule grain, the
+per-finding answer is still refused, and none of the four refusals moves, because the
+miscount bears on the cost of the change and not on its shape.
 
 ### docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md#1
 

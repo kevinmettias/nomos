@@ -3,7 +3,7 @@ id: OD-HOST-016
 type: decision
 title: A supporting fact is answered at rule grain from the read trail a run already builds and discards, and a per-finding answer is refused
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - host
@@ -523,6 +523,182 @@ orchestration half and `cargo test --no-fail-fast -p nomos-lsp` for the editor h
 item declares, per the same skill, and deliberately not reaching the contract suite's other
 obligations, which belong to whoever holds them.
 
+## Amendment (P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE), Version 2: The Census Behind Decision 4's Cost Was Short, In The One Direction That Made The Change Look Cheap
+
+Decision 4 priced its own shape with a measurement, and the measurement was wrong. Nothing
+here reopens the decision. The answer is still produced at rule grain; the per-finding answer
+is still refused, for decision 2's measured reason; the descriptor-side `Requirement` field
+and the `FactKey`-reconstruction capability are still refused, for decisions 5 and 6. All four
+refusals stand untouched. **The miscount bears on the cost of the change and not on its
+shape.** What moves is the size of the work, and what a building item must reserve to do it.
+
+That distinction is the whole of why this is worth an amendment rather than a corrected
+numeral. A count stated to justify a shape is read by the next person as the size of the work,
+and this one was read that way: `P125-SUPPORTING-FACT-TRAIL` reserved its territory from the
+section below and stopped, mid-implementation, when the compiler named a file that section
+does not contain.
+
+**The sentence being corrected**, from decision 4:
+
+> It is also cheap, measured rather than assumed: exactly two non-test sites destructure
+> `Judged` exhaustively -- `crates/host/nomos-api/src/check.rs:113` and
+> `crates/host/nomos-cli/src/check/report.rs:147` -- and every other reader already writes
+> `..`.
+
+Three non-test sites destructure it exhaustively, not two. And "every other reader" counts the
+wrong population, because a reader is not what a new field breaks: a site that *constructs*
+the variant by literal must name every field whatever any reader writes, and there are eight
+of those, two of them outside any test.
+
+### The real population, and how it was searched
+
+Measured at `3df66fe8d79cdcbdaaf7bc9d30c14ba0991f8bd2` -- the revision the "What was
+measured" section above names for its own re-verification, so the corrected count is taken
+over exactly the tree the sentence described. Re-measured at `9f13b1e7`, the head of `dev`
+when this amendment was written: the field-complete population is the same fifteen sites, two
+line numbers have moved, and the rest-pattern population has grown by two more readers in
+`run_context/tests.rs` that `f5be5478` added.
+
+The method, stated because a reader's confidence in a corrected count depends on it, and the
+previous count was presumably taken by one that looked sufficient:
+
+1. `git grep -n -w Judged <rev> -- '*.rs'` across the whole workspace -- the bare token rather
+   than the qualified path, so a variant reached through an import or a re-export could not
+   hide behind a spelling. 135 lines.
+2. `git grep -n "use .*CheckOutcome::" <rev> -- '*.rs'` returns nothing, which is what makes
+   that wider net redundant rather than merely reassuring: every use of this variant in the
+   workspace is written `CheckOutcome::Judged` or
+   `nomos_check_orchestration::CheckOutcome::Judged`, so no bare `Judged {` anywhere is this
+   variant. The 74 lines dropped at the next step are prose, the unrelated local
+   `struct Judged<'a>` in `run_context/judging.rs`, the distinct `CheckResponse::Judged` and
+   `CheckOutcomeResponse::Judged` of `nomos-api`, and rule fixtures naming a Rust item
+   `Judged`.
+3. `git grep -n "CheckOutcome::Judged"`, with whole-line comments dropped: **61 code sites.**
+4. Each of the 61 brace-matched forward from the variant name to its closing brace -- which a
+   line-wise grep cannot do, and two of the fifteen below span lines -- then classified on
+   whether that group contains `..`. **46 carry a rest pattern and are unaffected by a new
+   field; 15 are field-complete and break.**
+5. Each of the 15 read in place for whether it is a pattern or a construction, and each file
+   read for where its `#[cfg(test)]` module begins, rather than inferring test status from a
+   file name.
+
+The fifteen field-complete sites, at `3df66fe8`:
+
+| site | what it does | test? |
+|---|---|---|
+| `crates/host/nomos-api/src/check.rs:113` | destructures | non-test |
+| `crates/host/nomos-cli/src/check/report.rs:147` | destructures | non-test |
+| `crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs:32` | destructures | non-test |
+| `crates/orchestration/nomos-check-orchestration/src/run_context.rs:342` | constructs | non-test |
+| `crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs:40` | constructs | non-test |
+| `crates/orchestration/nomos-check-orchestration/src/run_context/tests.rs:31` | destructures | test |
+| `crates/orchestration/nomos-check-orchestration/src/tests/composition.rs:43` | destructures | test |
+| `crates/orchestration/nomos-check-orchestration/src/tests/composition.rs:74` | destructures | test |
+| `tests/integration/tests/calibration.rs:171` | destructures | test |
+| `crates/host/nomos-api/src/response/check_outcome_response.rs:145` | constructs | test |
+| `crates/host/nomos-cli/src/gate/report/tests.rs:36` | constructs | test |
+| `crates/host/nomos-cli/src/gate/report/tests/explain.rs:18` | constructs | test |
+| `crates/host/nomos-cli/src/gate/report/tests/verdicts.rs:22` | constructs | test |
+| `crates/host/nomos-cli/src/gate/report/tests/verdicts.rs:46` | constructs | test |
+| `crates/orchestration/nomos-gate-orchestration/src/gate_environment/tests.rs:115` | constructs | test |
+
+**Five non-test sites and ten test sites; seven destructurings and eight constructions; twelve
+files; four crates and the integration test tree.** Not two match arms.
+
+The miss is one of scope rather than of spelling, which is worth saying because it decides how
+the next census should be taken. The pattern at `reduction.rs:32` is
+`{ findings, examined, claim }` -- byte-identical to the group in both sites decision 4 names.
+Whatever produced the original count did not reach `crates/orchestration/` outside the
+defining crate, or `tests/`; all three sites it missed lie in those two places, and so do both
+files it never names.
+
+### Adding the field is a breaking change across crates, and Rust offers no additive shape
+
+Decision 4 is right that a field beats a second return shape, and its reason is untouched.
+What it implies and should not is that the field is *additive*. It is not, and a later reader
+must not plan as though it were.
+
+`CheckOutcome` carries no `#[non_exhaustive]`, on the enum or on the variant, and
+`tests/contract/surface/nomos-check-orchestration.txt` publishes the variant with its field
+list, so that list is part of what this crate promises. Adding `#[non_exhaustive]` now is not
+an escape either: it forbids precisely what the sites above already do from outside the
+defining crate, which is five of the fifteen.
+
+Functional record update does not exist for an enum variant, so
+`CheckOutcome::Judged { trail, ..previous }` is not a shape any construction can take.
+Compiled directly rather than recalled, against `rustc 1.88.0`:
+`error[E0436]: functional record update syntax requires a struct`. There is no default-valued
+field for a variant either. Rust offers nothing here, and the compiler says so by name.
+
+Nor can an existing field absorb the trail. `reduction.rs:40` constructs all three fields by
+literal, as `findings: admitted, examined, claim`, from a crate that does not define the type
+-- so widening the *type* of any one of the three breaks that same peer file at that same
+line, and every construction in the table with it. There is no cheap edge into this variant.
+
+The honest price of decision 4, then: one field costs fifteen sites in twelve files across
+four crates and the integration test tree, five of them outside any test, one of them in a
+crate the territory section below does not mention at all.
+
+### The territory section is short by three paths
+
+`P125-SUPPORTING-FACT-TRAIL` widened its own claim at 2026-09-22 05:21:32Z, holder
+`nomos-75-trail`, and that item's `widened` entry in `work/ledger.json` is the authority for
+what it actually had to reserve. Three of the seven paths it added appear nowhere in the
+"Territory a building item reserves" section below:
+
+- `crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs`
+- `crates/orchestration/nomos-gate-orchestration/src/gate_environment/tests.rs`
+- `tests/integration/tests/calibration.rs`
+
+The other four it added -- `crates/host/nomos-api/src/response/check_outcome_response.rs` and
+the three files under `crates/host/nomos-cli/src/gate/report/tests` -- that section does name,
+in its host bullet. Those four were added to the item because its own reservation had not
+spelled them out as paths, not because this record failed to predict them.
+
+`crates/orchestration/nomos-gate-orchestration` is also absent from the "Not reserved,
+deliberately" list, and that is the worse half of the omission. That list is written to be
+read as exhaustive about what stays out, so a crate missing from both lists reads as a crate
+the change does not reach rather than as a crate nobody looked at.
+
+So the orchestration half's territory is the section below **plus those three paths**. The
+editor half is unaffected: `nomos-lsp` reads the outcome with a rest pattern at
+`crates/host/nomos-lsp/src/nomos_diagnostic_provider.rs:100`, and its two test readers do the
+same, so nothing in that half's prediction depends on this count.
+
+### The correction was found in flight, and the ledger carries its evidence
+
+`P125-SUPPORTING-FACT-TRAIL` was claimed at 2026-09-22 04:51:50Z by `nomos-75-trail` and was
+already implementing when the miss surfaced; that item's own `why` records that it found
+`reduction.rs` destructuring exhaustively at line 32 and constructing by literal at line 40
+while going to add the field. The prediction was not repaired by editing this record from
+inside that item's territory. It was repaired through the mechanism the "What this record does
+not do" section below already names -- `OD-LEDGER-039`'s `work widen` -- which added the seven
+paths thirty minutes after the claim, at 05:21:32Z; the wrong prediction itself was raised as
+a separate item against this file, which is the item this amendment closes.
+
+That sequence is why this correction carries evidence rather than an assertion about history.
+The ledger holds the claim time, the widening time and the added paths; two commits hold the
+rest. `f5be5478` is the first increment -- the per-rule reader, the reduction, the four shapes
+and the cache -- and it does not widen `CheckOutcome::Judged` at all, which is why the variant
+still carried exactly `findings`, `examined` and `claim` at `9f13b1e7`. `402b2624` is the
+increment that added the field, as `supporting_facts: SupportingFactTrail`, and it is the
+falsifier for the table above rather than a restatement of it: **every one of the twelve files
+that table names appears in that commit.** The eight further paths it touched are the variant's
+own declaration, its new module, the two declaration sites above them, the reassessment cache,
+that item's own test module, the surface snapshot and the ledger -- not one of them a
+field-complete site the table missed, and not one of the twelve absent from it. The sentence
+corrected at the top of this amendment names two of those twelve files; the territory section
+below names nine; the three it names nowhere are exactly the three the widening had to add.
+
+### What this amendment does not do
+
+It changes no code and no decision. It does not move decision 4's choice of a field over a
+second return shape, whose reason is `OD-HOST-002`'s and not the count's -- which is exactly
+why the shape survives its own justification being corrected. It does not amend `OD-HOST-010`,
+`OD-HOST-015` or `OD-ANALYSIS-009`, and it does not repair the stale `server.rs` citation this
+record named above as found evidence, which `OD-ANALYSIS-009`'s own later amendment has since
+done. It reserves one file, this one.
+
 ## Status
 
 Accepted. At `3df66fe8` a run builds one `Reader` and throws its trail away unread; 31 of 71
@@ -536,3 +712,22 @@ of 56 construction sites; a descriptor-side `Requirement` field and a `FactKey`-
 capability are both refused with their reasons. `OD-HOST-010`'s two undecided targets are now
 both decided, neither of them built, and `P42-LSP-PROJECTION`'s five walk-outward targets have
 five answers on the board.
+
+Amended to version 2 by
+`P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE`, which corrected the
+census decision 4 priced its own shape with and left every decision standing. Three non-test
+sites destructure `CheckOutcome::Judged` exhaustively rather than two, and readers were the
+wrong population to have counted: fifteen sites in twelve files across four crates and the
+integration test tree are field-complete and break on a new field, five of them outside any
+test and eight of them constructions rather than readers, measured at `3df66fe8` and
+re-measured at `9f13b1e7`. Adding the field is therefore a breaking change across crates
+rather than an additive one, and no additive shape exists: the variant is not
+`#[non_exhaustive]`, functional record update does not exist for an enum variant, and all
+three existing fields are themselves constructed by literal in a peer crate, so none of them
+can absorb the trail either. The territory section is short by
+`crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs`, its
+sibling `tests.rs` and `tests/integration/tests/calibration.rs`, per the `work widen`
+`P125-SUPPORTING-FACT-TRAIL` had to take at 2026-09-22 05:21:32Z while already implementing.
+The decision itself is where it was: the answer is still produced at rule grain, the
+per-finding answer is still refused, and none of the four refusals moves, because the
+miscount bears on the cost of the change and not on its shape.
