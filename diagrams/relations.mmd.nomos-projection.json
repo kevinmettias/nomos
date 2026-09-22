@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:4919d386a1e06a18d49e1262f3397eb5d73bfacec8c667a5893a73c20c531e62",
-  "inputs_digest": "sha256:ba90395ca1bb91d845bd0f4f760a63806bd366d98f509404cb4675e7e2165559",
+  "content_digest": "sha256:ad5f615df611a28b3af49c777bb86110baed75aa24ffcbc8605a71350289dd42",
+  "inputs_digest": "sha256:e9b3afcb67f7d45f09fc43ec0a9c0186afb80560a70daeaec4b0ac775540c033",
   "sections": [
     [
       "Relations",
-      1818
+      1834
     ],
     [
       "Decisions",
-      246
+      247
     ]
   ],
   "inputs": [
@@ -70,6 +70,11 @@
       "content": "relations",
       "identity": "ARC-CONFORMANCE-001 relates-to OD-CAPABILITY-012",
       "hash": "sha256:28ce3636d45ee26273226242780f3a2b8b55a7bc81f4986a4693aecba7a23c6e"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-001 relates-to OD-ROADMAP-004",
+      "hash": "sha256:64c6f486c71984820795b76ccd7d339537fb9f29e2335137a5588d2212b83151"
     },
     {
       "content": "relations",
@@ -535,6 +540,11 @@
       "content": "relations",
       "identity": "ARC-ROADMAP-001 relates-to OD-ROADMAP-002",
       "hash": "sha256:73977123ff7442522021c17654d09ca8dd78c60b28eb8c34df0cb551ab5c19ff"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to OD-ROADMAP-004",
+      "hash": "sha256:a25ea0d4e1a009e976d11e4b0e71d3841a3e9b9a36d10074eb5c8bfe4ef5003c"
     },
     {
       "content": "relations",
@@ -1448,6 +1458,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-ANALYSIS-004 relates-to OD-ROADMAP-004",
+      "hash": "sha256:a957a40bca5d40d35abe7119f72133fa9978a586a4411b5b43a0dd4d58eff429"
+    },
+    {
+      "content": "relations",
       "identity": "OD-ANALYSIS-004 relates-to OD-RULES-008",
       "hash": "sha256:e3f2ab5d0a43b617251d8ecf0902f361107cf85a31fdee9a3fd8758108e9a284"
     },
@@ -1488,6 +1503,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-ANALYSIS-006 relates-to OD-ROADMAP-004",
+      "hash": "sha256:46d1ea1cea010629b8a6f9132edf5485e651443ae89f717901e1eee78e0d1b37"
+    },
+    {
+      "content": "relations",
       "identity": "OD-ANALYSIS-006 relates-to OD-SYNTAX-002",
       "hash": "sha256:8351cc31fc1722be6daa051ce1c755c6280d582cf7cee85bee9e067381aa1a95"
     },
@@ -1515,6 +1535,11 @@
       "content": "relations",
       "identity": "OD-ANALYSIS-007 relates-to OD-CAPABILITY-011",
       "hash": "sha256:7b4b9fe4e013faaab168c6191b394786dd6458bc7b8d10b3d01a6525d194d74b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ANALYSIS-007 relates-to OD-ROADMAP-004",
+      "hash": "sha256:8ee8e8fcabd8993c730bf1f026a94abefc41c8bc9bb8bcdeb0e40a98abaf5309"
     },
     {
       "content": "relations",
@@ -7063,6 +7088,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-ROADMAP-001 relates-to OD-ROADMAP-004",
+      "hash": "sha256:fdf2d4c12a3a098937bc24de4b096e45cba07905816534d4402f5efaef9ecd2a"
+    },
+    {
+      "content": "relations",
       "identity": "OD-ROADMAP-001 relates-to OD-RULES-022",
       "hash": "sha256:1202c017833ca8b57c62dd90aefa806c7dcba3e5c5f705b76cf125f3f2cde2c7"
     },
@@ -7100,6 +7130,51 @@
       "content": "relations",
       "identity": "OD-ROADMAP-002 relates-to OD-ROADMAP-001",
       "hash": "sha256:436de83122a2a6ad79c0fec6bc961ce52cd2591ffcaeec7425321637e3eb8499"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ROADMAP-002 relates-to OD-ROADMAP-004",
+      "hash": "sha256:1ffce4070ec314828d3a5c4ee5ffbf8fc59152ec2b068f770a936eabd8704b20"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ROADMAP-004 relates-to ARC-CONFORMANCE-001",
+      "hash": "sha256:c77066a80257d57398801b3655d6b3419dcf515b4483e4e8df2ba581d329e170"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ROADMAP-004 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:44e005aee013ce89a6e6c9b295f801d83256d8476ee2795e5e2ca679d95c31e5"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ROADMAP-004 relates-to OD-ANALYSIS-004",
+      "hash": "sha256:a25f51533a64f5cf82684712f491ddfb305578b9981bba5ba1a4fbb43a5d09e0"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ROADMAP-004 relates-to OD-ANALYSIS-006",
+      "hash": "sha256:2fa649456f66897b9c79721c7408b82d00ecc08c9c06d3d14df91d620a86d8e9"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ROADMAP-004 relates-to OD-ANALYSIS-007",
+      "hash": "sha256:f398d3aebeb79bdcad983540c064c81afe14ecf625360a8a74a3cd612f6f563a"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ROADMAP-004 relates-to OD-ROADMAP-001",
+      "hash": "sha256:5a917f8d3bf64da2a743d6a6a900ebcc3a7b77e68935863fd4cb32a8cd21ccdf"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ROADMAP-004 relates-to OD-ROADMAP-002",
+      "hash": "sha256:8f176019e62c987243a5fe91cddc1bfb0127ffd60e8bd107a2ee437259edb6da"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-ROADMAP-004 relates-to OD-TRACE-001",
+      "hash": "sha256:b8d67c3edb7221b7498c0ce5a1abf9bd547b3d968168fd6ed4c6f184f426bde8"
     },
     {
       "content": "relations",
@@ -8768,6 +8843,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-TRACE-001 relates-to OD-ROADMAP-004",
+      "hash": "sha256:78666cc2ace83d2153d0b484e61daee2de4c1f4fc40993c5f1ee871a8ab34706"
+    },
+    {
+      "content": "relations",
       "identity": "OD-TRACE-001 relates-to OD-SPEC-007",
       "hash": "sha256:9d81293f9c064814379e7676c94f1d72ea45c4f5603a69e685fad83e665e5e15"
     },
@@ -10035,6 +10115,11 @@
       "content": "nodes",
       "identity": "OD-ROADMAP-002",
       "hash": "sha256:3ab3d31b50c39585d6e2811ba637e8466b72ce06c5b5c8e2d964268d4bd824cf"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-ROADMAP-004",
+      "hash": "sha256:a041852688f7172cf7bfa9e053e6a25ecaf2f45fed1559681295dc2305ab0d36"
     },
     {
       "content": "nodes",

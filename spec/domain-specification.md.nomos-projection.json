@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:690e05636c8a482b4d595d616bfd38745e7035c26dab4448a9007e6632117fba",
-  "inputs_digest": "sha256:ea6f9896867e507602acd8cdc5e2e78bd3db55a5f4b1af84b17268659ef15f6d",
+  "content_digest": "sha256:e9a8910c9554183399f8cccf2e5fb14767adfc74121db89072f0cd75ff7c2b90",
+  "inputs_digest": "sha256:1ea669ec9e82acadd76525dceb84e1251054210964c77d7b271124d90d75b608",
   "sections": [
     [
       "Documents",
-      254
+      255
     ],
     [
       "Sections",
-      2137
+      2152
     ],
     [
       "Source blocks",
-      7565
+      7614
     ]
   ],
   "inputs": [
@@ -989,6 +989,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored",
       "hash": "sha256:b8159cff04a7379eb48a47ce46a3da98ad447cc8ccec98c33ab48526d604e57f"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md@authored",
+      "hash": "sha256:10e7559c59f1a3959589feff2d235bb86a75004e44ca44d07ea03d2ee37b4c19"
     },
     {
       "content": "documents",
@@ -9379,6 +9384,81 @@
       "content": "headings",
       "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#23",
       "hash": "sha256:3be98049387b37ec0ce5059b70793689ffe9451998cae1e0ea5983ac0543c89c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#1",
+      "hash": "sha256:c125d97b29f76ca8009af92fbb1446ef727729af727ee84f8bc07e0108c24572"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#2",
+      "hash": "sha256:9f0903386afd784ed018429d312b0ebd0caf87d29416b101f39bf71e1615ea84"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#5",
+      "hash": "sha256:8a0f6a3e5ea3cbca4dccdd9b826bc7999f6c16e709732d4da6185e1ca0aab21a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#16",
+      "hash": "sha256:209f4ad1858f05a227ff1b8189603669fb3e6ff021f56a8d3b491c327f46461d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#20",
+      "hash": "sha256:01970206d01fb670d4f0604cbacb6f319118088d662505c2399367f79d20d25c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#21",
+      "hash": "sha256:ad76ecc33689654aa4628d63bbe42c05e8690ebf6fdab0ba2824c8ef4d244468"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#24",
+      "hash": "sha256:08fe507d82e15340f4928709a565b555d997849bbc68c90a2fb2ef87fc1a4a3e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#27",
+      "hash": "sha256:a46f9ca8036a590842eab26b7308fb8dd67ebcc844ec49c1213120ae57042676"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#30",
+      "hash": "sha256:ce38ede55e39a85da8d5b5d4637a4af018d4f3e7bc24cb2fc6e1425bb033dbfa"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#32",
+      "hash": "sha256:c342d99415f5f1ec64f6b68af07eb593924e2e65e73595e7eb1b5e0ee9a0056f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#35",
+      "hash": "sha256:7e9f07c190cad90fae1e584d64bb6f74d9c0bf06216f59bf518c3ce6c3429c1d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#39",
+      "hash": "sha256:288f9eda29a9cffe45abd585788d511bb7118364d9ab3cc08a1599432f936269"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#42",
+      "hash": "sha256:bc4f370aada985a84601a07f6a6426cfe5491c638365e66520e11624baebf2e3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#46",
+      "hash": "sha256:39bec973b8134cb471536b11071a28e26aba4a72d43f37034a81643f18707dfd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#48",
+      "hash": "sha256:ea28871a6d98b726158fe2aba459f7083e9fd097261f755884d6f7eb0866de5b"
     },
     {
       "content": "headings",
@@ -40759,6 +40839,251 @@
       "content": "blocks",
       "identity": "docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md#24",
       "hash": "sha256:cb06e95531b574b85ed80076b14016113bbca8fab2abe12e115969b1c8d4ef0e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#1",
+      "hash": "sha256:e1101969ec797782305194e00fd6f1bf72cc9ca88a02ebfcc586d9c3fae6831b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#3",
+      "hash": "sha256:0153ca2273822babc9413222ca1719b954f6f1411fdb03cf540630de0c3df3d7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#4",
+      "hash": "sha256:a85446d7b477322b054545cf42d6653a47642a00cb19119e3919862142b5886a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#5",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#6",
+      "hash": "sha256:533e52dfc4d431bf0e4020f134d62717eb8cc5c6c90f11a7dc0a94c8a470bea6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#7",
+      "hash": "sha256:7c96869133ae35c274c13e5373563b32dd78cd2519d70c297e4ea11bdf5227ed"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#8",
+      "hash": "sha256:6a357b6f702397fda68ce7bf8b252f4cee00281498b9f0944d9108f14faaf3b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#9",
+      "hash": "sha256:fee2ba05d840641e8087da0e53348cf4e8d199672ac7a08ac19b22498bcacf03"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#10",
+      "hash": "sha256:359a4aa487e5efc3c3e7ccb2d091591e58d549a5df9e518a3a3251f6c8d9251e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#11",
+      "hash": "sha256:6f5ae41ecee6f4614dd5d773cc95090874ec5af3a9fd61b973029e7606539bf3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#12",
+      "hash": "sha256:c7645bf907c52c2f89ded1c3583c5e64a4a00cd3e587f9a7e45338b83cbabad1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#13",
+      "hash": "sha256:8c41423bd78312a5bb5932f3e4e9f658040a961b411478d63816d343d0fd7235"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#14",
+      "hash": "sha256:46156502023a406cdd44160403a88244061ea7d22b84f90d34630f4ec5520589"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#15",
+      "hash": "sha256:8212f78e3f05482906a51ee236249dcfe973ea5cae04f5dc31681a5218adbea8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#16",
+      "hash": "sha256:f4882fa3644d90d252e5d6165d7a77ff733cbdadf0156c4729d913138a3fcb0d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#17",
+      "hash": "sha256:415cfc9a449ead6f2a4727321250ba14460064098af1c6647affcff24cc94a54"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#18",
+      "hash": "sha256:b42de2c2e12ab6313833cb9f6b4c04093bfe611fe37753ff7c1242b39f96c8d4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#19",
+      "hash": "sha256:62553f43c4b822aceb43f62b6c351529c892f9c554a192e3a9fa10a795b16b30"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#20",
+      "hash": "sha256:a1e05bd4c3000ee536cfad8f47837b73c22e9943f35ae1d67b060de2a67a4a16"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#21",
+      "hash": "sha256:ef56554831275d6e32e6f179110b9a14f7ae16bb9e8c87688c01bdaaa7c86ff3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#22",
+      "hash": "sha256:d6fd1a08c4f99c4326ad20621327b6a85ac8c24b85b85177324725dbbb2f8b1a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#23",
+      "hash": "sha256:11b8569316341aef4306eaabf9938aa1114fcc4e1ed98a82d2d154d871fb4455"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#24",
+      "hash": "sha256:4d50c595021450aab49aab9b5d8a0194f05ffa6c4af9a57b73b313763865d733"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#25",
+      "hash": "sha256:e62e2d2c639bf9efd7b9417705d45f8e42057e90c4da54ecd49cb18629531856"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#26",
+      "hash": "sha256:b3026ed71cb3b61deb3a17231b2a34f1bd9c5f67086584739f8d9dac00b0a8aa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#27",
+      "hash": "sha256:990aafe24d53e799079753743eb36bbf7f96d3879aa48f0930790dd949f9ff4e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#28",
+      "hash": "sha256:f67f6c4ff43eea3eaae55427dd8e1989212cd96a58f60e04d3e1a27a737dc600"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#29",
+      "hash": "sha256:19c5cdcfae2705cea9ac6853602e4032a06c74f1e7489544608c65cadc5cc3df"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#30",
+      "hash": "sha256:3e5b7513427bae90a1e6289f457998bff59b7529dff6d144677c49abefc0a7cd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#31",
+      "hash": "sha256:1d928ffb4292a6dcd248c2ceaae1aae4a22ac5b558f602f9a3bb34c2efd5bd0a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#32",
+      "hash": "sha256:d51d6ef0809918d8697798837fbf9c97ac826f48616055252e993ec0f8ef5e37"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#33",
+      "hash": "sha256:e97d5e289b013e39fe0c28e3ae4c8965f97810a3e6b33727c9cbb49bbc79701b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#34",
+      "hash": "sha256:6d9448505a727bf1dd6dfefbd1eaa8f50c37b9805bf687710295b8c573b9d81d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#35",
+      "hash": "sha256:141b1ddf5232899fb0c9e28a3729d6774a5c82692170af7ee6721702849270f3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#36",
+      "hash": "sha256:1ff4d794abd4e66f0c01118d6a8c4a4c8f3015d6f1ef06b4bf0040ff66c353b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#37",
+      "hash": "sha256:6ba355ff9327f28b5b21c0a1ae6f65987d2ee36786896e2d31d6e8c47de0482b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#38",
+      "hash": "sha256:8ee3bf85f5f2e8be33202fd0fbe0902b5b43783c3dd9fa98293cdeb9a6b06fd5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#39",
+      "hash": "sha256:c5f527985aed24d094246c592faa97769aced407220b581c468a9dd651a834e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#40",
+      "hash": "sha256:7aaf00551db7f658619a1fae5f4afd4c6dd72b0ad2140372e44de83a5c76b960"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#41",
+      "hash": "sha256:c00e9e4b7c0788f478d2ab0c373f07b139f926ed847c3cc7172e3296ce92e973"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#42",
+      "hash": "sha256:f31ba05802142687cf001e5d6c1c49e0bf66eebb1de1f72f3dbcaccb3909cfd0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#43",
+      "hash": "sha256:665d62d535d2392bff1dd58ce1eec001a97d0526d0745507b39edb6f2939d3fa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#44",
+      "hash": "sha256:e1e9d2eb26efb07a346c1ccdc6b5bb88d65c01e05ab2b4e2cc565f86a4cd8b1f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#45",
+      "hash": "sha256:45f8e0537c0de53c18f5dd5ccaaaba1f5aff5ff6dbc38a3eccef9c7a52ee0ac4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#46",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#47",
+      "hash": "sha256:6ab21a8a1f67efd5c52e6bbb0324962d6d55b1fd6f073744ce826bb1c20f9539"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#48",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#49",
+      "hash": "sha256:8f792e5cd778a909273eef74597077c6d779223f648d009281a4f4755a2293a2"
     },
     {
       "content": "blocks",

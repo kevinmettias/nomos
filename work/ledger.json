@@ -87571,14 +87571,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-kwb",
-        "acquired_at": 1790043607,
-        "lease_expires_at": 1790054407
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -87589,7 +87585,28 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling proc-macro2 v1.0.107\n   Compiling quote v1.0.47\n   Compiling serde_core v1.0.229\n   Compiling once_cell v1.21.4\n   Compiling serde v1.0.229\n   Compiling serde_json v1.0.151\n   Compiling smallvec v1.15.2\n   Compiling memchr v2.8.3\n   Compiling indexmap v2.14.0\n   Compiling ahash v0.8.12\n   Compiling hashbrown v0.14.5\n   Compiling hashlink v0.9.1\n   Compiling rusqlite v0.32.1\n   Compiling syn v3.0.3\n   Compiling serde_derive v1.0.229\n   Compiling serde_yaml_ng v0.10.0\n   Compiling nomos-spec-model v0.1.0 (F:\\repos\\render-kwb\\crates\\spec\\nomos-spec-model)\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\render-kwb\\crates\\spec\\nomos-spec-store)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.63s\n     Running unittests src\\lib.rs (F:/repos/render-kwb-target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/render-kwb-target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/render-kwb-target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (F:/repos/render-kwb-target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/render-kwb-target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1790044270,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -87988,10 +88005,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-review-ledger-archive",
+        "acquired_at": 1790044281,
+        "lease_expires_at": 1790055081
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -88027,10 +88048,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-review-project-004",
+        "acquired_at": 1790044312,
+        "lease_expires_at": 1790055112
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -88067,10 +88092,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-review-effortlevel",
+        "acquired_at": 1790044328,
+        "lease_expires_at": 1790055128
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -88166,6 +88195,275 @@
           "lang_go_seam"
         ],
         "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-CHECK-RUN-IS-ADMITTED-TO-THE-WIRE",
+      "title": "Check_Run joins the wire transport and the MCP catalogue, as OD-HOST-014 decided and nothing performed",
+      "why": "OD-HOST-014 decided the criterion for what a transport admits (what a call causes on the host) and, under it, admitted Check_Run outright: it walks and judges a tree exactly as Gate_Run does and nothing distinguishes it from the four gate verbs already served. Its own What This Record Does Not Do said the admission is a separate increment editing three places: ServedMethod::REGISTRY in nomos-api-transport (crates/host/nomos-api-transport/src/served_method.rs, [Self; 5]), ServedTool::REGISTRY in nomos-mcp (crates/host/nomos-mcp/src/served_tool.rs, [Self; 5]) and the ADMITTED array in tests/contract/tests/boundaries/transport_registry.rs. Measured at 8338c6ec: all three still name five, so a real, tested canonical seam that a record admits is unreachable from any wire or MCP client. README.md's host rows also still say ServedMethod names four verbs and omit nomos.gate.compare, stale since the fifth landed. An external review at bc0aaacf names wire and MCP parity as a core gap; the admitted half holds.",
+      "done_when": "nomos.check.run is served by nomos-api-transport with a parameters type projecting Handle_Check_Run's own inputs (root at minimum, plus whatever selection the canonical handler already takes), by nomos-mcp as a tool with a description in the catalogue's existing style, and named in the ADMITTED array, so the three registries agree and the contract suite proves it; the operation name is spelled once from nomos_contracts::OperationName's authority and projected, never retyped; a dispatch test in each host crate runs the operation over a real temporary tree and reads back the check outcome; Agent_Execute, Agent_Judge_Role and Workflow_Run stay refused, and a test in transport_registry.rs still quantifies the exclusion over the real exported surface; README.md's host rows are corrected to name every served operation; no dependency is added to any Cargo.toml; the two crates' public surface snapshots are re-blessed; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api-transport",
+          "crates/host/nomos-mcp",
+          "tests/contract/tests/boundaries/transport_registry.rs",
+          "tests/contract/tests/boundaries/mcp_registry.rs",
+          "README.md",
+          "tests/contract/surface/nomos-api-transport.txt",
+          "tests/contract/surface/nomos-mcp.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P121-INTEGRATION-PACKAGE-MANIFEST"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api-transport",
+          "-p",
+          "nomos-mcp",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-GATE-PHASES-THRESHOLDS-AND-APPROVALS-ARE-AUTHORED-IN-THE-POLICY-FILE",
+      "title": "A repository authors its gate phases, thresholds and approvals in nomos-gate.json, where its other four policy families already live",
+      "why": "GatePhase, PhaseThreshold, PhaseApproval, PhaseDisposition and PhaseOutcome exist with execution semantics (crates/orchestration/nomos-gate-orchestration/src/gate_phase.rs and its directory; GateCommand carries phases and approvals; Evaluated_Phases and Phased_Disposition run them), built by P40-GATE-PHASES-APPROVALS-5. Nothing authors them: DeclaredPolicy in src/policy/gate_policy_file.rs parses exactly four keys (suppressions, baseline, adoption, coverage) under deny_unknown_fields, nomos-cli's parsing.rs says no flag authors a GatePhase or a PhaseApproval, and the transport omits every policy field. So WF-001's required phases, thresholds and approvals are semantics only a test can reach. OD-ROADMAP-002 paused new gate policy increments until the gate compiled into one resolved run plan; OD-ROADMAP-003 records that pause as lapsed, which is why this item depends on it. An external review at bc0aaacf names phase and approval authoring as a gate maturity gap; it holds.",
+      "done_when": "nomos-gate.json gains phases, thresholds and approvals keys read by the one existing reader (OD-GATE-011: one reader, never a second encoding), each declared value resolving into the existing GatePhase, PhaseThreshold and PhaseApproval types with no new vocabulary invented; an absent key still means unset as OD-GATE-029 decided; a file naming a phase, threshold or approval the types cannot represent is refused with the offending key named rather than silently ignored; a real Run_Gate over a temporary tree with a policy file declaring a phase whose threshold the findings exceed reports the phased disposition that Evaluated_Phases already computes, proven by a test; the policy digest that hashes the allowance (P109-F) covers the new families so two runs under different phase declarations are not reported as comparable; the mapping stays a declared constant and consults no store state or cost (OD-ROADMAP-003's surviving constraint); no CLI flag or transport field is added; the public surface snapshot is re-blessed; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P123-OD-ROADMAP-003-THE-THREE-PAUSES-HAVE-LAPSED"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-OD-GATE-034-WHAT-APPLICABILITY-POLICY-AND-EVIDENCE-REQUIREMENTS-MEAN",
+      "title": "OD-GATE-034: what ApplicabilityPolicy and evidence requirements mean, measured against the corpus, and whether either is CoveragePolicy under another name",
+      "why": "ARC-ROADMAP-001 constraint 5 lists ApplicabilityPolicy and evidence requirements among the product Gate's properties, nomos-gate-orchestration's lib.rs says both still have no definition, and an external review at bc0aaacf repeats both as gate gaps. Measured at 8338c6ec against the v14 corpus requirement files: no requirement's statement contains the phrase ApplicabilityPolicy or evidence requirement; WF-001 names coverage, unsupported-analysis policy, waivers, approvals and blocking behavior; OD-GATE-016 built CoveragePolicy for unsupported and unanalyzed scope and named ApplicabilityPolicy as unaddressed without saying what it would add; EvidenceClass exists on every Finding and no gate policy reads it, and P12-PROVENANCE-FLOOR (an evidence floor a consumer can state) was declined for territory, not on the merits. So two named gaps may be one built policy under another name and one real, unbuilt policy, and nothing decides which. Building either without deciding would mint a duplicate authority over coverage or invent a policy the corpus never asked for.",
+      "done_when": "A governing record OD-GATE-034 is written and registered that measures, by requirement identifier from the corpus (search the CHK, CONF, BASELINE, CAL, PKG and WF families for unsupported, applicability and evidence), what the corpus actually requires of a gate about applicability and about evidence; decides whether ApplicabilityPolicy is CoveragePolicy under another name (and if so amends nothing but says which name governs and why ARC-ROADMAP-001's list is not corrected) or a distinct policy over per-rule Applicability outcomes (and if so states its fields and what it decides that CoveragePolicy does not); decides what an evidence requirement policy is (at minimum whether a gate may state the lowest EvidenceClass a finding must carry to block, to count toward a threshold, or to be reported, and what a finding below the floor becomes), citing EvidenceClass's existing ordering in nomos-contracts; names the capability item that would build whichever policy is real, with territory by path; builds nothing; re-renders both projections per the nomos-spec-change skill; and the predicate passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-034",
+          "crates/spec/nomos-spec-store/records/OD-GATE-034.record"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p123-gate034",
+        "acquired_at": 1790044315,
+        "lease_expires_at": 1790055115
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY",
+      "title": "Every materializer proves its fact is current before writing it, not only the syntax one",
+      "why": "Only Materialize_Syntax checks currency (Is_Already_Current in crates/orchestration/nomos-check-orchestration/src/facts/dependency_materialization/syntax.rs, a raw InputDigest of the source against store.Current). Every other materializer writes unconditionally whenever its family is demanded: dependencies.rs, lint_materialization.rs, policy_materialization.rs, reachability in syntax.rs, and all eight policy-family files under policy_materialization/. The crate admits it in run_context/capabilities.rs (none of them has Materialize_Syntax's own currency check yet), and the decline reason of P40-INCREMENTAL-DEMAND-DRIVEN-RECOMPUTE-2 states the consequence: a family other than syntax reads as changed on every call, so the RuleReassessmentCache re-judges every rule that declares a policy, lint or dependency fact on every reused-store call, and the LSP's retained store buys nothing for those families. An external review at bc0aaacf names non-syntax provider currency as remaining incremental work; it holds.",
+      "done_when": "Each non-syntax materializer computes an input digest from exactly the inputs its provider reads (the manifest text for dependency edges, the policy file text for each policy family, the set of source digests plus toolchain identity for lint and dependency policy, the syntax facts it derives from for reachability) and skips the write when the store's current fact for that subject already carries that digest, using the same Is_Already_Current shape syntax uses; the digest is part of the fact's identity or recorded beside it so a reused store cannot serve a fact whose inputs changed; a test per family proves an unchanged input writes nothing on the second call and a changed input writes; the existing Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomputation still passes and gains a non-syntax family; the RuleReassessmentCache is proven, by counting rule invocations, to skip a policy-declaring rule when only an unrelated source changed; the capabilities.rs admission is rewritten to say what is now true; no planner, cost model or family ordering is introduced; the public surface snapshot is re-blessed if it moves; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-CSHARP-JOINS-THE-RUN-AND-THE-WALK",
+      "title": "The C# syntax provider is composed into the check run and the shared walk recognizes .cs, so a C# file is judged",
+      "why": "P123-CSHARP-SYNTAX-PROVIDER-AND-PACKAGE builds nomos-lang-csharp and its package but cannot compose them, because nomos-check-orchestration and nomos-workspace-discovery were held by other items when it was authored. Until composition lands, a C# file in a tree is neither walked nor judged: Registered_Extensions in crates/orchestration/nomos-workspace-discovery/src/lib.rs names Rust and Go only, and Registered in crates/orchestration/nomos-check-orchestration/src/composition.rs offers no C# provider. OD-HOST-004 says a second provider is composed by hand, one Offer line, and OD-HOST-008 says adding a language costs the walk one edit and no host any.",
+      "done_when": "Registered offers nomos_lang_csharp::Provider_Offer against nomos.cap.syntax.items beside the Rust and Go offers, with no conditional (OD-ROADMAP-003's surviving constraint); Registered_Extensions includes nomos_lang_csharp's extension constant; the two crates' Cargo.toml gain the dependency and Cargo.lock follows; a check run over a temporary tree holding one C# file with a construct an existing language-independent rule judges (pick one that fires on a syntax fact, and say which) reports that finding, proven by a test; the package conformance test in check-orchestration that reads packages/ from disk covers nomos.lang.csharp.json; nomos-lsp is not edited and is proven by reading its sources.rs to inherit the extension through the shared walk; both crates' public surface snapshots are re-blessed if they move; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-workspace-discovery",
+          "Cargo.lock",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/contract/surface/nomos-workspace-discovery.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P123-CSHARP-SYNTAX-PROVIDER-AND-PACKAGE",
+        "P123-WORKSPACE-PROFILE-FOR-ADOPTION"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-workspace-discovery"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-THE-COMPILER-CONTRACTS-LEAVE-THEIR-PROVIDER-AND-ITS-RULES-JOIN-THE-RUN",
+      "title": "The compiler-backed capabilities get a contract crate, their two rules move into nomos-rules, and a real check run materializes them on demand",
+      "why": "nomos-lang-rust-compiler bundles two capability contracts (nomos.cap.rust.copy_clones in src/contract.rs, nomos.cap.rust.nested_locks in src/nested_lock/contract.rs) with their one provider and two crate-local rules (Check_Copy_Clones in src/check.rs and the nested-lock check in src/nested_lock/check.rs), and nothing composes any of it: nomos-check-orchestration's Cargo.toml does not name the crate, Registered declares fourteen capabilities and DECLARED_CAPABILITY_COUNT pins 14, RequiredFact (crates/rules/nomos-rules/src/rule_descriptor/required_fact.rs) is a closed fourteen-variant set with neither capability, and README's own row says not yet composed into a real gate run. The only consumer is tests/integration's determinism productions. OD-CAPABILITY-017 licenses a rule to name a bundled contract crate only when the provider half cannot act from where the rule sits; this provider loads a crate through ra_ap_hir from the real filesystem with no port between, so that record's clause 2 fails and its own answer is to split the contract out rather than reclassify. OD-ROADMAP-002 paused new one-off capability orchestration until the planner; OD-ROADMAP-003 records that pause as lapsed and states the surviving constraint (a declared constant, never a condition). An external review at bc0aaacf names the compiler-backed provider as proven but not part of routine enforcement; measured, it holds.",
+      "done_when": "A Capability Contract zone crate crates/capabilities/nomos-cap-rust-semantics holds both contracts (identity, version, ceiling, payload schema, payload types and parsing) and no provider code, and nomos-lang-rust-compiler offers against it keeping its declared Guarantee; Check_Copy_Clones and the nested-lock check move into nomos-rules as descriptors requiring two new RequiredFact variants, reading facts only through FactReader, with their exemptions and tests moving with them; Registered declares both capabilities and offers the compiler provider, DECLARED_CAPABILITY_COUNT and every count that mirrors it are raised, and a demand-gated materialization section produces each family only when a selected rule requires it, written as a declared constant with no condition on store state or cost; a run that selects no rule requiring a compiler family never loads ra_ap_hir, proven by a test with a counting launcher or an equivalent observation; tests/integration's determinism productions keep passing against the moved types; the wall time of the workspace self-check (nomos check --root . over this repository) is measured before and after on the same machine and written into the commit message and the README row for the compiler crate; the new crate is registered in Cargo.toml, README.md, nomos-architecture.json and the completeness universes table, Cargo.lock follows, and OD-CAPABILITY-013's stale mechanism row (it says rustc_interface; the crate uses ra_ap_hir) is corrected in passing only if that record is added to territory by widen, otherwise noted in the report; every touched crate's public surface snapshot is re-blessed; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-rust-semantics",
+          "crates/languages/nomos-lang-rust-compiler",
+          "crates/rules/nomos-rules",
+          "crates/orchestration/nomos-check-orchestration",
+          "tests/integration",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "nomos-architecture.json",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "tests/contract/tests/rule_descriptors.rs",
+          "tests/contract/tests/rule_composition.rs",
+          "tests/contract/surface/nomos-cap-rust-semantics.txt",
+          "tests/contract/surface/nomos-lang-rust-compiler.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P123-OD-ROADMAP-003-THE-THREE-PAUSES-HAVE-LAPSED",
+        "P121-INTEGRATION-PACKAGE-MANIFEST",
+        "P123-CSHARP-SYNTAX-PROVIDER-AND-PACKAGE"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-rust-semantics",
+          "-p",
+          "nomos-lang-rust-compiler",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 5400
       },
       "verified": null,
       "abandoned": [],
