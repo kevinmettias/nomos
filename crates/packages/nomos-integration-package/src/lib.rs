@@ -15,14 +15,20 @@
 //! **No write, copy, stage or rollback logic.** Atomicity, each ownership class's conflict
 //! handling, staging and rollback are mechanics that know nothing about a peer connection,
 //! and `OD-PACKAGE-003` routes them to a generic, mechanism-owned materializer consuming an
-//! intent no matter which package kind declared it. No such materializer exists in this
-//! workspace; when one is built it is named as Nomos's own per `D-138` rather than staged
-//! under a platform name, and this crate hands it a declaration rather than teaching itself
-//! filesystem mechanics. That is also why [`OwnershipClass`] and [`PublicationScope`] live
-//! here beside the manifest rather than in a crate of their own: `OD-CAPABILITY-002`'s rule
-//! is that a contract earns a crate when a second party names it, and today the only party
-//! to either enum is this manifest. The day a materializer needs them, both move below this
-//! crate, and nothing in their shape presumes otherwise.
+//! intent no matter which package kind declared it. That materializer now exists, as
+//! `nomos-materialization`, below this crate: this one parses a declaration and hands it
+//! over, and still contains no filesystem write of its own.
+//!
+//! **No ownership, scope or intent type of its own.** [`OwnershipClass`],
+//! [`PublicationScope`], [`MaterializationIntent`] and [`OwnedRegion`] were declared here
+//! while this manifest was the only party to them, and this crate's own doc named the
+//! condition for moving them: `OD-CAPABILITY-002`'s rule is that a shared vocabulary earns a
+//! home below its parties once a second party names it. The materializer is that second
+//! party, so all four now live in `nomos-materialization` and are re-exported here
+//! unchanged, which is why no caller's spelling changed -- the same shape `nomos-ledger`
+//! re-exports `nomos-scope-verification`'s two primitives (`OD-LEDGER-037`) and this crate
+//! already re-exports `nomos-package`'s two version domains (`OD-PACKAGE-007`). A second
+//! package kind that declares placements names that crate, not this one.
 //!
 //! **No typed surface axis.** `OD-PACKAGE-003` leaves open whether its placement table's
 //! rows (agent contract file, per-agent adapter, skills, hooks, MCP registration, CI
@@ -55,15 +61,9 @@
 #![forbid(unsafe_code)]
 
 mod integration_package;
-mod materialization_intent;
-mod ownership_class;
-mod publication_scope;
 mod reader;
-mod target;
 
 pub use integration_package::IntegrationPackage;
-pub use materialization_intent::MaterializationIntent;
+pub use nomos_materialization::{MaterializationIntent, OwnedRegion, OwnershipClass, PublicationScope};
 pub use nomos_package::{PackageVersion, ProtocolRange};
-pub use ownership_class::OwnershipClass;
-pub use publication_scope::PublicationScope;
 pub use reader::{ManifestError, Parse_Manifest, Read_Manifest, SCHEMA_VERSION};

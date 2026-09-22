@@ -1,0 +1,74 @@
+pub const fn nomos_materialization::OwnershipClass::Label(self) -> &'static str
+pub const fn nomos_materialization::PublicationScope::Label(self) -> &'static str
+pub const nomos_materialization::OwnershipClass::UNDECLARED: Self
+pub const nomos_materialization::PublicationScope::UNDECLARED: Self
+pub enum nomos_materialization::MaterializationError
+pub enum nomos_materialization::OwnershipClass
+pub enum nomos_materialization::PlacementOutcome
+pub enum nomos_materialization::PublicationScope
+pub enum nomos_materialization::Refusal
+pub enum variant nomos_materialization::MaterializationError::Refused { target: String, refusal: Refusal, }
+pub enum variant nomos_materialization::MaterializationError::RollbackFailed { target: String, cause: String, unrestored_target: String, unrestored_cause: String, }
+pub enum variant nomos_materialization::MaterializationError::RolledBack { target: String, cause: String, }
+pub enum variant nomos_materialization::OwnershipClass::Composed
+pub enum variant nomos_materialization::OwnershipClass::GeneratedOwned
+pub enum variant nomos_materialization::OwnershipClass::UserOwned
+pub enum variant nomos_materialization::PlacementOutcome::Created
+pub enum variant nomos_materialization::PlacementOutcome::Overwritten
+pub enum variant nomos_materialization::PlacementOutcome::OwnedRegionReplaced
+pub enum variant nomos_materialization::PublicationScope::Ephemeral
+pub enum variant nomos_materialization::PublicationScope::Local
+pub enum variant nomos_materialization::PublicationScope::Shared
+pub enum variant nomos_materialization::Refusal::AbsentComposedTarget
+pub enum variant nomos_materialization::Refusal::AbsentRegionMarker { marker: String, }
+pub enum variant nomos_materialization::Refusal::AbsoluteSource
+pub enum variant nomos_materialization::Refusal::AbsoluteTarget
+pub enum variant nomos_materialization::Refusal::EscapingSource
+pub enum variant nomos_materialization::Refusal::EscapingTarget
+pub enum variant nomos_materialization::Refusal::InvertedRegionMarkers
+pub enum variant nomos_materialization::Refusal::OwnedRegionOnAnUncomposedTarget
+pub enum variant nomos_materialization::Refusal::RepeatedRegionMarker { marker: String, }
+pub enum variant nomos_materialization::Refusal::UndeclaredOwnedRegion
+pub enum variant nomos_materialization::Refusal::UnreadableSource { cause: String, }
+pub enum variant nomos_materialization::Refusal::UnreadableTarget { cause: String, }
+pub enum variant nomos_materialization::Refusal::UserOwnedTarget
+pub fn nomos_materialization::Escapes_The_Root(target: &str) -> bool
+pub fn nomos_materialization::Is_Absolute(target: &str) -> bool
+pub fn nomos_materialization::MaterializationError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_materialization::MaterializationReport::Placements_Scoped(&self, scope: PublicationScope) -> Vec<&Placement>
+pub fn nomos_materialization::MaterializationRoots::New(source_root: impl Into<PathBuf>, target_root: impl Into<PathBuf>) -> Self
+pub fn nomos_materialization::MaterializationRoots::Source_Path(&self, source: &str) -> PathBuf
+pub fn nomos_materialization::MaterializationRoots::Target_Path(&self, target: &str) -> PathBuf
+pub fn nomos_materialization::Materialize( intents: &[MaterializationIntent], roots: &MaterializationRoots, file_system: &impl FileSystem, ) -> Result<MaterializationReport, MaterializationError>
+pub fn nomos_materialization::OwnedRegion::New(opening_marker: impl Into<String>, closing_marker: impl Into<String>) -> Self
+pub fn nomos_materialization::OwnershipClass::Of_Label(label: &str) -> Option<Self>
+pub fn nomos_materialization::OwnershipClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_materialization::PublicationScope::Of_Label(label: &str) -> Option<Self>
+pub fn nomos_materialization::PublicationScope::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_materialization::Refusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_materialization::MaterializationError implements core::fmt::Display
+pub impl nomos_materialization::MaterializationError implements std::error::Error
+pub impl nomos_materialization::OwnershipClass implements core::fmt::Display
+pub impl nomos_materialization::PublicationScope implements core::fmt::Display
+pub impl nomos_materialization::Refusal implements core::fmt::Display
+pub struct field nomos_materialization::MaterializationIntent::owned_region: Option<OwnedRegion>
+pub struct field nomos_materialization::MaterializationIntent::ownership_class: OwnershipClass
+pub struct field nomos_materialization::MaterializationIntent::publication_scope: PublicationScope
+pub struct field nomos_materialization::MaterializationIntent::source: String
+pub struct field nomos_materialization::MaterializationIntent::surface: String
+pub struct field nomos_materialization::MaterializationIntent::target: String
+pub struct field nomos_materialization::MaterializationReport::placements: Vec<Placement>
+pub struct field nomos_materialization::MaterializationRoots::source_root: PathBuf
+pub struct field nomos_materialization::MaterializationRoots::target_root: PathBuf
+pub struct field nomos_materialization::OwnedRegion::closing_marker: String
+pub struct field nomos_materialization::OwnedRegion::opening_marker: String
+pub struct field nomos_materialization::Placement::outcome: PlacementOutcome
+pub struct field nomos_materialization::Placement::ownership_class: OwnershipClass
+pub struct field nomos_materialization::Placement::publication_scope: PublicationScope
+pub struct field nomos_materialization::Placement::surface: String
+pub struct field nomos_materialization::Placement::target: String
+pub struct nomos_materialization::MaterializationIntent
+pub struct nomos_materialization::MaterializationReport
+pub struct nomos_materialization::MaterializationRoots
+pub struct nomos_materialization::OwnedRegion
+pub struct nomos_materialization::Placement

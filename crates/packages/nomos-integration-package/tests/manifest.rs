@@ -4,8 +4,8 @@
 
 use nomos_contracts::{ContractVersion, PackageId, PackageKind};
 use nomos_integration_package::{
-    IntegrationPackage, ManifestError, MaterializationIntent, OwnershipClass, PackageVersion, Parse_Manifest, ProtocolRange,
-    PublicationScope, Read_Manifest,
+    IntegrationPackage, ManifestError, MaterializationIntent, OwnedRegion, OwnershipClass, PackageVersion, Parse_Manifest,
+    ProtocolRange, PublicationScope, Read_Manifest,
 };
 use std::path::PathBuf;
 
@@ -46,6 +46,7 @@ fn Intent(surface: &str, path: &str, ownership_class: OwnershipClass, publicatio
         target: path.to_owned(),
         ownership_class,
         publication_scope,
+        owned_region: None,
     };
 }
 
@@ -150,6 +151,59 @@ fn Test_An_Unknown_Publication_Scope_Label_Is_Refused()
     assert_eq!(
         refusal,
         ManifestError::UnknownPublicationScope { at: "test".to_owned(), field: "intents[0].publication_scope".to_owned(), found: "Public".to_owned() }
+    );
+}
+
+/// `owned_region` is absent for every class but `Composed`, so absence is the ordinary case
+/// and not a default standing in for something.
+#[test]
+fn Test_An_Intent_Declaring_No_Owned_Region_Should_Carry_None()
+{
+    assert_eq!(Intent_Of(&Manifest_Text()).owned_region, None);
+}
+
+/// A `Composed` target declares where its owned region sits. The reader resolves the pair
+/// and does not judge whether the class may carry one: that is a rule about what a write may
+/// do, and this crate performs no write.
+#[test]
+fn Test_A_Declared_Owned_Region_Should_Resolve_To_Its_Two_Markers()
+{
+    let text = With(
+        "\"ownership_class\": \"GeneratedOwned\"",
+        "\"ownership_class\": \"Composed\", \"owned_region\": {\"opening_marker\": \"<!-- a -->\", \"closing_marker\": \"<!-- b -->\"}",
+    );
+
+    assert_eq!(Intent_Of(&text).owned_region, Some(OwnedRegion::New("<!-- a -->", "<!-- b -->")));
+}
+
+/// Half a region is not a region, and a reader that accepted one would hand the materializer
+/// a boundary with one end.
+#[test]
+fn Test_An_Owned_Region_Missing_A_Marker_Should_Be_Refused()
+{
+    let text = With(
+        "\"ownership_class\": \"GeneratedOwned\"",
+        "\"ownership_class\": \"Composed\", \"owned_region\": {\"opening_marker\": \"<!-- a -->\"}",
+    );
+
+    let refusal = Parse_Manifest(&text, "test").expect_err("the closing marker is absent");
+
+    assert_eq!(
+        refusal,
+        ManifestError::MissingField { at: "test".to_owned(), field: "intents[0].owned_region.closing_marker".to_owned() }
+    );
+}
+
+#[test]
+fn Test_An_Owned_Region_Of_The_Wrong_Shape_Should_Be_Refused()
+{
+    let text = With("\"ownership_class\": \"GeneratedOwned\"", "\"owned_region\": \"between the markers\"");
+
+    let refusal = Parse_Manifest(&text, "test").expect_err("a region is an object, not a string");
+
+    assert_eq!(
+        refusal,
+        ManifestError::WrongType { at: "test".to_owned(), field: "intents[0].owned_region".to_owned(), expected: "object".to_owned() }
     );
 }
 

@@ -26,6 +26,15 @@ members = [
     # nothing a host has not asked for, and orchestrates nothing at all. `P88`.
     "crates/composer/nomos-composer-std",
 
+    # Zone: Substrate — substrate. The generic materializer OD-PACKAGE-003 routed to, and the
+    # vocabulary a declaring package and that mechanism both name: an intent, OD-PACKAGE-004's
+    # ownership class and OD-PACKAGE-005's publication scope. Below every package kind that
+    # declares a placement and below the mechanism that performs one, so neither owns the
+    # words both use; nomos-integration-package re-exports all three unchanged. Named as
+    # Nomos's own rather than under a platform prefix, per `D-138`.
+    # `OD-PACKAGE-003`, `OD-PACKAGE-004`, `OD-PACKAGE-005`, `OD-CAPABILITY-002`, `D-138`.
+    "crates/substrate/nomos-materialization",
+
     # Zone: Substrate — substrate. Territory and VerificationPredicate, the two ledger-agnostic
     # primitives `OD-LEDGER-037` found underneath nomos-agent-contracts' reuse of
     # nomos-ledger. Below the ledger and below nomos-agent-contracts, so both may depend
@@ -253,7 +262,8 @@ members = [
     # place of the third and fourth -- each a source, a repository-relative target,
     # OD-PACKAGE-004's ownership class and OD-PACKAGE-005's publication scope, with each
     # record's own default for an undeclared one. Declares placements and performs no write;
-    # the materializer is a separate, mechanism-owned concern. A sixth peer of the five above
+    # nomos-materialization below it is the mechanism that does, and owns the four types the
+    # vocabulary is spelled in, re-exported here unchanged. A sixth peer of the five above
     # -- none of the six names another.
     # `OD-PACKAGE-003`, `OD-PACKAGE-004`, `OD-PACKAGE-005`.
     "crates/packages/nomos-integration-package",
@@ -431,6 +441,7 @@ nomos-platform = { path = "crates/platform/nomos-platform" }
 nomos-platform-std = { path = "crates/platform/nomos-platform-std" }
 nomos-platform-xvpe = { path = "crates/platform/nomos-platform-xvpe" }
 nomos-composer-std = { path = "crates/composer/nomos-composer-std" }
+nomos-materialization = { path = "crates/substrate/nomos-materialization" }
 nomos-scope-verification = { path = "crates/substrate/nomos-scope-verification" }
 nomos-ledger = { path = "crates/substrate/nomos-ledger" }
 nomos-capability = { path = "crates/substrate/nomos-capability" }

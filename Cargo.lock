@@ -1325,6 +1325,7 @@ name = "nomos-integration-package"
 version = "0.1.0"
 dependencies = [
  "nomos-contracts",
+ "nomos-materialization",
  "nomos-package",
  "serde_json",
 ]
@@ -1547,6 +1548,13 @@ dependencies = [
  "xvpe-diagnostics",
  "xvpe-language-server-backend-lsp",
  "xvpe-primitives",
+]
+
+[[package]]
+name = "nomos-materialization"
+version = "0.1.0"
+dependencies = [
+ "nomos-platform",
 ]
 
 [[package]]

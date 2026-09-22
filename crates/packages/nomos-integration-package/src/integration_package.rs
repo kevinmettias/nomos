@@ -1,6 +1,6 @@
 //! The first `IntegrationPackage` manifest shape.
 
-use crate::materialization_intent::MaterializationIntent;
+use nomos_materialization::MaterializationIntent;
 use nomos_contracts::{PackageId, PackageKind};
 use nomos_package::{PackageVersion, ProtocolRange};
 

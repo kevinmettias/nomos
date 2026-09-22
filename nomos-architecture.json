@@ -59,6 +59,7 @@
     "nomos-lang-rust-scan": "Provider",
     "nomos-ledger": "Repo Tooling",
     "nomos-lsp": "Host",
+    "nomos-materialization": "Substrate",
     "nomos-mcp": "Host",
     "nomos-model": "Substrate",
     "nomos-model-backend-ollama": "Agent",
@@ -193,6 +194,9 @@
       "nomos-lang-rust",
       "nomos-lang-rust-scan",
       "nomos-package"
+    ],
+    "nomos-materialization": [
+      "nomos-platform"
     ],
     "nomos-mcp": [
       "nomos-api-transport"

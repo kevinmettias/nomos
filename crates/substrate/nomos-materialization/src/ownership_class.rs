@@ -10,6 +10,11 @@
 //! over the record's exact spellings, not a serde derive mapping this enum's Rust variant
 //! names onto the wire form. The three names are transcribed from `OD-PACKAGE-004`'s own
 //! table verbatim.
+//!
+//! Moved here from `nomos-integration-package`, unchanged, on the condition that crate's own
+//! doc stated: `OD-CAPABILITY-002`'s rule is that a shared vocabulary earns a home below its
+//! parties once a second party names it, and [`crate::Materialize`] is that second party.
+//! `nomos-integration-package` re-exports this enum, so no caller's spelling changed.
 
 const GENERATED_OWNED_LABEL: &str = "GeneratedOwned";
 const COMPOSED_LABEL: &str = "Composed";
@@ -17,9 +22,9 @@ const USER_OWNED_LABEL: &str = "UserOwned";
 
 /// One of `OD-PACKAGE-004`'s three ownership classes.
 ///
-/// What each one means for regeneration and for a conflict is that record's own table;
-/// this crate carries the classification and nothing that acts on it, because acting on it
-/// is the materializer's job (`OD-PACKAGE-003`).
+/// What each one means for regeneration and for a conflict is that record's own table, and
+/// [`crate::Materialize`] is where this crate performs it: `UserOwned` refuses the run,
+/// `GeneratedOwned` overwrites, `Composed` writes only its declared owned region.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum OwnershipClass
 {

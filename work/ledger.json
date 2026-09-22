@@ -90746,14 +90746,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-material",
-        "acquired_at": 1790052986,
-        "lease_expires_at": 1790063786
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -90768,7 +90764,32 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-materialization",
+          "-p",
+          "nomos-integration-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ebuginfo] target(s) in 0.50s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-b2a13c7253f27233.exe)\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-2998351f6db6b012.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-92a4ff356d3672d1.exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-2eab8f58748e8fc9.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-5fc6c569730113d9.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-955891bd276589df.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-ab84f3ce148d471e.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-ee154dd7301c3097.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-4b043d90270bbc14.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-e8b29a92e90bbab6.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-42eca897f526cc97.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-7b8fe6b7065225f2.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-f864f3dc950c0221.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-93c7b39b1bbd5318.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-496d4d6605ab0a03.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_package-0cea0619dd62ba6f.exe)\n     Running tests\\manifest.rs (target\\debug\\deps\\manifest-1d90094832270d88.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_materialization-2b0c3dfe232f5364.exe)\n     Running tests\\materializing\\main.rs (target\\debug\\deps\\materializing-590a2b3f494ba248.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_integration_package\n   Doc-tests nomos_materialization\n",
+        "verified_at": 1790054438,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "ed74ddd25b722a3811bf7e79b52efde39122db6c"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -91111,14 +91132,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-lock",
-        "acquired_at": 1790053735,
-        "lease_expires_at": 1790064535
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -91134,7 +91151,33 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "et Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.72s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/lock/render-target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/lock/render-target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/lock/render-target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790054420,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -91281,10 +91324,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-75-offers",
+        "acquired_at": 1790054384,
+        "lease_expires_at": 1790065184
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -91343,10 +91390,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-agent-port",
+        "acquired_at": 1790054474,
+        "lease_expires_at": 1790065274
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -91388,6 +91439,40 @@
           "record_citation"
         ],
         "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE",
+      "title": "OD-HOST-016 names two exhaustive readers of the outcome and there are three, so the territory it predicted was short in exactly that direction",
+      "why": "OD-HOST-016 decision 4 states that exactly two non-test sites destructure CheckOutcome::Judged exhaustively, naming nomos-api/src/check.rs and nomos-cli/src/check/report.rs, and says every other reader already writes the rest pattern. Its building item, P125-SUPPORTING-FACT-TRAIL, reserved territory on that basis and found it short. crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs destructures Judged exhaustively at line 32 and constructs it by literal at line 40, both outside tests, and its tests.rs constructs one at line 115. Adding the field the record decided on is therefore not the additive change the record implies; it is a breaking change to a peer crate, and Rust offers no additive shape for a struct variant, since the other three fields are themselves constructed by literal in that same file. The record's own territory section omits both gate-orchestration files and tests/integration/tests/calibration.rs. This is the same defect class this session has corrected in four other records, with one difference that makes it worth its own item rather than a footnote: the false statement is a measurement the record took to justify a design choice, so a reader who trusts it plans a smaller change than the one the tree requires, which is what happened.",
+      "done_when": "OD-HOST-016 states the real population of readers and constructors of the outcome type at a named revision, enumerating each site with its file and line and whether it is test or non-test, replacing the claim that exactly two non-test sites destructure exhaustively. It says that adding a field to that variant is a breaking change across crates rather than an additive one, and why no additive shape exists, so a later reader does not repeat the plan the original measurement implied. Its territory section names every path a building item needs, corrected against what P125-SUPPORTING-FACT-TRAIL actually had to reserve. The decision itself is unchanged: the answer is still produced at rule grain, the per-finding answer is still refused, and none of the four refusals is reopened, because the miscount bears on the cost of the change and not on its shape. It records that the building item was already in flight when the miscount was found and how it was resolved, so the correction carries its own evidence. No code changes. Both required projections are re-rendered from the record set the commit publishes and nomos spec freshness with both --require flags exits 0 in that tree.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
       },
       "verified": null,
       "abandoned": [],

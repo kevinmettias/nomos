@@ -1,11 +1,5 @@
-pub const fn nomos_integration_package::OwnershipClass::Label(self) -> &'static str
-pub const fn nomos_integration_package::PublicationScope::Label(self) -> &'static str
-pub const nomos_integration_package::OwnershipClass::UNDECLARED: Self
-pub const nomos_integration_package::PublicationScope::UNDECLARED: Self
 pub const nomos_integration_package::SCHEMA_VERSION: u32
 pub enum nomos_integration_package::ManifestError
-pub enum nomos_integration_package::OwnershipClass
-pub enum nomos_integration_package::PublicationScope
 pub enum variant nomos_integration_package::ManifestError::AbsoluteTarget { at: String, field: String, target: String, }
 pub enum variant nomos_integration_package::ManifestError::EmptyList { at: String, field: String, }
 pub enum variant nomos_integration_package::ManifestError::EscapingTarget { at: String, field: String, target: String, }
@@ -20,35 +14,21 @@ pub enum variant nomos_integration_package::ManifestError::UnknownSchema { at: S
 pub enum variant nomos_integration_package::ManifestError::Unreadable { at: String, cause: String, }
 pub enum variant nomos_integration_package::ManifestError::WrongPackageKind { at: String, found: PackageKind, }
 pub enum variant nomos_integration_package::ManifestError::WrongType { at: String, field: String, expected: String, }
-pub enum variant nomos_integration_package::OwnershipClass::Composed
-pub enum variant nomos_integration_package::OwnershipClass::GeneratedOwned
-pub enum variant nomos_integration_package::OwnershipClass::UserOwned
-pub enum variant nomos_integration_package::PublicationScope::Ephemeral
-pub enum variant nomos_integration_package::PublicationScope::Local
-pub enum variant nomos_integration_package::PublicationScope::Shared
 pub fn nomos_integration_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-pub fn nomos_integration_package::OwnershipClass::Of_Label(label: &str) -> Option<Self>
-pub fn nomos_integration_package::OwnershipClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_integration_package::Parse_Manifest(text: &str, at: &str) -> Result<IntegrationPackage, ManifestError>
-pub fn nomos_integration_package::PublicationScope::Of_Label(label: &str) -> Option<Self>
-pub fn nomos_integration_package::PublicationScope::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_integration_package::Read_Manifest(path: &Path) -> Result<IntegrationPackage, ManifestError>
 pub impl nomos_integration_package::ManifestError implements core::fmt::Display
-pub impl nomos_integration_package::OwnershipClass implements core::fmt::Display
-pub impl nomos_integration_package::PublicationScope implements core::fmt::Display
 pub struct field nomos_integration_package::IntegrationPackage::intents: Vec<MaterializationIntent>
 pub struct field nomos_integration_package::IntegrationPackage::package_id: PackageId
 pub struct field nomos_integration_package::IntegrationPackage::package_kind: PackageKind
 pub struct field nomos_integration_package::IntegrationPackage::package_version: PackageVersion
 pub struct field nomos_integration_package::IntegrationPackage::protocol_range: ProtocolRange
-pub struct field nomos_integration_package::MaterializationIntent::ownership_class: OwnershipClass
-pub struct field nomos_integration_package::MaterializationIntent::publication_scope: PublicationScope
-pub struct field nomos_integration_package::MaterializationIntent::source: String
-pub struct field nomos_integration_package::MaterializationIntent::surface: String
-pub struct field nomos_integration_package::MaterializationIntent::target: String
 pub struct nomos_integration_package::IntegrationPackage
-pub struct nomos_integration_package::MaterializationIntent
 
 # re-exports of items declared outside this crate
+pub use nomos_materialization::MaterializationIntent
+pub use nomos_materialization::OwnedRegion
+pub use nomos_materialization::OwnershipClass
+pub use nomos_materialization::PublicationScope
 pub use nomos_package::PackageVersion
 pub use nomos_package::ProtocolRange

@@ -12,6 +12,13 @@
 //! scratch build root), so folding scope into ownership would name combinations rather than
 //! properties. The three names are transcribed from `OD-PACKAGE-005`'s own table verbatim,
 //! by the same manual-match pattern `OwnershipClass` and `nomos-tool-package`'s `Family` use.
+//!
+//! Carried by [`crate::Materialize`] and reported on every [`crate::Placement`], and gating
+//! no write there: `OD-PACKAGE-005` states the guard this scope owes as a guard on the
+//! transition into repository-distributed state, which is a different boundary from placing
+//! a file on the machine. Moved here from `nomos-integration-package` beside
+//! [`crate::OwnershipClass`], for the reason that file's own header gives, and re-exported
+//! by it so no caller's spelling changed.
 
 const EPHEMERAL_LABEL: &str = "Ephemeral";
 const LOCAL_LABEL: &str = "Local";

@@ -1,4 +1,4 @@
-//! Whether a materialization intent's target stays inside the repository it names.
+//! Whether a materialization intent's target stays inside the tree it names.
 //!
 //! `OD-PACKAGE-003` declares a target as repository-relative, and a reader that accepted an
 //! absolute path or one climbing above the root would be declaring a placement outside the
@@ -7,6 +7,14 @@
 //! `std::path::Path::is_absolute`: that answer differs by host (`/etc` is not absolute on
 //! Windows, `C:\` is not on Unix), and a manifest is read on whichever machine happens to
 //! hold the checkout, so the refusal has to be the same one everywhere.
+//!
+//! Public, and one authority rather than two. These predicates were
+//! `nomos-integration-package`'s, private to its reader, and moved here with the intent type
+//! because the mechanism that actually opens the file cannot take its caller's word for
+//! where it may write: an intent reaches [`crate::Materialize`] from whatever declared it,
+//! including something with no reader of its own. A second copy of the check inside this
+//! crate would be a second authority on the same question, so the reader above now calls
+//! these rather than keeping its own.
 
 /// The two separators a manifest might spell a path with.
 const SEPARATORS: [char; 2] = ['/', '\\'];
@@ -20,7 +28,8 @@ const DRIVE_SEPARATOR: char = ':';
 /// Whether `target` is anchored somewhere other than the repository root: a leading
 /// separator (`/etc`, `\\server\share`) or a drive prefix (`C:\`, and the drive-relative
 /// `C:foo`, which Windows resolves against a drive's own current directory).
-pub(crate) fn Is_Absolute(target: &str) -> bool
+#[must_use]
+pub fn Is_Absolute(target: &str) -> bool
 {
     return target.starts_with(SEPARATORS) || Has_Drive_Prefix(target);
 }
@@ -37,7 +46,8 @@ fn Has_Drive_Prefix(target: &str) -> bool
 
 /// Whether `target`, walked segment by segment, ever climbs above the root it is relative
 /// to. `docs/../AGENTS.md` stays inside; `docs/../../sibling` does not.
-pub(crate) fn Escapes_The_Root(target: &str) -> bool
+#[must_use]
+pub fn Escapes_The_Root(target: &str) -> bool
 {
     let mut depth: usize = 0;
     for segment in target.split(SEPARATORS)

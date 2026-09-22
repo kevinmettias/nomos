@@ -10,6 +10,11 @@
 //! reuse `nomos_package`'s plain shared types (`ProtocolRange`, `PackageVersion`), never its
 //! `Parse_Manifest` entry point, and declare a complete [`ManifestError`] of this crate's own.
 //!
+//! `Is_Absolute` and `Escapes_The_Root` are called from `nomos-materialization` rather than
+//! kept here. They moved down with the intent type they judge, because the mechanism that
+//! actually opens the file cannot take a declaration's word for where it may write, and two
+//! copies of one check is two authorities on one question.
+//!
 //! Every condition is a refusal and not a skip, with two deliberate exceptions that are
 //! defaults rather than skips: an intent that declares no `ownership_class` resolves to
 //! [`OwnershipClass::UNDECLARED`] and one that declares no `publication_scope` resolves to
@@ -19,11 +24,8 @@
 //! still refused -- a default covers absence, never a malformed presence.
 
 use crate::integration_package::IntegrationPackage;
-use crate::materialization_intent::MaterializationIntent;
-use crate::ownership_class::OwnershipClass;
-use crate::publication_scope::PublicationScope;
-use crate::target;
 use nomos_contracts::{ContractVersion, PackageId, PackageKind};
+use nomos_materialization::{Escapes_The_Root, Is_Absolute, MaterializationIntent, OwnedRegion, OwnershipClass, PublicationScope};
 use nomos_package::{PackageVersion, ProtocolRange};
 use serde_json::{Map, Value};
 use std::path::Path;
@@ -389,8 +391,31 @@ fn Intent_At(value: &Value, at: &str, full: &str) -> Result<MaterializationInten
     let target = Target_Field(inner, at, full)?;
     let ownership_class = Ownership_Class_Field(inner, at, full)?;
     let publication_scope = Publication_Scope_Field(inner, at, full)?;
+    let owned_region = Owned_Region_Field(inner, at, full)?;
 
-    return Ok(MaterializationIntent { surface, source, target, ownership_class, publication_scope });
+    return Ok(MaterializationIntent { surface, source, target, ownership_class, publication_scope, owned_region });
+}
+
+/// One intent's `owned_region`: absent for every class but `Composed`, and both markers
+/// required when it is present.
+///
+/// Absence is not defaulted to a region, because there is no safe region to invent -- a
+/// guessed marker pair would either find nothing or find the wrong thing. Whether a given
+/// class may carry one at all is `nomos-materialization`'s judgment and not this reader's:
+/// that is a rule about what a write may do, and this crate performs no write.
+fn Owned_Region_Field(object: &Map<String, Value>, at: &str, full: &str) -> Result<Option<OwnedRegion>, ManifestError>
+{
+    let field = format!("{full}.owned_region");
+    let Some(raw) = object.get("owned_region")
+    else
+    {
+        return Ok(None);
+    };
+    let inner = Object_At(raw, at, &field)?;
+    let opening_marker = String_At(inner, "opening_marker", at, &format!("{field}.opening_marker"))?;
+    let closing_marker = String_At(inner, "closing_marker", at, &format!("{field}.closing_marker"))?;
+
+    return Ok(Some(OwnedRegion { opening_marker, closing_marker }));
 }
 
 /// One intent's `target`, refused if absolute or if it climbs above the repository root.
@@ -399,11 +424,11 @@ fn Target_Field(object: &Map<String, Value>, at: &str, full: &str) -> Result<Str
     let field = format!("{full}.target");
     let found = String_At(object, "target", at, &field)?;
 
-    if target::Is_Absolute(&found)
+    if Is_Absolute(&found)
     {
         return Err(ManifestError::AbsoluteTarget { at: at.to_owned(), field, target: found });
     }
-    if target::Escapes_The_Root(&found)
+    if Escapes_The_Root(&found)
     {
         return Err(ManifestError::EscapingTarget { at: at.to_owned(), field, target: found });
     }
