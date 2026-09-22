@@ -18,7 +18,7 @@
 //! `nomos-api-transport`'s, written out again because the two crates had no
 //! shared floor to stand on. They have one now.
 //!
-//! What stays is what was always this workspace's: **which four tools exist**
+//! What stays is what was always this workspace's: **which tools exist**
 //! ([`ServedTool`]), the sentence and the JSON Schema each one publishes, and
 //! where a call to one lands ([`NomosToolCatalog`]).
 //!

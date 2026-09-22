@@ -1029,6 +1029,7 @@ name = "nomos-api-transport"
 version = "0.1.0"
 dependencies = [
  "nomos-api",
+ "nomos-check-orchestration",
  "nomos-contracts",
  "nomos-correction-orchestration",
  "nomos-gate-orchestration",

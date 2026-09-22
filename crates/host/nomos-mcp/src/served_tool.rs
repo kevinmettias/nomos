@@ -6,10 +6,10 @@ use xvpe_remote_call::ToolDescriptor;
 
 /// One operation this server exposes as an MCP tool.
 ///
-/// A thin second name for [`ServedMethod`]'s own four variants -- not a wider registry and
-/// not a narrower one. `OD-HOST-007`'s three Gate verbs, plus
-/// `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2`'s Correction verb, are the whole of what an MCP
-/// client sees here too, the same boundary `nomos-api-transport` already draws and proves
+/// A thin second name for [`ServedMethod`]'s own variants -- not a wider registry and not a
+/// narrower one. `OD-HOST-007`'s Gate verbs, plus `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2`'s
+/// Correction verb and `OD-HOST-014`'s Check verb, are the whole of what an MCP client sees
+/// here too, the same boundary `nomos-api-transport` already draws and proves
 /// against `nomos-api`'s own blessed surface: this crate never calls a `nomos_api::Handle_*`
 /// function or depends on `nomos-api` at all, so widening what a `tools/call` can reach
 /// would first have to widen [`ServedMethod`] itself, in that crate, where the exclusion is
@@ -26,15 +26,17 @@ impl ServedTool
     /// keeping a second one beside it.
     ///
     /// Mirrored by `Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry`.
-    /// A fifth `ServedMethod` variant added to that registry without a matching entry here
+    /// A further `ServedMethod` variant added to that registry without a matching entry here
     /// would otherwise vanish silently: nothing else compares this array's length or order
-    /// against the registry it claims to project.
-    pub const REGISTRY: [Self; 5] = [
+    /// against the registry it claims to project. `OD-HOST-014`'s decision 5 names this array
+    /// as one of the three places an admitting increment must edit.
+    pub const REGISTRY: [Self; 6] = [
         Self(ServedMethod::GatePlan),
         Self(ServedMethod::GateRun),
         Self(ServedMethod::GateExplain),
         Self(ServedMethod::GateCompare),
         Self(ServedMethod::Correction),
+        Self(ServedMethod::Check),
     ];
 
     /// This tool's canonical name -- `nomos_contracts::OperationName`'s own identity,
@@ -84,15 +86,19 @@ impl ServedTool
             ServedMethod::Correction => {
                 "Walks a tree, stages a fix for the first real blocking correction claim it finds (a stale doc mirror or trailing whitespace), and, only if asked, commits it."
             }
+            ServedMethod::Check => {
+                "Walks a tree and runs every registered rule over it, reporting the findings, the files and facts examined, and whether every rule could look. Unlike nomos.gate.run it applies no suppression, baseline or coverage policy and reaches no disposition."
+            }
         };
     }
 
     /// This tool's arguments, as the JSON Schema the parameter type `nomos-api-transport`
     /// itself deserializes already accepts -- hand-written rather than derived, the same "no
     /// library bought a shape this crate can spell itself" choice that crate's own module doc
-    /// makes about JSON-RPC framing. `nomos_api_transport::GateParameters`'s and
-    /// `FindingParameters`'s own doc comments are this schema's authority; a field added or
-    /// renamed there without a matching edit here is a schema silently describing arguments
+    /// makes about JSON-RPC framing. `nomos_api_transport::GateParameters`'s,
+    /// `FindingParameters`'s and `CheckParameters`' own doc comments are this schema's
+    /// authority; a field added or renamed there without a matching edit here is a schema
+    /// silently describing arguments
     /// the operation no longer takes, which `dispatch::tests` exercises by calling every
     /// listed tool with the arguments its own schema shows a client.
     fn Input_Schema(self) -> Value
@@ -104,6 +110,7 @@ impl ServedTool
             ServedMethod::GateCompare => Compare_Schema(),
             ServedMethod::GateExplain => Explain_Schema(),
             ServedMethod::Correction => Correction_Schema(),
+            ServedMethod::Check => Check_Schema(),
         };
     }
 }
@@ -236,6 +243,25 @@ fn Correction_Schema() -> Value
     });
 }
 
+/// `nomos.check.run`'s arguments: which tree, and nothing else.
+///
+/// One property rather than the four `Run_Schema` shows, because `nomos check` itself takes
+/// one -- `nomos_api_transport::CheckParameters`' own doc is this schema's authority, the
+/// same way [`Run_Schema`]'s is `GateParameters`'.
+fn Check_Schema() -> Value
+{
+    return json!({
+        "type": "object",
+        "properties": {
+            "root": {
+                "type": "string",
+                "description": "The tree to judge. Absent, this server's own working directory.",
+            },
+        },
+        "additionalProperties": false,
+    });
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -278,7 +304,7 @@ mod tests
         }
     }
 
-    /// [`ServedTool::REGISTRY`]'s own claimed mirror: a fourth `ServedMethod` variant would
+    /// [`ServedTool::REGISTRY`]'s own claimed mirror: a further `ServedMethod` variant would
     /// not silently vanish from this projection, because this compares the two registries by
     /// name and order rather than trusting them to stay in step.
     #[test]

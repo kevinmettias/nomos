@@ -1,7 +1,7 @@
 [package]
 name = "nomos-api-transport"
 version = "0.1.0"
-description = "What this workspace serves over a wire: Gate's three handlers plus Correction's one that OD-HOST-007 and P62-TRANSPORT-MCP-CORRECTION-SURFACE-2 admit, and none of the twenty-one repo-tooling handlers it excludes. The wire itself is XVPE's as of 2026-09-10."
+description = "What this workspace serves over a wire: Gate's four handlers plus Correction's one and Check's one that OD-HOST-007, P62-TRANSPORT-MCP-CORRECTION-SURFACE-2 and OD-HOST-014 admit, and none of the twenty-one repo-tooling handlers or the three agent and workflow handlers they exclude. The wire itself is XVPE's as of 2026-09-10."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -16,6 +16,13 @@ xvpe-remote-call = { workspace = true }
 xvpe-primitives = { workspace = true }
 
 nomos-api = { workspace = true }
+# The command type `nomos_api::Handle_Check_Run` takes, for the operation OD-HOST-014's
+# decision 2 admits. Named for the same reason nomos-correction-orchestration below is:
+# a parameters type projects a handler's own inputs, and `CheckCommand` lives in the
+# orchestration crate that seam belongs to rather than in nomos-api. Application Service
+# from Host is within Host's own `Permits` -- `nomos-lsp` already reaches this same crate
+# directly -- and it is the workspace's own path entry, so it spells no source of its own.
+nomos-check-orchestration = { workspace = true }
 nomos-contracts = { workspace = true }
 nomos-correction-orchestration = { workspace = true }
 nomos-gate-orchestration = { workspace = true }

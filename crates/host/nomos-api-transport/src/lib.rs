@@ -24,10 +24,11 @@
 //!
 //! What stays is what was always this workspace's: **which verbs are served**
 //! ([`ServedMethod`]), **what each one's arguments mean** ([`GateParameters`],
-//! [`FindingParameters`], [`CorrectionParameters`]), and the dispatch that turns
-//! one into a `nomos_api::Handle_*` call ([`NomosApiDispatch`]).
+//! [`FindingParameters`], [`CompareParameters`], [`CorrectionParameters`],
+//! [`CheckParameters`]), and the dispatch that turns one into a
+//! `nomos_api::Handle_*` call ([`NomosApiDispatch`]).
 //!
-//! # What it serves, and why that is four verbs rather than twenty-six or more
+//! # What it serves, and why that is six verbs rather than thirty
 //!
 //! `OD-HOST-007` decided the shape of this before the crate existed, which is the
 //! difference between a boundary and an apology for one. `nomos-api` now exports
@@ -41,7 +42,7 @@
 //! records, and `Handle_Work_Finish` writes `work/ledger.json`, which `AGENTS.md`
 //! calls "global coordination state, shared with live sessions".
 //!
-//! So the registry is Gate's three verbs plus Correction's one, in
+//! So the registry is Gate's four verbs plus Correction's one and Check's one, in
 //! [`ServedMethod`], and it is an enum rather than a list precisely because
 //! `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2` refused a registry "merely short
 //! today, with nothing stopping a later increment from lengthening it".
@@ -49,6 +50,17 @@
 //! reads `nomos-api`'s own blessed surface snapshot and refuses this crate's
 //! source for calling a handler its `ADMITTED` allow-list has not deliberately
 //! named.
+//!
+//! `OD-HOST-014` drew the line inside the nine product operations `OD-HOST-007`
+//! left undivided, and drew it at what a call causes on the host rather than at
+//! whose verb it is: an operation that reads the tree it is given, or writes
+//! inside it, is admitted, and one that starts an external process which costs
+//! money is refused. `Handle_Check_Run` is admitted by that criterion, because it
+//! walks and judges a tree exactly as `Handle_Gate_Run` does.
+//! `Handle_Agent_Execute` and `Handle_Agent_Judge_Role` are refused by it, since
+//! each starts a subprocess and spends against a per-dispatch ceiling that bounds
+//! no number of calls a wire caller makes, and `Handle_Workflow_Run` is refused
+//! while a step may carry an agent body, which would admit them transitively.
 //!
 //! # How a caller serves this
 //!
@@ -70,6 +82,7 @@
 //! and `OD-HOST-006` share "fires against the transport, not against
 //! `nomos-api`", so what this registry admits is a commitment made by this crate.
 
+mod check_parameters;
 mod compare_parameters;
 mod correction_parameters;
 mod finding_parameters;
@@ -77,6 +90,7 @@ mod gate_parameters;
 mod nomos_api_dispatch;
 mod served_method;
 
+pub use check_parameters::CheckParameters;
 pub use compare_parameters::CompareParameters;
 pub use correction_parameters::CorrectionParameters;
 pub use finding_parameters::FindingParameters;

@@ -20,7 +20,7 @@ use crate::test_support::Field_At;
 const CALL_REACHES_THE_REGISTRY: &str = "a call reaches the handler behind the tool";
 /// A tool that refuses must come back as a failure, not as a produced answer.
 const REFUSAL_BECOMES_A_FAILURE: &str = "a refused call comes back as a failure";
-/// The catalogue is exactly the four served verbs.
+/// The catalogue is exactly the served verbs, however many the registry admits.
 const CATALOGUE_IS_THE_REGISTRY: &str =
     "the catalogue offers exactly the operations the transport serves";
 
@@ -59,6 +59,42 @@ fn Test_A_Call_Should_Reach_The_Real_Registry()
         serde_json::from_str(answer.Text()).expect("a produced answer is a JSON document");
     assert_eq!(Field_At(&document, "/outcome"), "planned", "{CALL_REACHES_THE_REGISTRY}");
 }
+
+/// A real `tools/call` of `nomos.check.run` over a real temporary tree comes back as a
+/// produced answer carrying that tree's own judged check outcome.
+///
+/// The one operation in this catalogue whose admission `OD-HOST-014` decided, exercised the
+/// way a client would: by name, with the arguments this tool's own schema shows, over a tree
+/// the request names. A listing entry with no dispatch behind it would still be offered and
+/// still resolve, so only a call over a real tree tells a served operation from an announced
+/// one.
+#[test]
+fn Test_A_Check_Call_Should_Reach_A_Real_Judged_Outcome_Over_A_Real_Tree()
+{
+    let root = std::env::temp_dir().join("nomos-mcp-check-run-judged");
+    let _ignored = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).expect("creates a fresh directory");
+    std::fs::write(root.join("a.rs"), STALE_MIRROR_FIXTURE)
+        .expect("create_dir_all above made this directory on an empty path");
+
+    let arguments = serde_json::json!({ "root": root.display().to_string() }).to_string();
+    let answer = NomosToolCatalog.Call_With_Json_Arguments("nomos.check.run", &arguments);
+
+    let _ignored = std::fs::remove_dir_all(&root);
+    assert!(!answer.Is_A_Failure(), "{CALL_REACHES_THE_REGISTRY}: {}", answer.Text());
+    let document: serde_json::Value =
+        serde_json::from_str(answer.Text()).expect("a produced answer is a JSON document");
+    assert_eq!(Field_At(&document, "/outcome"), "judged", "{document}");
+    assert!(document.to_string().contains(GHOST_TEST), "{document}");
+}
+
+/// A declared universe whose claimed mirror is a test that exists nowhere -- one real
+/// blocking finding, so the answer above carries a finding rather than an empty list.
+const STALE_MIRROR_FIXTURE: &str =
+    "/// A list.\n/// Mirrored by `Test_Mcp_Ghost`.\npub const TABLES: &[&str] = &[];\n";
+
+/// The name that fixture's mirror claim points at, which a real judged answer names back.
+const GHOST_TEST: &str = "Test_Mcp_Ghost";
 
 #[test]
 fn Test_A_Call_With_Unusable_Arguments_Should_Come_Back_As_A_Failure()

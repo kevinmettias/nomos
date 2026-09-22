@@ -1,6 +1,6 @@
-//! The four verbs this workspace serves, and the arguments each one reads.
+//! The verbs this workspace serves, and the arguments each one reads.
 
-use crate::{CompareParameters, CorrectionParameters, FindingParameters, GateParameters, ServedMethod};
+use crate::{CheckParameters, CompareParameters, CorrectionParameters, FindingParameters, GateParameters, ServedMethod};
 use serde::Serialize;
 use xvpe_primitives::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use xvpe_remote_call::{RemoteCallOutcome, RemoteCallRefusal, RemoteCallStrategy};
@@ -33,9 +33,9 @@ impl RemoteCallStrategy for NomosApiDispatch
     /// The registry `OD-HOST-007` asks to be declared explicitly, projected from
     /// [`ServedMethod::REGISTRY`] rather than restated beside it.
     ///
-    /// A fifth entry is a visible edit to that enum, in this crate, and
+    /// A further entry is a visible edit to that enum, in this crate, and
     /// `tests/contract`'s `Test_The_Transport_Should_Name_No_Repo_Tooling_Handler`
-    /// is what makes reaching a fifth *handler* a deliberate act rather than a
+    /// is what makes reaching a further *handler* a deliberate act rather than a
     /// diff nobody is watching.
     fn Served_Methods(&self) -> Vec<&'static str>
     {
@@ -70,6 +70,7 @@ fn Answered_Method(method: ServedMethod, parameters: &str) -> RemoteCallOutcome
         ServedMethod::GateExplain => Explained_Finding(parameters),
         ServedMethod::GateCompare => Compared_Trees(parameters),
         ServedMethod::Correction => Ran_Correction(parameters),
+        ServedMethod::Check => Ran_Check(parameters),
     };
 }
 
@@ -131,6 +132,18 @@ fn Ran_Correction(parameters: &str) -> RemoteCallOutcome
     return match Parsed_Parameters::<CorrectionParameters>(parameters)
     {
         Ok(parameters) => Serialized_Response(&nomos_api::Handle_Correction_Run(&parameters.Command())),
+        Err(refusal) => RemoteCallOutcome::Refused(refusal),
+    };
+}
+
+/// A check run over the tree the caller named in `root`, with none of the gate's own policy
+/// on top -- `OD-HOST-014`'s decision 2 admits it because it walks and judges that tree
+/// exactly as [`Ran_Gate`] does.
+fn Ran_Check(parameters: &str) -> RemoteCallOutcome
+{
+    return match Parsed_Parameters::<CheckParameters>(parameters)
+    {
+        Ok(parameters) => Serialized_Response(&nomos_api::Handle_Check_Run(&parameters.Command())),
         Err(refusal) => RemoteCallOutcome::Refused(refusal),
     };
 }

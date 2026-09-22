@@ -7,13 +7,14 @@ use nomos_contracts::OperationName;
 /// A closed enum rather than a map from names to function pointers, because `OD-HOST-007`
 /// requires the exclusion it decided be structural rather than advisory: "A registry that is
 /// merely short today, with nothing stopping a later increment from lengthening it, would be
-/// the absence-as-boundary `OD-CONNECTOR-001` refuses." The four variants here are Gate's
-/// three verbs, admitted from the start, plus `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2`'s own
-/// `Correction`: `nomos_api::Handle_Correction_Run` is a real, end-user-facing seam
-/// (`P40-CORRECTIONS-CANONICAL-SEAM`), not one of the `Handle_Work_*` and `Handle_Spec_*`
-/// handlers `nomos-api` also exports that belong to crates `README.md` marks
-/// `[repo tooling]`; adding one of *those* would take a variant, a dispatch arm, and that
-/// handler's name written into this crate's own source. `tests/contract`'s
+/// the absence-as-boundary `OD-CONNECTOR-001` refuses." The variants here are Gate's four
+/// verbs, admitted from the start, plus `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2`'s own
+/// `Correction` and `OD-HOST-014`'s `Check`: `nomos_api::Handle_Correction_Run` and
+/// `nomos_api::Handle_Check_Run` are real, end-user-facing seams
+/// (`P40-CORRECTIONS-CANONICAL-SEAM`, `P62-API-CHECK-SEAM`), not one of the `Handle_Work_*`
+/// and `Handle_Spec_*` handlers `nomos-api` also exports that belong to crates `README.md`
+/// marks `[repo tooling]`; adding one of *those* would take a variant, a dispatch arm, and
+/// that handler's name written into this crate's own source. `tests/contract`'s
 /// `Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` refuses the repo-tooling ones,
 /// measured against `nomos-api`'s own blessed surface rather than against a list kept here
 /// that could go stale beside it, and its own `ADMITTED` allow-list is what a handler this
@@ -34,6 +35,13 @@ pub enum ServedMethod
     /// A real correction run over a named tree, staging and, if asked, committing a fix.
     /// `nomos_api::Handle_Correction_Run`.
     Correction,
+    /// Every registered rule run over a named tree, with none of the gate's suppression,
+    /// baseline and coverage policy on top. `nomos_api::Handle_Check_Run`.
+    ///
+    /// Admitted by `OD-HOST-014`, whose criterion is what a call causes on the host rather
+    /// than whose verb it is: this one walks and judges the tree it is given and reads
+    /// nothing else, exactly as [`Self::GateRun`] does.
+    Check,
 }
 
 impl ServedMethod
@@ -41,8 +49,10 @@ impl ServedMethod
     /// Every operation this transport serves.
     ///
     /// The array is the registry `OD-HOST-007` asks to be declared explicitly, and its length
-    /// is part of the declaration: a fourth entry is a visible edit here rather than a line
-    /// appended to a table somewhere else.
+    /// is part of the declaration: a further entry is a visible edit here rather than a line
+    /// appended to a table somewhere else. `OD-HOST-014`'s decision 5 names this array as one
+    /// of the three places an admitting increment must edit, "which is the point of there
+    /// being three".
     ///
     /// Mirrored by `Test_The_Transport_Should_Name_No_Repo_Tooling_Handler`. What that check
     /// compares this list against is `nomos-api`'s own blessed surface: every dispatch arm
@@ -54,8 +64,14 @@ impl ServedMethod
     /// this enum and left out of the array: that leaves an operation nothing serves rather
     /// than a registry claiming more than it serves, and this list stays true of what is
     /// served either way.
-    pub const REGISTRY: [Self; 5] =
-        [Self::GatePlan, Self::GateRun, Self::GateExplain, Self::GateCompare, Self::Correction];
+    pub const REGISTRY: [Self; 6] = [
+        Self::GatePlan,
+        Self::GateRun,
+        Self::GateExplain,
+        Self::GateCompare,
+        Self::Correction,
+        Self::Check,
+    ];
 
     /// This operation's canonical name.
     ///
@@ -77,6 +93,7 @@ impl ServedMethod
             Self::GateExplain => "nomos.gate.explain",
             Self::GateCompare => "nomos.gate.compare",
             Self::Correction => "nomos.correction.run",
+            Self::Check => "nomos.check.run",
         };
     }
 

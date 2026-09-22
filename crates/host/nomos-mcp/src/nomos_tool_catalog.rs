@@ -1,4 +1,4 @@
-//! The four tools this server offers, and the one call that reaches them.
+//! The tools this server offers, and the one call that reaches them.
 
 use crate::ServedTool;
 use nomos_api_transport::NomosApiDispatch;
@@ -18,7 +18,7 @@ const SERVER_NAME: &str = "nomos-mcp";
 /// declaration, the listing envelope, the call envelope, the `isError`
 /// distinction, notification suppression, and the line framing underneath all of
 /// it -- is `xvpe-remote-call-backend-json`'s as of 2026-09-10. What is left here is the
-/// half that was always this workspace's: which four tools exist, what each one
+/// half that was always this workspace's: which tools exist, what each one
 /// means, what arguments it takes, and where a call goes.
 #[derive(Clone, Copy, Debug, Default)]
 pub struct NomosToolCatalog;

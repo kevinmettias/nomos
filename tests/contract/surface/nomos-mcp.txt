@@ -1,7 +1,7 @@
 pub const nomos_mcp::NomosToolCatalog::SCOPE: ReproducibilityScope
 pub const nomos_mcp::NomosToolCatalog::STRENGTH: DeterminismStrength
 pub const nomos_mcp::NomosToolCatalog::TRACE: TraceEquivalence
-pub const nomos_mcp::ServedTool::REGISTRY: [Self; 5]
+pub const nomos_mcp::ServedTool::REGISTRY: [Self; 6]
 pub fn nomos_mcp::NomosToolCatalog::Call_With_Json_Arguments(&self, name: &str, arguments: &str) -> ToolAnswer
 pub fn nomos_mcp::NomosToolCatalog::Identity(&self) -> ServerIdentity
 pub fn nomos_mcp::NomosToolCatalog::Tools(&self) -> Vec<ToolDescriptor>

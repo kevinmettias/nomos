@@ -139,3 +139,37 @@ fn Test_A_Correction_Run_Over_A_Clean_Tree_Should_Reach_A_Real_Clean_Answer()
     let result = Document_From_Outcome(&outcome);
     assert_eq!(Field_At(&result, "/outcome"), "clean", "{result}");
 }
+
+/// A real check run over a fixture tree carrying a real blocking claim reaches a real
+/// `judged` answer naming that finding -- proving this service, not only `nomos-api`
+/// directly, can reach `Handle_Check_Run`, which is the whole of what `OD-HOST-014`'s
+/// decision 2 admitted.
+///
+/// The subject is the outcome rather than the registry: a name added to `ServedMethod`
+/// with no dispatch arm behind it would still be listed, still resolve, and answer nothing,
+/// and only a call over a real tree tells the two apart.
+#[test]
+fn Test_A_Check_Run_Over_A_Real_Tree_Should_Reach_A_Real_Judged_Answer()
+{
+    let root = std::env::temp_dir().join("nomos-api-transport-check-run-judged");
+    let _ignored = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).expect("creates a fresh directory");
+    std::fs::write(root.join("a.rs"), STALE_MIRROR_FIXTURE)
+        .expect("create_dir_all above made this directory on an empty path");
+
+    let parameters = serde_json::json!({ "root": root.display().to_string() }).to_string();
+    let outcome = Answer_From_Dispatch(ServedMethod::Check, &parameters);
+
+    let _ignored = std::fs::remove_dir_all(&root);
+    let result = Document_From_Outcome(&outcome);
+    assert_eq!(Field_At(&result, "/outcome"), "judged", "{result}");
+    assert!(result.to_string().contains(GHOST_TEST), "{result}");
+}
+
+/// A declared universe whose claimed mirror is a test that exists nowhere -- one real
+/// blocking finding, the same fixture `nomos-api`'s own `Handle_Check_Run` test judges.
+const STALE_MIRROR_FIXTURE: &str =
+    "/// A list.\n/// Mirrored by `Test_Transport_Ghost`.\npub const TABLES: &[&str] = &[];\n";
+
+/// The name that fixture's mirror claim points at, which a real judged answer names back.
+const GHOST_TEST: &str = "Test_Transport_Ghost";

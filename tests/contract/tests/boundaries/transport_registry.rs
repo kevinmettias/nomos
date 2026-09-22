@@ -1,10 +1,10 @@
 //! What the API transport may project, asserted rather than left to a list that is short today.
 //!
-//! `OD-HOST-007` decided that an external surface over `nomos-api` projects Gate's three
-//! verbs, `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2` widened that to a fourth for Correction,
-//! and neither projects the many handlers belonging to crates `README.md` marks
-//! `[repo tooling]`, and said in as many words how that exclusion has to hold: "The exclusion
-//! is structural rather than advisory: the transport crate declares its tool registry
+//! `OD-HOST-007` decided that an external surface over `nomos-api` projects Gate's verbs,
+//! `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2` widened that for Correction and `OD-HOST-014`
+//! for Check, and none of them projects the many handlers belonging to crates `README.md`
+//! marks `[repo tooling]`, and said in as many words how that exclusion has to hold: "The
+//! exclusion is structural rather than advisory: the transport crate declares its tool registry
 //! explicitly, and `tests/contract` asserts that the registry names no handler belonging to a
 //! `[repo tooling]` crate -- the same shape
 //! `Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` already uses to keep a
@@ -51,19 +51,34 @@ const PROJECTED_CRATE: &str = "nomos_api";
 /// remembering to add it.
 const PROJECTED_SURFACE: &str = "tests/contract/surface/nomos-api.txt";
 
-/// The handlers `OD-HOST-007` and `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2` admit.
+/// The handlers `OD-HOST-007`, `P62-TRANSPORT-MCP-CORRECTION-SURFACE-2` and `OD-HOST-014`
+/// admit.
 ///
 /// Authored here rather than derived, because which verbs are a product surface and which are
 /// how this repository is developed is a decision, and there is nothing in the source to
-/// infer it from. Changing this list is changing what that record decided, which is what a
-/// failure below is meant to make somebody notice.
-const ADMITTED: [&str; 5] = [
+/// infer it from. Changing this list is changing what those records decided, which is what a
+/// failure below is meant to make somebody notice. `OD-HOST-014`'s decision 5 names this
+/// array as the third of the three places an admitting increment must edit, "which is the
+/// point of there being three".
+const ADMITTED: [&str; 6] = [
     "Handle_Gate_Plan",
     "Handle_Gate_Run",
     "Handle_Gate_Explain",
     "Handle_Gate_Compare",
     "Handle_Correction_Run",
+    "Handle_Check_Run",
 ];
+
+/// The three product operations `OD-HOST-014` refuses, by the handler each is exported as.
+///
+/// Named rather than left to the quantification above, because their exclusion is a decision
+/// with a stated reason rather than a gap: `Handle_Agent_Execute` and
+/// `Handle_Agent_Judge_Role` "start a subprocess and spend against a ceiling" that bounds one
+/// dispatch and not a caller making many, and `Handle_Workflow_Run` is refused "while a step
+/// may carry an agent body", which would admit the first two transitively. The quantification
+/// keeps every unnamed handler out; this keeps these three out *by name*, so admitting one
+/// cannot read as the same edit as admitting a handler nobody had considered.
+const REFUSED: [&str; 3] = ["Handle_Agent_Execute", "Handle_Agent_Judge_Role", "Handle_Workflow_Run"];
 
 /// The transport calls no handler its registry does not admit.
 ///
@@ -86,11 +101,63 @@ fn Test_The_Transport_Should_Name_No_Repo_Tooling_Handler()
     assert!(
         leaked.is_empty(),
         "the API transport calls {leaked:?}.\n\
-         OD-HOST-007 bounds its registry to {ADMITTED:?}: the other handlers nomos-api \
-         exports belong to crates README.md marks [repo tooling], which exist to develop \
-         this repository rather than to answer a question an end-user repository would ask. \
-         Widening the registry is that record's decision to revisit, not this crate's to \
+         OD-HOST-007 and OD-HOST-014 together bound its registry to {ADMITTED:?}. The other \
+         handlers nomos-api exports are excluded by one of the two: the twenty-one \
+         Handle_Work_* and Handle_Spec_* ones belong to crates README.md marks \
+         [repo tooling], which exist to develop this repository rather than to answer a \
+         question an end-user repository would ask, and the agent and workflow ones start or \
+         reach a metered external process, which OD-HOST-014's own criterion refuses. \
+         Widening the registry is those records' decision to revisit, not this crate's to \
          make."
+    );
+}
+
+/// The three operations `OD-HOST-014` refuses are still refused.
+///
+/// The quantification above keeps every unnamed handler out, and would keep these out too.
+/// This says so *by name*, because their exclusion is a decision with a stated reason rather
+/// than a gap nobody has filled: admitting one is the record's own decision 6 to revisit, and
+/// editing this array is how somebody would say one of the four events it names had happened.
+#[test]
+fn Test_The_Agent_And_Workflow_Operations_Should_Stay_Refused()
+{
+    let text = Transport_Text(&Transport_Sources());
+
+    let called: Vec<&&str> = REFUSED.iter().filter(|handler| return text.contains(&Qualified(handler))).collect();
+
+    assert!(
+        called.is_empty(),
+        "the API transport calls {called:?}.\n\
+         OD-HOST-014 refuses Agent_Execute and Agent_Judge_Role because each starts a \
+         subprocess and spends against a per-dispatch ceiling that bounds no number of calls \
+         an unauthenticated wire caller makes, and refuses Workflow_Run while a step may \
+         carry an agent body. Its decision 6 names what would reopen either; none of it is a \
+         registry's own decision to make."
+    );
+}
+
+/// The refusal above has a real subject: `nomos-api` still exports all three.
+///
+/// Without this it passes over a handler that has been renamed or removed, which is a refusal
+/// with nothing left to refuse -- the same vacuity objection
+/// [`Test_The_Registry_Assertion_Should_Have_Subjects_On_Both_Sides`] makes about the
+/// quantified one.
+#[test]
+fn Test_Every_Refused_Operation_Should_Still_Be_Exported()
+{
+    let handlers = Projected_Handlers();
+
+    let exported: Vec<&&str> = REFUSED
+        .iter()
+        .filter(|handler| return handlers.iter().any(|exported| return exported == *handler))
+        .collect();
+
+    assert_eq!(
+        exported.len(),
+        REFUSED.len(),
+        "nomos-api exports {exported:?} of the {REFUSED:?} OD-HOST-014 refuses. A handler this \
+         array names and nomos-api no longer exports makes the refusal above vacuous, so the \
+         array is stale rather than satisfied."
     );
 }
 

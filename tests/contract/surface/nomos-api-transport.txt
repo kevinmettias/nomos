@@ -2,13 +2,15 @@ pub const fn nomos_api_transport::ServedMethod::Name(self) -> &'static str
 pub const nomos_api_transport::NomosApiDispatch::SCOPE: ReproducibilityScope
 pub const nomos_api_transport::NomosApiDispatch::STRENGTH: DeterminismStrength
 pub const nomos_api_transport::NomosApiDispatch::TRACE: TraceEquivalence
-pub const nomos_api_transport::ServedMethod::REGISTRY: [Self; 5]
+pub const nomos_api_transport::ServedMethod::REGISTRY: [Self; 6]
 pub enum nomos_api_transport::ServedMethod
+pub enum variant nomos_api_transport::ServedMethod::Check
 pub enum variant nomos_api_transport::ServedMethod::Correction
 pub enum variant nomos_api_transport::ServedMethod::GateCompare
 pub enum variant nomos_api_transport::ServedMethod::GateExplain
 pub enum variant nomos_api_transport::ServedMethod::GatePlan
 pub enum variant nomos_api_transport::ServedMethod::GateRun
+pub fn nomos_api_transport::CheckParameters::Command(&self) -> CheckCommand
 pub fn nomos_api_transport::CompareParameters::Baseline(&self) -> GateCommand
 pub fn nomos_api_transport::CompareParameters::Candidate(&self) -> GateCommand
 pub fn nomos_api_transport::CorrectionParameters::Command(&self) -> CorrectionCommand
@@ -21,6 +23,7 @@ pub fn nomos_api_transport::ServedMethod::Named(name: &str) -> Option<Self>
 pub fn nomos_api_transport::ServedMethod::Operation(self) -> OperationName
 pub impl nomos_api_transport::NomosApiDispatch implements RemoteCallStrategy
 pub impl nomos_api_transport::NomosApiDispatch implements Strategy
+pub struct field nomos_api_transport::CheckParameters::root: Option<PathBuf>
 pub struct field nomos_api_transport::CompareParameters::baseline: GateParameters
 pub struct field nomos_api_transport::CompareParameters::candidate: GateParameters
 pub struct field nomos_api_transport::CorrectionParameters::commit: bool
@@ -32,6 +35,7 @@ pub struct field nomos_api_transport::GateParameters::exclude: Vec<String>
 pub struct field nomos_api_transport::GateParameters::include: Vec<String>
 pub struct field nomos_api_transport::GateParameters::root: Option<PathBuf>
 pub struct field nomos_api_transport::GateParameters::rules: Vec<String>
+pub struct nomos_api_transport::CheckParameters
 pub struct nomos_api_transport::CompareParameters
 pub struct nomos_api_transport::CorrectionParameters
 pub struct nomos_api_transport::FindingParameters
