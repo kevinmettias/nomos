@@ -90751,7 +90751,7 @@
       "claim": {
         "holder": "nomos-75-walk",
         "acquired_at": 1790055467,
-        "lease_expires_at": 1790066267
+        "lease_expires_at": 1790067643
       },
       "verification": {
         "argv": [
@@ -92326,6 +92326,44 @@
           "widened_at": 1790056718
         }
       ]
+    },
+    {
+      "id": "P126-TWO-README-ROWS-DESCRIBE-AN-AGENT-DISPATCH-THE-PORT-REPLACED",
+      "title": "Two README rows describe the agent dispatch the port replaced, and nothing judges either",
+      "why": "At d1dca47d, P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS made two README band-table rows describe a dispatch this workspace no longer has, and it could not fix them: README.md was held by a live claim throughout, and a contested path splits an item rather than narrowing it. The Application Service row for nomos-agent-orchestration says Run_Agent_Execute and Run_Agent_Judgment each dispatch through nomos-agent-executor-claude-code or nomos-model-backend-ollama, and that crate names neither adapter in its manifest or in a line of source now: it names nomos-agent-contracts two ports, AgentExecutor and ModelBackend, and a composition root in each host supplies the concrete pair. The Agent row for nomos-agent-contracts says the crate holds AGT-001 TaskEnvelope and AGT-002 WorkResult and that neither type computes anything, which was the whole of the crate and is no longer: it also publishes the two ports, their two answer types AgentExecution and ModelAnswer, DispatchRefusal, DispatchPort and DeclaredTarget. Both rows are read by a person and by nomos_rules::Check_Declared_Role_Matches_Surface, which is the rule nomos agent judge-role dispatches; a role row that describes a shape the surface no longer has is exactly what that rule exists to catch, and leaving it is a declared role nothing made true. Neither row is judged by a gate check -- tests/contract/tests/boundaries reads the band and crate cells and OD-PACKAGE-004 version 3 reclassified the Owns column as free region -- so nothing will report this and it will not surface on its own.",
+      "done_when": "1. README.md nomos-agent-orchestration row states what that crate dispatches through -- the port it names -- rather than the two adapter crates it no longer depends on, and names where the concrete pair is supplied instead. 2. README.md nomos-agent-contracts row states that the crate also publishes the two ports one per PackageKind and the two answer types they return, so the row describes the whole of the crate the way it did before the ports arrived. 3. Neither row asserts anything a reader can falsify against the committed surface snapshots for those two crates. 4. No other row moves, and no cell outside the Owns column of those two rows is edited, so the owned region OD-PACKAGE-004 version 3 draws is untouched. 5. Predicate scope, declared: the boundaries target is what judges README against the real workspace, and it is the only obligation this item claims. It deliberately does not reach the corpus-backed, agent_harness, public_surface or requirement_trace targets, which belong to other items.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
