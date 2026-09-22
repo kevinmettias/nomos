@@ -43,7 +43,7 @@ fn Disabled_Test_Findings_In(source: &SourceFile) -> Vec<Finding>
 /// `a-disabled-test-states-why` names as the one that needs a local comment instead.
 /// `#[ignore = "..."]` already carries its own reason in the attribute itself and is never
 /// flagged.
-fn Has_Bare_Ignore_Attribute(code: &str) -> bool
+pub(crate) fn Has_Bare_Ignore_Attribute(code: &str) -> bool
 {
     let Some(start) = code.find("#[ignore") else { return false };
     let after = code[start.saturating_add("#[ignore".len())..].trim_start();

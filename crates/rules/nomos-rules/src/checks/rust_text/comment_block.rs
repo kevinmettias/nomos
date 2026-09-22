@@ -95,6 +95,24 @@ pub(super) fn Is_A_Non_Empty_Comment(line: &str) -> bool
     return Comment_Text_Of(line).is_some_and(|comment| return !comment.trim().is_empty());
 }
 
+/// A non-empty comment on `index`'s own line, or anywhere in the contiguous comment block
+/// immediately above it.
+///
+/// The one body `Has_Local_Allow_Justification`, `Has_Local_Inline_Always_Justification` and
+/// `Has_Local_Ignore_Justification` had each written out separately and identically before
+/// `OD-RULES-034`'s declared form named it once — the authoring redundancy that record
+/// measured, in its smallest form. `DeclaredJustification::AnyAdjacentComment` is what names
+/// it now, and the three rules that used to spell it declare it instead.
+pub(crate) fn Has_An_Adjacent_Non_Empty_Comment(lines: &[&str], index: usize) -> bool
+{
+    if lines.get(index).is_some_and(|line| return Is_A_Non_Empty_Comment(line))
+    {
+        return true;
+    }
+
+    return Has_A_Previous_Comment_Block(lines, index, Is_A_Non_Empty_Comment);
+}
+
 pub(super) fn Has_A_Previous_Comment_Block(lines: &[&str], index: usize, predicate: fn(&str) -> bool) -> bool
 {
     let mut cursor = index;

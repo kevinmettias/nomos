@@ -37,6 +37,13 @@
 //! check as a `fn` pointer, which has no name at run time, so `DESCRIPTORS` itself cannot
 //! answer *which* function is composed -- only its own source text can.
 //!
+//! `OD-RULES-034` added a second way for a row to name no function at all: a rule of the
+//! declared archetype carries a `DeclaredTextRule` literal instead of a judgment pointer, so
+//! its rule is composed while the function it was written as reads here as uncomposed. That
+//! is not a false reading and the fix is not to teach this reader about the form -- the
+//! function really is out of the run now, and it stays exported because it is the baseline
+//! that record's falsifier compares the declaration against. Each one says so below.
+//!
 //! A function added to the surface and never composed falls into the difference; a
 //! function in the difference with no entry in [`ACCOUNTED_FOR`] fails this test.
 
@@ -127,6 +134,24 @@ const ACCOUNTED_FOR: &[(&str, &str)] = &[
     (
         "Check_Project_Owned_Function_Names_Use_Upper_Snake_Case",
         "The identical judgment as the already-composed naming-convention, relabeled under the code-standards rule id for numbering compatibility. Composing both would double-report every naming violation under two ids at once.",
+    ),
+    // The three rules OD-RULES-034's declared form replaced. Each rule is composed -- its
+    // DESCRIPTORS row is a declaration now rather than a function pointer, which is why this
+    // reader, which reads the table's own source text for `Check_*` names, no longer sees
+    // one. The function stays exported because it is the baseline the record's own falsifier
+    // compares against, byte for byte, and a baseline that had been deleted would leave the
+    // comparison with nothing on the other side.
+    (
+        "Check_Every_Allow_Carries_A_Justification",
+        "every-allow-carries-a-justification is composed, as a declaration: OD-RULES-034's form carries the row and checks::rust_text::declarations' own acceptance test compares this function's findings against the declaration's, byte for byte, over this tree.",
+    ),
+    (
+        "Check_Inline_Always_Justification",
+        "inline-always-requires-justification is composed, as a declaration, for the identical reason: this function is the byte-identical baseline that comparison reads.",
+    ),
+    (
+        "Check_A_Disabled_Test_States_Why",
+        "a-disabled-test-states-why is composed, as a declaration, for the identical reason: this function is the byte-identical baseline that comparison reads.",
     ),
 ];
 

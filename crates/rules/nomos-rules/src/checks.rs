@@ -170,6 +170,18 @@ pub use rust_text::{
     INLINE_ALWAYS_JUSTIFICATION, PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED, SHARED_INTERIOR_MUTABILITY_SAYS_WHY,
     UNSAFE_JUSTIFICATION, UNWRAP_EXPECT_DISCIPLINE,
 };
+/// `OD-RULES-034`'s declared form, reachable from the one table and from the vocabulary that
+/// resolves a declaration's names.
+///
+/// `pub(crate)` and not `pub`: a declaration is authored in this crate, beside the readings
+/// it may name, and exporting any of this would offer a second authoring path to a caller
+/// with no vocabulary to name — the accretion the one descriptor table exists to prevent.
+pub(crate) use rust_text::{
+    Judged_By_Declaration, A_DISABLED_TEST_DECLARATION, EVERY_ALLOW_DECLARATION, INLINE_ALWAYS_DECLARATION,
+};
+pub(crate) use rust_text::{
+    Has_Allow_Attribute, Has_An_Adjacent_Non_Empty_Comment, Has_Bare_Ignore_Attribute, Has_Inline_Always_Attribute,
+};
 pub use scalar_range::{
     Check_A_Known_Range_Picks_Its_Type, Check_Nonnegative_Storage_Is_Unsigned, A_KNOWN_RANGE_PICKS_ITS_TYPE, NONNEGATIVE_STORAGE_IS_UNSIGNED,
 };

@@ -83,7 +83,7 @@ fn Inline_Always_Findings_In(source: &SourceFile) -> Vec<Finding>
         Detector { has_construct: ConstructDetector(Has_Inline_Always_Attribute), has_local_justification: JustificationDetector(Has_Local_Inline_Always_Justification) },
     );
 }
-fn Has_Allow_Attribute(code: &str) -> bool
+pub(crate) fn Has_Allow_Attribute(code: &str) -> bool
 {
     return code.contains("#[allow(") || code.contains("#![allow(");
 }
@@ -97,7 +97,7 @@ fn Has_Local_Allow_Justification(lines: &[&str], index: usize) -> bool
 
     return Has_A_Previous_Comment_Block(lines, index, Is_A_Non_Empty_Comment);
 }
-fn Has_Inline_Always_Attribute(code: &str) -> bool
+pub(crate) fn Has_Inline_Always_Attribute(code: &str) -> bool
 {
     return code.contains("#[inline(always)]");
 }

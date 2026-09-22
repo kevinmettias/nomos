@@ -38,9 +38,20 @@ pub use required_fact::RequiredFact;
 pub use rule_judgment::RuleJudgment;
 pub use subject_kind::SubjectKind;
 
+pub(crate) use declared_detector::DeclaredDetector;
+pub(crate) use declared_justification::DeclaredJustification;
+pub(crate) use declared_parameter::DeclaredParameter;
+pub(crate) use declared_text_rule::DeclaredTextRule;
+pub(crate) use test_material_sensitivity::TestMaterialSensitivity;
+
+mod declared_detector;
+mod declared_justification;
+mod declared_parameter;
+mod declared_text_rule;
 mod required_fact;
 mod rule_judgment;
 mod subject_kind;
+mod test_material_sensitivity;
 
 /// One rule: what it reads, what a run must have materialized before it can be judged, the
 /// authority it answers to, and the judgment itself.
@@ -152,8 +163,10 @@ pub const NO_VERSIONED_RECORD: u32 = 0;
 ///
 /// `judge` is the plain `fn` pointer rather than the [`RuleJudgment`] that carries it, because
 /// this is the boundary where the table's own vocabulary -- a bare rule function or a closure
-/// widening one -- meets the named type. Every one of the seventy entries below passes its
-/// judgment in this shape, so [`RuleJudgment::New`] is named here and at no call site.
+/// widening one -- meets the named type. Every linked entry below passes its judgment in this
+/// shape, so [`RuleJudgment::New`] is named here and at no call site; a declared entry goes
+/// through [`Descriptor_For_Declaration`] instead, and the two are the only two ways a row
+/// is written.
 const fn Descriptor_For(id: &'static str, subject: SubjectKind, requires: &'static [RequiredFact], judge: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>) -> RuleDescriptor
 {
     return RuleDescriptor {
@@ -163,6 +176,37 @@ const fn Descriptor_For(id: &'static str, subject: SubjectKind, requires: &'stat
         check: RuleJudgment::New(judge),
         contract_record: PORTED_STANDARD,
         contract_record_version: NO_VERSIONED_RECORD,
+    };
+}
+
+/// One descriptor for a rule that is declared rather than written, named so the table below
+/// still reads as one line per rule.
+///
+/// Every field is taken from the declaration, including the two [`Descriptor_For`] defaults:
+/// a declaration states its own contract citation, so a declared row carries no `Citing` and
+/// no second place to get the authority wrong. [`DeclaredTextRule::Subject`] and
+/// [`DeclaredTextRule::Requires`] derive the other two from what the declaration says about
+/// test material, which is what keeps `Test_A_Source_Text_Rule_Should_Require_No_Fact` and
+/// its sibling judging a declared row exactly as they judge a linked one.
+///
+/// `OD-RULES-034` refused the obvious alternative by name: a declared rule belongs in this
+/// table, beside the linked ones, because a second list of rules is the accretion
+/// `OD-GATE-020` measured going silently out of step twice.
+const fn Descriptor_For_Declaration(declaration: &'static DeclaredTextRule) -> RuleDescriptor
+{
+    // The one refusal that is not impossible by construction, and it is refused here rather
+    // than reported at run time: this table is a `const`, so a declaration naming a parameter
+    // no detector in the vocabulary reads does not compile. `DeclaredTextRule`'s own doc says
+    // why the field is carried at all and what would make it live.
+    assert!(declaration.Is_Well_Formed(), "a declared rule names a parameter its detector does not take");
+
+    return RuleDescriptor {
+        id: declaration.id,
+        subject: declaration.Subject(),
+        requires: declaration.Requires(),
+        check: RuleJudgment::Declaring(declaration),
+        contract_record: declaration.contract_record,
+        contract_record_version: declaration.contract_record_version,
     };
 }
 
@@ -195,7 +239,7 @@ pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Descriptor_For(crate::DEPRECATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Deprecation_Carries_A_Reason(sources)),
     Descriptor_For(crate::A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources)),
     Descriptor_For(crate::SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Shared_Interior_Mutability_Says_Why(sources)),
-    Descriptor_For(crate::EVERY_ALLOW_CARRIES_A_JUSTIFICATION, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_Every_Allow_Carries_A_Justification),
+    Descriptor_For_Declaration(&crate::checks::EVERY_ALLOW_DECLARATION),
     Descriptor_For(crate::UNSAFE_JUSTIFICATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Unsafe_Justification(sources)),
     Descriptor_For(crate::SCRIPTS_USE_A_PORTABLE_SHEBANG, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Scripts_Use_A_Portable_Shebang(sources)),
     Descriptor_For(crate::A_SCRIPT_DECLARES_ITS_PURPOSE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Script_Declares_Its_Purpose(sources)),
@@ -238,8 +282,8 @@ pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Descriptor_For(crate::REQUIREMENT_TRACE_STALENESS, SubjectKind::Workspace, &[RequiredFact::RequirementTrace], |_sources, reader| return crate::Check_Requirement_Trace_Staleness(reader)) .Citing(crate::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD, crate::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD_VERSION),
     Descriptor_For(crate::ABBREVIATIONS, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::WordsPolicy], crate::Check_Abbreviations),
     Descriptor_For(crate::SINGLE_LETTER_NAMES, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Single_Letter_Names),
-    Descriptor_For(crate::A_DISABLED_TEST_STATES_WHY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Disabled_Test_States_Why(sources)),
-    Descriptor_For(crate::INLINE_ALWAYS_JUSTIFICATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Inline_Always_Justification(sources)),
+    Descriptor_For_Declaration(&crate::checks::A_DISABLED_TEST_DECLARATION),
+    Descriptor_For_Declaration(&crate::checks::INLINE_ALWAYS_DECLARATION),
     Descriptor_For(crate::NO_WILDCARD_IMPORTS, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_No_Wildcard_Imports),
     Descriptor_For(crate::NO_SINGLE_LINE_FUNCTION_BODIES, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Single_Line_Function_Bodies(sources)),
     Descriptor_For(crate::NO_ORPHAN_MODULES, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Orphan_Modules(sources)),
@@ -311,6 +355,62 @@ mod descriptor_tests
         {
             assert!(!descriptor.requires.is_empty(), "{} reads facts and must say which", descriptor.id);
         }
+    }
+
+    /// The three rules `OD-RULES-034`'s form was built for, with the descriptor each one
+    /// carried while it was a linked function. Every value is what the table said before the
+    /// conversion, transcribed from the rows this commit replaced.
+    ///
+    /// This is the descriptor half of the record's indistinguishability requirement: a
+    /// declared rule is not a new rule wearing an old identifier, so every field a consumer
+    /// of a [`RuleDescriptor`] can read must still answer what it answered. The findings half
+    /// is `checks::rust_text::declarations`' own byte-identical comparison against this tree.
+    const DECLARED_ROWS: &[(&str, SubjectKind, &[RequiredFact])] = &[
+        (crate::EVERY_ALLOW_CARRIES_A_JUSTIFICATION, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy]),
+        (crate::A_DISABLED_TEST_STATES_WHY, SubjectKind::SourceText, &[]),
+        (crate::INLINE_ALWAYS_JUSTIFICATION, SubjectKind::SourceText, &[]),
+    ];
+
+    /// A declared row answers every reading a linked row answers, with the values it always
+    /// had. `Declared_Rules` in `nomos-check-orchestration` builds a `RulePackage` out of
+    /// exactly these readings plus [`RuleDescriptor::Rule`] and
+    /// [`RuleDescriptor::Is_Citing_A_Versioned_Record`], both checked below, so a declaration
+    /// that passed this could not change what that derivation produces.
+    #[test]
+    fn Test_A_Declared_Row_Should_Read_Exactly_As_The_Linked_Row_It_Replaced()
+    {
+        for (id, subject, requires) in DECLARED_ROWS
+        {
+            let described = DESCRIPTORS
+                .iter()
+                .find(|candidate| return candidate.id == *id)
+                .expect("every declared rule is in the one table");
+
+            assert_eq!(described.subject, *subject, "{id}");
+            assert_eq!(described.requires, *requires, "{id}");
+            assert_eq!(described.contract_record, PORTED_STANDARD, "{id}");
+            assert_eq!(described.contract_record_version, NO_VERSIONED_RECORD, "{id}");
+            assert!(!described.Is_Citing_A_Versioned_Record(), "{id}");
+            assert_eq!(described.Rule(), nomos_contracts::RuleId::New(*id), "{id}");
+        }
+    }
+
+    /// The last channel through which a consumer could tell the two arms apart, closed on
+    /// purpose. A derived `Debug` would print the arm; this asserts the hand-written one does
+    /// not, by comparing a declared row's rendering against a linked row's.
+    #[test]
+    fn Test_A_Declared_Judgment_Should_Render_Exactly_As_A_Linked_One()
+    {
+        let declared = DESCRIPTORS
+            .iter()
+            .find(|candidate| return candidate.id == crate::EVERY_ALLOW_CARRIES_A_JUSTIFICATION)
+            .expect("the declared rule is in the one table");
+        let linked = DESCRIPTORS
+            .iter()
+            .find(|candidate| return candidate.id == crate::UNSAFE_JUSTIFICATION)
+            .expect("the linked sibling is in the one table");
+
+        assert_eq!(format!("{:?}", declared.check), format!("{:?}", linked.check));
     }
 
     #[test]

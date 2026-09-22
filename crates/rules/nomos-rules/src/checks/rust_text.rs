@@ -21,26 +21,56 @@
 //! Eight rules in one file passed the size at which this crate extracts a submodule, and the
 //! split follows the reasoning the family already carries. `comment_block` holds every
 //! primitive that walks the contiguous comment block above a line; `unwrap_expect`, `panic`,
-//! `path_attribute`, `interior_mutability`, `unsafe_justification` and `disabled_test` each
-//! hold one rule's own readings, and `comment_justified` holds the two whose justification is
-//! any adjacent comment rather than a required marker.
+//! `path_attribute`, `interior_mutability` and `unsafe_justification` each hold one rule's
+//! own readings, and `comment_justified` and `disabled_test` hold the readings of the three
+//! rules that are now declared rather than written.
 //!
 //! What more than one of those needs stayed here: the eight rule ids, the self-exemption
 //! below, the finding constructor every rule reports through, and `Detector` — the one shape
 //! a rule with no shared primitive of its own is written over.
+//!
+//! # The three declared rules
+//!
+//! `every-allow-carries-a-justification`, `inline-always-requires-justification` and
+//! `a-disabled-test-states-why` are no longer functions. `OD-RULES-034` censused this
+//! workspace's seventy-one composed rules and decided a declarative form for the archetype
+//! forty-four of them share — a per-line predicate over one file's raw text — so those three
+//! are `declarations`' `DeclaredTextRule` literals, interpreted by
+//! [`Judged_By_Declaration`] below. The interpreter is this module's own gate, traversal and
+//! finding constructor with the parts a declaration states lifted out of it, which is why a
+//! declared rule reports byte-identically to the function it replaced: nothing about how a
+//! finding is built moved.
+//!
+//! The three had accumulated three separately-written copies of one identical justification
+//! predicate between them, which is the authoring redundancy the record measured and the
+//! reason those three went first.
 
 use super::code_prefix::{Code_Prefix, Code_With_String_Bodies_Masked};
+use crate::rule_descriptor::DeclaredTextRule;
 use crate::SourceFile;
+use nomos_analysis::FactReader;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 mod comment_block;
 mod comment_justified;
+mod declarations;
 mod disabled_test;
 mod interior_mutability;
 mod panic;
 mod path_attribute;
 mod unsafe_justification;
 mod unwrap_expect;
+
+/// The three declarations this family's own `declarations` module holds, named where the
+/// table can reach them. `DESCRIPTORS` is the only caller.
+pub(crate) use declarations::{A_DISABLED_TEST_DECLARATION, EVERY_ALLOW_DECLARATION, INLINE_ALWAYS_DECLARATION};
+
+/// The readings a declaration may name, hoisted to where `DeclaredDetector` and
+/// `DeclaredJustification` resolve them. A vocabulary member stands for exactly one of
+/// these, and nothing else in this crate may name them.
+pub(crate) use comment_block::Has_An_Adjacent_Non_Empty_Comment;
+pub(crate) use comment_justified::{Has_Allow_Attribute, Has_Inline_Always_Attribute};
+pub(crate) use disabled_test::Has_Bare_Ignore_Attribute;
 
 pub use comment_justified::{Check_Every_Allow_Carries_A_Justification, Check_Inline_Always_Justification};
 pub use disabled_test::Check_A_Disabled_Test_States_Why;
@@ -134,6 +164,106 @@ fn Unjustified_Construct_Findings_In(source: &SourceFile, rule: Rule<'_>, messag
     return findings;
 }
 
+/// Runs one declared rule over `sources`, and the whole of what a declaration means.
+///
+/// `OD-RULES-034`'s interpreter. Every line of it was already in this module: the gate is
+/// the one the six linked rules above wrote out per rule, the traversal and the finding
+/// construction are [`Unjustified_Construct_Findings_In`]'s, and the ordering is the
+/// `subject_name` sort every rule in this family ends with. What a declaration supplies is
+/// the four things those bodies differed in — the detector, the justification, the message
+/// and the identity — which is why a declared rule reports byte-identically to the function
+/// it replaced rather than merely equivalently.
+///
+/// The reader is read only where the declaration says test material is excluded. That is not
+/// an optimization: `FactReader::Require` records an unmet read against the run's own claim,
+/// so a declaration that is not test-material sensitive must not ask, exactly as the linked
+/// rules it replaces never asked.
+pub(crate) fn Judged_By_Declaration(declaration: &DeclaredTextRule, sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+{
+    let declared_fixture_locations = Declared_Fixture_Locations_For(declaration, facts);
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        if Is_Judged_By(declaration, source, &declared_fixture_locations)
+        {
+            findings.extend(Declared_Findings_In(declaration, source));
+        }
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// The repository's own declared fixture locations, read once for the whole run and only
+/// where the declaration's own criterion needs them.
+fn Declared_Fixture_Locations_For(declaration: &DeclaredTextRule, facts: &mut dyn FactReader) -> Vec<String>
+{
+    if !declaration.Is_Excluding_Test_Material()
+    {
+        return Vec::new();
+    }
+
+    return super::Resolve_Declared_Fixture_Locations(facts);
+}
+
+/// Whether this declaration's subject includes `source`: its language, its test-material
+/// criterion and its self-exemption, in the order the rules it replaces asked them in.
+fn Is_Judged_By(declaration: &DeclaredTextRule, source: &SourceFile, declared_fixture_locations: &[String]) -> bool
+{
+    if declaration.language.is_some_and(|language| return !source.Is_Written_In(language))
+    {
+        return false;
+    }
+
+    if declaration.Is_Excluding_Test_Material() && super::Is_Test_Or_Example_Source(source, declared_fixture_locations)
+    {
+        return false;
+    }
+
+    return !Is_Exempt_Implementation_File(source, declaration.self_exemption);
+}
+
+/// One judged source's findings, through the same engine the linked rules of this family go
+/// through — the declaration resolved to the two predicates that engine takes.
+fn Declared_Findings_In(declaration: &DeclaredTextRule, source: &SourceFile) -> Vec<Finding>
+{
+    return Unjustified_Construct_Findings_In(
+        source,
+        Rule(declaration.id),
+        Message(declaration.message),
+        Detector {
+            has_construct: ConstructDetector(declaration.detector.As_Predicate()),
+            has_local_justification: JustificationDetector(Justification_Predicate(declaration)),
+        },
+    );
+}
+
+/// The justification a declaration names, or one that never holds where it names none.
+///
+/// A declaration with no justification clause is a rule with no local escape, which is a
+/// real shape rather than a missing field — so it renders as a predicate that answers `false`
+/// rather than as an empty one the engine would have to special-case.
+fn Justification_Predicate(declaration: &DeclaredTextRule) -> fn(&[&str], usize) -> bool
+{
+    return match declaration.justification
+    {
+        Some(justification) => justification.As_Predicate(),
+        None => Never_Locally_Justified,
+    };
+}
+
+fn Never_Locally_Justified(_lines: &[&str], _index: usize) -> bool
+{
+    return false;
+}
+
+/// Whether `source` is one of the implementation modules a declaration exempts.
+fn Is_Exempt_Implementation_File(source: &SourceFile, modules: &[&str]) -> bool
+{
+    return modules.iter().any(|module| return Is_Under_Module(source, module));
+}
+
 /// This rule family's own module root, checked with the same normalized-slash comparison
 /// [`super::Is_Test_Or_Example_Source`] already uses. Every rule under it that reads a
 /// construct's own spelling (`unsafe {`, `#[allow(`, `Rc::new(RefCell::new(`, `#[path`)
@@ -184,8 +314,20 @@ fn Line_Number(index: usize) -> usize
 
 fn Is_Own_Implementation_File(source: &SourceFile) -> bool
 {
+    return Is_Under_Module(source, OWN_IMPLEMENTATION_MODULE);
+}
+
+/// Whether `source` is `module`'s own file or sits under its directory, with slashes
+/// normalized first.
+///
+/// One comparison for the linked rules' fixed exemption and for a declaration's stated one,
+/// because they are the same criterion: a second copy is how a declared rule would start
+/// exempting a file its linked predecessor judged, which the byte-identical comparison in
+/// `declarations`' own tests exists to catch and this exists to make impossible.
+fn Is_Under_Module(source: &SourceFile, module: &str) -> bool
+{
     let normalized = source.path.replace('\\', "/");
-    let Some(rest) = normalized.strip_prefix(OWN_IMPLEMENTATION_MODULE)
+    let Some(rest) = normalized.strip_prefix(module)
     else
     {
         return false;
