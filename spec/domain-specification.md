@@ -67,7 +67,7 @@ profile: domain-specification
 | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md@authored | docs/records/OD-COMPLETENESS-004-a-report-that-cannot-render-eleven-reasons-renders-silence-instead.md | authored | 27 | 8 | sha256:ea548df7de6d318f3946ffc3c153f837e4289c5b25045352897d0221c1c1d3f7 |
 | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md@authored | docs/records/OD-CONNECTOR-001-an-outward-mutation-is-a-command-through-a-canonical-service-and-absence-from-the-interface-is-the-mechanism.md | authored | 26 | 10 | sha256:243cd01d0c3a76110de1cec5697fa03f185768f31467662081557f8ccca82386 |
 | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md@authored | docs/records/OD-CONNECTOR-002-a-connector-fixture-is-recorded-below-its-own-translation-and-an-absent-one-fails-as-loud-as-a-missing-corpus.md | authored | 28 | 9 | sha256:a4d8c71e62610f704811e42757155af8725a195a9b7f6d47a5af13197be33516 |
-| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md@authored | docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md | authored | 16 | 7 | sha256:e562395ece2dd83cfd803a27caa6ffb22c98ec857be770f9aec0219368107e2f |
+| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md@authored | docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md | authored | 24 | 8 | sha256:7981abae8b91105accb6027b2d54a0e179314c1a9957f40617083399206151a8 |
 | docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md@authored | docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md | authored | 33 | 11 | sha256:87af77a8b11ac7d5ac8cc907f6ff2cbae96084a66c4de46ea65d00fbb8467c90 |
 | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md@authored | docs/records/OD-CONTRACTS-001-band-zero-admits-what-crosses-a-boundary-and-a-domain-local-concept-stays-in-its-domain.md | authored | 29 | 9 | sha256:0351be57f7a37c7b7e8965886b9fa29c15f87fe4660ee253dcebcad932fe77a6 |
 | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md@authored | docs/records/OD-CONTRACTS-002-a-subject-that-needs-a-model-is-agent-required-rather-than-a-missing-provider.md | authored | 28 | 9 | sha256:15b5d49cfd110c5912afc3312550bed3193d467d2b5f619a78b9b8d9ed1efe01 |
@@ -715,7 +715,8 @@ profile: domain-specification
 | docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#9 | authored | 2 | Why a disposition is a new fact, not a rewrite of an existing one |
 | docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#11 | authored | 2 | Where it would live |
 | docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#13 | authored | 2 | Why comparing providers is not buildable yet regardless |
-| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#15 | authored | 2 | Decision |
+| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#15 | authored | 2 | What counts as a second review provider |
+| docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#23 | authored | 2 | Decision |
 | docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#1 | authored | 1 | A review assertion about the analyzed snapshot must resolve against it, and a historical one need not |
 | docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#2 | authored | 2 | Question |
 | docs/records/OD-CONNECTOR-005-a-review-assertion-about-the-analyzed-snapshot-must-resolve-against-it-and-a-historical-one-need-not.md#5 | authored | 2 | Why the obvious invariant is already refuted |
@@ -17216,11 +17217,77 @@ record declines to invent the second provider in order to make one buildable tod
 
 ### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#15
 
+*revision: authored · kind: heading · heading: A review finding carries no outcome and there is only one provider to compare it against / What counts as a second review provider · hash: sha256:f254d4e7c08760544506a63cea7f323ba009de359cda642e861f09e8fc3027b6*
+
+## What counts as a second review provider
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#16
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / What counts as a second review provider · hash: sha256:e6a4d86a80825fee3dec7073cf55ef112a5f350dbb55caaba3a1f7789defb300*
+
+The paragraph above makes a provider-comparison mechanism wait on a second real review
+provider existing, and the term is worth pinning down, because review material reaches this
+workspace over connectors and a second connector is easy to read as a second provider. Both
+are new crates, and review artifacts flow through both.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#17
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / What counts as a second review provider · hash: sha256:5eed01e79b971bfc5e5659b2ed0d1950a7514b10c22bc7351f2555cb40e9aff3*
+
+The condition is about `nomos.cap.review.finding` and nothing else. A second review provider
+is a second independent analyzer of a change, whose own judgments resolve that capability:
+something that reads a change and forms its own severity, category and message.
+`Check_Review_Findings` relays those 1:1 rather than forming a second opinion, precisely
+because the judgment was already made upstream of it. So the plurality being waited on is a
+plurality of analyzers, because an analyzer is what a comparison would compare.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#18
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / What counts as a second review provider · hash: sha256:e0d7494c54085cfb8db8fbe992ef3c58ed1a311678130d1650a56fb7e1cf8058*
+
+Three things do not satisfy it, however much review material they carry.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#19
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / What counts as a second review provider · hash: sha256:f22820dc11240a63f6a9b7716717b4e074e4a4aaae7ec9db7cebe335870c390a*
+
+A connector or transport that acquires or publishes review artifacts does not, because
+acquisition is a transport role. A second route to one analyzer's judgments still leaves one
+analyzer to score, and scoring it twice is not a comparison.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#20
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / What counts as a second review provider · hash: sha256:2d47e2ac0310753decda9ba61cb16069227bd1d0f32aed4cdd4fac506f6f5d99*
+
+A provider of a different capability does not. An artifact-acquisition contract offered
+against an issue tracker or a document store is the first provider of its own capability and
+the zeroth provider of this one. `ARC-CONNECTOR-001` names issue trackers and document stores
+as the expected next connectors, so this is the shape the next arrival is likely to take
+rather than a hypothetical worth ignoring.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#21
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / What counts as a second review provider · hash: sha256:9efeed93e6c2efe66e46d80ae84edf61d5d6baddef734d02956d37bf14296b93*
+
+A second offer against `nomos.cap.review.finding` that relays an analyzer this workspace
+already reads does not either. The capability's provider count would read two while the
+analyzer count still read one, and the provider count is not the quantity this condition is
+about.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#22
+
+*revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / What counts as a second review provider · hash: sha256:71c696aefcadb763007ac4305442cf3b52db112e003280abd8932dff3cf20c71*
+
+None of this builds or unblocks a mechanism. It narrows one term, so that the condition is
+satisfied by the thing it was written about.
+
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#23
+
 *revision: authored · kind: heading · heading: A review finding carries no outcome and there is only one provider to compare it against / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
 
 ## Decision
 
-### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#16
+### docs/records/OD-CONNECTOR-004-a-review-finding-carries-no-outcome-and-there-is-only-one-provider-to-compare-it-against.md#24
 
 *revision: authored · kind: prose · heading: A review finding carries no outcome and there is only one provider to compare it against / Decision · hash: sha256:2124030cefceaf26c00c55a0380c9ed959391bca4abee2b5f6aa0bcad829f8dd*
 

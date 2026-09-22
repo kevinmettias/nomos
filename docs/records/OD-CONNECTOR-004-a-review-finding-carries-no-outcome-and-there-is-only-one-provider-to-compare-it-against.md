@@ -3,7 +3,7 @@ id: OD-CONNECTOR-004
 type: decision
 title: A review finding carries no outcome and there is only one provider to compare it against
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - connector
@@ -108,6 +108,40 @@ a disposition mechanism now would be building a selection mechanism with one can
 select from — real, buildable work stays possible (a disposition fact keyed on `subject`,
 written by a new `nomos-corrections` type), but a *comparison* mechanism is not, and this
 record declines to invent the second provider in order to make one buildable today.
+
+## What counts as a second review provider
+
+The paragraph above makes a provider-comparison mechanism wait on a second real review
+provider existing, and the term is worth pinning down, because review material reaches this
+workspace over connectors and a second connector is easy to read as a second provider. Both
+are new crates, and review artifacts flow through both.
+
+The condition is about `nomos.cap.review.finding` and nothing else. A second review provider
+is a second independent analyzer of a change, whose own judgments resolve that capability:
+something that reads a change and forms its own severity, category and message.
+`Check_Review_Findings` relays those 1:1 rather than forming a second opinion, precisely
+because the judgment was already made upstream of it. So the plurality being waited on is a
+plurality of analyzers, because an analyzer is what a comparison would compare.
+
+Three things do not satisfy it, however much review material they carry.
+
+A connector or transport that acquires or publishes review artifacts does not, because
+acquisition is a transport role. A second route to one analyzer's judgments still leaves one
+analyzer to score, and scoring it twice is not a comparison.
+
+A provider of a different capability does not. An artifact-acquisition contract offered
+against an issue tracker or a document store is the first provider of its own capability and
+the zeroth provider of this one. `ARC-CONNECTOR-001` names issue trackers and document stores
+as the expected next connectors, so this is the shape the next arrival is likely to take
+rather than a hypothetical worth ignoring.
+
+A second offer against `nomos.cap.review.finding` that relays an analyzer this workspace
+already reads does not either. The capability's provider count would read two while the
+analyzer count still read one, and the provider count is not the quantity this condition is
+about.
+
+None of this builds or unblocks a mechanism. It narrows one term, so that the condition is
+satisfied by the thing it was written about.
 
 ## Decision
 

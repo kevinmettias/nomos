@@ -71559,7 +71559,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -71575,7 +71575,30 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "ess_universes-fc0de80925e1784b.exe)\n     Running tests\\corpus_gates.rs (F:/repos/nomos-p99-target\\debug\\deps\\corpus_gates-91a15869618678ba.exe)\n     Running tests\\crossing_cold.rs (F:/repos/nomos-p99-target\\debug\\deps\\crossing_cold-ec9d1de23e67a3e9.exe)\n     Running tests\\determinism_declarations.rs (F:/repos/nomos-p99-target\\debug\\deps\\determinism_declarations-b86ae74c4d6cafe6.exe)\n     Running tests\\determinism_vocabulary.rs (F:/repos/nomos-p99-target\\debug\\deps\\determinism_vocabulary-608930e80a5f6f6c.exe)\n     Running tests\\public_surface\\main.rs (F:/repos/nomos-p99-target\\debug\\deps\\public_surface-de2275c885d16568.exe)\n     Running tests\\record_citation.rs (F:/repos/nomos-p99-target\\debug\\deps\\record_citation-a3fd106318f043fe.exe)\n     Running tests\\requirement_trace\\main.rs (F:/repos/nomos-p99-target\\debug\\deps\\requirement_trace-dd53447302d4dcb1.exe)\n     Running tests\\rule_composition.rs (F:/repos/nomos-p99-target\\debug\\deps\\rule_composition-c3a394f004167fdd.exe)\n     Running tests\\rule_contract_citation.rs (F:/repos/nomos-p99-target\\debug\\deps\\rule_contract_citation-f205bd1954d014b7.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/nomos-p99-target\\debug\\deps\\rule_descriptors-b117e137f409de49.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/nomos-p99-target\\debug\\deps\\toolchain_floor-82d577dbe4f62e23.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p99-target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/nomos-p99-target\\debug\\deps\\governing_records_are_present-fb1c20a2af433cc4.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/nomos-p99-target\\debug\\deps\\round_trip_holds-91dbb605c0c2c1f6.exe)\n     Running tests\\store_holds.rs (F:/repos/nomos-p99-target\\debug\\deps\\store_holds-ed30fea2b99fbd8e.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/nomos-p99-target\\debug\\deps\\table_rows-e8c56575d59b7830.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1790039636,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
