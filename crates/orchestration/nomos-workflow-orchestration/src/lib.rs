@@ -59,35 +59,75 @@
 //! still answers with [`WorkflowOutcome`] alone, unchanged, because two hosts match that
 //! type's three variants field by field.
 //!
+//! # The definition engine, beside the ordered line
+//!
+//! `OD-ROADMAP-006` decision 2 supersedes four of `OD-WORKFLOW-005`'s "What This Does Not
+//! Build" clauses by name and by version -- `WF-009`'s immutable published artifacts,
+//! `WF-010`'s branch, merge and bounded parallelism, `WF-011`'s independently versioned
+//! definitions with pinned historical replay, and the **cache** half of its `WF-012`
+//! clause. [`WorkflowDefinition`] is what that authorizes, and it is built beside [`Run`]
+//! rather than inside it.
+//!
+//! A definition is an ordered list of [`WorkflowNode`]s, published through
+//! [`WorkflowDefinition::Publish`] with its own [`WorkflowDefinitionId`] and version, and
+//! immutable once published. A node's own name is the value it publishes; a
+//! [`WorkflowNode::Branch`] chooses an arm by the [`ProducedState`] an earlier node
+//! published; a [`WorkflowNode::Join`] reconverges the arms it names. Publishing takes
+//! every refusal [`DefinitionRefusal`] names -- a branch on a value no node produces most
+//! of all -- so a definition that exists can always be run, and
+//! [`WorkflowOutcome::Refused`] never appears in a definition run. That is the same
+//! guarantee `Is_Coherent` already gave [`Run`], moved from the step that reaches it to
+//! the whole plan before any of it dispatches.
+//!
+//! Nodes that read none of each other's values fall into one dependency wave, and a wave
+//! is cut into [`DispatchGroup`]s of at most the bound a caller states through
+//! [`Parallelism`]. Determinism survives that: every report is indexed and ordered by the
+//! declaration, never by the order a group's members were visited in, which
+//! [`GroupVisitOrder`] exists to make falsifiable rather than merely asserted. And
+//! [`Run_Definition`] records its run beside the definition it ran under, so [`Replay`]
+//! runs *that* definition and refuses when the one a caller offers now has moved.
+//!
+//! A third report type, [`DefinitionRun`], rather than new variants: `WorkflowOutcome`'s
+//! three variants and `DispatchError`'s three are matched field by field, with no wildcard
+//! arm, by three sites across `nomos-api` and `nomos-cli`, so widening either is a
+//! breaking change to two crates this increment may not edit. The sequential path keeps
+//! its behaviour, its signatures and its tests unchanged.
+//!
 //! # What stays out
 //!
-//! No immutable published artifacts (`WF-009`), no branch/merge or bounded parallelism
-//! (`WF-010`), no independently versioned or replayable definitions (`WF-011`), no shared
-//! dispatch trait across any of the four bodies, no `WorkResult` assembly --
-//! `OD-WORKFLOW-005`'s "What This Does Not Build" names each and why, apart from the
-//! check-body, correction-body and gate-body steps and the CLI verb that section named as
-//! later, heavier increments: those are now built, here and in `nomos-cli::workflow`.
+//! No shared dispatch trait across any of the four bodies, and no `WorkResult` assembly --
+//! `OD-WORKFLOW-005`'s "What This Does Not Build" names each and why, and
+//! `OD-ROADMAP-006` leaves both untouched.
 //!
-//! Three of the five declarations that section grouped under "no `WF-012` runtime" are
-//! still read by `Is_Coherent` and by nothing else, and the shape of what stays out is now
-//! narrower than that grouping. No cache runtime: `Cacheability::Cacheable`'s `key_inputs`
-//! name fields of a schema this crate never resolves, and a prior result is never
-//! substituted for a dispatch. No cancellation runtime: `CancellationBehavior` still says
-//! only whether a step's declaration would permit being cut short, and nothing here cuts a
-//! dispatch short -- which is also why a broken `Timeout` is *reported* after the dispatch
-//! ends rather than interrupting it. No deduplication tokens: `Is_Coherent` refuses a
-//! retryable non-idempotent side-effecting step that declares none, so every retry here
-//! runs under a cover the contract already checked, but this crate mints no per-attempt
-//! token and hands none to any dispatch target. And no compensating *step*:
-//! `Compensation::ExternallyCompensated` is reported as owed to whatever assembled the
-//! plan, never composed into one, because wiring one step's failure to another step's
-//! compensating run is a workflow definition's concern that `Compensation`'s own doc
-//! declines to name.
+//! No cancellation runtime, which is the half of `WF-012` that `OD-ROADMAP-006`
+//! deliberately did **not** supersede: `CancellationBehavior` still says only whether a
+//! step's declaration would permit being cut short, and nothing here cuts a dispatch
+//! short -- which is also why a broken `Timeout` is *reported* after the dispatch ends
+//! rather than interrupting it, and why no definition node can be cancelled either.
+//!
+//! No deduplication tokens: `Is_Coherent` refuses a retryable non-idempotent
+//! side-effecting step that declares none, so every retry here runs under a cover the
+//! contract already checked, but this crate mints no per-attempt token and hands none to
+//! any dispatch target. And no compensating *step*: `Compensation::ExternallyCompensated`
+//! is reported as owed to whatever assembled the plan, never composed into one, because
+//! wiring one step's failure to another step's compensating run is a workflow
+//! definition's concern that `Compensation`'s own doc declines to name.
+//!
+//! Two limits on what *was* built, stated here rather than left to be discovered. No
+//! thread is spawned and no executor is composed, so a group's members are dispatched one
+//! after another; what the bound buys is an explicit, checkable statement of how much
+//! independent work may be in flight, not work in flight. And the cache key is the whole
+//! body and the whole input schema rather than `Cacheable::key_inputs`, whose field names
+//! this crate has no resolver for -- strictly stronger than the declaration, so nothing is
+//! ever substituted that the declaration forbade.
 
 #![forbid(unsafe_code)]
 
 mod body;
+mod definition_run;
 mod run;
+mod run_definition;
+mod workflow_definition;
 mod workflow_outcome;
 mod workflow_run;
 mod workflow_step_plan;
@@ -96,7 +136,10 @@ mod workflow_step_plan;
 mod tests;
 
 pub use body::{AgentBody, Body, CheckBody, CommitIntent, CorrectionBody, GateBody};
+pub use definition_run::{BranchChoice, DefinitionRun, DispatchGroup, NodeDisposition, NodeReport};
 pub use run::{ClockedPlatform, Platform, Run, Run_Unclocked, Run_With_Clock};
+pub use run_definition::{GroupVisitOrder, Parallelism, Replay, ReplayRefusal, Run_Definition, WorkflowExecution, WorkflowRunRecord};
+pub use workflow_definition::{BranchArm, DefinitionRefusal, ProducedState, WorkflowDefinition, WorkflowDefinitionId, WorkflowNode};
 pub use workflow_outcome::{DispatchError, StepOutcome, WorkflowOutcome};
 pub use workflow_run::{StepAttempt, StepCompensation, StepTiming, WorkflowRun};
 pub use workflow_step_plan::WorkflowStepPlan;

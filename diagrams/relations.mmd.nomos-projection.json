@@ -3,12 +3,12 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:a4b680eb6009b6f697b28af4a6b52b0d4c5f2e11d86a6d2a65c4d721d8866d99",
-  "inputs_digest": "sha256:d1964ae86cba26c18d2656a5d54c6a7c6efd151f160bbc3a27545a7271cd0714",
+  "content_digest": "sha256:1727834d54054bb8e36ad60c8e058d3f8a6c9fac6eeaccdbc0109d488aa4659d",
+  "inputs_digest": "sha256:29e379ed0a1f388205b57aa23c9802968f8069838e1922e34151aa6bb10ea759",
   "sections": [
     [
       "Relations",
-      2186
+      2188
     ],
     [
       "Decisions",
@@ -3485,6 +3485,11 @@
       "content": "relations",
       "identity": "OD-EXECUTOR-008 relates-to OD-WORKFLOW-004",
       "hash": "sha256:30dd7d787d51a1ac2233b528e3eeb9fb216de8e4a89428b2b57592a8928f3797"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-EXECUTOR-008 relates-to OD-WORKFLOW-005",
+      "hash": "sha256:83c5170ef7153a865ba3ef295501c60a23e7b260665309d78f39ddd3ef79f972"
     },
     {
       "content": "relations",
@@ -10900,6 +10905,11 @@
       "content": "relations",
       "identity": "OD-WORKFLOW-005 relates-to OD-EXECUTOR-004",
       "hash": "sha256:4859ee32276afaa5de5dd55404ca443a55066986109725973da010940a19d156"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-WORKFLOW-005 relates-to OD-EXECUTOR-008",
+      "hash": "sha256:c068dd1a4f9af51bcb0fb9917dc0ac4b8a3d2778acc8f411012dc91534d320df"
     },
     {
       "content": "relations",

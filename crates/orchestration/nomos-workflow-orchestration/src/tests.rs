@@ -15,8 +15,9 @@ use nomos_platform_std::StdFileSystem;
 use nomos_workspace::BuildVariant;
 
 use crate::{
-    Body, CheckBody, CommitIntent, CorrectionBody, DispatchError, GateBody, Platform, Run, StepCompensation, StepOutcome, StepTiming, WorkflowOutcome,
-    WorkflowRun, WorkflowStepPlan,
+    Body, BranchArm, BranchChoice, CheckBody, CommitIntent, CorrectionBody, DefinitionRefusal, DefinitionRun, DispatchError, GateBody, GroupVisitOrder,
+    NodeDisposition, Parallelism, Platform, ProducedState, ReplayRefusal, Run, StepCompensation, StepOutcome, StepTiming, WorkflowDefinition,
+    WorkflowDefinitionId, WorkflowExecution, WorkflowNode, WorkflowOutcome, WorkflowRun, WorkflowRunRecord, WorkflowStepPlan,
 };
 
 /// The cases for each of the three declarations
@@ -27,6 +28,9 @@ use crate::{
 /// five bodies and sits close to the five-hundred-line review trigger, and three more
 /// families of case would push it past one.
 mod compensation;
+mod definition;
+mod graph;
+mod replay;
 mod retry;
 mod support;
 mod timeout;
@@ -177,6 +181,10 @@ enum PortAnswer
     Answered(String),
     /// Whichever port was reached produced nothing, for this reason.
     Refused(String),
+    /// An `AgentExecutorPackage` answered and raised its own error flag -- a dispatch that
+    /// completed and reported that something went wrong, which is not the same thing as a
+    /// dispatch that failed. The distinction is what a branch reads.
+    Errored(String),
 }
 
 fn Clean_Executor_Answer(result: &str) -> PortAnswer
@@ -192,6 +200,13 @@ fn Clean_Model_Answer(response: &str) -> PortAnswer
 fn Failing_Answer(reason: &str) -> PortAnswer
 {
     return PortAnswer::Refused(reason.to_owned());
+}
+
+/// An executor that answered and raised its own error flag, which is what makes a node
+/// publish `ProducedState::Flagged` without the dispatch having failed.
+fn Errored_Executor_Answer(result: &str) -> PortAnswer
+{
+    return PortAnswer::Errored(result.to_owned());
 }
 
 /// Both ports, answering from one queue the case wrote down, consumed one per dispatch in the
@@ -228,7 +243,8 @@ impl nomos_agent_contracts::AgentExecutor for ScriptedPorts
     {
         return match self.Next()
         {
-            PortAnswer::Executed(result) => Ok(Executed_With(&result)),
+            PortAnswer::Executed(result) => Ok(Executed_With(&result, false)),
+            PortAnswer::Errored(result) => Ok(Executed_With(&result, true)),
             PortAnswer::Refused(reason) => Err(nomos_agent_contracts::DispatchRefusal::Of(reason)),
             PortAnswer::Answered(response) =>
             {
@@ -248,7 +264,7 @@ impl nomos_agent_contracts::ModelBackend for ScriptedPorts
         {
             PortAnswer::Answered(response) => Ok(nomos_agent_contracts::ModelAnswer { response }),
             PortAnswer::Refused(reason) => Err(nomos_agent_contracts::DispatchRefusal::Of(reason)),
-            PortAnswer::Executed(result) =>
+            PortAnswer::Executed(result) | PortAnswer::Errored(result) =>
             {
                 panic!("an executor execution {result:?} was queued for a model backend dispatch")
             }
@@ -256,9 +272,10 @@ impl nomos_agent_contracts::ModelBackend for ScriptedPorts
     }
 }
 
-/// An execution carrying `result` as its one assumption, and the four measurements an
-/// `AgentExecutorPackage` establishes and a `ModelBackendPackage` does not.
-fn Executed_With(result: &str) -> nomos_agent_contracts::AgentExecution
+/// An execution carrying `result` as its one assumption, `is_error` as the flag the
+/// executor raised, and the four measurements an `AgentExecutorPackage` establishes and a
+/// `ModelBackendPackage` does not.
+fn Executed_With(result: &str, is_error: bool) -> nomos_agent_contracts::AgentExecution
 {
     use nomos_agent_contracts::{PortionSubstantiation, Substantiation, UnsubstantiatedReason, WorkResult};
 
@@ -282,7 +299,7 @@ fn Executed_With(result: &str) -> nomos_agent_contracts::AgentExecution
             },
         },
         denied_tool_uses: Vec::new(),
-        is_error: false,
+        is_error,
         spend: nomos_agent_contracts::MicroDollars::From_Micros(10_000),
         duration_ms: 10,
     };

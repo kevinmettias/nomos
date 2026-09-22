@@ -3,7 +3,7 @@ id: OD-WORKFLOW-005
 type: decision
 title: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - workflow
@@ -27,7 +27,11 @@ relations:
     type: relates-to
   - target: OD-EXECUTOR-003
     type: relates-to
+  - target: OD-EXECUTOR-008
+    type: relates-to
   - target: OD-PACKAGE-016
+    type: relates-to
+  - target: OD-ROADMAP-006
     type: relates-to
 ---
 
@@ -138,32 +142,47 @@ that. It is scoped by explicit subtraction, named in full in "What This Does Not
 
 ## What This Does Not Build
 
-Corrected in place at version 2: four of the clauses version 1 wrote here either named an
-absence this workspace has since built, or gave a reason that has since stopped holding. The
-amendment section below quotes each of the four and names what moved it, so this list is what
-stays out and the correction can still be checked against the words it replaced.
+Corrected in place twice. At version 2, four of the clauses version 1 wrote here either named
+an absence this workspace had since built or gave a reason that had stopped holding. At version
+3, four more were superseded by name by `OD-ROADMAP-006` and then built. The amendment sections
+below quote each and name what moved it, so this list is what stays out and every correction can
+still be checked against the words it replaced.
 
-No immutable published artifacts (`WF-009`). No branch/merge semantics or bounded parallelism
-(`WF-010`) — `Run` is one ordered sequence, nothing more. No independently versioned workflow
-definitions with pinned historical replay (`WF-011`). No `WF-012` cache or cancellation
-*runtime* — `Cacheability` and `CancellationBehavior` are read by `Is_Coherent` and carried on
-each step's declaration, and nothing here substitutes a prior result for a dispatch or cuts a
-dispatch short; version 1's single clause grouped `RetryPolicy`, `Timeout` and `Compensation`
-under the same absence, and those three have been honored since `29bc3e20`. No deduplication
-token minted — `Is_Coherent` refuses a retryable, non-idempotent, side-effecting step that
-requires none and declares no compensation, so every retry runs under a cover the contract
-already checked, but nothing here mints a per-attempt token or hands one to any dispatch
-target. No compensating *step* — `Compensation::ExternallyCompensated` is reported as owed to
-whatever assembled the plan, never composed into another step's compensating run, which
-`Compensation`'s own doc declines to name. No shared dispatch trait — `Body` names each real
-dispatch target directly, the same restraint `OD-EXECUTOR-001`/`OD-EXECUTOR-004` already hold,
-and this record does not reach into the separate `OD-EXECUTOR-004` shared-trait question. No
-`WorkResult` assembly — a step's real outcome is carried in `StepOutcome` exactly as its
+No `WF-012` **cancellation** runtime. `OD-ROADMAP-006` decision 2 superseded the cache half of
+version 2's combined clause and deliberately left this half standing, on the reason that clause
+itself gave: nothing in this workspace can cut a dispatch in flight, and `CancellationBehavior`
+is the declaration that would say whether a step even permits being cut short. It is still read
+by `Is_Coherent` and by no runtime, nothing here cuts a dispatch short, and a broken `Timeout`
+is therefore still *reported* after the dispatch ends rather than interrupting it — which is
+also why no node of a workflow definition can be cancelled either.
+
+No deduplication token minted — `Is_Coherent` refuses a retryable, non-idempotent,
+side-effecting step that requires none and declares no compensation, so every retry runs under a
+cover the contract already checked, but nothing here mints a per-attempt token or hands one to
+any dispatch target. No compensating *step* — `Compensation::ExternallyCompensated` is reported
+as owed to whatever assembled the plan, never composed into another step's compensating run,
+which `Compensation`'s own doc declines to name. No shared dispatch trait — `Body` names each
+real dispatch target directly, the same restraint `OD-EXECUTOR-001`/`OD-EXECUTOR-004` already
+hold, and this record does not reach into the separate `OD-EXECUTOR-004` shared-trait question.
+No `WorkResult` assembly — a step's real outcome is carried in `StepOutcome` exactly as its
 dispatch target reported it, and nothing here builds a `WorkResult` out of it; version 1 gave
 as the reason that neither `AgentExecutor` produces the material an honest assembly would
-need, and that reason no longer holds — `OD-EXECUTOR-003` decided the first real `WorkResult`
-and `nomos-agent-executor-claude-code` constructs one — so this exclusion stands on this crate
-assembling none, not on there being none to carry.
+need, and that reason no longer holds — `OD-EXECUTOR-008` decided a canonical `WorkResult`
+carrying only the fields a bare-prompt executor can honestly populate, and
+`nomos-agent-executor-claude-code` constructs one at `fe0fac58` — so this exclusion stands on
+this crate assembling none, not on there being none to carry.
+
+Four clauses that stood here through version 2 are no longer absences. `OD-ROADMAP-006`
+decision 2 superseded, by name and by version, "no immutable published artifacts (`WF-009`)",
+"no branch/merge semantics or bounded parallelism (`WF-010`) — `Run` is one ordered sequence,
+nothing more", "no independently versioned workflow definitions with pinned historical replay
+(`WF-011`)", and the **cache** half of the `WF-012` clause.
+`P128-THE-WORKFLOW-ENGINE-RUNS-A-LINE-AND-CANNOT-BRANCH-JOIN-OR-REPLAY` built all four, in
+`nomos-workflow-orchestration` and beside the sequential runner rather than inside it. The
+amendment section below states how far each was exercised and names the three limits on what
+was built, so this list is not read as claiming the authorization was spent further than it
+was. `Run` itself is still one ordered sequence and still reports exactly what it always
+reported; what is new stands next to it.
 
 Two of version 1's clauses are no longer absences at all, and are corrected here rather than
 left to read as current. The `nomos-check-orchestration::Run` step body version 1 named as "a
@@ -272,13 +291,126 @@ Measured" sections are measurements dated to the revision they were read at, and
 re-measures none of them; one of them the tree no longer agrees with, and it is named here so it
 is not read as current: version 1 grepped every real `WorkResult` construction site and found
 only `nomos-agent-contracts`' own `#[cfg(test)]` module, and `nomos-agent-executor-claude-code`
-now constructs one under `OD-EXECUTOR-003`. Whether that moves `OD-WORKFLOW-004`'s own finding,
+now constructs one under `OD-EXECUTOR-008` (version 2 of this record said `OD-EXECUTOR-003`,
+which the amendment below corrects). Whether that moves `OD-WORKFLOW-004`'s own finding,
 or any condition `OD-WORKFLOW-002` named, is those two records' question and belongs to an item
 that reserves them; this amendment neither restates those conditions nor decides them. Version
 1's per-backend `Body` variants were replaced by `OD-PACKAGE-016`'s profile resolution, which is
 that record's decision and is not reopened here. And this amendment does not reopen
 `OD-ROADMAP-001`'s override: the increment version 1 recorded stays recorded as the narrow,
 explicit, session-specific override it was, and nothing here widens or generalizes it.
+
+## Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built
+
+`OD-ROADMAP-006` decision 2 superseded four of this record's "What This Does Not Build" clauses
+by name and by version, and
+`P128-THE-WORKFLOW-ENGINE-RUNS-A-LINE-AND-CANNOT-BRANCH-JOIN-OR-REPLAY` built them. Version 2
+was true at the revision it was written against; the corrections are made in place above and the
+words they replaced are quoted here, so what changed can be checked against what it said rather
+than taken on trust.
+
+**What version 2 said.** "No immutable published artifacts (`WF-009`). No branch/merge semantics
+or bounded parallelism (`WF-010`) — `Run` is one ordered sequence, nothing more. No
+independently versioned workflow definitions with pinned historical replay (`WF-011`). No
+`WF-012` cache or cancellation *runtime* — `Cacheability` and `CancellationBehavior` are read by
+`Is_Coherent` and carried on each step's declaration, and nothing here substitutes a prior
+result for a dispatch or cuts a dispatch short."
+
+**A definition is published, identified and versioned.** `WorkflowDefinition` is an immutable
+value whose fields are private and whose only constructor publishes it under a
+`WorkflowDefinitionId` at a caller-stated version. Identity and version are authored rather than
+derived from a content digest, and deliberately so: a content-derived identity would collapse
+the two into one number and lose the distinction the replay refusal is built on, because a
+definition republished at the same version with different content would then simply be a
+different definition nobody had asked about.
+
+**A plan can branch and join.** A definition is an ordered list of nodes and a node's own name
+is the value it publishes, so a condition over what earlier steps produced is spelled as a
+condition over an earlier node. A branch chooses the arm matching the state that node published
+and skips the nodes of every arm it did not choose; a join reconverges the arms it names. The
+state is a two-valued reduction of what the answering seam itself reported, deferring to each
+seam's own vocabulary rather than inventing a threshold, and every case where a seam reached no
+judgment at all publishes the flagged state rather than the clean one — the collapse
+`nomos-contracts`' honesty vocabularies exist to prevent. The run reports which arm ran and why
+as the value read, the state it was read in and the arm that state selected: structured rather
+than rendered, so a reader re-derives the choice instead of taking an account of it on trust.
+
+**A branch on a value no node produces is refused before any body dispatches.** Publishing takes
+that refusal, along with a duplicate node name, a step requiring a value nothing before it
+publishes, an arm or a join naming a node in the wrong direction, and any step whose own
+`Is_Coherent` refuses its declaration. So the refusal is strictly earlier than the one `Run`
+makes rather than merely equal to it: a definition holds the whole topology before anything
+runs, where a plan reaches an incoherent step only after the steps before it have already
+dispatched. That is why `WorkflowOutcome::Refused` is unreachable from a definition run — the
+refusal moved earlier rather than away.
+
+**Parallelism is bounded, and the bound is honored rather than advisory.** Nodes that read none
+of each other's values fall into one dependency wave, and a wave is cut into groups of at most
+the bound the caller states, so a wave wider than the bound arrives as several groups rather
+than one oversized one and no group a run reports ever exceeds the stated number. Determinism
+survives it: every report is ordered by the declaration and never by the order a group's members
+were visited in. That is proven rather than asserted, by running one definition under both visit
+orders and comparing the whole report — which is what a stated visit order exists for, since a
+crate that dispatches sequentially would otherwise have no second order to falsify the claim
+against.
+
+**Cacheability is honored, within a stated limit.** A node whose declaration permits
+substitution and that repeats an earlier wave's node is served that node's result and does not
+dispatch. The key is the whole body and the whole input schema rather than
+`Cacheable::key_inputs`, whose field names name a sub-shape this workspace has no resolver for;
+whole-body equality is strictly stronger than the declared key, so nothing is ever substituted
+that the declaration would have forbidden, and what is given up is hits the declaration would
+have allowed — the right direction to be wrong in for a cache. A node declaring `NotCacheable`
+is never substituted, and no substitution is made inside a single group, because two nodes of
+one group have no order between them and a hit that depended on which was visited first would
+be the exact leak the determinism guarantee rules out.
+
+**Three limits on what was built, stated rather than left to be discovered.** No thread is
+spawned and no executor is composed, so a group's members are dispatched one after another; what
+the bound buys is an explicit, checkable statement of how much independent work may be in flight
+at once, not work in flight. A definition run is the clockless entry point, so a node declaring
+`Timeout::Seconds` reports it unmeasured rather than honored. And the cache is within one run:
+no result is persisted and nothing is substituted across two runs, so the published artifact
+`WF-009` names is the definition and not a result store.
+
+**What did not change.** `Run`, `Run_Unclocked` and `Run_With_Clock` keep their signatures and
+their behaviour, and their tests pass untouched — which is the evidence that the one real
+caller, `nomos_cli::workflow`, was not broken. `WorkflowOutcome` and `DispatchError` are
+unchanged, because three sites across `nomos-api` and `nomos-cli` match their variants field by
+field with no wildcard arm, measured rather than assumed, so the richer report is a third type
+beside them. That is the same shape version 2's own amendment already took for `WorkflowRun`,
+applied once more for the same reason.
+
+## Amendment: The Claude Code Executor's WorkResult Answers to OD-EXECUTOR-008, Not OD-EXECUTOR-003
+
+Version 2 attributed `nomos-agent-executor-claude-code`'s real `WorkResult` to
+`OD-EXECUTOR-003`, in the relations list and twice in the body. That attribution is wrong, and
+it is corrected in place above. Measured rather than assumed, at the revision this amendment was
+written against: the executor's real `WorkResult` landed at `fe0fac58`, whose own commit body
+opens "`OD-EXECUTOR-008`'s decision, implemented"; `git log -S WorkResult` over
+`crates/agent/nomos-agent-executor-claude-code/src/response.rs` names only `fe0fac58` and
+`9b3e9683`; and `OD-EXECUTOR-008`'s own title is that a canonical `WorkResult` carries only the
+fields a bare-prompt executor can honestly populate, which is exactly what that commit built.
+
+`OD-EXECUTOR-003` decided something else, and its own subject is still unbuilt. It decided that
+the first real `WorkResult` is judge-role's own verdict, built from an identity Claude Code
+never has to invent — a verdict carrying a real `Finding` in its `claims`. Measured directly:
+`response::Work_Result` sets `claims: Vec::new()` on every invocation, and
+`WORK_RESULT_SUBSTANTIATION` declares `claims` as `Unsubstantiated(ProducerCannotGround)`. So a
+reader following the old citation arrived at a record whose own decision has not been
+implemented and read it as the authority for one that has, which is the one kind of staleness a
+reader cannot detect from the citation itself.
+
+The relation to `OD-EXECUTOR-003` is kept rather than removed, and a relation to
+`OD-EXECUTOR-008` is added beside it. The two records are genuinely related, and
+`OD-EXECUTOR-003`'s subject remaining open is worth a reader finding rather than losing; what is
+corrected is which of the two the built artifact answers to. This amendment does not schedule
+`OD-EXECUTOR-003`'s own decision and does not reopen it.
+
+This correction rides here rather than in an item of its own because one claimant amending one
+record once is better than two items racing for one file. It was first measured by the claimant
+of `b3dc4728` while amending `OD-WORKFLOW-004`, and every claim in it was re-verified directly
+before being written here.
 
 ## Status
 
@@ -295,6 +427,18 @@ which corrected "What This Does Not Build" against the tree: the `WF-012` retry,
 compensation runtime it named as unimplemented was built by
 `P123-WORKFLOW-RETRY-TIMEOUT-COMPENSATION-RUNTIME` at `29bc3e20`, the check step body and the
 CLI verb it declined were built by `P40-WORKFLOW-CHECK-BODY` and `P40-WORKFLOW-CLI-VERB`, and
-the reason it gave for excluding `WorkResult` assembly was overtaken by `OD-EXECUTOR-003`. The decision this record names, and the override it records
-that decision as having been made under, are unchanged; what moved is which absences it may
-still claim.
+the reason it gave for excluding `WorkResult` assembly was overtaken by what is recorded above
+as `OD-EXECUTOR-008` rather than the `OD-EXECUTOR-003` version 2 named. The decision this
+record names, and the override it records that decision as having been made under, are
+unchanged; what moved is which absences it may still claim.
+
+Amended to version 3 by
+`P128-THE-WORKFLOW-ENGINE-RUNS-A-LINE-AND-CANNOT-BRANCH-JOIN-OR-REPLAY`, which carries two
+unrelated corrections in one amendment. The first: the four clauses `OD-ROADMAP-006` decision 2
+superseded — `WF-009`'s published artifacts, `WF-010`'s branch, merge and bounded parallelism,
+`WF-011`'s versioned replayable definitions, and the cache half of `WF-012` — are built, with
+the three limits on how far that authorization was exercised named above, and the cancellation
+half of `WF-012` left standing on its own reason. The second: this record's attribution of the
+Claude Code executor's real `WorkResult` to `OD-EXECUTOR-003` is corrected to `OD-EXECUTOR-008`
+in the relations list and in both places in the body, and `OD-EXECUTOR-003`'s own subject is
+recorded as still unbuilt rather than elided.

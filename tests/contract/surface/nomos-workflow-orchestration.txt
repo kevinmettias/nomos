@@ -1,10 +1,21 @@
+pub const fn nomos_workflow_orchestration::Parallelism::Of(bound: NonZeroUsize) -> Self
 pub const fn nomos_workflow_orchestration::StepTiming::Has_Timed_Out(self) -> bool
+pub const fn nomos_workflow_orchestration::WorkflowDefinition::Id(&self) -> &WorkflowDefinitionId
+pub const fn nomos_workflow_orchestration::WorkflowDefinition::Version(&self) -> u32
+pub const fn nomos_workflow_orchestration::WorkflowRunRecord::Definition(&self) -> &WorkflowDefinition
+pub const fn nomos_workflow_orchestration::WorkflowRunRecord::Produced(&self) -> &DefinitionRun
 pub enum nomos_workflow_orchestration::Body
 pub enum nomos_workflow_orchestration::CommitIntent
+pub enum nomos_workflow_orchestration::DefinitionRefusal
 pub enum nomos_workflow_orchestration::DispatchError
+pub enum nomos_workflow_orchestration::GroupVisitOrder
+pub enum nomos_workflow_orchestration::NodeDisposition
+pub enum nomos_workflow_orchestration::ProducedState
+pub enum nomos_workflow_orchestration::ReplayRefusal
 pub enum nomos_workflow_orchestration::StepCompensation
 pub enum nomos_workflow_orchestration::StepOutcome
 pub enum nomos_workflow_orchestration::StepTiming
+pub enum nomos_workflow_orchestration::WorkflowNode
 pub enum nomos_workflow_orchestration::WorkflowOutcome
 pub enum variant nomos_workflow_orchestration::Body::Agent(AgentBody)
 pub enum variant nomos_workflow_orchestration::Body::Check(CheckBody)
@@ -12,9 +23,25 @@ pub enum variant nomos_workflow_orchestration::Body::Correction(CorrectionBody)
 pub enum variant nomos_workflow_orchestration::Body::Gate(GateBody)
 pub enum variant nomos_workflow_orchestration::CommitIntent::Commit
 pub enum variant nomos_workflow_orchestration::CommitIntent::Stage
+pub enum variant nomos_workflow_orchestration::DefinitionRefusal::BranchesOnUnproducedValue { branch: String, value: String, }
+pub enum variant nomos_workflow_orchestration::DefinitionRefusal::DuplicateNodeName { name: String, }
+pub enum variant nomos_workflow_orchestration::DefinitionRefusal::IncoherentStep { node: String, }
+pub enum variant nomos_workflow_orchestration::DefinitionRefusal::NamesUnknownNode { node: String, named: String, }
+pub enum variant nomos_workflow_orchestration::DefinitionRefusal::RequiresUnproducedValue { node: String, value: String, }
 pub enum variant nomos_workflow_orchestration::DispatchError::AgentNotSelected(nomos_agent_orchestration::BackendAbsence)
 pub enum variant nomos_workflow_orchestration::DispatchError::AgentUnavailable(String)
 pub enum variant nomos_workflow_orchestration::DispatchError::Gate(nomos_gate_orchestration::GateRunResult)
+pub enum variant nomos_workflow_orchestration::GroupVisitOrder::Declared
+pub enum variant nomos_workflow_orchestration::GroupVisitOrder::Reversed
+pub enum variant nomos_workflow_orchestration::NodeDisposition::Dispatched { produced: ProducedState, }
+pub enum variant nomos_workflow_orchestration::NodeDisposition::Served { from: String, produced: ProducedState, }
+pub enum variant nomos_workflow_orchestration::NodeDisposition::Settled { produced: ProducedState, }
+pub enum variant nomos_workflow_orchestration::NodeDisposition::Skipped { by: String, }
+pub enum variant nomos_workflow_orchestration::ProducedState::Clean
+pub enum variant nomos_workflow_orchestration::ProducedState::Flagged
+pub enum variant nomos_workflow_orchestration::ReplayRefusal::Content { id: WorkflowDefinitionId, version: u32, }
+pub enum variant nomos_workflow_orchestration::ReplayRefusal::Identity { recorded: WorkflowDefinitionId, offered: WorkflowDefinitionId, }
+pub enum variant nomos_workflow_orchestration::ReplayRefusal::Version { recorded: u32, offered: u32, }
 pub enum variant nomos_workflow_orchestration::StepCompensation::Compensated { index: usize, restored: Vec<String>, }
 pub enum variant nomos_workflow_orchestration::StepCompensation::Owed { index: usize, }
 pub enum variant nomos_workflow_orchestration::StepCompensation::Refused { index: usize, reason: String, }
@@ -26,6 +53,9 @@ pub enum variant nomos_workflow_orchestration::StepTiming::Exceeded { declared_s
 pub enum variant nomos_workflow_orchestration::StepTiming::Honored { declared_seconds: NonZeroU32, elapsed_seconds: u64, }
 pub enum variant nomos_workflow_orchestration::StepTiming::Unbounded
 pub enum variant nomos_workflow_orchestration::StepTiming::Unmeasured { declared_seconds: NonZeroU32, }
+pub enum variant nomos_workflow_orchestration::WorkflowNode::Branch { name: String, on: String, arms: Vec<BranchArm>, }
+pub enum variant nomos_workflow_orchestration::WorkflowNode::Join { name: String, arms: Vec<String>, }
+pub enum variant nomos_workflow_orchestration::WorkflowNode::Step { name: String, requires: Vec<String>, step: WorkflowStepPlan, }
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Completed { completed: Vec<StepOutcome>, }
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Failed { completed: Vec<StepOutcome>, index: usize, error: DispatchError, }
 pub enum variant nomos_workflow_orchestration::WorkflowOutcome::Refused { completed: Vec<StepOutcome>, index: usize, }
@@ -34,11 +64,26 @@ pub fn nomos_workflow_orchestration::CommitIntent::From_Flag(flag: bool) -> Self
 pub fn nomos_workflow_orchestration::CommitIntent::Is_A_Commit(self) -> bool
 pub fn nomos_workflow_orchestration::CorrectionBody::New(root: PathBuf, sources: Vec<SourceFile>, commit: CommitIntent) -> Self
 pub fn nomos_workflow_orchestration::GateBody::New(sources: Vec<SourceFile>, command: GateCommand) -> Self
+pub fn nomos_workflow_orchestration::Replay<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( record: &WorkflowRunRecord, against: &WorkflowDefinition, execution: &WorkflowExecution<'_, Launcher, Fs, Env>, ) -> Result<DefinitionRun, ReplayRefusal>
 pub fn nomos_workflow_orchestration::Run<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> WorkflowOutcome
+pub fn nomos_workflow_orchestration::Run_Definition<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( definition: &WorkflowDefinition, execution: &WorkflowExecution<'_, Launcher, Fs, Env>, ) -> WorkflowRunRecord
 pub fn nomos_workflow_orchestration::Run_Unclocked<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(plan: &[WorkflowStepPlan], platform: &Platform<'_, Launcher, Fs, Env>, variant: &BuildVariant, run: RunId) -> WorkflowRun
 pub fn nomos_workflow_orchestration::Run_With_Clock<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment, Clk: Clock>(plan: &[WorkflowStepPlan], platform: &ClockedPlatform<'_, Launcher, Fs, Env, Clk>, variant: &BuildVariant, run: RunId) -> WorkflowRun
+pub fn nomos_workflow_orchestration::WorkflowDefinition::Nodes(&self) -> &[WorkflowNode]
+pub fn nomos_workflow_orchestration::WorkflowDefinition::Publish(id: WorkflowDefinitionId, version: u32, nodes: Vec<WorkflowNode>) -> Result<Self, DefinitionRefusal>
+pub fn nomos_workflow_orchestration::WorkflowDefinitionId::New(name: &str) -> Self
+pub fn nomos_workflow_orchestration::WorkflowDefinitionId::Text(&self) -> &str
+pub fn nomos_workflow_orchestration::WorkflowDefinitionId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_workflow_orchestration::WorkflowNode::Name(&self) -> &str
+pub impl nomos_workflow_orchestration::WorkflowDefinitionId implements core::fmt::Display
 pub struct field nomos_workflow_orchestration::AgentBody::profile: ModelExecutionProfile
 pub struct field nomos_workflow_orchestration::AgentBody::task: TaskEnvelope
+pub struct field nomos_workflow_orchestration::BranchArm::nodes: Vec<String>
+pub struct field nomos_workflow_orchestration::BranchArm::when: ProducedState
+pub struct field nomos_workflow_orchestration::BranchChoice::arm: Option<usize>
+pub struct field nomos_workflow_orchestration::BranchChoice::branch: String
+pub struct field nomos_workflow_orchestration::BranchChoice::observed: Option<ProducedState>
+pub struct field nomos_workflow_orchestration::BranchChoice::on: String
 pub struct field nomos_workflow_orchestration::CheckBody::root: PathBuf
 pub struct field nomos_workflow_orchestration::CheckBody::selected: Vec<RuleId>
 pub struct field nomos_workflow_orchestration::CheckBody::sources: Vec<SourceFile>
@@ -47,8 +92,21 @@ pub struct field nomos_workflow_orchestration::ClockedPlatform::platform: &'a Pl
 pub struct field nomos_workflow_orchestration::CorrectionBody::commit: CommitIntent
 pub struct field nomos_workflow_orchestration::CorrectionBody::root: PathBuf
 pub struct field nomos_workflow_orchestration::CorrectionBody::sources: Vec<SourceFile>
+pub struct field nomos_workflow_orchestration::DefinitionRun::attempts: Vec<StepAttempt>
+pub struct field nomos_workflow_orchestration::DefinitionRun::choices: Vec<BranchChoice>
+pub struct field nomos_workflow_orchestration::DefinitionRun::compensations: Vec<StepCompensation>
+pub struct field nomos_workflow_orchestration::DefinitionRun::groups: Vec<DispatchGroup>
+pub struct field nomos_workflow_orchestration::DefinitionRun::nodes: Vec<NodeReport>
+pub struct field nomos_workflow_orchestration::DefinitionRun::outcome: WorkflowOutcome
+pub struct field nomos_workflow_orchestration::DispatchGroup::nodes: Vec<String>
+pub struct field nomos_workflow_orchestration::DispatchGroup::wave: usize
 pub struct field nomos_workflow_orchestration::GateBody::command: GateCommand
 pub struct field nomos_workflow_orchestration::GateBody::sources: Vec<SourceFile>
+pub struct field nomos_workflow_orchestration::NodeReport::disposition: NodeDisposition
+pub struct field nomos_workflow_orchestration::NodeReport::index: usize
+pub struct field nomos_workflow_orchestration::NodeReport::name: String
+pub struct field nomos_workflow_orchestration::Parallelism::bound: NonZeroUsize
+pub struct field nomos_workflow_orchestration::Parallelism::visit: GroupVisitOrder
 pub struct field nomos_workflow_orchestration::Platform::declared: &'a [nomos_agent_contracts::DeclaredTarget<'a>]
 pub struct field nomos_workflow_orchestration::Platform::environment: &'a Env
 pub struct field nomos_workflow_orchestration::Platform::filesystem: &'a Fs
@@ -58,17 +116,31 @@ pub struct field nomos_workflow_orchestration::StepAttempt::attempt: u32
 pub struct field nomos_workflow_orchestration::StepAttempt::failure: Option<DispatchError>
 pub struct field nomos_workflow_orchestration::StepAttempt::index: usize
 pub struct field nomos_workflow_orchestration::StepAttempt::timing: StepTiming
+pub struct field nomos_workflow_orchestration::WorkflowExecution::parallelism: Parallelism
+pub struct field nomos_workflow_orchestration::WorkflowExecution::platform: &'a Platform<'a, Launcher, Fs, Env>
+pub struct field nomos_workflow_orchestration::WorkflowExecution::run: RunId
+pub struct field nomos_workflow_orchestration::WorkflowExecution::variant: &'a BuildVariant
 pub struct field nomos_workflow_orchestration::WorkflowRun::attempts: Vec<StepAttempt>
 pub struct field nomos_workflow_orchestration::WorkflowRun::compensations: Vec<StepCompensation>
 pub struct field nomos_workflow_orchestration::WorkflowRun::outcome: WorkflowOutcome
 pub struct field nomos_workflow_orchestration::WorkflowStepPlan::body: Body
 pub struct field nomos_workflow_orchestration::WorkflowStepPlan::declaration: WorkflowStep
 pub struct nomos_workflow_orchestration::AgentBody
+pub struct nomos_workflow_orchestration::BranchArm
+pub struct nomos_workflow_orchestration::BranchChoice
 pub struct nomos_workflow_orchestration::CheckBody
 pub struct nomos_workflow_orchestration::ClockedPlatform<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment, Clk: Clock>
 pub struct nomos_workflow_orchestration::CorrectionBody
+pub struct nomos_workflow_orchestration::DefinitionRun
+pub struct nomos_workflow_orchestration::DispatchGroup
 pub struct nomos_workflow_orchestration::GateBody
+pub struct nomos_workflow_orchestration::NodeReport
+pub struct nomos_workflow_orchestration::Parallelism
 pub struct nomos_workflow_orchestration::Platform<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 pub struct nomos_workflow_orchestration::StepAttempt
+pub struct nomos_workflow_orchestration::WorkflowDefinition
+pub struct nomos_workflow_orchestration::WorkflowDefinitionId(String)
+pub struct nomos_workflow_orchestration::WorkflowExecution<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 pub struct nomos_workflow_orchestration::WorkflowRun
+pub struct nomos_workflow_orchestration::WorkflowRunRecord
 pub struct nomos_workflow_orchestration::WorkflowStepPlan

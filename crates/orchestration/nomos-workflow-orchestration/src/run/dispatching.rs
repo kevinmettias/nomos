@@ -15,15 +15,15 @@ use super::Platform;
 /// generic clock parameter would force the clockless entry point to name a clock type it
 /// does not have. `None` is what makes a bounded step report
 /// [`crate::StepTiming::Unmeasured`] rather than a measurement nothing took.
-pub(super) struct Dispatching<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
+pub(crate) struct Dispatching<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 {
     /// The real platform this run's steps dispatch through.
-    pub(super) platform: &'a Platform<'a, Launcher, Fs, Env>,
+    pub(crate) platform: &'a Platform<'a, Launcher, Fs, Env>,
     /// What the compiling binary was built as, for a check, correction or gate step.
-    pub(super) variant: &'a BuildVariant,
+    pub(crate) variant: &'a BuildVariant,
     /// The run a gate step identifies its own execution by.
-    pub(super) run: RunId,
+    pub(crate) run: RunId,
     /// Where a bounded step's start and end are read from, or `None` when this run was
     /// given no clock to read.
-    pub(super) read_clock: Option<&'a dyn Fn() -> Timestamp>,
+    pub(crate) read_clock: Option<&'a dyn Fn() -> Timestamp>,
 }

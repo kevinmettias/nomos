@@ -92868,16 +92868,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P128-OD-ROADMAP-006-THE-REMAINING-REVIEW-GAPS-ARE-REQUIRED-AND-FIVE-DEFERRALS-ARE-NAMED"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p128-engine",
-        "acquired_at": 1790058750,
-        "lease_expires_at": 1790069550
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -92890,9 +92886,38 @@
         ],
         "timeout_seconds": 5400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-contracts"
+        ],
+        "exit_code": 0,
+        "output_tail": "tes\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-corrections v0.1.0 (F:\\repos\\nomos-p128-engine\\crates\\corrections\\nomos-corrections)\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling nomos-correction-orchestration v0.1.0 (F:\\repos\\nomos-p128-engine\\crates\\orchestration\\nomos-correction-orchestration)\n   Compiling nomos-agent-contracts v0.1.0 (F:\\repos\\nomos-p128-engine\\crates\\agent\\nomos-agent-contracts)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos-p128-engine\\crates\\orchestration\\nomos-gate-orchestration)\n   Compiling nomos-agent-orchestration v0.1.0 (F:\\repos\\nomos-p128-engine\\crates\\orchestration\\nomos-agent-orchestration)\n   Compiling nomos-workflow-orchestration v0.1.0 (F:\\repos\\nomos-p128-engine\\crates\\orchestration\\nomos-workflow-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.04s\n     Running unittests src\\lib.rs (target-p128\\debug\\deps\\nomos_contracts-71d6ecb473f133e0.exe)\n     Running unittests src\\lib.rs (target-p128\\debug\\deps\\nomos_workflow_orchestration-0a5b0b965aba6d58.exe)\n   Doc-tests nomos_contracts\n   Doc-tests nomos_workflow_orchestration\n",
+        "verified_at": 1790106374,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "fable-p128-engine",
+          "acquired_at": 1790058750,
+          "lease_expires_at": 1790069550
+        }
+      ],
       "declined": null,
       "widened": [
         {
@@ -92992,12 +93017,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P123-FACT-STORE-SURVIVES-THE-PROCESS-2"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p128-factgraph",
+        "acquired_at": 1790104796,
+        "lease_expires_at": 1790115596
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -93926,7 +93955,8 @@
           "crates/rules/nomos-rules/src/lib.rs",
           "tests/contract/surface/nomos-rules.txt",
           "crates/rules/nomos-rules/src/checks/rust_text",
-          "crates/rules/nomos-rules/docs/api/lib.md"
+          "crates/rules/nomos-rules/docs/api/lib.md",
+          "tests/contract/tests/rule_composition.rs"
         ],
         "patterns": []
       },
@@ -93934,9 +93964,9 @@
       "depends_on": [],
       "blocked": null,
       "claim": {
-        "holder": "fable-p129-declared",
-        "acquired_at": 1790059936,
-        "lease_expires_at": 1790070736
+        "holder": "fable-p129-declared-2",
+        "acquired_at": 1790104726,
+        "lease_expires_at": 1790115526
       },
       "verification": {
         "argv": [
@@ -93952,7 +93982,13 @@
       },
       "verified": null,
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "fable-p129-declared",
+          "acquired_at": 1790059936,
+          "lease_expires_at": 1790070736
+        }
+      ],
       "declined": null,
       "widened": [
         {
@@ -93962,6 +93998,13 @@
             "crates/rules/nomos-rules/docs/api/lib.md"
           ],
           "widened_at": 1790060744
+        },
+        {
+          "holder": "fable-p129-declared-2",
+          "added": [
+            "tests/contract/tests/rule_composition.rs"
+          ],
+          "widened_at": 1790105473
         }
       ]
     },
@@ -94013,6 +94056,47 @@
         },
         "revision": "bba02515080771172949d95ada6eb560e7f87e36"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P130-THE-SERIALIZER-GUARD-NAMES-A-COUPLING-THAT-RESOLVES-AND-THE-ONE-IT-FOUND-IS-A-SINGLE-ITEMS-TERRITORY",
+      "title": "The structural-serializer guard is red at HEAD over a path that resolves, and the coupling underneath it is one item reserving eleven crates",
+      "why": "Test_Every_Universal_Reservation_Should_Be_Declared fails at HEAD for every session, reporting crates/rules/nomos-rules as a universal reservation in no declared register, and KNOWN_SERIALIZERS is empty so the register has nothing to say. Measured here and independently by a second session: the four open record writers are P110-B, P113, P114 and P126, and all four do reserve under that crate. The two sessions read the cause differently and the difference decides the fix, which is why this is a decision rather than a correction. The other session reads it as the discriminator misfiring on a coincidence of four, since the coupling dissolves the moment any one of the four lands, and the guard's own doc defines a structural serializer as one that does not resolve. This session measured the territories and reads it the other way: P113, P114 and P126 reserve narrow files, several of them mutually disjoint, and the only reason anything folds up to the crate root is that P110-B reserves eleven entire crates, nomos-rules among them, through Is_Covering folding a reservation onto everything beneath it. On that reading the guard found a real reason the board runs one item at a time and only its message is wrong, because it calls structural a coupling that does resolve. P110-B is additionally stale: it is lapsed, and its central work is already committed, since Finding::address is at HEAD in crates/contracts/nomos-contracts/src/reporting/finding.rs. The threshold the first reading would change, WRITERS_MAKING_A_SERIALIZER, is governed by OD-LEDGER-032, which measured the cost of the current setting as red on 26 of the last 30 commits, so raising it is a decision against a record that already weighed this and not a tuning change. Whichever reading holds, a guard that is red at HEAD teaches every session to expect red and is the condition under which a real finding stops being read.",
+      "done_when": "The guard is green at HEAD for a stated reason rather than a silenced one, and the reason is recorded where the next session will find it. The claimant re-measures the population first rather than trusting either session's account, because the board moves and a writer landing or being authored changes the answer: enumerate the open record writers, print each one's reservations under crates/rules/nomos-rules, and say whether the universal path survives when P110-B alone is set aside. That measurement decides between the readings and must be reported whichever way it falls. If the path is universal only because of P110-B, the resolution is P110-B's territory and not the threshold: it is re-authored to the artefacts it actually writes, through the ledger by decline and re-add rather than by hand, with the re-authored item preserving every done_when clause the original carried and its already-landed work acknowledged rather than re-specified. If instead the path survives without P110-B, the coupling is real across unrelated writers and either it is declared in KNOWN_SERIALIZERS with what forces it, in the register's own form of an entry plus its expiry condition, or the threshold is changed and OD-LEDGER-032 is amended to carry the new measurement, since that record holds the old one and would otherwise state a number the code contradicts. Raising the threshold to make a red go away, with no measurement showing the finding false, is the one outcome refused outright. The guard's doc comment is left truthful about what it now asserts, including its structural-versus-ordinary distinction if that distinction moved. Test_An_Undeclared_Serializer_Should_Be_Found still proves the search has teeth, and the claimant confirms it by mutation rather than by reading it, restoring the mutated file byte-identically. No other test changes what it asserts. The predicate passes, and it is run as an integration target, since -p nomos-ledger --lib reports 152 passed and never reaches this test at all.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers.rs",
+          "crates/substrate/nomos-ledger/tests/records_do_not_serialize/serializers"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-p130-serializer",
+        "acquired_at": 1790105002,
+        "lease_expires_at": 1790117233
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "--test",
+          "records_do_not_serialize"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,

@@ -279,7 +279,7 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md | authored | 27 | 11 | sha256:1d2ebb790f9c4a5daf0adc02cb500289eb018869b3fc1cb88c52550cb2ad4e00 |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md@authored | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md | authored | 15 | 6 | sha256:e067ed756ffd159cb17a6fdc76092fd0f3ff664bcc77349204ce572497711c6e |
 | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md@authored | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md | authored | 30 | 8 | sha256:346ffb02070c643fc97226b6aacc1b608789274d42e91b79aed544847edef206 |
-| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md@authored | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md | authored | 31 | 8 | sha256:d82290588f438e17ce2c6be5d7768fb5c705ef9be9e02256ef9066b3760ad983 |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md@authored | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md | authored | 49 | 10 | sha256:fd94c27dd1ffe89ddb8e5e85da2e939465e82bc8b0fd508d59c4de6af209a2cf |
 
 ## Sections
 
@@ -2719,9 +2719,11 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#8 | authored | 2 | The Decision |
 | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#13 | authored | 2 | What This Does Not Build |
-| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#18 | authored | 2 | Amendment to OD-WORKFLOW-002 |
-| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#20 | authored | 2 | Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built |
-| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#29 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#20 | authored | 2 | Amendment to OD-WORKFLOW-002 |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#22 | authored | 2 | Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#31 | authored | 2 | Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#41 | authored | 2 | Amendment: The Claude Code Executor's WorkResult Answers to OD-EXECUTOR-008, Not OD-EXECUTOR-003 |
+| docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#46 | authored | 2 | Status |
 
 ## Source blocks
 
@@ -85122,40 +85124,63 @@ that. It is scoped by explicit subtraction, named in full in "What This Does Not
 
 ### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#14
 
-*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What This Does Not Build · hash: sha256:1a99b98dba18708bcbdeb089bbd1598e4b7848d21e0264ccfac5a58e73811869*
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What This Does Not Build · hash: sha256:809791bd39677abec50ee9ff54c027b989a061b02cba196fddfff24636ad17a4*
 
-Corrected in place at version 2: four of the clauses version 1 wrote here either named an
-absence this workspace has since built, or gave a reason that has since stopped holding. The
-amendment section below quotes each of the four and names what moved it, so this list is what
-stays out and the correction can still be checked against the words it replaced.
+Corrected in place twice. At version 2, four of the clauses version 1 wrote here either named
+an absence this workspace had since built or gave a reason that had stopped holding. At version
+3, four more were superseded by name by `OD-ROADMAP-006` and then built. The amendment sections
+below quote each and name what moved it, so this list is what stays out and every correction can
+still be checked against the words it replaced.
 
 ### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#15
 
-*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What This Does Not Build · hash: sha256:7474a0436a375831b9a2eef5a914df8b9ff3607deec6ca247d9a81ff72e81ef4*
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What This Does Not Build · hash: sha256:819871130241cc183c6664942f80d95ff716e0625bec6a8f203566fd4bec9ab7*
 
-No immutable published artifacts (`WF-009`). No branch/merge semantics or bounded parallelism
-(`WF-010`) — `Run` is one ordered sequence, nothing more. No independently versioned workflow
-definitions with pinned historical replay (`WF-011`). No `WF-012` cache or cancellation
-*runtime* — `Cacheability` and `CancellationBehavior` are read by `Is_Coherent` and carried on
-each step's declaration, and nothing here substitutes a prior result for a dispatch or cuts a
-dispatch short; version 1's single clause grouped `RetryPolicy`, `Timeout` and `Compensation`
-under the same absence, and those three have been honored since `29bc3e20`. No deduplication
-token minted — `Is_Coherent` refuses a retryable, non-idempotent, side-effecting step that
-requires none and declares no compensation, so every retry runs under a cover the contract
-already checked, but nothing here mints a per-attempt token or hands one to any dispatch
-target. No compensating *step* — `Compensation::ExternallyCompensated` is reported as owed to
-whatever assembled the plan, never composed into another step's compensating run, which
-`Compensation`'s own doc declines to name. No shared dispatch trait — `Body` names each real
-dispatch target directly, the same restraint `OD-EXECUTOR-001`/`OD-EXECUTOR-004` already hold,
-and this record does not reach into the separate `OD-EXECUTOR-004` shared-trait question. No
-`WorkResult` assembly — a step's real outcome is carried in `StepOutcome` exactly as its
-dispatch target reported it, and nothing here builds a `WorkResult` out of it; version 1 gave
-as the reason that neither `AgentExecutor` produces the material an honest assembly would
-need, and that reason no longer holds — `OD-EXECUTOR-003` decided the first real `WorkResult`
-and `nomos-agent-executor-claude-code` constructs one — so this exclusion stands on this crate
-assembling none, not on there being none to carry.
+No `WF-012` **cancellation** runtime. `OD-ROADMAP-006` decision 2 superseded the cache half of
+version 2's combined clause and deliberately left this half standing, on the reason that clause
+itself gave: nothing in this workspace can cut a dispatch in flight, and `CancellationBehavior`
+is the declaration that would say whether a step even permits being cut short. It is still read
+by `Is_Coherent` and by no runtime, nothing here cuts a dispatch short, and a broken `Timeout`
+is therefore still *reported* after the dispatch ends rather than interrupting it — which is
+also why no node of a workflow definition can be cancelled either.
 
 ### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#16
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What This Does Not Build · hash: sha256:412a973d5f36d3398895fac40e16a1b0f4fe2612907beee15790d0095b11fe80*
+
+No deduplication token minted — `Is_Coherent` refuses a retryable, non-idempotent,
+side-effecting step that requires none and declares no compensation, so every retry runs under a
+cover the contract already checked, but nothing here mints a per-attempt token or hands one to
+any dispatch target. No compensating *step* — `Compensation::ExternallyCompensated` is reported
+as owed to whatever assembled the plan, never composed into another step's compensating run,
+which `Compensation`'s own doc declines to name. No shared dispatch trait — `Body` names each
+real dispatch target directly, the same restraint `OD-EXECUTOR-001`/`OD-EXECUTOR-004` already
+hold, and this record does not reach into the separate `OD-EXECUTOR-004` shared-trait question.
+No `WorkResult` assembly — a step's real outcome is carried in `StepOutcome` exactly as its
+dispatch target reported it, and nothing here builds a `WorkResult` out of it; version 1 gave
+as the reason that neither `AgentExecutor` produces the material an honest assembly would
+need, and that reason no longer holds — `OD-EXECUTOR-008` decided a canonical `WorkResult`
+carrying only the fields a bare-prompt executor can honestly populate, and
+`nomos-agent-executor-claude-code` constructs one at `fe0fac58` — so this exclusion stands on
+this crate assembling none, not on there being none to carry.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#17
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What This Does Not Build · hash: sha256:1161893b0cb26e952a1018b0532a740526e5a386d22381a080bcf0ed2717d644*
+
+Four clauses that stood here through version 2 are no longer absences. `OD-ROADMAP-006`
+decision 2 superseded, by name and by version, "no immutable published artifacts (`WF-009`)",
+"no branch/merge semantics or bounded parallelism (`WF-010`) — `Run` is one ordered sequence,
+nothing more", "no independently versioned workflow definitions with pinned historical replay
+(`WF-011`)", and the **cache** half of the `WF-012` clause.
+`P128-THE-WORKFLOW-ENGINE-RUNS-A-LINE-AND-CANNOT-BRANCH-JOIN-OR-REPLAY` built all four, in
+`nomos-workflow-orchestration` and beside the sequential runner rather than inside it. The
+amendment section below states how far each was exercised and names the three limits on what
+was built, so this list is not read as claiming the authorization was spent further than it
+was. `Run` itself is still one ordered sequence and still reports exactly what it always
+reported; what is new stands next to it.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#18
 
 *revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What This Does Not Build · hash: sha256:a18c1793cafbd3488b5edda294d247939aa8811763881413b446e6d0982d43ff*
 
@@ -85170,7 +85195,7 @@ increments moved this crate's band and its dependency edges with them, so `READM
 allowed — not the band-and-peer parenthetical version 1 wrote in "The Decision" above, which
 named a band this crate has since left and an exclusion those bodies' own edges replaced.
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#17
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#19
 
 *revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / What This Does Not Build · hash: sha256:05aea94ace2b23ac5e739c5b5e1fd2ccd1c3b49df3ca11719df9b27f2689beb9*
 
@@ -85178,13 +85203,13 @@ It does not reopen `OD-WORKFLOW-001` through `004`, `OD-EXECUTOR-001`, or `OD-EX
 It does not claim `OD-ROADMAP-001` already covers this decision — checked directly above, it
 does not name the workflow tier, and this record does not amend `OD-ROADMAP-001` to add it.
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#18
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#20
 
 *revision: authored · kind: heading · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment to OD-WORKFLOW-002 · hash: sha256:1a5404ee0df3025616b1e4703f8b71d3f7beca77990c0b0df1d2b9ecfd224306*
 
 ## Amendment to OD-WORKFLOW-002
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#19
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#21
 
 *revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment to OD-WORKFLOW-002 · hash: sha256:d910752d8aeed1279da396364c743e2003fb1344a61eab8acf0f10889183be52*
 
@@ -85198,13 +85223,13 @@ session-specific override rather than under any of the three conditions `OD-WORK
 itself named. The three conditions, and everything else that record found, are otherwise
 unchanged: they remain the honest triggers for the *next* increment past this one.
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#20
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#22
 
 *revision: authored · kind: heading · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built · hash: sha256:6ea744f21811690f37ab1061edac39dee947a90af89c354d3e795cb39b32bf9a*
 
 ## Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#21
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#23
 
 *revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built · hash: sha256:8bb56564bbea39ad6e98cd672f1446dc8716b19804e22a81bfaf09800d8db927*
 
@@ -85217,7 +85242,7 @@ that repair. Version 1 was true at the revision it was written against; the corr
 made in place above and the words they replaced are quoted here, so what changed can be
 checked against what it said rather than taken on trust.
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#22
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#24
 
 *revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built · hash: sha256:46b7579c611ba0f89bc4ca6809a58837e49a27ee7582d39e79c20b816bbe8303*
 
@@ -85232,7 +85257,7 @@ argv design, not required to prove this mechanism for real." And, of the `WorkRe
 exclusion, "because neither `AgentExecutor` produces the material a honest assembly would need
 any more than either did before this record."
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#23
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#25
 
 *revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built · hash: sha256:7dff6fe12946bf8637c5958f09735f6e68484c5320296d521380e0ec6214a946*
 
@@ -85247,7 +85272,7 @@ incoherent declaration refuses the run before any body dispatches. So a step tha
 second dispatch reached it under one of those two covers, and re-checking it in the runner
 would be a second authority for a rule the contract already owns.
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#24
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#26
 
 *revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built · hash: sha256:2b6d521a123f0f3014c858c78b1517a3750542e0b1e6d5903a3666350bfe0801*
 
@@ -85260,7 +85285,7 @@ inside it, because the declaration says the step is no longer waited on *after* 
 seconds. A run given no clock reports a declared bound as unmeasured and never as honored,
 which is the one reading a run that measured nothing must not give.
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#25
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#27
 
 *revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built · hash: sha256:3a43556a8696a911f6c31e797196e1d8463b612e6c4e686f3a344b9c7c730e9b*
 
@@ -85275,7 +85300,7 @@ the step that refused never dispatched, so no dispatch of it failed, and whether
 before an incoherent declaration should be unwound is a question `WF-012` does not answer and
 this crate does not decide for it.
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#26
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#28
 
 *revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built · hash: sha256:e500b59760602a2a62c594b78c94319f3919158551668a19aa10bddb24756b0a*
 
@@ -85292,7 +85317,7 @@ carries rendered strings and no `CommittedPlan`, so the receiver a rollback need
 that seam. What that reverse does not have is named rather than implied — it does not assert the
 workspace has not moved since the commit, and it restores only the one path the outcome reports.
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#27
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#29
 
 *revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built · hash: sha256:09b6035a829c7f20af9f1b13375fea2e025fff69bfa1a94c7322969f262ae767*
 
@@ -85305,16 +85330,17 @@ deduplication token, so the declaration `Is_Coherent` demands becomes a mechanis
 cover a retry runs under. This record names them; `work/ledger.json` is where work is scheduled,
 and nothing here claims any of the three.
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#28
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#30
 
-*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built · hash: sha256:69e54ae691a44a89b2806a0f01a0a1c444ac41e4edd7cfb2f9afb3105693ad0b*
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Retry, Timeout and Compensation Runtime Version 1 Declined Is Built · hash: sha256:62fe8bf31d46241d1249ef95c8e5e92aa6c6901c57ab92ab140fb6717b5da663*
 
 **What this amendment does not re-take or reopen.** Version 1's "Question" and "What Was
 Measured" sections are measurements dated to the revision they were read at, and this amendment
 re-measures none of them; one of them the tree no longer agrees with, and it is named here so it
 is not read as current: version 1 grepped every real `WorkResult` construction site and found
 only `nomos-agent-contracts`' own `#[cfg(test)]` module, and `nomos-agent-executor-claude-code`
-now constructs one under `OD-EXECUTOR-003`. Whether that moves `OD-WORKFLOW-004`'s own finding,
+now constructs one under `OD-EXECUTOR-008` (version 2 of this record said `OD-EXECUTOR-003`,
+which the amendment below corrects). Whether that moves `OD-WORKFLOW-004`'s own finding,
 or any condition `OD-WORKFLOW-002` named, is those two records' question and belongs to an item
 that reserves them; this amendment neither restates those conditions nor decides them. Version
 1's per-backend `Body` variants were replaced by `OD-PACKAGE-016`'s profile resolution, which is
@@ -85322,13 +85348,185 @@ that record's decision and is not reopened here. And this amendment does not reo
 `OD-ROADMAP-001`'s override: the increment version 1 recorded stays recorded as the narrow,
 explicit, session-specific override it was, and nothing here widens or generalizes it.
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#29
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#31
+
+*revision: authored · kind: heading · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built · hash: sha256:5211a0fbbd52ad25e089a1dee57115dcca8bd40f33261b26d473594cc1a584f0*
+
+## Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#32
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built · hash: sha256:1b9ae93816702c71e8ef42f3efc51c0a1f9efebd86ab1a983f1dfd558dd53285*
+
+`OD-ROADMAP-006` decision 2 superseded four of this record's "What This Does Not Build" clauses
+by name and by version, and
+`P128-THE-WORKFLOW-ENGINE-RUNS-A-LINE-AND-CANNOT-BRANCH-JOIN-OR-REPLAY` built them. Version 2
+was true at the revision it was written against; the corrections are made in place above and the
+words they replaced are quoted here, so what changed can be checked against what it said rather
+than taken on trust.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#33
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built · hash: sha256:cc6963bf0d8b064e3feba86496b682229ed1d484f9cbaabcca3f9f5377b2f9e7*
+
+**What version 2 said.** "No immutable published artifacts (`WF-009`). No branch/merge semantics
+or bounded parallelism (`WF-010`) — `Run` is one ordered sequence, nothing more. No
+independently versioned workflow definitions with pinned historical replay (`WF-011`). No
+`WF-012` cache or cancellation *runtime* — `Cacheability` and `CancellationBehavior` are read by
+`Is_Coherent` and carried on each step's declaration, and nothing here substitutes a prior
+result for a dispatch or cuts a dispatch short."
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#34
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built · hash: sha256:61b4c55c4f50846c274f22bf9fdfb21f7e760e4af8781517fea11d930db16274*
+
+**A definition is published, identified and versioned.** `WorkflowDefinition` is an immutable
+value whose fields are private and whose only constructor publishes it under a
+`WorkflowDefinitionId` at a caller-stated version. Identity and version are authored rather than
+derived from a content digest, and deliberately so: a content-derived identity would collapse
+the two into one number and lose the distinction the replay refusal is built on, because a
+definition republished at the same version with different content would then simply be a
+different definition nobody had asked about.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#35
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built · hash: sha256:a3ba5569d45480ed43e9e8f6a12dda64ac05989afd588452b7959dff692a2935*
+
+**A plan can branch and join.** A definition is an ordered list of nodes and a node's own name
+is the value it publishes, so a condition over what earlier steps produced is spelled as a
+condition over an earlier node. A branch chooses the arm matching the state that node published
+and skips the nodes of every arm it did not choose; a join reconverges the arms it names. The
+state is a two-valued reduction of what the answering seam itself reported, deferring to each
+seam's own vocabulary rather than inventing a threshold, and every case where a seam reached no
+judgment at all publishes the flagged state rather than the clean one — the collapse
+`nomos-contracts`' honesty vocabularies exist to prevent. The run reports which arm ran and why
+as the value read, the state it was read in and the arm that state selected: structured rather
+than rendered, so a reader re-derives the choice instead of taking an account of it on trust.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#36
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built · hash: sha256:7c2a73be6321fe8e592b4219a135c5fbb0850ebd9ad0369da0e45f27bc15acc7*
+
+**A branch on a value no node produces is refused before any body dispatches.** Publishing takes
+that refusal, along with a duplicate node name, a step requiring a value nothing before it
+publishes, an arm or a join naming a node in the wrong direction, and any step whose own
+`Is_Coherent` refuses its declaration. So the refusal is strictly earlier than the one `Run`
+makes rather than merely equal to it: a definition holds the whole topology before anything
+runs, where a plan reaches an incoherent step only after the steps before it have already
+dispatched. That is why `WorkflowOutcome::Refused` is unreachable from a definition run — the
+refusal moved earlier rather than away.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#37
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built · hash: sha256:2f8452de966e563b2dc5938bf5b0afbc6f4488e54eb77cb3a5cf4b882ede067b*
+
+**Parallelism is bounded, and the bound is honored rather than advisory.** Nodes that read none
+of each other's values fall into one dependency wave, and a wave is cut into groups of at most
+the bound the caller states, so a wave wider than the bound arrives as several groups rather
+than one oversized one and no group a run reports ever exceeds the stated number. Determinism
+survives it: every report is ordered by the declaration and never by the order a group's members
+were visited in. That is proven rather than asserted, by running one definition under both visit
+orders and comparing the whole report — which is what a stated visit order exists for, since a
+crate that dispatches sequentially would otherwise have no second order to falsify the claim
+against.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#38
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built · hash: sha256:2c974b792208c4ef6b5aadd4812f9cd99fa5ba11e42b29edbaca6c1e8b0d12e3*
+
+**Cacheability is honored, within a stated limit.** A node whose declaration permits
+substitution and that repeats an earlier wave's node is served that node's result and does not
+dispatch. The key is the whole body and the whole input schema rather than
+`Cacheable::key_inputs`, whose field names name a sub-shape this workspace has no resolver for;
+whole-body equality is strictly stronger than the declared key, so nothing is ever substituted
+that the declaration would have forbidden, and what is given up is hits the declaration would
+have allowed — the right direction to be wrong in for a cache. A node declaring `NotCacheable`
+is never substituted, and no substitution is made inside a single group, because two nodes of
+one group have no order between them and a hit that depended on which was visited first would
+be the exact leak the determinism guarantee rules out.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#39
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built · hash: sha256:62aa0d91d97910bd902b2d07cfbbfe8dbc3203156a24fc88992c9072858ad59b*
+
+**Three limits on what was built, stated rather than left to be discovered.** No thread is
+spawned and no executor is composed, so a group's members are dispatched one after another; what
+the bound buys is an explicit, checkable statement of how much independent work may be in flight
+at once, not work in flight. A definition run is the clockless entry point, so a node declaring
+`Timeout::Seconds` reports it unmeasured rather than honored. And the cache is within one run:
+no result is persisted and nothing is substituted across two runs, so the published artifact
+`WF-009` names is the definition and not a result store.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#40
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Four Clauses OD-ROADMAP-006 Superseded Are Built · hash: sha256:03fbf120c041646a86ae8f46b8b7fbd1e2c0c4a5eb7f8e8323fbd01101593ebf*
+
+**What did not change.** `Run`, `Run_Unclocked` and `Run_With_Clock` keep their signatures and
+their behaviour, and their tests pass untouched — which is the evidence that the one real
+caller, `nomos_cli::workflow`, was not broken. `WorkflowOutcome` and `DispatchError` are
+unchanged, because three sites across `nomos-api` and `nomos-cli` match their variants field by
+field with no wildcard arm, measured rather than assumed, so the richer report is a third type
+beside them. That is the same shape version 2's own amendment already took for `WorkflowRun`,
+applied once more for the same reason.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#41
+
+*revision: authored · kind: heading · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Claude Code Executor's WorkResult Answers to OD-EXECUTOR-008, Not OD-EXECUTOR-003 · hash: sha256:a09ba1d08bf899548b4a92b664975e942fcccbaec092ffdbf50997ceea9c0f32*
+
+## Amendment: The Claude Code Executor's WorkResult Answers to OD-EXECUTOR-008, Not OD-EXECUTOR-003
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#42
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Claude Code Executor's WorkResult Answers to OD-EXECUTOR-008, Not OD-EXECUTOR-003 · hash: sha256:8f37e7e901757c536c481d15b45e2ef4396bf5876498befbdccd24339c2ea1a8*
+
+Version 2 attributed `nomos-agent-executor-claude-code`'s real `WorkResult` to
+`OD-EXECUTOR-003`, in the relations list and twice in the body. That attribution is wrong, and
+it is corrected in place above. Measured rather than assumed, at the revision this amendment was
+written against: the executor's real `WorkResult` landed at `fe0fac58`, whose own commit body
+opens "`OD-EXECUTOR-008`'s decision, implemented"; `git log -S WorkResult` over
+`crates/agent/nomos-agent-executor-claude-code/src/response.rs` names only `fe0fac58` and
+`9b3e9683`; and `OD-EXECUTOR-008`'s own title is that a canonical `WorkResult` carries only the
+fields a bare-prompt executor can honestly populate, which is exactly what that commit built.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#43
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Claude Code Executor's WorkResult Answers to OD-EXECUTOR-008, Not OD-EXECUTOR-003 · hash: sha256:606780454cf8550a0fb2413fbd7319ecc27cf8ab99cbe0b1522c45a33501e330*
+
+`OD-EXECUTOR-003` decided something else, and its own subject is still unbuilt. It decided that
+the first real `WorkResult` is judge-role's own verdict, built from an identity Claude Code
+never has to invent — a verdict carrying a real `Finding` in its `claims`. Measured directly:
+`response::Work_Result` sets `claims: Vec::new()` on every invocation, and
+`WORK_RESULT_SUBSTANTIATION` declares `claims` as `Unsubstantiated(ProducerCannotGround)`. So a
+reader following the old citation arrived at a record whose own decision has not been
+implemented and read it as the authority for one that has, which is the one kind of staleness a
+reader cannot detect from the citation itself.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#44
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Claude Code Executor's WorkResult Answers to OD-EXECUTOR-008, Not OD-EXECUTOR-003 · hash: sha256:c3bfd75510f93197f541135fb6efc9a5b6235cb0d1d38178e9ea94058eebe552*
+
+The relation to `OD-EXECUTOR-003` is kept rather than removed, and a relation to
+`OD-EXECUTOR-008` is added beside it. The two records are genuinely related, and
+`OD-EXECUTOR-003`'s subject remaining open is worth a reader finding rather than losing; what is
+corrected is which of the two the built artifact answers to. This amendment does not schedule
+`OD-EXECUTOR-003`'s own decision and does not reopen it.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#45
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Amendment: The Claude Code Executor's WorkResult Answers to OD-EXECUTOR-008, Not OD-EXECUTOR-003 · hash: sha256:8a14adf8f24149c3ed1b1cd8132cd6e90a9b9e6624d75ba134ef936a0852d14f*
+
+This correction rides here rather than in an item of its own because one claimant amending one
+record once is better than two items racing for one file. It was first measured by the claimant
+of `b3dc4728` while amending `OD-WORKFLOW-004`, and every claim in it was re-verified directly
+before being written here.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#46
 
 *revision: authored · kind: heading · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#30
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#47
 
 *revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Status · hash: sha256:98788158d5272879fd0759e35ffcad33951d07059fac624efc6da74b38a39896*
 
@@ -85339,9 +85537,9 @@ user's own direct instruction to this session. Does not claim `OD-ROADMAP-001`'s
 retirement already covered this decision, and does not itself generalize past the workflow
 tier.
 
-### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#31
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#48
 
-*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Status · hash: sha256:8df49f9e6a326734937a0eb39f4c1197d37853e9e67ecea65955a53c4f2a3726*
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Status · hash: sha256:d10900ebffff00b5feb0dfb9be66136e6040fb2c2a8910f01b37afcdaff687f0*
 
 Amended to version 2 by
 `P123-OD-WORKFLOW-005-SAYS-THE-RETRY-AND-COMPENSATION-RUNTIME-IS-UNBUILT-AND-IT-LANDED`,
@@ -85349,6 +85547,22 @@ which corrected "What This Does Not Build" against the tree: the `WF-012` retry,
 compensation runtime it named as unimplemented was built by
 `P123-WORKFLOW-RETRY-TIMEOUT-COMPENSATION-RUNTIME` at `29bc3e20`, the check step body and the
 CLI verb it declined were built by `P40-WORKFLOW-CHECK-BODY` and `P40-WORKFLOW-CLI-VERB`, and
-the reason it gave for excluding `WorkResult` assembly was overtaken by `OD-EXECUTOR-003`. The decision this record names, and the override it records
-that decision as having been made under, are unchanged; what moved is which absences it may
-still claim.
+the reason it gave for excluding `WorkResult` assembly was overtaken by what is recorded above
+as `OD-EXECUTOR-008` rather than the `OD-EXECUTOR-003` version 2 named. The decision this
+record names, and the override it records that decision as having been made under, are
+unchanged; what moved is which absences it may still claim.
+
+### docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md#49
+
+*revision: authored · kind: prose · heading: The workflow tier's first real execution increment is built under the user's standing override, not a fired OD-WORKFLOW-002 trigger / Status · hash: sha256:d21dc3b5c36e19ded1c4bac55e23319a061fd761d6ec29893d6e523a1be8a65c*
+
+Amended to version 3 by
+`P128-THE-WORKFLOW-ENGINE-RUNS-A-LINE-AND-CANNOT-BRANCH-JOIN-OR-REPLAY`, which carries two
+unrelated corrections in one amendment. The first: the four clauses `OD-ROADMAP-006` decision 2
+superseded — `WF-009`'s published artifacts, `WF-010`'s branch, merge and bounded parallelism,
+`WF-011`'s versioned replayable definitions, and the cache half of `WF-012` — are built, with
+the three limits on how far that authorization was exercised named above, and the cancellation
+half of `WF-012` left standing on its own reason. The second: this record's attribution of the
+Claude Code executor's real `WorkResult` to `OD-EXECUTOR-003` is corrected to `OD-EXECUTOR-008`
+in the relations list and in both places in the body, and `OD-EXECUTOR-003`'s own subject is
+recorded as still unbuilt rather than elided.

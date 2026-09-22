@@ -1,9 +1,12 @@
-//! The doubles and declarations the retry, timeout and compensation cases share.
+//! The doubles and declarations the retry, timeout, compensation, definition, graph and
+//! replay cases share.
 //!
 //! Beside [`super`]'s own doubles rather than inside them: `super` is already near this
-//! workspace's five-hundred-line review trigger, and the three case modules each need all
-//! of these, so a helper reached by three siblings belongs in one place they all name
+//! workspace's five-hundred-line review trigger, and the case modules each need all of
+//! these, so a helper reached by several siblings belongs in one place they all name
 //! rather than in whichever of them happened to be written first.
+
+use std::num::NonZeroUsize;
 
 use super::*;
 
@@ -81,7 +84,7 @@ pub(super) fn Ran_Report_With_Clock(plan: &[WorkflowStepPlan], answers: Vec<Port
 /// The platform both runners above build: `launcher`'s scripted answers, the real standard
 /// filesystem a correction step writes through, this process's own environment, and one
 /// fixed moment.
-fn Test_Platform<'a>(launcher: &'a Scripted, declared: &'a [nomos_agent_contracts::DeclaredTarget<'a>]) -> Platform<'a, Scripted, StdFileSystem, nomos_platform_std::StdEnvironment>
+pub(super) fn Test_Platform<'a>(launcher: &'a Scripted, declared: &'a [nomos_agent_contracts::DeclaredTarget<'a>]) -> Platform<'a, Scripted, StdFileSystem, nomos_platform_std::StdEnvironment>
 {
     return Platform {
         launcher,
@@ -148,4 +151,112 @@ pub(super) fn Declaring_Compensation(compensation: Compensation) -> WorkflowStep
 pub(super) fn Dispatched_Attempts(run: &WorkflowRun) -> Vec<(usize, u32)>
 {
     return run.attempts.iter().map(|attempt| return (attempt.index, attempt.attempt)).collect();
+}
+
+/// The identity every definition case publishes under. One spelling, so a case that varies
+/// the identity has to say so.
+pub(super) fn Test_Definition_Id() -> WorkflowDefinitionId
+{
+    return WorkflowDefinitionId::New("nomos.workflow.test.definition");
+}
+
+/// The version every definition case publishes at first.
+pub(super) const FIRST_VERSION: u32 = 1;
+
+/// A bound of `bound` nodes per dispatch group.
+pub(super) fn Bound(bound: usize) -> NonZeroUsize
+{
+    return NonZeroUsize::new(bound).expect("every case states a nonzero bound");
+}
+
+/// A step node named `name`, dispatching `body`, depending on the nodes `requires` names.
+pub(super) fn Step_Node(name: &str, requires: &[&str], body: Body) -> WorkflowNode
+{
+    return WorkflowNode::Step {
+        name: name.to_owned(),
+        requires: Owned(requires),
+        step: WorkflowStepPlan { declaration: Coherent_Step(), body },
+    };
+}
+
+/// A step node declaring `declaration` rather than the trivially coherent one.
+pub(super) fn Declaring_Node(name: &str, declaration: WorkflowStep, body: Body) -> WorkflowNode
+{
+    return WorkflowNode::Step { name: name.to_owned(), requires: Vec::new(), step: WorkflowStepPlan { declaration, body } };
+}
+
+/// A branch node named `name`, choosing an arm by the state the node `on` published.
+pub(super) fn Branch_Node(name: &str, on: &str, arms: Vec<BranchArm>) -> WorkflowNode
+{
+    return WorkflowNode::Branch { name: name.to_owned(), on: on.to_owned(), arms };
+}
+
+/// The arm chosen when the branched-on node published `when`, owning the nodes `nodes`
+/// names.
+pub(super) fn Arm(when: ProducedState, nodes: &[&str]) -> BranchArm
+{
+    return BranchArm { when, nodes: Owned(nodes) };
+}
+
+/// A join node named `name`, waiting for the nodes `arms` names.
+pub(super) fn Join_Node(name: &str, arms: &[&str]) -> WorkflowNode
+{
+    return WorkflowNode::Join { name: name.to_owned(), arms: Owned(arms) };
+}
+
+/// `names`, owned.
+fn Owned(names: &[&str]) -> Vec<String>
+{
+    return names.iter().map(|name| return (*name).to_owned()).collect();
+}
+
+/// `nodes` published as [`Test_Definition_Id`] at [`FIRST_VERSION`], asserting the publish
+/// was accepted.
+///
+/// Asserts rather than reports, for the reason `super::Ran_To_Completion` asserts: a case
+/// about what a *run* does has to fail here with its own message if the definition never
+/// published at all, rather than surfacing later as a puzzling assertion about a node.
+pub(super) fn Published(nodes: Vec<WorkflowNode>) -> WorkflowDefinition
+{
+    return WorkflowDefinition::Publish(Test_Definition_Id(), FIRST_VERSION, nodes).expect("this case's definition is coherent");
+}
+
+/// Runs `definition` through [`crate::Run_Definition`] under `parallelism`, with the ports
+/// scripted to answer its nodes in the order queued, and hands back the whole record.
+pub(super) fn Recorded(definition: &WorkflowDefinition, answers: Vec<PortAnswer>, parallelism: Parallelism) -> WorkflowRunRecord
+{
+    let launcher = Scripted::Of(Vec::new());
+    let ports = ScriptedPorts::Of(answers);
+    let declared = Declared_Ports(&ports);
+    let platform = Test_Platform(&launcher, &declared);
+    let variant = Test_Variant();
+    let execution = WorkflowExecution { platform: &platform, variant: &variant, run: Test_Run_Id(), parallelism };
+
+    return crate::Run_Definition(definition, &execution);
+}
+
+/// Replays `record` against `against` with the ports scripted to answer in the order
+/// queued.
+pub(super) fn Replayed(record: &WorkflowRunRecord, against: &WorkflowDefinition, answers: Vec<PortAnswer>) -> Result<DefinitionRun, ReplayRefusal>
+{
+    let launcher = Scripted::Of(Vec::new());
+    let ports = ScriptedPorts::Of(answers);
+    let declared = Declared_Ports(&ports);
+    let platform = Test_Platform(&launcher, &declared);
+    let variant = Test_Variant();
+    let execution = WorkflowExecution { platform: &platform, variant: &variant, run: Test_Run_Id(), parallelism: Parallelism::Of(Bound(1)) };
+
+    return crate::Replay(record, against, &execution);
+}
+
+/// What became of each node in `run`, by name, in the order the run reported them.
+pub(super) fn Dispositions(run: &DefinitionRun) -> Vec<(String, NodeDisposition)>
+{
+    return run.nodes.iter().map(|node| return (node.name.clone(), node.disposition.clone())).collect();
+}
+
+/// The names of the nodes in each group `run` visited, in the order it visited them.
+pub(super) fn Grouped_Names(run: &DefinitionRun) -> Vec<Vec<String>>
+{
+    return run.groups.iter().map(|group| return group.nodes.clone()).collect();
 }

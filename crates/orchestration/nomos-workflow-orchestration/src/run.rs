@@ -10,7 +10,7 @@ mod platform;
 pub use clocked_platform::ClockedPlatform;
 pub use platform::Platform;
 
-use dispatching::Dispatching;
+pub(crate) use dispatching::Dispatching;
 
 use std::time::Duration;
 
@@ -134,7 +134,7 @@ const ATTEMPTS_WITHOUT_RETRY: u32 = 1;
 /// So every step that reaches a second dispatch here reached it under one of those two
 /// covers. Re-checking that would be a second authority for a rule the contract already
 /// owns.
-fn Attempted_Step<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+pub(crate) fn Attempted_Step<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     step: &WorkflowStepPlan, context: &Dispatching<'_, Launcher, Fs, Env>, index: usize, attempts: &mut Vec<StepAttempt>,
 ) -> Result<StepOutcome, DispatchError>
 {
@@ -243,7 +243,7 @@ fn Compensated<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
 
 /// What compensating one completed step did, or `None` when its own declaration asked for
 /// nothing at all.
-fn Compensated_Step<Fs: FileSystem>(step: &WorkflowStepPlan, outcome: &StepOutcome, index: usize, filesystem: &Fs) -> Option<StepCompensation>
+pub(crate) fn Compensated_Step<Fs: FileSystem>(step: &WorkflowStepPlan, outcome: &StepOutcome, index: usize, filesystem: &Fs) -> Option<StepCompensation>
 {
     return match step.declaration.compensation
     {
