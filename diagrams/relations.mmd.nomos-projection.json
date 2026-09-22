@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:d82291ddd45548a01ca0234e01d7b032976ca28e93d205503158c400533694d2",
-  "inputs_digest": "sha256:9c695ccbfaba51e5d3cff6bce8edb57c3ab039691bdca4b33b1014baec2a3f8f",
+  "content_digest": "sha256:0d68f91a0c1028953fff272f744c217ecda8656e39246c23b03d244c1bd18c2e",
+  "inputs_digest": "sha256:bcc3ef6861c888ee569f29872b81602b701c27e7e7b3f547e63ea4de185435da",
   "sections": [
     [
       "Relations",
-      1954
+      1972
     ],
     [
       "Decisions",
-      252
+      253
     ]
   ],
   "inputs": [
@@ -5338,6 +5338,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-LEDGER-007 relates-to OD-LEDGER-041",
+      "hash": "sha256:7d339b9d63a6a30ded8b4fe3fd6f3d156fa14c1474702fd63354a8a33b7bb875"
+    },
+    {
+      "content": "relations",
       "identity": "OD-LEDGER-007 relates-to OD-SPEC-007",
       "hash": "sha256:39fb3c2f0a1c2a8b653df481bf3648f5c3d7331508feae1b08b57ffa08872290"
     },
@@ -5398,6 +5403,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-LEDGER-008 relates-to OD-LEDGER-041",
+      "hash": "sha256:162b5711f6ef4b112389e00ad8ee6ccc69cb5ea3818858da9a5a6cb596510b02"
+    },
+    {
+      "content": "relations",
       "identity": "OD-LEDGER-008 relates-to OD-PACKAGE-009",
       "hash": "sha256:cb2804e335b46620c18ab4c79024c229c1b65bf7dd4398548f8d93dc9cb59f6c"
     },
@@ -5445,6 +5455,11 @@
       "content": "relations",
       "identity": "OD-LEDGER-009 relates-to OD-LEDGER-021",
       "hash": "sha256:7f7e1e122094ce0576bd25e5e45fe5820638c9b08842d2d877ff627a7510ef18"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-009 relates-to OD-LEDGER-041",
+      "hash": "sha256:2cf8fa6f83962812fbf1d7d7e7b300d7f8aa13c14f9be94622704841ceca67f4"
     },
     {
       "content": "relations",
@@ -5773,6 +5788,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-LEDGER-018 relates-to OD-LEDGER-041",
+      "hash": "sha256:e24c8ad09f387c23ee0974090543428bd8563ac002441d51db0de4e4edb830a5"
+    },
+    {
+      "content": "relations",
       "identity": "OD-LEDGER-019 relates-to OD-LEDGER-001",
       "hash": "sha256:cae5b7b445d8942bf0f40c0149a94e10d96a2a6f3a17ecbcee05d244a02ed2bf"
     },
@@ -5845,6 +5865,11 @@
       "content": "relations",
       "identity": "OD-LEDGER-020 relates-to OD-LEDGER-038",
       "hash": "sha256:c09ec50166e44773bf49e5799ecb1717049f844e0ccc41ffd32b3d03534400d0"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-020 relates-to OD-LEDGER-041",
+      "hash": "sha256:adf47a129adf58d0a5d1255851f3f78f516fecbbfd840e418176227d2d051281"
     },
     {
       "content": "relations",
@@ -5925,6 +5950,11 @@
       "content": "relations",
       "identity": "OD-LEDGER-023 relates-to OD-LEDGER-038",
       "hash": "sha256:e3422a02495c7fd552814003435078b1f5d5499485ba027166af1c526e210ca6"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-023 relates-to OD-LEDGER-041",
+      "hash": "sha256:f4f66ac29e00631815654b82a576e0a47c3f2744e5a40351f5c4467413ad2e72"
     },
     {
       "content": "relations",
@@ -6015,6 +6045,11 @@
       "content": "relations",
       "identity": "OD-LEDGER-027 relates-to OD-LEDGER-008",
       "hash": "sha256:212491fa349df90a77f5b8157a3de660b333337f82eb19e74a73de6773ddea6a"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-027 relates-to OD-LEDGER-041",
+      "hash": "sha256:ff7bab9ca89d51559da8a369523fa72a0d08a5e4249f4d88104d2c2a8b76c8dc"
     },
     {
       "content": "relations",
@@ -6173,6 +6208,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-LEDGER-036 relates-to OD-LEDGER-041",
+      "hash": "sha256:37c117fba09508d256cca09cebb8a715fd221b8cad88888e55b3e6bbaf52006a"
+    },
+    {
+      "content": "relations",
       "identity": "OD-LEDGER-036 relates-to OD-PROJECT-004",
       "hash": "sha256:fd1473dbc8cbababa0c62b086ffe7ded5556ea8c4a365c834f667d76fd40724d"
     },
@@ -6238,6 +6278,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-LEDGER-038 relates-to OD-LEDGER-041",
+      "hash": "sha256:aaad9d8109a5e2b8c67d2f4137b16ad465ee631fb5c194bebc275e1a50e30533"
+    },
+    {
+      "content": "relations",
       "identity": "OD-LEDGER-039 relates-to OD-LEDGER-008",
       "hash": "sha256:be9f348cfb4c64f93adaf3c017a5962bc7739befd60fe8ace030ee07779e66d3"
     },
@@ -6295,6 +6340,51 @@
       "content": "relations",
       "identity": "OD-LEDGER-040 relates-to OD-LEDGER-039",
       "hash": "sha256:40dfbeeee43bc893f1835d1a79b391748325af481d063abc0cff4cc3cfce043c"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-041 relates-to OD-LEDGER-007",
+      "hash": "sha256:e18608d56b74623b52aa2a66b62b2bcec69269f44b75f5ff1e919bd9c0f95cba"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-041 relates-to OD-LEDGER-008",
+      "hash": "sha256:46b554da68b6aad37e56757e08a5095a63f74e20532b8a15e96cc0ebd8b464e8"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-041 relates-to OD-LEDGER-009",
+      "hash": "sha256:6dbafb2a4cb9f551b91ef3385509a29df82d6b155588366b5e4e778aed899440"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-041 relates-to OD-LEDGER-018",
+      "hash": "sha256:f942c18ece621a4141214d9e3335fd9cdb5dc1e04494ffb5576f9beb0d5c476a"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-041 relates-to OD-LEDGER-020",
+      "hash": "sha256:48ee6e6617d65128d6cb70c3018efd110b3c41107cc4eccb0bb0c045c3314d3b"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-041 relates-to OD-LEDGER-023",
+      "hash": "sha256:eb997af354e1d2c1620e7e63d58701efdcbccff5a6b58abd5fca6e989c074f72"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-041 relates-to OD-LEDGER-027",
+      "hash": "sha256:6906e6b28c3cbe8013de70d67f891d8a99adb2ea45afa6e354990bafdd255a0d"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-041 relates-to OD-LEDGER-036",
+      "hash": "sha256:449ef0e7bcde73fb919a51aa8d92a55a99d24d2c6b486af778b11f3118eaf5b4"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-LEDGER-041 relates-to OD-LEDGER-038",
+      "hash": "sha256:f1d9f0d94e8e5e4547fd348916a62c4e54271858f76c1a034ca8c400a4700fc6"
     },
     {
       "content": "relations",
@@ -10570,6 +10660,11 @@
       "content": "nodes",
       "identity": "OD-LEDGER-040",
       "hash": "sha256:9747e6d200e75a1270575d2cbeda3b0790ee502bb475e9ac31fa79c2dab13067"
+    },
+    {
+      "content": "nodes",
+      "identity": "OD-LEDGER-041",
+      "hash": "sha256:14c38e4cda7e464876341d52987eaabae5e9741be32122ae1722c4b8f36a9c5c"
     },
     {
       "content": "nodes",
