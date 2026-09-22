@@ -198,6 +198,11 @@ mod tests
     /// with a real line; it only has to be a line a rendered finding can carry.
     const FIRST_DIAGNOSTIC_LINE: u32 = 10;
 
+    /// Where the first of [`Two_Member_Diagnostics`]' two diagnostics sits. Paired with
+    /// [`SECOND_DIAGNOSTIC_LINE`], which differs, so the assertion that reads both can tell
+    /// them apart by line as well as by file.
+    const FIRST_MEMBER_DIAGNOSTIC_LINE: u32 = 1;
+
     /// The second member's diagnostic is filed lower in its own file than the first's, so
     /// the two are distinguishable if the relay ever mixed them up.
     const SECOND_DIAGNOSTIC_LINE: u32 = 2;
@@ -294,6 +299,21 @@ mod tests
         let findings = Check_Lint_Diagnostics(&[source], &mut reader);
 
         assert_eq!(findings.len(), EXPECTED_DIAGNOSTIC_FINDINGS, "{findings:?}");
+
+        // Not the order the fixture declares them in. `super::Relay_Findings` sorts every
+        // relayed finding by `(subject_name, summary)` before returning, so the error --
+        // whose summary begins "error:" -- precedes the warning whichever order the tool
+        // reported them in. Asserting the sorted positions pins that determinism here as
+        // well as the file and line each diagnostic carries.
+        let located: Vec<&Vec<String>> = findings.iter().map(|finding| return &finding.locations).collect();
+        assert_eq!(
+            located,
+            vec![
+                &vec![format!("crates/rules/nomos-rules/src/lint.rs:{SECOND_DIAGNOSTIC_LINE}")],
+                &vec![format!("crates/rules/nomos-rules/src/lib.rs:{FIRST_MEMBER_DIAGNOSTIC_LINE}")],
+            ],
+            "{findings:?}"
+        );
     }
 
     /// One warning with a lint name and one error without one, on two different files of the
@@ -308,7 +328,7 @@ mod tests
                     lint: Some("clippy::needless_return".to_owned()),
                     message: "unneeded `return` statement".to_owned(),
                     file: "crates/rules/nomos-rules/src/lib.rs".to_owned(),
-                    line: 1,
+                    line: FIRST_MEMBER_DIAGNOSTIC_LINE,
                 },
                 LintDiagnostic {
                     level: LintLevel::Error,
