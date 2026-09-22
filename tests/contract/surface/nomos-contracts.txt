@@ -283,6 +283,7 @@ pub struct field nomos_contracts::EnforcementReach::computed: GateCategory
 pub struct field nomos_contracts::EnforcementReach::declared: Vec<EnforcerRef>
 pub struct field nomos_contracts::EnforcementReach::expected: GateCategory
 pub struct field nomos_contracts::EnforcementReach::rule: RuleId
+pub struct field nomos_contracts::Finding::address: Option<String>
 pub struct field nomos_contracts::Finding::applicability: Applicability
 pub struct field nomos_contracts::Finding::evidence: EvidenceClass
 pub struct field nomos_contracts::Finding::gate: GateCategory

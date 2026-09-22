@@ -88012,14 +88012,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-lintline",
-        "acquired_at": 1790048320,
-        "lease_expires_at": 1790059120
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88034,7 +88030,32 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-lsp"
+        ],
+        "exit_code": 0,
+        "output_tail": "ction-orchestration v0.1.0 (F:\\repos\\verify-lintline\\crates\\orchestration\\nomos-correction-orchestration)\n   Compiling nomos-gate-orchestration v0.1.0 (F:\\repos\\verify-lintline\\crates\\orchestration\\nomos-gate-orchestration)\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling xvpe-language-server-backend-lsp v0.1.0 (https://github.com/kevinmettias/xvpe.git?rev=82a3c8fccf4ef7f3759f36d3f320a91d0f96341c#82a3c8fc)\nwarning: `nomos-rules` (lib test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 11.34s\n     Running unittests src\\lib.rs (F:/repos/verify-lintline-target\\debug\\deps\\nomos_gate_orchestration-511d15e0597ae2a9.exe)\n     Running tests\\check_orchestration_seam.rs (F:/repos/verify-lintline-target\\debug\\deps\\check_orchestration_seam-4e926489f3f876c7.exe)\n     Running tests\\gate_run_outcome.rs (F:/repos/verify-lintline-target\\debug\\deps\\gate_run_outcome-b344a1c7c6e760ec.exe)\n     Running unittests src\\lib.rs (F:/repos/verify-lintline-target\\debug\\deps\\nomos_lsp-052afaa044dd4974.exe)\n     Running unittests src\\main.rs (F:/repos/verify-lintline-target\\debug\\deps\\nomos_lsp-a6a8f5fc969338e0.exe)\n     Running tests\\fixture_tree.rs (F:/repos/verify-lintline-target\\debug\\deps\\fixture_tree-cd1f33dc9478aea2.exe)\n     Running unittests src\\lib.rs (F:/repos/verify-lintline-target\\debug\\deps\\nomos_rules-41fe04cbee895422.exe)\n     Running tests\\integration_seams.rs (F:/repos/verify-lintline-target\\debug\\deps\\integration_seams-d7949e2854b848be.exe)\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_lsp\n   Doc-tests nomos_rules\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: 1 warning emitted\n\n",
+        "verified_at": 1790048824,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -88796,14 +88817,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-triage",
-        "acquired_at": 1790048430,
-        "lease_expires_at": 1790055630
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88815,7 +88832,29 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
+        ],
+        "exit_code": 0,
+        "output_tail": "ared_Library_Less ... ok\n\ntest result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.36s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.73s\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-4b043d90270bbc14.exe)\n",
+        "verified_at": 1790048814,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0104d0b76e74ae38a67d7595c20d28e21ef5fbea"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
