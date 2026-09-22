@@ -1,18 +1,18 @@
 //! Ports and declarations this crate's own tests dispatch through.
 //!
 //! Every one of them is a fake, and that is the point of the port. Before `OD-ROADMAP-005`
-//! decision 2 this crate named both backend crates and its tests reached the real adapters
-//! through a scripted `nomos_platform::ProgramLauncher`, because a match arm calling
-//! `nomos_agent_executor_claude_code::Execute_Task` had no other seam to substitute at. There
-//! is a seam now, so the resolution and the dispatch are exercised against ports that answer
-//! from fixed data and this crate depends on no adapter at all.
+//! decision 2 this crate named both adapter crates and its tests reached the real adapters
+//! through a scripted `nomos_platform::ProgramLauncher`, because a match arm calling an
+//! adapter's own `Execute_Task` had no other seam to substitute at. There is a seam now, so
+//! the resolution and the dispatch are exercised against ports that answer from fixed data and
+//! this crate depends on no adapter at all.
 //!
 //! What that gives up is the real adapters' own coverage, and it is not lost: each adapter
 //! crate's own tests drive its port implementation through a scripted launcher, and
-//! `nomos-cli`'s `agent_executor_claude_code_seam` and `model_backend_ollama_seam` drive each
-//! real `Execute_Task` directly. The families named here are deliberately not `claude-code` or
-//! `ollama`, so a test that only passes because it happened to name a shipped family is not a
-//! test that could pass here.
+//! `nomos-cli`'s own per-adapter seam tests drive each real `Execute_Task` directly. The
+//! families named here are deliberately not either shipped family's label, so a test that only
+//! passes because it happened to name a family this build ships is not a test that could pass
+//! here.
 
 use nomos_agent_contracts::{
     AgentExecution, AgentExecutor, DeclaredTarget, DispatchPort, DispatchRefusal, ModelAnswer,

@@ -91972,7 +91972,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Absorbed into P125-WALK-OUTWARD-CARRIES-FIVE-ANSWERS rather than sequenced behind it, because the two deadlock. This item's territory is inside that item's, so it stays held while that item runs; and that item's predicate runs -p nomos-lsp, which contains this red test, so it cannot reach Done until this is fixed. Neither can go first. Its worker holds the territory, has the change built and verified, and has already produced the diagnosis this item asked for: the test computes per_source as cold minus unchanged, its own doc assumes a non-zero per-call cost, and the measured per-call cost is 0, so the subtraction yields the whole fact count rather than the per-source one. That points at the test's arithmetic rather than at the reuse, which this item's done_when explicitly admits as an acceptable finding provided the evidence is shown. Its standards are carried into that worker's instructions verbatim: name the cause, show the evidence, prove the restored property by mutation, and do not raise an expected number to match an observed one."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -91989,7 +91993,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1790056983
+      },
       "widened": []
     },
     {
@@ -92360,6 +92367,66 @@
         "timeout_seconds": 1800
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P126-AN-ORCHESTRATION-DOC-NAMES-A-BACKEND-CRATE-AND-ONE-SAYS-A-STEP-DISPATCHES-TO-IT",
+      "title": "Two orchestration crates still name the adapters their own item said they would not, and one comment claims a dispatch that no longer happens",
+      "why": "P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS declared, in its own done_when clause 1, that neither orchestration crate would name either adapter crate in any form, doc comments included. Measured at d1dca47d by grepping both crates for the four spellings: eleven lines still do. Nine are historical and true -- they say what the code used to do, in agent_dispatch_outcome.rs, dispatch_config.rs, lib.rs, run.rs and test_support.rs -- and the clause still excludes them, because a doc comment is source and the item said so rather than saying dependency. The tenth, nomos-workflow-orchestration src/tests.rs line 113, compares this crate scripted launcher against an adapter crate own, which is a comparison that no longer has a reader here. The eleventh is not historical and is not true: src/tests.rs line 544 says the second step of that case still dispatches through nomos-model-backend-ollama, and since d1dca47d it dispatches through the harness model port this crate own tests declare, under a family label deliberately spelled so that no shipped family could answer it. That sentence was made false by the commit whose done_when forbade it, which is the defect an item cannot leave behind for a later reader to trip over.",
+      "done_when": "1. Neither crates/orchestration/nomos-agent-orchestration nor crates/orchestration/nomos-workflow-orchestration names nomos_agent_executor_claude_code, nomos_model_backend_ollama, nomos-agent-executor-claude-code or nomos-model-backend-ollama anywhere in its Rust sources, doc comments included, which is the clause the port item declared and did not reach. 2. Every historical sentence that named an adapter keeps its history and loses only the vendor name: a reader still learns that this crate used to depend on two adapter crates and call their functions from a match arm, and which record moved that, without the crate names being the thing that says it. The vendor names stay where history belongs, in the amended records and in d1dca47d commit message. 3. The sentence in nomos-workflow-orchestration src/tests.rs that says a step dispatches through a shipped adapter is corrected to say what that case really dispatches through, so no comment in either crate asserts a dispatch the code no longer makes. 4. No behavior changes and no public surface moves, so no snapshot is re-blessed. 5. Predicate scope, declared: the two crates own suites are what judge that they still compile and still pass with the comments rewritten, and they are the only obligation this item claims. It reaches no contract-test target, because a prose edit inside two crates falsifies none of them.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-agent-orchestration",
+          "crates/orchestration/nomos-workflow-orchestration"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-workflow-orchestration"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-workflow-orchestration"
+        ],
+        "exit_code": 0,
+        "output_tail": "gShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-agent-contracts v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\agent-port\\wt3\\crates\\agent\\nomos-agent-contracts)\n   Compiling nomos-check-orchestration v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\agent-port\\wt3\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-agent-orchestration v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\agent-port\\wt3\\crates\\orchestration\\nomos-agent-orchestration)\n   Compiling nomos-gate-orchestration v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\agent-port\\wt3\\crates\\orchestration\\nomos-gate-orchestration)\n   Compiling nomos-correction-orchestration v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\agent-port\\wt3\\crates\\orchestration\\nomos-correction-orchestration)\n   Compiling nomos-workflow-orchestration v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\agent-port\\wt3\\crates\\orchestration\\nomos-workflow-orchestration)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 36.77s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/agent-port/wt3-target\\debug\\deps\\nomos_agent_orchestration-91255bc7f32032be.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/agent-port/wt3-target\\debug\\deps\\nomos_workflow_orchestration-a4c1a9ae4e0b7c46.exe)\n   Doc-tests nomos_agent_orchestration\n   Doc-tests nomos_workflow_orchestration\n",
+        "verified_at": 1790057193,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,

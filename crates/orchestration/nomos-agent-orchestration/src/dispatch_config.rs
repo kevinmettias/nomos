@@ -8,9 +8,9 @@ use nomos_model_package::EffortLevel;
 /// What a resolved dispatch runs with: the effort the profile asked for, carried unchanged,
 /// the family label of the target that answers, and the port it answers through.
 ///
-/// `port` replaces the two-variant `Backend` enum this type used to carry. That enum named
-/// `nomos-agent-executor-claude-code` and `nomos-model-backend-ollama` in its own variants,
-/// so a resolved choice was a vendor and the generic path held the list of them.
+/// `port` replaces the two-variant `Backend` enum this type used to carry. That enum named one
+/// adapter crate per variant, so a resolved choice was a vendor and the generic path held the
+/// list of them.
 /// `OD-ROADMAP-005` decision 2: a resolved choice is now the thing that answers, supplied by
 /// a composition root, and `family` is the label the declaration gave it.
 ///

@@ -13,13 +13,14 @@
 //!
 //! # This crate names a port, and no backend
 //!
-//! It used to name two. `nomos-agent-executor-claude-code` and `nomos-model-backend-ollama`
-//! were both manifest dependencies here; `run::Dispatched_Task` matched a two-variant
-//! `Backend` enum declared here onto their `Execute_Task` functions, `AgentDispatchOutcome`
-//! carried each crate's own outcome type as a variant named for its vendor, and
-//! `Declared_Targets` listed exactly those two. An external architecture review called that a
-//! plugin-boundary leak -- the generic path knew Claude Code and Ollama rather than knowing an
-//! executor -- and `OD-ROADMAP-005` decision 2 authorized closing it.
+//! It used to name two. Both adapter crates were manifest dependencies here;
+//! `run::Dispatched_Task` matched a two-variant `Backend` enum declared here onto their
+//! `Execute_Task` functions, `AgentDispatchOutcome` carried each one's own outcome type as a
+//! variant named for its vendor, and `Declared_Targets` listed exactly those two. An external
+//! architecture review called that a plugin-boundary leak -- the generic path knew which two
+//! products existed rather than knowing an executor -- and `OD-ROADMAP-005` decision 2
+//! authorized closing it. The two are named in that record's own amendments and in the commit
+//! that moved them, which is where a history belongs; naming them here is the leak.
 //!
 //! So: `nomos-agent-contracts` holds two ports, one per `PackageKind`
 //! (`nomos_agent_contracts::AgentExecutor` and `nomos_agent_contracts::ModelBackend`); each

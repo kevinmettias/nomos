@@ -110,11 +110,14 @@ fn Incoherent_Step() -> WorkflowStep
 }
 
 /// A launcher whose answers were written down by the test that built it, consumed one
-/// per call in the order queued. Unlike `nomos_agent_executor_claude_code`'s own
-/// `Scripted`, which only ever answers one call, a multi-step plan dispatches its
-/// launcher once per step, so each needs its own scripted answer — and a call with
-/// nothing left queued is a test bug (a body dispatched that should not have), not a
-/// silently-repeated answer.
+/// per call in the order queued. Unlike an adapter crate's own single-answer scripted
+/// launcher, a multi-step plan dispatches its launcher once per step, so each needs its own
+/// scripted answer — and a call with nothing left queued is a test bug (a body dispatched
+/// that should not have), not a silently-repeated answer.
+///
+/// No agent step reaches this any more. An agent body resolves to one of the ports
+/// [`Declared_Ports`] declares, and those answer from [`ScriptedPorts`]' own queue; what is
+/// left here is the platform a check, correction or gate body is handed.
 struct Scripted
 {
     answers: RefCell<VecDeque<ProgramOutput>>,
@@ -540,10 +543,9 @@ fn Test_A_Failure_Prevents_A_Later_Step_From_Running()
 
 /// `P40-WORKFLOW-CHECK-BODY`'s own `done_when`: a two-step workflow whose first step is a
 /// check runs through `nomos-check-orchestration::Run` against the canonical check seam,
-/// its outcome carried in the same `StepOutcome` shape the agent and model bodies already
-/// use, and its second step still dispatches through `nomos-model-backend-ollama`
-/// afterward -- proving the new body composes with the two that already existed rather
-/// than replacing them.
+/// its outcome carried in the same `StepOutcome` shape an agent body already uses, and its
+/// second step still dispatches through a model backend port afterward -- proving the new body
+/// composes with the one that already existed rather than replacing it.
 #[test]
 fn Test_A_Two_Step_Workflow_Whose_First_Step_Is_A_Check_Runs_Through_The_Canonical_Seam()
 {

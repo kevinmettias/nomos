@@ -6,11 +6,10 @@ use nomos_agent_contracts::{AgentExecution, ModelAnswer};
 /// [`crate::Run_Agent_Task`] call reported.
 ///
 /// The two answering variants are named for the **package kind** that answered, not for the
-/// vendor that implements it. They used to be `ClaudeCode(nomos_agent_executor_claude_code::
-/// AgentExecutionOutcome)` and `Ollama(nomos_model_backend_ollama::AgentExecutionOutcome)`,
-/// which is the plugin-boundary leak `OD-ROADMAP-005` decision 2 closes: this crate named two
-/// vendors and carried their own types, so the generic path knew Claude Code and Ollama rather
-/// than knowing an executor and a model backend.
+/// vendor that implements it. There used to be one variant per adapter crate, each carrying
+/// that adapter's own outcome type, which is the plugin-boundary leak `OD-ROADMAP-005`
+/// decision 2 closes: this crate named two vendors and carried their own types, so the generic
+/// path knew which two products existed rather than knowing an executor and a model backend.
 ///
 /// **The two shapes are still not interchangeable, and that is deliberate.**
 /// [`AgentExecution`] carries `denied_tool_uses`, `is_error`, `spend` and `duration_ms`;

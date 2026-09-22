@@ -12,10 +12,9 @@
 //! # The launcher left, because the port arrived
 //!
 //! Every function here used to be generic over [`nomos_platform::ProgramLauncher`] and to
-//! take an `AgentEnvironment` carrying one, because [`Dispatched_Task`] called
-//! `nomos_agent_executor_claude_code::Execute_Task` and
-//! `nomos_model_backend_ollama::Execute_Task` directly and those need a launcher. Neither is
-//! named here since `OD-ROADMAP-005` decision 2: a declared target arrives carrying a port,
+//! take an `AgentEnvironment` carrying one, because [`Dispatched_Task`] called each adapter
+//! crate's own `Execute_Task` directly and those need a launcher. Neither adapter is named
+//! here since `OD-ROADMAP-005` decision 2: a declared target arrives carrying a port,
 //! the adapter behind that port already holds whatever platform a composition root bound into
 //! it, and dispatching an agent task is no longer a thing this crate needs a platform to do.
 //! `AgentEnvironment` is gone with the parameter, since its one field was that launcher.
@@ -170,8 +169,7 @@ pub fn Run_Agent_Task(task: &TaskEnvelope, selection: &BackendSelection<'_>) -> 
 ///
 /// The two arms are the two `PackageKind`s, not two vendors, which is the whole of what
 /// `OD-ROADMAP-005` decision 2 changed here: this function used to match a `Backend` enum
-/// onto `nomos_agent_executor_claude_code::Execute_Task` and
-/// `nomos_model_backend_ollama::Execute_Task`, so the generic path named both adapters and
+/// onto each adapter crate's own `Execute_Task`, so the generic path named both adapters and
 /// carried their own outcome types. It names neither now, and the two answers stay apart
 /// because the two ports return different types -- an executor's execution carries a spend and
 /// a denial list, a model backend's answer carries a response, and neither is the other with
