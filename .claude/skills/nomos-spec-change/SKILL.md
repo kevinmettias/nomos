@@ -129,11 +129,63 @@ Then copy **all four** halves back — each body and the sidecar beside it:
 commit them with the record that moved them. Build in the worktree: a binary built in the
 shared tree has the wrong records compiled into it, which is the whole point.
 
+### Copying back is a race, and the commit form decides who wins it
+
+Those four halves are the files every session writes and nobody owns, so a peer can render
+over them while you are publishing. It happened three times within one hour on 2026-09-21:
+a worker's halves were swept into a peer's commit, repaired at `0a2daf37`; a peer's sidecars
+landed over a worker's copies, repaired in `da818179`; and `20e31c01` staged a peer's bytes
+for all four, repaired at `ad934368`. Two windows, and they need different answers.
+
+**Between the copy and the `git add`**, a peer's render lands on your files and you stage
+their bytes. So stage, then compare each staged blob against the render worktree's own file
+by object hash — never by reading the shared working tree, which holds whatever the peer just
+wrote and so compares their file against itself:
+
+```
+git add diagrams/relations.mmd diagrams/relations.mmd.nomos-projection.json \
+        spec/domain-specification.md spec/domain-specification.md.nomos-projection.json
+git rev-parse :spec/domain-specification.md                      # the blob you staged
+git hash-object <scratch>/render/spec/domain-specification.md    # the bytes you rendered
+```
+
+Equal for all four halves, or somebody wrote over you: re-copy from the worktree and stage
+again. Never repair the file by hand.
+
+**Between the `git add` and the commit**, use a **bare** `git commit -F <message>`. A trailing
+pathspec re-reads the working tree at commit time and ignores the index, so it commits the
+peer's bytes under your message — measured in a scratch repository by staging a file,
+overwriting it, and committing both ways. Explicit paths belong on `git add` and never on
+`git commit`; a pathspec there is not a stricter reading of the rule but its opposite.
+
+Bare costs the other half, which is why the pathspec form gets reached for: it commits the
+whole index, a peer's staged files included. So assert the staged list, and only then commit:
+
+```
+git diff --cached --name-only    # exactly the paths you meant, and nothing else
+```
+
+**After the commit**, `git show HEAD:<path> | diff - <path>` is worth running for what it is:
+a check that the working tree equals `HEAD`, which under a live peer is a different question
+from whether your commit is right. Measured both ways — silent on a pathspec commit that
+carried a peer's bytes, because `HEAD` and the tree then hold the same peer's file, and loud
+on a correct bare commit the moment a peer re-renders after it. It catches a stale render. It
+does not catch a stolen one.
+
 Two things follow that surprise people:
 
 - **`spec freshness` in your working tree is not the verdict.** It reports stale over a
   correct file whenever a peer holds an unlanded record, so exit 8 there is not evidence you
-  rendered wrongly. The clean worktree and CI are the trees where the question is well posed.
+  rendered wrongly. Before reporting staleness to anybody, read
+  `git status --short docs/records/ crates/spec/nomos-spec-store/records/` — any line there
+  and the reading is not evidence, in either direction. Both directories, because a record is
+  its document plus its registration; and read the output rather than the exit code, which is
+  0 either way. A count cannot stand in for it: a modified file counts the same as its
+  committed version. Measured 2026-09-21 at `9f13b1e7` — both committed projections read
+  current from a detached worktree at that revision and exit 8 from the same worktree once one
+  peer's unlanded record was on disk at build time, nothing else having changed. A session
+  reported a false alarm to two others that day on the strength of a shared-tree reading.
+  The clean worktree and CI are the trees where the question is well posed.
   Do not plan on waiting for the shared tree to go quiet: polled every minute for an hour on
   2026-08-10, while seven commits landed from three sessions, it never once did.
 - **`work finish` does not run this check**, deliberately, for the same reason. Adding a
@@ -169,6 +221,13 @@ silently dropped the projection entries for `OD-GATE-023`, `OD-HOST-011`, `OD-HO
   counts each render prints — relations, decisions, documents, sections — should move the way
   your edit moved them: adding one record adds one decision. A `git diff --stat` whose
   deletions dwarf its insertions is this bug, every time.
+- **When the diff is too large to attribute, render the base.** Revert your own record edit in
+  the worktree, rebuild, re-render, and diff that against the committed projection. What that
+  shows is staleness already at `HEAD`; what it does not show is yours. Measured 2026-09-21 at
+  `9f13b1e7`: the base render reproduced both committed bodies exactly, and one record added
+  moved them by 752 insertions and no deletions, so the whole diff was that record's. A peer's
+  session used the same two legs to separate 567 insertions of somebody else's staleness from
+  its own amendment, in about two minutes.
 
 **Record-fed and source-fed are not the same input, and one session filed a whole item on the
 confusion.** A projection's input digest is fed by the *record set*, not by repository source.

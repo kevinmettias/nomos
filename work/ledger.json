@@ -90742,13 +90742,17 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P125-SUPPORTING-FACT-TRAIL",
         "P125-REQUIREMENT-RULE-LINES"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-75-walk",
+        "acquired_at": 1790055467,
+        "lease_expires_at": 1790066267
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -90856,7 +90860,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Its done_when cannot be satisfied, and not because of territory. It requires the verb to read five sources from nomos-gate-orchestration, and one of them, ServedMethod::REGISTRY, is unreachable from that crate at any territory: nomos-api-transport exports it and depends on nomos-gate-orchestration, so the read is a cargo cycle, and the zone rule forbids it independently. Two further sources, the package allowlists and the requirement-trace reader, need new manifest dependencies and therefore Cargo.lock, which a live peer holds. Its worker claimed, measured, found all this, wrote no code and abandoned rather than landing two of five sources under a done_when that names five, which would have made the item false while its predicate went green. Re-authored after OD-PROJECT-007 is amended, with territory covering the gate-orchestration manifest, Cargo.lock, and nomos-cli's gate invocation, parsing and report modules, which the record named and the item dropped."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -90883,7 +90891,10 @@
         }
       ],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1790055373
+      },
       "widened": []
     },
     {
@@ -91349,14 +91360,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-render",
-        "acquired_at": 1790054766,
-        "lease_expires_at": 1790065566
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -91372,7 +91379,33 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.76s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/render/target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/render/target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/render/target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790055445,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -91725,7 +91758,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Too narrow, and an amends reservation is exclusive so a second item cannot be authored beside it. It covers one false sentence; the record has a larger defect found minutes later by the worker that tried to build from it. OD-PROJECT-007 Decision section 1 says the verb sits in nomos-gate-orchestration and reads ServedMethod::REGISTRY among five sources. That is unbuildable: ServedMethod is exported only by nomos-api-transport, whose manifest names nomos-api and nomos-gate-orchestration, so the read is a cargo dependency cycle; and nomos-api-transport is zoned Host while Application Service permits no Host, so it is a zone violation independently. Re-authored as -2 covering both defects together, because one amendment should leave the record buildable rather than merely less wrong."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -91738,6 +91775,43 @@
           "nomos-spec-store"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1790055372
+      },
+      "widened": []
+    },
+    {
+      "id": "P125-OD-PROJECT-007-NAMES-A-SOURCE-THE-CRATE-IT-CHOSE-CANNOT-READ",
+      "title": "OD-PROJECT-007 puts the verb in one crate and has it read a source that crate cannot depend on, and separately says the uncomposed offers are composed somewhere they are not",
+      "why": "OD-PROJECT-007 decided that what is built is reported by a host verb beside gate plan, derived at run time, and rejected three other placements on each one's own criterion. That decision stands. Two things it states do not. First and larger: its Decision section 1 says the verb sits in nomos-gate-orchestration and reads five sources, one of which is ServedMethod::REGISTRY. That is unbuildable from that crate. ServedMethod is exported only by nomos-api-transport, whose own manifest names nomos-api and nomos-gate-orchestration, so the read is a cargo dependency cycle; and nomos-architecture.json zones nomos-api-transport as Host while Application Service permits no Host and lists only nomos-check-orchestration as an exception, so it is a zone violation independently of the cycle. A worker claimed the building item, measured this, wrote no code and abandoned rather than land two of five sources under a done_when naming five. Second and smaller: the record says of the offers it classified declared and unobserved that all three are composed only under tests/integration. That composition root offers nomos_lang_rust, nomos_lang_rust_scan and its own surface provider and nothing else, and depends on the compiler crate only for determinism declarations, which call no Provider_Offer. Those offers are composed nowhere. Its count is also behind, three against four. Both defects are measurements the record took to justify a decision, and in both cases a reader who trusted one planned work that could not be done.",
+      "done_when": "OD-PROJECT-007's Decision section 1 names a source set the chosen crate can actually read. It records why ServedMethod::REGISTRY cannot be read from nomos-gate-orchestration, naming both the cargo cycle and the zone rule, and decides how the served-operation row is obtained instead, choosing between the host handing the registry in as a caller-supplied value the way the host variant is handed to the gate run today, and the row belonging to a different host's half, with the cost of each stated. It states which of the five sources need a manifest dependency the crate does not have, so a building item reserves the manifest and the lock file rather than discovering them, and it names the CLI modules a new verb touches, which its own earlier text named and its building item dropped. It corrects the claim that the uncomposed offers are composed under tests/integration, stating what that root actually composes and that the uncomposed offers reach no composition root at all, and either corrects the count at a named revision or replaces it with a derivation, naming the guard at tests/contract/tests/boundaries/composed_offers.rs as where a reader gets it. It records why a name or path scan of the exported set misreports in both directions, because one provider crate declares modules with a path attribute and re-exports an offer renamed. The decision itself is unchanged: a host verb over the compositions, four row states, and not built is still not a word the verb can print. No code changes. Both required projections are re-rendered from the record set the commit publishes and nomos spec freshness with both --require flags exits 0 in that tree.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2400
       },
       "verified": null,
       "abandoned": [],
