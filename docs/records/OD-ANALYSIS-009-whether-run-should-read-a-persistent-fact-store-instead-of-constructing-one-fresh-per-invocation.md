@@ -3,7 +3,7 @@ id: OD-ANALYSIS-009
 type: decision
 title: Whether nomos-check-orchestration's Run should read a persistent fact store instead of constructing MemoryFactStore fresh per invocation
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - analysis
@@ -186,6 +186,16 @@ caller itself.
 
 ## Amendment (P40-FACT-STORE-PERSISTENCE-2): The First Trigger Fired, And It Asks For Something Narrower Than This Record's Subject
 
+**Both halves of this section were corrected at version 4, and its citations are dated
+history rather than live pointers.** `crates/host/nomos-lsp/src/server.rs` no longer exists
+-- the server mechanics moved into `xvpe-language-server-backend-lsp` on 2026-09-10 -- and
+the per-call construction this section calls "a real, concrete, immediately buildable gap"
+was built. Read
+`Amendment (P123-OD-ANALYSIS-009-SENDS-A-READER-TO-A-DELETED-FILE-AND-TO-BUILD-WHAT-EXISTS)`
+below before relying on either half. Nothing here is rewritten or deleted: this section was
+true at the revision it measured, and the correction is only checkable against it if it
+stands.
+
 `P40-FACT-STORE-PERSISTENCE-2` re-measured all four triggers directly against the tree
 rather than trusting this record's own prior "unfired" verdict, the same discipline
 `OD-WORKFLOW-002` already modeled for the workflow tier.
@@ -242,6 +252,128 @@ not reach `nomos-lsp`, so this amendment records the gap rather than closing it;
 `nomos-lsp`'s own loop to hold one `Workspace` and one `MemoryFactStore` across its calls is
 real, disjoint, next work, left for a ledger item scoped to that crate.
 
+## Amendment (P123-OD-ANALYSIS-009-SENDS-A-READER-TO-A-DELETED-FILE-AND-TO-BUILD-WHAT-EXISTS): Both Halves Of The Trigger-1 Amendment Went Stale, One By A Move And One By Being Built
+
+The amendment above was written against a tree in which `crates/host/nomos-lsp` held a
+server and did not hold its own reuse. Neither is true now. Both halves were re-measured
+directly against `9f76f2f6` rather than carried over from that section's text, and this
+amendment corrects the citation and marks the ordering argument spent. It decides nothing
+about persistence: the `Decision` section above is untouched, and so is that section's own
+restatement of it.
+
+This follows `OD-ANALYSIS-007`'s amendment rather than a rewrite -- the stale sentences are
+quoted so the correction can be checked against them, and the paragraphs carrying them are
+left standing -- and keeps `ARC-ROADMAP-001`'s convention of naming each amending item in
+`Status`.
+
+**First half: the path went stale because the code moved, not because it was wrong when it
+was written.** The section above cites `Run_Server` at
+"`crates/host/nomos-lsp/src/server.rs:32`", its loop at "`Serve`, line 93", and
+`Recheck_And_Publish` at "`server.rs:122`". There is no `server.rs` under
+`crates/host/nomos-lsp/src`, and none of those three functions exists anywhere in this
+workspace; the crate's files are `build_variant.rs`, `file_diagnostic.rs`, `lib.rs`,
+`location.rs`, `main.rs`, `nomos_diagnostic_provider.rs`, `severity.rs`, `sources.rs` and
+`walk_outward.rs`. The crate's own module doc dates and explains the move rather than
+leaving a reader to infer it: under "What changed on 2026-09-10", "the whole server is
+XVPE's now" -- the handshake, the workspace root, the capability declaration, the `file://`
+URI conversion, the whole-line spans and the stale-marker clearing an editor needs all moved
+down into `xvpe-language-server-backend-lsp` over the `xvpe-diagnostics` provider contract,
+because "Nomos is an application over that engine, and a general capability sitting up here
+was unreachable by everything down there". What stayed is what was always this workspace's:
+the walk, the judgement, the severity each of its own rule categories deserves, and what a
+finding carries. `NomosDiagnosticProvider` is, in that doc's own words, "the one seam, and
+`src/main.rs` hands it to the engine".
+
+So the long-lived caller trigger 1 fired on is still real and is still this crate -- one
+editor session across many `didOpen` and `didSave` notifications -- but the name to read it
+at is `NomosDiagnosticProvider::Diagnose`, not `Run_Server` or `Recheck_And_Publish`. The
+citation is the defect and the finding is not: an amendment that sends a reader to a deleted
+file reads as a live pointer into code, which is worse than saying nothing, while a path
+citation is dated history the moment the tree moves -- `OD-SPEC-017` decided exactly that
+about path citations, which is why nothing mechanical caught this one and an amendment had
+to.
+
+**Second half: the gap that section calls immediately buildable is built, so its argument
+for building it first is spent.** What it says: `Recheck_And_Publish` "constructs `let mut
+workspace = None;` and `let mut store = nomos_analysis::MemoryFactStore::New();` fresh,
+inline, on every call -- discarding, on every keystroke's save, the exact reuse
+`P14-ANALYSIS-009-STORE-WORKSPACE-REUSE-FIRST-INCREMENT` (recorded above) already built and
+proved safe", and calls that "a real, concrete, immediately buildable gap ... left for a
+ledger item scoped to that crate". Measured now:
+`crates/host/nomos-lsp/src/nomos_diagnostic_provider.rs:55`-60 declares
+`workspace: Option<Workspace>`, `store: MemoryFactStore` and
+`reassessment: nomos_check_orchestration::RuleReassessmentCache` as struct fields of
+`NomosDiagnosticProvider`. The two initializers that section quotes survive, in `New` at
+lines 66-72, where they run once per provider rather than once per call. The type's own doc
+is explicit about which question that answers: its first line calls the three "the three
+things it keeps between being asked twice", and its "What it keeps between calls" heading
+says they are "reused across every judgement rather than rebuilt per call", citing this
+record's second amendment as the concrete case its first trigger was written for.
+
+Two ledger items closed it, in this order:
+
+- `P40-LSP-STORE-AND-WORKSPACE-REUSE` (Done, commit `7596982f`, 2026-09-06) grouped the
+  published set, the `Workspace` and the `MemoryFactStore` into one value the server owned
+  and threaded into every call it made to `Run` -- precisely the "real, disjoint, next work"
+  the section above left for an item scoped to this crate. When the server moved to XVPE
+  four days later, that reuse landed on `NomosDiagnosticProvider`'s own fields, which is why
+  the closure is invisible from the path that section cites.
+- `P105-THE-LSP-KEEPS-THE-REASSESSMENT-CACHE-AND-PROVES-THE-REUSE-AT-ITS-OWN-BOUNDARY`
+  (Done, commit `0c3b1013`) added the third field and made the rule-level skip reachable at
+  all: `Run` builds a reassessment cache fresh for its own call and drops it at the end by
+  construction, so every composed rule re-runs on every call for every caller, and a caller
+  wanting the skip has to keep the cache itself. An editor is the caller that can.
+
+The reuse is proven at that boundary rather than asserted there.
+`Test_A_Second_Judgement_Should_Re_Derive_A_Fact_Only_For_The_Source_That_Moved` holds that a
+second judgement re-derives a fact only for the source whose bytes moved,
+`Test_A_Reusing_Provider_Should_Answer_What_A_Fresh_One_Answers_Over_The_Same_Tree` holds
+that keeping the three does not change the answer, and
+`Test_A_Cold_Judgement_Should_Equal_What_The_Unreassessed_Run_Path_Produces` holds the
+reassessing path against the plain one -- the same
+`IncrementalResult(S) == CleanRecomputation(S)` invariant
+`Test_A_Store_And_Workspace_Reused_Across_An_Edit_Agrees_With_A_Clean_Recomputation` proves
+one layer down, now proven at the caller that actually reuses.
+
+**Why a closed gap needs recording rather than tidying.** The section above does not merely
+mention that gap; it rests its conclusion on it. Its argument is an ordering one -- the
+nearer in-process work "needs nothing this record's subject asks for: no serialization
+format, no on-disk store, no key that survives a build-variant or contract-version change,
+and no eviction policy", so that is the work to do and this record's subject is not. The
+argument is now **spent**: the nearer work is done and nothing waits behind it. A spent
+ordering argument left standing in a governing record reads as a live reason to wait, which
+is the whole defect corrected here. What does not follow is any conclusion about
+persistence, in either direction -- an argument being spent removes a reason to wait and
+supplies no reason to build.
+
+**What remains genuinely unbuilt is this record's own subject, the on-disk half.** Measured
+at `9f76f2f6`, three things, none of which the in-process closure above touches:
+
+- **No store survives process exit.** `crates/substrate/nomos-analysis/src/fact_store.rs`'s
+  `FactStore` trait has exactly one implementor in this workspace, `MemoryFactStore`, and it
+  is `BTreeMap`s in memory. The provider's own doc says the same of what it keeps: "Reused,
+  not persisted -- all three still end when this process does. Nothing here asks any of them
+  to survive past that."
+- **No key has ever had to survive the binary that wrote it.** `FactKey` already carries
+  `contract_version` and `variant: BuildVariantId` among its nine components, so within one
+  process a changed contract version or build variant yields a different key and costs a
+  recompute rather than serving a stale fact. What does not exist is any serialized form of
+  that key or of a fact, anything that validates one read back from a process that is not
+  this one, or any decision about what a stored entry means when the reading binary is not
+  the writing binary, or when `FactKey`'s own shape moved between the write and the read.
+  That is the keying question this record's subject asks, and it is untouched.
+- **No retention rule bounds the per-key history.** `MemoryFactStore` holds a `Vec` of
+  entries per key digest and every `Materialize` pushes another one onto it; nothing trims,
+  ages or evicts, and the process's own exit is the only bound. A store that ends with the
+  process can be built that way. One that outlives it cannot.
+
+**That question belongs to a forthcoming item, and this amendment is not it.**
+`P123-FACT-STORE-SURVIVES-THE-PROCESS-2` builds the on-disk store and amends the `Decision`
+section; it is not on the board while this correction is open, because an amends reservation
+on this record is exclusive and this item holds it, and it is authored once this lands.
+Until that item decides otherwise, the `Decision` section above is this record's position,
+unchanged and deliberately not reweighed here.
+
 ## Status
 
 Accepted, amended a second time. Trigger 1 (a real long-lived caller) has fired with the
@@ -254,3 +386,21 @@ other caller) needing its `Workspace`/`MemoryFactStore` to survive its own proce
 rather than merely to be held across calls within one process, on a real multi-analysis-pass
 workflow plan being composed by a real caller, on a corpus-scale timing measurement, or on
 `ARC-ROADMAP-001`'s near-term tier being internally sequenced.
+
+Amended a third time, to version 4, by
+`P123-OD-ANALYSIS-009-SENDS-A-READER-TO-A-DELETED-FILE-AND-TO-BUILD-WHAT-EXISTS`, which
+corrected both halves of the trigger-1 amendment above rather than deleting them. Its
+citations to `crates/host/nomos-lsp/src/server.rs` name a file that no longer exists,
+because the server mechanics moved into `xvpe-language-server-backend-lsp` on 2026-09-10
+and `NomosDiagnosticProvider` is the seam that remains; and the in-process reuse gap it
+called immediately buildable was built, by `P40-LSP-STORE-AND-WORKSPACE-REUSE` and then
+`P105-THE-LSP-KEEPS-THE-REASSESSMENT-CACHE-AND-PROVES-THE-REUSE-AT-ITS-OWN-BOUNDARY`, so
+its ordering argument for closing the nearer gap first is spent rather than live. That
+correction leaves the decision exactly where it was: the on-disk half -- a store that
+survives process exit, a key that survives the binary that wrote it, a retention rule over
+a per-key history -- remains unbuilt and is not reweighed here, and
+`P123-FACT-STORE-SURVIVES-THE-PROCESS-2` is the forthcoming item that answers it. The
+revisit conditions above are unchanged; what the correction sharpens is that the surviving
+half of trigger 1 is only the one they already name, a caller needing its
+`Workspace`/`MemoryFactStore` to survive its own process's exit rather than merely to be
+held across calls within one process.

@@ -89832,14 +89832,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-a009",
-        "acquired_at": 1790050815,
-        "lease_expires_at": 1790058015
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -89855,7 +89851,33 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "\\nomos-repo-policy)\n   Compiling nomos-lang-rust-clippy v0.1.0 (F:\\repos\\nomos-render-a009\\crates\\languages\\nomos-lang-rust-clippy)\n   Compiling nomos-lang-go-modules v0.1.0 (F:\\repos\\nomos-render-a009\\crates\\languages\\nomos-lang-go-modules)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos-render-a009\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-lang-go v0.1.0 (F:\\repos\\nomos-render-a009\\crates\\languages\\nomos-lang-go)\n   Compiling nomos-lang-rust-deny v0.1.0 (F:\\repos\\nomos-render-a009\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-lang-rust-cargo v0.1.0 (F:\\repos\\nomos-render-a009\\crates\\languages\\nomos-lang-rust-cargo)\n   Compiling nomos-workspace v0.1.0 (F:\\repos\\nomos-render-a009\\crates\\substrate\\nomos-workspace)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos-render-a009\\crates\\rules\\nomos-rules)\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-spec-store v0.1.0 (F:\\repos\\nomos-render-a009\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos-render-a009\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos-render-a009\\tests\\contract)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.29s\n     Running unittests src\\lib.rs (F:/repos/nomos-render-a009-target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (F:/repos/nomos-render-a009-target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-render-a009-target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790051533,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
