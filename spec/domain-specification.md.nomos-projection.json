@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:c179c3445ff7e556b33397ffae3b2a7abe2495e00fefbf74cbb269dbdeb92131",
-  "inputs_digest": "sha256:7f03f3febfbd43e43c6a649609c0565efb30f2107f460f0e89c5e03c80bed805",
+  "content_digest": "sha256:22b3d16145e722f6f8cea9ec484fde0224b3f1fcc3c9813db3bdef42a2e35298",
+  "inputs_digest": "sha256:9229087145bfc77f1046b3eb2e37c5ba73212c4ee087322f75a59efb32e42e96",
   "sections": [
     [
       "Documents",
-      264
+      265
     ],
     [
       "Sections",
-      2301
+      2308
     ],
     [
       "Source blocks",
-      8238
+      8266
     ]
   ],
   "inputs": [
@@ -1039,6 +1039,11 @@
       "content": "documents",
       "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md@authored",
       "hash": "sha256:62c6d8750480da8424a5689d32b601a54227446d970e4610b102910dbe001e06"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md@authored",
+      "hash": "sha256:63a8457f1df3d1c4ae5e22a2051333aac43426b8618a6dd792e5a7dc4aa024dd"
     },
     {
       "content": "documents",
@@ -10244,6 +10249,41 @@
       "content": "headings",
       "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#48",
       "hash": "sha256:ea28871a6d98b726158fe2aba459f7083e9fd097261f755884d6f7eb0866de5b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#1",
+      "hash": "sha256:9ed0c98d36e26cd36ea69d6308281f83909df5f35d7662c6cec49ef08f5850f7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#2",
+      "hash": "sha256:6d6e627c812fa55a86b57d1e27228971d62cb681a23de357e9c660d03f6f29f9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#6",
+      "hash": "sha256:0b90fefb1531cc767cdb06d769054ceff339bf8d94fba28dff727cf5f5f12ee5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#9",
+      "hash": "sha256:f51735cece05557fd3321714d85fc149860f358baefb92c8e98cb3bb0670ee39"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#19",
+      "hash": "sha256:be26e345cceee1b069ea235a1b7ea162e97ad312ca46c5fcb3bdb2ab92599951"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#25",
+      "hash": "sha256:e14b22af4dc954af44b6af2d46270bd05529d2119a654349b078b8f43189bd95"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#27",
+      "hash": "sha256:8e13296b7ef248c760fa49417acd293ceff0c97ed6e486a90431fae3902db45f"
     },
     {
       "content": "headings",
@@ -44934,6 +44974,146 @@
       "content": "blocks",
       "identity": "docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#49",
       "hash": "sha256:9c70cb2214671bc5313ecf2c3ab78963ef5998380219b5f1cadafecd37da5102"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#1",
+      "hash": "sha256:3b315606f00a17c86c120d1dcc3af462cbec5e1c6b5c9000b55c0d68eca8cd30"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#3",
+      "hash": "sha256:5132c436f96b43e8187a4b97781257ff2f76a7540e0352dcdf91abccd627c62e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#4",
+      "hash": "sha256:e1db908946c1a809cc3b1af87aa67dddd9959d2a2a9e40e8106e47d1936c87b9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#5",
+      "hash": "sha256:e62c56679de209c5417236cb7a823847c8929e1923b5ec4859840307a49562e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#6",
+      "hash": "sha256:effdef3bf2c276c54bfc6d0b88a2a7d8e2efd8534cd0f12e93c5429fc30b90d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#7",
+      "hash": "sha256:9fc921a6a09f585205612ad054d2c8a803d739d60cae23b2ab8eaea07d68a491"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#8",
+      "hash": "sha256:2005221e4364990476d0388e9bbba3222e3235f85098589b5bc6e1415664f8eb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#9",
+      "hash": "sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#10",
+      "hash": "sha256:f7119798f7d427daa868c936682c14f0a3acadd2722116881542766fb0155d94"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#11",
+      "hash": "sha256:a09d783dd13c666d5f72197dbf5fda543f94e67e1e854e6bbb45b5cb3610b8cf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#12",
+      "hash": "sha256:a92d9a1449ebe79a50c8bb1b684b299ea28848f4402741b2fa2836dc0dbfbcab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#13",
+      "hash": "sha256:30d480b5a35daa5c7632f2315d1aae10f7cdfa452e51085e0204b0663970a2dc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#14",
+      "hash": "sha256:73fed55a2ebac69005e04ef3a03a3fdd4f087721a744439628236dd906d8ff88"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#15",
+      "hash": "sha256:1010b1ace9434a309f238dce0ac452120c350fd35259a11c239d04ad45565824"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#16",
+      "hash": "sha256:51b0f42caadb148d190617f08e3a12a6d8945321d58d7be26c30f152598309e9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#17",
+      "hash": "sha256:b88f32ea6a9293f17a0460ee671fa2bf09d013fe0ac346f879ed9528b122a6db"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#18",
+      "hash": "sha256:8c2b024c6235c1f89bb557e58e7ec27d0b4daf2de382ba7ee736f510bab2d4f7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#19",
+      "hash": "sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#20",
+      "hash": "sha256:baebd641f1f3bdca68074162d3f63fabe61e1a4d57ba6e12173b7862605e110e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#21",
+      "hash": "sha256:6b6732ff643bb4eb5b2247c7e6a3d2018d6d61f124586414f2fa6590f108f4ee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#22",
+      "hash": "sha256:147632a99bde1a8535c43dec1fa30f9ce154911d30e5511f911251cec541b4da"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#23",
+      "hash": "sha256:35ca259730a7b8f81804ace557c0b930e15ef20a9a132ddf5e0e318aceccabbc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#24",
+      "hash": "sha256:dbabc322bf50bbadcb8167c4a460212c8661df4277441cc1183619e21b22861f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#25",
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#26",
+      "hash": "sha256:390a093b9aebacf118a112089a6785f33ad1c3b34a590b6b07a6349c14fa1349"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#27",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#28",
+      "hash": "sha256:2bca5ebea0909c2f25bce538749650f1c0976858cd3b4b9e3e67ae3fd6f925e9"
     },
     {
       "content": "blocks",

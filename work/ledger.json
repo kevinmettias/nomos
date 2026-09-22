@@ -88604,7 +88604,8 @@
           "tests/contract/tests/boundaries/mcp_registry.rs",
           "README.md",
           "tests/contract/surface/nomos-api-transport.txt",
-          "tests/contract/surface/nomos-mcp.txt"
+          "tests/contract/surface/nomos-mcp.txt",
+          "Cargo.lock"
         ],
         "patterns": []
       },
@@ -88639,7 +88640,15 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p123-checkrun",
+          "added": [
+            "Cargo.lock"
+          ],
+          "widened_at": 1790051989
+        }
+      ]
     },
     {
       "id": "P123-GATE-PHASES-THRESHOLDS-AND-APPROVALS-ARE-AUTHORED-IN-THE-POLICY-FILE",
@@ -88953,14 +88962,14 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": {
+        "Declined": {
+          "reason": "done_when falsified by time, not implementation. It requires the amendment to say OD-ROADMAP-003 is in flight and not cited as published; OD-ROADMAP-003 is now published and registered, so writing that would make the record false. It also names P123-THE-COMPILER-CONTRACTS-LEAVE-THEIR-PROVIDER-AND-ITS-RULES-JOIN-THE-RUN as the building item, and that item is declined and replaced by -2 carrying two crates rather than one. Re-authored as -3 against both published facts; the need it named is unchanged and sharper."
+        }
+      },
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-progsem",
-        "acquired_at": 1790044679,
-        "lease_expires_at": 1790051879
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88972,9 +88981,24 @@
         "timeout_seconds": 1800
       },
       "verified": null,
-      "abandoned": [],
-      "displaced": [],
-      "declined": null,
+      "abandoned": [
+        {
+          "holder": "nomos-75",
+          "reason": "Releasing the claim so the item can be declined; its terms were falsified by time and there is no work edit.",
+          "abandoned_at": 1790052619
+        }
+      ],
+      "displaced": [
+        {
+          "holder": "nomos-75-progsem",
+          "acquired_at": 1790044679,
+          "lease_expires_at": 1790051879
+        }
+      ],
+      "declined": {
+        "holder": "nomos-75",
+        "declined_at": 1790052620
+      },
       "widened": []
     },
     {
@@ -89729,7 +89753,17 @@
           "crates/orchestration/nomos-gate-orchestration/src/gate_plan/gate_run_result.rs",
           "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
           "tests/contract/surface/nomos-gate-orchestration.txt",
-          "tests/contract/tests/completeness_universes/table.rs"
+          "tests/contract/tests/completeness_universes/table.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_contribution.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/resolved_field.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_field.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/field_provenance.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_unit.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/rejected_override.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_refusal.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/resolution.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/tests.rs"
         ],
         "patterns": []
       },
@@ -89759,7 +89793,24 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p124-effective",
+          "added": [
+            "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file/tests.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_contribution.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/resolved_field.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_field.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/field_provenance.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_unit.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/rejected_override.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_refusal.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/resolution.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/tests.rs"
+          ],
+          "widened_at": 1790051984
+        }
+      ]
     },
     {
       "id": "P123-GATE-034-EVIDENCE-FLOOR-FIRST-INCREMENT-2",
@@ -90285,6 +90336,192 @@
           "record_citation"
         ],
         "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-OWNER-REQUIRES-THE-REVIEWS-DECLINED-ITEMS-BUILT",
+      "title": "The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand",
+      "why": "On 2026-09-21 an external architecture review of dev at bc0aaac was reconciled against docs/records/ item by item. Of its thirteen claims, three produced code changes, three produced new decision records, one was already built, and six were declined because an accepted record had already measured the same argument and named a trigger that has not fired. Two further points had no disposition at all: the increment OD-LEDGER-041 named as owed, and the rule the review's own section 13 asked for. The owner then required the declined set built anyway, which is a sequencing decision only the owner can make and one this repository has a precedent for in OD-ROADMAP-001. Without a record, each of the six implementations would read as an agent building against an accepted record that says not to, which is the failure the contract's route-to-authority rule exists to prevent; and a future session reconciling the same review would find six records saying wait and code saying otherwise, with nothing explaining which is current.",
+      "done_when": "OD-ROADMAP-005 is registered and states, in the shape OD-ROADMAP-001 already uses, that the owner requires the eight pieces built; it names each superseded record by identifier and version together with the specific clause superseded and the piece that supersedes it; it states that no superseded record's measurement is claimed to be wrong and that each one is amended by the item that lands its change rather than left to contradict the tree; it states what the override does not license, including scope beyond the eight pieces, a zone permission granted by fiat rather than declared, and any trigger in a record not named here; and both required projections are re-rendered from the record set the commit publishes with spec freshness exit 0.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md",
+          "crates/spec/nomos-spec-store/records/OD-ROADMAP-005.record"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "-46e767f10773\\scratchpad\\render\\tree\\crates\\languages\\nomos-lang-rust-clippy)\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n   Compiling nomos-workspace v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\render\\tree\\crates\\substrate\\nomos-workspace)\n   Compiling nomos-rules v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\render\\tree\\crates\\rules\\nomos-rules)\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-check-orchestration v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\render\\tree\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\render\\tree\\tests\\contract)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.06s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790052695,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-SUPPORTING-FACT-TRAIL",
+      "title": "A run builds a read trail and discards it, so build the rule-grain supporting-fact answer OD-HOST-016 decided",
+      "why": "OD-HOST-016 decided that a supporting-fact answer is produced at rule grain from the read trail the run already builds and discards, and refused the per-finding answer after measuring that the subject join it would need is falsified in twelve of fifty-six finding constructions. The measurements that make it buildable are in that record: forty of seventy-one composed rules read a fact at all and thirty-one can never have a trail; Reader::Require drops the Resolution, so the Requirement floor and the offers passed over are lost, but the chosen offer's Guarantee survives in full on the MaterializedFact that Require returns, and all forty fact-reading rules hold it while not one reads it; Into_Dependencies has zero callers in crates/orchestration and one in the whole workspace outside tests, so the trail costs nothing new to collect because Trail::Note already clones a FactKey on every read. Nothing in this workspace can answer which fact backed a judgment, which is one of the two targets OD-HOST-010 named undecided and the one this record closed.",
+      "done_when": "A run answers, per rule, which facts that rule read in the call that produced its findings. One Reader is built per rule rather than one per run; at the end of each rule call its trail is reduced to the distinct provenance tuples it holds, each carrying the capability, the provider and its contract version, the read outcome, and for an answered read the full Guarantee and EvidenceClass resolved off the MaterializedFact while the store is still in hand. The answer is carried on the outcome nomos-check-orchestration returns and is cached beside the findings it belongs to in the reassessment cache, because a caller that reuses findings across calls would otherwise be handed an empty trail for the findings it actually shows. Four answer shapes are distinguishable and no absence is reported as a judgment made without evidence: a rule that structurally reads no fact, derived from its descriptor and never from silence; a rule that read facts, claiming only that it read these in the call that produced this finding; a finding raised by materialization that never passed through a rule call; and unrecorded. The derived-versus-declared comparison is the falsifier: a test compares what each rule actually read against what its RuleDescriptor declares it requires, and a rule whose declaration and reads disagree is reported. No descriptor gains a Requirement floor field, no FactKey reconstruction is attempted and no per-finding answer is produced, each being refused by OD-HOST-016 with its own measured reason. Nothing under crates/host/nomos-lsp changes: projecting this to an editor is a separate item. cargo test passes for nomos-analysis, nomos-check-orchestration and nomos-contract-tests, and cargo clippy --workspace --all-targets is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-analysis",
+          "crates/orchestration/nomos-check-orchestration",
+          "tests/contract/surface/nomos-analysis.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "crates/host/nomos-api/src/check.rs",
+          "crates/host/nomos-cli/src/check/report.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75-trail",
+        "acquired_at": 1790052710,
+        "lease_expires_at": 1790063510
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-analysis",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-REQUIREMENT-RULE-LINES",
+      "title": "An assessment declares which rules enforce its requirement, the mechanism OD-HOST-015 decided",
+      "why": "OD-HOST-015 decided that a finding reaches its corpus requirement through rule lines the assessment declares, that the assessment owns the declaration, and that the record join which exists today is refused as a mechanism because it connects one rule to three requirements and every pair is a coincidence of shared citation. It also refused a requirements field on RuleDescriptor, on the ground that which rule enforces a requirement is a claim about this build against this corpus rather than a property of a rule everywhere. That leaves the mechanism decided and unbuilt, and leaves nomos-lsp unable to answer one of the five walk-outward targets P42-LSP-PROJECTION named. Fifty-nine of seventy-one rules are ported code-standards rules bearing on no v14 requirement at all, so the line is optional per entry and its absence means nobody declared one, which is the reading OD-TRACE-001 already chose for the whole registry.",
+      "done_when": "An assessment entry may carry repeated rule lines, one identifier each, in the same grammar site and gap already use, where the identifier is the string a Finding carries and a RuleDescriptor declares. The reader that already refuses an unknown key is where it is read, the assessment type carries the identifiers as the kernel's own RuleId rather than a second string spelling, and an empty identifier and a repeated one are each refused the way an empty or second record line already is. The malformed-entry test gains a case per refusal. A test in tests/contract resolves every declared identifier against nomos_rules::DESCRIPTORS so a line naming a rule this build does not compose is a failure rather than silent, and a rule identifier that is renamed cannot leave a dangling line unreported. Absence stays absence: no entry is written to mean that no rule bears, and nothing reports a requirement as unenforced by inference from a missing line, per OD-TRACE-001 and OD-COMPLETENESS-001. At least one real assessment declares at least one real line, chosen because the rule genuinely enforces the part of the requirement the entry's own sites satisfy, and the commit says which and why. RuleDescriptor gains no field, per OD-HOST-015's own refusal, so nothing under crates/rules changes. Nothing under crates/host/nomos-lsp changes: projecting this to an editor is a separate item. cargo test passes for nomos-cap-requirement-trace and nomos-contract-tests, and cargo clippy --workspace --all-targets is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-requirement-trace",
+          "tests/contract/tests/requirement_trace",
+          "tests/contract/requirements",
+          "tests/contract/surface/nomos-cap-requirement-trace.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-requirement-trace",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P121-OD-ANALYSIS-007-TRIGGER-HAS-FIRED-3",
+      "title": "OD-ANALYSIS-007 states a pause a published record has since retired, and decides a question without naming the item that builds it",
+      "why": "OD-ANALYSIS-007 v2, landed at 0db27c41, says wiring the two compiler-backed capabilities into Run waits on OD-ROADMAP-002's capability-orchestration pause, in the present tense, and leaves where that stands to other records. OD-ROADMAP-003 has since been published and registered and records that each of the three pauses OD-ROADMAP-002 set has lapsed on its own stated condition. So the record now tells a reader to wait on something a governing record says is over, which is the same misrouting this session has corrected in three other records. Separately the amendment decides the contract-home question, that each contract stays beside its provider until a rule in the Rules zone names it, without naming the item that acts on the decision; that item exists and is P123-THE-COMPILER-CONTRACTS-LEAVE-THEIR-PROVIDER-AND-ITS-RULES-JOIN-THE-RUN-2, which reserves one crate per capability exactly as the record decided.",
+      "done_when": "OD-ANALYSIS-007's amendment no longer states OD-ROADMAP-002's capability-orchestration pause as current. It says that the pause governed at OD-ROADMAP-002's own version, that OD-ROADMAP-003 is published and records every one of the three as lapsed on its stated condition, and that the wiring is therefore unblocked by that record rather than waiting on it, while remaining somebody else's item to schedule and not this record's. It names P123-THE-COMPILER-CONTRACTS-LEAVE-THEIR-PROVIDER-AND-ITS-RULES-JOIN-THE-RUN-2 as the item that acts on its contract-home decision and states the consequence for that item: one crate per capability, named for the capability id, because a rule in the Rules zone reading the contract is the second party OD-CAPABILITY-002 requires and Permits forbids that zone from naming Provider. Version stays 2, the amendment is edited in place rather than a third being added, and no other text changes. Both required projections are re-rendered from the record set the commit publishes and nomos spec freshness with both --require flags exits 0 in that tree.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
       },
       "verified": null,
       "abandoned": [],

@@ -214,6 +214,7 @@ profile: domain-specification
 | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md | authored | 25 | 6 | sha256:b6ef5e387b893426688336223754f3b165354a7fbf2e50641d03bdf8e836fd16 |
 | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md@authored | docs/records/OD-ROADMAP-003-each-of-the-three-pauses-od-roadmap-002-set-has-lapsed-on-its-own-stated-condition.md | authored | 43 | 12 | sha256:679898fb3515e18e74b3d01fc12b1993228c1941b02d8250e8a1a2b4c780c683 |
 | docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md@authored | docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md | authored | 49 | 15 | sha256:62c6d8750480da8424a5689d32b601a54227446d970e4610b102910dbe001e06 |
+| docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md@authored | docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md | authored | 28 | 7 | sha256:63a8457f1df3d1c4ae5e22a2051333aac43426b8618a6dd792e5a7dc4aa024dd |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md@authored | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md | authored | 67 | 12 | sha256:f55068c0987852129b3103770502611bec876fd8c119bc01cd6616b6ecdf7bc6 |
 | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md@authored | docs/records/OD-RULES-002-incompleteness-is-a-property-of-the-claim-and-not-of-the-run.md | authored | 69 | 16 | sha256:d17fccae2b6b9a6002f9cdbdc385dffbe1d4f839820436b89a3c50f09aa2bb8a |
 | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md@authored | docs/records/OD-RULES-003-a-declared-architecture-is-data-the-observed-graph-is-a-fact-a-capability-establishes.md | authored | 30 | 11 | sha256:c3a3b91dbb03f3f2ff52ab3d4d84186b0bb31760a93024fedee02b48a1b8722f |
@@ -2060,6 +2061,13 @@ profile: domain-specification
 | docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#42 | authored | 2 | What Builds The First Metric-Family Capability |
 | docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#46 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-ROADMAP-004-the-metric-and-runtime-characteristic-families-are-near-term-where-they-produce-a-fact-and-deferred-where-they-consume-one.md#48 | authored | 2 | Status |
+| docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#1 | authored | 1 | The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand |
+| docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#2 | authored | 2 | Question |
+| docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#6 | authored | 2 | What Is Not Being Claimed |
+| docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#9 | authored | 2 | The Decision |
+| docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#19 | authored | 2 | What This Does Not Do |
+| docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#25 | authored | 2 | Consequences |
+| docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#27 | authored | 2 | Status |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1 | authored | 1 | A rule states what it needs and is refused an answer beneath it |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#7 | authored | 2 | The Charge Is Correct |
@@ -62222,6 +62230,241 @@ terms, whichever way it does. `RUNTIME-004` and
 `RUNTIME-005` move only by a record adopting a decision `RUNTIME-005` names. And if the tiers
 themselves move, that is an amendment to `ARC-ROADMAP-001`, and this record follows it rather
 than the other way round.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#1
+
+*revision: authored · kind: heading · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand · hash: sha256:3b315606f00a17c86c120d1dcc3af462cbec5e1c6b5c9000b55c0d68eca8cd30*
+
+# The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#2
+
+*revision: authored · kind: heading · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#3
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / Question · hash: sha256:5132c436f96b43e8187a4b97781257ff2f76a7540e0352dcdf91abccd627c62e*
+
+An external architecture review of `dev` at `bc0aaac` was reconciled against `docs/records/`
+on 2026-09-21, claim by claim. Three of its thirteen points produced code changes, three
+produced new decision records, one was already built, and six were declined because an accepted
+record had already measured the same argument and named a trigger that had not fired. Two
+further points had no disposition: the increment `OD-LEDGER-041` names as owed, and the rule the
+review's own thirteenth section asks for.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#4
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / Question · hash: sha256:e1db908946c1a809cc3b1af87aa67dddd9959d2a2a9e40e8106e47d1936c87b9*
+
+The owner then required the declined set built anyway.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#5
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / Question · hash: sha256:e62c56679de209c5417236cb7a823847c8929e1923b5ec4859840307a49562e3*
+
+That is a sequencing decision, and it is the owner's to make rather than a session's. What it
+needs from this record is not permission but **bounds**: which deferral each piece supersedes,
+what stays true, and what the override does not reach. Without them, six implementations would
+each read as an agent building against an accepted record that says not to, and a later session
+reconciling the same review would find six records saying wait and a tree saying otherwise with
+nothing to say which is current.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#6
+
+*revision: authored · kind: heading · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / What Is Not Being Claimed · hash: sha256:effdef3bf2c276c54bfc6d0b88a2a7d8e2efd8534cd0f12e93c5429fc30b90d0*
+
+## What Is Not Being Claimed
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#7
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / What Is Not Being Claimed · hash: sha256:9fc921a6a09f585205612ad054d2c8a803d739d60cae23b2ab8eaea07d68a491*
+
+**None of the six declines was wrong on its own evidence, and this record does not say
+otherwise.** Each measured a real population at a real commit, and those measurements are cited
+by the items that now supersede them rather than deleted. `OD-CAPABILITY-008` really did find
+that three of the provider convention's four parts agree and the fourth diverges for a principled
+reason. `OD-EXECUTOR-005` really did find that Ollama is a `ModelBackend` and not a second
+`AgentExecutor`. `OD-AGENT-004` really did find that the two artifacts a review wanted compacted
+were the two that had not gone stale.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#8
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / What Is Not Being Claimed · hash: sha256:2005221e4364990476d0388e9bbba3222e3235f85098589b5bc6e1415664f8eb*
+
+**So the override is about *when*, not about *whether the reasoning held*.** This repository's
+own precedent is `OD-ROADMAP-001`, which retired a population-of-zero caution for a named cluster
+on exactly this footing: build the shape now, from the requirement text and the types that exist,
+rather than wait for a second consumer to justify it. That record has been cited by items and
+declined against reviews six times since, which is what a bounded override looks like when it is
+working.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#9
+
+*revision: authored · kind: heading · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / The Decision · hash: sha256:dc9e9d8ab6528b7b308fc1f23d52ff0ff2e814a01e253bb619d66ed8045833b1*
+
+## The Decision
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#10
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / The Decision · hash: sha256:f7119798f7d427daa868c936682c14f0a3acadd2722116881542766fb0155d94*
+
+**Build the eight pieces below. Each supersedes the named clause of the named record, at the
+version stated, and nothing else in that record moves.**
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#11
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / The Decision · hash: sha256:a09d783dd13c666d5f72197dbf5fda543f94e67e1e854e6bbb45b5cb3610b8cf*
+
+1. **The analysis providers are composed rather than named by the check service.**
+   Supersedes `OD-CAPABILITY-008` v3's second trigger, that no consumer holding providers
+   polymorphically exists yet; `OD-HOST-004` v2's conclusion that a registry never needs a
+   selection mechanism because composition is not choice; and `OD-PACKAGE-014`'s foreclosure of
+   activation driving composition. What is authorized is that
+   `nomos-check-orchestration` stops naming the capability, language and repository provider
+   crates directly and receives them from a composition root.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#12
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / The Decision · hash: sha256:a92d9a1449ebe79a50c8bb1b684b299ea28848f4402741b2fa2836dc0dbfbcab*
+
+2. **A port stands between the generic agent path and its concrete backends.**
+   Supersedes `OD-EXECUTOR-004` v1 and `OD-EXECUTOR-005` v2's shared trait trigger, that no
+   second real `AgentExecutor` exists, and `OD-PACKAGE-016` v1's first decision section, which
+   placed the resolver in `nomos-agent-orchestration` because it is the one crate reaching both
+   backend crates. What is authorized is that the generic path names the port and a composition
+   root supplies `nomos-agent-executor-claude-code` and `nomos-model-backend-ollama`.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#13
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / The Decision · hash: sha256:30d480b5a35daa5c7632f2315d1aae10f7cdfa452e51085e0204b0663970a2dc*
+
+3. **An application operation surface exists and the hosts project it.**
+   Supersedes `OD-HOST-011` v1's refusal of a contracts crate on `OD-PACKAGE-015`'s third clause
+   and `OD-HOST-012` v1's decision that repo-tooling handlers keep their present home until a
+   second host wants the product half alone. What is authorized is one operation surface the
+   hosts depend on in place of assembling the product themselves.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#14
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / The Decision · hash: sha256:73fed55a2ebac69005e04ef3a03a3fdd4f087721a744439628236dd906d8ff88*
+
+4. **`nomos-platform` compiles without XVPE.**
+   Supersedes `OD-PLATFORM-003` v1 only where that record's retirement of `AGT-006`'s
+   no-dependency clause reaches `nomos-platform` itself. The crossing stays adopted and stays
+   pinned, `nomos-platform-xvpe` stays the adapter, and what moves is the clock type the ports
+   crate re-exports. This does not restore the clause for the workspace, and it does not make
+   XVPE a peer again: Nomos remains an application over it.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#15
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / The Decision · hash: sha256:1010b1ace9434a309f238dce0ac452120c350fd35259a11c239d04ad45565824*
+
+5. **The review-finding capability contract is its own crate.**
+   Supersedes `OD-CAPABILITY-017` v1's closing decision that neither bundled crate is split by
+   that record, and `OD-CAPABILITY-002`'s licence to keep a contract beside its single provider
+   until a second provider contends for it. The vendor connector keeps the provider; the contract
+   a rule reads moves out from under the vendor's name.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#16
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / The Decision · hash: sha256:51b0f42caadb148d190617f08e3a12a6d8945321d58d7be26c30f152598309e9*
+
+6. **The architecture prose is generated or checked against one model.**
+   Supersedes `OD-AGENT-004` v2's decline of generated README tables and compacted manifest
+   commentary. The measurement that decline rested on stays true and is the reason the increment
+   is a projection or a check rather than a rewrite: what is authorized is that a fact
+   `nomos-architecture.json` holds stops being restated in prose that nothing compares.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#17
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / The Decision · hash: sha256:b88f32ea6a9293f17a0460ee671fa2bf09d013fe0ac346f879ed9528b122a6db*
+
+7. **The board listing defaults to the live board.** Supersedes nothing. `OD-LEDGER-041` named
+   this as owed when it refused the archive, and it is listed here so the set is complete.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#18
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / The Decision · hash: sha256:8c2b024c6235c1f89bb557e58e7ec27d0b4daf2de382ba7ee736f510bab2d4f7*
+
+8. **A rule states what a host may know of the orchestration graph.** Supersedes nothing, and is
+   the one piece whose output is a record rather than code. The review's thirteenth section asked
+   for it, both hosts name eight orchestration crates today, and no record states the rule.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#19
+
+*revision: authored · kind: heading · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
+
+## What This Does Not Do
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#20
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / What This Does Not Do · hash: sha256:baebd641f1f3bdca68074162d3f63fabe61e1a4d57ba6e12173b7862605e110e*
+
+**It does not license scope beyond those eight.** A piece that turns out to need a ninth change
+is a new item and, if it reaches another record's decision, a new question for the owner.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#21
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / What This Does Not Do · hash: sha256:6b6732ff643bb4eb5b2247c7e6a3d2018d6d61f124586414f2fa6590f108f4ee*
+
+**It does not let an item skip its record amendment.** Each superseded record is amended by the
+item that lands its change, in the same commit or the one after, so that a reader arriving at
+`OD-HOST-011` finds the override rather than a contradiction. An implementation that lands
+without its amendment leaves the record set lying, which is worse than the deferral it replaced.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#22
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / What This Does Not Do · hash: sha256:147632a99bde1a8535c43dec1fa30f9ce154911d30e5511f911251cec541b4da*
+
+**It does not grant a zone permission by fiat.** Several of these pieces move an edge — a
+composition root reaching providers, a host reaching one surface instead of eight. Every such
+edge is declared in `nomos-architecture.json` by the item that needs it and judged by the same
+rule and the same contract assertions as any other edge. This record changes no permission.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#23
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / What This Does Not Do · hash: sha256:35ca259730a7b8f81804ace557c0b930e15ef20a9a132ddf5e0e318aceccabbc*
+
+**It does not retire a trigger in any record not named above**, and it does not reopen the three
+decisions this review already produced: `OD-CONTRACTS-006`, `OD-LEDGER-041` and
+`OD-PROJECT-004` v2 stand as written.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#24
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / What This Does Not Do · hash: sha256:dbabc322bf50bbadcb8167c4a460212c8661df4277441cc1183619e21b22861f*
+
+**It does not promise an order.** The pieces contend for the same files and this tree is shared
+with live sessions, so which lands first is a coordination outcome rather than a decision. An
+item blocked on a peer's claim waits; it does not reach in.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#25
+
+*revision: authored · kind: heading · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+
+## Consequences
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#26
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / Consequences · hash: sha256:390a093b9aebacf118a112089a6785f33ad1c3b34a590b6b07a6349c14fa1349*
+
+Eight items are authored `--origin required` citing this record, each carrying its own territory,
+its own verification predicate and the amendment its superseded record needs. This record moves
+no code and amends nothing by itself.
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#27
+
+*revision: authored · kind: heading · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-ROADMAP-005-the-owner-requires-the-external-reviews-declined-items-built-and-eight-deferrals-are-superseded-by-name.md#28
+
+*revision: authored · kind: prose · heading: The owner requires the external review's declined items built, so eight deferrals are superseded by name and their measurements stand / Status · hash: sha256:2bca5ebea0909c2f25bce538749650f1c0976858cd3b4b9e3e67ae3fd6f925e9*
+
+Accepted. The bound is the enumeration above: eight pieces, each against a named clause of a
+named record at a stated version, with every measurement those records made left standing.
 
 ### docs/records/OD-RULES-001-a-rule-states-what-it-needs-and-is-refused-an-answer-beneath-it.md#1
 
