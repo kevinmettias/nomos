@@ -10,8 +10,8 @@
 //! dispatch out of this crate's own `agent/dispatch.rs` and `agent/judge_role.rs` into
 //! `nomos-agent-orchestration`; this suite's own concern -- `nomos-cli`'s use of
 //! `nomos_agent_contracts::TaskEnvelope` and `Isolated_Working_Directory` -- is unaffected
-//! by where the envelope gets built, and `workflow.rs` still names this crate directly for
-//! its own `Body::ClaudeCode`/`Body::Ollama` construction.
+//! by where the envelope gets built, and `nomos-cli`'s own workflow parsing still names
+//! this crate directly, building its `Body::Agent` around a `TaskEnvelope` of its own.
 //!
 //! What this proves: the exact `TaskEnvelope` shape a bare `nomos agent execute` or
 //! `judge-role` call builds (a bare `goal`/`effort`, every other field the empty value

@@ -89114,13 +89114,17 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P123-CSHARP-SYNTAX-PROVIDER-AND-PACKAGE",
         "P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-compiler",
+        "acquired_at": 1790112809,
+        "lease_expires_at": 1790123609
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -89938,16 +89942,43 @@
           "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
           "crates/host/nomos-cli/src/gate/report/run.rs",
           "crates/host/nomos-cli/src/gate/report/explain.rs",
-          "tests/contract/surface/nomos-gate-orchestration.txt"
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_contribution.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_field.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/resolution.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare/occurrence_tests.rs",
+          "crates/host/nomos-cli/src/gate/report/tests.rs",
+          "crates/host/nomos-cli/src/gate/report/tests/explain.rs",
+          "crates/host/nomos-api/src/response/gate_findings.rs",
+          "crates/host/nomos-api/src/response/gate_explain_response.rs",
+          "crates/host/nomos-api/src/response/finding_bucket.rs",
+          "crates/host/nomos-api/src/response/gate_compare_response.rs",
+          "crates/host/nomos-api/src/test_support.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/reason_recording_tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests/disposition.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests/explain.rs",
+          "crates/host/nomos-api/src/sarif/sarif_suppression.rs",
+          "crates/host/nomos-cli/src/gate/parsing.rs",
+          "crates/host/nomos-cli/src/gate/tests/real_runs.rs",
+          "crates/host/nomos-cli/src/gate/report/tests/verdicts.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/tests/declared_policy.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT-2"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-evidence",
+        "acquired_at": 1790112765,
+        "lease_expires_at": 1790128563
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -89968,7 +89999,67 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p123-evidence",
+          "added": [
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_contribution.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/policy_field.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/effective_policy/resolution.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file/tests.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/gate_compare/tests.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/gate_compare/occurrence_tests.rs",
+            "crates/host/nomos-cli/src/gate/report/tests.rs",
+            "crates/host/nomos-cli/src/gate/report/tests/explain.rs",
+            "crates/host/nomos-api/src/response/gate_findings.rs",
+            "crates/host/nomos-api/src/response/gate_explain_response.rs",
+            "crates/host/nomos-api/src/response/finding_bucket.rs",
+            "crates/host/nomos-api/src/response/gate_compare_response.rs",
+            "crates/host/nomos-api/src/test_support.rs"
+          ],
+          "widened_at": 1790113071
+        },
+        {
+          "holder": "fable-p123-evidence",
+          "added": [
+            "crates/orchestration/nomos-gate-orchestration/src/gate_environment/reason_recording_tests.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/gate_environment/tests.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/tests/disposition.rs",
+            "crates/orchestration/nomos-gate-orchestration/src/tests/explain.rs"
+          ],
+          "widened_at": 1790113561
+        },
+        {
+          "holder": "fable-p123-evidence",
+          "added": [
+            "crates/host/nomos-api/src/sarif/sarif_suppression.rs"
+          ],
+          "widened_at": 1790113742
+        },
+        {
+          "holder": "fable-p123-evidence",
+          "added": [
+            "crates/host/nomos-cli/src/gate/parsing.rs",
+            "crates/host/nomos-cli/src/gate/tests/real_runs.rs"
+          ],
+          "widened_at": 1790113785
+        },
+        {
+          "holder": "fable-p123-evidence",
+          "added": [
+            "crates/host/nomos-cli/src/gate/report/tests/verdicts.rs"
+          ],
+          "widened_at": 1790113861
+        },
+        {
+          "holder": "fable-p123-evidence",
+          "added": [
+            "crates/orchestration/nomos-gate-orchestration/src/tests/declared_policy.rs"
+          ],
+          "widened_at": 1790113960
+        }
+      ]
     },
     {
       "id": "P123-OD-ANALYSIS-009-SENDS-A-READER-TO-A-DELETED-FILE-AND-TO-BUILD-WHAT-EXISTS",
@@ -94812,6 +94903,196 @@
         },
         "revision": "a44b19fc158b0464ef9280f542a4549b75bcd178"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P137-A-PRIVATE-INDEX-COMMIT-LEAVES-A-STAGED-REVERT-OF-ITSELF-AND-THE-SKILL-SAYS-TO-LEAVE-IT",
+      "title": "A private-index commit leaves the shared index holding a staged revert of what it just published, and the spec-change skill says to leave it there",
+      "why": "Measured 2026-09-22 in a throwaway repository, both halves, after a peer session reported the symptom against a real commit. The nomos-spec-change skill's contention form builds a commit in a private index with read-tree, update-index, commit-tree and an update-ref compare-and-swap, deliberately never opening the shared index. That is correct and it is why the form exists. What it leaves behind is not. The shared index still holds the pre-commit entries, so immediately after publishing, git diff --cached reports a staged modification of every file the commit changed, reverting it to the parent blob, and a staged DELETION of every file the commit added that had been untracked before. A newly added file is the dangerous case because nothing in the shared index ever knew about it: the entry is absent, which reads as deleted. The skill sees this and tells the reader to leave it: its words are that the shared index and working tree are exactly as you left them, which is the point and looks alarming afterwards, and do not repair that by re-staging. Looking alarming is not what it is. It is a staged revert of the commit that was just published, sitting in an index shared with live sessions, and the same skill prescribes a bare git commit, which commits the whole index. Measured end to end: a repository with one committed file, one modification and one untracked new file; published both through the private-index form; the shared index then reported D on the new file and M on the modified one, and git status showed the new file as staged-deleted and untracked at the same time, which is the tell. A peer then ran a bare git commit with an unrelated message. It published two deletions: the new file was gone from HEAD and the modified file was back to its parent content. The peer's commit message said nothing about either, and its own diff showed two deletions it did not make. This already happened to a real record. P132 published OD-HOST-019 and its registration through this form on 2026-09-22; both were untracked before that commit, and both then read as staged deletions in the shared index. A peer session's worker cleared them with git restore --staged before anything committed over them. Nothing was lost that time, and nothing about the form made that outcome likelier than the other one.",
+      "done_when": "The skill stops telling a reader to leave a staged revert of their own commit in a shared index, and what replaces that instruction is decided on measurement rather than on preference. The two cases must be told apart, because they are not the same risk and one instruction cannot serve both: a staged modification reverts content that is still in the tree and in history, while a staged deletion of a file that was untracked before the commit removes the only tracked copy of something just published. The instruction that is being replaced had a real reason and the replacement must not simply discard it: the skill says not to re-stage because unstaging writes an index a peer may be in the middle of using, and that hazard is real and is why the private-index form exists at all. So the replacement states what to do about entries that are the publisher's own and says explicitly what it does not authorize about entries that are not. Whether the answer is a targeted git restore --staged of exactly the paths the commit published, a read of the index before deciding, or something else, is the claimant's to determine and to justify. Whatever is chosen is proven in a throwaway repository rather than argued, covering both the modified-file case and the untracked-new-file case, and the proof is reported with its commands so a later reader can re-run it rather than trust it. If the claimant finds the hazard does not reproduce, that is a real result and it is reported with what was run. The skill's existing statement that a private-index commit is verified by comparing the commit blob against the rendered bytes stays true and is not weakened: this item changes what the publisher does after verifying, not whether they verify. No change to the private-index commit form itself, which is measured and correct, and no new authority beside OD-GATE-005, which owns why a projection is rendered from the record set its commit publishes. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-spec-change/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "lib) generated 2 warnings\n   Compiling nomos-workspace v0.1.0 (F:\\repos\\verify-p137\\crates\\substrate\\nomos-workspace)\n   Compiling nomos-cap-requirement-trace v0.1.0 (F:\\repos\\verify-p137\\crates\\capabilities\\nomos-cap-requirement-trace)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\verify-p137\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-repo-policy v0.1.0 (F:\\repos\\verify-p137\\crates\\repository\\nomos-repo-policy)\n   Compiling nomos-lang-rust-clippy v0.1.0 (F:\\repos\\verify-p137\\crates\\languages\\nomos-lang-rust-clippy)\n   Compiling nomos-lang-rust-deny v0.1.0 (F:\\repos\\verify-p137\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-lang-go v0.1.0 (F:\\repos\\verify-p137\\crates\\languages\\nomos-lang-go)\n   Compiling nomos-connector-coderabbit v0.1.0 (F:\\repos\\verify-p137\\crates\\connectors\\nomos-connector-coderabbit)\n   Compiling nomos-lang-go-modules v0.1.0 (F:\\repos\\verify-p137\\crates\\languages\\nomos-lang-go-modules)\n   Compiling nomos-lang-rust-cargo v0.1.0 (F:\\repos\\verify-p137\\crates\\languages\\nomos-lang-rust-cargo)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\verify-p137\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\verify-p137\\crates\\rules\\nomos-rules)\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\verify-p137\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\verify-p137\\tests\\contract)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.28s\n     Running tests\\agent_harness.rs (target\\debug\\deps\\agent_harness-924e341fbb399618.exe)\n",
+        "verified_at": 1790113549,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P138-A-SEAM-SUITES-MODULE-DOC-NAMES-TWO-BODY-VARIANTS-THAT-WERE-COLLAPSED-AWAY",
+      "title": "The agent-contracts seam suite's module doc says workflow.rs constructs two Body variants that no longer exist",
+      "why": "crates/host/nomos-cli/tests/agent_contracts_seam.rs line 14 ends its module doc by saying that workflow.rs still names this crate directly for its own Body::ClaudeCode and Body::Ollama construction. OD-PACKAGE-016 decision 9 collapsed the two per-backend bodies into one, and d1dca47d removed those variants from the workflow crate; a grep for ClaudeCode across crates/orchestration/nomos-workflow-orchestration/src returns nothing. The real construction site is crates/host/nomos-cli/src/workflow/parsing.rs, where Agent_Body builds a Body::Agent around the TaskEnvelope that Task_From_String_Arguments assembles. Measured and reported by the claimant of 3a79b934, which corrected the same false phrase in crates/host/nomos-cli/Cargo.toml but could not reach this one because the file was outside its four declared paths; it reported the site rather than widening, which was right. Confirmed here at HEAD. Note that a neighbouring site, crates/host/nomos-cli/src/workflow/tests.rs line 49, also names Body::ClaudeCode but does so truthfully and in the past tense, so it is not part of this and must not be swept up. This is a module doc on a seam suite, which is the kind of prose that reads as an authority on where a seam sits, so a reader trusting it looks for a construction that is not there.",
+      "done_when": "The module doc names where a workflow body is actually constructed, which is nomos-cli's own workflow parsing rather than the workflow crate, and names a variant that exists. The sentence keeps the point it was making, that this suite's concern is nomos-cli's use of the envelope contract and is unaffected by where dispatch moved, because that point is still true and is why the sentence is there; only the example it rests on is false. The claimant re-measures at HEAD before editing and does not copy the replacement site from this item, since several sessions are committing to nomos-cli. Nothing else in the file changes: no test, no assertion, no fixture and no other doc paragraph, and if correcting the sentence would move what the suite proves, stop and report instead. The neighbouring past-tense mention in the same crate's workflow tests is left alone, and the commit says it was checked and why it stands. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/tests/agent_contracts_seam.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "agent_contracts_seam"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "agent_contracts_seam"
+        ],
+        "exit_code": 0,
+        "output_tail": "y code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: type `Requested_Dispatch` should have an upper camel case name\n   --> crates\\host\\nomos-cli\\src\\agent.rs:162:19\n    |\n162 | pub(super) struct Requested_Dispatch\n    |                   ^^^^^^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `RequestedDispatch`\n    |\n    = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: field `stdout` is never read\n  --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:32:9\n   |\n29 | pub struct Ran\n   |            --- field in this struct\n...\n32 |     pub stdout: String,\n   |         ^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: field `0` is never read\n  --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:58:25\n   |\n58 | pub struct FileName<'a>(&'a str);\n   |            --------     ^^^^^^^\n   |            |\n   |            field in this struct\n   |\n   = help: consider removing this field\n\nwarning: method `With` is never used\n  --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:97:12\n   |\n82 | impl Tree\n   | --------- method in this implementation\n...\n97 |     pub fn With<'a>(self, name: impl Into<FileName<'a>>, text: &str) -> Self\n   |            ^^^^\n\nwarning: `nomos-cli` (bin \"nomos\") generated 1 warning\nwarning: `nomos-cli` (test \"agent_contracts_seam\") generated 3 warnings\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.70s\n     Running tests\\agent_contracts_seam.rs (target\\debug\\deps\\agent_contracts_seam-fb9ff443e00eac29.exe)\n",
+        "verified_at": 1790114886,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "76dba30007babc6a2935fc01b821cb0fa1ebc291"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P139-THE-PRIVATE-INDEX-FORM-ONLY-ADDS-SO-A-FILE-THE-COMMIT-SHOULD-DELETE-SURVIVES-AS-AN-ORPHAN",
+      "title": "The contention form builds a commit by adding paths and never removing any, so a deletion silently does not happen and the file survives from the parent",
+      "why": "Reported by a peer session that traced it, and confirmed here. The nomos-spec-change skill's contention form builds its tree by reading the parent with git read-tree and then calling git update-index --add --cacheinfo once per path it publishes. Every step of that is additive. Nothing removes a path, and the form never mentions force-remove, so a file the commit is supposed to delete is simply inherited from the parent tree and lands in the commit unchanged. A session that deletes a file on disk, and does not also stage the deletion in the shared index it is deliberately bypassing, publishes a commit that keeps the file. This is not hypothetical and it has already cost a whole item. e12a4c32 split the review-finding capability into its own crate, and git ls-tree -r e12a4c32 shows all four of crates/connectors/nomos-connector-coderabbit/src/contract.rs, src/payload.rs, src/payload/finding_payload.rs and src/payload/payload_refusal.rs still present in that commit, with their declarations removed from lib.rs. They became four Blocking no-orphan-modules findings that reddened the self-check and contract reachability for every session in this tree, were twice misattributed by two different sessions to somebody's uncommitted work, and took P136 and a separate commit at 792a7a03 to clear. The reason nothing caught it is worth stating: every check in this repository reads the worktree's disk, where the files were correctly gone, so the render worktree was green, the predicate was green and the gate was green, while the published tree carried four files the publisher believed it had deleted. This is distinct from P137, which landed at 76dba300 and fixed what the form leaves in the shared index afterwards. This one is about what the form puts in the commit.",
+      "done_when": "A commit built by the skill's contention form deletes what it is meant to delete, and a reader following the skill cannot publish an orphan by omission. How that is achieved is the claimant's to decide and must be proven rather than argued: removing a path with git update-index --force-remove is one answer, and a verification step comparing the commit's tree against the worktree the render was taken from is another and a stronger one, because it catches every divergence rather than the one that has already been seen. If both are kept, the text says which is the safeguard and which is the instruction. The distinction that makes this reachable is stated where a reader meets it: the form bypasses the shared index deliberately, so a deletion staged nowhere is a deletion the form cannot see, and every check in this repository reads the worktree's disk rather than the published tree, so a green run is not evidence the commit carries what the worktree does. The verification already in that section, comparing the commit blob against the rendered bytes, is a check of content for paths the commit names and does not answer this; the replacement says so rather than implying the existing check covers it. Whatever is prescribed is proven in a throwaway repository, outside this workspace, on a case with a file deleted on disk and not staged: show that the unfixed form publishes the file and that the prescribed form does not. Put that evidence in the report. The private-index form is otherwise unchanged, including its captured-parent discipline and its update-ref compare-and-swap, and P137's aftermath subsection is not weakened or duplicated. No record is amended: OD-GATE-005 remains the only authority the section names, and if the claimant concludes a record is needed, stop and report rather than authoring one. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-spec-change/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P138-THE-PRIVATE-INDEX-FORM-CANNOT-PUBLISH-A-DELETION-AND-SAYS-NOTHING-ABOUT-IT",
+      "title": "The private-index landing form carries only additions, so a file deleted on the render worktree's disk survives into the commit as an orphan and every check still passes",
+      "why": "Measured 2026-09-22 in a throwaway repository, after nomos-24 reported the mechanism and named its casualty. The nomos-spec-change skill's contention form builds a commit by reading the parent tree into a private index and then calling git update-index --add for each path it means to publish. It never removes an entry. So a file that exists in the parent and has been deleted on the render worktree's disk, without a git rm, is carried into the published tree unchanged. The form can add and it can modify; it cannot delete, and it does not say so. Reproduced end to end: a parent holding doomed.txt and keep.txt; doomed.txt removed from the worktree disk with no git rm; one new file added; published through read-tree, update-index --add, write-tree, commit-tree and an update-ref compare-and-swap. The published tree held added.txt, keep.txt and doomed.txt. The deletion the author performed and believed they had published was silently not published. What makes it expensive rather than merely surprising is that nothing catches it. Every check the skill prescribes around this form reads the render worktree's disk, where the file is correctly gone: the render is right, freshness is right, the body-deletion comparison is right, and the post-commit blob comparison checks only the paths the author named. The commit is the one artifact that disagrees, and the author has no reason to look at it for a path they did not name. Its casualty is already on the board's history. e12a4c32 published the review-finding contract into a new capability crate and was believed to have moved four files out of nomos-connector-coderabbit: contract.rs, payload.rs, payload/finding_payload.rs and payload/payload_refusal.rs. All four survived in the commit while their mod declarations did not, so rustc never parsed them, nothing in them compiled or was linted, and they sat at HEAD as four Blocking no-orphan-modules findings that two sessions independently misattributed to somebody's uncommitted work before 792a7a03 repaired them. A file rustc never parses cannot be shown unused by the compiler, so the usual safety net is absent for exactly this failure.",
+      "done_when": "The skill states that the private-index form publishes additions and modifications only, and gives the reader a way to publish a deletion through it or an explicit instruction not to try. Which of those is correct is the claimant's to decide on measurement: git update-index --force-remove is the obvious candidate and must be proven rather than assumed, including what it does when the path is absent from the parent, and the claimant is free to conclude that a commit carrying deletions should not use this form at all, which would be a real answer and is one the quiet-tree form two subsections up may already serve better. The reader is also given something that would have caught the casualty: a check on the published commit rather than on the worktree disk, comparing what the commit's tree holds against what the author intended it to hold, stated so that it notices a path the author never named. Naming only the paths you published is precisely what fails here, so a check that reads only those paths does not satisfy this clause. Comparing the commit's tree against the render worktree's tracked state is the shape that would work, and the claimant proves whatever it writes rather than asserting it. Every claim added is measured in a throwaway repository and the commands are reported so a later reader can re-run them instead of trusting them, covering at minimum a deletion of a file present in the parent and an addition of a file absent from it. If the claimant finds the hazard does not reproduce, that is a real result and is reported with what was run. This does not reopen what P137 settled about clearing the leftover staged entries after a landing, which is a different subsection about a different moment and stays as written. It does not change the private-index form's read-tree, commit-tree and compare-and-swap structure, which is measured and correct, and it adds no authority beside OD-GATE-005. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-spec-change/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,
