@@ -87330,14 +87330,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "claude-external-review-reconciliation",
-        "acquired_at": 1790041879,
-        "lease_expires_at": 1790052679
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -87351,7 +87347,13 @@
         "timeout_seconds": 1800
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "claude-external-review-reconciliation",
+          "reason": "The work is done and committed at 6c92d857: OD-GATE-018 is at version 2 with the section this item asked for, and both required projections are rendered and verified, freshness exit 0 in an isolated worktree. Only the ledger transition is left, and it is blocked by somebody else. bc0aaacf added Finding::address without blessing tests/contract/surface/nomos-contracts.txt, so public_surface fails for every session and this item's predicate runs nomos-contract-tests. That snapshot is inside P110-B's live territory, held by fable-finding-address, so it is theirs to bless and not mine to edit. Whoever picks this up: do not redo the record. Re-run the predicate once the surface snapshot is green and finish.",
+          "abandoned_at": 1790042220
+        }
+      ],
       "displaced": [],
       "declined": null,
       "widened": []
