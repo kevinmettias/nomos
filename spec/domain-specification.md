@@ -200,7 +200,7 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 21 | 7 | sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md | authored | 40 | 8 | sha256:54dd8e341f63882f74fca31d11cc939e8bfec1033fe8ba3e6fcbf6a156689166 |
-| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md@authored | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md | authored | 58 | 17 | sha256:f30a6e902a1b22b97164c42910babfbc29d345ff54a05445ad3ed64b47b75420 |
+| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md@authored | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md | authored | 66 | 17 | sha256:73d6fb9bff712647b5d136d0e4a7665522bc903255454eff22be8f45858b6323 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
@@ -1909,12 +1909,12 @@ profile: domain-specification
 | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#28 | authored | 3 | 1. Ten layers, in the corpus's own order, named now whether or not a host can observe them |
 | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#32 | authored | 3 | 2. A layer is where a value came from; an artifact is which source; provenance carries both |
 | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#34 | authored | 3 | 3. A field combines by its shape: override, merge, or refuse |
-| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#40 | authored | 3 | 4. The effective policy is a provenance per field, not a merged blob |
-| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#44 | authored | 3 | 5. What is re-homed under the resolver, and what stays where it is |
-| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#49 | authored | 3 | 6. The capability item that builds the resolver, and its territory |
-| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#53 | authored | 2 | What This Does Not Do |
-| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#55 | authored | 2 | What Would Decide It Differently |
-| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#57 | authored | 2 | Status |
+| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#45 | authored | 3 | 4. The effective policy is a provenance per field, not a merged blob |
+| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#50 | authored | 3 | 5. What is re-homed under the resolver, and what stays where it is |
+| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#55 | authored | 3 | 6. The capability item that builds the resolver, and its territory |
+| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#60 | authored | 2 | What This Does Not Do |
+| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#62 | authored | 2 | What Would Decide It Differently |
+| docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#64 | authored | 2 | Status |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1 | authored | 1 | The repository's README is not the suite's overview, and stays hand-authored |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#2 | authored | 2 | Question |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#6 | authored | 2 | Two Documents, One Name |
@@ -56937,6 +56937,96 @@ what every reader already does and `Resolve_Gate_Policy`'s own doc says why.
 
 ### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#39
 
+*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 3. A field combines by its shape: override, merge, or refuse · hash: sha256:960162b8c49489763ca5bd8c9f2ad50d44dbf517a9c690705c1651f42f5be61b*
+
+**Combine as a unit — a set of fields no layer can state apart (amendment, version 2).**
+Version 1 assigned a shape per field, every case per field, and one pair in the tree cannot be
+resolved that way. `Preferred_Phase_Policy` in
+`crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs`, landed at
+`54e88f78`, resolves `phases` and `approvals` as "one decision rather than two
+`Preferred_Policy` calls", and its own doc gives the reason rather than leaving it to be
+re-derived: "`phases` alone decides it, because approvals are read only through them", since
+`Evaluated_Phases` "iterates the phases and asks each whether an approval names it, so a source
+declaring approvals and no phase has declared nothing a run can act on". The field doc on
+`GateCommand::approvals` states the consequence: an approval "names the phase it covers, so a
+caller's phases paired with a file's approvals would let an approval address a stage its own
+source never declared". Resolving the two per field is therefore not a simplification of what
+the gate does; it is a defect the code was written to avoid, and version 1's model could not
+express the difference.
+
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#40
+
+*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 3. A field combines by its shape: override, merge, or refuse · hash: sha256:3385bf0781958b7111c2af8c0653c875a1bcce92c6beb0d6a6743a08f06b4890*
+
+**So: a *unit* is a declared set of two or more fields of one policy in which a value of one
+field can only address something another field of the set declares, and one field of the unit
+is designated its *deciding field*. The highest layer that states the deciding field decides
+every field of the unit, and no other layer contributes to any field in it.** A unit is
+overridden whole for the same reason the override rule above gives for the architecture
+declaration: a set assembled from two layers is a set neither author wrote, the silent winner
+`ARCH-008` prohibits. That holds even where a field of the unit has the shape of a keyed set. `approvals`
+is a list, and the unit rule replaces it rather than taking the union across layers, because
+that union is exactly the cross-layer pairing the coupling exists to prevent.
+
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#41
+
+*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 3. A field combines by its shape: override, merge, or refuse · hash: sha256:e7e60625187f1c8b9be8c5ec49509c993c74b8a8d9f7163dd35e299c7d3f6aed*
+
+Two consequences a per-field reading would get wrong. **A unit is declared, never inferred.**
+That an approval names a phase is a fact about what the two fields mean, not one any shape can
+compute, so a unit and its deciding field are named where the resolver declares them and
+pinned by a test — `Test_A_Caller_That_Built_Phases_Should_Keep_Its_Own_Approvals` is that test
+today, and asserts the pairing in both directions so neither half can be the one precedence
+happens to agree with. **And inside a unit the deciding field's statement carries the
+companion fields' emptiness**, which is the one place "a sentinel is not a statement" reads
+differently: the same field doc says "a command stating `phases` therefore states its own
+approvals too, including none", so an empty `approvals` beside a stated `phases` is a statement
+of no approvals rather than an absence a lower layer may fill.
+
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#42
+
+*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 3. A field combines by its shape: override, merge, or refuse · hash: sha256:614406015b19c7e7762300ed1a94089adf51ac0a453d6131c8606cffa3e6c52c*
+
+**A contribution that states a companion field of a unit without stating that unit's deciding
+field is refused**, naming the unit, the field and the artifact. A companion addresses keys
+only the deciding field declares, so the one way it could take effect is by being paired with
+another layer's declaration, which is the defect above; and the alternative to refusing is
+silence, which the reader already rejects one level in.
+`Test_An_Approval_Naming_An_Undeclared_Phase_Should_Be_Refused` refuses an approval naming a
+phase its own file does not declare, because otherwise "the entry parses, resolves and matches
+no phase name in `Evaluated_Phases`, so an author who mistyped the phase gets a build that
+fails for the reason they thought they had approved away". The cross-layer rule is that
+refusal carried out one layer, not a new judgment. It is a property of the one contribution
+rather than of the layer set, so a partial unit refuses whether or not some other layer would
+have supplied the deciding field: a configuration must not become valid because a layer
+appeared, which is `US-CONFIG-002`'s "the resolved policy is reproducible" read at the
+resolver. So where two layers each state part of a unit, whichever contribution stated a
+companion without the deciding field is refused; where both stated the deciding field, this is
+the ordinary override above and the higher layer's unit wins whole. This refusal is the unit
+rule's own and leaves the three cases above the scope they have — a same-layer contradiction, a
+locked override, an unreadable artifact — because an orphaned companion is none of the three.
+In particular it is not a rejected override: no higher layer forbade it, and there is nothing
+for a report to show as rejected, only a statement that could never have addressed anything.
+
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#43
+
+*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 3. A field combines by its shape: override, merge, or refuse · hash: sha256:18d22cf533319f48723a0ceb1f77479be322f2e0b3997a7ca7d9ed19519681ff*
+
+**The phases and approvals pair is the one instance, and a second unit is declared by the
+record that measures it.** Measured 2026-09-21 at `54e88f78`, nothing else in the tree resolves
+two policy fields from one statement: `Preferred_Policy`'s three list-shaped policies stand
+alone, `coverage` and `model` are single values, and a `PhaseThreshold` is a key on its own
+phase rather than a field beside it, which `declared_phases`' own doc argues for its own
+reasons. One other set of fields does carry this coupling shape — `membership`, `permissions`,
+`exceptions` and `authorities` all address component names `components` declares, and
+`ArchitecturePayload::Has_An_Architecture` reads `components` alone to answer whether a
+repository declared an architecture at all — and it needs no unit, because the override rule
+above already replaces that declaration whole. A resolver may not promote a coupling it
+notices into a unit of its own; naming the fields and the deciding field is a decision, and
+decision 6's item is where this one is built.
+
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#44
+
 *revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 3. A field combines by its shape: override, merge, or refuse · hash: sha256:99b5f3bc284f59442a7dccbb80d2c5b6a57d18c565a6dcc2fac058139be8956b*
 
 **The model-execution profile is the one field with a precedence of its own, and this record
@@ -56955,13 +57045,13 @@ model resolver maps a layer-named tier onto a `ConfigurationLayer`, that is two 
 one corpus sentence and it is done under `OD-GATE-011`'s three conditions — the derivation
 named at the site, the reason stated there, and a test pinning the pair — rather than avoided.
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#40
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#45
 
 *revision: authored · kind: heading · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 4. The effective policy is a provenance per field, not a merged blob · hash: sha256:640dce204b2df92213da9d0bcfbdfdaa206dade124a6db2770eb855b91076854*
 
 ### 4. The effective policy is a provenance per field, not a merged blob
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#41
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#46
 
 *revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 4. The effective policy is a provenance per field, not a merged blob · hash: sha256:b8e48ddbd70cb2555bc060c94006048a6c8cb3e6a7106c07a1ca589009a75295*
 
@@ -56974,16 +57064,36 @@ every merged field it carries the same per entry.** It also carries the ordered 
 layers as consulted, each marked observed, absent on this host, or declared-unobservable, so
 that "organization: no source" is a line in the report and not an omission from it.
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#42
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#47
 
-*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 4. The effective policy is a provenance per field, not a merged blob · hash: sha256:83ff7141bb343521542b333687e72b18354115106c543a86b7310d6ab2924f2d*
+*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 4. The effective policy is a provenance per field, not a merged blob · hash: sha256:0805355300dfc7814c146b2710ec15cefd01aac5105e08ed2f7cc4de3ac519a9*
+
+**Amendment, version 2: every field of a resolved unit carries the deciding field's
+provenance, and says that it did.** One statement decided every field in the unit, so a
+provenance naming only the field it sits on would report `approvals` as though its source had
+written approvals when that source may have written none — the difference between a value and
+a statement that decision 3 turns on throughout. **Each field of a resolved unit therefore
+carries the layer and the artifact of the deciding field's statement, together with the unit it
+belongs to and which field's statement decided it**, so an effective policy reads "approvals:
+`Repository`, `nomos-gate.json`, decided with `phases` as the phase policy" and never
+"approvals: `Repository`, `nomos-gate.json`" alone. The overridden and rejected lists stay per
+field: a unit overridden whole records the lower layer's contribution for *every* field of it,
+so a reader of `approvals` alone sees that a file's approvals lost to a caller's stages although
+only `phases` was compared. A refused companion appears in no effective policy at all, because
+a run that refuses reaches none.
+
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#48
+
+*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 4. The effective policy is a provenance per field, not a merged blob · hash: sha256:163f26f6218aa91fe5b1144e5e52c03c4864359a4bc4138081990d3b5fc3ce6b*
 
 `GateRunProvenance.policy` stays what it is: a digest of the effective *values*, so that
 `gate compare` attributes a difference between two runs to what judged them and not to which
 layer happened to say it. Provenance rides beside the digest, never inside it; two runs judged
-under identical values from different layers compare as the same policy, because they are.
+under identical values from different layers compare as the same policy, because they are. A
+unit decides which layer stated a field and not what the field became, so it is invisible to
+the digest by that same argument.
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#43
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#49
 
 *revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 4. The effective policy is a provenance per field, not a merged blob · hash: sha256:00d5f189b87e8ebc80c559d4ec97f4b66beab9b1ecb1cb07aedee87e8546baf2*
 
@@ -56992,13 +57102,13 @@ policy field this workspace reads holds a secret, and a class with no member is 
 population-of-zero shape `OD-ROADMAP-001` retired for its own cluster and not for this one.
 Field-level provenance leaves the slot.
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#44
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#50
 
 *revision: authored · kind: heading · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 5. What is re-homed under the resolver, and what stays where it is · hash: sha256:3198a3430c9af41a30e5f0513021ec38ff7db7552e8f223f25dc9a94825db0f6*
 
 ### 5. What is re-homed under the resolver, and what stays where it is
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#45
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#51
 
 *revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 5. What is re-homed under the resolver, and what stays where it is · hash: sha256:d625a450c62f6becafa27170a7188208d464504c232d82d2004e93331021491d*
 
@@ -57009,7 +57119,7 @@ apart; `Resolved_Over` is retired in favour of the layered resolution; `Effectiv
 `Effective_Policies` call one function; and `Run_Gate` records the `TemporaryRunOverride` or
 `Workflow` layer a caller's command speaks for instead of "the caller".
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#46
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#52
 
 *revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 5. What is re-homed under the resolver, and what stays where it is · hash: sha256:199d38de4aa1a3578bbde1987aafea1f3215879a02a2b82b4b6884c87b49a381*
 
@@ -57024,7 +57134,7 @@ calling the family reader directly. The reader itself does not move in either ca
 `standards.json` is another tool's file with another tool's schema (`OD-HOST-009` at version
 2), and a resolver can only consume rows a reader produced from it.
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#47
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#53
 
 *revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 5. What is re-homed under the resolver, and what stays where it is · hash: sha256:8fd07aef258c90af85af71507dc94795cd7b9a5bbd830b0c4b95be012238496f*
 
@@ -57034,7 +57144,7 @@ contribute to it, so there is nothing to resolve and its provenance is a constan
 `nomos-lsp` reads it directly as well is a duplicated *read*, not a duplicated decision, and is
 not this record's to close.
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#48
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#54
 
 *revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 5. What is re-homed under the resolver, and what stays where it is · hash: sha256:a6f42ba3588615a64935996aa83ff482a73af59d52307c69397c09efdc57c4ce*
 
@@ -57042,13 +57152,13 @@ not this record's to close.
 `OD-GATE-018`, the resolver never reads it, and a report listing the artifacts a run resolved
 lists it under none of Nomos's layers.
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#49
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#55
 
 *revision: authored · kind: heading · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 6. The capability item that builds the resolver, and its territory · hash: sha256:6b240b163e372eecc09b74b92f34c3ecec866349296c13804a2b7ef67975781e*
 
 ### 6. The capability item that builds the resolver, and its territory
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#50
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#56
 
 *revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 6. The capability item that builds the resolver, and its territory · hash: sha256:8445412d6a1629a553623c94d6deea3f44379b96c2bc583d1a09625c3d2393b5*
 
@@ -57058,7 +57168,7 @@ This record builds nothing. The first increment is one item,
 reader. Its territory, proposed here and validated by execution as the `nomos-task` skill
 requires:
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#51
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#57
 
 *revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 6. The capability item that builds the resolver, and its territory · hash: sha256:db9b2c47964bda1c3e9b8d3348e38c59502cd8152adf091a0af4d8d3135cdfa8*
 
@@ -57077,7 +57187,7 @@ requires:
 - `crates/orchestration/nomos-gate-orchestration/src/lib.rs` for the re-exports, and
   `tests/contract/surface/nomos-gate-orchestration.txt`.
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#52
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#58
 
 *revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 6. The capability item that builds the resolver, and its territory · hash: sha256:a2a0fa882fbf7b2185b41a1117a0ee0282b79f11010ca830317c5cb2412d8b62*
 
@@ -57095,15 +57205,30 @@ still a field `Resolve_Gate_Policy` reads off `nomos-gate.json`. What the constr
 not restated here; `OD-ROADMAP-003` is where it is written and where a departure from it would
 have to be argued.
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#53
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#59
+
+*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / The Decision / 6. The capability item that builds the resolver, and its territory · hash: sha256:8418e698ff5075d9e6f4d4885fcb8a11d86bdb24eafa3a8036916ee0d275fc78*
+
+**Amendment, version 2: the item is `P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT-2`.** The
+id named above was declined before it was ever claimed, because its `done_when` required every
+field to combine by the shape this record assigns it "and by no per-layer or per-caller
+exception", and an implementer obeying that clause would have satisfied it by flattening the
+coupling decision 3's amendment now decides. The replacement carries the same territory and the
+same predicate, requires the phases and approvals unit to keep resolving exactly as
+`Preferred_Phase_Policy` resolves it today, and depends on
+`P123-OD-POLICY-001-HAS-NO-RULE-FOR-TWO-FIELDS-THAT-RESOLVE-TOGETHER`, which wrote this
+amendment, so the rule exists before code implements one. That item, not this record, is where the resolver, the
+effective policy and the unit are built.
+
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#60
 
 *revision: authored · kind: heading · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
 
 ## What This Does Not Do
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#54
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#61
 
-*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / What This Does Not Do · hash: sha256:357c219c61511620a41ac398766b8d53f4d16e3a4e73884b0df3bd659807d9ee*
+*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / What This Does Not Do · hash: sha256:61ffe94302caf93fda84e00d201ee33d0eccf6633c4a5e194249dcfd732dbb40*
 
 - **It builds nothing.** The layer enum, the resolver, the effective policy and the re-homing
   are the named item's, and no reader changes because this record exists.
@@ -57125,16 +57250,25 @@ have to be argued.
   given in decision 4.
 - **It does not reopen `OD-GATE-029`.** `AllowPartial` and `Unset` keep exactly the meanings
   that record gave them; decision 3 depends on them.
+- **It declares no unit but the phases and approvals pair, and makes no coupling inferable**
+  (amendment, version 2). Every other field resolves by its own shape until a record measures
+  a coupling and declares the fields and the deciding field, and a resolver may not decide
+  that for itself.
+- **It does not change how a phase is judged** (amendment, version 2). `Evaluated_Phases`'
+  ordering, its stop at the first phase that fails unapproved, a threshold's meaning and the
+  matching of an approval to its phase are all untouched; the unit rule decides only which
+  source's phases and approvals a run judges with, and adds no refusal to the three cases
+  decision 3 already carries.
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#55
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#62
 
 *revision: authored · kind: heading · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / What Would Decide It Differently · hash: sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429*
 
 ## What Would Decide It Differently
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#56
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#63
 
-*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / What Would Decide It Differently · hash: sha256:46d58afa8fe2bff2ea546ee2e709da989b4ab371edebff326c2f41a5574fe03f*
+*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / What Would Decide It Differently · hash: sha256:048bf7eea4fc1d7ae6f36226f4da00a6ab07271debf4fa87e8e71edac3c8efbd*
 
 - **A real `CommandLine` or `Environment` source for a policy field contending with a
   `TemporaryRunOverride`.** The relative order of the three invocation-side layers is the
@@ -57151,14 +57285,18 @@ have to be argued.
 - **A merged field whose order is its meaning.** `components` is the only ordered list today
   and is overridden whole for that reason; a second one that must merge would need a rule
   keyed union cannot express.
+- **A unit whose fields address each other, so that no field decides** (amendment, version 2).
+  A deciding field exists because approvals address phases and phases address nothing of
+  theirs. Two fields each addressing keys the other declares could not be resolved by
+  designating one of them, and would reopen the unit rule rather than add an instance to it.
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#57
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#64
 
 *revision: authored · kind: heading · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#58
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#65
 
 *revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / Status · hash: sha256:b25f9df24884120a5f05f8c03f8e8c3b09dce986c9ee1e422e33228fa9d4daa8*
 
@@ -57172,6 +57310,27 @@ another name, with `ConfigurationLayer` the single vocabulary for where a value 
 Re-homes the gate reader first, the six family readers on a named trigger, and leaves the
 architecture declaration and the external tool's ledger where they are. Builds nothing, and
 names `P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT` as the item that would.
+
+### docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md#66
+
+*revision: authored · kind: prose · heading: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it / Status · hash: sha256:f8b958de6514fef8fe24f1cf2f1f80e49df843a7f544b5bba560ca60f6a88955*
+
+Amended to version 2 by `P123-OD-POLICY-001-HAS-NO-RULE-FOR-TWO-FIELDS-THAT-RESOLVE-TOGETHER`,
+which decides the one case version 1's per-field model could not express, found by execution
+rather than by disagreement: a *unit* of fields that no layer can state apart combines by one
+designated deciding field, whose highest-stating layer decides every field in the unit and
+overrides a lower layer's unit whole; each field of a resolved unit carries that statement's
+layer and artifact together with the unit and the field that decided it, because a provenance
+naming only its own field would hide that another field's statement decided it; and a
+contribution stating a companion field without the deciding field is refused rather than
+silently dropped, as a property of the contribution and not of which layers happened to be
+present. `phases` and `approvals` in
+`crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs`, landed at
+`54e88f78`, are the one instance, with `phases` the deciding field and the existing reason
+quoted rather than re-derived. The ten layers, the three refusal cases and the `ExecutionScope`
+relationship are untouched. The item that builds the resolver is
+`P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT-2`, the id decision 6 names having been
+declined for the clause this amendment corrects.
 
 ### docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1
 

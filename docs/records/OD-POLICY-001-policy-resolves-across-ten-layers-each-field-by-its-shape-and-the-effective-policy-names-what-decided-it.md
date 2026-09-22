@@ -3,7 +3,7 @@ id: OD-POLICY-001
 type: decision
 title: Policy resolves across ten layers, each field by its shape, and the effective policy names what decided it
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - policy
@@ -339,6 +339,76 @@ carry, and no source that could carry one exists today. Third, an artifact that 
 cannot be read as its declared shape refuses the run rather than reading as empty, which is
 what every reader already does and `Resolve_Gate_Policy`'s own doc says why.
 
+**Combine as a unit — a set of fields no layer can state apart (amendment, version 2).**
+Version 1 assigned a shape per field, every case per field, and one pair in the tree cannot be
+resolved that way. `Preferred_Phase_Policy` in
+`crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs`, landed at
+`54e88f78`, resolves `phases` and `approvals` as "one decision rather than two
+`Preferred_Policy` calls", and its own doc gives the reason rather than leaving it to be
+re-derived: "`phases` alone decides it, because approvals are read only through them", since
+`Evaluated_Phases` "iterates the phases and asks each whether an approval names it, so a source
+declaring approvals and no phase has declared nothing a run can act on". The field doc on
+`GateCommand::approvals` states the consequence: an approval "names the phase it covers, so a
+caller's phases paired with a file's approvals would let an approval address a stage its own
+source never declared". Resolving the two per field is therefore not a simplification of what
+the gate does; it is a defect the code was written to avoid, and version 1's model could not
+express the difference.
+
+**So: a *unit* is a declared set of two or more fields of one policy in which a value of one
+field can only address something another field of the set declares, and one field of the unit
+is designated its *deciding field*. The highest layer that states the deciding field decides
+every field of the unit, and no other layer contributes to any field in it.** A unit is
+overridden whole for the same reason the override rule above gives for the architecture
+declaration: a set assembled from two layers is a set neither author wrote, the silent winner
+`ARCH-008` prohibits. That holds even where a field of the unit has the shape of a keyed set. `approvals`
+is a list, and the unit rule replaces it rather than taking the union across layers, because
+that union is exactly the cross-layer pairing the coupling exists to prevent.
+
+Two consequences a per-field reading would get wrong. **A unit is declared, never inferred.**
+That an approval names a phase is a fact about what the two fields mean, not one any shape can
+compute, so a unit and its deciding field are named where the resolver declares them and
+pinned by a test — `Test_A_Caller_That_Built_Phases_Should_Keep_Its_Own_Approvals` is that test
+today, and asserts the pairing in both directions so neither half can be the one precedence
+happens to agree with. **And inside a unit the deciding field's statement carries the
+companion fields' emptiness**, which is the one place "a sentinel is not a statement" reads
+differently: the same field doc says "a command stating `phases` therefore states its own
+approvals too, including none", so an empty `approvals` beside a stated `phases` is a statement
+of no approvals rather than an absence a lower layer may fill.
+
+**A contribution that states a companion field of a unit without stating that unit's deciding
+field is refused**, naming the unit, the field and the artifact. A companion addresses keys
+only the deciding field declares, so the one way it could take effect is by being paired with
+another layer's declaration, which is the defect above; and the alternative to refusing is
+silence, which the reader already rejects one level in.
+`Test_An_Approval_Naming_An_Undeclared_Phase_Should_Be_Refused` refuses an approval naming a
+phase its own file does not declare, because otherwise "the entry parses, resolves and matches
+no phase name in `Evaluated_Phases`, so an author who mistyped the phase gets a build that
+fails for the reason they thought they had approved away". The cross-layer rule is that
+refusal carried out one layer, not a new judgment. It is a property of the one contribution
+rather than of the layer set, so a partial unit refuses whether or not some other layer would
+have supplied the deciding field: a configuration must not become valid because a layer
+appeared, which is `US-CONFIG-002`'s "the resolved policy is reproducible" read at the
+resolver. So where two layers each state part of a unit, whichever contribution stated a
+companion without the deciding field is refused; where both stated the deciding field, this is
+the ordinary override above and the higher layer's unit wins whole. This refusal is the unit
+rule's own and leaves the three cases above the scope they have — a same-layer contradiction, a
+locked override, an unreadable artifact — because an orphaned companion is none of the three.
+In particular it is not a rejected override: no higher layer forbade it, and there is nothing
+for a report to show as rejected, only a statement that could never have addressed anything.
+
+**The phases and approvals pair is the one instance, and a second unit is declared by the
+record that measures it.** Measured 2026-09-21 at `54e88f78`, nothing else in the tree resolves
+two policy fields from one statement: `Preferred_Policy`'s three list-shaped policies stand
+alone, `coverage` and `model` are single values, and a `PhaseThreshold` is a key on its own
+phase rather than a field beside it, which `declared_phases`' own doc argues for its own
+reasons. One other set of fields does carry this coupling shape — `membership`, `permissions`,
+`exceptions` and `authorities` all address component names `components` declares, and
+`ArchitecturePayload::Has_An_Architecture` reads `components` alone to answer whether a
+repository declared an architecture at all — and it needs no unit, because the override rule
+above already replaces that declaration whole. A resolver may not promote a coupling it
+notices into a unit of its own; naming the fields and the deciding field is a decision, and
+decision 6's item is where this one is built.
+
 **The model-execution profile is the one field with a precedence of its own, and this record
 does not restate it.** `MODEL-ROUTE-005`'s ladder is the order for that field, `ExecutionScope`
 is that ladder transcribed, and neither is re-declared or reordered here. What this record
@@ -366,10 +436,26 @@ every merged field it carries the same per entry.** It also carries the ordered 
 layers as consulted, each marked observed, absent on this host, or declared-unobservable, so
 that "organization: no source" is a line in the report and not an omission from it.
 
+**Amendment, version 2: every field of a resolved unit carries the deciding field's
+provenance, and says that it did.** One statement decided every field in the unit, so a
+provenance naming only the field it sits on would report `approvals` as though its source had
+written approvals when that source may have written none — the difference between a value and
+a statement that decision 3 turns on throughout. **Each field of a resolved unit therefore
+carries the layer and the artifact of the deciding field's statement, together with the unit it
+belongs to and which field's statement decided it**, so an effective policy reads "approvals:
+`Repository`, `nomos-gate.json`, decided with `phases` as the phase policy" and never
+"approvals: `Repository`, `nomos-gate.json`" alone. The overridden and rejected lists stay per
+field: a unit overridden whole records the lower layer's contribution for *every* field of it,
+so a reader of `approvals` alone sees that a file's approvals lost to a caller's stages although
+only `phases` was compared. A refused companion appears in no effective policy at all, because
+a run that refuses reaches none.
+
 `GateRunProvenance.policy` stays what it is: a digest of the effective *values*, so that
 `gate compare` attributes a difference between two runs to what judged them and not to which
 layer happened to say it. Provenance rides beside the digest, never inside it; two runs judged
-under identical values from different layers compare as the same policy, because they are.
+under identical values from different layers compare as the same policy, because they are. A
+unit decides which layer stated a field and not what the field became, so it is invisible to
+the digest by that same argument.
 
 `CONFIG-001`'s sensitivity class and `CONFIG-005`'s secret references are not adopted: no
 policy field this workspace reads holds a secret, and a class with no member is the
@@ -443,6 +529,17 @@ still a field `Resolve_Gate_Policy` reads off `nomos-gate.json`. What the constr
 not restated here; `OD-ROADMAP-003` is where it is written and where a departure from it would
 have to be argued.
 
+**Amendment, version 2: the item is `P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT-2`.** The
+id named above was declined before it was ever claimed, because its `done_when` required every
+field to combine by the shape this record assigns it "and by no per-layer or per-caller
+exception", and an implementer obeying that clause would have satisfied it by flattening the
+coupling decision 3's amendment now decides. The replacement carries the same territory and the
+same predicate, requires the phases and approvals unit to keep resolving exactly as
+`Preferred_Phase_Policy` resolves it today, and depends on
+`P123-OD-POLICY-001-HAS-NO-RULE-FOR-TWO-FIELDS-THAT-RESOLVE-TOGETHER`, which wrote this
+amendment, so the rule exists before code implements one. That item, not this record, is where the resolver, the
+effective policy and the unit are built.
+
 ## What This Does Not Do
 
 - **It builds nothing.** The layer enum, the resolver, the effective policy and the re-homing
@@ -465,6 +562,15 @@ have to be argued.
   given in decision 4.
 - **It does not reopen `OD-GATE-029`.** `AllowPartial` and `Unset` keep exactly the meanings
   that record gave them; decision 3 depends on them.
+- **It declares no unit but the phases and approvals pair, and makes no coupling inferable**
+  (amendment, version 2). Every other field resolves by its own shape until a record measures
+  a coupling and declares the fields and the deciding field, and a resolver may not decide
+  that for itself.
+- **It does not change how a phase is judged** (amendment, version 2). `Evaluated_Phases`'
+  ordering, its stop at the first phase that fails unapproved, a threshold's meaning and the
+  matching of an approval to its phase are all untouched; the unit rule decides only which
+  source's phases and approvals a run judges with, and adds no refusal to the three cases
+  decision 3 already carries.
 
 ## What Would Decide It Differently
 
@@ -483,6 +589,10 @@ have to be argued.
 - **A merged field whose order is its meaning.** `components` is the only ordered list today
   and is overridden whole for that reason; a second one that must merge would need a rule
   keyed union cannot express.
+- **A unit whose fields address each other, so that no field decides** (amendment, version 2).
+  A deciding field exists because approvals address phases and phases address nothing of
+  theirs. Two fields each addressing keys the other declares could not be resolved by
+  designating one of them, and would reopen the unit rule rather than add an instance to it.
 
 ## Status
 
@@ -496,3 +606,20 @@ another name, with `ConfigurationLayer` the single vocabulary for where a value 
 Re-homes the gate reader first, the six family readers on a named trigger, and leaves the
 architecture declaration and the external tool's ledger where they are. Builds nothing, and
 names `P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT` as the item that would.
+
+Amended to version 2 by `P123-OD-POLICY-001-HAS-NO-RULE-FOR-TWO-FIELDS-THAT-RESOLVE-TOGETHER`,
+which decides the one case version 1's per-field model could not express, found by execution
+rather than by disagreement: a *unit* of fields that no layer can state apart combines by one
+designated deciding field, whose highest-stating layer decides every field in the unit and
+overrides a lower layer's unit whole; each field of a resolved unit carries that statement's
+layer and artifact together with the unit and the field that decided it, because a provenance
+naming only its own field would hide that another field's statement decided it; and a
+contribution stating a companion field without the deciding field is refused rather than
+silently dropped, as a property of the contribution and not of which layers happened to be
+present. `phases` and `approvals` in
+`crates/orchestration/nomos-gate-orchestration/src/policy/gate_policy_file.rs`, landed at
+`54e88f78`, are the one instance, with `phases` the deciding field and the existing reason
+quoted rather than re-derived. The ten layers, the three refusal cases and the `ExecutionScope`
+relationship are untouched. The item that builds the resolver is
+`P124-POLICY-001-EFFECTIVE-POLICY-FIRST-INCREMENT-2`, the id decision 6 names having been
+declined for the clause this amendment corrects.
