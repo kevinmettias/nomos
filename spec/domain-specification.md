@@ -202,7 +202,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md@authored | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md | authored | 56 | 14 | sha256:0ffc8479136943b0a3335a0042a996e0a028e3811b1ebcdca9228da7bd7e458c |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
-| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 21 | 7 | sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 35 | 11 | sha256:bba6e6b5f62b007c956218eebf7481b6890c759f30131be10fc545c564ccf868 |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md | authored | 40 | 8 | sha256:54dd8e341f63882f74fca31d11cc939e8bfec1033fe8ba3e6fcbf6a156689166 |
 | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md@authored | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md | authored | 85 | 18 | sha256:2abc66bb472507d0bf4f2c040530b440a47a4fed7def8473531083f874de3df2 |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
@@ -1993,6 +1993,10 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#15 | authored | 2 | Why The Test Was Deleted Rather Than Widened |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#18 | authored | 2 | What This Costs |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#20 | authored | 2 | Consequences |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#22 | authored | 2 | Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#24 | authored | 3 | What was measured |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#27 | authored | 3 | What moved, and what did not |
+| docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#31 | authored | 3 | What it cost, which is not what the section above says it costs |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1 | authored | 1 | A local patch override is a development convenience and never the governing form of the XVPE crossing |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#6 | authored | 2 | Decision |
@@ -60644,6 +60648,135 @@ That is a real cost, accepted deliberately rather than discovered later.
   adapter, not a replacement** for `nomos-platform`'s port: adopting XVPE's launcher trait
   workspace-wide would mean touching 33 implementors and 559 use-sites for no behavioural
   change.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#22
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards · hash: sha256:1288a87ba1e45c743dc9354eea4dcb1bc6759d9763e62c37ad0a14578691c36a*
+
+## Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#23
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards · hash: sha256:1835c16425e59a8f8c421d129e81ab2759ce541fbef96e2125cf50d1a152386b*
+
+`OD-ROADMAP-005` decision 4 authorizes this and states its own bound: this record is superseded
+only where its retirement of `AGT-006`'s no-dependency clause reaches `nomos-platform` itself.
+Everything above stands, and the reasoning that produced it was never the objection.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#24
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What was measured · hash: sha256:8a1f64f2f25048a02b74220dac0a038766c2b805c9bc809def51b3a5b69edf34*
+
+### What was measured
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#25
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What was measured · hash: sha256:ba501320a2b2e20f28431f8210913922b475f4b2491a4485272bc56db9b854a9*
+
+At `53de19a4`, and unchanged at `a50bf332`:
+`crates/platform/nomos-platform/src/clock/timestamp.rs` re-exported `xvpe_clock::Timestamp` and
+the crate's manifest named `xvpe-clock`. So the ports crate every band above depends on could
+not compile without the engine it is a port *to*. An external architecture review of `dev`
+called that a reverse boundary leak, and it is one: the seam this crate exists to be had a
+dependency running through it the wrong way, and every band above inherited it.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#26
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What was measured · hash: sha256:36c1575806839c121dc672ecd7f5c6b7d5d40ae91f830fc7a08134ec031e0faa*
+
+The consumer census over `crates/` and `tests/` is what decided the returning type's surface,
+rather than a reading of the one being replaced: 88 files name `Timestamp`;
+`Timestamp::From_Unix_Seconds` is called 153 times and `Timestamp::Plus` once as an associated
+function; the value methods are `Unix_Seconds` 19 times, `Plus` 10 and `Since` 4; no `const` or
+`static` of the type exists, nothing keys a map or a set by it, and no crate implements a trait
+for it. `nomos-platform` was the only crate in the workspace naming `xvpe-clock`, and neither
+`README.md` nor `nomos-architecture.json` mentioned it, so nothing outside that one manifest
+asserted the arrangement being undone.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#27
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:2f80fba18514b12f6ac170b7a2baa60bb09d4c91c259a71e4073ed565f78ba40*
+
+### What moved, and what did not
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#28
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:641f2f25eee921ea95c24d8c4744eaf975907665d4897e520e8c7e42bc934f46*
+
+The declaration moved, and nothing else. `nomos_platform::Timestamp` is the same path with the
+same operations, so no consumer was edited and none learned -- which is what the seam bought on
+the way down, bought again on the way back. The ledger's wire format never moved in either
+direction: it was always this workspace's own, `timestamp_serde` still holds it, and
+`Test_A_Timestamp_Should_Serialize_As_A_Bare_Number_Of_Seconds` still asserts the bytes every
+committed ledger carries.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#29
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:1ac233e92706012bbdcc0db594308a3d831d15cfa50120bfd42a5d0242c2aa80*
+
+**The crossing is untouched.** It stays adopted and stays pinned at
+`82a3c8fccf4ef7f3759f36d3f320a91d0f96341c`, declared once in `[workspace.dependencies]` and
+inherited by the eight members that name an `xvpe-` crate, which is one fewer than before.
+`nomos-platform-xvpe` is still the adapter and still the narrowest crate that must reach XVPE.
+Nothing here makes XVPE a peer again: Nomos remains an application over it, which is what this
+record decided and what `OD-ROADMAP-005` decision 4 repeats in terms.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#30
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What moved, and what did not · hash: sha256:db7f1b00aa8b68dd113a07acc06a885869a1adcea8cb944178f863fc55ab667b*
+
+**A conversion in the adapter was considered and refused.** Naming `xvpe-clock` in
+`nomos-platform-xvpe` and converting between the two declarations would have kept them joined,
+and it was the smaller edit to `Cargo.lock` -- one insertion and one deletion rather than 112
+deletions. It buys nothing. No caller converts, and an adapter carrying a dependency and
+conversions nothing calls is exactly the claim about the future this crate's own module
+documentation refuses. The lock was going to change either way, because it records a per-member
+dependency array and a move is an edit to two of them, so the argument from lock stability did
+not survive being measured.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#31
+
+*revision: authored · kind: heading · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:d23de6eb184835e2bd39af8985f6aceccce31e3ae8149e8f892dfaf683b85843*
+
+### What it cost, which is not what the section above says it costs
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#32
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:259b59449c5ade48222bb102d00551eaf184bd459588dc44836304edbae8b2c4*
+
+**`What This Costs` is wrong, and was already wrong before this amendment.** It says this
+workspace no longer builds standalone and requires XVPE checked out beside it, because the
+dependency is a path dependency across repositories. Neither clause is true. Every `xvpe-`
+dependency is a git source pinned to a revision, so the workspace resolves XVPE from what that
+revision pins and needs no sibling directory to build. `AGENTS.md` says so in its operating
+hazards, `OD-PLATFORM-004` made the local substitution opt-in and denied it any authority, and
+`Test_The_Committed_Lock_Should_Pin_Every_Crossing_Package_To_That_Revision` is what keeps the
+committed form honest. The path-dependency arrangement that paragraph describes stopped being
+the governing one when the crossing was pinned, and the sentence was left behind.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#33
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:24e6a3ca3bfb5f587ec3eb8c80fb371456e77d5cd1d6f1dae34abfbe0633d34b*
+
+What the crossing does cost, stated the way that paragraph meant to state it: a build that has
+not fetched the pinned revision cannot compile the members that name it, and a revision bump is
+a decision taken once in the root manifest rather than a refresh. That is unchanged here.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#34
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:eed398b2c41570b674e990503fb33f55614e288e1b0cd1a61f5cb6259a699a41*
+
+What *this* change cost is one number. `Cargo.lock` lost 112 lines: the package blocks for
+`xvpe-clock` itself and for `web-time`, `js-sys`, `wasm-bindgen` with its three macro crates,
+`rustversion`, `slab` and the three `futures` crates, all of which `xvpe-clock` alone pulled
+into this workspace. Twelve `xvpe-` packages in the committed lock became eleven, and all
+eleven still carry a `git+` source at the one revision the manifests declare.
+
+### docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#35
+
+*revision: authored · kind: prose · heading: Nomos is built on top of XVPE, so AGT-006's no-dependency clause no longer binds this crossing / Amendment, Version 2: The Clock Type Comes Back, Because A Port That Cannot Compile Without Its Engine Has The Dependency Backwards / What it cost, which is not what the section above says it costs · hash: sha256:b4aa14803d4d2379a4c4cf8edb23f6668b602126da30ce1a0886aa1cb23e03f7*
+
+Checked 2026-09-21 against the crate's manifest and module documentation, the committed lock before and after the change, `cargo tree -p nomos-platform`, and the blessed surface snapshot at `tests/contract/surface/nomos-platform.txt`.
 
 ### docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md#1
 

@@ -1,5 +1,7 @@
 pub const fn nomos_platform::ExitOutcome::Has_A_Verdict(self) -> bool
 pub const fn nomos_platform::ExitOutcome::Is_Successful(self) -> bool
+pub const fn nomos_platform::Timestamp::From_Unix_Seconds(seconds: i64) -> Self
+pub const fn nomos_platform::Timestamp::Unix_Seconds(self) -> i64
 pub enum nomos_platform::EnvironmentError
 pub enum nomos_platform::ExitOutcome
 pub enum nomos_platform::FileSystemError
@@ -31,6 +33,8 @@ pub fn nomos_platform::FileSystemError::fmt(&self, formatter: &mut core::fmt::Fo
 pub fn nomos_platform::FilesystemLock::Acquire( &self, holder: &str, wait_limit: Duration, stale_after: Duration, ) -> Result<LockAcquisition<Self::Guard>, LockError>
 pub fn nomos_platform::LockError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_platform::ProgramLauncher::Run(&self, command: &Command) -> Result<ProgramOutput, String>
+pub fn nomos_platform::Timestamp::Plus(self, duration: std::time::Duration) -> Self
+pub fn nomos_platform::Timestamp::Since(self, earlier: Self) -> std::time::Duration
 pub impl nomos_platform::EnvironmentError implements core::fmt::Display
 pub impl nomos_platform::EnvironmentError implements std::error::Error
 pub impl nomos_platform::FileSystemError implements core::fmt::Display
@@ -52,6 +56,7 @@ pub struct nomos_platform::Command
 pub struct nomos_platform::LockAcquisition<Guard>
 pub struct nomos_platform::ProgramOutput
 pub struct nomos_platform::StaleTakeover
+pub struct nomos_platform::Timestamp(i64)
 pub trait nomos_platform::Clock: Strategy
 pub trait nomos_platform::Environment: Strategy
 pub trait nomos_platform::FileSystem: Strategy
@@ -60,7 +65,6 @@ pub trait nomos_platform::ProgramLauncher: Strategy
 pub type nomos_platform::FilesystemLock::Guard
 
 # re-exports of items declared outside this crate
-pub use clock::Timestamp
 pub use clock::timestamp_serde
 pub use nomos_contracts::DeterminismStrength
 pub use nomos_contracts::ReproducibilityScope

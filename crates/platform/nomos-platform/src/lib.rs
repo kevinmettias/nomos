@@ -8,23 +8,28 @@
 //!
 //! This crate was written before XVPE could be depended on, so that adopting it later
 //! would be a new implementation behind an existing seam rather than a refactor of
-//! every caller. That is what happened, twice, and the seam is why neither move
-//! touched a caller:
+//! every caller. That is what happened, and the seam is why the move did not touch a
+//! caller: [`ProgramLauncher`]'s design went *down* into `xvpe-subprocess-execution`
+//! on 2026-09-10, with `nomos-platform-xvpe` bridging this workspace's launchers onto
+//! it. That trait is unchanged and its 33 implementors never learned.
 //!
-//! - [`ProgramLauncher`]'s design went *down* into `xvpe-subprocess-execution` on
-//!   2026-09-10, with `nomos-platform-xvpe` bridging this workspace's launchers onto
-//!   it. This trait is unchanged and its 33 implementors never learned.
-//! - [`Timestamp`] went down on 2026-09-11 and this crate now re-exports XVPE's. Its
-//!   46 use-sites never learned either; only the nine serde fields that write it into
-//!   the work ledger name anything new, and they name
-//!   [`timestamp_serde`] — the wire format, which stays this workspace's own.
-//!
-//! Both are `OD-PLATFORM-003`: Nomos is an application over that engine, so a
+//! That is `OD-PLATFORM-003`: Nomos is an application over that engine, so a
 //! domain-neutral capability sitting up here is unreachable by everything down there.
 //! The rule that once said only `nomos-platform-xvpe` may name `xvpe-` is retired with
 //! that record — naming `xvpe-` is ordinary now, and the `tests/contract` assertion
 //! that enforced it was deleted rather than widened, so no rule here reads as a
 //! boundary while enforcing nothing.
+//!
+//! [`Timestamp`] went down the same way on 2026-09-11 and came back on 2026-09-21,
+//! under `OD-ROADMAP-005` decision 4. Ownership of the type was never the objection:
+//! a *port* crate that cannot compile without the engine it is a port to has a
+//! dependency running the wrong way through the seam, and every band above this one
+//! inherits it. So this crate names no `xvpe-` dependency, and the seam paid for the
+//! return trip exactly as it paid for the outward one — no use-site learned either
+//! time, and the nine serde fields that write a timestamp into the work ledger still
+//! name [`timestamp_serde`], because the wire format never moved. What the crossing
+//! kept is untouched by this: it stays adopted, it stays pinned, and
+//! `nomos-platform-xvpe` is still the adapter.
 //!
 //! # Scope
 //!
@@ -42,12 +47,12 @@
 //! above are absent: every production call site of it is a `main.rs`.
 //!
 //! [`Clock`] stays this workspace's own rather than becoming XVPE's
-//! `WallClockStrategy`. The two are the same design — [`Timestamp`] is now literally
-//! the same type — but XVPE additionally requires every strategy surface to declare
-//! its determinism, and adopting that here would mean touching every implementor for
-//! no behavioural change. That is the same trade `nomos-platform-xvpe` already made
-//! for the launcher, and the answer is the same: bridge at the crossing, not at the
-//! port.
+//! `WallClockStrategy`. The two are the same design, operation for operation, down to
+//! the two `Timestamp` declarations — but XVPE additionally requires every strategy
+//! surface to declare its determinism, and adopting that here would mean touching every
+//! implementor for no behavioural change. That is the same trade `nomos-platform-xvpe`
+//! already made for the launcher, and the answer is the same: bridge at the crossing,
+//! not at the port.
 //!
 //! # Why `check-crate-split` reports this crate, and why it stays one
 //!

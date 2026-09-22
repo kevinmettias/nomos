@@ -90104,7 +90104,9 @@
       "territory": {
         "resolution": "File",
         "paths": [
-          "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md"
+          "docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-still-has-no-real-workresult-so-wf-006s-trigger-is-half-fired.md",
+          "crates/spec/nomos-spec-store/records/OD-WORKFLOW-004.record",
+          "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md"
         ],
         "patterns": []
       },
@@ -90135,7 +90137,22 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p123-wf004",
+          "added": [
+            "crates/spec/nomos-spec-store/records/OD-WORKFLOW-004.record"
+          ],
+          "widened_at": 1790058258
+        },
+        {
+          "holder": "fable-p123-wf004",
+          "added": [
+            "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md"
+          ],
+          "widened_at": 1790058258
+        }
+      ]
     },
     {
       "id": "P123-A-CRATE-DOC-AND-ITS-RECORD-DISAGREE-ABOUT-WHICH-OVERRIDE-LICENSED-THE-WORKFLOW-RUNTIME",
@@ -90367,10 +90384,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-persist",
+        "acquired_at": 1790058437,
+        "lease_expires_at": 1790069237
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -92559,14 +92580,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p128-auth",
-        "acquired_at": 1790057670,
-        "lease_expires_at": 1790068470
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -92582,7 +92599,33 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "et Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.67s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/auth/render-target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/auth/render-target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/auth/render-target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790058431,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -93018,7 +93061,8 @@
           "crates/orchestration/nomos-gate-orchestration/src/gate_plan.rs",
           "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
           "crates/orchestration/nomos-gate-orchestration/src/gate_environment.rs",
-          "crates/orchestration/nomos-gate-orchestration/src/gate_compare/tests.rs"
+          "crates/orchestration/nomos-gate-orchestration/src/gate_compare/tests.rs",
+          "crates/host/nomos-api/src/test_support.rs"
         ],
         "patterns": []
       },
@@ -93062,6 +93106,13 @@
             "crates/orchestration/nomos-gate-orchestration/src/gate_compare/tests.rs"
           ],
           "widened_at": 1790058005
+        },
+        {
+          "holder": "fable-p128-provenance",
+          "added": [
+            "crates/host/nomos-api/src/test_support.rs"
+          ],
+          "widened_at": 1790058427
         }
       ]
     },
@@ -93126,14 +93177,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-platform-clock",
-        "acquired_at": 1790057624,
-        "lease_expires_at": 1790068424
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -93150,7 +93197,34 @@
         ],
         "timeout_seconds": 1200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-platform-xvpe",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "e767f10773/scratchpad/project-004/target\\debug\\deps\\gate_covers_finish-936d11f16ada1850.exe)\n     Running tests\\local_gate_execution.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\local_gate_execution-a3d0a7711e8fa26a.exe)\n     Running tests\\records_do_not_serialize\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\records_do_not_serialize-43ccb2d296f8ebd8.exe)\n     Running tests\\scope_verification_integration.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\scope_verification_integration-2f62a6183cdc5bb3.exe)\n     Running tests\\widening_is_recorded\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\widening_is_recorded-0840763464627d90.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos_platform-a8ed52016ba8cc82.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos_platform_std-b54070cb737d5800.exe)\n     Running tests\\implements_the_platform_ports.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\implements_the_platform_ports-9e9630b9c4e240ff.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos_platform_xvpe-ea66813f25cb038f.exe)\n   Doc-tests nomos_ledger\n   Doc-tests nomos_platform\n   Doc-tests nomos_platform_std\n   Doc-tests nomos_platform_xvpe\n",
+        "verified_at": 1790058313,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -93310,6 +93384,46 @@
         },
         "revision": "66292b7f5c47e14034be56e69b20a72982d92588"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-A-WORKTREE-FINISH-LOSES-THE-REVISION-THE-BOARD-REPORTS-STALENESS-FROM",
+      "title": "The remedy for a red shared tree silently disables the provenance field the board reports staleness from",
+      "why": "OD-LEDGER-027 added a verification record naming the revision a predicate ran against, so work show can report when the tree has moved since. Current_Revision in crates/substrate/nomos-ledger/src/finish.rs resolves it by reading the path .git/HEAD under the working directory through the ledger's own file port, then following one loose ref, and returning None on any failure without distinguishing the causes. In a linked worktree .git is a FILE holding a gitdir pointer, not a directory, so that path does not exist and the stamp is silently absent. Measured on the live board: of seventy-eight items finished since the field existed, thirty-five carry a revision and forty-three do not, and the ones that do not are the ones finished from worktrees. This matters because finishing from a worktree is not an exotic choice, it is the remedy this repository's own skill and every orchestration briefing prescribe when a peer's in-flight work reddens the shared tree, which on a busy day is most finishes. So the field is absent exactly when the tree was most contended, which is when provenance is worth most. git rev-parse HEAD resolves correctly inside a worktree, so the capability exists and only the resolution does not use it. The absence is also reported in a way that reads as information: work show prints no revision recorded for this verification, which several workers have read as a normal post-commit state rather than as a gap.",
+      "done_when": "A predicate verified from a linked worktree records the revision it ran against, so the staleness report OD-LEDGER-027 built works for a finish taken by the procedure this repository recommends. The resolution handles a .git that is a file holding a gitdir pointer as well as a .git that is a directory, and handles a ref that is packed rather than loose, because both are ordinary states of a checkout and either returning None is the defect. It stays a read rather than a subprocess if the ledger's own file port can express it, and if it cannot, the record that chose a direct read is amended rather than contradicted in silence. A test proves the worktree case specifically, by resolving against a fixture whose .git is a file, and a test proves the packed-ref case, because a guard that only covers the shape somebody happened to hit is the narrow-population failure this tree has recorded repeatedly. Where a revision genuinely cannot be resolved the absence stays undistinguished per VerificationRecord's own reasoning, but work show no longer prints a bare no revision recorded for the ordinary case, because that sentence is currently read as a normal state rather than a gap. No change to what the field means and no schema change.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/finish.rs",
+          "crates/substrate/nomos-ledger/src/verification",
+          "crates/substrate/nomos-ledger/src/verification.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75-revision",
+        "acquired_at": 1790058158,
+        "lease_expires_at": 1790068958
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,

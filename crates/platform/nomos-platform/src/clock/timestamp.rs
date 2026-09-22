@@ -1,36 +1,108 @@
 //! A point in time, as everything in Nomos records one.
 //!
-//! # Why this file no longer defines the type
+//! # Why this file defines the type again
 //!
-//! It did, and the definition was carried down into XVPE on 2026-09-11 as
-//! `xvpe_clock::Timestamp`, under `OD-PLATFORM-003`: Nomos is an application over
-//! that engine, and a wall-clock value type with saturating arithmetic is exactly
-//! the domain-neutral capability `D-135` sends there. What was here — second
-//! resolution, a backwards clock reporting zero elapsed, an advance that saturates
-//! rather than wraps — is what moved, unchanged and with its tests.
+//! It defined it once, and the definition was carried down into XVPE on 2026-09-11 as
+//! `xvpe_clock::Timestamp` under `OD-PLATFORM-003`, leaving a re-export here.
+//! `OD-ROADMAP-005` decision 4 brings the declaration back, because the re-export made
+//! the ports crate every band above depends on unable to compile without the engine
+//! underneath it — a dependency running the wrong way through the seam this crate
+//! exists to be.
 //!
-//! What stays here is the one thing that is genuinely Nomos's: how a timestamp is
-//! written into the work ledger. See [`timestamp_serde`].
+//! That is the whole of what moved. The crossing stays adopted and stays pinned,
+//! `nomos-platform-xvpe` is still the adapter, and Nomos is still an application over
+//! XVPE rather than a peer of it. XVPE keeps `xvpe_clock::Timestamp` for its own
+//! consumers; this one is Nomos's, and the two are no longer one declaration.
+//!
+//! What a timestamp *is* did not change with the declaration: second resolution, an
+//! advance that saturates rather than wraps, and a backwards clock reporting zero
+//! elapsed. The cases that assert those three live in [`super`], beside the [`Clock`]
+//! whose readings they are about, and they passed unchanged across both moves.
+//!
+//! [`Clock`]: super::Clock
 
-pub use xvpe_clock::Timestamp;
+/// A point in time, as whole seconds since the Unix epoch.
+///
+/// # Why seconds
+///
+/// Everything that records one of these writes it into a line a person reads — a ledger
+/// entry, a lease, a receipt. Sub-second digits would churn every record without telling
+/// that reader anything they act on. Where ordering matters more finely than a second,
+/// carry the ordering explicitly rather than inferring it from a clock that is allowed to
+/// step backwards.
+///
+/// # Why this is not an elapsed time
+///
+/// This answers *when*, which is what a record needs. How long since is a different
+/// question with a different answer — a wall reading is not monotonic, because it steps
+/// when the machine corrects, resumes or crosses a leap, so a duration derived from two
+/// of these is a bound rather than a measurement. [`Since`](Self::Since) is that bound
+/// and says so.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub struct Timestamp(i64);
+
+impl Timestamp
+{
+    /// Wraps whole seconds since the Unix epoch.
+    #[must_use]
+    pub const fn From_Unix_Seconds(seconds: i64) -> Self
+    {
+        return Self(seconds);
+    }
+
+    /// Whole seconds since the Unix epoch.
+    #[must_use]
+    pub const fn Unix_Seconds(self) -> i64
+    {
+        return self.0;
+    }
+
+    /// This timestamp advanced by a duration, saturating at the representable range.
+    ///
+    /// Saturates rather than wrapping: a wrap at the far end of the range reads as a time
+    /// in the distant past, which inverts every comparison made against it.
+    #[must_use]
+    pub fn Plus(self, duration: std::time::Duration) -> Self
+    {
+        let seconds = i64::try_from(duration.as_secs()).unwrap_or(i64::MAX);
+
+        return Self(self.0.saturating_add(seconds));
+    }
+
+    /// How long after `earlier` this timestamp is, or zero if it is not after it.
+    ///
+    /// Zero rather than an underflowed maximum. A clock that went backwards — a
+    /// correction, a virtual machine resuming, a board with a dead battery — must not
+    /// produce a wildly large elapsed time, because every deadline measured against it
+    /// would read as long expired at once.
+    #[must_use]
+    pub fn Since(self, earlier: Self) -> std::time::Duration
+    {
+        let elapsed = self.0.saturating_sub(earlier.0);
+
+        return std::time::Duration::from_secs(u64::try_from(elapsed).unwrap_or(0));
+    }
+}
 
 /// Reading and writing a [`Timestamp`] as the work ledger already holds one.
 ///
 /// # Why an adapter rather than a derive
 ///
-/// [`Timestamp`] is XVPE's now, and `xvpe-clock` is a `no_std` crate with no serde
-/// dependency — deliberately, because a foundation crate down there does not take a
-/// third-party dependency to serve one consumer up here. So the wire format is
-/// Nomos's own concern, which is the right place for it: `work/ledger.json` is
-/// committed and read under `git diff`, and the representation is a compatibility
-/// obligation this workspace owes its own history, not a property of what a
-/// timestamp *is*.
+/// The derive is available — [`Timestamp`] is declared in this crate again — and is
+/// deliberately not taken, which is a different reason from the one that held while the
+/// type was XVPE's. It is not a format choice: a newtype struct is transparent to serde,
+/// so `#[derive(Serialize, Deserialize)]` would emit exactly the bytes these two
+/// functions do. It is that the bytes are an obligation rather than a property.
+/// `work/ledger.json` is committed and read under `git diff`, so what a timestamp looks
+/// like in it is a compatibility debt this workspace owes its own history, and not a
+/// property of what a timestamp *is*. A named pair of functions with cases asserting the
+/// bytes states that debt where a derive would leave it implicit in a trait
+/// implementation nobody reads.
 ///
 /// The format is a bare JSON number of whole seconds — byte-for-byte what the
-/// previous `#[derive(Serialize)]` on a newtype produced, because a newtype struct
-/// is transparent to serde. A ledger written before this change reads back
-/// identically after it, which this module's own cases assert directly rather than
-/// leaving to this comment.
+/// `#[derive(Serialize)]` this replaced produced. A ledger written before that change
+/// reads back identically after it, which this module's own cases assert directly
+/// rather than leaving to this comment.
 ///
 /// Applied at each field as a pair of attributes naming one function below by its full
 /// path — `#[serde(serialize_with = "nomos_platform::timestamp_serde::Write_Unix_Seconds")]`

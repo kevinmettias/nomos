@@ -13,10 +13,6 @@ serde = { workspace = true }
 # zone may depend on; and the same vocabulary the rest of this workspace's 29
 # strategy declarations already use, rather than a second one for the ports alone.
 nomos-contracts = { workspace = true }
-# The wall-clock value type, carried down into the engine on 2026-09-11 by
-# `OD-PLATFORM-003`. This crate re-exports it and keeps only the ledger's wire
-# format, which is this workspace's own obligation rather than the type's.
-xvpe-clock = { workspace = true }
 
 # The adapter asserts the committed ledger's byte format directly.
 [dev-dependencies]
