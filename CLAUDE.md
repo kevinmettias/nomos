@@ -39,9 +39,6 @@ board, and a second one is a second authority.
 Do not `Write` a file you have not read in this session. Another session may have changed
 it since your task was described to you.
 
-Scope every commit to explicit paths. `git add -A` in this tree sweeps up work that belongs
-to somebody else.
-
 Do not write a handoff, at compaction or at session end, that summarizes the repository.
 `docs/records/OD-AGENT-002-a-handoff-carries-session-local-state-and-routes-to-authority-for-everything-else.md`
 says what it carries instead.
