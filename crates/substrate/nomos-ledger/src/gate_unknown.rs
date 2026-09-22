@@ -42,6 +42,13 @@ pub use derived_step::DerivedStep;
 pub use step_execution::StepExecution;
 pub use local_gate_run::{LocalGateRun, Run_Gate_Locally};
 
+// The whole step set, read in one pass. Its own file because this one had grown past the
+// size the standards ask a submodule to be extracted at.
+#[path = "gate/step_derivation.rs"]
+mod step_derivation;
+
+pub use step_derivation::Derive_Steps;
+
 use std::path::Path;
 
 /// Where the gate is defined, relative to the tree the predicate runs in.
@@ -61,7 +68,12 @@ pub const LINT_STEP: &str = "Lint";
 /// bespoke quote handling and put a parser between what an author wrote and what ran.
 /// This module does not reintroduce that parser. It splits on whitespace, which is exact
 /// for a bare command, and refuses anything where whitespace is not the whole story.
-const SHELL_METACHARACTERS: [char; 9] = ['|', '&', ';', '<', '>', '$', '`', '"', '\''];
+///
+/// The last two are spelled as escapes rather than as themselves. A char literal holding a
+/// quote defeats the scanner that blanks strings before the brace checks read columns, and
+/// every block after this line then reports its braces as misaligned. The escape is the same
+/// character and costs nothing but the false report.
+const SHELL_METACHARACTERS: [char; 9] = ['|', '&', ';', '<', '>', '$', '`', '\u{22}', '\u{27}'];
 
 /// Why the gate could not be derived.
 ///
@@ -182,117 +194,6 @@ pub fn Derive_Step<'a>(workflow: impl Into<WorkflowText<'a>>, step: impl Into<St
     return Argv_Of(run, step);
 }
 
-/// Every step the workflow declares, in file order, each with its guard and its argv.
-///
-/// Beside [`Derive_Step`] rather than replacing it: that function answers for one named
-/// step and `work finish` depends on exactly that, so it keeps its behaviour including its
-/// indifference to every key but `run:`. This answers the different question `OD-GATE-033`
-/// needs -- what the whole set is, and which legs each member belongs to.
-///
-/// Unreadable parts are carried rather than dropped. A step whose guard is outside the
-/// subset still appears, with [`StepGuard::Outside`]; a step with no derivable command
-/// still appears, with the cause in its `argv`. A reader that dropped either would hand a
-/// caller a set that looks complete and is not.
-#[must_use]
-pub fn Derive_Steps<'a>(workflow: impl Into<WorkflowText<'a>>) -> Vec<DerivedStep>
-{
-    let workflow = workflow.into();
-    let mut parsed: Vec<ParsedStep> = Vec::new();
-
-    for line in workflow.As_Text().lines()
-    {
-        let trimmed = line.trim();
-
-        if let Some(name) = Step_Named(trimmed)
-            && Is_Nested(line)
-        {
-            parsed.push(ParsedStep { name: name.to_owned(), guard: StepGuard::Unguarded, run: None });
-            continue;
-        }
-
-        let Some(current) = parsed.last_mut()
-        else
-        {
-            continue;
-        };
-
-        if let Some(guard) = trimmed.strip_prefix("if:")
-        {
-            current.guard = Guard_From(guard);
-            continue;
-        }
-
-        if let Some(run) = trimmed.strip_prefix("run:")
-            && current.run.is_none()
-        {
-            current.run = Some(run.trim().to_owned());
-        }
-    }
-
-    return parsed.into_iter().map(Derived_From).collect();
-}
-
-/// Whether a line is nested under something, rather than a key of the document itself.
-///
-/// The discriminator is indentation, and it is needed here and not in [`Derive_Step`]. That
-/// function is asked for one step by name and is indifferent to every other `name:` in the
-/// file; this one collects them all, and a workflow's own `name:` key sits at column zero
-/// looking exactly like a step's. Reading it as one produced a sixteenth step called `gate`
-/// with no `run:`, which then reported as a refusal in a local run -- a step the workflow
-/// does not have, named in the set of steps this host did not execute.
-fn Is_Nested(line: &str) -> bool
-{
-    return line.starts_with(char::is_whitespace);
-}
-
-/// One step mid-read, before its `run:` has been turned into an argv or a refusal.
-struct ParsedStep
-{
-    name: String,
-    guard: StepGuard,
-    run: Option<String>,
-}
-
-/// A read step, with its `run:` resolved through the same [`Argv_Of`] the single-step
-/// derivation uses, so the two cannot disagree about what a derivable command is.
-fn Derived_From(parsed: ParsedStep) -> DerivedStep
-{
-    let run = parsed.run.unwrap_or_default();
-    let argv = Argv_Of(&run, StepName::from(parsed.name.as_str()));
-
-    return DerivedStep { name: parsed.name, guard: parsed.guard, argv };
-}
-
-/// The guard an `if:` line declares, or [`StepGuard::Outside`] when it is not the one
-/// spelling this reader implements.
-///
-/// The subset is deliberately one spelling wide. GitHub's expression language admits
-/// boolean operators, functions and contexts this workspace does not evaluate, and a reader
-/// that accepted more of it than it understood would decide a step's legs by accident.
-fn Guard_From(text: &str) -> StepGuard
-{
-    let trimmed = text.trim();
-
-    let Some(operand) = trimmed.strip_prefix("matrix.os ==")
-    else
-    {
-        return StepGuard::Outside(trimmed.to_owned());
-    };
-
-    let quoted = operand.trim();
-    let Some(host) = quoted.strip_prefix("'").and_then(|rest| return rest.strip_suffix("'"))
-    else
-    {
-        return StepGuard::Outside(trimmed.to_owned());
-    };
-
-    if host.is_empty() || host.contains("'")
-    {
-        return StepGuard::Outside(trimmed.to_owned());
-    }
-
-    return StepGuard::Host(host.to_owned());
-}
 
 /// The trimmed argument of the named step's `run:` line, or `None` if the workflow never
 /// declares that step, or declares it with no `run:` line.
@@ -458,7 +359,7 @@ mod tests
     #[test]
     fn Test_A_Scripted_Step_Should_Be_Refused_Rather_Than_Guessed()
     {
-        for run in Scripted_Step_Run_Lines()
+        for &run in Scripted_Step_Run_Lines()
         {
             let workflow = format!("      - name: Lint\n        run: {run}\n");
 
@@ -474,9 +375,9 @@ mod tests
 
     /// `run:` lines that are scripts rather than a single command, for
     /// [`Test_A_Scripted_Step_Should_Be_Refused_Rather_Than_Guessed`].
-    fn Scripted_Step_Run_Lines() -> [&'static str; 4]
+    fn Scripted_Step_Run_Lines() -> &'static [&'static str]
     {
-        return [
+        return &[
             "cargo clippy && cargo test",
             "cargo test | tee log",
             "cargo test --features \"a b\"",

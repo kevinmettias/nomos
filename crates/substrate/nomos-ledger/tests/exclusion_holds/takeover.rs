@@ -37,19 +37,35 @@ fn Test_An_Item_With_A_Live_Claim_Should_Not_Be_Taken_Over()
 
     let refusal = Take_Over_In(&mut during, "T-1", Claimant("agent-b"))
         .expect_err("a live claim must not be displaced by a takeover");
+
+    Assert_Held_By_A_Live_Claim(&refusal);
+    Assert_Undisturbed_Holder(Standing_Of(&Only_Item(&during)), "agent-a");
+}
+
+/// The refusal a live claim earns: it names the holder, and it says waiting resolves it.
+///
+/// Retryable is the load-bearing half. `HeldBy` alone would be satisfied by a refusal that
+/// told an agent to give up, and waiting is the one remedy that is actually correct here.
+fn Assert_Held_By_A_Live_Claim(refusal: &ClaimRefusal)
+{
     assert!(matches!(refusal, ClaimRefusal::HeldBy { .. }), "{}", refusal.Describe());
     assert!(
         refusal.Is_Retryable(),
         "the lease running out is what resolves this, so waiting is the honest advice"
     );
+}
 
+/// The board as a refused takeover must leave it: the same holder, and no trace of the
+/// attempt.
+///
+/// Displaced and widened are asserted empty rather than ignored, because a takeover that
+/// refused and still recorded itself would leave the board saying somebody was displaced
+/// who never lost the item.
+fn Assert_Undisturbed_Holder(standing: Standing<'_>, holder: &str)
+{
     assert_eq!(
-        Standing_Of(&Only_Item(&during)),
-        Standing {
-            held_by: Some("agent-a"),
-            displaced: Vec::new(),
-            widened: Vec::new(),
-        },
+        standing,
+        Standing { held_by: Some(holder), displaced: Vec::new(), widened: Vec::new() },
         "a takeover displaced a holder who was still working"
     );
 }

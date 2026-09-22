@@ -32,16 +32,18 @@ pub(crate) const GATE_FAILED_EXIT: i32 = 101;
 
 /// The workflow a derived gate step is read out of. Deliberately the real shape, so that
 /// a change to the repository's own gate breaks these tests rather than passing them.
-pub(crate) const WORKFLOW: &str = "name: gate\n\
-                        \n\
-                        jobs:\n\
-                        \x20 gate:\n\
-                        \x20   steps:\n\
-                        \x20     - uses: actions/checkout@v4\n\
-                        \x20     - name: Lint\n\
-                        \x20       run: cargo clippy --workspace --all-targets -- -D warnings\n\
-                        \x20     - name: Test\n\
-                        \x20       run: cargo test --workspace\n";
+pub(crate) const WORKFLOW: &str = concat!(
+    "name: gate\n",
+    "\n",
+    "jobs:\n",
+    "  gate:\n",
+    "    steps:\n",
+    "      - uses: actions/checkout@v4\n",
+    "      - name: Lint\n",
+    "        run: cargo clippy --workspace --all-targets -- -D warnings\n",
+    "      - name: Test\n",
+    "        run: cargo test --workspace\n",
+);
 
 pub(crate) struct FixedClock(i64);
 

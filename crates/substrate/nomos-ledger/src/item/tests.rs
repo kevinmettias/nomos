@@ -325,14 +325,10 @@ fn Test_Replacing_A_Lapsed_Claim_Should_Keep_The_Claim_It_Replaced()
     );
 }
 
-/// The two refusals, which are what keep the method safe standing alone.
-///
 /// A live holder is not displaced — otherwise `takeover` is a way to steal work in
-/// progress, which is worse than the defect it fixes. And an item recording no claim is
-/// not given one: writing a claim over a hole would destroy the evidence that the record
-/// was already missing, which is [`crate::Validate`]'s one remaining corruption.
+/// progress, which is worse than the defect it fixes.
 #[test]
-fn Test_Replacing_Should_Refuse_A_Live_Claim_And_An_Absent_One()
+fn Test_Replacing_Should_Refuse_A_Live_Claim()
 {
     let mut live = Item_With_Id("T-1");
     live.state = ItemState::Claimed;
@@ -348,7 +344,14 @@ fn Test_Replacing_Should_Refuse_A_Live_Claim_And_An_Absent_One()
         "a live holder was displaced"
     );
     assert!(live.displaced.is_empty());
+}
 
+/// An item recording no claim is not given one: writing a claim over a hole would destroy
+/// the evidence that the record was already missing, which is [`crate::Validate`]'s one
+/// remaining corruption.
+#[test]
+fn Test_Replacing_Should_Refuse_An_Item_That_Records_No_Claim()
+{
     let mut hollow = Item_With_Id("T-2");
     hollow.state = ItemState::Claimed;
 

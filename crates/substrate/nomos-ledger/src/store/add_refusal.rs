@@ -44,6 +44,12 @@ pub enum AddRefusal
     /// A published identifier excludes nobody, which is why nothing caught this before:
     /// `Test_A_Record_Should_Exclude_Nobody_But_Its_Own_Writer` reddens on two *open* items
     /// sharing an identifier, and one open item on a spent one is invisible to it.
+    ///
+    /// Each names what to do next, because the two are told apart by the remedy and
+    /// an author who read only "taken" would pick the wrong one half the time.
+    /// Names both acts rather than only the commoner one. "Choose the next free one"
+    /// was the whole of this sentence once, and it is advice that renumbers a record
+    /// that should not move whenever the author meant to amend.
     RecordPublished
     {
         /// The identifier, in the folded form both spellings reach.
@@ -105,6 +111,10 @@ pub enum AddRefusal
     /// Only a path claiming to be a filename is judged. The bare `docs/records/OD-LEDGER-016`
     /// spelling claims no slug and is the other spelling the fold admits, so it is accepted
     /// here as it always was; refusing it would withdraw a spelling this crate documents.
+    ///
+    /// Names the file rather than only saying the spelling is wrong, for the reason
+    /// `Self::RecordPublished` does: an author who has the identifier right and the slug
+    /// wrong needs the slug, and looking it up is the step that produced the mistake.
     AmendmentMisspelled
     {
         /// The identifier, in the folded form both spellings reach.
@@ -123,6 +133,10 @@ pub enum AddRefusal
     /// exit codes differ. This one is the caller's own item to correct and the board is fine;
     /// that one means nobody can use the board until somebody looks at it. Collapsing them is
     /// how "your territory is empty" comes to read as "stop and fetch a person".
+    ///
+    /// The wording [`LedgerError::Invalid`] would have produced, because this arm
+    /// exists to carry that refusal out through a different channel and not to
+    /// rephrase it. An operator who has seen one of these should recognise the other.
     WouldBeInvalid
     {
         /// Every violation the document would carry, not just the first.
@@ -149,36 +163,36 @@ impl AddRefusal
         return match self
         {
             Self::AlreadyPresent { item } => format!("{item} is already on the ledger"),
-            // Each names what to do next, because the two are told apart by the remedy and
-            // an author who read only "taken" would pick the wrong one half the time.
-            // Names both acts rather than only the commoner one. "Choose the next free one"
-            // was the whole of this sentence once, and it is advice that renumbers a record
-            // that should not move whenever the author meant to amend.
             Self::RecordPublished { identifier, file } => format!(
-                "{identifier} is already published as {file}. If this item is a new decision, \
-                 a record identifier is allocated once — choose the next free one. If it \
-                 amends that record, say so with `--amends {file}`, which reserves the file it \
-                 edits"
+                concat!(
+                    "{identifier} is already published as {file}. If this item is a new decision, a ",
+                    "record identifier is allocated once — choose the next free one. If it amends that ",
+                    "record, say so with `--amends {file}`, which reserves the file it edits"
+                ),
+                identifier = identifier, file = file,
             ),
             Self::RecordReserved { identifier, item } => format!(
-                "{identifier} is already reserved by {item}, which is open. Choose another \
-                 identifier, or retire that item if it is not work"
+                concat!(
+                    "{identifier} is already reserved by {item}, which is open. Choose another ",
+                    "identifier, or retire that item if it is not work"
+                ),
+                identifier = identifier, item = item,
             ),
             Self::AmendmentNotPublished { identifier } => format!(
-                "{identifier} is declared as an amendment and no record here carries it. An \
-                 amendment edits a record that exists; reserve a new one with `--territory`"
+                concat!(
+                    "{identifier} is declared as an amendment and no record here carries it. An amendment",
+                    " edits a record that exists; reserve a new one with `--territory`"
+                ),
+                identifier = identifier,
             ),
-            // Names the file rather than only saying the spelling is wrong, for the reason
-            // `Self::RecordPublished` does: an author who has the identifier right and the slug
-            // wrong needs the slug, and looking it up is the step that produced the mistake.
             Self::AmendmentMisspelled { identifier, declared, file } => format!(
-                "{declared} names no file. {identifier} is published as {file}; amend it with \
-                 `--amends {file}`, or with `{identifier}` spelled bare. The reservation would \
-                 have been right either way — the recorded path would not"
+                concat!(
+                    "{declared} names no file. {identifier} is published as {file}; amend it with ",
+                    "`--amends {file}`, or with `{identifier}` spelled bare. The reservation would have ",
+                    "been right either way — the recorded path would not"
+                ),
+                declared = declared, identifier = identifier, file = file,
             ),
-            // The wording [`LedgerError::Invalid`] would have produced, because this arm
-            // exists to carry that refusal out through a different channel and not to
-            // rephrase it. An operator who has seen one of these should recognise the other.
             Self::WouldBeInvalid { violations } => format!("ledger is invalid:\n  {}", violations.join("\n  ")),
             Self::LedgerUnusable { cause } => cause.clone(),
         };
