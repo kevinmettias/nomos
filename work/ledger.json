@@ -88609,16 +88609,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P121-INTEGRATION-PACKAGE-MANIFEST"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-checkrun",
-        "acquired_at": 1790051260,
-        "lease_expires_at": 1790062060
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88636,7 +88632,35 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api-transport",
+          "-p",
+          "nomos-mcp",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "boundaries"
+        ],
+        "exit_code": 0,
+        "output_tail": "ode::AgentExecutionError) -> Self\n   |                   ^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: associated function `From` is never used\n  --> crates\\host\\nomos-api\\src\\workflow\\agent_execution_outcome_response.rs:45:19\n   |\n43 | impl AgentExecutionOutcomeResponse\n   | ---------------------------------- associated function in this implementation\n44 | {\n45 |     pub(crate) fn From(outcome: nomos_agent_executor_claude_code::AgentExecutionOutcome) -> Self\n   |                   ^^^^\n\nwarning: associated function `From` is never used\n  --> crates\\host\\nomos-api\\src\\workflow\\ollama_execution_error_response.rs:26:19\n   |\n24 | impl OllamaExecutionErrorResponse\n   | --------------------------------- associated function in this implementation\n25 | {\n26 |     pub(crate) fn From(error: nomos_model_backend_ollama::AgentExecutionError) -> Self\n   |                   ^^^^\n\nwarning: associated function `From` is never used\n  --> crates\\host\\nomos-api\\src\\workflow\\ollama_execution_outcome_response.rs:15:19\n   |\n13 | impl OllamaExecutionOutcomeResponse\n   | ----------------------------------- associated function in this implementation\n14 | {\n15 |     pub(crate) fn From(outcome: nomos_model_backend_ollama::AgentExecutionOutcome) -> Self\n   |                   ^^^^\n\n   Compiling nomos-api-transport v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-api-transport)\nwarning: `nomos-api` (lib) generated 7 warnings (run `cargo fix --lib -p nomos-api` to apply 3 suggestions)\n   Compiling nomos-mcp v0.1.0 (F:\\repos\\nomos\\crates\\host\\nomos-mcp)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.05s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api_transport-292a102c65554712.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-0a97e9be8e6674b7.exe)\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-d9c5a227392b8f2c.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_mcp-390e69804bd32016.exe)\n",
+        "verified_at": 1790052801,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "fce34115bd28ffc47b506f6aa68e55b02a3f0686"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -90473,10 +90497,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-75-reqlines",
+        "acquired_at": 1790052714,
+        "lease_expires_at": 1790063514
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -90506,6 +90534,264 @@
         "resolution": "File",
         "paths": [
           "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75-pause",
+        "acquired_at": 1790052750,
+        "lease_expires_at": 1790063550
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-FOUR-HOST-RECORDS-FROZE-A-REGISTRY-SIZE-INTO-PROSE-AND-A-SIXTH-OPERATION-MADE-THEM-FALSE",
+      "title": "Four host records state how many operations the transport serves, and admitting the sixth made three of them false",
+      "why": "f0052c39 admitted nomos.check.run, so ServedMethod::REGISTRY and ServedTool::REGISTRY are each six entries and ADMITTED is six names, as OD-HOST-014 decision 2 said they should be. Four records state the old size in prose and three now say something false, measured at that commit. OD-HOST-011 says nomos-api-transport::ServedMethod is a closed enum of four variants and enumerates them. OD-HOST-012 says ServedMethod has four variants and enumerates them, in a section whose argument, that a closed set keeps the repo-tooling verbs off the wire, survives untouched. OD-HOST-013's account of what each crate kept says ServedMethod is the four admitted verbs and that ServedTool is which four tools exist, and in the same two entries it names the dispatch NomosApiService, which is NomosApiDispatch. OD-HOST-017 is the honest case and is included for that reason rather than as a defect: it says five entries today, which was true when written and is dated, so it shows the shape the other three should have had. The counts are incidental to every one of these records' arguments; not one of them turns on how many operations there are, only on the set being closed and on what decides membership. That is what makes this a correction rather than a decision: a record restating a quantity that a test already asserts has minted a second authority for it, and the second authority is the one that goes stale, because nothing renders a record from the code.",
+      "done_when": "No sentence in these four records states a number of served operations that HEAD contradicts. Each corrected sentence names the closed set and what decides membership in it rather than its size, so the same edit does not have to be made again when a seventh operation is admitted, and where a count genuinely carries an argument it is written as a dated measurement the way OD-HOST-017 already writes one. Where a record enumerates the variants, the enumeration either becomes complete at HEAD or is replaced by a reference to the registry that declares them, whichever the surrounding argument needs; a partial list left standing as though complete is the same defect one step smaller. OD-HOST-013's two entries name NomosApiDispatch rather than NomosApiService. Each record's own argument is left intact: OD-HOST-012's closed-set containment reasoning, OD-HOST-011's enum reasoning and OD-HOST-013's what-each-crate-kept division are not rewritten, only the quantities inside them. Each amended record has its version raised and names the item and the commit that made the old number false. The tests that already assert these registries agree are cited by their exact current names so a reader can see which authority is the mechanical one. Both projections are re-rendered per the nomos-spec-change skill, and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md",
+          "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md",
+          "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md",
+          "docs/records/OD-HOST-017-an-interchange-projection-belongs-to-the-service-that-owns-the-judgment-and-every-host-emits-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-WALK-OUTWARD-CARRIES-FIVE-ANSWERS",
+      "title": "A diagnostic carries all five walk-outward answers, and the README sentence saying two are undecided stops being true",
+      "why": "P42-LSP-PROJECTION named five things a diagnostic should be walkable to. OD-HOST-010 built three and named two undecided. Both are now decided: OD-HOST-015 decided a finding reaches its corpus requirement through rule lines an assessment declares, and OD-HOST-016 decided a supporting fact is answered at rule grain from the read trail a run builds. Their two building items produce the answers; nothing yet carries them to an editor, and crates/host/nomos-lsp still holds exactly three walk-outward modules. README.md's nomos-lsp row still ends by saying three of five are answered and two are named undecided in OD-HOST-010, which becomes false the moment this lands. Both building items were deliberately scoped to leave nomos-lsp and that sentence alone, because each would otherwise add a parameter to the same function and edit the same sentence, which is a collision one item should own rather than two.",
+      "done_when": "WalkOutward carries five answers rather than three: the governing rule, the architectural component, the available correction, the supporting facts a rule read, and the corpus requirements a finding bears on. Each new answer is honest about absence in the vocabulary its own record chose, so a rule that structurally reads no fact and a rule whose trail was not recorded are distinguishable from a rule that read nothing, and a requirement answer is empty because nobody declared a line rather than because no rule bears. The two new answers are read from the mechanisms the building items shipped and are not recomputed here, and this crate still performs no judgment of its own. Diagnostics_For takes whatever the two answers need through one parameter rather than two, so a sixth answer does not change its signature again. README.md's nomos-lsp row says five of five are answered and no longer cites two as undecided. cargo test passes for nomos-lsp and nomos-contract-tests and cargo clippy --workspace --all-targets is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-lsp",
+          "tests/contract/surface/nomos-lsp.txt",
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P125-SUPPORTING-FACT-TRAIL",
+        "P125-REQUIREMENT-RULE-LINES"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lsp",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-MATERIALIZER-PERFORMS-A-DECLARED-INTENT",
+      "title": "Nothing performs a materialization intent, so a package can declare a placement and no mechanism can carry it out",
+      "why": "OD-PACKAGE-003 decided that a package declares a materialization intent and never performs the write, and routed atomicity, per-ownership-class conflict handling, staging and rollback to a generic, mechanism-owned materializer consuming an intent whatever package kind declared it. P121-INTEGRATION-PACKAGE-MANIFEST built the declaring half at fd9b99a9: nomos-integration-package parses intents carrying a source, a repository-relative target, OD-PACKAGE-004's ownership class and OD-PACKAGE-005's publication scope, with each record's default for an undeclared one. Nothing consumes one. That crate's own doc states the condition this item meets, that OwnershipClass and PublicationScope live beside the manifest only until a materializer needs them, at which point they move below it under OD-CAPABILITY-002's rule. So the adoption story the reviews asked about stops at a manifest nobody can execute.",
+      "done_when": "A mechanism-owned crate performs a declared materialization intent against a real tree and is named as this repository's own rather than under a platform prefix, per D-138. It refuses to write a UserOwned target under any circumstance, overwrites a GeneratedOwned target unconditionally, and for a Composed target writes only the owned region and refuses when the free region would be lost, each behaviour per OD-PACKAGE-004 and each tested. A write is atomic per target and a failed run leaves the tree as it found it, proved by a test that fails a write midway through a multi-target intent and asserts every target is unchanged. It knows nothing about a crate, a rule, a gate or a peer connection, and nothing in it names a package kind, so a second package kind declaring an intent needs no change here. OwnershipClass, PublicationScope and the intent type move out of nomos-integration-package into a crate below both it and the materializer, that crate re-exports what its own readers need so no caller's spelling changes, and the zone declaration and band table record the move. Publication scope is carried and reported but gates no write, because OD-PACKAGE-005 makes it a property of where an asset may travel rather than of whether it may be written. cargo test passes for the new crate, nomos-integration-package and nomos-contract-tests, and cargo clippy --workspace --all-targets is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-materialization",
+          "crates/packages/nomos-integration-package",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "nomos-architecture.json",
+          "tests/contract/surface/nomos-materialization.txt",
+          "tests/contract/surface/nomos-integration-package.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-materialization",
+          "-p",
+          "nomos-integration-package",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-WHAT-IS-BUILT-IS-A-VERB",
+      "title": "What this build composes is reported by a verb, so a reviewer runs the binary instead of reconstructing a table by hand",
+      "why": "OD-PROJECT-007 decided that what is built is reported by a host verb beside gate plan, derived at run time from the compositions and typed nowhere, and rejected a render profile, a committed projection and a second owned README region on each one's own governing criterion. It measured the sources at 8338c6ec: fourteen contracts, seventeen offers of twenty exported, seventy-one rules, three allowlists, five served methods of thirty handlers, nineteen profiles, sixty-eight README rows, thirty-nine assessments in nine of sixty-one families, and 324 requirements nobody has looked at. Two external reviews have each rebuilt that table by hand and the second asked that it come from Nomos. Nothing reports it today, and the verb the record decided on does not exist.",
+      "done_when": "A verb beside gate plan reports what this build composes, derived at run time from the capability registry's declarations and offers with their guarantees, the rule descriptors, each package crate's known-providers allowlist, the served-method registry and the requirement-trace registry read over the root it is given. It types no list of its own, so a capability or rule added anywhere appears without editing this verb, and a test proves that by asserting the verb's counts against the compositions rather than against literals. It has two halves and labels them: what the binary composes, true wherever it runs and needing no tree, and what a given root answers, which needs one. A row is built, declared and unobserved, partial, or unassessed, each with the source that witnesses it, and not built is not a word the verb can print, because absence of a composition is not evidence of absence per OD-COMPLETENESS-001. On a runner with no corpus every build-time row is unchanged and every requirement-family row reports what is committed and names the rest uncounted rather than zero. Output is line-oriented like gate plan's. cargo test passes for nomos-gate-orchestration, nomos-cli and nomos-contract-tests, and cargo clippy --workspace --all-targets is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/status.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/status",
+          "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
+          "crates/host/nomos-cli/src/gate.rs",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-A-RULE-THAT-NEEDS-A-METRIC-FACT",
+      "title": "The first metric capability is picked by a rule that cannot reach its verdict without one, which is the trigger OD-ROADMAP-004 named",
+      "why": "OD-ROADMAP-004 placed MET on the near-term tier as fact-producing and MET-COMP on the deferred tier as consuming, and named the trigger for building the first metric capability: a rule whose own subject needs a metric fact to reach a verdict it cannot reach at Syntactic. Nothing under crates/ names a metric descriptor today. The record is explicit that neither MET requirement is built until that trigger fires, so building a capability first would be the unmotivated choice OD-ANALYSIS-007 spent two versions refusing for program semantics. This item fires the trigger honestly rather than waiving it: the workspace already judges function size by counting lines, which is a syntactic proxy that a long flat function passes and a short deeply-branching one also passes, and a rule judging a real complexity measure against a declared policy limit is a verdict no syntactic reading reaches.",
+      "done_when": "A capability contract, one real provider of it, and one rule that reads it are built together, and the rule reaches a verdict that the existing line-counting rule demonstrably cannot: a fixture holds a function that passes the line-count rule and fails the new one, and another that fails the line count and passes the new one, so neither rule subsumes the other. The capability's payload carries what MET-006 requires of a descriptor, quoted in the contract's own doc, and at minimum the unit, the subject kind, the directionality and whether the measure is aggregable, so a consumer cannot blend it beyond its declared semantics per MET-007. The fact's guarantee states its FactVariant honestly against what the provider actually resolved, and the rule states its own Requirement floor rather than accepting whatever is offered. The rule's limit is read from the repository's declared policy rather than compiled in, per OD-RULES-011, and a repository declaring none is reported as undeclared rather than judged against a default nobody chose. The rule is composed into the real check run and into the gate registry, both lists, so it judges this workspace and its findings are explainable. cargo test passes for the new crates, nomos-rules, nomos-check-orchestration, nomos-gate-orchestration and nomos-contract-tests, and cargo clippy --workspace --all-targets is clean.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-complexity",
+          "crates/languages/nomos-lang-rust-complexity",
+          "crates/rules/nomos-rules",
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "nomos-architecture.json",
+          "tests/contract/surface/nomos-rules.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-WHETHER-THE-DEFERRED-TIER-STILL-HOLDS",
+      "title": "ARC-ROADMAP-001 deferred architecture and feature intelligence when the near-term tier was mostly unbuilt, and it is now mostly built",
+      "why": "ARC-ROADMAP-001 drew a two-tier boundary and put architecture discovery and inference, feature topology, placement analysis, runtime and debug intelligence, test intelligence, Atlas and the rich clients on the deferred side, on the ground that pulling them forward would starve the substrate they consume. That was measured when the near-term tier was substantially unbuilt. Since then the near-term list has largely landed: the capability system, two and then more independent providers, deterministic rules, applicability and coverage, first-class gates with policy, baselines and tolerances, corrections, a workflow execution increment, an application-service boundary with CLI, API, MCP and LSP projections, and model and agent infrastructure. A person has asked for the deferred tier to be built. The boundary is a governing record, so building against it without reopening it would be a session overriding an architecture decision by doing the work, which is the move this repository refuses everywhere else. What has not been checked is whether the condition the deferral rested on still obtains.",
+      "done_when": "A registered governing record re-measures ARC-ROADMAP-001's near-term tier item by item at a named revision, reporting for each whether it is built, partial or absent with the evidence, and states whether the condition the deferral rested on, that the substrate the deferred systems consume is not yet production-grade, still holds. It decides one of three: the boundary stands unchanged, the boundary moves and names which deferred items become near-term and in what order, or the boundary is replaced by a per-item condition. Where it moves an item it names the substrate fact that item would consume and whether anything produces it, so a newly near-term item is not scheduled against a fact nobody makes, which is the failure OD-RULES-024 recorded for architecture drift. It amends ARC-ROADMAP-001 rather than standing beside it as a second sequencing authority, and it schedules no implementation. Both required projections are re-rendered from the record set the commit publishes and nomos spec freshness with both --require flags exits 0 in that tree.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md"
         ],
         "patterns": []
       },
