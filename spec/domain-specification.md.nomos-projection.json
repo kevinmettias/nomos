@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:689beeddf084675364570e4669203985935fd990a0967ebe85c865e7a3f37fd9",
-  "inputs_digest": "sha256:15db194e6b393903399ad2ff53f72223fcfaae825c8e237f06fd52fb8060ce3f",
+  "content_digest": "sha256:0e2b6ed6c7442b4ce2fa18e39a6fb79f342ee87cba3189ffa0eb3405b67f3bca",
+  "inputs_digest": "sha256:9698c1040d121d55633e4a769de4cac196ea66514971fa6c68e19a73ae968899",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2410
+      2414
     ],
     [
       "Source blocks",
-      8731
+      8745
     ]
   ],
   "inputs": [
@@ -983,7 +983,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored",
-      "hash": "sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc"
+      "hash": "sha256:bba6e6b5f62b007c956218eebf7481b6890c759f30131be10fc545c564ccf868"
     },
     {
       "content": "documents",
@@ -9914,6 +9914,26 @@
       "content": "headings",
       "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#20",
       "hash": "sha256:af38d383b4c8b0b26e95bbb7d192fa44e916fcc52469fc4edb4ff47026dbf531"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#22",
+      "hash": "sha256:5cde04dd05328b5f0b8eed8237213fb7b856b5acb28bbc26ae844a38abd73c30"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#24",
+      "hash": "sha256:fe6b8181ded6e9a54ba0d4d6a3fc438f6921c415e0ce20fe25ef4e68110fe7c5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#27",
+      "hash": "sha256:79af9ce8096c037e82b9e6d735e6caee9d6a3b7f35222acb58276285aaed745b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#31",
+      "hash": "sha256:7c3ee75c016ad35944c283528873b3c02c158788f4fcd9fd2815d8f05afdff63"
     },
     {
       "content": "headings",
@@ -44559,6 +44579,76 @@
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#21",
       "hash": "sha256:e98f99ea2475cc1541ee8bb8ed12af0d4e33b42f8137c0552a95e3478904375f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#22",
+      "hash": "sha256:1288a87ba1e45c743dc9354eea4dcb1bc6759d9763e62c37ad0a14578691c36a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#23",
+      "hash": "sha256:1835c16425e59a8f8c421d129e81ab2759ce541fbef96e2125cf50d1a152386b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#24",
+      "hash": "sha256:8a1f64f2f25048a02b74220dac0a038766c2b805c9bc809def51b3a5b69edf34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#25",
+      "hash": "sha256:ba501320a2b2e20f28431f8210913922b475f4b2491a4485272bc56db9b854a9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#26",
+      "hash": "sha256:36c1575806839c121dc672ecd7f5c6b7d5d40ae91f830fc7a08134ec031e0faa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#27",
+      "hash": "sha256:2f80fba18514b12f6ac170b7a2baa60bb09d4c91c259a71e4073ed565f78ba40"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#28",
+      "hash": "sha256:641f2f25eee921ea95c24d8c4744eaf975907665d4897e520e8c7e42bc934f46"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#29",
+      "hash": "sha256:1ac233e92706012bbdcc0db594308a3d831d15cfa50120bfd42a5d0242c2aa80"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#30",
+      "hash": "sha256:db7f1b00aa8b68dd113a07acc06a885869a1adcea8cb944178f863fc55ab667b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#31",
+      "hash": "sha256:d23de6eb184835e2bd39af8985f6aceccce31e3ae8149e8f892dfaf683b85843"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#32",
+      "hash": "sha256:259b59449c5ade48222bb102d00551eaf184bd459588dc44836304edbae8b2c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#33",
+      "hash": "sha256:24e6a3ca3bfb5f587ec3eb8c80fb371456e77d5cd1d6f1dae34abfbe0633d34b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#34",
+      "hash": "sha256:eed398b2c41570b674e990503fb33f55614e288e1b0cd1a61f5cb6259a699a41"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md#35",
+      "hash": "sha256:b4aa14803d4d2379a4c4cf8edb23f6668b602126da30ce1a0886aa1cb23e03f7"
     },
     {
       "content": "blocks",
