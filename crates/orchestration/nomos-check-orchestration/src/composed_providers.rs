@@ -121,6 +121,21 @@ pub type WorkspacePolicyProvider<Fs> = fn(&Path, &Context, &Fs) -> Option<Materi
 /// at each of the three sites that have one.
 pub type WorkspaceFactProvider<Launcher, Env> = fn(&Path, &Context, &Launcher, &Env) -> Result<SubjectFact, String>;
 
+/// A whole-project provider read through an environment alone, answering exactly one fact.
+///
+/// `nomos-lang-rust-compiler`'s granularity, and the reason it is neither
+/// [`WorkspacePolicyProvider`] nor [`WorkspaceFactProvider`]: it launches no subprocess, so
+/// it needs no launcher, and it reads the real filesystem through a compiler frontend rather
+/// than through a [`FileSystem`] port, so there is no port for one to be handed. What it does
+/// need is the [`Environment`] `OD-HOST-001` says a composition root chooses -- the working
+/// directory its own path filtering is resolved against.
+///
+/// A refusal *is* reported, as the `ProviderUnavailable` finding the service builds, so the
+/// error has to survive the call; it survives as its rendered text for the same reason
+/// [`WorkspaceFactProvider`]'s does -- rendering into one finding summary is the only thing
+/// this crate has ever done with a provider error.
+pub type ProjectFactProvider<Env> = fn(&Path, &Context, &Env) -> Result<SubjectFact, String>;
+
 /// A whole-workspace provider read through a process launcher, answering one fact per
 /// workspace member.
 ///
@@ -158,6 +173,12 @@ pub struct ComposedProviders<Launcher: ProgramLauncher, Fs: FileSystem, Env: Env
     pub words_policy: WorkspacePolicyProvider<Fs>,
     pub test_material_policy: WorkspacePolicyProvider<Fs>,
     pub requirement_trace: WorkspacePolicyProvider<Fs>,
+    /// The two compiler-backed families, at the one port their granularity requires. Both
+    /// rows name the same provider crate and the same `ra_ap_hir` engine, because
+    /// `nomos_capability::ProviderOffer` pairs a provider with a capability per offer: one
+    /// provider answering two capabilities is two offers, not two names.
+    pub copy_clones: ProjectFactProvider<Env>,
+    pub nested_locks: ProjectFactProvider<Env>,
 }
 
 /// Which composed `nomos.cap.syntax.items` provider `path` belongs to, if any does --

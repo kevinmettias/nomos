@@ -23,6 +23,8 @@ nomos-cap-words-policy = { workspace = true }
 nomos-cap-test-material-policy = { workspace = true }
 nomos-cap-requirement-trace = { workspace = true }
 nomos-cap-review-finding = { workspace = true }
+nomos-cap-rust-copy-clones = { workspace = true }
+nomos-cap-rust-nested-locks = { workspace = true }
 nomos-connector-coderabbit = { workspace = true }
 nomos-capability = { workspace = true }
 nomos-contracts = { workspace = true }
@@ -30,6 +32,7 @@ nomos-lang-rust = { workspace = true }
 nomos-lang-rust-scan = { workspace = true }
 nomos-lang-rust-cargo = { workspace = true }
 nomos-lang-rust-clippy = { workspace = true }
+nomos-lang-rust-compiler = { workspace = true }
 nomos-lang-rust-deny = { workspace = true }
 nomos-lang-go = { workspace = true }
 nomos-lang-go-modules = { workspace = true }

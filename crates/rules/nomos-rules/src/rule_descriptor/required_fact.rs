@@ -28,6 +28,19 @@ pub enum RequiredFact
     ReviewFindings,
     RequirementTrace,
     ArchitectureDeclaration,
+    /// Every `.clone()` call an analyzed crate makes on a value whose type a real compiler
+    /// frontend resolved to already implement `Copy`.
+    ///
+    /// The first of the two families whose provider is a compiler frontend rather than a
+    /// parser, a manifest reader, a subprocess or a declaration file. Nothing here says so
+    /// -- a variant names the capability and not the mechanism behind it -- but it is worth
+    /// knowing that a run demanding either of these two loads `ra_ap_hir` and every crate
+    /// reachable from the analyzed root, which is why a selection that demands neither must
+    /// not pay for them. `OD-ANALYSIS-007`.
+    CopyClones,
+    /// Every `std::sync::Mutex<T>` or `RwLock<T>` an analyzed crate declares whose `T` a
+    /// real compiler frontend resolved to another lock type.
+    NestedLocks,
 }
 
 impl RequiredFact
@@ -52,6 +65,8 @@ impl RequiredFact
             Self::ReviewFindings => nomos_cap_review_finding::Capability(),
             Self::RequirementTrace => nomos_cap_requirement_trace::Capability(),
             Self::ArchitectureDeclaration => nomos_cap_architecture::Capability(),
+            Self::CopyClones => nomos_cap_rust_copy_clones::Capability(),
+            Self::NestedLocks => nomos_cap_rust_nested_locks::Capability(),
         };
     }
 }

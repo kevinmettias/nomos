@@ -303,11 +303,18 @@ mod tests
     /// The real caller this check is for: this workspace's own two real, checked-in
     /// manifests, against this crate's own real, composed registry -- not a synthetic
     /// fixture. `OD-PACKAGE-014` measured, at the time it was written, that nothing ever read
-    /// these; this is the first real read, and the four names below are the real, current
-    /// gap it surfaces -- `nomos.lang.rust.cargo`, `.clippy` and `.deny`, and
+    /// these; this is the first real read, and the five names below are the real, current
+    /// gap it surfaces -- `nomos.lang.rust.cargo`, `.clippy`, `.compiler` and `.deny`, and
     /// `nomos.lang.go.modules`, none of which either manifest lists yet. A future item that
     /// closes that gap by editing `packages/nomos.lang.rust.json` and
     /// `packages/nomos.lang.go.json` will need to shrink this list, not this test's shape.
+    ///
+    /// `nomos.lang.rust.compiler` joined the list at `P123`, and it is a real growth of the
+    /// gap rather than a number nudged to match: that provider was exported and offered by
+    /// nobody until this crate's composition began declaring the two compiler-backed
+    /// capabilities, so before `P123` there was no registered provider for a manifest to have
+    /// left out. Declaring it in `packages/nomos.lang.rust.json` is the same separate work
+    /// the other four are waiting on, and this item does not reserve that file.
     #[test]
     fn Test_Check_Package_Conformance_Against_This_Workspaces_Own_Real_Manifests_And_Registry()
     {
@@ -329,7 +336,7 @@ mod tests
         let names: Vec<&str> = findings.iter().map(|finding| return finding.subject_name.as_str()).collect();
         assert_eq!(
             names,
-            vec!["nomos.lang.go.modules", "nomos.lang.rust.cargo", "nomos.lang.rust.clippy", "nomos.lang.rust.deny"],
+            vec!["nomos.lang.go.modules", "nomos.lang.rust.cargo", "nomos.lang.rust.clippy", "nomos.lang.rust.compiler", "nomos.lang.rust.deny"],
             "{findings:?}"
         );
         assert!(findings.iter().all(|finding| return finding.gate == GateCategory::Advisory), "{findings:?}");

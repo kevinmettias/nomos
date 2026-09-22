@@ -13,9 +13,10 @@ mod dependency_materialization;
 mod policy_materialization;
 
 pub use dependency_materialization::{
-    DependencyMaterialization, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
-    Materialize_Policy, Materialize_Reachability, Materialize_Review, Materialize_Syntax,
-    PolicyMaterialization, ReviewMaterialization, Subprocess, WorkspaceReading,
+    CompilerMaterialization, DependencyMaterialization, LintMaterialization, Materialize_Compiler_Family,
+    Materialize_Dependencies, Materialize_Lint, Materialize_Policy, Materialize_Reachability,
+    Materialize_Review, Materialize_Syntax, PolicyMaterialization, ProjectReading, ReviewMaterialization,
+    Subprocess, WorkspaceReading,
 };
 pub use policy_materialization::{Materialize_Policy_Fact, PolicyReading};
 

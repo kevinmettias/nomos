@@ -3,11 +3,9 @@
 use crate::CompilerError;
 use crate::Discover_Nested_Locks;
 use crate::guarantee::PROVIDER;
-use crate::nested_lock_contract::{Capability, Payload_Schema, CONTRACT_VERSION};
+use nomos_cap_rust_nested_locks::{Capability, Encode_Payload, NestedLockPayload, Payload_Schema, CONTRACT_VERSION};
 use crate::nested_lock_guarantee::Declared_Guarantee;
 use nomos_platform::Environment;
-use crate::payload::Encode_Nested_Lock_Payload;
-use crate::payload::nested_lock_payload::NestedLockPayload;
 use crate::provider::FactContext;
 use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_contracts::{EvidenceClass, Guarantee, ProviderId, SubjectId};
@@ -39,7 +37,7 @@ pub fn Materialize_Nested_Locks<Env: Environment>(root: &Path, context: FactCont
     let payload = NestedLockPayload { findings };
     let subject = nomos_model::Subject_Of_Path(&root.to_string_lossy());
     let guarantee = Declared_Guarantee();
-    let payload_bytes = Encode_Nested_Lock_Payload(&payload);
+    let payload_bytes = Encode_Payload(&payload);
     let key = Compute_Fact_Key(subject, guarantee, context);
     let fact = MaterializedFact {
         identity: key.At(context.generation),
@@ -91,7 +89,7 @@ mod tests
         assert_eq!(fact.Key().guarantee, GuaranteeDigest::Of(&Declared_Guarantee()));
         assert_eq!(fact.payload.schema, Payload_Schema());
 
-        let decoded = crate::payload::Parse_Nested_Lock_Payload(&fact.payload.bytes).expect("this crate's own encoding");
+        let decoded = nomos_cap_rust_nested_locks::Parse_Payload(&fact.payload.bytes).expect("the contract crate's own encoding");
         assert_eq!(decoded.findings.len(), 1, "{decoded:?}");
     }
 

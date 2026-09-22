@@ -1,14 +1,8 @@
-//! The agreement for this crate's second capability.
+//! The agreement itself.
 //!
-//! Housed inside this provider's own crate rather than under `crates/capabilities/`, the
-//! same choice [`crate::contract`] already made for `nomos.cap.rust.copy_clones`: a
-//! contract lives beside its only provider until a second real party names it. Nothing
-//! outside this crate answers `nomos.cap.rust.nested_locks` yet.
-//!
-//! A separate file from [`crate::contract`] rather than a second set of constants folded
-//! into it: each capability this crate answers gets its own contract, the same one-file-
-//! per-concern split this crate already draws for its fact-production strategy, its
-//! guarantee, and its rule.
+//! Below every party to it: the provider that answers `nomos.cap.rust.nested_locks`
+//! (`nomos-lang-rust-compiler`) and the rule that reads it (`nomos-rules`) both import this
+//! module rather than either one naming the other.
 
 use nomos_capability::CapabilityContract;
 use nomos_contracts::{
@@ -16,13 +10,13 @@ use nomos_contracts::{
     SchemaId,
 };
 
-/// The capability this crate answers.
+/// The capability this crate carries the contract for.
 ///
 /// Named for what a caller gets -- a lock guarding a value that is itself already behind
 /// a lock -- rather than for the mechanism (`ra_ap_hir`) that answers it, the same reason
-/// [`crate::contract::CAPABILITY`] is named for its own answer rather than for the engine
-/// behind it: a second provider answering the same question through a different compiler
-/// frontend must be able to name this capability honestly.
+/// `nomos_cap_rust_copy_clones::CAPABILITY` is named for its own answer rather than for the
+/// engine behind it: a second provider answering the same question through a different
+/// compiler frontend must be able to name this capability honestly.
 pub const CAPABILITY: &str = "nomos.cap.rust.nested_locks";
 
 /// The payload schema every answer to this capability is stamped with.
@@ -38,8 +32,8 @@ pub const CONTRACT_VERSION: ContractVersion = ContractVersion::New(1, 0);
 /// alias, re-export, or generic substitution stands between the syntax and the real type
 /// -- a syntax tree alone (`FactVariant::Syntactic`) sees the name written at the nesting
 /// site, not the type it names, and this capability's own fixture
-/// (`fixtures/nested_lock_sample`) is built specifically so its one real positive case is
-/// invisible without resolving a type alias.
+/// (`nomos-lang-rust-compiler`'s `fixtures/nested_lock_sample`) is built specifically so its
+/// one real positive case is invisible without resolving a type alias.
 ///
 /// Soundness [`Assurance::Sound`] at the ceiling: every finding this capability's real
 /// provider reports names an outer lock whose type argument a real compiler frontend
@@ -48,14 +42,14 @@ pub const CONTRACT_VERSION: ContractVersion = ContractVersion::New(1, 0);
 ///
 /// Completeness [`Assurance::Unknown`]: this ceiling leaves room for a stronger future
 /// provider than today's one real answer honestly claims -- see
-/// [`crate::nested_lock_guarantee::Declared_Guarantee`] for why the one provider that
+/// `nomos_lang_rust_compiler::Nested_Locks_Declared_Guarantee` for why the one provider that
 /// exists today does not claim it either.
 ///
 /// [`IncrementalGranularity::Project`]: resolving one type's generic argument can depend
 /// on any item reachable from it through the crate's own module tree (a type alias
 /// declared anywhere in the crate, an item re-exported from a dependency), so the unit
 /// that must recompute together is the whole crate being analyzed, the same reasoning
-/// [`crate::contract::Ceiling`] already gives for the identical structural reason.
+/// `nomos_cap_rust_copy_clones::Ceiling` already gives for the identical structural reason.
 #[must_use]
 pub const fn Ceiling() -> Guarantee
 {

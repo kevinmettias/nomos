@@ -39,29 +39,29 @@
 //!
 //! # What is here, and what is not
 //!
-//! Each capability's own contract (housed here rather than under `crates/capabilities/`,
-//! the same choice `OD-CAPABILITY-002` already made for `nomos.cap.module.index` — a
-//! contract lives beside its only provider until a second real party names it), its own
-//! guarantee and determinism declarations, the real `ra_ap_hir` analysis, and a rule that
-//! judges what it produces. `crate::reading::Load_Crate` is the one piece both
-//! capabilities share: sysroot discovery and per-crate file filtering, factored out once
-//! rather than solved twice. Composing either rule into a real gate run —
-//! `nomos-check-orchestration::Run`, `nomos-rules::DESCRIPTORS` — is those crates' own
-//! territory, the same follow-up split `nomos_lang_rust_deny`'s own capability-and-
-//! provider commits left for a third, separate change to draw.
+//! The real `ra_ap_hir` analysis, each capability's own guarantee and determinism
+//! declaration, and the fact each analysis produces. `crate::reading::Load_Crate` is the one
+//! piece both capabilities share: sysroot discovery and per-crate file filtering, factored
+//! out once rather than solved twice.
+//!
+//! What is **not** here any more is either capability's contract or either rule. Both
+//! contracts lived here while this provider was each capability's only party, which
+//! `OD-CAPABILITY-002` licenses; `OD-ANALYSIS-007` version 2 decided the second party that
+//! ends that arrangement is a `nomos-rules` descriptor naming the capability -- because this
+//! crate is zoned `Provider` and `Permits` forbids `Rules` from naming `Provider` -- and
+//! that the contracts then move to one crate per capability rather than one for the family.
+//! They are `nomos-cap-rust-copy-clones` and `nomos-cap-rust-nested-locks`, and this crate
+//! offers against both. The two rules moved with them, into `nomos-rules`, where every other
+//! composed rule is written. What that leaves here is a crate that declares no contract and
+//! judges nothing, which is exactly the criterion `OD-CAPABILITY-015` settles the zone on:
+//! still `Provider`.
 
 #![forbid(unsafe_code)]
 
-mod check;
 mod clone_on_copy_fact_production;
-mod contract;
 #[path = "fact_context.rs"]
 mod provider;
 mod guarantee;
-#[path = "nested_lock/check.rs"]
-mod nested_lock_check;
-#[path = "nested_lock/contract.rs"]
-mod nested_lock_contract;
 #[path = "nested_lock/fact_context.rs"]
 mod nested_lock_fact_context;
 #[path = "nested_lock/nested_lock_fact_production.rs"]
@@ -70,28 +70,13 @@ mod nested_lock_fact_production;
 mod nested_lock_guarantee;
 #[path = "nested_lock/reading.rs"]
 mod nested_lock_reading;
-mod payload;
 mod reading;
 
-pub use check::{Check_Copy_Clones, COPY_CLONES};
 pub use clone_on_copy_fact_production::CloneOnCopyFactProduction;
-pub use contract::{Capability, Capability_Contract, Ceiling, Payload_Schema, CAPABILITY, CONTRACT_VERSION, SCHEMA};
 pub use guarantee::{Declared_Guarantee, Provider_Offer, PROVIDER};
-pub use nested_lock_check::{Check_Nested_Locks, NESTED_LOCKS};
-pub use nested_lock_contract::{
-    Capability as Nested_Locks_Capability, Capability_Contract as Nested_Locks_Capability_Contract, Ceiling as Nested_Locks_Ceiling,
-    Payload_Schema as Nested_Locks_Payload_Schema, CAPABILITY as NESTED_LOCKS_CAPABILITY, CONTRACT_VERSION as NESTED_LOCKS_CONTRACT_VERSION,
-    SCHEMA as NESTED_LOCKS_SCHEMA,
-};
 pub use nested_lock_fact_context::{Materialize_Nested_Locks, NestedLockFact};
 pub use nested_lock_fact_production::NestedLockFactProduction;
 pub use nested_lock_guarantee::{Declared_Guarantee as Nested_Locks_Declared_Guarantee, Provider_Offer as Nested_Locks_Provider_Offer};
 pub use nested_lock_reading::Discover_Nested_Locks;
-pub use payload::clone_on_copy_payload::CloneOnCopyPayload;
-pub use payload::cloned_copy_type::ClonedCopyType;
-pub use payload::nested_lock_finding::NestedLockFinding;
-pub use payload::nested_lock_payload::NestedLockPayload;
-pub use payload::refusal::Refusal;
-pub use payload::{Encode_Nested_Lock_Payload, Encode_Payload, Parse_Nested_Lock_Payload, Parse_Payload};
 pub use provider::{CloneOnCopyFact, FactContext, Materialize_Crate};
 pub use reading::CompilerError;

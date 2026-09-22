@@ -11,16 +11,25 @@
 //! statements beside the three that return a value made one run of ten structurally identical
 //! statements, which this file's own intrafile-duplication rule reads as one concept written
 //! ten times -- which it was.
+//!
+//! The two compiler-backed families are that same shape again over a provider that runs a
+//! compiler frontend in-process, so they are driven from [`Compiler_Sections`] against the
+//! two declared rows [`COPY_CLONES_FAMILY`] and [`NESTED_LOCKS_FAMILY`]. They are the one
+//! pair whose demand gate a reader should not treat as an optimization: their provider loads
+//! the whole resolved crate graph of the tree under check together with a real sysroot, so a
+//! selection declaring neither family is the difference between a run that links a compiler
+//! and one that does not.
 
 use nomos_contracts::RuleId;
 use nomos_platform::{Environment, FileSystem, ProgramLauncher};
 use nomos_rules::{RequiredFact, SourceFile};
 
-use crate::composed_providers::WorkspacePolicyProvider;
+use crate::composed_providers::{ProjectFactProvider, WorkspacePolicyProvider};
 use crate::facts::{
-    DependencyMaterialization, LintMaterialization, Materialize_Dependencies, Materialize_Lint,
-    Materialize_Policy, Materialize_Policy_Fact, Materialize_Reachability, Materialize_Review,
-    PolicyMaterialization, PolicyReading, ReviewMaterialization, Subprocess, WorkspaceReading,
+    CompilerMaterialization, DependencyMaterialization, LintMaterialization, Materialize_Compiler_Family,
+    Materialize_Dependencies, Materialize_Lint, Materialize_Policy, Materialize_Policy_Fact,
+    Materialize_Reachability, Materialize_Review, PolicyMaterialization, PolicyReading, ProjectReading,
+    ReviewMaterialization, Subprocess, WorkspaceReading,
 };
 
 use super::{CapabilityMaterialization, Is_Rule_Selected, MaterializationEnvironment, MaterializedCapability};
@@ -92,7 +101,93 @@ pub(super) fn Materialize_Capabilities<Launcher: ProgramLauncher, Fs: FileSystem
 
     let review = Materialization_Tracking(env, changed, RequiredFact::ReviewFindings, |_env| return Materialize_Review_Section(demanded));
 
-    return Capability_Materialization_Of(dependencies, lint, policy, review);
+    let compiler = Compiler_Sections(env, demanded, changed);
+
+    return Capability_Materialization_Of(Produced { dependencies, lint, policy, review, compiler });
+}
+
+/// The two compiler-backed sections, run through the same [`Materialization_Tracking`]
+/// wrapper every other section is, and gathered into one value so
+/// [`Materialize_Capabilities`] names one step rather than two more statements and
+/// [`Capability_Materialization_Of`] stays within this crate's own parameter-count limit.
+fn Compiler_Sections<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
+    demanded: &[RequiredFact],
+    changed: &mut Vec<RequiredFact>,
+) -> CompilerSections
+{
+    let copy_clones = Materialization_Tracking(env, changed, COPY_CLONES_FAMILY.family, |env| {
+        let provider = env.providers.copy_clones;
+        return Materialize_Compiler_Section(env, demanded, COPY_CLONES_FAMILY, provider);
+    });
+    let nested_locks = Materialization_Tracking(env, changed, NESTED_LOCKS_FAMILY.family, |env| {
+        let provider = env.providers.nested_locks;
+        return Materialize_Compiler_Section(env, demanded, NESTED_LOCKS_FAMILY, provider);
+    });
+
+    return CompilerSections { copy_clones, nested_locks };
+}
+
+/// One compiler-backed family as a declared row: which family a selection demands to reach
+/// it, and which rule a refusal to materialize it is reported under.
+///
+/// This is what `OD-ROADMAP-003`'s surviving constraint requires a materialization section to
+/// be. Both rows below are `const`: neither reads the store, a cost model, a clock, or
+/// whether this family was already materialized. The sentence that would break it --
+/// *materialize this family unless the store already holds it*, or *unless it would cost more
+/// than it is worth* -- has no place to be written here, and if one is ever wanted,
+/// `OD-RULES-009` is where it has to be argued. Demand is still decided by
+/// [`Demanded_Families`] reading `nomos_rules::DESCRIPTORS`, and currency still only decides
+/// whether the *write* of an answer the provider has already produced is redundant.
+struct CompilerFamily
+{
+    /// The family a selected descriptor must declare for this section to run at all.
+    family: RequiredFact,
+    /// The rule a `ProviderUnavailable` finding is attributed to. Two families, two rules,
+    /// and a finding carrying the wrong one would be attributed to a rule that never asked.
+    rule: &'static str,
+}
+
+/// The `nomos.cap.rust.copy_clones` row.
+const COPY_CLONES_FAMILY: CompilerFamily = CompilerFamily { family: RequiredFact::CopyClones, rule: nomos_rules::COPY_CLONES };
+
+/// The `nomos.cap.rust.nested_locks` row.
+const NESTED_LOCKS_FAMILY: CompilerFamily = CompilerFamily { family: RequiredFact::NestedLocks, rule: nomos_rules::NESTED_LOCKS };
+
+/// One compiler-backed family: [`Materialize_Compiler_Family`] through the composed provider
+/// when `demanded` names it, an empty result otherwise.
+///
+/// The early return is the whole of this item's economic claim, and it is worth stating
+/// plainly because nothing downstream can distinguish it from a clean answer: the provider
+/// behind both rows loads the project rooted at the tree under check through `ra_ap_hir`,
+/// every crate its resolved graph reaches and a real sysroot besides. A run whose selection
+/// declares neither family never reaches this call, so it never loads any of that -- proven
+/// by `demand_tests`' own counting provider rather than inferred from this branch.
+fn Materialize_Compiler_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
+    demanded: &[RequiredFact],
+    row: CompilerFamily,
+    provider: ProjectFactProvider<Env>,
+) -> CompilerMaterialization
+{
+    if !demanded.contains(&row.family)
+    {
+        return CompilerMaterialization { sources: Vec::new(), findings: Vec::new() };
+    }
+
+    return Materialize_Compiler_Family(
+        ProjectReading { root: env.root, context: env.context, store: env.store, environment: env.environment },
+        provider,
+        row.rule,
+    );
+}
+
+/// What the two compiler-backed sections produced, named rather than left as a positional
+/// pair -- the same reason every `*Materialization` one layer down is named.
+struct CompilerSections
+{
+    copy_clones: CompilerMaterialization,
+    nested_locks: CompilerMaterialization,
 }
 
 /// The fact families the selected rules declare they need.
@@ -309,7 +404,9 @@ fn Policy_Provider_For<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environme
         | RequiredFact::LintDiagnostics
         | RequiredFact::DependencyPolicy
         | RequiredFact::Reachability
-        | RequiredFact::ReviewFindings => None,
+        | RequiredFact::ReviewFindings
+        | RequiredFact::CopyClones
+        | RequiredFact::NestedLocks => None,
     };
 }
 
@@ -370,21 +467,31 @@ fn Materialize_Review_Section(demanded: &[RequiredFact]) -> ReviewMaterializatio
     return ReviewMaterialization { sources: Vec::new(), findings: Vec::new() };
 }
 
-/// The assembly section: what the three source-and-finding materializations produced,
-/// gathered into one [`CapabilityMaterialization`], each pair kept together as the
-/// [`MaterializedCapability`] it already was one layer down.
-fn Capability_Materialization_Of(
+/// Everything the sections above produced, grouped so [`Capability_Materialization_Of`]
+/// takes one value rather than six and stays within this crate's own parameter-count limit.
+struct Produced
+{
     dependencies: DependencyMaterialization,
     lint: LintMaterialization,
     policy: PolicyMaterialization,
     review: ReviewMaterialization,
-) -> CapabilityMaterialization
+    compiler: CompilerSections,
+}
+
+/// The assembly section: what the source-and-finding materializations produced, gathered into
+/// one [`CapabilityMaterialization`], each pair kept together as the
+/// [`MaterializedCapability`] it already was one layer down.
+fn Capability_Materialization_Of(produced: Produced) -> CapabilityMaterialization
 {
+    let Produced { dependencies, lint, policy, review, compiler } = produced;
+
     return CapabilityMaterialization {
         dependency: MaterializedCapability { sources: dependencies.sources, findings: dependencies.findings },
         lint: MaterializedCapability { sources: lint.sources, findings: lint.findings },
         policy: MaterializedCapability { sources: policy.sources, findings: policy.findings },
         review: MaterializedCapability { sources: review.sources, findings: review.findings },
+        copy_clones: MaterializedCapability { sources: compiler.copy_clones.sources, findings: compiler.copy_clones.findings },
+        nested_locks: MaterializedCapability { sources: compiler.nested_locks.sources, findings: compiler.nested_locks.findings },
     };
 }
 

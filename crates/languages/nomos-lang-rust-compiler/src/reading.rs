@@ -42,7 +42,7 @@
 //! one of the two this crate can name without adding `ra_ap_span` as a direct dependency
 //! only to spell one type.
 
-use crate::payload::cloned_copy_type::ClonedCopyType;
+use nomos_cap_rust_copy_clones::ClonedCopyType;
 use line_index::LineIndex;
 use ra_ap_hir::{EditionedFileId, Semantics};
 use ra_ap_ide_db::RootDatabase;

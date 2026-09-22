@@ -28,7 +28,7 @@
 //! name and compare the resolved item's identity, not its spelling.
 
 use crate::CompilerError;
-use crate::payload::nested_lock_finding::NestedLockFinding;
+use nomos_cap_rust_nested_locks::NestedLockFinding;
 use crate::reading::Load_Crate;
 use nomos_platform::Environment;
 use line_index::LineIndex;

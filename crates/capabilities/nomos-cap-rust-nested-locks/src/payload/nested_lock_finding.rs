@@ -8,10 +8,10 @@
 /// already, itself, behind a lock.
 ///
 /// No resolved type names, the same reasoning
-/// [`crate::payload::cloned_copy_type::ClonedCopyType`] already gives for the identical
-/// shape: nothing this capability promises depends on which two lock types were nested,
-/// only that one was found inside the other -- a location is what lets a caller find the
-/// site, and both types it names are visible there already.
+/// `nomos_cap_rust_copy_clones::ClonedCopyType` already gives for the identical shape:
+/// nothing this capability promises depends on which two lock types were nested, only that
+/// one was found inside the other -- a location is what lets a caller find the site, and
+/// both types it names are visible there already.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct NestedLockFinding
 {

@@ -12,6 +12,11 @@ nomos-contracts = { workspace = true }
 nomos-model = { workspace = true }
 nomos-capability = { workspace = true }
 nomos-analysis = { workspace = true }
+# The two contracts this provider offers against. They used to be modules in this crate,
+# which OD-CAPABILITY-002 licensed while this provider was each capability's only party;
+# OD-ANALYSIS-007 version 2 moved them out the moment a nomos-rules descriptor named either.
+nomos-cap-rust-copy-clones = { workspace = true }
+nomos-cap-rust-nested-locks = { workspace = true }
 # `OD-PLATFORM-002`/`OD-HOST-001`: a relative root resolves against an environment the
 # composition root chose, never against this process's own current directory.
 nomos-platform = { workspace = true }

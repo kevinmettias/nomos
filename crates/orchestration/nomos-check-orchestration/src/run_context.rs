@@ -308,6 +308,11 @@ struct CapabilityMaterialization
     lint: MaterializedCapability,
     policy: MaterializedCapability,
     review: MaterializedCapability,
+    /// The two compiler-backed families. They are slices of their own rather than entries in
+    /// the walked sources for the same reason the four above them are: each is one fact about
+    /// a project, filed under a subject no walked file carries.
+    copy_clones: MaterializedCapability,
+    nested_locks: MaterializedCapability,
 }
 
 /// The sources one capability family materialized, and any finding materializing it already

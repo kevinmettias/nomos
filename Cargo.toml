@@ -223,6 +223,18 @@ members = [
     # parsing and comparison logic into a real, gate-composed rule. OD-TRACE-001.
     "crates/capabilities/nomos-cap-requirement-trace",
 
+    # Capability Contract zone — nomos.cap.rust.copy_clones' contract, on its own. It sat
+    # inside nomos-lang-rust-compiler while that provider was its only party;
+    # OD-ANALYSIS-007 version 2 decided the second party that moves it out is a nomos-rules
+    # descriptor, because the provider is zoned Provider and Permits forbids Rules from
+    # naming Provider. One crate per capability and never one for the family: what this
+    # shares with nested_locks is provider mechanics, not contract shape.
+    "crates/capabilities/nomos-cap-rust-copy-clones",
+
+    # Capability Contract zone — nomos.cap.rust.nested_locks' contract, on its own, for the
+    # identical reason its sibling one row above is on its own. OD-ANALYSIS-007 version 2.
+    "crates/capabilities/nomos-cap-rust-nested-locks",
+
     # Zone: Provider — package manifests. The Rust installable-unit manifest format: PackageId,
     # PackageKind and PKG-007's four version domains, given a real reader that refuses
     # what it cannot resolve. Wraps nomos-package's generic core with RustEdition
@@ -474,6 +486,8 @@ nomos-cap-test-material-policy = { path = "crates/capabilities/nomos-cap-test-ma
 nomos-cap-review-finding = { path = "crates/capabilities/nomos-cap-review-finding" }
 nomos-connector-coderabbit = { path = "crates/connectors/nomos-connector-coderabbit" }
 nomos-cap-requirement-trace = { path = "crates/capabilities/nomos-cap-requirement-trace" }
+nomos-cap-rust-copy-clones = { path = "crates/capabilities/nomos-cap-rust-copy-clones" }
+nomos-cap-rust-nested-locks = { path = "crates/capabilities/nomos-cap-rust-nested-locks" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
 nomos-lang-go = { path = "crates/languages/nomos-lang-go" }
 nomos-lang-csharp = { path = "crates/languages/nomos-lang-csharp" }

@@ -13,10 +13,12 @@ use nomos_analysis::Reader;
 use nomos_contracts::Finding;
 use nomos_rules::{
     SourceFile, DESCRIPTORS, RuleDescriptor,
-    // The six rules of [`Judged_Sources`]' mapping. Every rule identifier this crate used to
-    // name for the sake of *running* a rule is now read off `DESCRIPTORS` at run time; these
-    // six are the residue `OD-RULES-027` measured and licensed.
-    DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, LINT_DIAGNOSTICS, REVIEW_FINDING, WRITE_AUTHORITY,
+    // The eight rules of [`Judged_Sources`]' mapping. Every rule identifier this crate used
+    // to name for the sake of *running* a rule is now read off `DESCRIPTORS` at run time;
+    // these eight are the residue `OD-RULES-027` measured and licensed, plus the two
+    // compiler-backed families `P123` added on the identical grounds.
+    COPY_CLONES, DEPENDENCY_COMPLETENESS, DEPENDENCY_DIRECTION, DEPENDENCY_POLICY, LINT_DIAGNOSTICS, NESTED_LOCKS,
+    REVIEW_FINDING, WRITE_AUTHORITY,
 };
 
 use crate::examined::{FactRead, Reduced};
@@ -158,12 +160,15 @@ struct Judgment
 }
 
 /// The sources `rule` is judged over: a capability family's own materialized slice for the
-/// six rules that read one, and the walked sources for every other rule.
+/// eight rules that read one, and the walked sources for every other rule.
 ///
 /// # Why this mapping is a declaration and not a planner
 ///
 /// `OD-RULES-027` measured the seventy composed entries this function replaced and found
-/// that sixty-two closed over the same walked sources; these six are the whole residue.
+/// that sixty-two closed over the same walked sources; those six were the whole residue, and
+/// `P123` added the two compiler-backed families on the identical grounds -- each is one fact
+/// about the project rooted at the tree under check, filed under a subject no walked file
+/// carries, so there is no walked source either rule could be judged over.
 /// Which slice a rule reads is fixed at the moment that rule is written and is not computed
 /// from anything -- not from what was selected, not from what is already materialized, not
 /// from what the run has done so far. That makes it the same kind of fixed, hand-written
@@ -186,6 +191,8 @@ fn Judged_Sources<'a>(rule: &str, judged: &Judged<'a>) -> &'a [SourceFile]
         LINT_DIAGNOSTICS => &judged.capabilities.lint.sources,
         DEPENDENCY_POLICY => &judged.capabilities.policy.sources,
         REVIEW_FINDING => &judged.capabilities.review.sources,
+        COPY_CLONES => &judged.capabilities.copy_clones.sources,
+        NESTED_LOCKS => &judged.capabilities.nested_locks.sources,
         _ => judged.sources,
     };
 }
@@ -214,6 +221,8 @@ fn Capability_Findings(capabilities: CapabilityMaterialization) -> Vec<Finding>
     findings.extend(capabilities.lint.findings);
     findings.extend(capabilities.policy.findings);
     findings.extend(capabilities.review.findings);
+    findings.extend(capabilities.copy_clones.findings);
+    findings.extend(capabilities.nested_locks.findings);
 
     return findings;
 }

@@ -58,6 +58,8 @@ pub(crate) fn Composed_Providers<Launcher: ProgramLauncher, Fs: FileSystem, Env:
         words_policy: Words_Policy_Fact,
         test_material_policy: Test_Material_Policy_Fact,
         requirement_trace: Requirement_Trace_Fact,
+        copy_clones: Copy_Clones_Fact,
+        nested_locks: Nested_Locks_Fact,
     };
 }
 
@@ -261,6 +263,46 @@ fn Test_Material_Policy_Fact<Fs: FileSystem>(root: &Path, context: &Context, fil
 fn Requirement_Trace_Fact<Fs: FileSystem>(root: &Path, context: &Context, filesystem: &Fs) -> Option<MaterializedFact>
 {
     return Some(nomos_cap_requirement_trace::Materialize_Workspace(root, Requirement_Trace_Production(context), filesystem).fact);
+}
+
+/// The analyzed project's one `nomos.cap.rust.copy_clones` fact, from `ra_ap_hir`.
+///
+/// The path is the literal this capability files under for the same reason
+/// [`Deny_Fact`]'s is: the provider analyzes the project rooted at the path a check was asked
+/// about and states no path of its own, so the caller supplies the one name that is true of
+/// whatever it was handed. The subject is the provider's, not this literal's -- a rule reads
+/// the fact under the identity the provider filed it with.
+fn Copy_Clones_Fact<Env: Environment>(root: &Path, context: &Context, environment: &Env) -> Result<SubjectFact, String>
+{
+    let analyzed = nomos_lang_rust_compiler::Materialize_Crate(root, Compiler_Production(context), environment)
+        .map_err(|error| return error.to_string())?;
+
+    return Ok(SubjectFact { path: "workspace".to_owned(), subject: analyzed.subject, fact: analyzed.fact });
+}
+
+/// The analyzed project's one `nomos.cap.rust.nested_locks` fact, from the same `ra_ap_hir`
+/// engine [`Copy_Clones_Fact`] one row above runs, asked a different question.
+fn Nested_Locks_Fact<Env: Environment>(root: &Path, context: &Context, environment: &Env) -> Result<SubjectFact, String>
+{
+    let analyzed = nomos_lang_rust_compiler::Materialize_Nested_Locks(root, Compiler_Production(context), environment)
+        .map_err(|error| return error.to_string())?;
+
+    return Ok(SubjectFact { path: "workspace".to_owned(), subject: analyzed.subject, fact: analyzed.fact });
+}
+
+/// The reading context both of `nomos_lang_rust_compiler`'s providers take.
+///
+/// One function for two capabilities, not two, for the same reason
+/// [`Repo_Policy_Production`] is one function for seven: the two providers are one crate and
+/// share a single `FactContext` type.
+fn Compiler_Production(context: &Context) -> nomos_lang_rust_compiler::FactContext
+{
+    return nomos_lang_rust_compiler::FactContext {
+        snapshot: context.snapshot,
+        variant: context.variant,
+        configuration: context.configuration,
+        generation: context.generation,
+    };
 }
 
 /// The reading context as `nomos_lang_rust`'s own providers take it -- both the syntax one

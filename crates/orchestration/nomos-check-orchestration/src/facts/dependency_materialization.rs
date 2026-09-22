@@ -16,6 +16,7 @@
 //! `subprocess`. What stays here is the module's own doc, the `DependencyMaterialization`
 //! `dependencies` and its callers both name, and the tests.
 
+mod compiler_materialization;
 mod dependencies;
 mod lint_materialization;
 mod policy_materialization;
@@ -23,6 +24,7 @@ mod review_materialization;
 mod subprocess;
 mod syntax;
 
+pub use compiler_materialization::{CompilerMaterialization, Materialize_Compiler_Family, ProjectReading};
 pub use dependencies::Materialize_Dependencies;
 pub use lint_materialization::{LintMaterialization, Materialize_Lint};
 pub use policy_materialization::{Materialize_Policy, PolicyMaterialization};

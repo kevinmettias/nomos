@@ -31,9 +31,24 @@ use super::{Repository_Root, Source_File, SourceText, Test_Variant};
 /// Excluded from the selection below for the reason `tests::composition`'s own
 /// `Architectural_Rules` already states for the same three: their answers depend on the
 /// ambient state of the real repository at the moment the test runs, and minutes of
-/// subprocess time buys nothing this file is asking about. Every other family is a pure
-/// function over bytes, so the selection derived from this exclusion is wide -- most of
-/// `DESCRIPTORS` -- rather than a handful named by hand.
+/// subprocess time buys nothing this file is asking about. The selection derived from this
+/// exclusion is wide -- most of `DESCRIPTORS` -- rather than a handful named by hand.
+///
+/// # Two selected families are no longer pure functions over bytes
+///
+/// This doc used to say every family but these three was one, and `P123` made that false
+/// rather than merely incomplete. `RequiredFact::CopyClones` and `RequiredFact::NestedLocks`
+/// are answered in-process by `ra_ap_hir`, so they launch no subprocess and this constant --
+/// whose own definition is "runs a subprocess over the whole workspace" -- correctly does not
+/// name them. What they do share with the three named here is the cost and the ambience: each
+/// loads the resolved crate graph of the real repository together with a discovered sysroot,
+/// so every run below pays for two of those. Measured at roughly fifteen seconds per family
+/// per run on the machine that composed them.
+///
+/// Left in the selection deliberately rather than quietly excluded. Widening this constant
+/// would contradict its own name, and narrowing what this file judges is a decision about
+/// what the trail tests are for, which is not `P123`'s to take. The cost is written down here
+/// so the next reader is choosing rather than discovering.
 const SUBPROCESS_FAMILIES: [RequiredFact; 3] = [RequiredFact::DependencyEdges, RequiredFact::LintDiagnostics, RequiredFact::DependencyPolicy];
 
 /// Every composed rule the run below judges: all of them but the ones a subprocess family

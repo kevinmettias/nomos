@@ -1,9 +1,8 @@
 //! The agreement itself.
 //!
-//! Housed inside this provider's own crate rather than under `crates/capabilities/`,
-//! the same choice `OD-CAPABILITY-002` already made for `nomos.cap.module.index`: a
-//! contract lives beside its only provider until a second real party names it. Nothing
-//! outside this crate answers `nomos.cap.rust.copy_clones` yet.
+//! Below every party to it: the provider that answers `nomos.cap.rust.copy_clones`
+//! (`nomos-lang-rust-compiler`) and the rule that reads it (`nomos-rules`) both import this
+//! module rather than either one naming the other.
 
 use nomos_capability::CapabilityContract;
 use nomos_contracts::{
@@ -11,7 +10,7 @@ use nomos_contracts::{
     SchemaId,
 };
 
-/// The capability this crate answers.
+/// The capability this crate carries the contract for.
 ///
 /// Named for what a caller gets -- which `.clone()` calls duplicate a value that was
 /// already cheap to copy -- rather than for the mechanism (`ra_ap_hir`) that answers it,
@@ -40,8 +39,8 @@ pub const CONTRACT_VERSION: ContractVersion = ContractVersion::New(1, 0);
 ///
 /// Completeness [`Assurance::Unknown`]: this ceiling leaves room for a stronger future
 /// provider than today's one real answer honestly claims -- see
-/// [`crate::guarantee::Declared_Guarantee`] for why the one provider that exists today
-/// does not claim it either.
+/// `nomos_lang_rust_compiler::Declared_Guarantee` for why the one provider that exists
+/// today does not claim it either.
 ///
 /// [`IncrementalGranularity::Project`]: resolving one `.clone()` call's receiver type can
 /// depend on any item reachable from it through the crate's own module tree, so the unit

@@ -1,10 +1,8 @@
 //! Turning a real `ra_ap_hir` analysis into the one fact this capability answers.
 
 use crate::CompilerError;
-use crate::contract::{Capability, Payload_Schema, CONTRACT_VERSION};
+use nomos_cap_rust_copy_clones::{Capability, CloneOnCopyPayload, Encode_Payload, Payload_Schema, CONTRACT_VERSION};
 use crate::guarantee::{Declared_Guarantee, PROVIDER};
-use crate::payload::clone_on_copy_payload::CloneOnCopyPayload;
-use crate::payload::Encode_Payload;
 use crate::reading::Discover_Crate;
 use nomos_platform::Environment;
 use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
@@ -88,7 +86,6 @@ fn Compute_Fact_Key(subject: SubjectId, guarantee: Guarantee, context: FactConte
 mod tests
 {
     use super::*;
-    use crate::contract::Payload_Schema;
     use nomos_contracts::Digest128;
 
     #[test]
@@ -101,7 +98,7 @@ mod tests
         assert_eq!(fact.Key().guarantee, GuaranteeDigest::Of(&Declared_Guarantee()));
         assert_eq!(fact.payload.schema, Payload_Schema());
 
-        let decoded = crate::payload::Parse_Payload(&fact.payload.bytes).expect("this crate's own encoding");
+        let decoded = nomos_cap_rust_copy_clones::Parse_Payload(&fact.payload.bytes).expect("the contract crate's own encoding");
         assert_eq!(decoded.findings.len(), 1, "{decoded:?}");
     }
 

@@ -42,6 +42,8 @@ pub fn Registered() -> Result<Registry, RegistryError>
     Declare_Test_Material_Policy_Capability(&mut registry)?;
     Declare_Review_Capability(&mut registry)?;
     Declare_Requirement_Trace_Capability(&mut registry)?;
+    Declare_Copy_Clones_Capability(&mut registry)?;
+    Declare_Nested_Locks_Capability(&mut registry)?;
 
     return Ok(registry);
 }
@@ -298,6 +300,45 @@ fn Declare_Requirement_Trace_Capability(registry: &mut Registry) -> Result<(), R
     return Ok(());
 }
 
+/// A fifteenth capability, one offer against it -- the first compiler-backed evidence this
+/// composition admits.
+///
+/// Declaring and offering name two crates here, the way [`Declare_Review_Capability`] already
+/// does: the contract is `nomos-cap-rust-copy-clones`' and the offer is the provider's. They
+/// used to be one crate, which `OD-CAPABILITY-002` licenses while a capability has a single
+/// provider -- and it still has one. `OD-ANALYSIS-007` version 2 moved the contract out
+/// anyway, for a reason `nomos-cap-review-finding`'s own split did not have: the rule that
+/// reads this capability is `nomos-rules`', and `Permits` forbids `Rules` from naming
+/// `Provider`, so with the contract bundled there was no arrangement in which this capability
+/// could be composed at all.
+///
+/// Worth stating plainly, because it is the one capability here whose wiring a reader should
+/// not assume is free: its provider loads the tree under check through `ra_ap_hir` together
+/// with a real sysroot. Nothing on this line pays that -- a declaration is not a
+/// materialization -- and `crate::run_context::capabilities` gates the production on a
+/// selected rule declaring the family.
+fn Declare_Copy_Clones_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_rust_copy_clones::Capability_Contract())?;
+    registry.Offer(nomos_lang_rust_compiler::Provider_Offer())?;
+
+    return Ok(());
+}
+
+/// A sixteenth capability, one offer against it -- the same provider crate
+/// [`Declare_Copy_Clones_Capability`] names one function up, answering its second question.
+///
+/// Two offers and not two providers: `nomos_capability::ProviderOffer` pairs a provider with
+/// a capability per offer, so one engine answering two capabilities registers twice under one
+/// identity, which is what `nomos.lang.rust.compiler` names.
+fn Declare_Nested_Locks_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_rust_nested_locks::Capability_Contract())?;
+    registry.Offer(nomos_lang_rust_compiler::Nested_Locks_Provider_Offer())?;
+
+    return Ok(());
+}
+
 /// The identity of this run's effective policy.
 ///
 /// # Why the registry is the configuration
@@ -376,14 +417,16 @@ mod tests
     /// How many `Declare` calls [`Registered`]'s own body wires: syntax, dependency,
     /// controlflow, lint, dependency-policy, all six of `OD-RULES-011`'s families --
     /// naming, limits, scripting, goals, words and test-material -- review, requirement
-    /// trace, and the architecture declaration.
-    const DECLARED_CAPABILITY_COUNT: usize = 14;
+    /// trace, the architecture declaration, and the two compiler-backed families,
+    /// `nomos.cap.rust.copy_clones` and `nomos.cap.rust.nested_locks`.
+    const DECLARED_CAPABILITY_COUNT: usize = 16;
 
     /// The composition this crate ships must not be self-contradictory, and it must
-    /// declare exactly the fourteen capabilities [`Registered`]'s own body wires: syntax,
+    /// declare exactly the sixteen capabilities [`Registered`]'s own body wires: syntax,
     /// dependency, controlflow, lint, dependency-policy, all six of `OD-RULES-011`'s
     /// families -- naming, limits, scripting, goals, words and test-material -- review,
-    /// requirement trace, and the architecture declaration.
+    /// requirement trace, the architecture declaration, and the two compiler-backed
+    /// families.
     #[test]
     fn Test_Registered_Should_Declare_Every_Composed_Capability()
     {

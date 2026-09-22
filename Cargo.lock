@@ -1091,6 +1091,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-cap-rust-copy-clones"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+]
+
+[[package]]
+name = "nomos-cap-rust-nested-locks"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+]
+
+[[package]]
 name = "nomos-cap-scripting-policy"
 version = "0.1.0"
 dependencies = [
@@ -1144,6 +1160,8 @@ dependencies = [
  "nomos-cap-naming-policy",
  "nomos-cap-requirement-trace",
  "nomos-cap-review-finding",
+ "nomos-cap-rust-copy-clones",
+ "nomos-cap-rust-nested-locks",
  "nomos-cap-scripting-policy",
  "nomos-cap-syntax",
  "nomos-cap-test-material-policy",
@@ -1157,6 +1175,7 @@ dependencies = [
  "nomos-lang-rust",
  "nomos-lang-rust-cargo",
  "nomos-lang-rust-clippy",
+ "nomos-lang-rust-compiler",
  "nomos-lang-rust-deny",
  "nomos-lang-rust-package",
  "nomos-lang-rust-scan",
@@ -1454,6 +1473,8 @@ version = "0.1.0"
 dependencies = [
  "line-index",
  "nomos-analysis",
+ "nomos-cap-rust-copy-clones",
+ "nomos-cap-rust-nested-locks",
  "nomos-capability",
  "nomos-contracts",
  "nomos-model",
@@ -1670,6 +1691,8 @@ dependencies = [
  "nomos-cap-naming-policy",
  "nomos-cap-requirement-trace",
  "nomos-cap-review-finding",
+ "nomos-cap-rust-copy-clones",
+ "nomos-cap-rust-nested-locks",
  "nomos-cap-scripting-policy",
  "nomos-cap-syntax",
  "nomos-cap-test-material-policy",

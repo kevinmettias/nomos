@@ -294,6 +294,8 @@ pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Descriptor_For(crate::NESTING_DEPTH, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_Nesting_Depth),
     Descriptor_For(crate::CLOSURE_BOUNDS_ARE_MINIMAL, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::TestMaterialPolicy], crate::Check_Closure_Bounds_Are_Minimal),
     Descriptor_For(crate::BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::TestMaterialPolicy], crate::Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths),
+    Descriptor_For(crate::COPY_CLONES, SubjectKind::SourceFacts, &[RequiredFact::CopyClones], crate::Check_Copy_Clones).Citing(crate::COPY_CLONES_CONTRACT_RECORD, crate::COPY_CLONES_CONTRACT_RECORD_VERSION),
+    Descriptor_For(crate::NESTED_LOCKS, SubjectKind::SourceFacts, &[RequiredFact::NestedLocks], crate::Check_Nested_Locks).Citing(crate::NESTED_LOCKS_CONTRACT_RECORD, crate::NESTED_LOCKS_CONTRACT_RECORD_VERSION),
 ];
 
 #[cfg(test)]

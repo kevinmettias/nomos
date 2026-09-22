@@ -1,6 +1,6 @@
 //! What this provider offers, and at what guarantee.
 
-use crate::contract::{Capability, CONTRACT_VERSION};
+use nomos_cap_rust_copy_clones::{Capability, CONTRACT_VERSION};
 use nomos_capability::ProviderOffer;
 use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId};
 
@@ -29,7 +29,7 @@ pub const PROVIDER: &str = "nomos.lang.rust.compiler";
 /// `nomos_lang_rust_deny::guarantee::Declared_Guarantee` already gives for a different
 /// underlying reason.
 ///
-/// [`IncrementalGranularity::Project`]: [`crate::contract::Ceiling`] states why one
+/// [`IncrementalGranularity::Project`]: `nomos_cap_rust_copy_clones::Ceiling` states why one
 /// analyzed crate is the unit that must recompute together.
 #[must_use]
 pub const fn Declared_Guarantee() -> Guarantee
@@ -42,7 +42,7 @@ pub const fn Declared_Guarantee() -> Guarantee
     );
 }
 
-/// This provider's offer against [`crate::contract::Capability_Contract`].
+/// This provider's offer against `nomos_cap_rust_copy_clones::Capability_Contract`.
 #[must_use]
 pub fn Provider_Offer() -> ProviderOffer
 {
@@ -67,7 +67,7 @@ mod tests
     #[test]
     fn Test_The_Ceiling_Should_Satisfy_The_Declared_Guarantee()
     {
-        use crate::contract::Ceiling;
+        use nomos_cap_rust_copy_clones::Ceiling;
 
         assert!(Ceiling().Satisfies(&Declared_Guarantee()));
     }
@@ -75,7 +75,7 @@ mod tests
     #[test]
     fn Test_Provider_Offer_Should_Be_Accepted_Under_The_Capabilitys_Contract()
     {
-        use crate::contract::Capability_Contract;
+        use nomos_cap_rust_copy_clones::Capability_Contract;
         use nomos_capability::Registry;
 
         let mut registry = Registry::New();

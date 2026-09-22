@@ -28,6 +28,7 @@ mod closure_bounds;
 mod code_prefix;
 mod concurrency_text;
 mod constant_scope;
+mod copy_clones;
 mod crosslang;
 mod declaration_scan;
 mod dependency;
@@ -46,6 +47,7 @@ mod lint;
 mod mirror;
 mod guarantee_exerciser;
 mod naming;
+mod nested_locks;
 mod nesting_depth;
 mod orphan_modules;
 mod placement;
@@ -78,6 +80,7 @@ pub use concurrency_text::{
     SEQCST_JUSTIFIED_EXPLICITLY,
 };
 pub use constant_scope::{Check_Constants_Are_The_Exception_To_Function_Scope_Use, CONSTANTS_ARE_THE_EXCEPTION_TO_FUNCTION_SCOPE_USE};
+pub use copy_clones::{Check_Copy_Clones, COPY_CLONES, COPY_CLONES_CONTRACT_RECORD, COPY_CLONES_CONTRACT_RECORD_VERSION};
 pub use crosslang::{
     Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CONTRACT_RECORD, CROSS_LANGUAGE_CONTRACT_RECORD_VERSION,
     CROSS_LANGUAGE_CORRESPONDENCE,
@@ -141,6 +144,7 @@ pub use lifetime_discipline::{
     Check_Lifetimes_Follow_The_Descriptive_Naming_Rule, Check_Static_Bounds_Are_Justified,
     LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, STATIC_BOUNDS_ARE_JUSTIFIED,
 };
+pub use nested_locks::{Check_Nested_Locks, NESTED_LOCKS, NESTED_LOCKS_CONTRACT_RECORD, NESTED_LOCKS_CONTRACT_RECORD_VERSION};
 pub use nesting_depth::{Check_Nesting_Depth, NESTING_DEPTH};
 pub use orphan_modules::{Check_No_Orphan_Modules, NO_ORPHAN_MODULES};
 pub use procedural_macro::{Check_Prefer_Macro_Rules_Over_Procedural_Macros, PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS};

@@ -440,3 +440,26 @@ repository with no committed requirement corpus at all — every repository this
 judges except this one, today — resolves to the identical empty payload as one whose
 corpus fully resolves, the same "absent and clean read alike" shape
 [`Check_Goals_And_Parts_Line_Up`] already has for a repository that declared no goals.
+
+[`Check_Copy_Clones`] is the seventieth rule, and [`Check_Nested_Locks`] the
+seventy-first. Both are relays in [`Check_Dependency_Policy`]'s exact shape, over a kind
+of evidence this crate had never read: `nomos.cap.rust.copy_clones` and
+`nomos.cap.rust.nested_locks` are answered by a real compiler frontend — `ra_ap_hir`,
+rust-analyzer's own semantic-analysis engine — rather than by a parse, a manifest or
+another tool's report, which is what makes "does this receiver's resolved type implement
+`Copy`" and "is this lock's type argument itself a lock past every alias" answerable at
+all. Both were written inside `nomos-lang-rust-compiler` beside the provider and neither
+could ever run there: a rule in a Provider-zone crate is a rule no composition root can
+reach, because [`Is_Permitted`] forbids Rules zone from naming Provider zone.
+`OD-ANALYSIS-007` version 2 settled both halves at once — each contract moves to its own
+crate (`nomos-cap-rust-copy-clones`, `nomos-cap-rust-nested-locks`, never one crate for
+the family) at the moment a descriptor here names its capability, and the rule moves
+here with it.
+
+Their cost is the one thing about them a reader should not assume away. Each family's
+provider loads the whole resolved crate graph of the tree under check together with a
+real sysroot, so a run that demands one pays for a compiler frontend and a run that
+demands neither pays nothing — which is why their descriptors declare
+`RequiredFact::CopyClones` and `RequiredFact::NestedLocks` and nothing else, and why
+`nomos-check-orchestration` gates each family's production on a selected descriptor
+declaring it.

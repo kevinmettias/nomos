@@ -29,6 +29,8 @@
     "nomos-cap-lint": "Capability Contract",
     "nomos-cap-naming-policy": "Capability Contract",
     "nomos-cap-requirement-trace": "Capability Contract",
+    "nomos-cap-rust-copy-clones": "Capability Contract",
+    "nomos-cap-rust-nested-locks": "Capability Contract",
     "nomos-cap-review-finding": "Capability Contract",
     "nomos-cap-scripting-policy": "Capability Contract",
     "nomos-cap-syntax": "Capability Contract",
