@@ -27,7 +27,6 @@ nomos-rules = { workspace = true }
 # Syntax_Requirement`, so registering it would turn a refusal that can be reasoned about
 # here into a runtime event nobody sees.
 nomos-capability = { workspace = true }
-nomos-lang-rust = { workspace = true }
 # The one door a workspace state comes through. Used so that the snapshot, generation,
 # variant and configuration a fact is filed under come from something real rather than
 # from four values invented at the call site — and so that an empty change set is refused
@@ -94,6 +93,16 @@ nomos-workflow-orchestration = { workspace = true }
 nomos-agent-orchestration = { workspace = true }
 
 [dev-dependencies]
+# Nothing this crate ships names this crate. `tests/lang_rust_seam.rs` is its one
+# reader: it asserts `nomos_lang_rust::RUST_EXTENSION` is the value the walk is
+# expected to recognize, then drives the real binary over a file named with it and
+# reads back that one file was examined and materialized a fact. Moved here from
+# `[dependencies]` for the reason `P112-PLACEMENT-HOST` moved `nomos-model`: a
+# dependency only a test target reaches does not ship, and a manifest declaring it as
+# though it did is a wider claim than the fact under it. The walk itself belongs to
+# `nomos-workspace-discovery` since `OD-HOST-008`, and that crate reads this
+# constant rather than restating it.
+nomos-lang-rust = { workspace = true }
 # `check::sources::Read_Entry` and `gate::sources::Read_Entry` hardcode the `"go"`
 # extension as a literal rather than depending on this crate in production code -- see
 # their own doc comments for why. That literal has nothing tying it back to

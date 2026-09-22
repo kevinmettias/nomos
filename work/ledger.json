@@ -88361,7 +88361,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Two defects, both measured while holding it. FIRST, the predicate does not establish the done_when: it names cargo test -p nomos-cli --test lang_go_seam while the one target that reads nomos-lang-rust is tests/lang_rust_seam.rs, so the declared run never compiles the subject of the change. SECOND, the why and the intended comment both repeat a claim that is no longer true. They say check::sources::Read_Entry and gate::sources::Read_Entry hardcode the extension as a literal, copying the sibling comment that nomos-lang-go carries; measured 2026-09-21 at c8d82080, crates/host/nomos-cli/src contains no \"rs\" or \"go\" literal at all, because OD-HOST-008 moved the walk to nomos-workspace-discovery, whose Registered_Extensions reads both provider constants rather than restating them. The finding itself is unchanged and real, and the change was proven in an isolated worktree before this decline: with nomos-lang-rust moved to dev-dependencies, cargo test --no-fail-fast -p nomos-cli --test lang_rust_seam compiled the shipped binary and passed both of its tests. Re-authored as -2 with that predicate and a done_when the predicate establishes."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -88378,9 +88382,18 @@
         "timeout_seconds": 600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "fable-review",
+          "reason": "Releasing the claim so the item can be declined: its predicate cannot establish its own done_when. Declared cargo test -p nomos-cli --test lang_go_seam, and the crate this item moves is read by tests/lang_rust_seam.rs, not by the go seam test, so finishing on it would record verified over a claim the ledger never checked.",
+          "abandoned_at": 1790048684
+        }
+      ],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "fable-review",
+        "declined_at": 1790048684
+      },
       "widened": []
     },
     {
@@ -88803,6 +88816,65 @@
         "timeout_seconds": 1800
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P124-THE-CLI-LINKS-A-LANGUAGE-PROVIDER-ONLY-ITS-TESTS-NAME-2",
+      "title": "The CLI ships a language provider that only one of its tests names",
+      "why": "crates/host/nomos-cli/Cargo.toml declares nomos-lang-rust under [dependencies], and nothing this crate ships names it: measured 2026-09-21 at c8d82080 with a word-boundary search over src and build.rs, the only reader anywhere in the crate is tests/lang_rust_seam.rs. So the shipped binary links a language provider it never calls, and the host's dependency list overstates what the host knows, which is the shape an external review of bc0aaac read as the host layer knowing too much. The precedent is in the same manifest and needs no new reasoning: P112-PLACEMENT-HOST moved nomos-model from [dependencies] to [dev-dependencies] and stated the rule as a dependency only a test target reaches does not ship, and a manifest declaring it as though it did is a wider claim than the fact under it. Three crates already sit under [dev-dependencies] on exactly that ground, nomos-lang-go among them for the sibling language. What the predecessor item got wrong, corrected here: this crate no longer hardcodes the extension literal the seam test was written to guard. OD-HOST-008 moved the walk to nomos-workspace-discovery, whose Registered_Extensions returns nomos_lang_rust::RUST_EXTENSION and nomos_lang_go::GO_EXTENSION rather than restating either, so what lang_rust_seam.rs still proves is the constant's value and an end-to-end walk through the real binary, not agreement with a literal in this crate. That makes the manifest's own nomos-lang-go comment and the module doc of both seam tests stale on the same point, which is a separate finding this item does not fix and does not carry into its own prose.",
+      "done_when": "nomos-lang-rust is declared under [dev-dependencies] in crates/host/nomos-cli/Cargo.toml and no longer under [dependencies], with a comment that names tests/lang_rust_seam.rs as its one reader, states what that test actually proves, cites P112-PLACEMENT-HOST for the placement rule, and does not repeat the stale claim that this crate's own walk hardcodes the extension; cargo test --no-fail-fast -p nomos-cli --test lang_rust_seam passes, which compiles the shipped binary through CARGO_BIN_EXE_nomos and so establishes that the binary still builds with the dependency moved; and no file outside this manifest changes.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "lang_rust_seam"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "--test",
+          "lang_rust_seam"
+        ],
+        "exit_code": 0,
+        "output_tail": " default\n\nwarning: unused import: `std::path::Path`\n --> crates\\orchestration\\nomos-workflow-orchestration\\src\\run.rs:9:5\n  |\n9 | use std::path::Path;\n  |     ^^^^^^^^^^^^^^^\n\nwarning: constant `NO_ROOT` is never used\n  --> crates\\orchestration\\nomos-workflow-orchestration\\src\\run.rs:71:7\n   |\n71 | const NO_ROOT: &str = \"\";\n   |       ^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: `nomos-workflow-orchestration` (lib) generated 3 warnings (run `cargo fix --lib -p nomos-workflow-orchestration` to apply 2 suggestions)\nwarning: unused import: `DispatchConfig`\n  --> crates\\host\\nomos-cli\\src\\agent\\judge_role.rs:13:13\n   |\n13 | use super::{DispatchConfig, ExitCode};\n   |             ^^^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: unused import: `Backend`\n --> crates\\host\\nomos-cli\\src\\agent\\parsing.rs:3:13\n  |\n3 | use super::{Backend, Command};\n  |             ^^^^^^^\n\nwarning: type `Requested_Dispatch` should have an upper camel case name\n   --> crates\\host\\nomos-cli\\src\\agent.rs:125:19\n    |\n125 | pub(super) struct Requested_Dispatch\n    |                   ^^^^^^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `RequestedDispatch`\n    |\n    = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: field `stderr` is never read\n  --> crates\\host\\nomos-cli\\tests\\support\\mod.rs:33:9\n   |\n29 | pub struct Ran\n   |            --- field in this struct\n...\n33 |     pub stderr: String,\n   |         ^^^^^^\n   |\n   = note: `#[warn(dead_code)]` on by default\n\nwarning: `nomos-cli` (bin \"nomos\") generated 3 warnings (run `cargo fix --bin \"nomos\"` to apply 2 suggestions)\nwarning: `nomos-cli` (test \"lang_rust_seam\") generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.16s\n     Running tests\\lang_rust_seam.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\lang_rust_seam-eb276f4edb4622c7.exe)\n",
+        "verified_at": 1790048705,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
