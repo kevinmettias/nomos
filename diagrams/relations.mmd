@@ -264,6 +264,7 @@ graph LR
     od_agent_004 -->|"relates-to"| od_gate_023["OD-GATE-023"]
     od_agent_004 -->|"relates-to"| od_host_001["OD-HOST-001"]
     od_agent_004 -->|"relates-to"| od_platform_002["OD-PLATFORM-002"]
+    od_agent_004 -->|"relates-to"| od_project_004
     od_agent_004 -->|"relates-to"| od_project_007
     od_agent_004 -->|"relates-to"| od_rules_009
     od_analysis_001 -->|"affects"| d_129
@@ -908,6 +909,7 @@ graph LR
     od_host_006 -->|"relates-to"| od_host_012["OD-HOST-012"]
     od_host_006 -->|"relates-to"| od_host_014
     od_host_006 -->|"relates-to"| od_ledger_036
+    od_host_006 -->|"relates-to"| od_project_004
     od_host_007 -->|"affected_by"| od_host_013
     od_host_007 -->|"relates-to"| arc_ecosystem_001
     od_host_007 -->|"relates-to"| arc_roadmap_001
@@ -1427,10 +1429,15 @@ graph LR
     od_project_003 -->|"relates-to"| od_project_002
     od_project_003 -->|"relates-to"| od_project_007
     od_project_004 -->|"relates-to"| arc_ecosystem_001
+    od_project_004 -->|"relates-to"| od_agent_004
+    od_project_004 -->|"relates-to"| od_host_006
     od_project_004 -->|"relates-to"| od_ledger_001
     od_project_004 -->|"relates-to"| od_ledger_036
     od_project_004 -->|"relates-to"| od_package_015
     od_project_004 -->|"relates-to"| od_rules_020
+    od_project_004 -->|"relates-to"| od_rules_024
+    od_project_004 -->|"relates-to"| od_rules_028
+    od_project_004 -->|"relates-to"| od_rules_029
     od_project_005 -->|"relates-to"| od_project_002
     od_project_005 -->|"relates-to"| od_spec_012
     od_project_005 -->|"relates-to"| od_spec_015
@@ -1671,6 +1678,7 @@ graph LR
     od_rules_023 -->|"relates-to"| od_rules_024
     od_rules_023 -->|"relates-to"| od_rules_025
     od_rules_024 -->|"relates-to"| od_gate_002
+    od_rules_024 -->|"relates-to"| od_project_004
     od_rules_024 -->|"relates-to"| od_rules_020
     od_rules_024 -->|"relates-to"| od_rules_023
     od_rules_024 -->|"relates-to"| od_rules_025
@@ -1691,8 +1699,10 @@ graph LR
     od_rules_028 -->|"affects"| od_rules_020
     od_rules_028 -->|"relates-to"| od_host_001
     od_rules_028 -->|"relates-to"| od_platform_002
+    od_rules_028 -->|"relates-to"| od_project_004
     od_rules_028 -->|"relates-to"| od_rules_020
     od_rules_029 -->|"relates-to"| od_gate_026
+    od_rules_029 -->|"relates-to"| od_project_004
     od_rules_029 -->|"relates-to"| od_rules_003
     od_rules_029 -->|"relates-to"| od_rules_011
     od_rules_029 -->|"relates-to"| od_rules_020

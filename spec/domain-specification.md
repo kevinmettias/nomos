@@ -199,7 +199,7 @@ profile: domain-specification
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
-| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md@authored | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md | authored | 20 | 6 | sha256:5f9c67cc4d6f14d07b696b7c2842958e0e79c15eede17749d7e63ce8627f8793 |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md@authored | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md | authored | 49 | 13 | sha256:daec35180df8b99740172e26cadc029a18b33409bc1217492ba7306bf46aa296 |
 | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md@authored | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md | authored | 41 | 11 | sha256:ca481db57e29583ad6541fcf1a098df4a0450fe3a08a0a6b74856756e523ea1d |
 | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md@authored | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md | authored | 31 | 10 | sha256:0e6efa712278eff244251689c8bf8b4e33630f39419eb66ad7e39d563d402a1d |
 | docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md@authored | docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md | authored | 69 | 19 | sha256:516ee83533296746248d7fb3d29523f83972d159c0fec6c294b6d8386ab9baaf |
@@ -1869,7 +1869,14 @@ profile: domain-specification
 | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#10 | authored | 2 | The Decision |
 | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#14 | authored | 2 | What This Does Not Do |
-| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#19 | authored | 2 | Status |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#19 | authored | 2 | Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#21 | authored | 3 | What version 1 decided was never built |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#25 | authored | 3 | What arrived instead, and at what severity |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#33 | authored | 3 | The dev-dependency clause is withdrawn |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#36 | authored | 3 | The directory move is retired |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#39 | authored | 3 | The Specification zone is repository tooling, with a named route out |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#43 | authored | 3 | What version 2 changes, and what it does not |
+| docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#46 | authored | 2 | Status |
 | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#1 | authored | 1 | Whether projection selection gains bounded relation traversal for a scoped context pack |
 | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#2 | authored | 2 | Question |
 | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#5 | authored | 2 | What Was Measured |
@@ -55218,17 +55225,312 @@ test would find. Nothing measured here shows that need existing today.
 
 ### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#19
 
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard · hash: sha256:640c8067cdc4ae66534d0b2fc528d849ebc98a9a6650b3dd6f19142e415dcffc*
+
+## Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#20
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard · hash: sha256:29d9a95350c62a6bb4e0da7b44905459b130d85dc18a9a6a754f47f67042f563*
+
+Checked 2026-09-21, sixteen days after version 1 landed at `4c18388f`. The two injected-edge
+runs below were taken in a detached worktree at `fc941fe2`; every other claim was re-read
+against the tree this amendment commits into.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#21
+
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What version 1 decided was never built · hash: sha256:07e5917f5534e4a3ec614c6bb758e7c158ddb7321c5128b37876f8c2b5b67c3b*
+
+### What version 1 decided was never built
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#22
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What version 1 decided was never built · hash: sha256:54529fc7a567c8c676a6aa5997b604d7340372b15d9dd608b1df71e4eb64d1b3*
+
+`crates/repo-tooling/` does not exist. The four crates sit exactly where version 1 measured
+them: `nomos-ledger` under `crates/substrate/`, `nomos-work-orchestration` and
+`nomos-spec-orchestration` under `crates/orchestration/`, `nomos-surface-provenance` under
+`crates/host/`. `tests/contract/tests/boundaries/graph.rs` holds eight tests and none of them
+names a tooling crate: the vacuity guard, the `nomos-contracts` allowlist, the
+knowledge-workbench exclusion, the zone-and-edge check, two that every declared same-zone edge
+is a real dependency between two members of one zone, one that every write door is real, and
+one that every member declares a band. `P41-REPO-TOOLING-SEPARATION`, the item that produced
+version 1, had a `done_when` ending "No crate moves under this item", is Done on exactly that,
+and no successor was ever authored for the moves or the assertion. Version 1's "What This Does
+Not Do" handed each to "a future item's own territory", and no item took it.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#23
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What version 1 decided was never built · hash: sha256:e57c431f66c9a65057fb71d38469b9ec507cc62803cbab3b92eaf7cd93b56349*
+
+An external review of `bc0aaac` read this record as a built guard. That is the reading this
+amendment exists to correct: a record naming a directory and a test a reader cannot find
+describes an intention, and it has to say which.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#24
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What version 1 decided was never built · hash: sha256:4f791cccd094cf39a9fd7c15fc1f6e7821560ab0df485b279e342024431892c4*
+
+Two of version 1's own citations have also moved under it. The "existing two
+sibling-workspace checks" the fifth assertion was to copy are now one.
+`Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` does not resolve: it was
+retired on 2026-09-10 because this workspace is built on XVPE and naming an `xvpe-` crate
+stopped being an exception, and `graph.rs` carries the tombstone where it stood.
+`Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench` is the one that remains. And the
+dev-dependency population version 1 measured has changed shape, below.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#25
+
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What arrived instead, and at what severity · hash: sha256:4c4455e83d882c24655a3856bd3bd67bd83eb4632209e53f6b849168eabace94*
+
+### What arrived instead, and at what severity
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#26
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What arrived instead, and at what severity · hash: sha256:0d851d647b0c3ca8ce260fdd97245225c2a8f5903b0796bedafcf2534f80a225*
+
+The boundary version 1 wanted a directory to make visible is declared as data at the
+repository root, and two readers judge it.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#27
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What arrived instead, and at what severity · hash: sha256:fc6c9239dcebac14b744f16e2a59d6c3acbc13139c6d873749e40540048bd794*
+
+`nomos-architecture.json` is the declaration `OD-RULES-029` decided is read from the
+repository under check, and `OD-RULES-024` records as built on 2026-09-14:
+`nomos.cap.architecture.declaration`, its contract in
+`crates/capabilities/nomos-cap-architecture`, one provider in `nomos-repo-policy`'s
+`architecture` module reading that file, and no component name or crate name of this
+workspace's surviving in `nomos-rules`. Its `members` place `nomos-ledger`,
+`nomos-work-orchestration` and `nomos-surface-provenance` in `Repo Tooling`, and all seven
+`nomos-spec-*` crates, `nomos-spec-orchestration` included, in `Specification`. Its `permits`
+table admits each of those two zones to exactly two consumers, `Host` and `Verification`, and
+no other zone's row names either. So the edge version 1's assertion was to refuse, a product
+crate depending on a tooling crate, is refused by the declaration for every product zone at
+once; and the family split version 1 measured is healed in the declaration whatever directory
+`nomos-spec-orchestration` sits in.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#28
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What arrived instead, and at what severity · hash: sha256:e2664dc40d9f9f1f29cb71e19082634eb4672c88cf4c98aaddcb181e0037fa10*
+
+The severity was verified by injection rather than read off `OD-RULES-028`. In a detached
+worktree, `nomos-ledger` and `nomos-spec-store` were added to `nomos-model-backend-ollama`'s
+dependency table -- an Agent crate, from version 1's own measured population -- and two readers
+were run over that tree and none over the shared one:
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#29
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What arrived instead, and at what severity · hash: sha256:97fab67a0db22d3e2bd9ba90e4058d425ea8f7d1d5207ae57d584a2972076392*
+
+- `nomos check` over that root reported two findings, `[Advisory] dependency-direction`
+  naming `nomos-model-backend-ollama (Agent) depends on nomos-ledger (Repo Tooling)` and the
+  same sentence for `nomos-spec-store (Specification)`, in a run of 463 findings whose own
+  summary line reports none of which can fail a build, and exited 0. `OD-RULES-028`'s Advisory
+  is still true, and it is now a `GateCategory::Advisory` literal in the rule's `violations`
+  module rather than a table entry.
+- `cargo test -p nomos-contract-tests --test boundaries` over that tree failed:
+  `Test_Dependencies_Should_Run_Strictly_Downward` panicked with
+  `nomos-model-backend-ollama (Agent) depends on nomos-ledger (Repo Tooling).` and the process
+  exited 101. That test reads the same file through `Declared_Architecture`, so `gate.yml`'s
+  Test step, which runs the workspace test suite, and its Boundaries step, which runs the
+  contract crate's, both go red on the edge.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#30
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What arrived instead, and at what severity · hash: sha256:a97155b34823e9f41e45d14df5bc356ab0931d51f834e92b0dd31ad321530977*
+
+The worktree was reset afterwards. Nothing was injected into the shared tree.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#31
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What arrived instead, and at what severity · hash: sha256:909ea117fdaffe87344affa49be9408f41b9adb1ebd1a9fe6466e261b7a7c15b*
+
+**Blocking in effect, Advisory by name.** A product-to-tooling dependency edge cannot merge,
+because the gate fails through its Test and Boundaries steps. What is Advisory is the rule's own
+report of it in `nomos check`, which is the arrangement `OD-RULES-028` recorded for the
+`Backend` zone and which applies to every zone crossing alike, because one rule judges every
+row of `permits`. Whether `dependency-direction` should itself be Blocking is a question about
+that rule's contract for every zone at once, and this record does not decide it for one.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#32
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What arrived instead, and at what severity · hash: sha256:c47ef9ce1daa12a1e167e367b62e11d7c2b724118ecb18e6f64eac6ec1ec11ab*
+
+**Today no product crate crosses either line.** Every manifest under `crates/` outside
+`crates/spec/` and `crates/host/` was read for a `nomos-spec-` dependency: only
+`nomos-spec-orchestration`'s own manifest names a sibling, and neither
+`nomos-check-orchestration` nor `nomos-gate-orchestration`, the crates behind `nomos check` and
+`nomos gate`, names one at all. Outside `crates/host/`, the only dependency edge into a Repo
+Tooling crate is `nomos-work-orchestration` onto `nomos-ledger`, the declared same-zone
+exception. The boundary holds in fact and is guarded by the declaration.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#33
+
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / The dev-dependency clause is withdrawn · hash: sha256:88a7adc2546a31afbd1c7c0336d13b405b90707322c39156a1b6a78707957bbe*
+
+### The dev-dependency clause is withdrawn
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#34
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / The dev-dependency clause is withdrawn · hash: sha256:b2172fbf3223c3f016c4372fc2600b5b12210bad243b998e706a3a055f2bce88*
+
+Version 1 refused to exempt dev-dependencies, on the measurement that three product crates
+named `nomos-ledger` as a dev-dependency only to reach `Territory`, which
+`nomos-scope-verification` gives them. Both readers exempt dev-dependencies by name --
+`Is_Dev_Dependency` in the rule and `Is_Not_Dev` in the contract crate's workspace reader --
+and the population has changed shape under the clause. `nomos-agent-executor-claude-code` and
+`nomos-model-backend-ollama` each now carry
+`Test_The_Ledger_Territory_A_Task_Envelope_Carries_Is_The_Same_Territory_A_Real_Ledger_Claims`,
+which builds a real ledger, saves a real item and claims it, to prove that the scope a
+`TaskEnvelope` carries is the shape the ledger's exclusion model claims and not merely the same
+type name. That dev-dependency is the seam test's subject, and the substrate primitive cannot
+stand in for it. `nomos-workflow-orchestration`'s own test module is the one site where version
+1's finding still holds -- it imports `nomos_ledger::Territory` where
+`nomos_scope_verification::Territory` is the same type -- and it is a fixture spelling with no
+shipped edge behind it, not a defect a record owes an item for.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#35
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / The dev-dependency clause is withdrawn · hash: sha256:0424b9c1d6298ef6452b49255c8bb082dde0f20953888d477e1443577ea9b965*
+
+So version 1's sentence that a dev-dependency on repo tooling is exactly the failure this
+record exists to make visible is withdrawn. The failure this record existed to make visible was
+a shipped edge nothing refused, and that is closed. A test exercising the tool it is tested
+against is the reason both readers exempt dev-dependencies, and two of version 1's three cases
+are now that.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#36
+
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / The directory move is retired · hash: sha256:99f04a7a5c074912a9ef088c2543a4db348546c74030b45640e8d2ccf98b9b9a*
+
+### The directory move is retired
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#37
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / The directory move is retired · hash: sha256:95c5555f5be857bb04a458525eef92fc516913f37991e8e8eea64236daca7492*
+
+Version 1's reason for `crates/repo-tooling/` was that a reader cannot tell repo tooling from
+product by directory, that the README mark is the only signal, and that prose is not a
+boundary. The second half is no longer true. The zone declaration is the boundary, read by the
+rule and by the contract tests, and `OD-RULES-020` had already said the zone does not follow the
+directory: if that record's own move happens, the crates land where it already put them. A
+directory would now be a third copy of a membership `nomos-architecture.json` holds and two
+readers check, and the one copy nothing compares against the declaration -- a crate placed
+under `crates/repo-tooling/` and zoned elsewhere would contradict it silently. `OD-AGENT-004`
+is the record for what an unchecked copy of a checked fact does. The same holds for
+`nomos-spec-orchestration` and `crates/spec/`: the declaration already places it with its
+family.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#38
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / The directory move is retired · hash: sha256:d7bd0012b1125b978e1424965db41d294f6bdbd01cb3c22f13366721afe53c26*
+
+Neither move is owed, and no follow-up item is named. Carrying either out is a `git mv` and a
+`path` change that leaves `nomos-architecture.json` untouched -- permitted at any time,
+required by nothing, and if ever made, the declaration and not the directory remains what the
+gate reads. The trigger to reopen this is the one version 1 named and left unmet: a real need
+for the tooling to become its own workspace, which is `OD-PACKAGE-015`'s test and not a
+directory question.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#39
+
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / The Specification zone is repository tooling, with a named route out · hash: sha256:2aa1790eda7bfa4cd0fa8433673a3cdead1719e2e1bd1b9ed7c2d18fa86a367c*
+
+### The Specification zone is repository tooling, with a named route out
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#40
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / The Specification zone is repository tooling, with a named route out · hash: sha256:b4f52cb6a12bae643d27050062c84acb77f1dcff603c988295744d4b305f861a*
+
+The seven `nomos-spec-*` crates are repository tooling in `OD-LEDGER-036`'s sense, on that
+record's own evidence class. No product surface depends on any of them; every real consumer is
+this repository authoring and projecting its own governing records -- `nomos-cli`'s `spec`
+verbs, `nomos-api`'s specification handlers that `OD-HOST-006` found to be the same seam
+exercise `OD-LEDGER-036` found for the ledger, `gate.yml`'s required-projections step, and the
+contract tests -- and the `permits` table admits them to the same two zones it admits Repo
+Tooling to. `README.md` marks `nomos-spec-orchestration` `[repo tooling]` and says of the family
+that nothing in the product may name it; the declaration is that sentence as data.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#41
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / The Specification zone is repository tooling, with a named route out · hash: sha256:f5bee1a3b6cf06406ca553b3886791a3b76ed512c8913d924730527314009a74*
+
+They are not a product capability awaiting a caller, and the distinction decides what would
+change this answer. `ARC-ECOSYSTEM-001` names the family's mature home as KWB, reached from here
+through a knowledge capability, which is already how the product is permitted to see it. The
+route by which the specification reaches the product is therefore a capability contract and a
+provider -- a `Provider`-zone crate naming a `nomos-spec-*` crate, which is a new row in
+`permits`, decided in `nomos-architecture.json` when that provider exists -- and not a product
+crate depending on these seven. No such contract exists: none of the thirteen `nomos-cap-*`
+crates is a knowledge capability, and none names a `nomos-spec-*` crate.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#42
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / The Specification zone is repository tooling, with a named route out · hash: sha256:75cb26adb61eef822f0a3b72b0b45464a1857c8e3818a988d55c47304ffab888*
+
+The shared trigger stays shared. `OD-HOST-006` bound `nomos-spec-orchestration`'s exposure
+through `nomos-api` to the trigger `OD-LEDGER-036` stated -- `nomos-api` becoming an externally
+consumed surface -- and `OD-HOST-007` discharged it against the transport crate, where every
+specification handler is excluded by assertion. This record adds nothing to that trigger. It
+records that the ownership answer the trigger guards covers all seven crates, not only the one
+README marks.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#43
+
+*revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What version 2 changes, and what it does not · hash: sha256:20447d82ec3cc80b37f77cbaefb6036f952bc7c508f5a0bd95520dc8536224ad*
+
+### What version 2 changes, and what it does not
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#44
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What version 2 changes, and what it does not · hash: sha256:874193ae160a7bc8280f31131981f993b82e13a5bb51cab75073df48912c3652*
+
+The decision's title stands: the tools that govern this repository are separated from the
+product they govern. What changed is how -- by a declaration two readers judge, not by a
+directory and a fifth assertion -- and that both of version 1's mechanisms are retired rather
+than pending. No crate moves, no test is written and `nomos-architecture.json` is not edited by
+this amendment.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#45
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Amendment, Version 2: Neither Mechanism Was Built, And The Zone Declaration Is The Guard / What version 2 changes, and what it does not · hash: sha256:4cad7bec35165a47eae8f24703b031fe2346d904ec77fb2c5e4d1e65774c6761*
+
+`README.md`'s sentence that `OD-PROJECT-004` decided where these four belong physically
+describes version 1 and is stale from this amendment on, as its statement that `nomos-rules`
+declares a zone table already was. Both are `README.md`'s own, held by another item's territory
+at the time of writing, and are named here so the next README item finds them rather than
+re-derives them.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#46
+
 *revision: authored · kind: heading · heading: The tools that govern this repository are separated from the product they govern / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#20
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#47
 
-*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Status · hash: sha256:d244b0b265fc6ea0d6d56949bf88d02595c0b3c6ea700ea23f13138a7b88787b*
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Status · hash: sha256:70c60ab1fac9c37fa0ec62b65a6447f79dd4fbe4a6c4fe5378224e8f6ebee5ac*
 
-Accepted. Four crates named for a new directory, one of the four redirected to an
-existing family directory instead, one Cargo workspace kept, and one graph assertion's
-shape stated; no crate moves and no test is written here.
+Accepted at version 1, amended at version 2.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#48
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Status · hash: sha256:98de4fea7276dfcfb736056d681201d113f9714c360f30c8dc08697a313d2955*
+
+Version 1 named four crates for a new directory, redirected one of the four to an existing
+family directory instead, kept one Cargo workspace, and stated one graph assertion's shape; no
+crate moved and no test was written there.
+
+### docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#49
+
+*revision: authored · kind: prose · heading: The tools that govern this repository are separated from the product they govern / Status · hash: sha256:0a7929028c09253ca76448294319e3a2ab189ce6b86ba075c471a67c593873ea*
+
+Version 2 records that neither the directory nor the assertion was ever built, that
+`nomos-architecture.json`'s `permits` is the guard in effect and is Blocking through the gate
+while Advisory in the rule's own report, retires both of version 1's mechanisms rather than
+leaving them pending, withdraws the dev-dependency clause, and answers that all seven
+`Specification`-zone crates are repository tooling under `OD-LEDGER-036`'s shared trigger.
 
 ### docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md#1
 

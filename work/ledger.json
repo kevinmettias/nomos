@@ -87785,7 +87785,7 @@
       "claim": {
         "holder": "fable-p123-policy",
         "acquired_at": 1790043937,
-        "lease_expires_at": 1790054737
+        "lease_expires_at": 1790058975
       },
       "verification": {
         "argv": [
@@ -87829,7 +87829,7 @@
       "claim": {
         "holder": "fable-p123-workflow",
         "acquired_at": 1790043803,
-        "lease_expires_at": 1790054603
+        "lease_expires_at": 1790058979
       },
       "verification": {
         "argv": [
@@ -88012,10 +88012,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "nomos-75-lintline",
+        "acquired_at": 1790048320,
+        "lease_expires_at": 1790059120
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -88059,12 +88063,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P121-INTEGRATION-PACKAGE-MANIFEST"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-csharp",
+        "acquired_at": 1790048294,
+        "lease_expires_at": 1790059094
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -88191,14 +88199,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-review",
-        "acquired_at": 1790048009,
-        "lease_expires_at": 1790058809
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -88214,7 +88218,33 @@
         ],
         "timeout_seconds": 600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "os-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\project-004\\render\\crates\\rules\\nomos-rules)\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-lang-go v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\project-004\\render\\crates\\languages\\nomos-lang-go)\n   Compiling nomos-spec-store v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\project-004\\render\\crates\\spec\\nomos-spec-store)\n   Compiling nomos-check-orchestration v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\project-004\\render\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (C:\\Users\\kmett\\AppData\\Local\\Temp\\claude\\f--repos-nomos\\c67de600-dfa7-43c5-bfe2-46e767f10773\\scratchpad\\project-004\\render\\tests\\contract)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.98s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos_contract_tests-898ad6863a59c8f0.exe)\n     Running tests\\record_citation.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\record_citation-a117043e1d190d8b.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/project-004/target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790048413,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [
         {
           "holder": "fable-review-project-004",
@@ -88417,12 +88447,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P123-OD-ROADMAP-003-THE-THREE-PAUSES-HAVE-LAPSED"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-phases",
+        "acquired_at": 1790048311,
+        "lease_expires_at": 1790059111
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -88460,7 +88494,7 @@
       "claim": {
         "holder": "fable-p123-gate034",
         "acquired_at": 1790044315,
-        "lease_expires_at": 1790055115
+        "lease_expires_at": 1790059041
       },
       "verification": {
         "argv": [
@@ -88498,10 +88532,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p123-currency",
+        "acquired_at": 1790048336,
+        "lease_expires_at": 1790059136
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -88590,7 +88628,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "done_when is contradicted by a governing record published after this item was authored. OD-ANALYSIS-007 version 2, landed at 0db27c41, decides against a shared family crate by name: the two capabilities share provider mechanics (reading::Load_Crate, sysroot discovery, per-crate file filtering) and nothing contract-shaped, OD-CAPABILITY-002's criterion is per contended capability and never per family, and a family crate would be a home for exactly the shared vocabulary OD-ANALYSIS-004 forbids a program-semantics capability from introducing. It measures the one item that reserved such a crate, P42-SEMANTIC-FACT-FAMILY, and finds its commit created none. What it decides instead is one crate per capability, in the shape the five policy contracts have, at the moment a nomos-rules descriptor names either capability, which is precisely what this item does. This item's territory reserves a single crates/capabilities/nomos-cap-rust-semantics and its done_when requires both contracts to land in it, so executing it as written would publish the arrangement the record refuses. There is no work edit verb, so the item cannot be corrected in place. Re-authored as -2 with two contract crates named after their capability ids, citing OD-ANALYSIS-007 v2 for the shape and OD-CAPABILITY-015 for the zoning the record routes there. Nothing was written to the tree under this item and no claim was ever taken on it."
+        }
+      },
       "depends_on": [
         "P123-OD-ROADMAP-003-THE-THREE-PAUSES-HAVE-LAPSED",
         "P121-INTEGRATION-PACKAGE-MANIFEST",
@@ -88619,7 +88661,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "fable-triage",
+        "declined_at": 1790048422
+      },
       "widened": []
     },
     {
@@ -88651,6 +88696,109 @@
           "--no-fail-fast",
           "-p",
           "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-THE-COMPILER-CONTRACTS-LEAVE-THEIR-PROVIDER-AND-ITS-RULES-JOIN-THE-RUN-2",
+      "title": "Each compiler-backed capability's contract gets its own crate, its rule moves into nomos-rules, and a real check run materializes it on demand",
+      "why": "nomos-lang-rust-compiler bundles two capability contracts (nomos.cap.rust.copy_clones in src/contract.rs, nomos.cap.rust.nested_locks in src/nested_lock/contract.rs) with their one provider and two crate-local rules (Check_Copy_Clones in src/check.rs and the nested-lock check in src/nested_lock/check.rs), and nothing composes any of it: nomos-check-orchestration's Cargo.toml does not name the crate, Registered declares fourteen capabilities and DECLARED_CAPABILITY_COUNT pins that number, RequiredFact is a closed set with neither capability, and README's own row says not yet composed into a real gate run. The only crate depending on it is tests/integration, for its determinism declarations. OD-ANALYSIS-007 version 2 decides what moves and when: each contract stays beside its provider until a second party names it, the second party that arrives first is a nomos-rules descriptor naming either capability (because the compiler crate is zoned Provider and Permits forbids Rules from naming Provider), and at that moment each contract moves to its own crate under crates/capabilities, one per capability and never one for the family. OD-ROADMAP-002 paused the wiring as additional one-off capability orchestration; OD-ROADMAP-003, landed at 1fb8661c, records that pause as lapsed and states the constraint that survives it. An external review of bc0aaacf named the compiler-backed provider as proven but absent from routine enforcement; measured, it holds.",
+      "done_when": "Two Capability Contract zone crates exist, crates/capabilities/nomos-cap-rust-copy-clones and crates/capabilities/nomos-cap-rust-nested-locks, each holding exactly one capability's contract (identity, version, ceiling, payload schema, payload types and parsing) and no provider code, in the shape the five policy contract crates already have, with no shared vocabulary crate between them and nothing contract-shaped left behind in the provider; Test_A_Capability_Id_Should_Be_Written_In_One_Crate still holds each id to one home; nomos-lang-rust-compiler keeps its declared Guarantee and offers against both new crates, and stays zoned Provider now that it declares no contract, which is the arrangement OD-CAPABILITY-015's criterion gives once the contracts leave; Check_Copy_Clones and the nested-lock check move into nomos-rules as descriptors requiring two new RequiredFact variants, reading facts only through FactReader, with their exemptions and tests moving with them; Registered declares both capabilities and offers the compiler provider, every count that mirrors the capability or rule population is raised, and each family is materialized by a demand-gated section written as a declared constant with no condition on store state, cost or prior materialization, which is OD-ROADMAP-003's surviving constraint; a run that selects no rule requiring a compiler family never loads ra_ap_hir, proven by a test; tests/integration's determinism declarations keep passing against the moved types; the wall time of nomos check --root . over this repository is measured before and after on the same machine and written into the commit message; both new crates are registered in Cargo.toml, README.md, nomos-architecture.json (both the members map and the permits map) and the completeness universes table, with Cargo.lock following; every touched crate's public surface snapshot is re-blessed; and the predicate passes.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-rust-copy-clones",
+          "crates/capabilities/nomos-cap-rust-nested-locks",
+          "crates/languages/nomos-lang-rust-compiler",
+          "crates/rules/nomos-rules",
+          "crates/orchestration/nomos-check-orchestration",
+          "tests/integration",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "nomos-architecture.json",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "tests/contract/tests/rule_descriptors.rs",
+          "tests/contract/tests/rule_composition.rs",
+          "tests/contract/surface/nomos-cap-rust-copy-clones.txt",
+          "tests/contract/surface/nomos-cap-rust-nested-locks.txt",
+          "tests/contract/surface/nomos-lang-rust-compiler.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P123-CSHARP-SYNTAX-PROVIDER-AND-PACKAGE",
+        "P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-rust-copy-clones",
+          "-p",
+          "nomos-cap-rust-nested-locks",
+          "-p",
+          "nomos-lang-rust-compiler",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-THE-CONTRACTS-SURFACE-SNAPSHOT-IS-STALE-AND-REDDENS-THE-SUITE-FOR-EVERY-SESSION",
+      "title": "The nomos-contracts surface snapshot is stale at HEAD, unowned, and fails the contract suite for every session",
+      "why": "Finding gained a public address field at bc0aaacf (crates/contracts/nomos-contracts/src/reporting/finding.rs) and tests/contract/surface/nomos-contracts.txt contains no line naming it, so the committed snapshot disagrees with the crate it records and public_surface fails for anybody who runs it. The item that added the field, P110-B-A-FINDING-CARRIES-THE-ADDRESS-ITS-RULE-DECLARES, is lapsed: its lease ran out at unix 1790045890 with the snapshot unblessed, so the file is stale and owned by nobody, which is the same state P121-TWO-SNAPSHOTS-THE-PATH-ATTRIBUTE-REPAIR-MOVED-ARE-OWNED-BY-NOBODY-AND-REDDEN-THE-WHOLE-CONTRACT-SUITE was authored for and closed. A peer session reported it independently. This item blesses the snapshot and nothing else.",
+      "done_when": "tests/contract/surface/nomos-contracts.txt agrees with what crates/contracts/nomos-contracts publishes at HEAD, blessed by the mechanism the repository already has (NOMOS_SURFACE_BLESS=nomos-contracts) and not by hand, so cargo test -p nomos-contract-tests --test public_surface passes on the nomos-contracts snapshot; the diff is confined to the lines the address field adds and no other crate's snapshot is touched; and the item records explicitly that blessing ratifies that the field is published, not that P110-B's work is complete, since whether any rule populates the field rather than leaving it None is that item's own remaining work and this one makes no claim about it.",
+      "kind": "Cleanup",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-contracts.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-triage",
+        "acquired_at": 1790048430,
+        "lease_expires_at": 1790055630
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "public_surface"
         ],
         "timeout_seconds": 1800
       },

@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:be8eea2babc2708b8b161cab602d89e0011e786cd51b9eb65b8e0c6dd0267df9",
-  "inputs_digest": "sha256:c3788a62877722d6b7aecd33b480f4ccdb56cc8cd1c1c8d47de6b0a9062bd3a9",
+  "content_digest": "sha256:03bd8bd8f0b038facecf63c2721f2bc6ee289321a3528448749a911b539feda5",
+  "inputs_digest": "sha256:386aa0b6765f9de3ac62c3cdb569acac142be478635c4a986e4055111564e2c5",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2202
+      2209
     ],
     [
       "Source blocks",
-      7837
+      7866
     ]
   ],
   "inputs": [
@@ -968,7 +968,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md@authored",
-      "hash": "sha256:5f9c67cc4d6f14d07b696b7c2842958e0e79c15eede17749d7e63ce8627f8793"
+      "hash": "sha256:daec35180df8b99740172e26cadc029a18b33409bc1217492ba7306bf46aa296"
     },
     {
       "content": "documents",
@@ -9293,7 +9293,42 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#19",
-      "hash": "sha256:6a94a1c596f2d0d4dc7a3ea8be11a0d6b28e2f34c118be94d6a51c5863e82bdb"
+      "hash": "sha256:e7a3e19e9afe9ecb68632956ec8da6c39e07b6c9574a9865810219aa43f261be"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#21",
+      "hash": "sha256:6a8737dd6f769be6887175c3cc2a811990612266eb3d8a018b1c35ea0c3f7413"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#25",
+      "hash": "sha256:ee26510e9d4c641eed183f07ac1a1a066a5fc31994f23d1cec88ecedfd95eff3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#33",
+      "hash": "sha256:d588855e77ce0db420352477926eb5b8a2bcb515567f56929797155f50e39570"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#36",
+      "hash": "sha256:a0b161c9f2b3250d35a32f308f824ed967a974b5f0a67d4d9e2e5c94f7b6e9e2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#39",
+      "hash": "sha256:f0858992bf5454ebcaec8ae92ccc9e8a631ccab08c529253f6919ad756dd57e0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#43",
+      "hash": "sha256:0c54b40ff1ea2b9d080367f141bc343bc30bb6787b83b2d326092d324ad3d8a3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#46",
+      "hash": "sha256:b7af9f2e7acd7af0a36b54aa475fc6d9e01104deaee65ba9e52fa7c85241e5dd"
     },
     {
       "content": "headings",
@@ -40988,12 +41023,157 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#19",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:640c8067cdc4ae66534d0b2fc528d849ebc98a9a6650b3dd6f19142e415dcffc"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#20",
-      "hash": "sha256:d244b0b265fc6ea0d6d56949bf88d02595c0b3c6ea700ea23f13138a7b88787b"
+      "hash": "sha256:29d9a95350c62a6bb4e0da7b44905459b130d85dc18a9a6a754f47f67042f563"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#21",
+      "hash": "sha256:07e5917f5534e4a3ec614c6bb758e7c158ddb7321c5128b37876f8c2b5b67c3b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#22",
+      "hash": "sha256:54529fc7a567c8c676a6aa5997b604d7340372b15d9dd608b1df71e4eb64d1b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#23",
+      "hash": "sha256:e57c431f66c9a65057fb71d38469b9ec507cc62803cbab3b92eaf7cd93b56349"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#24",
+      "hash": "sha256:4f791cccd094cf39a9fd7c15fc1f6e7821560ab0df485b279e342024431892c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#25",
+      "hash": "sha256:4c4455e83d882c24655a3856bd3bd67bd83eb4632209e53f6b849168eabace94"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#26",
+      "hash": "sha256:0d851d647b0c3ca8ce260fdd97245225c2a8f5903b0796bedafcf2534f80a225"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#27",
+      "hash": "sha256:fc6c9239dcebac14b744f16e2a59d6c3acbc13139c6d873749e40540048bd794"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#28",
+      "hash": "sha256:e2664dc40d9f9f1f29cb71e19082634eb4672c88cf4c98aaddcb181e0037fa10"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#29",
+      "hash": "sha256:97fab67a0db22d3e2bd9ba90e4058d425ea8f7d1d5207ae57d584a2972076392"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#30",
+      "hash": "sha256:a97155b34823e9f41e45d14df5bc356ab0931d51f834e92b0dd31ad321530977"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#31",
+      "hash": "sha256:909ea117fdaffe87344affa49be9408f41b9adb1ebd1a9fe6466e261b7a7c15b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#32",
+      "hash": "sha256:c47ef9ce1daa12a1e167e367b62e11d7c2b724118ecb18e6f64eac6ec1ec11ab"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#33",
+      "hash": "sha256:88a7adc2546a31afbd1c7c0336d13b405b90707322c39156a1b6a78707957bbe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#34",
+      "hash": "sha256:b2172fbf3223c3f016c4372fc2600b5b12210bad243b998e706a3a055f2bce88"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#35",
+      "hash": "sha256:0424b9c1d6298ef6452b49255c8bb082dde0f20953888d477e1443577ea9b965"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#36",
+      "hash": "sha256:99f04a7a5c074912a9ef088c2543a4db348546c74030b45640e8d2ccf98b9b9a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#37",
+      "hash": "sha256:95c5555f5be857bb04a458525eef92fc516913f37991e8e8eea64236daca7492"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#38",
+      "hash": "sha256:d7bd0012b1125b978e1424965db41d294f6bdbd01cb3c22f13366721afe53c26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#39",
+      "hash": "sha256:2aa1790eda7bfa4cd0fa8433673a3cdead1719e2e1bd1b9ed7c2d18fa86a367c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#40",
+      "hash": "sha256:b4f52cb6a12bae643d27050062c84acb77f1dcff603c988295744d4b305f861a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#41",
+      "hash": "sha256:f5bee1a3b6cf06406ca553b3886791a3b76ed512c8913d924730527314009a74"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#42",
+      "hash": "sha256:75cb26adb61eef822f0a3b72b0b45464a1857c8e3818a988d55c47304ffab888"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#43",
+      "hash": "sha256:20447d82ec3cc80b37f77cbaefb6036f952bc7c508f5a0bd95520dc8536224ad"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#44",
+      "hash": "sha256:874193ae160a7bc8280f31131981f993b82e13a5bb51cab75073df48912c3652"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#45",
+      "hash": "sha256:4cad7bec35165a47eae8f24703b031fe2346d904ec77fb2c5e4d1e65774c6761"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#46",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#47",
+      "hash": "sha256:70c60ab1fac9c37fa0ec62b65a6447f79dd4fbe4a6c4fe5378224e8f6ebee5ac"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#48",
+      "hash": "sha256:98de4fea7276dfcfb736056d681201d113f9714c360f30c8dc08697a313d2955"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md#49",
+      "hash": "sha256:0a7929028c09253ca76448294319e3a2ab189ce6b86ba075c471a67c593873ea"
     },
     {
       "content": "blocks",
