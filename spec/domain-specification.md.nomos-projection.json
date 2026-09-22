@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:2c8e474de8c1b5538d32db0fb00b66a81f71e991ee634d936f568fd96ef9579b",
-  "inputs_digest": "sha256:c0981d6fbee7ddea537ec0e2aedc11308883afc0b53e5f6339efd4de1f71a099",
+  "content_digest": "sha256:cc392d2599f1901a980d326cbef159c1ca3151da761432d720cf75655fec014d",
+  "inputs_digest": "sha256:733bfc5c0fecd90487b04dda72a0da4469ff2ee1a1222cf1307472e171626286",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2429
+      2437
     ],
     [
       "Source blocks",
-      8829
+      8855
     ]
   ],
   "inputs": [
@@ -278,7 +278,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md@authored",
-      "hash": "sha256:8ba17cb0d7430c3eefb01799b45969f1782123108e58aa782f87beca01bd0e71"
+      "hash": "sha256:5469cacb65cde974eea5a5afa21dcf4f8d376eea74c7bbabc3abd161709b3c66"
     },
     {
       "content": "documents",
@@ -3419,6 +3419,46 @@
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#25",
       "hash": "sha256:5616f523bc12de849e00f9fffa93966c2d1b9cf6097fd4740ee1d573f2c2313f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#29",
+      "hash": "sha256:42df251eb37d8ad7385aa1f306396acb8e35734b9249a31b53dce2817d8cd2c2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#32",
+      "hash": "sha256:7c1d7b07b9230f8a2f34ff9793da0e282ab9923841e059bb047eb91aa53a04d2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#36",
+      "hash": "sha256:ae81277f79119c2ecd31bc55a12d63420516046c4218ad7f15df9712fae4ed7e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#39",
+      "hash": "sha256:4964eebfb2eee2dbe95ac3a1af8ff05d306d73cac0d416051b111bdefcfbe0dc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#42",
+      "hash": "sha256:b5d2707f91c5a433c8c5352c2a9444ab5c87939849d9c817e542397e431ad828"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#45",
+      "hash": "sha256:f75094829b0d3a2e6762a06e7d9d1c997b2c9686b3a0eb972e198cf682b59630"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#47",
+      "hash": "sha256:f2c9db72c3769ec96bc4a14620533142dbe454fc32cee22be73c661668ebfc87"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#50",
+      "hash": "sha256:aca4540cd864e40d270fcf86e52bf9bdc15449e9822f40bcf4918c5f099b4aea"
     },
     {
       "content": "headings",
@@ -21064,6 +21104,136 @@
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#28",
       "hash": "sha256:5e43a6d9b3f847894a0e7b4773ebb2752ff63e03e8cce3ed4feeb2f15009f2e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#29",
+      "hash": "sha256:94a483289822a3e92d78116809539804ee4ba78bb07f952f089c401742639278"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#30",
+      "hash": "sha256:3912be9b0647a90f753c22762e6dba203217f8186be16945b3d3c1376f94d6cf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#31",
+      "hash": "sha256:6b25e82b6494756ad0780ad5fe024dcb8ac5e0b1cd76a260c9b39b9359f0693f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#32",
+      "hash": "sha256:11ba404aff6e922f2df524cd450e2e1f58872e57727e747976264e94bc53ba37"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#33",
+      "hash": "sha256:ac1ab9f2847faeb96301a10350e046d4f0cda80ca4b57f623226e5236961e08c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#34",
+      "hash": "sha256:fafba93742292463c9e0e62fbba44e1877591a6003731981d88511ad93e7e2e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#35",
+      "hash": "sha256:1a20ca81f1e20ddfdc4f3c4a88e437a8e6a80a2c4a940f782eade5f7aa626701"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#36",
+      "hash": "sha256:877a1ef46e7575261c46a98b4a5d2e0bb20b6b172b114d2603f6154ad6c378c0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#37",
+      "hash": "sha256:88a29bd09c39ddde486053d309ebe2b14b5259607362be97a07e5f62c6b9645d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#38",
+      "hash": "sha256:eb3eaa95b8dc68623a328c007ab93a6588d481b747b4960f09ed28c55a0eb61b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#39",
+      "hash": "sha256:26aef662ce84bb43165059f61c1b4e6a2932b282a74408a4cb2eefe04d8ced04"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#40",
+      "hash": "sha256:d6dd6e0a5905b00f2c2a361cf2ade5d64b861725c02a425ca51fca6d06d81348"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#41",
+      "hash": "sha256:f4e2993ff69f5df183c721a27b000dcbfd24024deeacaa0eceb4f296b967bc62"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#42",
+      "hash": "sha256:3dffa83f1e6da8bd12a1c42e39bc65108da9ca4cabbeade2bcdb576cbee6dbe2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#43",
+      "hash": "sha256:bcadf443c01bfb0c5b978b38f8425744edca42781d2824c8e2da93b1601a76b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#44",
+      "hash": "sha256:9ec692d29b621d3c4da6e0dfed63db3dda97346faada8645bd12bf7035709bc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#45",
+      "hash": "sha256:6b3926685326815e22acca6d017e1bf23ef59fbd8254df95267d643874f7150b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#46",
+      "hash": "sha256:ef5bde74eea6110175dd183f85ebf4cca3d32b5c48d1421491c2f4b08fbcb7c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#47",
+      "hash": "sha256:17322824aaaf7e6489c21907b0d3a5277445ce60d04a4c1255500910ee16303a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#48",
+      "hash": "sha256:926da1d23ae112f064b1cfbf6bdd50ac415665126b450f055d461cb9e3ec5305"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#49",
+      "hash": "sha256:2dd07044888ecbd07b4d2b2338b6a0360e587379f5fc541d81845d447c068ad9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#50",
+      "hash": "sha256:cf8b26b5397dec3ae293835197872ea0b936c8554ffed147e35fa61baaaacd19"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#51",
+      "hash": "sha256:0bfcba5543109478405608af81ab3905b4ff7ce3c3216e7c7bb6333629f66188"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#52",
+      "hash": "sha256:455442fe51dbf2f03045eb396d23ed8aa4ad86159a3aef7c5fe8691f8ab3e7e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#53",
+      "hash": "sha256:e08e7a165d265dc79e1e1fe1b35319a717d97ec3333d04124b227573e726d02f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#54",
+      "hash": "sha256:63af808b62430e39f9f09b59dba652348224b24785f31e65a946027873bfba84"
     },
     {
       "content": "blocks",

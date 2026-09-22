@@ -19,7 +19,7 @@
 use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest, MaterializedFact};
 use nomos_capability::Requirement;
-use nomos_connector_coderabbit::FindingPayload;
+use nomos_cap_review_finding::FindingPayload;
 use nomos_contracts::{
     Applicability, Assurance, EvidenceClass, FactVariant, Finding, GateCategory,
     Guarantee, IncrementalGranularity, RuleId,
@@ -69,7 +69,7 @@ fn Payload_Of(source: &SourceFile, facts: &mut dyn FactReader) -> Result<Finding
 fn Require_Fact<'a>(source: &SourceFile, facts: &'a mut dyn FactReader) -> Result<&'a MaterializedFact, Finding>
 {
     let need = Review_Requirement();
-    let capability = nomos_connector_coderabbit::Capability();
+    let capability = nomos_cap_review_finding::Capability();
     let inputs = InputDigest::Of(&[]);
 
     return match facts.Require(&capability, &source.subject, inputs, &need)
@@ -99,13 +99,13 @@ fn Review_Requirement() -> Requirement
         IncrementalGranularity::None,
     );
 
-    return Requirement::New(nomos_connector_coderabbit::Capability(), nomos_connector_coderabbit::CONTRACT_VERSION, guarantee);
+    return Requirement::New(nomos_cap_review_finding::Capability(), nomos_cap_review_finding::CONTRACT_VERSION, guarantee);
 }
 
 /// Confirms `fact`'s payload schema is the one this rule knows how to decode.
 fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Finding>
 {
-    if fact.payload.schema != nomos_connector_coderabbit::Payload_Schema()
+    if fact.payload.schema != nomos_cap_review_finding::Payload_Schema()
     {
         return Err(Unread_Finding(
             source,
@@ -124,7 +124,7 @@ fn Check_Schema(source: &SourceFile, fact: &MaterializedFact) -> Result<(), Find
 /// Decodes `fact`'s payload bytes into this rule's own [`FindingPayload`] shape.
 fn Parse_Fact(source: &SourceFile, fact: &MaterializedFact) -> Result<FindingPayload, Finding>
 {
-    return nomos_connector_coderabbit::Parse_Payload(&fact.payload.bytes)
+    return nomos_cap_review_finding::Parse_Payload(&fact.payload.bytes)
         .map_err(|refusal| return Unread_Finding(source, Applicability::Unparseable, &refusal.to_string()));
 }
 
@@ -156,8 +156,10 @@ fn Finding_For_Payload(source: &SourceFile, payload: &FindingPayload) -> Finding
 /// `payload`, rendered as one line — the reviewing tool's own severity, category and
 /// message, with the vendor's own words kept rather than translated into this workspace's
 /// vocabulary: `ARC-CONNECTOR-001`'s second invariant permits vendor identity as data, and
-/// [`nomos_connector_coderabbit::translation`]'s own module doc already declines to force
-/// either word into a fixed enum this rule would then have to invent a mapping for.
+/// the one provider's own translation module already declines to force either word into a
+/// fixed enum this rule would then have to invent a mapping for. That provider is named
+/// here in prose and nowhere in code: `OD-ROADMAP-005`'s fifth decision moved the contract
+/// out of it, and `Permits` forbids `Rules` from naming `Provider` at all.
 fn Summary_Of(payload: &FindingPayload) -> String
 {
     return format!(
@@ -188,7 +190,7 @@ mod tests
     use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
     use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
     use nomos_capability::ProviderOffer;
-    use nomos_connector_coderabbit::ReviewFindingId;
+    use nomos_cap_review_finding::ReviewFindingId;
     use nomos_contracts::SubjectId;
     use nomos_model::Content_Digest;
 
@@ -223,15 +225,15 @@ mod tests
 
     fn Materialize_Review_Fact(store: &mut MemoryFactStore, source: &SourceFile, offer: &ProviderOffer, payload: &FindingPayload)
     {
-        let bytes = nomos_connector_coderabbit::Encode_Payload(payload);
-        test_support::Materialize_Fact(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_connector_coderabbit::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
+        let bytes = nomos_cap_review_finding::Encode_Payload(payload);
+        test_support::Materialize_Fact(store, FactToFile { subject: source.subject, offer, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_review_finding::Payload_Schema(), bytes }).expect("the fixture's store holds no fact under this key at a newer generation");
     }
 
     fn Sample_Payload() -> FindingPayload
     {
         return FindingPayload {
             external_system: "coderabbit".to_owned(),
-            external_id: ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", REVIEW_COMMENT_ID),
+            external_id: ReviewFindingId::New(RECORDED_IDENTITY),
             locator: "https://github.com/coderabbitai/rabbits-playground/pull/13#discussion_r3521038097".to_owned(),
             category: "🔒 Security & Privacy".to_owned(),
             severity: "🟡 Minor".to_owned(),
@@ -256,9 +258,15 @@ mod tests
         assert_eq!(findings.first().expect("asserted len 1 above").gate, GateCategory::Advisory);
     }
 
-    /// The review comment id the sample payload names -- the one the real provider's own
-    /// locator URL ends with.
-    const REVIEW_COMMENT_ID: u64 = 3_521_038_097;
+    /// The identity the sample payload names -- the one this capability's one real
+    /// provider mints for the review comment its own recorded fixture was captured from,
+    /// and the one its locator URL ends with.
+    ///
+    /// Spelled as a literal rather than minted. Minting is the provider's own act, it
+    /// lives in a `Provider`-zone crate now, and `Permits` forbids this crate from naming
+    /// one -- which is the whole point of `OD-ROADMAP-005`'s fifth decision and was not
+    /// true of the version of this fixture that called the vendor crate's constructor.
+    const RECORDED_IDENTITY: &str = "coderabbitai/rabbits-playground#review-comment:3521038097";
 
     #[test]
     fn Test_An_Empty_Source_List_Should_Produce_No_Findings()
@@ -304,9 +312,9 @@ mod tests
     {
         return test_support::Offered_Registry(
             OfferedProvider {
-                contract: nomos_connector_coderabbit::Capability_Contract(),
-                capability: nomos_connector_coderabbit::Capability(),
-                version: nomos_connector_coderabbit::CONTRACT_VERSION,
+                contract: nomos_cap_review_finding::Capability_Contract(),
+                capability: nomos_cap_review_finding::Capability(),
+                version: nomos_cap_review_finding::CONTRACT_VERSION,
                 provider: PROVIDER,
                 guarantee: Guarantee_At_Floor(),
             },

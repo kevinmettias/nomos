@@ -1,19 +1,19 @@
 [package]
 name = "nomos-connector-coderabbit"
 version = "0.1.0"
-description = "Capability Contract zone. nomos.cap.review.finding's contract and its one provider, over CodeRabbit's own review comments as gh api reads them. ARC-CONNECTOR-001, OD-CONNECTOR-001, OD-CONNECTOR-002."
+description = "Provider zone. The one provider of nomos.cap.review.finding, over CodeRabbit's own review comments as gh api reads them. The contract it offers against is nomos-cap-review-finding. ARC-CONNECTOR-001, OD-CONNECTOR-001, OD-CONNECTOR-002, OD-ROADMAP-005."
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 publish.workspace = true
 
 [dependencies]
+nomos-cap-review-finding = { workspace = true }
 nomos-contracts = { workspace = true }
 nomos-model = { workspace = true }
 nomos-capability = { workspace = true }
 nomos-analysis = { workspace = true }
 nomos-platform = { workspace = true }
-serde = { workspace = true }
 serde_json = { workspace = true }
 
 [dev-dependencies]

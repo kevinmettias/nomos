@@ -413,11 +413,15 @@ carrying CodeRabbit's own posted judgment) rather than a local subprocess this
 workspace's own `ProcessLauncher` runs end to end — `OD-EXECUTOR-006` measured that
 difference and found it does not change which shape this rule takes, because the
 boundary that actually matters is `OD-RULES-010`'s fact-not-finding split, not the
-transport. Its contract lives bundled with its one provider in
-`nomos-connector-coderabbit` itself rather than in a `nomos-cap-*` crate of its own —
-`OD-CAPABILITY-002` licenses that for a single-provider capability — classified
-Capability Contract zone rather than Provider zone specifically so this crate may
-depend on it at all, since [`Is_Permitted`] forbids Rules zone from naming Provider zone.
+transport. Its contract lives in `nomos-cap-review-finding`, one crate away
+from the provider that materializes it. It did not always: the contract was bundled
+into `nomos-connector-coderabbit`, which `OD-CAPABILITY-002` licenses for a
+single-provider capability and `OD-CAPABILITY-017` measured as defeating no boundary.
+`OD-ROADMAP-005`'s fifth decision superseded that conclusion on the owner's own
+sequencing — a generic rule layer should not have to name a vendor crate to obtain a
+generic capability — so this crate now names a contract with no provider in it and the
+vendor crate is Provider zone, which [`Is_Permitted`] forbids Rules zone from naming at
+all.
 
 [`Check_Requirement_Trace_Staleness`] is the sixty-ninth rule, and a second whose
 subject is not source: `OD-TRACE-001` already required a corpus requirement's

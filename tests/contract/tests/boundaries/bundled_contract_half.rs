@@ -25,6 +25,25 @@
 //! is classified as neither half fails. A new provider module therefore cannot slip through
 //! unjudged — it fails until somebody says which half it is.
 //!
+//! # Why the population is one crate and not two
+//!
+//! It was two. `OD-ROADMAP-005`'s fifth decision split `nomos.cap.review.finding`'s contract
+//! out of `nomos-connector-coderabbit` into `nomos-cap-review-finding`, so that crate is not
+//! bundled any more -- it declares no contract, it is Provider zone, and `Permits` forbids
+//! `Rules` from naming it at all. Its entry is gone rather than kept: a row naming a crate
+//! that is not bundled is a classification outliving its subject, which is the staleness
+//! [`Test_Every_Module_Of_A_Bundled_Crate_Should_Be_Classified`] exists to refuse.
+//!
+//! What is left is `nomos-cap-requirement-trace`, still bundled, still named by
+//! `nomos-rules`, so this guard still has a live subject and is not the
+//! `OD-COMPLETENESS-001` shape -- a guard quantifying over an empty universe, passing
+//! because there was nothing to judge. It is not retired, because retiring it would leave
+//! `OD-CAPABILITY-017`'s first clause unenforced for the crate that still depends on it, and
+//! the day a second bundled contract arrives it would have to be written again from the
+//! record. Both tests below assert the population is non-empty rather than trusting that
+//! somebody would notice, which is the assertion the list did not carry while it had two
+//! members and could not go empty by one edit.
+//!
 //! # What this cannot do
 //!
 //! It reads source text, so it sees what `nomos-rules` *names*, not what it links. That is the
@@ -52,19 +71,12 @@ struct Bundled
 
 /// The bundled capability-contract crates `nomos-rules` is permitted to name.
 ///
-/// `OD-CAPABILITY-002` licenses the bundling while each capability has exactly one provider;
-/// `OD-CAPABILITY-015` puts both crates in the Capability Contract zone because they declare a
-/// contract. Neither record is restated here.
+/// `OD-CAPABILITY-002` licenses the bundling while a capability has exactly one provider;
+/// `OD-CAPABILITY-015` puts such a crate in the Capability Contract zone because it declares a
+/// contract. Neither record is restated here. One member, since `OD-ROADMAP-005`'s fifth
+/// decision unbundled the other -- the module doc above says why that leaves a guard with a
+/// subject rather than a guard with nothing to judge.
 const HALVES: &[Bundled] = &[
-    Bundled {
-        directory: "crates/connectors/nomos-connector-coderabbit",
-        rust_path: "nomos_connector_coderabbit",
-        // `fetching` reaches GitHub, `translation` turns a response into a payload, and
-        // `provider` materializes the fact. Calling any of the three is a rule obtaining its own
-        // answer, which is exactly what the Rules boundary forbids.
-        fact_producing: &["fetching", "translation", "provider"],
-        contract: &["contract", "determinism", "fixture", "guarantee", "identity", "payload"],
-    },
     Bundled {
         directory: "crates/capabilities/nomos-cap-requirement-trace",
         rust_path: "nomos_cap_requirement_trace",
@@ -452,6 +464,34 @@ fn Lib_Of(crate_: &Bundled) -> String
         .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
 }
 
+/// `HALVES` names at least one crate, and `nomos-rules` still depends on it.
+///
+/// Both assertions above iterate over `HALVES`, so an empty list passes them having judged
+/// nothing -- `OD-COMPLETENESS-001`'s own subject, and the failure mode this list acquired
+/// the day it went from two members to one. The dependency half matters as much as the
+/// count: a row for a crate `nomos-rules` no longer names would keep the list non-empty
+/// while the thing it guards had already stopped happening.
+fn Assert_A_Bundled_Crate_Is_Still_Named()
+{
+    assert!(
+        !HALVES.is_empty(),
+        "HALVES is empty, so every assertion in this module quantifies over nothing and          passes having judged nothing. If the last bundled contract really was split out,          this module is retired deliberately and with a record saying so -- not left          standing as a green test over an empty universe."
+    );
+
+    let manifest = std::fs::read_to_string(Repository_Root().join(RULES_SOURCE).join("../Cargo.toml"))
+        .expect("nomos-rules has a manifest");
+
+    for crate_ in HALVES
+    {
+        let name = crate_.directory.rsplit('/').next().unwrap_or(crate_.directory);
+
+        assert!(
+            manifest.contains(name),
+            "{name} is classified here as a bundled crate nomos-rules is permitted to name,              and nomos-rules does not depend on it. Then nothing in this module is guarding              anything about it: drop the row, or the dependency was removed and the row              outlived its subject."
+        );
+    }
+}
+
 /// Both halves together are exactly the modules the crate declares.
 ///
 /// The both-directions check. A named module the crate dropped fails, and a module the crate
@@ -460,6 +500,8 @@ fn Lib_Of(crate_: &Bundled) -> String
 #[test]
 fn Test_Every_Module_Of_A_Bundled_Crate_Should_Be_Classified()
 {
+    Assert_A_Bundled_Crate_Is_Still_Named();
+
     for crate_ in HALVES
     {
         let declared = Declared_Modules(&Lib_Of(crate_));
@@ -498,6 +540,8 @@ fn Test_Every_Module_Of_A_Bundled_Crate_Should_Be_Classified()
 #[test]
 fn Test_Rules_Should_Name_Only_The_Contract_Half_Of_A_Bundled_Crate()
 {
+    Assert_A_Bundled_Crate_Is_Still_Named();
+
     let source = Source_Under(&Repository_Root().join(RULES_SOURCE));
 
     for crate_ in HALVES
@@ -521,60 +565,87 @@ fn Test_Rules_Should_Name_Only_The_Contract_Half_Of_A_Bundled_Crate()
 
 /// The judging rejects what it must, and accepts what it must.
 ///
-/// The negative control. Both bundled crates satisfy the rule today, so the assertion above is
-/// otherwise only known to pass on a tree that already agrees with it -- which is
+/// The negative control. The one bundled crate satisfies the rule today, so the assertion
+/// above is otherwise only known to pass on a tree that already agrees with it -- which is
 /// indistinguishable from an assertion that cannot fail. `OD-GATE-028` is why this is not
 /// optional.
+///
+/// Written against whichever crate `HALVES` holds first rather than a crate named here, so
+/// that the control cannot survive the list it is a control for. It used to spell
+/// `nomos_connector_coderabbit`, and when `OD-ROADMAP-005`'s fifth decision unbundled that
+/// crate the literals had to move with the row; the `rust_path` below is read from the row
+/// instead, so the next such move breaks nothing silently.
 #[test]
 fn Test_A_Rule_Naming_A_Fact_Producing_Symbol_Should_Be_Rejected()
 {
-    let Some(coderabbit) = HALVES.first()
+    let Some(bundled) = HALVES.first()
     else
     {
         panic!("HALVES is empty, so this control proves nothing about a guard nothing runs");
     };
 
-    let lib = Lib_Of(coderabbit);
+    let lib = Lib_Of(bundled);
+    let path = bundled.rust_path;
+    let produces = Some_Fact_Producing_Symbol(bundled, &lib);
+    let reads = Some_Contract_Symbol(bundled, &lib);
 
-    let obtains_its_own_answer = "let comment = nomos_connector_coderabbit::Fetch_Review_Comment(&context);";
-    let reads_the_contract = "let capability = nomos_connector_coderabbit::Capability();";
-    let braced = "use nomos_connector_coderabbit::{FindingPayload, Materialize_Review_Comment};";
+    let obtains_its_own_answer = format!("let fact = {path}::{produces}(root, context, filesystem);");
+    let reads_the_contract = format!("let held = {path}::{reads}();");
+    let braced = format!("use {path}::{{{reads}, {produces}}};");
 
     assert!(
-        !Forbidden_Named(obtains_its_own_answer, coderabbit, &lib).is_empty(),
-        "a rule calling Fetch_Review_Comment was accepted. This assertion cannot fail, and a \
-         guard that cannot fail is worse than no guard."
+        !Forbidden_Named(&obtains_its_own_answer, bundled, &lib).is_empty(),
+        "a rule calling {produces} was accepted. This assertion cannot fail, and a guard          that cannot fail is worse than no guard."
     );
 
     assert!(
-        !Forbidden_Named(braced, coderabbit, &lib).is_empty(),
-        "a braced import of Materialize_Review_Comment was accepted; the scanner misses the \
-         spelling a real `use` statement would take."
+        !Forbidden_Named(&braced, bundled, &lib).is_empty(),
+        "a braced import of {produces} was accepted; the scanner misses the spelling a real          `use` statement would take."
     );
 
     assert!(
-        Forbidden_Named(reads_the_contract, coderabbit, &lib).is_empty(),
-        "reading the capability was rejected. The guard is wrong in the direction that would \
-         forbid what OD-CAPABILITY-017 explicitly permits."
+        Forbidden_Named(&reads_the_contract, bundled, &lib).is_empty(),
+        "reading {reads} was rejected. The guard is wrong in the direction that would forbid          what OD-CAPABILITY-017 explicitly permits."
     );
 
-    let describes_it_in_prose = "//! The fact arrives from `nomos_connector_coderabbit::Fetch_Review_Comment`,\n\
-                                 //! which this rule never calls.\nlet x = 1;";
+    let describes_it_in_prose =
+        format!("//! The fact arrives from `{path}::{produces}`,
+//! which this rule never calls.
+let x = 1;");
 
     assert!(
-        Forbidden_Named(describes_it_in_prose, coderabbit, &lib).is_empty(),
-        "a doc comment naming a provider function was reported as a call. This is the false \
-         positive the first version of this module actually produced against \
-         checks/requirement_trace.rs, and it punishes a rule for documenting the boundary it \
-         respects."
+        Forbidden_Named(&describes_it_in_prose, bundled, &lib).is_empty(),
+        "a doc comment naming a provider function was reported as a call. This is the false          positive the first version of this module actually produced against          checks/requirement_trace.rs, and it punishes a rule for documenting the boundary it          respects."
     );
 
-    let url_in_a_string = "let u = \"https://example.invalid/x\"; \
-                           let c = nomos_connector_coderabbit::Fetch_Review_Comment(&context);";
+    let url_in_a_string =
+        format!("let u = \"https://example.invalid/x\"; let c = {path}::{produces}(root, context, filesystem);");
 
     assert!(
-        !Forbidden_Named(url_in_a_string, coderabbit, &lib).is_empty(),
-        "a `//` inside a string literal blinded the scanner to a real call later on the same \
-         line. That is the dangerous direction: the guard would go quiet rather than loud."
+        !Forbidden_Named(&url_in_a_string, bundled, &lib).is_empty(),
+        "a `//` inside a string literal blinded the scanner to a real call later on the same          line. That is the dangerous direction: the guard would go quiet rather than loud."
     );
+}
+
+/// One symbol the crate re-exports from a fact-producing module, whichever comes first.
+fn Some_Fact_Producing_Symbol(crate_: &Bundled, lib: &str) -> String
+{
+    return Some_Symbol_From(crate_.fact_producing, lib)
+        .unwrap_or_else(|| panic!("{} re-exports no fact-producing symbol, so the control has nothing to reject", crate_.directory));
+}
+
+/// One symbol the crate re-exports from a contract-half module, whichever comes first.
+fn Some_Contract_Symbol(crate_: &Bundled, lib: &str) -> String
+{
+    return Some_Symbol_From(crate_.contract, lib)
+        .unwrap_or_else(|| panic!("{} re-exports no contract-half symbol, so the control has nothing to accept", crate_.directory));
+}
+
+/// The first symbol re-exported from any of `modules`.
+fn Some_Symbol_From(modules: &[&str], lib: &str) -> Option<String>
+{
+    return Exports_By_Module(lib)
+        .into_iter()
+        .find(|(module, _)| return modules.contains(&module.as_str()))
+        .map(|(_, symbol)| return symbol);
 }

@@ -28,7 +28,7 @@ impl Strategy for ReviewFindingProduction
 {
     /// `State`, not `StateTemporal`. [`crate::translation::Translate_Review_Comment`] reads
     /// a fixed JSON object with no iteration order to depend on, and
-    /// [`crate::payload::Encode_Payload`] writes its eight fields in one fixed order every
+    /// [`nomos_cap_review_finding::Encode_Payload`] writes its eight fields in one fixed order every
     /// time. Nothing about *when* this ran is part of what the fact claims; only the
     /// translated result is.
     const STRENGTH: DeterminismStrength = DeterminismStrength::State;

@@ -5,9 +5,13 @@
 //! its own crate once a second real *provider* names it, not merely once a rule reads it.
 //! `nomos.cap.requirement.trace` has exactly one provider, this crate's own, so a split
 //! crate the way `nomos.cap.naming.policy` and its four siblings are split (contract here,
-//! provider in `nomos-repo-policy`) would buy independence nothing spends —
-//! `nomos-connector-coderabbit` already took the identical bundled shape for
-//! `nomos.cap.review.finding`, for the identical reason.
+//! provider in `nomos-repo-policy`) would buy independence nothing spends.
+//! `nomos-connector-coderabbit` held the identical bundled shape for
+//! `nomos.cap.review.finding` and no longer does: `OD-ROADMAP-005`'s fifth decision split
+//! that one on the owner's own sequencing rather than on contention, which leaves this
+//! crate the only bundled contract in the workspace and `OD-CAPABILITY-002`'s criterion
+//! exactly as it was. Nothing in that decision reaches this capability, whose rule reads
+//! no vendor's name.
 //!
 //! # Why this is Capability Contract zone rather than Provider zone
 //!

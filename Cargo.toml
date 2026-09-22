@@ -198,17 +198,21 @@ members = [
     # prospective `admits` answer, and nomos-lsp's architectural component all read it.
     "crates/capabilities/nomos-cap-architecture",
 
-    # Capability Contract zone — nomos.cap.review.finding's contract, bundled with its one
-    # provider in the same crate rather than split the way its nine nomos-cap-* siblings
-    # above are: OD-CAPABILITY-002's own criterion is a second real party, and this
-    # capability has exactly one provider and (once nomos-rules' Check_Review_Findings
-    # lands beside it) one reader, so a second crate would buy no independence anybody
-    # spends. Classified Capability Contract rather than Provider — unlike
-    # nomos-lang-rust-clippy et al., whose contract already lives one crate away in
-    # nomos-cap-lint precisely so nomos-rules (Rules zone) can reach the contract without
-    # reaching the Provider zone Permits() forbids it from naming — this crate carries
-    # both halves itself, so Provider zone would make its fact family structurally
-    # unreachable by any rule. ARC-CONNECTOR-001, OD-CONNECTOR-001, OD-CONNECTOR-002.
+    # Capability Contract zone — nomos.cap.review.finding's contract on its own: identity,
+    # version, ceiling, schema, codec and payload types, with no provider beside them.
+    # OD-CAPABILITY-002's criterion is provider contention and it has not fired — this
+    # capability still has one provider. OD-ROADMAP-005's fifth decision required the split
+    # on a different ground: a generic rule layer should not have to name a vendor crate to
+    # obtain a generic capability. OD-CAPABILITY-017's own measurements stand.
+    "crates/capabilities/nomos-cap-review-finding",
+
+    # Provider zone — the one provider of nomos.cap.review.finding, offering against the
+    # contract one entry above. A connector under ARC-CONNECTOR-001: reads an already-posted
+    # CodeRabbit review comment through gh api, never writes (OD-CONNECTOR-001, held by
+    # omission), and carries one recorded fixture plus one opt-in live test
+    # (OD-CONNECTOR-002). Provider rather than Capability Contract because
+    # OD-CAPABILITY-015's criterion is what a crate declares, and this one declares no
+    # contract any more — which is what lets Permits() keep Rules away from it outright.
     "crates/connectors/nomos-connector-coderabbit",
 
     # Capability Contract zone — nomos.cap.requirement.trace's contract, bundled with its
@@ -459,6 +463,7 @@ nomos-cap-words-policy = { path = "crates/capabilities/nomos-cap-words-policy" }
 nomos-cap-goals-policy = { path = "crates/capabilities/nomos-cap-goals-policy" }
 nomos-cap-architecture = { path = "crates/capabilities/nomos-cap-architecture" }
 nomos-cap-test-material-policy = { path = "crates/capabilities/nomos-cap-test-material-policy" }
+nomos-cap-review-finding = { path = "crates/capabilities/nomos-cap-review-finding" }
 nomos-connector-coderabbit = { path = "crates/connectors/nomos-connector-coderabbit" }
 nomos-cap-requirement-trace = { path = "crates/capabilities/nomos-cap-requirement-trace" }
 nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }

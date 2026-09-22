@@ -1,8 +1,8 @@
 //! What this provider offers, and at what guarantee.
 
-use crate::contract::{Capability, CONTRACT_VERSION};
+use nomos_cap_review_finding::{Capability, CONTRACT_VERSION};
 #[cfg(test)]
-use crate::contract::Ceiling;
+use nomos_cap_review_finding::Ceiling;
 use nomos_capability::ProviderOffer;
 use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId};
 
@@ -19,7 +19,7 @@ pub const PROVIDER: &str = "nomos.connector.coderabbit";
 
 /// What this provider claims, on every axis.
 ///
-/// [`FactVariant::RuntimeObserved`] at the ceiling -- `contract::Ceiling`'s own doc gives
+/// [`FactVariant::RuntimeObserved`] at the ceiling -- `nomos_cap_review_finding::Ceiling`'s own doc gives
 /// the reason, and this provider meets it exactly: `gh api` against one comment id is a
 /// live read of GitHub's current record for it, not a cached or derived one.
 ///
@@ -52,7 +52,7 @@ pub const fn Declared_Guarantee() -> Guarantee
     );
 }
 
-/// This provider's offer against [`crate::contract::Capability_Contract`].
+/// This provider's offer against [`nomos_cap_review_finding::Capability_Contract`].
 #[must_use]
 pub fn Provider_Offer() -> ProviderOffer
 {

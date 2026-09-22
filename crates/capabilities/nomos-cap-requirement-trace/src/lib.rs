@@ -35,7 +35,9 @@
 //!
 //! [`contract`]'s own module doc carries the full reasoning: `OD-CAPABILITY-002` licenses
 //! bundling contract and provider in one crate while there is exactly one provider, the
-//! shape `nomos-connector-coderabbit` already took for `nomos.cap.review.finding`. Reading
+//! shape `nomos-connector-coderabbit` held for `nomos.cap.review.finding` until
+//! `OD-ROADMAP-005`'s fifth decision split that one for a reason that does not reach this
+//! capability. Reading
 //! arbitrary files across the repository tree needs a [`nomos_platform::FileSystem`], which
 //! `crates/rules/nomos-rules/src/checks/dependency/zones.rs`'s own `Permits` forbids Rules
 //! zone from reaching except through a Capability Contract zone crate — the same constraint

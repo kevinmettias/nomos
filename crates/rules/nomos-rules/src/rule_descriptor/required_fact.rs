@@ -49,7 +49,7 @@ impl RequiredFact
             Self::GoalsPolicy => nomos_cap_goals_policy::Capability(),
             Self::WordsPolicy => nomos_cap_words_policy::Capability(),
             Self::TestMaterialPolicy => nomos_cap_test_material_policy::Capability(),
-            Self::ReviewFindings => nomos_connector_coderabbit::Capability(),
+            Self::ReviewFindings => nomos_cap_review_finding::Capability(),
             Self::RequirementTrace => nomos_cap_requirement_trace::Capability(),
             Self::ArchitectureDeclaration => nomos_cap_architecture::Capability(),
         };

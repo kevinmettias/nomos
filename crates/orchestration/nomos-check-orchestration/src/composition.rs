@@ -271,14 +271,15 @@ fn Declare_Test_Material_Policy_Capability(registry: &mut Registry) -> Result<()
 }
 
 /// An eleventh capability, one offer against it -- the first connector under
-/// `ARC-CONNECTOR-001` wired for real. `nomos-connector-coderabbit` bundles
-/// `nomos.cap.review.finding`'s contract with its own one provider in a single crate
-/// (`OD-CAPABILITY-002` licenses this while there is only one provider), so declaring and
-/// offering it both name that one crate rather than a contract crate and a provider crate
-/// the way `Declare_Lint_Capability` and `Declare_Dependency_Policy_Capability` do.
+/// `ARC-CONNECTOR-001` wired for real. Declaring and offering name two crates here, the
+/// way `Declare_Lint_Capability` and `Declare_Dependency_Policy_Capability` already do:
+/// the contract is `nomos-cap-review-finding`'s and the offer is the vendor connector's.
+/// They used to be one crate, which `OD-CAPABILITY-002` licenses while a capability has a
+/// single provider -- and it still has one. `OD-ROADMAP-005`'s fifth decision moved the
+/// contract out anyway, so that the generic rule reading it names no vendor.
 fn Declare_Review_Capability(registry: &mut Registry) -> Result<(), RegistryError>
 {
-    registry.Declare(nomos_connector_coderabbit::Capability_Contract())?;
+    registry.Declare(nomos_cap_review_finding::Capability_Contract())?;
     registry.Offer(nomos_connector_coderabbit::Provider_Offer())?;
 
     return Ok(());

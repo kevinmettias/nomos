@@ -61,7 +61,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md@authored | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md | authored | 23 | 8 | sha256:33f282b8156d4f3dd172d5ee4c250a2cb2d4efb04987e2efcae89ba263371d43 |
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md | authored | 22 | 6 | sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md@authored | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md | authored | 27 | 7 | sha256:cae971023f2e38fc400fcb48c0f851cf958af99faf124d0caaba5d34226ee492 |
-| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md@authored | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md | authored | 28 | 7 | sha256:8ba17cb0d7430c3eefb01799b45969f1782123108e58aa782f87beca01bd0e71 |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md@authored | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md | authored | 54 | 15 | sha256:5469cacb65cde974eea5a5afa21dcf4f8d376eea74c7bbabc3abd161709b3c66 |
 | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md@authored | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md | authored | 69 | 18 | sha256:871db338d39dd503e1f4117f04eab7616d135aa320ba89e74c2e9aec3d494c7a |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
@@ -695,6 +695,14 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#18 | authored | 2 | What A Future Bundled Contract Must Satisfy |
 | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#22 | authored | 2 | What Is Owed |
 | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#25 | authored | 2 | What This Does Not Decide |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#29 | authored | 2 | Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#32 | authored | 3 | What still stands, re-checked rather than assumed |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#36 | authored | 3 | What the override actually changed, which is the ground and not the finding |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#39 | authored | 3 | What moved, exactly |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#42 | authored | 3 | The identity constructor went with the provider, not with the type it returns |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#45 | authored | 3 | No re-export, and convenience was not a good enough reason for one |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#47 | authored | 3 | The three conditions, and what became of each |
+| docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#50 | authored | 3 | The guard's population fell to one, and it is not retired |
 | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#1 | authored | 1 | The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright |
 | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#6 | authored | 2 | What Was Measured |
@@ -17285,6 +17293,246 @@ its fixture obligations are that record's, and are untouched.
 *revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / What This Does Not Decide · hash: sha256:5e43a6d9b3f847894a0e7b4773ebb2752ff63e03e8cce3ed4feeb2f15009f2e0*
 
 Checked 2026-09-14 against the bundled crates this adjudication reaches and `nomos-rules`' own edges onto them.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#29
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds · hash: sha256:94a483289822a3e92d78116809539804ee4ba78bb07f952f089c401742639278*
+
+## Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#30
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds · hash: sha256:3912be9b0647a90f753c22762e6dba203217f8186be16945b3d3c1376f94d6cf*
+
+`OD-ROADMAP-005`, decision 5, supersedes this record's closing sentence — "neither crate is
+split by this record" — for one of the two crates it reaches.
+`nomos.cap.review.finding`'s contract now lives in `nomos-cap-review-finding`, and
+`nomos-connector-coderabbit` keeps the provider. `nomos-cap-requirement-trace` is untouched
+and is still bundled.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#31
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds · hash: sha256:6b25e82b6494756ad0780ad5fe024dcb8ac5e0b1cd76a260c9b39b9359f0693f*
+
+Nothing measured above is withdrawn, and saying which part moved is the whole content of
+this amendment. A reader arriving at this record from the tree would otherwise find a
+decision not to split beside a split, with nothing to say which is current.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#32
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / What still stands, re-checked rather than assumed · hash: sha256:11ba404aff6e922f2df524cd450e2e1f58872e57727e747976264e94bc53ba37*
+
+### What still stands, re-checked rather than assumed
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#33
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / What still stands, re-checked rather than assumed · hash: sha256:ac1ab9f2847faeb96301a10350e046d4f0cda80ca4b57f623226e5236961e08c*
+
+All four measurements, re-run on 2026-09-22 against the tree immediately before the split:
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#34
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / What still stands, re-checked rather than assumed · hash: sha256:fafba93742292463c9e0e62fbba44e1877591a6003731981d88511ad93e7e2e5*
+
+- **`nomos-rules` called no provider-side symbol of either crate.** Still true and now
+  mechanical for the crate that is still bundled:
+  `Test_Rules_Should_Name_Only_The_Contract_Half_Of_A_Bundled_Crate` is green, and it was
+  green with `nomos-connector-coderabbit` in its population on the commit before this one.
+  The split was not repairing a violation. There was none.
+- **No platform implementation was reachable from `Rules`, so the provider could not act
+  from where a rule sat.** Unchanged: `nomos-rules` still names no `nomos-platform-std` and
+  no composer, and the split neither added nor removed one.
+- **The edge that carried the crates was independently legal.** Unchanged.
+- **So nothing crossed that the model did not already allow.** Unchanged.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#35
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / What still stands, re-checked rather than assumed · hash: sha256:1a20ca81f1e20ddfdc4f3c4a88e437a8e6a80a2c4a940f782eade5f7aa626701*
+
+`OD-CAPABILITY-002`'s criterion is also intact, and this is the easiest thing here to read
+wrongly: the criterion is provider **contention**, and it has not fired.
+`nomos.cap.review.finding` has exactly one provider today, the same one it had when this
+record was written. The contract did not earn a crate under that record; it was given one
+under a different authority.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#36
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / What the override actually changed, which is the ground and not the finding · hash: sha256:877a1ef46e7575261c46a98b4a5d2e0bb20b6b172b114d2603f6154ad6c378c0*
+
+### What the override actually changed, which is the ground and not the finding
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#37
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / What the override actually changed, which is the ground and not the finding · hash: sha256:88a29bd09c39ddde486053d309ebe2b14b5259607362be97a07e5f62c6b9645d*
+
+The external review's objection was never that a rule could act through the provider linked
+beside it. This record measured that and found it could not, and that finding is the one the
+override leaves alone. The objection was that a **generic rule layer had to spell a vendor's
+crate name** to obtain a generic capability: `nomos-rules` wrote `nomos_connector_coderabbit`
+to reach `nomos.cap.review.finding`, so a reader of the Rules zone met `CodeRabbit` there.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#38
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / What the override actually changed, which is the ground and not the finding · hash: sha256:eb3eaa95b8dc68623a328c007ab93a6588d481b747b4960f09ed28c55a0eb61b*
+
+This record answered that with "the Rules boundary is about how a verdict is reached, not
+about which object code shares an rlib," which remains correct about the boundary and does
+not answer the naming complaint at all. The owner treated the naming complaint as a
+sequencing question — build the split now rather than wait for contention — which is the
+owner's to decide, and recorded the bound in `OD-ROADMAP-005` rather than leaving six
+implementations reading as sessions building against accepted records.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#39
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / What moved, exactly · hash: sha256:26aef662ce84bb43165059f61c1b4e6a2932b282a74408a4cb2eefe04d8ced04*
+
+### What moved, exactly
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#40
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / What moved, exactly · hash: sha256:d6dd6e0a5905b00f2c2a361cf2ade5d64b861725c02a425ca51fca6d06d81348*
+
+| went to `nomos-cap-review-finding` | stayed in `nomos-connector-coderabbit` |
+|---|---|
+| `CAPABILITY`, `SCHEMA`, `CONTRACT_VERSION`, `Capability`, `Payload_Schema`, `Ceiling`, `Capability_Contract` | `PROVIDER`, `Declared_Guarantee`, `Provider_Offer` |
+| `FindingPayload`, `PayloadRefusal`, `ReviewFindingId`, `Encode_Payload`, `Parse_Payload` | `Fetch_Review_Comment`, `Translate_Review_Comment`, `Materialize_Review_Comment`, `Fact_Of`, `ReviewFindingFact`, `FactContext` |
+| | `Sample_Review_Comment_Response`, `ReviewFindingProduction`, `Review_Comment_Identity` |
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#41
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / What moved, exactly · hash: sha256:f4e2993ff69f5df183c721a27b000dcbfd24024deeacaa0eceb4f296b967bc62*
+
+The right-hand column is `OD-CAPABILITY-002`'s own division applied unchanged: a
+`ProviderId` is a provider's own name, a `Guarantee` is its own claim, a recorded fixture is
+its own evidence, and a `Strategy` declaration is a promise about its own repetition. The
+codec crossed with the payload types because every extracted `nomos-cap-*` crate in this
+workspace already holds both halves of its codec — `nomos-cap-lint` and `nomos-cap-dependency`
+are the precedent, and splitting a writer from its reader would put the agreed wire shape in
+two crates.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#42
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / The identity constructor went with the provider, not with the type it returns · hash: sha256:3dffa83f1e6da8bd12a1c42e39bc65108da9ca4cabbeade2bcdb576cbee6dbe2*
+
+### The identity constructor went with the provider, not with the type it returns
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#43
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / The identity constructor went with the provider, not with the type it returns · hash: sha256:bcadf443c01bfb0c5b978b38f8425744edca42781d2824c8e2da93b1601a76b1*
+
+`ReviewFindingId` is a payload field, so the type is the agreement's. Its constructor was
+not. `Of_Review_Comment` joined a repository and GitHub's permanent comment id with a
+`review-comment` label — GitHub's addressing scheme, spelled out. A contract crate carrying
+it would be one vendor's convention wearing the agreement's name, which is the defect this
+piece exists to remove, one level down from the crate name.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#44
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / The identity constructor went with the provider, not with the type it returns · hash: sha256:9ec692d29b621d3c4da6e0dfed63db3dda97346faada8645bd12bf7035709bc4*
+
+So it is `nomos_connector_coderabbit::Review_Comment_Identity` now, and the contract carries
+an opaque identity that a second provider over a different review system could mint its own
+way. This was visible in the tree before the split and is worth recording because it is the
+kind of thing a crate-level move leaves behind: `nomos-rules`' own test fixture built its
+sample payload by calling `ReviewFindingId::Of_Review_Comment(...)` — a generic rule's test
+minting a GitHub identity. It spells the literal now, and could not do otherwise:
+`Permits` forbids `Rules` from naming `Provider`, which is where the constructor lives.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#45
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / No re-export, and convenience was not a good enough reason for one · hash: sha256:6b3926685326815e22acca6d017e1bf23ef59fbd8254df95267d643874f7150b*
+
+### No re-export, and convenience was not a good enough reason for one
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#46
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / No re-export, and convenience was not a good enough reason for one · hash: sha256:ef5bde74eea6110175dd183f85ebf4cca3d32b5c48d1421491c2f4b08fbcb7c3*
+
+`nomos-connector-coderabbit` re-exports no part of the contract. A re-export would keep
+`nomos_connector_coderabbit::Capability()` and `nomos_connector_coderabbit::FindingPayload`
+spelling correctly, so a consumer could go on naming the vendor crate for a generic
+contract — which is precisely the thing the review objected to and the only thing this
+piece removes. A compatibility shim here would be the defect preserved behind a `pub use`,
+and the migration it would spare is four call sites in two crates, both of them in this
+workspace, both changed in the same commit. `nomos-lang-rust-clippy` does not re-export
+`nomos-cap-lint` either, and nothing has ever wanted it to.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#47
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / The three conditions, and what became of each · hash: sha256:17322824aaaf7e6489c21907b0d3a5277445ce60d04a4c1255500910ee16303a*
+
+### The three conditions, and what became of each
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#48
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / The three conditions, and what became of each · hash: sha256:926da1d23ae112f064b1cfbf6bdd50ac415665126b450f055d461cb9e3ec5305*
+
+The conditions this record set for a **bundled** crate are unchanged and still govern
+`nomos-cap-requirement-trace`. For `nomos-connector-coderabbit` they no longer apply,
+because it is no longer bundled, which this record's own third condition anticipated in
+terms: contention "is that record's own trigger to extract the contract into its own
+crate — at which point this question stops being asked." The trigger that fired was a
+different one; the consequence is the one predicted.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#49
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / The three conditions, and what became of each · hash: sha256:2dd07044888ecbd07b4d2b2338b6a0360e587379f5fc541d81845d447c068ad9*
+
+The consequence is also stronger than the conditions were. `nomos-connector-coderabbit` is
+Provider zone now — `OD-CAPABILITY-015`'s criterion is what a crate *declares*, and it
+declares no contract — so `Permits` forbids `Rules` from naming it at all, and the first
+condition is enforced for this crate by the dependency model rather than by a text scanner.
+The debt this record recorded as owed, and
+`tests/contract/tests/boundaries/bundled_contract_half.rs` paid, is what held that line in
+the meantime.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#50
+
+*revision: authored · kind: heading · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / The guard's population fell to one, and it is not retired · hash: sha256:cf8b26b5397dec3ae293835197872ea0b936c8554ffed147e35fa61baaaacd19*
+
+### The guard's population fell to one, and it is not retired
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#51
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / The guard's population fell to one, and it is not retired · hash: sha256:0bfcba5543109478405608af81ab3905b4ff7ce3c3216e7c7bb6333629f66188*
+
+`HALVES` named two crates and now names one. Dropping the row rather than editing it is
+deliberate: a row for a crate that is not bundled is a classification outliving its subject,
+which is the staleness `Test_Every_Module_Of_A_Bundled_Crate_Should_Be_Classified` exists to
+refuse in the other direction.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#52
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / The guard's population fell to one, and it is not retired · hash: sha256:455442fe51dbf2f03045eb396d23ed8aa4ad86159a3aef7c5fe8691f8ab3e7e8*
+
+A population of one is a guard with a subject; a population of zero would be
+`OD-COMPLETENESS-001`'s shape — a check quantifying over an empty universe and passing
+having judged nothing. That was the risk worth naming, so both assertions now check the
+population is non-empty and that `nomos-rules` still depends on each crate named, rather
+than trusting that somebody would notice. `Test_A_Rule_Naming_A_Fact_Producing_Symbol_Should_Be_Rejected`,
+the negative control, no longer spells a crate name at all: it reads the first row of
+`HALVES` and takes its own literals from what that crate re-exports, so the next such move
+cannot leave a control passing about a crate nobody bundles.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#53
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / The guard's population fell to one, and it is not retired · hash: sha256:e08e7a165d265dc79e1e1fe1b35319a717d97ec3333d04124b227573e726d02f*
+
+Retiring the module was considered and rejected on two counts. It would leave this record's
+first clause unenforced for `nomos-cap-requirement-trace`, which is still bundled and still
+named by `nomos-rules`; and the day a second bundled contract arrives, the guard would have
+to be written again out of this record, which is the cost `OD-PLATFORM-004`'s comparison
+above was about.
+
+### docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md#54
+
+*revision: authored · kind: prose · heading: A bundled provider does not defeat the Rules boundary, because what that boundary forbids is a rule obtaining its own answer / Amendment, Version 2: The Owner Required One Of The Two Crates Split, And Every Measurement Above Still Holds / The guard's population fell to one, and it is not retired · hash: sha256:63af808b62430e39f9f09b59dba652348224b24785f31e65a946027873bfba84*
+
+Checked 2026-09-22 against the split as landed: the workspace compiles, the contract crate
+carries no provider symbol, `Test_A_Capability_Id_Should_Be_Written_In_One_Crate` still
+finds `nomos.cap.review.finding` in exactly one crate's `src`, and
+`Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot` holds both crates' surfaces to
+their committed snapshots.
 
 ### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#1
 

@@ -1,0 +1,21 @@
+[package]
+name = "nomos-cap-review-finding"
+version = "0.1.0"
+description = "Capability Contract zone. The nomos.cap.review.finding contract on its own: capability identity, contract version, ceiling, payload schema, payload codec and payload types, with no provider beside them. OD-ROADMAP-005, OD-CAPABILITY-017, OD-CAPABILITY-002."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# The same two dependencies nomos-cap-lint and nomos-cap-dependency carry, and for the
+# same reason: a contract is the agreed meaning of a question, so it names the registry
+# type it is declared into and the protocol vocabulary its ceiling is written in, and
+# nothing else. serde is here for ReviewFindingId's own derives, which travelled with the
+# payload type rather than being added by the move.
+[dependencies]
+nomos-capability = { workspace = true }
+nomos-contracts = { workspace = true }
+serde = { workspace = true }
+
+[lints]
+workspace = true

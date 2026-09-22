@@ -1,18 +1,34 @@
-//! Capability Contract zone -- `nomos.cap.review.finding`'s contract, and its one
-//! provider, over `CodeRabbit`'s own review comments as `gh api` reads them.
+//! Provider zone -- the one provider of `nomos.cap.review.finding`
+//! (`nomos-cap-review-finding`), over `CodeRabbit`'s own review comments as `gh api` reads
+//! them.
 //!
-//! # Why this is a new capability, not a second offer against an artifact-shaped contract
+//! # Why the contract is one crate away
 //!
-//! [`contract`]'s own module doc carries the full measurement; the summary is that a
-//! `CodeRabbit` review comment answers a different question than an external artifact's
-//! title, state, locator and kind. `ARC-CONNECTOR-001` named Jira, Confluence and
-//! `SharePoint` as the connectors expected to contend for a shared artifact contract --
-//! every one an issue tracker or a document store answering that exact question with a
-//! different vendor's bytes. A review finding is evidence about a diff (a file, a line, a
-//! severity, a category), not a record with a title and a lifecycle state, and
-//! `OD-CAPABILITY-002`'s own criterion is contention on the same question, not
-//! resemblance through a shared connector shape. [`contract`], [`guarantee`], [`fetching`]
-//! and [`translation`] are this crate's one offer against it.
+//! It used to be here. `OD-CAPABILITY-002` licenses a contract living beside its only
+//! provider until a second one contends for it, and `OD-CAPABILITY-017` measured that the
+//! bundled arrangement defeated no boundary: `nomos-rules` called no provider-side symbol
+//! of this crate, and no platform implementation was reachable from where a rule sits, so
+//! the `gh api` machinery linked beside a rule could not act. Both findings stand.
+//!
+//! `OD-ROADMAP-005`'s fifth decision superseded the conclusion on a different ground. An
+//! external architecture review objected that `nomos-rules`, a generic rule layer, had to
+//! name a *vendor* crate to obtain a generic capability, and the owner required the split
+//! built now rather than at contention. So [`nomos_cap_review_finding`] holds the
+//! agreement -- capability identity, contract version, ceiling, payload schema, payload
+//! codec and payload types -- and this crate holds what a provider claims for itself: its
+//! own name, its own guarantee, its own recorded fixture, its own determinism declaration
+//! and the code that reaches GitHub.
+//!
+//! **Nothing of the contract is re-exported here.** A re-export would leave
+//! `nomos_connector_coderabbit::Capability()` spelling correctly, so a consumer could keep
+//! naming a vendor crate for a generic contract and the defect the split exists to remove
+//! would survive it. Consumers name [`nomos_cap_review_finding`] directly, exactly as
+//! `nomos-lang-rust-clippy`'s consumers name `nomos-cap-lint`.
+//!
+//! This crate is Provider zone for the same reason: `OD-CAPABILITY-015`'s criterion is what
+//! a crate *declares*, and this one declares no capability contract any more. `Permits`
+//! forbids `Rules` from naming `Provider`, so the prohibition `OD-CAPABILITY-017` had to
+//! establish by measurement is now the ordinary declared edge.
 //!
 //! # The seam `ARC-CONNECTOR-001` draws, inside one crate
 //!
@@ -20,27 +36,18 @@
 //! api repos/{repository}/pulls/comments/{id}` through a caller-supplied
 //! [`nomos_platform::ProgramLauncher`] and hands back GitHub's own bytes, unread.
 //! [`translation::Translate_Review_Comment`] is the vendor-to-canonical side: a pure
-//! function from those bytes to this crate's own [`payload::finding_payload::
-//! FindingPayload`], naming no vendor type in its return shape and refusing rather than
-//! guessing at a comment-body convention it was not written against.
-//! [`provider::Materialize_Review_Comment`] composes the two into the one fact
-//! `contract::Ceiling`'s `IncrementalGranularity::None` allows per finding. This split is
-//! what lets [`fixture::Sample_Review_Comment_Response`] -- this crate's one recorded
-//! fixture, per `OD-CONNECTOR-002` -- stand in for a live call on every replay:
+//! function from those bytes to the contract's own
+//! [`nomos_cap_review_finding::FindingPayload`], naming no vendor type in its return shape
+//! and refusing rather than guessing at a comment-body convention it was not written
+//! against. [`identity::Review_Comment_Identity`] is this crate's own mint, which travelled
+//! with the provider rather than with the payload type it returns, because GitHub's
+//! addressing scheme is this provider's knowledge and not the agreement's.
+//! [`provider::Materialize_Review_Comment`] composes them into the one fact
+//! `nomos_cap_review_finding::Ceiling`'s `IncrementalGranularity::None` allows per finding.
+//! This split is what lets [`fixture::Sample_Review_Comment_Response`] -- this crate's one
+//! recorded fixture, per `OD-CONNECTOR-002` -- stand in for a live call on every replay:
 //! [`translation::Translate_Review_Comment`] reads it exactly as it would read
 //! [`fetching::Fetch_Review_Comment`]'s own output.
-//!
-//! # Why this crate is Capability Contract zone, not Provider zone
-//!
-//! Every other real `ToolProvider` in this workspace splits its contract into its own
-//! `nomos-cap-*` crate at Capability Contract zone specifically so `nomos-rules` (Rules
-//! zone) can depend on the contract without depending on the Provider-zone crate that
-//! performs the I/O -- `crates/rules/nomos-rules/src/checks/dependency/zones.rs`'s own
-//! `Permits` forbids `Rules` from naming `Provider` at all. `OD-CAPABILITY-002` licenses
-//! bundling contract and provider in one crate while there is only one provider; this
-//! crate does exactly that, so it is classified Capability Contract zone rather than
-//! Provider zone -- Provider zone would leave `nomos.cap.review.finding` structurally
-//! unreachable by any rule, not merely undesirable.
 //!
 //! # What this crate does not do
 //!
@@ -58,26 +65,20 @@
 
 #![forbid(unsafe_code)]
 
-mod contract;
 #[path = "review_finding_production.rs"]
 mod determinism;
 mod fetching;
 mod fixture;
 mod guarantee;
-#[path = "review_finding_id.rs"]
+#[path = "review_comment_identity.rs"]
 mod identity;
-mod payload;
 mod provider;
 mod translation;
 
-pub use contract::{Capability, Capability_Contract, Ceiling, Payload_Schema, CAPABILITY, CONTRACT_VERSION, SCHEMA};
 pub use determinism::ReviewFindingProduction;
 pub use fetching::{Fetch_Review_Comment, FetchError};
 pub use fixture::Sample_Review_Comment_Response;
 pub use guarantee::{Declared_Guarantee, Provider_Offer, PROVIDER};
-pub use identity::ReviewFindingId;
-pub use payload::finding_payload::FindingPayload;
-pub use payload::payload_refusal::PayloadRefusal;
-pub use payload::{Encode_Payload, Parse_Payload};
+pub use identity::Review_Comment_Identity;
 pub use provider::{ConnectorError, Fact_Of, FactContext, Materialize_Review_Comment, ReviewFindingFact};
 pub use translation::{Translate_Review_Comment, TranslationError};

@@ -77,13 +77,14 @@ nomos-cap-test-material-policy = { workspace = true }
 # the description a rule judges against. The three dependency checks name this contract and
 # never a component of their own.
 nomos-cap-architecture = { workspace = true }
-# nomos-connector-coderabbit, the identical reasoning applied to a connector under
-# ARC-CONNECTOR-001 rather than a same-process ToolProvider: Check_Review_Findings names
-# nomos.cap.review.finding, whose contract this crate bundles with its own one provider
-# (OD-CAPABILITY-002 licenses this for a single-provider capability) at Capability
-# Contract zone rather than Provider zone, precisely so this crate may depend on it at
-# all. OD-RULES-010, OD-EXECUTOR-006.
-nomos-connector-coderabbit = { workspace = true }
+# nomos-cap-review-finding, the identical reasoning applied to evidence from a connector
+# under ARC-CONNECTOR-001 rather than from a same-process ToolProvider: Check_Review_Findings
+# names nomos.cap.review.finding and nothing that produces it. The contract used to be
+# bundled into nomos-connector-coderabbit and this line used to name that vendor crate;
+# OD-ROADMAP-005's fifth decision moved the contract out, so what a generic rule layer
+# names is a generic contract. The vendor crate is Provider zone now and Permits forbids
+# naming it from here at all. OD-RULES-010, OD-EXECUTOR-006, OD-CAPABILITY-017.
+nomos-cap-review-finding = { workspace = true }
 # nomos-cap-requirement-trace, the second rule here whose subject is not source at all:
 # Check_Requirement_Trace_Staleness names nomos.cap.requirement.trace, whose contract this
 # crate bundles with its own one provider (OD-CAPABILITY-002 licenses this for a

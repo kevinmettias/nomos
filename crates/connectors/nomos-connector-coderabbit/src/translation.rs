@@ -35,8 +35,8 @@ mod translation_error;
 
 pub use translation_error::TranslationError;
 
-use crate::ReviewFindingId;
-use crate::payload::finding_payload::FindingPayload;
+use crate::identity::Review_Comment_Identity;
+use nomos_cap_review_finding::FindingPayload;
 
 /// The GitHub account every comment this connector translates must be posted by.
 const CODERABBIT_BOT_LOGIN: &str = "coderabbitai[bot]";
@@ -53,7 +53,7 @@ const RECOGNIZED_COMMENT_VERSION_MARKER: &str = "<!-- cr-comment:v1:";
 /// [`crate::fetching::Fetch_Review_Comment`] already knows which repository it asked about.
 /// Nomos supplies it here rather than inferring it, the same "own the construction, do not
 /// claim to have derived the vendor's value" discipline `ARC-CONNECTOR-001`'s first
-/// invariant states, mirrored by [`crate::identity::ReviewFindingId::Of_Review_Comment`].
+/// invariant states, mirrored by [`crate::identity::Review_Comment_Identity`].
 ///
 /// # Errors
 ///
@@ -76,7 +76,7 @@ pub fn Translate_Review_Comment(repository: &str, vendor_bytes: &[u8]) -> Result
 
     return Ok(FindingPayload {
         external_system: "coderabbit".to_owned(),
-        external_id: ReviewFindingId::Of_Review_Comment(repository, id),
+        external_id: Review_Comment_Identity(repository, id),
         locator: html_url,
         category,
         severity,

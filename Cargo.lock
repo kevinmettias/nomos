@@ -1082,6 +1082,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "nomos-cap-review-finding"
+version = "0.1.0"
+dependencies = [
+ "nomos-capability",
+ "nomos-contracts",
+ "serde",
+]
+
+[[package]]
 name = "nomos-cap-scripting-policy"
 version = "0.1.0"
 dependencies = [
@@ -1134,6 +1143,7 @@ dependencies = [
  "nomos-cap-lint",
  "nomos-cap-naming-policy",
  "nomos-cap-requirement-trace",
+ "nomos-cap-review-finding",
  "nomos-cap-scripting-policy",
  "nomos-cap-syntax",
  "nomos-cap-test-material-policy",
@@ -1205,12 +1215,12 @@ name = "nomos-connector-coderabbit"
 version = "0.1.0"
 dependencies = [
  "nomos-analysis",
+ "nomos-cap-review-finding",
  "nomos-capability",
  "nomos-contracts",
  "nomos-model",
  "nomos-platform",
  "nomos-platform-std",
- "serde",
  "serde_json",
 ]
 
@@ -1647,12 +1657,12 @@ dependencies = [
  "nomos-cap-lint",
  "nomos-cap-naming-policy",
  "nomos-cap-requirement-trace",
+ "nomos-cap-review-finding",
  "nomos-cap-scripting-policy",
  "nomos-cap-syntax",
  "nomos-cap-test-material-policy",
  "nomos-cap-words-policy",
  "nomos-capability",
- "nomos-connector-coderabbit",
  "nomos-contracts",
  "nomos-lang-rust",
  "nomos-model",

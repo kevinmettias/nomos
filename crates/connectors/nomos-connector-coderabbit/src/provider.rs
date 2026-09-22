@@ -9,11 +9,10 @@ pub use connector_error::ConnectorError;
 pub use fact_context::FactContext;
 pub use review_finding_fact::ReviewFindingFact;
 
-use crate::contract::{Capability, Payload_Schema, CONTRACT_VERSION};
 use crate::fetching::Fetch_Review_Comment;
 use crate::guarantee::{Declared_Guarantee, PROVIDER};
-use crate::payload::{finding_payload::FindingPayload, Encode_Payload};
 use crate::translation::Translate_Review_Comment;
+use nomos_cap_review_finding::{Capability, Encode_Payload, FindingPayload, Payload_Schema, ReviewFindingId, CONTRACT_VERSION};
 use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_contracts::{EvidenceClass, Guarantee, ProviderId, SubjectId};
 use nomos_platform::ProgramLauncher;
@@ -73,7 +72,7 @@ pub fn Fact_Of(payload: &FindingPayload, context: FactContext) -> ReviewFindingF
 /// `semantic_inputs` digests the finding's own external identity: two different findings
 /// must file under two different keys even though both share the constant placeholder
 /// subject every connector fact carries today.
-fn Finding_Fact_Key(subject: SubjectId, external_id: &crate::identity::ReviewFindingId, guarantee: Guarantee, context: FactContext) -> FactKey
+fn Finding_Fact_Key(subject: SubjectId, external_id: &ReviewFindingId, guarantee: Guarantee, context: FactContext) -> FactKey
 {
     return FactKey {
         contract: Capability(),
@@ -124,7 +123,7 @@ mod tests
         assert_eq!(fact.Key().guarantee, GuaranteeDigest::Of(&Declared_Guarantee()));
         assert_eq!(fact.payload.schema, Payload_Schema());
 
-        let decoded = crate::payload::Parse_Payload(&fact.payload.bytes).expect("this crate's own encoding");
+        let decoded = nomos_cap_review_finding::Parse_Payload(&fact.payload.bytes).expect("the contract's own encoding");
         assert_eq!(
             decoded.external_id.As_Str(),
             "coderabbitai/rabbits-playground#review-comment:3521038097"
@@ -149,8 +148,8 @@ mod tests
         let subject = nomos_model::Subject_Of_Path("");
         let guarantee = Declared_Guarantee();
 
-        let one = crate::identity::ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", COMMENT_ID);
-        let other = crate::identity::ReviewFindingId::Of_Review_Comment("coderabbitai/rabbits-playground", OTHER_COMMENT_ID);
+        let one = crate::identity::Review_Comment_Identity("coderabbitai/rabbits-playground", COMMENT_ID);
+        let other = crate::identity::Review_Comment_Identity("coderabbitai/rabbits-playground", OTHER_COMMENT_ID);
 
         let first_key = Finding_Fact_Key(subject, &one, guarantee, Context());
         let second_key = Finding_Fact_Key(subject, &other, guarantee, Context());
@@ -181,7 +180,7 @@ mod tests
         assert_eq!(subject, nomos_model::Subject_Of_Path(""));
         assert_eq!(fact.evidence, EvidenceClass::Observed);
 
-        let decoded = crate::payload::Parse_Payload(&fact.payload.bytes).expect("this crate's own encoding");
+        let decoded = nomos_cap_review_finding::Parse_Payload(&fact.payload.bytes).expect("the contract's own encoding");
         assert_eq!(decoded.external_system, "coderabbit");
         assert_eq!(
             decoded.external_id.As_Str(),
