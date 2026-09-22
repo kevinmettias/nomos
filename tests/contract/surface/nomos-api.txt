@@ -104,6 +104,7 @@ pub enum variant nomos_api::Disposition::Indeterminate
 pub enum variant nomos_api::Disposition::Passed
 pub enum variant nomos_api::FindingBucket::BaselineExceeded
 pub enum variant nomos_api::FindingBucket::Baselined
+pub enum variant nomos_api::FindingBucket::BelowEvidenceFloor
 pub enum variant nomos_api::FindingBucket::Blocking
 pub enum variant nomos_api::FindingBucket::Calibrated
 pub enum variant nomos_api::FindingBucket::Suppressed
@@ -113,7 +114,7 @@ pub enum variant nomos_api::FreshnessResponse::Examined { examined: Vec<ProfileO
 pub enum variant nomos_api::FreshnessResponse::NoSuchProfile { requested: String, known: Vec<String>, }
 pub enum variant nomos_api::FreshnessResponse::RequirementUnexamined { requested: String, only: Option<String>, }
 pub enum variant nomos_api::FreshnessResponse::Unreadable { cause: String, }
-pub enum variant nomos_api::GateExplainResponse::Found { finding: Box<Finding>, would_block: bool, calibrated_by: Option<RuleCalibrationResponse>, suppressed_by: Box<Option<SuppressionResponse>>, baselined_by: Option<BaselineDebtResponse>, contract_record: Option<String>, contract_record_version: Option<u32>, }
+pub enum variant nomos_api::GateExplainResponse::Found { finding: Box<Finding>, would_block: bool, floored_by: Option<String>, calibrated_by: Option<RuleCalibrationResponse>, suppressed_by: Box<Option<SuppressionResponse>>, baselined_by: Option<BaselineDebtResponse>, contract_record: Option<String>, contract_record_version: Option<u32>, }
 pub enum variant nomos_api::GateExplainResponse::NotFound
 pub enum variant nomos_api::GatePlanResponse::Contradictory { cause: String, }
 pub enum variant nomos_api::GatePlanResponse::Planned { rules: Vec<RuleOfferResponse>, }
@@ -305,6 +306,7 @@ pub struct field nomos_api::GateCompareResponse::uncomparable: Option<RunId>
 pub struct field nomos_api::GateFindings::baseline_exceeded_findings: Vec<Finding>
 pub struct field nomos_api::GateFindings::baseline_populations: Vec<BaselinePopulationResponse>
 pub struct field nomos_api::GateFindings::baselined_findings: Vec<Finding>
+pub struct field nomos_api::GateFindings::below_evidence_floor_findings: Vec<Finding>
 pub struct field nomos_api::GateFindings::blocking_findings: Vec<Finding>
 pub struct field nomos_api::GateFindings::calibrated_findings: Vec<Finding>
 pub struct field nomos_api::GateFindings::suppressed_findings: Vec<Finding>
