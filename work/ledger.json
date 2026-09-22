@@ -93130,7 +93130,7 @@
       "claim": {
         "holder": "fable-p128-daemon",
         "acquired_at": 1790106907,
-        "lease_expires_at": 1790121307
+        "lease_expires_at": 1790120798
       },
       "verification": {
         "argv": [
@@ -93359,7 +93359,7 @@
       "claim": {
         "holder": "fable-p128-provenance-2",
         "acquired_at": 1790106605,
-        "lease_expires_at": 1790117405
+        "lease_expires_at": 1790120089
       },
       "verification": {
         "argv": [
@@ -94184,14 +94184,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p131-prose",
-        "acquired_at": 1790107069,
-        "lease_expires_at": 1790117869
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -94206,6 +94202,156 @@
           "--lib",
           "--test",
           "record_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "orm-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.68s\n     Running unittests src\\lib.rs (F:/repos/nomos-render-p131-target\\debug\\deps\\nomos_check_orchestration-072a6b3ebd0da8a1.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-render-p131-target\\debug\\deps\\nomos_contract_tests-b0cde3716885e4db.exe)\n     Running tests\\record_citation.rs (F:/repos/nomos-render-p131-target\\debug\\deps\\record_citation-538121b0059c9c68.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-render-p131-target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790111297,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "27050a9203ad4cb09a6858d1b573dba1a30994a8"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P131-A-DEFERRED-COST-WAS-PAID-OFF-WITHOUT-ITS-TRIGGER-FIRING-AND-THE-RECORD-STILL-DEFERS-IT",
+      "title": "OD-ANALYSIS-008 defers a clone that no longer exists, and the aggregate it was carved out of may still count it among six live hazards",
+      "why": "OD-ANALYSIS-008 is status open and decides that MemoryFactStore::Invalidate cloning the whole reverse-dependency index is an accepted cost, deferred until a second propagation implementation exists. Three things are now true of it, each measured here at HEAD rather than inferred. The clone is gone: invalidation is a two-pass walk, Walked_Dependents takes a shared borrow of the store and returns an owned Walk, and the second pass takes the mutable borrow afterward, which is exactly the restructuring the record named as the alternative to cloning. Its Why The Clone Is There section quotes DependencyPropagation::Spread as taking a BTreeMap of Digest128 to a set of Digest128; that signature is now generic over Node, so the quotation is stale twice over, once by the two-pass split and once by 27050a92 making the propagation vocabulary name no identity type at all. And the record cites the code at memory_store.rs, while the mechanism now lives in memory_store/invalidation.rs. So this is not prose that drifted around a standing decision, it is a deferral whose subject was paid off without its stated trigger ever firing, which is a different thing and wants deciding rather than patching: a record that still defers a cost nobody pays teaches the next reader that the cost is there. The claimant of 27050a92 measured the staleness and correctly refused to amend a record from outside its territory. There is a second half nobody has measured. ARC-ROADMAP-001 is where these came from, recording that two reviews raised eight performance claims against nomos-analysis of which six were confirmed as hazards left for later, and saying the assessed set stays at the six entries those records describe. OD-ANALYSIS-008 names one of the six. If closing it leaves that aggregate asserting a count that is no longer true, the aggregate is stale by the same act, and 27050a92 plus bb79f7a5 may have reached others of the six as well.",
+      "done_when": "OD-ANALYSIS-008 no longer defers a cost this workspace does not pay, and its disposition is decided rather than patched: it is superseded, closed or amended, and whichever is chosen the record says that the deferral ended because the subject was removed by other work and not because its stated trigger fired, because those are different reasons and the difference is the part a future reader cannot re-derive. A second propagation implementation still does not exist, so any wording implying the trigger fired is refused. Its stale citations go with it: the quoted Spread signature and the memory_store.rs path both name what is there now, verified by reading the code rather than by copying this item. The second half is measured and answered rather than left: the claimant reads ARC-ROADMAP-001's statement that the assessed set stays at six entries, determines whether closing this one falsifies it, and checks each of the remaining five against HEAD, since 27050a92 and bb79f7a5 landed interning, a lending read, linear ranking and a stated retention rule and may have reached more than one. What that measurement finds is reported whichever way it falls, and a hazard still real is said to be still real rather than quietly dropped. If the aggregate needs correcting, the claimant widens to it through the ledger and corrects it in this commit; if widening is refused because another item holds it, the finding is boarded as its own item naming the measurement, and neither the aggregate nor another holder's record is edited. No code changes: this is a record reconciliation and any behaviour change found necessary is a separate item. Because governing records change, both derived projections are re-rendered, corpus-unset, from a worktree whose registered records are exactly the ones this commit publishes, per the procedure in .claude/skills/nomos-spec-change, and spec freshness reports both profiles at exit 0. Rendering only the diagram leaves the other stale and red. The predicate passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P132-SEVEN-OF-EIGHT-AUTHORIZED-PIECES-ARE-BOARDED-AND-THE-OPERATION-SURFACE-IS-THE-ONE-THAT-IS-NOT",
+      "title": "The application operation surface OD-ROADMAP-005 authorizes as its third piece is the only one nobody boarded, and its shape is undecided",
+      "why": "OD-ROADMAP-005 decision 3 authorizes an application operation surface that the hosts project, superseding OD-HOST-011 v1's refusal of a contracts crate and OD-HOST-012 v1's decision that repo-tooling handlers keep their present home, and what it authorizes is one operation surface the hosts depend on in place of assembling the product themselves. That record says eight items are authored origin required citing it. Seven of the eight are on the board and this one is not: a scan of every item's id, title, why and done_when finds exactly one naming an operation surface, P125-A-RULE-STATES-WHAT-A-HOST-MAY-KNOW-OF-THE-ORCHESTRATION-GRAPH, which is Done and cites a different decision. So the largest authorized piece has been sitting unclaimed because nobody wrote it down, which is the failure mode a board exists to prevent. ARC-ROADMAP-001 measures the same gap at its tenth item, calling the application-service boundary partial and being reopened as that record was written: nomos-api exports thirty Handle_ functions, a real convergence point, but there is no operation-surface crate beneath the hosts, so each host still assembles the product itself, nomos-cli naming twenty-six nomos crates and nomos-api twenty-two, and IF-001's canonical application service per user-visible query or action is satisfied for the verbs nomos-api covers rather than by a boundary the hosts depend on. The external review that prompted this framed the gap as the service lagging the command line, and that framing is close to wrong and worth recording: the command line dispatches nine groups and eight have a counterpart, so the service is one verb behind, not badly behind. The one without a seam is profile, the first-run verb, which renders a workspace profile and writes a starting gate policy entirely inside nomos-cli. The gap is therefore not parity of verbs but the absence of a boundary, and an item authored against the review's framing would build the wrong thing. What the surface's unit is, which operations belong to it, where it sits given that a host may not name another host, and whether profile joins it or is declared host-local, are all undecided, which is why this is a decision and not an implementation.",
+      "done_when": "A record under the reserved identifier decides the shape of the application operation surface well enough that an implementer needs no further design, and is registered so it governs rather than merely existing. It states what one operation is as a unit and the membership rule that decides whether a given thing is one, in a form that answers for an operation nobody has written yet rather than by listing today's verbs. It decides where the surface sits against the declared zones in nomos-architecture.json, and it is explicit that a host may not name another host, so the surface is named by the hosts rather than naming them, and any arrangement requiring a new zone exception is refused here rather than discovered later. It decides whether profile joins the surface or is declared host-local, and if host-local it says what makes it so in a way that would also classify the next verb of its kind; leaving profile unmentioned fails this clause, because it is the one measured asymmetry and silence about it is what created this gap. It states the falsifier in measurable terms: ARC-ROADMAP-001 records nomos-cli naming twenty-six nomos crates and nomos-api twenty-two, and the record says what those counts must become for the surface to be real, so a later claim of success is checkable rather than asserted. It says what it does not authorize, and in particular that the surface is not a second authority beside anything already governing, since a second home for a decided thing is what this repository files records to refuse. It names the implementation item or items it triggers and what each would have to establish, sized so that no single one reserves both hosts and the registration files indefinitely, because that territory blocks most of the board. The claimant re-measures the two crate-naming counts and the nine command-line groups at HEAD rather than copying them from this item, and reports what it finds even where that contradicts the numbers here; several sessions are committing to these crates and the counts move. No code changes: this item decides and does not build, and if the claimant concludes the surface should not be built as authorized, that conclusion is recorded with its measurement rather than acted on, since OD-ROADMAP-005 is an owner requirement and overturning one is not this item's to do. Because a governing record is added, both derived projections go stale: diagrams/relations.mmd and spec/domain-specification.md are both re-rendered, corpus-unset, from a worktree whose registered records are exactly the ones this commit publishes, per the procedure in .claude/skills/nomos-spec-change, and spec freshness reports both profiles at exit 0. The predicate passes.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-HOST-019-the-application-operation-surface-is-shaped-by-what-a-host-would-otherwise-assemble-and-totality-over-the-command-line-is-its-test.md",
+          "crates/spec/nomos-spec-store/records/OD-HOST-019.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P133-FOUR-PUBLIC-RESPONSE-TYPES-OUTLIVED-THE-PER-BACKEND-ARMS-THAT-PRODUCED-THEM",
+      "title": "Four response types are exported and documented as carried, and the collapse of the per-backend arms left nothing producing two of them",
+      "why": "The agent port collapsed the generic path's two per-backend arms behind one port, and the response types the old arms produced are still exported. Measured at HEAD, not inferred. crates/host/nomos-api/src/workflow/dispatch_error_response.rs line 8 imports AgentExecutionErrorResponse and OllamaExecutionErrorResponse and uses neither: DispatchErrorResponse now declares AgentUnavailable, AgentNotSelected and Gate, and its From maps the three DispatchError variants onto exactly those. workflow/step_outcome_response.rs line 9 imports AgentExecutionOutcomeResponse and OllamaExecutionOutcomeResponse and uses neither. Both error types still define a pub(crate) From over their backend's own error, at agent_execution_error_response.rs line 40 and ollama_execution_error_response.rs line 26, and a search of crates for a call of either finds none, so nothing in this workspace constructs them. All four are exported from nomos-api's lib.rs at lines 218 and 219, so they sit in the public surface snapshot, and agent.rs's module doc at lines 15, 16, 31 to 34 still describes them as what a workflow step's outcome and error are rendered as, and explains at line 32 that two of them are deliberately not reused by the agent dispatch response. That prose is the part worth noticing: it explains a distinction between two things, one of which no longer has a producer, so a reader is taught a seam that is not there. Nothing mechanical reports any of this. The gate's Lint step carries no deny for warnings by OD-GATE-007, so the four unused imports are invisible to it, and a surface snapshot records a type whether or not anything produces it, so blessing cannot catch it either. The Outcome pair is not symmetric with the Error pair and the difference must not be assumed away: AgentExecutionOutcomeResponse::From does have a call site, inside its own module at agent_execution_outcome_response.rs line 132, which may be a test rather than a producer.",
+      "done_when": "Each of the four types is measured and dispositioned individually, and the commit says which of the four had a producer and which did not, counted rather than assumed. For a type nothing produces, either it is removed together with its module, its export, its unused import and the prose that describes it as carried, or it is kept and a record says what keeps a type with no producer in a public surface; removal is the expected answer and the burden is on keeping. A type whose only construction is in its own tests is reported as that rather than as produced, because a test constructing a type is not a producer and the distinction is the whole question here. agent.rs's module doc no longer explains a distinction between a type that exists and one that does not, and whatever it says about the agent dispatch response not reusing a workflow response is true of the types that remain. The four unused imports go. No behaviour changes: no judgment, no response a caller already receives, and no serialized shape a consumer reads may move, so if removing a type would change what any existing response serializes, stop and report rather than proceeding. The surface snapshot is re-blessed and the diff is inspected and stated in the commit message, since a shrinking public surface is exactly the change a bless can hide. Each site is re-measured at HEAD before editing, because several sessions are committing to this crate and one may have corrected it already, in which case say so and name the commit rather than claiming it. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/workflow.rs",
+          "crates/host/nomos-api/src/workflow",
+          "crates/host/nomos-api/src/agent.rs",
+          "crates/host/nomos-api/src/lib.rs",
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "public_surface"
         ],
         "timeout_seconds": 2700
       },

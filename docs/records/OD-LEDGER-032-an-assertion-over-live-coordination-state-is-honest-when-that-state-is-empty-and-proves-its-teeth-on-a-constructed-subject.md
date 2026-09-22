@@ -112,8 +112,9 @@ still read. `Two_Record_Writers` stopped reading it only because both of its cal
 both territories before contesting anything — they never read what the real items reserved, so
 borrowing them bought nothing and cost a green tree at rest.
 
-It does not touch `OD-LEDGER-007`'s debt register or `KNOWN_SERIALIZERS`, which is empty and
-stays empty. Nothing here declares a serializer to silence a search.
+It does not touch `OD-LEDGER-007`'s debt register or `KNOWN_SERIALIZERS`; what that register
+may hold, and what takes an entry out of it, is `OD-LEDGER-007`'s to say and not this
+record's. Nothing here declares a serializer to silence a search.
 
 ## What Was Considered And Rejected
 

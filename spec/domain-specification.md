@@ -171,7 +171,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md@authored | docs/records/OD-LEDGER-029-a-crate-wide-reservation-going-stale-is-not-the-same-event-as-a-new-one-arriving.md | authored | 22 | 8 | sha256:ab29d2a1225a5ff3aabc40822a8a4487b9d23f1d2a4be034ab7a664619f74a0e |
 | docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md@authored | docs/records/OD-LEDGER-030-a-repository-wide-acceptance-pair-is-a-fact-about-timing-and-not-only-about-authoring.md | authored | 20 | 8 | sha256:b9b8e8c69db8cd1669f9965df1e32ba0ee19634968e153e1d5bb50f6ed7e0d80 |
 | docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md@authored | docs/records/OD-LEDGER-031-the-crate-wide-serializer-register-empties-again-when-the-pair-forcing-both-of-its-entries-reaches-done.md | authored | 15 | 7 | sha256:13bc9a8a9f32e0d46c78adb4f917e5bb47fc79932a8c2bcac5b1f19c0306e7e9 |
-| docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md@authored | docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md | authored | 35 | 9 | sha256:8b99c94d98fdfc2f28901faef55e6d8589203ed121e1d8de16673266842cc199 |
+| docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md@authored | docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md | authored | 35 | 9 | sha256:d67e05bca68dac2949c8e548c209d95151615664db1caff9a77070e38106041c |
 | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md@authored | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md | authored | 17 | 5 | sha256:69ab019a45e8742af61dfa35899a6c68c9d29cc11a8c28c52356296a97a114ea |
 | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md@authored | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md | authored | 14 | 5 | sha256:cb61b6f602f2fc7836f03727ce282c5f46da3e5ef3c6f92108dc77cc862577fc |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md | authored | 17 | 5 | sha256:e28fcdcd8881a5405bfd5398964764cd59fa6d45e8340359ca94d9df98a0d732 |
@@ -51776,10 +51776,11 @@ borrowing them bought nothing and cost a green tree at rest.
 
 ### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#24
 
-*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What This Does Not Say · hash: sha256:19c35aa031200c2248cc65775660f778b413ae4f7def132d916f1ee286d9562c*
+*revision: authored · kind: prose · heading: An assertion over live coordination state is honest when that state is empty, and proves its teeth on a constructed subject / What This Does Not Say · hash: sha256:f813b99c190596bf6266848749c59721d2ff164a6a3d9c0f129f37a2045bb9e1*
 
-It does not touch `OD-LEDGER-007`'s debt register or `KNOWN_SERIALIZERS`, which is empty and
-stays empty. Nothing here declares a serializer to silence a search.
+It does not touch `OD-LEDGER-007`'s debt register or `KNOWN_SERIALIZERS`; what that register
+may hold, and what takes an entry out of it, is `OD-LEDGER-007`'s to say and not this
+record's. Nothing here declares a serializer to silence a search.
 
 ### docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#25
 

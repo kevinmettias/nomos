@@ -32,7 +32,8 @@ const DECLARED_VERSION: ContractVersion = ContractVersion::New(1, 0);
 /// derives from instead of restating.
 ///
 /// Every declaration is [`Judgment::Mechanical`], and that is a measurement rather than a
-/// default: every rule in `DESCRIPTORS` is a linked function this build composes. The
+/// default: every rule in `DESCRIPTORS` is decided by code this build links, whether the rule
+/// is written as a function or declared as a form a linked interpreter reads. The
 /// model-judged arm exists for rules whose judgment is a model reading source — the Go
 /// predecessor's own population — and this workspace declares none yet.
 ///

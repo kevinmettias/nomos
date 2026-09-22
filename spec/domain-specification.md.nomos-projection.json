@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:72e8fa7f7a0d876c5596abd853bf4c4d94883bfb7bc14e90145b6d7770753a21",
-  "inputs_digest": "sha256:f038fa6c43f8eff22f4400e2218a8c49e06db149a52386eda4891308d374925f",
+  "content_digest": "sha256:e0503b6411fe35aa45ab05ada48bd6a5186c49f96566982ae2bc210e66ff0014",
+  "inputs_digest": "sha256:3def32a98b1f74e682779e3b022251cb1418cda5277362e53549cfc5e1613146",
   "sections": [
     [
       "Documents",
@@ -828,7 +828,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md@authored",
-      "hash": "sha256:8b99c94d98fdfc2f28901faef55e6d8589203ed121e1d8de16673266842cc199"
+      "hash": "sha256:d67e05bca68dac2949c8e548c209d95151615664db1caff9a77070e38106041c"
     },
     {
       "content": "documents",
@@ -39923,7 +39923,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-032-an-assertion-over-live-coordination-state-is-honest-when-that-state-is-empty-and-proves-its-teeth-on-a-constructed-subject.md#24",
-      "hash": "sha256:19c35aa031200c2248cc65775660f778b413ae4f7def132d916f1ee286d9562c"
+      "hash": "sha256:f813b99c190596bf6266848749c59721d2ff164a6a3d9c0f129f37a2045bb9e1"
     },
     {
       "content": "blocks",
