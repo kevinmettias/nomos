@@ -17,7 +17,11 @@ pub(super) const VERBS: &str = "\x20 list     [--state ready|waiting|held|lapsed
      from the same refusal `claim` would give.\n\
      \x20 show     --item <id>\n\
      \x20          one item in full: its claim, every claim given up on it with the reason \
-     given, and its verification. `list` is a column per item and cannot carry prose.\n\
+     given, its verification, and then its contract — the `why` and the `done_when` whole and \
+     unabridged, the paths it reserves, and the predicate declared to judge it. `list` is a \
+     column per item and cannot carry prose. This is the verb `AGENTS.md`'s loop means when it \
+     says to read the item's terms before editing anything, so nothing here is clipped or \
+     summarized however long it runs.\n\
      \x20 add      --item <id> --title <text> --why <text> --done-when <text>\n\
      \x20          --kind capability|decision|validation|correction|cleanup\n\
      \x20          --origin required|proposed\n\

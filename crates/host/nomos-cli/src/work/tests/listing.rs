@@ -1,7 +1,8 @@
 //! What `nomos work list` and `show` print, held against the board they print it from.
 
 use super::super::{
-    Bounds, ItemId, LedgerDocument, LedgerItem, ListingScope, Listing_Label, Print_Board, Territory,
+    Bounds, ExitCode, ItemId, LedgerDocument, LedgerItem, ListingScope, Listing_Label, Print_Board,
+    Render_Show, ShowView, Territory,
 };
 use super::{Alternatives_After, FlagAlternatives, Sorted_Words};
 use super::super::parse::Usage_Text;
@@ -397,5 +398,153 @@ fn Test_A_Terminal_State_Filter_Should_Answer_Without_Asking_For_The_Whole_Board
     assert!(
         !printed.contains("next:"),
         "a filtered listing carries no `next:` line, which this bound does not change:\n{printed}"
+    );
+}
+
+/// A `why` as they really arrive on this board: prose long enough that a width limit, a wrap
+/// or an ellipsis anywhere in the renderer would cut it, and ending in a clause a truncating
+/// implementation could not reach.
+///
+/// Written out as one string rather than assembled from parts, because what the assertions
+/// below check is that these exact characters come back out of the verb.
+const A_LONG_WHY: &str = "work show prints the title, the state, the kind, the origin, the claim \
+     history with its reasons, and the verification line, and it prints neither the why nor the \
+     done_when. The two fields that decide what an item is and when it is finished are therefore \
+     unreachable from every verb, and the only way to read them is to parse the board file by \
+     hand. The failure is quiet rather than loud, which is the whole of why it survived: a \
+     session that does not notice proceeds from whatever paraphrase its instructions carried.";
+
+/// A `done_when` at the length these routinely run to, for [`A_LONG_WHY`]'s reason.
+const A_LONG_DONE_WHEN: &str = "show prints the item's why and its done_when in full, unwrapped \
+     and unelided, so that the instruction to read the contract before editing can be followed \
+     through the verb it routes to. A done_when is routinely several hundred words and a \
+     truncated contract is worse than none, because a reader cannot tell which clause they are \
+     missing, so nothing is summarized or line-clipped however long it runs. The output stays \
+     readable when a field is empty and when it is enormous, and the existing lines keep their \
+     order and their spelling so that a reader's habits and any script reading them still work.";
+
+/// One item carrying a whole contract: prose in both fields, a territory of more than one
+/// path, and a declared predicate.
+fn An_Item_With_A_Contract() -> LedgerItem
+{
+    let mut item = Listing_Item("T-1");
+    item.why = A_LONG_WHY.to_owned();
+    item.done_when = A_LONG_DONE_WHEN.to_owned();
+    item.territory = Territory::Of_Files(vec![
+        "crates/host/nomos-cli/src/work/listing.rs".to_owned(),
+        "crates/host/nomos-cli/src/work/tests/listing.rs".to_owned(),
+    ]);
+    item.verification = Some(nomos_ledger::VerificationPredicate::From_String_Arguments(vec![
+        "cargo".to_owned(),
+        "test".to_owned(),
+        "-p".to_owned(),
+        "nomos-cli".to_owned(),
+    ]));
+
+    return item;
+}
+
+/// What `nomos work show` prints for `item`, rendered through the verb rather than through any
+/// one of the functions it is assembled from.
+///
+/// That is the point of this helper and not an incidental choice. The defect this group is
+/// about was in what `show` *printed*, so a test reaching past the renderer -- one asserting
+/// that the stored item holds a `done_when`, say -- would have passed unchanged on the day the
+/// field was invisible, and proved nothing about the thing that was wrong.
+fn Shown(item: LedgerItem) -> String
+{
+    let id = item.id.clone();
+    let view = ShowView {
+        document: LedgerDocument {
+            schema_version: nomos_ledger::SCHEMA_VERSION,
+            items: vec![item],
+        },
+        now: Timestamp::From_Unix_Seconds(LISTING_NOW),
+        current_revision: None,
+    };
+    let mut output = Vec::new();
+
+    let code = Render_Show(&id, Ok(view), &mut output);
+
+    assert_eq!(code, ExitCode::Ok, "the fixture board holds the item the fixture asks for");
+
+    return String::from_utf8(output).expect("Render_Show writes only str into the buffer");
+}
+
+/// The two fields that are the contract are printed, and printed whole.
+///
+/// Both halves matter and the second is the one that is easy to lose. Asserting the label
+/// would pass over a renderer that printed `done_when:` and then the first eighty characters
+/// of it; asserting the stored string back out, character for character, fails on a clip, on
+/// an ellipsis and on a re-wrap alike.
+#[test]
+fn Test_Show_Should_Print_The_Items_Why_And_Done_When_Whole()
+{
+    let item = An_Item_With_A_Contract();
+
+    let printed = Shown(item.clone());
+
+    assert!(printed.contains("why:"), "{printed}");
+    assert!(printed.contains("done_when:"), "{printed}");
+    assert!(
+        printed.contains(&item.why),
+        "the why must come back out character for character, unclipped and unwrapped:\n{printed}"
+    );
+    assert!(
+        printed.contains(&item.done_when),
+        "the done_when must come back out character for character, unclipped and \
+         unwrapped:\n{printed}"
+    );
+}
+
+/// The other two terms the `done_when` names, in the same block as the prose.
+#[test]
+fn Test_Show_Should_Print_The_Territory_And_The_Declared_Predicate()
+{
+    let printed = Shown(An_Item_With_A_Contract());
+
+    assert!(printed.contains("territory: 2 path(s)"), "{printed}");
+    assert!(printed.contains("crates/host/nomos-cli/src/work/listing.rs"), "{printed}");
+    assert!(printed.contains("crates/host/nomos-cli/src/work/tests/listing.rs"), "{printed}");
+    assert!(printed.contains("verification: `cargo test -p nomos-cli`"), "{printed}");
+}
+
+/// An empty field says which field it is, rather than printing a label over a blank line.
+///
+/// The two absences are different: a `why` nobody wrote is a field left empty, and a missing
+/// predicate is an item nothing was declared to judge. Output that showed neither would leave
+/// a reader unable to tell either one from a renderer that had stopped working.
+#[test]
+fn Test_Show_Should_Name_A_Contract_Field_That_Is_Empty()
+{
+    let mut item = An_Item_With_A_Contract();
+    item.why = String::new();
+    item.verification = None;
+
+    let printed = Shown(item);
+
+    assert!(printed.contains("why: (empty)"), "{printed}");
+    assert!(printed.contains("verification: (none declared)"), "{printed}");
+}
+
+/// The lines that were already printed keep their order and their spelling, at the top where
+/// they were.
+///
+/// Other sessions read this output by habit and at least one reads it with a script, so the
+/// contract is an addition and not a redesign. It is printed after these rather than before
+/// them for the same reason: a `done_when` of several hundred words inserted above would push
+/// every one of them off the screen.
+#[test]
+fn Test_Show_Should_Keep_The_Lines_It_Already_Printed_Ahead_Of_The_Contract()
+{
+    let printed = Shown(An_Item_With_A_Contract());
+    let lines: Vec<&str> = printed.lines().collect();
+
+    assert_eq!(lines.first().copied(), Some("T-1 item T-1"), "{printed}");
+    assert_eq!(lines.get(1).copied(), Some("state: ready"), "{printed}");
+    assert_eq!(lines.get(2).copied(), Some("kind: Correction  origin: Proposed"), "{printed}");
+    assert!(
+        printed.find("state: ") < printed.find("why:"),
+        "the contract follows the lines that were already there:\n{printed}"
     );
 }

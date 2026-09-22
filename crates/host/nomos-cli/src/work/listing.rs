@@ -1,6 +1,9 @@
 //! Printing an item: how it stands on the board, and everything recorded against it.
 
-use nomos_ledger::{Claim_Refusal, ClaimRefusal, ItemState, LedgerDocument, LedgerItem, VerificationRecord};
+use nomos_ledger::{
+    Claim_Refusal, ClaimRefusal, ItemState, LedgerDocument, LedgerItem, Territory,
+    VerificationPredicate, VerificationRecord,
+};
 use nomos_platform::Timestamp;
 
 use super::ListingScope;
@@ -255,6 +258,109 @@ fn Print_Staleness(
              could not be read"
         ),
     };
+}
+
+/// The item's own terms: why it is worth doing, what finishing means, the ground it reserves,
+/// and the predicate that will judge it.
+///
+/// `OD-LEDGER-006`'s rule — a record no surface reports is one only somebody willing to read
+/// the JSON can find — applied to the four fields it had never reached. `AGENTS.md`'s loop and
+/// the `nomos-task` skill both send a session to read an item's full `why`, `done_when`,
+/// territory and predicate before it edits anything, and until this existed the verb they
+/// route to printed none of them. The failure was quiet rather than loud: a session that did
+/// not notice proceeded from whatever paraphrase its instructions carried, which is the thing
+/// an unamendable `done_when` exists to prevent.
+///
+/// Printed after the claim and the history rather than before them. Those are short lines that
+/// readers, and at least one script, find by position near the top; a `done_when` runs to
+/// several hundred words and would push every one of them off the screen.
+pub(super) fn Print_Contract(found: &LedgerItem, output: &mut impl std::io::Write)
+{
+    Print_Prose("why", &found.why, output);
+    Print_Prose("done_when", &found.done_when, output);
+    Print_Territory(&found.territory, output);
+    Print_Predicate(found.verification.as_ref(), output);
+}
+
+/// One prose field, under a label of its own, exactly as the board holds it.
+///
+/// Nothing here truncates, elides, re-wraps or indents the text. A reader comparing what was
+/// printed against what is stored sees the same characters, and a clipped contract is worse
+/// than no contract at all, because nothing in a clipped one says which clause is missing.
+///
+/// The label is a line by itself for the same reason the text is not indented: `why:` followed
+/// by four hundred words is a label that has scrolled away by the time the reader wants it,
+/// and a label on its own line is one a reader can scan a screen for.
+///
+/// An empty field says so on the label line. Printing a label over a blank line reads as
+/// output that broke, rather than as a field nobody filled in.
+fn Print_Prose(label: &str, text: &str, output: &mut impl std::io::Write)
+{
+    let _ = writeln!(output);
+
+    if text.trim().is_empty()
+    {
+        let _ = writeln!(output, "{label}: (empty)");
+
+        return;
+    }
+
+    let _ = writeln!(output, "{label}:");
+    let _ = writeln!(output, "{text}");
+}
+
+/// The ground the item reserves, counted and then listed.
+///
+/// One path per line, because a territory is a list rather than prose and the reader is
+/// scanning for whether one file is in it. The count comes first and in the spelling `add`
+/// already answers with, so the two surfaces report a reservation the same way.
+///
+/// Patterns are printed when there are any. Nothing has authored one since `OD-LEDGER-013`
+/// withdrew the flag, so the usual answer is none — but a hand-edited document can still
+/// carry one, every comparison involving it answers `Unknown`, and a reader wondering why
+/// their claim was refused needs to see it rather than have it silently left out.
+fn Print_Territory(territory: &Territory, output: &mut impl std::io::Write)
+{
+    let _ = writeln!(output);
+    let _ = writeln!(
+        output,
+        "territory: {} path(s) at {:?} resolution",
+        territory.paths.len(),
+        territory.resolution
+    );
+
+    for path in &territory.paths
+    {
+        let _ = writeln!(output, "  {path}");
+    }
+    for pattern in &territory.patterns
+    {
+        let _ = writeln!(output, "  pattern {pattern}");
+    }
+}
+
+/// The predicate declared to judge the item, and the bound it will run under.
+///
+/// What the item *carries*, which is not what [`Print_Verification`] reports. That one prints
+/// the record of a run, and an item that has never been verified has a declared predicate and
+/// no record of it — so the two lines answer different questions and are spelled differently
+/// (`verification:` against `verified by`) so that a reader can tell which they are reading.
+fn Print_Predicate(predicate: Option<&VerificationPredicate>, output: &mut impl std::io::Write)
+{
+    let Some(declared) = predicate
+    else
+    {
+        let _ = writeln!(output, "verification: (none declared)");
+
+        return;
+    };
+
+    let _ = writeln!(
+        output,
+        "verification: `{}` within {} seconds",
+        declared.argv.join(" "),
+        declared.timeout_seconds
+    );
 }
 
 /// What to call an item in a listing.

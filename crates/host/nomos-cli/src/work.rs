@@ -29,7 +29,8 @@ pub(crate) use exit_code::ExitCode;
 pub(crate) use nomos_work_orchestration::{ClaimRequest, EndingRequest, ListingScope, WorkCommand};
 
 use listing::{
-    Bounds, Listed_As, Listing_Label, Nothing_Listed, Print_Claim, Print_History, Print_Listing,
+    Bounds, Listed_As, Listing_Label, Nothing_Listed, Print_Claim, Print_Contract, Print_History,
+    Print_Listing,
 };
 use report::{
     Amendment_Note, Blocking_Refusal, Code_For_Refusal, Ended, Print_Blocked, Report_Claim,
@@ -333,12 +334,17 @@ fn Print_Next(document: &LedgerDocument, now: nomos_platform::Timestamp, output:
     };
 }
 
-/// Reports one item, including what has happened to it.
+/// Reports one item: what has happened to it, and then the terms it is held to.
 ///
 /// `list` is one line per item and cannot carry prose. That is why an abandonment had
 /// nowhere to be read even once the ledger began keeping one: a record no surface reports
 /// is a record only somebody willing to read the JSON can find, which is most of the way
 /// back to not keeping it.
+///
+/// [`Print_Contract`] is that same argument reaching the four fields it had never been
+/// applied to. `AGENTS.md`'s loop sends a session here to read an item's `why`, `done_when`,
+/// territory and predicate before it edits anything, and this verb used to print none of
+/// them.
 fn Render_Show(
     item: &ItemId,
     result: Result<ShowView, LedgerError>,
@@ -364,6 +370,7 @@ fn Render_Show(
     let _ = writeln!(output, "kind: {:?}  origin: {:?}", found.kind, found.origin);
     Print_Claim(found, now, output);
     Print_History(found, current_revision.as_deref(), output);
+    Print_Contract(found, output);
 
     return ExitCode::Ok;
 }
