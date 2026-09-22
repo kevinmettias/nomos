@@ -1,6 +1,6 @@
 //! Test-only fixtures shared by more than one response module's own test suite --
-//! `crate::spec` and `crate::response` today. Declared `#[cfg(test)]` by this crate's own
-//! `lib.rs`, so nothing here compiles into a real build, the same discipline
+//! `crate::spec`, `crate::response` and `crate::sarif` today. Declared `#[cfg(test)]` by this
+//! crate's own `lib.rs`, so nothing here compiles into a real build, the same discipline
 //! `crate::work::tests_support` already keeps for its own verbs.
 //!
 //! Every fixture here hands its failure back rather than unwrapping its own steps. A fixture
@@ -8,8 +8,88 @@
 //! staged edit it cannot write, says nothing about the under-test code, and only the caller
 //! knows which claim it was trying to prove when the step failed.
 
+use crate::response::{CheckOutcomeResponse, Disposition, GateFindings, GateRunResponse};
+use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, RunId, SubjectId};
 use serde::Serialize;
 use std::path::{Path, PathBuf};
+
+/// The byte [`Finding_At`] fills its subject digest with, and [`Complete_Gate_Response`] its
+/// run id. Any single repeated byte would do; naming them keeps a digest's content out of a
+/// fixture's logic position, the same way `nomos_contracts::Finding`'s own test fixture does.
+const FIXTURE_DIGEST_BYTE: u8 = 7;
+
+/// What every [`Finding_At`] reports as its summary. Fixed prose, so a test asserting on a
+/// projected message is asserting about the projection rather than about a varying fixture.
+const FIXTURE_SUMMARY: &str = "a real summary";
+
+/// How many files and facts [`Complete_Gate_Response`]'s judged check reports having read. Not
+/// zero, so a projection that dropped the numbers could not pass for one that carried them.
+const FIXTURE_EXAMINED: usize = 1;
+
+/// One evaluated, blocking, mechanically derived finding from `rule`, reported at `location`.
+///
+/// The defaults are the case every other one is a departure from: a rule that reached its
+/// subject (`Applicability::Supported`), a claim it derived (`EvidenceClass::Derived`), and
+/// wiring that would fail a build over it (`GateCategory::Blocking`). A test that needs a
+/// different axis sets that one field on the returned value and leaves the rest, so what it is
+/// varying is visible at its own call site.
+///
+/// `subject_name` is `location`'s path, not `location` itself: a finding's name is what to call
+/// the thing, and `nomos_contracts::Finding`'s own doc keeps that apart from where to look.
+pub(crate) fn Finding_At(rule: &str, location: &str) -> Finding
+{
+    let subject_name = match location.split_once(':')
+    {
+        Some((path, _line)) => path,
+        None => location,
+    };
+
+    return Finding {
+        rule: RuleId::New(rule),
+        subject: SubjectId::From_Digest(Digest128::From_Bytes([FIXTURE_DIGEST_BYTE; Digest128::BYTE_LENGTH])),
+        subject_name: subject_name.to_owned(),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary: FIXTURE_SUMMARY.to_owned(),
+        locations: vec![location.to_owned()],
+        address: None,
+    };
+}
+
+/// A [`GateFindings`] with every one of its groups empty -- the value a test pushes one
+/// finding into the group it is actually about, rather than restating five empty vectors.
+pub(crate) fn Empty_Gate_Findings() -> GateFindings
+{
+    return GateFindings {
+        blocking_findings: Vec::new(),
+        calibrated_findings: Vec::new(),
+        suppressed_findings: Vec::new(),
+        baselined_findings: Vec::new(),
+        baseline_exceeded_findings: Vec::new(),
+        baseline_populations: Vec::new(),
+    };
+}
+
+/// A gate run that judged its tree completely and reached a verdict, carrying `findings`.
+///
+/// Constructed rather than run, deliberately: a test about how a response *projects* must be
+/// able to state the response it is projecting, including the combinations a real run over a
+/// scratch tree cannot be made to produce on demand -- a judged-but-incomplete claim, a
+/// malformed policy, one finding in each of five buckets. A test about the path a caller takes
+/// drives `Handle_Gate_Run` instead, and `crate::sarif` keeps one of each.
+pub(crate) fn Complete_Gate_Response(findings: GateFindings) -> GateRunResponse
+{
+    return GateRunResponse {
+        run: RunId::From_Digest(Digest128::From_Bytes([FIXTURE_DIGEST_BYTE; Digest128::BYTE_LENGTH])),
+        root: PathBuf::from("."),
+        disposition: Disposition::Passed,
+        findings,
+        check_outcome: CheckOutcomeResponse::Judged { files: FIXTURE_EXAMINED, facts: FIXTURE_EXAMINED, complete: true },
+        no_verdict: None,
+        unmatched_policy: Vec::new(),
+    };
+}
 
 /// The caller's own subsystem (`"spec-commit"`, `"gate-explain"`, and so on) -- the half of a
 /// scratch path's name a module fixes rather than varies.

@@ -240,6 +240,8 @@ pub fn nomos_api::Handle_Work_Show(directory: &Path, item: &ItemId) -> ShowRespo
 pub fn nomos_api::Handle_Work_TakeOver(directory: &Path, request: &ClaimRequest) -> ReservationOutcomeResponse
 pub fn nomos_api::Handle_Work_Validate(directory: &Path) -> ValidateResponse
 pub fn nomos_api::Handle_Workflow_Run(plan: &WorkflowStepPlan) -> WorkflowRunResponse
+pub fn nomos_api::SarifLog::Of_Check_Run(root: &Path, response: &CheckResponse) -> Self
+pub fn nomos_api::SarifLog::Of_Gate_Run(response: &GateRunResponse) -> Self
 pub struct field nomos_api::AbsenceResponse::cause: String
 pub struct field nomos_api::AbsenceResponse::cost: String
 pub struct field nomos_api::AbsenceResponse::expected: String
@@ -414,6 +416,7 @@ pub struct nomos_api::ReservationResponse
 pub struct nomos_api::RowCensusResponse
 pub struct nomos_api::RuleCalibrationResponse
 pub struct nomos_api::RuleOfferResponse
+pub struct nomos_api::SarifLog
 pub struct nomos_api::SubmissionResponse
 pub struct nomos_api::SuppressionResponse
 pub struct nomos_api::TableLineResponse

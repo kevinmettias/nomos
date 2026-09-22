@@ -127,6 +127,18 @@
 //! same-process cases. Comparing against a run an earlier invocation produced is real,
 //! deferred, and would need a persisted history keyed by `RunId` or a round-trippable twin.
 //!
+//! [`SarifLog`] is not a twenty-seventh seam and is counted apart from them: every increment
+//! above gives this crate a verb some orchestration crate already had, and this gives it an
+//! *interchange projection* of two responses it already holds. `P123-SARIF-PROJECTION-OF-A-GATE-RUN`
+//! measured that no host emitted findings in any interchange format -- so the one export
+//! GitHub code scanning, Azure DevOps and most CI consumers ingest did not exist, and a v14
+//! corpus row requiring a SARIF run-evidence export had nothing behind it. It lives here for
+//! the reason `OD-HOST-002` gives: a SARIF log is a pure function of
+//! [`response::GateRunResponse`] and [`check::CheckResponse`], the canonical answers all three
+//! hosts project, so it reconstructs from the canonical service and belongs beside it rather
+//! than in the one host that happens to want it first. It adds no verb of its own -- see the
+//! section below, which is unmoved by it.
+//!
 //! [`Handle_Gate_Run`] is a deliberate twin of `nomos-cli`'s `gate.rs`
 //! `Invocation::Run` arm: it walks `command.root` for `.rs` sources
 //! ([`sources::Walked_Sources`] -- a twin of `crates/host/nomos-cli/src/gate/sources.rs`, since a
@@ -165,6 +177,7 @@ mod check;
 mod composition;
 mod correction;
 mod response;
+mod sarif;
 mod sources;
 mod spec;
 #[cfg(test)]
@@ -182,6 +195,7 @@ pub use response::{
     Handle_Gate_Explain, Handle_Gate_Plan, Handle_Gate_Run, JudgmentDifferenceResponse, NoVerdictResponse,
     RuleCalibrationResponse, RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse,
 };
+pub use sarif::SarifLog;
 pub use spec::{
     AbsenceResponse, BlockChangeResponse, CommitReportResponse, CommitResponse, CommittedPreviewResponse,
     DecisionGapResponse, DocumentSourceResponse, FailureResponse, FieldValueResponse, FreshnessResponse,
