@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:3e2bff24e45db5ffc7902367759641ad4a280079d21a7d508be5685a2f1fdd4c",
-  "inputs_digest": "sha256:5714e93b5ee36df6f1390691127dad1c4b68e4286bf9514862599d41741608ff",
+  "content_digest": "sha256:fb33ec8632b8f30a2cb65de3c2d3453e2f6b02251958283e1698e6fa0462976d",
+  "inputs_digest": "sha256:0845e4153fda82b21fb1235070253ffc5926785a78b8b4545b7a7dfcd93c7605",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2329
+      2326
     ],
     [
       "Source blocks",
-      8372
+      8360
     ]
   ],
   "inputs": [
@@ -628,17 +628,17 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md@authored",
-      "hash": "sha256:5d339100d0519963681ac89fbaf21092060698320beed360ce4006e36eee9491"
+      "hash": "sha256:361139ee1bbe26b54f84f93988dbf0ccf3488045465fa4f1558161c02d48ba8b"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md@authored",
-      "hash": "sha256:6d8b1108f385170d2a88d33cc4adcb7eecc543d736a5283f08b50acf392e8ef6"
+      "hash": "sha256:1f5a1bfd574bfb0b43f9b1b360bd932f8c620d390cb1eb9a0931804fbc9d76db"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md@authored",
-      "hash": "sha256:6ac53a834c76e68a76011715ebb72f409b6ac87804d5e27c775aca56b4aeb691"
+      "hash": "sha256:5a4499b293dcf3cd5427520182b60d4f21d816e6a0f1733e35cfaee37721a099"
     },
     {
       "content": "documents",
@@ -6252,11 +6252,6 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#20",
-      "hash": "sha256:7969ea34bf9be536ba95ab4adaacd7b2e3422443cc3ef0bb4975e527c0f89602"
-    },
-    {
-      "content": "headings",
       "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#1",
       "hash": "sha256:5656a3d38902d839d4ad5ed2b7761359376cdab6e09c361cf6e5b82a824385ea"
     },
@@ -6284,11 +6279,6 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#17",
       "hash": "sha256:8db6490375a97e6fc820063e99337b8526d2da2d882a9028a62337f2d1a9d7c4"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#19",
-      "hash": "sha256:b76f70b50410c2ee259b9ede6b5e1c9d0e2b533c66db4ec0ac8270ebf39b17aa"
     },
     {
       "content": "headings",
@@ -6334,11 +6324,6 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#24",
       "hash": "sha256:e29527d8074275a311fa60280ba4853007b19a60a017e2c0fb8ca5196cf979cb"
-    },
-    {
-      "content": "headings",
-      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#26",
-      "hash": "sha256:2b6c98a38ad531077343f5e5cbe45eaf36b0a0fb4a891c4f4663aa260774b58e"
     },
     {
       "content": "headings",
@@ -30718,7 +30703,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#9",
-      "hash": "sha256:7f85e59071be6cf2e50f2a74d81913433ec0df2f5bfcabfd8a141ef347230ea3"
+      "hash": "sha256:db60453bcd1b1438a978ea86cf731dd6ca70525a12374a0d4a849e9d94c87396"
     },
     {
       "content": "blocks",
@@ -30758,7 +30743,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#17",
-      "hash": "sha256:2510ecb585a066fca1160738cf3fa2a92c1fb4817e05020ba4684f78e7eb04fe"
+      "hash": "sha256:6c13cf1cc643c9b760e16ff5e26e35cc3cca9ea3b655acf607b56a69c8516a9c"
     },
     {
       "content": "blocks",
@@ -30768,27 +30753,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#19",
-      "hash": "sha256:0f0176244533e03df47594d42584fb2d0814828888fee2ff32dad800ffd00c4e"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#20",
-      "hash": "sha256:ed68b2b9c2059b7555a4a10e7333cf5ada0cd24e42637840b9c1c03b92c6a516"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#21",
-      "hash": "sha256:3e32ad7f32c53752a6cb4116addb5e91bf5eb57071c44da75a0e13796c380735"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#22",
-      "hash": "sha256:850ae4bef59d8e134ef520063f8ce4633c52beb8fb5e13ae071fe53b864d4e2a"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#23",
-      "hash": "sha256:1049ed15d72ec4c7647d586d64131b88371d38d552dc378d5a7367f359e01cce"
+      "hash": "sha256:f50b703cf0b53f3d515bb23503a88feb804a944925aec865f3b44eb7fea3a9dd"
     },
     {
       "content": "blocks",
@@ -30818,12 +30783,12 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#6",
-      "hash": "sha256:637ddfb4447b1911acb1ccf33b7eee3c30b3dd7e519fb41c3a1dfbd274f9fa66"
+      "hash": "sha256:a81c79b3fe299fb8e8ec7e6fb2d572034bb9706f2b82231d96d2ebec3ad2f5a6"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#7",
-      "hash": "sha256:a47fc61ccc9f7bfd972eae259825c2a5d0e9e71654f0b71ef0c829c63d397b24"
+      "hash": "sha256:b0a56eb2520a8a8b100f28e8dd0cb512a56621f74d7359025d02c554f02ba842"
     },
     {
       "content": "blocks",
@@ -30868,7 +30833,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#16",
-      "hash": "sha256:adda3b0827c225f62cc388844f68f2459e3c13c7cb33127bb50e19b90c8a610e"
+      "hash": "sha256:4a8b40e275798f41d72a139d76e26f015d6a13d141b4cc81203ce2a74b3dc697"
     },
     {
       "content": "blocks",
@@ -30878,27 +30843,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#18",
-      "hash": "sha256:da6b930220e6e25934fdef19ca42e6c34dd86b399f5a02ca0a42ebf636b4d1ab"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#19",
-      "hash": "sha256:e556a899286ec0b49db5c30adb627a62b76bed33fddd7b0d950c8dcb3f088ab0"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#20",
-      "hash": "sha256:09fcc1cf9b4ac3a75de89241e26a9833dcb8d42945dd784180ac156b88f49306"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#21",
-      "hash": "sha256:ec5c71c4e3b047f49fcc9d1732adce1a7043497a59684fa0cae92afec38bab06"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#22",
-      "hash": "sha256:1049ed15d72ec4c7647d586d64131b88371d38d552dc378d5a7367f359e01cce"
+      "hash": "sha256:c5598213284e5cddc4540ee21dc2d670ba21897d2cda66ff08446fc40083e664"
     },
     {
       "content": "blocks",
@@ -30958,7 +30903,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#12",
-      "hash": "sha256:b5ebfa8cc2d745167d9c4ce0b02d784711337af2c36821b55ccc634dc86f616f"
+      "hash": "sha256:b36701d56a7988f9b893fda37653a4b37388b2f6af6e32afb863c4e30102f6c4"
     },
     {
       "content": "blocks",
@@ -31024,26 +30969,6 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#25",
       "hash": "sha256:989097b0be905b9ad283a2a659cb164d945378363b1b6f962a656d003fa56d9a"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#26",
-      "hash": "sha256:116ce343a724999b58f33e9bb8a9e17c435354e86d51cd8f4696727a880d0d23"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#27",
-      "hash": "sha256:7f63cfc901dde250a654c888a20c2d3628e01d08dfb0e75b3c093a9e9fc0b5b3"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#28",
-      "hash": "sha256:1c6c8fcaaf5852ba632e945398079e737a516eebc341eee690a0eb39224401a9"
-    },
-    {
-      "content": "blocks",
-      "identity": "docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#29",
-      "hash": "sha256:1049ed15d72ec4c7647d586d64131b88371d38d552dc378d5a7367f359e01cce"
     },
     {
       "content": "blocks",

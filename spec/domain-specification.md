@@ -131,9 +131,9 @@ profile: domain-specification
 | docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md@authored | docs/records/OD-HOST-008-source-discovery-is-a-canonical-service-and-not-a-walker-each-host-keeps-its-own-copy-of.md | authored | 17 | 6 | sha256:352695e42fc3c9e2e1d46f7552ad424db79b4ffe8c08efb7d9bf7696b68b6c81 |
 | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md@authored | docs/records/OD-HOST-009-a-repository-declares-which-tool-answers-a-family-and-may-decline-one.md | authored | 27 | 7 | sha256:684ae923f81b5315a4a01ea0d7b9d57012008c870177eb0a197d61566d9824f7 |
 | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md@authored | docs/records/OD-HOST-010-three-of-a-diagnostics-five-walk-outward-targets-are-real-today-the-other-two-are-od-host-003s-same-two-gaps-unclosed.md | authored | 23 | 7 | sha256:68d1d753054542c6d8e57a0ce6d40c300f5bc598959791a06ca99ec7514b97e8 |
-| docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md@authored | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md | authored | 23 | 8 | sha256:5d339100d0519963681ac89fbaf21092060698320beed360ce4006e36eee9491 |
-| docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md@authored | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md | authored | 22 | 7 | sha256:6d8b1108f385170d2a88d33cc4adcb7eecc543d736a5283f08b50acf392e8ef6 |
-| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md@authored | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md | authored | 29 | 10 | sha256:6ac53a834c76e68a76011715ebb72f409b6ac87804d5e27c775aca56b4aeb691 |
+| docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md@authored | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md | authored | 19 | 7 | sha256:361139ee1bbe26b54f84f93988dbf0ccf3488045465fa4f1558161c02d48ba8b |
+| docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md@authored | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md | authored | 18 | 6 | sha256:1f5a1bfd574bfb0b43f9b1b360bd932f8c620d390cb1eb9a0931804fbc9d76db |
+| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md@authored | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md | authored | 25 | 9 | sha256:5a4499b293dcf3cd5427520182b60d4f21d816e6a0f1733e35cfaee37721a099 |
 | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md@authored | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md | authored | 39 | 12 | sha256:af086972c1c5a6fe934fe91f8e0b7dc9bff973d7986240dcbb05a3bdac229496 |
 | docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md@authored | docs/records/OD-HOST-015-a-finding-reaches-its-corpus-requirement-through-a-rule-line-the-assessment-declares-and-the-record-join-that-exists-today-connects-one-rule-to-three-requirements-it-does-not-bear-on.md | authored | 56 | 13 | sha256:7a05e7d2b4970db396626604d0d0e0e6dda68dcb9890eeaaa7d120f22d219e88 |
 | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md@authored | docs/records/OD-HOST-016-a-supporting-fact-is-answered-at-rule-grain-from-the-read-trail-a-run-already-builds-and-discards-and-a-per-finding-answer-is-refused.md | authored | 92 | 24 | sha256:0ce8b873e26fc707ad0594a76922e8ccf0fa5c374c5867d74543afd06d69e593 |
@@ -1261,14 +1261,12 @@ profile: domain-specification
 | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#14 | authored | 2 | What Would Decide It Differently |
 | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#16 | authored | 2 | What This Does Not Decide |
 | docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#18 | authored | 2 | Status |
-| docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#20 | authored | 2 | Amendment, Version 2: A Restated Registry Size Is A Second Authority, And `f0052c39` Made It False |
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#1 | authored | 1 | The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone |
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#2 | authored | 2 | Question |
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#10 | authored | 2 | The Decision |
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#15 | authored | 2 | What Would Decide It Differently |
 | docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#17 | authored | 2 | Status |
-| docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#19 | authored | 2 | Amendment, Version 2: The Enumerated Four Were A Frozen Size, And `f0052c39` Made Them False |
 | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#1 | authored | 1 | A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs |
 | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#2 | authored | 2 | Question |
 | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#6 | authored | 2 | Decision |
@@ -1278,7 +1276,6 @@ profile: domain-specification
 | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#18 | authored | 2 | What it cost |
 | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#21 | authored | 2 | A guard this repaired |
 | docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#24 | authored | 2 | Consequences |
-| docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#26 | authored | 2 | Amendment, Version 2: Two Kept-Surface Entries Named A Size And A Type That Are Both Wrong |
 | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#1 | authored | 1 | The transport admits a product operation that reads or writes the tree it is given, and refuses one that starts a metered external process |
 | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#2 | authored | 2 | Question |
 | docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#6 | authored | 2 | What Was Measured |
@@ -36423,19 +36420,13 @@ questions separable.
 
 ### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#9
 
-*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What Was Measured · hash: sha256:7f85e59071be6cf2e50f2a74d81913433ec0df2f5bfcabfd8a141ef347230ea3*
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What Was Measured · hash: sha256:db60453bcd1b1438a978ea86cf731dd6ca70525a12374a0d4a849e9d94c87396*
 
-**One transport consumes the surface today, and it consumes a small part of it.**
-`nomos-api-transport::ServedMethod` is a closed enum whose members are exactly the operations
-`ServedMethod::REGISTRY` declares, and what decides membership is what a call causes on the
-host rather than a size written down here.
-`Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` and
-`Test_The_Registry_Assertion_Should_Have_Subjects_On_Both_Sides`, in
-`tests/contract/tests/boundaries/transport_registry.rs`, compare that registry against
-`nomos-api`'s own blessed surface in both directions, so the mechanical authority for the set
-is there and not in this sentence. Measured 2026-09-21: six served operations against
-`nomos-api`'s thirty exported handlers. A shared contract layer's whole value is agreement
-among several consumers; there is one, and it does not use most of what exists.
+**One transport consumes the surface today, and it consumes a seventh of it.**
+`nomos-api-transport::ServedMethod` is a closed enum of four variants -- `GatePlan`,
+`GateRun`, `GateExplain`, `Correction` -- against `nomos-api`'s twenty-nine handlers. A shared
+contract layer's whole value is agreement among several consumers; there is one, and it does
+not use most of what exists.
 
 ### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#10
 
@@ -36500,10 +36491,10 @@ argues for exactly this test in the same document.
 
 ### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#17
 
-*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What This Does Not Decide · hash: sha256:2510ecb585a066fca1160738cf3fa2a92c1fb4817e05020ba4684f78e7eb04fe*
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / What This Does Not Decide · hash: sha256:6c13cf1cc643c9b760e16ff5e26e35cc3cca9ea3b655acf607b56a69c8516a9c*
 
-Whether `nomos-api` should hold as many handlers as it does at all -- `OD-HOST-012` takes
-that up. Whether the transport's served surface should grow. Neither depends on this answer.
+Whether `nomos-api` should hold twenty-nine handlers at all -- `OD-HOST-012` takes that up.
+Whether the transport's four-method surface should grow. Neither depends on this answer.
 
 ### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#18
 
@@ -36513,44 +36504,12 @@ that up. Whether the transport's served surface should grow. Neither depends on 
 
 ### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#19
 
-*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / Status · hash: sha256:0f0176244533e03df47594d42584fb2d0814828888fee2ff32dad800ffd00c4e*
+*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / Status · hash: sha256:f50b703cf0b53f3d515bb23503a88feb804a944925aec865f3b44eb7fea3a9dd*
 
-Accepted. Measured against a one-transport reality in which the transport serves a small part
-of `nomos-api`'s surface; the review's five-layer chain was checked and two of its layers do
-not exist. Revisit on a second transport that would depend on a contracts crate without
-depending on `nomos-api`, or on the first twin that stops being a mechanical transcription.
-
-### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#20
-
-*revision: authored · kind: heading · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / Amendment, Version 2: A Restated Registry Size Is A Second Authority, And `f0052c39` Made It False · hash: sha256:ed68b2b9c2059b7555a4a10e7333cf5ada0cd24e42637840b9c1c03b92c6a516*
-
-## Amendment, Version 2: A Restated Registry Size Is A Second Authority, And `f0052c39` Made It False
-
-### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#21
-
-*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / Amendment, Version 2: A Restated Registry Size Is A Second Authority, And `f0052c39` Made It False · hash: sha256:3e32ad7f32c53752a6cb4116addb5e91bf5eb57071c44da75a0e13796c380735*
-
-Version 1 called `ServedMethod` "a closed enum of four variants", listed them, and set them
-against "twenty-nine handlers". `f0052c39` admitted `nomos.check.run` under `OD-HOST-014`'s
-criterion, so `ServedMethod::REGISTRY` is six entries; `nomos-api` exports thirty handlers.
-Both numbers are incidental to this record's argument, which turns on there being *one*
-consumer of that surface and not on how much of it that consumer uses.
-
-### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#22
-
-*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / Amendment, Version 2: A Restated Registry Size Is A Second Authority, And `f0052c39` Made It False · hash: sha256:850ae4bef59d8e134ef520063f8ce4633c52beb8fb5e13ae071fe53b864d4e2a*
-
-The repair is not a newer number. A record restating a quantity a test already asserts has
-minted a second authority for it, and the second one is what goes stale, because nothing
-renders a record from the code. So the measurement now names the closed set and what decides
-membership in it, cites the checks that hold the registry against `nomos-api`'s blessed
-surface, and states its one remaining count as a dated measurement.
-
-### docs/records/OD-HOST-011-whether-nomos-apis-response-twins-become-one-serializable-application-contract-layer.md#23
-
-*revision: authored · kind: prose · heading: A response twin is the accepted cost of keeping serialization out of orchestration, and one shared contract layer waits for a second transport that needs it / Amendment, Version 2: A Restated Registry Size Is A Second Authority, And `f0052c39` Made It False · hash: sha256:1049ed15d72ec4c7647d586d64131b88371d38d552dc378d5a7367f359e01cce*
-
-Amended by `P123-FOUR-HOST-RECORDS-FROZE-A-REGISTRY-SIZE-INTO-PROSE-AND-A-SIXTH-OPERATION-MADE-THEM-FALSE`.
+Accepted. Measured against a one-transport, four-method reality; the review's five-layer chain
+was checked and two of its layers do not exist. Revisit on a second transport that would depend
+on a contracts crate without depending on `nomos-api`, or on the first twin that stops being a
+mechanical transcription.
 
 ### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#1
 
@@ -36591,31 +36550,25 @@ spec half. Neither decides where the handlers live.
 
 ### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#6
 
-*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Was Measured · hash: sha256:637ddfb4447b1911acb1ccf33b7eee3c30b3dd7e519fb41c3a1dfbd274f9fa66*
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Was Measured · hash: sha256:a81c79b3fe299fb8e8ec7e6fb2d572034bb9706f2b82231d96d2ebec3ad2f5a6*
 
-**The split, counted.** Measured 2026-09-21: `nomos-api` declares thirty `pub fn Handle_*`
-entry points. Twenty-one are repo tooling -- eleven `Work` verbs and ten `Spec` verbs --
-against nine product handlers: `Check_Run`, `Correction_Run`, four `Gate` verbs,
-`Workflow_Run`, and two `Agent` verbs. The crate is 70 percent repo tooling by handler count.
-The review's characterization is if anything understated.
+**The split, counted.** `nomos-api` declares twenty-nine `pub fn Handle_*` entry points.
+Twenty-one are repo tooling -- eleven `Work` verbs and ten `Spec` verbs -- against eight
+product handlers: `Check_Run`, `Correction_Run`, three `Gate` verbs, `Workflow_Run`, and two
+`Agent` verbs. The crate is 72 percent repo tooling by handler count. The review's
+characterization is if anything understated.
 
 ### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#7
 
-*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Was Measured · hash: sha256:a47fc61ccc9f7bfd972eae259825c2a5d0e9e71654f0b71ef0c829c63d397b24*
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Was Measured · hash: sha256:b0a56eb2520a8a8b100f28e8dd0cb512a56621f74d7359025d02c554f02ba842*
 
 **The review's central inference is wrong, checked directly.** It reads the allowlist as a
-repo-tooling containment mechanism. `ServedMethod`'s members are exactly the operations
-`ServedMethod::REGISTRY` declares, and what decides membership is what a call causes on the
-host rather than which family a verb belongs to. It excludes `work` and `spec` -- and it also
-excludes handlers that are product handlers by any reading: `Agent_Execute`,
-`Agent_Judge_Role` and `Workflow_Run` are held outside it by name in
-`Test_The_Agent_And_Workflow_Operations_Should_Stay_Refused`, and
-`Test_Every_Refused_Operation_Should_Still_Be_Exported` keeps that refusal from going quiet
-should one of them be renamed away; both are in
-`tests/contract/tests/boundaries/transport_registry.rs`. The allowlist is not drawing the
-repo-tooling line. It is the frontier of what has been deliberately projected so far, exactly
-as `OD-HOST-007` describes, and `work`/`spec` are outside it along with the product verbs
-refused on grounds of their own.
+repo-tooling containment mechanism. `ServedMethod` has four variants: `GatePlan`, `GateRun`,
+`GateExplain` and `Correction`. It excludes `work` and `spec` -- and it also excludes
+`Check_Run`, `Workflow_Run`, `Agent_Execute` and `Agent_Judge_Role`, which are product
+handlers by any reading. The allowlist is not drawing the repo-tooling line. It is the
+frontier of what has been deliberately projected so far, exactly as `OD-HOST-007` describes,
+and `work`/`spec` are outside it along with four product verbs.
 
 ### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#8
 
@@ -36688,13 +36641,13 @@ re-privilege the CLI for a family that has already been de-privileged.
 
 ### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#16
 
-*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Would Decide It Differently · hash: sha256:adda3b0827c225f62cc388844f68f2459e3c13c7cb33127bb50e19b90c8a610e*
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / What Would Decide It Differently · hash: sha256:4a8b40e275798f41d72a139d76e26f015d6a13d141b4cc81203ce2a74b3dc697*
 
 - **A host depending on the product handlers alone**, which fires `OD-PACKAGE-015`'s third
   clause and makes the split correct rather than speculative.
 - **A repo-tooling handler reaching the wire.** Would mean the exclusion failed and the
   ownership boundary, not the allowlist, is what is needed.
-- **`ServedMethod` closing.** If the product operations outside the allowlist are all
+- **`ServedMethod` closing.** If the four product families outside the allowlist are all
   projected and the surface stops being a frontier, the allowlist becomes a pure
   repo-tooling boundary and the review's original reading becomes the correct one.
 
@@ -36706,46 +36659,12 @@ re-privilege the CLI for a family that has already been de-privileged.
 
 ### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#18
 
-*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / Status · hash: sha256:da6b930220e6e25934fdef19ca42e6c34dd86b399f5a02ca0a42ebf636b4d1ab*
+*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / Status · hash: sha256:c5598213284e5cddc4540ee21dc2d670ba21897d2cda66ff08446fc40083e664*
 
 Accepted. The review identified a real asymmetry and misattributed its cause; the correction is
-that `ServedMethod` is an incremental frontier excluding product verbs alongside the two
+that `ServedMethod` is an incremental frontier excluding four product verbs alongside the two
 repo-tooling families, not a containment line. Revisit on a second host wanting the product
 half alone.
-
-### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#19
-
-*revision: authored · kind: heading · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / Amendment, Version 2: The Enumerated Four Were A Frozen Size, And `f0052c39` Made Them False · hash: sha256:e556a899286ec0b49db5c30adb627a62b76bed33fddd7b0d950c8dcb3f088ab0*
-
-## Amendment, Version 2: The Enumerated Four Were A Frozen Size, And `f0052c39` Made Them False
-
-### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#20
-
-*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / Amendment, Version 2: The Enumerated Four Were A Frozen Size, And `f0052c39` Made Them False · hash: sha256:09fcc1cf9b4ac3a75de89241e26a9833dcb8d42945dd784180ac156b88f49306*
-
-Version 1 wrote that "`ServedMethod` has four variants" and listed them, that the allowlist
-"also excludes `Check_Run`", and that `work`/`spec` sit outside it "along with four product
-verbs". `f0052c39` admitted `nomos.check.run`, which makes the size wrong, the enumeration
-incomplete, and the named exclusion of `Check_Run` false outright. The split this record
-counted has moved too: `nomos-api` exports thirty handlers today rather than twenty-nine.
-
-### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#21
-
-*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / Amendment, Version 2: The Enumerated Four Were A Frozen Size, And `f0052c39` Made Them False · hash: sha256:ec5c71c4e3b047f49fcc9d1732adce1a7043497a59684fa0cae92afec38bab06*
-
-None of that touches the argument. The allowlist is an incremental projection frontier and not
-a repo-tooling containment boundary *because* it excludes product verbs as well as
-repo-tooling ones, and it still does -- which is what
-`Test_The_Agent_And_Workflow_Operations_Should_Stay_Refused` now pins by name, where version 1
-had only a list of four that admitting a fifth silently falsified. The counts are replaced by
-the closed set and what decides membership in it; the one measurement that carries weight is
-dated, the shape this record's sibling `OD-HOST-017` already used.
-
-### docs/records/OD-HOST-012-whether-repo-tooling-api-ownership-separates-from-the-product-application-api.md#22
-
-*revision: authored · kind: prose · heading: The transport allowlist is an incremental projection frontier and not a repo-tooling containment boundary, and repo-tooling handlers leave nomos-api when a second host wants the product half alone / Amendment, Version 2: The Enumerated Four Were A Frozen Size, And `f0052c39` Made Them False · hash: sha256:1049ed15d72ec4c7647d586d64131b88371d38d552dc378d5a7367f359e01cce*
-
-Amended by `P123-FOUR-HOST-RECORDS-FROZE-A-REGISTRY-SIZE-INTO-PROSE-AND-A-SIXTH-OPERATION-MADE-THEM-FALSE`.
 
 ### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#1
 
@@ -36828,17 +36747,13 @@ The three protocol implementations moved to XVPE on 2026-09-11, into four crates
 
 ### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#12
 
-*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / What each crate here kept · hash: sha256:b5ebfa8cc2d745167d9c4ce0b02d784711337af2c36821b55ccc634dc86f616f*
+*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / What each crate here kept · hash: sha256:b36701d56a7988f9b893fda37653a4b37388b2f6af6e32afb863c4e30102f6c4*
 
-- **`nomos-api-transport`** — `ServedMethod` (the admitted verbs, which are exactly what
-  `ServedMethod::REGISTRY` declares), a parameter type per admitted operation, and
-  `NomosApiDispatch`, which is the dispatch into `nomos_api::Handle_*`. It is an
+- **`nomos-api-transport`** — `ServedMethod` (the four admitted verbs), the three parameter
+  types, and `NomosApiService`, which is the dispatch into `nomos_api::Handle_*`. It is an
   `xvpe_remote_call::RemoteCallStrategy`.
-- **`nomos-mcp`** — `ServedTool`: which tools exist, which is `ServedMethod` projected rather
-  than a second list of its own --
-  `Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry` holds
-  the two equal by name and in order -- the sentence each publishes and the JSON Schema each
-  accepts. It is an `xvpe_remote_call::ToolCatalogStrategy`, and `src/main.rs`
+- **`nomos-mcp`** — `ServedTool`: which four tools exist, the sentence each publishes and the
+  JSON Schema each accepts. It is an `xvpe_remote_call::ToolCatalogStrategy`, and `src/main.rs`
   hands it to the engine's `Serve_Tools` over this process's own pipes.
 - **`nomos-lsp`** — the walk, the judgement, `Diagnostics_For`, `WalkOutward`, and
   `severity::Severity_Of`. That last one is the clearest case for the line this record draws:
@@ -36954,40 +36869,6 @@ quietly under-quantified.
   vocabulary, and sees generic implementations.
 - `tests/contract/tests/boundaries/mcp_registry.rs` still holds: `nomos-mcp` depends on
   `nomos-api-transport` and no other workspace member.
-
-### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#26
-
-*revision: authored · kind: heading · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Amendment, Version 2: Two Kept-Surface Entries Named A Size And A Type That Are Both Wrong · hash: sha256:116ce343a724999b58f33e9bb8a9e17c435354e86d51cd8f4696727a880d0d23*
-
-## Amendment, Version 2: Two Kept-Surface Entries Named A Size And A Type That Are Both Wrong
-
-### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#27
-
-*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Amendment, Version 2: Two Kept-Surface Entries Named A Size And A Type That Are Both Wrong · hash: sha256:7f63cfc901dde250a654c888a20c2d3628e01d08dfb0e75b3c093a9e9fc0b5b3*
-
-Version 1's account of what each crate kept said `ServedMethod` is "the four admitted verbs"
-and `ServedTool` is "which four tools exist", and named the transport's dispatch
-`NomosApiService`. The dispatch is `NomosApiDispatch` and always was, so that half was wrong
-when written. The two counts were right when written and were made false by `f0052c39`, which
-admitted `nomos.check.run` and took both registries to six.
-
-### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#28
-
-*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Amendment, Version 2: Two Kept-Surface Entries Named A Size And A Type That Are Both Wrong · hash: sha256:1c6c8fcaaf5852ba632e945398079e737a516eebc341eee690a0eb39224401a9*
-
-The division this section draws is untouched: the transport keeps the verbs and the dispatch,
-`nomos-mcp` keeps the catalogue, `nomos-lsp` keeps the judgement. What is removed is the size,
-which this record never needed and which no test renders back into it. The entries now name the
-registry that declares the set, and cite
-`Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry` as the
-mechanical authority for the second registry being a projection of the first rather than a copy
-that can drift from it.
-
-### docs/records/OD-HOST-013-a-protocol-is-the-engines-and-the-semantics-are-this-workspaces-so-three-host-crates-keep-only-their-verbs.md#29
-
-*revision: authored · kind: prose · heading: A protocol is the engine's and the semantics are this workspace's, so three host crates keep only their verbs / Amendment, Version 2: Two Kept-Surface Entries Named A Size And A Type That Are Both Wrong · hash: sha256:1049ed15d72ec4c7647d586d64131b88371d38d552dc378d5a7367f359e01cce*
-
-Amended by `P123-FOUR-HOST-RECORDS-FROZE-A-REGISTRY-SIZE-INTO-PROSE-AND-A-SIXTH-OPERATION-MADE-THEM-FALSE`.
 
 ### docs/records/OD-HOST-014-which-product-operations-the-transport-admits.md#1
 
