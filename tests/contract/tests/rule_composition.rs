@@ -129,7 +129,7 @@ const ACCOUNTED_FOR: &[(&str, &str)] = &[
     ),
     (
         "Check_Function_Arity_Policy",
-        "Not a standalone rule: the shared, configurable engine PARAMETER_COUNT and GO_HELPERS_PACKAGE_FIVE_INPUTS already call with their own policy. It has no rule id of its own; composing it directly would compose an already-composed check a third time.",
+        "Not a standalone rule: the shared, configurable engine PARAMETER_COUNT and GO_PARAMETER_COUNT already call with their own policy. It has no rule id of its own; composing it directly would compose an already-composed check a third time.",
     ),
     (
         "Check_Project_Owned_Function_Names_Use_Upper_Snake_Case",

@@ -64,7 +64,7 @@ use nomos_contracts::Finding;
 pub use abbreviations::{Check_Abbreviations, ABBREVIATIONS};
 pub use boolean_predicates::{Check_Boolean_Predicates, BOOLEAN_PREDICATES};
 pub use clarity::{Check_Naming_Clarity, NAMING_CLARITY};
-pub use data_names::{Check_Data_Names_Stay_Lower_Snake, DATA_NAMES_STAY_LOWER_SNAKE};
+pub use data_names::{Check_Module_And_Field_Names_Stay_Lower_Snake, MODULE_AND_FIELD_NAMES_STAY_LOWER_SNAKE};
 pub use file_names::{
     Check_File_Name_Matches_Declared_Type, Check_One_Public_Type_Per_File, FILE_NAME_MATCHES_DECLARED_TYPE,
     ONE_PUBLIC_TYPE_PER_FILE,

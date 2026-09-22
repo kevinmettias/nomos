@@ -17,7 +17,7 @@ pub fn Check_Relaxed_Not_Used_When_Ordering_Matters(sources: &[SourceFile], fact
 #[cfg(test)]
 mod tests
 {
-    use super::super::tests::{Check, Source_File, SourceText};
+    use super::super::tests::{Findings_From_Check, Source_File, SourceText};
     use super::*;
     use nomos_contracts::RuleId;
 
@@ -25,7 +25,7 @@ mod tests
     fn Test_Check_Relaxed_Not_Used_When_Ordering_Matters_Should_Report_An_Unexplained_Relaxed()
     {
         let source = Source_File(SourceText { path: "src/counter.rs", text: "counter.fetch_add(1, Ordering::Relaxed);\n" });
-        let findings = Check(Check_Relaxed_Not_Used_When_Ordering_Matters, source);
+        let findings = Findings_From_Check(Check_Relaxed_Not_Used_When_Ordering_Matters, source);
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(RELAXED_NOT_USED_WHEN_ORDERING_MATTERS));
     }
@@ -34,7 +34,7 @@ mod tests
     fn Test_Check_Relaxed_Not_Used_When_Ordering_Matters_Should_Accept_A_Marker_Reason()
     {
         let source = Source_File(SourceText { path: "src/counter.rs", text: "counter.fetch_add(1, Ordering::Relaxed); // atomic-ordering: allow: statistics-only, nothing else reads this\n" });
-        let findings = Check(Check_Relaxed_Not_Used_When_Ordering_Matters, source);
+        let findings = Findings_From_Check(Check_Relaxed_Not_Used_When_Ordering_Matters, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 }

@@ -33,18 +33,18 @@ use nomos_contracts::{Applicability, EvidenceClass, Finding, RuleId, SubjectId};
 
 mod function_arity_policy;
 mod function_arity_source;
-mod go_helpers_package_five_inputs;
+mod go_parameter_count;
 mod receiver_allowance;
 
 pub use function_arity_policy::FunctionArityPolicy;
 pub use function_arity_source::FunctionAritySource;
-pub use go_helpers_package_five_inputs::Check_Go_Helpers_Package_Five_Inputs;
+pub use go_parameter_count::Check_Go_Parameter_Count;
 pub use receiver_allowance::ReceiverAllowance;
 
 /// The code-standards parameter-count rule id.
 pub const PARAMETER_COUNT: &str = "parameter-count";
 /// The Go-specific code-standards parameter-count rule id.
-pub const GO_HELPERS_PACKAGE_FIVE_INPUTS: &str = "go-helpers-package-five-inputs";
+pub const GO_PARAMETER_COUNT: &str = "go-helpers-package-five-inputs";
 
 /// `standards.json`'s row key for the value-parameter ceiling, shared by the generic and
 /// the Go rule since Go's own value equals the default and so needs no override row.

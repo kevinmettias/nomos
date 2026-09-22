@@ -140,7 +140,7 @@ there is no distinction here for a packet to lose.
 
 `crates/rules/nomos-rules`' six already-shipped casing rules
 (`Check_Naming_Convention`, `Check_Project_Owned_Function_Names_Use_Upper_Snake_Case`,
-`Check_Data_Names_Stay_Lower_Snake`, `Check_Go_Type_Names_Use_Camel_Case`,
+`Check_Module_And_Field_Names_Stay_Lower_Snake`, `Check_Go_Type_Names_Use_Camel_Case`,
 `Check_Exported_Go_Functions_Use_Upper_Snake_Case`,
 `Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter`) are refactored onto this
 one engine as its first real consumers, each keeping its own `RuleId` and gate behavior —

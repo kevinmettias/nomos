@@ -59,7 +59,7 @@ pub fn Check_Closure_Bounds_Are_Minimal(sources: &[SourceFile], facts: &mut dyn 
     let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
 
-    for source in sources.iter().filter(|source| return Judgeable(source, &declared))
+    for source in sources.iter().filter(|source| return Is_Judgeable_Source(source, &declared))
     {
         findings.extend(Minimal_Bound_Findings_In(source));
     }
@@ -295,7 +295,7 @@ pub fn Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(sources: &[SourceFil
     let declared = crate::checks::Resolve_Declared_Fixture_Locations(facts);
     let mut findings = Vec::new();
 
-    for source in sources.iter().filter(|source| return Judgeable(source, &declared))
+    for source in sources.iter().filter(|source| return Is_Judgeable_Source(source, &declared))
     {
         findings.extend(Boxed_Closure_Findings_In(source));
     }
@@ -404,7 +404,7 @@ const OWN_IMPLEMENTATION_FILES: &[&str] = &[
 /// classification -- [`super::Is_Test_Or_Example_Source`], the same predicate and the same
 /// repository-declared fixture locations every other test-material-sensitive rule in this
 /// crate reads, rather than a third private path list beside it.
-fn Judgeable(source: &SourceFile, declared: &[String]) -> bool
+fn Is_Judgeable_Source(source: &SourceFile, declared: &[String]) -> bool
 {
     return source.Is_Written_In(RUST_LANGUAGE)
         && !Is_Own_Implementation_File(source)

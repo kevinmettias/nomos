@@ -328,7 +328,7 @@ mod self_tests
         let secret = format!("AKIA{}", "ABCDEFGHIJKLMNOP");
         let text = format!("const KEY: &str = \"{secret}\";\n");
 
-        let findings = Check(Check_A_Credential_Is_Not_Hardcoded_In_Source, Source_For(Path("src/config.rs"), Text(&text)));
+        let findings = Findings_From_Check(Check_A_Credential_Is_Not_Hardcoded_In_Source, Source_For(Path("src/config.rs"), Text(&text)));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(
@@ -342,7 +342,7 @@ mod self_tests
     {
         let text = format!("let url = format!(\"https://api.example.com/data?{}={{key}}\");\n", "api_key");
 
-        let findings = Check(Check_A_Secret_Does_Not_Travel_In_A_Url, Source_For(Path("src/client.rs"), Text(&text)));
+        let findings = Findings_From_Check(Check_A_Secret_Does_Not_Travel_In_A_Url, Source_For(Path("src/client.rs"), Text(&text)));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(
@@ -370,7 +370,7 @@ mod self_tests
     /// Runs `check` over `source` through a real, empty reader — the three checks read only
     /// `nomos.cap.test.material.policy`, which no fixture here declares, so `Require` fails
     /// and each resolves to its own fixed clauses alone.
-    fn Check(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, source: SourceFile) -> Vec<Finding>
+    fn Findings_From_Check(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, source: SourceFile) -> Vec<Finding>
     {
         let store = MemoryFactStore::New();
         let registry = Registry::New();

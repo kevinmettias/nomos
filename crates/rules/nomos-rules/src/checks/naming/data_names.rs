@@ -14,7 +14,7 @@ use nomos_cap_syntax::{PayloadItem, Struct_Fields, SyntaxPayload};
 use nomos_contracts::{Finding, RuleId};
 
 /// This rule's own identifier, matching the code-standards rule id.
-pub const DATA_NAMES_STAY_LOWER_SNAKE: &str = "data-names-stay-lower-snake";
+pub const MODULE_AND_FIELD_NAMES_STAY_LOWER_SNAKE: &str = "data-names-stay-lower-snake";
 
 const MODULE: &str = "Module";
 const STRUCT: &str = "Struct";
@@ -23,7 +23,7 @@ const STRUCT: &str = "Struct";
 /// repository's own `nomos.cap.naming.policy` when it declares `module`/`field`, this
 /// rule's own prior default otherwise.
 #[must_use]
-pub fn Check_Data_Names_Stay_Lower_Snake(
+pub fn Check_Module_And_Field_Names_Stay_Lower_Snake(
     sources: &[SourceFile],
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
@@ -88,7 +88,7 @@ fn Field_Violations_In(path: &str, item: &PayloadItem, field_case: Case) -> Vec<
 
 fn Unread_As_This_Rule(mut finding: Finding) -> Finding
 {
-    finding.rule = RuleId::New(DATA_NAMES_STAY_LOWER_SNAKE);
+    finding.rule = RuleId::New(MODULE_AND_FIELD_NAMES_STAY_LOWER_SNAKE);
     finding.summary = finding
         .summary
         .replace("this file's naming could not be judged", "this file's data names could not be judged");
@@ -118,7 +118,7 @@ fn Unescaped_Name(name: &str) -> &str
 fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
 {
     return Member_Finding(
-        Finding_Shape { rule: DATA_NAMES_STAY_LOWER_SNAKE, path, summary: format!("`{name}` is a data name that is not lower snake case") },
+        Finding_Shape { rule: MODULE_AND_FIELD_NAMES_STAY_LOWER_SNAKE, path, summary: format!("`{name}` is a data name that is not lower snake case") },
         item,
         name,
     );

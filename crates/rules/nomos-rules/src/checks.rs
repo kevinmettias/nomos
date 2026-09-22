@@ -107,8 +107,8 @@ pub use formatting::{
     NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_WHITESPACE, TODO_FORMAT,
 };
 pub use function_shape::{
-    Check_Function_Arity_Policy, Check_Go_Helpers_Package_Five_Inputs, Check_Parameter_Count, FunctionArityPolicy,
-    FunctionAritySource, ReceiverAllowance, GO_HELPERS_PACKAGE_FIVE_INPUTS, PARAMETER_COUNT,
+    Check_Function_Arity_Policy, Check_Go_Parameter_Count, Check_Parameter_Count, FunctionArityPolicy,
+    FunctionAritySource, ReceiverAllowance, GO_PARAMETER_COUNT, PARAMETER_COUNT,
 };
 pub use go_text::{
     Check_A_Discarded_Error_Is_Explained, Check_A_Skipped_Test_States_Why, Check_An_Excluded_File_Says_Why,
@@ -124,14 +124,15 @@ pub use guarantee_exerciser::{
     GUARANTEE_EXERCISER_CONTRACT_RECORD_VERSION,
 };
 pub use naming::{
-    Check_Abbreviations, Check_Boolean_Predicates, Check_Data_Names_Stay_Lower_Snake, Check_File_Name_Matches_Declared_Type,
+    Check_Abbreviations, Check_Boolean_Predicates, Check_File_Name_Matches_Declared_Type,
     Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Constants_Split_By_Export, Check_Go_Type_Names_Use_Camel_Case,
-    Check_Go_Variables_Use_Lower_Snake_Case, Check_Naming_Clarity, Check_Naming_Convention, Check_One_Public_Type_Per_File,
+    Check_Go_Variables_Use_Lower_Snake_Case, Check_Module_And_Field_Names_Stay_Lower_Snake,
+    Check_Naming_Clarity, Check_Naming_Convention, Check_One_Public_Type_Per_File,
     Check_Project_Owned_Function_Names_Use_Upper_Snake_Case,
     Check_Single_Letter_Names, Check_Test_Names_Describe_Behavior, Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter,
-    ABBREVIATIONS, BOOLEAN_PREDICATES, CONSTANTS_SPLIT_BY_EXPORT, DATA_NAMES_STAY_LOWER_SNAKE,
+    ABBREVIATIONS, BOOLEAN_PREDICATES, CONSTANTS_SPLIT_BY_EXPORT,
     EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE, GO_VARIABLES_USE_LOWER_SNAKE_CASE,
-    NAMING_CLARITY, NAMING_CONVENTION,
+    MODULE_AND_FIELD_NAMES_STAY_LOWER_SNAKE, NAMING_CLARITY, NAMING_CONVENTION,
     ONE_PUBLIC_TYPE_PER_FILE, PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE, SINGLE_LETTER_NAMES,
     TEST_NAME_DESCRIBES_BEHAVIOR, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,

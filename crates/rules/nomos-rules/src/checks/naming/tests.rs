@@ -78,13 +78,13 @@ fn Test_Check_Test_Names_Describe_Behavior_Should_Read_And_Judge_A_Real_Fact()
 }
 
 #[test]
-fn Test_Check_Data_Names_Stay_Lower_Snake_Should_Read_And_Judge_A_Real_Fact()
+fn Test_Check_Module_And_Field_Names_Stay_Lower_Snake_Should_Read_And_Judge_A_Real_Fact()
 {
     let findings = Findings_From(
         Path("src/lib.rs"),
         Text("mod BadModule {}"),
         "unexpanded\t0\nitem\t0\tModule\tPrivate\tBadModule\t.\t.\n",
-        Check_Data_Names_Stay_Lower_Snake,
+        Check_Module_And_Field_Names_Stay_Lower_Snake,
     );
 
     assert_eq!(findings.len(), 1, "{findings:?}");

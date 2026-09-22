@@ -28,7 +28,6 @@ pub const nomos_rules::CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::CROSS_LANGUAGE_CONTRACT_RECORD: &str
 pub const nomos_rules::CROSS_LANGUAGE_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE: &str
-pub const nomos_rules::DATA_NAMES_STAY_LOWER_SNAKE: &str
 pub const nomos_rules::DECLARED_ROLE_MATCHES_SURFACE: &str
 pub const nomos_rules::DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS: &str
 pub const nomos_rules::DEPENDENCY_COMPLETENESS: &str
@@ -53,8 +52,8 @@ pub const nomos_rules::FILE_SIZE_JUSTIFICATION_TRIGGER: &str
 pub const nomos_rules::FILE_SIZE_REVIEW_TRIGGER: &str
 pub const nomos_rules::FIVE_HUNDRED_LINE_REVIEW_TRIGGER: &str
 pub const nomos_rules::GOALS_AND_PARTS_LINE_UP: &str
-pub const nomos_rules::GO_HELPERS_PACKAGE_FIVE_INPUTS: &str
 pub const nomos_rules::GO_LANGUAGE: &str
+pub const nomos_rules::GO_PARAMETER_COUNT: &str
 pub const nomos_rules::GO_VARIABLES_USE_LOWER_SNAKE_CASE: &str
 pub const nomos_rules::GUARANTEE_DECLARES_ITS_EXERCISER: &str
 pub const nomos_rules::GUARANTEE_EXERCISER_CONTRACT_RECORD: &str
@@ -65,6 +64,7 @@ pub const nomos_rules::LINT_CONTRACT_RECORD: &str
 pub const nomos_rules::LINT_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::LINT_DIAGNOSTICS: &str
 pub const nomos_rules::LOWERCASE_FIRST_LETTER: &str
+pub const nomos_rules::MODULE_AND_FIELD_NAMES_STAY_LOWER_SNAKE: &str
 pub const nomos_rules::NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS: &str
 pub const nomos_rules::NAMING_CLARITY: &str
 pub const nomos_rules::NAMING_CONVENTION: &str
@@ -169,7 +169,6 @@ pub fn nomos_rules::Check_Closure_Bounds_Are_Minimal(sources: &[SourceFile], fac
 pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Constants_Are_The_Exception_To_Function_Scope_Use(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Cross_Language_Correspondence(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
-pub fn nomos_rules::Check_Data_Names_Stay_Lower_Snake( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Declared_Role_Matches_Surface(subjects: &[RoleSurfacePair]) -> Vec<Finding>
 pub fn nomos_rules::Check_Declared_Tooling_Language_For_Scripts(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
@@ -190,7 +189,7 @@ pub fn nomos_rules::Check_Function_Arity_Policy( sources: &[SourceFile], facts: 
 pub fn nomos_rules::Check_Go_Constants_Split_By_Export(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_File_Size_Hard_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
-pub fn nomos_rules::Check_Go_Helpers_Package_Five_Inputs( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Go_Parameter_Count( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_Type_Names_Use_Camel_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Go_Variables_Use_Lower_Snake_Case(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Goals_And_Parts_Line_Up(facts: &mut dyn FactReader) -> Vec<Finding>
@@ -198,6 +197,7 @@ pub fn nomos_rules::Check_Guarantee_Declares_Its_Exerciser(sources: &[SourceFile
 pub fn nomos_rules::Check_Inline_Always_Justification(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Lifetimes_Follow_The_Descriptive_Naming_Rule(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Lint_Diagnostics(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Module_And_Field_Names_Stay_Lower_Snake( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
 pub fn nomos_rules::Check_Named_Fields_Over_Positional_Variant_Payloads(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Naming_Clarity(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Naming_Convention( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>

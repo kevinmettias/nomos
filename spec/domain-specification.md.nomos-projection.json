@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:566f6eafe59e5d2107e48d77c1be8af62404e28c01465fd3923b637c95604f23",
-  "inputs_digest": "sha256:5420abb0ea4c8c8cfa539400bbf05d7bdbee4039ca1bd77a2fc6ae4c4a4916fc",
+  "content_digest": "sha256:5c3bd9c764785cfa3c30f450809f8d2191cf2bac8ddefa96773056167fda9fd9",
+  "inputs_digest": "sha256:4fcadd099cf50ea7d1c912c01d1f994c76c7dde309ce1041bdb6720e3701561f",
   "sections": [
     [
       "Documents",
@@ -1118,7 +1118,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored",
-      "hash": "sha256:841b1c5bb58bd645f7b84a43c5f4433923df78193de6b7e6e3ffecc92de628c9"
+      "hash": "sha256:b0170320f17965570bf63ff80bf4e70b55c1f37d58dbabd38f7d88d3e78e6375"
     },
     {
       "content": "documents",
@@ -50348,7 +50348,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#15",
-      "hash": "sha256:a81462235b219447b3fab4ae9039da300d6fd61710114d9a62de29cd05f41593"
+      "hash": "sha256:f80323d2a64d30e6673c83f47bf918fa1c5c0c5c5698b6524670c42dee04426c"
     },
     {
       "content": "blocks",

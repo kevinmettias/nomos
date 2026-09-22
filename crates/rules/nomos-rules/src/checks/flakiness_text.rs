@@ -387,7 +387,7 @@ mod tests
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Report_A_Qualified_Sleep_In_An_Integration_Test()
     {
         let source = Source_File(SourceText { path: "tests/lock.rs", text: "thread::sleep(Duration::from_millis(50));\n" });
-        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
+        let findings = Findings_From_Check(Check_Sleep_Is_Not_Synchronization, source);
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").rule, RuleId::New(SLEEP_BASED_SYNCHRONIZATION));
     }
@@ -398,7 +398,7 @@ mod tests
         let source = Source_File(
             SourceText { path: "src/latch.rs", text: "pub fn is_open(&self) -> bool { true }\n\n#[cfg(test)]\nmod tests {\n #[test]\n fn opens() {\n thread::sleep(Duration::from_millis(50));\n }\n}\n" },
         );
-        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
+        let findings = Findings_From_Check(Check_Sleep_Is_Not_Synchronization, source);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
 
@@ -406,7 +406,7 @@ mod tests
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Ignore_A_Sleep_In_Production_Code()
     {
         let source = Source_File(SourceText { path: "src/rate_limiter.rs", text: "thread::sleep(backoff);\n" });
-        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
+        let findings = Findings_From_Check(Check_Sleep_Is_Not_Synchronization, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -414,7 +414,7 @@ mod tests
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Ignore_A_Path_That_Merely_Ends_In_The_Same_Letters()
     {
         let source = Source_File(SourceText { path: "tests/worker.rs", text: "worker_thread::sleep(backoff);\n" });
-        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
+        let findings = Findings_From_Check(Check_Sleep_Is_Not_Synchronization, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -422,7 +422,7 @@ mod tests
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Accept_A_Same_Line_Allow_Marker()
     {
         let source = Source_File(SourceText { path: "tests/lock.rs", text: "thread::sleep(debounce); // flakiness: allow this waits on the debounce window under test\n" });
-        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
+        let findings = Findings_From_Check(Check_Sleep_Is_Not_Synchronization, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -430,7 +430,7 @@ mod tests
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Report_A_Qualified_Time_Sleep_In_A_Go_Test_File()
     {
         let source = Source_File(SourceText { path: "worker_test.go", text: "func TestReady(t *testing.T) {\n\ttime.Sleep(50 * time.Millisecond)\n}\n" });
-        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
+        let findings = Findings_From_Check(Check_Sleep_Is_Not_Synchronization, source);
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
 
@@ -438,7 +438,7 @@ mod tests
     fn Test_Check_Sleep_Is_Not_Synchronization_Should_Ignore_Go_Sleep_Outside_A_Test_File()
     {
         let source = Source_File(SourceText { path: "worker.go", text: "func Ready() {\n\ttime.Sleep(50 * time.Millisecond)\n}\n" });
-        let findings = Check(Check_Sleep_Is_Not_Synchronization, source);
+        let findings = Findings_From_Check(Check_Sleep_Is_Not_Synchronization, source);
         assert!(findings.is_empty(), "{findings:?}");
     }
 
@@ -505,7 +505,7 @@ mod tests
     /// Runs `check` over `source` through a real, empty reader — this check reads only
     /// `nomos.cap.test.material.policy`, which no fixture here declares, so `Require` fails
     /// and it resolves to its own fixed clauses alone.
-    fn Check(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, source: SourceFile) -> Vec<Finding>
+    fn Findings_From_Check(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, source: SourceFile) -> Vec<Finding>
     {
         let store = MemoryFactStore::New();
         let registry = Registry::New();

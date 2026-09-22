@@ -229,7 +229,7 @@ profile: domain-specification
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 86 | 19 | sha256:38f6a9b571b3413cadfc1a777d3b018e3256a39dc29f02bb656ac96ee7b768ad |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
-| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 23 | 6 | sha256:841b1c5bb58bd645f7b84a43c5f4433923df78193de6b7e6e3ffecc92de628c9 |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 23 | 6 | sha256:b0170320f17965570bf63ff80bf4e70b55c1f37d58dbabd38f7d88d3e78e6375 |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md | authored | 38 | 10 | sha256:740a2ca81a0ba769b2370b32a0b5af4aeb3647f2c9a141f1ebaf058f08f9f6c1 |
 | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md@authored | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md | authored | 23 | 6 | sha256:4b0bd63773267478c66835f887728ff0cedb4892a98e85291ed631e1665b53c8 |
 | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md@authored | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md | authored | 20 | 6 | sha256:04c3221540c1dfff84ceb66e9b1cd588331b0e7df89080dc0d714bc2df75102b |
@@ -71912,11 +71912,11 @@ there is no distinction here for a packet to lose.
 
 ### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#15
 
-*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / The Decision · hash: sha256:a81462235b219447b3fab4ae9039da300d6fd61710114d9a62de29cd05f41593*
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / The Decision · hash: sha256:f80323d2a64d30e6673c83f47bf918fa1c5c0c5c5698b6524670c42dee04426c*
 
 `crates/rules/nomos-rules`' six already-shipped casing rules
 (`Check_Naming_Convention`, `Check_Project_Owned_Function_Names_Use_Upper_Snake_Case`,
-`Check_Data_Names_Stay_Lower_Snake`, `Check_Go_Type_Names_Use_Camel_Case`,
+`Check_Module_And_Field_Names_Stay_Lower_Snake`, `Check_Go_Type_Names_Use_Camel_Case`,
 `Check_Exported_Go_Functions_Use_Upper_Snake_Case`,
 `Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter`) are refactored onto this
 one engine as its first real consumers, each keeping its own `RuleId` and gate behavior —

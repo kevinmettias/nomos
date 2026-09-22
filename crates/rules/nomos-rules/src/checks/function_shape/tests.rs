@@ -94,28 +94,28 @@ fn Test_Violations_In_Should_Apply_Receiver_Allowance_Only_When_Configured()
 }
 
 #[test]
-fn Test_Check_Go_Helpers_Package_Five_Inputs_Should_Report_Under_The_Go_Rule_Id()
+fn Test_Check_Go_Parameter_Count_Should_Report_Under_The_Go_Rule_Id()
 {
     let source = Source(Path("builder.go"), Text("func Build(a A, b B, c C, d D, e E) {}"));
     let TestOffering { store, registry, .. } = Offering_With_A_Five_Parameter_Build(&source);
     let mut reader = Reader::On(&store, &registry, Test_Context());
-    let findings = Check_Go_Helpers_Package_Five_Inputs(&[source], &mut reader);
+    let findings = Check_Go_Parameter_Count(&[source], &mut reader);
 
     assert_eq!(findings.len(), 1, "{findings:?}");
     assert_eq!(
         findings.first().expect("asserted len 1 above").rule,
-        RuleId::New(GO_HELPERS_PACKAGE_FIVE_INPUTS)
+        RuleId::New(GO_PARAMETER_COUNT)
     );
 }
 
 #[test]
-fn Test_Check_Go_Helpers_Package_Five_Inputs_Should_Ignore_Non_Go_Sources()
+fn Test_Check_Go_Parameter_Count_Should_Ignore_Non_Go_Sources()
 {
     let source = Source(Path("src/lib.rs"), Text("pub fn Build(a: A, b: B, c: C, d: D, e: E) {}"));
     let TestOffering { store, registry, .. } = Offering();
 
     let mut reader = Reader::On(&store, &registry, Test_Context());
-    let findings = Check_Go_Helpers_Package_Five_Inputs(&[source], &mut reader);
+    let findings = Check_Go_Parameter_Count(&[source], &mut reader);
 
     assert!(findings.is_empty(), "{findings:?}");
 }

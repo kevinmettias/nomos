@@ -1,6 +1,6 @@
 //! `function_shape`'s Go preset: the arity engine narrowed to Go sources.
 
-use super::{Check_Function_Arity_Policy, FunctionArityPolicy, GO, GO_HELPERS_PACKAGE_FIVE_INPUTS, MAX_VALUE_PARAMETERS, PARAMETER_COUNT_MAX_KEY, Resolve_Limit};
+use super::{Check_Function_Arity_Policy, FunctionArityPolicy, GO, GO_PARAMETER_COUNT, MAX_VALUE_PARAMETERS, PARAMETER_COUNT_MAX_KEY, Resolve_Limit};
 use crate::{GO_LANGUAGE, SourceFile};
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
@@ -10,7 +10,7 @@ use nomos_contracts::Finding;
 /// `parameter-count-max`, the repository-wide value or the prior hardcoded default
 /// otherwise.
 #[must_use]
-pub fn Check_Go_Helpers_Package_Five_Inputs(
+pub fn Check_Go_Parameter_Count(
     sources: &[SourceFile],
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
@@ -19,7 +19,7 @@ pub fn Check_Go_Helpers_Package_Five_Inputs(
     return Check_Function_Arity_Policy(
         sources,
         facts,
-        FunctionArityPolicy::New(GO_HELPERS_PACKAGE_FIVE_INPUTS, max)
+        FunctionArityPolicy::New(GO_PARAMETER_COUNT, max)
             .For_Language(GO_LANGUAGE)
             .Allow_One_Receiver_For_Qualified_Functions(),
     );

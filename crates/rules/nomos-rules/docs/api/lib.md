@@ -137,9 +137,9 @@ why neither it nor this line spells the marker out.
 the thirteenth and fourteenth rules, importing code-standards' ~500-line review and
 ~1500-line justification thresholds as text-local judgments.
 
-[`Check_Data_Names_Stay_Lower_Snake`] is the fifteenth rule, importing the subset of
-`data-names-stay-lower-snake` visible in `nomos.cap.syntax.items`: module names and
-named struct fields.
+[`Check_Module_And_Field_Names_Stay_Lower_Snake`] is the fifteenth rule, importing the
+subset of `data-names-stay-lower-snake` visible in `nomos.cap.syntax.items`: module names
+and named struct fields.
 
 [`Check_Project_Owned_Function_Names_Use_Upper_Snake_Case`] is the sixteenth rule and
 gives the existing function-name judgment the exact code-standards rule id and blocking
@@ -179,11 +179,11 @@ Go visibility facts the syntax payload already carries.
 importing code-standards' Go exported-function convention from function names and Go
 visibility facts already present in the syntax payload.
 
-[`Check_Go_Helpers_Package_Five_Inputs`] is the twenty-eighth rule, importing the
-Go-specific parameter-count rule id through the same syntax arity facts as
-[`Check_Parameter_Count`]. Both are now presets over [`Check_Function_Arity_Policy`],
-because rule id, file selection, threshold, receiver allowance and gate category are
-policy dimensions rather than separate rule engines.
+[`Check_Go_Parameter_Count`] is the twenty-eighth rule, importing the Go-specific
+parameter-count rule id through the same syntax arity facts as [`Check_Parameter_Count`].
+Both are now presets over [`Check_Function_Arity_Policy`], because rule id, file
+selection, threshold, receiver allowance and gate category are policy dimensions rather
+than separate rule engines.
 
 [`Check_Unwrap_Expect_Discipline`], [`Check_Panics_Are_Justified_Documented_And_Validated`],
 [`Check_A_Rust_Path_Stays_Within_Its_Own_Subtree`] and [`Check_Shared_Interior_Mutability_Says_Why`]
@@ -215,8 +215,8 @@ data-name conventions from the syntax payload's `Constant` and `Variable` items:
 constant's case splits by export status the same way [`Check_Go_Type_Names_Use_Camel_Case`]
 already splits Go type case, and a top-level `var` is judged against `lower_snake_case`
 without that split — locals, parameters and struct fields are outside what either check
-can see, the latter already covered by [`Check_Data_Names_Stay_Lower_Snake`] regardless
-of language.
+can see, the latter already covered by
+[`Check_Module_And_Field_Names_Stay_Lower_Snake`] regardless of language.
 
 [`Check_Every_Allow_Carries_A_Justification`] and [`Check_Unsafe_Justification`] are the
 thirty-ninth and fortieth rules, the same "a Rust construct needs an adjacent

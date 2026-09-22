@@ -238,7 +238,7 @@ fn Check_Declaring(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>
     return check(sources, &mut facts);
 }
 
-/// The falsifier for the declared half of [`super::Judgeable`]. The same fixture is reported
+/// The falsifier for the declared half of [`super::Is_Judgeable_Source`]. The same fixture is reported
 /// when nothing is declared and exempt when the repository declares the directory it sits in,
 /// so the declaration is what decides -- not a path this crate compiled in. Ignore the
 /// declared locations and the second assertion fails.
