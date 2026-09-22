@@ -32,70 +32,44 @@
 //! So an ordinary `cargo test -p nomos-contract-tests` does not pay for a cold build. The gate
 //! runs it as its own step with `--ignored`, which is the one place the cost is worth paying.
 
+//! # Where the declared revision comes from
+//!
+//! `nomos_contract_tests::Declared_Revision`, shared with `boundaries::lock_pinning`. This
+//! module used to scan `crates/platform/nomos-platform-xvpe/Cargo.toml` for a `rev = "` of
+//! its own, and on 2026-09-21 `e0197368` moved the crossing's declaration into the root
+//! manifest's `[workspace.dependencies]` table, leaving that scan with nothing to find. It
+//! panics rather than failing an assertion and it is `#[ignore]`d, so the gate's own step was
+//! the only reader that could reach the panic, and it reached it before building anything.
+//!
+
 use std::path::{Path, PathBuf};
 
 /// The crate whose compilation must reach XVPE.
 const SUBJECT: &str = "nomos-platform-xvpe";
 
-/// The manifest whose pinned revision the build is checked against.
-const PINNED_MANIFEST: &str = "crates/platform/nomos-platform-xvpe/Cargo.toml";
+/// The declaring site answers, so the cold check below is not quantifying over nothing.
+///
+/// Not `#[ignore]`d, and that is the whole point of it. The reader this module used to carry
+/// resolved nothing from `e0197368` onward, and because the only test that called it is
+/// ignored, an ordinary `cargo test` could not see it: the gate's own `--ignored` step was the
+/// first reader to reach the panic, and it reached it before building anything. This runs
+/// everywhere and costs nothing.
+#[test]
+fn Test_The_Declared_Revision_Should_Resolve_Against_The_Real_Manifests()
+{
+    let revision = nomos_contract_tests::Declared_Revision();
 
+    assert!(
+        revision.len() == 40 && revision.chars().all(|character| return character.is_ascii_hexdigit()),
+        "the declared crossing revision is {revision:?}, which is not a forty-character git \
+         revision. A reader accepting this would compare a cold build against nonsense."
+    );
+}
 /// The workspace root, from this crate's manifest directory.
 fn Repository_Root() -> PathBuf
 {
-    return Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    return nomos_contract_tests::Repository_Root();
 }
-
-/// The revision `PINNED_MANIFEST` adopts the crossing at.
-///
-/// Read rather than written down, so a legitimate bump moves this with the manifest instead of
-/// failing and teaching the next reader to edit the test.
-fn Declared_Revision() -> String
-{
-    const KEY: &str = "rev = \"";
-
-    let path = Repository_Root().join(PINNED_MANIFEST);
-    let text = std::fs::read_to_string(&path)
-        .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
-
-    for line in text.lines()
-    {
-        if !line.contains("xvpe")
-        {
-            continue;
-        }
-
-        let Some(offset) = line.find(KEY)
-        else
-        {
-            continue;
-        };
-
-        let Some(rest) = line.get(offset.saturating_add(KEY.len())..)
-        else
-        {
-            continue;
-        };
-
-        if let Some(end) = rest.find('"')
-        {
-            if let Some(revision) = rest.get(..end)
-            {
-                return revision.to_string();
-            }
-        }
-    }
-
-    panic!(
-        "{PINNED_MANIFEST} names no pinned revision for the XVPE crossing. Either the crossing \
-         was respelled as a path -- the form D-130 refuses -- or this workspace stopped \
-         depending on XVPE, and either way this module's premise no longer holds."
-    );
-}
-
-/// What a build log says about the crossing: how many xvpe crates came from `revision`, and
-/// which ones came from anywhere else.
-///
 /// A function over text, because the assertion below is otherwise only ever exercised against a
 /// tree that already satisfies it, which is indistinguishable from an assertion that cannot
 /// fail. `OD-GATE-028` records why that distinction is not optional, and
@@ -153,7 +127,7 @@ fn Empty_Target_Directory() -> PathBuf
 #[ignore = "cold build by construction; the gate runs this with --ignored"]
 fn Test_The_Pinned_Crossing_Should_Really_Compile_From_A_Cold_Target_Directory()
 {
-    let revision = Declared_Revision();
+    let revision = nomos_contract_tests::Declared_Revision();
     let target = Empty_Target_Directory();
 
     let output = std::process::Command::new("cargo")

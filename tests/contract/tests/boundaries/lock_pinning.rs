@@ -6,6 +6,15 @@
 //! local substitution of that crossing for sibling development, denies it any authority,
 //! and names the debt this module pays.
 //!
+//! # Where the revision reading lives now
+//!
+//! In `nomos_contract_tests::crossing`, with `crossing_cold`'s copy of it. Until
+//! 2026-09-21 each target scanned manifests itself, and `e0197368` moved the declaration
+//! into the root table and taught only this one to follow. The other kept scanning a member
+//! manifest for a `rev = "` that inheritance no longer spells, and panicked rather than
+//! failing, in a test the gate reaches only with `--ignored`. One authority, named outside
+//! both, is `OD-GATE-011`'s remedy; the constructed-disagreement control moved there with it.
+//!
 //! # Why a lock needs its own guard
 //!
 //! A sibling-development build rewrites `Cargo.lock`, deleting the `source` line from all
@@ -73,94 +82,7 @@
 //! hardcoded revision would fail on every bump and teach the next reader to edit the test
 //! rather than look.
 
-use crate::bands::Repository_Root;
-use std::collections::BTreeSet;
-use std::path::PathBuf;
-
-/// The repository the XVPE crossing is adopted from.
-const XVPE_GIT_URL: &str = "https://github.com/kevinmettias/xvpe.git";
-
-/// The prefix naming a package that belongs to that crossing.
-const XVPE_PREFIX: &str = "xvpe-";
-
-/// The value of `rev = "..."` in `line`, if it carries one.
-fn Revision_In(line: &str) -> Option<String>
-{
-    const KEY: &str = "rev = \"";
-
-    let from = line.find(KEY)?.checked_add(KEY.len())?;
-    let rest = line.get(from..)?;
-    let to = rest.find('\"')?;
-
-    return Some(rest.get(..to)?.to_string());
-}
-
-/// Every revision `text` pins the crossing to.
-///
-/// Over text rather than over a path, so that the multi-revision case below can be
-/// exhibited on a constructed manifest: a tree that satisfies the rule cannot demonstrate
-/// that the rule has teeth.
-fn Revisions_In(text: &str) -> BTreeSet<String>
-{
-    let mut found = BTreeSet::new();
-
-    for line in text.lines()
-    {
-        // A guard clause rather than a nested `if`: the two conditions one inside the
-        // other put this at four levels of control flow, which `nesting-depth` reports,
-        // and flattening with an early `continue` is the first remedy it names.
-        if !line.contains(XVPE_GIT_URL)
-        {
-            continue;
-        }
-
-        if let Some(revision) = Revision_In(line)
-        {
-            found.insert(revision);
-        }
-    }
-
-    return found;
-}
-
-/// Every manifest that can pin the crossing.
-///
-/// The workspace root first, because `[workspace.dependencies]` is where the crossing is
-/// declared; then every member, because a member that spells its own `git` and `rev`
-/// instead of inheriting is precisely what a single declaring site stops being able to
-/// prevent.
-fn Pinning_Manifests() -> Vec<PathBuf>
-{
-    use nomos_contract_tests::Workspace;
-
-    let mut manifests = vec![Repository_Root().join("Cargo.toml")];
-
-    for member in Workspace::Load().Members()
-    {
-        manifests.push(member.root.join("Cargo.toml"));
-    }
-
-    return manifests;
-}
-
-/// Every revision this workspace's own manifests pin the crossing to.
-fn Declared_Revisions() -> BTreeSet<String>
-{
-    let mut found = BTreeSet::new();
-
-    for manifest in Pinning_Manifests()
-    {
-        let Ok(text) = std::fs::read_to_string(&manifest)
-        else
-        {
-            continue;
-        };
-
-        found.extend(Revisions_In(&text));
-    }
-
-    return found;
-}
+use nomos_contract_tests::{Declared_Revisions, Repository_Root, Revisions_In, XVPE_PREFIX};
 
 /// `Cargo.lock` as the current commit publishes it.
 ///
@@ -281,43 +203,6 @@ fn Test_Every_Manifest_Should_Pin_The_Crossing_To_One_Revision()
     );
 }
 
-/// A member that re-pins the crossing instead of inheriting it is seen as a second
-/// revision.
-///
-/// The negative control for the assertion above, and the one the single declaring site
-/// made necessary: with the revision written once in the root table and inherited
-/// everywhere else, the real tree can no longer exhibit disagreement, so a guard believed
-/// because it passes over that tree would be believed for no reason. The disagreement is
-/// constructed here instead, in the two manifests it would really live in.
-#[test]
-fn Test_A_Member_Re_Pinning_The_Crossing_Should_Be_Seen_As_A_Second_Revision()
-{
-    let root = "[workspace.dependencies]\n\
-                xvpe-primitives = { git = \"https://github.com/kevinmettias/xvpe.git\", rev = \"82a3c8fccf4ef7f3759f36d3f320a91d0f96341c\" }\n";
-    let inheriting_member = "[dependencies]\nxvpe-primitives = { workspace = true }\n";
-    let re_pinning_member = "[dependencies]\n\
-                             xvpe-primitives = { git = \"https://github.com/kevinmettias/xvpe.git\", rev = \"0000000000000000000000000000000000000000\" }\n";
-
-    let mut inherited = Revisions_In(root);
-    inherited.extend(Revisions_In(inheriting_member));
-
-    assert!(
-        inherited.len() == 1,
-        "a member inheriting the crossing added a revision of its own: {inherited:?}. \
-         Inheritance carries no `rev` of its own, so the declaring site must be the only \
-         answer."
-    );
-
-    let mut disagreeing = Revisions_In(root);
-    disagreeing.extend(Revisions_In(re_pinning_member));
-
-    assert!(
-        disagreeing.len() == 2,
-        "a member that re-pinned the crossing to its own revision was not seen: \
-         {disagreeing:?}. The assertion above would then pass over a workspace holding two \
-         snapshots of one engine, which is the whole thing it refuses."
-    );
-}
 /// The judging rejects a lock that violates it.
 ///
 /// The negative control. Without it the assertion below is only known to pass on a tree

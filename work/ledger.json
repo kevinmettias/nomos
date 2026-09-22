@@ -90477,7 +90477,7 @@
       "claim": {
         "holder": "nomos-75-trail",
         "acquired_at": 1790052710,
-        "lease_expires_at": 1790063510
+        "lease_expires_at": 1790065105
       },
       "verification": {
         "argv": [
@@ -91155,6 +91155,92 @@
         ],
         "patterns": []
       },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "nomos-75-graphfact",
+        "acquired_at": 1790054096,
+        "lease_expires_at": 1790064896
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P126-A-SECOND-READER-OF-THE-CROSSING-REVISION-WAS-NOT-CENSUSED",
+      "title": "A second reader of the pinned crossing revision was not censused, so the gate's cold-crossing step panics before it builds",
+      "why": "e0197368 moved the XVPE crossing's declaration into the root manifest's workspace.dependencies table and taught tests/contract/tests/boundaries/lock_pinning.rs to read it there. It did not census the other reader. tests/contract/tests/crossing_cold.rs holds its own copy of the same scan: PINNED_MANIFEST names crates/platform/nomos-platform-xvpe/Cargo.toml, Declared_Revision scans that file for the literal rev = quote, and it panics when it finds none. Measured 2026-09-21 at 0a2daf37, that manifest contains zero occurrences, because inheritance with workspace = true spells no revision. The test is ignored, so an ordinary cargo test never reaches the panic, and the gate's XVPE crossing step runs it with --ignored, which means that step now fails before it builds anything, for the opposite of its own reason. Exactly two files in the workspace read that fact and neither derives from the other, which is the duplicated-answer shape OD-GATE-011 asks to be resolved by one authority named outside both. This is also the second instance in one day of the same class OD-COMPLETENESS-001 states: a guard whose universe is narrower than the claim beside it does not fail, it stops noticing. The first was the guard this commit repaired; this is the reader it did not know about.",
+      "done_when": "One authority in the contract crate's own library holds the crossing URL, the revision scan over text and the set of manifests that may declare a revision, and both readers use it rather than either scanning a manifest of its own; crossing_cold.rs no longer names a member manifest and no longer carries its own scan; an assertion that is not ignored fails when the declared revision cannot be resolved, so an ordinary cargo test catches the regression that previously only the gate's ignored step could reach, and it is exhibited to fail on constructed text rather than believed because it passes; lock_pinning.rs keeps its own negative controls including the member-re-pinning case and still passes; the contract crate's public surface snapshot is re-blessed; and cargo test --no-fail-fast -p nomos-contract-tests --test boundaries --test crossing_cold --test public_surface passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/src/lib.rs",
+          "tests/contract/src/crossing.rs",
+          "tests/contract/tests/crossing_cold.rs",
+          "tests/contract/tests/boundaries/lock_pinning.rs",
+          "tests/contract/surface/nomos-contract-tests.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-review",
+        "acquired_at": 1790054096,
+        "lease_expires_at": 1790061296
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries",
+          "--test",
+          "crossing_cold",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-THE-RENDER-PROCEDURES-POST-COMMIT-CHECK-CANNOT-SEE-A-PEERS-WRITE-BETWEEN-THE-STAGE-AND-THE-COMMIT",
+      "title": "The projection procedure's post-commit check is empty in exactly the failure it exists to catch",
+      "why": "OD-GATE-005 makes the derived projections nobody's territory and renders them from the record set a commit publishes, and the nomos-spec-change skill carries the procedure. Its post-commit check is to diff the committed projection against the working tree. Measured today across three record commits in one session, that check is blind to the failure that actually occurs. A worker rendered correctly in a worktree, compared HEAD before copying back and again before committing and found it stable both times, and a peer session copied its own render over all four projection halves in the window between the copy and the git add, so the commit carried the peer's bytes. The prescribed check passed, because it compares the commit against the working tree and the working tree held the peer's file too. Only a diff against the render worktree exposes it. Two sessions hit the mirror image of this within an hour and each repaired the other's commit, at 0a2daf37 and ad934368. A second mechanism makes it worse and is verified rather than assumed: git commit with a trailing pathspec re-reads the working tree at commit time and ignores the index, proved in a scratch repository by staging a file, overwriting it and committing with the pathspec form, which carried the overwrite, while a bare commit carried what was staged. So the commit form this repository's own guidance recommends, for the good reason that it stops a peer's staged work being swept in, reopens the window it was meant to close for any path a peer also writes. The projections are the only paths in this tree that every session writes and nobody owns, which is why they are where this shows up.",
+      "done_when": "The procedure a session follows to publish a rendered projection detects a peer's write between the stage and the commit, and says so where that procedure is written rather than only in a record. The check it prescribes compares the staged blob against the render worktree's own file, by object hash rather than by reading either through the shared working tree, and it runs before the commit rather than after it, because after it the evidence is gone. The procedure states which commit form to use and why, covering both halves of the hazard: that a bare commit carries the whole index and so needs the staged path list asserted against the intended list, and that a trailing pathspec re-reads the working tree and so cannot be used for any path another session writes. The post-commit check is kept, because it still catches a stale render, but it is described as what it is rather than as sufficient. Whether this lands in the nomos-spec-change skill, in OD-GATE-005, or in both is the claimant's judgment, argued rather than assumed: a skill is procedure and a record is decision, and the reason the existing check is insufficient is a fact about a shared checkout rather than a decision anybody took. If the claimant concludes a mechanism could enforce this rather than a procedure describing it, it names that as its own item with territory rather than building it here. Nothing about what a projection contains, when it is rendered, or who owns it changes; OD-GATE-005's own decision is untouched. If a record is amended, both projections are re-rendered by this very procedure, which is the first test of it, and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-spec-change/SKILL.md"
+        ],
+        "patterns": []
+      },
       "state": "Ready",
       "depends_on": [],
       "blocked": null,
@@ -91165,9 +91251,143 @@
           "test",
           "--no-fail-fast",
           "-p",
-          "nomos-spec-store"
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
         ],
-        "timeout_seconds": 2400
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-AN-OFFER-CAN-BE-EXPORTED-AND-REACH-NOTHING",
+      "title": "Four provider offers are exported and composed into nothing, and the count grows without anything noticing",
+      "why": "Measured at HEAD: twenty-one crates export a Provider_Offer and nomos-check-orchestration's composition root takes seventeen, so four offers exist that no run can ever resolve. They are nomos-lang-csharp, both capabilities of nomos-lang-rust-compiler, and nomos-lang-rust's module-index rollup, which is offered only inside its own tests. Being uncomposed is not by itself a defect: OD-ROADMAP-001 licenses building a provider before a consumer exists, and README's own row for the compiler crate says it is not yet composed into a real gate run. The defect is that nothing distinguishes an offer deliberately built ahead of its consumer from one whose composition line somebody forgot, and nothing notices when the number moves. It moved this week: the measurement behind OD-PROJECT-007 counted three, and a fourth arrived with the C# provider hours later, with no check reporting the change. OD-PROJECT-007 decided that a verb reports declared-and-unobserved as a row state, which makes the honesty of that row depend on a distinction nothing currently records. This is the unenforced-declaration shape this tree has closed several times: a declaration that reaches nothing produces no output and is discovered one instance at a time.",
+      "done_when": "A test in tests/contract compares every crate exporting a Provider_Offer against the offers nomos-check-orchestration's composition root actually takes, and reports an offer that is exported and uncomposed unless this workspace has declared it as intentionally so. The declared list lives beside the test with one entry per offer carrying the reason it is not composed, in the shape D-134's universes use, so the declaration and the check cannot drift apart into two files. An offer that is uncomposed and undeclared fails; an offer declared as intentionally uncomposed and then composed also fails, because a stale exemption is how a list stops meaning anything, and both directions are tested. The four that exist today are enumerated with their real reasons read from their own crate docs and the records that licensed them, never with a placeholder. The test derives the exported set rather than listing it, so a twenty-second provider is compared without editing the test, and the derivation is stated in the test's own doc. Nothing under crates/ changes and no offer is composed or removed by this item; if the work shows one of the four is uncomposed by omission rather than by intent, that is reported in the commit message and left for an item of its own. cargo test -p nomos-contract-tests passes and cargo clippy --workspace --all-targets is clean.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/boundaries/composed_offers.rs",
+          "tests/contract/tests/boundaries/main.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS",
+      "title": "A port stands between the generic agent path and its two concrete backends, one port per package kind, and a composition root supplies the pair",
+      "why": "OD-ROADMAP-005 decision 2 requires it: the generic agent path names a port and a composition root supplies nomos-agent-executor-claude-code and nomos-model-backend-ollama. That decision supersedes OD-EXECUTOR-004 v1 and OD-EXECUTOR-005 v2 shared-trait trigger, that no second real AgentExecutor exists, and OD-PACKAGE-016 v1 first decision section, which placed the resolver in nomos-agent-orchestration precisely because it is the one crate reaching both backend crates. Measured at 5299b2a6, in this tree: crates/orchestration/nomos-agent-orchestration/Cargo.toml declares both backend crates; src/run.rs Dispatched_Task matches a two-variant Backend enum onto nomos_agent_executor_claude_code::Execute_Task and nomos_model_backend_ollama::Execute_Task; src/agent_dispatch_outcome.rs carries each crate own AgentExecutionOutcome as a variant named for its vendor. crates/orchestration/nomos-workflow-orchestration/Cargo.toml declares both backend crates too, while a grep of that crate src and tests finds no Rust path naming either -- its two manifest lines are already dead, and deleting them rewrites Cargo.lock by exactly two lines, measured with cargo metadata --offline in a detached worktree at HEAD. The two outcome shapes are not interchangeable and this item does not make them so: the Claude Code outcome carries denied_tool_uses, is_error, cost and duration_ms, and the Ollama one honestly carries none of those, which agent_dispatch_outcome.rs own doc comment already states. OD-EXECUTOR-005 measured that Claude Code is an AgentExecutor and Ollama a ModelBackend -- two package kinds answering different questions, which is why --executor and --model-backend are separate flags. So the port is one port per package kind rather than one flattened shape: an executor port whose answer carries what an agent executor dispatch establishes, and a model backend port whose answer carries only what a model backend establishes. A single flattened return, or a common core plus a vendor-named extension, would either destroy that distinction or keep the vendor names in the generic path, which is the leak being closed.",
+      "done_when": "1. Neither crates/orchestration/nomos-agent-orchestration nor crates/orchestration/nomos-workflow-orchestration declares nomos-agent-executor-claude-code or nomos-model-backend-ollama in its manifest, and neither crate Rust sources name nomos_agent_executor_claude_code, nomos_model_backend_ollama, nomos-agent-executor-claude-code or nomos-model-backend-ollama in any form, doc comments included. 2. nomos-agent-contracts publishes one port per PackageKind: an AgentExecutor port whose answer carries what an agent executor dispatch establishes, and a ModelBackend port whose answer carries only what a model backend establishes. nomos-agent-executor-claude-code implements the first, nomos-model-backend-ollama the second, and each crate keeps its own error type and its own public entry point for a caller that wants the structure the port folds. 3. nomos-agent-orchestration dispatches through a port it is handed and constructs neither concrete backend; the dispatch targets it resolves against carry their port rather than a vendor enum. Each host agent module is the composition root that names the concrete pair and declares the targets it supplies. 4. The --executor and --model-backend split stands: nomos agent execute --executor claude-code and --model-backend ollama still parse, the crossed spellings --executor ollama and --model-backend claude-code are still refused, and what each backend renders is unchanged. 5. The honesty property holds mechanically rather than by discipline: the model backend port answer carries no cost, no duration and no denial list, and a test destructures it with no rest pattern, so a fabricated field stops that test compiling. The proof is performed -- a cost field is injected, the compile failure observed, and the file restored byte-identically -- and the run is named in the commit message. 6. Every public surface that moved is re-blessed and the public_surface contract target is green for each crate named in this territory. 7. OD-EXECUTOR-004, OD-EXECUTOR-005 and OD-PACKAGE-016 each gain an amendment naming OD-ROADMAP-005 decision 2 as the authorization, what was measured, what was built, and which of its own clauses is superseded rather than pending; each version is bumped and each keeps its own measurement standing, because the override says in terms that no superseded measurement is claimed to be wrong. Both required projections are rendered from a detached worktree holding exactly the registered records this commit publishes, nomos spec freshness --into . --require diagram-set --require domain-specification exits 0 there, and the render diff insertions dominate its deletions. 8. Predicate scope, declared: the predicate reaches the seven packages this item changes, nomos-spec-store for the amended record bodies, and exactly three contract-test targets -- public_surface, boundaries and record_citation. It deliberately does not reach nomos-contract-tests corpus-backed, agent_harness or requirement_trace obligations, which belong to other items and whose failures are not this item to answer.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/agent/nomos-agent-contracts",
+          "crates/agent/nomos-agent-executor-claude-code",
+          "crates/agent/nomos-model-backend-ollama",
+          "crates/orchestration/nomos-agent-orchestration",
+          "crates/orchestration/nomos-workflow-orchestration",
+          "crates/host/nomos-cli/Cargo.toml",
+          "crates/host/nomos-cli/src/main.rs",
+          "crates/host/nomos-cli/src/agent.rs",
+          "crates/host/nomos-cli/src/agent",
+          "crates/host/nomos-cli/tests/agent_contracts_seam.rs",
+          "crates/host/nomos-cli/tests/agent_executor_claude_code_seam.rs",
+          "crates/host/nomos-cli/tests/model_backend_ollama_seam.rs",
+          "crates/host/nomos-api/Cargo.toml",
+          "crates/host/nomos-api/src/lib.rs",
+          "crates/host/nomos-api/src/agent.rs",
+          "crates/host/nomos-api/src/agent",
+          "crates/host/nomos-api/src/workflow.rs",
+          "crates/host/nomos-api/src/workflow",
+          "crates/host/nomos-api/tests/integration_seams.rs",
+          "tests/contract/surface/nomos-agent-contracts.txt",
+          "tests/contract/surface/nomos-agent-executor-claude-code.txt",
+          "tests/contract/surface/nomos-model-backend-ollama.txt",
+          "tests/contract/surface/nomos-agent-orchestration.txt",
+          "tests/contract/surface/nomos-workflow-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt",
+          "Cargo.lock",
+          "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md",
+          "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md",
+          "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-agent-contracts",
+          "-p",
+          "nomos-agent-executor-claude-code",
+          "-p",
+          "nomos-model-backend-ollama",
+          "-p",
+          "nomos-agent-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--bins",
+          "--test",
+          "integration_seams",
+          "--test",
+          "agent_contracts_seam",
+          "--test",
+          "agent_executor_claude_code_seam",
+          "--test",
+          "model_backend_ollama_seam",
+          "--test",
+          "public_surface",
+          "--test",
+          "boundaries",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 5400
       },
       "verified": null,
       "abandoned": [],

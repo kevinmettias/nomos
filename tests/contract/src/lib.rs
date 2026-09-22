@@ -8,6 +8,7 @@
 
 #![forbid(unsafe_code)]
 
+mod crossing;
 mod domain_row;
 mod reading;
 mod fact_domain;
@@ -19,6 +20,7 @@ mod universes;
 mod workspace;
 
 pub use reading::declaration::Declaration;
+pub use crossing::{Declared_Revision, Declared_Revisions, Pinning_Manifests, Revisions_In, Repository_Root, XVPE_GIT_URL, XVPE_PREFIX};
 pub use domain_row::{Domain_Table, DomainRow};
 pub use fact_domain::{Fact_Domains, FactDomain};
 pub use gates::{Corpus_Gates, CorpusGate, CORPUS_VARIABLES};
