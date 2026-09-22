@@ -23,12 +23,33 @@
 //! does not) composes its own wider set rather than this crate inventing a second
 //! registration surface for a rule's own applicability data, which is not a language
 //! package or provider and is out of this record's scope.
+//!
+//! [`WorkspaceProfile`] is the second thing this crate answers, built on the first: what a
+//! root contains before anything judges it -- how many sources of each registered language
+//! the walk finds, which language manifests and which repository policy files sit at the
+//! root, and whether the root carries the marker the walk already uses. A pure function of
+//! the walk plus existence checks at the root, so it lives here rather than in the host that
+//! will render it. `P123-WORKSPACE-PROFILE-FOR-ADOPTION`.
 
 #![forbid(unsafe_code)]
 
 use nomos_model::Subject_Of_Path;
 use nomos_rules::SourceFile;
 use std::path::{Path, PathBuf};
+
+mod language_manifest;
+mod policy_file;
+mod policy_file_presence;
+mod profile_refusal;
+mod source_count;
+mod workspace_profile;
+
+pub use language_manifest::LanguageManifest;
+pub use policy_file::PolicyFile;
+pub use policy_file_presence::PolicyFilePresence;
+pub use profile_refusal::ProfileRefusal;
+pub use source_count::SourceCount;
+pub use workspace_profile::WorkspaceProfile;
 
 /// The file a repository declares its own conventions in, and so the mark of a repository
 /// root.
@@ -189,7 +210,16 @@ fn Is_A_Nested_Git_Worktree(path: &Path) -> bool
 /// both halves of that.
 fn Is_A_Nested_Repository_Root(path: &Path) -> bool
 {
-    return path.join(ROOT_MARKER).is_file();
+    return Carries_Root_Marker(path);
+}
+
+/// Whether `directory` holds its own [`ROOT_MARKER`] as a file -- the one test both the
+/// walk and [`WorkspaceProfile`] make of a directory, so the profile's "this is a
+/// repository root" and the walk's "that is somebody else's" cannot come to differ about
+/// which file decides.
+pub(crate) fn Carries_Root_Marker(directory: &Path) -> bool
+{
+    return directory.join(ROOT_MARKER).is_file();
 }
 
 /// One source file as a caller takes it.
@@ -217,9 +247,13 @@ pub fn Relative_Path(root: &Path, path: &Path) -> String
 }
 
 #[cfg(test)]
+mod test_support;
+
+#[cfg(test)]
 mod tests
 {
     use super::{Read_Source, Read_Sources, Registered_Extensions, Relative_Path, ROOT_MARKER, Walked_Sources, SCRIPT_EXTENSIONS};
+    use crate::test_support::{Fresh_Root, Make_Fixture_Directory, Write_Fixture};
     use std::path::{Path, PathBuf};
 
     #[test]
@@ -374,32 +408,5 @@ mod tests
         let sources = Read_Sources(root, &Registered_Extensions());
         let _ignored = std::fs::remove_dir_all(root);
         return sources.iter().map(|source| return source.path.clone()).collect();
-    }
-
-    /// Writes one fixture file, whose parent directory a [`Make_Fixture_Directory`] call has
-    /// already created.
-    ///
-    /// Same promise as [`Make_Fixture_Directory`], from the same [`Fresh_Root`] the caller
-    /// just made: the path lies under a temporary tree this test's own process owns.
-    fn Write_Fixture(path: PathBuf, text: &str)
-    {
-        std::fs::write(path, text).expect("the fixture root is a tempdir this test owns");
-    }
-
-    /// Creates one directory under a fixture root, so a file can then be written inside it.
-    ///
-    /// The promise holds because every caller passes `root.join(...)` for the [`Fresh_Root`] it
-    /// made moments earlier in this test's own process.
-    fn Make_Fixture_Directory(path: PathBuf)
-    {
-        std::fs::create_dir_all(path).expect("the fixture root is a tempdir this test owns");
-    }
-
-    fn Fresh_Root(name: &str) -> PathBuf
-    {
-        let root = std::env::temp_dir().join(name);
-        let _ignored = std::fs::remove_dir_all(&root);
-        std::fs::create_dir_all(&root).expect("the temporary root is creatable");
-        return root;
     }
 }

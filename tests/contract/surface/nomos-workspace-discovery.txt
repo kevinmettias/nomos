@@ -1,6 +1,33 @@
 pub const nomos_workspace_discovery::SCRIPT_EXTENSIONS: [&str; 5]
+pub enum nomos_workspace_discovery::PolicyFilePresence
+pub enum nomos_workspace_discovery::ProfileRefusal
+pub enum variant nomos_workspace_discovery::PolicyFilePresence::Absent
+pub enum variant nomos_workspace_discovery::PolicyFilePresence::Present
+pub enum variant nomos_workspace_discovery::PolicyFilePresence::PresentButUnreadable { reason: String, }
+pub enum variant nomos_workspace_discovery::ProfileRefusal::RootIsNotADirectory { root: PathBuf, }
+pub fn nomos_workspace_discovery::LanguageManifest::At_Root(root: &Path) -> Vec<Self>
+pub fn nomos_workspace_discovery::PolicyFile::At_Root(root: &Path) -> Vec<Self>
+pub fn nomos_workspace_discovery::PolicyFilePresence::Of_Path(path: &Path) -> Self
+pub fn nomos_workspace_discovery::ProfileRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_workspace_discovery::Read_Source(root: &Path, path: &Path, text: String) -> SourceFile
 pub fn nomos_workspace_discovery::Read_Sources(root: &Path, recognized: &[&str]) -> Vec<SourceFile>
 pub fn nomos_workspace_discovery::Registered_Extensions() -> Vec<&'static str>
 pub fn nomos_workspace_discovery::Relative_Path(root: &Path, path: &Path) -> String
 pub fn nomos_workspace_discovery::Walked_Sources(root: &Path, recognized: &[&str]) -> Option<Vec<SourceFile>>
+pub fn nomos_workspace_discovery::WorkspaceProfile::Of_Root(root: &Path) -> Result<Self, ProfileRefusal>
+pub impl nomos_workspace_discovery::ProfileRefusal implements core::fmt::Display
+pub struct field nomos_workspace_discovery::LanguageManifest::extension: &'static str
+pub struct field nomos_workspace_discovery::LanguageManifest::is_present: bool
+pub struct field nomos_workspace_discovery::LanguageManifest::name: &'static str
+pub struct field nomos_workspace_discovery::PolicyFile::name: &'static str
+pub struct field nomos_workspace_discovery::PolicyFile::presence: PolicyFilePresence
+pub struct field nomos_workspace_discovery::SourceCount::extension: &'static str
+pub struct field nomos_workspace_discovery::SourceCount::sources: usize
+pub struct field nomos_workspace_discovery::WorkspaceProfile::has_root_marker: bool
+pub struct field nomos_workspace_discovery::WorkspaceProfile::manifests: Vec<LanguageManifest>
+pub struct field nomos_workspace_discovery::WorkspaceProfile::policy_files: Vec<PolicyFile>
+pub struct field nomos_workspace_discovery::WorkspaceProfile::sources: Vec<SourceCount>
+pub struct nomos_workspace_discovery::LanguageManifest
+pub struct nomos_workspace_discovery::PolicyFile
+pub struct nomos_workspace_discovery::SourceCount
+pub struct nomos_workspace_discovery::WorkspaceProfile
