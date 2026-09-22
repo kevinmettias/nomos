@@ -551,10 +551,10 @@ mod tests
     /// A 64-bit linear congruential generator's constants (Knuth's MMIX). A generator
     /// written out here rather than a dependency: what these populations need is
     /// repeatability across runs, not statistical quality.
-    const LCG_MULTIPLIER: u64 = 6_364_136_223_846_793_005;
+    const LINEAR_CONGRUENTIAL_MULTIPLIER: u64 = 6_364_136_223_846_793_005;
 
     /// The increment of the same generator.
-    const LCG_INCREMENT: u64 = 1_442_695_040_888_963_407;
+    const LINEAR_CONGRUENTIAL_INCREMENT: u64 = 1_442_695_040_888_963_407;
 
     /// A scan per offer: for each place in the ranking, walk everything still unranked and
     /// take what the running-strongest chain settles on.
@@ -588,7 +588,7 @@ mod tests
 
     fn Next_Random(state: &mut u64) -> u64
     {
-        *state = state.wrapping_mul(LCG_MULTIPLIER).wrapping_add(LCG_INCREMENT);
+        *state = state.wrapping_mul(LINEAR_CONGRUENTIAL_MULTIPLIER).wrapping_add(LINEAR_CONGRUENTIAL_INCREMENT);
 
         return *state;
     }
