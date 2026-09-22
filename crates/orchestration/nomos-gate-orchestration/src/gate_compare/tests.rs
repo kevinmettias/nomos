@@ -292,6 +292,9 @@ pub(super) fn Result_With(run: RunId, findings: GateFindings) -> GateRunResult
         findings,
         disposition: crate::GateRunOutcome::Indeterminate,
         no_verdict: None,
+        // These tests are about what two runs' findings differ by, and say nothing about
+        // which layer stated the policy either was judged under.
+        policy: None,
         // One fixed provenance for every result this helper builds, so two of them are
         // judged alike by construction and a test about findings stays a test about
         // findings. A test that wants its two sides judged differently says so itself.

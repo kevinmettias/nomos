@@ -9,6 +9,7 @@ mod baselines;
 mod compare;
 mod explain;
 mod plan;
+mod policy;
 mod verdicts;
 
 use nomos_check_orchestration::{CheckOutcome, Claim, Examined, SupportingFactTrail};
@@ -29,6 +30,9 @@ fn Judged_With(fill: u8, provenance: Option<GateRunProvenance>) -> GateRunResult
 {
     return GateRunResult {
         provenance,
+        // These tests are about rendering, and say nothing about which layer stated the
+        // policy this run was judged under.
+        policy: None,
         no_verdict: None,
         unmatched_policy: Vec::new(),
         run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(i64::from(fill))),

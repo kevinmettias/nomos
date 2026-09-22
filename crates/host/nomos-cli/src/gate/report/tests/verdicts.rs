@@ -15,6 +15,9 @@ fn Judged_Without_A_Verdict(finding: &Finding, cause: Option<NoVerdict>) -> Gate
     return GateRunResult {
         // These tests are about rendering, and say nothing about what judged the run.
         provenance: None,
+        // These tests are about rendering, and say nothing about which layer stated the
+        // policy this run was judged under.
+        policy: None,
         no_verdict: cause,
         unmatched_policy: Vec::new(),
         run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
@@ -40,6 +43,9 @@ fn Judged_Run(findings: Vec<Finding>, whole: GateFindings, disposition: GateRunO
     return GateRunResult {
         // These tests are about rendering, and say nothing about what judged the run.
         provenance: None,
+        // These tests are about rendering, and say nothing about which layer stated the
+        // policy this run was judged under.
+        policy: None,
         no_verdict: None,
         unmatched_policy: Vec::new(),
         run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
@@ -58,6 +64,9 @@ fn Test_Render_Run_Should_Report_Vacuous_When_The_Check_Outcome_Never_Reached_Ju
 {
     let result = GateRunResult {
         provenance: None,
+        // These tests are about rendering, and say nothing about which layer stated the
+        // policy this run was judged under.
+        policy: None,
         no_verdict: None,
         unmatched_policy: Vec::new(),
         run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),

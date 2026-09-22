@@ -12,6 +12,7 @@ const KNOWN_ARGUMENTS: [&str; 9] =
 pub(super) const USAGE: &str = "usage: nomos gate plan    [--root <path>] [--include <path>]… \
 [--exclude <path>]… [--rule <id>]…\n       \
      nomos gate run     [--root <path>] [--include <path>]… [--exclude <path>]… [--rule <id>]…\n       \
+     nomos gate policy  [--root <path>] [--include <path>]… [--exclude <path>]… [--rule <id>]…\n       \
      nomos gate explain [--root <path>] --rule <id> --location <path>\n       \
      nomos gate compare [--root <path>] --against <path> [--include <path>]… \
 [--exclude <path>]… [--rule <id>]…\n       \
@@ -19,6 +20,10 @@ pub(super) const USAGE: &str = "usage: nomos gate plan    [--root <path>] [--inc
      nomos gate steps   [--root <path>] [--host <label>]\n\n\
      plan composes this gate's rule registry and reports what it holds.\n\
      run walks the tree, judges it, and reports a real disposition.\n\
+     policy walks the tree and judges it exactly as run does, and reports which layer and \
+artifact decided each field of the policy it was judged under, what that statement \
+outranked, and any statement a lock refused with the reason. It changes no judgment and no \
+disposition; it reports what the resolution already decided.\n\
      explain walks the tree, judges it, and reports what one named finding looks like and \
 whether it would block.\n\
      compare walks --root and --against, judges each, and reports which findings were \
@@ -104,6 +109,7 @@ fn Known_Verb(verb: &str) -> Result<(), String>
 {
     let is_unknown_verb = verb != "plan"
         && verb != "run"
+        && verb != "policy"
         && verb != "explain"
         && verb != "compare"
         && verb != "admits"
@@ -158,6 +164,11 @@ fn Verb_Invocation(verb: &str, rest: &[String], root: PathBuf) -> Result<Invocat
     }
 
     let command = Plan_Or_Run_Command(root, rest);
+
+    if verb == "policy"
+    {
+        return Ok(Invocation::Policy(command));
+    }
 
     return Ok(if verb == "run" { Invocation::Run(command) } else { Invocation::Plan(command) });
 }
@@ -388,5 +399,27 @@ mod tests
         {
             assert!(refusal.contains(verb), "the refusal must name `{verb}`: {refusal}");
         }
+        // Spelled with its invocation, because "policy" alone appears in this usage text for
+        // three other reasons and a bare `contains` would pass with the verb missing.
+        assert!(refusal.contains("nomos gate policy"), "the refusal must name the policy verb: {refusal}");
+    }
+
+    /// `policy` is a verb of its own, carrying the same command `run` does -- the command
+    /// line is one of the layers the resolution ranks, so a policy report over a bare root
+    /// would report a resolution no run performs.
+    #[test]
+    fn Test_Gate_Invocation_From_String_Arguments_Should_Parse_A_Policy_Verb()
+    {
+        let arguments = vec!["policy".to_owned(), "--root".to_owned(), "some/tree".to_owned()];
+
+        let invocation = Gate_Invocation_From_String_Arguments(&arguments)
+            .expect("`policy` is one of the gate verbs, and `--root` is the flag it reads");
+
+        let Invocation::Policy(command) = invocation
+        else
+        {
+            panic!("expected Policy, got {invocation:?}");
+        };
+        assert_eq!(command.root, PathBuf::from("some/tree"));
     }
 }

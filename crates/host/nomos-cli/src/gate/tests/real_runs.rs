@@ -44,6 +44,35 @@ fn Test_Compare_Should_Refuse_A_Side_That_Was_Never_Judged()
     std::fs::remove_dir_all(&empty).ok();
 }
 
+/// The `policy` verb over a real tree reports the file that decided a field, through the
+/// same composition root `run` walks with.
+///
+/// The other half of the end-to-end claim `report/tests/policy.rs` makes: that one resolves
+/// three declared contributions and renders them, because no composition root can state one
+/// field at three layers today; this one proves the two layers that *do* have a source reach
+/// a host's report from a real `Run_Gate` rather than from a result a test built.
+///
+/// Over a scratch tree with no source rather than this workspace's own: what the walk finds
+/// does not reach the resolution at all, and judging the whole repository to read back one
+/// line of policy would spend thirteen seconds proving nothing extra.
+#[test]
+fn Test_The_Policy_Verb_Should_Name_The_File_That_Decided_A_Field_On_A_Real_Run()
+{
+    let root = Repository_Root().join("target").join("nomos-gate-policy-verb");
+    std::fs::create_dir_all(&root).expect("the fixture directory");
+    std::fs::write(root.join("nomos-gate.json"), r#"{ "coverage": "require-completeness" }"#).expect("the fixture policy");
+    let arguments = vec!["policy".to_owned(), "--root".to_owned(), root.display().to_string()];
+    let invocation = Gate_Invocation_From_String_Arguments(&arguments).expect("policy parses");
+
+    let summary = Run_Over_This_Tree(invocation);
+
+    std::fs::remove_dir_all(&root).ok();
+    assert_eq!(summary.code, ExitCode::Ok, "stderr: {}", summary.diagnostics);
+    assert!(summary.output.contains("coverage:"), "{}", summary.output);
+    assert!(summary.output.contains("Repository"), "{}", summary.output);
+    assert!(summary.output.contains("nomos-gate.json"), "{}", summary.output);
+}
+
 /// This repository's own root, three levels above `crates/host/nomos-cli` -- the same
 /// derivation `check_command.rs`'s and `agent/tests.rs`'s own copies of this helper use.
 ///

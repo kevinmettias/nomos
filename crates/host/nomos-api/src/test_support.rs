@@ -88,6 +88,9 @@ pub(crate) fn Complete_Gate_Response(findings: GateFindings) -> GateRunResponse
         check_outcome: CheckOutcomeResponse::Judged { files: FIXTURE_EXAMINED, facts: FIXTURE_EXAMINED, complete: true },
         no_verdict: None,
         unmatched_policy: Vec::new(),
+        // A response a test states rather than runs says nothing about which layer decided
+        // any field, so it reports no provenance rather than an invented one.
+        effective_policy: Vec::new(),
     };
 }
 

@@ -325,6 +325,7 @@ pub struct field nomos_api::GateFindings::calibrated_findings: Vec<Finding>
 pub struct field nomos_api::GateFindings::suppressed_findings: Vec<Finding>
 pub struct field nomos_api::GateRunResponse::check_outcome: CheckOutcomeResponse
 pub struct field nomos_api::GateRunResponse::disposition: Disposition
+pub struct field nomos_api::GateRunResponse::effective_policy: Vec<String>
 pub struct field nomos_api::GateRunResponse::findings: GateFindings
 pub struct field nomos_api::GateRunResponse::no_verdict: Option<NoVerdictResponse>
 pub struct field nomos_api::GateRunResponse::root: PathBuf

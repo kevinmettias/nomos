@@ -5,6 +5,7 @@
 //! themselves -- an outcome variant with nothing yet to carry would be exactly the empty seam
 //! this workspace has learned not to build ahead of a second real case.
 
+mod effective_policy_report;
 mod gate_findings;
 mod gate_outcome;
 mod gate_run_outcome;
@@ -12,6 +13,7 @@ mod gate_run_provenance;
 mod gate_run_result;
 mod no_verdict;
 
+pub use effective_policy_report::Effective_Policy_Report;
 pub use gate_findings::{BaselinePopulation, GateFindings};
 pub use gate_outcome::GateOutcome;
 pub use gate_run_outcome::{Disposition_Of_Findings, GateRunOutcome};

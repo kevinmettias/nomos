@@ -63,7 +63,7 @@ mod tests;
 
 pub use invocation::Invocation;
 pub use parsing::Gate_Invocation_From_String_Arguments;
-use report::{Render_Admits, Render_Compare, Render_Explain, Render_Plan, Render_Run, Render_Steps};
+use report::{Render_Admits, Render_Compare, Render_Explain, Render_Plan, Render_Policy, Render_Run, Render_Steps};
 
 mod exit_code;
 
@@ -116,6 +116,7 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
             Render_Plan(&outcome, stdout, stderr)
         }
         Invocation::Run(command) => Run_Verb(command, stdout, stderr),
+        Invocation::Policy(command) => Policy_Verb(command, stdout, stderr),
         Invocation::Steps { root, host } => Steps_Verb(root, host, stdout, stderr),
         Invocation::Compare { baseline, candidate } =>
         {
@@ -151,6 +152,17 @@ pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl W
 fn Run_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
 {
     return Render_Run(&Judged_Command(command), stdout, stderr);
+}
+
+/// Judges `command` exactly as `run` does and reports what decided its policy.
+///
+/// Through the same [`Judged_Command`] rather than through a resolution of its own, which is
+/// the whole claim this verb makes: the policy it reports is the one that judged the run, so
+/// a reader cannot be shown a resolution a real run never used. `OD-POLICY-001` puts the
+/// resolution on the result for exactly that reason.
+fn Policy_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+{
+    return Render_Policy(&Judged_Command(command), stdout, stderr);
 }
 
 /// Judges both commands the same way `run` judges one, and renders what moved.

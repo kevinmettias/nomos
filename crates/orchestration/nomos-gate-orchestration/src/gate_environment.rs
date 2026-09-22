@@ -157,6 +157,10 @@ pub fn Run_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
         disposition: if unusable_policy.is_some() { GateRunOutcome::Indeterminate } else { disposition },
         no_verdict: unusable_policy.or(reduced.no_verdict),
         provenance: Some(provenance),
+        // The resolution itself, so a host can be told what decided each field rather than
+        // only what the fields came out as. A refused one is `None` and `no_verdict` above
+        // carries the refusal's own sentence; there is no half-resolution to report.
+        policy: resolved.ok().map(Box::new),
     };
 }
 

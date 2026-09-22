@@ -264,8 +264,8 @@ pub use gate_compare::{
 pub use gate_environment::{GateEnvironment, Run_Gate};
 pub use gate_phase::{Evaluated_Phases, GatePhase, PhaseApproval, PhaseDisposition, PhaseOutcome, PhaseThreshold, Phased_Disposition};
 pub use gate_plan::{
-    BaselinePopulation, Disposition_Of_Findings, GateFindings, GateOutcome, GatePlan, GateRunOutcome, GateRunProvenance, GateRunResult,
-    NoVerdict,
+    BaselinePopulation, Disposition_Of_Findings, Effective_Policy_Report, GateFindings, GateOutcome, GatePlan, GateRunOutcome,
+    GateRunProvenance, GateRunResult, NoVerdict,
 };
 pub use policy::{
     AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, CoveragePolicy, Effective_Gate_Policy, EffectivePolicy,

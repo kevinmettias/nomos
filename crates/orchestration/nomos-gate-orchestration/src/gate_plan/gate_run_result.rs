@@ -5,6 +5,7 @@ use nomos_contracts::RunId;
 use std::path::PathBuf;
 
 use crate::GateRunOutcome;
+use crate::policy::EffectivePolicy;
 use super::{GateFindings, GateRunProvenance, NoVerdict};
 
 /// What a real `nomos gate run` produced.
@@ -67,4 +68,39 @@ pub struct GateRunResult
     /// nobody knows what judged it, which must not read as "the same thing that judged the
     /// other side".
     pub provenance: Option<GateRunProvenance>,
+    /// What decided every field of the policy this run judged under.
+    ///
+    /// `OD-POLICY-001` decides that the effective policy carries, per field, the layer and
+    /// artifact that decided it, every contribution that decision outranked, and every
+    /// override a lock refused with its reason. The resolver produced all of that from the
+    /// moment it existed and nothing carried it past the function that computed it, so a
+    /// repository could be judged under a policy and have no way to ask why. This is that
+    /// answer, travelling with the run it belongs to.
+    ///
+    /// Beside [`Self::provenance`] rather than inside it, and for a different question.
+    /// [`GateRunProvenance::policy`] is a digest of the effective *values*, so that two runs
+    /// judged under identical values compare as the same policy however they were stated;
+    /// this says which layer stated them, which is exactly the fact that digest must not
+    /// depend on. `OD-POLICY-001`: "provenance rides beside the digest, never inside it".
+    ///
+    /// `None` for a run whose resolution refused. A locked override does not refuse -- it is
+    /// kept visible in the field it was refused for -- but a same-layer contradiction, an
+    /// unreadable artifact and an orphaned companion do, and a run that fell back to every
+    /// default rather than judging under half a policy has no resolution to report.
+    /// [`Self::no_verdict`] is what says so, in the sentence the refusal wrote. `None` as
+    /// well for a result built by hand, which is what every fixture that says nothing about
+    /// policy passes.
+    ///
+    /// Boxed, which is a cost this field pays rather than imposes. A resolution is seven
+    /// collections and carries about 184 bytes inline, and a `GateRunResult` is itself a
+    /// variant of `nomos_workflow_orchestration`'s `DispatchError`, so an unboxed one grows
+    /// `StepOutcome` and `WorkflowOutcome` with it: every step of every workflow would move
+    /// the size of a policy nothing in that crate reads, which is what `large_enum_variant`
+    /// exists to notice and did. One allocation per gate run buys that back, and a gate run
+    /// is not a value anything constructs in a loop -- the argument
+    /// `crate::policy::Effective_Gate_Policy` makes against boxing its refusal does not
+    /// transfer, because that one is a sentence handed straight to a reader and this is a
+    /// structure a report walks. The cost is real and lands on the caller: a composition root
+    /// writes `Some(Box::new(..))` and a reader takes `as_deref()`.
+    pub policy: Option<Box<EffectivePolicy>>,
 }

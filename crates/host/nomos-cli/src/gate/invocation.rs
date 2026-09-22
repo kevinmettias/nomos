@@ -20,6 +20,18 @@ pub enum Invocation
     /// Walk the tree, judge it exactly as `nomos check` would, and report a real
     /// disposition.
     Run(GateCommand),
+    /// Walk the tree, judge it, and report which layer and artifact decided each field of
+    /// the policy it was judged under.
+    ///
+    /// Carries a whole [`GateCommand`] and not a root alone, because the command *is* one of
+    /// the layers: what a caller states on the command line is a contribution the resolution
+    /// ranks against the repository's own file, so a policy report over a bare root would be
+    /// a report of a different resolution than the one any real run performs.
+    ///
+    /// A verb of its own rather than a flag on [`Self::Run`]. `OD-POLICY-001`'s rendering
+    /// changes no judgment, no disposition and no exit code, and folding it into `run` would
+    /// have put a second answer under a verb whose output every caller already parses.
+    Policy(GateCommand),
     /// Walk the tree, judge it, and answer what one named finding looks like and whether
     /// it would block.
     Explain

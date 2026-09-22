@@ -9,7 +9,10 @@ fn Root_Of(invocation: &Invocation) -> &PathBuf
 {
     return match invocation
     {
-        Invocation::Plan(command) | Invocation::Run(command) | Invocation::Explain { command, .. } => &command.root,
+        Invocation::Plan(command)
+        | Invocation::Run(command)
+        | Invocation::Policy(command)
+        | Invocation::Explain { command, .. } => &command.root,
         // The baseline's, because `--root` spells it for every verb including this one;
         // `--against`'s is reached through the variant itself where a test needs both.
         Invocation::Compare { baseline, .. } => &baseline.root,

@@ -16,6 +16,7 @@ use std::io::Write;
 mod admits;
 mod baselines;
 mod explain;
+mod policy;
 mod run;
 mod steps;
 
@@ -24,6 +25,7 @@ mod tests;
 
 pub(super) use admits::Render_Admits;
 pub(super) use explain::Render_Explain;
+pub(super) use policy::Render_Policy;
 pub(super) use run::{Render_Plan, Render_Run};
 pub(super) use steps::Render_Steps;
 

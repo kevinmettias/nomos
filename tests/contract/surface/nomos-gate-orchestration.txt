@@ -84,6 +84,7 @@ pub fn nomos_gate_orchestration::Compare_Gate_Runs( baseline: &GateRunResult, ca
 pub fn nomos_gate_orchestration::Disposition_Of_Findings(findings: &[Finding]) -> GateRunOutcome
 pub fn nomos_gate_orchestration::EffectivePolicy::Deciding(&self, field: PolicyField) -> Option<&ResolvedField>
 pub fn nomos_gate_orchestration::Effective_Gate_Policy(contributions: &[PolicyContribution]) -> Result<EffectivePolicy, PolicyRefusal>
+pub fn nomos_gate_orchestration::Effective_Policy_Report(policy: &EffectivePolicy) -> Vec<String>
 pub fn nomos_gate_orchestration::Evaluated_Phases(phases: &[GatePhase], findings: &[Finding], approvals: &[PhaseApproval]) -> Vec<PhaseOutcome>
 pub fn nomos_gate_orchestration::Explain_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs, Env>, command: &GateCommand, query: &FindingQuery, ) -> GateExplainResult
 pub fn nomos_gate_orchestration::FieldProvenance::Sentence(&self) -> String
@@ -182,6 +183,7 @@ pub struct field nomos_gate_orchestration::GateRunResult::check_outcome: CheckOu
 pub struct field nomos_gate_orchestration::GateRunResult::disposition: GateRunOutcome
 pub struct field nomos_gate_orchestration::GateRunResult::findings: GateFindings
 pub struct field nomos_gate_orchestration::GateRunResult::no_verdict: Option<NoVerdict>
+pub struct field nomos_gate_orchestration::GateRunResult::policy: Option<Box<EffectivePolicy>>
 pub struct field nomos_gate_orchestration::GateRunResult::provenance: Option<GateRunProvenance>
 pub struct field nomos_gate_orchestration::GateRunResult::root: PathBuf
 pub struct field nomos_gate_orchestration::GateRunResult::run: RunId

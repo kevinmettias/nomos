@@ -4,7 +4,7 @@
 
 use crate::{composition, sources};
 use nomos_contracts::RunId;
-use nomos_gate_orchestration::{GateCommand, GateRunResult};
+use nomos_gate_orchestration::{Effective_Policy_Report, GateCommand, GateRunResult};
 use nomos_platform::Clock;
 use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use serde::Serialize;
@@ -85,6 +85,23 @@ pub struct GateRunResponse
     ///
     /// Empty whenever every declared entry matched, and empty when none was declared.
     pub unmatched_policy: Vec<String>,
+    /// Which layer and artifact decided each field of the policy this run judged under, what
+    /// that statement outranked, and any statement a lock refused with the reason.
+    ///
+    /// `OD-POLICY-001`'s provenance, reaching a headless caller. Every line here is
+    /// [`nomos_gate_orchestration::Effective_Policy_Report`]'s own, which is the same
+    /// function `nomos-cli`'s `gate policy` verb prints: this is a projection of that
+    /// rendering and not a second assembly of it, so the two surfaces cannot come to disagree
+    /// about what decided a field while each looks right on its own.
+    ///
+    /// Text rather than a typed entry, for the reason [`Self::unmatched_policy`] already
+    /// gives: these are report lines. A caller that wants to match on a layer has the typed
+    /// resolution one crate down; duplicating it on the wire would be a second addressing
+    /// scheme for one question.
+    ///
+    /// Empty for a run whose resolution refused, which is the case
+    /// [`Self::no_verdict`] already carries the reason for.
+    pub effective_policy: Vec<String>,
 }
 
 impl GateRunResponse
@@ -98,6 +115,7 @@ impl GateRunResponse
             check_outcome: CheckOutcomeResponse::From(&result.check_outcome),
             no_verdict: result.no_verdict.as_ref().map(NoVerdictResponse::From),
             unmatched_policy: result.unmatched_policy,
+            effective_policy: result.policy.as_deref().map(Effective_Policy_Report).unwrap_or_default(),
             findings: GateFindings::From(result.findings),
         };
     }
@@ -108,8 +126,8 @@ mod tests
 {
     use super::*;
     use crate::test_support::{Area, Probe_Tree, TreeName};
-    use nomos_contracts::RuleId;
-    use nomos_gate_orchestration::RuleSelector;
+    use nomos_contracts::{ConfigurationLayer, RuleId};
+    use nomos_gate_orchestration::{CoveragePolicy, Effective_Gate_Policy, PolicyContribution, RuleSelector};
     use nomos_rules::NAMING_CONVENTION;
 
     /// The subsystem this module's own probe trees are named under.
@@ -287,6 +305,48 @@ mod tests
             naming_only.findings.blocking_findings.is_empty(),
             "the deselected rule's finding must not exist at all: {naming_only:?}"
         );
+    }
+
+    /// The artifact a policy a caller built in code is reported under, as
+    /// `nomos_gate_orchestration`'s own resolver names it.
+    ///
+    /// Spelled here because a `GateCommand` contributes at `CommandLine` whether or not it
+    /// states anything, so the resolution behind the assertion below has two contributions
+    /// and not one. A change to that name fails this test, which is the right place to find
+    /// out that the wire's wording moved.
+    const CALLER_BUILT_POLICY: &str = "the policy the caller built";
+
+    /// `OD-POLICY-001`'s provenance reaching a headless caller, and reaching it as the same
+    /// lines `nomos-cli`'s `gate policy` verb prints.
+    ///
+    /// Compared against `Effective_Policy_Report` over the resolution this tree declares, not
+    /// merely searched for the file's name: the claim is that this response *projects* that
+    /// rendering rather than assembling one, and a response that built its own sentences
+    /// naming the same artifact would pass any weaker assertion.
+    #[test]
+    fn Test_A_Headless_Caller_Should_Be_Told_What_Decided_Each_Field_In_The_Rendering_Cli_Prints()
+    {
+        let root = Probe_Tree(GATE_RUN_AREA, TreeName("effective-policy"), r#"{ "coverage": "require-completeness" }"#)
+            .expect("the temp directory is writable and this call's own name is fresh");
+
+        let response = Handle_Gate_Run(&Command_At(root.clone()));
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert_eq!(response.effective_policy, Declared_Coverage_Report(), "{:?}", response.effective_policy);
+    }
+
+    /// The report a tree declaring only a coverage floor resolves to, rendered by the one
+    /// function both hosts read it through.
+    fn Declared_Coverage_Report() -> Vec<String>
+    {
+        let declared = PolicyContribution {
+            coverage: Some(CoveragePolicy::RequireCompleteness),
+            ..PolicyContribution::Silent(ConfigurationLayer::Repository, "nomos-gate.json")
+        };
+        let stated = PolicyContribution::Silent(ConfigurationLayer::CommandLine, CALLER_BUILT_POLICY);
+        let policy = Effective_Gate_Policy(&[declared, stated]).expect("one stated field at one layer is not refused");
+
+        return Effective_Policy_Report(&policy);
     }
 
     /// [`GateCommand`] over `root`, every selector at its select-everything default -- the
