@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:6905ed3d12ec72993c7a583b2f582bdeb7081c4250ae889aa3aecfa37ec57952",
-  "inputs_digest": "sha256:2634564229fe27fca85e9575f83c154ea272197abf94f51460ea91df2918b3c7",
+  "content_digest": "sha256:690e05636c8a482b4d595d616bfd38745e7035c26dab4448a9007e6632117fba",
+  "inputs_digest": "sha256:ea6f9896867e507602acd8cdc5e2e78bd3db55a5f4b1af84b17268659ef15f6d",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2136
+      2137
     ],
     [
       "Source blocks",
-      7557
+      7565
     ]
   ],
   "inputs": [
@@ -498,7 +498,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored",
-      "hash": "sha256:c69ceac45b63a2a7fdbf575e0aae4e6917ff2f5e7d2ef0497149ca8d811344da"
+      "hash": "sha256:d7c3436fe262ca6a9eaa4ceb5dc835f3e134a390855992f4ccea26a1dbf156f3"
     },
     {
       "content": "documents",
@@ -5113,12 +5113,17 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#13",
-      "hash": "sha256:9e5a80e768188567c59771922d3f430a933aa5a5431bdcf4bb2d84b1f2ca79de"
+      "hash": "sha256:8340b07b91f4422a2d9dfd247e7eb8c2708cb0c49a4c9afbddd6e8bf852cb8bd"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#18",
-      "hash": "sha256:2e77b49fd095edb11eddf327beec9680eac2202dac4824fe2fe8b4521efda7ff"
+      "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#21",
+      "hash": "sha256:6cc81ce31c0ea5ad2ff226d46aa9ad553fc09b39c97f33f4512b2162c0bfcf32"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#26",
+      "hash": "sha256:d45154d79abde5f1ba6dbe0e9f2458187b9fe4c216a0c1c9c0427256718e6913"
     },
     {
       "content": "headings",
@@ -25288,41 +25293,81 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#13",
-      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+      "hash": "sha256:4489d352833722a77f898ed00519b484eb733dd56698e2e9290ece827dbce7e2"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#14",
-      "hash": "sha256:99e002c55aa290abe34e6fa0b9cd0732e9b4da55bd105d68491ce2d197889f08"
+      "hash": "sha256:2374a079d62f5c25cfb1927ca94ae9d03bec8ac5ed6972c3efc01b81bbcfdaab"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#15",
-      "hash": "sha256:5e78ba08839d342ade740f3659104c92bf605b1780b1d5681be342b6ada56ab3"
+      "hash": "sha256:b774c29e5febc463c5dde400a97ea8d79c8ba6b9a9b2ee659b9bc2c88cae5db5"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#16",
-      "hash": "sha256:13443f242748a43a18cfe69739a3b8c026a5411e8ddd7a27dfc0edaad3ffc316"
+      "hash": "sha256:b6a93d84e8326299dccffadd295c0eb41fa78d96a7825d33b30d609d2fd144d1"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#17",
-      "hash": "sha256:da80fd9e70def86fcf0d890f0ad6701d4cc822cf8c1bcbca4be1545309144f1b"
+      "hash": "sha256:1fb854ef7134235bee92f172f89ca8de9630978519c9d9d96213bebcc373320e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#18",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:5b3576ad5182950a265854cbdf28ea59b782728df8cf52ce4b17680be48c14b9"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#19",
-      "hash": "sha256:94f62a4bb213bcfb0463bedc5b6f9c5fe5cd5280f2b779859566b03494fcf575"
+      "hash": "sha256:7db61c8ed8b60dce9e38e575432a87750c5fe6447919851219780ec11dbf047d"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#20",
+      "hash": "sha256:11bf724fc51d2e3188407b39c0aacbf6460cd08baeb319eec1f37058a83f68e6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#21",
+      "hash": "sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#22",
+      "hash": "sha256:99e002c55aa290abe34e6fa0b9cd0732e9b4da55bd105d68491ce2d197889f08"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#23",
+      "hash": "sha256:5e78ba08839d342ade740f3659104c92bf605b1780b1d5681be342b6ada56ab3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#24",
+      "hash": "sha256:13443f242748a43a18cfe69739a3b8c026a5411e8ddd7a27dfc0edaad3ffc316"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#25",
+      "hash": "sha256:da80fd9e70def86fcf0d890f0ad6701d4cc822cf8c1bcbca4be1545309144f1b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#26",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#27",
+      "hash": "sha256:94f62a4bb213bcfb0463bedc5b6f9c5fe5cd5280f2b779859566b03494fcf575"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#28",
       "hash": "sha256:a47ae4363a00fc5a0c772bf13b1fb9d2b2f34a94bd375e0ba326520267fab735"
     },
     {

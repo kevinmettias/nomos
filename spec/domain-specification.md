@@ -105,7 +105,7 @@ profile: domain-specification
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 34 | 12 | sha256:3f9a8dc63ea44ae7b2ced612ba58b62590e3240954555ba9ce43331f6157366b |
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md | authored | 20 | 7 | sha256:0c813c23245ff0e95b51d6914c67d7ab36ae6d18b05e2bd82bd69892016f969e |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 25 | 7 | sha256:6b6d9f41076761c1a5af15719547c1b28ab365e7b4e46ba305c59bc4de3a71b5 |
-| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md | authored | 20 | 6 | sha256:c69ceac45b63a2a7fdbf575e0aae4e6917ff2f5e7d2ef0497149ca8d811344da |
+| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md | authored | 28 | 7 | sha256:d7c3436fe262ca6a9eaa4ceb5dc835f3e134a390855992f4ccea26a1dbf156f3 |
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md@authored | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md | authored | 24 | 6 | sha256:a1950bc3193e80ab3048937686ee5af16afe5f70f160c318aa0fad2915067313 |
 | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md@authored | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md | authored | 21 | 6 | sha256:5e4ffc056879a2325a78cf957dd7e176cd0a0ebc73c27b1b2a8d90553bd65891 |
 | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md@authored | docs/records/OD-GATE-023-the-gate-clusters-dependency-on-the-planner-was-mostly-inherited-and-each-item-is-disposed-on-its-own-measured-claim.md | authored | 23 | 7 | sha256:7ffcec3773752326a5ba599808f3454e1385db25737f73d58c74cbc762307665 |
@@ -1033,8 +1033,9 @@ profile: domain-specification
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#8 | authored | 2 | Decision |
-| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#13 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#18 | authored | 2 | Status |
+| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#13 | authored | 2 | A finding no code change can clear |
+| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#21 | authored | 2 | What This Record Does Not Do |
+| docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#26 | authored | 2 | Status |
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#1 | authored | 1 | What nomos-gate-orchestration's RuleRegistry means now that Run composes 56 rules and the registry offers 8 |
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md#6 | authored | 2 | What Was Measured |
@@ -27488,11 +27489,86 @@ phase, in the order: `clean-file`, `decompose-file`, everything else, `placement
 
 ### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#13
 
+*revision: authored · kind: heading · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / A finding no code change can clear · hash: sha256:4489d352833722a77f898ed00519b484eb733dd56698e2e9290ece827dbce7e2*
+
+## A finding no code change can clear
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#14
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / A finding no code change can clear · hash: sha256:2374a079d62f5c25cfb1927ca94ae9d03bec8ac5ed6972c3efc01b81bbcfdaab*
+
+The campaign this record authorized was followed by a stricter one. The eight-phase items
+verify through a predicate that counts a waived finding as outstanding, on the ground that a
+waiver is a recorded exemption rather than a fix and the point of the campaign is to stop
+needing them. That is the right rule for a finding a fix could clear. It is the wrong rule for
+one no fix can, because it leaves the item with no spelling at all.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#15
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / A finding no code change can clear · hash: sha256:b774c29e5febc463c5dde400a97ea8d79c8ba6b9a9b2ee659b9bc2c88cae5db5*
+
+Measured on 2026-09-21 in the substrate-ledger territory. Four `check-closure-bounds` findings
+sit on closures that `std::thread::scope` moves onto spawned threads, and `Send` is what the
+compiler demands of them: deleting the bound fails to compile, with the message that the
+closure cannot be sent between threads safely. The check asks for an in-code marker instead,
+and under the `safety-only` setting this record kept, that marker is not honoured for
+`check-closure-bounds` -- the checks whose exceptions belong beside the code are a list the
+tool decides, thirteen of them, and this is not one. So the code cannot change, the marker
+would do nothing, and the waiver is counted as a finding. Three spellings, all closed.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#16
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / A finding no code change can clear · hash: sha256:b6a93d84e8326299dccffadd295c0eb41fa78d96a7825d33b30d609d2fd144d1*
+
+**A finding no code change can clear stays in `suppressions.json`, and an eight-phase item may
+close with it standing**, on three conditions.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#17
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / A finding no code change can clear · hash: sha256:1fb854ef7134235bee92f172f89ca8de9630978519c9d9d96213bebcc373320e*
+
+1. The claim that no code change clears it is **proven by mutation, and the proof recorded**:
+   the bound is removed, the compiler refuses, and the file is restored byte-identically.
+2. The waiver cites this record and states the compiler's own reason, not the campaign's
+   convenience.
+3. The site carries a comment saying the same thing, so a reader meeting the code without the
+   waiver ledger still meets the justification.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#18
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / A finding no code change can clear · hash: sha256:5b3576ad5182950a265854cbdf28ea59b782728df8cf52ce4b17680be48c14b9*
+
+**The exception is carried by the item, not by the predicate.** The campaign's instrument
+counts waived findings deliberately and is not weakened here: an item in this position names
+the exempt findings in its own `done_when` and asserts that the predicate reports exactly
+those and no others. A predicate that cannot reach zero is then a fact the item states rather
+than a failure it hides, which is the same discipline `OD-GATE-001` asks of a skipped test.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#19
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / A finding no code change can clear · hash: sha256:7db61c8ed8b60dce9e38e575432a87750c5fe6447919851219780ec11dbf047d*
+
+The mutation is what makes this an exception rather than a hole. A finding whose removal still
+compiles is outside it, and so is one whose fix is merely large, inconvenient or disliked.
+Running the mutation is cheap, and requiring it keeps the cost of claiming the exception above
+the cost of doing the work.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#20
+
+*revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / A finding no code change can clear · hash: sha256:11bf724fc51d2e3188407b39c0aacbf6460cd08baeb319eec1f37058a83f68e6*
+
+`crates/platform/nomos-platform-std/src/launcher/drain.rs` is the second instance already in
+the tree, excusing `check-lifetime-discipline` in the same words. So this is a class rather
+than one file, and the next territory to meet it reads an answer instead of making the
+discovery again.
+
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#21
+
 *revision: authored · kind: heading · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What This Record Does Not Do · hash: sha256:6ea554e3175afde151b90b210ad0b67222f6600de726831ca6973094b0d91620*
 
 ## What This Record Does Not Do
 
-### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#14
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#22
 
 *revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What This Record Does Not Do · hash: sha256:99e002c55aa290abe34e6fa0b9cd0732e9b4da55bd105d68491ce2d197889f08*
 
@@ -27500,14 +27576,14 @@ It does not waive every finding a check reports; only the two named, general cat
 above are pre-decided. Every other finding is a real candidate for a code fix and is
 triaged on its own merits in the item that closes its phase.
 
-### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#15
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#23
 
 *revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What This Record Does Not Do · hash: sha256:5e78ba08839d342ade740f3659104c92bf605b1780b1d5681be342b6ada56ab3*
 
 It does not change `suppression.markers` from the shipped safety-only default, and does not
 grant any check outside the shipped thirteen an in-code marker.
 
-### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#16
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#24
 
 *revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What This Record Does Not Do · hash: sha256:13443f242748a43a18cfe69739a3b8c026a5411e8ddd7a27dfc0edaad3ffc316*
 
@@ -27515,7 +27591,7 @@ It does not resolve `check-visibility-scope` against this repository; that check
 count is deferred until the working tree is not sharing live, divergent worktrees, per the
 measurement above.
 
-### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#17
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#25
 
 *revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / What This Record Does Not Do · hash: sha256:da80fd9e70def86fcf0d890f0ad6701d4cc822cf8c1bcbca4be1545309144f1b*
 
@@ -27524,13 +27600,13 @@ duplication thresholds, language-specific calibration, a standards-tree policy, 
 Every field left absent takes the shipped default, which this record deliberately does not
 re-argue.
 
-### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#18
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#26
 
 *revision: authored · kind: heading · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#19
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#27
 
 *revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Status · hash: sha256:94f62a4bb213bcfb0463bedc5b6f9c5fe5cd5280f2b779859566b03494fcf575*
 
@@ -27545,7 +27621,7 @@ per crate directory), everything else (`P16-EVERYTHINGELSE-*`, ending at
 ordered it (`P20-PLACEMENT-*`, with `P22-PLACEMENT-DUP-REGRESSION` closing the two
 duplication findings a later fix introduced).
 
-### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#20
+### docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#28
 
 *revision: authored · kind: prose · heading: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign / Status · hash: sha256:a47ae4363a00fc5a0c772bf13b1fb9d2b2f34a94bd375e0ba326520267fab735*
 

@@ -3,7 +3,7 @@ id: OD-GATE-018
 type: decision
 title: Adopting code-standards' waiver mechanism for a nine-phase remediation campaign
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - gate
@@ -100,6 +100,49 @@ placement, decompose-file, declare-types, concurrency and errors finding not mat
 of the two categories above — is triaged and fixed (or, if a specific case turns out to be
 its own structural exception, waived individually with its own stated reason) phase by
 phase, in the order: `clean-file`, `decompose-file`, everything else, `placement` last.
+
+## A finding no code change can clear
+
+The campaign this record authorized was followed by a stricter one. The eight-phase items
+verify through a predicate that counts a waived finding as outstanding, on the ground that a
+waiver is a recorded exemption rather than a fix and the point of the campaign is to stop
+needing them. That is the right rule for a finding a fix could clear. It is the wrong rule for
+one no fix can, because it leaves the item with no spelling at all.
+
+Measured on 2026-09-21 in the substrate-ledger territory. Four `check-closure-bounds` findings
+sit on closures that `std::thread::scope` moves onto spawned threads, and `Send` is what the
+compiler demands of them: deleting the bound fails to compile, with the message that the
+closure cannot be sent between threads safely. The check asks for an in-code marker instead,
+and under the `safety-only` setting this record kept, that marker is not honoured for
+`check-closure-bounds` -- the checks whose exceptions belong beside the code are a list the
+tool decides, thirteen of them, and this is not one. So the code cannot change, the marker
+would do nothing, and the waiver is counted as a finding. Three spellings, all closed.
+
+**A finding no code change can clear stays in `suppressions.json`, and an eight-phase item may
+close with it standing**, on three conditions.
+
+1. The claim that no code change clears it is **proven by mutation, and the proof recorded**:
+   the bound is removed, the compiler refuses, and the file is restored byte-identically.
+2. The waiver cites this record and states the compiler's own reason, not the campaign's
+   convenience.
+3. The site carries a comment saying the same thing, so a reader meeting the code without the
+   waiver ledger still meets the justification.
+
+**The exception is carried by the item, not by the predicate.** The campaign's instrument
+counts waived findings deliberately and is not weakened here: an item in this position names
+the exempt findings in its own `done_when` and asserts that the predicate reports exactly
+those and no others. A predicate that cannot reach zero is then a fact the item states rather
+than a failure it hides, which is the same discipline `OD-GATE-001` asks of a skipped test.
+
+The mutation is what makes this an exception rather than a hole. A finding whose removal still
+compiles is outside it, and so is one whose fix is merely large, inconvenient or disliked.
+Running the mutation is cheap, and requiring it keeps the cost of claiming the exception above
+the cost of doing the work.
+
+`crates/platform/nomos-platform-std/src/launcher/drain.rs` is the second instance already in
+the tree, excusing `check-lifetime-discipline` in the same words. So this is a class rather
+than one file, and the next territory to meet it reads an answer instead of making the
+discovery again.
 
 ## What This Record Does Not Do
 
