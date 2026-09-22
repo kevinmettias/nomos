@@ -33,16 +33,28 @@ table this section used to carry with a declared set of zones and the zones each
 depend on, plus a short, named list of the same-zone edges a real crate needs; a total
 order over one number line forced two crates with no real precedence between them to be
 given one anyway the moment either legitimately depended on the other, which is why a
-crate had to be renumbered more than once for a dependency nobody disputed. `nomos-rules`
-declares `ZONES`, `Permits` and `SAME_ZONE_EDGES`, and `tests/contract` asserts against
-that one declaration rather than a second copy of its own.
+crate had to be renumbered more than once for a dependency nobody disputed. All three of
+those parts are declared once, as data, in `nomos-architecture.json` at the repository
+root — `OD-RULES-003`'s third prerequisite asked for a declared architecture as data
+rather than a Rust `const` table, and `OD-RULES-024` removed the last component and crate
+name of this workspace from `nomos-rules`, which is where the table used to live.
+`nomos-cap-architecture` carries the contract that file answers to, `nomos-repo-policy`'s
+`architecture` module is the one provider that reads it, and `tests/contract` reaches it
+through `Declared_Architecture` in `boundaries/bands.rs` and asserts against that one
+declaration rather than a second copy of its own. What it declares is in the file; a
+reader wanting the zones, the lattice or the edge list reads them there, because restating
+any of them here would be the second copy this sentence exists to refuse.
 
 Four rows below are marked `[repo tooling]`: `nomos-ledger`, `nomos-work-orchestration`,
 `nomos-spec-orchestration` and `nomos-surface-provenance` exist to develop or preserve this
 repository, not to answer a question an end-user repository would ask Nomos.
 `ARC-ECOSYSTEM-001` names why a shared zone does not by itself mean shared product
-ownership, `OD-LEDGER-036` settles the ledger specifically, and `OD-PROJECT-004` decided
-where these four belong physically. The `nomos-spec-*` family below the main table carries
+ownership, `OD-LEDGER-036` settles the ledger specifically, and `OD-PROJECT-004` decides
+that the tools governing this repository are separated from the product they govern. What
+that record decides is ownership, not placement: version 1 named a `crates/repo-tooling/`
+directory, version 2 retires it as never built and records the zone declaration two
+readers judge as the boundary instead, so these four sit exactly where version 1 measured
+them and no move is owed. The `nomos-spec-*` family below the main table carries
 the identical distinction in its own prose already. The mark here does not move a crate,
 does not change a dependency, and is not itself a decision — it only makes a decision other
 records already made visible where a reader would otherwise have to infer it from zone

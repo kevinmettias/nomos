@@ -1,6 +1,6 @@
 //! Zone: Application Service — the workflow tier's first real execution increment: an ordered sequence of
 //! `WorkflowStep` declarations, each paired with a real dispatch to one of this
-//! workspace's five real dispatch targets.
+//! workspace's four real dispatch targets.
 //!
 //! `OD-WORKFLOW-005` names why this exists ahead of any of `OD-WORKFLOW-002`'s three
 //! named conditions firing, and what it does and does not build. In short:
@@ -34,8 +34,23 @@
 //!
 //! `WF-012`'s retry, timeout and compensation are honored here, not merely declared:
 //! `P123-WORKFLOW-RETRY-TIMEOUT-COMPENSATION-RUNTIME` built the three halves of that
-//! clause this crate can honor from the declared vocabulary alone, under the standing
-//! override `OD-ROADMAP-001` records. [`Run`] re-dispatches a failed step while its own
+//! clause this crate can honor from the declared vocabulary alone, under the user's own
+//! direct, session-specific override that `OD-WORKFLOW-005` records for this tier.
+//!
+//! This doc used to name `OD-ROADMAP-001`'s standing override instead, and it was the one
+//! kind of wrong a reader could not detect from here: two authorities disagreeing, neither
+//! of them the mechanical one. Read against each other, they do not. `OD-ROADMAP-001`
+//! retires the population-of-zero caution for the AgentExecutor / ModelBackend /
+//! RulePackage / corrections cluster it supersedes record by record, and its own text says
+//! it does not touch a decision outside that cluster; the workflow tier is not named in it.
+//! `OD-WORKFLOW-005` refuses the same claim from its own side -- its title says the
+//! increment rests on the user's standing override rather than a fired `OD-WORKFLOW-002`
+//! trigger, and its "What This Does Not Build" and Status both decline to claim that the
+//! generalized retirement already covers this decision. Its version 2 amendment, which is
+//! what records this runtime as landed, widens nothing. So the record was right and this
+//! doc was wrong, and the licence is the narrow one named above.
+//!
+//! [`Run`] re-dispatches a failed step while its own
 //! `RetryPolicy::Retry` permits another attempt, reports a step that broke its declared
 //! `Timeout::Seconds` as [`StepTiming::Exceeded`] when a clock was supplied to measure it,
 //! and unwinds the completed steps of a failed run in reverse through whichever
@@ -48,7 +63,7 @@
 //!
 //! No immutable published artifacts (`WF-009`), no branch/merge or bounded parallelism
 //! (`WF-010`), no independently versioned or replayable definitions (`WF-011`), no shared
-//! dispatch trait across any of the five bodies, no `WorkResult` assembly --
+//! dispatch trait across any of the four bodies, no `WorkResult` assembly --
 //! `OD-WORKFLOW-005`'s "What This Does Not Build" names each and why, apart from the
 //! check-body, correction-body and gate-body steps and the CLI verb that section named as
 //! later, heavier increments: those are now built, here and in `nomos-cli::workflow`.
