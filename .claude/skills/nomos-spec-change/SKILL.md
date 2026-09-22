@@ -283,7 +283,9 @@ git hash-object <scratch>/render/spec/domain-specification.md    # the bytes you
 
 Then copy the four halves into the working tree, so the next session stages your bytes rather
 than the ones you superseded. That copy races like every other, and the commit does not depend
-on it. Then clear the leftover, which is the subsection below and is not optional.
+on it. **It covers the four halves and not your commit** — every other path you published is
+left stale in the shared checkout, which is the last subsection before the rebuild rule. Then
+clear the leftover, which is the subsection below and is not optional.
 
 **The form adds and replaces entries and cannot express a deletion.** `read-tree` followed by
 `update-index --add` never removes one, so a file you deleted on the render worktree's disk is
@@ -416,6 +418,80 @@ the paths you just published, because you know what your commit put at `HEAD`; y
 for theirs. That is why the quiet-tree reading sends you to this form rather than telling you to
 unstage them: that bullet is about their entries before you commit, and this subsection is about
 yours after.
+
+### The copy-back is scoped to the four halves, and your commit is not
+
+The instruction two subsections up says to copy the four projection halves into the working tree.
+That is right, and it is written about the halves. A commit publishes whatever it publishes, and
+**nothing writes the shared checkout for any other path**, so the moment the branch moves, every
+session's working tree is `HEAD` minus your commit.
+
+Measured on `e12a4c32`, which published 34 paths of which four were projection-shaped. The other
+30 were never copied back, and the shared checkout stood at `HEAD`-minus-that-commit through
+**nine peer commits over several hours** before anybody noticed — the other sessions were
+committing from their own worktrees and never staged the affected paths.
+
+**Clear the leftover first, or you cannot see this at all.** Proved in a throwaway repository,
+publishing one modification, one addition and one deletion through the form above. Immediately
+after the swap, `git status --short` put all three in the *first* column — `M mod.txt`,
+`D added.txt`, `A doomed.txt` — because the index still holds the parent's entries. Those are the
+leftover, and they mask the tree completely. Only after `git restore --staged` of the published
+paths does the second column speak, and then the same commit appears again in three disguises:
+
+```
+ M mod.txt      # a published modification, reverted on disk
+ D added.txt    # a published addition, absent from disk
+?? doomed.txt   # a published deletion, still present on disk and now untracked
+```
+
+**Why it is not cosmetic.** A peer who runs `git add` on any of those stages the pre-commit bytes
+and publishes a revert of your work under their own message. Meanwhile every `nomos check --root .`,
+every contract-suite run and every `cargo build` in the shared tree is measuring a tree that exists
+at no commit, so a session diagnosing a red check there is diagnosing a state nothing produced —
+which happened: two sessions independently blamed somebody's uncommitted work for four orphan
+files that were in fact published by `e12a4c32`.
+
+**Read before you write.** A checkout over a path a peer is editing destroys their work, so
+establish the delta is your own first. The same triple the leftover subsection uses answers it,
+with the captured `$PARENT` as the third leg:
+
+```
+for p in <the paths this commit published>; do
+  printf '%s  disk=%s  head=%s  parent=%s\n' "$p" \
+    "$( [ -e "$p" ] && git hash-object "$p" || echo absent )" \
+    "$(git rev-parse --verify -q "HEAD:$p"   || echo absent)" \
+    "$(git rev-parse --verify -q "$PARENT:$p" || echo absent)"
+done
+```
+
+- **disk equals `HEAD`** — already reconciled; do nothing.
+- **disk equals `$PARENT`** — purely un-applied, and yours to restore.
+- **disk equals neither** — still just your change missing, with peers' later commits layered over
+  the pre-commit content. Read the diff before restoring; it should be your commit reversed.
+- **anything you cannot attribute to your own commit** — not yours. Leave it and say so.
+
+**Then reconcile, and note the case a checkout cannot reach:**
+
+```
+git checkout HEAD -- <the published paths HEAD still holds>
+rm -f <each published path HEAD no longer holds>
+```
+
+`git checkout HEAD -- <a path your commit deleted>` fails with exit 1 and
+`error: pathspec '<path>' did not match any file(s) known to git`, because `HEAD` has no such path.
+It comes back as `??` and only an explicit `rm` clears it. Measured; `rm` before the leftover is
+cleared is not enough either, because the index entry survives and the path then reads `AD`.
+
+**`work/ledger.json` is excluded from all of this.** It is live coordination state and its disk
+copy is legitimately *newer* than `HEAD` whenever a peer has claimed since you rendered, so
+restoring it to `HEAD` destroys live claims. Measured on 2026-09-22: a peer claimed an item between
+two `git status` calls ninety seconds apart, so the window is not theoretical.
+
+**Three moments, three subsections, and they are not interchangeable.** The form cannot express a
+deletion, which is about what the *commit* carries and is settled before the branch moves. The
+leftover is about what the *index* holds afterwards. This is about what the *working tree* never
+received. A landing can be correct on the first two and wrong on this one, which is exactly what
+`e12a4c32` was.
 
 ### Rebuild the binary after the last record edit, not merely once in the worktree
 
