@@ -29,12 +29,24 @@ pub struct VerificationRecord
     ///
     /// Same shape as `gate`, deliberately: `None` on every record written before this field
     /// existed, and `None` again when `HEAD` could not be resolved -- no `.git` at the tree
-    /// this ran in, a `HEAD` naming a packed ref this build does not chase, or any other read
-    /// failure. A reader cannot tell those cases apart from a `None`, and that is deliberate --
+    /// this ran in, a ref naming nothing, or any other read failure. A reader cannot tell
+    /// those cases apart from a `None`, and that is deliberate --
     /// none of them is a case this field claims to answer, and inventing a value for any of
     /// them would be worse than admitting it does not have one. Never backfilled, for the
     /// reason `gate` above is not: doing so would manufacture the exact claim this field
     /// exists to stop -- that a tree nobody measured was.
+    ///
+    /// **The `None`s already on the board are not all that reasoning.** Two shapes of
+    /// ordinary checkout used to defeat the resolution and no longer do: a linked worktree,
+    /// whose `.git` is a file rather than a directory, and a branch that `git pack-refs` has
+    /// moved out of `refs/`. Measured over the window opened by `89fdf1c1`, the commit that
+    /// landed this field: 998 verifications, 874 carrying a revision and 124 without. That
+    /// null rate is about twelve percent across the whole window and was fifty-five percent
+    /// on the busiest day in it, because finishing from a worktree is what this repository's
+    /// own procedure prescribes when a peer's work reddens the shared tree -- so the stamp
+    /// went missing precisely when the tree was most contended. Those 124 stay as they are,
+    /// for the no-backfill reason above; what they mean is "this could not be resolved",
+    /// which was true when each was written.
     ///
     /// Identifies the tree by its last commit, not by its content. `OD-LEDGER-027` chose this
     /// over a digest of the item's own territory and over a digest of the whole working tree,

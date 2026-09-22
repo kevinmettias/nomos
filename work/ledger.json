@@ -93202,14 +93202,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p128-studio",
-        "acquired_at": 1790057704,
-        "lease_expires_at": 1790068504
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -93225,7 +93221,33 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "e(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.07s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/studio/render-target\\debug\\deps\\nomos_contract_tests-c36279d0e5751e6e.exe)\n     Running tests\\record_citation.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/studio/render-target\\debug\\deps\\record_citation-7e607e57fa9aa44e.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/studio/render-target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790058874,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -93476,14 +93498,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-revision",
-        "acquired_at": 1790058158,
-        "lease_expires_at": 1790068958
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -93494,7 +93512,28 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\n   Compiling nomos-scope-verification v0.1.0 (F:\\repos\\verify-p125rev\\crates\\substrate\\nomos-scope-verification)\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n   Compiling nomos-ledger v0.1.0 (F:\\repos\\verify-p125rev\\crates\\substrate\\nomos-ledger)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 12.56s\n     Running unittests src\\lib.rs (F:/repos/verify-p125rev-target\\debug\\deps\\nomos_ledger-e9ed1d7f29c933a3.exe)\n     Running tests\\declining_ends_an_item\\main.rs (F:/repos/verify-p125rev-target\\debug\\deps\\declining_ends_an_item-d94a11e92b83d44f.exe)\n     Running tests\\exclusion_holds\\main.rs (F:/repos/verify-p125rev-target\\debug\\deps\\exclusion_holds-a13cb0c484e2f9fe.exe)\n     Running tests\\gate_covers_finish\\main.rs (F:/repos/verify-p125rev-target\\debug\\deps\\gate_covers_finish-936d11f16ada1850.exe)\n     Running tests\\local_gate_execution.rs (F:/repos/verify-p125rev-target\\debug\\deps\\local_gate_execution-a3d0a7711e8fa26a.exe)\n     Running tests\\records_do_not_serialize\\main.rs (F:/repos/verify-p125rev-target\\debug\\deps\\records_do_not_serialize-43ccb2d296f8ebd8.exe)\n     Running tests\\scope_verification_integration.rs (F:/repos/verify-p125rev-target\\debug\\deps\\scope_verification_integration-2f62a6183cdc5bb3.exe)\n     Running tests\\widening_is_recorded\\main.rs (F:/repos/verify-p125rev-target\\debug\\deps\\widening_is_recorded-0840763464627d90.exe)\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1790058885,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e7a577be67f08585b48c9ab6a5ba6c60e0677cb6"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -93530,6 +93569,84 @@
           "F:/repos/nomos"
         ],
         "timeout_seconds": 600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-THE-ADAPTER-NOW-CARRIES-THE-DEFECT-THE-CONTRACT-JUST-LOST",
+      "title": "The Claude Code adapter tells a session to scope a commit to explicit paths and does not say which command, which is the defect the contract just lost",
+      "why": "e0e2334a corrected AGENTS.md so its commit rule says which command explicit paths go on, after two sessions verified in throwaway repositories that a trailing pathspec makes git re-read the working tree and ignore the index, so the form that reads as the careful one commits a peer's bytes under your message. CLAUDE.md, the Claude Code adapter, still carries the uncorrected sentence at line 42: scope every commit to explicit paths, git add -A sweeps up work that belongs to somebody else, and no command named. So the adapter now says exactly what the contract stopped saying, and a Claude Code session reading its own adapter first gets the version that was wrong. The claimant of e0e2334a measured this and named it rather than fixing it, correctly, because whether the line is amended or deleted is a design question rather than a typo: OD-AGENT-001 holds that an agent instruction file routes to authority rather than restating it, and tests/contract/tests/agent_harness.rs enforces that the adapter imports the contract and stays inside a line budget precisely so it cannot accumulate restatements. A sentence the contract already carries, restated in the adapter, is the thing that record exists to refuse.",
+      "done_when": "CLAUDE.md no longer states a commit rule that the contract states, decided rather than patched: either the sentence is deleted as a restatement OD-AGENT-001 does not admit, with the reasoning recorded in the commit message and the adapter left routing to AGENTS.md as it does for everything else, or it is kept and corrected, in which case the commit message says what makes this one restatement admissible when the record refuses restatements generally. Deleting is the expected answer and the burden is on keeping it. Whichever is chosen, no Claude Code session reading only its adapter is left with a commit rule the contract has corrected. The adapter's other content is untouched, it still imports the contract, and the agent harness suite stays green including its line budget and its import assertion; run the whole suite rather than one target, because that suite judges routing, code spans and backtick parity in this file. No record is amended: OD-AGENT-001 already decides this and the claimant of e0e2334a established that OD-LEDGER-018 routes the staging half to the contract by name, so a new record would be a second home for a rule that has one. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "CLAUDE.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P128-A-CONSTANT-NO-CRATE-DECLARES-IS-NAMED-IN-FOUR-MORE-PLACES",
+      "title": "Four more sentences name a constant no crate declares, a variant that was replaced, or a body count that is wrong",
+      "why": "OD-RULES-024 removed the last component and crate name of this workspace from nomos-rules, so the ZONES table it used to declare is gone and nomos-architecture.json is the one declaration. dc7740d1 corrected the two README paragraphs that said otherwise, and its claimant measured four more sites it was not authorized to touch, each confirmed here at HEAD. README.md's nomos-lsp row says that crate depends on nomos-rules for DESCRIPTORS and ZONES; crates/host/nomos-lsp/Cargo.toml line 24 says the same in a comment; and nomos-lsp's source names DESCRIPTORS, SourceFile and rule-id constants and no ZONES anywhere. crates/orchestration/nomos-workflow-orchestration/src/tests.rs says five bodies at line 27 and the other four bodies at line 569, where Body declares four variants and OD-PACKAGE-016 collapsed the two per-backend bodies into one. crates/host/nomos-cli/Cargo.toml line 72 names Body::ClaudeCode, the variant that collapse replaced and which a peer removed from the workflow crate entirely at d1dca47d. The README one is worth noting for its own sake: it sits in the crate table's third column, which the boundaries check never reads, so no mechanism will ever catch it.",
+      "done_when": "No sentence in the four named sites asserts something the tree contradicts: the two nomos-lsp sites name what that crate actually reads from nomos-rules and, where they mean the zone declaration, name the file that holds it rather than a constant no crate declares; the two counts in the workflow crate's tests match the variants Body declares, counted rather than copied; and the CLI manifest comment names a variant that exists. Each site is re-measured before editing, because three sessions are committing to these files and one of them may already have been corrected, in which case say so and name the commit rather than claiming it. The README row's third column is corrected knowing nothing checks it, and the commit message says that plainly rather than implying a guard exists. No behaviour changes and no test changes what it asserts; if correcting a doc comment in the workflow crate's tests would move what a test does, stop and report instead. Nothing here touches the README's closing section, which is another item's declared ground. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md",
+          "crates/host/nomos-lsp/Cargo.toml",
+          "crates/orchestration/nomos-workflow-orchestration/src/tests.rs",
+          "crates/host/nomos-cli/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 2700
       },
       "verified": null,
       "abandoned": [],
