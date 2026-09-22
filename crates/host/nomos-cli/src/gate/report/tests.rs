@@ -11,7 +11,7 @@ mod explain;
 mod plan;
 mod verdicts;
 
-use nomos_check_orchestration::{CheckOutcome, Claim, Examined};
+use nomos_check_orchestration::{CheckOutcome, Claim, Examined, SupportingFactTrail};
 use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
 use nomos_gate_orchestration::{
     Fresh_Run_Id, GateFindings, GateRunOutcome, GateRunProvenance, GateRunResult,
@@ -33,7 +33,7 @@ fn Judged_With(fill: u8, provenance: Option<GateRunProvenance>) -> GateRunResult
         unmatched_policy: Vec::new(),
         run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(i64::from(fill))),
         root: PathBuf::from("."),
-        check_outcome: CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: 1, facts: 1 }, claim: Claim::Complete },
+        check_outcome: CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: 1, facts: 1 }, claim: Claim::Complete, supporting_facts: SupportingFactTrail::New() },
         findings: Empty_Findings(),
         disposition: GateRunOutcome::Passed,
     };

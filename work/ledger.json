@@ -90856,14 +90856,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Ready",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-verb",
-        "acquired_at": 1790054840,
-        "lease_expires_at": 1790065640
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -90879,7 +90875,13 @@
         "timeout_seconds": 3600
       },
       "verified": null,
-      "abandoned": [],
+      "abandoned": [
+        {
+          "holder": "nomos-75-verb",
+          "reason": "Stopped without writing code: three of the five sources the done_when names cannot be reached from the reserved territory, and one cannot be reached from nomos-gate-orchestration at any territory. (1) ServedMethod::REGISTRY lives in nomos-api-transport, whose own Cargo.lock dependency list names nomos-api and nomos-gate-orchestration, so a verb in nomos-gate-orchestration reading it is a cargo dependency cycle as well as an Application-Service-to-Host edge nomos-architecture.json permits does not grant; OD-PROJECT-007 decision 1 states the verb reads it there, and that sentence is unbuildable as written. (2) each package crate KNOWN_PROVIDERS allowlist and (3) the requirement-trace registry reader each need new dependencies (nomos-lang-rust-package, nomos-lang-go-package, nomos-tool-package, nomos-cap-requirement-trace), which rewrites Cargo.lock; work widen --territory Cargo.lock refused exit 3, held by P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS until unix 1790065274. Only the capability registry and the rule descriptors are reachable from the existing dependency set, two of five, so nothing was implemented rather than a partial census landed under this item. Also, the reserved CLI territory is short: adding a verb needs crates/host/nomos-cli/src/gate/invocation.rs, parsing.rs and report.rs, none of which the item reserves. Re-measured at 9f13b1e7: 14 Declare and 17 Offer calls in the check composition root, 21 exported ProviderOffer functions across the blessed surfaces (4 uncomposed, agreeing with tests/contract/tests/boundaries/composed_offers.rs UNCOMPOSED), 71 Descriptor_For entries, 39 assessment files, and ServedMethod::REGISTRY is now [Self; 6] rather than the five OD-PROJECT-007 measured.",
+          "abandoned_at": 1790055276
+        }
+      ],
       "displaced": [],
       "declined": null,
       "widened": []
@@ -91704,6 +91706,40 @@
         },
         "revision": null
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P125-OD-PROJECT-007-SAYS-THE-UNCOMPOSED-OFFERS-ARE-COMPOSED-SOMEWHERE-ELSE",
+      "title": "OD-PROJECT-007 says the uncomposed offers are composed under tests/integration, and they are composed nowhere",
+      "why": "OD-PROJECT-007 measured this workspace's mechanical sources so a verb could report what is built, and one sentence of that measurement is false. It says of the offers it classified declared and unobserved: All three are composed only under tests/integration. Measured at HEAD, tests/integration/src/composition.rs offers exactly three things, nomos_lang_rust, nomos_lang_rust_scan and its own surface provider; it depends on nomos-lang-rust-compiler only for determinism declarations, which call no Provider_Offer. So those offers are composed nowhere at all. The record is right that no real run composes them and wrong about where they go instead, which matters because declared and unobserved is a row state that record invented and a reader checking what the state means is sent to a file that does not demonstrate it. Its count is separately behind, three against four, the fourth being the C# provider that landed hours later. Both were found by the worker building the guard for this same drift, which derived the real sets rather than trusting the prose, and both were confirmed independently before this item was authored. The record's own subject is that a hand-maintained table goes stale and disagrees with itself, so a false hand-taken count inside it is the defect it describes, in the artifact that describes it.",
+      "done_when": "OD-PROJECT-007 no longer asserts that the uncomposed offers are composed under tests/integration. It states what tests/integration actually composes, read from its composition root, and says the uncomposed offers reach no composition root at all. Its count of declared-and-unobserved offers is either corrected to the population at a named revision or replaced by a statement that the number is derived rather than fixed, and if the latter it names where a reader gets it, which is the guard at tests/contract/tests/boundaries/composed_offers.rs. It says why a name or path scan of the exported set is wrong, because one provider crate declares modules with a path attribute and re-exports an offer renamed, so an inferred path does not exist and the scan misreports in both directions; that is a fact about how any future count must be taken and it belongs in the record that decided a verb would take it. The decision is unchanged: the view is still a host verb over the compositions, the four row states stand, and not built is still not a word the verb can print. No code changes and no guard is built here. Both required projections are re-rendered from the record set the commit publishes and nomos spec freshness with both --require flags exits 0 in that tree.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,

@@ -4,7 +4,7 @@ pub enum nomos_check_orchestration::Claim
 pub enum nomos_check_orchestration::RuleResolutionError
 pub enum nomos_check_orchestration::SupportingFacts
 pub enum variant nomos_check_orchestration::CheckOutcome::Contradictory(RegistryError)
-pub enum variant nomos_check_orchestration::CheckOutcome::Judged { findings: Vec<Finding>, examined: Examined, claim: Claim, }
+pub enum variant nomos_check_orchestration::CheckOutcome::Judged { findings: Vec<Finding>, examined: Examined, claim: Claim, supporting_facts: SupportingFactTrail, }
 pub enum variant nomos_check_orchestration::CheckOutcome::NoFacts { files: usize, }
 pub enum variant nomos_check_orchestration::CheckOutcome::NoSource
 pub enum variant nomos_check_orchestration::CheckOutcome::Unreadable
@@ -25,9 +25,10 @@ pub fn nomos_check_orchestration::Registered() -> Result<Registry, RegistryError
 pub fn nomos_check_orchestration::Resolve_Rules(declared: &[RulePackage], registered: &[RuleId]) -> Result<RuleResolution, RuleResolutionError>
 pub fn nomos_check_orchestration::Resolved_Configuration(registry: &Registry) -> ConfigurationId
 pub fn nomos_check_orchestration::RuleReassessmentCache::New() -> Self
-pub fn nomos_check_orchestration::RuleReassessmentCache::Supporting_Facts(&self, rule: &str) -> SupportingFacts
 pub fn nomos_check_orchestration::Run<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( sources: &[SourceFile], context: RunContext<'_, Launcher, Fs, Env>, selected: &[RuleId], ) -> CheckOutcome
 pub fn nomos_check_orchestration::Run_Reassessing<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( sources: &[SourceFile], context: RunContext<'_, Launcher, Fs, Env>, selected: &[RuleId], reassessment: &mut RuleReassessmentCache, ) -> CheckOutcome
+pub fn nomos_check_orchestration::SupportingFactTrail::Facts_For(&self, rule: &str) -> SupportingFacts
+pub fn nomos_check_orchestration::SupportingFactTrail::New() -> Self
 pub impl nomos_check_orchestration::Claim implements core::fmt::Display
 pub struct field nomos_check_orchestration::CheckCommand::root: PathBuf
 pub struct field nomos_check_orchestration::DeclaredPackage::manifest_path: &'a str
@@ -57,3 +58,4 @@ pub struct nomos_check_orchestration::FactRead
 pub struct nomos_check_orchestration::RuleReassessmentCache
 pub struct nomos_check_orchestration::RuleResolution
 pub struct nomos_check_orchestration::RunContext<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
+pub struct nomos_check_orchestration::SupportingFactTrail

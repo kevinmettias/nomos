@@ -3,7 +3,7 @@
 
 use super::super::{ExitCode, Render_Run};
 use super::{Empty_Findings, Example_Finding};
-use nomos_check_orchestration::{CheckOutcome, Claim, Examined};
+use nomos_check_orchestration::{CheckOutcome, Claim, Examined, SupportingFactTrail};
 use nomos_contracts::{Finding, GateCategory};
 use nomos_gate_orchestration::{Fresh_Run_Id, GateFindings, GateRunOutcome, GateRunResult, NoVerdict};
 use nomos_platform::Timestamp;
@@ -23,6 +23,7 @@ fn Judged_Without_A_Verdict(finding: &Finding, cause: Option<NoVerdict>) -> Gate
             findings: vec![finding.clone()],
             examined: Examined { files: 1, facts: 1 },
             claim: Claim::Incomplete,
+            supporting_facts: SupportingFactTrail::New(),
         },
         findings: Empty_Findings(),
         disposition: GateRunOutcome::Indeterminate,
@@ -43,7 +44,7 @@ fn Judged_Run(findings: Vec<Finding>, whole: GateFindings, disposition: GateRunO
         unmatched_policy: Vec::new(),
         run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
         root: PathBuf::from("."),
-        check_outcome: CheckOutcome::Judged { findings, examined: Examined { files: 1, facts: 1 }, claim: Claim::Complete },
+        check_outcome: CheckOutcome::Judged { findings, examined: Examined { files: 1, facts: 1 }, claim: Claim::Complete, supporting_facts: SupportingFactTrail::New() },
         findings: whole,
         disposition,
     };

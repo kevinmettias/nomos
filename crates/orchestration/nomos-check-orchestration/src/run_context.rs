@@ -25,6 +25,7 @@ use std::path::Path;
 use crate::composition::{Recognized_Language, Recognized_Syntax_Provider, Registered};
 use crate::facts::{Ingested_Workspace, Materialize_Syntax};
 use crate::CheckOutcome;
+use crate::SupportingFactTrail;
 
 mod capabilities;
 mod judging;
@@ -158,7 +159,7 @@ pub fn Run_Reassessing<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environme
     let mut state = RunState { store, reassessment, changed: composed.changed };
     let findings = Judged_Over(sources, run, &mut state);
 
-    return Outcome_Of(sources.len(), composed.facts, findings);
+    return Outcome_Of(Examination { files: sources.len(), facts: composed.facts }, findings, state.reassessment.Supporting_Facts().clone());
 }
 
 /// The registry composed, `sources` ingested and the syntax facts materialized -- the three
@@ -337,16 +338,30 @@ struct Reassessment<'a>
     changed: &'a [RequiredFact],
 }
 
-/// The whole run, once judging is done -- how many files and facts it examined, and the
-/// claim its own findings support.
-fn Outcome_Of(files: usize, facts: usize, findings: Vec<Finding>) -> CheckOutcome
+/// How much of the world the run saw, before it is paired with what the run found.
+///
+/// Named rather than passed as two adjacent `usize` parameters, which is the transposition
+/// `crate::examined::Examined` already exists to prevent one layer out -- and what keeps
+/// [`Outcome_Of`] within this crate's own parameter-count limit now that the trail is a
+/// third thing the outcome carries.
+struct Examination
+{
+    /// Files the walk read.
+    files: usize,
+    /// Files a syntax fact was materialized for.
+    facts: usize,
+}
+
+/// The whole run, once judging is done -- how much it examined, the claim its own findings
+/// support, and which facts each rule read to reach them.
+fn Outcome_Of(examination: Examination, findings: Vec<Finding>, supporting_facts: SupportingFactTrail) -> CheckOutcome
 {
     use crate::examined::{Claim_Of, Examined};
 
-    let examined = Examined { files, facts };
+    let examined = Examined { files: examination.files, facts: examination.facts };
     let claim = Claim_Of(&findings);
 
-    return CheckOutcome::Judged { findings, examined, claim };
+    return CheckOutcome::Judged { findings, examined, claim, supporting_facts };
 }
 
 /// Every rule [`Run`] composes, in the order it runs them.

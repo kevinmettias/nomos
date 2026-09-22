@@ -18,9 +18,10 @@ use nomos_analysis::{MemoryFactStore, ReadOutcome};
 use nomos_contracts::{CapabilityId, RuleId};
 use nomos_model::Subject_Of_Path;
 use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
-use nomos_rules::{RequiredFact, RuleDescriptor, DESCRIPTORS};
+use nomos_rules::{RequiredFact, RuleDescriptor, SourceFile, DESCRIPTORS};
+use nomos_workspace::Workspace;
 
-use crate::{RuleReassessmentCache, RunContext, Run_Reassessing, SupportingFacts};
+use crate::{CheckOutcome, RuleReassessmentCache, RunContext, Run_Reassessing, SupportingFactTrail, SupportingFacts};
 
 use super::{Repository_Root, Source_File, SourceText, Test_Variant};
 
@@ -56,29 +57,49 @@ fn Is_Selected(rule: &str) -> bool
     return Selected_Rules().iter().any(|id| return id.As_Str() == rule);
 }
 
-/// One real run over one hand-written source, with the cache the trail is recorded against
-/// kept so a test can read it back.
-fn Observed() -> RuleReassessmentCache
+/// The one source every run here is judged over.
+fn Fixture() -> [SourceFile; 1]
 {
-    let sources = [Source_File("a.rs", SourceText("pub fn Ok() {}\n"))];
-    let mut cache = RuleReassessmentCache::New();
+    return [Source_File("a.rs", SourceText("pub fn Ok() {}\n"))];
+}
 
-    let _outcome = Run_Reassessing(
-        &sources,
+/// One real run, reading the trail back off the outcome it returned.
+///
+/// Off the outcome rather than off the cache that recorded it, because the outcome is where
+/// `OD-HOST-016`'s decision 4 put the answer; reading it from the cache would prove something
+/// weaker than what every test below claims.
+fn Observed() -> SupportingFactTrail
+{
+    return Judged_Trail(&Fixture(), &mut None, &mut MemoryFactStore::New(), &mut RuleReassessmentCache::New());
+}
+
+/// The trail `Run_Reassessing` carried out on its own outcome for one call over `sources`.
+fn Judged_Trail(
+    sources: &[SourceFile], workspace: &mut Option<Workspace>, store: &mut MemoryFactStore, cache: &mut RuleReassessmentCache,
+) -> SupportingFactTrail
+{
+    let outcome = Run_Reassessing(
+        sources,
         RunContext {
             variant: Test_Variant(),
             root: &Repository_Root(),
             launcher: &StdProgramLauncher,
             filesystem: &StdFileSystem,
             environment: &StdEnvironment,
-            workspace: &mut None,
-            store: &mut MemoryFactStore::New(),
+            workspace,
+            store,
         },
         &Selected_Rules(),
-        &mut cache,
+        cache,
     );
 
-    return cache;
+    let CheckOutcome::Judged { supporting_facts, .. } = outcome
+    else
+    {
+        panic!("a tree the provider can read must be judged");
+    };
+
+    return supporting_facts;
 }
 
 /// The capabilities `descriptor` declares it requires.
@@ -89,9 +110,9 @@ fn Declared(descriptor: &RuleDescriptor) -> Vec<CapabilityId>
 
 /// The capabilities `rule`'s trail says it actually read, in the order the reduction holds
 /// them.
-fn Observed_Capabilities(cache: &RuleReassessmentCache, rule: &str) -> Vec<CapabilityId>
+fn Observed_Capabilities(trail: &SupportingFactTrail, rule: &str) -> Vec<CapabilityId>
 {
-    return cache
+    return trail
         .Observed_Reads(rule)
         .unwrap_or_default()
         .iter()
@@ -101,13 +122,13 @@ fn Observed_Capabilities(cache: &RuleReassessmentCache, rule: &str) -> Vec<Capab
 
 /// Every rule in the selection whose observed reads name a capability its own descriptor does
 /// not declare, as a line a person can act on.
-fn Disagreements(cache: &RuleReassessmentCache) -> Vec<String>
+fn Disagreements(trail: &SupportingFactTrail) -> Vec<String>
 {
     let mut disagreements = Vec::new();
     for descriptor in DESCRIPTORS.iter().filter(|descriptor| return Is_Selected(descriptor.id))
     {
         let declared = Declared(descriptor);
-        for capability in Observed_Capabilities(cache, descriptor.id).iter().filter(|capability| return !declared.contains(capability))
+        for capability in Observed_Capabilities(trail, descriptor.id).iter().filter(|capability| return !declared.contains(capability))
         {
             disagreements.push(format!("`{}` read `{capability:?}`, declaring {declared:?}", descriptor.id));
         }
@@ -124,9 +145,9 @@ fn Disagreements(cache: &RuleReassessmentCache) -> Vec<String>
 #[test]
 fn Test_Every_Selected_Rules_Reads_Should_Be_Declared_By_Its_Descriptor()
 {
-    let cache = Observed();
+    let trail = Observed();
 
-    let disagreements = Disagreements(&cache);
+    let disagreements = Disagreements(&trail);
 
     assert!(disagreements.is_empty(), "a rule read a capability its descriptor does not declare: {disagreements:?}");
 }
@@ -140,11 +161,11 @@ fn Test_Every_Selected_Rules_Reads_Should_Be_Declared_By_Its_Descriptor()
 #[test]
 fn Test_A_Later_Rules_Trail_Should_Not_Contain_An_Earlier_Rules_Reads()
 {
-    let cache = Observed();
+    let trail = Observed();
     let naming_policy = nomos_cap_naming_policy::Capability();
 
-    let earlier = Observed_Capabilities(&cache, nomos_rules::NAMING_CONVENTION);
-    let later = Observed_Capabilities(&cache, nomos_rules::GUARANTEE_DECLARES_ITS_EXERCISER);
+    let earlier = Observed_Capabilities(&trail, nomos_rules::NAMING_CONVENTION);
+    let later = Observed_Capabilities(&trail, nomos_rules::GUARANTEE_DECLARES_ITS_EXERCISER);
 
     assert!(earlier.contains(&naming_policy), "the earlier rule must really read the policy, or this proves nothing: {earlier:?}");
     assert!(!later.contains(&naming_policy), "the later rule's trail carries a read it never made: {later:?}");
@@ -155,9 +176,9 @@ fn Test_A_Later_Rules_Trail_Should_Not_Contain_An_Earlier_Rules_Reads()
 #[test]
 fn Test_A_Fact_Reading_Rule_Should_Answer_With_What_It_Read()
 {
-    let cache = Observed();
+    let trail = Observed();
 
-    let answer = cache.Supporting_Facts(nomos_rules::GUARANTEE_DECLARES_ITS_EXERCISER);
+    let answer = trail.Facts_For(nomos_rules::GUARANTEE_DECLARES_ITS_EXERCISER);
 
     let SupportingFacts::Read(reads) = answer
     else
@@ -174,11 +195,11 @@ fn Test_A_Fact_Reading_Rule_Should_Answer_With_What_It_Read()
 #[test]
 fn Test_A_Source_Text_Rule_Should_Answer_Not_Fact_Backed()
 {
-    let cache = Observed();
+    let trail = Observed();
 
-    assert_eq!(cache.Supporting_Facts(nomos_rules::NO_TRAILING_WHITESPACE), SupportingFacts::NotFactBacked);
+    assert_eq!(trail.Facts_For(nomos_rules::NO_TRAILING_WHITESPACE), SupportingFacts::NotFactBacked);
     assert_eq!(
-        cache.Observed_Reads(nomos_rules::NO_TRAILING_WHITESPACE),
+        trail.Observed_Reads(nomos_rules::NO_TRAILING_WHITESPACE),
         Some([].as_slice()),
         "a source-text rule is handed a reader it discards, so its trail is what proves the shape is structural"
     );
@@ -189,9 +210,9 @@ fn Test_A_Source_Text_Rule_Should_Answer_Not_Fact_Backed()
 #[test]
 fn Test_A_Rule_The_Run_Never_Reached_Should_Answer_Unrecorded()
 {
-    let cache = Observed();
+    let trail = Observed();
 
-    assert_eq!(cache.Supporting_Facts(nomos_rules::LINT_DIAGNOSTICS), SupportingFacts::Unrecorded);
+    assert_eq!(trail.Facts_For(nomos_rules::LINT_DIAGNOSTICS), SupportingFacts::Unrecorded);
 }
 
 /// The third shape, and what it exists to stop: a finding raised while a capability was
@@ -200,11 +221,11 @@ fn Test_A_Rule_The_Run_Never_Reached_Should_Answer_Unrecorded()
 #[test]
 fn Test_A_Materialization_Raised_Rule_Should_Not_Answer_Unrecorded()
 {
-    let mut cache = RuleReassessmentCache::New();
+    let mut trail = SupportingFactTrail::New();
 
-    cache.Note_Materialization_Raised(&[Unjudgeable_Finding()]);
+    trail.Note_Materialization_Raised(&[Unjudgeable_Finding()]);
 
-    assert_eq!(cache.Supporting_Facts(nomos_rules::LINT_DIAGNOSTICS), SupportingFacts::RaisedByMaterialization);
+    assert_eq!(trail.Facts_For(nomos_rules::LINT_DIAGNOSTICS), SupportingFacts::RaisedByMaterialization);
 }
 
 /// One finding of the shape a capability's own materialization raises: it names a rule and
@@ -236,4 +257,32 @@ fn Test_The_Selection_Should_Be_Most_Of_The_Composed_Table()
     {
         assert!(Is_Selected(rule), "{rule}");
     }
+}
+
+/// Decision 4's second half: the trail is cached beside the findings it belongs to, so a
+/// caller that reuses findings across calls is not handed an empty answer for the findings it
+/// actually shows.
+///
+/// The second call over an unmoved tree re-runs no rule at all -- every one is served from
+/// `RuleReassessmentCache` -- so a trail that lived only for the call would come back empty
+/// here while the findings it belongs to came back in full. That is the exact failure this
+/// asserts against, and it is the state an editor session spends nearly every keystroke in.
+#[test]
+fn Test_A_Reused_Call_Should_Still_Carry_The_Trail_Of_The_Call_That_Judged()
+{
+    let sources = Fixture();
+    let mut workspace = None;
+    let mut store = MemoryFactStore::New();
+    let mut cache = RuleReassessmentCache::New();
+
+    let judged = Judged_Trail(&sources, &mut workspace, &mut store, &mut cache);
+    let recorded = cache.Recorded();
+    let reused = Judged_Trail(&sources, &mut workspace, &mut store, &mut cache);
+
+    assert_eq!(cache.Recorded(), recorded, "the second call over an unmoved tree must re-run no rule, or this proves nothing");
+    assert_eq!(reused, judged, "the reused call's outcome must carry the trail of the call that actually judged");
+    assert!(
+        matches!(reused.Facts_For(nomos_rules::NAMING_CONVENTION), SupportingFacts::Read(reads) if !reads.is_empty()),
+        "a reused finding's rule still answers with what it read"
+    );
 }

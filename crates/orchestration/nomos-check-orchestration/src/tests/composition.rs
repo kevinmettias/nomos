@@ -40,7 +40,7 @@ fn Test_A_Clean_Tree_Should_Be_Judged_Complete_With_No_Findings()
 
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &Architectural_Rules());
 
-    let CheckOutcome::Judged { findings, examined, claim } = outcome
+    let CheckOutcome::Judged { findings, examined, claim, .. } = outcome
     else
     {
         panic!("a tree the provider can read must be judged");
@@ -71,7 +71,7 @@ fn Test_A_Clean_Go_Source_Should_Be_Judged_Through_Its_Own_Real_Provider()
 
     let outcome = Run(&sources, RunContext { variant: Test_Variant(), root: &Repository_Root(), launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New() }, &selected);
 
-    let CheckOutcome::Judged { findings, examined, claim } = outcome
+    let CheckOutcome::Judged { findings, examined, claim, .. } = outcome
     else
     {
         panic!("a tree the provider can read must be judged");

@@ -168,7 +168,7 @@ fn Findings_By_Rule() -> BTreeMap<String, Vec<Finding>>
         &[],
     );
 
-    let CheckOutcome::Judged { findings, examined, claim } = outcome
+    let CheckOutcome::Judged { findings, examined, claim, .. } = outcome
     else
     {
         panic!("the fixture is a real, readable tree the syntax provider recognizes; a refusal here is a test-setup bug, not a caller-facing failure: {outcome:?}");

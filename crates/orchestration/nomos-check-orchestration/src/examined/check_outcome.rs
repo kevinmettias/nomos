@@ -3,7 +3,7 @@
 use nomos_capability::RegistryError;
 use nomos_contracts::Finding;
 
-use crate::examined::{Claim, Examined};
+use crate::examined::{Claim, Examined, SupportingFactTrail};
 
 /// What a `nomos check` run produced.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -33,5 +33,15 @@ pub enum CheckOutcome
         examined: Examined,
         /// Whether this run reached a judgment about everything it touched.
         claim: Claim,
+        /// Which facts each rule read in the call that produced its findings.
+        ///
+        /// A field here rather than a second, richer return shape, which is
+        /// `OD-HOST-016`'s decision 4 and `OD-HOST-002`'s reason: two shapes make the
+        /// richer one the only complete one and every caller taking the thinner one sees a
+        /// subset. Walked from a finding through its rule with
+        /// [`SupportingFactTrail::Facts_For`], never carried on the finding itself -- a
+        /// finding is what a rule says about a subject, and how the rule came to say it is
+        /// a property of the run.
+        supporting_facts: SupportingFactTrail,
     },
 }

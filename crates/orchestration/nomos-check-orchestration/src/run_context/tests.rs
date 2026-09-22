@@ -58,7 +58,7 @@ fn Test_Run_Should_Judge_A_Clean_Source_With_No_Findings()
     let context = Test_Context(Path::new("."), &mut workspace, &mut store);
     let outcome = Run(&sources, context, &selected);
 
-    let CheckOutcome::Judged { findings, examined, claim } = outcome
+    let CheckOutcome::Judged { findings, examined, claim, .. } = outcome
     else
     {
         // this fixture's own source is well-formed and the provider recognizes it; a

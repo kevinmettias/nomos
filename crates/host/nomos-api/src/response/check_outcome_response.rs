@@ -94,7 +94,7 @@ impl CheckOutcomeResponse
 mod tests
 {
     use super::*;
-    use nomos_check_orchestration::Examined;
+    use nomos_check_orchestration::{Examined, SupportingFactTrail};
 
     /// How many files a `NoFacts` outcome in these tests read before nothing was materialized.
     const READ_FILES: usize = 3;
@@ -142,7 +142,7 @@ mod tests
     #[test]
     fn Test_A_Judged_Outcome_Should_Carry_Its_Counts_And_Its_Claim_And_Not_Its_Findings()
     {
-        let outcome = CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: JUDGED_FILES, facts: JUDGED_FACTS }, claim: Claim::Incomplete };
+        let outcome = CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: JUDGED_FILES, facts: JUDGED_FACTS }, claim: Claim::Incomplete, supporting_facts: SupportingFactTrail::New() };
 
         let rendered = Rendered_Outcome(&outcome);
 

@@ -110,7 +110,7 @@ impl CheckResponse
             CheckOutcome::Contradictory(cause) => Self::Contradictory { cause: format!("{cause:?}") },
             CheckOutcome::NoSource => Self::NoSource,
             CheckOutcome::NoFacts { files } => Self::NoFacts { files },
-            CheckOutcome::Judged { findings, examined, claim } => Self::Judged {
+            CheckOutcome::Judged { findings, examined, claim, .. } => Self::Judged {
                 findings,
                 examined: ExaminedResponse::From(examined),
                 claim: ClaimResponse::From(claim),

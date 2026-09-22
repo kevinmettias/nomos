@@ -116,6 +116,7 @@ fn Incomplete_Judgment() -> CheckOutcome
         findings: vec![Unjudgeable_Finding()],
         examined: nomos_check_orchestration::Examined { files: 1, facts: 1 },
         claim: Claim::Incomplete,
+        supporting_facts: nomos_check_orchestration::SupportingFactTrail::New(),
     };
 }
 

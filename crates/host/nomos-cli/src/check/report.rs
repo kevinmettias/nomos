@@ -144,7 +144,7 @@ pub(super) fn Render_Outcome(root: &Path, outcome: &CheckOutcome, stdout: &mut i
         CheckOutcome::Contradictory(error) => Render_Contradictory(error, stderr),
         CheckOutcome::NoSource => Render_No_Source(root, stderr),
         CheckOutcome::NoFacts { files } => Render_No_Facts(root, *files, stderr),
-        CheckOutcome::Judged { findings, examined, claim } => Report_Findings(findings, *examined, *claim, stdout),
+        CheckOutcome::Judged { findings, examined, claim, .. } => Report_Findings(findings, *examined, *claim, stdout),
     };
 }
 

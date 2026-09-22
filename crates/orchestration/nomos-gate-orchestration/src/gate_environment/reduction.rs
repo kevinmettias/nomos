@@ -29,7 +29,7 @@ use crate::{
 /// no path, which is every `dependency-policy` advisory about the workspace as a whole.
 pub(super) fn Scoped_Findings(outcome: CheckOutcome, scope: &ScopeSelector) -> CheckOutcome
 {
-    let CheckOutcome::Judged { findings, examined, claim } = outcome
+    let CheckOutcome::Judged { findings, examined, claim, supporting_facts } = outcome
     else
     {
         return outcome;
@@ -37,7 +37,7 @@ pub(super) fn Scoped_Findings(outcome: CheckOutcome, scope: &ScopeSelector) -> C
 
     let admitted = findings.into_iter().filter(|finding| return Is_Admitted(finding, scope)).collect();
 
-    return CheckOutcome::Judged { findings: admitted, examined, claim };
+    return CheckOutcome::Judged { findings: admitted, examined, claim, supporting_facts };
 }
 
 /// Whether `scope` admits `finding`, by the places it names.
