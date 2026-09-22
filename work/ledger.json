@@ -91528,7 +91528,9 @@
           "Cargo.lock",
           "docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md",
           "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md",
-          "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md"
+          "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md",
+          "crates/host/nomos-cli/src/workflow.rs",
+          "crates/host/nomos-cli/src/workflow/report.rs"
         ],
         "patterns": []
       },
@@ -91538,7 +91540,7 @@
       "claim": {
         "holder": "fable-agent-port",
         "acquired_at": 1790054474,
-        "lease_expires_at": 1790065274
+        "lease_expires_at": 1790066991
       },
       "verification": {
         "argv": [
@@ -91586,7 +91588,16 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-agent-port",
+          "added": [
+            "crates/host/nomos-cli/src/workflow.rs",
+            "crates/host/nomos-cli/src/workflow/report.rs"
+          ],
+          "widened_at": 1790056128
+        }
+      ]
     },
     {
       "id": "P125-OD-HOST-016-MISCOUNTS-THE-READERS-ITS-BUILDING-ITEM-MUST-CHANGE",
@@ -91856,14 +91867,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-project007",
-        "acquired_at": 1790055510,
-        "lease_expires_at": 1790066310
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -91874,7 +91881,28 @@
         ],
         "timeout_seconds": 2400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest corpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s\n     Running unittests src\\lib.rs (F:/repos/render-project007-target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/render-project007-target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/render-project007-target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (F:/repos/render-project007-target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/render-project007-target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1790056257,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -91987,6 +92015,121 @@
           "nomos-contract-tests",
           "--test",
           "agent_harness"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P126-THE-REVIEW-FINDING-CONTRACT-IS-ITS-OWN-CRATE",
+      "title": "The review-finding capability contract becomes its own crate and the vendor connector keeps only its provider",
+      "why": "OD-ROADMAP-005 decision 5 requires it. An external architecture review objected that nomos-rules, a generic rule layer, names nomos-connector-coderabbit to obtain a generic capability, so a vendor name sits below the provider boundary. OD-CAPABILITY-017 measured that nomos-rules calls no provider-side symbol, that the provider cannot act from where a rule sits, and that the bundling therefore defeats no boundary; OD-CAPABILITY-002 licenses the bundling while a capability has exactly one provider, and there is still one. Both measurements stand. The owner superseded the conclusion on sequencing, not the reasoning, so what moves is the contract half only: capability identity, contract version, ceiling, payload schema, payload parsing and the payload types.",
+      "done_when": "A new workspace member crates/capabilities/nomos-cap-review-finding holds nomos.cap.review.finding contract half and nothing that produces a fact. nomos-connector-coderabbit depends on it, keeps the provider, the provider guarantee, the recorded fixture and the determinism declaration, and re-exports no part of the contract, so no consumer can keep naming the vendor crate for a generic contract. nomos-rules and nomos-check-orchestration Declare_Review_Capability name the contract crate instead of the vendor one. The new member is registered in the root Cargo.toml members list and workspace dependency table, in Cargo.lock, in the README crate table, in nomos-architecture.json, and in a surface snapshot under tests/contract/surface/. The bundled-contract guard no longer names a crate that is not bundled, its HALVES list is left non-vacuous, and its negative control is rewritten against a member the list still has. OD-CAPABILITY-017 carries an amendment naming OD-ROADMAP-005 and stating that its own measurements stand. The predicate below exits 0. It deliberately does not reach the determinism suite in tests/integration, which is nomos-integration-tests own obligation and is unchanged by this item, nor any non-lib target of nomos-rules or nomos-check-orchestration.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-review-finding",
+          "crates/connectors/nomos-connector-coderabbit",
+          "crates/rules/nomos-rules/Cargo.toml",
+          "crates/rules/nomos-rules/src/checks/review.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor/required_fact.rs",
+          "crates/rules/nomos-rules/docs/api/lib.md",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/dependency_materialization/review_materialization.rs",
+          "crates/capabilities/nomos-cap-requirement-trace/src/contract.rs",
+          "crates/capabilities/nomos-cap-requirement-trace/src/lib.rs",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "nomos-architecture.json",
+          "tests/contract/surface/nomos-connector-coderabbit.txt",
+          "tests/contract/surface/nomos-cap-review-finding.txt",
+          "tests/contract/tests/boundaries/bundled_contract_half.rs",
+          "docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-review-finding",
+          "-p",
+          "nomos-connector-coderabbit",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "boundaries",
+          "--test",
+          "public_surface",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P127-THE-CHECK-SERVICE-MATERIALIZES-THROUGH-DECLARED-PROVIDER-PORTS",
+      "title": "Every materialization in the check service reaches its provider through a declared port, so one module names a provider crate and fifteen files stop",
+      "why": "OD-ROADMAP-005 decision item 1 authorizes nomos-check-orchestration to stop naming the capability, language and repository provider crates directly and to receive them from a composition root. An external architecture review called the crate a composition root disguised as an application service: the crate that runs a check knows every language and tool in the product. Measured at 6109d307, the naming is 44 provider symbol occurrences in src/composition.rs and 62 more across fifteen other files under src/facts, src/run_context and src/package_conformance.\n\nThe move has two halves and only one of them is free ground right now. Supplying the providers from outside the crate needs crates/host/nomos-cli/Cargo.toml, crates/host/nomos-api/Cargo.toml, all of crates/host/nomos-lsp and Cargo.lock, every one of which a live peer claim holds (P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-ITS-TWO-BACKENDS and P125-WALK-OUTWARD-CARRIES-FIVE-ANSWERS). OD-ROADMAP-005 says an item blocked on a peer claim waits and does not reach in, so this item is the half that lands inside the crate and the dependent item is the half that crosses the manifests. Nothing is dropped: the second item carries the three record amendments and the manifest move, and depends on this one.\n\nWhat this item builds is the part the measurement is actually about. The materialization sites are where the provider names live, and the shape they need is decided by what OD-CAPABILITY-008 measured rather than by convenience. That record found three of the provider convention four parts genuinely agree across every provider -- PROVIDER, Declared_Guarantee and the four-field FactContext -- and that Materialize does not, because its divergence tracks a real difference in capability granularity: per-file parsing against whole-workspace discovery, one fact against many, a filesystem port against a process launcher. A single trait over all of them would be inventing agreement, which that record refuses for good reason, and this item does not build one. It declares one port per granularity that really exists and no fewer, so each provider keeps the signature it has today and the service names none of them.\n\nThe four-field carry from nomos_analysis::Context into each provider own FactContext is written out twelve times today, once per materialization file. It is the one thing that genuinely does agree, and it is what moves to the root: the port takes a Context and the root adapts it, so twelve identical private functions collapse into one conversion per provider at the place that already knows the provider by name.",
+      "done_when": "Every materialization site under crates/orchestration/nomos-check-orchestration/src reaches its provider through a port value handed to it rather than by naming a provider crate, so that a search of that crate src directory for the identifiers nomos_lang_, nomos_repo_policy and nomos_connector_ finds them only in src/composition.rs and inside cfg(test) modules.\n\nThe declared ports are exactly the granularities OD-CAPABILITY-008 measured as genuinely distinct, and no single port admits two of them: per-subject syntax over recognized text, per-subject reachability over the same text, whole-workspace one fact read through a filesystem port, whole-workspace one fact read through a process launcher, and whole-workspace many subject-addressed facts read through a process launcher. Each port carries nomos_analysis::Context and the adaptation into a provider own FactContext happens once per provider in src/composition.rs, not once per materialization file.\n\nRegistered() still declares every capability it declared before this change and the crate own declared-capability count assertion is unchanged rather than adjusted to fit; Composed_Rules() still returns the same rule list; and a rule still consumes facts resolved through a capability rather than calling a provider, so no rule crate gains a provider dependency.\n\nA capability whose provider refuses still reports which capability could not be answered: the three synthetic ProviderUnavailable findings for dependency edges, lint diagnostics and dependency policy still name their capability in the summary and are still raised from a refusal rather than swallowed into an empty answer.\n\nThe item predicate exits 0 with no test disabled, ignored, weakened or deleted to get there, and the gate lint step work finish runs first is green.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-check-orchestration",
+          "tests/contract/surface/nomos-check-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "fable-check-composition",
+        "acquired_at": 1790056126,
+        "lease_expires_at": 1790066926
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "public_surface",
+          "--test",
+          "boundaries"
         ],
         "timeout_seconds": 2700
       },

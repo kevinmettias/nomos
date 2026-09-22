@@ -211,7 +211,7 @@ profile: domain-specification
 | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md@authored | docs/records/OD-PROJECT-004-the-tools-that-govern-this-repository-are-separated-from-the-product-they-govern.md | authored | 49 | 13 | sha256:daec35180df8b99740172e26cadc029a18b33409bc1217492ba7306bf46aa296 |
 | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md@authored | docs/records/OD-PROJECT-005-whether-projection-selection-gains-bounded-relation-traversal-for-a-scoped-context-pack.md | authored | 41 | 11 | sha256:ca481db57e29583ad6541fcf1a098df4a0450fe3a08a0a6b74856756e523ea1d |
 | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md@authored | docs/records/OD-PROJECT-006-what-the-required-relation-projection-is-for-at-243-nodes-and-one-resolution.md | authored | 31 | 10 | sha256:0e6efa712278eff244251689c8bf8b4e33630f39419eb66ad7e39d563d402a1d |
-| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md@authored | docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md | authored | 69 | 19 | sha256:516ee83533296746248d7fb3d29523f83972d159c0fec6c294b6d8386ab9baaf |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md@authored | docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md | authored | 103 | 27 | sha256:aa0ef25d7cbdf63983f3722ebbe8344d3d85e9414998552d70ea8f4ebf6f21d8 |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md@authored | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md | authored | 18 | 7 | sha256:4264b9448cf95f7bb22780f4a6cd970a7f64828eea993961df2987984417b701 |
 | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md@authored | docs/records/OD-ROADMAP-001-the-population-of-zero-caution-is-retired-for-agentexecutor-modelbackend-rulepackage-and-corrections-this-cluster-builds-ahead-of-consumers-now.md | authored | 18 | 6 | sha256:5369feac3ebd7b343b32234f25aa30ba669d4151b15af6d83d2ad37da0f58379 |
 | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md@authored | docs/records/OD-ROADMAP-002-building-ahead-of-consumers-is-licensed-but-building-ahead-of-the-seam-that-will-carry-it-is-not.md | authored | 25 | 6 | sha256:b6ef5e387b893426688336223754f3b165354a7fbf2e50641d03bdf8e836fd16 |
@@ -2087,7 +2087,15 @@ profile: domain-specification
 | docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#55 | authored | 3 | 5. The territory a building item would reserve |
 | docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#59 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#66 | authored | 2 | Controls |
-| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#68 | authored | 2 | Status |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#68 | authored | 2 | Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#70 | authored | 3 | `ServedMethod::REGISTRY` cannot be read from `nomos-gate-orchestration`, and no declared form would permit it |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#75 | authored | 3 | Decision: the served-operation row belongs to the serving host's half, and the verb reads four sources |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#80 | authored | 3 | Which of the four remaining sources need a dependency the crate does not have |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#86 | authored | 3 | The CLI modules a new verb touches |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#88 | authored | 3 | The uncomposed offers reach no composition root, and the count is a derivation now |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#93 | authored | 3 | Why a name or a path scan of the exported set misreports in both directions |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#97 | authored | 3 | What this amendment does not touch |
+| docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#100 | authored | 2 | Status |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1 | authored | 1 | Main and dev mean different things, and the distance between them is a decision, not an accident |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#2 | authored | 2 | Question |
 | docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#5 | authored | 2 | What main is for |
@@ -63969,23 +63977,371 @@ a separate act with its own three files.
 
 ### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#68
 
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong · hash: sha256:5e7157484f1daebbf9dbf585ffa0244632f307d15022f67cccd44d46355aaa2e*
+
+## Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#69
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong · hash: sha256:2bae51399870b370cb59414df8ef11a31e8c3b624e2907a3e87f1b1e10a45c52*
+
+Version 1 got the shape right and the reach wrong. A worker claimed the building item this
+record authorized, measured decision 1's source list against the workspace, wrote no code and
+abandoned, because one of the five sources cannot be read from the crate decision 1 placed the
+verb in. This amendment settles that source, states what the other four cost a building item,
+and corrects the one measurement in "What Was Measured" that a reader would plan work on.
+Nothing in version 1 is rewritten; it is quoted so the correction can be checked against it.
+The decision is untouched: a host verb over the compositions, derived at run time, four row
+states, and "not built" is still not a word the verb can print.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#70
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / `ServedMethod::REGISTRY` cannot be read from `nomos-gate-orchestration`, and no declared form would permit it · hash: sha256:fb86052e5227853b211bbf16898825cd3be04743beebdaa0fa56e66d21f1de4f*
+
+### `ServedMethod::REGISTRY` cannot be read from `nomos-gate-orchestration`, and no declared form would permit it
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#71
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / `ServedMethod::REGISTRY` cannot be read from `nomos-gate-orchestration`, and no declared form would permit it · hash: sha256:9b5928c91fbf26a1afa2386a44b0c7aafcd4351c48f026760fb782f21377cb9f*
+
+Decision 1 says the verb "sits beside `Plan` in `nomos-gate-orchestration`, reads
+`nomos_check_orchestration::Registered()`, `nomos_rules::DESCRIPTORS`, each package crate's
+`KNOWN_PROVIDERS`, `ServedMethod::REGISTRY` and the requirement-trace registry reader over the
+root it is given". Measured at `c9803c96`, the fourth of those is unbuildable, for two
+independent reasons, either of which alone would be enough.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#72
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / `ServedMethod::REGISTRY` cannot be read from `nomos-gate-orchestration`, and no declared form would permit it · hash: sha256:907febc5089997d9a297e4ebe21d39b607ad9142bbe0a24eddc364442566c0e7*
+
+**It is a cargo cycle.** `ServedMethod` is declared in
+`crates/host/nomos-api-transport/src/served_method.rs` and exported by no other member; the only
+other spelling of the list, `nomos_mcp::ServedTool`, reads it back out of
+`nomos_api_transport::ServedMethod::REGISTRY`. And `nomos-api-transport`'s own manifest names
+`nomos-gate-orchestration` among its dependencies. So the edge decision 1 asks for closes a
+cycle cargo refuses to build.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#73
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / `ServedMethod::REGISTRY` cannot be read from `nomos-gate-orchestration`, and no declared form would permit it · hash: sha256:968ce1f105ee7eb4b154a9bf47d716cd5d4b5ed4bbdeaef5c18fcaa0c5b6ddeb*
+
+**It is a forbidden zone crossing, and not one an exception can lift.** `nomos-architecture.json`
+places `nomos-api-transport` in `Host` and `nomos-gate-orchestration` in `Application Service`,
+whose `permits` entry is `["Protocol", "Substrate", "Capability Contract", "Provider", "Rules",
+"Agent"]` — no `Host`. `Test_Dependencies_Should_Run_Strictly_Downward` in
+`tests/contract/tests/boundaries/graph.rs` refuses the edge, and the exceptions table cannot be
+reached for: an exception lifts the same-zone peer refusal only, and
+`Test_Same_Zone_Edges_Should_Each_Name_Two_Members_Of_The_Same_Zone` refuses an entry whose two
+members sit in different components. `nomos-gate-orchestration`'s one exception is
+`nomos-check-orchestration`, its own zone peer. There is therefore no spelling of the declaration
+that would admit this edge; it is not a permission somebody forgot to write.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#74
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / `ServedMethod::REGISTRY` cannot be read from `nomos-gate-orchestration`, and no declared form would permit it · hash: sha256:d38997e90314bcc0528ca283ba30e4ee270f06237628a7cc5c83946dfeb6f6e0*
+
+This is a property of the fact, not of the crate. What `Registered()`, `DESCRIPTORS`, an
+allowlist and an assessment have in common is that each is true of the binary or of the tree.
+Which operations are served is true of neither: `nomos` the CLI serves nothing over a wire and
+`nomos-mcp` serves five, out of one workspace. Decision 1 gave the verb two halves and labelled
+them — "**What this binary composes**" and "**What this tree declares**" — and the served
+registry belongs to neither. It was mis-assigned, not merely placed out of reach.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#75
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Decision: the served-operation row belongs to the serving host's half, and the verb reads four sources · hash: sha256:c6244b52742936f05753570ff3bbfe3b1d808407e9bcaae328a1cbaff107dd35*
+
+### Decision: the served-operation row belongs to the serving host's half, and the verb reads four sources
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#76
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Decision: the served-operation row belongs to the serving host's half, and the verb reads four sources · hash: sha256:a9d58eb2817751432254ef47cbbf2915cfa895dec4eb835d7c52021beeda951b*
+
+Two band-clean shapes were weighed rather than one adopted.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#77
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Decision: the served-operation row belongs to the serving host's half, and the verb reads four sources · hash: sha256:89ebf9db9ccc3f4aeb07e3e1863c6f4e1cf7f12427d7a0438d2361445db8b990*
+
+**Caller-supplied, the way the host variant is handed in today.** `nomos-api`'s private
+`composition::Host_Variant()` builds a `BuildVariant` and hands it to
+`nomos_gate_orchestration::Run_Gate` inside a `GateEnvironment`, so an Application Service
+function already receives a host fact as data rather than as a dependency, and the verb could
+take the served operation names the same way. Its cost is who supplies them. Exactly one member
+can read the registry: `nomos-mcp`, by the declared same-zone exception `nomos-mcp ->
+nomos-api-transport`. `nomos-api` cannot — that is the cycle again from the other side, since
+`nomos-api-transport` depends on `nomos-api`. `nomos-cli`, the binary a reviewer runs, is `Host`
+like the transport, so the form exists but the permission does not: it would take a new same-zone
+exception in `nomos-architecture.json` for a vocabulary read, and until it had one the CLI would
+hand in nothing and the served half would print empty — a silence that reads as "nothing is
+served", which is the inference from silence decision 2 spent a row state refusing. And a served
+list, unlike a build variant, is a declared list with a mirror: `ADMITTED` in
+`tests/contract/tests/boundaries/transport_registry.rs` quantifies it over the real exported
+surface, `Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` holds it there and
+`Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry` holds
+`nomos-mcp`'s projection of it. A build variant is the caller's own property by definition and
+cannot be wrong; a handed-in served list can be, and the verb would print it unchecked.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#78
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Decision: the served-operation row belongs to the serving host's half, and the verb reads four sources · hash: sha256:1c921c5b4b333e1e19a1a52847164b1af459a6ef2e36fd8a56bc1c9025685da3*
+
+**The row belongs to the host half this record already defers.** Decision 1's source set drops to
+four, and the served-operation row is composed where the fact is true: by `nomos-api-transport`,
+the one member that both declares `ServedMethod::REGISTRY` and can call `nomos_api::Handle_*`
+without closing a cycle, at the moment the verb is served over the transport — which
+`OD-HOST-014`'s criterion admits and which this record still does not perform. Under the CLI the
+verb prints no served-operation row and routes to
+`tests/contract/tests/boundaries/transport_registry.rs` instead. Its cost is that the reviewer's
+one command answers four of the five sources and the fifth is somewhere else — one fragment
+readmitted, which is what the Question opened about — and that the served half then exists only
+in the served build, so two hosts print reports of different width.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#79
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Decision: the served-operation row belongs to the serving host's half, and the verb reads four sources · hash: sha256:3a64d3cdba0faa47152bb7d762d10d97607c5a7882d39d06575d75372d6dac11*
+
+**The second is chosen.** The first buys one output at the price of a new architecture exception,
+an unchecked handed-in list, and an empty half in exactly the invocation this record exists to
+serve. The second pays one routing line for a row that was never a composition fact and already
+has a checked universe of its own. A building item authored against this record implements four
+sources, and a `done_when` naming five is wrong.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#80
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Which of the four remaining sources need a dependency the crate does not have · hash: sha256:9226c86c10a83005baa0ad4bf3ec6c4731e34a72f480925fe860595fd5c82708*
+
+### Which of the four remaining sources need a dependency the crate does not have
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#81
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Which of the four remaining sources need a dependency the crate does not have · hash: sha256:9e58b2925f2902aec12efc7873f638e9eb59997901214622cf9d48095ef54c4d*
+
+Read from `crates/orchestration/nomos-gate-orchestration/Cargo.toml` at `c9803c96`. Two of the
+four are already reachable and two are not, stated here so a building item reserves the manifest
+and the lock file rather than discovering them mid-implementation.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#82
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Which of the four remaining sources need a dependency the crate does not have · hash: sha256:843634445b7016cd1677ea63170f4666aa04298f5d2b7f83bc1545de7916cfd1*
+
+| Source | Where it lives | In the gate crate's manifest |
+|---|---|---|
+| `Registered()` | `nomos-check-orchestration` | yes |
+| `DESCRIPTORS` | `nomos-rules` | yes |
+| `KNOWN_PROVIDERS` | `nomos-lang-rust-package`, `nomos-lang-go-package`, `nomos-tool-package`, `nomos-lang-csharp-package` | no |
+| the requirement-trace reader | `nomos-cap-requirement-trace` | no |
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#83
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Which of the four remaining sources need a dependency the crate does not have · hash: sha256:dc2f7c54046db5f108028247ea0dfba2b33dcbb20a47ff791cea7b3d7f8b8d63*
+
+Five dependencies to add, and every one is zone-legal for `Application Service` with no exception
+at all: the four package crates are `Provider` and `nomos-cap-requirement-trace` is `Capability
+Contract`, both in that zone's `permits`. None of the five names `nomos-gate-orchestration`, so
+none closes a cycle. All five already stand in the root `[workspace.dependencies]` table, so the
+root manifest does not move; `crates/orchestration/nomos-gate-orchestration/Cargo.toml` and
+`Cargo.lock` do, the lock because it carries a `dependencies` list per workspace member.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#84
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Which of the four remaining sources need a dependency the crate does not have · hash: sha256:3a42dae2812ff812e562cb40b476e8af76ff520518372af5d8d8c77ffb408d2b*
+
+The allowlist count moved as well. "What Was Measured" says "Six under `crates/packages`. Three
+carry a `KNOWN_PROVIDERS` allowlist"; at `c9803c96` there are eight members and four allowlists,
+`nomos-lang-csharp-package` being the fourth. It arrived with the C# provider, which is the same
+arrival the offer count below records.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#85
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Which of the four remaining sources need a dependency the crate does not have · hash: sha256:851e98b18fd9f39671a31bdf8c9ccf565e7286fa45758e67483f34644dc00d65*
+
+`Check_Package_Conformance`, which decision 2 names among the declared and unobserved, needs
+nothing new: `nomos-check-orchestration` exports it and the gate crate already depends on that
+crate. Its own module doc still reads "Nothing calls this from a real host today."
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#86
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / The CLI modules a new verb touches · hash: sha256:f5c5f2e6b66f0e60553a5011c63bff28b571c3b17eebb1d69cf62e9b9b9b3605*
+
+### The CLI modules a new verb touches
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#87
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / The CLI modules a new verb touches · hash: sha256:dca9fa73fe323d490746eb19e7c13ea07f6e95f8b90fec357c5346d0f20b8964*
+
+Section 5 named "`crates/host/nomos-cli/src/gate.rs` and `crates/host/nomos-cli/src/gate/`", and
+the building item authored from it kept the file and dropped the directory. The files, at
+`c9803c96`, are `crates/host/nomos-cli/src/gate/invocation.rs`,
+`crates/host/nomos-cli/src/gate/parsing.rs`, `crates/host/nomos-cli/src/gate/report.rs`, and a
+new `crates/host/nomos-cli/src/gate/report/status.rs` beside the five renderers already there —
+`admits.rs`, `baselines.rs`, `explain.rs`, `run.rs` and `steps.rs`.
+`crates/host/nomos-cli/src/gate.rs` stays territory as the module's own root. None of them has a
+surface snapshot, because `nomos-cli` is a binary.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#88
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / The uncomposed offers reach no composition root, and the count is a derivation now · hash: sha256:4c5c3d71db663aba7a49330e6957c0d03451244ae6c05e08e8221d2eb747a24b*
+
+### The uncomposed offers reach no composition root, and the count is a derivation now
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#89
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / The uncomposed offers reach no composition root, and the count is a derivation now · hash: sha256:7083b42548ca61ba18648aacf3beb78b42f70028758e5ce4ed92c5b0bb68ec10*
+
+"What Was Measured" says of the three offers it found uncomposed: "All three are composed only
+under `tests/integration`." That is false of all three, and false in the direction a reader plans
+work on — it reads as wired somewhere, just not in the product.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#90
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / The uncomposed offers reach no composition root, and the count is a derivation now · hash: sha256:4271fcf898391c80bfdea9c60908c8ce986a5137e1b2b916403c5cc3410f418c*
+
+`tests/integration/src/composition.rs` is that root, and it has exactly three offer call sites:
+`Declare_And_Offer(syntax::Capability_Contract(), rust::Provider_Offer())`,
+`Offer(scan::Provider_Offer())` and
+`Declare_And_Offer(surface::Capability_Contract(), surface::Provider_Offer())` — the Rust
+provider, the Rust scanner, and that crate's own surface rollup. It names
+`nomos-lang-rust-compiler` only under `tests/determinism/`, for determinism declarations and for
+direct `Materialize_Crate` and `Materialize_Nested_Locks` calls, none of which is a
+`ProviderOffer`.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#91
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / The uncomposed offers reach no composition root, and the count is a derivation now · hash: sha256:079c0ba80bb03b33527440558ee74279731dae2d290c442555507bb6f408fefa*
+
+So, at `c9803c96`: `nomos_lang_rust_compiler::Provider_Offer` and
+`nomos_lang_rust_compiler::Nested_Locks_Provider_Offer` are composed by no root anywhere in this
+workspace, and `nomos_lang_rust::rollup::Provider_Offer` is composed in exactly one place that is
+not `tests/integration` — `crates/languages/nomos-lang-rust/tests/rollup.rs`, that crate's own
+test. A fourth, `nomos_lang_csharp::Provider_Offer`, joined them after this record was measured
+and is composed nowhere.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#92
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / The uncomposed offers reach no composition root, and the count is a derivation now · hash: sha256:6cd2c3032f962ac2a17f9954754f88add1439eb944bcdb9afefdb0e10cd4c16b*
+
+The count is no longer this record's to hold.
+`tests/contract/tests/boundaries/composed_offers.rs` derives it and carries a reason per
+uncomposed entry, and a reader takes both from there rather than from the number above:
+`Test_Every_Exported_Offer_Should_Be_Composed_Or_Declared_Uncomposed` fails on an offer that is
+exported, uncomposed and undeclared;
+`Test_Every_Declared_Uncomposed_Offer_Should_Still_Be_Uncomposed` and
+`Test_Every_Declared_Uncomposed_Offer_Should_Still_Be_Exported` fail on an exemption gone stale
+in either direction; and `Test_Every_Composed_Offer_Should_Be_An_Exported_Offer` fails on a
+mis-parse. Taken by that method at `c9803c96`, independently by two sessions: **twenty-one
+exported, seventeen composed, four uncomposed.** Version 1's "Twenty `Provider_Offer` functions
+are exported and seventeen are composed" was one short on the exported side before the C#
+provider landed and is two short after it.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#93
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Why a name or a path scan of the exported set misreports in both directions · hash: sha256:a89128ef2bc0c085d5b6008c777394e41aca8f8dbdd2dae4519561fc3a328757*
+
+### Why a name or a path scan of the exported set misreports in both directions
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#94
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Why a name or a path scan of the exported set misreports in both directions · hash: sha256:351110915cabecec508a49390645da69f51f90f3ffab0c6e8be353f0a62538d3*
+
+This belongs in this record because this record decided a verb would take that count, and the
+declared-and-unobserved row is only as honest as the method behind it.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#95
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Why a name or a path scan of the exported set misreports in both directions · hash: sha256:33f2c919f1b0cdd857ad073d8b14f0797aa950051d77e12fb2bd21a61ffd577e*
+
+The exported set is derived from the blessed surface snapshots under `tests/contract/surface`,
+matched on **return type** — an exported function taking no receiver and answering a bare
+`ProviderOffer` — and never on the name `Provider_Offer`, never on a source path.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#96
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / Why a name or a path scan of the exported set misreports in both directions · hash: sha256:f69881cb3e99e887b71bb297222aebcccf7fc43635c68467cea5a0c06b536f5a*
+
+A path scan infers a module path from a file path, and `nomos-lang-rust-compiler` declares modules
+with `#[path]`. `composed_offers.rs` records that such a scan would infer
+`nomos_lang_rust_compiler::nested_lock::guarantee::Provider_Offer`, "which is not a path that
+exists", for six `#[path]`-renamed modules in that crate alone. A name scan loses the same crate's
+second offer, which its `src/lib.rs` re-exports as `Nested_Locks_Provider_Offer`. Either method is
+wrong in both directions at once — it reports a composed offer as missing and an uncomposed one as
+composed — so a count taken either way cannot be believed, and nor can a row derived from it. The
+snapshots are the right oracle because they say what is *reachable*, which is what a composition
+root must be able to name, and they are held to the tree by
+`Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot`.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#97
+
+*revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / What this amendment does not touch · hash: sha256:bd50f17ace6d6c297dc3bd1f6b3d9c6666b89e2f2aa3145c0accde7d85764126*
+
+### What this amendment does not touch
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#98
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / What this amendment does not touch · hash: sha256:45a0d9580e4f580ca8e67c337e3e522745e1e55b6716241e0e940c7c84a87a9f*
+
+The decision. Every clause of decisions 1 through 4 stands except the source list in decision 1,
+which loses `ServedMethod::REGISTRY` and keeps the other four. The verb is still a host verb
+beside `gate plan`, still derived at run time, still two-halved, still printing one of four row
+states, and "not built" is still not a word it can print. Decision 2's declared-and-unobserved
+entry now covers four offers rather than three, beside `Check_Package_Conformance`; that changes
+the row's population, never its definition.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#99
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong / What this amendment does not touch · hash: sha256:c173aada6db49c68932f7b25e75e109581acbce0f91fc544901975005631217a*
+
+The README measurement in "What Was Measured" is not re-taken here. `OD-PACKAGE-017` has since
+measured that `README.md`'s band listing is two tables rather than one and that the split has no
+declared source, so nothing in this record should be read as saying a mechanism could derive a
+member's row placement from `nomos-architecture.json`, which is a flat member-to-zone map. The
+verb reads no README row either way.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#100
+
 *revision: authored · kind: heading · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#69
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#101
 
-*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Status · hash: sha256:9eb10a6b587ba72f7eeb6a8c6e234330da68c050d915382f1b6b2a462fb03eb5*
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Status · hash: sha256:4aaf1ef13d7455947f4ee407cb655badf03ca3068358a52c71005068a53f2c65*
 
-Accepted. The view is a host verb beside `gate plan`, derived at run time from the
-compositions and typed nowhere; a row is built, declared and unobserved, partial, or unassessed,
-each with the source that witnesses it, and "not built" is not a word the verb can print. On a
-corpus-less runner every build-time row is unchanged and every family row counts what is
-committed and reports unassessed as uncounted; the count itself is the corpus-gated suite's to
-give and never the verb's. Measured at `8338c6ec`: fourteen contracts, seventeen offers of
-twenty exported, seventy-one rules, three allowlists, five served methods of thirty handlers,
-nineteen profiles, sixty-eight README rows, thirty-nine assessments in nine of sixty-one
-families, and 324 requirements nobody has looked at.
+Accepted, amended at version 2. The view is a host verb beside `gate plan`, derived at run time
+from the compositions and typed nowhere; a row is built, declared and unobserved, partial, or
+unassessed, each with the source that witnesses it, and "not built" is not a word the verb can
+print. On a corpus-less runner every build-time row is unchanged and every family row counts what
+is committed and reports unassessed as uncounted; the count itself is the corpus-gated suite's to
+give and never the verb's.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#102
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Status · hash: sha256:7fe5fe98203b73305733dbd5b57ec4f0de5e749ccde820e4a4cd447911249ea5*
+
+Version 2 corrects the reach and leaves the shape alone. The verb reads **four** sources, not
+five: `ServedMethod::REGISTRY` cannot be read from `nomos-gate-orchestration` — a cargo cycle and
+a zone crossing no exception can lift — and the served-operation row belongs to the serving host's
+half, composed by `nomos-api-transport` when the verb is served and routed to
+`tests/contract/tests/boundaries/transport_registry.rs` otherwise. Two of the four remaining
+sources need a dependency the gate crate does not have, so a building item reserves
+`crates/orchestration/nomos-gate-orchestration/Cargo.toml` and `Cargo.lock`, and the CLI modules
+it touches are named rather than left to the file it was written from. The claim that the
+uncomposed offers are composed under `tests/integration` was false of all three; they reach no
+composition root at all, a fourth has since joined them, and the count is
+`tests/contract/tests/boundaries/composed_offers.rs`'s derivation from the blessed surface
+snapshots rather than a number this record holds.
+
+### docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#103
+
+*revision: authored · kind: prose · heading: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built / Status · hash: sha256:7325144354ec6f662a8dfb6e334fb06a55b3515fda3828ecbd79e8ef33c4da27*
+
+Measured at `8338c6ec`: fourteen contracts, seventeen offers of twenty exported, seventy-one
+rules, three allowlists, five served methods of thirty handlers, nineteen profiles, sixty-eight
+README rows, thirty-nine assessments in nine of sixty-one families, and 324 requirements nobody
+has looked at. Re-measured at `c9803c96` where version 2 says so: twenty-one offers exported,
+seventeen composed and four uncomposed; eight members under `crates/packages` and four
+`KNOWN_PROVIDERS` allowlists. Every other figure above is version 1's and is dated to its own
+revision.
 
 ### docs/records/OD-RELEASE-001-main-and-dev-mean-different-things-and-the-distance-between-them-is-a-decision-not-an-accident.md#1
 

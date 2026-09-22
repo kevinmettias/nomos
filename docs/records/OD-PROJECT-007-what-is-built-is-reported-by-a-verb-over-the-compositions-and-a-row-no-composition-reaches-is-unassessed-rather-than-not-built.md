@@ -3,7 +3,7 @@ id: OD-PROJECT-007
 type: decision
 title: What is built is reported by a verb over the compositions, and a row no composition reaches is unassessed rather than not built
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - projection
@@ -414,14 +414,226 @@ a separate act with its own three files.
 | print "declared and unobserved" for an unserved handler or an unoccupied family label | an export or a vocabulary term reported as a broken expectation, twenty-one of them by decision |
 | compile a product-name mapping into the verb | the review's hand-written table, one indirection further from the reader, stale at the next review |
 
+## Amendment: The Verb Was Given a Source Its Own Crate Cannot Read, and One Measurement Behind It Was Wrong
+
+Version 1 got the shape right and the reach wrong. A worker claimed the building item this
+record authorized, measured decision 1's source list against the workspace, wrote no code and
+abandoned, because one of the five sources cannot be read from the crate decision 1 placed the
+verb in. This amendment settles that source, states what the other four cost a building item,
+and corrects the one measurement in "What Was Measured" that a reader would plan work on.
+Nothing in version 1 is rewritten; it is quoted so the correction can be checked against it.
+The decision is untouched: a host verb over the compositions, derived at run time, four row
+states, and "not built" is still not a word the verb can print.
+
+### `ServedMethod::REGISTRY` cannot be read from `nomos-gate-orchestration`, and no declared form would permit it
+
+Decision 1 says the verb "sits beside `Plan` in `nomos-gate-orchestration`, reads
+`nomos_check_orchestration::Registered()`, `nomos_rules::DESCRIPTORS`, each package crate's
+`KNOWN_PROVIDERS`, `ServedMethod::REGISTRY` and the requirement-trace registry reader over the
+root it is given". Measured at `c9803c96`, the fourth of those is unbuildable, for two
+independent reasons, either of which alone would be enough.
+
+**It is a cargo cycle.** `ServedMethod` is declared in
+`crates/host/nomos-api-transport/src/served_method.rs` and exported by no other member; the only
+other spelling of the list, `nomos_mcp::ServedTool`, reads it back out of
+`nomos_api_transport::ServedMethod::REGISTRY`. And `nomos-api-transport`'s own manifest names
+`nomos-gate-orchestration` among its dependencies. So the edge decision 1 asks for closes a
+cycle cargo refuses to build.
+
+**It is a forbidden zone crossing, and not one an exception can lift.** `nomos-architecture.json`
+places `nomos-api-transport` in `Host` and `nomos-gate-orchestration` in `Application Service`,
+whose `permits` entry is `["Protocol", "Substrate", "Capability Contract", "Provider", "Rules",
+"Agent"]` — no `Host`. `Test_Dependencies_Should_Run_Strictly_Downward` in
+`tests/contract/tests/boundaries/graph.rs` refuses the edge, and the exceptions table cannot be
+reached for: an exception lifts the same-zone peer refusal only, and
+`Test_Same_Zone_Edges_Should_Each_Name_Two_Members_Of_The_Same_Zone` refuses an entry whose two
+members sit in different components. `nomos-gate-orchestration`'s one exception is
+`nomos-check-orchestration`, its own zone peer. There is therefore no spelling of the declaration
+that would admit this edge; it is not a permission somebody forgot to write.
+
+This is a property of the fact, not of the crate. What `Registered()`, `DESCRIPTORS`, an
+allowlist and an assessment have in common is that each is true of the binary or of the tree.
+Which operations are served is true of neither: `nomos` the CLI serves nothing over a wire and
+`nomos-mcp` serves five, out of one workspace. Decision 1 gave the verb two halves and labelled
+them — "**What this binary composes**" and "**What this tree declares**" — and the served
+registry belongs to neither. It was mis-assigned, not merely placed out of reach.
+
+### Decision: the served-operation row belongs to the serving host's half, and the verb reads four sources
+
+Two band-clean shapes were weighed rather than one adopted.
+
+**Caller-supplied, the way the host variant is handed in today.** `nomos-api`'s private
+`composition::Host_Variant()` builds a `BuildVariant` and hands it to
+`nomos_gate_orchestration::Run_Gate` inside a `GateEnvironment`, so an Application Service
+function already receives a host fact as data rather than as a dependency, and the verb could
+take the served operation names the same way. Its cost is who supplies them. Exactly one member
+can read the registry: `nomos-mcp`, by the declared same-zone exception `nomos-mcp ->
+nomos-api-transport`. `nomos-api` cannot — that is the cycle again from the other side, since
+`nomos-api-transport` depends on `nomos-api`. `nomos-cli`, the binary a reviewer runs, is `Host`
+like the transport, so the form exists but the permission does not: it would take a new same-zone
+exception in `nomos-architecture.json` for a vocabulary read, and until it had one the CLI would
+hand in nothing and the served half would print empty — a silence that reads as "nothing is
+served", which is the inference from silence decision 2 spent a row state refusing. And a served
+list, unlike a build variant, is a declared list with a mirror: `ADMITTED` in
+`tests/contract/tests/boundaries/transport_registry.rs` quantifies it over the real exported
+surface, `Test_The_Transport_Should_Name_No_Repo_Tooling_Handler` holds it there and
+`Test_The_Tool_Registry_Should_Name_The_Same_Operations_As_The_Served_Method_Registry` holds
+`nomos-mcp`'s projection of it. A build variant is the caller's own property by definition and
+cannot be wrong; a handed-in served list can be, and the verb would print it unchecked.
+
+**The row belongs to the host half this record already defers.** Decision 1's source set drops to
+four, and the served-operation row is composed where the fact is true: by `nomos-api-transport`,
+the one member that both declares `ServedMethod::REGISTRY` and can call `nomos_api::Handle_*`
+without closing a cycle, at the moment the verb is served over the transport — which
+`OD-HOST-014`'s criterion admits and which this record still does not perform. Under the CLI the
+verb prints no served-operation row and routes to
+`tests/contract/tests/boundaries/transport_registry.rs` instead. Its cost is that the reviewer's
+one command answers four of the five sources and the fifth is somewhere else — one fragment
+readmitted, which is what the Question opened about — and that the served half then exists only
+in the served build, so two hosts print reports of different width.
+
+**The second is chosen.** The first buys one output at the price of a new architecture exception,
+an unchecked handed-in list, and an empty half in exactly the invocation this record exists to
+serve. The second pays one routing line for a row that was never a composition fact and already
+has a checked universe of its own. A building item authored against this record implements four
+sources, and a `done_when` naming five is wrong.
+
+### Which of the four remaining sources need a dependency the crate does not have
+
+Read from `crates/orchestration/nomos-gate-orchestration/Cargo.toml` at `c9803c96`. Two of the
+four are already reachable and two are not, stated here so a building item reserves the manifest
+and the lock file rather than discovering them mid-implementation.
+
+| Source | Where it lives | In the gate crate's manifest |
+|---|---|---|
+| `Registered()` | `nomos-check-orchestration` | yes |
+| `DESCRIPTORS` | `nomos-rules` | yes |
+| `KNOWN_PROVIDERS` | `nomos-lang-rust-package`, `nomos-lang-go-package`, `nomos-tool-package`, `nomos-lang-csharp-package` | no |
+| the requirement-trace reader | `nomos-cap-requirement-trace` | no |
+
+Five dependencies to add, and every one is zone-legal for `Application Service` with no exception
+at all: the four package crates are `Provider` and `nomos-cap-requirement-trace` is `Capability
+Contract`, both in that zone's `permits`. None of the five names `nomos-gate-orchestration`, so
+none closes a cycle. All five already stand in the root `[workspace.dependencies]` table, so the
+root manifest does not move; `crates/orchestration/nomos-gate-orchestration/Cargo.toml` and
+`Cargo.lock` do, the lock because it carries a `dependencies` list per workspace member.
+
+The allowlist count moved as well. "What Was Measured" says "Six under `crates/packages`. Three
+carry a `KNOWN_PROVIDERS` allowlist"; at `c9803c96` there are eight members and four allowlists,
+`nomos-lang-csharp-package` being the fourth. It arrived with the C# provider, which is the same
+arrival the offer count below records.
+
+`Check_Package_Conformance`, which decision 2 names among the declared and unobserved, needs
+nothing new: `nomos-check-orchestration` exports it and the gate crate already depends on that
+crate. Its own module doc still reads "Nothing calls this from a real host today."
+
+### The CLI modules a new verb touches
+
+Section 5 named "`crates/host/nomos-cli/src/gate.rs` and `crates/host/nomos-cli/src/gate/`", and
+the building item authored from it kept the file and dropped the directory. The files, at
+`c9803c96`, are `crates/host/nomos-cli/src/gate/invocation.rs`,
+`crates/host/nomos-cli/src/gate/parsing.rs`, `crates/host/nomos-cli/src/gate/report.rs`, and a
+new `crates/host/nomos-cli/src/gate/report/status.rs` beside the five renderers already there —
+`admits.rs`, `baselines.rs`, `explain.rs`, `run.rs` and `steps.rs`.
+`crates/host/nomos-cli/src/gate.rs` stays territory as the module's own root. None of them has a
+surface snapshot, because `nomos-cli` is a binary.
+
+### The uncomposed offers reach no composition root, and the count is a derivation now
+
+"What Was Measured" says of the three offers it found uncomposed: "All three are composed only
+under `tests/integration`." That is false of all three, and false in the direction a reader plans
+work on — it reads as wired somewhere, just not in the product.
+
+`tests/integration/src/composition.rs` is that root, and it has exactly three offer call sites:
+`Declare_And_Offer(syntax::Capability_Contract(), rust::Provider_Offer())`,
+`Offer(scan::Provider_Offer())` and
+`Declare_And_Offer(surface::Capability_Contract(), surface::Provider_Offer())` — the Rust
+provider, the Rust scanner, and that crate's own surface rollup. It names
+`nomos-lang-rust-compiler` only under `tests/determinism/`, for determinism declarations and for
+direct `Materialize_Crate` and `Materialize_Nested_Locks` calls, none of which is a
+`ProviderOffer`.
+
+So, at `c9803c96`: `nomos_lang_rust_compiler::Provider_Offer` and
+`nomos_lang_rust_compiler::Nested_Locks_Provider_Offer` are composed by no root anywhere in this
+workspace, and `nomos_lang_rust::rollup::Provider_Offer` is composed in exactly one place that is
+not `tests/integration` — `crates/languages/nomos-lang-rust/tests/rollup.rs`, that crate's own
+test. A fourth, `nomos_lang_csharp::Provider_Offer`, joined them after this record was measured
+and is composed nowhere.
+
+The count is no longer this record's to hold.
+`tests/contract/tests/boundaries/composed_offers.rs` derives it and carries a reason per
+uncomposed entry, and a reader takes both from there rather than from the number above:
+`Test_Every_Exported_Offer_Should_Be_Composed_Or_Declared_Uncomposed` fails on an offer that is
+exported, uncomposed and undeclared;
+`Test_Every_Declared_Uncomposed_Offer_Should_Still_Be_Uncomposed` and
+`Test_Every_Declared_Uncomposed_Offer_Should_Still_Be_Exported` fail on an exemption gone stale
+in either direction; and `Test_Every_Composed_Offer_Should_Be_An_Exported_Offer` fails on a
+mis-parse. Taken by that method at `c9803c96`, independently by two sessions: **twenty-one
+exported, seventeen composed, four uncomposed.** Version 1's "Twenty `Provider_Offer` functions
+are exported and seventeen are composed" was one short on the exported side before the C#
+provider landed and is two short after it.
+
+### Why a name or a path scan of the exported set misreports in both directions
+
+This belongs in this record because this record decided a verb would take that count, and the
+declared-and-unobserved row is only as honest as the method behind it.
+
+The exported set is derived from the blessed surface snapshots under `tests/contract/surface`,
+matched on **return type** — an exported function taking no receiver and answering a bare
+`ProviderOffer` — and never on the name `Provider_Offer`, never on a source path.
+
+A path scan infers a module path from a file path, and `nomos-lang-rust-compiler` declares modules
+with `#[path]`. `composed_offers.rs` records that such a scan would infer
+`nomos_lang_rust_compiler::nested_lock::guarantee::Provider_Offer`, "which is not a path that
+exists", for six `#[path]`-renamed modules in that crate alone. A name scan loses the same crate's
+second offer, which its `src/lib.rs` re-exports as `Nested_Locks_Provider_Offer`. Either method is
+wrong in both directions at once — it reports a composed offer as missing and an uncomposed one as
+composed — so a count taken either way cannot be believed, and nor can a row derived from it. The
+snapshots are the right oracle because they say what is *reachable*, which is what a composition
+root must be able to name, and they are held to the tree by
+`Test_Every_Crates_Public_Surface_Should_Match_Its_Snapshot`.
+
+### What this amendment does not touch
+
+The decision. Every clause of decisions 1 through 4 stands except the source list in decision 1,
+which loses `ServedMethod::REGISTRY` and keeps the other four. The verb is still a host verb
+beside `gate plan`, still derived at run time, still two-halved, still printing one of four row
+states, and "not built" is still not a word it can print. Decision 2's declared-and-unobserved
+entry now covers four offers rather than three, beside `Check_Package_Conformance`; that changes
+the row's population, never its definition.
+
+The README measurement in "What Was Measured" is not re-taken here. `OD-PACKAGE-017` has since
+measured that `README.md`'s band listing is two tables rather than one and that the split has no
+declared source, so nothing in this record should be read as saying a mechanism could derive a
+member's row placement from `nomos-architecture.json`, which is a flat member-to-zone map. The
+verb reads no README row either way.
+
 ## Status
 
-Accepted. The view is a host verb beside `gate plan`, derived at run time from the
-compositions and typed nowhere; a row is built, declared and unobserved, partial, or unassessed,
-each with the source that witnesses it, and "not built" is not a word the verb can print. On a
-corpus-less runner every build-time row is unchanged and every family row counts what is
-committed and reports unassessed as uncounted; the count itself is the corpus-gated suite's to
-give and never the verb's. Measured at `8338c6ec`: fourteen contracts, seventeen offers of
-twenty exported, seventy-one rules, three allowlists, five served methods of thirty handlers,
-nineteen profiles, sixty-eight README rows, thirty-nine assessments in nine of sixty-one
-families, and 324 requirements nobody has looked at.
+Accepted, amended at version 2. The view is a host verb beside `gate plan`, derived at run time
+from the compositions and typed nowhere; a row is built, declared and unobserved, partial, or
+unassessed, each with the source that witnesses it, and "not built" is not a word the verb can
+print. On a corpus-less runner every build-time row is unchanged and every family row counts what
+is committed and reports unassessed as uncounted; the count itself is the corpus-gated suite's to
+give and never the verb's.
+
+Version 2 corrects the reach and leaves the shape alone. The verb reads **four** sources, not
+five: `ServedMethod::REGISTRY` cannot be read from `nomos-gate-orchestration` — a cargo cycle and
+a zone crossing no exception can lift — and the served-operation row belongs to the serving host's
+half, composed by `nomos-api-transport` when the verb is served and routed to
+`tests/contract/tests/boundaries/transport_registry.rs` otherwise. Two of the four remaining
+sources need a dependency the gate crate does not have, so a building item reserves
+`crates/orchestration/nomos-gate-orchestration/Cargo.toml` and `Cargo.lock`, and the CLI modules
+it touches are named rather than left to the file it was written from. The claim that the
+uncomposed offers are composed under `tests/integration` was false of all three; they reach no
+composition root at all, a fourth has since joined them, and the count is
+`tests/contract/tests/boundaries/composed_offers.rs`'s derivation from the blessed surface
+snapshots rather than a number this record holds.
+
+Measured at `8338c6ec`: fourteen contracts, seventeen offers of twenty exported, seventy-one
+rules, three allowlists, five served methods of thirty handlers, nineteen profiles, sixty-eight
+README rows, thirty-nine assessments in nine of sixty-one families, and 324 requirements nobody
+has looked at. Re-measured at `c9803c96` where version 2 says so: twenty-one offers exported,
+seventeen composed and four uncomposed; eight members under `crates/packages` and four
+`KNOWN_PROVIDERS` allowlists. Every other figure above is version 1's and is dated to its own
+revision.

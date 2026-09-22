@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:e2782fec4ffbe36c2708aeba6cf1a9780588609eab9edede786966064497e931",
-  "inputs_digest": "sha256:f1d958a478acc028d60af6d55e861f02aa6bbbcdda8871aaa821de98109a24bd",
+  "content_digest": "sha256:1b5b3e95a0c73683dab6a97ad08901fff0850929d67c68df4dcb53caa2f92c92",
+  "inputs_digest": "sha256:09b95d25e750d84806897e853004182331badfd8569ddc8e4be5abf186e3b680",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2378
+      2386
     ],
     [
       "Source blocks",
-      8586
+      8620
     ]
   ],
   "inputs": [
@@ -1028,7 +1028,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md@authored",
-      "hash": "sha256:516ee83533296746248d7fb3d29523f83972d159c0fec6c294b6d8386ab9baaf"
+      "hash": "sha256:aa0ef25d7cbdf63983f3722ebbe8344d3d85e9414998552d70ea8f4ebf6f21d8"
     },
     {
       "content": "documents",
@@ -10383,7 +10383,47 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#68",
-      "hash": "sha256:07b4eae078ead00c27618e6f8c15cf112d11b5fc0df48533115d27214afd77d6"
+      "hash": "sha256:60847b3e5d31ade4efe33a73a944edb9737caf4017975d3a662cfa24447c8bf2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#70",
+      "hash": "sha256:647296044ce7521e935be1933ca36530beb1baddd13ee2420d7c1e7e9ac4c10e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#75",
+      "hash": "sha256:8340e6668b0d23ba3617ab8f1debc3aeb758abf2ffd945f0f72aa5f4170c9855"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#80",
+      "hash": "sha256:0c4bf4fb47089b94de93b9dcd4718a71b3d7fc3213c1f9f846f83e2033649565"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#86",
+      "hash": "sha256:3c7bacee3ec4bd0435fc779044dca9fcc9d1da8831e4fc704f9d4910a2f66435"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#88",
+      "hash": "sha256:b6d064b6ef71ee3d0fb949cf1100f609c3a19defc08b61d12e2cff8002c2b8a0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#93",
+      "hash": "sha256:e3a1be795caaa9a6f23f2e63dceb5606dd0657e7b2bee4270b31efbbf220af3d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#97",
+      "hash": "sha256:731770f7ee2d71ebc1ff88c5389df63ca90d4cb565eb1ef24d87568079be9294"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#100",
+      "hash": "sha256:f3e6bcefa821f3a772d54c48ca5abbd66b591e0d50a91ae1390ac58a23992aa8"
     },
     {
       "content": "headings",
@@ -46168,12 +46208,182 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#68",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:5e7157484f1daebbf9dbf585ffa0244632f307d15022f67cccd44d46355aaa2e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#69",
-      "hash": "sha256:9eb10a6b587ba72f7eeb6a8c6e234330da68c050d915382f1b6b2a462fb03eb5"
+      "hash": "sha256:2bae51399870b370cb59414df8ef11a31e8c3b624e2907a3e87f1b1e10a45c52"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#70",
+      "hash": "sha256:fb86052e5227853b211bbf16898825cd3be04743beebdaa0fa56e66d21f1de4f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#71",
+      "hash": "sha256:9b5928c91fbf26a1afa2386a44b0c7aafcd4351c48f026760fb782f21377cb9f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#72",
+      "hash": "sha256:907febc5089997d9a297e4ebe21d39b607ad9142bbe0a24eddc364442566c0e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#73",
+      "hash": "sha256:968ce1f105ee7eb4b154a9bf47d716cd5d4b5ed4bbdeaef5c18fcaa0c5b6ddeb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#74",
+      "hash": "sha256:d38997e90314bcc0528ca283ba30e4ee270f06237628a7cc5c83946dfeb6f6e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#75",
+      "hash": "sha256:c6244b52742936f05753570ff3bbfe3b1d808407e9bcaae328a1cbaff107dd35"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#76",
+      "hash": "sha256:a9d58eb2817751432254ef47cbbf2915cfa895dec4eb835d7c52021beeda951b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#77",
+      "hash": "sha256:89ebf9db9ccc3f4aeb07e3e1863c6f4e1cf7f12427d7a0438d2361445db8b990"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#78",
+      "hash": "sha256:1c921c5b4b333e1e19a1a52847164b1af459a6ef2e36fd8a56bc1c9025685da3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#79",
+      "hash": "sha256:3a64d3cdba0faa47152bb7d762d10d97607c5a7882d39d06575d75372d6dac11"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#80",
+      "hash": "sha256:9226c86c10a83005baa0ad4bf3ec6c4731e34a72f480925fe860595fd5c82708"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#81",
+      "hash": "sha256:9e58b2925f2902aec12efc7873f638e9eb59997901214622cf9d48095ef54c4d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#82",
+      "hash": "sha256:843634445b7016cd1677ea63170f4666aa04298f5d2b7f83bc1545de7916cfd1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#83",
+      "hash": "sha256:dc2f7c54046db5f108028247ea0dfba2b33dcbb20a47ff791cea7b3d7f8b8d63"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#84",
+      "hash": "sha256:3a42dae2812ff812e562cb40b476e8af76ff520518372af5d8d8c77ffb408d2b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#85",
+      "hash": "sha256:851e98b18fd9f39671a31bdf8c9ccf565e7286fa45758e67483f34644dc00d65"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#86",
+      "hash": "sha256:f5c5f2e6b66f0e60553a5011c63bff28b571c3b17eebb1d69cf62e9b9b9b3605"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#87",
+      "hash": "sha256:dca9fa73fe323d490746eb19e7c13ea07f6e95f8b90fec357c5346d0f20b8964"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#88",
+      "hash": "sha256:4c5c3d71db663aba7a49330e6957c0d03451244ae6c05e08e8221d2eb747a24b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#89",
+      "hash": "sha256:7083b42548ca61ba18648aacf3beb78b42f70028758e5ce4ed92c5b0bb68ec10"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#90",
+      "hash": "sha256:4271fcf898391c80bfdea9c60908c8ce986a5137e1b2b916403c5cc3410f418c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#91",
+      "hash": "sha256:079c0ba80bb03b33527440558ee74279731dae2d290c442555507bb6f408fefa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#92",
+      "hash": "sha256:6cd2c3032f962ac2a17f9954754f88add1439eb944bcdb9afefdb0e10cd4c16b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#93",
+      "hash": "sha256:a89128ef2bc0c085d5b6008c777394e41aca8f8dbdd2dae4519561fc3a328757"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#94",
+      "hash": "sha256:351110915cabecec508a49390645da69f51f90f3ffab0c6e8be353f0a62538d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#95",
+      "hash": "sha256:33f2c919f1b0cdd857ad073d8b14f0797aa950051d77e12fb2bd21a61ffd577e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#96",
+      "hash": "sha256:f69881cb3e99e887b71bb297222aebcccf7fc43635c68467cea5a0c06b536f5a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#97",
+      "hash": "sha256:bd50f17ace6d6c297dc3bd1f6b3d9c6666b89e2f2aa3145c0accde7d85764126"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#98",
+      "hash": "sha256:45a0d9580e4f580ca8e67c337e3e522745e1e55b6716241e0e940c7c84a87a9f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#99",
+      "hash": "sha256:c173aada6db49c68932f7b25e75e109581acbce0f91fc544901975005631217a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#100",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#101",
+      "hash": "sha256:4aaf1ef13d7455947f4ee407cb655badf03ca3068358a52c71005068a53f2c65"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#102",
+      "hash": "sha256:7fe5fe98203b73305733dbd5b57ec4f0de5e749ccde820e4a4cd447911249ea5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PROJECT-007-what-is-built-is-reported-by-a-verb-over-the-compositions-and-a-row-no-composition-reaches-is-unassessed-rather-than-not-built.md#103",
+      "hash": "sha256:7325144354ec6f662a8dfb6e334fb06a55b3515fda3828ecbd79e8ef33c4da27"
     },
     {
       "content": "blocks",
