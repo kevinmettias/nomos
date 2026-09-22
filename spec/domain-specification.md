@@ -199,6 +199,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md@authored | docs/records/OD-PACKAGE-014-a-languagepackages-activation-semantics-are-a-conformance-claim-not-an-installer-action.md | authored | 18 | 6 | sha256:f17c861d194a9cc9d84cd2a1dd636f2d20cf8f6ce02d03d175153c13487a2288 |
 | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md@authored | docs/records/OD-PACKAGE-015-a-crate-earns-its-boundary-by-independent-versioning-isolation-or-installation-and-not-by-naming-a-concept.md | authored | 21 | 7 | sha256:ad7db84e0e6c5bd783952fb02f6bde672224a893e8ea7fdf510c2a1ceb6cedd2 |
 | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md@authored | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md | authored | 73 | 21 | sha256:869fcd6c1da5288bad1e3edc4fdafadb040f475c06009c158ed88d8426536f5c |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md@authored | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md | authored | 56 | 14 | sha256:0ffc8479136943b0a3335a0042a996e0a028e3811b1ebcdca9228da7bd7e458c |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 21 | 7 | sha256:6d884c5158bc41044a4934206fd5ebf5dcd821ff3547b3fd9741139ed06572dc |
@@ -1942,6 +1943,20 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#60 | authored | 2 | What This Does And Does Not Invalidate |
 | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#64 | authored | 2 | Alternatives Considered |
 | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#72 | authored | 2 | Status |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#1 | authored | 1 | An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#2 | authored | 2 | Question |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#7 | authored | 2 | The case, constructed rather than asserted |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#14 | authored | 2 | Two measurements that make the region narrower than "a column problem" |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#17 | authored | 2 | Why a free region inside an owned span is a contradiction, not a granularity problem |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#22 | authored | 2 | Decision |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#26 | authored | 3 | What `OD-PACKAGE-004`'s classification of `README.md` is for, then |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#29 | authored | 3 | The expression candidate, and why it is declined in both its shapes |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#33 | authored | 2 | What refuses, and where |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#40 | authored | 2 | Surviving `OD-PACKAGE-003`'s test |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#43 | authored | 2 | Is this urgent |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#48 | authored | 2 | What this costs |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#53 | authored | 2 | Controls |
+| docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#55 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1 | authored | 1 | A port that names its outcomes says nothing about how they are obtained |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#5 | authored | 2 | What Was Measured |
@@ -58589,6 +58604,520 @@ Accepted. Decides the three questions the declined consumer item surfaced and di
 and pays `OD-PACKAGE-012`'s binding question with the measurement taken against the real types.
 Authorizes one resolver and one addition to existing vocabulary; files the dispatch wiring as a
 dependent item rather than widening its own territory.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#1
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written · hash: sha256:a86a0be6ee3f69365760705b7af1aa8e975cc46fd004e589d9f1d59d869f72da*
+
+# An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#2
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#3
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Question · hash: sha256:b50988531c2b058c56d6fdb01f1ec0ff70ea6390f6c56005bd349fff59eb7bea*
+
+Two halves of one question were answered hours apart and do not meet.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#4
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Question · hash: sha256:bfe3495759a4c8f6c5675837441ffc5f9a4642ea7e761a50532dc3d9047537f3*
+
+`OD-PACKAGE-004` version 3 defines a `Composed` asset's owned region "at the granularity
+something compares" and works that definition out against this repository's own instance,
+`README.md`'s band listing: the zone cell owned, the crate-name cell owned, the set of rows
+owned, and the `Owns` column free. Owned region and free region therefore interleave, cell by
+cell, inside one artifact.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#5
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Question · hash: sha256:21c6fc0582fbf54a96b6854d71c6f9417e62fce6751b86588c4d090a57dff028*
+
+`nomos-materialization` performs a declared placement and expresses a `Composed` target's
+owned region as an `OwnedRegion { opening_marker, closing_marker }`. Its own documentation
+states the limit rather than hiding it — "A pair names **one contiguous span**, and that is
+the whole of what this maturity expresses" — together with the case it cannot serve, naming
+`OD-PACKAGE-004`'s worked instance directly, and the reason it was not taught to: "Teaching
+this crate the finer granularity is not the fix. A splicer that understood a table's columns
+would be a format-aware mechanism, and the first thing such a thing wants to know is which
+kind of package it is serving."
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#6
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Question · hash: sha256:519ee812e25102cc33d2d24e1b64a8697cc648075e450342000e600d0d3709f0*
+
+Both statements are careful and neither is wrong. What neither says is which of the two gives.
+A placer that wrapped the band listing in a marker pair and asked for it to be written would
+have the free region inside the span, and nothing in the record or the mechanism would refuse.
+That is a silent loss, which is the property `OD-PACKAGE-004` was amended to end.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#7
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / The case, constructed rather than asserted · hash: sha256:5d7a049aa68e7da8b030daf9baaed4a414011c82415d97c8f671497b363af613*
+
+## The case, constructed rather than asserted
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#8
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / The case, constructed rather than asserted · hash: sha256:e4e20e59911eaf951daf98f4e790bbdd7c64fc35e804a8ee5c1e765b2f3052b4*
+
+Measured 2026-09-21 against `README.md` and `nomos-architecture.json` as this record was
+written, by re-running `Zone_Row`'s own reading and then applying `Spliced`'s own algorithm from
+`crates/substrate/nomos-materialization/src/materializer/composed.rs` to the result.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#9
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / The case, constructed rather than asserted · hash: sha256:312d7958c0088716759b2d2b10266a51b429ad74ffe4d777fc6a8f20d69b05b7*
+
+| | |
+|---|---|
+| `README.md` | 51,510 characters, 51,680 bytes |
+| rows `Zone_Row`'s reading matches | 72 |
+| crates `nomos-architecture.json` declares in `members` | 72 |
+| characters in the 72 `Owns` cells | 33,102 |
+| `Owns` cells that are empty | 0 |
+| occurrences of `<!--` anywhere in `README.md` | 0 |
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#10
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / The case, constructed rather than asserted · hash: sha256:7db5a7d5cc7427d4320d1bda19ffb502ac9da85eb9696a7e818ee812145d83d2*
+
+The construction: add a marker pair around the listing, render a replacement from the only
+declared source there is — `nomos-architecture.json`, whose five keys are `components`,
+`members`, `permits`, `exceptions` and `authorities`, none of them a description — and splice.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#11
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / The case, constructed rather than asserted · hash: sha256:c49f0fd85493b28a87ebd5ed3cf24bf8aec0405db31f9e20244ec596bc7932e0*
+
+| | |
+|---|---|
+| span the markers would bound | lines 51 to 130, 36,525 characters |
+| replacement rendered from `members` | 3,214 characters, 72 rows, every `Owns` cell empty |
+| `README.md` after the splice | 18,251 characters |
+| characters lost | 33,311 |
+| refusal returned by the splice | none |
+| rows afterwards | 72, every member still listed at its declared zone, both directions |
+| occurrences of `OD-CONTRACTS-001` afterwards | 0, from 1 |
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#12
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / The case, constructed rather than asserted · hash: sha256:87ee74cbd7829ebfa5fe07617f54257faee71505077b38f2242b9c6fcebe4d89*
+
+`Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band` stays green across that,
+because it compares only the two cells it reads. The one assertion that moves is
+`Test_Band_Zero_Should_Be_Described_In_One_Place`, and it moves for the reason version 3
+predicted a whole-file constraint would: `README.md`'s single occurrence of `OD-CONTRACTS-001`
+sits inside the `nomos-contracts` row's `Owns` cell, so the failure reports that `README.md`
+describes band 0 without naming the record, not that 33,311 characters of reasoning were
+deleted.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#13
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / The case, constructed rather than asserted · hash: sha256:416cefd63b026360dc0969b8338dd8fe9e175369d39ca06ad67a7a588ecba3f4*
+
+Against `README.md` exactly as it stands, the splice refuses — `Refusal::AbsentRegionMarker`,
+the behaviour `Test_A_Table_With_No_Markers_Should_Refuse_Rather_Than_Replace_The_File`
+measures. That refusal is about the file not carrying a marker, not about the declaration being
+false, and it lasts exactly as long as nobody adds one.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#14
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Two measurements that make the region narrower than "a column problem" · hash: sha256:81974e87e00b32c204662228a808de97d7fadd8c695faa7d5e249908e5a38f87*
+
+## Two measurements that make the region narrower than "a column problem"
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#15
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Two measurements that make the region narrower than "a column problem" · hash: sha256:ef22154dcf7cb5fcf9fcd3ec75202eeb232aed759ba57fad01c10f1c5f51c512*
+
+**The listing is two tables, not one.** Lines 51 to 118 carry 66 rows; lines 123 to 130 carry 6
+more; and lines 119 to 122 between them are a blank line, two lines of a person's prose — "The
+specification system sits beside the kernel rather than above it. It reaches the product only
+through a knowledge capability, so nothing in the product may name it." — and another blank
+line, followed by a repeated header and separator. `Zone_Row` reads rows in both and the
+assertion quantifies over the union, so the owned *set of rows* is already two spans with free
+prose between them, before the `Owns` column is considered at all.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#16
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Two measurements that make the region narrower than "a column problem" · hash: sha256:e0910624de4db4be0180012b6b29c0b214f00b986b5de0d9d848b624f8c11d81*
+
+**The split between the two tables has no declared source either.** It is not a zone split:
+`nomos-spec-orchestration` is a `Specification`-zone crate in the first table while the six
+`nomos-spec-*` crates in the second are `Specification` as well. `members` is a flat map from
+crate name to zone, so a renderer handed it cannot decide which of the two tables a new
+`Specification` member belongs in. Version 3's owned "set of rows" — "add a row for a declared
+member" — is therefore not fully derivable from the declaration it is owned against.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#17
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Why a free region inside an owned span is a contradiction, not a granularity problem · hash: sha256:cfb20ac80f857bdda87273e2f7738a0ce8d0be2abb6324a11d80831c34c7619d*
+
+## Why a free region inside an owned span is a contradiction, not a granularity problem
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#18
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Why a free region inside an owned span is a contradiction, not a granularity problem · hash: sha256:8e7148325b820074173c77384b0c40353bca0656f0266b5fac9ae12e6a326579*
+
+The tempting reading is that a span is merely too coarse an instrument for a region this fine.
+It is not, and the mechanism's own test suite shows why.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#19
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Why a free region inside an owned span is a contradiction, not a granularity problem · hash: sha256:e924641269367bced5c71484a2b25131edcce02c2841de42e46d307822e2a7ae*
+
+`Spliced` writes `source` into the span and keeps only what lies outside the markers. So for
+any byte inside the span to survive, `source` must contain it. `tests/materializing/rows.rs` is
+the case built against version 3's row corner, and its fixture is exactly that: the source
+constant `ROWS_WITH_ONE_ADDED` carries a row whose third cell reads "What one owns, written
+by a person." — the free cell's bytes, reproduced verbatim by the placer so that
+`Test_Adding_A_Row_Should_Change_Only_The_Span_The_Markers_Name` can observe them unchanged.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#20
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Why a free region inside an owned span is a contradiction, not a granularity problem · hash: sha256:010d60cc6d84cd255296620900ecda3a5912d6912064695397d74368ad911515*
+
+That test is honest about what it measures and its module doc says so. What it demonstrates,
+read the other way, is the contradiction: a splice does not preserve free region inside a span,
+it requires the placer to re-emit it. And a placer that re-emits the free region is writing the
+free region, which `OD-PACKAGE-004` defines as the region where "nothing but its human author
+ever writes", and whose overwrite its controls table names as the failure the class exists to
+prevent.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#21
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Why a free region inside an owned span is a contradiction, not a granularity problem · hash: sha256:1802956c076e9c83976fae4d89e43529a1e4a99257df0f33f9e2d7a589f80eda*
+
+So the two are not at different granularities. **Free region inside an owned span is
+self-contradictory: either the span's bytes come from the declared source, in which case they
+are not free, or some of them do not, in which case the span is not owned.** The span is not
+too coarse; the region is not a region.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#22
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#23
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Decision · hash: sha256:2562275442d6808e7991c32c83a2aa4ef6ba89e9b90adfd9310068a1a0bcff13*
+
+**An owned region is one contiguous span of bytes, and every byte strictly between its markers
+is produced by the region's declared source. A candidate region whose owned and free parts
+interleave is not an owned region. It is a checked region, and it is not materializable.**
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#24
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Decision · hash: sha256:5d956118dd6e945262393b686391286992f8cf3ac8071eb82f9ea9239c5fbaf8*
+
+This adds the second half of `OD-PACKAGE-004` version 3's rule rather than replacing it. That
+rule — "A `Composed` asset's owned region is exactly what some check actually compares against
+a declared source, in the units that check reads" — is the right test for what a *check* holds,
+and it is left standing for that. Read as a licence to *write*, it can name a region no write
+can honour, because a check reads at whatever granularity it likes and a write is a byte range.
+Version 3's own corollary, "State a region in the comparison's units, never the artifact's",
+gains a companion: **a region stated in units the target's bytes do not carry — a cell, a
+column, the existence of a row — is checkable and is not writable.**
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#25
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Decision · hash: sha256:7f29d15feed8130d72281322732cd2bca1d9a804541cc142bda0a5a83ddf87ba*
+
+Applied to the instance: `README.md`'s band listing is a checked region. `README.md` is
+`Composed` and is **not a materialization target**, now and for as long as the `Owns` column
+has no declared source.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#26
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Decision / What `OD-PACKAGE-004`'s classification of `README.md` is for, then · hash: sha256:55f0d50e1cef5a9e5e242f315cb57ffe164838f2a2fc75aed7b26cbe5c0cd468*
+
+### What `OD-PACKAGE-004`'s classification of `README.md` is for, then
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#27
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Decision / What `OD-PACKAGE-004`'s classification of `README.md` is for, then · hash: sha256:56e2a05619ccf23f2bf3b60c9529b7ed99db622a3a9ec23f0ca402c81ba69ecd*
+
+It is not spent. `Composed` has carried two modes since version 1, and `README.md` is in the
+second by that record's own words: "Where no renderer exists yet for the owned region — this
+repository's own case for `README.md` — the equivalent obligation is a bidirectional check
+against the declared source, and a person reconciles a failure by hand; the check substitutes
+for a render, it does not excuse one." That obligation is live and discharged today by
+`Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band`.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#28
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Decision / What `OD-PACKAGE-004`'s classification of `README.md` is for, then · hash: sha256:2a7f72983c7ec3d9eada03d17d4286568c388696a7cc05f4f9545aa5358032ea*
+
+What this record changes is the tense. Version 1 read as though the check were standing in for
+a renderer that had not arrived yet. Under this decision no renderer is coming for this asset,
+so the check is not an interim arrangement and the classification's job is to say which region
+a person reconciles and which region nothing may touch — which is exactly what version 3's 218
+lines worked out. Its findings were about the reach of a comparison and the entitlement a
+classification confers; neither depended on a write ever happening.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#29
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Decision / The expression candidate, and why it is declined in both its shapes · hash: sha256:f08870157c73c33fa79f252d378b56bf4926d00e918647acd5b91c679d95a36b*
+
+### The expression candidate, and why it is declined in both its shapes
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#30
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Decision / The expression candidate, and why it is declined in both its shapes · hash: sha256:fa6da21402522be7fa18462862e2641898d314d37cbde4b4f35cc173d471d277*
+
+The second candidate is that the intent gains a way to express a non-contiguous region. It has
+two shapes and neither survives.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#31
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Decision / The expression candidate, and why it is declined in both its shapes · hash: sha256:37d8fa1375f6e3365353cb573fc75491cd0cf1375522a7ce49ced26b5284ae15*
+
+**Format-aware.** An intent that said "column three of each row is free" would carry a unit only
+a format defines. The mechanism honouring it would have to parse the target to find the unit,
+so its vocabulary would close over target formats — a Markdown table, a YAML block, a TOML key
+— and each package kind arrives with the formats its surfaces use. The mechanism would then
+grow once per package kind, which is precisely `OD-PACKAGE-003`'s test: the mechanics "refer to
+nothing that knows what a crate, a rule, a gate, or a peer connection is". The materializer's
+author declined on this ground and the decline is upheld here.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#32
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Decision / The expression candidate, and why it is declined in both its shapes · hash: sha256:d09460eb71aba38cbe661caec94ca4c750339cb4249af5f9431abbc263d217a4*
+
+**A set of spans.** The cheap generalization — a non-contiguous region as a list of contiguous
+spans — is not format-aware and still does not help, for three measured reasons. It does not
+address the contradiction above, since each span in the list must still hold no free region, so
+the `Owns` column forces one span per owned cell rather than one per table. Those markers must
+each occur exactly once in the target, which `Sole_Occurrence` requires, so they would have to
+be keyed per row and the target would carry 144 of them inside its own cells. And a row that
+does not exist yet carries no markers, so adding one would require the mechanism to write
+markers — which `OwnedRegion` states it never does: "The markers themselves are preserved."
+A generalization that buys nothing for the one instance and costs the marker-preservation
+invariant is not the answer.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#33
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / What refuses, and where · hash: sha256:9bbb4231deae1bb30fde5e4bfd00627635f4d0ca7f05178e72661ac7abe03ffe*
+
+## What refuses, and where
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#34
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / What refuses, and where · hash: sha256:4535fa1d2cc8c7701edd054e42f897e20f24406c95d3bdb3606a1116bb258943*
+
+Four answers, ordered by strength, because naming only the strongest would repeat the mistake.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#35
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / What refuses, and where · hash: sha256:708e93f45096d5310d77b82baceb6082f5801ad396f7110f7ac18852ce7eb3b3*
+
+**1. The declaration refuses, by being unformable.** A `Composed` intent must carry an
+`owned_region` — `Refusal::UndeclaredOwnedRegion`, exercised by
+`Test_A_Composed_Target_Declaring_No_Region_Should_Refuse` — and under this decision a placer
+may declare one only for a span it has shown closed under the declared source. For
+`README.md`'s listing that showing fails, measured: 33,102 characters in 72 cells against a
+declaration holding no description, plus two lines of prose and a table split inside the same
+span. There is no region, so there is no intent. The refusal is that the declaration cannot be
+formed, not that a mechanism would decline it.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#36
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / What refuses, and where · hash: sha256:5340fd7426b59d8f1d1005f1349b362afe9eda49eff48428542af7d8e2d501bf*
+
+**2. The closure test is a procedure, and it is performable today.** Render from the declared
+source and compare byte for byte against the candidate span. Identical, and the span is closed.
+Different, and the difference is either staleness or free bytes, and a placer that cannot say
+which does not have a region. It costs one render and one comparison, needs no new mechanism,
+and is `OD-PACKAGE-004` version 3's third question — "Construct the disagreement" — asked of a
+span instead of a check. It was run for `README.md` above and the answer is published rather
+than left for the next reader to derive.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#37
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / What refuses, and where · hash: sha256:fb67a4cd49659a0141b078e7be793d307b6e22aaf0d3d2d1ce1e19dfa3427c39*
+
+**3. What must not be mistaken for the guard.** `Refusal::AbsentRegionMarker` fires today only
+because `README.md` carries no `<!--` at all. It refuses an unprepared file, not a false
+declaration, and it disappears the instant somebody adds a marker pair. The standing instruction
+this leaves is concrete: **`README.md` is not to be given region markers.**
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#38
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / What refuses, and where · hash: sha256:a2abf157ca0295b860d9c58120e141eb1e5d9037f1f56f0a149f1c74570b1e00*
+
+**4. What does not refuse, and why that is a price rather than a defect.** `Materialize` cannot
+refuse this and will not be taught to. It holds three things — the target's previous contents,
+the two markers, and the source — and no function of those three separates "the owned region is
+stale" from "the span holds bytes the source cannot produce", because both present as the source
+differing from the span. Telling them apart requires knowing the target's format. So the absence
+of a mechanism-side refusal is the cost of `OD-PACKAGE-003`'s test being passed, and it is named
+here rather than left to be discovered by whoever loses a column.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#39
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / What refuses, and where · hash: sha256:31bf12645a3a29daf14e6fe35f1e274df42597c6714caf6c5aa092f8dace90b5*
+
+That cost has a residue this record does not close: nothing checks that a placer performed the
+closure test. A placer that declares a span it never closed still loses bytes at exit 0. What
+changes is that the loss now has a name and an owner — a false closure claim, made at the
+declaration — instead of being a behaviour nobody had written down, and that the one asset for
+which the claim is known false is named. Building the check belongs with the first `Composed`
+intent, which does not exist; see below.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#40
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Surviving `OD-PACKAGE-003`'s test · hash: sha256:b4b9e897dc1939efe13d0f409e7d94e8d8b9fe202c0912c1044298e54bc357af*
+
+## Surviving `OD-PACKAGE-003`'s test
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#41
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Surviving `OD-PACKAGE-003`'s test · hash: sha256:3a9c7fba9c8627a10a5acbcc952fc9f0dda9ceeff5799bda7d16db0f4ec3215e*
+
+The test is that the mechanism must not know what a crate, a rule, a gate or a package kind is.
+This answer adds nothing to the mechanism at all: no field on `MaterializationIntent`, no
+variant on `Refusal`, no reading of the target beyond the two markers it already matches.
+`Materialize` remains a byte-range splicer that cannot tell a table from a YAML block, and the
+obligation this record creates lands on the placer, which already knows its own format because
+it renders the source. A second package kind that declares a `Composed` intent changes nothing
+here.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#42
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Surviving `OD-PACKAGE-003`'s test · hash: sha256:b8feeaa81946794ae8ab8f885f0400ba79070d9a928d2ea3809a9e29e14290c7*
+
+The declined candidate is the one that fails the test, and it fails it at the first step rather
+than eventually: a mechanism asked to honour "column three is free" must first ask what kind of
+document it is looking at.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#43
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Is this urgent · hash: sha256:4fcb9639ec24c7805d56f975952164b1b53ab5123b0c8db456a0f4b89f43831d*
+
+## Is this urgent
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#44
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Is this urgent · hash: sha256:c0986f0f96ee894df948b257d9317ea630bf6cd4137d03f65a1935a5fe7c8176*
+
+**No. It is latent, and the affected asset is one nothing places.** Measured across the whole
+tree:
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#45
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Is this urgent · hash: sha256:0e4caf50a57c9f3c5cbeb2f15857ce40a2630a8427e52e9e72acca8bcac024b2*
+
+- `OwnershipClass::Composed` appears nowhere outside `nomos-materialization`'s own sources and
+  tests. No package, manifest or fixture declares a `Composed` intent.
+- No manifest, fixture or source names `README.md` as a materialization target.
+- The only manifest on disk is
+  `crates/packages/nomos-integration-package/tests/fixtures/nomos.integration.self.json`. It
+  declares four intents — `AGENTS.md`, `CLAUDE.md`, `.claude/skills` and
+  `.github/workflows/gate.yml` — declares no ownership class for any of them, and therefore
+  resolves all four to `UserOwned`, which
+  `Test_The_Self_Fixture_Should_Resolve_To_The_Four_Placed_Rows` asserts. `Materialize` refuses
+  that whole run with `Refusal::UserOwnedTarget` before reading a byte.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#46
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Is this urgent · hash: sha256:ecf3f550a415bc4b5fb860a789d9b823cfeae184facf503ecf02672b5c0f644c*
+
+So nothing is blocked today. This record is a guard placed before the first `Composed`
+declaration rather than a repair of a live one, and a reader should treat it as the
+precondition on that work rather than as an incident.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#47
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Is this urgent · hash: sha256:374c0c3396620dc7c8827a93d55d33dd9bcd98df0b6e2eba043922ddc3096ecd*
+
+One adjacent gap, noted and deliberately not folded into this decision: directory sources are
+out of scope in `nomos-materialization` and refuse as `Refusal::UnreadableSource`, and the self
+fixture's `.claude/skills` intent names a directory. That refusal is unreachable for the fixture
+as it stands, because `Admissible` refuses `UserOwnedTarget` before the source is read. It is a
+separate question for whoever gives that fixture a real class.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#48
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / What this costs · hash: sha256:747a4997db33b638a4949cde021a5d560aab6fd370b0e24f19ffedb2142be0f3*
+
+## What this costs
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#49
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / What this costs · hash: sha256:7085cd31fc804f116540fb9714385251213d303bd6453a6ed83dbb0b0d9ca8e5*
+
+**`README.md`'s band listing gets no renderer.** Adding a crate stays a hand edit in two
+places, reconciled by `Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band` going red
+until they agree. That is what HEAD already does; what this record adds is that the arrangement
+is settled rather than pending.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#50
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / What this costs · hash: sha256:1634cf594f3f06dc9959826f351e1c8fc7e2a36a1c5570c9d864ab202753aafb*
+
+**It is settled, not permanent.** The condition version 3 already named is the same one that
+would reopen this: a declared source of truth for a crate's description, outside `README.md`,
+compared in both directions. Given one, the span becomes closed under its source, the region
+stops interleaving, and the asset becomes materializable under this record's own rule with
+nothing here amended. The table split measured above would have to gain a declared source too.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#51
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / What this costs · hash: sha256:ccd1cfed3937ba49e14863f6d2b58819aea57284e0bcc3d03fa39e9dcfcaae02*
+
+**A placer's closure claim is unchecked.** Stated above, and left to the first `Composed`
+intent rather than pre-built against a population of zero declarations.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#52
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / What this costs · hash: sha256:58380bc25d87e9e17c922bb4f9989b01fa90fdc99f6a32a7fcd47ea74e8e3423*
+
+**No code, check or test is changed by this record**, and none is owed by it. The three
+ownership classes, the default to `UserOwned`, the four assets' classifications and every
+refusal `nomos-materialization` already performs stand exactly as written.
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#53
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Controls · hash: sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4*
+
+## Controls
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#54
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Controls · hash: sha256:ce553f41a0d31628a4267988aa778ea4a696f669c1a2d64aa78f315e5bdd1584*
+
+| Weakening | What it produces |
+|---|---|
+| let a placer declare a span it has not shown closed under the declared source | the measured case above: 33,311 characters gone, no refusal, and the only check that moves reports a different defect |
+| teach the splicer a target's format so a per-cell region can be written | a mechanism whose first question is which package kind it serves, which is the crossing `OD-PACKAGE-003` runs backward |
+| read `Refusal::AbsentRegionMarker` as the guard against a non-contiguous declaration | the guard evaporates the moment somebody prepares the file, and preparing it looks like progress |
+| generalize `OwnedRegion` to a list of spans and call the interleave solved | each span still holds free region, the markers multiply into the cells, and adding a row needs the mechanism to write a marker it promises to preserve |
+| keep `README.md` classified as awaiting a renderer | the entitlement version 3 withdrew from the `Owns` column is restored to the whole listing, and the next placer reads it as work to do |
+| treat this as urgent and build the closure check now | a guard shaped against zero declarations, landing before the first real one says what shape it needs |
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#55
+
+*revision: authored · kind: heading · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#56
+
+*revision: authored · kind: prose · heading: An owned region is one contiguous span holding no free region, so an interleaved region is checked and never written / Status · hash: sha256:dac8a8ecc12993060f7ab6b8149775aeb8d0c181245bd8d2735a0ba784884745*
+
+Accepted. `OD-PACKAGE-004`'s rule for what a check owns is unchanged and gains its companion
+for what a mechanism may write; `nomos-materialization`'s contiguous-span maturity is ratified
+as the definition rather than recorded as a limitation; and `README.md` is a checked `Composed`
+asset that nothing materializes. No code changed and none is owed. The first package to declare
+a `Composed` intent owes the closure check named under "What refuses, and where", and the
+question of a declared source for a crate's description remains open exactly where
+`OD-PACKAGE-004` version 3 left it.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#1
 

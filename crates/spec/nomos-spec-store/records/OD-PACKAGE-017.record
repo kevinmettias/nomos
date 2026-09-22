@@ -1,0 +1,3 @@
+# The registration for OD-PACKAGE-017. Writing the record file does not make a record
+# governing; this file does.
+path: docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md

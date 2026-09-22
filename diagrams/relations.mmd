@@ -72,6 +72,7 @@ graph LR
     arc_ecosystem_001 -->|"relates-to"| od_package_005["OD-PACKAGE-005"]
     arc_ecosystem_001 -->|"relates-to"| od_package_014["OD-PACKAGE-014"]
     arc_ecosystem_001 -->|"relates-to"| od_package_015["OD-PACKAGE-015"]
+    arc_ecosystem_001 -->|"relates-to"| od_package_017["OD-PACKAGE-017"]
     arc_ecosystem_001 -->|"relates-to"| od_platform_004["OD-PLATFORM-004"]
     arc_ecosystem_001 -->|"relates-to"| od_project_004["OD-PROJECT-004"]
     arc_ecosystem_001 -->|"relates-to"| od_rules_020["OD-RULES-020"]
@@ -271,6 +272,7 @@ graph LR
     od_agent_004 -->|"relates-to"| od_gate_023["OD-GATE-023"]
     od_agent_004 -->|"relates-to"| od_host_001["OD-HOST-001"]
     od_agent_004 -->|"relates-to"| od_package_004
+    od_agent_004 -->|"relates-to"| od_package_017
     od_agent_004 -->|"relates-to"| od_platform_002["OD-PLATFORM-002"]
     od_agent_004 -->|"relates-to"| od_project_004
     od_agent_004 -->|"relates-to"| od_project_007
@@ -774,6 +776,7 @@ graph LR
     od_gate_005 -->|"relates-to"| od_ledger_040
     od_gate_005 -->|"relates-to"| od_package_004
     od_gate_005 -->|"relates-to"| od_package_005
+    od_gate_005 -->|"relates-to"| od_package_017
     od_gate_005 -->|"relates-to"| od_project_001
     od_gate_005 -->|"relates-to"| od_project_002
     od_gate_005 -->|"relates-to"| od_project_003["OD-PROJECT-003"]
@@ -1435,12 +1438,14 @@ graph LR
     od_package_003 -->|"relates-to"| od_package_002
     od_package_003 -->|"relates-to"| od_package_004
     od_package_003 -->|"relates-to"| od_package_005
+    od_package_003 -->|"relates-to"| od_package_017
     od_package_004 -->|"relates-to"| arc_ecosystem_001
     od_package_004 -->|"relates-to"| od_agent_004
     od_package_004 -->|"relates-to"| od_gate_005
     od_package_004 -->|"relates-to"| od_package_001
     od_package_004 -->|"relates-to"| od_package_003
     od_package_004 -->|"relates-to"| od_package_005
+    od_package_004 -->|"relates-to"| od_package_017
     od_package_004 -->|"relates-to"| od_project_001
     od_package_004 -->|"relates-to"| od_project_002
     od_package_005 -->|"relates-to"| arc_ecosystem_001
@@ -1448,6 +1453,7 @@ graph LR
     od_package_005 -->|"relates-to"| od_package_001
     od_package_005 -->|"relates-to"| od_package_003
     od_package_005 -->|"relates-to"| od_package_004
+    od_package_005 -->|"relates-to"| od_package_017
     od_package_005 -->|"relates-to"| od_project_002
     od_package_006 -->|"relates-to"| d_134
     od_package_006 -->|"relates-to"| od_capability_007
@@ -1548,6 +1554,13 @@ graph LR
     od_package_016 -->|"relates-to"| od_roadmap_003
     od_package_016 -->|"relates-to"| od_roadmap_005
     od_package_016 -->|"relates-to"| od_workflow_005
+    od_package_017 -->|"relates-to"| arc_ecosystem_001
+    od_package_017 -->|"relates-to"| od_agent_004
+    od_package_017 -->|"relates-to"| od_gate_005
+    od_package_017 -->|"relates-to"| od_package_003
+    od_package_017 -->|"relates-to"| od_package_004
+    od_package_017 -->|"relates-to"| od_package_005
+    od_package_017 -->|"relates-to"| od_project_001
     od_platform_001 -->|"relates-to"| arc_harness_001
     od_platform_001 -->|"relates-to"| d_130
     od_platform_001 -->|"relates-to"| od_gate_001
@@ -1593,6 +1606,7 @@ graph LR
     od_project_001 -->|"relates-to"| od_gate_001
     od_project_001 -->|"relates-to"| od_gate_005
     od_project_001 -->|"relates-to"| od_package_004
+    od_project_001 -->|"relates-to"| od_package_017
     od_project_001 -->|"relates-to"| od_project_002
     od_project_001 -->|"relates-to"| od_project_007
     od_project_002 -->|"relates-to"| arc_specdb_001
@@ -2314,6 +2328,7 @@ graph LR
     od_package_014
     od_package_015
     od_package_016
+    od_package_017
     od_platform_001
     od_platform_002
     od_platform_003

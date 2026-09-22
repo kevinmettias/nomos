@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:bbd53d830ab63e944418704ba9be0a1ad7de497c77d585740c97101a086d7433",
-  "inputs_digest": "sha256:c5932ce763897398d7167adf4aa8bd176c3cc294ae2eb8e39d3c803abd68db59",
+  "content_digest": "sha256:eb653d696a307fce0c6c2cbbfbd8749bfad6b009e3bd3c5806d212707665d80f",
+  "inputs_digest": "sha256:0a1eefe7f94dbf4ef9d71c83997800844762c0d25897621b68a357aa12abcd1a",
   "sections": [
     [
       "Documents",
-      267
+      268
     ],
     [
       "Sections",
-      2358
+      2372
     ],
     [
       "Source blocks",
-      8498
+      8554
     ]
   ],
   "inputs": [
@@ -964,6 +964,11 @@
       "content": "documents",
       "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md@authored",
       "hash": "sha256:869fcd6c1da5288bad1e3edc4fdafadb040f475c06009c158ed88d8426536f5c"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md@authored",
+      "hash": "sha256:0ffc8479136943b0a3335a0042a996e0a028e3811b1ebcdca9228da7bd7e458c"
     },
     {
       "content": "documents",
@@ -9654,6 +9659,76 @@
       "content": "headings",
       "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#72",
       "hash": "sha256:d838bd1181784747d2f18e0df77b65edaae4205df9ff6d2fd26a53405515ff03"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#1",
+      "hash": "sha256:520f405009156575f2e10cf05de28bf8db2ee2fc81d051af75f66c9d36d3ba28"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#2",
+      "hash": "sha256:a6ddd62de59e8d6619f58f3528ff64375daa4185edb6561c4304681e8de846f5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#7",
+      "hash": "sha256:8eeef3a3bdd29233807ae21988d552db725356331d706817cd0a8fa601df6341"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#14",
+      "hash": "sha256:e369c31d9c627980b4b63e03496ff9d13ab986c246a6b6003871a4370f9e24ec"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#17",
+      "hash": "sha256:425b627696a9093276232a9a09e318f0272dfde1eb8af7a558d9e90abf362d2a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#22",
+      "hash": "sha256:c916e580bc43f96c0df7044ed1545bdc481496ec014bab2685200613440ebc1b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#26",
+      "hash": "sha256:b8285e152d3977a8994013355a10a3b199004b3356823256ec31a0f19e3d3e4e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#29",
+      "hash": "sha256:5970e186e5a1787891e2a74deaf4c4849201a5d9f9e05f9fb05b59647231e6b6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#33",
+      "hash": "sha256:21a2118cf69b4fe870bf6dd074075eaf3025e8ee8dbac14bce19fcfc1f2a4423"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#40",
+      "hash": "sha256:1277caa77c45bb6ebf1933c8fc9ddd0098bcd03d535c3c9a2f6d32e40f7b5b66"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#43",
+      "hash": "sha256:4943902c20306aaab2e400f9c54407e746aa5f4b0195a5bf8c89d3b26dbc062f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#48",
+      "hash": "sha256:49be0b6bf74fb56666208e6a5c717fb80ca6b0a6837db4944e751d103ce3a3e2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#53",
+      "hash": "sha256:ca011c7d6cf15ca3de7da8de56a286a7a91084cf78808aa0c4970f839a629988"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#55",
+      "hash": "sha256:4fa144429852d7f140bb3ed8248e423850e7ccf20d370417de560d7080e9d4e6"
     },
     {
       "content": "headings",
@@ -43239,6 +43314,286 @@
       "content": "blocks",
       "identity": "docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md#73",
       "hash": "sha256:94b945b7acfbbe7bd176f02d7278bbe6c1da4a57d4da756839dace67ef33c372"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#1",
+      "hash": "sha256:a86a0be6ee3f69365760705b7af1aa8e975cc46fd004e589d9f1d59d869f72da"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#3",
+      "hash": "sha256:b50988531c2b058c56d6fdb01f1ec0ff70ea6390f6c56005bd349fff59eb7bea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#4",
+      "hash": "sha256:bfe3495759a4c8f6c5675837441ffc5f9a4642ea7e761a50532dc3d9047537f3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#5",
+      "hash": "sha256:21c6fc0582fbf54a96b6854d71c6f9417e62fce6751b86588c4d090a57dff028"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#6",
+      "hash": "sha256:519ee812e25102cc33d2d24e1b64a8697cc648075e450342000e600d0d3709f0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#7",
+      "hash": "sha256:5d7a049aa68e7da8b030daf9baaed4a414011c82415d97c8f671497b363af613"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#8",
+      "hash": "sha256:e4e20e59911eaf951daf98f4e790bbdd7c64fc35e804a8ee5c1e765b2f3052b4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#9",
+      "hash": "sha256:312d7958c0088716759b2d2b10266a51b429ad74ffe4d777fc6a8f20d69b05b7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#10",
+      "hash": "sha256:7db5a7d5cc7427d4320d1bda19ffb502ac9da85eb9696a7e818ee812145d83d2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#11",
+      "hash": "sha256:c49f0fd85493b28a87ebd5ed3cf24bf8aec0405db31f9e20244ec596bc7932e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#12",
+      "hash": "sha256:87ee74cbd7829ebfa5fe07617f54257faee71505077b38f2242b9c6fcebe4d89"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#13",
+      "hash": "sha256:416cefd63b026360dc0969b8338dd8fe9e175369d39ca06ad67a7a588ecba3f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#14",
+      "hash": "sha256:81974e87e00b32c204662228a808de97d7fadd8c695faa7d5e249908e5a38f87"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#15",
+      "hash": "sha256:ef22154dcf7cb5fcf9fcd3ec75202eeb232aed759ba57fad01c10f1c5f51c512"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#16",
+      "hash": "sha256:e0910624de4db4be0180012b6b29c0b214f00b986b5de0d9d848b624f8c11d81"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#17",
+      "hash": "sha256:cfb20ac80f857bdda87273e2f7738a0ce8d0be2abb6324a11d80831c34c7619d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#18",
+      "hash": "sha256:8e7148325b820074173c77384b0c40353bca0656f0266b5fac9ae12e6a326579"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#19",
+      "hash": "sha256:e924641269367bced5c71484a2b25131edcce02c2841de42e46d307822e2a7ae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#20",
+      "hash": "sha256:010d60cc6d84cd255296620900ecda3a5912d6912064695397d74368ad911515"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#21",
+      "hash": "sha256:1802956c076e9c83976fae4d89e43529a1e4a99257df0f33f9e2d7a589f80eda"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#22",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#23",
+      "hash": "sha256:2562275442d6808e7991c32c83a2aa4ef6ba89e9b90adfd9310068a1a0bcff13"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#24",
+      "hash": "sha256:5d956118dd6e945262393b686391286992f8cf3ac8071eb82f9ea9239c5fbaf8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#25",
+      "hash": "sha256:7f29d15feed8130d72281322732cd2bca1d9a804541cc142bda0a5a83ddf87ba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#26",
+      "hash": "sha256:55f0d50e1cef5a9e5e242f315cb57ffe164838f2a2fc75aed7b26cbe5c0cd468"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#27",
+      "hash": "sha256:56e2a05619ccf23f2bf3b60c9529b7ed99db622a3a9ec23f0ca402c81ba69ecd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#28",
+      "hash": "sha256:2a7f72983c7ec3d9eada03d17d4286568c388696a7cc05f4f9545aa5358032ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#29",
+      "hash": "sha256:f08870157c73c33fa79f252d378b56bf4926d00e918647acd5b91c679d95a36b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#30",
+      "hash": "sha256:fa6da21402522be7fa18462862e2641898d314d37cbde4b4f35cc173d471d277"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#31",
+      "hash": "sha256:37d8fa1375f6e3365353cb573fc75491cd0cf1375522a7ce49ced26b5284ae15"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#32",
+      "hash": "sha256:d09460eb71aba38cbe661caec94ca4c750339cb4249af5f9431abbc263d217a4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#33",
+      "hash": "sha256:9bbb4231deae1bb30fde5e4bfd00627635f4d0ca7f05178e72661ac7abe03ffe"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#34",
+      "hash": "sha256:4535fa1d2cc8c7701edd054e42f897e20f24406c95d3bdb3606a1116bb258943"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#35",
+      "hash": "sha256:708e93f45096d5310d77b82baceb6082f5801ad396f7110f7ac18852ce7eb3b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#36",
+      "hash": "sha256:5340fd7426b59d8f1d1005f1349b362afe9eda49eff48428542af7d8e2d501bf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#37",
+      "hash": "sha256:fb67a4cd49659a0141b078e7be793d307b6e22aaf0d3d2d1ce1e19dfa3427c39"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#38",
+      "hash": "sha256:a2abf157ca0295b860d9c58120e141eb1e5d9037f1f56f0a149f1c74570b1e00"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#39",
+      "hash": "sha256:31bf12645a3a29daf14e6fe35f1e274df42597c6714caf6c5aa092f8dace90b5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#40",
+      "hash": "sha256:b4b9e897dc1939efe13d0f409e7d94e8d8b9fe202c0912c1044298e54bc357af"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#41",
+      "hash": "sha256:3a9c7fba9c8627a10a5acbcc952fc9f0dda9ceeff5799bda7d16db0f4ec3215e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#42",
+      "hash": "sha256:b8feeaa81946794ae8ab8f885f0400ba79070d9a928d2ea3809a9e29e14290c7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#43",
+      "hash": "sha256:4fcb9639ec24c7805d56f975952164b1b53ab5123b0c8db456a0f4b89f43831d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#44",
+      "hash": "sha256:c0986f0f96ee894df948b257d9317ea630bf6cd4137d03f65a1935a5fe7c8176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#45",
+      "hash": "sha256:0e4caf50a57c9f3c5cbeb2f15857ce40a2630a8427e52e9e72acca8bcac024b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#46",
+      "hash": "sha256:ecf3f550a415bc4b5fb860a789d9b823cfeae184facf503ecf02672b5c0f644c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#47",
+      "hash": "sha256:374c0c3396620dc7c8827a93d55d33dd9bcd98df0b6e2eba043922ddc3096ecd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#48",
+      "hash": "sha256:747a4997db33b638a4949cde021a5d560aab6fd370b0e24f19ffedb2142be0f3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#49",
+      "hash": "sha256:7085cd31fc804f116540fb9714385251213d303bd6453a6ed83dbb0b0d9ca8e5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#50",
+      "hash": "sha256:1634cf594f3f06dc9959826f351e1c8fc7e2a36a1c5570c9d864ab202753aafb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#51",
+      "hash": "sha256:ccd1cfed3937ba49e14863f6d2b58819aea57284e0bcc3d03fa39e9dcfcaae02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#52",
+      "hash": "sha256:58380bc25d87e9e17c922bb4f9989b01fa90fdc99f6a32a7fcd47ea74e8e3423"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#53",
+      "hash": "sha256:0c4878f82e428c850709c3921802b897d9ff812e70e504d22fe8dc18ecab3dc4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#54",
+      "hash": "sha256:ce553f41a0d31628a4267988aa778ea4a696f669c1a2d64aa78f315e5bdd1584"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#55",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md#56",
+      "hash": "sha256:dac8a8ecc12993060f7ab6b8149775aeb8d0c181245bd8d2735a0ba784884745"
     },
     {
       "content": "blocks",

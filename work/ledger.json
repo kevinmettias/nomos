@@ -91602,14 +91602,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-miscount",
-        "acquired_at": 1790054867,
-        "lease_expires_at": 1790065667
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -91620,7 +91616,28 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "nical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.63s\n     Running unittests src\\lib.rs (F:/repos/render-miscount-target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/render-miscount-target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/render-miscount-target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (F:/repos/render-miscount-target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/render-miscount-target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1790055543,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -91641,14 +91658,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "nomos-75-span",
-        "acquired_at": 1790054653,
-        "lease_expires_at": 1790065453
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -91659,7 +91672,28 @@
         ],
         "timeout_seconds": 2400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "orpus::Test_The_Canonical_Domain_Model_Should_Answer_30_And_28 ... ok\ntest corpus::Test_The_Domain_Volumes_Should_Answer_282_258_And_234 ... ok\ntest hashing::Test_A_Row_Should_Hash_Its_Own_Line ... ok\ntest migration::Test_Migrating_A_Version_Two_Store_Should_Re_Derive_Its_Headers ... ok\ntest census::Test_A_Row_Should_Be_Findable_By_Its_Content ... ok\ntest census::Test_A_Table_Block_Should_Store_Every_Pipe_Line ... ok\ntest refusals::Test_A_Refused_Table_Should_Not_Write_Half_A_Document ... ok\ntest census::Test_The_Store_Should_Answer_Every_Count_Separately ... ok\ntest refusals::Test_A_Lineage_Row_Naming_Nothing_Should_Be_Refused ... ok\ntest census::Test_A_Block_With_No_Table_Should_Store_No_Rows ... ok\ntest lineage::Test_A_Node_Restored_From_A_Row_Should_Trace_To_That_Row ... ok\ntest lineage::Test_Recording_A_Row_Lineage_Twice_Should_Write_One_Row ... ok\ntest lineage::Test_Rewriting_A_Document_Should_Not_Renumber_Its_Rows ... ok\ntest census::Test_A_Census_Should_Narrow_To_One_Table ... ok\ntest refusals::Test_A_Table_With_A_Malformed_Delimiter_Should_Be_Refused ... ok\n\ntest result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.61s\n     Running unittests src\\lib.rs (F:/repos/render-span-target\\debug\\deps\\nomos_spec_store-fa4ca603520403bd.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/render-span-target\\debug\\deps\\governing_records_are_present-68598d7aa5979f42.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/render-span-target\\debug\\deps\\round_trip_holds-2ceb9907f4ad7260.exe)\n     Running tests\\store_holds.rs (F:/repos/render-span-target\\debug\\deps\\store_holds-0e03220efb7e656e.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/render-span-target\\debug\\deps\\table_rows-01d65bb5b00aa28a.exe)\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1790055601,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": null
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -91879,6 +91913,50 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P123-THE-GENERAL-COMMIT-RULE-DOES-NOT-DISTINGUISH-ADD-FROM-COMMIT-AND-ONE-OF-THE-TWO-IS-UNSAFE",
+      "title": "The rule telling every session to commit explicit paths does not say which command they go on, and the wrong one commits a peer's bytes",
+      "why": "AGENTS.md tells every session to scope a commit to explicit paths because `git add -A` sweeps up work belonging to somebody else, and the nomos-task skill repeats it at its commit step. Neither says whether the paths go on `git add` or on `git commit`, and the two are opposite. Verified in a throwaway repository twice today, once by me and once independently by the claimant of P123-THE-RENDER-PROCEDURES-POST-COMMIT-CHECK-CANNOT-SEE-A-PEERS-WRITE-BETWEEN-THE-STAGE-AND-THE-COMMIT: `git commit -F <msg> -- <paths>` ignores the index and commits the current working-tree content of those paths, so a peer's write to one of your own paths between your `git add` and your commit lands in your commit under your message; a bare `git commit` after `git add` commits what was staged, but carries the whole index including anything a peer staged. Each form closes one of two windows and neither closes both. That claimant grepped the repository and found no committed file prescribing either form: the pathspec commit and the post-commit projection check have been living in session memory rather than in any authority, which is why sessions have been using the unsafe form all day believing it was the careful one. 966d8745 landed the resolution for the projections in the nomos-spec-change skill, stated as a rule there: explicit paths belong on `git add` and never on `git commit`, and a pathspec there is not a stricter reading of the rule but its opposite. That rule is general and its home is not a skill about rendering specifications. The file it matters most for is work/ledger.json, which every session writes and every session commits, and which has no copy outside the shared tree against which a staged blob could be checked, so the commit form is the only thing protecting it.",
+      "done_when": "AGENTS.md's commit rule says which command explicit paths go on, in one sentence rather than a section, keeping the reason it already gives for scoping at all; the file stays inside the line budget tests/contract/tests/agent_harness.rs enforces, which it is roughly twenty-seven lines under, and the harness suite stays green. The nomos-task skill's commit step carries the same distinction with the commands beside it, including the staged-list assertion that a bare commit needs because it carries the whole index, and it names work/ledger.json as the case where the commit form is the only available protection, since no copy of it exists outside the shared tree to compare a staged blob against. Neither file restates the projection-specific hash comparison, which 966d8745 already placed in the nomos-spec-change skill where a render worktree exists to make it possible; a reader who needs it is routed there rather than given a second copy, because a second copy of a procedure is the defect this repository files records about. Whether the general rule also belongs in a governing record is decided rather than assumed: the claimant of 966d8745 argued that OD-GATE-005 needs no change because its own text already says the procedure is the answer, and if the same reasoning covers the general case then say so and amend nothing. No mechanism is built; that claimant's argument against one, that a check closing one of two windows while reading as done is worse than the rule, is either adopted or answered. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "AGENTS.md",
+          ".claude/skills/nomos-task/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "done_when carries a false measurement that a claimant would plan against. It says AGENTS.md is roughly twenty-seven lines under the budget the agent harness enforces, which I took from a worker's report without checking. Measured: tests/contract/tests/agent_harness.rs line 70 sets CONTRACT_LINE_BUDGET to 120, Test_The_Contract_Should_Stay_Inside_Its_Line_Budget asserts it, and AGENTS.md is 119 lines. The headroom is one line, not twenty-seven, so a claimant planning a sentence that wraps to two lines would redden the harness, and the instruction the item gives is wrong in the direction that costs a dispatch. A peer session told me this file sits at its budget hours ago and I acknowledged it before writing the opposite. There is no work edit verb. Re-authored as -2, unchanged in kind, territory and predicate, with the done_when requiring the rule to land by replacing text rather than adding any and carrying the measured numbers. No claim was ever taken and nothing was written to the tree under this item."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-triage",
+        "declined_at": 1790055662
+      },
       "widened": []
     }
   ]
