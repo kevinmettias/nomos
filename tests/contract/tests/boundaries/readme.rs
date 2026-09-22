@@ -286,6 +286,122 @@ fn Test_The_Readmes_Listed_Origins_Should_Be_Every_Origin_An_Item_Can_Declare()
     );
 }
 
+/// The count the zones paragraph states, if it states one this function can read.
+///
+/// Over text rather than over the file, so that a disagreement can be constructed. The
+/// assertion below is about a number that is correct today, and a guard believed because it
+/// passes over a tree that already satisfies it has proved nothing -- which is the failure
+/// `OD-COMPLETENESS-001` names and the one this module's own siblings were written against.
+///
+/// Number words rather than digits, because that is how the sentence is written and prose is
+/// the artifact being checked. A count this function cannot read is reported by the caller
+/// as an absence rather than defaulted, since a sentence that stopped saying how many zones
+/// there are is a different edit from one that says the wrong number.
+fn Stated_Zone_Count(text: &str) -> Option<usize>
+{
+    const OPENING: &str = "ordered into ";
+    const CLOSING: &str = " named zones";
+
+    let from = text.find(OPENING)?.checked_add(OPENING.len())?;
+    let rest = text.get(from..)?;
+    let to = rest.find(CLOSING)?;
+    let word = rest.get(..to)?;
+
+    return NUMBER_WORDS.iter().find_map(|(spelled, value)| return (*spelled == word).then_some(*value));
+}
+
+/// The number words this repository's own prose could plausibly reach for.
+///
+/// Bounded deliberately: a zone set large enough to need a word past twenty is a different
+/// architecture, and a table that guessed at one would be answering a question nobody has
+/// asked yet.
+const NUMBER_WORDS: [(&str, usize); 16] = [
+    ("five", 5),
+    ("six", 6),
+    ("seven", 7),
+    ("eight", 8),
+    ("nine", 9),
+    ("ten", 10),
+    ("eleven", 11),
+    ("twelve", 12),
+    ("thirteen", 13),
+    ("fourteen", 14),
+    ("fifteen", 15),
+    ("sixteen", 16),
+    ("seventeen", 17),
+    ("eighteen", 18),
+    ("nineteen", 19),
+    ("twenty", 20),
+];
+
+/// The zone count the README states in prose is the number of components declared.
+///
+/// The rows below this sentence are asserted in both directions by
+/// [`Test_The_Readme_Should_List_Every_Member_At_Its_Declared_Band`], and the sentence above
+/// them was asserted by nothing: a thirteenth component would leave the word stale while every
+/// row stayed correct, one line from the table that would have caught it anywhere else.
+///
+/// A comparison rather than a removal, which is what distinguishes this from the three
+/// vocabularies [`Test_The_Readme_Should_Not_Relist_A_Vocabulary_It_Routes_To`] forbids. Those
+/// were removed because their authority is private to a binary crate and no test outside it
+/// can read the set. This number's authority is `nomos-architecture.json`, which
+/// [`Declared_Architecture`] already reads for the rows, so `OD-AGENT-004`'s rule sends it the
+/// other way: a fact another artifact checks is routed to rather than restated, and a
+/// restatement that can be compared is checked rather than deleted.
+#[test]
+fn Test_The_Readmes_Stated_Zone_Count_Should_Be_The_Number_Of_Declared_Components()
+{
+    let path = Repository_Root().join("README.md");
+    let text = std::fs::read_to_string(&path)
+        .unwrap_or_else(|error| panic!("cannot read {}: {error}", path.display()));
+
+    let stated = Stated_Zone_Count(&text).unwrap_or_else(|| {
+        panic!(
+            "README.md no longer says how many zones crates are ordered into, or says it in a \
+             spelling this test cannot read. Either is an edit worth noticing: the sentence is \
+             the one thing above the zone table that names its size."
+        )
+    });
+
+    let declared = Declared_Architecture().components.len();
+
+    assert_eq!(
+        stated, declared,
+        "README.md says crates are ordered into {stated} named zones and \
+         nomos-architecture.json declares {declared} components. The rows are checked in both \
+         directions and would not have caught this, because a component gained or lost changes \
+         the count without making any single row wrong."
+    );
+}
+
+/// The reading rejects a sentence that disagrees with the declaration.
+///
+/// The negative control. Without it the assertion above is only known to pass over a README
+/// that already agrees, which is indistinguishable from an assertion that cannot fail.
+#[test]
+fn Test_A_Stated_Count_That_Disagrees_Should_Be_Read_As_A_Different_Number()
+{
+    let agreeing = "Crates are ordered into twelve named zones -- the rest is prose.";
+    let disagreeing = "Crates are ordered into thirteen named zones -- the rest is prose.";
+    let silent = "Crates are ordered into zones, and this sentence names no number.";
+
+    assert_eq!(
+        Stated_Zone_Count(agreeing),
+        Some(12),
+        "the sentence README.md actually carries was not read as a number"
+    );
+    assert_eq!(
+        Stated_Zone_Count(disagreeing),
+        Some(13),
+        "a sentence stating a different count was not read as a different number, so the \
+         assertion above could not tell a stale prose count from a current one"
+    );
+    assert_eq!(
+        Stated_Zone_Count(silent),
+        None,
+        "a sentence naming no count was read as one anyway"
+    );
+}
 /// The vocabularies the README routes to instead of listing stay routed.
 ///
 /// Three of the five enumerations this file used to carry were removed rather than compared,
