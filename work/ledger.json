@@ -94819,7 +94819,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -94838,7 +94838,33 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "f let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.21s\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/arc-render/target\\debug\\deps\\nomos_contract_tests-b0cde3716885e4db.exe)\n     Running tests\\record_citation.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/arc-render/target\\debug\\deps\\record_citation-538121b0059c9c68.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/c67de600-dfa7-43c5-bfe2-46e767f10773/scratchpad/arc-render/target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n",
+        "verified_at": 1790115450,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2137c85cd62f9abea7ce4868e9f3ab61096fe7d0"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -95040,7 +95066,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Duplicate of P138-THE-PRIVATE-INDEX-FORM-CANNOT-PUBLISH-A-DELETION-AND-SAYS-NOTHING-ABOUT-IT, which two sessions boarded independently from one peer report within minutes of each other, both reserving .claude/skills/nomos-spec-change/SKILL.md alone for the same defect, so only one could ever be claimed. That one survives rather than this one because it is the better authored of the two on measurement: its claimant reproduced the failure end to end in a throwaway repository rather than tracing it from the source, and its done_when refuses in advance the mistake this defect is made of, by requiring a check that notices a path the author never named and stating that a check reading only the published paths does not satisfy the clause. This item's one contribution not already in it is the mechanism detail that force-remove appears nowhere in the skill, and that is carried to its claimant rather than kept as a reason to hold a second item open. No work is lost by this decline and nothing here is refused on its merits."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -95059,7 +95089,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "nomos-33",
+        "declined_at": 1790114932
+      },
       "widened": []
     },
     {
@@ -95076,7 +95109,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -95091,6 +95124,106 @@
           "agent_harness"
         ],
         "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "s-workspace)\n   Compiling nomos-cap-requirement-trace v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\capabilities\\nomos-cap-requirement-trace)\n   Compiling nomos-repo-policy v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\repository\\nomos-repo-policy)\n   Compiling nomos-lang-rust v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\languages\\nomos-lang-rust)\n   Compiling nomos-lang-rust-cargo v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\languages\\nomos-lang-rust-cargo)\n   Compiling nomos-lang-rust-scan v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\languages\\nomos-lang-rust-scan)\n   Compiling nomos-connector-coderabbit v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\connectors\\nomos-connector-coderabbit)\n   Compiling nomos-lang-go-modules v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\languages\\nomos-lang-go-modules)\n   Compiling nomos-lang-rust-clippy v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\languages\\nomos-lang-rust-clippy)\n   Compiling nomos-lang-rust-deny v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\rules\\nomos-rules)\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-lang-go v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\languages\\nomos-lang-go)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos-render-p132\\tests\\contract)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.53s\n     Running tests\\agent_harness.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\agent_harness-03949604de657960.exe)\n",
+        "verified_at": 1790115490,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2137c85cd62f9abea7ce4868e9f3ab61096fe7d0"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P140-THE-COPY-BACK-AFTER-A-PRIVATE-INDEX-LANDING-IS-SCOPED-TO-THE-PROJECTION-HALVES-AND-THE-COMMIT-IS-NOT",
+      "title": "The copy-back after a private-index landing is scoped to the four projection halves, so every other published path leaves the shared checkout at HEAD minus the commit",
+      "why": "Measured 2026-09-22 by the session that hit it. The nomos-spec-change skill's contention form builds a commit from blobs hashed out of a render worktree and moves the branch with a compare-and-swap, and then tells the author to copy the four projection halves into the working tree so the next session stages their bytes rather than the ones they superseded. That instruction is correct and is scoped to the four halves. A commit publishes whatever it publishes. So every published path that is not one of those four halves is never written to the shared checkout, and the moment the ref moves the shared working tree is HEAD minus the commit that was just landed.\n\nMeasured on e12a4c32, which published 34 paths of which four were projection-shaped. The other 30 were never copied back. git status in the shared tree then showed that commit inverted: files it added read D, files it deleted came back as untracked, files it modified read M. It stayed that way through nine peer commits over several hours before anyone noticed, because the other sessions were committing from their own worktrees and never staged the affected paths. The tree was reconciled by git checkout HEAD -- of exactly the commit's paths plus an rm of the one path the commit had deleted, after proving the whole delta was that commit reversed.\n\nWhy nothing catches it, which is the part worth keeping. The prescribed verification for a shared tree is to read git show HEAD:<path> rather than the disk, because the disk tells you nothing about who wrote it. That rule is right and it is the exact blind spot: git show HEAD: passed on all 34 paths, git ls-tree listed the new crate, and a grep of HEAD:Cargo.toml found the member line. Every one of those is true and every one is silent about the checkout. Verifying through HEAD says nothing about the working tree, which is the same error as the rule it obeys, mirrored.\n\nWhy it is not cosmetic. Any peer who runs git add on an inverted path stages the pre-commit bytes and reverts the publisher's work under their own message, which is the shared-index hazard reached from a third side. Meanwhile nomos check --root ., the contract suite and cargo build in the shared tree are all measuring a tree that exists at no commit, so a session diagnosing a red check there is diagnosing a state no commit produced. Two sessions independently misattributed the four orphan files from the same commit to somebody's uncommitted work before 792a7a03 repaired them.\n\nThis is a third defect in the same section and neither live item covers it. P137 settled what to do about the staged revert the form leaves in the index, which is a different moment and stays as written. P138-THE-PRIVATE-INDEX-FORM-CANNOT-PUBLISH-A-DELETION covers what the commit fails to carry; this covers what the checkout fails to receive after the commit is correct. This item depends on that one rather than racing it, because both write the same file and an item cannot be edited.",
+      "done_when": "The skill tells the author to reconcile the shared working tree with every path the commit published, not only the four projection halves, and says why the halves instruction is not sufficient for a commit that publishes anything else. The reader is given a form that handles the two cases a checkout alone does not: a path the commit deleted, which git checkout HEAD -- does not remove and which returns as untracked until an explicit rm, and work/ledger.json, which must be excluded because its disk copy is legitimately newer than HEAD whenever a peer has claimed since, so restoring it to HEAD destroys live claims. That exclusion is measured rather than argued: a peer claimed an item between two git status calls ninety seconds apart on the day this was found.\n\nThe reader is also told to establish that the delta is their own before reconciling, since a checkout over a path a peer is editing destroys that peer's work, and is given a reading that separates the cases: a path whose disk content equals the captured parent is purely un-applied, a path matching neither the parent nor HEAD has later commits layered over the pre-commit content and is still just the publisher's change missing, and a path matching HEAD needs nothing. Anything the author cannot attribute to their own commit is left alone and said so, in the same shape the rest of this skill already uses.\n\nEvery claim added is proven rather than asserted, in a throwaway repository, with the commands reported so a later reader can re-run them instead of trusting them, covering at minimum a published modification, a published addition and a published deletion. If the claimant finds the hazard does not reproduce, that is a real result and is reported with what was run.\n\nThis does not reopen what P137 settled about clearing the leftover staged entries, and it does not reopen what its own dependency settles about a deletion the commit fails to carry; a reader must be able to tell the three apart afterwards, since all three are consequences of the same form at three different moments. It does not change the read-tree, commit-tree and compare-and-swap structure, which is measured and correct, and it adds no authority beside OD-GATE-005. No code changes. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-spec-change/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P138-THE-PRIVATE-INDEX-FORM-CANNOT-PUBLISH-A-DELETION-AND-SAYS-NOTHING-ABOUT-IT"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P139-THE-NOMOS-API-SURFACE-SNAPSHOT-IS-STALE-ON-THE-EVIDENCE-FLOOR-BUCKET",
+      "title": "The nomos-api public surface snapshot is stale on the evidence floor bucket the gate now reports",
+      "why": "P123-GATE-034-EVIDENCE-FLOOR-FIRST-INCREMENT-2 gave nomos_gate_orchestration a sixth GateFindings bucket and a sixth FindingDisposition variant, BelowEvidenceFloor, under OD-GATE-034. FindingBucket::From in crates/host/nomos-api/src/response/finding_bucket.rs matches FindingDisposition exhaustively on purpose, so the new variant is a compile error there unless nomos-api gains one too, and its twin GateFindings and GateExplainResponse::Found were widened alongside so the API does not report a bucket as absent. Those three public-surface additions stale tests/contract/surface/nomos-api.txt. That path was held by P133-FOUR-PUBLIC-RESPONSE-TYPES-OUTLIVED-THE-PER-BACKEND-ARMS-THAT-PRODUCED-THEM, whose own change to it landed at 953edf51 while its claim stayed live, so work widen refused it four times at exit 3 and the snapshot was left as it is rather than written into another holders territory. The three lines the snapshot is missing are: the FindingBucket::BelowEvidenceFloor variant, the GateFindings::below_evidence_floor_findings field, and a GateExplainResponse::Found variant line that gained a floored_by field. Nothing else about nomos-api changed.",
+      "done_when": "tests/contract/surface/nomos-api.txt is re-blessed from a tree holding the committed nomos-api sources, through NOMOS_SURFACE_BLESS set to nomos-api and never by hand, and the predicate passes. The bless is read rather than taken on trust: the diff must add exactly the three lines the why names and remove exactly the one superseded GateExplainResponse::Found line, and any other difference is a second change riding along and is reported rather than committed.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/surface/nomos-api.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 2700
       },
       "verified": null,
       "abandoned": [],

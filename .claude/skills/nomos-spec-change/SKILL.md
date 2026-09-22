@@ -257,7 +257,7 @@ their own file, and overwritten the specification in the shared tree — the com
 four halves and the ledger, carried nothing of theirs, kept their record amendment, and left
 their staging where it was.
 
-Three things about it, each measured in a throwaway repository before it was written here:
+Four things about it, each measured in a throwaway repository before it was written here:
 
 **The parent is captured once and used twice**, for the `read-tree` and for the expected value
 of the swap. Reading HEAD a second time for the parent is the silent failure, and the swap does
@@ -285,8 +285,75 @@ Then copy the four halves into the working tree, so the next session stages your
 than the ones you superseded. That copy races like every other, and the commit does not depend
 on it. Then clear the leftover, which is the subsection below and is not optional.
 
+**The form adds and replaces entries and cannot express a deletion.** `read-tree` followed by
+`update-index --add` never removes one, so a file you deleted on the render worktree's disk is
+carried into the commit unchanged, and every check around it reads that disk, where the deletion
+is correctly done. The subsection after next is the safeguard, and it is not optional either.
+
 Every edit to a record body changes the store, so **render after the last word is written**, not
 before. A record you touch again is a diagram you render again.
+
+### The form cannot delete, and only a check reading the published tree catches it
+
+A file that exists in `$PARENT` and that you removed from the render worktree's disk is published
+unchanged, so the commit carries an orphan: a file nothing declares, that `rustc` never parses,
+that no lint reads, and that no compiler can report as unused because it never compiled it.
+
+**It reached a real commit.** `e12a4c32` published the review-finding contract into a new
+capability crate and was believed to have moved four files out of `nomos-connector-coderabbit`.
+All four survived in the commit while their `mod` declarations did not, so they sat at `HEAD` as
+four `Blocking` `no-orphan-modules` findings, which two sessions each misattributed to somebody's
+uncommitted work before `792a7a03` repaired them.
+
+**Nothing around it notices, and that is structural rather than an oversight.** Every check this
+section prescribes reads the render worktree's disk, where the deletion is correctly done — the
+render, `freshness`, and the body-deletion comparison are all right. The blob comparison above is
+a check of *content* for the paths the commit *names*, so it cannot see a path the commit should
+not have carried at all. A green run is not evidence that the commit holds what the worktree does.
+
+**It fails in two independent places, and repairing one leaves the other.** Both measured in a
+throwaway repository:
+
+- **The form cannot express the deletion.** A parent holding `doomed.txt` and `keep.txt`, with
+  `doomed.txt` removed from the worktree's disk and one untracked file added, published through
+  the form above: the tree held `added.txt`, `keep.txt` and `doomed.txt`.
+- **The path list cannot carry it either.** A land script iterating
+  `git diff --cached --name-only` in the source worktree never sees an unstaged deletion, because
+  that command returns empty for one, so a removal branch keyed off that list never runs. Measured
+  by a session whose script already had `--force-remove` and lost all four files regardless.
+
+`git update-index --force-remove <path>` does publish the deletion once it is reached, and on a
+path the parent does not carry it is a no-op at exit 0 rather than an error, so naming a path you
+are unsure of costs nothing. **It is the instruction and it is not the safeguard**, because it
+acts only on paths you thought to name, and this defect is made of the path you did not.
+
+**The safeguard is told no paths at all.** Build the tree the render worktree's disk represents
+and compare it against the tree the commit published. Do it after `commit-tree` and before
+`update-ref`, where the object exists and the branch has not moved:
+
+```
+export GIT_INDEX_FILE=<scratch>/verify-index   # a third private index; the shared one stays shut
+rm -f "$GIT_INDEX_FILE"
+git --work-tree=<scratch>/render read-tree "$PARENT"
+git --work-tree=<scratch>/render add -A        # exactly what that disk holds, from no list
+git update-index --add --cacheinfo "100644,$(git hash-object -w work/ledger.json),work/ledger.json"
+EXPECTED=$(git write-tree)
+unset GIT_INDEX_FILE
+test "$EXPECTED" = "$(git rev-parse "$NEW^{tree}")" || git diff --name-status "$NEW" "$EXPECTED"
+```
+
+The ledger line is not optional and is the one path exempted from "no list": the commit
+deliberately takes that blob from the shared tree rather than the worktree's, per `OD-LEDGER-018`
+above, and without the line the check fires on `work/ledger.json` after every *correct* landing
+whenever a peer has claimed since you rendered. Measured both ways — with the line, the
+comparison agreed on a correct landing and named exactly `D doomed.txt` on the broken one; without
+it, it reported `M work/ledger.json` on a landing that was right. A check that cries wolf on every
+good commit is one the next reader stops running.
+
+`git diff --name-status` names the divergence in the form you need to repair it: add the missing
+`--force-remove`, or re-copy a half, then rebuild the tree and swap. This is a check of the commit,
+so it is finished before the branch moves and says nothing about the index afterwards, which is
+the subsection below.
 
 ### The leftover is a staged revert of your own commit, and you clear your own entries only
 
