@@ -309,9 +309,11 @@ the former and one of each at the latter. Neither compiler-backed capability nee
 family crate: each stays beside its provider under `OD-CAPABILITY-002` until a second party
 names it, and the party that will is the first composed rule in `nomos-rules`, at which point
 that contract gets a crate of its own under `crates/capabilities`. Composing either into `Run`
-waits on `OD-ROADMAP-002`'s capability-orchestration pause and on the records that decide
-whether it has lifted. What version 1 was guarding — that a shape not be fixed before a rule
-holds it to account — has moved rather than lapsed: the shapes are fixed and re-derivable, and
-the first program-semantics *claim* composed against a policy of this repository's own is still
-unwritten, which is `OD-ANALYSIS-004`'s to measure when a rule states one. No revisit condition
-remains here.
+was paused by `OD-ROADMAP-002`'s capability-orchestration pause, which governed at
+`OD-ROADMAP-002`'s own version; `OD-ROADMAP-003` recorded its lapse — "All three pauses have
+lapsed, each on the condition `OD-ROADMAP-002` set for it." — so the wiring is unblocked by
+that record rather than waiting on it, and is somebody else's item to schedule. What version 1
+was guarding — that a shape not be fixed before a rule holds it to account — has moved rather
+than lapsed: the shapes are fixed and re-derivable, and the first program-semantics *claim*
+composed against a policy of this repository's own is still unwritten, which is
+`OD-ANALYSIS-004`'s to measure when a rule states one. No revisit condition remains here.

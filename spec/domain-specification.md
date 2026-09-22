@@ -39,7 +39,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md@authored | docs/records/OD-ANALYSIS-004-program-semantics-facts-are-nomos-owned-and-are-expressed-through-the-existing-epistemic-types.md | authored | 30 | 7 | sha256:2d1cc618a04047fd179e4d5f24fd112d9fafc6d05fe7710be734b52d3d2dc8e9 |
 | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md@authored | docs/records/OD-ANALYSIS-005-recompute-equivalence-is-a-property-of-the-stores-own-primitives-and-a-fixture-built-on-them-proves-it-without-waiting-for-an-orchestrator.md | authored | 23 | 7 | sha256:f8ced57db03fbaac9fbbb8a550e6e9561a4d5e651d59adb613370d47e46725be |
 | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md@authored | docs/records/OD-ANALYSIS-006-a-runtime-observation-is-a-workload-scoped-fact-and-the-determinism-declarations-exempt-it-rather-than-bind-it.md | authored | 42 | 9 | sha256:a7a3620d599955e63ca9bcc81b52866cf77cf156c8bb930391ee67daedaa3040 |
-| docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md | authored | 28 | 6 | sha256:373e8af52b14b8082d5bfc8a3ac40281ee2d307ec08cebffda5075328afb512f |
+| docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored | docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md | authored | 28 | 6 | sha256:6579da56c92d14e1728834c5596fbf6a5062c7de8020223ea5bb75dd969f650c |
 | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md@authored | docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md | authored | 22 | 8 | sha256:2a1f9cc14ba7229566dea2754dfbafa91116a43aa78032e04f419cbd3c313272 |
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 43 | 9 | sha256:c218a0e3bcaaf03e21f566d1fa336427f086e410c27c64e9a0232305afd93500 |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md | authored | 16 | 6 | sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a |
@@ -10859,7 +10859,7 @@ schedules nothing.
 
 ### docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#28
 
-*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Status · hash: sha256:81ea90b9870b99028b3c246faff40aa0be3dcf8557f3fe1780392fcabff3d595*
+*revision: authored · kind: prose · heading: Whether the first program-semantics capability is picked and built now, or waits for a rule that needs the evidence it would produce / Status · hash: sha256:32a80a32fd68abeb10d499e5fc23e8c9228b58bc9713d6d7adfd213e7e2e7b58*
 
 Closed at version 2. The question version 1 held open — whether the first program-semantics
 capability is picked now or waits for a rule that needs it — was answered by events rather than
@@ -10872,12 +10872,14 @@ the former and one of each at the latter. Neither compiler-backed capability nee
 family crate: each stays beside its provider under `OD-CAPABILITY-002` until a second party
 names it, and the party that will is the first composed rule in `nomos-rules`, at which point
 that contract gets a crate of its own under `crates/capabilities`. Composing either into `Run`
-waits on `OD-ROADMAP-002`'s capability-orchestration pause and on the records that decide
-whether it has lifted. What version 1 was guarding — that a shape not be fixed before a rule
-holds it to account — has moved rather than lapsed: the shapes are fixed and re-derivable, and
-the first program-semantics *claim* composed against a policy of this repository's own is still
-unwritten, which is `OD-ANALYSIS-004`'s to measure when a rule states one. No revisit condition
-remains here.
+was paused by `OD-ROADMAP-002`'s capability-orchestration pause, which governed at
+`OD-ROADMAP-002`'s own version; `OD-ROADMAP-003` recorded its lapse — "All three pauses have
+lapsed, each on the condition `OD-ROADMAP-002` set for it." — so the wiring is unblocked by
+that record rather than waiting on it, and is somebody else's item to schedule. What version 1
+was guarding — that a shape not be fixed before a rule holds it to account — has moved rather
+than lapsed: the shapes are fixed and re-derivable, and the first program-semantics *claim*
+composed against a policy of this repository's own is still unwritten, which is
+`OD-ANALYSIS-004`'s to measure when a rule states one. No revisit condition remains here.
 
 ### docs/records/OD-ANALYSIS-008-invalidate-clones-the-whole-dependents-map-on-every-call-and-the-fix-is-deferred-until-a-second-propagation-implementation-exists.md#1
 

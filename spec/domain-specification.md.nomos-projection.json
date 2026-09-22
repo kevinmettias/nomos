@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:2dc96f19bd7c94560223596f77f63571c733d2e034104d789e068adc3ad9650f",
-  "inputs_digest": "sha256:0590414781549955c163bac52db30a98e90efed2e771deea117a6f53178a1252",
+  "content_digest": "sha256:850845c6156ef5106f2eca488e7a01bdc210b241bcb4d0d98d7adc40962677eb",
+  "inputs_digest": "sha256:dcf147de15b959e32732f2bed8a25a60ab8d22a2dd8493264d75512ab80ddf49",
   "sections": [
     [
       "Documents",
@@ -168,7 +168,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md@authored",
-      "hash": "sha256:373e8af52b14b8082d5bfc8a3ac40281ee2d307ec08cebffda5075328afb512f"
+      "hash": "sha256:6579da56c92d14e1728834c5596fbf6a5062c7de8020223ea5bb75dd969f650c"
     },
     {
       "content": "documents",
@@ -17443,7 +17443,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-ANALYSIS-007-whether-the-first-program-semantics-capability-is-picked-and-built-now-or-waits-for-a-rule-that-needs-the-evidence-it-would-produce.md#28",
-      "hash": "sha256:81ea90b9870b99028b3c246faff40aa0be3dcf8557f3fe1780392fcabff3d595"
+      "hash": "sha256:32a80a32fd68abeb10d499e5fc23e8c9228b58bc9713d6d7adfd213e7e2e7b58"
     },
     {
       "content": "blocks",
